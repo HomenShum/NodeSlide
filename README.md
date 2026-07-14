@@ -6,7 +6,7 @@
 
 > NodeSlide turns a prompt, a structured brief, or raw data into a presentation you can *inspect and defend* — a canonical structured document that compiles to editable slides, where every change (human or agent) flows through one validated mutation path.
 
-> **Repository status (2026-07-13):** this is the fresh public home for NodeSlide, seeded docs-first. The product runs today at the [live demo](https://parity-studio.vercel.app/?domain=nodeslide); the source is being extracted from the `parity-studio` monorepo into this repo with an IP-carve-out and secrets pass, so the architecture links below currently point to the canonical source. See [Repository status](#repository-status).
+> **Repository status (2026-07-13):** the NodeSlide app now lives in this repo and **builds green** — the Convex backend deploys, `tsc -b` + `vite build` pass, and **469/469 tests** pass. Extracted from the `parity-studio` monorepo with an IP-carve-out + secrets pass. See [Repository status](#repository-status).
 
 ---
 
@@ -70,21 +70,40 @@ Capability honesty is the product, so it's the README too. As of 2026-07-13:
 - [**Product Requirements (PRD)**](docs/PRD.md) — problem, user, workflow, why structured authoring wins, trust surface, launch requirements, metrics, wedge.
 - [**Technical Design (TDD)**](docs/TDD.md) — architecture, canonical schema, agent execution, mutation protocol, validation/repair, rendering/export/publishing, MCP seam, verification.
 
+## Quickstart
+
+```bash
+git clone https://github.com/HomenShum/NodeSlide
+cd NodeSlide
+npm install
+npx convex dev     # one-time: provisions a Convex deployment, writes .env.local, generates convex/_generated/
+npm run dev        # vite + convex dev (concurrently) — open the printed localhost URL
+```
+
+The **deterministic path needs no API keys** and produces a complete, reproducible deck. For live model runs, set `OPENROUTER_API_KEY` in Convex (`npx convex env set OPENROUTER_API_KEY …`) or bring your own key (BYOK). See [`.env.example`](.env.example).
+
+```bash
+npm test            # vitest run — 469 tests
+npm run typecheck   # tsc -b
+npm run build       # tsc -b && vite build
+npm run lint        # biome check .
+```
+
 ## Architecture
 
 React 19 + TypeScript + Vite editor over a **Convex** authoritative backend; PptxGenJS and a self-contained HTML compiler for export; [`pi-ai`](https://www.npmjs.com/package/@earendil-works/pi-ai) for governed model routing (managed Nebius GLM 5.2 + BYOK); JSZip + OOXML parsing for style extraction. Deployed on Vercel + Convex.
 
-While the source migrates into this repo, these point to the canonical implementation in the `parity-studio` monorepo:
+Key modules:
 
-| Concern | Module (canonical source) |
+| Concern | Module |
 |---|---|
-| Canonical schema — `DeckSnapshot`, `SlideElement`, `PatchOperation`, `DeckPatch`, `DeckVersion` | [`shared/nodeslide.ts`](https://github.com/HomenShum/parity-studio/blob/main/shared/nodeslide.ts) |
-| Pure apply core (`applyDeckPatch`) | [`shared/nodeslidePatch.ts`](https://github.com/HomenShum/parity-studio/blob/main/shared/nodeslidePatch.ts) |
-| Server authority — `applyPatch` / `commitPatch`, CAS | [`convex/nodeslide.ts`](https://github.com/HomenShum/parity-studio/blob/main/convex/nodeslide.ts), [`convex/lib/nodeslidePatches.ts`](https://github.com/HomenShum/parity-studio/blob/main/convex/lib/nodeslidePatches.ts) |
-| Durable agent — plan, propose, trace | [`convex/nodeslideAgent.ts`](https://github.com/HomenShum/parity-studio/blob/main/convex/nodeslideAgent.ts) |
-| Compilers — PPTX, HTML, capabilities, validation | [`src/domains/nodeslide/slidelang/`](https://github.com/HomenShum/parity-studio/tree/main/src/domains/nodeslide/slidelang) |
-| Inspectors — AI · Design · Data · Comments · Versions · Trace | [`src/domains/nodeslide/inspector/`](https://github.com/HomenShum/parity-studio/tree/main/src/domains/nodeslide/inspector) |
-| Governed MCP surface | [`mcp/src/lib/nodeslideTools.ts`](https://github.com/HomenShum/parity-studio/blob/main/mcp/src/lib/nodeslideTools.ts) |
+| Canonical schema — `DeckSnapshot`, `SlideElement`, `PatchOperation`, `DeckPatch`, `DeckVersion` | [`shared/nodeslide.ts`](shared/nodeslide.ts) |
+| Pure apply core (`applyDeckPatch`) | [`shared/nodeslidePatch.ts`](shared/nodeslidePatch.ts) |
+| Server authority — `applyPatch` / `commitPatch`, CAS | [`convex/nodeslide.ts`](convex/nodeslide.ts), [`convex/lib/nodeslidePatches.ts`](convex/lib/nodeslidePatches.ts) |
+| Durable agent — plan, propose, trace | [`convex/nodeslideAgent.ts`](convex/nodeslideAgent.ts) |
+| Compilers — PPTX, HTML, capabilities, validation | [`src/domains/nodeslide/slidelang/`](src/domains/nodeslide/slidelang) |
+| Inspectors — AI · Design · Data · Comments · Versions · Trace | [`src/domains/nodeslide/inspector/`](src/domains/nodeslide/inspector) |
+| Governed MCP surface | [`mcp/src/lib/nodeslideTools.ts`](mcp/src/lib/nodeslideTools.ts) |
 
 **Grounding tools.** Consented Linkup web research runs bounded searches, persists source snapshots, and attaches `{url, retrievedAt, excerpt}` citations to the claims they support. Data ingestion accepts CSV/JSON/TXT as typed source records (digest, columns, row count) that bind to chart and formula primitives, with per-source retention and deletion.
 
@@ -121,19 +140,21 @@ Prioritized:
 
 Trust is a product surface, not a hidden backend step. Validation covers schema and referential integrity, bounds/overlap/text-fit, required chart/math data, safe media URLs, source coverage, export capability, and publication cleanliness — and it *blocks* unsafe present, publish, or export. Repairs are explicit proposals through the same gate.
 
-- **500+ Vitest tests** across ~74 files: schema coercion, planner attribution, one-repair fallback convergence, acceptance gating, editor-state integrity, publishing privacy, web-research/ingestion contracts, governed-MCP consent parity, and HTML/PPTX generation. TypeScript compile and the Vite production build are release gates.
+- **469 Vitest tests** across 59 files: schema coercion, planner attribution, one-repair fallback convergence, acceptance gating, editor-state integrity, publishing privacy, web-research/ingestion contracts, governed-MCP consent parity, and HTML/PPTX generation. TypeScript compile and the Vite production build are release gates.
 - **Independent UI audit** via the open-source [`agentic-ui-qa`](https://github.com/HomenShum/agentic-ui-qa) protocol — the Agentic UI Bar (B1–B11) for surface trust/operability and a Depth tier (D1–D11) for agent-product maturity — with findings tracked in an append-only ledger.
 
 The Trace inspector exposes the exact provider/model, plan, tool calls, operations, validation state, digests, token/cost usage, and the human decision — a compact run-metrics card over an auditable events chain, closing on a validation seal honestly labeled by run type (countersigned for a live run, provisional for a deterministic one).
 
 ## Repository status
 
-This repository is the fresh, public home for NodeSlide. It is currently seeded with the product documentation (PRD, TDD) and this overview. The running application lives at the [live demo](https://parity-studio.vercel.app/?domain=nodeslide) and its source in the `parity-studio` monorepo; migration into this repo is deliberate and staged:
+This repository is the public home for NodeSlide, extracted from the `parity-studio` monorepo.
 
-1. **Docs + overview** — *done* (this commit).
-2. **Source extraction** — lift `shared/nodeslide*`, `src/domains/nodeslide/`, the `convex/nodeslide*` server, and the MCP surface into a standalone, buildable package, with an IP-carve-out review (no out-of-scope Parity Studio platform IP) and a secrets scan.
-3. **Standalone quickstart** — `npm install && npm run dev` against a fresh Convex deployment, with a deterministic (no-key) path for reproducible runs.
-4. **CI + release gates** — typecheck, Vitest, production build, and the `agentic-ui-qa` audit.
+1. **Docs + overview** — ✅ done.
+2. **Source extraction** — ✅ done. `shared/nodeslide*`, `src/domains/nodeslide/`, the `convex/nodeslide*` server (schema trimmed to NodeSlide's 27 tables), and the MCP tools lifted into a standalone, buildable package. IP-carve-out verified (no Parity Studio platform IP; the frontend imports zero shell components) and secrets-scanned (none found).
+3. **Standalone build** — ✅ green. Convex backend deploys; `tsc -b` + `vite build` pass; **469/469 Vitest tests** pass; biome clean.
+4. **CI + release gates** — ⏳ next: wire typecheck + Vitest + build + the `agentic-ui-qa` audit into CI, and author the standalone MCP sub-package entry.
+
+The **live demo** currently runs the monorepo build at [parity-studio.vercel.app/?domain=nodeslide](https://parity-studio.vercel.app/?domain=nodeslide); a dedicated NodeSlide deployment can be published from this repo.
 
 ## License
 

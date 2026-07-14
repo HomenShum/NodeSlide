@@ -115,9 +115,11 @@ describe('NodeSlide v3 visual contract', () => {
     expect(css).toMatch(/\.ns-composer-field:focus-within[\s\S]*?border-color:[\s\S]*?box-shadow:/);
     expect(css).toMatch(/\.ns-composer-field textarea[\s\S]*?min-height: 92px;/);
 
-    // The composer is present and primary; zero-friction consent removed the
-    // inline per-request consent block entirely (disclosure lives in the model pill).
-    expect(aiInspectorSource).toContain('className="ns-composer-field ns-ai-v3-composer-field"');
+    // The composer now adopts the AI Elements PromptInput family (Path B); the
+    // typing surface is the controlled PromptInputTextarea. Zero-friction consent
+    // removed the inline per-request consent block entirely.
+    expect(aiInspectorSource).toContain('<PromptInputTextarea');
+    expect(aiInspectorSource).toContain('<PromptInputSubmit');
     expect(aiInspectorSource).not.toContain('className="ns-ai-inline-consent"');
   });
 

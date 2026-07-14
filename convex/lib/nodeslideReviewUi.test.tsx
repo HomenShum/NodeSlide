@@ -11,8 +11,10 @@ import {
   NODESLIDE_NEBIUS_VARIATIONS_CONSENT,
   NODESLIDE_OPENROUTER_REVIEW_CONSENT,
   NODESLIDE_OPENROUTER_VARIATIONS_CONSENT,
+  NODESLIDE_REASONING_EFFORTS,
   NODESLIDE_TOOLCHAIN_VERSION,
   type NodeSlideWorkspace,
+  nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
 import {
   type AiAgentActivity,
@@ -119,18 +121,29 @@ describe('NodeSlide AI review inspector', () => {
     expect(markup).toContain('It does not browse or fetch URLs');
     expect(markup).toContain('data-testid="ai-model-select"');
     expect(markup).toContain('data-testid="ai-effort-select"');
-    expect(markup).toContain('<option value="low">Light</option>');
-    expect(markup).toContain('<option value="medium">Medium</option>');
-    expect(markup).toContain('<option value="high" selected="">High</option>');
-    expect(markup).not.toContain('<option value="xhigh">Extra High</option>');
-    expect(markup).not.toContain('<option value="max">Ultra</option>');
+    // The model + effort pickers now render as portal-based Radix selects
+    // (AI Elements PromptInput), so their options are absent from static SSR
+    // markup. Assert the offered efforts/models at the data layer instead.
+    const defaultEffortIds = NODESLIDE_REASONING_EFFORTS.filter((effort) =>
+      nodeSlideModelSupportsReasoningEffort(NODESLIDE_DEFAULT_AGENT_MODEL, effort.id),
+    ).map((effort) => effort.id);
+    expect(defaultEffortIds).toContain('low');
+    expect(defaultEffortIds).toContain('medium');
+    expect(defaultEffortIds).toContain('high');
+    expect(defaultEffortIds).not.toContain('xhigh');
+    expect(defaultEffortIds).not.toContain('max');
     expect(markup).not.toMatch(/data-testid="ai-provider-controls"[^>]*open=/);
-    expect(markup).toContain('Claude Sonnet 5 · Anthropic');
-    expect(markup).toContain('Claude Fable 5 · Anthropic');
-    expect(markup).toContain('Gemini 3.5 Flash · Google');
-    expect(markup).toContain('Gemini 3.1 Pro · Google');
-    expect(markup).toContain('GPT-5.6 Sol · OpenAI');
-    expect(markup).toContain('GPT-5.6 Terra · OpenAI');
+    const modelLabels = NODESLIDE_AGENT_MODELS.map((model) => `${model.label} · ${model.vendor}`);
+    expect(modelLabels).toEqual(
+      expect.arrayContaining([
+        'Claude Sonnet 5 · Anthropic',
+        'Claude Fable 5 · Anthropic',
+        'Gemini 3.5 Flash · Google',
+        'Gemini 3.1 Pro · Google',
+        'GPT-5.6 Sol · OpenAI',
+        'GPT-5.6 Terra · OpenAI',
+      ]),
+    );
     expect(markup).not.toMatch(/ai-provider-consent/);
 
     expect(createAiProviderRequest('nebius', false)).toBeNull();
@@ -166,8 +179,14 @@ describe('NodeSlide AI review inspector', () => {
       initialProviderModel: 'z-ai/glm-5.2',
     });
 
-    expect(markup).toContain('<option value="xhigh">Extra High</option>');
-    expect(markup).toContain('<option value="max">Ultra</option>');
+    // Extended effort levels are provider-specific; assert them at the data
+    // layer since the effort picker is now a portal-based Radix select.
+    const glmEffortIds = NODESLIDE_REASONING_EFFORTS.filter((effort) =>
+      nodeSlideModelSupportsReasoningEffort('z-ai/glm-5.2', effort.id),
+    ).map((effort) => effort.id);
+    expect(glmEffortIds).toContain('xhigh');
+    expect(glmEffortIds).toContain('max');
+    expect(markup).toContain('data-testid="ai-effort-select"');
   });
 
   it('keeps the idle AI surface conversational while preserving advanced controls', () => {
@@ -287,7 +306,10 @@ describe('NodeSlide AI review inspector', () => {
     expect(commandMenu).toContain('/variations');
     expect(commandMenu).toContain('/edit');
     expect(commandMenu).toContain('/propagate');
-    expect(commandMenu.match(/<option value=/g)).toHaveLength(16 + NODESLIDE_AGENT_MODELS.length);
+    // Native <option> elements now come only from the three advanced-controls
+    // policy selects (operation 4 + design 5 + reference 3 = 12); the model and
+    // effort pickers moved to portal-based Radix selects (AI Elements).
+    expect(commandMenu.match(/<option value=/g)).toHaveLength(12);
     expect(commandMenu).toContain('Advanced controls');
   });
 

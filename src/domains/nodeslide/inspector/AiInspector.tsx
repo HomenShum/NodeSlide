@@ -1,5 +1,19 @@
 import {
-  ArrowUp,
+  PromptInput,
+  PromptInputButton,
+  PromptInputFooter,
+  PromptInputSelect,
+  PromptInputSelectContent,
+  PromptInputSelectItem,
+  PromptInputSelectTrigger,
+  PromptInputSelectValue,
+  PromptInputSubmit,
+  PromptInputTextarea,
+  PromptInputTools,
+} from '@/components/ai-elements/prompt-input';
+import { SelectGroup, SelectLabel } from '@/components/ui/select';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import {
   AtSign,
   Brain,
   Check,
@@ -968,9 +982,8 @@ export function AiInspector<CommandId extends string = string>({
         ) : null}
       </div>
 
-      <form
+      <div
         className={`ns-ai-composer ns-ai-v3-composer ${composerExpanded ? 'is-expanded' : ''}`}
-        onSubmit={submit}
         data-testid="ai-composer"
       >
         {showSuggested ? (
@@ -1227,199 +1240,211 @@ export function AiInspector<CommandId extends string = string>({
           </div>
         ) : null}
 
-        <div className="ns-composer-field ns-ai-v3-composer-field">
-          <label className="ns-sr-only" htmlFor={composerId}>
-            AI instruction
-          </label>
-          <textarea
-            ref={textareaRef}
-            id={composerId}
-            rows={composerExpanded ? 9 : 3}
-            value={instruction}
-            onChange={(event) => {
-              updateInstruction(event.target.value, event.target.selectionStart);
-            }}
-            onSelect={(event) => setCursorPosition(event.currentTarget.selectionStart)}
-            placeholder={
-              commentContext
-                ? 'Address this review comment without resolving it...'
-                : scopeChoice === 'elements'
-                  ? 'Make this feel more decisive...'
-                  : 'Turn this into a crisp executive story...'
-            }
-            onKeyDown={handleComposerKeyDown}
-            aria-autocomplete="list"
-            aria-controls={menuOpen ? menuId : undefined}
-            aria-expanded={menuOpen}
-            aria-haspopup="menu"
-          />
-          <div className="ns-composer-meta">
-            <div className="ns-composer-token-toolbar ns-ai-v3-composer-toolbar">
-              <label className="ns-ai-model-picker">
-                <Sparkles size={12} aria-hidden="true" />
-                <span className="ns-sr-only">Agent model</span>
-                <select
-                  value={providerMode === 'deterministic' ? 'deterministic' : providerModel}
-                  onChange={(event) => chooseProviderModel(event.target.value)}
-                  aria-label="Agent model"
-                  data-testid="ai-model-select"
-                >
-                  <optgroup label="Recommended">
-                    <option value={NODESLIDE_DEFAULT_AGENT_MODEL}>
-                      {nodeSlideAgentModel(NODESLIDE_DEFAULT_AGENT_MODEL).label} · Nebius ·
-                      Recommended
-                    </option>
-                  </optgroup>
-                  <optgroup label="More live models">
-                    {NODESLIDE_AGENT_MODELS.filter(
-                      (model) => model.id !== NODESLIDE_DEFAULT_AGENT_MODEL,
-                    ).map((model) => (
-                      <option key={model.id} value={model.id}>
-                        {model.label} · {model.vendor} ·{' '}
-                        {providerNameForMode(nodeSlideProviderModeForModel(model.id))}
-                      </option>
-                    ))}
-                  </optgroup>
-                  <optgroup label="Private fallback">
-                    <option value="deterministic">Deterministic · no external model</option>
-                  </optgroup>
-                </select>
-              </label>
-              {providerMode !== 'deterministic' ? (
-                <label className="ns-ai-model-picker ns-ai-effort-picker">
-                  <span className="ns-sr-only">Reasoning effort</span>
-                  <select
-                    value={providerEffort}
-                    onChange={(event) => {
-                      const effort = event.target.value as NodeSlideReasoningEffort;
-                      setProviderEffort(effort);
-                      window.localStorage.setItem('nodeslide.agent-effort', effort);
-                    }}
-                    aria-label="Reasoning effort"
-                    data-testid="ai-effort-select"
-                  >
-                    {NODESLIDE_REASONING_EFFORTS.filter((effort) =>
-                      nodeSlideModelSupportsReasoningEffort(providerModel, effort.id),
-                    ).map((effort) => (
-                      <option key={effort.id} value={effort.id}>
-                        {effort.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              ) : null}
-              <button
-                type="button"
-                onClick={() => setConnectionsOpen(true)}
-                aria-label="Connect BYOK model or coding agent"
-                title="Connect BYOK model or coding agent"
-                data-testid="ai-connect-agent"
-              >
-                <PlugZap size={12} /> Connect
-              </button>
-              <button
-                type="button"
-                className={webResearch ? 'is-active' : ''}
-                aria-pressed={webResearch}
-                onClick={() => {
-                  setWebResearch((enabled) => !enabled);
+        <div className="ns-ai-elements ns-ai-v3-prompt">
+          <TooltipProvider delayDuration={200}>
+            <PromptInput className="ns-prompt-input" onSubmit={(_message, event) => submit(event)}>
+              <PromptInputTextarea
+                ref={textareaRef}
+                id={composerId}
+                rows={composerExpanded ? 9 : 3}
+                value={instruction}
+                onChange={(event) => {
+                  updateInstruction(event.target.value, event.target.selectionStart);
                 }}
-                data-testid="ai-web-research-toggle"
-                title="Search the web and persist source snapshots before planning"
-              >
-                <Globe2 size={12} /> Web
-              </button>
-              {onCreateMemory && onUpdateMemory && onDeleteMemory ? (
-                <button
-                  type="button"
-                  className={useMemoryForRun ? 'is-active' : ''}
-                  onClick={() => setMemoryOpen(true)}
-                  aria-label="Manage deck memory"
-                  aria-pressed={useMemoryForRun}
-                  data-testid="ai-memory"
-                  title="Manage durable deck memory"
-                >
-                  <Brain size={12} /> Memory
-                  {memories.length ? ` ${activeMemoryCount}` : ''}
-                </button>
-              ) : null}
-              <button
-                type="button"
-                onClick={() => openTokenMenu('@')}
-                disabled={references.length === 0}
-                aria-label="Add read context reference"
-                title="Add read context"
-              >
-                <AtSign size={12} /> Context
-              </button>
-              <button
-                type="button"
-                onClick={() => openTokenMenu('/')}
-                aria-label="Add command"
-                title="Add command"
-              >
-                <Command size={12} /> Insert
-              </button>
-              {onAttachDataFile ? (
-                <>
-                  <input
-                    ref={attachmentInputRef}
-                    className="ns-sr-only"
-                    type="file"
-                    accept=".csv,.json,.txt,text/csv,application/json,text/plain"
-                    data-testid="ai-data-file-input"
-                    onChange={(event) => {
-                      const file = event.currentTarget.files?.[0];
-                      event.currentTarget.value = '';
-                      if (file) void attachDataFile(file);
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => attachmentInputRef.current?.click()}
-                    disabled={attachmentBusy}
-                    aria-label="Attach data file"
-                    title="Attach CSV, JSON, or text data"
-                    data-testid="ai-attach-data"
+                onSelect={(event) => setCursorPosition(event.currentTarget.selectionStart)}
+                placeholder={
+                  commentContext
+                    ? 'Address this review comment without resolving it...'
+                    : scopeChoice === 'elements'
+                      ? 'Make this feel more decisive...'
+                      : 'Turn this into a crisp executive story...'
+                }
+                onKeyDown={handleComposerKeyDown}
+                aria-label="AI instruction"
+                aria-autocomplete="list"
+                aria-controls={menuOpen ? menuId : undefined}
+                aria-expanded={menuOpen}
+                aria-haspopup="menu"
+              />
+              <PromptInputFooter className="ns-prompt-footer">
+                <PromptInputTools className="ns-prompt-tools">
+                  <PromptInputSelect
+                    value={providerMode === 'deterministic' ? 'deterministic' : providerModel}
+                    onValueChange={chooseProviderModel}
                   >
-                    {attachmentBusy ? (
-                      <LoaderCircle className="ns-spin" size={12} />
-                    ) : (
-                      <Paperclip size={12} />
-                    )}{' '}
-                    Data
-                  </button>
-                </>
-              ) : null}
-              <span>
-                {requestedReadContext.length > 0
-                  ? `${requestedReadContext.length} explicit reference${requestedReadContext.length === 1 ? '' : 's'}`
-                  : 'Scoped context'}
-              </span>
-            </div>
-            <button
-              type="button"
-              className="ns-ai-v3-expand-composer"
-              onClick={() => setComposerExpanded((expanded) => !expanded)}
-              aria-label={composerExpanded ? 'Collapse composer' : 'Expand composer'}
-              aria-pressed={composerExpanded}
-              title={composerExpanded ? 'Collapse composer' : 'Expand composer'}
-            >
-              <Maximize2 size={14} />
-            </button>
-            <button
-              type="submit"
-              disabled={!instruction.trim() || isSubmitting || !providerReady}
-              aria-label="Propose edit"
-              data-testid="ai-submit"
-            >
-              {isSubmitting ? (
-                <LoaderCircle className="ns-spin" size={15} />
-              ) : (
-                <ArrowUp size={15} />
-              )}
-            </button>
-          </div>
+                    <PromptInputSelectTrigger
+                      className="ns-prompt-model"
+                      aria-label="Agent model"
+                      data-testid="ai-model-select"
+                    >
+                      <Sparkles size={12} aria-hidden="true" />
+                      <PromptInputSelectValue placeholder="Model" />
+                    </PromptInputSelectTrigger>
+                    <PromptInputSelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Recommended</SelectLabel>
+                        <PromptInputSelectItem
+                          value={NODESLIDE_DEFAULT_AGENT_MODEL}
+                          textValue={nodeSlideAgentModel(NODESLIDE_DEFAULT_AGENT_MODEL).label}
+                        >
+                          {nodeSlideAgentModel(NODESLIDE_DEFAULT_AGENT_MODEL).label} · Nebius ·
+                          Recommended
+                        </PromptInputSelectItem>
+                      </SelectGroup>
+                      <SelectGroup>
+                        <SelectLabel>More live models</SelectLabel>
+                        {NODESLIDE_AGENT_MODELS.filter(
+                          (model) => model.id !== NODESLIDE_DEFAULT_AGENT_MODEL,
+                        ).map((model) => (
+                          <PromptInputSelectItem
+                            key={model.id}
+                            value={model.id}
+                            textValue={model.label}
+                          >
+                            {model.label} · {model.vendor} ·{' '}
+                            {providerNameForMode(nodeSlideProviderModeForModel(model.id))}
+                          </PromptInputSelectItem>
+                        ))}
+                      </SelectGroup>
+                      <SelectGroup>
+                        <SelectLabel>Private fallback</SelectLabel>
+                        <PromptInputSelectItem value="deterministic" textValue="Deterministic">
+                          Deterministic · no external model
+                        </PromptInputSelectItem>
+                      </SelectGroup>
+                    </PromptInputSelectContent>
+                  </PromptInputSelect>
+                  {providerMode !== 'deterministic' ? (
+                    <PromptInputSelect
+                      value={providerEffort}
+                      onValueChange={(value) => {
+                        const effort = value as NodeSlideReasoningEffort;
+                        setProviderEffort(effort);
+                        window.localStorage.setItem('nodeslide.agent-effort', effort);
+                      }}
+                    >
+                      <PromptInputSelectTrigger
+                        className="ns-prompt-effort"
+                        aria-label="Reasoning effort"
+                        data-testid="ai-effort-select"
+                      >
+                        <PromptInputSelectValue placeholder="Effort" />
+                      </PromptInputSelectTrigger>
+                      <PromptInputSelectContent>
+                        {NODESLIDE_REASONING_EFFORTS.filter((effort) =>
+                          nodeSlideModelSupportsReasoningEffort(providerModel, effort.id),
+                        ).map((effort) => (
+                          <PromptInputSelectItem key={effort.id} value={effort.id}>
+                            {effort.label}
+                          </PromptInputSelectItem>
+                        ))}
+                      </PromptInputSelectContent>
+                    </PromptInputSelect>
+                  ) : null}
+                  <PromptInputButton
+                    onClick={() => setConnectionsOpen(true)}
+                    tooltip="Connect BYOK model or coding agent"
+                    aria-label="Connect BYOK model or coding agent"
+                    data-testid="ai-connect-agent"
+                  >
+                    <PlugZap size={14} />
+                  </PromptInputButton>
+                  <PromptInputButton
+                    variant={webResearch ? 'default' : 'ghost'}
+                    aria-pressed={webResearch}
+                    onClick={() => {
+                      setWebResearch((enabled) => !enabled);
+                    }}
+                    tooltip="Search the web and persist source snapshots before planning"
+                    aria-label="Toggle web research"
+                    data-testid="ai-web-research-toggle"
+                  >
+                    <Globe2 size={14} />
+                  </PromptInputButton>
+                  {onCreateMemory && onUpdateMemory && onDeleteMemory ? (
+                    <PromptInputButton
+                      variant={useMemoryForRun ? 'default' : 'ghost'}
+                      onClick={() => setMemoryOpen(true)}
+                      aria-label="Manage deck memory"
+                      aria-pressed={useMemoryForRun}
+                      data-testid="ai-memory"
+                      tooltip="Manage durable deck memory"
+                    >
+                      <Brain size={14} />
+                      {memories.length ? (
+                        <span className="ns-prompt-badge">{activeMemoryCount}</span>
+                      ) : null}
+                    </PromptInputButton>
+                  ) : null}
+                  <PromptInputButton
+                    onClick={() => openTokenMenu('@')}
+                    disabled={references.length === 0}
+                    aria-label="Add read context reference"
+                    tooltip="Add read context (@)"
+                  >
+                    <AtSign size={14} />
+                  </PromptInputButton>
+                  <PromptInputButton
+                    onClick={() => openTokenMenu('/')}
+                    aria-label="Add command"
+                    tooltip="Insert command (/)"
+                  >
+                    <Command size={14} />
+                  </PromptInputButton>
+                  {onAttachDataFile ? (
+                    <>
+                      <input
+                        ref={attachmentInputRef}
+                        className="ns-sr-only"
+                        type="file"
+                        accept=".csv,.json,.txt,text/csv,application/json,text/plain"
+                        data-testid="ai-data-file-input"
+                        onChange={(event) => {
+                          const file = event.currentTarget.files?.[0];
+                          event.currentTarget.value = '';
+                          if (file) void attachDataFile(file);
+                        }}
+                      />
+                      <PromptInputButton
+                        onClick={() => attachmentInputRef.current?.click()}
+                        disabled={attachmentBusy}
+                        aria-label="Attach data file"
+                        tooltip="Attach CSV, JSON, or text data"
+                        data-testid="ai-attach-data"
+                      >
+                        {attachmentBusy ? (
+                          <LoaderCircle className="ns-spin" size={14} />
+                        ) : (
+                          <Paperclip size={14} />
+                        )}
+                      </PromptInputButton>
+                    </>
+                  ) : null}
+                  <span className="ns-prompt-context-count">
+                    {requestedReadContext.length > 0
+                      ? `${requestedReadContext.length} ref${requestedReadContext.length === 1 ? '' : 's'}`
+                      : 'Scoped'}
+                  </span>
+                </PromptInputTools>
+                <div className="ns-prompt-submit-group">
+                  <PromptInputButton
+                    onClick={() => setComposerExpanded((expanded) => !expanded)}
+                    aria-label={composerExpanded ? 'Collapse composer' : 'Expand composer'}
+                    aria-pressed={composerExpanded}
+                    tooltip={composerExpanded ? 'Collapse composer' : 'Expand composer'}
+                  >
+                    <Maximize2 size={14} />
+                  </PromptInputButton>
+                  <PromptInputSubmit
+                    status={isSubmitting ? 'submitted' : 'ready'}
+                    disabled={!instruction.trim() || isSubmitting || !providerReady}
+                    aria-label="Propose edit"
+                    data-testid="ai-submit"
+                  />
+                </div>
+              </PromptInputFooter>
+            </PromptInput>
+          </TooltipProvider>
         </div>
 
         {attachmentError ? (
@@ -1483,7 +1508,7 @@ export function AiInspector<CommandId extends string = string>({
             ? 'private deterministic processing'
             : `${selectedAgentModel.label} · ${effortLabel(providerEffort)} effort`}
         </small>
-      </form>
+      </div>
       <NodeSlideConnectionsDialog
         open={connectionsOpen}
         onClose={() => setConnectionsOpen(false)}

@@ -42,9 +42,7 @@ export function serializeDeckJson(value: unknown): string {
   return JSON.stringify(value, null, 2);
 }
 
-export type ElementEditResult =
-  | { ok: true; ops: PatchOperation[] }
-  | { ok: false; error: string };
+export type ElementEditResult = { ok: true; ops: PatchOperation[] } | { ok: false; error: string };
 
 const EDITABLE_NOTE =
   'Editable from JSON: position, size, text, style, visibility, and (for charts) chart data.';
@@ -77,7 +75,10 @@ const UNSUPPORTED_FIELDS: readonly (keyof SlideElement)[] = [
  * and unsupported fields are rejected rather than dropped; the returned ops still
  * pass through the server's validate → CAS → commit gate — no second write path.
  */
-export function synthesizeElementOps(original: SlideElement, editedRaw: unknown): ElementEditResult {
+export function synthesizeElementOps(
+  original: SlideElement,
+  editedRaw: unknown,
+): ElementEditResult {
   if (typeof editedRaw !== 'object' || editedRaw === null || Array.isArray(editedRaw)) {
     return { ok: false, error: 'Edited JSON must be a single element object.' };
   }
@@ -129,7 +130,10 @@ export function synthesizeElementOps(original: SlideElement, editedRaw: unknown)
     unsupported.push('chart');
   }
   if (unsupported.length > 0) {
-    return { ok: false, error: `Not editable from JSON yet: ${unsupported.join(', ')}. ${EDITABLE_NOTE}` };
+    return {
+      ok: false,
+      error: `Not editable from JSON yet: ${unsupported.join(', ')}. ${EDITABLE_NOTE}`,
+    };
   }
 
   return { ok: true, ops };

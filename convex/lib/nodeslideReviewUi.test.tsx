@@ -123,7 +123,9 @@ describe('NodeSlide AI review inspector', () => {
     expect(markup).toContain('data-testid="ai-effort-select"');
     // The model + effort pickers now render as portal-based Radix selects
     // (AI Elements PromptInput), so their options are absent from static SSR
-    // markup. Assert the offered efforts/models at the data layer instead.
+    // markup. Here we assert the offered efforts/models at the data layer; the
+    // behavioural guarantee that AiInspector actually renders every model into
+    // the picker lives in nodeslideModelPicker.test.tsx (jsdom interaction).
     const defaultEffortIds = NODESLIDE_REASONING_EFFORTS.filter((effort) =>
       nodeSlideModelSupportsReasoningEffort(NODESLIDE_DEFAULT_AGENT_MODEL, effort.id),
     ).map((effort) => effort.id);

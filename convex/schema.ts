@@ -170,17 +170,6 @@ export const RUN_STATUSES = [
   'failed',
 ] as const;
 
-const SUPPORTED_PROVIDER_UNION = v.union(
-  v.literal('anthropic'),
-  v.literal('openai'),
-  v.literal('google'),
-  v.literal('openrouter'),
-  v.literal('groq'),
-  v.literal('cerebras'),
-  v.literal('xai'),
-  v.literal('mistral'),
-);
-
 export const PARITY_STATUSES = [
   'verified',
   'needs_review',

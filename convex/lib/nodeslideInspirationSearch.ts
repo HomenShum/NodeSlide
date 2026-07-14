@@ -54,32 +54,6 @@ function productFromUrl(rawUrl: string): string {
   }
 }
 
-function searchQueryFromContext(input: {
-  query?: string;
-  title?: string;
-  prompt?: string;
-  paritySummary?: string;
-  filePaths: string[];
-  mediaPreference: MediaPreference;
-}): string {
-  const explicit = input.query?.replace(/\s+/g, ' ').trim();
-  if (explicit) return explicit.slice(0, 380);
-  const parts = [
-    input.title,
-    input.prompt,
-    input.paritySummary,
-    input.filePaths.slice(0, 8).join(' '),
-    input.mediaPreference === 'videos'
-      ? 'product UI demo video design inspiration'
-      : 'product UI design inspiration screenshots references',
-  ]
-    .filter(Boolean)
-    .join(' ');
-  return (
-    parts.replace(/\s+/g, ' ').trim().slice(0, 380) || 'product UI design inspiration references'
-  );
-}
-
 async function withTimeout<T>(
   timeoutMs: number,
   fn: (signal: AbortSignal) => Promise<T>,

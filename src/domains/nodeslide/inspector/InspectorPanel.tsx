@@ -472,6 +472,7 @@ export function InspectorPanel<CommandId extends string = string>({
             slide={slide}
             selectedElements={selectedElements}
             patches={workspace.patches}
+            onApplyPatch={onApplyDesignPatch}
           />
         ) : null}
         {activeTab === 'trace' ? (

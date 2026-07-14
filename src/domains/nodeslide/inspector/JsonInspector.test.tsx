@@ -5,7 +5,12 @@ import {
   NODESLIDE_SCHEMA_VERSION,
   NODESLIDE_TOOLCHAIN_VERSION,
 } from '../../../../shared/nodeslide';
-import { JsonInspector, deckJsonView, serializeDeckJson } from './JsonInspector';
+import {
+  JsonInspector,
+  deckJsonView,
+  serializeDeckJson,
+  synthesizeElementOps,
+} from './JsonInspector';
 
 const now = 1_700_000_000_000;
 
@@ -155,5 +160,101 @@ describe('JsonInspector render', () => {
     // the default (deck) view actually shows the serialized DeckSpec
     expect(html).toContain('deck-1');
     expect(html).toContain('&quot;schemaVersion&quot;');
+  });
+});
+
+describe('synthesizeElementOps', () => {
+  const snap = snapshot();
+  const [textElement, chartElement] = snap.elements;
+  if (!textElement || !chartElement) throw new Error('fixture needs a text and a chart element');
+
+  it('emits move + resize for bbox changes', () => {
+    const result = synthesizeElementOps(textElement, {
+      ...textElement,
+      bbox: { ...textElement.bbox, x: 0.2, height: 0.3 },
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.ops).toEqual([
+      {
+        op: 'move',
+        slideId: textElement.slideId,
+        elementId: textElement.id,
+        x: 0.2,
+        y: textElement.bbox.y,
+      },
+      {
+        op: 'resize',
+        slideId: textElement.slideId,
+        elementId: textElement.id,
+        width: textElement.bbox.width,
+        height: 0.3,
+      },
+    ]);
+  });
+
+  it('emits replace_text, update_style, and set_visibility_v1', () => {
+    const styled = synthesizeElementOps(textElement, {
+      ...textElement,
+      content: 'After',
+      style: { ...textElement.style, fontSize: 40 },
+    });
+    expect(styled.ok).toBe(true);
+    if (!styled.ok) return;
+    expect(styled.ops.map((op) => op.op)).toEqual(['replace_text', 'update_style']);
+
+    const hidden = synthesizeElementOps(textElement, { ...textElement, visible: false });
+    expect(hidden.ok).toBe(true);
+    if (!hidden.ok) return;
+    expect(hidden.ops).toEqual([
+      {
+        op: 'set_visibility_v1',
+        slideId: textElement.slideId,
+        elementId: textElement.id,
+        visible: false,
+      },
+    ]);
+  });
+
+  it('emits update_chart for a chart element', () => {
+    const chartData = chartElement.chart;
+    if (!chartData) throw new Error('chart fixture needs chart data');
+    const result = synthesizeElementOps(chartElement, {
+      ...chartElement,
+      chart: { ...chartData, labels: ['A', 'B', 'C'] },
+    });
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.ops.map((op) => op.op)).toEqual(['update_chart']);
+  });
+
+  it('returns ok with no ops when nothing changed', () => {
+    expect(synthesizeElementOps(textElement, { ...textElement })).toEqual({ ok: true, ops: [] });
+  });
+
+  it('blocks identity changes, unsupported fields, and non-objects', () => {
+    expect(synthesizeElementOps(textElement, { ...textElement, id: 'other' }).ok).toBe(false);
+    expect(synthesizeElementOps(textElement, { ...textElement, kind: 'shape' }).ok).toBe(false);
+    expect(synthesizeElementOps(textElement, { ...textElement, rotation: 45 }).ok).toBe(false);
+    expect(synthesizeElementOps(textElement, 'not an object').ok).toBe(false);
+  });
+});
+
+describe('JsonInspector editing', () => {
+  it('advertises the validated edit path when onApplyPatch is provided', () => {
+    const snap = snapshot();
+    const [slide] = snap.slides;
+    const [element] = snap.elements;
+    if (!slide || !element) throw new Error('fixture needs a slide and element');
+    const html = renderToStaticMarkup(
+      <JsonInspector
+        snapshot={snap}
+        slide={slide}
+        selectedElements={[element]}
+        patches={[]}
+        onApplyPatch={() => undefined}
+      />,
+    );
+    expect(html).toContain('flow through the validated');
   });
 });

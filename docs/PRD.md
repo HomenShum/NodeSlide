@@ -1,78 +1,71 @@
-# NodeSlide — Product Requirements Document
+# NodeSlide Product Requirements Document
 
-**Build challenge:** Slidelang
+**Build Challenge:** AI Fund SlideLang. **Prototype:** [parity-studio.vercel.app/?domain=nodeslide](https://parity-studio.vercel.app/?domain=nodeslide)
 
-**Prototype:** [parity-studio.vercel.app](https://parity-studio.vercel.app/)
+**Thesis:** A presentation should be a trustworthy, editable program, not an opaque image returned by a prompt. NodeSlide compiles a prompt into a typed `DeckSnapshot` where every change, human or agent, flows through one validated mutation path.
 
-**Product thesis:** A presentation should be a trustworthy, editable program—not an opaque image returned by a prompt.
+This is a show-your-work doc. Every claim below cites the code that backs it.
 
-## Problem and user
+## 1. The deck creator and workflow
 
-Creating a credible deck still involves a costly loop: research, outline, layout, review, correction, export, and presentation. Prompt-to-image slide tools shorten the first draft but usually discard the structure that professionals need afterward. Numbers cannot be inspected, charts cannot be rebound to data, layout defects are hard to repair, and every revision becomes another generation request.
+What a user does, end to end:
 
-NodeSlide is for founders, analysts, operators, researchers, and technical teams who create recurring decks and need both AI speed and human control. The initial wedge is repeatable, evidence-heavy work—market updates, operating reviews, technical explainers, and data narratives—where provenance and safe revision matter more than a one-off visual.
+1. **Intake.** The landing composer asks "What presentation should we build?" and takes a prompt plus an optional structured brief (`DeckBrief`: prompt, audience, purpose, successCriteria) and CSV/JSON/TXT uploads. The user picks a model, a reasoning effort, and whether to allow web research inside the composer. Navigator, canvas, inspector, validation, and trace stay hidden until creation starts.
+2. **Compile.** NodeSlide plans and compiles a multi-slide `nodeslide.slidelang/v1` deck. The default route is managed Nebius `GLM-5.2` at `high` effort (`NODESLIDE_DEFAULT_AGENT_MODEL`, `NODESLIDE_DEFAULT_REASONING_EFFORT`). A deterministic path needs no API key and produces a reproducible deck.
+3. **Edit and review.** The browser editor renders native structured elements: `text`, `shape`, `image`, `chart`, `math`, `video`, `connector` (`ElementKind`). The user edits copy and style directly, or asks the agent in the AI inspector (`AiInspector.tsx`) for a scoped change.
+4. **Propose before mutate.** Agent output arrives as a `DeckPatch` in `awaiting_review` (`nodeslideAgent.proposeEdit`), carrying the exact `PatchOperation[]`, model attribution, token and cost usage, a `candidateDigest`, and a `candidateValidation` receipt. The canonical deck does not change until a human accepts.
+5. **Validate, publish, present.** Three gates guard present, publish, and export. A clean deck presents in-app, publishes as an immutable share snapshot, or exports to editable HTML and PPTX.
 
-## Core workflow
+Every failure mode (provider timeout, unavailability, invalid JSON after one repair attempt, exception) converges on a labeled deterministic fallback that is still a reviewable proposal (`nodeslideEditPlanner.ts`, `origin: 'deterministic_fallback'`). No fabricated AI success. No raw error dumped to the user.
 
-1. A creator lands on a clean, intent-first composer ("What presentation should we build?") and enters a prompt, structured spec, or evidence—choosing the model, effort, web-research, and any uploaded data inside the composer. The navigator, canvas, inspector, validation, and trace are revealed only after creation begins.
-2. NodeSlide plans and compiles a multi-slide `nodeslide.slidelang/v1` deck specification.
-3. The browser editor renders native structured elements: text, shape, image, chart, math, video, and connector primitives. Speaker notes live on the slide as the private `notes` field.
-4. The creator directly edits copy and styling or asks the agent for a scoped change.
-5. Agent changes arrive as proposals. NodeSlide shows the exact operations, model attribution, cost and token usage, candidate digest, validation receipt, and human decision boundary.
-6. The creator previews, accepts, or rejects. The canonical deck is unchanged until acceptance.
-7. Validation gates presentation, publishing, and export. A successful deck can be presented in the app, published as an immutable share version, or exported to HTML and PowerPoint.
+## 2. Why structured authoring beats prompt-to-static-slides
 
-The product supports a deterministic generation path for reliable demos and an explicitly consented external-model path. A model selector offers private-deterministic plus named models (GLM 5.2, Claude, Gemini, GPT); the recommended route is managed **Nebius GLM 5.2** through the pi-ai orchestration library at native reasoning efforts (low / medium / high), and creators may bring their own provider key (BYOK). Consent names the exact provider, model, and effort before any egress. Every failure mode—timeout, unavailability, invalid JSON after one repair attempt, or exception—converges on a labeled deterministic fallback that is still a reviewable proposal, never a fabricated AI success or a raw error.
+Prompt-to-image tools shorten the first draft and throw away the structure professionals need next. A picture cannot be inspected, its chart cannot be rebound to data, a layout defect is hard to repair, and every revision is another full generation.
 
-Two capabilities ground the agent in evidence. **Consented web research** (Linkup) runs bounded searches and URL reads, persists source snapshots, and attaches citations to the claims they support. **Data ingestion** accepts CSV/JSON/TXT uploads as typed source records (digest, columns, row count, size) that bind to chart and formula primitives, with per-source retention and deletion controls. Agent runs are **durable**: long jobs persist server-side with live progress, cancellation, idempotency, and reload recovery, and multi-turn conversations carry memory across turns.
+The `DeckSnapshot` is a typed system, not a bitmap. `deck`, `slides[]`, `elements[]`, and `sources[]` stay connected. Each `SlideElement` carries a stable `id`, normalized geometry (`BoundingBox` in 0..1), type-specific data (`ChartData`, `MathData`, `VideoData`, `ImageData`), style, `sourceIds`, `exportCapabilities`, and a `version` clock. Render targets (browser, HTML, PPTX) are derived, never the source.
 
-## Why structured authoring wins
+That structure buys what an image cannot: direct edit without regeneration, data-bound charts, math preserved as an editable `expression`, element- and slide-scoped AI ops, reviewable diffs and versions (`DeckVersion` stores a full snapshot per version), and immutable public publishing where private `notes` stay private. Editable beats throwaway because the asset survives the next revision.
 
-The deck specification is the source of truth. Every slide and element has a stable ID, normalized geometry, type-specific data, style, sources, export capabilities, and version clocks. That enables capabilities a static slide image cannot provide:
+## 3. What makes the generated deck trustworthy and editable
 
-- direct editing without regeneration;
-- data-bound charts and preserved math expressions;
-- source and speaker-note management;
-- element- and slide-scoped AI operations;
-- deterministic validation and repair suggestions;
-- reviewable diffs, comments, versions, and stale-work rejection;
-- multiple render targets from one canonical deck;
-- immutable public publishing while private notes and internal source metadata remain private.
+Trust is a product surface, not a hidden backend step. Six mechanisms, all live in code:
 
-Math remains editable by preserving the expression and syntax. Browser video is native; PowerPoint receives a clearly labeled linked-media placeholder rather than pretending to create a native embedded video. These fallbacks are visible in capability and validation receipts.
+- **Stable IDs and normalized geometry.** Every id is deterministic (`nodeslideStableId`). Every box is validated 0..1 with no overflow (`isNormalizedBoundingBox`). The 13.333 x 7.5 in canvas is fixed, so geometry ports cleanly to PPTX.
+- **One mutation path.** Every edit (drag, resize, a Design control, an agent proposal, a repair) reduces to one of 17 typed `PatchOperation` variants. Client preview is local. Acceptance is a server mutation (`commitPatch` in `convex/nodeslide.ts`).
+- **CAS on version clocks.** `commitPatch` reruns `validateNodeSlidePatch`, then `evaluateNodeSlideCas` compares `baseDeckVersion` plus per-slide and per-element clocks. A stale write is rejected and marked `stale`. Non-overlapping fine-grained edits rebase onto a newer version. No client optimism.
+- **Digest-bound candidates.** The server rebuilds the exact candidate, recomputes `candidateDigest`, and refuses to commit if the digest no longer matches its preflight validation binding, even when the deck itself validates. A delayed agent result cannot overwrite newer human work.
+- **Scoped writes and consent.** `PatchScope` limits write authority to a deck, slides, elements, a box, or a comment, with an `OperationMode` (copy, style, layout, unrestricted). Read authority (`AgentReadReference`) is separate from write authority. External egress requires an exact, per-operation consent string (`NODESLIDE_NEBIUS_REVIEW_CONSENT`, `NODESLIDE_WEB_RESEARCH_CONSENT`, and peers). Consent for review is not interchangeable with consent for web research.
+- **Provenance and trace receipts.** Web claims attach `SourceRecord` citations with `{url, retrievedAt, citation}`. Uploaded data lands as typed sources (digest, columns, rowCount, byteSize) bound to charts and formulas. The `AgentTrace` records provider, model, effort, input and output tokens, `costMicroUsd`, and a validation seal labeled honestly by run type: countersigned for a live run, provisional for a deterministic one.
 
-## Trust and validation
+## 4. The wedge and the broader platform
 
-Trust is a product surface, not a hidden backend step. NodeSlide checks schema integrity, element bounds, overlap, text fit, missing assets, source coverage, export capability, and publication readiness. Repairs are explicit proposals. Candidate operations are revalidated on the server and bound to a digest before acceptance. Scope limits, expected version clocks, and stale-candidate checks prevent a delayed agent result from overwriting newer human work.
+Start narrow. One buyer, one pain. The buyer is the operator or analyst who ships recurring, evidence-heavy decks: diligence memos, operating reviews, board and investor material, technical explainers. The pain is that these decks must be defended, and a generated image cannot be defended. Provenance and safe revision matter more than a one-off visual.
 
-The Trace inspector is a compact run-metrics card (run time, tokens, cost, validation) above an auditable-events chain—authorization → context → plan → actions → validation → approval—closing on a validation seal that is honestly labeled by run type (countersigned for a live run, provisional/"machine only, not signable" for a deterministic one). Three densities control depth:
+From that wedge the same compiler expands: reusable team templates, scheduled data refresh, a first-class deck-JSON source panel, a governed MCP surface so a coding agent inherits the same consent and gates as the UI, and agent-to-agent deck production. The durable asset is an inspectable presentation program that humans and agents evolve together. This is non-hype because the data model already supports it. The missing work is the connector and source-UI layer, not a schema rewrite.
 
-- **Overview:** the chain-of-custody summary from context read through human decision, with the seal;
-- **Evidence:** plan, tools, guardrails, operations, tokens, cost, and validation status;
-- **Raw:** model/provider, digests, toolchain version, shadow controls, and raw trace/patch JSON.
+## 5. Validation plan and success metrics
 
-Published snapshots are immutable and omit speaker notes. Owner credentials and private source metadata are not included in public payloads.
+**Three gates** from `validateNodeSlideSnapshot`, computed on the candidate before commit:
 
-## Launch requirements
+| Gate | Blocks | Rule |
+|---|---|---|
+| `ok` | present | no `error` issues (schema, geometry, missing asset, mismatched chart data) |
+| `publishOk` | publish and export | no errors, and no `warning` on source, contrast, font size, export, or on-brand |
+| `cleanOk` | "clean" badge | no non-info issues at all |
 
-- A new user can generate a coherent multi-slide deck from a prompt without setup.
-- The generated deck includes editable text plus chart, math, and image primitives; video is supported when supplied.
-- Direct browser edits and agent proposals update the same canonical schema.
-- Invalid or stale proposals cannot mutate the deck.
-- Validation blocks unsafe present, publish, or export actions.
-- Public links open without owner credentials and do not expose private notes.
-- HTML and PowerPoint exports preserve editable structure where the target supports it and label fallbacks where it does not.
-- Web claims carry a source with URL, retrieval time, and excerpt; uploaded data is deletable and its retention is disclosed.
-- Long agent runs are cancellable and resume after reload without duplicating work.
-- Creators can bring their own provider key (BYOK) and connect their own coding agents over a governed MCP surface that enforces the same consent, write-scope, proposal-before-mutate, and receipt gates as the UI.
-- The core workflow is usable on the hosted deployment and demonstrated end to end.
+**Render-repair loop** (`nodeslideRenderRepairLoop.ts`) is bounded and deterministic. It renders, observes, proposes a repair, revalidates, and reapplies through the same CAS and patch validators. Default budget is 4 attempts and 45s. Hard caps are 8 attempts, 120s, 128 ops, 20MB render, with cycle and no-progress detection. It always terminates with a labeled reason. Provider JSON gets exactly one repair attempt (`nodeslideProvider.ts`, two model calls max) before falling back deterministically.
 
-## Success metrics
+**Targets for the challenge prototype:**
 
-For the challenge prototype, success means: 95% of seeded prompt runs produce a schema-valid deck; 100% of agent mutations remain gated until acceptance; 100% of stale or digest-mismatched candidates are rejected; no speaker notes appear in public snapshots; and the core prompt → edit → validate → publish/present flow completes without manual database intervention.
+| Metric | Target |
+|---|---|
+| Seeded prompt runs producing an `ok` deck first try | ≥ 95% |
+| Agent mutations gated until human acceptance | 100% |
+| Stale or digest-mismatched candidates rejected | 100% |
+| Render-repair runs that terminate (clean or labeled stop) | 100%, never unbounded |
+| Speaker `notes` leaked into public snapshots | 0 (enforced by `PublishedSlide = Omit<Slide,'notes'>`) |
+| Time to first editable deck, deterministic path | < 30s |
 
-For an early product cohort, measure time to first publishable deck, proposal acceptance rate, validation issues per slide, successful repair rate, export success, repeat decks per creator, and the percentage of revisions completed as scoped edits instead of full regeneration. The north-star metric is **validated, human-approved decks published per active team**.
+**Targets for an early cohort:** edit-accept rate ≥ 70%, validation issues per slide < 1.0, successful repair convergence ≥ 80%, and share of revisions done as scoped edits instead of full regeneration ≥ 60%. North-star: validated, human-approved decks published per active team.
 
-## Product wedge and expansion
-
-NodeSlide starts with recurring analytical and technical decks because their structure, data, and evidence make the value of deck-as-code obvious. The same compiler can expand into reusable team templates, scheduled data refresh, CLI and plugin authoring, collaborative approval workflows, organization design systems, and agent-to-agent deck production. The durable asset is not a generated picture; it is an inspectable presentation program that humans and agents can safely evolve together.
+Verification today: 482 Vitest tests across 61 files (including a jsdom interaction test that opens the Radix model picker and asserts every offered model renders), plus `tsc -b` and `vite build` as release gates. Honest gaps: PPTX export is real and labeled "Editable with fallbacks" (math as text, linked-video placeholder). PPTX import extracts design taste, not slides. A user-facing deck-JSON surface is in progress. The data model round-trips all of it.

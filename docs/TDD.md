@@ -1,92 +1,71 @@
-# NodeSlide — Technical Design Document
+# NodeSlide Technical Design Document
 
-**Schema:** `nodeslide.slidelang/v1`
+**Schema:** `nodeslide.slidelang/v1` (`shared/nodeslide.ts`, `NODESLIDE_SCHEMA_VERSION`)
+**Toolchain:** `local-slidelang-adapter/1.1.0` (`NODESLIDE_TOOLCHAIN_VERSION`)
+**Runtime:** React + TypeScript + Vite front end, Convex backend, PptxGenJS export, `@earendil-works/pi-ai` provider layer, governed MCP server (`mcp/`).
 
-**Toolchain:** `local-slidelang-adapter/1.1.0`
-
-**Runtime:** React + TypeScript + Vite, Convex, PptxGenJS, pi-ai (managed Nebius / OpenRouter / BYOK), Linkup web research, governed MCP access
-
-## Architecture
-
-NodeSlide is a domain inside the existing Parity Studio application. Convex is the authoritative state and job layer; the React editor is an optimistic projection that always reconciles with server receipts. A single canonical deck snapshot feeds the browser renderer, validation pipeline, present mode, immutable publisher, HTML compiler, and PowerPoint compiler.
+NodeSlide is a domain inside Parity Studio. Convex owns authoritative state. The React editor is an optimistic projection that always reconciles with a server receipt. One canonical snapshot feeds the renderer, the validators, present mode, the publisher, and both compilers.
 
 ```text
-prompt / JSON brief
-        ↓
-bounded planner → nodeslide.slidelang/v1 snapshot
-        ↓
-Convex canonical state + version clocks
-        ↓
-browser editor ── proposed patch ── server validation/digest gate
-        ↓                              ↓
-present / publish / HTML / PPTX   accept or reject by human
+prompt / brief ─▶ AI planner (pi-ai route or deterministic) ─▶ scoped proposal
+                                                                     │
+DeckSnapshot (Convex canonical + version clocks) ◀── acceptPatch ◀── validate + CAS gate
+        │                                                                     ▲
+        └─▶ browser editor ─ EditOp[] ─▶ applyDeckPatch ─ candidate ─────────┘
+        │
+        └─▶ present · publish · HTML · PPTX · JSON
 ```
 
-This is NodeSlide’s own compact SlideLang-compatible intermediate representation, not the upstream `sl0` runtime. An earlier hosted `sl0` adapter remains prior-art/prototyping context; the live product uses `nodeslide.slidelang/v1` consistently end to end.
+## 1. Deck spec schema and compiler
 
-## Canonical schema and storage
+`DeckSnapshot { deck, slides, elements, sources }` is the canonical shape (`shared/nodeslide.ts`). It is mirrored by Convex validators in `convex/lib/nodeslideValidators.ts` and normalized tables in `convex/schema.ts`, so the same object crosses the wire, the database, and both compilers unchanged.
 
-The shared TypeScript contract defines the wire shape and is mirrored by Convex validators and normalized tables.
+`SlideElement` carries `id`, `slideId`, `name`, `kind`, `bbox`, `rotation`, `content`, `style`, and kind payloads `chart` / `math` / `video` / `image` plus `imageUrl` / `altText`, `sourceIds`, `locked`, `visible`, `groupId`, `exportCapabilities`, and a per-element `version`. `ElementKind` is `text | shape | image | chart | math | video | connector`. `BoundingBox` is normalized `0..1`, so one spec maps to the browser and to 16:9 PowerPoint coordinates (`SLIDE_WIDTH_IN = 13.333`, `SLIDE_HEIGHT_IN = 7.5`). "Compile" is deterministic projection, not a rebuild. `src/domains/nodeslide/slidelang/` holds `buildPptx`, the HTML compiler (`html.ts`), and `capabilities.ts`.
 
-- **Deck:** ID, title, brief, theme, schema/toolchain versions, status, dimensions, version and timestamps.
-- **Slide:** stable ID, deck ID, order, title, private speaker `notes`, background, element order, source IDs, and version clocks.
-- **Element:** stable ID, deck/slide IDs, kind, role, normalized bounding box, z-order, lock state, style, content, source IDs, tags, export capabilities, and element version.
-- **Kinds:** `text`, `shape`, `image`, `chart`, `math`, `video`, and `connector`.
-- **Chart:** chart type, categories, named series, values, labels, legend, and source ID.
-- **Math:** machine-readable expression, presentation display, typed variables (`label`, `value`, optional `unit`), optional source ID, `plain` or `latex` syntax, inline/block display mode, and description.
-- **Image:** optional embedded/HTTPS asset, alt text, and structured placeholder, credit, and source metadata so missing licensed media remains an honest editable object.
-- **Video:** HTTPS or embedded media URL, optional poster/title/caption track, language, and bounded start/end times.
-- **Review records:** comments, sources, patches, candidate validation receipts, agent traces, deck versions, exports, and publications.
+## 2. AI planning: prompt to deck spec
 
-Normalized geometry makes the same specification portable across browser and 16:9 PowerPoint coordinates. Additive optional math/video fields preserve existing `v1` decks while completing the challenge primitive surface. Public snapshot types intentionally omit `Slide.notes`; only explicitly public citations cross the publish boundary.
+Two entry points. `nodeslideAgent:createDeckFromBrief` turns a `DeckBrief` into a full deck. `nodeslideAgent:proposeEdit` turns an instruction plus scope into one proposal. Both route through `callNodeSlideFreeJson` in `convex/lib/nodeslideProvider.ts`, built on `@earendil-works/pi-ai`. The default route is managed Nebius (`zai-org/GLM-5.2`, `baseUrl https://api.tokenfactory.nebius.com/v1`). `NODESLIDE_AGENT_MODELS` also exposes an OpenRouter fleet (GLM 5.2, Claude Sonnet 5, Claude Fable 5, Gemini 3.5 Flash, Gemini 3.1 Pro, GPT-5.6 Sol and Terra). The deterministic fallback needs no egress.
 
-## AI planning and agent execution
+`planNodeSlideEdit` (`nodeslideEditPlanner.ts`) assembles read context with `resolveNodeSlideReadContext` (`nodeslideReadContext.ts`), builds a bounded provider input via `buildNodeSlideEditProviderInput`, and requests JSON against a per-request `scopedEditResponseSchema`. Model output is untrusted. `operationsUseOnlyAuthorizedSources` rejects any operation that binds copy to a source outside read scope. Origin is recorded as `free_route` or `deterministic_fallback`. Every failure mode (invalid JSON, timeout, network, exception) converges on the same labeled deterministic proposal. It is caught at the provider boundary, so a raw Convex error never surfaces.
 
-Prompt generation produces a bounded JSON plan, coerces it into known primitive contracts, and validates the compiled snapshot. The deterministic path creates a complete, reproducible deck with image, chart, and math examples. The network path requires explicit external-model consent that names the exact provider, model, and reasoning effort before egress; a model selector offers private-deterministic plus named models, and creators may bring their own key (BYOK).
+## 3. Browser editor state and mutation protocol
 
-The edit planner uses the maintained `@earendil-works/pi-ai` package with model constant `NODESLIDE_EDIT_MODEL = 'z-ai/glm-5.2'`, routed by default through **managed Nebius** at native reasoning efforts (low / medium / high), with OpenRouter and BYOK as alternate routes. Provider, model, and effort attribution flow from the selected route into the proposal and trace. Requests have an abort deadline, a bounded response read, zero library retries, and one explicit strict-JSON repair attempt. Usage tokens and cost are recorded. Every failure mode—invalid output, timeout, network, or exception—converges on the same labeled deterministic fallback (a reviewable proposal); the exception/timeout path is caught at the provider boundary so a raw Convex server error never surfaces.
+Human edits and agent edits share one write path: `EditOp[] → applyDeckPatch` (`shared/nodeslidePatch.ts`). The `PatchOperation` union is `move`, `resize`, `replace_text`, `update_style`, `update_chart`, `update_image`, `add_element`, `remove_element`, `set_visibility_v1`, `group_elements_v1`, `ungroup_elements_v1`, `reorder_element_v1`, `add_slide`, `remove_slide`, `reorder_slide`, `update_slide`, `update_deck`.
 
-**Grounding tools.** Consented web research (Linkup) runs bounded searches and URL reads, persists source snapshots, and emits claim-level citations (`{url, retrievedAt, excerpt}`) bound to the elements they support. Data ingestion stores CSV/JSON/TXT uploads as typed source records (digest, columns, row count, size) with per-source retention and deletion, which bind to chart and formula primitives.
+CAS is enforced twice. `applyDeckPatch` throws when `baseDeckVersion !== snapshot.deck.version`. `validatePatchScope` enforces the scope kind and `OperationMode` (`copy`, `style`, `layout`, `unrestricted`) before any mutation runs. `DeckPatch` also carries fine-grained `baseSlideVersions` and `baseElementVersions` clocks so non-overlapping work rebases safely. Geometry is clamped by `normalizeBox`. The client previews a candidate locally, but acceptance is the server mutation `nodeslide:acceptPatch`, which rebuilds the candidate, revalidates, recomputes `candidateDigest`, and compares clocks. Inspector tabs (AI, JSON deck-as-code, Design, Data, Comments, Versions, Trace) all emit the same operations.
 
-The orchestration follows patterns adapted from my NodeRoom/NodeAgent work: authoritative shared state, **durable jobs** (server-persisted runs with live progress, cancellation, idempotency keys, and reload recovery), **multi-turn conversations with persisted deck memory**, bounded context reads, stale-work guards, explicit human steering, and reviewable execution receipts persisted as trace journals. NodeSlide adds domain-specific tools and gates rather than exposing an unrestricted code-execution REPL to the model.
+## 4. Validation and repair
 
-## Editor state and mutation protocol
+`validateNodeSlideSnapshot` (`nodeslideValidation.ts`) returns three independent gates on one `ValidationResult`:
 
-Human edits and agent edits converge on the same patch operations. Operations include adding/removing/reordering slides and elements, replacing text or math expressions, setting element/slide properties, applying transforms, chart updates, and source changes. Each proposal declares read scope and write scope, has an operation cap, and carries expected deck/slide/element versions.
+- **`ok`**. No `error` issues. Schema, referential integrity, bounds, chart or math data present, safe media URLs.
+- **`publishOk`**. `ok` and no warning of code `source`, `missing_asset`, `export`, `contrast`, `font_size`, or `on_brand_*`. This is the publish gate.
+- **`cleanOk`**. No issue above `info`. The strictest bar.
 
-The client can preview a candidate locally, but acceptance is a server mutation. Before applying it, the server reconstructs the candidate, revalidates every operation, checks scope and capability policy, recomputes the digest, and compares version clocks. A mismatch marks the patch stale or invalid. Only a validated, digest-bound, current proposal can create a new canonical version. The browser serializes writes and discards late results tied to an older deck or request token.
+Present, publish, and export block on the matching receipt. The render-repair loop `runNodeSlideRenderRepairLoop` (`nodeslideRenderRepairLoop.ts`) drives `validate → render → observe → proposeRepair` on cloned snapshots with no persistence. It converges by cycle detection on a version-stripped `semanticSnapshotDigest` and a no-progress counter, and terminates deterministically on any budget: attempts, wall time, operations, render bytes, observation bytes. Every repair proposal passes `evaluateNodeSlideCas` and `validateNodeSlidePatch` before it applies in memory.
 
-## Validation and repair
+## 5. Chart, math, and image primitives
 
-Validation runs both in the browser for immediate feedback and on the server for authority. Checks cover:
+Each kind renders in the browser (`SlideRenderer.tsx`) and exports through `buildPptx` (`slidelang/pptx.ts`). Charts are structured `ChartData` (`bar | line | area | donut`), rendered as native SVG in the DOM and as an editable object via `pptxSlide.addChart`. Math keeps a machine `expression` plus `display`, `syntax` (`plain | latex`), and typed `variables`. It renders from the preserved expression and exports as editable PowerPoint text (`element.math.display ?? expression`). It does not claim to build an Office equation object. Images use `imageUrl` + `altText`, and `ImageData.placeholder` models a missing licensed asset as an honest, editable replace-image object rather than a broken render. Edits are always the typed operations `update_chart` and `update_image`, never freeform mutation.
 
-- schema and referential integrity;
-- bounds, minimum size, overlap, group membership, and text-fit estimates;
-- required chart data, math expressions, image/video assets, and safe media URLs;
-- source coverage for data-bound or quantitative claims;
-- export capability and fallback disclosure;
-- publication cleanliness and private/public boundary rules.
+## 6. Hosted API
 
-Issues include severity, code, slide/element anchors, and optional repair operations. Repairs remain proposals and pass through the same acceptance gate. Present, publish, and export are blocked when their corresponding validation receipt is not green.
+Convex is the hosted API. Queries include `getWorkspace`, `listDecks`, `getPresenterSnapshot`, `getEditorCapabilities`, and the telemetry readers. Mutations include `proposePatch`, `acceptPatch`, `rejectPatch`, `attachDataSource`, `publishDeck`, `revokePublication`, and `restoreVersion`. Actions in `nodeslideAgent.ts` (`proposeEdit`, `proposeExternalAgentEdit`, `createDeckFromBrief`) own model egress. Every deck function is owner-gated by a per-deck `ownerAccessKey` capability (`nodeslideAccess.ts`), never returned in a payload. Durable agent runs (`beginAgentRunInternal`, `advanceAgentRunInternal`, `recoverStaleAgentRunsInternal`) give server-persisted progress, idempotency keys, leases, and reload recovery.
 
-## Rendering, export, and publishing
+## 7. Publishing and present
 
-The React renderer uses editable DOM/SVG primitives. Charts are native SVG/data structures; math renders from the preserved expression; video uses an HTML `<video>` element with optional poster and media fragment. The HTML compiler emits a self-contained presentable document with semantic math and video markup.
+`publishDeck` writes an immutable versioned `PublishedDeckSnapshot` plus a `shareSlug`. `NodeSlidePublication` moves `active → superseded → revoked`. `getPresenterSnapshot` and the public read return the narrow published types only. `PublishedSlide` omits `notes`, and `PublishedSourceRecord` keeps only `url` citations, so speaker notes, owner key, traces, and internal sources never cross the publish boundary. Export runs client-side: `downloadPptx`, `downloadDeckHtml`, `downloadDeckJson`. `capabilityWarnings` and `ExportCapability` flags (`web_native`, `pptx_editable`, `pptx_static_fallback`, `web_only`) expose target differences instead of failing silently.
 
-The PowerPoint compiler uses PptxGenJS. Text, shapes, charts, images, connectors, and math-expression text remain editable PowerPoint objects. Math preserves LaTeX/plain source but does not claim to create an Office equation object. Video exports as an explicit linked-media placeholder because the current compiler does not embed a native PowerPoint video. Capability flags and validation warnings expose those target differences.
+## 8. CLI and plugin integration (MCP)
 
-Publishing creates an immutable versioned snapshot plus a share slug. Republishing supersedes the previous active publication; revocation disables the link. The public query returns the sanitized published type, without owner key, private speaker notes, internal comments, traces, or non-public source metadata.
+`mcp/src/lib/nodeslideTools.ts` exposes `get_deck`, `list_slides`, `get_trace`, `list_versions`, `propose_edit`, `accept_proposal`, `reject_proposal`, `upload_source`, `search_web`, `create_deck`, and `byok_status`. A coding agent (Claude Code, Codex, Cursor) drives NodeSlide through these tools. Governance parity is the invariant: every MCP write calls the same governed Convex actions, so it inherits the UI's consent, write-scope, proposal-before-mutate, and receipt gates. `unappliedProposalReceipt` throws if `propose_edit` ever returns an applied deck. `execution=byok` plans locally with a user key (`byok.ts`, `requireLocalKeys`). Keys stay in the MCP process, are never uploaded, and consent gates egress independently of key presence.
 
-## Hosted API, CLI, and extension seams
+## Failure modes and agentic-reliability posture
 
-Convex queries, mutations, and actions provide deck creation, workspace reads, patch planning/acceptance, validation, versioning, export receipts, and publication. The schema and compiler are shared TypeScript modules, so a CLI or editor plugin can submit the same deck spec and patches without reimplementing the format. Today's hosted browser workflow is complete, and the CLI/plugin seam is now realized as **governed MCP access**: a coding agent (Claude Code, Codex, Cursor) can drive NodeSlide through tools that mirror the same governed Convex actions—so every MCP write inherits the UI's consent, write-scope, proposal-before-mutate, and receipt gates. Governance parity is the invariant: the second front door has the same locks, and the connected agent submits intent while the server owns policy. Creators may also bring their own provider key (BYOK); keys are masked and never logged, and consent still gates egress independently of key presence.
+The 8-point checklist is enforced. **BOUND**. `NODESLIDE_PATCH_OPERATION_LIMIT`, scope caps, and render-repair byte and attempt ceilings bound every collection. **HONEST_STATUS**. Provider failure becomes a disclosed fallback, and the MCP receipt refuses to claim a fake apply. **HONEST_SCORES**. Validation gates are real checks with no score floors. **TIMEOUT**. A 30s `AbortController` deadline races every completion. **SSRF and safe media**. URL safety is validated before fetch and before render. **BOUND_READ**. `MAX_RESPONSE_BYTES = 200_000` caps model output, and observation bytes are capped in the loop. **ERROR_BOUNDARY**. Provider and adapter exceptions are caught and converge on labeled outcomes. **DETERMINISTIC**. CAS digests use sorted-key `stableSerialize` and `canonicalValue`, so the same candidate always hashes the same.
 
-## Verification and failure handling
-
-Vitest covers schema coercion, planner attribution, one-repair fallback (every provider failure mode converging on a reviewable deterministic proposal), acceptance gating, editor-state integrity, shadow comparison, admission policy, publishing privacy, web-research/ingestion contracts, governed-MCP consent parity, and HTML/PPTX generation—currently 74 files / 500+ tests plus an agent-operability linter (9/9). TypeScript compilation and the Vite production build are release gates. Deterministic fixtures make regression tests stable; provider calls are dependency-injected in planner tests. UI quality is independently audited by the open-source `agentic-ui-qa` protocol (the Agentic UI Bar B1–B11 for surface trust/operability and a conditional Depth tier D1–D11 for agent-product maturity), with findings tracked in an append-only ledger.
-
-Expected failure modes are visible: model unavailability becomes a disclosed fallback; invalid candidates cannot be accepted; stale work cannot overwrite newer state; missing/unsafe media blocks readiness; unsupported export behavior becomes a labeled fallback; and public payload tests protect private fields. The Trace inspector exposes the exact provider/model, plan, tool calls, operations, validation state, digests, token/cost usage, and human decision for panel inspection.
+Expected failures are visible. Model unavailability disclosed as fallback. Invalid candidates cannot be accepted. Stale work cannot overwrite newer state. Missing or unsafe media blocks readiness. Unsupported export behavior degrades to a labeled fallback. The Trace inspector surfaces provider, model, plan, operations, validation, digests, and token or cost usage for review. Vitest covers schema coercion, planner attribution, the one-repair fallback, acceptance gating, publishing privacy, and MCP consent parity.
 
 ## Reuse disclosure
 
-I reused the Parity Studio React/Vite/Convex shell, deployment setup, design tokens, provider plumbing, and general editor patterns. I adapted orchestration patterns from my NodeRoom/NodeAgent work. Third-party libraries include React, Convex, PptxGenJS, JSZip, Lucide, Vitest, and pi-ai. I personally built the NodeSlide schema and normalized storage, compiler/renderers, prompt and edit planning, scoped patch protocol, validation/repair pipeline, browser editing workflow, exports, publishing boundary, trace receipts, tests, and challenge-specific deck experiences.
+Reused from Parity Studio: the React / Vite / Convex shell, deploy setup, design tokens, and provider plumbing. Orchestration patterns adapted from my NodeRoom / NodeAgent work. Third-party: React, Convex, PptxGenJS, `@earendil-works/pi-ai`, Zod, Vitest. I built the NodeSlide schema, patch protocol, planners, validation and repair pipeline, editor workflow, exports, publishing boundary, trace receipts, and the governed MCP server.

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.0/schema.json",
+  "files": {
+    "ignore": [
+      ".convex",
+      ".claude",
+      ".playwright-mcp",
+      ".tmp",
+      ".vercel",
+      "dist",
+      "docs/dogfood",
+      "docs/plans/assets",
+      "convex/_generated",
+      "mcp/dist",
+      "node_modules",
+      "runs",
+      "*.log",
+      "*.tsbuildinfo"
+    ]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "useLiteralKeys": "off"
+      }
+    }
+  },
+  "organizeImports": {
+    "enabled": true
+  }
+}

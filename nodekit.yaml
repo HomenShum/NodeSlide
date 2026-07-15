@@ -1,0 +1,50 @@
+schemaVersion: nodekit.repo/v1
+repository: HomenShum/NodeSlide
+lifecycle: preview
+support: active
+role: domain-application
+commandProfile: application
+
+canonicalFor:
+  - nodeslide.deck
+  - nodeslide.deck-patch
+
+consumes:
+  - nodeplatform.repo-contract
+  - nodeplatform.environment
+  - nodeagent.agent-run
+  - nodeagent.policy-context
+  - nodeagent.proposal-review
+  - nodeagent.trace-workpaper
+  - nodetrace.trace-ui-store
+  - proofloop.certification
+  - agentic-ui-qa.flight-recorder
+
+commands:
+  dev: { script: dev, mode: service }
+  demo: { script: demo, mode: service }
+  doctor: { script: doctor, mode: finite }
+  check: { script: check, mode: finite }
+  proof: { script: proof, mode: finite }
+
+noKey:
+  status: partial
+  command: npm run demo
+  externalAccountsRequired: 1
+  disclosure: Model keys are optional, but the full authoritative workflow still requires a Convex deployment.
+
+environment:
+  contractVersion: nodeplatform.env/v1
+  status: migration-planned
+
+proof:
+  command: npm run proof
+  receiptSchema: null
+
+contractDeclarations:
+  - concept: nodeslide.deck-patch
+    signature: nodeslide-patch-operation
+    path: shared/nodeslide.ts
+    mode: canonical
+
+architectureExceptions: []

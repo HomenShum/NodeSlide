@@ -41,5 +41,11 @@
   },
   "organizeImports": {
     "enabled": true
-  }
+  },
+  "overrides": [
+    {
+      "include": ["shared/workflowExecutionPort.ts"],
+      "formatter": { "enabled": false }
+    }
+  ]
 }

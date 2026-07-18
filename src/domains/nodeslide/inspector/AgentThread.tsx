@@ -85,6 +85,7 @@ export function AgentThread({
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const tailKey = `${orderedRuns.length}:${messages.length}:${orderedRuns[orderedRuns.length - 1]?.status ?? ''}`;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: tailKey is the intentional trigger — re-pin the scroll to the newest turn whenever the thread tail changes.
   useEffect(() => {
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;

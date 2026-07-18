@@ -1121,7 +1121,7 @@ export const createDeckFromBrief = action({
         },
         // Full-deck generation is a ~5k-token completion; the 30s edit-path
         // default guarantees a timeout and a silent (honest) fallback.
-        { timeoutMs: 150_000 },
+        { timeoutMs: 240_000 },
       ),
     );
     const rawSpec = provider?.ok === true ? provider.value : fallbackSpec;

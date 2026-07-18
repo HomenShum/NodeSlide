@@ -40,11 +40,16 @@ runs+messages+spans → thread turns.
 
 ## Slices
 
-1. `thread/AgentThread.tsx` — runs+messages subscription, turn grouping, status
-   shimmer, step timeline from spans (read-only). **← this commit**
-2. Inline PatchCard wiring (accept/reject in place) + composer docking.
-3. AiInspector slim-down + policy controls → popover; delete dead form code.
-4. Live-drive against Kimi agent; latency/citation polish; tests.
+1. `thread/AgentThread.tsx` — DONE (5d94904): turn grouping, step timeline,
+   inline patch card, 3 scenario tests.
+2. Mount in AiInspector — DONE (61c715c + 866a162, two sessions converged):
+   .ns-ai-elements wrapper, welcome keys off agentRuns, orphan-proposal
+   coverage retained, onCancelRun on active turns.
+3. Form retirement — PARTIAL: flat message list deleted; policy-controls
+   popover + dead-CSS deletion (nodeslideV3.css agentic block) still open.
+4. OPEN: live-drive against Kimi agent (build → preview → real run →
+   screenshot/clip), latency + citation polish. This is also the first step
+   of the founder-roadshow demo recording.
 
 ## Coordination + integration notes (Claude, 2026-07-18)
 

@@ -558,6 +558,7 @@ export const nodeslideProviderModeValidator = v.union(
 
 export const nodeslideAgentModelValidator = v.union(
   v.literal('nebius/zai-org/GLM-5.2'),
+  v.literal('moonshotai/kimi-k3'),
   v.literal('z-ai/glm-5.2'),
   v.literal('anthropic/claude-sonnet-5'),
   v.literal('anthropic/claude-fable-5'),

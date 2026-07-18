@@ -20,9 +20,9 @@ import {
 } from '../../shared/nodeslide';
 
 export const NODESLIDE_NEBIUS_PROVIDER = 'nebius' as const;
-export const NODESLIDE_EDIT_PROVIDER = NODESLIDE_NEBIUS_PROVIDER;
 /** Backwards-compatible name for the default; requests may select any catalog model. */
 export const NODESLIDE_EDIT_MODEL = NODESLIDE_DEFAULT_AGENT_MODEL;
+export const NODESLIDE_EDIT_PROVIDER = nodeSlideAgentModel(NODESLIDE_DEFAULT_AGENT_MODEL).provider;
 export const NODESLIDE_NEBIUS_GLM_MODEL = 'zai-org/GLM-5.2' as const;
 
 const MODEL_TIMEOUT_MS = 30_000;
@@ -65,12 +65,45 @@ function nebiusProvider() {
   });
 }
 
+// Kimi K3 is newer than pi-ai's bundled OpenRouter catalog, so we register it
+// explicitly (shape mirrors the catalog's moonshotai/kimi-k2-thinking entry).
+const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
+  id: 'moonshotai/kimi-k3',
+  name: 'MoonshotAI: Kimi K3',
+  api: 'openai-completions',
+  provider: 'openrouter',
+  baseUrl: 'https://openrouter.ai/api/v1',
+  reasoning: false,
+  input: ['text'],
+  cost: { input: 0.6, output: 2.5, cacheRead: 0.15, cacheWrite: 0 },
+  contextWindow: 262_144,
+  maxTokens: 100_352,
+  compat: {
+    supportsDeveloperRole: false,
+    maxTokensField: 'max_tokens',
+  },
+};
+
+function openrouterProviderWithKimi() {
+  const builtin = openrouterProvider();
+  const models = builtin.getModels();
+  if (models.some((model) => model.id === NODESLIDE_KIMI_K3.id)) return builtin;
+  return createProvider({
+    id: 'openrouter',
+    name: 'OpenRouter',
+    baseUrl: 'https://openrouter.ai/api/v1',
+    auth: { apiKey: envApiKeyAuth('OpenRouter API key', ['OPENROUTER_API_KEY']) },
+    models: [...models, NODESLIDE_KIMI_K3],
+    api: openAICompletionsApi(),
+  });
+}
+
 function providerDisplayName(provider: NodeSlideExternalProvider): string {
   return provider === 'nebius' ? 'Nebius' : 'OpenRouter';
 }
 
 const nodeSlideModels = createModels();
-nodeSlideModels.setProvider(openrouterProvider());
+nodeSlideModels.setProvider(openrouterProviderWithKimi());
 nodeSlideModels.setProvider(nebiusProvider());
 
 export interface NodeSlideProviderTelemetry {

@@ -302,7 +302,7 @@ describe('NodeSlide provider consent contract', () => {
       validateNodeSlideBriefProviderChoice('openrouter_free', NODESLIDE_OPENROUTER_BRIEF_CONSENT),
     ).toEqual({
       providerMode: 'openrouter_free',
-      providerModel: 'z-ai/glm-5.2',
+      providerModel: 'moonshotai/kimi-k3',
       providerEffort: 'high',
       providerConsent: NODESLIDE_OPENROUTER_BRIEF_CONSENT,
     });

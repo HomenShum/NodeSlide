@@ -66,6 +66,7 @@ import {
   type SlideElement,
   isNodeSlideAgentModelId,
   nodeSlideAgentModel,
+  nodeSlideDefaultModelForProviderMode,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
 } from '../../../../shared/nodeslide';
@@ -203,7 +204,7 @@ export function AiInspector<CommandId extends string = string>({
   commentContext = null,
   initialInstruction = '',
   initialReadContext = [],
-  initialProviderMode = 'nebius',
+  initialProviderMode = nodeSlideProviderModeForModel(NODESLIDE_DEFAULT_AGENT_MODEL),
   initialProviderModel = NODESLIDE_DEFAULT_AGENT_MODEL,
   previewedPatchId = null,
   onPropose,
@@ -1287,8 +1288,8 @@ export function AiInspector<CommandId extends string = string>({
                           value={NODESLIDE_DEFAULT_AGENT_MODEL}
                           textValue={nodeSlideAgentModel(NODESLIDE_DEFAULT_AGENT_MODEL).label}
                         >
-                          {nodeSlideAgentModel(NODESLIDE_DEFAULT_AGENT_MODEL).label} · Nebius ·
-                          Recommended
+                          {nodeSlideAgentModel(NODESLIDE_DEFAULT_AGENT_MODEL).label} ·{' '}
+                          {nodeSlideAgentModel(NODESLIDE_DEFAULT_AGENT_MODEL).vendor} · Recommended
                         </PromptInputSelectItem>
                       </SelectGroup>
                       <SelectGroup>
@@ -1813,14 +1814,15 @@ function ProposalCard({
 export function createAiProviderRequest(
   mode: AiProviderMode,
   consentGranted: boolean,
-  model: NodeSlideAgentModelId = NODESLIDE_DEFAULT_AGENT_MODEL,
+  model?: NodeSlideAgentModelId,
   effort: NodeSlideReasoningEffort = NODESLIDE_DEFAULT_REASONING_EFFORT,
 ): AiProviderRequest | null {
   if (mode === 'deterministic') return { providerMode: 'deterministic' };
-  if (!consentGranted || !nodeSlideModelSupportsReasoningEffort(model, effort)) return null;
+  const selectedModel = model ?? nodeSlideDefaultModelForProviderMode(mode);
+  if (!consentGranted || !nodeSlideModelSupportsReasoningEffort(selectedModel, effort)) return null;
   return {
     providerMode: mode,
-    providerModel: model,
+    providerModel: selectedModel,
     providerEffort: effort,
     providerConsent:
       mode === 'nebius' ? NODESLIDE_NEBIUS_REVIEW_CONSENT : NODESLIDE_OPENROUTER_REVIEW_CONSENT,
@@ -1830,14 +1832,15 @@ export function createAiProviderRequest(
 export function createAiVariationProviderRequest(
   mode: AiProviderMode,
   consentGranted: boolean,
-  model: NodeSlideAgentModelId = NODESLIDE_DEFAULT_AGENT_MODEL,
+  model?: NodeSlideAgentModelId,
   effort: NodeSlideReasoningEffort = NODESLIDE_DEFAULT_REASONING_EFFORT,
 ): AiVariationProviderRequest | null {
   if (mode === 'deterministic') return { providerMode: 'deterministic' };
-  if (!consentGranted || !nodeSlideModelSupportsReasoningEffort(model, effort)) return null;
+  const selectedModel = model ?? nodeSlideDefaultModelForProviderMode(mode);
+  if (!consentGranted || !nodeSlideModelSupportsReasoningEffort(selectedModel, effort)) return null;
   return {
     providerMode: mode,
-    providerModel: model,
+    providerModel: selectedModel,
     providerEffort: effort,
     providerConsent:
       mode === 'nebius'

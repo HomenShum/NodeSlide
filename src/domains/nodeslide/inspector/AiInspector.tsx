@@ -1261,7 +1261,11 @@ export function AiInspector<CommandId extends string = string>({
                       data-testid="ai-model-select"
                     >
                       <Sparkles size={12} aria-hidden="true" />
-                      <PromptInputSelectValue placeholder="Model" />
+                      {/* Children override Radix's default (the full option row),
+                          so the 340px rail shows "Kimi K3", never "Kimi K3 · Mc…". */}
+                      <PromptInputSelectValue placeholder="Model">
+                        {providerMode === 'deterministic' ? 'Private' : selectedAgentModel.label}
+                      </PromptInputSelectValue>
                     </PromptInputSelectTrigger>
                     <PromptInputSelectContent>
                       <SelectGroup>

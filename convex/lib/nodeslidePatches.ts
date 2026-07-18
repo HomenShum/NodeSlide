@@ -761,6 +761,19 @@ export function deterministicAgentOperations(
   ];
 }
 
+/** Human verb phrases so proposal summaries read as sentences, not op codes. */
+const OPERATION_SUMMARY_VERBS: Partial<Record<PatchOperation['op'], string>> = {
+  replace_text: 'Rewrite',
+  update_style: 'Restyle',
+  move: 'Move',
+  resize: 'Resize',
+  update_chart: 'Update the chart in',
+  update_image: 'Swap the image in',
+  remove_element: 'Remove',
+  set_visibility_v1: 'Toggle visibility of',
+  reorder_element_v1: 'Reorder',
+};
+
 export function summarizePatchOperations(
   operations: readonly PatchOperation[],
   snapshot?: DeckSnapshot,
@@ -801,7 +814,10 @@ export function summarizePatchOperations(
     const elementLabel =
       snapshot?.elements.find((element) => element.id === operation.elementId)?.name ??
       operation.elementId;
-    return `${operation.op.replaceAll('_', ' ')} ${elementLabel}`;
+    const verb = OPERATION_SUMMARY_VERBS[operation.op];
+    return verb
+      ? `${verb} ${elementLabel}`
+      : `${operation.op.replaceAll('_', ' ')} ${elementLabel}`;
   });
   return nodeslideCleanText(labels.join('; '), 240);
 }

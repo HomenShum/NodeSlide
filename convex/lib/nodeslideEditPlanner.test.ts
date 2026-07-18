@@ -303,7 +303,7 @@ describe('NodeSlide baseline edit planner extraction', () => {
         text: 'Provider replacement',
       },
     ]);
-    expect(result.summary).toContain('replace text');
+    expect(result.summary).toContain('Rewrite');
     expect(JSON.stringify(result)).not.toContain('UNTRUSTED_PROVIDER_PROSE');
     const providerSchema = JSON.stringify(provider.mock.calls[0]?.[0].jsonSchema?.schema);
     expect(providerSchema).toContain(target.slideId);

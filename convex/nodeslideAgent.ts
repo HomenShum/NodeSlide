@@ -525,7 +525,7 @@ export const proposeEdit = action({
         status: 'awaiting_review',
         patchId,
         traceId,
-        message: `${summary} Review the validated proposal before it can change the deck.`,
+        message: `Proposed: ${summary}. Review the validated patch below — nothing changes until you accept.`,
         role: 'assistant',
         ...(webSourceIds.length ? { sourceIds: webSourceIds } : {}),
       });
@@ -706,7 +706,7 @@ export const proposeExternalAgentEdit = action({
         status: 'awaiting_review',
         patchId,
         traceId,
-        message: `${summary} Review the validated proposal before it can change the deck.`,
+        message: `Proposed: ${summary}. Review the validated patch below — nothing changes until you accept.`,
         role: 'assistant',
       });
       return proposal;

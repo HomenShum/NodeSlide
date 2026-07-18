@@ -202,7 +202,9 @@ function ThreadTurn({
               >
                 <Wrench aria-hidden className="mt-0.5 size-3 shrink-0" />
                 <span className="font-medium">{humanizeToolName(step.toolName)}</span>
-                <span className="truncate">{step.content}</span>
+                <span className="truncate" title={step.content}>
+                  {step.content}
+                </span>
               </li>
             ))}
           </ol>

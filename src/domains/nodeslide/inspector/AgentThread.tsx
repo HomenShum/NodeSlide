@@ -8,11 +8,13 @@ import {
   XCircle,
 } from 'lucide-react';
 import { useEffect, useMemo, useRef } from 'react';
-import type {
-  DeckPatch,
-  NodeSlideAgentMessage,
-  NodeSlideAgentRun,
-  NodeSlideAgentRunStatus,
+import {
+  type DeckPatch,
+  type NodeSlideAgentMessage,
+  type NodeSlideAgentRun,
+  type NodeSlideAgentRunStatus,
+  isNodeSlideAgentModelId,
+  nodeSlideAgentModel,
 } from '../../../../shared/nodeslide';
 import type { AiReviewablePatch } from './reviewTypes';
 
@@ -168,7 +170,7 @@ function ThreadTurn({
         <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
           <StatusIcon status={run.status} />
           <span data-testid="agent-thread-status">{STATUS_LABEL[run.status]}</span>
-          <span className="text-muted-foreground/60">· {run.model}</span>
+          <span className="text-muted-foreground/60">· {modelDisplayName(run.model)}</span>
           {citationCount > 0 && (
             <span
               className="ml-auto inline-flex items-center gap-1"
@@ -277,6 +279,10 @@ function ThreadTurn({
 }
 
 /** Step labels for the visible timeline (moved from AiInspector with the old flat list). */
+function modelDisplayName(model: string) {
+  return isNodeSlideAgentModelId(model) ? nodeSlideAgentModel(model).label : model;
+}
+
 function humanizeToolName(toolName?: string) {
   if (!toolName) return 'Tool';
   const knownLabels: Record<string, string> = {

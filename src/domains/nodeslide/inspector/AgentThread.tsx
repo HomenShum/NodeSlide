@@ -1,4 +1,12 @@
-import { CheckCircle2, ChevronRight, CircleDashed, Loader2, Search, Wrench, XCircle } from 'lucide-react';
+import {
+  CheckCircle2,
+  ChevronRight,
+  CircleDashed,
+  Loader2,
+  Search,
+  Wrench,
+  XCircle,
+} from 'lucide-react';
 import { useEffect, useMemo, useRef } from 'react';
 import type {
   DeckPatch,
@@ -45,6 +53,7 @@ export interface AgentThreadProps {
   onRejectPatch: (patch: DeckPatch) => void;
   onOpenTrace?: (runId: string) => void;
   onPreviewPatch?: (patch: AiReviewablePatch | null) => void;
+  onCancelRun?: (runId: string) => void;
 }
 
 export function AgentThread({
@@ -55,6 +64,7 @@ export function AgentThread({
   onRejectPatch,
   onOpenTrace,
   onPreviewPatch,
+  onCancelRun,
 }: AgentThreadProps) {
   const orderedRuns = useMemo(() => [...runs].sort((a, b) => a.createdAt - b.createdAt), [runs]);
   const messagesByRun = useMemo(() => {
@@ -82,7 +92,10 @@ export function AgentThread({
 
   if (orderedRuns.length === 0) {
     return (
-      <div className="px-3 py-6 text-center text-xs text-muted-foreground" data-testid="agent-thread-empty">
+      <div
+        className="px-3 py-6 text-center text-xs text-muted-foreground"
+        data-testid="agent-thread-empty"
+      >
         Ask the agent below — every run lands here as a reviewable turn.
       </div>
     );
@@ -105,6 +118,7 @@ export function AgentThread({
           onRejectPatch={onRejectPatch}
           onOpenTrace={onOpenTrace}
           onPreviewPatch={onPreviewPatch}
+          onCancelRun={onCancelRun}
         />
       ))}
     </div>
@@ -119,6 +133,7 @@ function ThreadTurn({
   onRejectPatch,
   onOpenTrace,
   onPreviewPatch,
+  onCancelRun,
 }: {
   run: NodeSlideAgentRun;
   messages: readonly NodeSlideAgentMessage[];
@@ -127,6 +142,7 @@ function ThreadTurn({
   onRejectPatch: (patch: DeckPatch) => void;
   onOpenTrace: ((runId: string) => void) | undefined;
   onPreviewPatch: ((patch: AiReviewablePatch | null) => void) | undefined;
+  onCancelRun: ((runId: string) => void) | undefined;
 }) {
   const active = ACTIVE_STATUSES.includes(run.status);
   const steps = messages.filter((message) => message.role === 'tool');
@@ -135,9 +151,14 @@ function ThreadTurn({
   const patchReviewable = patch && ['draft', 'validating', 'ready', 'stale'].includes(patch.status);
 
   return (
-    <section className="flex flex-col gap-2" data-testid="agent-thread-turn" data-run-id={run.id} data-status={run.status}>
+    <section
+      className="flex flex-col gap-2"
+      data-testid="agent-thread-turn"
+      data-run-id={run.id}
+      data-status={run.status}
+    >
       {/* User turn */}
-      <div className="self-end max-w-[92%] rounded-lg bg-primary/10 px-3 py-2 text-xs text-foreground">
+      <div className="self-end max-w-[92%] break-words rounded-lg bg-primary/10 px-3 py-2 text-xs text-foreground">
         {run.instruction}
       </div>
 
@@ -148,10 +169,23 @@ function ThreadTurn({
           <span data-testid="agent-thread-status">{STATUS_LABEL[run.status]}</span>
           <span className="text-muted-foreground/60">· {run.model}</span>
           {citationCount > 0 && (
-            <span className="ml-auto inline-flex items-center gap-1" data-testid="agent-thread-citations">
+            <span
+              className="ml-auto inline-flex items-center gap-1"
+              data-testid="agent-thread-citations"
+            >
               <Search aria-hidden className="size-3" />
               {citationCount} source{citationCount === 1 ? '' : 's'}
             </span>
+          )}
+          {active && onCancelRun && (
+            <button
+              type="button"
+              className={`${citationCount > 0 ? '' : 'ml-auto '}rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground hover:bg-muted hover:text-foreground`}
+              data-testid="ai-cancel-run"
+              onClick={() => onCancelRun(run.id)}
+            >
+              Cancel
+            </button>
           )}
         </div>
 
@@ -159,9 +193,12 @@ function ThreadTurn({
         {steps.length > 0 && (
           <ol className="flex flex-col gap-0.5" data-testid="agent-thread-steps">
             {steps.map((step) => (
-              <li key={step.id} className="flex items-start gap-1.5 text-[11px] text-muted-foreground">
+              <li
+                key={step.id}
+                className="flex items-start gap-1.5 text-[11px] text-muted-foreground"
+              >
                 <Wrench aria-hidden className="mt-0.5 size-3 shrink-0" />
-                <span className="font-mono text-[10px] uppercase tracking-wide">{step.toolName ?? 'tool'}</span>
+                <span className="font-medium">{humanizeToolName(step.toolName)}</span>
                 <span className="truncate">{step.content}</span>
               </li>
             ))}
@@ -170,7 +207,10 @@ function ThreadTurn({
 
         {/* Streamed prose */}
         {prose.map((message) => (
-          <p key={message.id} className="whitespace-pre-wrap text-xs leading-relaxed text-foreground">
+          <p
+            key={message.id}
+            className="whitespace-pre-wrap break-words text-xs leading-relaxed text-foreground"
+          >
             {message.content}
           </p>
         ))}
@@ -193,7 +233,9 @@ function ThreadTurn({
             onMouseEnter={() => onPreviewPatch?.(patch)}
             onMouseLeave={() => onPreviewPatch?.(null)}
           >
-            <span className="min-w-0 flex-1 truncate text-[11px] text-foreground">{patch.summary ?? 'Proposed change'}</span>
+            <span className="min-w-0 flex-1 truncate text-[11px] text-foreground">
+              {patch.summary ?? 'Proposed change'}
+            </span>
             <button
               type="button"
               className="rounded bg-primary px-2 py-0.5 text-[11px] font-medium text-primary-foreground hover:bg-primary/90"
@@ -233,9 +275,24 @@ function ThreadTurn({
   );
 }
 
+/** Step labels for the visible timeline (moved from AiInspector with the old flat list). */
+function humanizeToolName(toolName?: string) {
+  if (!toolName) return 'Tool';
+  const knownLabels: Record<string, string> = {
+    candidate_validation: 'Validation',
+    web_research: 'Web research',
+    source_snapshot: 'Source capture',
+  };
+  if (knownLabels[toolName]) return knownLabels[toolName];
+  return toolName.replaceAll('_', ' ').replace(/\b\w/g, (character) => character.toUpperCase());
+}
+
 function StatusIcon({ status }: { status: NodeSlideAgentRunStatus }) {
-  if (ACTIVE_STATUSES.includes(status)) return <Loader2 aria-hidden className="size-3 animate-spin" />;
-  if (status === 'awaiting_review') return <CircleDashed aria-hidden className="size-3 text-primary" />;
-  if (status === 'completed') return <CheckCircle2 aria-hidden className="size-3 text-emerald-600" />;
+  if (ACTIVE_STATUSES.includes(status))
+    return <Loader2 aria-hidden className="size-3 animate-spin" />;
+  if (status === 'awaiting_review')
+    return <CircleDashed aria-hidden className="size-3 text-primary" />;
+  if (status === 'completed')
+    return <CheckCircle2 aria-hidden className="size-3 text-emerald-600" />;
   return <XCircle aria-hidden className="size-3 text-destructive" />;
 }

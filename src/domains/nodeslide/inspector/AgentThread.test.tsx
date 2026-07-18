@@ -56,12 +56,30 @@ describe('AgentThread', () => {
     const html = renderToStaticMarkup(
       <AgentThread
         runs={[
-          run({ id: 'run-2', instruction: 'Now add a source for the market size', status: 'researching', createdAt: 10 }),
+          run({
+            id: 'run-2',
+            instruction: 'Now add a source for the market size',
+            status: 'researching',
+            createdAt: 10,
+          }),
           run({ id: 'run-1', patchId: 'patch-1' }),
         ]}
         messages={[
-          message({ id: 'm1', runId: 'run-1', role: 'tool', toolName: 'read_slide', content: 'Read slide 2', createdAt: 1 }),
-          message({ id: 'm2', runId: 'run-1', role: 'assistant', sourceIds: ['src-a', 'src-b'], createdAt: 2 }),
+          message({
+            id: 'm1',
+            runId: 'run-1',
+            role: 'tool',
+            toolName: 'read_slide',
+            content: 'Read slide 2',
+            createdAt: 1,
+          }),
+          message({
+            id: 'm2',
+            runId: 'run-1',
+            role: 'assistant',
+            sourceIds: ['src-a', 'src-b'],
+            createdAt: 2,
+          }),
         ]}
         patches={[reviewablePatch]}
         onAcceptPatch={() => {}}
@@ -71,10 +89,12 @@ describe('AgentThread', () => {
 
     // Multi-turn, chronological: run-1 (createdAt 1) renders before run-2 (createdAt 10)
     expect(html.indexOf('Tighten the headline')).toBeGreaterThan(-1);
-    expect(html.indexOf('Tighten the headline')).toBeLessThan(html.indexOf('add a source for the market size'));
+    expect(html.indexOf('Tighten the headline')).toBeLessThan(
+      html.indexOf('add a source for the market size'),
+    );
 
-    // Visible step timeline from the tool message
-    expect(html).toContain('read_slide');
+    // Visible step timeline from the tool message (toolName humanized for display)
+    expect(html).toContain('Read Slide');
     expect(html).toContain('Read slide 2');
 
     // Citations surfaced
@@ -88,14 +108,19 @@ describe('AgentThread', () => {
     // Active turn shows honest working state; settled turn does not
     expect(html).toContain('Researching');
     expect(html).toContain('Working…');
-    const settledTurn = html.slice(html.indexOf('data-run-id="run-1"'), html.indexOf('data-run-id="run-2"'));
+    const settledTurn = html.slice(
+      html.indexOf('data-run-id="run-1"'),
+      html.indexOf('data-run-id="run-2"'),
+    );
     expect(settledTurn).not.toContain('Working…');
   });
 
   it('renders a failed run with its error text, and a settled patch without action buttons', () => {
     const html = renderToStaticMarkup(
       <AgentThread
-        runs={[run({ id: 'run-3', status: 'failed', error: 'provider timeout', patchId: 'patch-2' })]}
+        runs={[
+          run({ id: 'run-3', status: 'failed', error: 'provider timeout', patchId: 'patch-2' }),
+        ]}
         messages={[]}
         patches={[{ ...reviewablePatch, id: 'patch-2', status: 'applied' } as unknown as DeckPatch]}
         onAcceptPatch={() => {}}
@@ -109,7 +134,13 @@ describe('AgentThread', () => {
 
   it('renders the empty-state invitation when no runs exist', () => {
     const html = renderToStaticMarkup(
-      <AgentThread runs={[]} messages={[]} patches={[]} onAcceptPatch={() => {}} onRejectPatch={() => {}} />,
+      <AgentThread
+        runs={[]}
+        messages={[]}
+        patches={[]}
+        onAcceptPatch={() => {}}
+        onRejectPatch={() => {}}
+      />,
     );
     expect(html).toContain('agent-thread-empty');
   });

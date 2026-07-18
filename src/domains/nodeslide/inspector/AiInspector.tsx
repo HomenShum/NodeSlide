@@ -73,6 +73,7 @@ import {
 import type { SlideVariation } from '../../../../shared/nodeslideVariation';
 import { NodeSlideConnectionsDialog } from '../components/NodeSlideConnectionsDialog';
 import { NodeSlideMemoryDialog } from '../components/NodeSlideMemoryDialog';
+import { AgentThread } from './AgentThread';
 import {
   AI_DRAFTING_PHASE_MS,
   type AiAgentActivity,
@@ -449,6 +450,10 @@ export function AiInspector<CommandId extends string = string>({
   const latestPersistedUserAsk = [...recentMessages]
     .reverse()
     .find((message) => message.role === 'user')?.content;
+  // Durable runs render as conversational turns via AgentThread; the orphan
+  // list keeps covering proposals that predate run records.
+  const runPatchIds = new Set(agentRuns.flatMap((run) => (run.patchId ? [run.patchId] : [])));
+  const orphanProposals = proposals.filter((patch) => !runPatchIds.has(patch.id));
 
   const updateInstruction = (value: string, cursor = value.length) => {
     setInstruction(value);
@@ -692,6 +697,7 @@ export function AiInspector<CommandId extends string = string>({
         !activeTrace &&
         proposals.length === 0 &&
         !showDirectionThread &&
+        agentRuns.length === 0 &&
         recentMessages.length === 0 ? (
           <section className="ns-ai-v3-chat-turn is-agent ns-ai-v3-welcome">
             <span className="ns-ai-v3-agent-mark" aria-hidden="true">
@@ -708,35 +714,40 @@ export function AiInspector<CommandId extends string = string>({
           </section>
         ) : null}
 
-        {recentMessages.map((message) => (
+        {/* Pre-run-record history (old decks): messages with no run to group under
+            stay visible in the legacy flat style — history never silently drops. */}
+        {legacyMessages.map((message) => (
           <section
             key={message.id}
             className={`ns-ai-v3-chat-turn is-${message.role === 'user' ? 'user' : 'agent'} ns-agent-message`}
             data-testid={`agent-message-${message.role}`}
           >
-            {message.role !== 'user' ? (
-              <span className="ns-ai-v3-agent-mark" aria-hidden="true">
-                {message.role === 'tool' ? <Globe2 size={14} /> : <Sparkles size={14} />}
-              </span>
-            ) : null}
             <div>
               <span className="ns-eyebrow">
-                {message.role === 'user'
-                  ? 'You'
-                  : message.role === 'tool'
-                    ? humanizeToolName(message.toolName)
-                    : 'NodeSlide'}
+                {message.role === 'user' ? 'You' : message.role === 'tool' ? 'Tool' : 'NodeSlide'}
               </span>
               <p>{message.content}</p>
-              {message.sourceIds?.length ? (
-                <small>
-                  {message.sourceIds.length} persisted source snapshot
-                  {message.sourceIds.length === 1 ? '' : 's'}
-                </small>
-              ) : null}
             </div>
           </section>
         ))}
+
+        {/* Conversational thread — run-grouped turns with inline patch review
+            (docs/AI_TAB_THREAD_REBUILD.md slice 2). The .ns-ai-elements wrapper is
+            load-bearing: Tailwind preflight is scoped to it, so AgentThread's
+            border utilities only render inside it. */}
+        {agentRuns.length > 0 ? (
+          <div className="ns-ai-elements">
+            <AgentThread
+              runs={agentRuns}
+              messages={agentMessages}
+              patches={patches}
+              onAcceptPatch={onAccept}
+              onRejectPatch={onReject}
+              {...(onPreviewPatch ? { onPreviewPatch } : {})}
+              {...(onCancelRun ? { onCancelRun } : {})}
+            />
+          </div>
+        ) : null}
 
         {visibleAsk && latestPersistedUserAsk !== visibleAsk ? (
           <section
@@ -748,7 +759,7 @@ export function AiInspector<CommandId extends string = string>({
           </section>
         ) : null}
 
-        {resolvedActivity || activeTrace ? (
+        {!activeDurableRun && (resolvedActivity || activeTrace) ? (
           <section
             className={`ns-agent-progress ns-ai-v3-progress ${
               resolvedActivity?.status === 'cancelled'
@@ -779,28 +790,16 @@ export function AiInspector<CommandId extends string = string>({
               </span>
               <span>
                 <strong>
-                  {activeDurableRun
-                    ? durableRunLabel(activeDurableRun.status)
-                    : resolvedActivity
-                      ? agentPhaseLabel(resolvedActivity)
-                      : activeTrace?.status === 'working'
-                        ? 'Drafting proposal'
-                        : 'Reading context'}
+                  {resolvedActivity
+                    ? agentPhaseLabel(resolvedActivity)
+                    : activeTrace?.status === 'working'
+                      ? 'Drafting proposal'
+                      : 'Reading context'}
                 </strong>
                 <small>{activeTrace?.summary ?? 'Preparing a bounded, reviewable patch'}</small>
               </span>
               <ChevronRight size={14} className={showPlan ? 'is-open' : ''} />
             </button>
-            {activeDurableRun && onCancelRun ? (
-              <button
-                type="button"
-                className="ns-agent-cancel"
-                onClick={() => onCancelRun(activeDurableRun.id)}
-                data-testid="ai-cancel-run"
-              >
-                <X size={12} /> Cancel run
-              </button>
-            ) : null}
             {resolvedActivity && isTerminalActivity(resolvedActivity) ? (
               <div className="ns-agent-honesty-state">
                 <strong>
@@ -835,13 +834,13 @@ export function AiInspector<CommandId extends string = string>({
           </section>
         ) : null}
 
-        {proposals.length > 0 ? (
+        {orphanProposals.length > 0 ? (
           <section className="ns-proposals ns-ai-v3-proposals">
             <div className="ns-section-heading">
               <span>Proposals</span>
-              <small>{proposals.length} to review</small>
+              <small>{orphanProposals.length} to review</small>
             </div>
-            {proposals.map((patch) => (
+            {orphanProposals.map((patch) => (
               <ProposalCard
                 key={patch.id}
                 patch={patch}
@@ -1532,17 +1531,6 @@ export function AiInspector<CommandId extends string = string>({
   );
 }
 
-function humanizeToolName(toolName?: string) {
-  if (!toolName) return 'Tool';
-  const knownLabels: Record<string, string> = {
-    candidate_validation: 'Validation',
-    web_research: 'Web research',
-    source_snapshot: 'Source capture',
-  };
-  if (knownLabels[toolName]) return knownLabels[toolName];
-  return toolName.replaceAll('_', ' ').replace(/\b\w/g, (character) => character.toUpperCase());
-}
-
 function VariationCard({
   variation,
   previewed,
@@ -1877,14 +1865,6 @@ function isFailureActivity(activity: AiAgentActivity): boolean {
 
 function activityMessage(activity: AiAgentActivity): string | undefined {
   return 'message' in activity ? activity.message : undefined;
-}
-
-function durableRunLabel(status: NodeSlideAgentRun['status']) {
-  if (status === 'queued') return 'Queued';
-  if (status === 'researching') return 'Researching sources';
-  if (status === 'planning') return 'Planning edit';
-  if (status === 'validating') return 'Validating candidate';
-  return 'Working';
 }
 
 function resolveActivity(

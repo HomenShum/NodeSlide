@@ -16,6 +16,18 @@ export const NODESLIDE_AGENT_MODELS = [
     supportedEfforts: ['low', 'medium', 'high'],
   },
   {
+    id: 'moonshotai/kimi-k3',
+    upstreamId: 'moonshotai/kimi-k3',
+    provider: 'openrouter',
+    vendor: 'Moonshot AI',
+    label: 'Kimi K3',
+    description: 'Moonshot Kimi K3 with 1M context for long-horizon deck planning and structured edits.',
+    costTier: 'balanced',
+    bestFor: 'Long-context agentic deck work',
+    supportsTemperature: true,
+    supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
+  },
+  {
     id: 'z-ai/glm-5.2',
     upstreamId: 'z-ai/glm-5.2',
     provider: 'openrouter',

@@ -714,23 +714,6 @@ export function AiInspector<CommandId extends string = string>({
           </section>
         ) : null}
 
-        {/* Pre-run-record history (old decks): messages with no run to group under
-            stay visible in the legacy flat style — history never silently drops. */}
-        {legacyMessages.map((message) => (
-          <section
-            key={message.id}
-            className={`ns-ai-v3-chat-turn is-${message.role === 'user' ? 'user' : 'agent'} ns-agent-message`}
-            data-testid={`agent-message-${message.role}`}
-          >
-            <div>
-              <span className="ns-eyebrow">
-                {message.role === 'user' ? 'You' : message.role === 'tool' ? 'Tool' : 'NodeSlide'}
-              </span>
-              <p>{message.content}</p>
-            </div>
-          </section>
-        ))}
-
         {/* Conversational thread — run-grouped turns with inline patch review
             (docs/AI_TAB_THREAD_REBUILD.md slice 2). The .ns-ai-elements wrapper is
             load-bearing: Tailwind preflight is scoped to it, so AgentThread's

@@ -80,3 +80,29 @@ Gotchas for slices 2–3 (wiring `<AgentThread/>` into AiInspector):
   queries, exactly as slice 1 intends.
 - **Branch hygiene:** Claude is NOT editing `AiInspector.tsx` to avoid a
   same-branch collision with slice 3. Codex owns slices 2–4.
+
+## Orchestrator/worker routing — honest assessment (2026-07-18)
+
+**What exists and is PROVEN live on prod** (fail-closed Playwright runs):
+per-request model choice with per-turn attribution (Kimi K3, Claude Sonnet 5,
+and GPT-5.6 Terra each drove a turn in one thread; Trace records provider,
+model, tokens, cost); the variations command fans one intent into three
+generated-and-validated candidates; and every model output is verified by the
+deterministic validator before commit (a real "verifier" role, deterministic
+rather than model-based).
+
+**What does NOT exist:** model-to-model routing — no run where an expensive
+model plans and a cheaper model executes a bounded subtask, and no
+parent-child spans attributing different models inside one run. Per the demo
+rule ("do not claim routing based only on configuration code"), routing is
+EXCLUDED from the demo video and labeled roadmap.
+
+**Smallest real version** (~1 day, server-side): split `planNodeSlideEdit`
+into plan (orchestrator model → op skeleton + copy briefs) and execute
+(cheap model → copy for each `replace_text`), then orchestrator-validate
+before the candidate is assembled; spans get `parentSpanId` + per-model
+attribution; AgentThread already renders tool steps so the roles surface
+with zero UI work. Known feeder issue: Gemini 3.5 Flash via OpenRouter burns
+its token budget on reasoning before JSON (same family as the Kimi
+`reasoning:true` bug) — any cheap-executor choice must pin reasoning off in
+the pi-ai model entry first.

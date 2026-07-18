@@ -1021,6 +1021,16 @@ export const createDeckFromBrief = action({
               )
               .join('\n\n')}`,
           };
+    // A brief that names a slide count inside the 6-8 band gets it enforced by
+    // the response schema itself, not by prompt hope.
+    const requestedSlideCount = (() => {
+      const match = `${brief.prompt} ${title}`
+        .toLowerCase()
+        .match(/\b(six|seven|eight|6|7|8)[-\s]slide/);
+      if (!match) return null;
+      const counts: Record<string, number> = { six: 6, seven: 7, eight: 8, '6': 6, '7': 7, '8': 8 };
+      return counts[match[1] ?? ''] ?? null;
+    })();
     const fallbackSpec = deterministicBriefSpec(title, generationBrief);
     const provider = await invokeNodeSlideBriefProvider(providerChoice, async () =>
       callNodeSlideFreeJson(
@@ -1052,8 +1062,8 @@ export const createDeckFromBrief = action({
                 plan: { type: 'array', items: { type: 'string' } },
                 slides: {
                   type: 'array',
-                  minItems: 6,
-                  maxItems: 8,
+                  minItems: requestedSlideCount ?? 6,
+                  maxItems: requestedSlideCount ?? 8,
                   items: {
                     type: 'object',
                     required: ['title', 'section', 'headline', 'body', 'bullets'],

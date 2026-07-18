@@ -24,7 +24,10 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (!id.includes('node_modules')) return undefined;
-          if (id.includes('react') || id.includes('react-dom')) return 'react';
+          // Exact folder match only: substring 'react' would drag radix's
+          // helper packages (react-remove-scroll, …) out of vendor and break
+          // React's init order at runtime (useLayoutEffect undefined).
+          if (/node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) return 'react';
           if (id.includes('convex')) return 'convex';
           if (id.includes('lucide-react')) return 'icons';
           if (id.includes('jszip')) return 'zip';

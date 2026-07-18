@@ -1072,7 +1072,7 @@ describe('NodeSlide deck-level operations and clocks', () => {
         ],
         snapshot(),
       ),
-    ).toBe('replace text Headline');
+    ).toBe('Rewrite Headline');
     const copySummarySnapshot = snapshot();
     const copyTemplate = copySummarySnapshot.elements[0];
     if (!copyTemplate) throw new Error('Expected a copy summary fixture.');

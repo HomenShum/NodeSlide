@@ -97,7 +97,7 @@ describe('AgentThread', () => {
       <AgentThread
         runs={[run({ id: 'run-3', status: 'failed', error: 'provider timeout', patchId: 'patch-2' })]}
         messages={[]}
-        patches={[{ ...reviewablePatch, id: 'patch-2', status: 'applied' } as DeckPatch]}
+        patches={[{ ...reviewablePatch, id: 'patch-2', status: 'applied' } as unknown as DeckPatch]}
         onAcceptPatch={() => {}}
         onRejectPatch={() => {}}
       />,

@@ -30,7 +30,7 @@ export function inspectNodeSlideWorkflowCandidate(args: {
     expectedAppCommit: args.expectedAppCommit,
     digestCandidate: args.digestCandidate,
     validateCandidate: (candidate) => validateCandidate(args.snapshot, candidate),
-    now: args.now,
+    ...(args.now ? { now: args.now } : {}),
   });
 }
 

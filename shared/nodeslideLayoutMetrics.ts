@@ -1,4 +1,4 @@
-import type { BoundingBox } from './nodeslide';
+import type { BoundingBox, SlideElement } from './nodeslide';
 
 /**
  * Pure text-measurement and geometry helpers for the deck materializer.
@@ -242,4 +242,55 @@ export function resolveCollisions(
     resolved: remaining.length === 0,
     remaining,
   };
+}
+
+/** Default measured-vs-allotted ratio above which text counts as compressed. */
+export const NODESLIDE_TEXT_COMPRESSION_TOLERANCE = 1.12;
+
+export interface NodeSlideCompressedTextElement {
+  slideId: string;
+  elementId: string;
+  elementName: string;
+  /** Estimated normalized height the content needs at its styled font. */
+  measuredHeight: number;
+  /** Normalized height the layout actually granted the element. */
+  allottedHeight: number;
+}
+
+/**
+ * Report text elements whose measured wrapped height exceeds the height the
+ * materializer granted them (i.e. copy that only fits because a clamp or the
+ * stack compressor squeezed it). Pure, DOM-free: uses the same canvas-model
+ * estimate as the materializer, so a block laid out at its measured height
+ * reports a ratio of exactly 1 and is never flagged.
+ */
+export function findCompressedTextElements(
+  elements: readonly SlideElement[],
+  toleranceRatio: number = NODESLIDE_TEXT_COMPRESSION_TOLERANCE,
+): NodeSlideCompressedTextElement[] {
+  const compressed: NodeSlideCompressedTextElement[] = [];
+  for (const element of elements) {
+    if (element.kind !== 'text') continue;
+    const content = element.content?.trim();
+    if (!content) continue;
+    const fontSize = element.style.fontSize;
+    if (!fontSize || fontSize <= 0) continue;
+    if (element.bbox.height <= 0 || element.bbox.width <= 0) continue;
+    const measuredHeight = estimateTextHeight(
+      content,
+      fontSize,
+      element.style.lineHeight ?? 1.2,
+      element.bbox.width,
+    );
+    if (measuredHeight > element.bbox.height * toleranceRatio) {
+      compressed.push({
+        slideId: element.slideId,
+        elementId: element.id,
+        elementName: element.name,
+        measuredHeight,
+        allottedHeight: element.bbox.height,
+      });
+    }
+  }
+  return compressed;
 }

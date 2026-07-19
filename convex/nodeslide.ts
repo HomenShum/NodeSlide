@@ -2021,6 +2021,9 @@ export const createFromBriefInternal = internalMutation({
     plan: v.array(v.string()),
     spec: v.any(),
     traceSummary: v.string(),
+    critiquePasses: v.optional(v.number()),
+    critiqueDecision: v.optional(v.string()),
+    critiqueReport: v.optional(v.string()),
     provider: v.optional(v.string()),
     model: v.optional(v.string()),
     reasoningEffort: v.optional(nodeslideReasoningEffortValidator),
@@ -2061,11 +2064,20 @@ export const createFromBriefInternal = internalMutation({
                 `Read ${args.attachments.length} user-supplied data source${args.attachments.length === 1 ? '' : 's'}`,
               ]
             : []),
+          ...(args.critiquePasses !== undefined
+            ? [
+                `Self-critique: ${args.critiquePasses} pass${args.critiquePasses === 1 ? '' : 'es'}${args.critiqueDecision ? ` (${args.critiqueDecision})` : ''}`,
+              ]
+            : []),
+          ...(args.critiqueReport
+            ? [`Self-critique report: ${args.critiqueReport}`.slice(0, 500)]
+            : []),
           'Persisted deterministic plan and deck specification',
         ],
         toolCalls: [
           'Planned six-to-eight slide narrative',
           'Built normalized deck',
+          ...(args.critiquePasses === 2 ? ['Ran bounded self-critique revision'] : []),
           'Validated snapshot',
         ],
         ...(args.provider ? { provider: args.provider } : {}),

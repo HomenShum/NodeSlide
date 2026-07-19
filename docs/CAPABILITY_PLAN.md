@@ -134,52 +134,110 @@ but never live-verified.
       `nodeslide-deploy` staging folder; decide parity-studio's demo fate.
 - [ ] H5. Human: send the Mike draft (video URL now public via the README).
 
-## I · Injectable component — NodeSlide in anyone's repo (P1)
+## I · Injectable engine — NodeSlide as a reusable governed presentation system (P0 boundary, P1 packaging)
 
-Everything above should land as capabilities of an *installable* deck-agent,
-not features locked inside this app. Target shape: drop NodeSlide into any
-React + Convex repo the way AI Elements drops into a Next app. Pilot bed:
-our own `noderoom` repo.
+Corrected after architecture review (2026-07-19): the product is NOT
+`<NodeSlideStudio/>` as a mega-component. It is a layered, independently
+consumable stack — **portable deck model + governed mutation engine + agent
+pack + backend ports + controlled React surfaces + optional source-owned
+registry + conformance/consumer tests**. The current app and NodeRoom become
+the first two consumers. Every other track builds against these interfaces
+from now on — capability work that crosses the boundary is a regression.
 
-- [ ] I1. Extraction boundary audit: `shared/` (types + patch engine) must have
-      zero app imports; editor/inspector/AgentThread components take all state
-      via props/hooks (no app-global reach-ins); enumerate every leak.
-- [ ] I2. Backend as a **Convex component**: package the `nodeslide_*` schema +
-      functions with Convex's component system so a host app mounts it with
-      isolated tables (`app.use(nodeslide)`); host passes provider keys/env.
-      Fallback mode: hosted-API adapter pointing at our prod deployment.
-- [ ] I3. Frontend as `@nodeslide/react`: `<NodeSlideStudio/>` (full editor) and
-      `<DeckAgentThread/>` (chat + patch review only) with a typed backend
-      adapter interface; scoped Tailwind stays preflight-off so it cannot
-      restyle the host app (the `.ns-ai-elements` discipline, generalized).
-- [ ] I4. Install path: `npx nodeslide init` (shadcn-style registry for the
-      ownable UI pieces) + npm for the engine; writes the Convex mount, env
-      names, and a seed route. One command to a working sample deck.
-- [ ] I5. Governance travels with the component: consent tokens, scope
-      validators, CAS, gates, and Trace receipts are part of the package —
-      not optional extras the host can silently drop.
-- [ ] I6. Docs: a 10-minute "add a deck agent to your app" guide with the same
-      honest capability labels the product uses.
-- [ ] I7. Acceptance (fail-closed, in `noderoom`): fresh clone → install via I4
-      → mount → create a deck → live agent edit accepted → PPTX export, all
-      driven headlessly in noderoom's own CI, zero copy-paste from this repo.
-- [ ] I8. Dogfood loop: noderoom's integration becomes a second CI surface for
-      every track above (a layout or thread regression must fail in the
-      consumer repo too, not just here).
+Package layout (target):
+
+```text
+@nodeslide/contracts       schemas + types only (no React, no Convex, no app imports)
+@nodeslide/engine          layout, patches, validation, compilation, proposals (no UI)
+@nodeslide/agent           tool/skill pack, context assembly, policy hooks, evals
+@nodeslide/react-headless  hooks, state machines, a11y/keyboard contracts
+@nodeslide/react           styled controlled components over CSS variables
+@nodeslide/convex          reference backend adapter (Convex component + migrations)
+@nodeslide/client-http     hosted-API adapter
+@nodeslide/mcp             external-agent adapter
+@nodeslide/testing         fixtures, fake repository, scripted agent, conformance
+registry/                  shadcn-style source-owned compositions (studio route,
+                           agent panel, proposal review, design tab, presenter)
+```
+
+- [ ] I1. **Extraction-boundary audit** (P0, first): map every import crossing
+      domain ↔ app-shell ↔ convex ↔ shared; classify each as
+      contracts/engine/react/backend/agent/host; document violations; freeze
+      the boundary (new capability code may not cross it).
+- [ ] I2. **Backend ports before backends**: define `NodeSlideRepository`
+      (getDeck/applyPatch/createProposal/resolveProposal/listVersions/
+      storeReceipt) + `NodeSlideAssetStore` + `NodeSlideTelemetryAdapter`.
+      Implement Memory (tests), Convex (reference, as a mountable Convex
+      component with isolated tables + migrations), Http (hosted). The Convex
+      component is the reference production backend, not the abstraction.
+- [ ] I3. **Controlled React surfaces**: `<NodeSlideStudio/>` /
+      `<DeckAgentThread/>` take snapshot/selection/proposal/permissions +
+      onPatch/onPropose/onAccept/onReject/onExport — backend-neutral; ship
+      `<ConvexNodeSlideStudio deckId/>` as optional convenience binding.
+      Split headless (hooks/state) from styled (CSS-variable tokens:
+      `--nodeslide-*`); a host can adopt the engine without NodeSlide's
+      visual identity. "Scoped Tailwind" alone is not the isolation contract.
+- [ ] I4. **Auth is host-supplied**: normalize to `NodeSlidePrincipal`
+      {userId, organizationId?, roles, permissions}; host adapters resolve it
+      from WorkOS/Clerk/Auth0/Convex/Supabase/custom. No auth vendor inside
+      the packages.
+- [ ] I5. **Governance = enforced invariants, configurable UX.** Required and
+      non-bypassable server-side: mutation authority checks, version clocks
+      (CAS), validation, trace lineage, source authorization, rollback.
+      Host-configurable: which operations need human approval (typo fix auto
+      → structural deletion approval), Turbo auto-commit, host-supplied
+      approval UI, publishing/retention policy. A host cannot bypass
+      validation and still claim a valid NodeSlide result — but the engine
+      never imposes one UX.
+- [ ] I6. **Installer + upgrade contract**: `npx nodeslide init` asks what to
+      install (full studio / agent thread / renderer / presenter / backend
+      only / agent pack only), which backend (Convex / hosted / custom), and
+      which UI mode (default theme / host tokens / headless); detects
+      framework + shadcn config; installs versioned packages + chosen
+      registry sources; generates example route + env examples + conformance
+      tests; runs typecheck/build; writes an installation receipt. Never
+      silently touches auth, global CSS, routing, or existing schemas.
+      Upgrades: engine/schemas semver + migrations; snapshots carry
+      schemaVersion + migration chain; registry sources upgrade by diff.
+- [ ] I7. **NodeRoom consumer proof** (a required architectural test, not
+      optional dogfood): from a clean NodeRoom branch — installer →
+      NodeRoom's own principal adapter → mount as a room artifact → create
+      → manual edit → invoke NodeRoom's existing NodeAgent runtime (no
+      second runtime) → unapplied proposal → compare → accept through
+      server validation/CAS → room activity + receipt → reload → presenter
+      → PPTX export → re-validate. Hard checks: no copied backend source,
+      no duplicate auth, no second Convex client, no global CSS
+      contamination, no table collisions, clean uninstall, same snapshot runs
+      against Memory and Convex adapters.
+- [ ] I8. **Cross-repo CI**: a NodeSlide package regression must fail
+      NodeRoom's consumer suite; both CIs run the same smallest journey
+      (load → create → render → edit → version++ → export).
 
 ---
 
-## Suggested sequence
+## Suggested sequence (corrected)
 
-1. **H1 + A1–A4** (one arc: layout correctness + unified validation + CI that
-   would have caught everything this week)
-2. **I1** extraction-boundary audit (cheap now, brutal later — every subsequent
-   track builds against the injectable boundary instead of re-entangling)
-3. **B1** creation self-correction loop (the DeepAgent story, reusing repair bones)
-4. **C1–C2** KaTeX (small, high-credibility for the researcher persona)
-5. **I2–I4** package + install path → **I7** noderoom pilot
-6. **D1–D3** charts · **B2–B3** routing · **E1/E3** images · **F** evidence
-7. **G/E2/B5/I8** polish + roadmap + consumer-repo CI
+```text
+1.  I1      extraction boundary (before ANY new capability work)
+2.  H1      real runtime smoke gate (NodeSlide CI now; NodeRoom CI at I7)
+3.  A1-A4   measured layout, 5 archetypes, unified validation
+4.  B1      generate -> render -> inspect -> critique -> repair loop
+            (the agent must SEE renders, geometry reports, Deck CI findings,
+            references - otherwise self-critique is theatre)
+5.  C       KaTeX (removes the fastest credibility gap)
+6.  D       real charts (multi-series line/bar/area, native PPTX)
+7.  E       image search/licensing pipeline
+8.  F       visual evidence lineage (screenshot + region binding)
+9.  I2-I6   ports, packages, installer (package only proven behavior -
+            release bar: install -> mount -> create -> edit -> live agent
+            change -> chart render -> PPTX -> Deck CI green, no copy-paste)
+10. I7-I8   NodeRoom consumer proof + permanent cross-repo CI
+```
+
+Organizing principle: **NodeSlide is no longer just an app — it is a reusable
+governed presentation engine with two consumers (this app, NodeRoom).** Every
+capability is implemented once in the engine, proven here, and independently
+verified in NodeRoom.
 
 Definition of done for the plan itself: every checked item has a fail-closed
 verification run linked in the commit message, and no caption anywhere claims

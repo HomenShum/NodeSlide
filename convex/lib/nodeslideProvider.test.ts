@@ -3,10 +3,12 @@ import { NODESLIDE_NEBIUS_AGENT_MODEL, nodeSlideAgentModel } from '../../shared/
 import {
   NODESLIDE_EDIT_MODEL,
   NODESLIDE_EDIT_PROVIDER,
+  NODESLIDE_OPENROUTER_MODEL_OVERRIDES,
   type NodeSlideCompletion,
   type NodeSlideCompletionResult,
   callNodeSlideFreeJson,
   nodeSlideStructuredOutputPayload,
+  openrouterProviderWithOverrides,
 } from './nodeslideProvider';
 
 const defaultRoute = nodeSlideAgentModel(NODESLIDE_EDIT_MODEL);
@@ -93,6 +95,23 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     });
     expect(complete.mock.calls[0]?.[0].model).toBe('anthropic/claude-sonnet-5');
     expect(complete.mock.calls[0]?.[0].reasoningEffort).toBe('xhigh');
+  });
+
+  it('pins reasoning:false OpenRouter overrides for Kimi K3 and Gemini 3.5 Flash', () => {
+    const provider = openrouterProviderWithOverrides();
+    const models = provider.getModels();
+    const overrideIds = NODESLIDE_OPENROUTER_MODEL_OVERRIDES.map((model) => model.id);
+    expect(overrideIds).toEqual(['moonshotai/kimi-k3', 'google/gemini-3.5-flash']);
+    for (const override of NODESLIDE_OPENROUTER_MODEL_OVERRIDES) {
+      const matches = models.filter((model) => model.id === override.id);
+      // Exactly one entry per id: our pinned definition wins over any bundled
+      // catalog entry that would re-enable reasoning and burn the JSON budget.
+      expect(matches).toHaveLength(1);
+      expect(matches[0]).toMatchObject({
+        reasoning: false,
+        compat: { supportsDeveloperRole: false, maxTokensField: 'max_tokens' },
+      });
+    }
   });
 
   it('injects the schema while preserving pi-ai provider routing', () => {

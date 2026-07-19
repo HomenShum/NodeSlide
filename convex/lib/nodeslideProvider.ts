@@ -84,16 +84,51 @@ const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
   },
 };
 
-function openrouterProviderWithKimi() {
+// Gemini 3.5 Flash exists in the bundled catalog but with reasoning enabled;
+// via OpenRouter it burns its whole token budget on reasoning before emitting
+// JSON (finish=length with ~70 chars of content) — same disease Kimi K3 had.
+// Pin reasoning:false with the same minimal compat surface as the Kimi fix.
+// Cost/context mirror the bundled catalog entry.
+const NODESLIDE_GEMINI_35_FLASH: Model<'openai-completions'> = {
+  id: 'google/gemini-3.5-flash',
+  name: 'Google: Gemini 3.5 Flash',
+  api: 'openai-completions',
+  provider: 'openrouter',
+  baseUrl: 'https://openrouter.ai/api/v1',
+  reasoning: false,
+  input: ['text', 'image'],
+  cost: { input: 1.5, output: 9, cacheRead: 0.15, cacheWrite: 0.083333 },
+  contextWindow: 1_048_576,
+  maxTokens: 65_536,
+  compat: {
+    supportsDeveloperRole: false,
+    maxTokensField: 'max_tokens',
+  },
+};
+
+/**
+ * NodeSlide-pinned OpenRouter model definitions. Each entry replaces the
+ * bundled catalog entry with the same id (or is appended when the catalog
+ * predates the model), so newer catalog releases cannot silently reintroduce
+ * behavior we had to pin away (e.g. reasoning burning the JSON token budget).
+ */
+export const NODESLIDE_OPENROUTER_MODEL_OVERRIDES: readonly Model<'openai-completions'>[] = [
+  NODESLIDE_KIMI_K3,
+  NODESLIDE_GEMINI_35_FLASH,
+];
+
+export function openrouterProviderWithOverrides() {
   const builtin = openrouterProvider();
-  const models = builtin.getModels();
-  if (models.some((model) => model.id === NODESLIDE_KIMI_K3.id)) return builtin;
+  const overridden = new Map(
+    NODESLIDE_OPENROUTER_MODEL_OVERRIDES.map((model) => [model.id, model] as const),
+  );
+  const models = builtin.getModels().filter((model) => !overridden.has(model.id));
   return createProvider({
     id: 'openrouter',
     name: 'OpenRouter',
     baseUrl: 'https://openrouter.ai/api/v1',
     auth: { apiKey: envApiKeyAuth('OpenRouter API key', ['OPENROUTER_API_KEY']) },
-    models: [...models, NODESLIDE_KIMI_K3],
+    models: [...models, ...NODESLIDE_OPENROUTER_MODEL_OVERRIDES],
     api: openAICompletionsApi(),
   });
 }
@@ -103,7 +138,7 @@ function providerDisplayName(provider: NodeSlideExternalProvider): string {
 }
 
 const nodeSlideModels = createModels();
-nodeSlideModels.setProvider(openrouterProviderWithKimi());
+nodeSlideModels.setProvider(openrouterProviderWithOverrides());
 nodeSlideModels.setProvider(nebiusProvider());
 
 export interface NodeSlideProviderTelemetry {

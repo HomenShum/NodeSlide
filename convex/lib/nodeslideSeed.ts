@@ -5,10 +5,12 @@ import {
   NODESLIDE_SCHEMA_VERSION,
   NODESLIDE_TOOLCHAIN_VERSION,
   type Slide,
+  type SlideArchetype,
   type SlideElement,
   type SourceRecord,
   type ThemeSpec,
 } from '../../shared/nodeslide';
+import { type SlideContentShape, chooseDeckArchetypes } from '../../shared/nodeslideArchetypes';
 import {
   type NodeSlideDataAttachment,
   nodeSlideDataAttachmentShape,
@@ -831,6 +833,20 @@ function buildNodeSlideDeck(input: {
     ...uploadedSources,
   ];
 
+  // Archetype selection runs over the whole deck first so the anti-monotony
+  // rule can see adjacency: an alternative layout is preferred whenever the
+  // content shape allows one and the previous slide used the same archetype.
+  const contentShapes: SlideContentShape[] = input.spec.slides.map((planned, index) => ({
+    index,
+    total: input.spec.slides.length,
+    hasMetric: planned.metric !== undefined,
+    hasChart: planned.chart !== undefined,
+    hasMedia: planned.image !== undefined || planned.video !== undefined,
+    hasFormula: planned.formula !== undefined,
+    bulletCount: planned.bullets.filter(Boolean).length,
+  }));
+  const archetypes = chooseDeckArchetypes(contentShapes);
+
   const slides: Slide[] = [];
   const elements: SlideElement[] = [];
   for (let index = 0; index < input.spec.slides.length; index += 1) {
@@ -841,6 +857,7 @@ function buildNodeSlideDeck(input: {
       deckId: input.deckId,
       slideId,
       planned,
+      archetype: archetypes[index] ?? 'split',
       index,
       total: input.spec.slides.length,
       theme,
@@ -878,6 +895,7 @@ function buildSlide(input: {
   deckId: string;
   slideId: string;
   planned: NodeSlidePlannedSlide;
+  archetype: SlideArchetype;
   index: number;
   total: number;
   theme: ThemeSpec;
@@ -935,7 +953,17 @@ function buildSlide(input: {
     }),
   );
   const isOpening = input.index === 0;
-  const isClosing = input.index === input.total - 1;
+
+  // Archetype-driven layout switches. Every archetype reuses the same
+  // measurement helpers and ends in the same collision gate below.
+  const { archetype } = input;
+  const isStatement = archetype === 'statement';
+  const isComparison = archetype === 'comparison';
+  const isChartDominant = archetype === 'chart-dominant';
+  // Media-dominant slides alternate sides by slide index for deck rhythm:
+  // even index keeps the visual on the right, odd index moves it left.
+  const mediaOnLeft = archetype === 'media-dominant' && input.index % 2 === 1;
+  const copyX = mediaOnLeft ? 0.52 : 0.07;
 
   // Measured layout: heights derive from content (with the historical fixed
   // proportions kept as minimums) and blocks stack sequentially so long copy
@@ -979,13 +1007,24 @@ function buildSlide(input: {
   const evidenceSourceIds =
     input.linkedSourceIds.length > 0 ? input.linkedSourceIds : [input.sourceEvidenceId];
   const primaryEvidenceSourceId = evidenceSourceIds[0] ?? input.sourceEvidenceId;
-  const bodyWidth = hasVisual ? 0.39 : isOpening || isClosing ? 0.66 : 0.48;
-  const horizontalBullets = (isOpening || isClosing) && !hasVisual;
+  const bodyWidth = isComparison
+    ? 0.79
+    : isChartDominant
+      ? 0.3
+      : mediaOnLeft
+        ? 0.4
+        : hasVisual
+          ? 0.39
+          : isStatement
+            ? 0.66
+            : 0.48;
+  const horizontalBullets = isStatement;
   // The body starts below the measured headline; its own height is measured
   // from content (legacy proportions as minimums) and capped so the bullet
-  // stack that follows it always stays above the footer band.
+  // stack that follows it always stays above the footer band. Comparison
+  // slides cap the body earlier to leave room for the three columns below.
   const bodyY = headlineY + headlineHeight + (isOpening ? 0.06 : 0.05);
-  const bodyMaxBottom = hasVisual ? 0.7 : horizontalBullets ? 0.78 : 0.9;
+  const bodyMaxBottom = isComparison ? 0.58 : hasVisual ? 0.7 : horizontalBullets ? 0.78 : 0.9;
   const bodyHeight = Math.min(
     Math.max(0.06, bodyMaxBottom - bodyY),
     Math.max(isOpening ? 0.17 : 0.2, estimateTextHeight(planned.body, 19, 1.35, bodyWidth)),
@@ -995,7 +1034,7 @@ function buildSlide(input: {
       name: 'Body copy',
       kind: 'text',
       role: 'body',
-      bbox: box(0.07, bodyY, bodyWidth, bodyHeight),
+      bbox: box(copyX, bodyY, bodyWidth, bodyHeight),
       rotation: 0,
       content: planned.body,
       style: {
@@ -1012,8 +1051,18 @@ function buildSlide(input: {
   );
 
   const bulletFontSize = horizontalBullets ? 16 : 17;
-  const bulletX = horizontalBullets ? 0.07 : hasVisual ? 0.07 : 0.59;
-  const bulletWidth = horizontalBullets ? 0.25 : hasVisual ? 0.39 : 0.33;
+  const bulletX = horizontalBullets || isComparison ? 0.07 : hasVisual ? copyX : 0.59;
+  const bulletWidth = horizontalBullets
+    ? 0.25
+    : isComparison
+      ? 0.26
+      : isChartDominant
+        ? 0.3
+        : mediaOnLeft
+          ? 0.4
+          : hasVisual
+            ? 0.39
+            : 0.33;
   const bulletTexts = planned.bullets
     .slice(0, 3)
     .map((bullet, bulletIndex) => `${horizontalBullets ? '•' : `0${bulletIndex + 1}`}  ${bullet}`);
@@ -1023,35 +1072,48 @@ function buildSlide(input: {
       estimateTextHeight(text, bulletFontSize, 1.2, bulletWidth),
     ),
   );
-  // Horizontal rows sit on one line below the body; vertical stacks begin
+  // Horizontal rows sit on one line below the body; comparison slides place
+  // each bullet in its own column on a shared row; vertical stacks begin
   // below the body (visual layouts) or beside it (right column) and are
   // compressed by stackBlocks if they would run past the footer band.
   const horizontalRowY = Math.min(0.9, Math.max(0.72, bodyY + bodyHeight + 0.03));
+  const comparisonRowY = Math.min(0.7, bodyY + bodyHeight + 0.04);
   const bulletStackStart = hasVisual ? bodyY + bodyHeight + 0.02 : 0.42;
-  const stackedBullets = horizontalBullets
-    ? []
-    : stackBlocks(
-        bulletStackStart,
-        bulletHeights.map((height, bulletIndex) => ({
-          key: `bullet-${bulletIndex + 1}`,
-          height,
-          gapBefore: 0.03,
-        })),
-        0.95,
-      );
+  const stackedBullets =
+    horizontalBullets || isComparison
+      ? []
+      : stackBlocks(
+          bulletStackStart,
+          bulletHeights.map((height, bulletIndex) => ({
+            key: `bullet-${bulletIndex + 1}`,
+            height,
+            gapBefore: 0.03,
+          })),
+          0.95,
+        );
   bulletTexts.forEach((content, bulletIndex) => {
     const stacked = stackedBullets[bulletIndex];
-    const bulletY = horizontalBullets ? horizontalRowY : (stacked?.y ?? bulletStackStart);
+    const bulletY = horizontalBullets
+      ? horizontalRowY
+      : isComparison
+        ? comparisonRowY
+        : (stacked?.y ?? bulletStackStart);
     const bulletHeight = horizontalBullets
       ? Math.min(bulletHeights[bulletIndex] ?? 0.08, 0.98 - horizontalRowY)
-      : (stacked?.height ?? 0.09);
+      : isComparison
+        ? Math.min(Math.max(0.16, bulletHeights[bulletIndex] ?? 0.16), 0.9 - comparisonRowY)
+        : (stacked?.height ?? 0.09);
     add(
       element(`bullet-${bulletIndex + 1}`, {
         name: `Key point ${bulletIndex + 1}`,
         kind: 'text',
         role: 'bullet',
         bbox: box(
-          horizontalBullets ? bulletX + bulletIndex * 0.28 : bulletX,
+          horizontalBullets
+            ? bulletX + bulletIndex * 0.28
+            : isComparison
+              ? bulletX + bulletIndex * 0.29
+              : bulletX,
           bulletY,
           bulletWidth,
           bulletHeight,
@@ -1087,8 +1149,11 @@ function buildSlide(input: {
     return { y, height: clampedHeight };
   };
 
+  // Stat-dominant slides without a chart give the metric the full right
+  // column: a taller panel and a larger figure so the number carries the slide.
+  const hugeMetric = archetype === 'stat-dominant' && !planned.chart;
   if (planned.metric && !hasPrimaryMedia) {
-    const metricBox = placeRight(0.41, 0.15);
+    const metricBox = placeRight(0.41, hugeMetric ? 0.2 : 0.15);
     add(
       element('metric', {
         name: 'Primary metric',
@@ -1101,7 +1166,7 @@ function buildSlide(input: {
           color: theme.colors.insightInk,
           fill: theme.colors.insight,
           fontFamily: theme.typography.data,
-          fontSize: 43,
+          fontSize: hugeMetric ? 56 : 43,
           fontWeight: 720,
           lineHeight: 1,
           padding: 20,
@@ -1174,6 +1239,13 @@ function buildSlide(input: {
     );
   }
 
+  // Media-dominant slides alternate the visual column; when the visual sits
+  // on the left it anchors below the measured headline instead of the legacy
+  // right-column Y so it never slides under the full-width headline.
+  const mediaX = mediaOnLeft ? 0.06 : 0.53;
+  const mediaAnchorY = (base: number) =>
+    mediaOnLeft ? Math.max(base, headlineY + headlineHeight + 0.04) : base;
+
   if (planned.image) {
     const imageUrl = planned.image.imageUrl ?? planned.image.url;
     const hasEmbeddedAsset = Boolean(imageUrl);
@@ -1181,13 +1253,13 @@ function buildSlide(input: {
       planned.image.credit ??
       planned.image.caption ??
       'Credit required before external publication';
-    const imageBox = placeRight(0.39, 0.38);
+    const imageBox = placeRight(mediaAnchorY(0.39), 0.38);
     add(
       element('image', {
         name: 'Editable image',
         kind: 'image',
         role: 'image',
-        bbox: box(0.53, imageBox.y, 0.39, imageBox.height),
+        bbox: box(mediaX, imageBox.y, 0.39, imageBox.height),
         rotation: 0,
         style: {
           fill: theme.colors.accentSoft,
@@ -1216,7 +1288,7 @@ function buildSlide(input: {
         name: 'Image credit',
         kind: 'text',
         role: 'caption',
-        bbox: box(0.55, imageCreditBox.y, 0.35, imageCreditBox.height),
+        bbox: box(mediaOnLeft ? 0.08 : 0.55, imageCreditBox.y, 0.35, imageCreditBox.height),
         rotation: 0,
         content: planned.image.caption
           ? planned.image.caption
@@ -1237,13 +1309,13 @@ function buildSlide(input: {
   }
 
   if (planned.video) {
-    const videoBox = placeRight(0.4, 0.28);
+    const videoBox = placeRight(mediaAnchorY(0.4), 0.28);
     add(
       element('video', {
         name: 'Linked video',
         kind: 'video',
         role: 'evidence_video',
-        bbox: box(0.53, videoBox.y, 0.39, videoBox.height),
+        bbox: box(mediaX, videoBox.y, 0.39, videoBox.height),
         rotation: 0,
         style: {
           fill: '#111318',
@@ -1278,13 +1350,17 @@ function buildSlide(input: {
     const labels = planned.chart.labels.slice(0, 8);
     const values = planned.chart.values.slice(0, labels.length);
     const chartAlone = !(hasPrimaryMedia || planned.metric);
-    const chartBox = placeRight(0.42, chartAlone ? 0.4 : 0.17);
+    // Chart-dominant slides let the chart claim ~55% of the canvas width;
+    // other layouts keep the legacy right-column footprint.
+    const chartX = isChartDominant ? 0.42 : 0.53;
+    const chartWidth = isChartDominant ? 0.5 : 0.39;
+    const chartBox = placeRight(0.42, chartAlone ? (isChartDominant ? 0.46 : 0.4) : 0.17);
     add(
       element('chart', {
         name: 'Evidence chart',
         kind: 'chart',
         role: 'evidence',
-        bbox: box(0.53, chartBox.y, 0.39, chartBox.height),
+        bbox: box(chartX, chartBox.y, chartWidth, chartBox.height),
         rotation: 0,
         style: {
           fill: theme.colors.accentSoft,
@@ -1382,6 +1458,7 @@ function buildSlide(input: {
       deckId: input.deckId,
       title: planned.title,
       section: planned.section,
+      archetype,
       notes: `Narrative role: ${planned.section}. Keep the spoken transition focused on “${planned.headline}”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.`,
       background: theme.colors.canvas,
       elementOrder: elements.map((candidate) => candidate.id),

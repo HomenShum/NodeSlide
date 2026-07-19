@@ -382,6 +382,19 @@ export interface SlideElement {
   version: number;
 }
 
+/**
+ * Layout archetype chosen at materialization from slide role + content shape.
+ * Optional for backward compatibility: slides materialized before archetypes
+ * existed omit the field and render exactly as before.
+ */
+export type SlideArchetype =
+  | 'statement'
+  | 'stat-dominant'
+  | 'chart-dominant'
+  | 'media-dominant'
+  | 'comparison'
+  | 'split';
+
 export interface Slide {
   id: string;
   deckId: string;
@@ -389,6 +402,8 @@ export interface Slide {
   section?: string;
   /** Private speaker notes. Published presenter snapshots intentionally omit this field. */
   notes?: string;
+  /** Layout archetype the materializer chose for this slide, when known. */
+  archetype?: SlideArchetype;
   background: string;
   elementOrder: string[];
   version: number;

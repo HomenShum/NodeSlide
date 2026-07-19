@@ -492,12 +492,22 @@ export const nodeslideElementValidator = v.object({
   version: v.number(),
 });
 
+export const nodeslideSlideArchetypeValidator = v.union(
+  v.literal('statement'),
+  v.literal('stat-dominant'),
+  v.literal('chart-dominant'),
+  v.literal('media-dominant'),
+  v.literal('comparison'),
+  v.literal('split'),
+);
+
 export const nodeslideSlideValidator = v.object({
   id: v.string(),
   deckId: v.string(),
   title: v.string(),
   section: v.optional(v.string()),
   notes: v.optional(v.string()),
+  archetype: v.optional(nodeslideSlideArchetypeValidator),
   background: v.string(),
   elementOrder: v.array(v.string()),
   version: v.number(),

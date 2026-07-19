@@ -18,6 +18,7 @@ import {
   nodeslidePatchScopeValidator,
   nodeslidePatchSourceValidator,
   nodeslidePatchStatusValidator,
+  nodeslideSlideArchetypeValidator,
   nodeslideSnapshotValidator,
   nodeslideThemeValidator,
   nodeslideValidationIssueValidator,
@@ -279,6 +280,8 @@ export default defineSchema({
     title: v.string(),
     section: v.optional(v.string()),
     notes: v.optional(v.string()),
+    // Optional: rows materialized before layout archetypes existed omit it.
+    archetype: v.optional(nodeslideSlideArchetypeValidator),
     background: v.string(),
     elementOrder: v.array(v.string()),
     version: v.number(),

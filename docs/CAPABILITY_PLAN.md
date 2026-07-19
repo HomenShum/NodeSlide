@@ -134,16 +134,52 @@ but never live-verified.
       `nodeslide-deploy` staging folder; decide parity-studio's demo fate.
 - [ ] H5. Human: send the Mike draft (video URL now public via the README).
 
+## I · Injectable component — NodeSlide in anyone's repo (P1)
+
+Everything above should land as capabilities of an *installable* deck-agent,
+not features locked inside this app. Target shape: drop NodeSlide into any
+React + Convex repo the way AI Elements drops into a Next app. Pilot bed:
+our own `noderoom` repo.
+
+- [ ] I1. Extraction boundary audit: `shared/` (types + patch engine) must have
+      zero app imports; editor/inspector/AgentThread components take all state
+      via props/hooks (no app-global reach-ins); enumerate every leak.
+- [ ] I2. Backend as a **Convex component**: package the `nodeslide_*` schema +
+      functions with Convex's component system so a host app mounts it with
+      isolated tables (`app.use(nodeslide)`); host passes provider keys/env.
+      Fallback mode: hosted-API adapter pointing at our prod deployment.
+- [ ] I3. Frontend as `@nodeslide/react`: `<NodeSlideStudio/>` (full editor) and
+      `<DeckAgentThread/>` (chat + patch review only) with a typed backend
+      adapter interface; scoped Tailwind stays preflight-off so it cannot
+      restyle the host app (the `.ns-ai-elements` discipline, generalized).
+- [ ] I4. Install path: `npx nodeslide init` (shadcn-style registry for the
+      ownable UI pieces) + npm for the engine; writes the Convex mount, env
+      names, and a seed route. One command to a working sample deck.
+- [ ] I5. Governance travels with the component: consent tokens, scope
+      validators, CAS, gates, and Trace receipts are part of the package —
+      not optional extras the host can silently drop.
+- [ ] I6. Docs: a 10-minute "add a deck agent to your app" guide with the same
+      honest capability labels the product uses.
+- [ ] I7. Acceptance (fail-closed, in `noderoom`): fresh clone → install via I4
+      → mount → create a deck → live agent edit accepted → PPTX export, all
+      driven headlessly in noderoom's own CI, zero copy-paste from this repo.
+- [ ] I8. Dogfood loop: noderoom's integration becomes a second CI surface for
+      every track above (a layout or thread regression must fail in the
+      consumer repo too, not just here).
+
 ---
 
 ## Suggested sequence
 
 1. **H1 + A1–A4** (one arc: layout correctness + unified validation + CI that
    would have caught everything this week)
-2. **B1** creation self-correction loop (the DeepAgent story, reusing repair bones)
-3. **C1–C2** KaTeX (small, high-credibility for the researcher persona)
-4. **D1–D3** charts · **B2–B3** routing · **E1/E3** images · **F** evidence
-5. **G/E2/B5** polish + roadmap
+2. **I1** extraction-boundary audit (cheap now, brutal later — every subsequent
+   track builds against the injectable boundary instead of re-entangling)
+3. **B1** creation self-correction loop (the DeepAgent story, reusing repair bones)
+4. **C1–C2** KaTeX (small, high-credibility for the researcher persona)
+5. **I2–I4** package + install path → **I7** noderoom pilot
+6. **D1–D3** charts · **B2–B3** routing · **E1/E3** images · **F** evidence
+7. **G/E2/B5/I8** polish + roadmap + consumer-repo CI
 
 Definition of done for the plan itself: every checked item has a fail-closed
 verification run linked in the commit message, and no caption anywhere claims

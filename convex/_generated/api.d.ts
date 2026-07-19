@@ -44,6 +44,7 @@ import type * as lib_nodeslideTasteMismatch from "../lib/nodeslideTasteMismatch.
 import type * as lib_nodeslideValidation from "../lib/nodeslideValidation.js";
 import type * as lib_nodeslideValidators from "../lib/nodeslideValidators.js";
 import type * as lib_nodeslideVariationHarness from "../lib/nodeslideVariationHarness.js";
+import type * as lib_nodeslideWorkflowCandidate from "../lib/nodeslideWorkflowCandidate.js";
 import type * as nodeslide from "../nodeslide.js";
 import type * as nodeslideAgent from "../nodeslideAgent.js";
 import type * as nodeslideMemory from "../nodeslideMemory.js";
@@ -97,6 +98,7 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslideValidation": typeof lib_nodeslideValidation;
   "lib/nodeslideValidators": typeof lib_nodeslideValidators;
   "lib/nodeslideVariationHarness": typeof lib_nodeslideVariationHarness;
+  "lib/nodeslideWorkflowCandidate": typeof lib_nodeslideWorkflowCandidate;
   nodeslide: typeof nodeslide;
   nodeslideAgent: typeof nodeslideAgent;
   nodeslideMemory: typeof nodeslideMemory;

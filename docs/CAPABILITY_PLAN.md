@@ -213,6 +213,36 @@ registry/                  shadcn-style source-owned compositions (studio route,
       NodeRoom's consumer suite; both CIs run the same smallest journey
       (load → create → render → edit → version++ → export).
 
+## J · Ecosystem organization — who owns what across HomenShum repos (P1, audit-first)
+
+Gap surfaced 2026-07-19: Track I plans NodeSlide's internals and NodeRoom as a
+consumer, but nothing maps the wider fleet — `noderoom` (product +
+**NodeAgent runtime**), `NodeVideo` (**eve control plane**: apps/, packs/,
+nodekit.yaml), `nodeslide` (deck engine), `agentic-ui-qa` (QA harness). Same
+discipline as I1: audit before asserting; no invented org maps.
+
+- [ ] J1. **NodeAgent runtime audit** (prerequisite for I7): map NodeAgent's
+      actual surface in `noderoom` — tool registration, run/step model, memory,
+      provider routing, receipts. Output: the concrete
+      `NodeSlideAgentAdapter` contract written against the real interface,
+      not the assumed one.
+- [ ] J2. **Eve control-plane audit**: map what eve owns in `NodeVideo`
+      (packs, nodekit.yaml, control loops). Decide the orchestration fork
+      explicitly: does cross-model routing (Track B2) live per-product inside
+      NodeSlide, or is eve the orchestration layer NodeSlide registers into?
+      One owner, stated in writing — the same layer must not be built twice.
+- [ ] J3. **Repo responsibility map** (`docs/ECOSYSTEM.md`, one page): per
+      repo — what it owns, what it consumes, what it must never contain.
+      NodeSlide = governed deck engine + its packages; NodeRoom = collab
+      product hosting NodeAgent; eve/NodeVideo = TBD by J2; agentic-ui-qa =
+      cross-product QA. Every future extraction cites this map.
+- [ ] J4. **Inter-repo distribution decision**: how noderoom consumes
+      `@nodeslide/*` before public npm (workspace link / git tag / tarball /
+      private registry), with the same semver+migration rules as I6.
+- [ ] J5. Acceptance: J1's adapter contract compiles against real NodeAgent
+      types; J2's decision is recorded with rationale; ECOSYSTEM.md merged in
+      nodeslide and cross-linked from noderoom.
+
 ---
 
 ## Suggested sequence (corrected)
@@ -231,7 +261,9 @@ registry/                  shadcn-style source-owned compositions (studio route,
 9.  I2-I6   ports, packages, installer (package only proven behavior -
             release bar: install -> mount -> create -> edit -> live agent
             change -> chart render -> PPTX -> Deck CI green, no copy-paste)
-10. I7-I8   NodeRoom consumer proof + permanent cross-repo CI
+10. J1-J4   ecosystem audits: NodeAgent runtime, eve control plane,
+            responsibility map, distribution decision (J1 gates I7)
+11. I7-I8   NodeRoom consumer proof + permanent cross-repo CI
 ```
 
 Organizing principle: **NodeSlide is no longer just an app — it is a reusable

@@ -236,22 +236,22 @@ consumer, but nothing maps the wider fleet — `noderoom` (product +
 nodekit.yaml), `nodeslide` (deck engine), `agentic-ui-qa` (QA harness). Same
 discipline as I1: audit before asserting; no invented org maps.
 
-- [ ] J1. **NodeAgent runtime audit** (prerequisite for I7): map NodeAgent's
+- [x] J1. **NodeAgent runtime audit** — done 2026-07-19 (read-only): seams + run loop + both entry points + receipts mapped with file:line anchors; adapter contract recorded in docs/ECOSYSTEM.md (docs-only until I2). Map NodeAgent's
       actual surface in `noderoom` — tool registration, run/step model, memory,
       provider routing, receipts. Output: the concrete
       `NodeSlideAgentAdapter` contract written against the real interface,
       not the assumed one.
-- [ ] J2. **Eve control-plane audit**: map what eve owns in `NodeVideo`
+- [x] J2. **Eve control-plane audit** — done 2026-07-19: eve = single-tenant chat agent, no routing to inherit; decision (verbatim in docs/ECOSYSTEM.md): B2 routing lives in nodeslide as a standalone policy module; eve extraction only when a second consumer exists. Map what eve owns in `NodeVideo`
       (packs, nodekit.yaml, control loops). Decide the orchestration fork
       explicitly: does cross-model routing (Track B2) live per-product inside
       NodeSlide, or is eve the orchestration layer NodeSlide registers into?
       One owner, stated in writing — the same layer must not be built twice.
-- [ ] J3. **Repo responsibility map** (`docs/ECOSYSTEM.md`, one page): per
+- [x] J3. **Repo responsibility map** — done 2026-07-19: docs/ECOSYSTEM.md written (owns/consumes/never-contains per repo, sourced from J1+J2 audits). (`docs/ECOSYSTEM.md`, one page): per
       repo — what it owns, what it consumes, what it must never contain.
       NodeSlide = governed deck engine + its packages; NodeRoom = collab
       product hosting NodeAgent; eve/NodeVideo = TBD by J2; agentic-ui-qa =
       cross-product QA. Every future extraction cites this map.
-- [ ] J4. **Inter-repo distribution decision**: how noderoom consumes
+- [x] J4. **Inter-repo distribution decision** — done 2026-07-19: versioned `npm pack` tarball via `file:` pin (link/git-tag rejected for this Windows multi-repo setup; rationale in docs/ECOSYSTEM.md). How noderoom consumes
       `@nodeslide/*` before public npm (workspace link / git tag / tarball /
       private registry), with the same semver+migration rules as I6.
 - [ ] J5. Acceptance: J1's adapter contract compiles against real NodeAgent

@@ -6,6 +6,7 @@ import type {
   PointerEvent as ReactPointerEvent,
 } from 'react';
 import type { ChartData, Slide, SlideElement, ThemeSpec } from '../../../../shared/nodeslide';
+import { typesetMathHtml } from './mathTypeset';
 
 interface SlideRendererProps {
   slide: Slide;
@@ -128,13 +129,28 @@ function ElementContent({ element, theme }: { element: SlideElement; theme: Them
     const expression = element.math?.expression ?? element.content ?? '';
     const display = element.math?.display ?? expression;
     const variables = element.math?.variables ?? [];
+    // C1: real typesetting for latex syntax, and for plain expressions that
+    // happen to parse as TeX. C3: null (parse failure) falls back to the
+    // existing styled-text rendering below — no crash, no error markup.
+    const katexHtml =
+      element.math?.syntax === 'latex' || expression.trim().length > 0
+        ? typesetMathHtml(expression)
+        : null;
     return (
       <div
         className={`ns-element-math ns-math-primitive ns-element-math--${element.math?.syntax ?? 'plain'}`}
         role="math"
         aria-label={element.math?.description ?? `${element.name}: ${display}`}
       >
-        <code>{display}</code>
+        {katexHtml ? (
+          <span
+            className="ns-math-typeset"
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: markup is generated locally by KaTeX from the deck's own expression, not remote content.
+            dangerouslySetInnerHTML={{ __html: katexHtml }}
+          />
+        ) : (
+          <code>{display}</code>
+        )}
         {variables.length > 0 ? (
           <small>
             {variables
@@ -145,7 +161,7 @@ function ElementContent({ element, theme }: { element: SlideElement; theme: Them
               .join(' · ')}
           </small>
         ) : null}
-        {element.math?.syntax === 'latex' ? <small>LaTeX source</small> : null}
+        {element.math?.syntax === 'latex' && !katexHtml ? <small>LaTeX source</small> : null}
       </div>
     );
   }

@@ -359,6 +359,12 @@ export function applyDeckPatch(
       }
       element.imageUrl = operation.imageUrl;
       element.altText = operation.altText;
+      // An embedded raster travels into PPTX/Slides as a static picture, so
+      // keep the declared export capabilities truthful — a stale
+      // pptx_editable claim is a validation warning that blocks export.
+      if (operation.imageUrl.startsWith('data:image/')) {
+        element.exportCapabilities = ['web_native', 'pptx_static_fallback', 'google_importable'];
+      }
       element.image = {
         placeholder: false,
         ...(operation.credit ? { credit: operation.credit } : {}),

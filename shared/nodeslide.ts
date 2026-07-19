@@ -11,7 +11,20 @@ export const NODESLIDE_AGENT_MODELS = [
     label: 'GLM 5.2',
     description: 'Direct managed Nebius route for long-horizon planning and structured edits.',
     costTier: 'balanced',
-    bestFor: 'Recommended direct agent route',
+    bestFor: 'Direct managed Nebius route',
+    supportsTemperature: true,
+    supportedEfforts: ['low', 'medium', 'high'],
+  },
+  {
+    id: 'moonshotai/kimi-k3',
+    upstreamId: 'moonshotai/kimi-k3',
+    provider: 'openrouter',
+    vendor: 'Moonshot AI',
+    label: 'Kimi K3',
+    description:
+      'Moonshot Kimi K3 with large-context planning and structured edits, routed via OpenRouter.',
+    costTier: 'balanced',
+    bestFor: 'Recommended agent route',
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high'],
   },
@@ -102,8 +115,9 @@ export const NODESLIDE_AGENT_MODELS = [
 ] as const;
 export type NodeSlideAgentModelId = (typeof NODESLIDE_AGENT_MODELS)[number]['id'];
 export type NodeSlideExternalProvider = (typeof NODESLIDE_AGENT_MODELS)[number]['provider'];
-export const NODESLIDE_DEFAULT_AGENT_MODEL: NodeSlideAgentModelId = 'nebius/zai-org/GLM-5.2';
-export const NODESLIDE_DEFAULT_OPENROUTER_AGENT_MODEL: NodeSlideAgentModelId = 'z-ai/glm-5.2';
+export const NODESLIDE_DEFAULT_AGENT_MODEL: NodeSlideAgentModelId = 'moonshotai/kimi-k3';
+export const NODESLIDE_DEFAULT_OPENROUTER_AGENT_MODEL: NodeSlideAgentModelId = 'moonshotai/kimi-k3';
+export const NODESLIDE_NEBIUS_AGENT_MODEL: NodeSlideAgentModelId = 'nebius/zai-org/GLM-5.2';
 
 export const NODESLIDE_REASONING_EFFORTS = [
   { id: 'low', label: 'Light', description: 'Faster responses for straightforward work.' },
@@ -151,7 +165,7 @@ export function nodeSlideDefaultModelForProviderMode(
   mode: Exclude<NodeSlideProviderMode, 'deterministic'>,
 ): NodeSlideAgentModelId {
   return mode === 'nebius'
-    ? NODESLIDE_DEFAULT_AGENT_MODEL
+    ? NODESLIDE_NEBIUS_AGENT_MODEL
     : NODESLIDE_DEFAULT_OPENROUTER_AGENT_MODEL;
 }
 export const NODESLIDE_PATCH_OPERATION_LIMIT = 512 as const;

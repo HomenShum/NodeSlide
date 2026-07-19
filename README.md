@@ -6,7 +6,20 @@
 
 > NodeSlide turns a prompt, a structured brief, or raw data into a presentation you can *inspect and defend* — a canonical structured document that compiles to editable slides, where every change (human or agent) flows through one validated mutation path.
 
-> **Repository status (2026-07-13):** the NodeSlide app now lives in this repo and **builds green** — the Convex backend deploys, `tsc -b` + `vite build` pass, and **469/469 tests** pass. Extracted from the `parity-studio` monorepo with an IP-carve-out + secrets pass. See [Repository status](#repository-status).
+> **Repository status (2026-07-18):** the NodeSlide app now lives in this repo and **builds green** — the Convex backend deploys, `tsc -b` passes, and **485/485 tests** pass. Extracted from the `parity-studio` monorepo with an IP-carve-out + secrets pass. See [Repository status](#repository-status).
+
+---
+
+## See it run — 43 seconds, live agent, single take
+
+[`docs/demo/agent-thread-live-kimi.mp4`](docs/demo/agent-thread-live-kimi.mp4) — unedited recording against the deployed Convex backend and the live Kimi K3 route:
+
+1. An instruction lands in the AI tab → the conversational thread echoes the turn in **under a second**
+2. The agent researches and validates → a **cited, validated proposal** arrives in ~30s ("Ready for review · Kimi K3 · 1 source")
+3. The canvas opens a **side-by-side Compare** — baseline vs proposal, the headline genuinely tightened
+4. **Accept in place** → patch applies, deck version advances, provenance intact
+
+Nothing in the agent loop is mocked. That clip is the product thesis: agent edits are reviewable diffs on a typed document, never silent overwrites.
 
 ---
 
@@ -136,11 +149,21 @@ Prioritized:
 
 *Editing source JSON must never bypass the mutation system:* saving compiles changes into `PatchOperation[]`, runs schema + layout validation, shows the visual diff, then requires acceptance. The foundational data model already supports all of this — the missing work is the connector layer, the sync ledger, and the source UI, not a schema rewrite.
 
+## Built · Reused · Broke
+
+The disclosure discipline from the AI Fund Build Challenge template, kept as a permanent README fixture — every showcase claim names its evidence.
+
+**What I personally built.** The deck-as-code type system (`DeckSnapshot` — typed slides/elements/sources, normalized geometry, version clocks; render targets are derived, never the source). The patch/review model (`applyDeckPatch` — agent edits land as validated, reviewable patches with CAS version guards). The durable agent runtime on Convex (`nodeslide_agent_runs`/`_messages`/`_spans` — per-step model, token, and cost telemetry). The conversational review UI (`AgentThread` — visible tool steps, citations, accept-in-place).
+
+**What I reused (disclosed).** React 19 / Vite / Convex / Tailwind; shadcn + Radix interaction primitives; Vercel AI Elements (prompt input, thread pieces); OpenRouter for model routing (Kimi K3 default). Reuse is a feature: the edge is the governance and proof glue, not re-implementing editors.
+
+**What broke and how I debugged it.** The agent route itself. The default model route was dead (missing key + model absent from the client catalog), and Kimi K3 initially returned *empty content* — `reasoning: true` consumed the token budget before any text. Root-caused request-by-request against the OpenRouter API, registered the model with honest pricing so cost receipts are non-zero, promoted it to the validated default, pinned with tests. The demo video above is that same route working end to end; the failure, fix, and proof are all in this repo's git history.
+
 ## Trust & verification
 
 Trust is a product surface, not a hidden backend step. Validation covers schema and referential integrity, bounds/overlap/text-fit, required chart/math data, safe media URLs, source coverage, export capability, and publication cleanliness — and it *blocks* unsafe present, publish, or export. Repairs are explicit proposals through the same gate.
 
-- **469 Vitest tests** across 59 files: schema coercion, planner attribution, one-repair fallback convergence, acceptance gating, editor-state integrity, publishing privacy, web-research/ingestion contracts, governed-MCP consent parity, and HTML/PPTX generation. TypeScript compile and the Vite production build are release gates.
+- **485 Vitest tests**: schema coercion, planner attribution, one-repair fallback convergence, acceptance gating, editor-state integrity, publishing privacy, web-research/ingestion contracts, governed-MCP consent parity, HTML/PPTX generation, and the AgentThread conversational-review scenarios. TypeScript compile is a release gate; `npx impeccable detect` runs zero-findings on the agent UI surfaces.
 - **Independent UI audit** via the open-source [`agentic-ui-qa`](https://github.com/HomenShum/agentic-ui-qa) protocol — the Agentic UI Bar (B1–B11) for surface trust/operability and a Depth tier (D1–D11) for agent-product maturity — with findings tracked in an append-only ledger.
 
 The Trace inspector exposes the exact provider/model, plan, tool calls, operations, validation state, digests, token/cost usage, and the human decision — a compact run-metrics card over an auditable events chain, closing on a validation seal honestly labeled by run type (countersigned for a live run, provisional for a deterministic one).

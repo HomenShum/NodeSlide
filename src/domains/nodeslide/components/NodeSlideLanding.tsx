@@ -279,11 +279,14 @@ export function NodeSlideLanding({
                 >
                   <optgroup label="Recommended">
                     <option value={NODESLIDE_DEFAULT_AGENT_MODEL}>
-                      GLM 5.2 · Nebius · Recommended
+                      {nodeSlideAgentModel(NODESLIDE_DEFAULT_AGENT_MODEL).label} ·{' '}
+                      {nodeSlideAgentModel(NODESLIDE_DEFAULT_AGENT_MODEL).vendor} · Recommended
                     </option>
                   </optgroup>
                   <optgroup label="More live models">
-                    {NODESLIDE_AGENT_MODELS.slice(1).map((model) => (
+                    {NODESLIDE_AGENT_MODELS.filter(
+                      (model) => model.id !== NODESLIDE_DEFAULT_AGENT_MODEL,
+                    ).map((model) => (
                       <option key={model.id} value={model.id}>
                         {model.label} · {model.vendor} ·{' '}
                         {providerDisplayName(nodeSlideProviderModeForModel(model.id))}

@@ -28,9 +28,11 @@ describe('NodeSlide informed provider controls', () => {
     expect(markup).toMatch(/data-testid="provider-deterministic"[^>]*aria-pressed="false"/);
     expect(markup).toMatch(/data-testid="provider-external"[^>]*aria-pressed="true"/);
     expect(markup).not.toMatch(/type="checkbox"[^>]*data-testid="provider-consent"[^>]*disabled/);
-    expect(markup).toContain('Nebius');
-    expect(markup).toContain('Sends the full brief to the selected named model through Nebius.');
-    expect(markup).toContain('I consent to sending this full brief to Nebius');
+    expect(markup).toContain('OpenRouter');
+    expect(markup).toContain(
+      'Sends the full brief to the selected named model through OpenRouter.',
+    );
+    expect(markup).toContain('I consent to sending this full brief to OpenRouter');
     expect(markup).toContain('data-testid="create-model-select"');
     expect(markup).toContain('data-testid="create-effort-select"');
     expect(markup).toContain('<option value="low">Light</option>');
@@ -90,7 +92,8 @@ describe('NodeSlide informed provider controls', () => {
 
     expect(markup).toContain('data-testid="nodeslide-landing"');
     expect(markup).toContain('What presentation should we build?');
-    expect(markup).toContain('GLM 5.2 · Nebius · Recommended');
+    expect(markup).toContain('Kimi K3 · Moonshot AI · Recommended');
+    expect(markup).toContain('GLM 5.2 · Z.ai · Nebius');
     expect(markup).toContain('Claude Sonnet 5 · Anthropic');
     expect(markup).toContain('GPT-5.6 Sol · OpenAI');
     expect(markup).toContain('data-testid="landing-effort-select"');

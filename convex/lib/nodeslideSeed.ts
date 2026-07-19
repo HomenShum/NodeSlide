@@ -967,7 +967,14 @@ function buildSlide(input: {
       name: 'Body copy',
       kind: 'text',
       role: 'body',
-      bbox: box(0.07, isOpening ? 0.48 : 0.4, bodyWidth, isOpening ? 0.17 : 0.2),
+      // Opening slides with a visual stack bullets from y=0.62; the body block
+      // must end above that line or important elements collide (export blocker).
+      bbox: box(
+        0.07,
+        isOpening ? 0.48 : 0.4,
+        bodyWidth,
+        isOpening ? (hasVisual ? 0.13 : 0.17) : 0.2,
+      ),
       rotation: 0,
       content: planned.body,
       style: {

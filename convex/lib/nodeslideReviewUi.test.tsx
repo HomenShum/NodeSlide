@@ -7,6 +7,7 @@ import {
   type DeckSnapshot,
   NODESLIDE_AGENT_MODELS,
   NODESLIDE_DEFAULT_AGENT_MODEL,
+  NODESLIDE_NEBIUS_AGENT_MODEL,
   NODESLIDE_NEBIUS_REVIEW_CONSENT,
   NODESLIDE_NEBIUS_VARIATIONS_CONSENT,
   NODESLIDE_OPENROUTER_REVIEW_CONSENT,
@@ -112,11 +113,11 @@ describe('NodeSlide AI review inspector', () => {
     expect(markup).not.toContain('has-failed');
   });
 
-  it('recommends the live Nebius GLM route with provider-native effort controls', () => {
+  it('recommends the live Kimi K3 route with provider-native effort controls', () => {
     const markup = renderAi();
-    expect(markup).toContain('External model: on · Nebius · GLM 5.2');
+    expect(markup).toContain('External model: on · OpenRouter · Kimi K3');
     expect(markup).toMatch(/data-testid="ai-provider-external"[^>]*checked=""/);
-    expect(markup).toContain('Nebius · Z.ai · GLM 5.2 — external');
+    expect(markup).toContain('OpenRouter · Moonshot AI · Kimi K3 — external');
     expect(markup).not.toContain('Allow one Nebius request');
     expect(markup).toContain('It does not browse or fetch URLs');
     expect(markup).toContain('data-testid="ai-model-select"');
@@ -151,14 +152,14 @@ describe('NodeSlide AI review inspector', () => {
     expect(createAiProviderRequest('nebius', false)).toBeNull();
     expect(createAiProviderRequest('nebius', true)).toEqual({
       providerMode: 'nebius',
-      providerModel: NODESLIDE_DEFAULT_AGENT_MODEL,
+      providerModel: NODESLIDE_NEBIUS_AGENT_MODEL,
       providerEffort: 'high',
       providerConsent: NODESLIDE_NEBIUS_REVIEW_CONSENT,
     });
     expect(createAiVariationProviderRequest('nebius', false)).toBeNull();
     expect(createAiVariationProviderRequest('nebius', true)).toEqual({
       providerMode: 'nebius',
-      providerModel: NODESLIDE_DEFAULT_AGENT_MODEL,
+      providerModel: NODESLIDE_NEBIUS_AGENT_MODEL,
       providerEffort: 'high',
       providerConsent: NODESLIDE_NEBIUS_VARIATIONS_CONSENT,
     });

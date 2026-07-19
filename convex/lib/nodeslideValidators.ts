@@ -404,16 +404,28 @@ export const nodeslideElementStyleValidator = v.object({
   shadow: v.optional(v.string()),
 });
 
+export const nodeslideChartTypeValidator = v.union(
+  v.literal('bar'),
+  v.literal('bar-horizontal'),
+  v.literal('line'),
+  v.literal('area'),
+  v.literal('pie'),
+  v.literal('donut'),
+  v.literal('stacked-bar'),
+);
+
+export const nodeslideChartSeriesValidator = v.array(
+  v.object({
+    name: v.string(),
+    values: v.array(v.number()),
+    color: v.optional(v.string()),
+  }),
+);
+
 export const nodeslideChartDataValidator = v.object({
-  chartType: v.union(v.literal('bar'), v.literal('line'), v.literal('area'), v.literal('donut')),
+  chartType: nodeslideChartTypeValidator,
   labels: v.array(v.string()),
-  series: v.array(
-    v.object({
-      name: v.string(),
-      values: v.array(v.number()),
-      color: v.optional(v.string()),
-    }),
-  ),
+  series: nodeslideChartSeriesValidator,
   unit: v.optional(v.string()),
   sourceId: v.optional(v.string()),
 });
@@ -689,7 +701,9 @@ export const nodeslidePatchOperationValidator = v.union(
     op: v.literal('update_chart'),
     slideId: v.string(),
     elementId: v.string(),
-    chart: nodeslideChartDataValidator,
+    chart: v.optional(nodeslideChartDataValidator),
+    chartType: v.optional(nodeslideChartTypeValidator),
+    series: v.optional(nodeslideChartSeriesValidator),
   }),
   v.object({
     op: v.literal('update_image'),

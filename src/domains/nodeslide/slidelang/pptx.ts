@@ -251,11 +251,13 @@ function addNativeChart(
   const chartType =
     chart.chartType === 'donut'
       ? pptx.ChartType.doughnut
-      : chart.chartType === 'area'
-        ? pptx.ChartType.area
-        : chart.chartType === 'line'
-          ? pptx.ChartType.line
-          : pptx.ChartType.bar;
+      : chart.chartType === 'pie'
+        ? pptx.ChartType.pie
+        : chart.chartType === 'area'
+          ? pptx.ChartType.area
+          : chart.chartType === 'line'
+            ? pptx.ChartType.line
+            : pptx.ChartType.bar;
   const data = chart.series.map((series) => ({
     name: series.name,
     labels: chart.labels,
@@ -289,6 +291,10 @@ function addNativeChart(
     valAxisLabelFontFace: safeFontFamily(snapshot.deck.theme.typography.data),
     valAxisLabelFontSize: 10,
     ...(chart.chartType === 'donut' ? { holeSize: 58 } : {}),
+    // Horizontal and stacked variants are still native PowerPoint bar charts;
+    // barDir/barGrouping keep them editable rather than falling back to images.
+    ...(chart.chartType === 'bar-horizontal' ? { barDir: 'bar' as const } : {}),
+    ...(chart.chartType === 'stacked-bar' ? { barGrouping: 'stacked' as const } : {}),
   });
 }
 

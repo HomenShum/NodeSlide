@@ -607,3 +607,127 @@ describe('hosted SlideLang seam', () => {
     );
   });
 });
+
+/*
+ * D1 — expanded chart types in the export SVG renderer.
+ *
+ * Every chartType compiles to real SVG primitives in the slide visual: the
+ * right mark count for the data, axis/value labels with units where the shape
+ * calls for them, and the legacy bar output untouched for golden decks.
+ */
+describe('SlideLang export chart types (D1)', () => {
+  const adapter = createLocalSlideLangAdapter();
+
+  function chartSvg(chartType: NonNullable<SlideElement['chart']>['chartType']): string {
+    const snapshot = cleanSnapshot();
+    const chartElement = snapshot.elements.find((element) => element.id === 'element:chart');
+    if (!chartElement?.chart) throw new Error('Missing chart fixture.');
+    chartElement.chart.chartType = chartType;
+    if (chartType === 'stacked-bar') {
+      chartElement.chart.series = [
+        { name: 'Teams', values: [12, 28, 47], color: '#7dd3fc' },
+        { name: 'Pilots', values: [6, 9, 11] },
+      ];
+    }
+    const html = adapter.renderSlideHtml(snapshot, 'slide:overview');
+    // Isolate the chart element's <g> group inside the slide visual SVG.
+    const start = html.indexOf('<g data-element-id="element:chart"');
+    if (start < 0) throw new Error('Chart SVG group missing.');
+    const end = html.indexOf('</g>', start);
+    if (end < 0) throw new Error('Chart SVG group unterminated.');
+    return html.slice(start, end);
+  }
+
+  const count = (svg: string, marker: string): number => svg.split(marker).length - 1;
+
+  it('keeps the legacy vertical bar output', () => {
+    const svg = chartSvg('bar');
+    expect(count(svg, '<rect')).toBe(3);
+    expect(count(svg, '<polyline')).toBe(0);
+  });
+
+  it('renders horizontal bars with category labels and a value axis with units', () => {
+    const svg = chartSvg('bar-horizontal');
+    expect(count(svg, '<rect')).toBe(3);
+    expect(svg).toContain('>Alpha</text>');
+    expect(svg).toContain('>Beta</text>');
+    expect(svg).toContain('>GA</text>');
+    expect(svg).toContain('>0</text>');
+    expect(svg).toContain('47 teams</text>');
+  });
+
+  it('renders stacked bars with one segment per series value and a value axis', () => {
+    const svg = chartSvg('stacked-bar');
+    expect(count(svg, '<rect')).toBe(6); // 3 labels x 2 series
+    expect(svg).toContain('>0</text>');
+    expect(svg).toContain('58 teams</text>'); // 47 + 11 stacked maximum
+  });
+
+  it('renders a line chart with a polyline and point markers', () => {
+    const svg = chartSvg('line');
+    expect(count(svg, '<polyline')).toBe(1);
+    expect(count(svg, '<circle')).toBe(3);
+  });
+
+  it('renders an area chart with a filled polygon under the line', () => {
+    const svg = chartSvg('area');
+    expect(count(svg, '<polygon')).toBe(1);
+    expect(count(svg, '<polyline')).toBe(1);
+  });
+
+  it('renders a pie chart with one filled wedge per slice', () => {
+    const svg = chartSvg('pie');
+    expect(count(svg, '<circle')).toBe(3);
+    expect(svg).toContain('teams</text>');
+  });
+
+  it('renders a donut chart with a track plus one arc per slice', () => {
+    const svg = chartSvg('donut');
+    expect(count(svg, '<circle')).toBe(4);
+  });
+});
+
+/*
+ * D3 — expanded chart types stay native, editable PowerPoint charts.
+ *
+ * pie compiles to a pieChart, bar-horizontal keeps barChart with a horizontal
+ * bar direction, and stacked-bar keeps barChart with stacked grouping — none
+ * of them regress to rasterized fallbacks.
+ */
+describe('SlideLang PPTX native chart types (D3)', () => {
+  const adapter = createLocalSlideLangAdapter();
+
+  async function chartXml(
+    chartType: NonNullable<SlideElement['chart']>['chartType'],
+  ): Promise<string> {
+    const snapshot = cleanSnapshot();
+    const chartElement = snapshot.elements.find((element) => element.id === 'element:chart');
+    if (!chartElement?.chart) throw new Error('Missing chart fixture.');
+    chartElement.chart.chartType = chartType;
+    const binary = await adapter.buildPptx(snapshot);
+    const zip = await JSZip.loadAsync(binary);
+    const path = Object.keys(zip.files).find((candidate) =>
+      /^ppt\/charts\/chart\d+\.xml$/.test(candidate),
+    );
+    if (!path) throw new Error('Native chart XML missing from PPTX.');
+    const xml = await zip.file(path)?.async('string');
+    if (!xml) throw new Error('Native chart XML unreadable.');
+    return xml;
+  }
+
+  it('compiles pie to a native pieChart', async () => {
+    expect(await chartXml('pie')).toContain('<c:pieChart>');
+  });
+
+  it('compiles bar-horizontal to a native horizontal barChart', async () => {
+    const xml = await chartXml('bar-horizontal');
+    expect(xml).toContain('<c:barChart>');
+    expect(xml).toContain('<c:barDir val="bar"/>');
+  });
+
+  it('compiles stacked-bar to a native stacked barChart', async () => {
+    const xml = await chartXml('stacked-bar');
+    expect(xml).toContain('<c:barChart>');
+    expect(xml).toContain('<c:grouping val="stacked"/>');
+  });
+});

@@ -2188,8 +2188,12 @@ function describeOperation(operation: PatchOperation) {
     return `Replace copy in ${operation.elementId} with “${truncateOperationText(operation.text)}”`;
   if (operation.op === 'update_style')
     return `Update ${Object.keys(operation.properties).join(', ')} on ${operation.elementId}`;
-  if (operation.op === 'update_chart')
-    return `Update ${operation.chart.chartType} chart data on ${operation.elementId}`;
+  if (operation.op === 'update_chart') {
+    const nextType = operation.chartType ?? operation.chart?.chartType;
+    return nextType
+      ? `Update ${nextType} chart data on ${operation.elementId}`
+      : `Update chart data on ${operation.elementId}`;
+  }
   if (operation.op === 'update_image') return `Replace image asset in ${operation.elementId}`;
   if (operation.op === 'add_element')
     return `Add ${operation.element.kind} “${operation.element.name}”`;

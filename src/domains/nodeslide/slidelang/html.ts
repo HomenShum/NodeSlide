@@ -361,6 +361,31 @@ function renderCartesianChart(snapshot: DeckSnapshot, chart: ChartData, box: Svg
         );
       });
     });
+  } else if (chart.chartType === 'stacked-bar') {
+    const groupWidth = width / labels.length;
+    const barWidth = groupWidth * 0.6;
+    const stackedMax = Math.max(
+      1,
+      ...labels.map((_, valueIndex) =>
+        chart.series.reduce((sum, series) => sum + Math.max(0, series.values[valueIndex] ?? 0), 0),
+      ),
+    );
+    labels.forEach((_, valueIndex) => {
+      let stackTop = baseline;
+      chart.series.forEach((series, seriesIndex) => {
+        const value = Math.max(0, series.values[valueIndex] ?? 0);
+        const segmentHeight = (value / stackedMax) * height;
+        if (segmentHeight <= 0) return;
+        stackTop -= segmentHeight;
+        parts.push(
+          `<rect x="${left + valueIndex * groupWidth + groupWidth * 0.2}" y="${stackTop}" width="${Math.max(1, barWidth)}" height="${Math.max(1, segmentHeight)}" fill="${chartColor(snapshot, seriesIndex, series.color)}"/>`,
+        );
+      });
+    });
+    parts.push(
+      `<text x="${left - 8}" y="${top + 6}" fill="${ink}" font-family="system-ui, sans-serif" font-size="14" text-anchor="end">${escapeHtml(`${formatChartValue(stackedMax)}${chart.unit ? ` ${chart.unit}` : ''}`)}</text>`,
+      `<text x="${left - 8}" y="${baseline}" fill="${ink}" font-family="system-ui, sans-serif" font-size="14" text-anchor="end">0</text>`,
+    );
   } else {
     chart.series.forEach((series, seriesIndex) => {
       const denominator = Math.max(1, labels.length - 1);
@@ -388,13 +413,82 @@ function renderCartesianChart(snapshot: DeckSnapshot, chart: ChartData, box: Svg
   const labelStep = labels.length > 8 ? Math.ceil(labels.length / 8) : 1;
   labels.forEach((label, index) => {
     if (index % labelStep !== 0) return;
-    const denominator = chart.chartType === 'bar' ? labels.length : Math.max(1, labels.length - 1);
-    const offset = chart.chartType === 'bar' ? 0.5 : 0;
+    const grouped = chart.chartType === 'bar' || chart.chartType === 'stacked-bar';
+    const denominator = grouped ? labels.length : Math.max(1, labels.length - 1);
+    const offset = grouped ? 0.5 : 0;
     const x = left + ((index + offset) / denominator) * width;
     parts.push(
       `<text x="${x}" y="${top + height + 28}" fill="${ink}" font-family="system-ui, sans-serif" font-size="15" text-anchor="middle">${escapeHtml(label)}</text>`,
     );
   });
+  return parts.join('');
+}
+
+function formatChartValue(value: number): string {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1);
+}
+
+function renderHorizontalBarChart(snapshot: DeckSnapshot, chart: ChartData, box: SvgBox): string {
+  const labelGutter = box.width * 0.24;
+  const left = box.x + labelGutter;
+  const top = box.y + box.height * 0.08;
+  const width = box.width * 0.98 - labelGutter;
+  const height = box.height * 0.78;
+  const labels = chart.labels.length > 0 ? chart.labels : [''];
+  const maximum = Math.max(
+    1,
+    ...chart.series.flatMap((series) => series.values.map((value) => Math.abs(value))),
+  );
+  const axisColor = colorToHex(snapshot.deck.theme.colors.border, '#555555');
+  const ink = colorToHex(snapshot.deck.theme.colors.muted, '#777777');
+  const rowHeight = height / labels.length;
+  const seriesCount = Math.max(1, chart.series.length);
+  const barHeight = (rowHeight * 0.68) / seriesCount;
+  const parts = [
+    `<line x1="${left}" y1="${top}" x2="${left}" y2="${top + height}" stroke="${axisColor}" stroke-width="2"/>`,
+  ];
+  labels.forEach((label, labelIndex) => {
+    parts.push(
+      `<text x="${left - 10}" y="${top + labelIndex * rowHeight + rowHeight / 2}" fill="${ink}" font-family="system-ui, sans-serif" font-size="15" text-anchor="end" dominant-baseline="middle">${escapeHtml(label)}</text>`,
+    );
+    chart.series.forEach((series, seriesIndex) => {
+      const value = Math.abs(series.values[labelIndex] ?? 0);
+      const barLength = (value / maximum) * width;
+      parts.push(
+        `<rect x="${left}" y="${top + labelIndex * rowHeight + rowHeight * 0.16 + seriesIndex * barHeight}" width="${Math.max(1, barLength)}" height="${Math.max(1, barHeight - 3)}" rx="3" fill="${chartColor(snapshot, seriesIndex, series.color)}"/>`,
+      );
+    });
+  });
+  parts.push(
+    `<text x="${left}" y="${top + height + 26}" fill="${ink}" font-family="system-ui, sans-serif" font-size="14" text-anchor="start">0</text>`,
+    `<text x="${left + width}" y="${top + height + 26}" fill="${ink}" font-family="system-ui, sans-serif" font-size="14" text-anchor="end">${escapeHtml(`${formatChartValue(maximum)}${chart.unit ? ` ${chart.unit}` : ''}`)}</text>`,
+  );
+  return parts.join('');
+}
+
+function renderPieChart(snapshot: DeckSnapshot, chart: ChartData, box: SvgBox): string {
+  const values = chart.series[0]?.values.map((value) => Math.max(0, value)) ?? [];
+  const total = values.reduce((sum, value) => sum + value, 0) || 1;
+  const radius = Math.max(1, Math.min(box.width, box.height) * 0.36);
+  const centerX = box.x + box.width / 2;
+  const centerY = box.y + box.height / 2;
+  // A circle of radius r/2 with stroke-width r paints filled wedges via dasharray.
+  const wedgeRadius = radius / 2;
+  const circumference = 2 * Math.PI * wedgeRadius;
+  let offset = 0;
+  const parts: string[] = [];
+  values.forEach((value, index) => {
+    const length = (value / total) * circumference;
+    parts.push(
+      `<circle cx="${centerX}" cy="${centerY}" r="${wedgeRadius}" fill="none" stroke="${chartColor(snapshot, index, chart.series[0]?.color)}" stroke-width="${radius}" stroke-dasharray="${length} ${circumference - length}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${centerX} ${centerY})"/>`,
+    );
+    offset += length;
+  });
+  if (chart.unit) {
+    parts.push(
+      `<text x="${centerX}" y="${centerY + radius + 26}" fill="${colorToHex(snapshot.deck.theme.colors.muted, '#777777')}" font-family="system-ui, sans-serif" font-size="15" text-anchor="middle">${escapeHtml(chart.unit)}</text>`,
+    );
+  }
   return parts.join('');
 }
 
@@ -427,9 +521,10 @@ function renderChart(snapshot: DeckSnapshot, element: SlideElement, box: SvgBox)
     return renderImage(snapshot, { ...element, altText: 'Chart data unavailable' }, box);
   }
   const chart = element.chart;
-  return chart.chartType === 'donut'
-    ? renderDonutChart(snapshot, chart, box)
-    : renderCartesianChart(snapshot, chart, box);
+  if (chart.chartType === 'donut') return renderDonutChart(snapshot, chart, box);
+  if (chart.chartType === 'pie') return renderPieChart(snapshot, chart, box);
+  if (chart.chartType === 'bar-horizontal') return renderHorizontalBarChart(snapshot, chart, box);
+  return renderCartesianChart(snapshot, chart, box);
 }
 
 function renderMath(snapshot: DeckSnapshot, element: SlideElement, box: SvgBox): string {

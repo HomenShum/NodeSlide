@@ -73,8 +73,8 @@ describe('NodeSlide chart label/value grid', () => {
     expect(result.error).toBeNull();
     expect(result.operation?.op).toBe('update_chart');
     if (result.operation?.op !== 'update_chart') throw new Error('Expected update_chart');
-    expect(result.operation.chart.labels).toEqual(['2010', '2014', '2018', '2022']);
-    expect(result.operation.chart.series[0]?.values).toEqual([145, 171, 181, 172]);
+    expect(result.operation.chart?.labels).toEqual(['2010', '2014', '2018', '2022']);
+    expect(result.operation.chart?.series[0]?.values).toEqual([145, 171, 181, 172]);
 
     expect(studioSource).toContain('baseDeckVersion: currentWorkspace.deck.version');
     expect(studioSource).toContain('baseSlideVersions: clocks.baseSlideVersions');

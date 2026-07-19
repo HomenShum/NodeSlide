@@ -121,7 +121,11 @@ function ElementContent({ element, theme }: { element: SlideElement; theme: Them
 
   if (element.kind === 'chart' && element.chart) {
     return (
-      <ChartGraphic chart={element.chart} accent={element.style.color ?? theme.colors.accent} />
+      <ChartGraphic
+        chart={element.chart}
+        accent={element.style.color ?? theme.colors.accent}
+        theme={theme}
+      />
     );
   }
 
@@ -269,7 +273,161 @@ function elementVisualStyle(element: SlideElement): CSSProperties {
   };
 }
 
-function ChartGraphic({ chart, accent }: { chart: ChartData; accent: string }) {
+function ChartGraphic({
+  chart,
+  accent,
+  theme,
+}: {
+  chart: ChartData;
+  accent: string;
+  theme: ThemeSpec;
+}) {
+  // Multi-series colors come from the theme palette; the first series keeps
+  // the accent so single-series decks look exactly as before.
+  const palette = [
+    accent,
+    theme.colors.insightInk,
+    theme.colors.muted,
+    theme.colors.border,
+    theme.colors.insight,
+    theme.colors.trace,
+  ];
+  const seriesColor = (index: number, explicit?: string) =>
+    explicit ?? palette[index % palette.length] ?? accent;
+
+  if (chart.chartType === 'pie') {
+    const values = chart.series[0]?.values.map((value) => Math.max(0, value)) ?? [];
+    const total = values.reduce((sum, value) => sum + value, 0) || 1;
+    // A circle of radius r/2 with stroke-width r paints filled wedges.
+    const wedgeRadius = 18;
+    const circumference = 2 * Math.PI * wedgeRadius;
+    let offset = 0;
+    return (
+      <div
+        className="ns-chart ns-chart--line"
+        data-chart-type="pie"
+        role="img"
+        aria-label={`${chart.labels.join(', ')} pie chart`}
+      >
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          {values.map((value, index) => {
+            const length = (value / total) * circumference;
+            const dashOffset = -offset;
+            offset += length;
+            return (
+              <circle
+                key={`${chart.labels[index] ?? 'wedge'}-${index}`}
+                cx="50"
+                cy="50"
+                r={wedgeRadius}
+                fill="none"
+                stroke={seriesColor(index, index === 0 ? chart.series[0]?.color : undefined)}
+                strokeWidth={36}
+                strokeDasharray={`${length} ${circumference - length}`}
+                strokeDashoffset={dashOffset}
+                transform="rotate(-90 50 50)"
+              />
+            );
+          })}
+        </svg>
+      </div>
+    );
+  }
+
+  if (chart.chartType === 'bar-horizontal') {
+    const labels = chart.labels.length > 0 ? chart.labels : [''];
+    const max = Math.max(
+      1,
+      ...chart.series.flatMap((series) => series.values.map((value) => Math.abs(value))),
+    );
+    const rowHeight = 100 / labels.length;
+    const seriesCount = Math.max(1, chart.series.length);
+    const barHeight = (rowHeight * 0.6) / seriesCount;
+    return (
+      <div
+        className="ns-chart ns-chart--line"
+        data-chart-type="bar-horizontal"
+        role="img"
+        aria-label={`${chart.labels.join(', ')} horizontal bar chart${chart.unit ? ` in ${chart.unit}` : ''}`}
+      >
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="26" y1="0" x2="26" y2="100" stroke={theme.colors.border} strokeWidth="0.6" />
+          {labels.map((label, labelIndex) => (
+            <g key={`${chart.labels[labelIndex] ?? 'row'}-${labelIndex}`}>
+              <text
+                x="24"
+                y={labelIndex * rowHeight + rowHeight / 2}
+                fill={theme.colors.muted}
+                fontSize="5"
+                textAnchor="end"
+                dominantBaseline="middle"
+              >
+                {label}
+              </text>
+              {chart.series.map((series, seriesIndex) => (
+                <rect
+                  key={`${series.name}-${seriesIndex}`}
+                  x="26"
+                  y={labelIndex * rowHeight + rowHeight * 0.2 + seriesIndex * barHeight}
+                  width={Math.max(1, (Math.abs(series.values[labelIndex] ?? 0) / max) * 72)}
+                  height={Math.max(1, barHeight - 1)}
+                  rx="1"
+                  fill={seriesColor(seriesIndex, series.color)}
+                />
+              ))}
+            </g>
+          ))}
+        </svg>
+      </div>
+    );
+  }
+
+  if (chart.chartType === 'stacked-bar') {
+    const labels = chart.labels.length > 0 ? chart.labels : [''];
+    const stackedMax = Math.max(
+      1,
+      ...labels.map((_, valueIndex) =>
+        chart.series.reduce((sum, series) => sum + Math.max(0, series.values[valueIndex] ?? 0), 0),
+      ),
+    );
+    const groupWidth = 100 / labels.length;
+    return (
+      <div
+        className="ns-chart ns-chart--line"
+        data-chart-type="stacked-bar"
+        role="img"
+        aria-label={`${chart.labels.join(', ')} stacked bar chart${chart.unit ? ` in ${chart.unit}` : ''}`}
+      >
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="0" y1="94" x2="100" y2="94" stroke={theme.colors.border} strokeWidth="0.6" />
+          {labels.map((_, valueIndex) => {
+            let stackTop = 94;
+            return (
+              <g key={`${chart.labels[valueIndex] ?? 'column'}-${valueIndex}`}>
+                {chart.series.map((series, seriesIndex) => {
+                  const value = Math.max(0, series.values[valueIndex] ?? 0);
+                  const segmentHeight = (value / stackedMax) * 88;
+                  if (segmentHeight <= 0) return null;
+                  stackTop -= segmentHeight;
+                  return (
+                    <rect
+                      key={`${series.name}-${seriesIndex}`}
+                      x={valueIndex * groupWidth + groupWidth * 0.2}
+                      y={stackTop}
+                      width={groupWidth * 0.6}
+                      height={segmentHeight}
+                      fill={seriesColor(seriesIndex, series.color)}
+                    />
+                  );
+                })}
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+    );
+  }
+
   if (chart.chartType === 'donut') {
     const values = chart.series.flatMap((series) => series.values);
     const total = values.reduce((sum, value) => sum + Math.max(0, value), 0) || 1;
@@ -314,30 +472,44 @@ function ChartGraphic({ chart, accent }: { chart: ChartData; accent: string }) {
     );
   }
 
-  const values = chart.series[0]?.values ?? [];
-  const max = Math.max(1, ...values.map((value) => Math.abs(value)));
-  const denominator = Math.max(1, values.length - 1);
-  const points = values
-    .map((value, index) => `${(index / denominator) * 100},${94 - (Math.abs(value) / max) * 82}`)
-    .join(' ');
-  const areaPoints = `0,100 ${points} 100,100`;
+  const max = Math.max(
+    1,
+    ...chart.series.flatMap((series) => series.values.map((value) => Math.abs(value))),
+  );
+  const seriesPoints = chart.series.map((series) => {
+    const denominator = Math.max(1, series.values.length - 1);
+    return series.values
+      .map((value, index) => `${(index / denominator) * 100},${94 - (Math.abs(value) / max) * 82}`)
+      .join(' ');
+  });
   return (
     <div
       className="ns-chart ns-chart--line"
+      data-chart-type={chart.chartType}
       role="img"
       aria-label={`${chart.labels.join(', ')} trend chart`}
     >
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        {chart.chartType === 'area' ? (
-          <polygon points={areaPoints} fill={accent} opacity="0.14" />
-        ) : null}
-        <polyline
-          points={points}
-          fill="none"
-          stroke={chart.series[0]?.color ?? accent}
-          strokeWidth="3"
-          vectorEffect="non-scaling-stroke"
-        />
+        {chart.chartType === 'area'
+          ? chart.series.map((series, index) => (
+              <polygon
+                key={`area-${series.name}-${index}`}
+                points={`0,100 ${seriesPoints[index] ?? ''} 100,100`}
+                fill={index === 0 ? accent : seriesColor(index, series.color)}
+                opacity="0.14"
+              />
+            ))
+          : null}
+        {chart.series.map((series, index) => (
+          <polyline
+            key={`line-${series.name}-${index}`}
+            points={seriesPoints[index] ?? ''}
+            fill="none"
+            stroke={series.color ?? seriesColor(index)}
+            strokeWidth="3"
+            vectorEffect="non-scaling-stroke"
+          />
+        ))}
       </svg>
     </div>
   );

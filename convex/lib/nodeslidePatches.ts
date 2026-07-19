@@ -1,5 +1,6 @@
 import {
   type BoundingBox,
+  type ChartType,
   type DeckComment,
   type DeckPatch,
   type DeckSnapshot,
@@ -394,26 +395,46 @@ export function validateNodeSlidePatch(
         errors.push(
           `update_chart requires a chart element; ${operation.elementId} is ${element.kind}.`,
         );
+      } else if (
+        operation.chart === undefined &&
+        operation.chartType === undefined &&
+        operation.series === undefined
+      ) {
+        errors.push(
+          `update_chart on ${operation.elementId} requires a chart payload, chartType, or series.`,
+        );
       } else {
-        const chart = operation.chart;
-        const validLabels = chart.labels.length > 0 && chart.labels.length <= 24;
-        const validSeries =
-          chart.series.length > 0 &&
-          chart.series.length <= 6 &&
-          chart.series.every(
-            (series) =>
-              series.name.trim().length > 0 &&
-              series.values.length === chart.labels.length &&
-              series.values.every(Number.isFinite),
-          );
-        if (!validLabels || !validSeries) {
+        const base = operation.chart ?? element.chart;
+        if (!base) {
           errors.push(
-            'update_chart requires 1-24 labels and 1-6 finite series aligned to those labels.',
+            `update_chart on ${operation.elementId} needs a chart payload or existing chart data.`,
           );
-        } else if (JSON.stringify(chart) === JSON.stringify(element.chart)) {
-          errors.push(`update_chart must change element ${operation.elementId}.`);
-        } else if (canMutate) {
-          element.chart = structuredClone(chart);
+        } else {
+          const chart = structuredClone(base);
+          if (operation.chartType !== undefined) chart.chartType = operation.chartType;
+          if (operation.series !== undefined) chart.series = structuredClone(operation.series);
+          if (chart.sourceId === undefined && element.chart?.sourceId !== undefined) {
+            chart.sourceId = element.chart.sourceId;
+          }
+          const validLabels = chart.labels.length > 0 && chart.labels.length <= 24;
+          const validSeries =
+            chart.series.length > 0 &&
+            chart.series.length <= 6 &&
+            chart.series.every(
+              (series) =>
+                series.name.trim().length > 0 &&
+                series.values.length === chart.labels.length &&
+                series.values.every(Number.isFinite),
+            );
+          if (!validLabels || !validSeries) {
+            errors.push(
+              'update_chart requires 1-24 labels and 1-6 finite series aligned to those labels.',
+            );
+          } else if (JSON.stringify(chart) === JSON.stringify(element.chart)) {
+            errors.push(`update_chart must change element ${operation.elementId}.`);
+          } else if (canMutate) {
+            element.chart = structuredClone(chart);
+          }
         }
       }
     }
@@ -761,6 +782,17 @@ export function deterministicAgentOperations(
   ];
 }
 
+/** Human phrasing per chart shape so summaries read naturally ("a horizontal bar chart"). */
+const CHART_TYPE_PHRASES: Record<ChartType, string> = {
+  bar: 'bar',
+  'bar-horizontal': 'horizontal bar',
+  line: 'line',
+  area: 'area',
+  pie: 'pie',
+  donut: 'donut',
+  'stacked-bar': 'stacked bar',
+};
+
 /** Human verb phrases so proposal summaries read as sentences, not op codes. */
 const OPERATION_SUMMARY_VERBS: Partial<Record<PatchOperation['op'], string>> = {
   replace_text: 'Rewrite',
@@ -814,6 +846,15 @@ export function summarizePatchOperations(
     const elementLabel =
       snapshot?.elements.find((element) => element.id === operation.elementId)?.name ??
       operation.elementId;
+    if (operation.op === 'update_chart') {
+      const previousType = snapshot?.elements.find((element) => element.id === operation.elementId)
+        ?.chart?.chartType;
+      const nextType = operation.chartType ?? operation.chart?.chartType;
+      if (nextType !== undefined && previousType !== undefined && nextType !== previousType) {
+        return `Switch the chart in ${elementLabel} to a ${CHART_TYPE_PHRASES[nextType]} chart`;
+      }
+      return `Update the chart in ${elementLabel}`;
+    }
     const verb = OPERATION_SUMMARY_VERBS[operation.op];
     return verb
       ? `${verb} ${elementLabel}`

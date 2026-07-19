@@ -750,8 +750,11 @@ function ChartDataEditor({
           <span>Chart type</span>
           <select name="chartType" defaultValue={chart.chartType}>
             <option value="bar">Bar</option>
+            <option value="bar-horizontal">Horizontal bar</option>
+            <option value="stacked-bar">Stacked bar</option>
             <option value="line">Line</option>
             <option value="area">Area</option>
+            <option value="pie">Pie</option>
             <option value="donut">Donut</option>
           </select>
         </label>

@@ -313,8 +313,24 @@ export interface ChartSeries {
   color?: string;
 }
 
+/**
+ * All renderable chart shapes. 'bar' stays the default look; decks created
+ * before the expanded set continue to validate and render unchanged.
+ */
+export const NODESLIDE_CHART_TYPES = [
+  'bar',
+  'bar-horizontal',
+  'line',
+  'area',
+  'pie',
+  'donut',
+  'stacked-bar',
+] as const;
+
+export type ChartType = (typeof NODESLIDE_CHART_TYPES)[number];
+
 export interface ChartData {
-  chartType: 'bar' | 'line' | 'area' | 'donut';
+  chartType: ChartType;
   labels: string[];
   series: ChartSeries[];
   unit?: string;
@@ -501,7 +517,12 @@ export type PatchOperation =
       op: 'update_chart';
       slideId: string;
       elementId: string;
-      chart: ChartData;
+      /** Full replacement payload. Optional when chartType/series carry a partial update. */
+      chart?: ChartData;
+      /** Partial update: switch the chart shape while keeping existing data + provenance. */
+      chartType?: ChartType;
+      /** Partial update: replace the series while keeping the existing type + labels. */
+      series?: ChartSeries[];
     }
   | {
       op: 'update_image';

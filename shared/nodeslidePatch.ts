@@ -350,7 +350,21 @@ export function applyDeckPatch(
           `update_chart requires a chart element; ${operation.elementId} is ${element.kind}.`,
         );
       }
-      element.chart = structuredClone(operation.chart);
+      const base = operation.chart ?? element.chart;
+      if (!base) {
+        throw new Error(
+          `update_chart on ${operation.elementId} needs a chart payload or existing chart data.`,
+        );
+      }
+      const next = structuredClone(base);
+      if (operation.chartType !== undefined) next.chartType = operation.chartType;
+      if (operation.series !== undefined) next.series = structuredClone(operation.series);
+      // Provenance survives a pure type/series switch: a payload that omits
+      // sourceId never silently drops the existing data-source binding.
+      if (next.sourceId === undefined && element.chart?.sourceId !== undefined) {
+        next.sourceId = element.chart.sourceId;
+      }
+      element.chart = next;
     } else if (operation.op === 'update_image') {
       if (element.kind !== 'image') {
         throw new Error(

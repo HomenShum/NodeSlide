@@ -7,6 +7,7 @@ import {
   touchedNodeSlideIds,
   validateNodeSlidePatch,
 } from '../convex/lib/nodeslidePatches';
+import { validateNodeSlideSnapshot } from '../convex/lib/nodeslideValidation';
 import {
   type DeckSnapshot,
   NODESLIDE_PATCH_OPERATION_LIMIT,
@@ -1287,5 +1288,213 @@ describe('NodeSlide deck-level operations and clocks', () => {
     expect(() =>
       deterministicAgentOperations(current, 'Replace "Missing" with "After".', scope),
     ).toThrow('could not safely infer new wording');
+  });
+});
+
+/*
+ * D1+D2+D4 — expanded chart types, partial update_chart, provenance survival.
+ *
+ * update_chart accepts either a full chart payload or a partial
+ * chartType/series override; a pure type switch keeps the element's data and
+ * source bindings intact, the summarizer narrates the switch, and mismatched
+ * series lengths are rejected before mutation.
+ */
+describe('NodeSlide chart type operations', () => {
+  function chartSnapshot(): DeckSnapshot {
+    const current = snapshot();
+    const chartElement = current.elements.find((element) => element.id === 'chart');
+    if (!chartElement?.chart) throw new Error('fixture chart missing');
+    chartElement.sourceIds = ['src-1'];
+    chartElement.chart.sourceId = 'src-1';
+    return current;
+  }
+
+  it('switches the chart type with a partial op while preserving data and provenance (D4)', () => {
+    const current = chartSnapshot();
+    const operations: PatchOperation[] = [
+      { op: 'update_chart', slideId: 'slide-1', elementId: 'chart', chartType: 'line' },
+    ];
+    expect(validateNodeSlidePatch(current, serverPatch(current, operations))).toEqual([]);
+
+    const result = applyDeckPatch(current, {
+      baseDeckVersion: current.deck.version,
+      scope: { kind: 'deck', deckId: current.deck.id, operationMode: 'unrestricted' },
+      operations,
+    });
+    const updated = result.snapshot.elements.find((element) => element.id === 'chart');
+    expect(updated?.chart).toMatchObject({
+      chartType: 'line',
+      labels: ['Before', 'After'],
+      series: [{ name: 'Minutes', values: [44, 8] }],
+      sourceId: 'src-1',
+    });
+    expect(updated?.sourceIds).toEqual(['src-1']);
+  });
+
+  it('accepts every expanded chart type through a partial type switch', () => {
+    for (const chartType of [
+      'bar-horizontal',
+      'pie',
+      'stacked-bar',
+      'line',
+      'area',
+      'donut',
+    ] as const) {
+      const current = chartSnapshot();
+      const operations: PatchOperation[] = [
+        { op: 'update_chart', slideId: 'slide-1', elementId: 'chart', chartType },
+      ];
+      expect(validateNodeSlidePatch(current, serverPatch(current, operations))).toEqual([]);
+      const result = applyDeckPatch(current, {
+        baseDeckVersion: current.deck.version,
+        scope: { kind: 'deck', deckId: current.deck.id, operationMode: 'unrestricted' },
+        operations,
+      });
+      const updated = result.snapshot.elements.find((element) => element.id === 'chart');
+      expect(updated?.chart?.chartType).toBe(chartType);
+      expect(updated?.chart?.sourceId).toBe('src-1');
+    }
+  });
+
+  it('keeps provenance when a full replacement payload omits sourceId (D4)', () => {
+    const current = chartSnapshot();
+    const operations: PatchOperation[] = [
+      {
+        op: 'update_chart',
+        slideId: 'slide-1',
+        elementId: 'chart',
+        chart: {
+          chartType: 'pie',
+          labels: ['Before', 'After'],
+          series: [{ name: 'Minutes', values: [44, 8] }],
+        },
+      },
+    ];
+    const result = applyDeckPatch(current, {
+      baseDeckVersion: current.deck.version,
+      scope: { kind: 'deck', deckId: current.deck.id, operationMode: 'unrestricted' },
+      operations,
+    });
+    expect(
+      result.snapshot.elements.find((element) => element.id === 'chart')?.chart?.sourceId,
+    ).toBe('src-1');
+  });
+
+  it('replaces only the series with a partial op and validates series/label alignment', () => {
+    const current = chartSnapshot();
+    const good: PatchOperation[] = [
+      {
+        op: 'update_chart',
+        slideId: 'slide-1',
+        elementId: 'chart',
+        series: [
+          { name: 'Minutes', values: [44, 8] },
+          { name: 'Baseline', values: [50, 50] },
+        ],
+      },
+    ];
+    expect(validateNodeSlidePatch(current, serverPatch(current, good))).toEqual([]);
+    const result = applyDeckPatch(current, {
+      baseDeckVersion: current.deck.version,
+      scope: { kind: 'deck', deckId: current.deck.id, operationMode: 'unrestricted' },
+      operations: good,
+    });
+    const updated = result.snapshot.elements.find((element) => element.id === 'chart');
+    expect(updated?.chart?.series.length).toBe(2);
+    expect(updated?.chart?.chartType).toBe('bar');
+
+    const mismatched: PatchOperation[] = [
+      {
+        op: 'update_chart',
+        slideId: 'slide-1',
+        elementId: 'chart',
+        series: [{ name: 'Minutes', values: [44, 8, 99] }],
+      },
+    ];
+    expect(validateNodeSlidePatch(current, serverPatch(current, mismatched))).toEqual([
+      'update_chart requires 1-24 labels and 1-6 finite series aligned to those labels.',
+    ]);
+  });
+
+  it('rejects an update_chart op that carries neither payload nor overrides', () => {
+    const current = chartSnapshot();
+    const operations: PatchOperation[] = [
+      { op: 'update_chart', slideId: 'slide-1', elementId: 'chart' },
+    ];
+    expect(validateNodeSlidePatch(current, serverPatch(current, operations))).toEqual([
+      'update_chart on chart requires a chart payload, chartType, or series.',
+    ]);
+  });
+
+  it('narrates a type switch and a plain data update distinctly', () => {
+    const current = chartSnapshot();
+    expect(
+      summarizePatchOperations(
+        [{ op: 'update_chart', slideId: 'slide-1', elementId: 'chart', chartType: 'line' }],
+        current,
+      ),
+    ).toBe('Switch the chart in Chart to a line chart');
+    expect(
+      summarizePatchOperations(
+        [
+          {
+            op: 'update_chart',
+            slideId: 'slide-1',
+            elementId: 'chart',
+            chartType: 'bar-horizontal',
+          },
+        ],
+        current,
+      ),
+    ).toBe('Switch the chart in Chart to a horizontal bar chart');
+    expect(
+      summarizePatchOperations(
+        [
+          {
+            op: 'update_chart',
+            slideId: 'slide-1',
+            elementId: 'chart',
+            series: [{ name: 'Minutes', values: [40, 9] }],
+          },
+        ],
+        current,
+      ),
+    ).toBe('Update the chart in Chart');
+  });
+});
+
+describe('NodeSlide deck validator chart series rules (D4)', () => {
+  it('flags mismatched series/label lengths for expanded chart types', () => {
+    const current = snapshot();
+    const chartElement = current.elements.find((element) => element.id === 'chart');
+    if (!chartElement?.chart) throw new Error('fixture chart missing');
+    chartElement.chart.chartType = 'stacked-bar';
+    chartElement.chart.series = [
+      { name: 'Minutes', values: [44, 8] },
+      { name: 'Baseline', values: [50] },
+    ];
+
+    const result = validateNodeSlideSnapshot(current, now);
+    expect(
+      result.issues.some(
+        (issue) =>
+          issue.severity === 'error' &&
+          issue.message === 'Chart element chart has mismatched label and series lengths.',
+      ),
+    ).toBe(true);
+  });
+
+  it('accepts an aligned multi-series stacked-bar chart', () => {
+    const current = snapshot();
+    const chartElement = current.elements.find((element) => element.id === 'chart');
+    if (!chartElement?.chart) throw new Error('fixture chart missing');
+    chartElement.chart.chartType = 'stacked-bar';
+    chartElement.chart.series = [
+      { name: 'Minutes', values: [44, 8] },
+      { name: 'Baseline', values: [50, 50] },
+    ];
+
+    const result = validateNodeSlideSnapshot(current, now);
+    expect(result.issues.some((issue) => issue.message.includes('mismatched label'))).toBe(false);
   });
 });

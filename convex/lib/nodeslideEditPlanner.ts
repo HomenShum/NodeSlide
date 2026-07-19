@@ -4,6 +4,7 @@ import {
   type DeckSnapshot,
   type ElementStyle,
   NODESLIDE_AGENT_READ_CONTEXT_LIMITS,
+  NODESLIDE_CHART_TYPES,
   NODESLIDE_DEFAULT_AGENT_MODEL,
   type NodeSlideAgentMemory,
   type NodeSlideAgentModelId,
@@ -106,7 +107,7 @@ const NODESLIDE_EDIT_RESPONSE_SCHEMA = {
                 additionalProperties: false,
                 required: ['chartType', 'labels', 'series'],
                 properties: {
-                  chartType: { enum: ['bar', 'line', 'area', 'donut'] },
+                  chartType: { enum: [...NODESLIDE_CHART_TYPES] },
                   labels: {
                     type: 'array',
                     minItems: 1,
@@ -640,20 +641,14 @@ function operationsUseOnlyAuthorizedSources(
         operation.sourceIds === undefined ||
         operation.sourceIds.every((sourceId) => authorized.has(sourceId))) &&
       (operation.op !== 'update_chart' ||
-        operation.chart.sourceId === undefined ||
+        operation.chart?.sourceId === undefined ||
         authorized.has(operation.chart.sourceId)),
   );
 }
 
 function parseChart(value: NodeSlideAgentRecord): ChartData | null {
-  if (
-    value['chartType'] !== 'bar' &&
-    value['chartType'] !== 'line' &&
-    value['chartType'] !== 'area' &&
-    value['chartType'] !== 'donut'
-  ) {
-    return null;
-  }
+  const chartType = NODESLIDE_CHART_TYPES.find((candidate) => candidate === value['chartType']);
+  if (chartType === undefined) return null;
   if (
     !Array.isArray(value['labels']) ||
     value['labels'].length === 0 ||
@@ -686,7 +681,7 @@ function parseChart(value: NodeSlideAgentRecord): ChartData | null {
   });
   if (series.some((candidate) => candidate === null || !candidate.name)) return null;
   return {
-    chartType: value['chartType'],
+    chartType,
     labels,
     series: series as ChartData['series'],
     ...(typeof value['unit'] === 'string' ? { unit: value['unit'].slice(0, 40) } : {}),

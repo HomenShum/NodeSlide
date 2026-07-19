@@ -14,6 +14,11 @@ import {
   nodeSlideDataAttachmentShape,
 } from '../../shared/nodeslideAttachments';
 import {
+  estimateTextHeight,
+  resolveCollisions,
+  stackBlocks,
+} from '../../shared/nodeslideLayoutMetrics';
+import {
   nodeslideCleanText,
   nodeslideContentDigest,
   nodeslideHash,
@@ -929,18 +934,34 @@ function buildSlide(input: {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
+  const isOpening = input.index === 0;
+  const isClosing = input.index === input.total - 1;
+
+  // Measured layout: heights derive from content (with the historical fixed
+  // proportions kept as minimums) and blocks stack sequentially so long copy
+  // pushes everything below it down instead of overlapping it.
+  const headlineFontSize = isOpening ? 48 : 38;
+  const headlineWidth = isOpening ? 0.79 : 0.76;
+  const headlineY = 0.15;
+  const headlineHeight = Math.min(
+    isOpening ? 0.33 : 0.28,
+    Math.max(
+      isOpening ? 0.27 : 0.2,
+      estimateTextHeight(planned.headline, headlineFontSize, 1.04, headlineWidth),
+    ),
+  );
   add(
     element('headline', {
       name: 'Headline',
       kind: 'text',
-      role: input.index === 0 ? 'title' : 'headline',
-      bbox: box(0.07, 0.15, input.index === 0 ? 0.79 : 0.76, input.index === 0 ? 0.27 : 0.2),
+      role: isOpening ? 'title' : 'headline',
+      bbox: box(0.07, headlineY, headlineWidth, headlineHeight),
       rotation: 0,
       content: planned.headline,
       style: {
         color: theme.colors.ink,
         fontFamily: theme.typography.display,
-        fontSize: input.index === 0 ? 48 : 38,
+        fontSize: headlineFontSize,
         fontWeight: 620,
         lineHeight: 1.04,
         letterSpacing: -0.8,
@@ -950,9 +971,6 @@ function buildSlide(input: {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
-
-  const isOpening = input.index === 0;
-  const isClosing = input.index === input.total - 1;
   const hasPrimaryMedia =
     planned.formula !== undefined || planned.image !== undefined || planned.video !== undefined;
   const hasStructuredPrimitive = Boolean(planned.chart || hasPrimaryMedia);
@@ -962,19 +980,22 @@ function buildSlide(input: {
     input.linkedSourceIds.length > 0 ? input.linkedSourceIds : [input.sourceEvidenceId];
   const primaryEvidenceSourceId = evidenceSourceIds[0] ?? input.sourceEvidenceId;
   const bodyWidth = hasVisual ? 0.39 : isOpening || isClosing ? 0.66 : 0.48;
+  const horizontalBullets = (isOpening || isClosing) && !hasVisual;
+  // The body starts below the measured headline; its own height is measured
+  // from content (legacy proportions as minimums) and capped so the bullet
+  // stack that follows it always stays above the footer band.
+  const bodyY = headlineY + headlineHeight + (isOpening ? 0.06 : 0.05);
+  const bodyMaxBottom = hasVisual ? 0.7 : horizontalBullets ? 0.78 : 0.9;
+  const bodyHeight = Math.min(
+    Math.max(0.06, bodyMaxBottom - bodyY),
+    Math.max(isOpening ? 0.17 : 0.2, estimateTextHeight(planned.body, 19, 1.35, bodyWidth)),
+  );
   add(
     element('body', {
       name: 'Body copy',
       kind: 'text',
       role: 'body',
-      // Opening slides with a visual stack bullets from y=0.62; the body block
-      // must end above that line or important elements collide (export blocker).
-      bbox: box(
-        0.07,
-        isOpening ? 0.48 : 0.4,
-        bodyWidth,
-        isOpening ? (hasVisual ? 0.13 : 0.17) : 0.2,
-      ),
+      bbox: box(0.07, bodyY, bodyWidth, bodyHeight),
       rotation: 0,
       content: planned.body,
       style: {
@@ -990,11 +1011,40 @@ function buildSlide(input: {
     }),
   );
 
-  const horizontalBullets = (isOpening || isClosing) && !hasVisual;
+  const bulletFontSize = horizontalBullets ? 16 : 17;
   const bulletX = horizontalBullets ? 0.07 : hasVisual ? 0.07 : 0.59;
-  const bulletY = horizontalBullets ? 0.72 : hasVisual ? 0.62 : 0.42;
-  const bulletWidth = horizontalBullets ? 0.8 : hasVisual ? 0.39 : 0.33;
-  planned.bullets.slice(0, 3).forEach((bullet, bulletIndex) => {
+  const bulletWidth = horizontalBullets ? 0.25 : hasVisual ? 0.39 : 0.33;
+  const bulletTexts = planned.bullets
+    .slice(0, 3)
+    .map((bullet, bulletIndex) => `${horizontalBullets ? '•' : `0${bulletIndex + 1}`}  ${bullet}`);
+  const bulletHeights = bulletTexts.map((text) =>
+    Math.max(
+      horizontalBullets ? 0.08 : 0.09,
+      estimateTextHeight(text, bulletFontSize, 1.2, bulletWidth),
+    ),
+  );
+  // Horizontal rows sit on one line below the body; vertical stacks begin
+  // below the body (visual layouts) or beside it (right column) and are
+  // compressed by stackBlocks if they would run past the footer band.
+  const horizontalRowY = Math.min(0.9, Math.max(0.72, bodyY + bodyHeight + 0.03));
+  const bulletStackStart = hasVisual ? bodyY + bodyHeight + 0.02 : 0.42;
+  const stackedBullets = horizontalBullets
+    ? []
+    : stackBlocks(
+        bulletStackStart,
+        bulletHeights.map((height, bulletIndex) => ({
+          key: `bullet-${bulletIndex + 1}`,
+          height,
+          gapBefore: 0.03,
+        })),
+        0.95,
+      );
+  bulletTexts.forEach((content, bulletIndex) => {
+    const stacked = stackedBullets[bulletIndex];
+    const bulletY = horizontalBullets ? horizontalRowY : (stacked?.y ?? bulletStackStart);
+    const bulletHeight = horizontalBullets
+      ? Math.min(bulletHeights[bulletIndex] ?? 0.08, 0.98 - horizontalRowY)
+      : (stacked?.height ?? 0.09);
     add(
       element(`bullet-${bulletIndex + 1}`, {
         name: `Key point ${bulletIndex + 1}`,
@@ -1002,16 +1052,16 @@ function buildSlide(input: {
         role: 'bullet',
         bbox: box(
           horizontalBullets ? bulletX + bulletIndex * 0.28 : bulletX,
-          horizontalBullets ? bulletY : bulletY + bulletIndex * 0.12,
-          horizontalBullets ? 0.25 : bulletWidth,
-          horizontalBullets ? 0.08 : 0.09,
+          bulletY,
+          bulletWidth,
+          bulletHeight,
         ),
         rotation: 0,
-        content: `${horizontalBullets ? '•' : `0${bulletIndex + 1}`}  ${bullet}`,
+        content,
         style: {
           color: theme.colors.ink,
           fontFamily: theme.typography.body,
-          fontSize: horizontalBullets ? 16 : 17,
+          fontSize: bulletFontSize,
           fontWeight: 560,
           lineHeight: 1.2,
         },
@@ -1022,13 +1072,29 @@ function buildSlide(input: {
     );
   });
 
+  // Right-column primitives stack sequentially: the first keeps its legacy
+  // anchor Y, later ones start below the previous block plus a gap, clamped
+  // so nothing extends past the bottom of the slide.
+  let rightColumnBottom: number | null = null;
+  const placeRight = (
+    defaultY: number,
+    height: number,
+    gapBefore = 0.03,
+  ): { y: number; height: number } => {
+    const y = Math.min(0.9, rightColumnBottom === null ? defaultY : rightColumnBottom + gapBefore);
+    const clampedHeight = Math.min(height, 0.98 - y);
+    rightColumnBottom = y + clampedHeight;
+    return { y, height: clampedHeight };
+  };
+
   if (planned.metric && !hasPrimaryMedia) {
+    const metricBox = placeRight(0.41, 0.15);
     add(
       element('metric', {
         name: 'Primary metric',
         kind: 'text',
         role: 'metric',
-        bbox: box(0.56, 0.41, 0.34, 0.15),
+        bbox: box(0.56, metricBox.y, 0.34, metricBox.height),
         rotation: 0,
         content: planned.metric,
         style: {
@@ -1046,12 +1112,13 @@ function buildSlide(input: {
         exportCapabilities: [...EDITABLE_CAPABILITIES],
       }),
     );
+    const metricLabelBox = placeRight(0.58, 0.09, 0.02);
     add(
       element('metric-label', {
         name: 'Metric label',
         kind: 'text',
         role: 'caption',
-        bbox: box(0.59, 0.58, 0.29, 0.09),
+        bbox: box(0.59, metricLabelBox.y, 0.29, metricLabelBox.height),
         rotation: 0,
         content: planned.metricLabel ?? 'Success signal from the working brief',
         style: {
@@ -1070,12 +1137,13 @@ function buildSlide(input: {
   }
 
   if (planned.formula) {
+    const formulaBox = placeRight(0.42, 0.24);
     add(
       element('formula', {
         name: 'Editable formula',
         kind: 'math',
         role: 'formula',
-        bbox: box(0.53, 0.42, 0.39, 0.24),
+        bbox: box(0.53, formulaBox.y, 0.39, formulaBox.height),
         rotation: 0,
         content: planned.formula.display,
         style: {
@@ -1113,12 +1181,13 @@ function buildSlide(input: {
       planned.image.credit ??
       planned.image.caption ??
       'Credit required before external publication';
+    const imageBox = placeRight(0.39, 0.38);
     add(
       element('image', {
         name: 'Editable image',
         kind: 'image',
         role: 'image',
-        bbox: box(0.53, 0.39, 0.39, 0.38),
+        bbox: box(0.53, imageBox.y, 0.39, imageBox.height),
         rotation: 0,
         style: {
           fill: theme.colors.accentSoft,
@@ -1141,12 +1210,13 @@ function buildSlide(input: {
           : [...EDITABLE_CAPABILITIES],
       }),
     );
+    const imageCreditBox = placeRight(0.79, 0.07, 0.02);
     add(
       element('image-credit', {
         name: 'Image credit',
         kind: 'text',
         role: 'caption',
-        bbox: box(0.55, 0.79, 0.35, 0.07),
+        bbox: box(0.55, imageCreditBox.y, 0.35, imageCreditBox.height),
         rotation: 0,
         content: planned.image.caption
           ? planned.image.caption
@@ -1167,12 +1237,13 @@ function buildSlide(input: {
   }
 
   if (planned.video) {
+    const videoBox = placeRight(0.4, 0.28);
     add(
       element('video', {
         name: 'Linked video',
         kind: 'video',
         role: 'evidence_video',
-        bbox: box(0.53, 0.4, 0.39, 0.28),
+        bbox: box(0.53, videoBox.y, 0.39, videoBox.height),
         rotation: 0,
         style: {
           fill: '#111318',
@@ -1206,17 +1277,14 @@ function buildSlide(input: {
   if (planned.chart) {
     const labels = planned.chart.labels.slice(0, 8);
     const values = planned.chart.values.slice(0, labels.length);
+    const chartAlone = !(hasPrimaryMedia || planned.metric);
+    const chartBox = placeRight(0.42, chartAlone ? 0.4 : 0.17);
     add(
       element('chart', {
         name: 'Evidence chart',
         kind: 'chart',
         role: 'evidence',
-        bbox: box(
-          0.53,
-          hasPrimaryMedia || planned.metric ? 0.7 : 0.42,
-          0.39,
-          hasPrimaryMedia || planned.metric ? 0.17 : 0.4,
-        ),
+        bbox: box(0.53, chartBox.y, 0.39, chartBox.height),
         rotation: 0,
         style: {
           fill: theme.colors.accentSoft,
@@ -1278,6 +1346,35 @@ function buildSlide(input: {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
+
+  // Geometry gate: no slide may materialize with colliding content elements.
+  // A bounded pass pushes the lower element of each colliding pair down; if
+  // geometry still collides afterwards the generation must fail loudly
+  // instead of persisting broken layout.
+  const collidable = elements.filter(
+    (candidate) =>
+      candidate.kind !== 'shape' &&
+      candidate.kind !== 'connector' &&
+      candidate.role !== 'footer' &&
+      candidate.role !== 'page_number',
+  );
+  const resolution = resolveCollisions(
+    collidable.map((candidate) => ({ id: candidate.id, bbox: candidate.bbox })),
+  );
+  if (!resolution.resolved) {
+    const pairs = resolution.remaining
+      .map((pair) => `${pair.first} × ${pair.second} (${Math.round(pair.overlapRatio * 100)}%)`)
+      .join('; ');
+    throw new Error(
+      `NodeSlide layout: unresolved element collision on slide "${planned.title}": ${pairs}`,
+    );
+  }
+  if (resolution.nudged.length > 0) {
+    for (const candidate of elements) {
+      const resolvedBox = resolution.boxes.get(candidate.id);
+      if (resolvedBox) candidate.bbox = resolvedBox;
+    }
+  }
 
   return {
     slide: {
@@ -1530,7 +1627,10 @@ function isRecord(value: unknown): value is NodeSlideInputRecord {
 }
 
 function box(x: number, y: number, width: number, height: number): BoundingBox {
-  return { x, y, width, height };
+  // Stacked positions are sums of measured heights; round to a stable grid so
+  // deterministic builds hash identically across platforms.
+  const snap = (value: number) => Math.round(value * 10_000) / 10_000;
+  return { x: snap(x), y: snap(y), width: snap(width), height: snap(height) };
 }
 
 function isMatchingCanonicalGolden(snapshot: DeckSnapshot, canonical: DeckSnapshot): boolean {

@@ -160,7 +160,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
                            agent panel, proposal review, design tab, presenter)
 ```
 
-- [ ] I1. **Extraction-boundary audit** (P0, first): map every import crossing
+- [x] I1. **Extraction-boundary audit** (done — see EXTRACTION_BOUNDARY.md: shared/ pure, one backend seam in NodeSlideStudio.tsx, 3 small violations listed, boundary frozen) (P0, first): map every import crossing
       domain ↔ app-shell ↔ convex ↔ shared; classify each as
       contracts/engine/react/backend/agent/host; document violations; freeze
       the boundary (new capability code may not cross it).

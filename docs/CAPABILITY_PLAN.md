@@ -18,19 +18,26 @@ Priorities: **P0** = before panel deep-dives · **P1** = strengthens the story �
 The materializer is fixed-coordinate stacking; every slide is one grid family.
 This is the root of the visual monotony AND the collision/overflow bug class.
 
-- [ ] A1. Text measurement: estimate rendered height (font metrics × content
+- [x] A1. Text measurement: estimate rendered height (font metrics × content
       length × width) for headline/body/bullets; clamp or reflow instead of
       fixed heights. Kills the collision class the 0.13 clamp only patched.
-- [ ] A2. Slide archetype variety: ≥5 layouts (statement, stat-dominant,
+      — DONE a0d34f9: `shared/` text metrics estimator drives block heights at
+      materialization.
+- [x] A2. Slide archetype variety: ≥5 layouts (statement, stat-dominant,
       comparison, chart-dominant, image-dominant) selected from slide role +
       content shape (has chart / metric / quote / image), not position alone.
-- [ ] A3. Server-side geometry validation at materialization: run the
+      — DONE 9fc0d24: archetype selector in the materializer picks layout from
+      slide role + content shape.
+- [x] A3. Server-side geometry validation at materialization: run the
       collision/overflow checks before persisting; auto-nudge or reflow on
       failure so no deck is born export-blocked.
-- [ ] A4. Unify validation surfaces: move the client-only geometry checks
+      — DONE a0d34f9: geometry gate runs pre-persist with auto-nudge/reflow.
+- [x] A4. Unify validation surfaces: move the client-only geometry checks
       (`slidelang/validation.ts` collision/overflow) into the shared validator
       so footer, Trace, server, and the export gate agree. (Today: footer can
       show green while export blocks — dishonest-by-accident.)
+      — DONE 2e8ce2d: single-source geometry checks in shared validator; server
+      and client verdicts agree.
 - [ ] A5. Acceptance: 20 fresh prod generations → 0 collisions, 0 overflows,
       100% export-clean, ≥3 visually distinct layouts per deck at thumbnail
       scale (assert distinct archetype ids per deck).
@@ -48,9 +55,11 @@ No decomposition, no sub-agents, no self-verification against the render.
       planner model → op skeleton + copy briefs; cheap executor model → copy;
       orchestrator validates before candidate assembly. Spans carry
       `parentSpanId` + per-model attribution; AgentThread shows roles.
-- [ ] B3. Unblock cheap executors (P1): pin `reasoning:false` for Gemini 3.5
+- [x] B3. Unblock cheap executors (P1): pin `reasoning:false` for Gemini 3.5
       Flash in the pi-ai catalog override (same disease as Kimi's original bug);
       audit the rest of the fleet with a 1-token probe script.
+      — DONE 9d18ab6: generalized OpenRouter overrides pin reasoning:false for
+      Gemini 3.5 Flash.
 - [ ] B4. Edit-path tool loop (P1): read → propose → verify-against-render →
       finalize, with real steps in the thread replacing status labels.
 - [ ] B5. Variations become a judged fan-out (P2): 3 executor generations + a
@@ -64,10 +73,14 @@ No decomposition, no sub-agents, no self-verification against the render.
 
 The formula element stores a `latex`-tagged string; nothing typesets it.
 
-- [ ] C1. KaTeX render for math elements in the browser canvas (SSR-safe).
+- [x] C1. KaTeX render for math elements in the browser canvas (SSR-safe).
+      — DONE 5b0faac: real KaTeX typesetting in SlideRenderer with jsdom test
+      coverage.
 - [ ] C2. PPTX export: KaTeX → SVG → raster embed, replacing "math as text";
       capability report updated truthfully (`pptx_static_fallback`).
-- [ ] C3. Expression validation + honest plain-text fallback when parse fails.
+- [x] C3. Expression validation + honest plain-text fallback when parse fails.
+      — DONE 5b0faac: parse failures fall back to labeled plain text, never a
+      silent blank.
 - [ ] C4. Acceptance: golden formula typesets in browser; PPTX shows the
       rendered equation; capability claims match the adapter.
 
@@ -123,9 +136,11 @@ but never live-verified.
 
 ## H · Ops, CI, hygiene (P0-quick)
 
-- [ ] H1. CI runtime smoke: build → `vite preview` → headless assert landing
+- [x] H1. CI runtime smoke: build → `vite preview` → headless assert landing
       renders + zero page errors (the blank-page chunking class can never ship
       again on green CI).
+      — DONE 5e60dcf: `scripts/smoke.mjs` serves dist, asserts React mounts,
+      zero page errors; wired into CI.
 - [ ] H2. Nightly prod probe: the fail-closed create→edit→export script on a
       schedule; alert on first red.
 - [ ] H3. Vercel deploys from CI on main push (replace manual prebuilt deploys);

@@ -7,6 +7,7 @@ import {
   type ValidationIssue,
   type ValidationResult,
 } from '../../../../shared/nodeslide';
+import { geometryIssueDrafts } from '../../../../shared/nodeslideGeometryChecks';
 import type { SignatureProfile } from '../../../../shared/nodeslideSignature';
 import { onBrandIssues } from '../../../../shared/nodeslideSignatureApply';
 import { getElementCapability } from './capabilities';
@@ -14,8 +15,6 @@ import {
   MIN_READABLE_FONT_SIZE,
   boxContains,
   contrastRatio,
-  estimateTextFit,
-  intersectionRatio,
   isStableId,
   orderedElements,
   stableHash,
@@ -384,24 +383,6 @@ function validateElementContent(
       });
     }
   }
-
-  const textLikeContent =
-    element.kind === 'math' ? element.math?.expression : element.content?.trim();
-  if (
-    (element.kind === 'text' || element.kind === 'shape' || element.kind === 'math') &&
-    textLikeContent
-  ) {
-    const fit = estimateTextFit({ ...element, content: textLikeContent });
-    if (fit.overflow) {
-      addIssue(issues, snapshot, {
-        severity: 'error',
-        code: 'overflow',
-        message: `Text is estimated at ${fit.estimatedLines} lines but "${element.id}" fits about ${fit.availableLines}.`,
-        slideId: element.slideId,
-        elementId: element.id,
-      });
-    }
-  }
 }
 
 function textBackground(snapshot: DeckSnapshot, slide: Slide, element: SlideElement): string {
@@ -568,40 +549,6 @@ function validateSources(
   }
 }
 
-function isCollisionCandidate(element: SlideElement): boolean {
-  if (element.kind === 'connector') return false;
-  if (element.role === 'footer' || element.role === 'page_number') return false;
-  if (/(?:background|decorative|decoration|watermark)/i.test(element.role ?? '')) return false;
-  return element.kind !== 'shape' || Boolean(element.content?.trim());
-}
-
-function shouldIgnoreContainedShape(first: SlideElement, second: SlideElement): boolean {
-  if (first.kind === 'shape' && boxContains(first.bbox, second.bbox)) return true;
-  if (second.kind === 'shape' && boxContains(second.bbox, first.bbox)) return true;
-  return false;
-}
-
-function validateCollisions(snapshot: DeckSnapshot, slide: Slide, issues: ValidationIssue[]): void {
-  const elements = orderedElements(snapshot, slide).filter(isCollisionCandidate);
-  for (let firstIndex = 0; firstIndex < elements.length; firstIndex += 1) {
-    const first = elements[firstIndex];
-    if (!first) continue;
-    for (let secondIndex = firstIndex + 1; secondIndex < elements.length; secondIndex += 1) {
-      const second = elements[secondIndex];
-      if (!second || shouldIgnoreContainedShape(first, second)) continue;
-      const overlap = intersectionRatio(first.bbox, second.bbox);
-      if (overlap < 0.2) continue;
-      addIssue(issues, snapshot, {
-        severity: 'error',
-        code: 'collision',
-        message: `Important elements "${first.id}" and "${second.id}" overlap by ${Math.round(overlap * 100)}% of the smaller element.`,
-        slideId: slide.id,
-        elementId: second.id,
-      });
-    }
-  }
-}
-
 function validateExportCapabilities(
   snapshot: DeckSnapshot,
   element: SlideElement,
@@ -675,7 +622,9 @@ export function validateSnapshot(
     if (slide) validateTextQuality(snapshot, slide, element, issues);
   }
 
-  for (const slide of snapshot.slides) validateCollisions(snapshot, slide, issues);
+  // Geometry (text overflow + collisions) is single-sourced with the server
+  // validator so export gating and server validation records agree.
+  for (const draft of geometryIssueDrafts(snapshot)) addIssue(issues, snapshot, draft);
 
   if (options.signatureProfile) {
     for (const issue of onBrandIssues(snapshot, options.signatureProfile)) {
@@ -688,7 +637,15 @@ export function validateSnapshot(
     (issue) =>
       issue.severity === 'error' ||
       (issue.severity === 'warning' &&
-        (['source', 'missing_asset', 'export', 'contrast', 'font_size'].includes(issue.code) ||
+        ([
+          'source',
+          'missing_asset',
+          'export',
+          'contrast',
+          'font_size',
+          'collision',
+          'overflow',
+        ].includes(issue.code) ||
           issue.code.startsWith('on_brand_'))),
   );
   const hasRepairableIssue = sortedIssues.some((issue) => issue.severity === 'warning');

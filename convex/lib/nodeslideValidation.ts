@@ -11,6 +11,7 @@ import {
   type ValidationIssue,
   type ValidationResult,
 } from '../../shared/nodeslide';
+import { geometryIssueDrafts } from '../../shared/nodeslideGeometryChecks';
 import type { SignatureProfile } from '../../shared/nodeslideSignature';
 import { onBrandIssues } from '../../shared/nodeslideSignatureApply';
 import { nodeslideStableId } from './nodeslideIds';
@@ -174,12 +175,13 @@ export function validateNodeSlideSnapshot(
       validateElement(element, slide.background, sourceIds, addIssue);
     }
     validateFlatGroups(slide.elementOrder, slideElements, slide.id, addIssue);
-    validateCollisions(
-      slideElements.filter((element) => element.visible !== false),
-      slide.id,
-      addIssue,
-    );
   }
+
+  // Geometry (text overflow + collisions) is single-sourced with the client
+  // SlideLang validator so validation records and export gating agree.
+  geometryIssueDrafts(snapshot).forEach((draft, index) => {
+    addIssue(draft, `geometry:${draft.code}:${draft.elementId ?? ''}:${index}`);
+  });
 
   for (const [slideId, orphaned] of elementsBySlide.entries()) {
     if (!uniqueSlideIds.has(slideId)) {
@@ -247,6 +249,8 @@ export function validateNodeSlideSnapshot(
           issue.code === 'export' ||
           issue.code === 'contrast' ||
           issue.code === 'font_size' ||
+          issue.code === 'collision' ||
+          issue.code === 'overflow' ||
           issue.code.startsWith('on_brand_'))),
   );
   const hasCleanupIssue = issues.some((issue) => issue.severity !== 'info');
@@ -626,55 +630,6 @@ function validateFlatGroups(
       );
     }
   }
-}
-
-function validateCollisions(
-  elements: readonly SlideElement[],
-  slideId: string,
-  addIssue: (issue: Omit<ValidationIssue, 'id'>, discriminator?: string) => void,
-) {
-  const contentElements = elements.filter(
-    (element) =>
-      element.kind !== 'shape' &&
-      element.kind !== 'connector' &&
-      element.role !== 'footer' &&
-      element.role !== 'page_number',
-  );
-  for (let leftIndex = 0; leftIndex < contentElements.length; leftIndex += 1) {
-    const left = contentElements[leftIndex];
-    if (!left) continue;
-    for (let rightIndex = leftIndex + 1; rightIndex < contentElements.length; rightIndex += 1) {
-      const right = contentElements[rightIndex];
-      if (!right) continue;
-      const overlap = overlapRatio(left.bbox, right.bbox);
-      if (overlap >= 0.35) {
-        addIssue(
-          {
-            severity: 'warning',
-            code: 'collision',
-            message: `Elements ${left.id} and ${right.id} overlap by ${Math.round(overlap * 100)}% of the smaller region.`,
-            slideId,
-            elementId: right.id,
-          },
-          `${left.id}:${right.id}`,
-        );
-      }
-    }
-  }
-}
-
-function overlapRatio(left: BoundingBox, right: BoundingBox): number {
-  const width = Math.max(
-    0,
-    Math.min(left.x + left.width, right.x + right.width) - Math.max(left.x, right.x),
-  );
-  const height = Math.max(
-    0,
-    Math.min(left.y + left.height, right.y + right.height) - Math.max(left.y, right.y),
-  );
-  const overlap = width * height;
-  const smallerArea = Math.min(left.width * left.height, right.width * right.height);
-  return smallerArea > 0 ? overlap / smallerArea : 0;
 }
 
 function sameMembers(left: readonly string[], right: readonly string[]): boolean {

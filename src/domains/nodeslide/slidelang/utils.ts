@@ -165,87 +165,11 @@ export function chooseReadableTextColor(background: string | undefined): string 
   return blackContrast >= whiteContrast ? '#000000' : '#ffffff';
 }
 
-export interface TextFitEstimate {
-  overflow: boolean;
-  estimatedLines: number;
-  availableLines: number;
-  estimatedCharactersPerLine: number;
-}
-
-export function estimateTextFit(element: SlideElement): TextFitEstimate {
-  const content = element.content ?? '';
-  const fontSize = Number.isFinite(element.style.fontSize)
-    ? Math.max(1, element.style.fontSize ?? 24)
-    : 24;
-  const lineHeight = Number.isFinite(element.style.lineHeight)
-    ? Math.max(0.8, element.style.lineHeight ?? 1.2)
-    : 1.2;
-  const padding = Number.isFinite(element.style.padding)
-    ? Math.max(0, element.style.padding ?? 0)
-    : 0;
-  const innerWidth = Math.max(1, element.bbox.width * SVG_WIDTH - padding * 2);
-  const innerHeight = Math.max(1, element.bbox.height * SVG_HEIGHT - padding * 2);
-  const averageCharacterWidth = fontSize * 0.52;
-  const charactersPerLine = Math.max(1, Math.floor(innerWidth / averageCharacterWidth));
-  const availableLines = Math.max(1, Math.floor(innerHeight / (fontSize * lineHeight)));
-
-  let estimatedLines = 0;
-  for (const paragraph of content.split(/\r?\n/)) {
-    if (paragraph.length === 0) {
-      estimatedLines += 1;
-      continue;
-    }
-    let lineLength = 0;
-    let lines = 1;
-    for (const word of paragraph.split(/\s+/)) {
-      const wordLength = Math.max(1, word.length);
-      if (wordLength > charactersPerLine) {
-        const wrappedWordLines = Math.ceil(wordLength / charactersPerLine);
-        lines += Math.max(0, wrappedWordLines - (lineLength === 0 ? 1 : 0));
-        lineLength = wordLength % charactersPerLine;
-      } else if (lineLength === 0) {
-        lineLength = wordLength;
-      } else if (lineLength + 1 + wordLength <= charactersPerLine) {
-        lineLength += 1 + wordLength;
-      } else {
-        lines += 1;
-        lineLength = wordLength;
-      }
-    }
-    estimatedLines += lines;
-  }
-
-  return {
-    overflow: estimatedLines > availableLines,
-    estimatedLines,
-    availableLines,
-    estimatedCharactersPerLine: charactersPerLine,
-  };
-}
-
-export function intersectionRatio(first: BoundingBox, second: BoundingBox): number {
-  const width = Math.max(
-    0,
-    Math.min(first.x + first.width, second.x + second.width) - Math.max(first.x, second.x),
-  );
-  const height = Math.max(
-    0,
-    Math.min(first.y + first.height, second.y + second.height) - Math.max(first.y, second.y),
-  );
-  const intersection = width * height;
-  const smallerArea = Math.min(first.width * first.height, second.width * second.height);
-  return smallerArea > 0 ? intersection / smallerArea : 0;
-}
-
-export function boxContains(
-  container: BoundingBox,
-  content: BoundingBox,
-  tolerance = 0.005,
-): boolean {
-  return (
-    container.x <= content.x + tolerance &&
-    container.y <= content.y + tolerance &&
-    container.x + container.width >= content.x + content.width - tolerance &&
-    container.y + container.height >= content.y + content.height - tolerance
-  );
-}
+// Geometry estimation is single-sourced with the server validator in
+// shared/nodeslideGeometryChecks.ts; re-exported here for existing consumers.
+export {
+  boxContains,
+  estimateTextFit,
+  intersectionRatio,
+  type TextFitEstimate,
+} from '../../../../shared/nodeslideGeometryChecks';

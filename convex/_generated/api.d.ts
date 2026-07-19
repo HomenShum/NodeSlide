@@ -15,6 +15,7 @@ import type * as lib_nodeslideAgenticTelemetry from "../lib/nodeslideAgenticTele
 import type * as lib_nodeslideAnalysisKernel from "../lib/nodeslideAnalysisKernel.js";
 import type * as lib_nodeslideAuthority from "../lib/nodeslideAuthority.js";
 import type * as lib_nodeslideCandidate from "../lib/nodeslideCandidate.js";
+import type * as lib_nodeslideCreationCritique from "../lib/nodeslideCreationCritique.js";
 import type * as lib_nodeslideData from "../lib/nodeslideData.js";
 import type * as lib_nodeslideDataAttachment from "../lib/nodeslideDataAttachment.js";
 import type * as lib_nodeslideDeckRepl from "../lib/nodeslideDeckRepl.js";
@@ -69,6 +70,7 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslideAnalysisKernel": typeof lib_nodeslideAnalysisKernel;
   "lib/nodeslideAuthority": typeof lib_nodeslideAuthority;
   "lib/nodeslideCandidate": typeof lib_nodeslideCandidate;
+  "lib/nodeslideCreationCritique": typeof lib_nodeslideCreationCritique;
   "lib/nodeslideData": typeof lib_nodeslideData;
   "lib/nodeslideDataAttachment": typeof lib_nodeslideDataAttachment;
   "lib/nodeslideDeckRepl": typeof lib_nodeslideDeckRepl;

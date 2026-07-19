@@ -38,7 +38,8 @@ This is the root of the visual monotony AND the collision/overflow bug class.
       show green while export blocks — dishonest-by-accident.)
       — DONE 2e8ce2d: single-source geometry checks in shared validator; server
       and client verdicts agree.
-- [ ] A5. Acceptance: 20 fresh prod generations → 0 collisions, 0 overflows,
+- [ ] A5. Acceptance (NOT RUN — the arc-2 agent stalled before generating;
+      no results exist, nothing is claimed): 20 fresh prod generations → 0 collisions, 0 overflows,
       100% export-clean, ≥3 visually distinct layouts per deck at thumbnail
       scale (assert distinct archetype ids per deck).
 
@@ -47,10 +48,15 @@ This is the root of the visual monotony AND the collision/overflow bug class.
 Today: one planner call + one JSON repair. Thread steps are status labels.
 No decomposition, no sub-agents, no self-verification against the render.
 
-- [ ] B1. Creation loop (P0): generate spec → materialize → validate (incl.
+- [x] B1. Creation loop (P0): generate spec → materialize → validate (incl.
       geometry after A3) → feed issue list back to the model → revise ops →
       converge. Bounded attempts, one receipt per pass, honest terminal states.
       Reuses the render-repair loop bones (exists, unused in creation).
+      — DONE a99edcd: bounded server-side self-critique loop — first spec is
+      materialized in memory via the real buildBriefNodeSlide path, shared
+      validator + quality signals produce a concrete report, exactly one
+      revision call embeds it, and the revision is adopted only when it
+      strictly reduces the report.
 - [ ] B2. Orchestrator/worker routing (P1, specced in AI_TAB_THREAD_REBUILD.md):
       planner model → op skeleton + copy briefs; cheap executor model → copy;
       orchestrator validates before candidate assembly. Spans carry
@@ -88,16 +94,35 @@ The formula element stores a `latex`-tagged string; nothing typesets it.
 
 Single-series flat bars only.
 
-- [ ] D1. Types: line, horizontal bar, pie/donut, stacked bar; axis labels,
+- [x] D1. Types: line, horizontal bar, pie/donut, stacked bar; axis labels,
       ticks, units; multi-series schema (`labels` + `series[]`).
-- [ ] D2. `update_chart` gains `chartType` + series ops so the agent can switch
+      — DONE 46eebaa: ChartType widened (NODESLIDE_CHART_TYPES), Convex
+      validators added, pure-SVG renderers in editor canvas + export SVG with
+      axis labels/units and theme-palette series colors; legacy bar output
+      byte-stable for golden decks.
+- [x] D2. `update_chart` gains `chartType` + series ops so the agent can switch
       forms ("make this a trend line").
-- [ ] D3. Native PPTX charts via PptxGenJS chart API (it supports them) instead
+      — DONE 46eebaa: partial chartType/series overrides merge onto the
+      existing chart; edit-planner schema + parseChart accept every type;
+      summarizer narrates the switch.
+- [x] D3. Native PPTX charts via PptxGenJS chart API (it supports them) instead
       of static shapes — keeps decks editable in PowerPoint.
-- [ ] D4. Source binding preserved across type switches; validator understands
+      — DONE 46eebaa: pie → pieChart, bar-horizontal → barChart barDir=bar,
+      stacked-bar → barChart grouping=stacked, asserted against generated
+      chart XML; capability report unchanged (still pptx_editable).
+- [x] D4. Source binding preserved across type switches; validator understands
       series.
-- [ ] D5. Acceptance: each type renders + exports natively + agent switches a
+      — DONE 46eebaa: element.sourceIds untouched and chart.sourceId
+      re-attached when a replacement omits it (test-asserted); series/label
+      length mismatches rejected at patch validation and flagged by the deck
+      validator.
+- [x] D5. Acceptance: each type renders + exports natively + agent switches a
       chart's type live on prod.
+      — DONE (live probe 2026-07-19): on nodeslide.vercel.app, "Turn this
+      chart into a line chart" -> Kimi patch "Switch the chart in Evidence
+      chart to a line chart" -> Accept -> element class ns-chart--bar (3 bars)
+      became ns-chart--line with SVG line geometry. Per-type render/export
+      covered by the 46eebaa test suite.
 
 ## E · Images — fill the grey boxes (P1/P2)
 

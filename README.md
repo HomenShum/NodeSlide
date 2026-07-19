@@ -2,7 +2,7 @@
 
 **Reviewable deck-as-code. Every AI edit is a scoped, validated, receipted proposal — never a silent overwrite.**
 
-[**Live demo →**](https://parity-studio.vercel.app/?domain=nodeslide) · React 19 + Convex + Vite · [`agentic-ui-qa`](https://github.com/HomenShum/agentic-ui-qa)-audited · Built for the AI Fund SlideLang EIR Build Challenge
+[**Live demo →**](https://nodeslide.vercel.app) · React 19 + Convex + Vite · [`agentic-ui-qa`](https://github.com/HomenShum/agentic-ui-qa)-audited · Built for the AI Fund SlideLang EIR Build Challenge
 
 > NodeSlide turns a prompt, a structured brief, or raw data into a presentation you can *inspect and defend* — a canonical structured document that compiles to editable slides, where every change (human or agent) flows through one validated mutation path.
 
@@ -10,9 +10,24 @@
 
 ---
 
-## See it run — 43 seconds, live agent, single take
+## Watch the full journey — 2 min 26 s, recorded live on production
 
-[`docs/demo/agent-thread-live-kimi.mp4`](docs/demo/agent-thread-live-kimi.mp4) — unedited recording against the deployed Convex backend and the live Kimi K3 route:
+https://github.com/HomenShum/NodeSlide/raw/main/docs/demo/nodeslide-demo-final.mp4
+
+Six acts at [nodeslide.vercel.app](https://nodeslide.vercel.app), captured by a fail-closed recorder (every scene asserts real product state before its caption; a failed assert aborts the take — zero seeded or fabricated state):
+
+1. **Fresh session** — a founder brief is typed and `pilot-metrics.csv` attached; the Kimi K3 · OpenRouter route is disclosed up front
+2. **Live creation** — Kimi generates exactly the six requested slides from the brief (real elapsed 3 min 47 s, shown at 10×); the Trace receipt attributes the plan to the live model, no fallback
+3. **Structured primitives** — the chart, formula, and image are each *clicked*, proving native editable elements; real art is uploaded with alt text and credit; the Evidence tab lists the attached CSV as a typed source
+4. **Directed edit** — a plain-language ask lands in the conversational thread; Kimi returns a validated proposal; Accept applies one CAS-guarded change
+5. **Non-text edit** — the chart is updated to the verified per-customer numbers from the attached data; the bars visibly change
+6. **Ship** — validation gates green, editable PowerPoint exported, canonical JSON available
+
+### The hero loop — 43 seconds, live agent, single take
+
+https://github.com/HomenShum/NodeSlide/raw/main/docs/demo/agent-thread-live-kimi.mp4
+
+Unedited recording against the deployed Convex backend and the live Kimi K3 route:
 
 1. An instruction lands in the AI tab → the conversational thread echoes the turn in **under a second**
 2. The agent researches and validates → a **cited, validated proposal** arrives in ~30s ("Ready for review · Kimi K3 · 1 source")

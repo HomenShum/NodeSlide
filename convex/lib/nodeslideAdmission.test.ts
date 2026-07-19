@@ -168,6 +168,7 @@ describe('NodeSlide create action admission boundary', () => {
 
     expect(callNodeSlideFreeJson).toHaveBeenCalledWith(
       expect.objectContaining({ model: 'anthropic/claude-sonnet-5' }),
+      expect.objectContaining({ timeoutMs: 240_000 }),
     );
     const providerRequest = vi.mocked(callNodeSlideFreeJson).mock.calls[0]?.[0];
     expect(providerRequest?.userText).toContain('world-cup.csv');

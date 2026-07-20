@@ -1,4 +1,5 @@
 import type { DeckSnapshot, ExportCapability, SlideElement } from '../../../../shared/nodeslide';
+import { getMathPptxPlan } from './mathRaster';
 import type { ElementCapabilityReport } from './types';
 import { isEmbeddedImageData } from './utils';
 
@@ -55,6 +56,16 @@ export function getElementCapability(element: SlideElement): ElementCapabilityRe
     pptx = 'static_fallback';
     googleSlides = 'static_fallback';
     warnings.push('Math expression is missing, so exports use a labeled editable placeholder.');
+  } else if (element.kind === 'math' && getMathPptxPlan(element).kind === 'raster') {
+    // Same predicate the PPTX compiler uses (getMathPptxPlan), so this claim
+    // and the export behavior agree: rendered equation embedded as an image.
+    effective = ['web_native', 'pptx_static_fallback', 'google_importable'];
+    web = 'native';
+    pptx = 'static_fallback';
+    googleSlides = 'static_fallback';
+    warnings.push(
+      'LaTeX math is typeset natively on the web; PowerPoint and Google Slides receive a rasterized image of the rendered equation (static fallback, not editable).',
+    );
   } else if (element.kind === 'video') {
     effective = ['web_native', 'pptx_static_fallback', 'google_importable'];
     web = element.video?.url.trim() ? 'native' : 'static_fallback';

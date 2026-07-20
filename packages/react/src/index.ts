@@ -5,9 +5,7 @@ export {
   type NodeSlideSlideFrameProps,
 } from './viewer';
 export {
-  createNodeSlideProposalPreview,
   NodeSlideProposalReview,
-  type NodeSlideProposalPreview,
   type NodeSlideProposalReviewProps,
 } from './proposalReview';
 export {
@@ -22,3 +20,10 @@ export {
   type NodeSlideStudioShellActions,
   type NodeSlideStudioShellProps,
 } from './studioShell';
+export {
+  createNodeSlideProposalPreview,
+  createNodeSlideProposalReviewModel,
+  type NodeSlideProposalPreview,
+  type NodeSlideProposalReviewBlockReason,
+  type NodeSlideProposalReviewModel,
+} from '@nodeslide/react-headless';

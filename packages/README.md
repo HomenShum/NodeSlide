@@ -13,7 +13,7 @@ can migrate without a second DeckSpec, patch engine, or validator.
 | `@nodeslide/backend` | Ports, default-deny principal adapter, approval policy, production-governance declarations, receipts | Any auth vendor or database SDK |
 | `@nodeslide/testing` | Deterministic fixtures, memory repository/assets/telemetry, repository conformance smoke | Production persistence |
 | `@nodeslide/agent` | Runtime-neutral room tools, host tool contract, governed direct-edit/proposal routing | A second agent loop or model provider |
-| `@nodeslide/react-headless` | Repository controller, selection/navigation state, proposal-review model, permission derivation | Rendering, CSS, DOM queries, backend SDKs |
+| `@nodeslide/react-headless` | Controlled deck navigation, repository controller, proposal previews/review state, and permission derivation | Rendering, CSS, DOM queries, persistence SDKs |
 | `@nodeslide/react` | Controlled StudioShell, deck renderer, proposal review, agent transcript/composer, opt-in scoped styles | Convex, auth, routing, global CSS, standalone app state |
 | `@nodeslide/client-http` | Hosted repository/assets/telemetry client with normalized errors and host credentials | Trusting a serialized client principal |
 | `@nodeslide/convex` | Injected generated refs, auth-session and bearer-capability adapters, optional Studio binding, isolated component schema and migration chain | App `_generated/api` imports or auth-vendor policy |
@@ -51,12 +51,13 @@ consumer with scripts disabled:
 npm run packages:consumer:smoke
 ```
 
-The smoke packs every workspace, installs only those tarballs plus React and
-Convex peers into
-an isolated consumer, runs the repository proposal/acceptance conformance
-journey, exercises the agent proposal path, HTTP descriptor, migration plan,
-registry reader, CLI planner, headless permissions, server-rendered viewer, and
-exported CSS, then removes the temporary directory. Source-workspace imports
+The smoke packs the reusable application-boundary workspaces, installs only
+those tarballs plus React and Convex peers into an isolated consumer, runs the
+repository proposal/acceptance conformance journey, exercises the agent proposal
+path, HTTP descriptor, migration plan, registry reader, CLI planner, headless
+permissions and review model, server-renders the controlled deck viewer,
+compiles a strict TypeScript consumer against the packed declarations, verifies
+the exported CSS, and removes the temporary directory. Source-workspace imports
 cannot satisfy this gate.
 
 External coding agents can use the bundled CLI or the adapted MCP server as

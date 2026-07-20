@@ -9,14 +9,18 @@ export type NodeSlideProposalPreview =
       affectedSlideIds: readonly string[];
       affectedElementIds: readonly string[];
     }
-  | { ok: false; error: string };
+  | {
+      ok: false;
+      error: string;
+    };
 
 export type NodeSlideProposalReviewBlockReason =
   | 'host_disabled'
   | 'pending'
   | 'invalid_preview'
-  | 'terminal_proposal'
-  | null;
+  | 'proposal_not_ready'
+  | 'stale_proposal'
+  | 'terminal_proposal';
 
 export interface CreateNodeSlideProposalReviewModelInput {
   currentSnapshot: DeckSnapshot;
@@ -32,10 +36,13 @@ export interface NodeSlideProposalReviewModel {
   currentSlide: Slide | null;
   candidateSlide: Slide | null;
   isBusy: boolean;
+  isActionable: boolean;
   actionsDisabled: boolean;
-  blockReason: NodeSlideProposalReviewBlockReason;
+  blockReason: NodeSlideProposalReviewBlockReason | null;
+  blockReasons: readonly NodeSlideProposalReviewBlockReason[];
 }
 
+/** Materializes an unapplied proposal without mutating the authoritative snapshot. */
 export function createNodeSlideProposalPreview(
   currentSnapshot: DeckSnapshot,
   proposal: DeckPatch,
@@ -56,6 +63,7 @@ export function createNodeSlideProposalPreview(
   }
 }
 
+/** Derives proposal-review state without rendering or persisting a decision. */
 export function createNodeSlideProposalReviewModel({
   currentSnapshot,
   proposal,
@@ -75,25 +83,33 @@ export function createNodeSlideProposalReviewModel({
         : currentSnapshot.slides.find((slide) => slide.id === slideId),
     )
     .filter((slide): slide is Slide => slide !== undefined);
+  const currentSlide = currentSnapshot.slides.find((slide) => slide.id === activeSlideId) ?? null;
+  const candidateSlide = preview.ok
+    ? (preview.candidate.slides.find((slide) => slide.id === activeSlideId) ?? null)
+    : null;
   const isBusy = pendingDecision !== null;
-  const blockReason: NodeSlideProposalReviewBlockReason = disabled
-    ? 'host_disabled'
-    : isBusy
-      ? 'pending'
-      : !preview.ok
-        ? 'invalid_preview'
-        : proposal.status !== 'ready'
-          ? 'terminal_proposal'
-          : null;
+  const isActionable = proposal.status === 'ready';
+  const blockReasons: NodeSlideProposalReviewBlockReason[] = [];
+  if (disabled) blockReasons.push('host_disabled');
+  if (isBusy) blockReasons.push('pending');
+  if (!preview.ok) blockReasons.push('invalid_preview');
+  if (proposal.status === 'draft' || proposal.status === 'validating') {
+    blockReasons.push('proposal_not_ready');
+  } else if (proposal.status === 'stale') {
+    blockReasons.push('stale_proposal');
+  } else if (!isActionable) {
+    blockReasons.push('terminal_proposal');
+  }
+
   return {
     preview,
     orderedSlides,
-    currentSlide: currentSnapshot.slides.find((slide) => slide.id === activeSlideId) ?? null,
-    candidateSlide: preview.ok
-      ? (preview.candidate.slides.find((slide) => slide.id === activeSlideId) ?? null)
-      : null,
+    currentSlide,
+    candidateSlide,
     isBusy,
-    actionsDisabled: blockReason !== null,
-    blockReason,
+    isActionable,
+    actionsDisabled: blockReasons.length > 0,
+    blockReason: blockReasons[0] ?? null,
+    blockReasons,
   };
 }

@@ -9,7 +9,6 @@ import type { ReactNode } from 'react';
 import { NodeSlideSlideFrame } from './viewer';
 
 export { createNodeSlideProposalPreview, type NodeSlideProposalPreview };
-
 export interface NodeSlideProposalReviewProps {
   currentSnapshot: DeckSnapshot;
   proposal: DeckPatch;
@@ -44,15 +43,22 @@ export function NodeSlideProposalReview({
   acceptLabel = 'Accept proposal',
   rejectLabel = 'Reject proposal',
 }: NodeSlideProposalReviewProps) {
-  const model = createNodeSlideProposalReviewModel({
+  const review = createNodeSlideProposalReviewModel({
     currentSnapshot,
     proposal,
     activeSlideId,
     pendingDecision,
     disabled,
   });
-  const { preview, orderedSlides, currentSlide, candidateSlide, isBusy, actionsDisabled } = model;
-  const isActionable = proposal.status === 'ready';
+  const {
+    actionsDisabled,
+    candidateSlide,
+    currentSlide,
+    isActionable,
+    isBusy,
+    orderedSlides,
+    preview,
+  } = review;
 
   return (
     <section

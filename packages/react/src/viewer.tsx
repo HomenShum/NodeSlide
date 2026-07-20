@@ -97,7 +97,7 @@ export function NodeSlideDeckViewer({
   const navigation = useNodeSlideDeckNavigation({
     snapshot,
     activeSlideId,
-    ...(onActiveSlideChange ? { onActiveSlideChange } : {}),
+    onActiveSlideChange,
     onFocusRequest: (slideId) => slideTabRefs.current.get(slideId)?.focus(),
   });
   const { activeIndex, activeSlide, orderedSlides } = navigation;

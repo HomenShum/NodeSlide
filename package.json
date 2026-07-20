@@ -17,7 +17,7 @@
     "proof:external-agent": "node scripts/smoke-external-agent-package.mjs",
     "codegen": "convex codegen",
     "build": "npm run packages:build && tsc -b && vite build",
-    "packages:build": "npm run build --workspaces --if-present",
+    "packages:build": "npm run build --workspace @nodeslide/contracts && npm run build --workspace @nodeslide/engine && npm run build --workspace @nodeslide/backend && npm run build --workspace @nodeslide/testing && npm run build --workspace @nodeslide/agent && npm run build --workspace @nodeslide/client-http && npm run build --workspace @nodeslide/react-headless && npm run build --workspace @nodeslide/react && npm run build --workspace @nodeslide/convex && npm run build --workspace @nodeslide/registry && npm run build --workspace @nodeslide/cli && npm run build --workspace @nodeslide/external-agent && npm run build --workspace nodeslide-mcp",
     "packages:consumer:smoke": "node scripts/package-consumer-smoke.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b && npm run typecheck --workspaces --if-present",

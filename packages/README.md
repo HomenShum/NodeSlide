@@ -13,6 +13,7 @@ patch engine.
 | `@nodeslide/backend` | `NodeSlideRepository`, `NodeSlideAssetStore`, `NodeSlideTelemetryAdapter`, normalized principal and receipts | Any concrete database or auth vendor |
 | `@nodeslide/testing` | Deterministic fixtures, memory repository/assets/telemetry, repository conformance smoke | Production persistence |
 | `@nodeslide/react` | Controlled read-only deck rendering, deterministic proposal comparison, accessible review callbacks, opt-in scoped styles | Convex, auth, routing, global CSS, standalone app state |
+| `@nodeslide/external-agent` | Bundled library + `nodeslide` CLI for offline inspect/validate/propose/apply | UI, hosted auth, provider calls, a second patch engine |
 
 The compatibility direction is deliberate:
 
@@ -36,3 +37,7 @@ npm run packages:build
 Each workspace is private to prevent accidental publication but supports
 `npm pack` for the version-pinned tarball workflow documented in
 `docs/ECOSYSTEM.md`.
+
+External coding agents can use the bundled CLI or the adapted MCP server as
+documented in `docs/EXTERNAL_AGENT_ACCESS.md`. Both transports consume these
+package boundaries instead of copying the deck model or patch engine.

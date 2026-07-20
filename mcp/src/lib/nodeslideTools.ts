@@ -77,8 +77,68 @@ const scopeArgs = {
   operationMode: z.enum(['copy', 'style', 'layout', 'unrestricted']).default('unrestricted'),
 };
 
+interface NodeSlideMcpToolArguments {
+  model?: string;
+  deckId: string;
+  ownerAccessKey?: string;
+  traceId?: string;
+  limit: number;
+  instruction: string;
+  scope: 'deck' | 'slide' | 'elements';
+  slideId?: string;
+  elementIds?: string[];
+  operationMode: OperationMode;
+  execution: 'byok' | 'hosted' | 'deterministic';
+  consent: boolean;
+  idempotencyKey?: string;
+  patchId: string;
+  title: string;
+  format: 'csv' | 'json' | 'txt';
+  content: string;
+  query: string;
+  prompt: string;
+  audience: string;
+  purpose: string;
+  successCriteria: string[];
+  themeId: string;
+  clientSessionId: string;
+  accessCode?: string;
+}
+
+interface NodeSlideMcpToolConfig {
+  title: string;
+  description: string;
+  inputSchema: Record<string, z.ZodTypeAny>;
+  annotations: {
+    readOnlyHint: boolean;
+    destructiveHint: boolean;
+    openWorldHint: boolean;
+  };
+}
+
+/**
+ * The MCP SDK + Zod generic for a large multi-tool surface can expand to
+ * gigabytes during `tsc`. Runtime input safety still comes from the exact Zod
+ * schemas above; this narrow registrar keeps handler typing finite and makes
+ * the package typecheck usable for external consumers.
+ */
+function registerTool(
+  server: McpServer,
+  name: string,
+  config: NodeSlideMcpToolConfig,
+  handler: (args: NodeSlideMcpToolArguments) => Promise<unknown>,
+): void {
+  const register = server.registerTool as unknown as (
+    toolName: string,
+    toolConfig: NodeSlideMcpToolConfig,
+    toolHandler: (args: NodeSlideMcpToolArguments) => Promise<unknown>,
+  ) => void;
+  register.call(server, name, config, handler);
+}
+
 export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall): void {
-  server.registerTool(
+  registerTool(
+    server,
     'nodeslide.byok_status',
     {
       title: 'Check NodeSlide local BYOK readiness',
@@ -90,7 +150,8 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
     async ({ model }) => textResult(localByokStatus([model ?? DEFAULT_BYOK_MODEL])),
   );
 
-  server.registerTool(
+  registerTool(
+    server,
     'nodeslide.get_deck',
     {
       title: 'Read a NodeSlide deck',
@@ -115,7 +176,8 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
     },
   );
 
-  server.registerTool(
+  registerTool(
+    server,
     'nodeslide.list_slides',
     {
       title: 'List structured NodeSlide slides',
@@ -135,7 +197,8 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
     },
   );
 
-  server.registerTool(
+  registerTool(
+    server,
     'nodeslide.get_trace',
     {
       title: 'Read NodeSlide agent traces',
@@ -158,7 +221,8 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
     },
   );
 
-  server.registerTool(
+  registerTool(
+    server,
     'nodeslide.list_versions',
     {
       title: 'List NodeSlide deck versions',
@@ -176,7 +240,8 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
     },
   );
 
-  server.registerTool(
+  registerTool(
+    server,
     'nodeslide.propose_edit',
     {
       title: 'Propose a governed NodeSlide edit',
@@ -250,7 +315,8 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
     },
   );
 
-  server.registerTool(
+  registerTool(
+    server,
     'nodeslide.accept_proposal',
     {
       title: 'Accept a reviewed NodeSlide proposal',
@@ -269,7 +335,8 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
       ),
   );
 
-  server.registerTool(
+  registerTool(
+    server,
     'nodeslide.reject_proposal',
     {
       title: 'Reject a NodeSlide proposal',
@@ -287,7 +354,8 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
       ),
   );
 
-  server.registerTool(
+  registerTool(
+    server,
     'nodeslide.upload_source',
     {
       title: 'Attach a private NodeSlide data source',
@@ -313,7 +381,8 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
       ),
   );
 
-  server.registerTool(
+  registerTool(
+    server,
     'nodeslide.search_web',
     {
       title: 'Research the web and propose a sourced NodeSlide edit',
@@ -347,7 +416,8 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
     },
   );
 
-  server.registerTool(
+  registerTool(
+    server,
     'nodeslide.create_deck',
     {
       title: 'Create a governed NodeSlide deck',

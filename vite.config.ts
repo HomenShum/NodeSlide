@@ -23,7 +23,7 @@ export default defineConfig({
     },
   },
   test: {
-    exclude: [...configDefaults.exclude, '**/.claude/**'],
+    exclude: [...configDefaults.exclude, '**/.claude/**', 'packages/external-agent/**', 'mcp/**'],
   },
   server: {
     port: 5180,

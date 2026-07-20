@@ -95,6 +95,8 @@ Capability honesty is the product, so it's the README too. As of 2026-07-13:
 
 ## Documentation
 
+- [**External-agent access**](docs/EXTERNAL_AGENT_ACCESS.md) - offline CLI and MCP file tools, host-backed MCP mode, proposal receipts, and tarball consumer proof.
+
 - [**Product Requirements (PRD)**](docs/PRD.md) — problem, user, workflow, why structured authoring wins, trust surface, launch requirements, metrics, wedge.
 - [**Technical Design (TDD)**](docs/TDD.md) — architecture, canonical schema, agent execution, mutation protocol, validation/repair, rendering/export/publishing, MCP seam, verification.
 

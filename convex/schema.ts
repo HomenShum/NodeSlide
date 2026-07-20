@@ -541,6 +541,14 @@ export default defineSchema({
     retention: v.optional(v.union(v.literal('until_deleted'), v.literal('public_snapshot'))),
     status: v.optional(v.union(v.literal('ready'), v.literal('refreshing'), v.literal('failed'))),
     lastRefreshedAt: v.optional(v.number()),
+    snapshot: v.optional(
+      v.object({
+        kind: v.literal('search_excerpt'),
+        capturedAt: v.number(),
+        text: v.string(),
+        contentDigest: v.string(),
+      }),
+    ),
   })
     .index('by_stable_id', ['id'])
     .index('by_deck', ['deckId']),
@@ -607,7 +615,25 @@ export default defineSchema({
     content: v.string(),
     toolName: v.optional(v.string()),
     sourceIds: v.optional(v.array(v.string())),
+    streamState: v.optional(
+      v.union(v.literal('streaming'), v.literal('complete'), v.literal('interrupted')),
+    ),
+    handoff: v.optional(
+      v.object({
+        id: v.string(),
+        parentId: v.optional(v.string()),
+        from: v.string(),
+        to: v.string(),
+        status: v.union(
+          v.literal('delegated'),
+          v.literal('completed'),
+          v.literal('failed'),
+          v.literal('skipped'),
+        ),
+      }),
+    ),
     createdAt: v.number(),
+    updatedAt: v.optional(v.number()),
   })
     .index('by_stable_id', ['id'])
     .index('by_deck_created', ['deckId', 'createdAt'])

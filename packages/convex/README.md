@@ -1,27 +1,56 @@
 # `@nodeslide/convex`
 
-Reference Convex client adapter for the NodeSlide backend ports. Generated
-function references are injected by the host; this package never imports an
-application's `_generated/api`. Host wrapper functions resolve the authenticated
-principal server-side and call the isolated component API.
+`@nodeslide/convex` is the reference production implementation of the
+NodeSlide backend ports. It ships a real Convex component: its schema,
+functions, generated component API type, and migration ledger are packaged
+together and mount into a namespace that is isolated from the host app's
+tables.
 
-The `component/` directory is source-owned Convex component material: isolated
-table definitions and a versioned migration manifest. It intentionally does
-not pretend that copying a schema mounts a backend. The installer copies these
-files into a new package-specific directory, while the host adds authenticated
-wrappers and runs Convex codegen. The adapter only receives a production
-descriptor after the host supplies a complete `nodeslide.governance/v1`
-declaration and passes repository conformance.
+Mount it from the host application's root `convex.config.ts`:
 
-NodeSlide's current app uses an anonymous, server-issued owner capability
-rather than an identity-provider session. `createNodeSlideCapabilityConvexAdapters`
-is the production bridge for that host: it sends only the capability in the
-host's existing authorization arguments, strips client-asserted provenance,
-and consumes receipts derived by the existing server mutation path. The
-host-owned generated-reference binding lives outside this package.
+```ts
+import nodeslide from '@nodeslide/convex/convex.config.js';
+import { defineApp } from 'convex/server';
 
-The isolated schema is still installation material, not a second live backend
-inside the NodeSlide app. Mounting it today would fork deck state and duplicate
-the monolithic validation/trace logic. A true isolated-component mount remains
-blocked on extracting that mutation core into a shared server module; the
-capability bridge deliberately reuses the authoritative tables until then.
+const app = defineApp();
+app.use(nodeslide);
+export default app;
+```
+
+After host codegen, server wrappers call the mounted references under
+`components.nodeslide.repository`. The public functions are
+`initializeDeck`, `getDeck`, `applyPatch`, `createProposal`,
+`resolveProposal`, `listVersions`, `storeReceipt`, `putAsset`, `getAsset`,
+`deleteAsset`, and `applyMigration`. Consumers can import the component's
+reference shape as a type:
+
+```ts
+import type { ComponentApi } from '@nodeslide/convex/_generated/component.js';
+```
+
+The host owns identity and policy. A host wrapper resolves its Clerk, WorkOS,
+Auth0, Supabase, Convex Auth, NodeRoom ActorProof, or custom principal on the
+server and mints a request-bound `nodeslide.component-grant/v1`. Mutation
+grants are bound to the exact action, deck, and resource and are consumed once
+inside the component. Credentials and host ActorProofs never enter component
+tables. Read grants are checked on every query but are not persisted.
+
+The component owns isolated deck, proposal, version, receipt, asset, migration,
+and consumed-grant tables. Its mutation implementation imports only the
+portable `@nodeslide/backend`, `@nodeslide/contracts`, and `@nodeslide/engine`
+boundaries; it does not import the NodeSlide application's Convex schema,
+mutations, or `_generated/api`.
+
+Server governance is literal and non-bypassable. The exported
+`NODESLIDE_CONVEX_COMPONENT_GOVERNANCE` requires mutation authority, CAS,
+candidate validation, trace lineage, source authorization, and rollback.
+`assertNodeSlideConvexComponentConfiguration` lets a host choose approval,
+Turbo, publishing, and retention UX while rejecting any attempt to weaken
+those six invariants.
+
+Schema version 2 has a contiguous, non-destructive two-step migration chain.
+Run the exported planner and apply each step through the mounted
+`repository.applyMigration` function with a host-issued migration grant.
+Component tests use the actual isolated schema through `convex-test`, including
+proposal acceptance, durable reread, CAS conflict, invalid candidate,
+cross-resource grant, replayed grant, and skipped-migration rejection.

@@ -62,6 +62,17 @@ const webSource = source({
   status: 'ready',
 });
 
+const capturedWebSource = source({
+  ...webSource,
+  id: 'src-web',
+  snapshot: {
+    kind: 'search_excerpt',
+    capturedAt: 1_720_000_000_000,
+    text: 'Global EV adoption reached 28% of new sales in 2026.',
+    contentDigest: 'content_sha256:captured-ev-excerpt',
+  },
+});
+
 const csvSource = source({
   id: 'src-csv',
   title: 'Quarterly sales.csv',
@@ -161,6 +172,51 @@ describe('DataInspector evidence lineage', () => {
     const highlighted = marks.map((mark) => mark.textContent?.toLowerCase());
     expect(highlighted).toContain('adoption');
     expect(highlighted).toContain('reached');
+  });
+
+  it('opens the exact captured excerpt and its claim-bound region from the citing element', async () => {
+    const onSelectElement = vi.fn();
+    render(
+      <DataInspector
+        sources={[capturedWebSource]}
+        selectedElements={[]}
+        elements={elements}
+        slides={slides}
+        onSelectElement={onSelectElement}
+      />,
+    );
+
+    expect(screen.queryByTestId('evidence-snapshot-region')).toBeNull();
+    await userEvent.click(screen.getByTestId('evidence-citing-element'));
+
+    expect(onSelectElement).toHaveBeenCalledWith('slide-2', 'el-headline');
+    const region = screen.getByTestId('evidence-snapshot-region');
+    expect(region.textContent).toContain(capturedWebSource.snapshot?.text);
+    expect(screen.getByTestId('evidence-snapshot-binding').textContent).toContain(
+      'Claim region bound to Headline',
+    );
+    const highlights = screen.getAllByTestId('evidence-snapshot-highlight');
+    expect(highlights.length).toBeGreaterThan(0);
+    expect(highlights.every((highlight) => highlight.dataset['elementId'] === 'el-headline')).toBe(
+      true,
+    );
+    expect(screen.queryByTestId('evidence-no-snapshot')).toBeNull();
+  });
+
+  it('opens a captured excerpt directly and discloses that it is not a page photograph', async () => {
+    render(
+      <DataInspector
+        sources={[capturedWebSource]}
+        selectedElements={[]}
+        elements={elements}
+        slides={slides}
+      />,
+    );
+
+    await userEvent.click(screen.getByTestId('evidence-snapshot-toggle'));
+    const region = screen.getByTestId('evidence-snapshot-region');
+    expect(region.textContent).toContain('not a photograph of the third-party page');
+    expect(region.textContent).toContain('content_sha256:ca');
   });
 
   it('labels web sources with the honest no-visual-snapshot note and never fakes one for uploads', () => {

@@ -82,7 +82,13 @@ await new Promise((resolve) => {
 clearTimeout(timer);
 if (stdoutBuffer.trim()) acceptLine(stdoutBuffer);
 
-const failed = childExitCode !== null && childExitCode !== 0 && stopReason !== 'max-events';
+const cliFailed = childExitCode !== null && childExitCode !== 0 && stopReason !== 'max-events';
+// A green empty capture recreates the original blind spot: the operator gets
+// no execution evidence but the command appears healthy. History mode should
+// return recent completions on an active production deployment, so fail closed
+// and retain a machine-readable reason when it returns nothing.
+const emptyHistory = !cliFailed && eventCount === 0;
+const failed = cliFailed || emptyHistory;
 lines.push(
   JSON.stringify({
     capture: {
@@ -93,9 +99,10 @@ lines.push(
       maxEvents,
       capturedEvents: eventCount,
       includeMessages,
-      stopReason: failed ? 'cli-error' : stopReason,
+      stopReason: cliFailed ? 'cli-error' : emptyHistory ? 'empty-history' : stopReason,
       status: failed ? 'failed' : 'completed',
-      ...(failed && stderrBuffer.trim()
+      failureCode: cliFailed ? 'convex-cli-error' : emptyHistory ? 'no-production-events' : null,
+      ...(cliFailed && stderrBuffer.trim()
         ? { diagnostic: redact(stderrBuffer.trim()).slice(0, 800) }
         : {}),
     },

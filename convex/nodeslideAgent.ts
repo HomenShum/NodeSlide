@@ -17,6 +17,7 @@ import {
   authorizeNodeSlideAgenticOperation,
   resolveNodeSlideAgenticControls,
 } from './lib/nodeslideAgenticControls';
+import { createNodeSlideAssistantStreamProjector } from './lib/nodeslideAssistantStream';
 import { authorizeBeforeConsumingQuota, nodeSlideActorQuotaKey } from './lib/nodeslideAuthority';
 import {
   injectNodeSlideSyntheticCreationFault,
@@ -37,6 +38,7 @@ import {
   NODESLIDE_BASELINE_EDIT_ADAPTER_VERSION,
   type NodeSlideEditPlannerReceipt,
   type NodeSlideEditPlanningRequest,
+  type NodeSlideEditProvider,
   type NodeSlideEditRoutingReceipt,
   nodeSlideRepairStepMessage,
   nodeSlideVerifyStepMessage,
@@ -233,6 +235,26 @@ export const proposeEdit = action({
       );
     }
 
+    const assistantStreamMessageId = nodeslideStableId(
+      'agent_message',
+      runId,
+      'assistant_stream',
+      String(runStart.run.attempt),
+    );
+    const assistantStream = createNodeSlideAssistantStreamProjector({
+      write: async ({ content, state, sourceIds }) => {
+        await ctx.runMutation(nodeslideInternal.writeAgentAssistantStreamInternal, {
+          deckId: args.deckId,
+          ownerAccessKey: args.ownerAccessKey,
+          runId,
+          messageId: assistantStreamMessageId,
+          content,
+          state,
+          ...(sourceIds ? { sourceIds } : {}),
+        });
+      },
+    });
+
     try {
       let webSourceIds: string[] = [];
       let webProvidersUsed: string[] = [];
@@ -387,10 +409,23 @@ export const proposeEdit = action({
       // failure mode on the same graceful deterministic fallback, keeping attribution honest.
       let baseline: Awaited<ReturnType<typeof planNodeSlideEditRouted>>;
       let providerErrored = false;
+      const callStreamingPlanner: NodeSlideEditProvider = (providerArgs) =>
+        callNodeSlideFreeJson({
+          ...providerArgs,
+          ...(providerArgs.jsonSchema?.name === 'nodeslide_edit_patch'
+            ? { onTextDelta: (event) => assistantStream.observe(event) }
+            : {}),
+        });
       try {
-        baseline = await planNodeSlideEditRouted({ snapshot, scopedComment, readContext, request });
+        baseline = await planNodeSlideEditRouted(
+          { snapshot, scopedComment, readContext, request },
+          { callProvider: callStreamingPlanner },
+        );
       } catch {
         providerErrored = true;
+        await assistantStream.interrupt(
+          'The streamed provider draft was discarded before deterministic fallback planning.',
+        );
         try {
           baseline = await planNodeSlideEditRouted({
             snapshot,
@@ -425,7 +460,15 @@ export const proposeEdit = action({
         const replaceTextCount = baseline.operations.filter(
           (operation) => operation.op === 'replace_text',
         ).length;
-        await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
+        const handoffId = nodeslideStableId(
+          'agent_handoff',
+          runId,
+          String(runStart.run.attempt),
+          routing.policyVersion,
+          routing.plannerModel,
+          routing.executorModel,
+        );
+        const plannerCheckpoint = await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
           deckId: args.deckId,
           ownerAccessKey: args.ownerAccessKey,
           runId,
@@ -435,7 +478,20 @@ export const proposeEdit = action({
           toolName: 'planner',
           spanProvider: plannerRoute.provider,
           spanModel: plannerRoute.upstreamId,
+          handoff: {
+            id: handoffId,
+            from: plannerRoute.label,
+            to: executorRoute.label,
+            status: 'delegated',
+          },
         });
+        if (plannerCheckpoint === null) {
+          throw publicAgentError('invalid_request', 'The agent run was cancelled during planning.');
+        }
+        const plannerSpanId =
+          plannerCheckpoint && typeof plannerCheckpoint.spanId === 'string'
+            ? plannerCheckpoint.spanId
+            : undefined;
         const executorMessage =
           routing.executorOutcome === 'applied'
             ? `Executor · ${executorRoute.label}: wrote copy for ${routing.executorAppliedOps ?? 0} text element${(routing.executorAppliedOps ?? 0) === 1 ? '' : 's'}; deterministic validation reran on the assembled operations.`
@@ -454,6 +510,19 @@ export const proposeEdit = action({
           toolName: 'executor',
           spanProvider: executorRoute.provider,
           spanModel: executorRoute.upstreamId,
+          ...(plannerSpanId ? { parentSpanId: plannerSpanId } : {}),
+          handoff: {
+            id: nodeslideStableId('agent_handoff', handoffId, 'executor'),
+            ...(plannerSpanId ? { parentId: handoffId } : {}),
+            from: plannerRoute.label,
+            to: executorRoute.label,
+            status:
+              routing.executorOutcome === 'applied'
+                ? 'completed'
+                : routing.executorOutcome === 'no_briefs'
+                  ? 'skipped'
+                  : 'failed',
+          },
         });
         traceContext.push(
           `Routing: ${routing.policyVersion} split — planner ${plannerRoute.upstreamId}, executor ${executorRoute.upstreamId} (${routing.executorOutcome ?? 'granted'})`,
@@ -677,6 +746,15 @@ export const proposeEdit = action({
         ],
         ...traceAttribution,
       });
+      const streamAccepted =
+        baseline.receipt.origin === 'free_route' && !providerErrored
+          ? await assistantStream.complete(summary, webSourceIds)
+          : false;
+      if (!streamAccepted && assistantStream.hasStarted() && !assistantStream.wasInterrupted()) {
+        await assistantStream.interrupt(
+          'The streamed provider draft was discarded because it did not become the validated proposal.',
+        );
+      }
       await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
         deckId: args.deckId,
         ownerAccessKey: args.ownerAccessKey,
@@ -684,12 +762,19 @@ export const proposeEdit = action({
         status: 'awaiting_review',
         patchId,
         traceId,
-        message: `Proposed: ${summary}. Review the validated patch below — nothing changes until you accept.`,
-        role: 'assistant',
+        ...(!streamAccepted
+          ? {
+              message: `Proposed: ${summary}. Review the validated patch below — nothing changes until you accept.`,
+              role: 'assistant' as const,
+            }
+          : {}),
         ...(webSourceIds.length ? { sourceIds: webSourceIds } : {}),
       });
       return proposal;
     } catch (error) {
+      await assistantStream.interrupt(
+        'The streamed draft did not become a proposal. No deck changes were applied.',
+      );
       const current = await ctx.runQuery(nodeslideInternal.getAgentRunInternal, {
         deckId: args.deckId,
         ownerAccessKey: args.ownerAccessKey,

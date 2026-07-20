@@ -42,15 +42,18 @@ Options evaluated for THIS setup (Windows 11, sibling repos under a path with a 
   extra machinery that public npm makes obsolete anyway.
 - **versioned tarball** (`npm pack` → `file:` install) — **chosen.**
 
-**Decision: versioned tarball.** In nodeslide: `npm pack` each `@nodeslide/*` package →
-`nodeslide-<pkg>-X.Y.Z.tgz`; noderoom pins it in `package.json` as
-`"@nodeslide/<pkg>": "file:../nodeslide/artifacts/nodeslide-<pkg>-X.Y.Z.tgz"` (or copies
-the tarball into a `vendor/` dir it commits). Justification: the tarball **is** the exact
+**Decision: versioned tarball.** In nodeslide: the artifact builder runs `npm pack` for
+the complete 11-package `@nodeslide/*` closure and writes
+`nodeslide-artifacts.json`; noderoom installs through `@nodeslide/cli --artifacts`
+or pins the verified tarballs in a committed `vendor/` directory. The manifest binds one
+release ID/version to every filename with independent SHA-256 and npm SHA-512 integrity,
+and install receipts preserve those pins. Justification: the tarball **is** the exact
 artifact npm would publish, so I6's release bar (install → mount → create → edit → live
 agent change → chart render → PPTX → Deck CI green) tests reality, not a symlink; it is
 deterministic and version-pinned (semver + migration notes per I6 apply unchanged — a new
-tarball requires a version bump, no mutable "latest"); it has zero symlink/junction/spaces
-problems on Windows; and switching to public npm later is a one-line specifier change.
+artifact set requires a version bump, no mutable "latest"); mixed, unlisted, missing, or
+tampered tarballs fail before npm runs; it has zero symlink/junction/spaces problems on
+Windows; and switching to public npm later is a one-line specifier change.
 
 ## NodeSlideAgentAdapter contract (from J1, against the REAL noderoom types)
 

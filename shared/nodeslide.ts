@@ -643,6 +643,17 @@ export interface SourceRecord {
   retention?: 'until_deleted' | 'public_snapshot';
   status?: 'ready' | 'refreshing' | 'failed';
   lastRefreshedAt?: number;
+  /**
+   * Immutable evidence captured by the search provider at retrieval time.
+   * This is deliberately a retrieved excerpt snapshot, not a claim that
+   * NodeSlide photographed the third-party page.
+   */
+  snapshot?: {
+    kind: 'search_excerpt';
+    capturedAt: number;
+    text: string;
+    contentDigest: string;
+  };
 }
 
 export type NodeSlideAgentRunStatus =
@@ -751,7 +762,25 @@ export interface NodeSlideAgentMessage {
   content: string;
   toolName?: string;
   sourceIds?: string[];
+  /**
+   * Durable delivery state for assistant prose. `streaming` rows are updated
+   * by server-observed provider text deltas; they are never a client-side
+   * typewriter effect. `interrupted` means the draft was not accepted as the
+   * proposal and must not be read as a completed assistant claim.
+   */
+  streamState?: 'streaming' | 'complete' | 'interrupted';
+  /** Structured delegation identity used by the thread and trace projections. */
+  handoff?: NodeSlideAgentHandoff;
   createdAt: number;
+  updatedAt?: number;
+}
+
+export interface NodeSlideAgentHandoff {
+  id: string;
+  parentId?: string;
+  from: string;
+  to: string;
+  status: 'delegated' | 'completed' | 'failed' | 'skipped';
 }
 
 export type NodeSlideAgentMemoryCategory =

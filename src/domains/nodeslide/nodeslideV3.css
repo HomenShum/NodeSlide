@@ -127,6 +127,53 @@
   font-style: italic;
 }
 
+.ns-evidence-snapshot-toggle {
+  display: inline-flex;
+  margin-top: 6px;
+  padding: 4px 8px;
+  border: 1px solid var(--ns-border, #ddd6cd);
+  border-radius: 8px;
+  background: var(--ns-surface, #fffdfa);
+  color: var(--ns-ink, #2b2620);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ns-evidence-snapshot-toggle:hover {
+  border-color: var(--ns-accent, #b7803a);
+}
+
+.ns-evidence-snapshot {
+  display: grid;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 10px;
+  border: 1px solid var(--ns-border, #ddd6cd);
+  border-left: 3px solid var(--ns-accent, #b7803a);
+  border-radius: 8px;
+  background: var(--ns-surface, #fffdfa);
+}
+
+.ns-evidence-snapshot header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 10px;
+}
+
+.ns-evidence-snapshot header small,
+.ns-evidence-snapshot > small {
+  color: var(--ns-muted, #6d665f);
+}
+
+.ns-evidence-snapshot blockquote {
+  margin: 0;
+  padding: 9px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--ns-accent-soft, #f3e4c8) 35%, transparent);
+  line-height: 1.5;
+}
+
 .ns-evidence-citing {
   display: flex;
   flex-wrap: wrap;

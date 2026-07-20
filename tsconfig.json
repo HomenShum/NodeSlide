@@ -9,6 +9,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
+      "@nodeslide/convex/convex.config.js": ["./packages/convex/component/convex.config.ts"],
       "@nodeslide/convex/component-schema": ["./packages/convex/src/componentSchema.ts"],
       "@nodeslide/*": ["./packages/*/src/index.ts"]
     },

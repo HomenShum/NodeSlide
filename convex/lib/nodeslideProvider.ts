@@ -1,4 +1,5 @@
 import {
+  type AssistantMessage,
   type Context,
   type Model,
   type TextContent,
@@ -175,6 +176,7 @@ export interface NodeSlideCompletionRequest {
   jsonSchema?: NodeSlideJsonSchema;
   repairAttempt: boolean;
   signal: AbortSignal;
+  onTextDelta?: (delta: string, accumulatedText: string) => void | Promise<void>;
 }
 
 export interface NodeSlideCompletionResult {
@@ -193,6 +195,113 @@ export type NodeSlideCompletion = (
 interface NodeSlideProviderDependencies {
   complete?: NodeSlideCompletion;
   timeoutMs?: number;
+  onTextDelta?: (event: NodeSlideProviderTextDelta) => void | Promise<void>;
+}
+
+export interface NodeSlideProviderTextDelta {
+  delta: string;
+  accumulatedText: string;
+  attempt: number;
+  repairAttempt: boolean;
+}
+
+export interface NodeSlideModelProbeReceipt {
+  model: NodeSlideAgentModelId;
+  provider: NodeSlideExternalProvider;
+  upstreamModel: string;
+  maxTokens: 1;
+  status: 'passed' | 'failed';
+  stopReason?: string;
+  latencyMs: number;
+  costMicroUsd: number;
+  inputTokens: number;
+  outputTokens: number;
+  /** Bounded proof of output presence; provider text is deliberately omitted. */
+  response: { present: boolean; bytes: number };
+  failure?: string;
+}
+
+/**
+ * Executes exactly one one-token completion for a catalog route. This is kept
+ * below a server-only Convex action so an unauthenticated client cannot turn
+ * the fleet probe into a cost-bearing endpoint.
+ */
+export async function probeNodeSlideModelOnce(
+  modelId: NodeSlideAgentModelId,
+  dependencies: NodeSlideProviderDependencies = {},
+): Promise<NodeSlideModelProbeReceipt> {
+  const route = nodeSlideAgentModel(modelId);
+  const complete = dependencies.complete ?? completeNodeSlideWithPiAi;
+  const controller = new AbortController();
+  const startedAt = Date.now();
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  const deadline = new Promise<never>((_, reject) => {
+    timeout = setTimeout(() => {
+      controller.abort();
+      reject(new Error('nodeslide_provider_timeout'));
+    }, dependencies.timeoutMs ?? MODEL_TIMEOUT_MS);
+  });
+
+  try {
+    const result = await Promise.race([
+      complete({
+        provider: route.provider,
+        model: route.upstreamId,
+        supportsTemperature: route.supportsTemperature,
+        reasoningEffort: 'low',
+        systemPrompt: 'Reply with one character.',
+        userText: '1',
+        maxTokens: 1,
+        repairAttempt: false,
+        signal: controller.signal,
+      }),
+      deadline,
+    ]);
+    const bytes = responseBytes(result.text);
+    const hasOutput = result.text.trim().length > 0;
+    const passed = result.stopReason !== 'error' && result.stopReason !== 'aborted' && hasOutput;
+    return {
+      model: modelId,
+      provider: route.provider,
+      upstreamModel: route.upstreamId,
+      maxTokens: 1,
+      status: passed ? 'passed' : 'failed',
+      stopReason: result.stopReason,
+      latencyMs: Date.now() - startedAt,
+      costMicroUsd: result.costMicroUsd,
+      inputTokens: result.inputTokens,
+      outputTokens: result.outputTokens,
+      response: { present: hasOutput, bytes },
+      ...(passed
+        ? {}
+        : {
+            failure: hasOutput
+              ? providerErrorReason(
+                  result.errorMessage,
+                  `${route.label} via ${providerDisplayName(route.provider)}`,
+                )
+              : `The ${route.label} route returned no assistant text within one output token.`,
+          }),
+    };
+  } catch {
+    return {
+      model: modelId,
+      provider: route.provider,
+      upstreamModel: route.upstreamId,
+      maxTokens: 1,
+      status: 'failed',
+      latencyMs: Date.now() - startedAt,
+      costMicroUsd: 0,
+      inputTokens: 0,
+      outputTokens: 0,
+      response: { present: false, bytes: 0 },
+      failure: controller.signal.aborted
+        ? `The ${route.label} route timed out.`
+        : `The ${route.label} route was unavailable.`,
+    };
+  } finally {
+    if (timeout !== undefined) clearTimeout(timeout);
+  }
 }
 
 export async function callNodeSlideFreeJson(
@@ -203,6 +312,7 @@ export async function callNodeSlideFreeJson(
     model?: NodeSlideAgentModelId;
     reasoningEffort?: NodeSlideReasoningEffort;
     jsonSchema?: NodeSlideJsonSchema;
+    onTextDelta?: (event: NodeSlideProviderTextDelta) => void | Promise<void>;
   },
   dependencies: NodeSlideProviderDependencies = {},
 ): Promise<NodeSlideProviderResult> {
@@ -232,6 +342,7 @@ export async function callNodeSlideFreeJson(
   let hasTelemetry = false;
   let invalidResponse = '';
   let nativeSchemaEnabled = Boolean(args.jsonSchema);
+  const onTextDelta = dependencies.onTextDelta ?? args.onTextDelta;
 
   try {
     // Exactly two model calls are possible: the initial completion and one JSON-repair completion.
@@ -249,6 +360,17 @@ export async function callNodeSlideFreeJson(
           ...(args.jsonSchema && nativeSchemaEnabled ? { jsonSchema: args.jsonSchema } : {}),
           repairAttempt,
           signal: controller.signal,
+          ...(onTextDelta
+            ? {
+                onTextDelta: (delta: string, accumulatedText: string) =>
+                  onTextDelta({
+                    delta,
+                    accumulatedText,
+                    attempt: attempt + 1,
+                    repairAttempt,
+                  }),
+              }
+            : {}),
         }),
         deadline,
       ]);
@@ -323,15 +445,39 @@ async function completeNodeSlideWithPiAi(
       },
     ],
   };
-  const result = await nodeSlideModels.complete(model, context, {
+  const options = {
     signal: request.signal,
     maxTokens: request.maxTokens,
     maxRetries: 0,
     reasoning: request.reasoningEffort,
     ...(request.supportsTemperature ? { temperature: 0 } : {}),
     ...(request.provider === 'openrouter' ? { headers: OPENROUTER_ATTRIBUTION_HEADERS } : {}),
-    onPayload: (payload) => nodeSlideStructuredOutputPayload(payload, request.jsonSchema),
-  });
+    onPayload: (payload: unknown) => nodeSlideStructuredOutputPayload(payload, request.jsonSchema),
+  };
+  let result: AssistantMessage;
+  if (request.onTextDelta) {
+    const stream = nodeSlideModels.stream(model, context, options);
+    let accumulatedText = '';
+    for await (const event of stream) {
+      if (request.signal.aborted) break;
+      if (event.type !== 'text_delta') continue;
+      accumulatedText += event.delta;
+      // Streaming is an observability/projection path. A transient persistence
+      // failure must not turn a valid provider completion into an invalid edit.
+      try {
+        await request.onTextDelta(event.delta, accumulatedText);
+      } catch {
+        // The action finalizes or interrupts any started row after planning.
+      }
+    }
+    result = await stream.result();
+  } else {
+    result = await nodeSlideModels.complete(model, context, options);
+  }
+  return completionResult(result);
+}
+
+function completionResult(result: AssistantMessage): NodeSlideCompletionResult {
   const text = result.content
     .filter((block): block is TextContent => block.type === 'text')
     .map((block) => block.text)

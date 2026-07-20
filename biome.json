@@ -11,6 +11,7 @@
       "docs/dogfood",
       "docs/plans/assets",
       "convex/_generated",
+      "packages/convex/component/_generated",
       "mcp/dist",
       "node_modules",
       "runs",

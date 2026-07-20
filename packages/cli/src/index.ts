@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { access, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import {
   NODESLIDE_REGISTRY_VERSION,
@@ -13,7 +13,41 @@ import {
 } from '@nodeslide/registry';
 
 export const NODESLIDE_INSTALLATION_RECEIPT_VERSION = 'nodeslide.installation/v1' as const;
-export const NODESLIDE_PACKAGE_VERSION = '0.1.0' as const;
+export const NODESLIDE_PACKAGE_VERSION = '0.2.0' as const;
+export const NODESLIDE_ARTIFACT_MANIFEST_VERSION = 'nodeslide.artifacts/v1' as const;
+export const NODESLIDE_ARTIFACT_MANIFEST_FILE = 'nodeslide-artifacts.json' as const;
+
+export interface NodeSlideArtifactManifestPackage {
+  name: string;
+  version: string;
+  file: string;
+  sha256: string;
+  integrity: string;
+}
+
+export interface NodeSlideArtifactManifest {
+  schemaVersion: typeof NODESLIDE_ARTIFACT_MANIFEST_VERSION;
+  releaseVersion: string;
+  releaseId: string;
+  registryVersion: string;
+  packages: readonly NodeSlideArtifactManifestPackage[];
+}
+
+export interface VerifiedNodeSlideArtifactSet {
+  directory: string;
+  manifestPath: string;
+  manifestSha256: string;
+  manifest: NodeSlideArtifactManifest;
+  packages: ReadonlyMap<string, NodeSlideArtifactManifestPackage & { absolutePath: string }>;
+}
+
+export interface NodeSlideArtifactReceipt {
+  manifestSha256: string;
+  releaseVersion: string;
+  releaseId: string;
+  registryVersion: string;
+  packages: readonly NodeSlideArtifactManifestPackage[];
+}
 
 export interface NodeSlideInitOptions {
   cwd: string;
@@ -55,6 +89,7 @@ export interface NodeSlideInstallationReceipt {
   checks: readonly { script: string; status: 'passed' | 'skipped' | 'failed' }[];
   pendingMigrations: readonly string[];
   manualSteps: readonly string[];
+  artifactSet?: NodeSlideArtifactReceipt;
   upgrades: readonly {
     upgradedAt: string;
     fromRegistryVersion: string;
@@ -71,6 +106,7 @@ export interface NodeSlideInstallPlan {
   packageSource: NodeSlideInstallationReceipt['packageSource'];
   entries: readonly NodeSlideRegistryEntry[];
   detection: NodeSlideFrameworkDetection;
+  artifactSet: VerifiedNodeSlideArtifactSet | null;
 }
 
 export async function planNodeSlideInstallation(
@@ -80,7 +116,10 @@ export async function planNodeSlideInstallation(
   const manifest = await readJsonObject(path.join(root, 'package.json'));
   const detection = await detectFramework(root, manifest);
   const packages = packagesFor(options);
-  const installSpecs = await installSpecsFor(packages, root, options.artifactsDirectory);
+  const artifactSet = options.artifactsDirectory
+    ? await verifyNodeSlideArtifactSet(path.resolve(root, options.artifactsDirectory), packages)
+    : null;
+  const installSpecs = installSpecsFor(packages, artifactSet);
   return {
     root,
     receiptPath: path.join(root, '.nodeslide', 'installation.json'),
@@ -93,6 +132,7 @@ export async function planNodeSlideInstallation(
         : 'registry',
     entries: selectNodeSlideRegistryEntries(options),
     detection,
+    artifactSet,
   };
 }
 
@@ -152,6 +192,9 @@ export async function runNodeSlideUpgrade(options: {
     ...(options.skipChecks === undefined ? {} : { skipChecks: options.skipChecks }),
   };
   const plan = await planNodeSlideInstallation(initOptions);
+  if (previous.artifactSet && plan.artifactSet) {
+    assertArtifactUpgrade(previous.artifactSet, plan.artifactSet);
+  }
   if (!options.skipInstall && !options.dryRun) {
     await runCommand('npm', ['install', '--save-exact', ...plan.installSpecs], root);
   }
@@ -207,6 +250,11 @@ export async function runNodeSlideUpgrade(options: {
     packageSource: options.skipInstall ? 'skipped' : plan.packageSource,
     files: nextFiles,
     checks,
+    ...(plan.artifactSet
+      ? { artifactSet: artifactReceipt(plan.artifactSet) }
+      : previous.artifactSet
+        ? { artifactSet: previous.artifactSet }
+        : {}),
     upgrades: [
       ...previous.upgrades,
       {
@@ -292,21 +340,16 @@ function packagesFor(
   return [...new Set(values)].sort();
 }
 
-async function installSpecsFor(
+function installSpecsFor(
   packages: readonly string[],
-  root: string,
-  artifactsDirectory?: string,
-): Promise<string[]> {
-  if (!artifactsDirectory) return packages.map((name) => `${name}@${NODESLIDE_PACKAGE_VERSION}`);
-  const artifacts = path.resolve(root, artifactsDirectory);
-  const specs: string[] = [];
-  for (const packageName of packages) {
-    const base = packageName.replace(/^@/, '').replace('/', '-');
-    const tarball = path.join(artifacts, `${base}-${NODESLIDE_PACKAGE_VERSION}.tgz`);
-    await access(tarball);
-    specs.push(tarball);
-  }
-  return specs;
+  artifactSet: VerifiedNodeSlideArtifactSet | null,
+): string[] {
+  if (!artifactSet) return packages.map((name) => `${name}@${NODESLIDE_PACKAGE_VERSION}`);
+  return artifactSet.manifest.packages.map((artifact) => {
+    const verified = artifactSet.packages.get(artifact.name);
+    if (!verified) throw new Error(`Artifact set is missing verified package ${artifact.name}.`);
+    return verified.absolutePath;
+  });
 }
 
 async function prepareRegistryWrites(plan: NodeSlideInstallPlan) {
@@ -344,7 +387,10 @@ function receiptFor(
     checks,
     pendingMigrations:
       options.backend === 'convex'
-        ? ['initialize_isolated_tables_v1 (run in host Convex deployment)']
+        ? [
+            'initialize_isolated_tables_v1 (run in mounted component)',
+            'add_authorization_grant_ledger_v2 (run in mounted component)',
+          ]
         : [],
     manualSteps: [
       'Wire the generated example into host-owned routing only after review.',
@@ -354,8 +400,190 @@ function receiptFor(
         ? []
         : ['Import @nodeslide/react/styles.css from a host-owned style entry if desired.']),
     ],
+    ...(plan.artifactSet ? { artifactSet: artifactReceipt(plan.artifactSet) } : {}),
     upgrades: [],
   };
+}
+
+export async function verifyNodeSlideArtifactSet(
+  directory: string,
+  expectedPackages?: readonly string[],
+): Promise<VerifiedNodeSlideArtifactSet> {
+  const root = path.resolve(directory);
+  const manifestPath = path.join(root, NODESLIDE_ARTIFACT_MANIFEST_FILE);
+  const manifestBytes = await readFile(manifestPath);
+  const manifestValue: unknown = JSON.parse(manifestBytes.toString('utf8'));
+  const manifest = parseArtifactManifest(manifestValue);
+  const packages = new Map<string, NodeSlideArtifactManifestPackage & { absolutePath: string }>();
+  for (const artifact of manifest.packages) {
+    if (packages.has(artifact.name)) {
+      throw new Error(`Artifact manifest contains duplicate package ${artifact.name}.`);
+    }
+    if (artifact.version !== manifest.releaseVersion) {
+      throw new Error(
+        `Artifact ${artifact.name}@${artifact.version} is mixed into release ${manifest.releaseVersion}.`,
+      );
+    }
+    const absolutePath = safeArtifactPath(root, artifact.file);
+    const bytes = await readFile(absolutePath);
+    const sha256 = `sha256:${createHash('sha256').update(bytes).digest('hex')}`;
+    const integrity = `sha512-${createHash('sha512').update(bytes).digest('base64')}`;
+    if (sha256 !== artifact.sha256 || integrity !== artifact.integrity) {
+      throw new Error(`Artifact integrity mismatch for ${artifact.name}.`);
+    }
+    packages.set(artifact.name, { ...artifact, absolutePath });
+  }
+  const listedTarballs = new Set(manifest.packages.map((artifact) => artifact.file));
+  const strayTarballs = (await readdir(root)).filter(
+    (entry) => entry.endsWith('.tgz') && !listedTarballs.has(entry),
+  );
+  if (strayTarballs.length > 0) {
+    throw new Error(`Artifact directory contains unlisted tarballs: ${strayTarballs.join(', ')}.`);
+  }
+  for (const packageName of expectedPackages ?? []) {
+    if (!packages.has(packageName)) throw new Error(`Artifact set is missing ${packageName}.`);
+  }
+  return {
+    directory: root,
+    manifestPath,
+    manifestSha256: `sha256:${createHash('sha256').update(manifestBytes).digest('hex')}`,
+    manifest,
+    packages,
+  };
+}
+
+function parseArtifactManifest(value: unknown): NodeSlideArtifactManifest {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    throw new Error('NodeSlide artifact manifest must be an object.');
+  }
+  const record = value as Record<string, unknown>;
+  if (record['schemaVersion'] !== NODESLIDE_ARTIFACT_MANIFEST_VERSION) {
+    throw new Error(`Unsupported artifact manifest ${String(record['schemaVersion'])}.`);
+  }
+  const releaseVersion = canonicalSemver(record['releaseVersion'], 'releaseVersion');
+  const releaseId = canonicalIdentifier(record['releaseId'], 'releaseId');
+  const registryVersion = canonicalSemver(record['registryVersion'], 'registryVersion');
+  if (!Array.isArray(record['packages']) || record['packages'].length === 0) {
+    throw new Error('Artifact manifest must contain packages.');
+  }
+  const packages = record['packages'].map((value, index) => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) {
+      throw new Error(`Artifact manifest package ${index} must be an object.`);
+    }
+    const artifact = value as Record<string, unknown>;
+    const name = canonicalPackageName(artifact['name']);
+    const version = canonicalSemver(artifact['version'], `${name}.version`);
+    const file = canonicalArtifactFile(artifact['file'], name);
+    const sha256 = artifact['sha256'];
+    const integrity = artifact['integrity'];
+    if (typeof sha256 !== 'string' || !/^sha256:[0-9a-f]{64}$/u.test(sha256)) {
+      throw new Error(`${name}.sha256 is not canonical.`);
+    }
+    if (typeof integrity !== 'string' || !/^sha512-[A-Za-z0-9+/]+={0,2}$/u.test(integrity)) {
+      throw new Error(`${name}.integrity is not canonical.`);
+    }
+    return { name, version, file, sha256, integrity };
+  });
+  return {
+    schemaVersion: NODESLIDE_ARTIFACT_MANIFEST_VERSION,
+    releaseVersion,
+    releaseId,
+    registryVersion,
+    packages,
+  };
+}
+
+function artifactReceipt(artifactSet: VerifiedNodeSlideArtifactSet): NodeSlideArtifactReceipt {
+  return {
+    manifestSha256: artifactSet.manifestSha256,
+    releaseVersion: artifactSet.manifest.releaseVersion,
+    releaseId: artifactSet.manifest.releaseId,
+    registryVersion: artifactSet.manifest.registryVersion,
+    packages: artifactSet.manifest.packages.map(({ name }) => {
+      const artifact = artifactSet.packages.get(name);
+      if (!artifact) throw new Error(`Artifact receipt is missing ${name}.`);
+      const { absolutePath: _absolutePath, ...portable } = artifact;
+      return portable;
+    }),
+  };
+}
+
+function assertArtifactUpgrade(
+  previous: NodeSlideArtifactReceipt,
+  next: VerifiedNodeSlideArtifactSet,
+): void {
+  if (previous.manifestSha256 === next.manifestSha256) return;
+  if (compareSemver(next.manifest.releaseVersion, previous.releaseVersion) <= 0) {
+    throw new Error(
+      `Artifact upgrade must advance ${previous.releaseVersion}; received ${next.manifest.releaseVersion}.`,
+    );
+  }
+  if (compareSemver(next.manifest.registryVersion, previous.registryVersion) < 0) {
+    throw new Error(
+      `Artifact upgrade cannot downgrade registry ${previous.registryVersion} to ${next.manifest.registryVersion}.`,
+    );
+  }
+}
+
+function safeArtifactPath(root: string, file: string): string {
+  const resolved = path.resolve(root, file);
+  if (path.dirname(resolved) !== root) throw new Error(`Artifact path escaped its root: ${file}.`);
+  return resolved;
+}
+
+function canonicalPackageName(value: unknown): string {
+  if (typeof value !== 'string' || !/^@nodeslide\/[a-z0-9-]+$/u.test(value)) {
+    throw new Error(`Artifact package name ${String(value)} is invalid.`);
+  }
+  return value;
+}
+
+function canonicalArtifactFile(value: unknown, packageName: string): string {
+  if (
+    typeof value !== 'string' ||
+    value !== path.basename(value) ||
+    !/^[a-z0-9._-]+\.tgz$/u.test(value)
+  ) {
+    throw new Error(`${packageName}.file is not a safe tarball name.`);
+  }
+  return value;
+}
+
+function canonicalIdentifier(value: unknown, label: string): string {
+  if (
+    typeof value !== 'string' ||
+    value.length < 1 ||
+    value.length > 200 ||
+    value !== value.trim() ||
+    containsControlCharacter(value)
+  ) {
+    throw new Error(`${label} is not canonical.`);
+  }
+  return value;
+}
+
+function containsControlCharacter(value: string): boolean {
+  return [...value].some((character) => {
+    const codePoint = character.codePointAt(0) ?? 0;
+    return codePoint <= 31 || codePoint === 127;
+  });
+}
+
+function canonicalSemver(value: unknown, label: string): string {
+  if (typeof value !== 'string' || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/u.test(value)) {
+    throw new Error(`${label} must be an exact semantic version.`);
+  }
+  return value;
+}
+
+function compareSemver(left: string, right: string): number {
+  const leftParts = left.split('-', 1)[0]?.split('.').map(Number) ?? [];
+  const rightParts = right.split('-', 1)[0]?.split('.').map(Number) ?? [];
+  for (let index = 0; index < 3; index += 1) {
+    const difference = (leftParts[index] ?? 0) - (rightParts[index] ?? 0);
+    if (difference !== 0) return difference;
+  }
+  return left.localeCompare(right);
 }
 
 async function runProjectChecks(root: string): Promise<NodeSlideInstallationReceipt['checks']> {
@@ -386,9 +614,22 @@ function skippedChecks(): NodeSlideInstallationReceipt['checks'] {
 }
 
 async function runCommand(command: string, args: readonly string[], cwd: string): Promise<void> {
+  let executable = command;
+  let executableArgs = [...args];
+  if (process.platform === 'win32' && command === 'npm') {
+    const npmCli =
+      process.env['npm_execpath'] ??
+      path.join(path.dirname(process.execPath), 'node_modules', 'npm', 'bin', 'npm-cli.js');
+    try {
+      await access(npmCli);
+    } catch {
+      throw new Error(`Unable to locate npm CLI at ${npmCli}. Run NodeSlide through npm or npx.`);
+    }
+    executable = process.execPath;
+    executableArgs = [npmCli, ...args];
+  }
   await new Promise<void>((resolve, reject) => {
-    const executable = process.platform === 'win32' && command === 'npm' ? 'npm.cmd' : command;
-    const child = spawn(executable, [...args], {
+    const child = spawn(executable, executableArgs, {
       cwd,
       shell: false,
       stdio: 'inherit',

@@ -1,12 +1,10 @@
 /**
  * Evidence-lineage helpers (pure; no React/Convex/DOM types).
  *
- * Web research stores TEXT excerpts on source records — snippet into
- * `citation`, plus `retrievedAt`/`contentDigest`. There is no screenshot
- * pipeline, so the UI must say "text excerpt · no visual snapshot" instead of
- * faking a screenshot badge. These helpers make that storage path testable and
- * give the Evidence tab an honest, deterministic highlight of the claim terms
- * inside the stored excerpt.
+ * Web research stores the provider's text excerpt on the source record and as
+ * an immutable retrieved-excerpt snapshot. It never claims to photograph the
+ * third-party page. These helpers keep capture validation and claim-region
+ * highlighting deterministic and testable.
  */
 
 export interface WebSourceExcerptInput {

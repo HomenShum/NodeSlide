@@ -255,8 +255,8 @@ describe('@nodeslide/convex', () => {
   });
 
   it('plans and receipts a contiguous, non-destructive component migration', async () => {
-    expect(NODESLIDE_CONVEX_COMPONENT_SCHEMA_VERSION).toBe(1);
-    expect(planNodeSlideConvexMigrations(1)).toEqual([]);
+    expect(NODESLIDE_CONVEX_COMPONENT_SCHEMA_VERSION).toBe(2);
+    expect(planNodeSlideConvexMigrations(2)).toEqual([]);
     const receipts = await runNodeSlideConvexMigrations({
       installedVersion: 0,
       apply: async (step) => ({
@@ -267,7 +267,10 @@ describe('@nodeslide/convex', () => {
         appliedAt: 1,
       }),
     });
-    expect(receipts.map((receipt) => receipt.stepId)).toEqual(['initialize_isolated_tables_v1']);
-    expect(() => planNodeSlideConvexMigrations(2)).toThrow(/newer than supported/);
+    expect(receipts.map((receipt) => receipt.stepId)).toEqual([
+      'initialize_isolated_tables_v1',
+      'add_authorization_grant_ledger_v2',
+    ]);
+    expect(() => planNodeSlideConvexMigrations(3)).toThrow(/newer than supported/);
   });
 });

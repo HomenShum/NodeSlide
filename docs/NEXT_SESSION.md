@@ -77,6 +77,19 @@ Code checkpoints before this docs-only deployment-proof update:
   checks do not satisfy I7's future mounted reload and durable-persistence goals.
 - Portable PPTX font fallback behavior was mirrored into parity-studio and its
   full suite passed: **1,494 tests across 198 files**.
+- I2 and I5 are closed in the package boundary: `@nodeslide/convex` now ships a
+  mountable component with isolated tables/functions, a generated
+  `ComponentApi`, one-time host mutation grants, two contiguous migrations,
+  and no application Convex imports. Its tests exercise a real component
+  schema through `convex-test`. The six server invariants are exported
+  literally and cannot be weakened by host UX configuration.
+- I6's local immutable-artifact slice is complete. Eleven v0.1.0 tarballs were
+  generated from exact baseline `df5567917425901252252e3adb2efb788ec345e4`;
+  a clean consumer then installed that release and upgraded to the v0.2.0
+  candidate with exact receipt and `package-lock.json` integrity pins. Tampered
+  bytes and a mixed manifest failed closed. I6 remains unchecked only because
+  publishing and verifying two public immutable GitHub releases is external
+  release work.
 
 ## Remaining work — literal acceptance only
 
@@ -98,17 +111,18 @@ Code checkpoints before this docs-only deployment-proof update:
    `VERCEL_AUTOMATION_BYPASS_SECRET`; optional diagnostics secret:
    `CONVEX_DIAGNOSTICS_KEY`; required variable:
    `NODESLIDE_PRODUCTION_DEPLOY_ENABLED=true`.
-7. **I2:** extract a truly isolated, mountable Convex mutation component. The
-   current package binding intentionally reuses the app mutation core.
-8. **I4:** mount NodeRoom ActorProof/membership policy as the production host
+7. **I4:** mount NodeRoom ActorProof/membership policy as the production host
    authorizer. Package-level authorization/evidence is real; the product host
    adapter is not mounted.
-9. **I5/I6:** meet the literal invariant/configuration acceptance and prove a
-   clean consumer install + upgrade from immutable/public artifacts.
-10. **I7/I8:** mount the full NodeRoom room-artifact journey, including its own
-    principal, canvas, presenter/PPTX/reopen, browser/a11y, and Memory/Convex
-    parity; then make that smallest full journey bilateral CI.
-11. **H5:** the human still sends Mike's draft.
+8. **I6:** enable GitHub release immutability, publish two complete artifact
+   sets, and run `.github/workflows/immutable-package-proof.yml`. Preserve its
+   successful report only after `gh release verify` and every
+   `gh release verify-asset` check pass; the local proof is not public-release
+   evidence.
+9. **I7/I8:** mount the full NodeRoom room-artifact journey, including its own
+   principal, canvas, presenter/PPTX/reopen, browser/a11y, and Memory/Convex
+   parity; then make that smallest full journey bilateral CI.
+10. **H5:** the human still sends Mike's draft.
 
 ## Mirror rule
 

@@ -46,6 +46,10 @@ export function DataInspector({
 }: DataInspectorProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [openSnapshot, setOpenSnapshot] = useState<{
+    sourceId: string;
+    elementId?: string;
+  } | null>(null);
   const dependencyIds = new Set(
     selectedElements.flatMap((element) => [
       ...element.sourceIds,
@@ -138,10 +142,23 @@ export function DataInspector({
               source.citation.length > 420 ? `${source.citation.slice(0, 420)}…` : source.citation;
             const isWebExcerpt = source.format === 'web';
             const captureFailed = source.status === 'failed';
+            const snapshot = source.snapshot?.kind === 'search_excerpt' ? source.snapshot : null;
             const claimTerms = isWebExcerpt
               ? evidenceClaimTerms(
                   [...citingElements, ...selectedElements].map((element) => element.content ?? ''),
                   excerpt,
+                )
+              : [];
+            const snapshotIsOpen = snapshot !== null && openSnapshot?.sourceId === source.id;
+            const snapshotElement = snapshotIsOpen
+              ? citingElements.find((element) => element.id === openSnapshot.elementId)
+              : undefined;
+            const snapshotTerms = snapshot
+              ? evidenceClaimTerms(
+                  snapshotElement
+                    ? [snapshotElement.content ?? '']
+                    : citingElements.map((element) => element.content ?? ''),
+                  snapshot.text,
                 )
               : [];
             return (
@@ -182,6 +199,18 @@ export function DataInspector({
                       >
                         Capture failed — the stored excerpt may be stale. Open the source to verify.
                       </small>
+                    ) : snapshot ? (
+                      <button
+                        type="button"
+                        className="ns-evidence-snapshot-toggle"
+                        data-testid="evidence-snapshot-toggle"
+                        aria-expanded={snapshotIsOpen}
+                        onClick={() =>
+                          setOpenSnapshot(snapshotIsOpen ? null : { sourceId: source.id })
+                        }
+                      >
+                        {snapshotIsOpen ? 'Close' : 'Open'} retrieved excerpt snapshot
+                      </button>
                     ) : (
                       <small
                         className="ns-evidence-capture-note"
@@ -190,6 +219,53 @@ export function DataInspector({
                         Text excerpt · no visual snapshot
                       </small>
                     )
+                  ) : null}
+                  {snapshotIsOpen && snapshot ? (
+                    <section
+                      className="ns-evidence-snapshot"
+                      data-testid="evidence-snapshot-region"
+                      aria-label={`Retrieved excerpt snapshot for ${source.title}`}
+                    >
+                      <header>
+                        <strong>Retrieved excerpt snapshot</strong>
+                        <small>
+                          Captured {formatDate(snapshot.capturedAt)} ·{' '}
+                          {snapshot.contentDigest.slice(0, 18)}…
+                        </small>
+                      </header>
+                      <blockquote>
+                        {snapshotTerms.length > 0
+                          ? highlightExcerpt(snapshot.text, snapshotTerms).map((segment, index) =>
+                              segment.highlighted ? (
+                                <mark
+                                  className="ns-evidence-highlight"
+                                  data-testid="evidence-snapshot-highlight"
+                                  data-element-id={snapshotElement?.id}
+                                  // biome-ignore lint/suspicious/noArrayIndexKey: immutable snapshot segments
+                                  key={index}
+                                >
+                                  {segment.text}
+                                </mark>
+                              ) : (
+                                // biome-ignore lint/suspicious/noArrayIndexKey: immutable snapshot segments
+                                <span key={index}>{segment.text}</span>
+                              ),
+                            )
+                          : snapshot.text}
+                      </blockquote>
+                      <small data-testid="evidence-snapshot-binding">
+                        {snapshotElement
+                          ? `Claim region bound to ${snapshotElement.name}.`
+                          : snapshotTerms.length > 0
+                            ? `Claim regions from ${citingElements.length} citing element${citingElements.length === 1 ? '' : 's'}.`
+                            : 'No citing claim terms overlap this captured excerpt.'}
+                      </small>
+                      <small>
+                        This is the immutable excerpt returned by{' '}
+                        {source.provider ?? 'the search provider'}, not a photograph of the
+                        third-party page.
+                      </small>
+                    </section>
                   ) : null}
                   {source.format || source.rowCount !== undefined || source.columns?.length ? (
                     <div className="ns-source-metadata" aria-label={`${source.title} data shape`}>
@@ -227,9 +303,14 @@ export function DataInspector({
                                 key={element.id}
                                 className="ns-evidence-citing-element"
                                 data-testid="evidence-citing-element"
-                                disabled={!onSelectElement}
-                                onClick={() => onSelectElement?.(element.slideId, element.id)}
-                                aria-label={`Select ${element.name}${slideTitle ? ` on ${slideTitle}` : ''}`}
+                                disabled={!onSelectElement && !snapshot}
+                                onClick={() => {
+                                  if (snapshot) {
+                                    setOpenSnapshot({ sourceId: source.id, elementId: element.id });
+                                  }
+                                  onSelectElement?.(element.slideId, element.id);
+                                }}
+                                aria-label={`${snapshot ? 'Open source snapshot region and ' : ''}select ${element.name}${slideTitle ? ` on ${slideTitle}` : ''}`}
                               >
                                 <Link2 size={11} /> {element.name}
                                 {slideTitle ? <em> · {slideTitle}</em> : null}

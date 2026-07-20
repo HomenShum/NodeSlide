@@ -1,6 +1,6 @@
 {
   "name": "@nodeslide/agent",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
@@ -16,7 +16,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@nodeslide/backend": "0.1.0",
-    "@nodeslide/contracts": "0.1.0"
+    "@nodeslide/backend": "0.2.0",
+    "@nodeslide/contracts": "0.2.0"
   }
 }

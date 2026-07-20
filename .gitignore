@@ -9,3 +9,7 @@ dist/
 # TypeScript incremental build cache
 *.tsbuildinfo
 .vercel
+
+# Local proof runner streams; sanitized JSON receipts may be committed.
+artifacts/**/*.stdout.log
+artifacts/**/*.stderr.log

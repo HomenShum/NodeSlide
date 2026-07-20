@@ -383,11 +383,16 @@ registry/                  shadcn-style source-owned compositions (studio route,
       no duplicate auth, no second Convex client, no global CSS
       contamination, no table collisions, clean uninstall, same snapshot runs
       against Memory and Convex adapters.
-      — PARTIAL: the NodeRoom proof consumes packed artifacts, compiles the
-      real NodeAgent adapter, exercises proposal/CAS/reload/receipt behavior,
-      and emits explicit false flags for every unproved surface. The real room
-      artifact adapter, ActorProof/membership policy, mounted canvas,
-      presenter/PPTX/reopen, browser/a11y, and Memory/Convex parity remain.
+      — PARTIAL: NodeRoom main `332149ef` (PR #231) consumes packed artifacts,
+      compiles the real NodeAgent adapter, and exercises proposal/CAS behavior.
+      Receipt schema v3 names the bounded evidence precisely: an in-memory
+      receipt ledger, a same-instance in-memory repository reread, and a
+      portable JSON snapshot roundtrip. It explicitly sets
+      `durableReceiptPersistence` and `packageReload` to false and retains false
+      flags for every other unproved surface. The real room artifact adapter,
+      ActorProof/membership policy, mounted canvas and reload backed by durable
+      persistence, presenter/PPTX/reopen, browser/a11y, and Memory/Convex parity
+      remain.
 - [ ] I8. **Cross-repo CI**: a NodeSlide package regression must fail
       NodeRoom's consumer suite; both CIs run the same smallest journey
       (load → create → render → edit → version++ → export).

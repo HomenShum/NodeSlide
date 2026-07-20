@@ -9,7 +9,9 @@ Code checkpoints before this docs-only deployment-proof update:
 
 - NodeSlide: `12a8527cb99adf5e80af2302a53332509ce7c283`
 - parity-studio: `de4a67585f9040db95b2af7caeae69c92894e4e5`
-- NodeRoom: `4a4a3c259ddfa96e51b8194685a7c3b9ff56c384`
+- NodeRoom product integration: `4a4a3c259ddfa96e51b8194685a7c3b9ff56c384`;
+  current main: `332149ef4ac945546479d08d328d3f43378b3831` (PR #231,
+  consumer-proof receipt schema v3)
 
 ## Verified production state
 
@@ -68,6 +70,11 @@ Code checkpoints before this docs-only deployment-proof update:
   The jobs currently pair moving `main` branches rather than an atomic
   immutable-SHA pair. This is not yet a mounted second product consumer; I7
   remains open.
+- NodeRoom PR #231 makes the executable consumer-proof vocabulary explicit. Its
+  v3 receipt proves an in-memory receipt ledger, a same-instance in-memory
+  repository reread, and a portable JSON snapshot roundtrip; it requires
+  `durableReceiptPersistence: false` and `packageReload: false`. Those bounded
+  checks do not satisfy I7's future mounted reload and durable-persistence goals.
 - Portable PPTX font fallback behavior was mirrored into parity-studio and its
   full suite passed: **1,494 tests across 198 files**.
 

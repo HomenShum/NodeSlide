@@ -203,4 +203,84 @@ describe('AgentThread', () => {
       'title="Verify: applied candidate to a shadow snapshot — 1 issue, repairing."',
     );
   });
+
+  it('renders provider-backed streaming state and a nested planner-to-executor handoff', () => {
+    const html = renderToStaticMarkup(
+      <AgentThread
+        runs={[run({ id: 'run-1', status: 'planning' })]}
+        messages={[
+          message({
+            id: 'stream-1',
+            runId: 'run-1',
+            content: 'Sharper board narrative',
+            streamState: 'streaming',
+            sourceIds: ['source-board'],
+          }),
+          message({
+            id: 'planner-handoff',
+            runId: 'run-1',
+            role: 'tool',
+            toolName: 'planner',
+            content: 'Delegated two bounded copy targets.',
+            handoff: {
+              id: 'handoff-root',
+              from: 'Kimi K3',
+              to: 'Gemini 3.5 Flash',
+              status: 'delegated',
+            },
+          }),
+          message({
+            id: 'executor-handoff',
+            runId: 'run-1',
+            role: 'tool',
+            toolName: 'executor',
+            content: 'Returned two validated copy operations.',
+            handoff: {
+              id: 'handoff-child',
+              parentId: 'handoff-root',
+              from: 'Kimi K3',
+              to: 'Gemini 3.5 Flash',
+              status: 'completed',
+            },
+          }),
+        ]}
+        patches={[]}
+        onAcceptPatch={() => {}}
+        onRejectPatch={() => {}}
+      />,
+    );
+
+    expect(html).toContain('data-stream-state="streaming"');
+    expect(html).toContain('Drafting');
+    expect(html).toContain('1 source');
+    expect(html).toContain('agent-thread-stream-cursor');
+    expect(html).toContain('data-handoff-id="handoff-root"');
+    expect(html).toContain('data-handoff-parent-id="handoff-root"');
+    expect(html).toContain('agent-thread-handoff-children');
+    expect(html.indexOf('Delegated two bounded copy targets.')).toBeLessThan(
+      html.indexOf('Returned two validated copy operations.'),
+    );
+  });
+
+  it('labels interrupted text as a discarded draft instead of completed assistant prose', () => {
+    const html = renderToStaticMarkup(
+      <AgentThread
+        runs={[run({ id: 'run-1', status: 'awaiting_review' })]}
+        messages={[
+          message({
+            id: 'stream-1',
+            runId: 'run-1',
+            content: 'The initial response did not validate.',
+            streamState: 'interrupted',
+          }),
+        ]}
+        patches={[]}
+        onAcceptPatch={() => {}}
+        onRejectPatch={() => {}}
+      />,
+    );
+    expect(html).toContain('Draft discarded');
+    expect(html).toContain('data-stream-state="interrupted"');
+    expect(html).not.toContain('agent-thread-stream-cursor');
+  });
 });

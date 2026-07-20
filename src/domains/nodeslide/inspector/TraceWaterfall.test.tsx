@@ -115,6 +115,30 @@ describe('TraceWaterfall', () => {
     expect(errors[1]?.depth).toBe(1);
   });
 
+  it('projects a delegated executor span as a real child of its planner span', () => {
+    const root = span(0);
+    const planner = {
+      ...span(1),
+      spanId: 'planner000000000',
+      parentSpanId: root.spanId,
+      name: 'Planner · Kimi K3',
+      toolName: 'planner',
+    };
+    const executor = {
+      ...span(2),
+      spanId: 'executor00000000',
+      parentSpanId: planner.spanId,
+      name: 'Executor · Gemini 3.5 Flash',
+      toolName: 'executor',
+    };
+    const rows = buildWaterfallRows([root, planner, executor]);
+    expect(rows.map(({ span: current, depth }) => [current.name, depth])).toEqual([
+      ['World Cup research run', 0],
+      ['Planner · Kimi K3', 1],
+      ['Executor · Gemini 3.5 Flash', 2],
+    ]);
+  });
+
   it('virtualizes hundreds of rows and renders span-bound source evidence honestly', () => {
     const html = renderToStaticMarkup(
       <TraceWaterfall

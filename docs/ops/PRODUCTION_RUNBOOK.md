@@ -132,7 +132,7 @@ Repeat the safe capture locally with a least-privilege production deploy key:
 ```bash
 CONVEX_DEPLOY_KEY='<prod key with deployment:logs:view>' \
   CONVEX_LOG_HISTORY=50 \
-  node scripts/capture-convex-logs.mjs
+  npm run diagnostics:convex-logs:prod
 ```
 
 For a secured, local-only investigation, set
@@ -140,11 +140,28 @@ For a secured, local-only investigation, set
 but that output can still contain user-authored text and must not be uploaded.
 The script refuses message-inclusive mode when `CI` is set.
 
-An empty bounded capture means only that no events were present in the chosen
-history/window or that the capture could not authenticate; inspect the capture
-footer. It does not prove a Convex backend defect. For durable history and
-alerting beyond the CLI's recent window, configure a Convex log stream to an
-approved sink.
+An empty bounded capture is not treated as green evidence. The wrapper exits
+non-zero and records `failureCode: "no-production-events"` plus
+`stopReason: "empty-history"` in the sanitized footer. That can mean the
+chosen history/window was genuinely empty; it does not by itself prove a
+Convex backend defect. Authentication and CLI failures use the separate
+`convex-cli-error` code. For durable history and alerting beyond the CLI's
+recent window, configure a Convex log stream to an approved sink.
+
+## Model fleet one-token audit
+
+Run the operator-only model audit after deploying the candidate Convex code:
+
+```bash
+npm run probe:model-fleet:prod
+```
+
+The internal action invokes every `NODESLIDE_AGENT_MODELS` entry sequentially
+with `maxTokens: 1`. Its `nodeslide.model-fleet-probe/v1` JSON receipt records
+catalog/probed/failed counts, route identity, timing, token/cost telemetry, and
+only the presence and byte length of assistant output. It never returns model
+text or upstream error bodies. Treat the audit as passed only when the top-level
+`passed` field is `true` and `probedModelCount` equals `catalogModelCount`.
 
 ## Read-only repository hygiene (H4 support)
 

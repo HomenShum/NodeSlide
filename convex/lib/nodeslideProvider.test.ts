@@ -266,6 +266,30 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     expect(complete.mock.calls[0]?.[0].signal.aborted).toBe(true);
   });
 
+  it('forwards real provider text deltas with attempt identity while keeping raw JSON out of the result', async () => {
+    const onTextDelta = vi.fn(async () => undefined);
+    const complete = vi.fn<NodeSlideCompletion>(async (completionRequest) => {
+      await completionRequest.onTextDelta?.('{"summary":"Shar', '{"summary":"Shar');
+      await completionRequest.onTextDelta?.(
+        'per"}',
+        '{"summary":"Sharper","operations":[{"op":"replace_text"}]}',
+      );
+      return completion('{"summary":"Sharper","operations":[{"op":"replace_text"}]}');
+    });
+
+    const result = await callNodeSlideFreeJson(request, { complete, onTextDelta });
+
+    expect(result.ok).toBe(true);
+    expect(onTextDelta).toHaveBeenCalledTimes(2);
+    expect(onTextDelta.mock.calls[0]?.[0]).toMatchObject({
+      delta: '{"summary":"Shar',
+      accumulatedText: '{"summary":"Shar',
+      attempt: 1,
+      repairAttempt: false,
+    });
+    expect(result).not.toHaveProperty('accumulatedText');
+  });
+
   it('rejects reasoning efforts that the selected provider does not advertise', async () => {
     const complete = vi.fn<NodeSlideCompletion>();
 
@@ -322,5 +346,18 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       failure: 'The Kimi K3 route timed out.',
     });
     expect(complete.mock.calls[0]?.[0].signal.aborted).toBe(true);
+  });
+
+  it('fails a one-token probe honestly when the route returns no assistant text', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () =>
+      completion('', { outputTokens: 1, stopReason: 'length' }),
+    );
+    const result = await probeNodeSlideModelOnce(NODESLIDE_EDIT_MODEL, { complete });
+    expect(result).toMatchObject({
+      status: 'failed',
+      response: { present: false, bytes: 0 },
+      failure: 'The Kimi K3 route returned no assistant text within one output token.',
+    });
+    expect(JSON.stringify(result)).not.toContain('errorMessage');
   });
 });

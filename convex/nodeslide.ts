@@ -1863,6 +1863,18 @@ export const consumePreviewQuotaResult = internalMutation({
 
 const NODESLIDE_AGENT_TELEMETRY_VERSION = 'nodeslide-otel/v1';
 const NODESLIDE_AGENT_LEASE_MS = 5 * 60 * 1000;
+const nodeslideAgentHandoffValidator = v.object({
+  id: v.string(),
+  parentId: v.optional(v.string()),
+  from: v.string(),
+  to: v.string(),
+  status: v.union(
+    v.literal('delegated'),
+    v.literal('completed'),
+    v.literal('failed'),
+    v.literal('skipped'),
+  ),
+});
 
 function agentTraceId(deckId: string, runId: string): string {
   return nodeslideIdDigest(`nodeslide-agent-trace\u001f${deckId}\u001f${runId}`);
@@ -2148,6 +2160,97 @@ export const markAgentTelemetryExportInternal = internalMutation({
   },
 });
 
+/**
+ * Creates or advances one provider-backed assistant prose row. Every update is
+ * a full prefix, so Convex queries deliver actual server-observed text deltas
+ * rather than a client-side typewriter animation.
+ */
+export const writeAgentAssistantStreamInternal = internalMutation({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    runId: v.string(),
+    messageId: v.string(),
+    content: v.string(),
+    state: v.union(v.literal('streaming'), v.literal('complete'), v.literal('interrupted')),
+    sourceIds: v.optional(v.array(v.string())),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const run = await ctx.db
+      .query('nodeslide_agent_runs')
+      .withIndex('by_stable_id', (query) => query.eq('id', args.runId))
+      .unique();
+    if (!run || run.deckId !== args.deckId) throw new Error('Agent run not found.');
+    const messageId = requiredText(args.messageId, 'stream message id', 180);
+    const content = requiredAgentStreamText(args.content);
+    const existing = await ctx.db
+      .query('nodeslide_agent_messages')
+      .withIndex('by_stable_id', (query) => query.eq('id', messageId))
+      .unique();
+    const now = Date.now();
+    const terminalRun = ['completed', 'failed', 'cancelled'].includes(run.status);
+    if (!existing) {
+      if (args.state !== 'streaming') {
+        throw new Error('An assistant stream must begin with a streaming prefix.');
+      }
+      if (terminalRun) {
+        throw new Error('A terminal agent run cannot begin an assistant stream.');
+      }
+      await ctx.db.insert('nodeslide_agent_messages', {
+        id: messageId,
+        deckId: args.deckId,
+        runId: args.runId,
+        role: 'assistant',
+        content,
+        streamState: 'streaming',
+        createdAt: now,
+        updatedAt: now,
+      });
+    } else {
+      if (
+        existing.deckId !== args.deckId ||
+        existing.runId !== args.runId ||
+        existing.role !== 'assistant' ||
+        !existing.streamState
+      ) {
+        throw new Error('Assistant stream identity collision.');
+      }
+      if (existing.streamState !== 'streaming') {
+        if (existing.streamState === args.state && existing.content === content) return messageId;
+        if (existing.streamState === 'complete' && args.state === 'interrupted') {
+          await ctx.db.patch(existing._id, {
+            content,
+            streamState: 'interrupted',
+            updatedAt: now,
+          });
+          return messageId;
+        }
+        throw new Error('A settled assistant stream is immutable.');
+      }
+      if (terminalRun && args.state !== 'interrupted') {
+        throw new Error('A terminal agent run may only interrupt an open assistant stream.');
+      }
+      if (args.state === 'streaming' && !content.startsWith(existing.content)) {
+        throw new Error('Assistant stream updates must extend the persisted prefix.');
+      }
+      await ctx.db.patch(existing._id, {
+        content,
+        streamState: args.state,
+        ...(args.sourceIds ? { sourceIds: args.sourceIds.slice(0, 32) } : {}),
+        updatedAt: now,
+      });
+    }
+    if (!terminalRun) {
+      await ctx.db.patch(run._id, {
+        lastHeartbeatAt: now,
+        leaseExpiresAt: now + NODESLIDE_AGENT_LEASE_MS,
+      });
+    }
+    return messageId;
+  },
+});
+
 export const advanceAgentRunInternal = internalMutation({
   args: {
     deckId: v.string(),
@@ -2175,6 +2278,9 @@ export const advanceAgentRunInternal = internalMutation({
     /** B2 routing attribution: per-model span rows (planner/executor) may override the run model. */
     spanProvider: v.optional(v.string()),
     spanModel: v.optional(v.string()),
+    /** A verified span from this run; used to make delegated work a real child span. */
+    parentSpanId: v.optional(v.string()),
+    handoff: v.optional(nodeslideAgentHandoffValidator),
   },
   handler: async (ctx, args) => {
     await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
@@ -2189,6 +2295,47 @@ export const advanceAgentRunInternal = internalMutation({
     const sequence = row.nextTelemetrySequence ?? 3;
     const traceId = row.otelTraceId ?? agentTraceId(args.deckId, args.runId);
     const rootSpanId = row.rootSpanId ?? agentSpanId(traceId, 'invoke_agent', 1);
+    let parentSpanId = rootSpanId;
+    let verifiedParentSpan: Doc<'nodeslide_agent_spans'> | null = null;
+    if (args.parentSpanId) {
+      const requestedParentSpanId = requiredText(args.parentSpanId, 'parent span id', 80);
+      const parent = await ctx.db
+        .query('nodeslide_agent_spans')
+        .withIndex('by_stable_id', (query) =>
+          query.eq('id', nodeslideStableId('agent_span', args.runId, requestedParentSpanId)),
+        )
+        .unique();
+      if (!parent || parent.runId !== args.runId || parent.traceId !== traceId) {
+        throw new Error('Agent child span parent is not part of this run.');
+      }
+      verifiedParentSpan = parent;
+      parentSpanId = requestedParentSpanId;
+    }
+    if (args.handoff?.parentId && !args.parentSpanId) {
+      throw new Error('A nested handoff requires its verified parent span.');
+    }
+    if (args.handoff && !args.message) {
+      throw new Error('A handoff must have a durable thread message.');
+    }
+    const handoff = args.handoff
+      ? {
+          id: requiredText(args.handoff.id, 'handoff id', 180),
+          ...(args.handoff.parentId
+            ? { parentId: requiredText(args.handoff.parentId, 'parent handoff id', 180) }
+            : {}),
+          from: requiredText(args.handoff.from, 'handoff source', 180),
+          to: requiredText(args.handoff.to, 'handoff destination', 180),
+          status: args.handoff.status,
+        }
+      : undefined;
+    if (handoff?.parentId) {
+      const boundParentHandoffId = verifiedParentSpan?.attributes.find(
+        (attribute) => attribute.key === 'nodeslide.handoff.id',
+      )?.value;
+      if (boundParentHandoffId !== handoff.parentId) {
+        throw new Error('Nested handoff identity does not match its parent span.');
+      }
+    }
     const phase = agentOperation(row.status, args.activity);
     const phaseSpanId = agentSpanId(traceId, phase.operationName, sequence);
     const phaseStatus = args.status === 'failed' ? 'error' : 'ok';
@@ -2202,7 +2349,7 @@ export const advanceAgentRunInternal = internalMutation({
       runId: args.runId,
       traceId,
       spanId: phaseSpanId,
-      parentSpanId: rootSpanId,
+      parentSpanId,
       name: phase.name,
       operationName: phase.operationName,
       kind: phase.operationName === 'chat' ? 'client' : 'internal',
@@ -2253,11 +2400,33 @@ export const advanceAgentRunInternal = internalMutation({
               },
             ]
           : []),
+        ...(handoff
+          ? [
+              { key: 'nodeslide.handoff.id', value: handoff.id },
+              ...(handoff.parentId
+                ? [{ key: 'nodeslide.handoff.parent_id', value: handoff.parentId }]
+                : []),
+              { key: 'nodeslide.handoff.from', value: handoff.from },
+              { key: 'nodeslide.handoff.to', value: handoff.to },
+              { key: 'nodeslide.handoff.status', value: handoff.status },
+              { key: 'nodeslide.handoff.timing', value: 'checkpoint_projection' },
+            ]
+          : []),
       ],
       sequence,
       createdAt: now,
       updatedAt: now,
     });
+    if (verifiedParentSpan) {
+      // Keep the exported trace tree temporally valid. These are durable
+      // post-call checkpoints (declared in the timing attribute), so the
+      // parent must remain open through its projected child checkpoint.
+      await ctx.db.patch(verifiedParentSpan._id, {
+        endTime: now,
+        durationMs: Math.max(0, now - verifiedParentSpan.startTime),
+        updatedAt: now,
+      });
+    }
     await ctx.db.insert('nodeslide_agent_events', {
       id: nodeslideStableId('agent_event', args.runId, String(sequence + 1), args.status),
       deckId: args.deckId,
@@ -2330,10 +2499,12 @@ export const advanceAgentRunInternal = internalMutation({
         content: message,
         ...(args.toolName ? { toolName: requiredText(args.toolName, 'tool name', 120) } : {}),
         ...(args.sourceIds ? { sourceIds: args.sourceIds.slice(0, 32) } : {}),
+        ...(handoff ? { handoff } : {}),
         createdAt: now,
+        updatedAt: now,
       });
     }
-    return args.runId;
+    return { runId: args.runId, spanId: phaseSpanId };
   },
 });
 
@@ -4863,4 +5034,12 @@ function requiredText(value: string, label: string, max: number): string {
   if (!clean) throw new Error(`${label} is required.`);
   if (clean.length > max) throw new Error(`${label} exceeds ${max} characters.`);
   return clean;
+}
+
+function requiredAgentStreamText(value: string): string {
+  if (!value.trim()) throw new Error('assistant stream content is required.');
+  if (value.length > 4000) throw new Error('assistant stream content exceeds 4000 characters.');
+  // Preserve provider-observed whitespace exactly so each streaming mutation
+  // can prove it extends the previously persisted prefix.
+  return value;
 }

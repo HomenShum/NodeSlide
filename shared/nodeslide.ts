@@ -762,7 +762,25 @@ export interface NodeSlideAgentMessage {
   content: string;
   toolName?: string;
   sourceIds?: string[];
+  /**
+   * Durable delivery state for assistant prose. `streaming` rows are updated
+   * by server-observed provider text deltas; they are never a client-side
+   * typewriter effect. `interrupted` means the draft was not accepted as the
+   * proposal and must not be read as a completed assistant claim.
+   */
+  streamState?: 'streaming' | 'complete' | 'interrupted';
+  /** Structured delegation identity used by the thread and trace projections. */
+  handoff?: NodeSlideAgentHandoff;
   createdAt: number;
+  updatedAt?: number;
+}
+
+export interface NodeSlideAgentHandoff {
+  id: string;
+  parentId?: string;
+  from: string;
+  to: string;
+  status: 'delegated' | 'completed' | 'failed' | 'skipped';
 }
 
 export type NodeSlideAgentMemoryCategory =

@@ -31,9 +31,10 @@ environment or repository secrets:
 | `VERCEL_TOKEN` | A Vercel token allowed to deploy the `nodeslide` project. |
 | `VERCEL_ORG_ID` | The Vercel owner/team id for that project. |
 | `VERCEL_PROJECT_ID` | The Vercel project id for `nodeslide`. |
+| `VERCEL_AUTOMATION_BYPASS_SECRET` | Project-level Deployment Protection bypass used only by the live gate for the protected immutable deployment URL. |
 | `CONVEX_DIAGNOSTICS_KEY` | Optional, least-privilege prod key with `deployment:logs:view`; used only after a red nightly probe. Do not reuse an admin key. |
 
-After the four required deploy secrets are present, create the repository
+After the five required deploy secrets are present, create the repository
 variable `NODESLIDE_PRODUCTION_DEPLOY_ENABLED=true`. Trusted successful pushes
 to `main` are deliberately skipped until that variable is set, so landing the
 workflow cannot turn every main-branch run red during credential setup. A

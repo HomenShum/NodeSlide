@@ -52,9 +52,10 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: |
           missing=()
-          for name in CONVEX_DEPLOY_KEY VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+          for name in CONVEX_DEPLOY_KEY VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID VERCEL_AUTOMATION_BYPASS_SECRET; do
             if [[ -z "${!name:-}" ]]; then missing+=("$name"); fi
           done
           if (( ${#missing[@]} > 0 )); then
@@ -113,4 +114,5 @@ jobs:
           EXPECTED_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
           EXPECTED_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
           DEPLOYMENT_URL: ${{ steps.vercel_deploy.outputs.deployment_url }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: node scripts/live-smoke.mjs "$DEPLOYMENT_URL" "$PROD_WEB_URL"

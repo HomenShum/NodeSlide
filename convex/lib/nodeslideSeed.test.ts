@@ -364,4 +364,28 @@ runner_up,Lionel Messi,7 goals,FIFA`,
     editedBullet.version = 2;
     expect(repairLegacyGoldenSnapshot(edited, canonical).changed).toBe(false);
   });
+
+  it('upgrades only untouched legacy golden math to the canonical LaTeX payload', () => {
+    const canonical = buildGoldenNodeSlide('legacy-math-repair-test', 1_000).snapshot;
+    const legacy = structuredClone(canonical);
+    const canonicalMath = canonical.elements.find((element) => element.kind === 'math');
+    const legacyMath = legacy.elements.find((element) => element.id === canonicalMath?.id);
+    if (!canonicalMath?.math || !legacyMath) throw new Error('Missing math fixture.');
+    legacyMath.math = {
+      ...legacyMath.math,
+      expression: 'authorized change = requested scope ∩ allowed scope',
+      syntax: 'plain',
+    };
+
+    const repaired = repairLegacyGoldenSnapshot(legacy, canonical);
+    expect(repaired.changed).toBe(true);
+    expect(
+      repaired.snapshot.elements.find((element) => element.id === canonicalMath.id)?.math,
+    ).toEqual(canonicalMath.math);
+
+    legacyMath.version = 2;
+    expect(repairLegacyGoldenSnapshot(legacy, canonical)).toMatchObject({
+      changed: false,
+    });
+  });
 });

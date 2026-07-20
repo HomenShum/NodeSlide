@@ -345,7 +345,9 @@ registry/                  shadcn-style source-owned compositions (studio route,
       receipt, and version coordinates and fails closed on contradictory,
       duplicate, noncanonical, or cross-envelope legacy state. PR #21 also
       rejects an origin replay receipt before any write when its deck version
-      differs from the persisted direct or unresolved submission.
+      differs from the persisted direct or unresolved submission. This
+      follow-up applies the same fail-closed binding to rejected submissions,
+      which preserve the proposal's original submission version.
       The production gap remains: NodeRoom ActorProof/membership authorization
       is not yet the mounted host authorizer.
 - [ ] I5. **Governance = enforced invariants, configurable UX.** Required and

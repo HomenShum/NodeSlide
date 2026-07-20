@@ -3638,6 +3638,7 @@ function assertPackageOriginReceiptVersion(
     kind === 'direct' ||
     patch.status === 'ready' ||
     patch.status === 'draft' ||
+    patch.status === 'rejected' ||
     (patch.status === 'stale' && receipt.operation === 'proposal.stale');
   if (!bindsSubmissionVersion) return;
   if (patch.resultingDeckVersion === undefined) {

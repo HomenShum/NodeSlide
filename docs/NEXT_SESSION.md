@@ -5,7 +5,7 @@ Last updated 2026-07-20. Read this first, then
 `docs/EXTRACTION_BOUNDARY.md` (package boundary), and
 `docs/ops/PRODUCTION_RUNBOOK.md` (intended deployment path).
 
-Code baselines before this docs-only handoff commit:
+Code checkpoints before this rejected-origin follow-up:
 
 - NodeSlide: `c4fa556866adce9db8333d699ef45946dd02e4ef`
 - parity-studio: `de4a67585f9040db95b2af7caeae69c92894e4e5`
@@ -25,8 +25,9 @@ Code baselines before this docs-only handoff commit:
   manually deployed from exact code baseline `c4fa556` to production Convex.
   The canonical alias serves the unchanged production-bound frontend entry;
   PR #21 is server/test-only. Local and canonical live smokes pass. There is
-  still no automated exact-SHA deployment receipt; retain that distinction
-  until H3 is configured and run.
+  still no automated exact-SHA deployment receipt, and the rejected-origin
+  follow-up in this change is not part of that deployed baseline. Retain those
+  distinctions until H3 is configured and run.
 - Final CI corpus at the code baseline: **765 tests across 99 files**
   (core 745/96 + external-agent 11/1 + MCP 9/2), plus typecheck, Biome,
   production build, MCP, node-platform, and packed NodeRoom/NodeAgent consumer
@@ -49,15 +50,19 @@ Code baselines before this docs-only handoff commit:
   wrapper is `scripts/capture-convex-logs.mjs`.
 - The repository authorization spine now requires host-supplied authorization
   for all governed repository mutations and binds receipts to frozen request
-  evidence. NodeRoom's package consumer is operation-v1-only for current
-  NodeSlide main; the old three-argument legacy ABI now fails closed.
+  evidence. NodeRoom's packed-consumer proof is operation-v1-only for current
+  NodeSlide main; PR #226 removed the rollout bridge, so the old three-argument
+  legacy ABI now fails closed. This remains package-level proof, not a mounted
+  production host adapter.
 - PR #19 closes the post-review replay gaps: immutable proposal decisions and
   stale results, lazy legacy upgrades, canonical receipt/submission IDs,
   dual-index envelope collision checks, contradictory-history rejection, and
   organization-bound custom receipt replay. A subsequent review found one
   origin deck-version binding gap; PR #21 closes it before any write for direct
-  and unresolved submissions. The focused security suite is now 34/34, and the
-  combined security/memory suite is 49/49.
+  and unresolved submissions. A follow-up review found that rejected proposals
+  preserve the same submission-version coordinate; this change closes that path
+  before any authorization write and extends the regression matrix. The focused
+  security suite is 34/34, and the combined security/memory suite is 49/49.
 - NodeRoom has bilateral package-level CI and real NodeAgent type compatibility.
   The jobs currently pair moving `main` branches rather than an atomic
   immutable-SHA pair. This is not yet a mounted second product consumer; I7

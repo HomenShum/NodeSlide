@@ -140,10 +140,10 @@ jobs:
         run: |
           immutable_html="$(mktemp)"
           trap 'rm -f "$immutable_html"' EXIT
-          npx --yes vercel@56.3.2 curl / \
+          npx --yes vercel@56.3.2 --token="$VERCEL_TOKEN" curl / \
             --deployment "$DEPLOYMENT_URL" \
-            --token="$VERCEL_TOKEN" \
             --yes \
+            -- \
             --silent \
             --show-error \
             --fail \

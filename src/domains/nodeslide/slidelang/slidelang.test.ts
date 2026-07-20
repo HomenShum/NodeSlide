@@ -870,6 +870,7 @@ describe('SlideLang PPTX math raster seam (C2+C4)', () => {
       return PNG_DATA_URL;
     });
     const { snapshot, element } = latexMathSnapshot('E = mc^2');
+    element.exportCapabilities = ['web_native', 'pptx_static_fallback', 'google_importable'];
 
     // C4: capability report agrees with the raster branch before export runs.
     const report = adapter.getElementCapability(element);
@@ -878,6 +879,9 @@ describe('SlideLang PPTX math raster seam (C2+C4)', () => {
     expect(report.effective).not.toContain('pptx_editable');
     expect(report.web).toBe('native');
     expect(report.warnings.join(' ')).toContain('rasterized image of the rendered equation');
+    expect(adapter.validate(snapshot).issues.filter((issue) => issue.code === 'export')).toEqual(
+      [],
+    );
 
     const binary = await adapter.buildPptx(snapshot);
     const zip = await JSZip.loadAsync(binary);

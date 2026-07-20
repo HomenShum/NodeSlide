@@ -555,11 +555,13 @@ function validateExportCapabilities(
   issues: ValidationIssue[],
 ): void {
   const report = getElementCapability(element);
-  if (report.warnings.length === 0) return;
+  const effective = new Set(report.effective);
+  const unhonored = report.declared.filter((capability) => !effective.has(capability));
+  if (unhonored.length === 0) return;
   addIssue(issues, snapshot, {
     severity: 'warning',
     code: 'export',
-    message: report.warnings.join(' '),
+    message: `Element declares ${unhonored.join(', ')}, but the local adapter cannot honor ${unhonored.length === 1 ? 'that capability' : 'those capabilities'} for ${element.kind}.`,
     slideId: element.slideId,
     elementId: element.id,
   });

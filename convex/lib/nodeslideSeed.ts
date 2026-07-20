@@ -105,6 +105,11 @@ export interface BuildBriefDeckInput {
 }
 
 const EDITABLE_CAPABILITIES = ['web_native', 'pptx_editable', 'google_importable'] as const;
+const STATIC_MATH_CAPABILITIES = [
+  'web_native',
+  'pptx_static_fallback',
+  'google_importable',
+] as const;
 
 const FALLBACK_LIGHT_THEME: ThemeSpec = {
   id: 'editorial-signal',
@@ -278,6 +283,7 @@ export function repairLegacyGoldenSnapshot(
       ...current,
       ...(expected.content !== undefined ? { content: expected.content } : {}),
       math: structuredClone(expected.math),
+      exportCapabilities: [...expected.exportCapabilities],
     });
   }
 
@@ -1257,7 +1263,10 @@ function buildSlide(input: {
         },
         sourceIds: evidenceSourceIds,
         locked: false,
-        exportCapabilities: [...EDITABLE_CAPABILITIES],
+        exportCapabilities:
+          planned.formula.syntax === 'latex'
+            ? [...STATIC_MATH_CAPABILITIES]
+            : [...EDITABLE_CAPABILITIES],
       }),
     );
   }

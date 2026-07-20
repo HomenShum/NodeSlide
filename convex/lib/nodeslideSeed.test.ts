@@ -23,6 +23,9 @@ describe('NodeSlide seed', () => {
       syntax: 'latex',
       displayMode: 'block',
     });
+    expect(
+      snapshot.elements.find((element) => element.kind === 'math')?.exportCapabilities,
+    ).toEqual(['web_native', 'pptx_static_fallback', 'google_importable']);
     expect(snapshot.elements.find((element) => element.kind === 'image')).toMatchObject({
       image: { placeholder: true },
       altText: 'Structured deck graph connecting slides, elements, sources, and versions',
@@ -382,6 +385,10 @@ runner_up,Lionel Messi,7 goals,FIFA`,
     expect(
       repaired.snapshot.elements.find((element) => element.id === canonicalMath.id)?.math,
     ).toEqual(canonicalMath.math);
+    expect(
+      repaired.snapshot.elements.find((element) => element.id === canonicalMath.id)
+        ?.exportCapabilities,
+    ).toEqual(canonicalMath.exportCapabilities);
 
     legacyMath.version = 2;
     expect(repairLegacyGoldenSnapshot(legacy, canonical)).toMatchObject({

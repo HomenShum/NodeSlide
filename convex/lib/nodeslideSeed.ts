@@ -1793,14 +1793,19 @@ function isCanonicalMathWithLegacyCapabilityDeclaration(
   const {
     version: _currentVersion,
     exportCapabilities: _currentCapabilities,
+    visible: currentVisible,
     ...currentRest
   } = current;
   const {
     version: _expectedVersion,
     exportCapabilities: _expectedCapabilities,
+    visible: expectedVisible,
     ...expectedRest
   } = expected;
-  return stableJson(currentRest) === stableJson(expectedRest);
+  return (
+    (currentVisible ?? true) === (expectedVisible ?? true) &&
+    stableJson(currentRest) === stableJson(expectedRest)
+  );
 }
 
 function isLegacyDuplicatedNumberedBullet(current: SlideElement, expected: SlideElement): boolean {

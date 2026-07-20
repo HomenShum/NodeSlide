@@ -405,6 +405,7 @@ runner_up,Lionel Messi,7 goals,FIFA`,
 
     staged.deck.version = 2;
     stagedMath.version = 2;
+    stagedMath.visible = true;
     stagedMath.exportCapabilities = ['web_native', 'pptx_editable', 'google_importable'];
     stagedMath.math = {
       description: canonicalMath.math.description,

@@ -13,6 +13,7 @@ patch engine.
 | `@nodeslide/backend` | `NodeSlideRepository`, `NodeSlideAssetStore`, `NodeSlideTelemetryAdapter`, normalized principal and receipts | Any concrete database or auth vendor |
 | `@nodeslide/testing` | Deterministic fixtures, memory repository/assets/telemetry, repository conformance smoke | Production persistence |
 | `@nodeslide/react` | Controlled read-only deck rendering, deterministic proposal comparison, accessible review callbacks, opt-in scoped styles | Convex, auth, routing, global CSS, standalone app state |
+| `@nodeslide/external-agent` | Bundled library + `nodeslide` CLI for offline inspect/validate/propose/apply | UI, hosted auth, provider calls, a second patch engine |
 
 The compatibility direction is deliberate:
 
@@ -49,3 +50,7 @@ an isolated consumer, runs the repository proposal/acceptance conformance
 journey, server-renders the controlled deck viewer, verifies the exported CSS,
 and removes the temporary directory. Source-workspace imports cannot satisfy
 this gate.
+
+External coding agents can use the bundled CLI or the adapted MCP server as
+documented in `docs/EXTERNAL_AGENT_ACCESS.md`. Both transports consume these
+package boundaries instead of copying the deck model or patch engine.

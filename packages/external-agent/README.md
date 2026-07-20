@@ -19,5 +19,8 @@ stderr and exit non-zero. `apply` only accepts a digest-bound proposal created b
 `propose`, requires an exact approval ID, and never overwrites an input or an
 existing output path.
 
+Default candidate compilation is reproducible from the base deck clock;
+proposal and application timestamps are separate event metadata.
+
 See `docs/EXTERNAL_AGENT_ACCESS.md` in the NodeSlide repository for the offline
 file and host-backed MCP operating modes.

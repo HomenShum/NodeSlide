@@ -469,11 +469,17 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
     if (existing) {
       const {
         principalId: existingPrincipalId,
-        authorization: _existingAuthorization,
+        authorization: existingAuthorization,
         ...existingDraft
       } = existing;
       if (
         existingPrincipalId === request.principal.userId &&
+        existingAuthorization.principalId === authorization.principalId &&
+        existingAuthorization.organizationId === authorization.organizationId &&
+        existingAuthorization.deckId === authorization.deckId &&
+        existingAuthorization.action === authorization.action &&
+        existingAuthorization.resource.kind === authorization.resource.kind &&
+        existingAuthorization.resource.id === authorization.resource.id &&
         JSON.stringify(existingDraft) === JSON.stringify(request.receipt)
       ) {
         return clone(existing);

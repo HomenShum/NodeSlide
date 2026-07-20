@@ -17,6 +17,7 @@ import {
   getPresenterSnapshot,
   packageApplyPatch,
   packageCreateProposal,
+  packageResolveProposal,
   proposePatch,
   publishDeck,
   rejectPatch,
@@ -29,7 +30,7 @@ import {
   loadNodeSlideSnapshot,
   loadNodeSlideWorkspace,
 } from './nodeslideData';
-import { nodeslideIdDigest } from './nodeslideIds';
+import { nodeslideIdDigest, nodeslideStableId } from './nodeslideIds';
 import { clocksForNodeSlideOperations } from './nodeslidePatches';
 import { buildGoldenNodeSlide } from './nodeslideSeed';
 import {
@@ -337,6 +338,20 @@ const packageCreateProposalHandler = registeredHandler<
   },
   { patch: DeckPatch; receipt: { id: string } }
 >(packageCreateProposal);
+const packageResolveProposalHandler = registeredHandler<
+  {
+    deckId: string;
+    ownerAccessKey: string;
+    proposalId: string;
+    decision: 'accept' | 'reject';
+  },
+  {
+    status: 'accepted' | 'rejected' | 'stale';
+    patch: DeckPatch;
+    snapshot: DeckSnapshot;
+    receipt: { id: string; operation: string; recordedAt: number; authorization: unknown };
+  }
+>(packageResolveProposal);
 
 describe('NodeSlide release security', () => {
   it('derives package receipts from owner capability and ignores forged principal/provenance', async () => {
@@ -481,9 +496,6 @@ describe('NodeSlide release security', () => {
       },
     };
 
-    const proposal = await packageCreateProposalHandler(context, request);
-    expect(proposal.patch.status).toBe('ready');
-
     const firstAdvance = textEdit(snapshot, 'Advance before stale evaluation');
     await applyPatchHandler(context, {
       id: 'before-stale-patch',
@@ -500,7 +512,7 @@ describe('NodeSlide release security', () => {
     expect(first.status).toBe('stale');
     expect(database.rows('nodeslide_patches')).toHaveLength(2);
     expect(database.rows('nodeslide_versions')).toHaveLength(2);
-    expect(database.rows('nodeslide_package_receipts')).toHaveLength(2);
+    expect(database.rows('nodeslide_package_receipts')).toHaveLength(1);
 
     const afterStale = await requiredSnapshot(context, snapshot.deck.id);
     const laterAdvance = textEdit(afterStale, 'Advance after stale evaluation');
@@ -523,7 +535,7 @@ describe('NodeSlide release security', () => {
     expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(afterLaterAdvance);
     expect(database.rows('nodeslide_patches')).toHaveLength(3);
     expect(database.rows('nodeslide_versions')).toHaveLength(3);
-    expect(database.rows('nodeslide_package_receipts')).toHaveLength(2);
+    expect(database.rows('nodeslide_package_receipts')).toHaveLength(1);
   });
 
   it('replays an exact package proposal and rejects a conflicting command before receipt writes', async () => {
@@ -623,6 +635,1262 @@ describe('NodeSlide release security', () => {
     expect(database.rows('nodeslide_patches')).toHaveLength(1);
     expect(database.rows('nodeslide_versions')).toHaveLength(2);
     expect(database.rows('nodeslide_package_receipts')).toHaveLength(1);
+  });
+
+  it('replays an immutable accepted proposal result and rejects an opposite decision', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-accept-resolution', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Accepted proposal result');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-accepted-proposal',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Accept exactly once',
+      },
+    };
+
+    await packageCreateProposalHandler(context, request);
+    const first = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    expect(first.status).toBe('accepted');
+    expect(first.receipt.operation).toBe('proposal.accepted');
+
+    const laterEdit = textEdit(first.snapshot, 'Later after accepted proposal');
+    await applyPatchHandler(context, {
+      id: 'after-accepted-proposal',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: first.snapshot.deck.version,
+      ...clocksForNodeSlideOperations(first.snapshot, [laterEdit.operation]),
+      scope: laterEdit.scope,
+      operations: [laterEdit.operation],
+      summary: 'Advance after accepted proposal',
+    });
+    const afterLaterEdit = await requiredSnapshot(context, snapshot.deck.id);
+
+    database.resetObservations();
+    const replay = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    expect(replay).toEqual(first);
+    expect(database.writes).toEqual([]);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(afterLaterEdit);
+
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'reject',
+      }),
+    ).rejects.toThrow(/already resolved as accept/i);
+    expect(database.writes).toEqual([]);
+  });
+
+  it('replays an immutable rejected proposal result after later deck edits', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-reject-resolution', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Rejected proposal result');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-rejected-proposal',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Reject exactly once',
+      },
+    };
+
+    await packageCreateProposalHandler(context, request);
+    const first = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'reject',
+    });
+    expect(first.status).toBe('rejected');
+    expect(first.receipt.operation).toBe('proposal.rejected');
+
+    const laterEdit = textEdit(snapshot, 'Later after rejected proposal');
+    await applyPatchHandler(context, {
+      id: 'after-rejected-proposal',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: snapshot.deck.version,
+      ...clocksForNodeSlideOperations(snapshot, [laterEdit.operation]),
+      scope: laterEdit.scope,
+      operations: [laterEdit.operation],
+      summary: 'Advance after rejected proposal',
+    });
+    const afterLaterEdit = await requiredSnapshot(context, snapshot.deck.id);
+
+    database.resetObservations();
+    const replay = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'reject',
+    });
+    expect(replay).toEqual(first);
+    expect(database.writes).toEqual([]);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(afterLaterEdit);
+
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'accept',
+      }),
+    ).rejects.toThrow(/already resolved as reject/i);
+    expect(database.writes).toEqual([]);
+  });
+
+  it('replays an immutable stale proposal result and fails closed on rejection', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-stale-resolution', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Stale proposal result');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-stale-proposal',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Become stale exactly once',
+      },
+    };
+
+    await packageCreateProposalHandler(context, request);
+    const winner = textEdit(snapshot, 'Winner before stale resolution');
+    await applyPatchHandler(context, {
+      id: 'before-stale-proposal-resolution',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: snapshot.deck.version,
+      ...clocksForNodeSlideOperations(snapshot, [winner.operation]),
+      scope: winner.scope,
+      operations: [winner.operation],
+      summary: 'Advance before stale proposal resolution',
+    });
+    const first = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    expect(first.status).toBe('stale');
+    expect(first.receipt.operation).toBe('proposal.stale');
+
+    const laterEdit = textEdit(first.snapshot, 'Later after stale proposal');
+    await applyPatchHandler(context, {
+      id: 'after-stale-proposal-resolution',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: first.snapshot.deck.version,
+      ...clocksForNodeSlideOperations(first.snapshot, [laterEdit.operation]),
+      scope: laterEdit.scope,
+      operations: [laterEdit.operation],
+      summary: 'Advance after stale proposal resolution',
+    });
+    const afterLaterEdit = await requiredSnapshot(context, snapshot.deck.id);
+
+    database.resetObservations();
+    const replay = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    expect(replay).toEqual(first);
+    expect(database.writes).toEqual([]);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(afterLaterEdit);
+
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'reject',
+      }),
+    ).rejects.toThrow(/already resolved as accept/i);
+    expect(database.writes).toEqual([]);
+  });
+
+  it('binds package IDs to direct or proposal submission before any resolution writes', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-submission-kind', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const directEdit = textEdit(snapshot, 'Direct kind');
+    const directRequest = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-direct-kind',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [directEdit.operation]),
+        scope: directEdit.scope,
+        operations: [directEdit.operation],
+        summary: 'Direct kind binding',
+      },
+    };
+    await packageApplyPatchHandler(context, directRequest);
+
+    database.resetObservations();
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: directRequest.patch.id,
+        decision: 'accept',
+      }),
+    ).rejects.toThrow(/bound to a direct package submission/i);
+    expect(database.writes).toEqual([]);
+    expect(
+      database
+        .rows('nodeslide_package_receipts')
+        .some((row) =>
+          ['proposal.accepted', 'proposal.rejected', 'proposal.stale'].includes(
+            String((row.receipt as { operation?: unknown }).operation),
+          ),
+        ),
+    ).toBe(false);
+
+    const directSubmission = database
+      .rows('nodeslide_package_submissions')
+      .find((row) => row.patchId === directRequest.patch.id);
+    if (!directSubmission) throw new Error('Expected direct submission fixture.');
+    await database.delete(directSubmission._id);
+    const directReceipt = database
+      .rows('nodeslide_package_receipts')
+      .find((row) => row.patchId === directRequest.patch.id);
+    if (!directReceipt) throw new Error('Expected direct receipt fixture.');
+    Reflect.deleteProperty(directReceipt.receipt as Record<string, unknown>, 'authorization');
+    database.resetObservations();
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: directRequest.patch.id,
+        decision: 'accept',
+      }),
+    ).rejects.toThrow(/bound to a direct package submission/i);
+    expect(database.writes).toEqual([]);
+    expect((directReceipt.receipt as { authorization?: unknown }).authorization).toBeUndefined();
+
+    const afterDirect = await requiredSnapshot(context, snapshot.deck.id);
+    const proposalEdit = textEdit(afterDirect, 'Proposal kind');
+    const proposalRequest = {
+      deckId: afterDirect.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-proposal-kind',
+        deckId: afterDirect.deck.id,
+        baseDeckVersion: afterDirect.deck.version,
+        ...clocksForNodeSlideOperations(afterDirect, [proposalEdit.operation]),
+        scope: proposalEdit.scope,
+        operations: [proposalEdit.operation],
+        summary: 'Proposal kind binding',
+      },
+    };
+    await packageCreateProposalHandler(context, proposalRequest);
+
+    database.resetObservations();
+    await expect(packageApplyPatchHandler(context, proposalRequest)).rejects.toThrow(
+      /bound to a proposal package submission/i,
+    );
+    expect(database.writes).toEqual([]);
+    expect(onlyStableRow(database, 'nodeslide_patches', proposalRequest.patch.id).status).toBe(
+      'ready',
+    );
+
+    const proposalSubmission = database
+      .rows('nodeslide_package_submissions')
+      .find((row) => row.patchId === proposalRequest.patch.id);
+    if (!proposalSubmission) throw new Error('Expected proposal submission fixture.');
+    await database.delete(proposalSubmission._id);
+    const proposalReceipt = database
+      .rows('nodeslide_package_receipts')
+      .find((row) => row.patchId === proposalRequest.patch.id);
+    if (!proposalReceipt) throw new Error('Expected proposal receipt fixture.');
+    Reflect.deleteProperty(proposalReceipt.receipt as Record<string, unknown>, 'authorization');
+    database.resetObservations();
+    await expect(packageApplyPatchHandler(context, proposalRequest)).rejects.toThrow(
+      /bound to a proposal package submission/i,
+    );
+    expect(database.writes).toEqual([]);
+    expect((proposalReceipt.receipt as { authorization?: unknown }).authorization).toBeUndefined();
+  });
+
+  it('does not resolve a proposal that was already stale when it was created', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-created-stale', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const staleEdit = textEdit(snapshot, 'Created stale');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-created-stale-proposal',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [staleEdit.operation]),
+        scope: staleEdit.scope,
+        operations: [staleEdit.operation],
+        summary: 'Created after its base moved',
+      },
+    };
+    const winner = textEdit(snapshot, 'Move base before proposal creation');
+    await applyPatchHandler(context, {
+      id: 'before-stale-proposal-creation',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: snapshot.deck.version,
+      ...clocksForNodeSlideOperations(snapshot, [winner.operation]),
+      scope: winner.scope,
+      operations: [winner.operation],
+      summary: 'Move base before proposal creation',
+    });
+    const created = await packageCreateProposalHandler(context, request);
+    expect(created.patch.status).toBe('stale');
+    expect((created.receipt as { authorization?: { action?: string } }).authorization?.action).toBe(
+      'proposal.create',
+    );
+
+    database.resetObservations();
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'accept',
+      }),
+    ).rejects.toThrow(/cannot be resolved from status stale/i);
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'reject',
+      }),
+    ).rejects.toThrow(/cannot be resolved from status stale/i);
+    expect(database.writes).toEqual([]);
+  });
+
+  it('lazily upgrades a legacy direct accepted apply and preserves its historical result', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-legacy-direct', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Legacy direct accepted');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-legacy-direct-accepted',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Legacy direct accepted replay',
+      },
+    };
+    const first = await packageApplyPatchHandler(context, request);
+    if (first.status !== 'accepted') throw new Error('Expected accepted direct fixture.');
+
+    const laterEdit = textEdit(first.result.snapshot, 'Advance after legacy direct apply');
+    await applyPatchHandler(context, {
+      id: 'after-legacy-direct-accepted',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: first.result.snapshot.deck.version,
+      ...clocksForNodeSlideOperations(first.result.snapshot, [laterEdit.operation]),
+      scope: laterEdit.scope,
+      operations: [laterEdit.operation],
+      summary: 'Advance after legacy direct apply',
+    });
+    const current = await requiredSnapshot(context, snapshot.deck.id);
+    await downgradePackagePatchToLegacy(database, request.patch.id);
+
+    const upgraded = await packageApplyPatchHandler(context, request);
+    expect(upgraded).toEqual(first);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(current);
+    expect(database.rows('nodeslide_package_submissions')).toHaveLength(1);
+    expect(database.writes.length).toBeGreaterThan(0);
+
+    database.resetObservations();
+    expect(await packageApplyPatchHandler(context, request)).toEqual(first);
+    expect(database.writes).toEqual([]);
+  });
+
+  it('lazily upgrades a legacy proposal creation receipt without rebasing its response', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-legacy-create', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Legacy proposal creation');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-legacy-proposal-created',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Legacy proposal creation replay',
+      },
+    };
+    const first = await packageCreateProposalHandler(context, request);
+    const laterEdit = textEdit(snapshot, 'Advance after legacy proposal creation');
+    await applyPatchHandler(context, {
+      id: 'after-legacy-proposal-created',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: snapshot.deck.version,
+      ...clocksForNodeSlideOperations(snapshot, [laterEdit.operation]),
+      scope: laterEdit.scope,
+      operations: [laterEdit.operation],
+      summary: 'Advance after legacy proposal creation',
+    });
+    const current = await requiredSnapshot(context, snapshot.deck.id);
+    await downgradePackagePatchToLegacy(database, request.patch.id);
+
+    const upgraded = await packageCreateProposalHandler(context, request);
+    expect(upgraded).toEqual(first);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(current);
+    expect(database.writes.length).toBeGreaterThan(0);
+
+    database.resetObservations();
+    expect(await packageCreateProposalHandler(context, request)).toEqual(first);
+    expect(database.writes).toEqual([]);
+  });
+
+  it('lazily upgrades a legacy accepted proposal resolution and freezes its version', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-legacy-accept', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Legacy accepted proposal');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-legacy-proposal-accepted',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Legacy accepted proposal replay',
+      },
+    };
+    await packageCreateProposalHandler(context, request);
+    const first = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    if (first.status !== 'accepted') throw new Error('Expected accepted proposal fixture.');
+    const laterEdit = textEdit(first.snapshot, 'Advance after legacy accepted proposal');
+    await applyPatchHandler(context, {
+      id: 'after-legacy-proposal-accepted',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: first.snapshot.deck.version,
+      ...clocksForNodeSlideOperations(first.snapshot, [laterEdit.operation]),
+      scope: laterEdit.scope,
+      operations: [laterEdit.operation],
+      summary: 'Advance after legacy accepted proposal',
+    });
+    const current = await requiredSnapshot(context, snapshot.deck.id);
+    await downgradePackagePatchToLegacy(database, request.patch.id);
+
+    const upgraded = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    expect(upgraded).toEqual(first);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(current);
+    expect(database.writes.length).toBeGreaterThan(0);
+
+    database.resetObservations();
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'reject',
+      }),
+    ).rejects.toThrow(/already resolved as accept/i);
+    expect(database.writes).toEqual([]);
+    expect(
+      await packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'accept',
+      }),
+    ).toEqual(first);
+    expect(database.writes).toEqual([]);
+  });
+
+  it('lazily upgrades a legacy rejected proposal resolution and freezes its version', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-legacy-reject', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Legacy rejected proposal');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-legacy-proposal-rejected',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Legacy rejected proposal replay',
+      },
+    };
+    await packageCreateProposalHandler(context, request);
+    const first = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'reject',
+    });
+    if (first.status !== 'rejected') throw new Error('Expected rejected proposal fixture.');
+    const laterEdit = textEdit(snapshot, 'Advance after legacy rejected proposal');
+    await applyPatchHandler(context, {
+      id: 'after-legacy-proposal-rejected',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: snapshot.deck.version,
+      ...clocksForNodeSlideOperations(snapshot, [laterEdit.operation]),
+      scope: laterEdit.scope,
+      operations: [laterEdit.operation],
+      summary: 'Advance after legacy rejected proposal',
+    });
+    const current = await requiredSnapshot(context, snapshot.deck.id);
+    await downgradePackagePatchToLegacy(database, request.patch.id);
+
+    const upgraded = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'reject',
+    });
+    expect(upgraded).toEqual(first);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(current);
+    expect(database.writes.length).toBeGreaterThan(0);
+
+    database.resetObservations();
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'accept',
+      }),
+    ).rejects.toThrow(/already resolved as reject/i);
+    expect(database.writes).toEqual([]);
+    expect(
+      await packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'reject',
+      }),
+    ).toEqual(first);
+    expect(database.writes).toEqual([]);
+  });
+
+  it('fails closed without writes when a legacy receipt binding is malformed', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-malformed-legacy', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Malformed legacy receipt');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-malformed-legacy-receipt',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Malformed legacy receipt fails closed',
+      },
+    };
+    await packageApplyPatchHandler(context, request);
+    await downgradePackagePatchToLegacy(database, request.patch.id);
+    const receiptRow = database
+      .rows('nodeslide_package_receipts')
+      .find((row) => row.patchId === request.patch.id);
+    if (!receiptRow) throw new Error('Expected malformed receipt fixture.');
+    (receiptRow.receipt as { principalId: string }).principalId = 'forged:principal';
+    database.resetObservations();
+
+    await expect(packageApplyPatchHandler(context, request)).rejects.toThrow(
+      /does not match its stored binding/i,
+    );
+    expect(database.writes).toEqual([]);
+    expect(database.rows('nodeslide_package_submissions')).toEqual([]);
+  });
+
+  it('fails closed before writes when legacy proposal receipts contain opposite terminal decisions', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(
+      database,
+      'package-legacy-conflicting-resolution',
+      OWNER_ACCESS_KEY,
+      '8',
+    );
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Legacy conflicting proposal');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-legacy-conflicting-proposal',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Legacy contradictory terminal history',
+      },
+    };
+    await packageCreateProposalHandler(context, request);
+    const winner = textEdit(snapshot, 'Advance before contradictory stale result');
+    await applyPatchHandler(context, {
+      id: 'before-legacy-conflicting-resolution',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: snapshot.deck.version,
+      ...clocksForNodeSlideOperations(snapshot, [winner.operation]),
+      scope: winner.scope,
+      operations: [winner.operation],
+      summary: 'Make the legacy proposal stale',
+    });
+    const stale = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    expect(stale.status).toBe('stale');
+    const rejected = await rejectPatchHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patchId: request.patch.id,
+    });
+    if (!rejected) throw new Error('Expected rejected legacy proposal fixture.');
+    const rejectedReceipt = {
+      ...structuredClone(stale.receipt),
+      id: nodeslideStableId(
+        'repository_receipt',
+        snapshot.deck.id,
+        request.patch.id,
+        'proposal.rejected',
+        String(stale.snapshot.deck.version),
+      ),
+      operation: 'proposal.rejected' as const,
+      recordedAt: rejected.updatedAt,
+      attributes: {
+        ...structuredClone(stale.receipt.attributes),
+        status: 'rejected',
+      },
+    };
+    Reflect.deleteProperty(rejectedReceipt, 'authorization');
+    database.seed('nodeslide_package_receipts', {
+      receiptId: rejectedReceipt.id,
+      deckId: snapshot.deck.id,
+      patchId: request.patch.id,
+      principalId: rejectedReceipt.principalId,
+      receipt: rejectedReceipt,
+      recordedAt: rejectedReceipt.recordedAt,
+    });
+    await downgradePackagePatchToLegacy(database, request.patch.id);
+
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'reject',
+      }),
+    ).rejects.toThrow(/conflicting terminal package receipts/i);
+    expect(database.writes).toEqual([]);
+    expect(database.rows('nodeslide_package_submissions')).toEqual([]);
+  });
+
+  it('rejects a self-consistent but noncanonical legacy receipt ID without writes', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(
+      database,
+      'package-legacy-noncanonical-receipt',
+      OWNER_ACCESS_KEY,
+      '8',
+    );
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Noncanonical receipt ID');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-legacy-noncanonical-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Reject noncanonical legacy receipt ID',
+      },
+    };
+    await packageApplyPatchHandler(context, request);
+    await downgradePackagePatchToLegacy(database, request.patch.id);
+    const receiptRow = database
+      .rows('nodeslide_package_receipts')
+      .find((row) => row.patchId === request.patch.id);
+    if (!receiptRow) throw new Error('Expected noncanonical receipt fixture.');
+    receiptRow.receiptId = 'legacy-noncanonical-receipt-id';
+    (receiptRow.receipt as { id: string }).id = receiptRow.receiptId;
+    database.resetObservations();
+
+    await expect(packageApplyPatchHandler(context, request)).rejects.toThrow(
+      /canonical stable ID/i,
+    );
+    expect(database.writes).toEqual([]);
+    expect(database.rows('nodeslide_package_submissions')).toEqual([]);
+  });
+
+  it('rejects duplicate canonical legacy receipt rows without writes', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(
+      database,
+      'package-legacy-duplicate-receipt',
+      OWNER_ACCESS_KEY,
+      '8',
+    );
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Duplicate canonical receipt');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-legacy-duplicate-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Reject duplicate legacy receipt rows',
+      },
+    };
+    await packageApplyPatchHandler(context, request);
+    await downgradePackagePatchToLegacy(database, request.patch.id);
+    const receiptRow = database
+      .rows('nodeslide_package_receipts')
+      .find((row) => row.patchId === request.patch.id);
+    if (!receiptRow) throw new Error('Expected duplicate receipt fixture.');
+    database.seed('nodeslide_package_receipts', {
+      receiptId: receiptRow.receiptId,
+      deckId: receiptRow.deckId,
+      patchId: receiptRow.patchId,
+      principalId: receiptRow.principalId,
+      receipt: structuredClone(receiptRow.receipt),
+      recordedAt: receiptRow.recordedAt,
+    });
+    database.resetObservations();
+
+    await expect(packageApplyPatchHandler(context, request)).rejects.toThrow(
+      /receipt ID collision/i,
+    );
+    expect(database.writes).toEqual([]);
+    expect(database.rows('nodeslide_package_submissions')).toEqual([]);
+  });
+
+  it('preflights every legacy receipt before upgrading a resolved proposal', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(
+      database,
+      'package-legacy-semantic-duplicate-receipt',
+      OWNER_ACCESS_KEY,
+      '8',
+    );
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Semantic duplicate terminal receipt');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-legacy-semantic-duplicate-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Preflight all legacy terminal receipts',
+      },
+    };
+    await packageCreateProposalHandler(context, request);
+    await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    await downgradePackagePatchToLegacy(database, request.patch.id);
+    const terminalRow = database
+      .rows('nodeslide_package_receipts')
+      .find(
+        (row) =>
+          row.patchId === request.patch.id &&
+          (row.receipt as { operation?: unknown }).operation === 'proposal.accepted',
+      );
+    if (!terminalRow) throw new Error('Expected terminal receipt fixture.');
+    const duplicateReceipt = structuredClone(terminalRow.receipt) as Record<string, unknown>;
+    duplicateReceipt.id = 'noncanonical-semantic-terminal-receipt';
+    database.seed('nodeslide_package_receipts', {
+      receiptId: duplicateReceipt.id,
+      deckId: terminalRow.deckId,
+      patchId: terminalRow.patchId,
+      principalId: terminalRow.principalId,
+      receipt: duplicateReceipt,
+      recordedAt: terminalRow.recordedAt,
+    });
+    database.resetObservations();
+
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'accept',
+      }),
+    ).rejects.toThrow(/canonical stable ID/i);
+    expect(database.writes).toEqual([]);
+    expect(database.rows('nodeslide_package_submissions')).toEqual([]);
+    expect(
+      database
+        .rows('nodeslide_package_receipts')
+        .filter((row) => row.patchId === request.patch.id)
+        .every((row) => (row.receipt as { authorization?: unknown }).authorization === undefined),
+    ).toBe(true);
+  });
+
+  it('rejects noncanonical and duplicate package submission coordinates before writes', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(
+      database,
+      'package-submission-coordinate-collision',
+      OWNER_ACCESS_KEY,
+      '8',
+    );
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Submission coordinate collision');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-submission-coordinate-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Reject invalid submission coordinates',
+      },
+    };
+    await packageApplyPatchHandler(context, request);
+    const submission = database
+      .rows('nodeslide_package_submissions')
+      .find((row) => row.patchId === request.patch.id);
+    if (!submission) throw new Error('Expected package submission fixture.');
+    const canonicalSubmissionId = String(submission.submissionId);
+    submission.submissionId = 'noncanonical-package-submission';
+    const originRow = database
+      .rows('nodeslide_package_receipts')
+      .find((row) => row.patchId === request.patch.id);
+    if (!originRow) throw new Error('Expected package origin receipt fixture.');
+    Reflect.deleteProperty(originRow.receipt as Record<string, unknown>, 'authorization');
+    database.resetObservations();
+
+    await expect(packageApplyPatchHandler(context, request)).rejects.toThrow(
+      /noncanonical package submission binding/i,
+    );
+    expect(database.writes).toEqual([]);
+    expect((originRow.receipt as { authorization?: unknown }).authorization).toBeUndefined();
+
+    submission.submissionId = canonicalSubmissionId;
+    const { _id, _creationTime, ...duplicateSubmission } = submission;
+    database.seed('nodeslide_package_submissions', {
+      ...structuredClone(duplicateSubmission),
+      submissionId: 'duplicate-package-submission-coordinate',
+    });
+    database.resetObservations();
+
+    await expect(packageApplyPatchHandler(context, request)).rejects.toThrow(
+      /duplicate package submission bindings/i,
+    );
+    expect(database.writes).toEqual([]);
+    expect((originRow.receipt as { authorization?: unknown }).authorization).toBeUndefined();
+  });
+
+  it('rejects a canonical package submission ID stored under a conflicting envelope', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(
+      database,
+      'package-submission-envelope-collision',
+      OWNER_ACCESS_KEY,
+      '8',
+    );
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Submission envelope collision');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-submission-envelope-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Reject a stable ID bound to another envelope',
+      },
+    };
+    await packageApplyPatchHandler(context, request);
+    const submission = database
+      .rows('nodeslide_package_submissions')
+      .find((row) => row.patchId === request.patch.id);
+    if (!submission) throw new Error('Expected package submission fixture.');
+    submission.deckId = 'forged-deck-envelope';
+    submission.patchId = 'forged-patch-envelope';
+    const originRow = database
+      .rows('nodeslide_package_receipts')
+      .find((row) => row.patchId === request.patch.id);
+    if (!originRow) throw new Error('Expected package origin receipt fixture.');
+    Reflect.deleteProperty(originRow.receipt as Record<string, unknown>, 'authorization');
+    database.resetObservations();
+
+    await expect(packageApplyPatchHandler(context, request)).rejects.toThrow(
+      /conflicting package submission envelope/i,
+    );
+    expect(database.writes).toEqual([]);
+    expect((originRow.receipt as { authorization?: unknown }).authorization).toBeUndefined();
+    expect(database.rows('nodeslide_package_submissions')).toHaveLength(1);
+  });
+
+  it('rejects an accepted proposal replay whose immutable version misses its candidate digest', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(
+      database,
+      'package-proposal-digest-replay',
+      OWNER_ACCESS_KEY,
+      '8',
+    );
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Accepted digest-bound proposal');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-proposal-digest-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Digest-bound proposal replay',
+      },
+    };
+    await packageCreateProposalHandler(context, request);
+    await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    const versionRow = database
+      .rows('nodeslide_versions')
+      .find((row) => row.patchId === request.patch.id);
+    if (!versionRow) throw new Error('Expected accepted proposal version fixture.');
+    const corrupted = structuredClone(versionRow.snapshot as DeckSnapshot);
+    const firstElement = corrupted.elements[0];
+    if (!firstElement) throw new Error('Expected an element to corrupt.');
+    corrupted.elements[0] = { ...firstElement, content: 'Corrupted immutable proposal version' };
+    versionRow.snapshot = corrupted;
+    database.resetObservations();
+
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'accept',
+      }),
+    ).rejects.toThrow(/immutable candidate digest/i);
+    expect(database.writes).toEqual([]);
+  });
+
+  it('lazily upgrades a legacy direct-stale apply and replays the original result', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-legacy-direct-stale', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Legacy direct stale');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-legacy-direct-stale-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Legacy direct stale replay',
+      },
+    };
+    const winner = textEdit(snapshot, 'Advance before legacy direct stale');
+    await applyPatchHandler(context, {
+      id: 'before-legacy-direct-stale',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: snapshot.deck.version,
+      ...clocksForNodeSlideOperations(snapshot, [winner.operation]),
+      scope: winner.scope,
+      operations: [winner.operation],
+      summary: 'Make direct package patch stale',
+    });
+    const first = await packageApplyPatchHandler(context, request);
+    expect(first.status).toBe('stale');
+    const laterEdit = textEdit(first.snapshot, 'Advance after legacy direct stale');
+    await applyPatchHandler(context, {
+      id: 'after-legacy-direct-stale',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: first.snapshot.deck.version,
+      ...clocksForNodeSlideOperations(first.snapshot, [laterEdit.operation]),
+      scope: laterEdit.scope,
+      operations: [laterEdit.operation],
+      summary: 'Advance after legacy direct stale',
+    });
+    const current = await requiredSnapshot(context, snapshot.deck.id);
+    await downgradePackagePatchToLegacy(database, request.patch.id);
+    const patchRow = onlyStableRow(database, 'nodeslide_patches', request.patch.id);
+    Reflect.deleteProperty(patchRow, 'resultingDeckVersion');
+    database.resetObservations();
+
+    expect(await packageApplyPatchHandler(context, request)).toEqual(first);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(current);
+    expect(database.writes.length).toBeGreaterThan(0);
+    database.resetObservations();
+    expect(await packageApplyPatchHandler(context, request)).toEqual(first);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(current);
+    expect(database.writes).toEqual([]);
+  });
+
+  it('lazily upgrades a proposal that was stale at creation without making it resolvable', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-legacy-created-stale', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Legacy stale-at-creation proposal');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-legacy-created-stale-proposal',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Legacy stale proposal creation replay',
+      },
+    };
+    const winner = textEdit(snapshot, 'Advance before legacy stale creation');
+    await applyPatchHandler(context, {
+      id: 'before-legacy-stale-creation',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: snapshot.deck.version,
+      ...clocksForNodeSlideOperations(snapshot, [winner.operation]),
+      scope: winner.scope,
+      operations: [winner.operation],
+      summary: 'Make proposal stale before creation',
+    });
+    const first = await packageCreateProposalHandler(context, request);
+    expect(first.patch.status).toBe('stale');
+    await downgradePackagePatchToLegacy(database, request.patch.id);
+    const patchRow = onlyStableRow(database, 'nodeslide_patches', request.patch.id);
+    Reflect.deleteProperty(patchRow, 'resultingDeckVersion');
+
+    expect(await packageCreateProposalHandler(context, request)).toEqual(first);
+    expect(database.writes.length).toBeGreaterThan(0);
+    database.resetObservations();
+    expect(await packageCreateProposalHandler(context, request)).toEqual(first);
+    expect(database.writes).toEqual([]);
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'accept',
+      }),
+    ).rejects.toThrow(/cannot be resolved from status stale/i);
+    expect(database.writes).toEqual([]);
+  });
+
+  it('lazily upgrades legacy unauthenticated receipts and stale version rows for exact replay', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-legacy-stale', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const staleEdit = textEdit(snapshot, 'Legacy stale proposal');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-legacy-stale-proposal',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [staleEdit.operation]),
+        scope: staleEdit.scope,
+        operations: [staleEdit.operation],
+        summary: 'Legacy stale proposal replay',
+      },
+    };
+    await packageCreateProposalHandler(context, request);
+    const winner = textEdit(snapshot, 'Win before legacy stale result');
+    await applyPatchHandler(context, {
+      id: 'before-legacy-stale-resolution',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: snapshot.deck.version,
+      ...clocksForNodeSlideOperations(snapshot, [winner.operation]),
+      scope: winner.scope,
+      operations: [winner.operation],
+      summary: 'Win before legacy stale result',
+    });
+    const first = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    expect(first.status).toBe('stale');
+
+    const laterEdit = textEdit(first.snapshot, 'Advance after legacy stale result');
+    await applyPatchHandler(context, {
+      id: 'after-legacy-stale-resolution',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: first.snapshot.deck.version,
+      ...clocksForNodeSlideOperations(first.snapshot, [laterEdit.operation]),
+      scope: laterEdit.scope,
+      operations: [laterEdit.operation],
+      summary: 'Advance after legacy stale result',
+    });
+    const current = await requiredSnapshot(context, snapshot.deck.id);
+
+    const submission = database.rows('nodeslide_package_submissions')[0];
+    if (!submission) throw new Error('Expected package submission fixture.');
+    await database.delete(submission._id);
+    const patchRow = onlyStableRow(database, 'nodeslide_patches', request.patch.id);
+    Reflect.deleteProperty(patchRow, 'resultingDeckVersion');
+    for (const row of database.rows('nodeslide_package_receipts')) {
+      if (row.patchId !== request.patch.id) continue;
+      const receipt = row.receipt as Record<string, unknown>;
+      Reflect.deleteProperty(receipt, 'authorization');
+    }
+
+    database.resetObservations();
+    const upgraded = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    expect(upgraded).toEqual(first);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(current);
+    expect(
+      onlyStableRow(database, 'nodeslide_patches', request.patch.id).resultingDeckVersion,
+    ).toBe(first.snapshot.deck.version);
+    expect(database.rows('nodeslide_package_submissions')).toHaveLength(1);
+    expect(
+      database
+        .rows('nodeslide_package_receipts')
+        .filter((row) => row.patchId === request.patch.id)
+        .every((row) => Boolean((row.receipt as { authorization?: unknown }).authorization)),
+    ).toBe(true);
+
+    database.resetObservations();
+    const replay = await packageResolveProposalHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      proposalId: request.patch.id,
+      decision: 'accept',
+    });
+    expect(replay).toEqual(first);
+    expect(database.writes).toEqual([]);
+    await expect(
+      packageResolveProposalHandler(context, {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        proposalId: request.patch.id,
+        decision: 'reject',
+      }),
+    ).rejects.toThrow(/already resolved as accept/i);
+    expect(database.writes).toEqual([]);
   });
 
   it('removes public provenance arguments and forces direct human mutations to human', async () => {
@@ -1397,6 +2665,25 @@ function onlyStableRow(database: MemoryDatabase, tableName: string, id: string):
     throw new Error(`Expected one ${tableName} row with id ${id}; found ${rows.length}.`);
   }
   return rows[0];
+}
+
+async function downgradePackagePatchToLegacy(
+  database: MemoryDatabase,
+  patchId: string,
+): Promise<void> {
+  const submission = database
+    .rows('nodeslide_package_submissions')
+    .find((row) => row.patchId === patchId);
+  if (!submission) throw new Error(`Expected package submission ${patchId}.`);
+  await database.delete(submission._id);
+  const receipts = database
+    .rows('nodeslide_package_receipts')
+    .filter((row) => row.patchId === patchId);
+  if (receipts.length === 0) throw new Error(`Expected package receipts for ${patchId}.`);
+  for (const row of receipts) {
+    Reflect.deleteProperty(row.receipt as Record<string, unknown>, 'authorization');
+  }
+  database.resetObservations();
 }
 
 function matchesFilter(actual: unknown, filter: Filter): boolean {

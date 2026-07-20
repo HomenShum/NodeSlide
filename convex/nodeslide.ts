@@ -3466,6 +3466,8 @@ async function migrateLegacyGoldenWorkspace(
       return previous &&
         (previous.content !== element.content ||
           JSON.stringify(previous.math) !== JSON.stringify(element.math) ||
+          JSON.stringify(previous.exportCapabilities) !==
+            JSON.stringify(element.exportCapabilities) ||
           JSON.stringify(previous.bbox) !== JSON.stringify(element.bbox))
         ? [element.id]
         : [];

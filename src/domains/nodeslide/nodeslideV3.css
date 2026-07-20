@@ -113,6 +113,61 @@
   color: #9d3e29;
 }
 
+.ns-evidence-highlight {
+  background: var(--ns-accent-soft, #f3e4c8);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+.ns-evidence-capture-note {
+  display: block;
+  margin: 4px 0 0;
+  color: var(--ns-muted, #6d665f);
+  font-style: italic;
+}
+
+.ns-evidence-citing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.ns-evidence-citing > small {
+  flex-basis: 100%;
+  color: var(--ns-muted, #6d665f);
+}
+
+.ns-evidence-citing-element {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 26px;
+  padding: 3px 8px;
+  border: 1px solid var(--ns-border, #ddd6cd);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ns-ink, #2b2620);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.ns-evidence-citing-element em {
+  font-style: normal;
+  color: var(--ns-muted, #6d665f);
+}
+
+.ns-evidence-citing-element:hover:not(:disabled) {
+  border-color: var(--ns-accent, #b7803a);
+}
+
+.ns-evidence-citing-element:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
 .ns-source-metadata {
   display: flex;
   flex-wrap: wrap;

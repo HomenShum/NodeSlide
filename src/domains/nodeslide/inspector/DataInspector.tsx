@@ -12,15 +12,38 @@ import {
   Trash2,
 } from 'lucide-react';
 import { useState } from 'react';
-import type { SlideElement, SourceRecord } from '../../../../shared/nodeslide';
+import type { Slide, SlideElement, SourceRecord } from '../../../../shared/nodeslide';
+import { evidenceClaimTerms, highlightExcerpt } from '../../../../shared/nodeslideEvidence';
 
 interface DataInspectorProps {
   sources: readonly SourceRecord[];
   selectedElements: readonly SlideElement[];
+  /** All deck elements, for claim -> source -> element lineage. */
+  elements?: readonly SlideElement[];
+  /** All deck slides, to label where a citing element lives. */
+  slides?: readonly Slide[];
+  /** Selects a citing element on its slide (canvas selection callback). */
+  onSelectElement?: (slideId: string, elementId: string) => void;
   onDeleteSource?: (sourceId: string) => Promise<void>;
 }
 
-export function DataInspector({ sources, selectedElements, onDeleteSource }: DataInspectorProps) {
+function elementCitesSource(element: SlideElement, sourceId: string): boolean {
+  return (
+    element.sourceIds.includes(sourceId) ||
+    element.chart?.sourceId === sourceId ||
+    element.math?.sourceId === sourceId ||
+    element.image?.sourceId === sourceId
+  );
+}
+
+export function DataInspector({
+  sources,
+  selectedElements,
+  elements,
+  slides,
+  onSelectElement,
+  onDeleteSource,
+}: DataInspectorProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const dependencyIds = new Set(
@@ -107,71 +130,152 @@ export function DataInspector({ sources, selectedElements, onDeleteSource }: Dat
             <p>Sources cited by agents or imports will be recorded here.</p>
           </div>
         ) : (
-          sources.map((source) => (
-            <article key={source.id} className={dependencyIds.has(source.id) ? 'is-linked' : ''}>
-              <span className="ns-source-icon">
-                <SourceIcon type={source.sourceType} />
-              </span>
-              <div>
+          sources.map((source) => {
+            const citingElements = (elements ?? []).filter((element) =>
+              elementCitesSource(element, source.id),
+            );
+            const excerpt =
+              source.citation.length > 420 ? `${source.citation.slice(0, 420)}…` : source.citation;
+            const isWebExcerpt = source.format === 'web';
+            const captureFailed = source.status === 'failed';
+            const claimTerms = isWebExcerpt
+              ? evidenceClaimTerms(
+                  [...citingElements, ...selectedElements].map((element) => element.content ?? ''),
+                  excerpt,
+                )
+              : [];
+            return (
+              <article key={source.id} className={dependencyIds.has(source.id) ? 'is-linked' : ''}>
+                <span className="ns-source-icon">
+                  <SourceIcon type={source.sourceType} />
+                </span>
                 <div>
-                  <strong>{source.title}</strong>
-                  <span>{source.sourceType}</span>
-                </div>
-                <blockquote>
-                  <Quote size={11} />
-                  {source.citation.length > 420
-                    ? `${source.citation.slice(0, 420)}…`
-                    : source.citation}
-                </blockquote>
-                {source.format || source.rowCount !== undefined || source.columns?.length ? (
-                  <div className="ns-source-metadata" aria-label={`${source.title} data shape`}>
-                    {source.format ? <span>{source.format.toUpperCase()}</span> : null}
-                    {source.rowCount !== undefined ? (
-                      <span>{source.rowCount.toLocaleString()} rows</span>
-                    ) : null}
-                    {source.byteSize !== undefined ? (
-                      <span>{formatBytes(source.byteSize)}</span>
-                    ) : null}
-                    {source.columns?.slice(0, 6).map((column) => (
-                      <span key={column}>{column}</span>
-                    ))}
+                  <div>
+                    <strong>{source.title}</strong>
+                    <span>{source.sourceType}</span>
                   </div>
-                ) : null}
-                <small>
-                  Retrieved {formatDate(source.retrievedAt)}
-                  {source.license ? ` · ${source.license}` : ''}
-                </small>
-                {source.url ? (
-                  <a href={source.url} target="_blank" rel="noreferrer">
-                    Open source <ExternalLink size={11} />
-                  </a>
-                ) : null}
-                {source.retention === 'until_deleted' && onDeleteSource ? (
-                  <button
-                    type="button"
-                    className="ns-source-delete"
-                    disabled={deletingId === source.id}
-                    onClick={() => {
-                      setDeleteError(null);
-                      setDeletingId(source.id);
-                      void onDeleteSource(source.id)
-                        .catch((error) =>
-                          setDeleteError(
-                            error instanceof Error
-                              ? error.message
-                              : 'The source could not be deleted.',
+                  <blockquote data-testid="evidence-excerpt">
+                    <Quote size={11} />
+                    {isWebExcerpt && claimTerms.length > 0
+                      ? highlightExcerpt(excerpt, claimTerms).map((segment, index) =>
+                          segment.highlighted ? (
+                            <mark
+                              className="ns-evidence-highlight"
+                              data-testid="evidence-highlight"
+                              // biome-ignore lint/suspicious/noArrayIndexKey: segments are static per render
+                              key={index}
+                            >
+                              {segment.text}
+                            </mark>
+                          ) : (
+                            // biome-ignore lint/suspicious/noArrayIndexKey: segments are static per render
+                            <span key={index}>{segment.text}</span>
                           ),
                         )
-                        .finally(() => setDeletingId(null));
-                    }}
-                    aria-label={`Delete private source ${source.title}`}
-                  >
-                    <Trash2 size={12} /> {deletingId === source.id ? 'Deleting…' : 'Delete data'}
-                  </button>
-                ) : null}
-              </div>
-            </article>
-          ))
+                      : excerpt}
+                  </blockquote>
+                  {isWebExcerpt ? (
+                    captureFailed ? (
+                      <small
+                        className="ns-evidence-capture-note"
+                        data-testid="evidence-capture-failed"
+                      >
+                        Capture failed — the stored excerpt may be stale. Open the source to verify.
+                      </small>
+                    ) : (
+                      <small
+                        className="ns-evidence-capture-note"
+                        data-testid="evidence-no-snapshot"
+                      >
+                        Text excerpt · no visual snapshot
+                      </small>
+                    )
+                  ) : null}
+                  {source.format || source.rowCount !== undefined || source.columns?.length ? (
+                    <div className="ns-source-metadata" aria-label={`${source.title} data shape`}>
+                      {source.format ? <span>{source.format.toUpperCase()}</span> : null}
+                      {source.rowCount !== undefined ? (
+                        <span>{source.rowCount.toLocaleString()} rows</span>
+                      ) : null}
+                      {source.byteSize !== undefined ? (
+                        <span>{formatBytes(source.byteSize)}</span>
+                      ) : null}
+                      {source.columns?.slice(0, 6).map((column) => (
+                        <span key={column}>{column}</span>
+                      ))}
+                    </div>
+                  ) : null}
+                  <small>
+                    Retrieved {formatDate(source.retrievedAt)}
+                    {source.license ? ` · ${source.license}` : ''}
+                  </small>
+                  {elements ? (
+                    <div className="ns-evidence-citing" data-testid="evidence-citing-list">
+                      {citingElements.length > 0 ? (
+                        <>
+                          <small>
+                            Cited by {citingElements.length}{' '}
+                            {citingElements.length === 1 ? 'element' : 'elements'}
+                          </small>
+                          {citingElements.map((element) => {
+                            const slideTitle = slides?.find(
+                              (candidate) => candidate.id === element.slideId,
+                            )?.title;
+                            return (
+                              <button
+                                type="button"
+                                key={element.id}
+                                className="ns-evidence-citing-element"
+                                data-testid="evidence-citing-element"
+                                disabled={!onSelectElement}
+                                onClick={() => onSelectElement?.(element.slideId, element.id)}
+                                aria-label={`Select ${element.name}${slideTitle ? ` on ${slideTitle}` : ''}`}
+                              >
+                                <Link2 size={11} /> {element.name}
+                                {slideTitle ? <em> · {slideTitle}</em> : null}
+                              </button>
+                            );
+                          })}
+                        </>
+                      ) : (
+                        <small data-testid="evidence-no-citations">
+                          No elements cite this source yet.
+                        </small>
+                      )}
+                    </div>
+                  ) : null}
+                  {source.url ? (
+                    <a href={source.url} target="_blank" rel="noreferrer">
+                      Open source <ExternalLink size={11} />
+                    </a>
+                  ) : null}
+                  {source.retention === 'until_deleted' && onDeleteSource ? (
+                    <button
+                      type="button"
+                      className="ns-source-delete"
+                      disabled={deletingId === source.id}
+                      onClick={() => {
+                        setDeleteError(null);
+                        setDeletingId(source.id);
+                        void onDeleteSource(source.id)
+                          .catch((error) =>
+                            setDeleteError(
+                              error instanceof Error
+                                ? error.message
+                                : 'The source could not be deleted.',
+                            ),
+                          )
+                          .finally(() => setDeletingId(null));
+                      }}
+                      aria-label={`Delete private source ${source.title}`}
+                    >
+                      <Trash2 size={12} /> {deletingId === source.id ? 'Deleting…' : 'Delete data'}
+                    </button>
+                  ) : null}
+                </div>
+              </article>
+            );
+          })
         )}
         {deleteError ? <output role="alert">{deleteError}</output> : null}
       </section>

@@ -3198,6 +3198,10 @@ export function NodeSlideStudio() {
             setTraceTelemetryRunId(runId);
             setTelemetryLoadError(null);
           }}
+          onSelectEvidenceElement={(slideId, elementId) => {
+            setActiveSlideId(slideId);
+            setSelectedElementIds([elementId]);
+          }}
           onLoadMoreAgentTelemetry={loadOlderAgentTelemetry}
           {...(agentTelemetry ? { agentTelemetry } : {})}
           aiCommentContext={aiCommentContext}

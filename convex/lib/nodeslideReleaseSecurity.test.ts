@@ -1627,10 +1627,11 @@ describe('NodeSlide release security', () => {
     expect(database.rows('nodeslide_package_submissions')).toHaveLength(1);
   });
 
-  it('rejects direct and unresolved proposal replays with a mismatched origin deck version', async () => {
+  it('rejects direct, unresolved, and rejected proposal replays with a mismatched origin deck version', async () => {
     const cases = [
       { kind: 'direct' as const, suffix: 'direct' },
       { kind: 'proposal' as const, suffix: 'proposal' },
+      { kind: 'rejected' as const, suffix: 'rejected' },
     ];
 
     for (const testCase of cases) {
@@ -1657,8 +1658,19 @@ describe('NodeSlide release security', () => {
           summary: `Reject mismatched ${testCase.suffix} origin version`,
         },
       };
-      if (testCase.kind === 'direct') await packageApplyPatchHandler(context, request);
-      else await packageCreateProposalHandler(context, request);
+      if (testCase.kind === 'direct') {
+        await packageApplyPatchHandler(context, request);
+      } else {
+        await packageCreateProposalHandler(context, request);
+        if (testCase.kind === 'rejected') {
+          await packageResolveProposalHandler(context, {
+            deckId: request.deckId,
+            ownerAccessKey: OWNER_ACCESS_KEY,
+            proposalId: request.patch.id,
+            decision: 'reject',
+          });
+        }
+      }
 
       const submission = database
         .rows('nodeslide_package_submissions')
@@ -1687,7 +1699,14 @@ describe('NodeSlide release security', () => {
       const replay =
         testCase.kind === 'direct'
           ? packageApplyPatchHandler(context, request)
-          : packageCreateProposalHandler(context, request);
+          : testCase.kind === 'rejected'
+            ? packageResolveProposalHandler(context, {
+                deckId: request.deckId,
+                ownerAccessKey: OWNER_ACCESS_KEY,
+                proposalId: request.patch.id,
+                decision: 'reject',
+              })
+            : packageCreateProposalHandler(context, request);
       await expect(replay).rejects.toThrow(/conflicting package origin deck version/i);
       expect(database.writes).toEqual([]);
       expect((originRow.receipt as { authorization?: unknown }).authorization).toBeUndefined();

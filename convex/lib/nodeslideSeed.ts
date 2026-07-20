@@ -263,6 +263,28 @@ export function repairLegacyGoldenSnapshot(
     const current = currentSnapshot().elements[index];
     if (!current) continue;
     const expected = canonicalElements.get(current.id);
+    if (
+      !expected ||
+      !isUntouchedCanonicalElementIdentity(current, expected) ||
+      current.kind !== 'math' ||
+      expected.kind !== 'math' ||
+      !expected.math ||
+      JSON.stringify(current.math) === JSON.stringify(expected.math)
+    ) {
+      continue;
+    }
+
+    replaceElement(index, {
+      ...current,
+      ...(expected.content !== undefined ? { content: expected.content } : {}),
+      math: structuredClone(expected.math),
+    });
+  }
+
+  for (let index = 0; index < snapshot.elements.length; index += 1) {
+    const current = currentSnapshot().elements[index];
+    if (!current) continue;
+    const expected = canonicalElements.get(current.id);
     if (!expected || !isUntouchedCanonicalElementIdentity(current, expected)) continue;
     if (!isLegacyDuplicatedNumberedBullet(current, expected)) continue;
 

@@ -3465,6 +3465,7 @@ async function migrateLegacyGoldenWorkspace(
       const previous = before.elements.find((candidate) => candidate.id === element.id);
       return previous &&
         (previous.content !== element.content ||
+          JSON.stringify(previous.math) !== JSON.stringify(element.math) ||
           JSON.stringify(previous.bbox) !== JSON.stringify(element.bbox))
         ? [element.id]
         : [];

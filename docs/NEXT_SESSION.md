@@ -9,9 +9,9 @@ Code checkpoints before this docs-only deployment-proof update:
 
 - NodeSlide: `12a8527cb99adf5e80af2302a53332509ce7c283`
 - parity-studio: `de4a67585f9040db95b2af7caeae69c92894e4e5`
-- NodeRoom product integration: `4a4a3c259ddfa96e51b8194685a7c3b9ff56c384`;
-  current main: `332149ef4ac945546479d08d328d3f43378b3831` (PR #231,
-  consumer-proof receipt schema v3)
+- NodeRoom packed-consumer proof baseline:
+  `4a4a3c259ddfa96e51b8194685a7c3b9ff56c384`; v3 proof-contract checkpoint:
+  `332149ef4ac945546479d08d328d3f43378b3831` (PR #231)
 
 ## Verified production state
 

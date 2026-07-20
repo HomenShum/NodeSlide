@@ -72,7 +72,7 @@ Code checkpoints before this docs-only deployment-proof update:
   remains open.
 - NodeRoom PR #231 makes the executable consumer-proof vocabulary explicit. Its
   v3 receipt proves an in-memory receipt ledger, a same-instance in-memory
-  repository reread, and a portable JSON snapshot roundtrip; it requires
+  repository reread, and a portable JSON snapshot round-trip; it requires
   `durableReceiptPersistence: false` and `packageReload: false`. Those bounded
   checks do not satisfy I7's future mounted reload and durable-persistence goals.
 - Portable PPTX font fallback behavior was mirrored into parity-studio and its

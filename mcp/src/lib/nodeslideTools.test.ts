@@ -1,9 +1,11 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { localByokStatus } from './byok.js';
+import { registerNodeSlideLocalTools } from './localDeckTools.js';
 import {
   type NodeSlideWorkspace,
   planLocalByokEdit,
+  registerNodeSlideTools,
   requireExplicitConsent,
   resolveScope,
   unappliedProposalReceipt,
@@ -45,6 +47,43 @@ afterEach(() => {
 });
 
 describe('NodeSlide MCP governance', () => {
+  it('retains all 11 hosted tools and adds exactly four offline file tools', () => {
+    const hosted: string[] = [];
+    const local: string[] = [];
+    registerNodeSlideTools(
+      {
+        registerTool(name: string) {
+          hosted.push(name);
+        },
+      } as never,
+      async () => null,
+    );
+    registerNodeSlideLocalTools({
+      registerTool(name: string) {
+        local.push(name);
+      },
+    } as never);
+    expect(hosted).toEqual([
+      'nodeslide.byok_status',
+      'nodeslide.get_deck',
+      'nodeslide.list_slides',
+      'nodeslide.get_trace',
+      'nodeslide.list_versions',
+      'nodeslide.propose_edit',
+      'nodeslide.accept_proposal',
+      'nodeslide.reject_proposal',
+      'nodeslide.upload_source',
+      'nodeslide.search_web',
+      'nodeslide.create_deck',
+    ]);
+    expect(local).toEqual([
+      'nodeslide.inspect_file',
+      'nodeslide.validate_file_patch',
+      'nodeslide.propose_file_patch',
+      'nodeslide.apply_file_proposal',
+    ]);
+  });
+
   it('refuses every external path without explicit consent', () => {
     expect(() => requireExplicitConsent(false, 'local BYOK model egress')).toThrow(
       'Explicit consent',

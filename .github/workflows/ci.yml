@@ -21,11 +21,11 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Lint (biome)
-        run: npx biome check src shared packages scripts/package-consumer-smoke.mjs
+        run: npm run lint
       - name: Typecheck (tsc)
-        run: npx tsc -b
+        run: npm run typecheck
       - name: Test (vitest)
-        run: npx vitest run
+        run: npm test
       - name: Production build (packages + app)
         run: npm run build
         env:
@@ -35,6 +35,8 @@ jobs:
           VITE_CONVEX_SITE_URL: https://ci-placeholder.convex.site
       - name: Packed package consumer smoke
         run: npm run packages:consumer:smoke
+      - name: Packed external agent + MCP smoke
+        run: npm run proof:external-agent
       - name: Install Playwright Chromium (smoke)
         run: npx playwright install --with-deps chromium
       - name: Runtime smoke (serve dist, assert React mounts, zero page errors)
@@ -51,7 +53,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm ci || npm install
+          cache: npm
+      - run: npm ci
       - run: npm run typecheck
       - run: npm test
       - run: npm run build

@@ -31,13 +31,11 @@
  * Stack consistency > install-size optimization.
  */
 
-import {
-  type AssistantMessage,
-  type Context,
-  type ImageContent,
-  type TextContent,
-  getModel,
-  complete as piComplete,
+import type {
+  AssistantMessage,
+  Context,
+  ImageContent,
+  TextContent,
 } from '@earendil-works/pi-ai/compat';
 
 /**
@@ -126,13 +124,16 @@ function canonicalizeModelId(provider: SupportedProvider, modelId: string): stri
  *   to retry with larger maxTokens
  */
 export async function call(opts: CallOptions): Promise<CallResult> {
+  // Keep the sizeable provider catalog off the MCP startup/help path. Offline
+  // file tools never pay this import cost; BYOK loads it only at first use.
+  const pi = await import('@earendil-works/pi-ai/compat');
   const canonicalId = canonicalizeModelId(opts.provider, opts.modelId);
   // pi-ai's getModel is typed against its compile-time MODEL registry, but
   // we accept arbitrary strings at this boundary (env-driven model overrides,
   // per-call user input). Runtime validation inside getModel throws for
   // unknown ids — we surface that as a clear error message to the agent.
   // biome-ignore lint/suspicious/noExplicitAny: see comment above
-  const registryModel = (getModel as any)(opts.provider, canonicalId);
+  const registryModel = (pi.getModel as any)(opts.provider, canonicalId);
   const model = opts.baseUrl ? { ...registryModel, baseUrl: opts.baseUrl } : registryModel;
 
   const userContent: (TextContent | ImageContent)[] = [{ type: 'text', text: opts.userText }];
@@ -158,7 +159,7 @@ export async function call(opts: CallOptions): Promise<CallResult> {
     ],
   };
 
-  const result = await piComplete(model, context, {
+  const result = await pi.complete(model, context, {
     ...(opts.signal !== undefined ? { signal: opts.signal } : {}),
     ...(opts.maxTokens !== undefined ? { maxOutputTokens: opts.maxTokens } : {}),
   });

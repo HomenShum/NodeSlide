@@ -335,7 +335,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
       state; `@nodeslide/react` ships the controlled StudioShell, viewer,
       proposal review, and agent thread over opt-in scoped CSS; the Convex
       package and source registry provide the optional binding and presenter.
-- [x] I4. **Auth is host-supplied**: normalize to `NodeSlidePrincipal`
+- [ ] I4. **Auth is host-supplied**: normalize to `NodeSlidePrincipal`
       {userId, organizationId?, roles, permissions}; host adapters resolve it
       from WorkOS/Clerk/Auth0/Convex/Supabase/custom. No auth vendor inside
       the packages. First authorization-spine slice: the backend package now
@@ -356,11 +356,12 @@ registry/                  shadcn-style source-owned compositions (studio route,
       differs from the persisted direct or unresolved submission. PR #23
       applies the same fail-closed binding to rejected submissions, which
       preserve the proposal's original submission version.
-      — DONE across NodeSlide PR #28 and NodeRoom PR #233 (merged as
-      `7788e986886f9948f8f3e7c7c21ad49295d3cec5`): NodeRoom's real
-      ActorProof/membership policy is the mounted host authorizer. Reads and
-      writes authorize before resource lookup, receipts bind the host policy
-      evidence, and bearer credentials are never persisted.
+      — PACKAGE COMPLETE; FINAL HOST MOUNT PENDING. NodeRoom PR #233 landed
+      the real ActorProof/membership authorizer, but its release binding used
+      the superseded pre-review v0.2.0 artifact set. The sanitized follow-up
+      retains the authorization ordering and credential-handling hardening;
+      keep this unchecked until it is rebound to approved v0.2.1 artifacts
+      and the full mounted journey passes on NodeRoom main.
 - [x] I5. **Governance = enforced invariants, configurable UX.** Required and
       non-bypassable server-side: mutation authority checks, version clocks
       (CAS), validation, trace lineage, source authorization, rollback.
@@ -373,7 +374,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
       validator. Approval mode, per-operation policy, Turbo, publishing, and
       retention remain host-configurable; tests prove none can disable the
       server invariants.
-- [x] I6. **Installer + upgrade contract**: `npx nodeslide init` asks what to
+- [ ] I6. **Installer + upgrade contract**: `npx nodeslide init` asks what to
       install (full studio / agent thread / renderer / presenter / backend
       only / agent pack only), which backend (Convex / hosted / custom), and
       which UI mode (default theme / host tokens / headless); detects
@@ -391,13 +392,13 @@ registry/                  shadcn-style source-owned compositions (studio route,
       SHA-512 pins; pre-install tamper/mixed/unlisted checks; receipt and
       lockfile proof; strictly advancing upgrades; and a clean local
       v0.1.0 -> v0.2.0 install/upgrade proof with tampered and mixed sets
-      rejected. DONE 2026-07-20: immutable public releases v0.1.0
-      (`df5567917425901252252e3adb2efb788ec345e4`) and v0.2.0
-      (`39a9ebfcbaaeef52556bc263d386ea4859f476bb`) contain the complete
-      artifact sets and manifests. GitHub release verification passed for both;
-      every v0.2 asset verified, and the clean v0.1.0 → v0.2.0 upgrade proof
-      passed exact pins, lock integrity, tamper rejection, and mixed-release
-      rejection.
+      rejected. Public v0.1.0 is verified and immutable. Public v0.2.0 was
+      published concurrently from a pre-review producer and is itself
+      immutable, so it is preserved but explicitly superseded; it is not the
+      acceptance target. Keep this unchecked until v0.2.1 is rebuilt twice
+      byte-for-byte from its exact green main SHA, published and verified, and
+      the public v0.1.0 → v0.2.1 workflow passes exact pins, lock integrity,
+      tamper rejection, mixed-release rejection, and source reproducibility.
 - [ ] I7. **NodeRoom consumer proof** (a required architectural test, not
       optional dogfood): from a clean NodeRoom branch — installer →
       NodeRoom's own principal adapter → mount as a room artifact → create
@@ -408,20 +409,23 @@ registry/                  shadcn-style source-owned compositions (studio route,
       no duplicate auth, no second Convex client, no global CSS
       contamination, no table collisions, clean uninstall, same snapshot runs
       against Memory and Convex adapters.
-      — PRODUCT PATH COMPLETE in NodeRoom PR #233, merged as
-      `7788e986886f9948f8f3e7c7c21ad49295d3cec5`: the real room artifact,
+      — CANDIDATE PATH IMPLEMENTED in NodeRoom PR #233: the real room artifact,
       ActorProof/membership policy, package StudioShell, existing NodeAgent,
       unapplied proposals, CAS acceptance/rejection, activity/receipts,
       reconstructed-repository reload, presenter/PPTX/reopen, and Memory/Convex
-      parity are deterministic and green. The checkbox remains open only for
-      the literal mounted browser/a11y observation required by this item.
-- [x] I8. **Cross-repo CI**: a NodeSlide package regression must fail
+      parity are deterministic and green. Its pre-review v0.2.0 package lock is
+      rejected and removed by the sanitized follow-up. Rebind to approved
+      v0.2.1, rerun the mounted release proof, and record the literal browser/
+      a11y observation before checking this item.
+- [ ] I8. **Cross-repo CI**: a NodeSlide package regression must fail
       NodeRoom's consumer suite; both CIs run the same smallest journey
       (load → create → render → edit → version++ → export).
-      — DONE 2026-07-20: NodeRoom pins the immutable NodeSlide v0.2.0 producer
-      SHA and artifact digests; both repositories' CI runs the publish-shaped
-      package proof plus the smallest mounted Memory/Convex/React journey.
-      NodeRoom PR #233 and NodeSlide PR #29 were green in both directions.
+      — PLUMBING COMPLETE, APPROVED PIN PENDING. Both repositories run the
+      publish-shaped package proof and smallest mounted Memory/Convex/React
+      journey, but the first NodeRoom immutable pin targeted superseded
+      pre-review v0.2.0. Keep this unchecked until NodeRoom pins v0.2.1's exact
+      producer SHA and digests and both repositories are green against that
+      approved pair.
 
 ## J · Ecosystem organization — who owns what across HomenShum repos (P1, audit-first)
 
@@ -459,18 +463,21 @@ discipline as I1: audit before asserting; no invented org maps.
 ## Suggested sequence — remaining literal acceptance
 
 ```text
-1.  B6 / E4     record the literal camera acceptances
-2.  F1/F2/F4    visually prove snapshot capture and claim-bound regions
-3.  I7          record the literal mounted NodeRoom browser/a11y observation
-4.  H5          human sends the Mike draft
+1.  I6          publish and prove immutable v0.1.0 → v0.2.1
+2.  I4/I7/I8    bind NodeRoom to v0.2.1, rerun full journey and bilateral CI
+3.  H3          retain a green exact-main automated deployment receipt
+4.  B6 / E4     record the literal camera acceptances
+5.  F1/F2/F4    visually prove snapshot capture and claim-bound regions
+6.  I7          record the literal mounted NodeRoom browser/a11y observation
+7.  H5          human sends the Mike draft
 ```
 
 Organizing principle: **NodeSlide is an app plus a reusable governed
-presentation engine.** The app and NodeRoom are product consumers today;
-NodeRoom's deterministic mounted journey is green, with only the separately
-named browser/a11y observation still open. Shared capability belongs in the
-engine and is independently verified by the smallest honest consumer proof
-available.
+presentation engine.** The app is the verified product consumer today;
+NodeRoom becomes the second verified product consumer only after the approved
+v0.2.1 binding, deterministic mounted journey, bilateral CI, and browser/a11y
+observation all pass. Shared capability belongs in the engine and is
+independently verified by the smallest honest consumer proof available.
 
 Definition of done for the plan itself: every checked item has a fail-closed
 verification run linked in the commit message, and no caption anywhere claims

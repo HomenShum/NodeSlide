@@ -476,7 +476,33 @@ export default defineSchema({
     recordedAt: v.number(),
   })
     .index('by_stable_id', ['receiptId'])
+    .index('by_deck_patch', ['deckId', 'patchId'])
     .index('by_deck_recorded', ['deckId', 'recordedAt']),
+
+  /**
+   * Package mutation identity and proposal-resolution ledger. Patch rows are
+   * shared with the app, so this table records whether a package patch ID was
+   * submitted directly or as a proposal and binds resolution coordinates to
+   * the authoritative patch, version, and receipt rows.
+   */
+  nodeslide_package_submissions: defineTable({
+    submissionId: v.string(),
+    deckId: v.string(),
+    patchId: v.string(),
+    kind: v.union(v.literal('direct'), v.literal('proposal')),
+    commandDigest: v.string(),
+    originReceiptId: v.string(),
+    submittedAt: v.number(),
+    resolutionDecision: v.optional(v.union(v.literal('accept'), v.literal('reject'))),
+    resolutionStatus: v.optional(
+      v.union(v.literal('accepted'), v.literal('rejected'), v.literal('stale')),
+    ),
+    resolutionDeckVersion: v.optional(v.number()),
+    resolutionReceiptId: v.optional(v.string()),
+    resolvedAt: v.optional(v.number()),
+  })
+    .index('by_stable_id', ['submissionId'])
+    .index('by_deck_patch', ['deckId', 'patchId']),
 
   nodeslide_package_assets: defineTable({
     assetId: v.string(),

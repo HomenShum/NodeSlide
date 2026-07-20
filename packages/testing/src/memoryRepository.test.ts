@@ -399,6 +399,43 @@ describe('injectable NodeSlide testkit', () => {
     } satisfies Partial<NodeSlideRepositoryError>);
   });
 
+  it('rejects custom receipt replay across organizations that share a user ID', async () => {
+    const snapshot = createNodeSlideTestSnapshot();
+    const repository = new MemoryNodeSlideRepository({
+      snapshots: [snapshot],
+      authorize: authorizeNodeSlideTestPrincipal,
+    });
+    const draft = {
+      id: 'custom-receipt:cross-organization-replay' as const,
+      deckId: snapshot.deck.id,
+      deckVersion: snapshot.deck.version,
+      operation: 'custom' as const,
+      recordedAt: snapshot.deck.updatedAt,
+      attributes: { purpose: 'organization-bound-audit' },
+    };
+
+    const stored = await repository.storeReceipt({
+      deckId: snapshot.deck.id,
+      principal: NODESLIDE_TEST_PRINCIPAL,
+      receipt: draft,
+    });
+    expect(stored.authorization.organizationId).toBe(NODESLIDE_TEST_PRINCIPAL.organizationId);
+
+    await expect(
+      repository.storeReceipt({
+        deckId: snapshot.deck.id,
+        principal: {
+          ...NODESLIDE_TEST_PRINCIPAL,
+          organizationId: 'organization:other',
+        },
+        receipt: draft,
+      }),
+    ).rejects.toMatchObject({
+      code: 'invalid_state',
+    } satisfies Partial<NodeSlideRepositoryError>);
+    expect(repository.receiptsForDeck(snapshot.deck.id)).toEqual([stored]);
+  });
+
   it('snapshots store-receipt outer fields once without invoking accessors or proxy gets', async () => {
     const snapshot = createNodeSlideTestSnapshot();
     const repository = new MemoryNodeSlideRepository({

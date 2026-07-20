@@ -2,6 +2,7 @@ import { v } from 'convex/values';
 import {
   NODESLIDE_PERMISSIONS,
   type NodeSlidePrincipal,
+  type NodeSlideProposalResolution,
   type NodeSlideReceipt,
   type NodeSlideRepositoryAuthorizationAction,
   type NodeSlideRepositoryAuthorizationRequest,
@@ -237,6 +238,15 @@ const PACKAGE_ASSET_METADATA_MAX_BYTES = 32 * 1024;
 
 type PackageHostReceiptOperation = NodeSlideReceipt['operation'];
 type PackageHostReceipt = NodeSlideReceipt;
+type PackageSubmissionKind = 'direct' | 'proposal';
+type PackageProposalDecision = 'accept' | 'reject';
+type StoredPackageHostReceipt = Omit<PackageHostReceipt, 'authorization'> & {
+  authorization?: PackageHostReceipt['authorization'];
+};
+type PackageSubmissionBinding = {
+  row: Doc<'nodeslide_package_submissions'>;
+  originReceipt: PackageHostReceipt;
+};
 
 type PackageJsonValue =
   | string
@@ -1019,8 +1029,17 @@ export const packageApplyPatch = mutation({
   handler: async (ctx, args) => {
     const normalized = normalizePackageHostPatch(args);
     await requireOwnerAccess(ctx, normalized.deckId, normalized.ownerAccessKey);
-    const existing = normalized.id ? await findPatchRow(ctx, normalized.id) : null;
-    if (existing) assertExactPatchCommandReplay(existing, normalized);
+    let existing = normalized.id ? await findPatchRow(ctx, normalized.id) : null;
+    let submission = null;
+    if (existing) {
+      assertExactPatchCommandReplay(existing, normalized);
+      submission = await requirePackageSubmission(ctx, {
+        patch: existing,
+        ownerAccessKey: args.ownerAccessKey,
+        expectedKind: 'direct',
+      });
+      existing = await upgradeLegacyStalePatchVersion(ctx, existing, submission.originReceipt);
+    }
     const before = await requireSnapshot(ctx, args.deckId);
     const replayed = existing?.status === 'accepted' || existing?.status === 'stale';
     const committed = await commitPatch(ctx, normalized, existing);
@@ -1037,16 +1056,25 @@ export const packageApplyPatch = mutation({
       replayed && committed.patch.status === 'stale'
         ? evaluateNodeSlideCas(snapshot, patchInput(normalized)).reasons
         : null;
-    const receipt = await persistPackageHostReceipt(
-      ctx,
-      packageHostReceipt({
-        ownerAccessKey: args.ownerAccessKey,
+    const receipt =
+      submission?.originReceipt ??
+      (await persistPackageHostReceipt(
+        ctx,
+        packageHostReceipt({
+          ownerAccessKey: args.ownerAccessKey,
+          patch: committed.patch,
+          deckVersion: committed.patch.resultingDeckVersion ?? snapshot.deck.version,
+          operation: committed.patch.status === 'accepted' ? 'patch.applied' : 'custom',
+          authorizationAction: 'patch.apply',
+        }),
+      ));
+    if (!submission) {
+      submission = await persistPackageSubmission(ctx, {
         patch: committed.patch,
-        deckVersion: committed.patch.resultingDeckVersion ?? snapshot.deck.version,
-        operation: committed.patch.status === 'accepted' ? 'patch.applied' : 'custom',
-        authorizationAction: 'patch.apply',
-      }),
-    );
+        kind: 'direct',
+        originReceipt: receipt,
+      });
+    }
     if (committed.patch.status !== 'accepted') {
       return {
         status: 'stale' as const,
@@ -1089,14 +1117,26 @@ export const packageCreateProposal = mutation({
   handler: async (ctx, args) => {
     const normalized = normalizePackageHostPatch(args);
     await requireOwnerAccess(ctx, normalized.deckId, normalized.ownerAccessKey);
-    const existing = normalized.id ? await findPatchRow(ctx, normalized.id) : null;
+    let existing = normalized.id ? await findPatchRow(ctx, normalized.id) : null;
     if (existing) {
       assertExactPatchCommandReplay(existing, normalized);
-      if (existing.status === 'accepted' || existing.status === 'rejected') {
+      const submission = await requirePackageSubmission(ctx, {
+        patch: existing,
+        ownerAccessKey: args.ownerAccessKey,
+        expectedKind: 'proposal',
+      });
+      if (
+        submission.row.resolutionStatus !== undefined ||
+        existing.status === 'accepted' ||
+        existing.status === 'rejected' ||
+        (existing.status === 'stale' && submission.originReceipt.operation === 'proposal.created')
+      ) {
         throw new Error(
           `Proposal ${existing.id} was already resolved; its creation response cannot be replayed.`,
         );
       }
+      existing = await upgradeLegacyStalePatchVersion(ctx, existing, submission.originReceipt);
+      return { patch: patchFromRow(existing), receipt: submission.originReceipt };
     }
     const proposed = await persistProposal(ctx, normalized);
     const receipt = await persistPackageHostReceipt(
@@ -1111,6 +1151,11 @@ export const packageCreateProposal = mutation({
         authorizationAction: 'proposal.create',
       }),
     );
+    await persistPackageSubmission(ctx, {
+      patch: proposed.patch,
+      kind: 'proposal',
+      originReceipt: receipt,
+    });
     return { patch: proposed.patch, receipt };
   },
 });
@@ -1123,30 +1168,53 @@ export const packageResolveProposal = mutation({
     decision: v.union(v.literal('accept'), v.literal('reject')),
   },
   handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const proposal = await findPatchRow(ctx, args.proposalId);
+    if (!proposal || proposal.deckId !== args.deckId) {
+      throw new Error(`Patch ${args.proposalId} not found.`);
+    }
+    const submission = await requirePackageSubmission(ctx, {
+      patch: proposal,
+      ownerAccessKey: args.ownerAccessKey,
+      expectedKind: 'proposal',
+    });
+    const replay = await packageExistingProposalResolution(ctx, {
+      submission,
+      patch: proposal,
+      ownerAccessKey: args.ownerAccessKey,
+      decision: args.decision,
+    });
+    if (replay) return replay;
+
     if (args.decision === 'accept') {
       const resolved = await acceptPatchForOwner(ctx, {
         deckId: args.deckId,
         ownerAccessKey: args.ownerAccessKey,
         patchId: args.proposalId,
       });
-      const snapshot = packageSnapshot(requirePackageWorkspace(resolved.workspace));
+      const currentSnapshot = packageSnapshot(requirePackageWorkspace(resolved.workspace));
       const status = resolved.patch.status === 'accepted' ? 'accepted' : 'stale';
+      const resolvedAt = Date.now();
       const receipt = await persistPackageHostReceipt(
         ctx,
         packageHostReceipt({
           ownerAccessKey: args.ownerAccessKey,
           patch: resolved.patch,
-          deckVersion: snapshot.deck.version,
+          deckVersion: currentSnapshot.deck.version,
           operation: status === 'accepted' ? 'proposal.accepted' : 'proposal.stale',
           authorizationAction: 'proposal.accept',
+          recordedAt: resolvedAt,
         }),
       );
-      return {
+      const snapshot = await immutablePackageResolutionSnapshot(ctx, resolved.patch, receipt);
+      const resolution = {
         status: status as 'accepted' | 'stale',
         patch: resolved.patch,
         snapshot,
         receipt,
       };
+      await persistPackageProposalResolution(ctx, submission.row, 'accept', resolution, resolvedAt);
+      return resolution;
     }
 
     const patch = await rejectPatchForOwner(ctx, {
@@ -1155,18 +1223,23 @@ export const packageResolveProposal = mutation({
       patchId: args.proposalId,
     });
     if (!patch) throw new Error(`Patch ${args.proposalId} not found.`);
-    const snapshot = await requireSnapshot(ctx, args.deckId);
+    const currentSnapshot = await requireSnapshot(ctx, args.deckId);
+    const resolvedAt = Date.now();
     const receipt = await persistPackageHostReceipt(
       ctx,
       packageHostReceipt({
         ownerAccessKey: args.ownerAccessKey,
         patch,
-        deckVersion: snapshot.deck.version,
+        deckVersion: currentSnapshot.deck.version,
         operation: 'proposal.rejected',
         authorizationAction: 'proposal.reject',
+        recordedAt: resolvedAt,
       }),
     );
-    return { status: 'rejected' as const, patch, snapshot, receipt };
+    const snapshot = await immutablePackageResolutionSnapshot(ctx, patch, receipt);
+    const resolution = { status: 'rejected' as const, patch, snapshot, receipt };
+    await persistPackageProposalResolution(ctx, submission.row, 'reject', resolution, resolvedAt);
+    return resolution;
   },
 });
 
@@ -3147,8 +3220,9 @@ function packageHostReceipt(args: {
   deckVersion: number;
   operation: PackageHostReceiptOperation;
   authorizationAction: PackageHostAuthorizationAction;
+  recordedAt?: number;
 }): PackageHostReceipt {
-  const recordedAt = args.patch.updatedAt;
+  const recordedAt = args.recordedAt ?? args.patch.updatedAt;
   const receiptId = nodeslideStableId(
     'repository_receipt',
     args.patch.deckId,
@@ -3196,16 +3270,30 @@ async function persistPackageHostReceipt(
   ctx: MutationCtx,
   receipt: PackageHostReceipt,
 ): Promise<PackageHostReceipt> {
-  const existing = await ctx.db
+  const existingRows = await ctx.db
     .query('nodeslide_package_receipts')
     .withIndex('by_stable_id', (index) => index.eq('receiptId', receipt.id))
-    .first();
+    .collect();
+  if (existingRows.length > 1) {
+    throw new Error('NodeSlide package receipt ID collision.');
+  }
+  const existing = existingRows[0];
   if (existing) {
     const persisted = existing.receipt as PackageHostReceipt;
-    if (stableJson(persisted) !== stableJson(receipt)) {
+    if (
+      existing.deckId !== receipt.deckId ||
+      existing.patchId !== receipt.patchId ||
+      existing.principalId !== receipt.principalId ||
+      existing.recordedAt !== receipt.recordedAt
+    ) {
       throw new Error('NodeSlide package receipt ID collision.');
     }
-    return persisted;
+    if (stableJson(persisted) === stableJson(receipt)) return persisted;
+    if (!legacyPackageReceiptMatches(persisted, receipt)) {
+      throw new Error('NodeSlide package receipt ID collision.');
+    }
+    await ctx.db.patch(existing._id, { receipt });
+    return receipt;
   }
   await ctx.db.insert('nodeslide_package_receipts', {
     receiptId: receipt.id,
@@ -3216,6 +3304,663 @@ async function persistPackageHostReceipt(
     recordedAt: receipt.recordedAt,
   });
   return receipt;
+}
+
+function legacyPackageReceiptMatches(persisted: unknown, authorized: PackageHostReceipt): boolean {
+  if (!persisted || typeof persisted !== 'object' || Array.isArray(persisted)) return false;
+  if (Object.hasOwn(persisted, 'authorization')) return false;
+  const legacy = Object.fromEntries(
+    Object.entries(authorized).filter(([key]) => key !== 'authorization'),
+  );
+  return stableJson(persisted) === stableJson(legacy);
+}
+
+function packageSubmissionId(deckId: string, patchId: string): string {
+  return nodeslideStableId('package_submission', deckId, patchId);
+}
+
+function packageCommandDigest(patch: ExactPatchCommand): string {
+  return nodeslideContentDigest(stableJson(exactPatchCommand(patch)));
+}
+
+async function findPackageSubmission(
+  ctx: MutationCtx,
+  deckId: string,
+  patchId: string,
+): Promise<Doc<'nodeslide_package_submissions'> | null> {
+  const expectedSubmissionId = packageSubmissionId(deckId, patchId);
+  const coordinateRows = await ctx.db
+    .query('nodeslide_package_submissions')
+    .withIndex('by_deck_patch', (index) => index.eq('deckId', deckId).eq('patchId', patchId))
+    .collect();
+  const stableIdRows = await ctx.db
+    .query('nodeslide_package_submissions')
+    .withIndex('by_stable_id', (index) => index.eq('submissionId', expectedSubmissionId))
+    .collect();
+  if (coordinateRows.length > 1) {
+    throw new Error(`Patch ID ${patchId} has duplicate package submission bindings.`);
+  }
+  if (stableIdRows.length > 1) {
+    throw new Error(`Patch ID ${patchId} has a package submission ID collision.`);
+  }
+  const coordinateRow = coordinateRows[0];
+  const stableIdRow = stableIdRows[0];
+  if (coordinateRow && stableIdRow && coordinateRow._id !== stableIdRow._id) {
+    throw new Error(`Patch ID ${patchId} has conflicting package submission bindings.`);
+  }
+  const row = coordinateRow ?? stableIdRow;
+  if (row && row.submissionId !== expectedSubmissionId) {
+    throw new Error(`Patch ID ${patchId} has a noncanonical package submission binding.`);
+  }
+  if (row && (row.deckId !== deckId || row.patchId !== patchId)) {
+    throw new Error(`Patch ID ${patchId} has a conflicting package submission envelope.`);
+  }
+  return row ?? null;
+}
+
+async function packageReceiptRowsForPatch(
+  ctx: MutationCtx,
+  deckId: string,
+  patchId: string,
+): Promise<Doc<'nodeslide_package_receipts'>[]> {
+  return await ctx.db
+    .query('nodeslide_package_receipts')
+    .withIndex('by_deck_patch', (index) => index.eq('deckId', deckId).eq('patchId', patchId))
+    .collect();
+}
+
+async function packageReceiptRowById(
+  ctx: MutationCtx,
+  receiptId: string,
+): Promise<Doc<'nodeslide_package_receipts'>> {
+  const rows = await ctx.db
+    .query('nodeslide_package_receipts')
+    .withIndex('by_stable_id', (index) => index.eq('receiptId', receiptId))
+    .collect();
+  if (rows.length > 1) {
+    throw new Error('NodeSlide package receipt ID collision.');
+  }
+  const row = rows[0];
+  if (!row) throw new Error('NodeSlide package submission is missing its origin receipt.');
+  return row;
+}
+
+function storedPackageReceipt(value: unknown): StoredPackageHostReceipt {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    throw new Error('NodeSlide package receipt is malformed.');
+  }
+  const receipt = value as Partial<StoredPackageHostReceipt>;
+  if (
+    typeof receipt.id !== 'string' ||
+    typeof receipt.deckId !== 'string' ||
+    typeof receipt.deckVersion !== 'number' ||
+    !Number.isSafeInteger(receipt.deckVersion) ||
+    receipt.deckVersion < 0 ||
+    typeof receipt.operation !== 'string' ||
+    ![
+      'patch.applied',
+      'proposal.created',
+      'proposal.accepted',
+      'proposal.rejected',
+      'proposal.stale',
+      'custom',
+    ].includes(receipt.operation) ||
+    typeof receipt.principalId !== 'string' ||
+    typeof receipt.patchId !== 'string' ||
+    typeof receipt.recordedAt !== 'number' ||
+    !Number.isSafeInteger(receipt.recordedAt) ||
+    receipt.recordedAt < 0 ||
+    !receipt.attributes ||
+    typeof receipt.attributes !== 'object' ||
+    Array.isArray(receipt.attributes)
+  ) {
+    throw new Error('NodeSlide package receipt is malformed.');
+  }
+  return receipt as StoredPackageHostReceipt;
+}
+
+function packageReceiptPatch(patch: DeckPatch, receipt: StoredPackageHostReceipt): DeckPatch {
+  const status = receipt.attributes['status'];
+  const source = receipt.attributes['source'];
+  if (
+    (status !== 'draft' &&
+      status !== 'ready' &&
+      status !== 'accepted' &&
+      status !== 'rejected' &&
+      status !== 'stale') ||
+    source !== patch.source ||
+    receipt.attributes['governancePath'] !== 'existing_nodeslide_server'
+  ) {
+    throw new Error('NodeSlide package receipt does not match its patch provenance.');
+  }
+  const expectedStatus: Partial<Record<PackageHostReceiptOperation, DeckPatch['status']>> = {
+    'patch.applied': 'accepted',
+    'proposal.created': 'ready',
+    'proposal.accepted': 'accepted',
+    'proposal.rejected': 'rejected',
+    'proposal.stale': 'stale',
+    custom: 'stale',
+  };
+  if (expectedStatus[receipt.operation] !== status) {
+    throw new Error('NodeSlide package receipt does not match its mutation status.');
+  }
+  return { ...patch, status, updatedAt: receipt.recordedAt };
+}
+
+function preflightStoredPackageReceiptRow(args: {
+  row: Doc<'nodeslide_package_receipts'>;
+  patch: DeckPatch;
+  ownerAccessKey: string;
+}): StoredPackageHostReceipt {
+  const persisted = storedPackageReceipt(args.row.receipt);
+  if (
+    args.row.receiptId !== persisted.id ||
+    args.row.deckId !== persisted.deckId ||
+    args.row.patchId !== persisted.patchId ||
+    args.row.principalId !== persisted.principalId ||
+    args.row.recordedAt !== persisted.recordedAt ||
+    persisted.deckId !== args.patch.deckId ||
+    persisted.patchId !== args.patch.id ||
+    persisted.principalId !== packageHostPrincipalId(args.ownerAccessKey)
+  ) {
+    throw new Error('NodeSlide package receipt does not match its stored binding.');
+  }
+  const canonicalId = nodeslideStableId(
+    'repository_receipt',
+    persisted.deckId,
+    persisted.patchId,
+    persisted.operation,
+    String(persisted.deckVersion),
+  );
+  if (persisted.id !== canonicalId) {
+    throw new Error('NodeSlide package receipt does not have its canonical stable ID.');
+  }
+  packageReceiptPatch(args.patch, persisted);
+  return persisted;
+}
+
+async function authorizedPackageReceipt(
+  ctx: MutationCtx,
+  args: {
+    row: Doc<'nodeslide_package_receipts'>;
+    patch: DeckPatch;
+    ownerAccessKey: string;
+    authorizationAction: PackageHostAuthorizationAction;
+  },
+): Promise<PackageHostReceipt> {
+  const persisted = preflightStoredPackageReceiptRow(args);
+  const expected = packageHostReceipt({
+    ownerAccessKey: args.ownerAccessKey,
+    patch: packageReceiptPatch(args.patch, persisted),
+    deckVersion: persisted.deckVersion,
+    operation: persisted.operation,
+    authorizationAction: args.authorizationAction,
+    recordedAt: persisted.recordedAt,
+  });
+  return await persistPackageHostReceipt(ctx, expected);
+}
+
+function packageReceiptAuthorizationAction(
+  receipt: StoredPackageHostReceipt,
+): PackageHostAuthorizationAction | undefined {
+  const action = receipt.authorization?.action;
+  if (
+    action === 'patch.apply' ||
+    action === 'proposal.create' ||
+    action === 'proposal.accept' ||
+    action === 'proposal.reject'
+  ) {
+    return action;
+  }
+  return undefined;
+}
+
+async function inferLegacyPackageSubmission(
+  ctx: MutationCtx,
+  args: {
+    patch: Doc<'nodeslide_patches'>;
+    ownerAccessKey: string;
+  },
+): Promise<{
+  kind: PackageSubmissionKind;
+  originRow: Doc<'nodeslide_package_receipts'>;
+}> {
+  const rows = (await packageReceiptRowsForPatch(ctx, args.patch.deckId, args.patch.id)).sort(
+    (left, right) => left._creationTime - right._creationTime,
+  );
+  const patch = patchFromRow(args.patch);
+  const seenReceiptIds = new Set<string>();
+  const receipts = rows.map((row) => {
+    const receipt = preflightStoredPackageReceiptRow({
+      row,
+      patch,
+      ownerAccessKey: args.ownerAccessKey,
+    });
+    if (seenReceiptIds.has(receipt.id)) {
+      throw new Error('NodeSlide package receipt ID collision.');
+    }
+    seenReceiptIds.add(receipt.id);
+    return { row, receipt };
+  });
+  const direct = receipts.filter(
+    ({ receipt }) => receipt.operation === 'patch.applied' || receipt.operation === 'custom',
+  );
+  const proposal = receipts.filter(({ receipt }) => receipt.operation.startsWith('proposal.'));
+  if (direct.length > 0 && proposal.length > 0) {
+    throw new Error(`Patch ID ${args.patch.id} has conflicting package submission kinds.`);
+  }
+  if (direct.length > 0) {
+    const expectedOperation = args.patch.status === 'accepted' ? 'patch.applied' : 'custom';
+    const origin = direct.find(({ receipt }) => receipt.operation === expectedOperation);
+    if (!origin) throw new Error(`Patch ${args.patch.id} has no valid direct submission receipt.`);
+    return {
+      kind: 'direct',
+      originRow: origin.row,
+    };
+  }
+
+  const created = proposal.find(({ receipt }) => receipt.operation === 'proposal.created');
+  const staleCreation = proposal.find(
+    ({ receipt }) =>
+      receipt.operation === 'proposal.stale' &&
+      (packageReceiptAuthorizationAction(receipt) === 'proposal.create' ||
+        (receipt.authorization === undefined && created === undefined)),
+  );
+  const origin = created ?? staleCreation;
+  if (!origin) {
+    throw new Error(`Patch ${args.patch.id} has no package proposal creation receipt.`);
+  }
+  const terminalOperations = new Set(
+    proposal
+      .filter(({ row }) => row._id !== origin.row._id)
+      .map(({ receipt }) => receipt.operation)
+      .filter(
+        (operation) =>
+          operation === 'proposal.accepted' ||
+          operation === 'proposal.rejected' ||
+          operation === 'proposal.stale',
+      ),
+  );
+  if (
+    terminalOperations.size > 1 ||
+    (origin.receipt.operation === 'proposal.stale' && terminalOperations.size > 0)
+  ) {
+    throw new Error(`Proposal ${args.patch.id} has conflicting terminal package receipts.`);
+  }
+  return {
+    kind: 'proposal',
+    originRow: origin.row,
+  };
+}
+
+function assertPackageSubmissionRow(
+  row: Doc<'nodeslide_package_submissions'>,
+  args: {
+    patch: DeckPatch;
+    expectedKind: PackageSubmissionKind;
+  },
+): void {
+  if (
+    row.submissionId !== packageSubmissionId(args.patch.deckId, args.patch.id) ||
+    row.deckId !== args.patch.deckId ||
+    row.patchId !== args.patch.id ||
+    row.commandDigest !== packageCommandDigest(args.patch)
+  ) {
+    throw new Error(`Patch ID ${args.patch.id} has a conflicting package submission binding.`);
+  }
+  if (row.kind !== args.expectedKind) {
+    throw new Error(
+      `Patch ID ${args.patch.id} is already bound to a ${row.kind} package submission.`,
+    );
+  }
+  const resolutionFields = [
+    row.resolutionDecision,
+    row.resolutionStatus,
+    row.resolutionDeckVersion,
+    row.resolutionReceiptId,
+    row.resolvedAt,
+  ];
+  const populatedResolutionFields = resolutionFields.filter((value) => value !== undefined).length;
+  if (populatedResolutionFields !== 0 && populatedResolutionFields !== resolutionFields.length) {
+    throw new Error(`Proposal ${args.patch.id} has an incomplete resolution binding.`);
+  }
+  if (row.kind === 'direct' && populatedResolutionFields !== 0) {
+    throw new Error(`Direct patch ${args.patch.id} cannot carry a proposal resolution.`);
+  }
+}
+
+async function persistPackageSubmission(
+  ctx: MutationCtx,
+  args: {
+    patch: DeckPatch;
+    kind: PackageSubmissionKind;
+    originReceipt: PackageHostReceipt;
+  },
+): Promise<PackageSubmissionBinding> {
+  const expected = {
+    submissionId: packageSubmissionId(args.patch.deckId, args.patch.id),
+    deckId: args.patch.deckId,
+    patchId: args.patch.id,
+    kind: args.kind,
+    commandDigest: packageCommandDigest(args.patch),
+    originReceiptId: args.originReceipt.id,
+    submittedAt: args.originReceipt.recordedAt,
+  };
+  const existing = await findPackageSubmission(ctx, args.patch.deckId, args.patch.id);
+  if (existing) {
+    assertPackageSubmissionRow(existing, { patch: args.patch, expectedKind: args.kind });
+    if (
+      existing.originReceiptId !== expected.originReceiptId ||
+      existing.submittedAt !== expected.submittedAt
+    ) {
+      throw new Error(`Patch ID ${args.patch.id} has a conflicting package origin receipt.`);
+    }
+    return { row: existing, originReceipt: args.originReceipt };
+  }
+  await ctx.db.insert('nodeslide_package_submissions', expected);
+  const inserted = await findPackageSubmission(ctx, args.patch.deckId, args.patch.id);
+  if (!inserted) throw new Error('NodeSlide package submission could not be persisted.');
+  return { row: inserted, originReceipt: args.originReceipt };
+}
+
+async function requirePackageSubmission(
+  ctx: MutationCtx,
+  args: {
+    patch: Doc<'nodeslide_patches'>;
+    ownerAccessKey: string;
+    expectedKind: PackageSubmissionKind;
+  },
+): Promise<PackageSubmissionBinding> {
+  const patch = patchFromRow(args.patch);
+  const existing = await findPackageSubmission(ctx, patch.deckId, patch.id);
+  if (existing) {
+    assertPackageSubmissionRow(existing, { patch, expectedKind: args.expectedKind });
+    const originRow = await packageReceiptRowById(ctx, existing.originReceiptId);
+    if (
+      originRow.receiptId !== existing.originReceiptId ||
+      originRow.recordedAt !== existing.submittedAt
+    ) {
+      throw new Error(`Patch ID ${patch.id} has a conflicting package origin receipt.`);
+    }
+    const originReceipt = await authorizedPackageReceipt(ctx, {
+      row: originRow,
+      patch,
+      ownerAccessKey: args.ownerAccessKey,
+      authorizationAction: existing.kind === 'direct' ? 'patch.apply' : 'proposal.create',
+    });
+    if (
+      (existing.kind === 'direct' &&
+        originReceipt.operation !== 'patch.applied' &&
+        originReceipt.operation !== 'custom') ||
+      (existing.kind === 'proposal' &&
+        originReceipt.operation !== 'proposal.created' &&
+        originReceipt.operation !== 'proposal.stale')
+    ) {
+      throw new Error(`Patch ID ${patch.id} has an invalid package origin receipt.`);
+    }
+    if (
+      existing.originReceiptId !== originReceipt.id ||
+      existing.submittedAt !== originReceipt.recordedAt
+    ) {
+      throw new Error(`Patch ID ${patch.id} has a conflicting package origin receipt.`);
+    }
+    return { row: existing, originReceipt };
+  }
+  const inferred = await inferLegacyPackageSubmission(ctx, {
+    patch: args.patch,
+    ownerAccessKey: args.ownerAccessKey,
+  });
+  if (inferred.kind !== args.expectedKind) {
+    throw new Error(
+      `Patch ID ${patch.id} is already bound to a ${inferred.kind} package submission.`,
+    );
+  }
+  const originReceipt = await authorizedPackageReceipt(ctx, {
+    row: inferred.originRow,
+    patch,
+    ownerAccessKey: args.ownerAccessKey,
+    authorizationAction: inferred.kind === 'direct' ? 'patch.apply' : 'proposal.create',
+  });
+  return await persistPackageSubmission(ctx, {
+    patch,
+    kind: inferred.kind,
+    originReceipt,
+  });
+}
+
+async function upgradeLegacyStalePatchVersion(
+  ctx: MutationCtx,
+  row: Doc<'nodeslide_patches'>,
+  receipt: PackageHostReceipt,
+): Promise<Doc<'nodeslide_patches'>> {
+  if (row.status !== 'stale' || row.resultingDeckVersion !== undefined) return row;
+  const version = await findVersionRow(ctx, {
+    deckId: row.deckId,
+    version: receipt.deckVersion,
+  });
+  if (!version || receipt.attributes['status'] !== 'stale') {
+    throw new Error(`Stale patch ${row.id} is missing a safe immutable version binding.`);
+  }
+  await ctx.db.patch(row._id, { resultingDeckVersion: receipt.deckVersion });
+  const upgraded = await findPatchRow(ctx, row.id);
+  if (!upgraded || upgraded.deckId !== row.deckId) {
+    throw new Error(`Stale patch ${row.id} could not be upgraded.`);
+  }
+  return upgraded;
+}
+
+async function immutablePackageResolutionSnapshot(
+  ctx: MutationCtx,
+  patch: DeckPatch,
+  receipt: PackageHostReceipt,
+): Promise<DeckSnapshot> {
+  const version = await findVersionRow(ctx, {
+    deckId: patch.deckId,
+    version: receipt.deckVersion,
+  });
+  if (!version)
+    throw new Error(`Proposal ${patch.id} is missing its immutable resolution version.`);
+  if (patch.status === 'accepted' && version.patchId !== patch.id) {
+    throw new Error(`Proposal ${patch.id} has an invalid accepted version binding.`);
+  }
+  if (
+    patch.status === 'accepted' &&
+    (patch.candidateDigest === undefined ||
+      nodeSlideCandidateDigest(version.snapshot) !== patch.candidateDigest)
+  ) {
+    throw new Error(`Proposal ${patch.id} does not match its immutable candidate digest.`);
+  }
+  if (patch.status !== 'rejected' && patch.resultingDeckVersion !== receipt.deckVersion) {
+    throw new Error(`Proposal ${patch.id} has a conflicting resolution version.`);
+  }
+  return version.snapshot;
+}
+
+async function persistPackageProposalResolution(
+  ctx: MutationCtx,
+  row: Doc<'nodeslide_package_submissions'>,
+  decision: PackageProposalDecision,
+  resolution: NodeSlideProposalResolution,
+  resolvedAt: number,
+): Promise<void> {
+  const current = await findPackageSubmission(ctx, row.deckId, row.patchId);
+  if (!current || current._id !== row._id || current.kind !== 'proposal') {
+    throw new Error(`Proposal ${row.patchId} has an invalid package submission binding.`);
+  }
+  const expectedStatus = decision === 'reject' ? 'rejected' : resolution.status;
+  if (
+    resolution.status !== expectedStatus ||
+    (decision === 'accept' && resolution.status === 'rejected') ||
+    resolution.patch.id !== row.patchId ||
+    resolution.patch.deckId !== row.deckId ||
+    resolution.snapshot.deck.id !== row.deckId ||
+    resolution.snapshot.deck.version !== resolution.receipt.deckVersion ||
+    resolution.receipt.patchId !== row.patchId ||
+    resolution.receipt.recordedAt !== resolvedAt
+  ) {
+    throw new Error(`Proposal ${row.patchId} has an invalid resolution result.`);
+  }
+  if (current.resolutionStatus !== undefined) {
+    if (
+      current.resolutionDecision !== decision ||
+      current.resolutionStatus !== resolution.status ||
+      current.resolutionDeckVersion !== resolution.receipt.deckVersion ||
+      current.resolutionReceiptId !== resolution.receipt.id ||
+      current.resolvedAt !== resolvedAt ||
+      current.resolutionStatus !== resolution.patch.status
+    ) {
+      throw new Error(`Proposal ${row.patchId} already has a different resolution.`);
+    }
+    return;
+  }
+  if (
+    current.resolutionDecision !== undefined ||
+    current.resolutionDeckVersion !== undefined ||
+    current.resolutionReceiptId !== undefined ||
+    current.resolvedAt !== undefined
+  ) {
+    throw new Error(`Proposal ${row.patchId} has an incomplete resolution binding.`);
+  }
+  await ctx.db.patch(current._id, {
+    resolutionDecision: decision,
+    resolutionStatus: resolution.status,
+    resolutionDeckVersion: resolution.receipt.deckVersion,
+    resolutionReceiptId: resolution.receipt.id,
+    resolvedAt,
+  });
+}
+
+async function validateStoredPackageProposalResolution(
+  ctx: MutationCtx,
+  args: {
+    submission: Doc<'nodeslide_package_submissions'>;
+    patch: Doc<'nodeslide_patches'>;
+    ownerAccessKey: string;
+    decision: PackageProposalDecision;
+  },
+): Promise<NodeSlideProposalResolution> {
+  if (
+    args.submission.resolutionDecision === undefined ||
+    args.submission.resolutionStatus === undefined ||
+    args.submission.resolutionDeckVersion === undefined ||
+    args.submission.resolutionReceiptId === undefined ||
+    args.submission.resolvedAt === undefined
+  ) {
+    throw new Error(`Proposal ${args.patch.id} has an incomplete resolution binding.`);
+  }
+  if (args.submission.resolutionDecision !== args.decision) {
+    throw new Error(
+      `Proposal ${args.patch.id} is already resolved as ${args.submission.resolutionDecision}.`,
+    );
+  }
+  const status = args.submission.resolutionStatus;
+  const expectedStatus = args.decision === 'reject' ? 'rejected' : status;
+  const patch = patchFromRow(args.patch);
+  if (
+    status !== expectedStatus ||
+    (args.decision === 'accept' && status === 'rejected') ||
+    patch.status !== status
+  ) {
+    throw new Error(`Proposal ${args.patch.id} has a conflicting stored resolution.`);
+  }
+  const expectedOperation =
+    status === 'accepted'
+      ? 'proposal.accepted'
+      : status === 'rejected'
+        ? 'proposal.rejected'
+        : 'proposal.stale';
+  const receiptRow = await packageReceiptRowById(ctx, args.submission.resolutionReceiptId);
+  const receipt = await authorizedPackageReceipt(ctx, {
+    row: receiptRow,
+    patch,
+    ownerAccessKey: args.ownerAccessKey,
+    authorizationAction: args.decision === 'accept' ? 'proposal.accept' : 'proposal.reject',
+  });
+  if (
+    receipt.operation !== expectedOperation ||
+    receipt.deckVersion !== args.submission.resolutionDeckVersion ||
+    receipt.recordedAt !== args.submission.resolvedAt
+  ) {
+    throw new Error(`Proposal ${args.patch.id} has a conflicting stored resolution receipt.`);
+  }
+  const snapshot = await immutablePackageResolutionSnapshot(ctx, patch, receipt);
+  return { status, patch, snapshot, receipt };
+}
+
+async function packageExistingProposalResolution(
+  ctx: MutationCtx,
+  args: {
+    submission: PackageSubmissionBinding;
+    patch: Doc<'nodeslide_patches'>;
+    ownerAccessKey: string;
+    decision: PackageProposalDecision;
+  },
+): Promise<NodeSlideProposalResolution | null> {
+  if (args.submission.row.resolutionStatus !== undefined) {
+    return await validateStoredPackageProposalResolution(ctx, {
+      submission: args.submission.row,
+      patch: args.patch,
+      ownerAccessKey: args.ownerAccessKey,
+      decision: args.decision,
+    });
+  }
+  if (args.submission.originReceipt.operation === 'proposal.stale') {
+    throw new Error(`Proposal ${args.patch.id} cannot be resolved from status stale.`);
+  }
+  if (args.patch.status === 'ready' || args.patch.status === 'draft') return null;
+  if (
+    args.patch.status !== 'accepted' &&
+    args.patch.status !== 'rejected' &&
+    args.patch.status !== 'stale'
+  ) {
+    throw new Error(
+      `Proposal ${args.patch.id} cannot be resolved from status ${args.patch.status}.`,
+    );
+  }
+  const resolutionStatus = args.patch.status;
+
+  const originalDecision: PackageProposalDecision =
+    resolutionStatus === 'rejected' ? 'reject' : 'accept';
+  if (originalDecision !== args.decision) {
+    throw new Error(`Proposal ${args.patch.id} is already ${resolutionStatus}.`);
+  }
+  const expectedOperation: PackageHostReceiptOperation =
+    resolutionStatus === 'accepted'
+      ? 'proposal.accepted'
+      : resolutionStatus === 'rejected'
+        ? 'proposal.rejected'
+        : 'proposal.stale';
+  const receiptRows = (await packageReceiptRowsForPatch(ctx, args.patch.deckId, args.patch.id))
+    .filter((row) => row.receiptId !== args.submission.originReceipt.id)
+    .filter((row) => storedPackageReceipt(row.receipt).operation === expectedOperation)
+    .sort((left, right) => left._creationTime - right._creationTime);
+  const receiptRow = receiptRows[0];
+  if (!receiptRow) {
+    throw new Error(`Proposal ${args.patch.id} is missing its original resolution receipt.`);
+  }
+  const receipt = await authorizedPackageReceipt(ctx, {
+    row: receiptRow,
+    patch: patchFromRow(args.patch),
+    ownerAccessKey: args.ownerAccessKey,
+    authorizationAction: originalDecision === 'accept' ? 'proposal.accept' : 'proposal.reject',
+  });
+  const patchRow = await upgradeLegacyStalePatchVersion(ctx, args.patch, receipt);
+  const patch = patchFromRow(patchRow);
+  const snapshot = await immutablePackageResolutionSnapshot(ctx, patch, receipt);
+  const resolution: NodeSlideProposalResolution = {
+    status: resolutionStatus,
+    patch,
+    snapshot,
+    receipt,
+  };
+  await persistPackageProposalResolution(
+    ctx,
+    args.submission.row,
+    originalDecision,
+    resolution,
+    receipt.recordedAt,
+  );
+  return resolution;
 }
 
 function boundedPackageMetadata(value: unknown): Record<string, PackageJsonValue> {

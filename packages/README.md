@@ -47,10 +47,10 @@ with:
 
 ```bash
 npm run artifacts:build -- \
-  --out ./artifacts/v0.2.1 \
+  --out ./artifacts/v0.2.2 \
   --release-id <full-40-character-lowercase-git-commit-sha> \
-  --release-version 0.2.1 \
-  --registry-version 0.2.1
+  --release-version 0.2.2 \
+  --registry-version 0.2.2
 ```
 
 The manifest pins the exact 11-package closure with SHA-256 and npm SHA-512
@@ -102,7 +102,7 @@ is confirmed; the CLI does not claim an unpublished alias.
 
 For upgrades, use a separately generated, strictly newer release set and run
 `nodeslide upgrade --artifacts <directory>`. The immutable proof workflow
-installs v0.1.0 into a clean consumer, upgrades to v0.2.1, checks the lockfile
+installs v0.1.0 into a clean consumer, upgrades to v0.2.2, checks the lockfile
 and receipt pins, and rejects mixed or tampered sets. Public-release acceptance
 additionally requires GitHub release immutability, the exact canonical
 11-package asset roster, manifest release IDs equal to both tag commit SHAs,

@@ -77,6 +77,23 @@ jobs:
           VITE_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
       - name: Run the local built-bundle smoke gate
         run: node scripts/smoke.mjs
+      - name: Build the exact Vercel production artifact
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VITE_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
+          VITE_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
+        run: |
+          npx --yes vercel@56.3.2 pull \
+            --yes \
+            --environment=production \
+            --token="$VERCEL_TOKEN"
+          npx --yes vercel@56.3.2 build \
+            --prod \
+            --yes \
+            --token="$VERCEL_TOKEN"
       - name: Deploy Convex functions to the pinned production deployment
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
@@ -94,14 +111,13 @@ jobs:
           deployment_log="$(mktemp)"
           trap 'rm -f "$deployment_log"' EXIT
           npx --yes vercel@56.3.2 deploy \
+              --prebuilt \
               --prod \
               --yes \
               --non-interactive \
               --no-color \
               --archive=tgz \
               --token="$VERCEL_TOKEN" \
-              --build-env "VITE_CONVEX_URL=$PROD_CONVEX_URL" \
-              --build-env "VITE_CONVEX_SITE_URL=$PROD_CONVEX_SITE_URL" \
               --meta "githubCommitSha=$DEPLOY_SHA" 2>&1 | tee "$deployment_log"
           deployment_url="$(
             node scripts/extract-vercel-deployment-url.mjs "$deployment_log" "$PROD_WEB_URL"
@@ -117,4 +133,5 @@ jobs:
           EXPECTED_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
           DEPLOYMENT_URL: ${{ steps.vercel_deploy.outputs.deployment_url }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          LIVE_SMOKE_DIST_DIR: .vercel/output/static
         run: node scripts/live-smoke.mjs "$DEPLOYMENT_URL" "$PROD_WEB_URL"

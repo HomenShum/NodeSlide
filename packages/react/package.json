@@ -4,14 +4,8 @@
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
-  "sideEffects": [
-    "./src/styles.css"
-  ],
-  "files": [
-    "dist",
-    "src/styles.css",
-    "README.md"
-  ],
+  "sideEffects": ["./src/styles.css"],
+  "files": ["dist", "src/styles.css", "README.md"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

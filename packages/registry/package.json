@@ -4,11 +4,7 @@
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
-  "files": [
-    "dist",
-    "sources",
-    "README.md"
-  ],
+  "files": ["dist", "sources", "README.md"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

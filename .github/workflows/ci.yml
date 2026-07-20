@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   app:
-    name: App — lint · typecheck · test · build
+    name: App + packages — lint · typecheck · test · build · consume
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,18 +21,20 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Lint (biome)
-        run: npx biome check src shared
+        run: npx biome check src shared packages scripts/package-consumer-smoke.mjs
       - name: Typecheck (tsc)
         run: npx tsc -b
       - name: Test (vitest)
         run: npx vitest run
-      - name: Production build (vite)
-        run: npx vite build
+      - name: Production build (packages + app)
+        run: npm run build
         env:
           # CI placeholder backend binding — the smoke gate accepts either the
           # landing page or the deployment-guard screen (see scripts/smoke.mjs).
           VITE_CONVEX_URL: https://ci-placeholder.convex.cloud
           VITE_CONVEX_SITE_URL: https://ci-placeholder.convex.site
+      - name: Packed package consumer smoke
+        run: npm run packages:consumer:smoke
       - name: Install Playwright Chromium (smoke)
         run: npx playwright install --with-deps chromium
       - name: Runtime smoke (serve dist, assert React mounts, zero page errors)

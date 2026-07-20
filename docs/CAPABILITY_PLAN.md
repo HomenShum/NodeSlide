@@ -309,6 +309,10 @@ registry/                  shadcn-style source-owned compositions (studio route,
       implementations, and conformance smoke now live under `packages/`;
       Convex/HTTP adapters and the source move remain open. Parity capability
       preservation is tracked in `PARITY_CAPABILITY_MIGRATION_LEDGER.md`.
+      The package release gate now builds every workspace and installs the
+      packed tarballs into a fresh script-disabled consumer for repository +
+      React SSR proof; this hardens distribution but does not complete the
+      missing production adapters.
 - [ ] I3. **Controlled React surfaces**: `<NodeSlideStudio/>` /
       `<DeckAgentThread/>` take snapshot/selection/proposal/permissions +
       onPatch/onPropose/onAccept/onReject/onExport — backend-neutral; ship
@@ -316,6 +320,10 @@ registry/                  shadcn-style source-owned compositions (studio route,
       Split headless (hooks/state) from styled (CSS-variable tokens:
       `--nodeslide-*`); a host can adopt the engine without NodeSlide's
       visual identity. "Scoped Tailwind" alone is not the isolation contract.
+      First controlled slice: `@nodeslide/react` now ships a deck viewer and
+      fail-closed proposal review surface with scoped opt-in CSS. The true
+      `@nodeslide/react-headless` split, StudioShell, agent thread, presenter,
+      and Convex convenience binding remain open.
 - [ ] I4. **Auth is host-supplied**: normalize to `NodeSlidePrincipal`
       {userId, organizationId?, roles, permissions}; host adapters resolve it
       from WorkOS/Clerk/Auth0/Convex/Supabase/custom. No auth vendor inside

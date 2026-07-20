@@ -64,6 +64,12 @@ the exact proposal ID, verifies the base snapshot digest and all version clocks,
 re-runs canonical preflight, and writes a new snapshot. It will not overwrite
 an input or any existing output path.
 
+Candidate compilation is deterministic: absent an explicit override, the
+candidate uses `base deck.updatedAt + 1`. Separate `validate` and `propose`
+calls therefore produce the same candidate digest. Proposal `createdAt` and
+application `appliedAt` remain independent event timestamps and do not alter
+the compiled deck.
+
 The same functions are available as a library:
 
 ```ts

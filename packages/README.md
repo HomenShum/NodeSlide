@@ -16,9 +16,9 @@ can migrate without a second DeckSpec, patch engine, or validator.
 | `@nodeslide/react-headless` | Controlled deck navigation, repository controller, proposal previews/review state, and permission derivation | Rendering, CSS, DOM queries, persistence SDKs |
 | `@nodeslide/react` | Controlled StudioShell, deck renderer, proposal review, agent transcript/composer, opt-in scoped styles | Convex, auth, routing, global CSS, standalone app state |
 | `@nodeslide/client-http` | Hosted repository/assets/telemetry client with normalized errors and host credentials | Trusting a serialized client principal |
-| `@nodeslide/convex` | Injected generated refs, auth-session and bearer-capability adapters, optional Studio binding, isolated component schema and migration chain | App `_generated/api` imports or auth-vendor policy |
+| `@nodeslide/convex` | Injected generated refs, auth-session and bearer-capability adapters, optional Studio binding, mountable isolated component functions/schema, one-time host grants, migrations, and literal governance | App `_generated/api` imports, host tables, credentials, or auth-vendor policy |
 | `@nodeslide/registry` | Versioned source-owned compositions for studio/agent/renderer/presenter/backend proof | Automatic routing, auth, `.env`, or global-style edits |
-| `@nodeslide/cli` | Preflighted init/upgrade, exact package/tarball plan, hashed receipt, diff-only source upgrades | Silent overwrites or unpublished-package claims |
+| `@nodeslide/cli` | Preflighted init/upgrade, verified immutable artifact-set install, integrity-pinned receipt, and diff-only source upgrades | Silent overwrites, mutable package sets, or unpublished-package claims |
 | `@nodeslide/external-agent` | Bundled library + `nodeslide` CLI for offline inspect/validate/propose/apply | UI, hosted auth, provider calls, a second patch engine |
 
 The compatibility direction is deliberate:
@@ -42,7 +42,21 @@ npm run packages:build
 
 Each workspace is private to prevent accidental publication but supports
 `npm pack` for the version-pinned tarball workflow documented in
-`docs/ECOSYSTEM.md`.
+`docs/ECOSYSTEM.md`. Build a complete release set and its integrity manifest
+with:
+
+```bash
+npm run artifacts:build -- \
+  --out ./artifacts/v0.2.0 \
+  --release-id <git-commit-sha> \
+  --release-version 0.2.0 \
+  --registry-version 0.2.0
+```
+
+The manifest pins the exact 11-package closure with SHA-256 and npm SHA-512
+integrity. Artifact-mode installs consume the whole verified closure so npm
+never resolves an unpublished internal `@nodeslide/*` dependency from a mutable
+registry.
 
 After building, prove the actual publish-shaped artifacts in a fresh temporary
 consumer with scripts disabled:
@@ -52,7 +66,8 @@ npm run packages:consumer:smoke
 ```
 
 The smoke packs the reusable application-boundary workspaces, installs only
-those tarballs plus React and Convex peers into an isolated consumer, runs the
+those tarballs plus React and Convex peers into an isolated consumer, verifies
+the mountable component config/functions/types, runs the
 repository proposal/acceptance conformance journey, exercises the agent proposal
 path, HTTP descriptor, migration plan, registry reader, CLI planner, headless
 permissions and review model, server-renders the controlled deck viewer,
@@ -84,3 +99,10 @@ npx @nodeslide/cli init --profile full-studio --backend convex --ui host-tokens 
 The `nodeslide` binary supports interactive prompts. The scoped `npx` package
 name remains explicit until ownership of the unscoped `nodeslide` registry name
 is confirmed; the CLI does not claim an unpublished alias.
+
+For upgrades, use a separately generated, strictly newer release set and run
+`nodeslide upgrade --artifacts <directory>`. The immutable proof workflow
+installs v0.1.0 into a clean consumer, upgrades to v0.2.0, checks the lockfile
+and receipt pins, and rejects mixed or tampered sets. Public-release acceptance
+additionally requires GitHub release immutability plus successful
+`gh release verify` and per-asset `gh release verify-asset` checks.

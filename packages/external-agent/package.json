@@ -1,6 +1,6 @@
 {
   "name": "@nodeslide/external-agent",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Offline governed DeckSpec inspection and patching for coding agents and automation.",
@@ -21,10 +21,10 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "devDependencies": {
-    "@nodeslide/backend": "0.1.0",
-    "@nodeslide/contracts": "0.1.0",
-    "@nodeslide/engine": "0.1.0",
-    "@nodeslide/testing": "0.1.0",
+    "@nodeslide/backend": "0.2.0",
+    "@nodeslide/contracts": "0.2.0",
+    "@nodeslide/engine": "0.2.0",
+    "@nodeslide/testing": "0.2.0",
     "@types/node": "^22.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.7.0",

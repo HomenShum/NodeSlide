@@ -304,7 +304,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
       domain ↔ app-shell ↔ convex ↔ shared; classify each as
       contracts/engine/react/backend/agent/host; document violations; freeze
       the boundary (new capability code may not cross it).
-- [ ] I2. **Backend ports before backends**: define `NodeSlideRepository`
+- [x] I2. **Backend ports before backends**: define `NodeSlideRepository`
       (getDeck/applyPatch/createProposal/resolveProposal/listVersions/
       storeReceipt) + `NodeSlideAssetStore` + `NodeSlideTelemetryAdapter`.
       Implement Memory (tests), Convex (reference, as a mountable Convex
@@ -312,9 +312,14 @@ registry/                  shadcn-style source-owned compositions (studio route,
       component is the reference production backend, not the abstraction.
       Memory, HTTP, auth-session Convex, and owner-capability Convex adapters,
       governance descriptors, migrations, conformance tests, and packed
-      consumer proof now live under `packages/`. The remaining blocker is the
-      true isolated Convex mutation component/source extraction; the current
-      package binding deliberately reuses the production app mutation core.
+      consumer proof now live under `packages/`. Closed 2026-07-20: the
+      packaged Convex backend now mounts as a real isolated component with its
+      own schema, functions, generated `ComponentApi`, contiguous migrations,
+      and one-time host authorization-grant ledger. Its mutations import only
+      portable package boundaries, never the application schema, mutation
+      functions, or `_generated/api`; `convex-test` proves initialize ->
+      propose -> accept -> durable reread plus CAS, validation, grant replay,
+      resource binding, and migration failure paths.
 - [x] I3. **Controlled React surfaces**: `<NodeSlideStudio/>` /
       `<DeckAgentThread/>` take snapshot/selection/proposal/permissions +
       onPatch/onPropose/onAccept/onReject/onExport — backend-neutral; ship
@@ -350,14 +355,18 @@ registry/                  shadcn-style source-owned compositions (studio route,
       preserve the proposal's original submission version.
       The production gap remains: NodeRoom ActorProof/membership authorization
       is not yet the mounted host authorizer.
-- [ ] I5. **Governance = enforced invariants, configurable UX.** Required and
+- [x] I5. **Governance = enforced invariants, configurable UX.** Required and
       non-bypassable server-side: mutation authority checks, version clocks
       (CAS), validation, trace lineage, source authorization, rollback.
       Host-configurable: which operations need human approval (typo fix auto
       → structural deletion approval), Turbo auto-commit, host-supplied
       approval UI, publishing/retention policy. A host cannot bypass
       validation and still claim a valid NodeSlide result — but the engine
-      never imposes one UX.
+      never imposes one UX. Closed 2026-07-20: the Convex package exports a
+      literal six-invariant declaration and a fail-closed configuration
+      validator. Approval mode, per-operation policy, Turbo, publishing, and
+      retention remain host-configurable; tests prove none can disable the
+      server invariants.
 - [ ] I6. **Installer + upgrade contract**: `npx nodeslide init` asks what to
       install (full studio / agent thread / renderer / presenter / backend
       only / agent pack only), which backend (Convex / hosted / custom), and
@@ -371,8 +380,14 @@ registry/                  shadcn-style source-owned compositions (studio route,
       — IMPLEMENTED SLICE in PR #13: framework/shadcn detection, explicit
       profile/backend/UI selection, exact install plans, versioned registry
       sources, env/conformance output, hashed receipts, validation hooks, and
-      diff-only upgrades with migrations. Keep unchecked until a clean
-      external consumer installs and upgrades immutable/public artifacts.
+      diff-only upgrades with migrations. The 2026-07-20 artifact slice adds a
+      complete 11-tarball manifest with exact release/version, SHA-256, and npm
+      SHA-512 pins; pre-install tamper/mixed/unlisted checks; receipt and
+      lockfile proof; strictly advancing upgrades; and a clean local
+      v0.1.0 -> v0.2.0 install/upgrade proof with tampered and mixed sets
+      rejected. Keep unchecked until the same workflow downloads two public
+      GitHub releases after release immutability is enabled and verifies each
+      release and asset.
 - [ ] I7. **NodeRoom consumer proof** (a required architectural test, not
       optional dogfood): from a clean NodeRoom branch — installer →
       NodeRoom's own principal adapter → mount as a room artifact → create
@@ -445,8 +460,8 @@ discipline as I1: audit before asserting; no invented org maps.
 4.  F1/F2/F4    finish visual evidence lineage
 5.  G2/G3       stream assistant text and render nested handoffs
 6.  H3          configure external deployment credentials + exact-SHA receipt
-7.  I2/I4/I5/I6 finish the isolated component, production host auth,
-                invariant acceptance, and immutable install/upgrade proof
+7.  I4/I6       mount production host auth and run the immutable artifact
+                proof against two public GitHub releases
 8.  I7/I8       mount and prove the full NodeRoom journey and bilateral CI
 9.  H5          human sends the Mike draft
 ```

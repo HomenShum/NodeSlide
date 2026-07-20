@@ -28,6 +28,7 @@ import type { ConvexHttpClient } from 'convex/browser';
 import type { FunctionReference } from 'convex/server';
 
 export * from './capabilityHost';
+export * from './governance';
 
 type QueryReference<Args extends Record<string, unknown>, Result> = FunctionReference<
   'query',

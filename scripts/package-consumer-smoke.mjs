@@ -132,7 +132,7 @@ try {
     rendered: true,
     cssExported: true,
     httpAdapter: true,
-    migrationCount: 1,
+    migrationCount: 2,
     registrySource: true,
     cliPlan: true,
     agentProposal: true,
@@ -177,8 +177,16 @@ function assertPackedEntrypoints(packageName, files) {
       '@nodeslide/convex tarball is missing its isolated schema.',
     );
     assert(
-      paths.has('component/convex.config.ts'),
-      '@nodeslide/convex tarball is missing its source-owned component config.',
+      paths.has('dist/component/convex.config.js'),
+      '@nodeslide/convex tarball is missing its mountable component config.',
+    );
+    assert(
+      paths.has('dist/component/repository.js'),
+      '@nodeslide/convex tarball is missing isolated component mutations.',
+    );
+    assert(
+      paths.has('dist/component/_generated/component.d.ts'),
+      '@nodeslide/convex tarball is missing its ComponentApi type.',
     );
   }
   if (packageName === '@nodeslide/registry') {
@@ -255,6 +263,7 @@ import type {
   NodeSlideDeckViewerProps,
   NodeSlideProposalReviewProps,
 } from '@nodeslide/react';
+import type { ComponentApi } from '@nodeslide/convex/_generated/component.js';
 import { MemoryNodeSlideRepository } from '@nodeslide/testing';
 
 declare const snapshot: DeckSnapshot;
@@ -330,6 +339,7 @@ void [
   authorizationReceipt,
   customReceiptInput,
   typedRepository,
+  {} as ComponentApi,
 ];
 `;
 }
@@ -447,7 +457,9 @@ const http = createNodeSlideHttpAdapters({
 });
 assert.equal(http.repository.descriptor.adapter, 'http');
 assert.equal(nodeSlideStudioPermissionsForPrincipal(NODESLIDE_TEST_PRINCIPAL).canRead, true);
-assert.equal(planNodeSlideConvexMigrations(0).length, 1);
+assert.equal(planNodeSlideConvexMigrations(0).length, 2);
+const componentConfig = await import('@nodeslide/convex/convex.config.js');
+assert(componentConfig.default, 'Convex component config export is missing.');
 const registrySource = await readNodeSlideRegistryEntry(NODESLIDE_REGISTRY_ENTRIES[0]);
 assert.match(registrySource, /NodeSlideStudioShell/);
 const cliPlan = await planNodeSlideInstallation({

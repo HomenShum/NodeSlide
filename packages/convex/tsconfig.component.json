@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "allowImportingTsExtensions": false,
+    "allowJs": true,
+    "checkJs": false,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "dist/component",
+    "rootDir": "component",
+    "baseUrl": ".",
+    "paths": {}
+  },
+  "include": ["component/**/*.ts", "component/**/*.js"],
+  "exclude": ["component/**/*.test.ts"]
+}

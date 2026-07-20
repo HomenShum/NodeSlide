@@ -18,6 +18,7 @@ import type {
   DeckPatch,
   DeckSnapshot,
   DeckVersion,
+  LicensedImageResult,
   NodeSlideAgentMemory,
   NodeSlideAgentMemoryCategory,
   NodeSlideAgentMessage,
@@ -316,6 +317,12 @@ interface NodeSlideGeneratedApi {
     createDeckFromBrief: PublicAction<CreateDeckAdmissionRequest, OwnerWorkspace>;
     proposeEdit: PublicAction<AgentEditRequest & { ownerAccessKey: string }, PatchReceipt>;
   };
+  nodeslideImages: {
+    searchImages: PublicAction<
+      { query: string; consent: string },
+      { results: LicensedImageResult[] }
+    >;
+  };
   nodeslideVariations: {
     generate: PublicAction<
       {
@@ -538,6 +545,7 @@ export function NodeSlideStudio() {
   const removeAgentMemory = useMutation(nodeslideApi.nodeslideMemory.remove);
   const createDeckFromBrief = useAction(nodeslideApi.nodeslideAgent.createDeckFromBrief);
   const proposeEdit = useAction(nodeslideApi.nodeslideAgent.proposeEdit);
+  const searchLicensedImages = useAction(nodeslideApi.nodeslideImages.searchImages);
   const generateVariations = useAction(nodeslideApi.nodeslideVariations.generate);
   const acceptVariation = useAction(nodeslideApi.nodeslideVariations.accept);
   const rejectVariation = useMutation(nodeslideApi.nodeslideVariations.reject);
@@ -3190,6 +3198,7 @@ export function NodeSlideStudio() {
               summary,
             )
           }
+          onSearchImages={(query, consent) => searchLicensedImages({ query, consent })}
           onAddComment={(text, anchor) =>
             ownerAccessKey
               ? void addComment({

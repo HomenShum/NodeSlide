@@ -295,6 +295,59 @@
   line-height: 1.4;
 }
 
+/* Licensed image search (Openverse) ------------------------------------ */
+
+.nodeslide-studio .ns-licensed-image-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.nodeslide-studio .ns-licensed-image-grid button {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid var(--ns-border);
+  border-radius: 8px;
+  background: var(--ns-panel);
+  cursor: pointer;
+  text-align: left;
+}
+
+.nodeslide-studio .ns-licensed-image-grid button:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--ns-accent) 42%, var(--ns-border));
+}
+
+.nodeslide-studio .ns-licensed-image-grid img {
+  width: 100%;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 5px;
+  background: var(--ns-border);
+}
+
+.nodeslide-studio .ns-licensed-image-grid span {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ns-ink, inherit);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nodeslide-studio .ns-licensed-image-grid small {
+  font-size: 9px;
+  color: var(--ns-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Design inspector disclosure primitive -------------------------------- */
 
 .nodeslide-studio .ns-design-section {

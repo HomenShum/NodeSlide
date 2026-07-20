@@ -24,6 +24,7 @@ import type * as lib_nodeslideEditShadowPlanner from "../lib/nodeslideEditShadow
 import type * as lib_nodeslideExecutionTrace from "../lib/nodeslideExecutionTrace.js";
 import type * as lib_nodeslideExecutionTraceValidator from "../lib/nodeslideExecutionTraceValidator.js";
 import type * as lib_nodeslideIds from "../lib/nodeslideIds.js";
+import type * as lib_nodeslideImageSearch from "../lib/nodeslideImageSearch.js";
 import type * as lib_nodeslideInspirationSearch from "../lib/nodeslideInspirationSearch.js";
 import type * as lib_nodeslideManagedKernel from "../lib/nodeslideManagedKernel.js";
 import type * as lib_nodeslideOtlp from "../lib/nodeslideOtlp.js";
@@ -48,6 +49,7 @@ import type * as lib_nodeslideVariationHarness from "../lib/nodeslideVariationHa
 import type * as lib_nodeslideWorkflowCandidate from "../lib/nodeslideWorkflowCandidate.js";
 import type * as nodeslide from "../nodeslide.js";
 import type * as nodeslideAgent from "../nodeslideAgent.js";
+import type * as nodeslideImages from "../nodeslideImages.js";
 import type * as nodeslideMemory from "../nodeslideMemory.js";
 import type * as nodeslidePreferences from "../nodeslidePreferences.js";
 import type * as nodeslideSignatures from "../nodeslideSignatures.js";
@@ -79,6 +81,7 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslideExecutionTrace": typeof lib_nodeslideExecutionTrace;
   "lib/nodeslideExecutionTraceValidator": typeof lib_nodeslideExecutionTraceValidator;
   "lib/nodeslideIds": typeof lib_nodeslideIds;
+  "lib/nodeslideImageSearch": typeof lib_nodeslideImageSearch;
   "lib/nodeslideInspirationSearch": typeof lib_nodeslideInspirationSearch;
   "lib/nodeslideManagedKernel": typeof lib_nodeslideManagedKernel;
   "lib/nodeslideOtlp": typeof lib_nodeslideOtlp;
@@ -103,6 +106,7 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslideWorkflowCandidate": typeof lib_nodeslideWorkflowCandidate;
   nodeslide: typeof nodeslide;
   nodeslideAgent: typeof nodeslideAgent;
+  nodeslideImages: typeof nodeslideImages;
   nodeslideMemory: typeof nodeslideMemory;
   nodeslidePreferences: typeof nodeslidePreferences;
   nodeslideSignatures: typeof nodeslideSignatures;

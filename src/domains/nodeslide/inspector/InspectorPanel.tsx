@@ -49,7 +49,7 @@ import {
 } from './AiInspector';
 import { CommentsInspector } from './CommentsInspector';
 import { DataInspector } from './DataInspector';
-import { DesignInspector } from './DesignInspector';
+import { DesignInspector, type DesignInspectorSearchImagesHandler } from './DesignInspector';
 import { JsonInspector } from './JsonInspector';
 import { TraceInspector } from './TraceInspector';
 import { VersionsInspector } from './VersionsInspector';
@@ -132,6 +132,7 @@ export interface InspectorPanelProps<CommandId extends string = string> {
   onEvictTasteSignal?: (signalId: string) => void;
   onOpenPreferenceEvidence?: (eventId: string) => void;
   onApplyDesignPatch: (operations: PatchOperation[], summary: string) => void;
+  onSearchImages?: DesignInspectorSearchImagesHandler;
   onAddComment: (text: string, anchor: CommentAnchor) => void;
   onReply: (parentId: string, text: string) => void;
   onSetCommentStatus: (commentId: string, status: 'open' | 'resolved') => void;
@@ -212,6 +213,7 @@ export function InspectorPanel<CommandId extends string = string>({
   onEvictTasteSignal,
   onOpenPreferenceEvidence,
   onApplyDesignPatch,
+  onSearchImages,
   onAddComment,
   onReply,
   onSetCommentStatus,
@@ -429,6 +431,7 @@ export function InspectorPanel<CommandId extends string = string>({
             onOpenPreferenceEvidence={onOpenPreferenceEvidence}
             onClearTastePack={onClearTastePack}
             onApplyPatch={onApplyDesignPatch}
+            {...(onSearchImages ? { onSearchImages } : {})}
           />
         ) : null}
         {activeTab === 'comments' ? (

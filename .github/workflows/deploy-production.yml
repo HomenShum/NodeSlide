@@ -52,10 +52,9 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: |
           missing=()
-          for name in CONVEX_DEPLOY_KEY VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID VERCEL_AUTOMATION_BYPASS_SECRET; do
+          for name in CONVEX_DEPLOY_KEY VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
             if [[ -z "${!name:-}" ]]; then missing+=("$name"); fi
           done
           if (( ${#missing[@]} > 0 )); then
@@ -116,5 +115,21 @@ jobs:
           EXPECTED_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
           EXPECTED_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
           DEPLOYMENT_URL: ${{ steps.vercel_deploy.outputs.deployment_url }}
-          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-        run: node scripts/live-smoke.mjs "$DEPLOYMENT_URL" "$PROD_WEB_URL"
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          LIVE_SMOKE_RETRY_TIMEOUT_MS: 300000
+        shell: bash
+        run: |
+          immutable_html="$(mktemp)"
+          trap 'rm -f "$immutable_html"' EXIT
+          npx --yes vercel@56.3.2 curl / \
+            --deployment "$DEPLOYMENT_URL" \
+            --token="$VERCEL_TOKEN" \
+            --yes \
+            --silent \
+            --show-error \
+            --fail \
+            --output "$immutable_html"
+          node scripts/verify-deployed-html.mjs dist/index.html "$immutable_html"
+          node scripts/live-smoke.mjs "$PROD_WEB_URL"

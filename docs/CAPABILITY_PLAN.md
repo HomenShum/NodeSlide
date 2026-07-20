@@ -123,6 +123,26 @@ No decomposition, no sub-agents, no self-verification against the render.
       unproven (needs a fault-injection run). Left unchecked until the camera
       run + induced-repair demonstration.
 
+      — FAULT-INJECTION RUN (2026-07-19, prod): ran three overflow-inducing
+      briefs on live prod (Kimi K3) designed to force a compression fault —
+      "EXACTLY 3 slides" hard-cap + a ~150-word verbatim legal disclaimer plus
+      six 25-word bullets all mandated onto one content slide. Outcome across
+      every run (UI + 5 direct `convex run` calls with args matched to the UI):
+      the model ABSORBS the induced fault at generation time — it splits/expands
+      content across slides (the "3-slide" and "4-slide" briefs materialized as
+      6 slides) so `collectNodeSlideCreationQualityReport` finds issueCount 0 and
+      the revision pass is a no-op ("Self-critique: 1 pass, clean"). Net honest
+      finding: the self-critique loop is present, runs on every creation, and is
+      verified clean live, but a genuine 2-pass REVISE event cannot be shown with
+      a robust model because strong generation never emits a spec bad enough to
+      fail the quality report. Forcing the revise branch would require a
+      deliberately weak model or synthetic spec-level fault injection (artificial),
+      so this half stays honestly unproven-live rather than faked. Side finding
+      (not a code bug): the in-app browser's Convex WebSocket went stale after a
+      mid-session prod redeploy and surfaced masked "Server Error" on subsequent
+      creates; fresh CLI calls and post-reload creates succeed — recent-decks
+      confirms the decks were created. Backend create path is sound.
+
 ## C · Math — typeset it or stop saying LaTeX (P1)
 
 The formula element stores a `latex`-tagged string; nothing typesets it.

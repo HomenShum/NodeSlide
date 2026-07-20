@@ -395,4 +395,51 @@ runner_up,Lionel Messi,7 goals,FIFA`,
       changed: false,
     });
   });
+
+  it('finishes the staged golden math capability migration without overwriting edits', () => {
+    const canonical = buildGoldenNodeSlide('staged-math-capability-repair-test', 1_000).snapshot;
+    const staged = structuredClone(canonical);
+    const canonicalMath = canonical.elements.find((element) => element.kind === 'math');
+    const stagedMath = staged.elements.find((element) => element.id === canonicalMath?.id);
+    if (!canonicalMath?.math || !stagedMath) throw new Error('Missing math fixture.');
+
+    staged.deck.version = 2;
+    stagedMath.version = 2;
+    stagedMath.visible = true;
+    stagedMath.exportCapabilities = ['web_native', 'pptx_editable', 'google_importable'];
+    stagedMath.math = {
+      description: canonicalMath.math.description,
+      display: canonicalMath.math.display,
+      displayMode: canonicalMath.math.displayMode,
+      expression: canonicalMath.math.expression,
+      sourceId: canonicalMath.math.sourceId,
+      syntax: canonicalMath.math.syntax,
+      variables: canonicalMath.math.variables,
+    };
+    const stagedSlide = staged.slides.find((slide) => slide.id === stagedMath.slideId);
+    if (!stagedSlide) throw new Error('Missing math slide fixture.');
+    stagedSlide.version = 2;
+
+    const repaired = repairLegacyGoldenSnapshot(staged, canonical);
+    expect(repaired.changed).toBe(true);
+    expect(
+      repaired.snapshot.elements.find((element) => element.id === canonicalMath.id)
+        ?.exportCapabilities,
+    ).toEqual(canonicalMath.exportCapabilities);
+    expect(
+      repaired.snapshot.elements.find((element) => element.id === canonicalMath.id)?.math,
+    ).toEqual(canonicalMath.math);
+
+    const edited = structuredClone(staged);
+    const editedMath = edited.elements.find((element) => element.id === canonicalMath.id);
+    if (!editedMath?.math) throw new Error('Missing edited math fixture.');
+    editedMath.math.description = 'A user-authored explanation that must be preserved.';
+    expect(repairLegacyGoldenSnapshot(edited, canonical)).toMatchObject({ changed: false });
+
+    const laterVersion = structuredClone(staged);
+    const laterMath = laterVersion.elements.find((element) => element.id === canonicalMath.id);
+    if (!laterMath) throw new Error('Missing later-version math fixture.');
+    laterMath.version = 3;
+    expect(repairLegacyGoldenSnapshot(laterVersion, canonical)).toMatchObject({ changed: false });
+  });
 });

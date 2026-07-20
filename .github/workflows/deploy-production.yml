@@ -91,8 +91,9 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
           DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
-          deployment_url="$(
-            npx --yes vercel@56.3.2 deploy \
+          deployment_log="$(mktemp)"
+          trap 'rm -f "$deployment_log"' EXIT
+          npx --yes vercel@56.3.2 deploy \
               --prod \
               --yes \
               --non-interactive \
@@ -101,9 +102,10 @@ jobs:
               --token="$VERCEL_TOKEN" \
               --build-env "VITE_CONVEX_URL=$PROD_CONVEX_URL" \
               --build-env "VITE_CONVEX_SITE_URL=$PROD_CONVEX_SITE_URL" \
-              --meta "githubCommitSha=$DEPLOY_SHA"
+              --meta "githubCommitSha=$DEPLOY_SHA" 2>&1 | tee "$deployment_log"
+          deployment_url="$(
+            node scripts/extract-vercel-deployment-url.mjs "$deployment_log" "$PROD_WEB_URL"
           )"
-          deployment_url="$(printf '%s\n' "$deployment_url" | tail -n 1 | tr -d '\r')"
           if [[ ! "$deployment_url" =~ ^https://[A-Za-z0-9.-]+\.vercel\.app$ ]]; then
             echo "::error::Vercel CLI did not return a valid deployment URL."
             exit 1

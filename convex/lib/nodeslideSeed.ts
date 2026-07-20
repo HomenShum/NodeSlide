@@ -268,13 +268,17 @@ export function repairLegacyGoldenSnapshot(
     const current = currentSnapshot().elements[index];
     if (!current) continue;
     const expected = canonicalElements.get(current.id);
+    const mathMatches = stableJson(current.math) === stableJson(expected?.math);
+    const capabilitiesMatch =
+      stableJson(current.exportCapabilities) === stableJson(expected?.exportCapabilities);
     if (
       !expected ||
-      !isUntouchedCanonicalElementIdentity(current, expected) ||
+      (!isUntouchedCanonicalElementIdentity(current, expected) &&
+        !isCanonicalMathWithLegacyCapabilityDeclaration(current, expected)) ||
       current.kind !== 'math' ||
       expected.kind !== 'math' ||
       !expected.math ||
-      JSON.stringify(current.math) === JSON.stringify(expected.math)
+      (mathMatches && capabilitiesMatch)
     ) {
       continue;
     }
@@ -1773,6 +1777,32 @@ function isUntouchedCanonicalElementIdentity(
   );
 }
 
+function isCanonicalMathWithLegacyCapabilityDeclaration(
+  current: SlideElement,
+  expected: SlideElement,
+): boolean {
+  if (
+    current.version !== 2 ||
+    current.kind !== 'math' ||
+    expected.kind !== 'math' ||
+    stableJson(current.exportCapabilities) !== stableJson(EDITABLE_CAPABILITIES)
+  ) {
+    return false;
+  }
+
+  const {
+    version: _currentVersion,
+    exportCapabilities: _currentCapabilities,
+    ...currentRest
+  } = current;
+  const {
+    version: _expectedVersion,
+    exportCapabilities: _expectedCapabilities,
+    ...expectedRest
+  } = expected;
+  return stableJson(currentRest) === stableJson(expectedRest);
+}
+
 function isLegacyDuplicatedNumberedBullet(current: SlideElement, expected: SlideElement): boolean {
   if (current.kind !== 'text' || expected.kind !== 'text') return false;
   const currentText = current.content?.trim() ?? '';
@@ -1800,6 +1830,18 @@ function sameBoundingBox(left: BoundingBox, right: BoundingBox): boolean {
     left.width === right.width &&
     left.height === right.height
   );
+}
+
+function stableJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(',')}]`;
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    return `{${Object.keys(record)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${stableJson(record[key])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value) ?? 'undefined';
 }
 
 function sameMembers(left: readonly string[], right: readonly string[]): boolean {

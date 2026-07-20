@@ -24,13 +24,22 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           ref: ${{ inputs.release_ref }}
+          fetch-depth: 0
           persist-credentials: false
+      - name: Require the exact producer commit on main
+        shell: bash
+        env:
+          RELEASE_REF: ${{ inputs.release_ref }}
+        run: |
+          [[ "$(git rev-parse HEAD)" == "$RELEASE_REF" ]]
+          git fetch --no-tags origin main
+          git merge-base --is-ancestor "$RELEASE_REF" FETCH_HEAD
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 22
           package-manager-cache: false
       - run: npm ci
-      - name: Build the publish-shaped package set
+      - name: Build the publish-shaped package set twice
         shell: bash
         env:
           RELEASE_REF: ${{ inputs.release_ref }}
@@ -38,10 +47,48 @@ jobs:
           [[ "$(git rev-parse HEAD)" == "$RELEASE_REF" ]]
           release_version="$(node -e "process.stdout.write(require('./packages/contracts/package.json').version)")"
           [[ "$release_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
-          npm run artifacts:build -- \
-            --out artifacts/release \
-            --release-id "$RELEASE_REF" \
-            --release-version "$release_version"
+          for output in artifacts/release artifacts/rebuilt; do
+            npm run artifacts:build -- \
+              --out "$output" \
+              --release-id "$RELEASE_REF" \
+              --release-version "$release_version"
+          done
+      - name: Require the exact 12-file roster and byte identity
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFile } from 'node:fs/promises';
+          import {
+            assertArtifactDirectoriesByteEqual,
+            assertExactArtifactDirectory,
+          } from './scripts/immutable-package-set.mjs';
+
+          const canonical = JSON.parse(
+            await readFile('artifacts/release/nodeslide-artifacts.json', 'utf8'),
+          );
+          const rebuilt = JSON.parse(
+            await readFile('artifacts/rebuilt/nodeslide-artifacts.json', 'utf8'),
+          );
+          const canonicalAssets = await assertExactArtifactDirectory(
+            'artifacts/release',
+            canonical,
+            'Canonical producer output',
+          );
+          const rebuiltAssets = await assertExactArtifactDirectory(
+            'artifacts/rebuilt',
+            rebuilt,
+            'Second producer output',
+          );
+          if (canonicalAssets.length !== 12 || rebuiltAssets.length !== 12) {
+            throw new Error('Producer outputs must contain exactly 12 regular files.');
+          }
+          await assertArtifactDirectoriesByteEqual(
+            'artifacts/release',
+            canonical,
+            'artifacts/rebuilt',
+            rebuilt,
+          );
+          NODE
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: nodeslide-package-set

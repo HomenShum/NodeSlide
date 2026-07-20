@@ -8,7 +8,12 @@
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@nodeslide/backend": ["./packages/backend/src/index.ts"],
+      "@nodeslide/contracts": ["./packages/contracts/src/index.ts"],
+      "@nodeslide/engine": ["./packages/engine/src/index.ts"],
+      "@nodeslide/external-agent": ["./packages/external-agent/src/index.ts"],
+      "@nodeslide/testing": ["./packages/testing/src/index.ts"]
     },
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,

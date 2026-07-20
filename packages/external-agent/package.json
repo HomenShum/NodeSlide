@@ -1,0 +1,33 @@
+{
+  "name": "@nodeslide/external-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline governed DeckSpec inspection and patching for coding agents and automation.",
+  "license": "UNLICENSED",
+  "bin": {
+    "nodeslide": "dist/cli.js"
+  },
+  "files": ["dist", "README.md"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/cli.ts --format esm --platform node --dts --clean --sourcemap",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run --config vitest.config.ts"
+  },
+  "devDependencies": {
+    "@nodeslide/backend": "0.1.0",
+    "@nodeslide/contracts": "0.1.0",
+    "@nodeslide/engine": "0.1.0",
+    "@nodeslide/testing": "0.1.0",
+    "@types/node": "^22.0.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  }
+}

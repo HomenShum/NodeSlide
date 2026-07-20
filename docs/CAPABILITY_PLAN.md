@@ -38,18 +38,18 @@ This is the root of the visual monotony AND the collision/overflow bug class.
       show green while export blocks — dishonest-by-accident.)
       — DONE 2e8ce2d: single-source geometry checks in shared validator; server
       and client verdicts agree.
-- [ ] A5. Acceptance: 20 fresh prod generations → 0 collisions, 0 overflows,
+- [x] A5. Acceptance: 20 fresh prod generations → 0 collisions, 0 overflows,
       100% export-clean, ≥3 visually distinct layouts per deck at thumbnail
       scale (assert distinct archetype ids per deck).
 
-      ### A5 acceptance run (2026-07-19, N=6 live prod generations)
+      ### A5 acceptance run (2026-07-19 through 2026-07-20, N=20)
 
-      Deviation from spec: N=6, not 20 — two generator agents produced 3 live
-      prod decks each; the remaining 14 generations were not run. All 6 decks
-      were live generations (no fallbacks). Scored with the shared validator
-      (`convex/lib/nodeslideValidation.ts` `validateNodeSlideSnapshot`) via a
-      temporary vitest harness (deleted after the run). Gates per deck:
-      0 geometry errors, publishOk, exactly 6 slides, ≥3 distinct archetypes.
+      The initial six live production generations below and the committed
+      `artifacts/prod-proof-20260720/a5-generations.json` receipt's fourteen
+      additional fresh production generations complete the literal N=20 run.
+      All were real model generations (no fallbacks), scored with the shared
+      validator. Every deck had 0 geometry errors, 0 geometry warnings,
+      `publishOk`, exactly 6 slides, and at least 3 distinct archetypes.
 
       | Deck | Gen time (s) | Geometry errors | Geometry warnings | publishOk | Slides | Distinct archetypes | Adjacent archetype repeats | Verdict |
       |---|---|---|---|---|---|---|---|---|
@@ -60,18 +60,14 @@ This is the root of the visual monotony AND the collision/overflow bug class.
       | gen2-deck2 (Farline Logistics) | 75 | 0 | 0 | true | 6 | 4 (media-dominant, split, stat-dominant, chart-dominant) | 0 | PASS |
       | gen2-deck3 (Quietdesk) | 87 | 0 | 0 | true | 6 | 3 (stat-dominant, media-dominant, split) | 1 | PASS |
 
-      Result: 6/20 required live generations passed every gate — 0 geometry
-      errors and 0 warnings across those decks, all export-clean (publishOk),
-      all exactly 6 slides, and all ≥3 distinct archetypes. One adjacent
-      archetype repeat was observed (gen2-deck3); it is not a gate. Fourteen
-      generations remain, so the item stays unchecked until the literal N=20
-      acceptance is complete.
+      Result: 20/20 required live generations passed every gate. One adjacent
+      archetype repeat was observed in the initial six; it is not a gate.
 
 ## B · Agentic depth — a real loop, not a labeled function call (P0/P1)
 
 Original gap: one planner call + one JSON repair, status-label thread steps,
-and no decomposition or render-aware self-verification. B1/B2/B4/B5 now close
-most of that gap; the literal B3 fleet probe and B6 camera acceptance remain.
+and no decomposition or render-aware self-verification. B1–B5 now close most
+of that gap; only the literal B6 camera acceptance remains.
 
 - [x] B1. Creation loop (P0): generate spec → materialize → validate (incl.
       geometry after A3) → feed issue list back to the model → revise ops →
@@ -93,12 +89,15 @@ most of that gap; the literal B3 fleet probe and B6 camera acceptance remain.
       targets to the executor lane." and "Executor · Gemini 3.5 Flash: wrote
       copy for 2 text elements; deterministic validation reran on the
       assembled operations." Patch card (2 ops) validated and reviewable.
-- [ ] B3. Unblock cheap executors (P1): pin `reasoning:false` for Gemini 3.5
+- [x] B3. Unblock cheap executors (P1): pin `reasoning:false` for Gemini 3.5
       Flash in the pi-ai catalog override (same disease as Kimi's original bug);
       audit the rest of the fleet with a 1-token probe script.
-      — PARTIAL 9d18ab6: generalized OpenRouter overrides pin
-      `reasoning:false` for Gemini 3.5 Flash. The required fleet-wide 1-token
-      probe is not implemented or run.
+      — DONE: 9d18ab6 pins the override and PR #28 adds the operator-only,
+      fail-closed fleet probe. The production audit at 2026-07-20T21:48:36Z
+      probed all 9 catalog routes: 4 returned assistant output and 5 failed or
+      returned no text. That is an honest completed audit, not a green fleet
+      claim; the exact red receipt is committed at
+      `artifacts/prod-proof-20260720/model-fleet-probe.json`.
 - [x] B4. Edit-path tool loop (P1): read → propose → verify-against-render →
       finalize, with real steps in the thread replacing status labels.
       — DONE f041168; LIVE-PROVED on prod 2026-07-19: sample deck, prompt
@@ -233,8 +232,12 @@ were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
       — DONE c69b164: advanced-controls popover (live composer shows the
       "Advanced provider, privacy, scope, and editing controls" trigger on
       prod); stopgap CSS block gone (repo grep clean).
-- [ ] G2. Streaming assistant text in AgentThread (reads as alive, not batch).
-- [ ] G3. Nested handoff rendering (pairs with B2).
+- [x] G2. Streaming assistant text in AgentThread (reads as alive, not batch).
+      — DONE in PR #28: provider deltas persist into the active assistant step
+      and render incrementally with deterministic regression coverage.
+- [x] G3. Nested handoff rendering (pairs with B2).
+      — DONE in PR #28: parent/child handoffs render as a nested thread tree
+      with model attribution instead of a flat status list.
 - [x] G4. Creation wait UX: informative staged progress on the landing (what
       the 2–4 min is doing), since Kimi's tail is slow.
       — DONE c69b164; LIVE-PROVED on prod 2026-07-19: real creation from the
@@ -332,7 +335,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
       state; `@nodeslide/react` ships the controlled StudioShell, viewer,
       proposal review, and agent thread over opt-in scoped CSS; the Convex
       package and source registry provide the optional binding and presenter.
-- [ ] I4. **Auth is host-supplied**: normalize to `NodeSlidePrincipal`
+- [x] I4. **Auth is host-supplied**: normalize to `NodeSlidePrincipal`
       {userId, organizationId?, roles, permissions}; host adapters resolve it
       from WorkOS/Clerk/Auth0/Convex/Supabase/custom. No auth vendor inside
       the packages. First authorization-spine slice: the backend package now
@@ -353,8 +356,11 @@ registry/                  shadcn-style source-owned compositions (studio route,
       differs from the persisted direct or unresolved submission. PR #23
       applies the same fail-closed binding to rejected submissions, which
       preserve the proposal's original submission version.
-      The production gap remains: NodeRoom ActorProof/membership authorization
-      is not yet the mounted host authorizer.
+      — DONE across NodeSlide PR #28 and NodeRoom PR #233 (merged as
+      `7788e986886f9948f8f3e7c7c21ad49295d3cec5`): NodeRoom's real
+      ActorProof/membership policy is the mounted host authorizer. Reads and
+      writes authorize before resource lookup, receipts bind the host policy
+      evidence, and bearer credentials are never persisted.
 - [x] I5. **Governance = enforced invariants, configurable UX.** Required and
       non-bypassable server-side: mutation authority checks, version clocks
       (CAS), validation, trace lineage, source authorization, rollback.
@@ -367,7 +373,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
       validator. Approval mode, per-operation policy, Turbo, publishing, and
       retention remain host-configurable; tests prove none can disable the
       server invariants.
-- [ ] I6. **Installer + upgrade contract**: `npx nodeslide init` asks what to
+- [x] I6. **Installer + upgrade contract**: `npx nodeslide init` asks what to
       install (full studio / agent thread / renderer / presenter / backend
       only / agent pack only), which backend (Convex / hosted / custom), and
       which UI mode (default theme / host tokens / headless); detects
@@ -385,9 +391,13 @@ registry/                  shadcn-style source-owned compositions (studio route,
       SHA-512 pins; pre-install tamper/mixed/unlisted checks; receipt and
       lockfile proof; strictly advancing upgrades; and a clean local
       v0.1.0 -> v0.2.0 install/upgrade proof with tampered and mixed sets
-      rejected. Keep unchecked until the same workflow downloads two public
-      GitHub releases after release immutability is enabled and verifies each
-      release and asset.
+      rejected. DONE 2026-07-20: immutable public releases v0.1.0
+      (`df5567917425901252252e3adb2efb788ec345e4`) and v0.2.0
+      (`39a9ebfcbaaeef52556bc263d386ea4859f476bb`) contain the complete
+      artifact sets and manifests. GitHub release verification passed for both;
+      every v0.2 asset verified, and the clean v0.1.0 → v0.2.0 upgrade proof
+      passed exact pins, lock integrity, tamper rejection, and mixed-release
+      rejection.
 - [ ] I7. **NodeRoom consumer proof** (a required architectural test, not
       optional dogfood): from a clean NodeRoom branch — installer →
       NodeRoom's own principal adapter → mount as a room artifact → create
@@ -398,25 +408,20 @@ registry/                  shadcn-style source-owned compositions (studio route,
       no duplicate auth, no second Convex client, no global CSS
       contamination, no table collisions, clean uninstall, same snapshot runs
       against Memory and Convex adapters.
-      — PARTIAL: NodeRoom v3 proof-contract checkpoint `332149ef` (PR #231)
-      consumes packed artifacts, compiles the real NodeAgent adapter, and
-      exercises proposal/CAS behavior. Receipt schema v3 names the bounded
-      evidence precisely: an in-memory receipt ledger, a same-instance
-      in-memory repository reread, and a portable JSON snapshot round-trip. It
-      explicitly sets
-      `durableReceiptPersistence` and `packageReload` to false and retains false
-      flags for every other unproved surface. The real room artifact adapter,
-      ActorProof/membership policy, mounted canvas and reload backed by durable
-      persistence, presenter/PPTX/reopen, browser/a11y, and Memory/Convex parity
-      remain.
-- [ ] I8. **Cross-repo CI**: a NodeSlide package regression must fail
+      — PRODUCT PATH COMPLETE in NodeRoom PR #233, merged as
+      `7788e986886f9948f8f3e7c7c21ad49295d3cec5`: the real room artifact,
+      ActorProof/membership policy, package StudioShell, existing NodeAgent,
+      unapplied proposals, CAS acceptance/rejection, activity/receipts,
+      reconstructed-repository reload, presenter/PPTX/reopen, and Memory/Convex
+      parity are deterministic and green. The checkbox remains open only for
+      the literal mounted browser/a11y observation required by this item.
+- [x] I8. **Cross-repo CI**: a NodeSlide package regression must fail
       NodeRoom's consumer suite; both CIs run the same smallest journey
       (load → create → render → edit → version++ → export).
-      — PARTIAL: bilateral cross-repo CI wiring is merged and green. The
-      jobs currently test each repository against the other repository's
-      moving `main`; they do not create an atomic immutable-SHA pair. The
-      shared proof also does not yet mount/render/export, so the full journey
-      in this item remains open.
+      — DONE 2026-07-20: NodeRoom pins the immutable NodeSlide v0.2.0 producer
+      SHA and artifact digests; both repositories' CI runs the publish-shaped
+      package proof plus the smallest mounted Memory/Convex/React journey.
+      NodeRoom PR #233 and NodeSlide PR #29 were green in both directions.
 
 ## J · Ecosystem organization — who owns what across HomenShum repos (P1, audit-first)
 
@@ -454,23 +459,18 @@ discipline as I1: audit before asserting; no invented org maps.
 ## Suggested sequence — remaining literal acceptance
 
 ```text
-1.  A5          run the remaining 14 production generations
-2.  B3          add and run the fleet-wide 1-token probe
-3.  B6 / E4     record the literal camera acceptances
-4.  F1/F2/F4    finish visual evidence lineage
-5.  G2/G3       stream assistant text and render nested handoffs
-6.  H3          configure external deployment credentials + exact-SHA receipt
-7.  I4/I6       mount production host auth and run the immutable artifact
-                proof against two public GitHub releases
-8.  I7/I8       mount and prove the full NodeRoom journey and bilateral CI
-9.  H5          human sends the Mike draft
+1.  B6 / E4     record the literal camera acceptances
+2.  F1/F2/F4    visually prove snapshot capture and claim-bound regions
+3.  I7          record the literal mounted NodeRoom browser/a11y observation
+4.  H5          human sends the Mike draft
 ```
 
 Organizing principle: **NodeSlide is an app plus a reusable governed
-presentation engine.** The app is the product consumer today; NodeRoom proves
-package compatibility today and becomes the second product consumer only when
-the mounted I7 journey passes. Shared capability belongs in the engine and is
-independently verified by the smallest honest consumer proof available.
+presentation engine.** The app and NodeRoom are product consumers today;
+NodeRoom's deterministic mounted journey is green, with only the separately
+named browser/a11y observation still open. Shared capability belongs in the
+engine and is independently verified by the smallest honest consumer proof
+available.
 
 Definition of done for the plan itself: every checked item has a fail-closed
 verification run linked in the commit message, and no caption anywhere claims

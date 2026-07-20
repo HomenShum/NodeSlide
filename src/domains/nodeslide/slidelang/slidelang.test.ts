@@ -870,6 +870,9 @@ describe('SlideLang PPTX math raster seam (C2+C4)', () => {
       return PNG_DATA_URL;
     });
     const { snapshot, element } = latexMathSnapshot('E = mc^2');
+    expect(
+      adapter.validate(snapshot).issues.filter((issue) => issue.code === 'export'),
+    ).toHaveLength(1);
     element.exportCapabilities = ['web_native', 'pptx_static_fallback', 'google_importable'];
 
     // C4: capability report agrees with the raster branch before export runs.

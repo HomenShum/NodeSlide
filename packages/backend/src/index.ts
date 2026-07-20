@@ -213,6 +213,70 @@ export interface NodeSlidePatchCommand {
   profileDigest?: string;
 }
 
+export const NODESLIDE_AUTHORIZATION_RECEIPT_VERSION = 'nodeslide.authorization/v1' as const;
+
+export type NodeSlideRepositoryAuthorizationAction =
+  | 'deck.read'
+  | 'patch.apply'
+  | 'proposal.create'
+  | 'proposal.accept'
+  | 'proposal.reject'
+  | 'versions.list'
+  | 'receipt.store';
+
+export type NodeSlideAuthorizationResource =
+  | { kind: 'deck'; id: string }
+  | { kind: 'patch'; id: string }
+  | { kind: 'proposal'; id: string }
+  | { kind: 'receipt'; id: string };
+
+export type NodeSlideRepositoryAuthorizationRequest =
+  | (NodeSlideAuthorizedDeckRequest & { action: 'deck.read' })
+  | (NodeSlideAuthorizedDeckRequest & {
+      action: 'patch.apply' | 'proposal.create';
+      patch: Readonly<NodeSlidePatchCommand>;
+    })
+  | (NodeSlideAuthorizedDeckRequest & {
+      action: 'proposal.accept' | 'proposal.reject';
+      proposalId: string;
+    })
+  | (NodeSlideAuthorizedDeckRequest & {
+      action: 'versions.list';
+      limit?: number;
+    })
+  | (NodeSlideAuthorizedDeckRequest & {
+      action: 'receipt.store';
+      receipt: Readonly<NodeSlideReceiptDraft>;
+    });
+
+/**
+ * Opaque proof metadata issued by the host's server-side authorization policy.
+ * Credentials, JWTs, ActorProofs, and other bearer material must never be put
+ * in this envelope; `evidenceId` is an audit-row reference only.
+ */
+export interface NodeSlideAuthorizationEvidence {
+  issuer: string;
+  policyId: string;
+  policyVersion: string;
+  evidenceId?: string;
+}
+
+export type NodeSlideAuthorize = (
+  request: Readonly<NodeSlideRepositoryAuthorizationRequest>,
+) => NodeSlideAuthorizationEvidence | Promise<NodeSlideAuthorizationEvidence>;
+
+export interface NodeSlideAuthorizationReceipt {
+  schemaVersion: typeof NODESLIDE_AUTHORIZATION_RECEIPT_VERSION;
+  id: string;
+  principalId: string;
+  organizationId?: string;
+  deckId: string;
+  action: NodeSlideRepositoryAuthorizationAction;
+  resource: NodeSlideAuthorizationResource;
+  authorizedAt: number;
+  evidence: NodeSlideAuthorizationEvidence;
+}
+
 export interface NodeSlideGetDeckInput extends NodeSlideAuthorizedDeckRequest {}
 
 export interface NodeSlideApplyPatchInput extends NodeSlideAuthorizedDeckRequest {
@@ -242,17 +306,33 @@ export type NodeSlideReceiptOperation =
   | 'proposal.stale'
   | 'custom';
 
-/** Portable receipt envelope. Backend-specific proof may be carried in attributes. */
-export interface NodeSlideReceipt {
+export interface NodeSlideReceiptBody {
   id: string;
   deckId: string;
   deckVersion: number;
-  operation: NodeSlideReceiptOperation;
-  principalId: string;
   patchId?: string;
   traceId?: string;
   recordedAt: number;
   attributes: Record<string, NodeSlideJsonValue>;
+}
+
+export type NodeSlideCustomReceiptId = `custom-receipt:${string}`;
+
+/** Caller-supplied custom receipt. Canonical mutation operations are repository-only. */
+export interface NodeSlideReceiptDraft extends NodeSlideReceiptBody {
+  id: NodeSlideCustomReceiptId;
+  operation: 'custom';
+}
+
+/** Portable receipt envelope bound to host authorization evidence. */
+export interface NodeSlideReceipt extends NodeSlideReceiptBody {
+  operation: NodeSlideReceiptOperation;
+  principalId: string;
+  authorization: NodeSlideAuthorizationReceipt;
+}
+
+export interface NodeSlideStoreReceiptInput extends NodeSlideAuthorizedDeckRequest {
+  receipt: NodeSlideReceiptDraft;
 }
 
 export interface NodeSlideApplyPatchResult {
@@ -288,7 +368,7 @@ export interface NodeSlideRepository {
   createProposal(input: NodeSlideCreateProposalInput): Promise<DeckPatch>;
   resolveProposal(input: NodeSlideResolveProposalInput): Promise<NodeSlideProposalResolution>;
   listVersions(input: NodeSlideListVersionsInput): Promise<DeckVersion[]>;
-  storeReceipt(receipt: NodeSlideReceipt): Promise<void>;
+  storeReceipt(input: NodeSlideStoreReceiptInput): Promise<NodeSlideReceipt>;
 }
 
 export type NodeSlideAssetKind = 'image' | 'video' | 'document' | 'data' | 'export' | 'other';
@@ -362,4 +442,356 @@ export class NodeSlideRepositoryError extends Error {
     this.name = 'NodeSlideRepositoryError';
     this.code = code;
   }
+}
+
+const PRINCIPAL_KEYS = new Set(['userId', 'organizationId', 'roles', 'permissions']);
+const AUTHORIZATION_EVIDENCE_KEYS = new Set(['issuer', 'policyId', 'policyVersion', 'evidenceId']);
+const MAX_PRINCIPAL_LIST_ITEMS = 64;
+const MAX_IDENTIFIER_LENGTH = 256;
+const MAX_POLICY_VERSION_LENGTH = 64;
+
+function containsControlCharacter(value: string): boolean {
+  for (let index = 0; index < value.length; index += 1) {
+    const code = value.charCodeAt(index);
+    if (code <= 31 || code === 127) return true;
+  }
+  return false;
+}
+
+function plainRecord(
+  value: unknown,
+  label: string,
+  allowedKeys: ReadonlySet<string>,
+): Record<string, unknown> {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new TypeError(`${label} must be a plain object.`);
+  }
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) {
+    throw new TypeError(`${label} must be a plain object.`);
+  }
+  const captured: Record<string, unknown> = {};
+  for (const key of Reflect.ownKeys(value)) {
+    if (typeof key !== 'string' || !allowedKeys.has(key)) {
+      throw new TypeError(`${label} contains an unknown field.`);
+    }
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (!descriptor || !('value' in descriptor)) {
+      throw new TypeError(`${label}.${key} must be a data property.`);
+    }
+    captured[key] = descriptor.value;
+  }
+  return captured;
+}
+
+function boundedString(value: unknown, label: string, maxLength = MAX_IDENTIFIER_LENGTH): string {
+  if (
+    typeof value !== 'string' ||
+    value.length === 0 ||
+    value.length > maxLength ||
+    value !== value.trim() ||
+    containsControlCharacter(value)
+  ) {
+    throw new TypeError(`${label} must be a bounded canonical string.`);
+  }
+  return value;
+}
+
+function boundedStringList(value: unknown, label: string): readonly string[] {
+  if (!Array.isArray(value) || Object.getPrototypeOf(value) !== Array.prototype) {
+    throw new TypeError(`${label} must be a plain array.`);
+  }
+  const captured = new Map<string, unknown>();
+  for (const key of Reflect.ownKeys(value)) {
+    if (typeof key !== 'string') {
+      throw new TypeError(`${label} must be a dense array without extra properties.`);
+    }
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (!descriptor || !('value' in descriptor)) {
+      throw new TypeError(`${label}.${key} must be a data property.`);
+    }
+    captured.set(key, descriptor.value);
+  }
+  const length = captured.get('length');
+  if (typeof length !== 'number' || !Number.isSafeInteger(length) || length < 0) {
+    throw new TypeError(`${label}.length must be a non-negative integer.`);
+  }
+  if (length > MAX_PRINCIPAL_LIST_ITEMS) {
+    throw new TypeError(`${label} exceeds the item limit.`);
+  }
+  if (captured.size !== length + 1) {
+    throw new TypeError(`${label} must be a dense array without extra properties.`);
+  }
+  const result: string[] = [];
+  const seen = new Set<string>();
+  for (let index = 0; index < length; index += 1) {
+    if (!captured.has(String(index))) {
+      throw new TypeError(`${label} must be a dense array.`);
+    }
+    const item = boundedString(captured.get(String(index)), `${label}[${index}]`);
+    if (seen.has(item)) throw new TypeError(`${label} must not contain duplicates.`);
+    seen.add(item);
+    result.push(item);
+  }
+  return Object.freeze(result);
+}
+
+/**
+ * Runtime validation for the vendor-neutral principal shape. Authentication
+ * still belongs to the host; this parser only prevents ambiguous or hostile
+ * values from crossing the repository boundary.
+ */
+export function parseNodeSlidePrincipal(value: unknown): NodeSlidePrincipal {
+  const record = plainRecord(value, 'NodeSlide principal', PRINCIPAL_KEYS);
+  if (!Object.hasOwn(record, 'userId')) {
+    throw new TypeError('NodeSlide principal.userId is required.');
+  }
+  if (!Object.hasOwn(record, 'roles') || !Object.hasOwn(record, 'permissions')) {
+    throw new TypeError('NodeSlide principal roles and permissions are required.');
+  }
+  const organizationId = Object.hasOwn(record, 'organizationId')
+    ? boundedString(record['organizationId'], 'NodeSlide principal.organizationId')
+    : undefined;
+  return Object.freeze({
+    userId: boundedString(record['userId'], 'NodeSlide principal.userId'),
+    ...(organizationId === undefined ? {} : { organizationId }),
+    roles: boundedStringList(record['roles'], 'NodeSlide principal.roles'),
+    permissions: boundedStringList(record['permissions'], 'NodeSlide principal.permissions'),
+  });
+}
+
+export function parseNodeSlideAuthorizationEvidence(
+  value: unknown,
+): NodeSlideAuthorizationEvidence {
+  const record = plainRecord(
+    value,
+    'NodeSlide authorization evidence',
+    AUTHORIZATION_EVIDENCE_KEYS,
+  );
+  for (const key of ['issuer', 'policyId', 'policyVersion'] as const) {
+    if (!Object.hasOwn(record, key)) {
+      throw new TypeError(`NodeSlide authorization evidence.${key} is required.`);
+    }
+  }
+  const evidenceId = Object.hasOwn(record, 'evidenceId')
+    ? boundedString(record['evidenceId'], 'NodeSlide authorization evidence.evidenceId')
+    : undefined;
+  return Object.freeze({
+    issuer: boundedString(record['issuer'], 'NodeSlide authorization evidence.issuer'),
+    policyId: boundedString(record['policyId'], 'NodeSlide authorization evidence.policyId'),
+    policyVersion: boundedString(
+      record['policyVersion'],
+      'NodeSlide authorization evidence.policyVersion',
+      MAX_POLICY_VERSION_LENGTH,
+    ),
+    ...(evidenceId === undefined ? {} : { evidenceId }),
+  });
+}
+
+const AUTHORIZATION_REQUEST_KEYS = new Set([
+  'action',
+  'deckId',
+  'principal',
+  'patch',
+  'proposalId',
+  'limit',
+  'receipt',
+]);
+
+interface CapturedAuthorizationRequest {
+  action: NodeSlideRepositoryAuthorizationAction;
+  deckId: string;
+  principal: unknown;
+  resource: NodeSlideAuthorizationResource;
+}
+
+function assertAuthorizationRequestKeys(
+  record: Record<string, unknown>,
+  required: readonly string[],
+  optional: readonly string[] = [],
+): void {
+  const allowed = new Set([...required, ...optional]);
+  for (const key of Object.keys(record)) {
+    if (!allowed.has(key)) {
+      throw new TypeError('NodeSlide authorization request contains an invalid field.');
+    }
+  }
+  for (const key of required) {
+    if (!Object.hasOwn(record, key)) {
+      throw new TypeError(`NodeSlide authorization request.${key} is required.`);
+    }
+  }
+}
+
+function capturedDataProperties(
+  value: unknown,
+  label: string,
+  keys: readonly string[],
+): Record<string, unknown> {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new TypeError(`${label} must be a plain object.`);
+  }
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) {
+    throw new TypeError(`${label} must be a plain object.`);
+  }
+  const captured: Record<string, unknown> = {};
+  for (const key of keys) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (!descriptor || !('value' in descriptor)) {
+      throw new TypeError(`${label}.${key} must be a data property.`);
+    }
+    captured[key] = descriptor.value;
+  }
+  return captured;
+}
+
+function capturedPatchResource(
+  value: unknown,
+  label: string,
+  deckId: string,
+  kind: 'patch' | 'proposal',
+): NodeSlideAuthorizationResource {
+  const patch = capturedDataProperties(value, label, ['id', 'deckId', 'scope']);
+  const patchDeckId = boundedString(patch['deckId'], `${label}.deckId`);
+  const scope = capturedDataProperties(patch['scope'], `${label}.scope`, ['deckId']);
+  const scopeDeckId = boundedString(scope['deckId'], `${label}.scope.deckId`);
+  if (patchDeckId !== deckId || scopeDeckId !== deckId) {
+    throw new TypeError(`${label} deck scope must match the authorization request.deckId.`);
+  }
+  return {
+    kind,
+    id: boundedString(patch['id'], `${label}.id`),
+  };
+}
+
+function capturedReceiptResource(
+  value: unknown,
+  label: string,
+  deckId: string,
+): NodeSlideAuthorizationResource {
+  const receipt = capturedDataProperties(value, label, ['id', 'deckId']);
+  if (boundedString(receipt['deckId'], `${label}.deckId`) !== deckId) {
+    throw new TypeError(`${label}.deckId must match the authorization request.deckId.`);
+  }
+  return {
+    kind: 'receipt',
+    id: boundedString(receipt['id'], `${label}.id`),
+  };
+}
+
+function captureAuthorizationRequest(request: unknown): CapturedAuthorizationRequest {
+  const record = plainRecord(
+    request,
+    'NodeSlide authorization request',
+    AUTHORIZATION_REQUEST_KEYS,
+  );
+  const action = record['action'];
+  const baseKeys = ['action', 'deckId', 'principal'] as const;
+  const deckId = boundedString(record['deckId'], 'NodeSlide authorization request.deckId');
+  let resource: NodeSlideAuthorizationResource;
+  switch (action) {
+    case 'patch.apply':
+      assertAuthorizationRequestKeys(record, [...baseKeys, 'patch']);
+      return {
+        action,
+        deckId,
+        principal: record['principal'],
+        resource: capturedPatchResource(
+          record['patch'],
+          'NodeSlide authorization request.patch',
+          deckId,
+          'patch',
+        ),
+      };
+    case 'proposal.create':
+      assertAuthorizationRequestKeys(record, [...baseKeys, 'patch']);
+      resource = capturedPatchResource(
+        record['patch'],
+        'NodeSlide authorization request.patch',
+        deckId,
+        'proposal',
+      );
+      break;
+    case 'proposal.accept':
+    case 'proposal.reject':
+      assertAuthorizationRequestKeys(record, [...baseKeys, 'proposalId']);
+      resource = {
+        kind: 'proposal',
+        id: boundedString(record['proposalId'], 'NodeSlide authorization request.proposalId'),
+      };
+      break;
+    case 'receipt.store':
+      assertAuthorizationRequestKeys(record, [...baseKeys, 'receipt']);
+      resource = capturedReceiptResource(
+        record['receipt'],
+        'NodeSlide authorization request.receipt',
+        deckId,
+      );
+      break;
+    case 'deck.read':
+      assertAuthorizationRequestKeys(record, baseKeys);
+      resource = {
+        kind: 'deck',
+        id: boundedString(record['deckId'], 'NodeSlide authorization request.deckId'),
+      };
+      break;
+    case 'versions.list':
+      assertAuthorizationRequestKeys(record, baseKeys, ['limit']);
+      if (
+        Object.hasOwn(record, 'limit') &&
+        (typeof record['limit'] !== 'number' || !Number.isFinite(record['limit']))
+      ) {
+        throw new TypeError('NodeSlide authorization request.limit must be finite.');
+      }
+      resource = {
+        kind: 'deck',
+        id: boundedString(record['deckId'], 'NodeSlide authorization request.deckId'),
+      };
+      break;
+    default:
+      throw new TypeError('NodeSlide authorization request.action is invalid.');
+  }
+  return {
+    action,
+    deckId,
+    principal: record['principal'],
+    resource,
+  };
+}
+
+export function createNodeSlideAuthorizationReceipt(
+  request: NodeSlideRepositoryAuthorizationRequest,
+  evidence: unknown,
+  issued: { id: string; authorizedAt: number },
+): NodeSlideAuthorizationReceipt {
+  const capturedRequest = captureAuthorizationRequest(request);
+  const issuedRecord = plainRecord(
+    issued,
+    'NodeSlide authorization receipt issuance',
+    new Set(['id', 'authorizedAt']),
+  );
+  if (!Object.hasOwn(issuedRecord, 'id') || !Object.hasOwn(issuedRecord, 'authorizedAt')) {
+    throw new TypeError('NodeSlide authorization receipt issuance fields are required.');
+  }
+  const principal = parseNodeSlidePrincipal(capturedRequest.principal);
+  const id = boundedString(issuedRecord['id'], 'NodeSlide authorization receipt.id');
+  const authorizedAt = issuedRecord['authorizedAt'];
+  if (typeof authorizedAt !== 'number' || !Number.isSafeInteger(authorizedAt) || authorizedAt < 0) {
+    throw new TypeError(
+      'NodeSlide authorization receipt.authorizedAt must be a timestamp integer.',
+    );
+  }
+  const resource = Object.freeze(capturedRequest.resource);
+  return Object.freeze({
+    schemaVersion: NODESLIDE_AUTHORIZATION_RECEIPT_VERSION,
+    id,
+    principalId: principal.userId,
+    ...(principal.organizationId === undefined ? {} : { organizationId: principal.organizationId }),
+    deckId: capturedRequest.deckId,
+    action: capturedRequest.action,
+    resource,
+    authorizedAt,
+    evidence: parseNodeSlideAuthorizationEvidence(evidence),
+  });
 }

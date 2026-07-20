@@ -17,6 +17,7 @@ import {
   NodeSlideRepositoryError,
   type NodeSlideResolveProposalInput,
   type NodeSlideServerGovernanceDeclaration,
+  type NodeSlideStoreReceiptInput,
   type NodeSlideStoredAsset,
   type NodeSlideTelemetryAdapter,
   createProductionRepositoryDescriptor,
@@ -196,10 +197,10 @@ export class NodeSlideCapabilityConvexRepository implements NodeSlideRepository 
     });
   }
 
-  async storeReceipt(receipt: NodeSlideReceipt): Promise<void> {
+  async storeReceipt(input: NodeSlideStoreReceiptInput): Promise<NodeSlideReceipt> {
     throw new NodeSlideRepositoryError(
       'forbidden',
-      `Receipt ${receipt.id} was not produced by the server mutation path.`,
+      `Receipt ${input.receipt.id} was not produced by the server mutation path.`,
     );
   }
 

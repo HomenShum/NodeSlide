@@ -1,5 +1,13 @@
 import { v } from 'convex/values';
 import {
+  NODESLIDE_PERMISSIONS,
+  type NodeSlidePrincipal,
+  type NodeSlideReceipt,
+  type NodeSlideRepositoryAuthorizationAction,
+  type NodeSlideRepositoryAuthorizationRequest,
+  createNodeSlideAuthorizationReceipt,
+} from '../packages/backend/src/index';
+import {
   type CandidateValidationReceipt,
   type CommentAnchor,
   type DeckComment,
@@ -227,25 +235,8 @@ const packageAssetKindValidator = v.union(
 const PACKAGE_ASSET_MAX_BYTES = 8 * 1024 * 1024;
 const PACKAGE_ASSET_METADATA_MAX_BYTES = 32 * 1024;
 
-type PackageHostReceiptOperation =
-  | 'patch.applied'
-  | 'proposal.created'
-  | 'proposal.accepted'
-  | 'proposal.rejected'
-  | 'proposal.stale'
-  | 'custom';
-
-type PackageHostReceipt = {
-  id: string;
-  deckId: string;
-  deckVersion: number;
-  operation: PackageHostReceiptOperation;
-  principalId: string;
-  patchId?: string;
-  traceId?: string;
-  recordedAt: number;
-  attributes: Record<string, PackageJsonValue>;
-};
+type PackageHostReceiptOperation = NodeSlideReceipt['operation'];
+type PackageHostReceipt = NodeSlideReceipt;
 
 type PackageJsonValue =
   | string
@@ -260,7 +251,11 @@ export const ensureWorkspace = mutation({
   handler: async (ctx, { clientSessionId, ownerAccessKey: providedOwnerAccessKey }) => {
     const session = requiredText(clientSessionId, 'clientSessionId', 256);
     await consumePreviewQuotaBuckets(ctx, [
-      { key: `workspace:${nodeslideHash(session)}`, limit: 100, windowMs: 86_400_000 },
+      {
+        key: `workspace:${nodeslideHash(session)}`,
+        limit: 100,
+        windowMs: 86_400_000,
+      },
       { key: 'workspace:global', limit: 1_000, windowMs: 3_600_000 },
     ]);
     const built = buildGoldenNodeSlide(session, Date.now());
@@ -274,7 +269,10 @@ export const ensureWorkspace = mutation({
         const now = Date.now();
         await ctx.db.patch(existing._id, { ownerAccessKey, updatedAt: now });
         if (!isSecureShareSlug(existing.shareSlug)) {
-          await ctx.db.patch(existing._id, { shareSlug: createShareSlug(), updatedAt: now });
+          await ctx.db.patch(existing._id, {
+            shareSlug: createShareSlug(),
+            updatedAt: now,
+          });
         }
         await migrateLegacyGoldenWorkspace(ctx, existing.id, built.snapshot, now);
         return await ownerWorkspaceResponse(ctx, existing.id, ownerAccessKey, now);
@@ -283,7 +281,10 @@ export const ensureWorkspace = mutation({
       await requireOwnerAccess(ctx, existing.id, providedOwnerAccessKey);
       const now = Date.now();
       if (!isSecureShareSlug(existing.shareSlug)) {
-        await ctx.db.patch(existing._id, { shareSlug: createShareSlug(), updatedAt: now });
+        await ctx.db.patch(existing._id, {
+          shareSlug: createShareSlug(),
+          updatedAt: now,
+        });
       }
       await migrateLegacyGoldenWorkspace(ctx, existing.id, built.snapshot, now);
       return await ownerWorkspaceResponse(ctx, existing.id, providedOwnerAccessKey, now);
@@ -405,7 +406,11 @@ export const attachDataSource = mutation({
 
 /** Owner-controlled deletion for private uploaded evidence. Linked data fails closed. */
 export const deleteDataSource = mutation({
-  args: { deckId: v.string(), ownerAccessKey: v.string(), sourceId: v.string() },
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    sourceId: v.string(),
+  },
   handler: async (ctx, args) => {
     await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
     const source = await ctx.db
@@ -429,7 +434,11 @@ export const deleteDataSource = mutation({
 });
 
 export const listAgentRuns = query({
-  args: { deckId: v.string(), ownerAccessKey: v.string(), limit: v.optional(v.number()) },
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    limit: v.optional(v.number()),
+  },
   handler: async (ctx, args) => {
     await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
     const limit = Math.max(1, Math.min(100, Math.floor(args.limit ?? 40)));
@@ -443,7 +452,11 @@ export const listAgentRuns = query({
 });
 
 export const listAgentMessages = query({
-  args: { deckId: v.string(), ownerAccessKey: v.string(), limit: v.optional(v.number()) },
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    limit: v.optional(v.number()),
+  },
   handler: async (ctx, args) => {
     await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
     const limit = Math.max(1, Math.min(200, Math.floor(args.limit ?? 80)));
@@ -518,7 +531,11 @@ export const cancelAgentRun = mutation({
       return run;
     }
     const now = Date.now();
-    await ctx.db.patch(row._id, { status: 'cancelled', updatedAt: now, completedAt: now });
+    await ctx.db.patch(row._id, {
+      status: 'cancelled',
+      updatedAt: now,
+      completedAt: now,
+    });
     const updated = await ctx.db.get(row._id);
     if (!updated) return null;
     const { _id, _creationTime, ownerDigest: _ownerDigest, ...run } = updated;
@@ -893,7 +910,10 @@ export const acceptVariationPatch = internalMutation({
       const now = Date.now();
       const stale = patchRow(patchArgs, now, 'stale', existingPatch?.createdAt);
       if (existingPatch) {
-        await ctx.db.patch(existingPatch._id, { status: 'stale', updatedAt: now });
+        await ctx.db.patch(existingPatch._id, {
+          status: 'stale',
+          updatedAt: now,
+        });
       } else {
         await ctx.db.insert('nodeslide_patches', stale);
       }
@@ -998,16 +1018,33 @@ export const packageApplyPatch = mutation({
   },
   handler: async (ctx, args) => {
     const normalized = normalizePackageHostPatch(args);
+    await requireOwnerAccess(ctx, normalized.deckId, normalized.ownerAccessKey);
+    const existing = normalized.id ? await findPatchRow(ctx, normalized.id) : null;
+    if (existing) assertExactPatchCommandReplay(existing, normalized);
     const before = await requireSnapshot(ctx, args.deckId);
-    const committed = await commitPatch(ctx, normalized, null);
-    const snapshot = packageSnapshot(requirePackageWorkspace(committed.workspace));
+    const replayed = existing?.status === 'accepted' || existing?.status === 'stale';
+    const committed = await commitPatch(ctx, normalized, existing);
+    const replaySnapshot = replayed
+      ? await packagePersistedPatchSnapshot(ctx, committed.patch)
+      : null;
+    const replayResult =
+      replaySnapshot !== null && committed.patch.status === 'accepted'
+        ? await packageAcceptedPatchReplay(ctx, committed.patch, replaySnapshot)
+        : null;
+    const snapshot =
+      replaySnapshot ?? packageSnapshot(requirePackageWorkspace(committed.workspace));
+    const replayedStaleReasons =
+      replayed && committed.patch.status === 'stale'
+        ? evaluateNodeSlideCas(snapshot, patchInput(normalized)).reasons
+        : null;
     const receipt = await persistPackageHostReceipt(
       ctx,
       packageHostReceipt({
         ownerAccessKey: args.ownerAccessKey,
         patch: committed.patch,
-        deckVersion: snapshot.deck.version,
+        deckVersion: committed.patch.resultingDeckVersion ?? snapshot.deck.version,
         operation: committed.patch.status === 'accepted' ? 'patch.applied' : 'custom',
+        authorizationAction: 'patch.apply',
       }),
     );
     if (committed.patch.status !== 'accepted') {
@@ -1016,18 +1053,20 @@ export const packageApplyPatch = mutation({
         patch: committed.patch,
         snapshot,
         receipt,
-        reasons: committed.staleReasons ?? ['The patch is stale.'],
+        reasons: replayedStaleReasons ?? committed.staleReasons ?? ['The patch is stale.'],
       };
     }
-    const applied = applyDeckPatch(
-      before,
-      {
-        baseDeckVersion: before.deck.version,
-        scope: committed.patch.scope,
-        operations: committed.patch.operations,
-      },
-      committed.patch.updatedAt,
-    );
+    const applied =
+      replayResult ??
+      applyDeckPatch(
+        before,
+        {
+          baseDeckVersion: before.deck.version,
+          scope: committed.patch.scope,
+          operations: committed.patch.operations,
+        },
+        committed.patch.updatedAt,
+      );
     return {
       status: 'accepted' as const,
       result: {
@@ -1048,14 +1087,28 @@ export const packageCreateProposal = mutation({
     patch: packageHostPatchValidator,
   },
   handler: async (ctx, args) => {
-    const proposed = await persistProposal(ctx, normalizePackageHostPatch(args));
+    const normalized = normalizePackageHostPatch(args);
+    await requireOwnerAccess(ctx, normalized.deckId, normalized.ownerAccessKey);
+    const existing = normalized.id ? await findPatchRow(ctx, normalized.id) : null;
+    if (existing) {
+      assertExactPatchCommandReplay(existing, normalized);
+      if (existing.status === 'accepted' || existing.status === 'rejected') {
+        throw new Error(
+          `Proposal ${existing.id} was already resolved; its creation response cannot be replayed.`,
+        );
+      }
+    }
+    const proposed = await persistProposal(ctx, normalized);
     const receipt = await persistPackageHostReceipt(
       ctx,
       packageHostReceipt({
         ownerAccessKey: args.ownerAccessKey,
         patch: proposed.patch,
-        deckVersion: requirePackageWorkspace(proposed.workspace).deck.version,
+        deckVersion:
+          proposed.patch.resultingDeckVersion ??
+          requirePackageWorkspace(proposed.workspace).deck.version,
         operation: proposed.patch.status === 'stale' ? 'proposal.stale' : 'proposal.created',
+        authorizationAction: 'proposal.create',
       }),
     );
     return { patch: proposed.patch, receipt };
@@ -1085,9 +1138,15 @@ export const packageResolveProposal = mutation({
           patch: resolved.patch,
           deckVersion: snapshot.deck.version,
           operation: status === 'accepted' ? 'proposal.accepted' : 'proposal.stale',
+          authorizationAction: 'proposal.accept',
         }),
       );
-      return { status: status as 'accepted' | 'stale', patch: resolved.patch, snapshot, receipt };
+      return {
+        status: status as 'accepted' | 'stale',
+        patch: resolved.patch,
+        snapshot,
+        receipt,
+      };
     }
 
     const patch = await rejectPatchForOwner(ctx, {
@@ -1104,6 +1163,7 @@ export const packageResolveProposal = mutation({
         patch,
         deckVersion: snapshot.deck.version,
         operation: 'proposal.rejected',
+        authorizationAction: 'proposal.reject',
       }),
     );
     return { status: 'rejected' as const, patch, snapshot, receipt };
@@ -1240,7 +1300,11 @@ export const restoreVersion = mutation({
       deckId: args.deckId,
       baseDeckVersion: args.baseDeckVersion,
       ...clocks,
-      scope: { kind: 'deck', deckId: args.deckId, operationMode: 'unrestricted' } as const,
+      scope: {
+        kind: 'deck',
+        deckId: args.deckId,
+        operationMode: 'unrestricted',
+      } as const,
       operations: [] as PatchOperation[],
       source: 'system' as const,
       summary: `Restore version ${target.version} as a new write.`,
@@ -1383,7 +1447,11 @@ export const resolveComment = mutation({
 });
 
 export const reopenComment = mutation({
-  args: { deckId: v.string(), ownerAccessKey: v.string(), commentId: v.string() },
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    commentId: v.string(),
+  },
   handler: async (ctx, { deckId, ownerAccessKey, commentId }) => {
     await requireOwnerAccess(ctx, deckId, ownerAccessKey);
     const comment = await findCommentRow(ctx, commentId);
@@ -1437,7 +1505,12 @@ export const touchPresence = mutation({
       ...(args.slideId ? { slideId: args.slideId } : {}),
       elementIds: [...new Set(args.elementIds)],
       ...(args.cursor
-        ? { cursor: { x: clampNormalized(args.cursor.x), y: clampNormalized(args.cursor.y) } }
+        ? {
+            cursor: {
+              x: clampNormalized(args.cursor.x),
+              y: clampNormalized(args.cursor.y),
+            },
+          }
         : {}),
       lastSeenAt: now,
       expiresAt: now + PRESENCE_TTL_MS,
@@ -1759,7 +1832,10 @@ function agentOperation(
         toolName: 'candidate_validation',
       };
     case 'awaiting_review':
-      return { name: 'Await human approval', operationName: 'agent.await_approval' };
+      return {
+        name: 'Await human approval',
+        operationName: 'agent.await_approval',
+      };
     default:
       return { name: 'Finalize agent run', operationName: 'agent.finalize' };
   }
@@ -1990,7 +2066,9 @@ export const markAgentTelemetryExportInternal = internalMutation({
       otelExportStatus: args.status,
       otelExportedAt: Date.now(),
       ...(args.error
-        ? { otelExportError: requiredText(args.error, 'OTLP export error', 300) }
+        ? {
+            otelExportError: requiredText(args.error, 'OTLP export error', 300),
+          }
         : {}),
     });
     return true;
@@ -2075,12 +2153,23 @@ export const advanceAgentRunInternal = internalMutation({
         { key: 'nodeslide.run.status.to', value: args.status },
         { key: 'nodeslide.checkpoint', value: args.status },
         ...(args.sourceIds?.length
-          ? [{ key: 'nodeslide.source.ids', value: args.sourceIds.slice(0, 32).join(',') }]
+          ? [
+              {
+                key: 'nodeslide.source.ids',
+                value: args.sourceIds.slice(0, 32).join(','),
+              },
+            ]
           : []),
         ...(args.memoryIds?.length
           ? [
-              { key: 'nodeslide.memory.count', value: Math.min(6, args.memoryIds.length) },
-              { key: 'nodeslide.memory.ids', value: args.memoryIds.slice(0, 6).join(',') },
+              {
+                key: 'nodeslide.memory.count',
+                value: Math.min(6, args.memoryIds.length),
+              },
+              {
+                key: 'nodeslide.memory.ids',
+                value: args.memoryIds.slice(0, 6).join(','),
+              },
             ]
           : []),
         ...(args.memoryDigests?.length
@@ -2113,7 +2202,12 @@ export const advanceAgentRunInternal = internalMutation({
         { key: 'nodeslide.checkpoint', value: args.status },
         { key: 'nodeslide.run.attempt', value: row.attempt },
         ...(args.memoryIds?.length
-          ? [{ key: 'nodeslide.memory.count', value: Math.min(6, args.memoryIds.length) }]
+          ? [
+              {
+                key: 'nodeslide.memory.count',
+                value: Math.min(6, args.memoryIds.length),
+              },
+            ]
           : []),
       ],
       sequence: sequence + 1,
@@ -2212,7 +2306,10 @@ export const recoverStaleAgentRunsInternal = internalMutation({
         model: run.model,
         attributes: [
           { key: 'nodeslide.recovery.reason', value: 'worker_lease_expired' },
-          { key: 'nodeslide.last_checkpoint', value: run.checkpoint ?? run.status },
+          {
+            key: 'nodeslide.last_checkpoint',
+            value: run.checkpoint ?? run.status,
+          },
         ],
         sequence,
         createdAt: now,
@@ -2228,7 +2325,12 @@ export const recoverStaleAgentRunsInternal = internalMutation({
         severity: 'error',
         timestamp: now,
         body: 'The worker lease expired. The run was failed without applying deck changes.',
-        attributes: [{ key: 'nodeslide.last_checkpoint', value: run.checkpoint ?? run.status }],
+        attributes: [
+          {
+            key: 'nodeslide.last_checkpoint',
+            value: run.checkpoint ?? run.status,
+          },
+        ],
         sequence: sequence + 1,
       });
       await ctx.db.patch(run._id, {
@@ -2703,7 +2805,10 @@ async function finalizeAtomicVariationSelection(
   for (const trace of decision.traces) await insertAtomicVariationDecision(ctx, trace);
   for (const link of linkedPatches) {
     if (link.variation.id !== winnerRow.id && link.patch?.status === 'ready') {
-      await ctx.db.patch(link.patch._id, { status: 'rejected', updatedAt: decidedAt });
+      await ctx.db.patch(link.patch._id, {
+        status: 'rejected',
+        updatedAt: decidedAt,
+      });
     }
   }
   await ctx.db.patch(batch._id, {
@@ -2838,6 +2943,45 @@ function stableJson(value: unknown): string {
   return JSON.stringify(value);
 }
 
+type ExactPatchCommand = Omit<
+  PatchMutationArgs,
+  'ownerAccessKey' | 'candidateDigest' | 'candidateValidation'
+>;
+
+function exactPatchCommand(value: ExactPatchCommand) {
+  return {
+    ...(value.id === undefined ? {} : { id: value.id }),
+    deckId: value.deckId,
+    baseDeckVersion: value.baseDeckVersion,
+    baseSlideVersions: value.baseSlideVersions,
+    baseElementVersions: value.baseElementVersions,
+    scope: value.scope,
+    operations: value.operations,
+    source: value.source ?? 'human',
+    summary: value.summary?.trim() || 'Scoped NodeSlide change.',
+    ...(value.linkedCommentId ? { linkedCommentId: value.linkedCommentId } : {}),
+    ...(value.traceId ? { traceId: value.traceId } : {}),
+    proposalKind: value.proposalKind ?? 'edit',
+    ...(value.parentPatchId === undefined ? {} : { parentPatchId: value.parentPatchId }),
+    ...(value.affectedSlideIds === undefined ? {} : { affectedSlideIds: value.affectedSlideIds }),
+    ...(value.affectedSlideDigest === undefined
+      ? {}
+      : { affectedSlideDigest: value.affectedSlideDigest }),
+    ...(value.profileId === undefined ? {} : { profileId: value.profileId }),
+    ...(value.profileDigest === undefined ? {} : { profileDigest: value.profileDigest }),
+  };
+}
+
+function assertExactPatchCommandReplay(
+  existing: Doc<'nodeslide_patches'>,
+  requested: PatchMutationArgs,
+): void {
+  if (existing.deckId !== requested.deckId) throw new Error('Patch is unavailable.');
+  if (stableJson(exactPatchCommand(existing)) !== stableJson(exactPatchCommand(requested))) {
+    throw new Error(`Patch ID ${existing.id} is already bound to a different command.`);
+  }
+}
+
 async function acceptPatchForOwner(
   ctx: MutationCtx,
   args: { deckId: string; ownerAccessKey: string; patchId: string },
@@ -2901,8 +3045,100 @@ function requirePackageWorkspace(workspace: NodeSlideWorkspace | null): NodeSlid
   return workspace;
 }
 
+async function packagePersistedPatchSnapshot(
+  ctx: MutationCtx,
+  patch: DeckPatch,
+): Promise<DeckSnapshot> {
+  if (patch.resultingDeckVersion === undefined) {
+    throw new Error('Patch replay is missing its persisted deck version.');
+  }
+  const version = await findVersionRow(ctx, {
+    deckId: patch.deckId,
+    version: patch.resultingDeckVersion,
+  });
+  if (!version) {
+    throw new Error('Patch replay is missing its immutable version.');
+  }
+  if (patch.status === 'accepted' && version.patchId !== patch.id) {
+    throw new Error('Accepted patch replay has an invalid version binding.');
+  }
+  return version.snapshot;
+}
+
+async function packageAcceptedPatchReplay(
+  ctx: MutationCtx,
+  patch: DeckPatch,
+  snapshot: DeckSnapshot,
+) {
+  if (patch.resultingDeckVersion === undefined) {
+    throw new Error('Accepted patch replay is missing its resulting deck version.');
+  }
+  const previous = await findVersionRow(ctx, {
+    deckId: patch.deckId,
+    version: patch.resultingDeckVersion - 1,
+  });
+  if (!previous) {
+    throw new Error('Accepted patch replay is missing its base version.');
+  }
+  const applied = applyDeckPatch(
+    previous.snapshot,
+    {
+      baseDeckVersion: previous.snapshot.deck.version,
+      scope: patch.scope,
+      operations: patch.operations,
+    },
+    patch.updatedAt,
+  );
+  if (
+    patch.candidateDigest === undefined ||
+    nodeSlideCandidateDigest(snapshot) !== patch.candidateDigest
+  ) {
+    throw new Error('Accepted patch replay does not match its immutable version.');
+  }
+  return { ...applied, snapshot };
+}
+
 function packageHostPrincipalId(ownerAccessKey: string): string {
   return `anonymous-owner:${nodeslideIdDigest(ownerAccessKey)}`;
+}
+
+type PackageHostAuthorizationAction = Extract<
+  NodeSlideRepositoryAuthorizationAction,
+  'patch.apply' | 'proposal.create' | 'proposal.accept' | 'proposal.reject'
+>;
+
+function packageHostPrincipal(ownerAccessKey: string): NodeSlidePrincipal {
+  return {
+    userId: packageHostPrincipalId(ownerAccessKey),
+    roles: ['owner'],
+    permissions: [
+      NODESLIDE_PERMISSIONS.read,
+      NODESLIDE_PERMISSIONS.propose,
+      NODESLIDE_PERMISSIONS.write,
+      NODESLIDE_PERMISSIONS.approve,
+      NODESLIDE_PERMISSIONS.manageAssets,
+    ],
+  };
+}
+
+function packageHostAuthorizationRequest(args: {
+  action: PackageHostAuthorizationAction;
+  patch: DeckPatch;
+  principal: NodeSlidePrincipal;
+}): NodeSlideRepositoryAuthorizationRequest {
+  const base = {
+    action: args.action,
+    deckId: args.patch.deckId,
+    principal: args.principal,
+  };
+  switch (args.action) {
+    case 'patch.apply':
+    case 'proposal.create':
+      return { ...base, action: args.action, patch: args.patch };
+    case 'proposal.accept':
+    case 'proposal.reject':
+      return { ...base, action: args.action, proposalId: args.patch.id };
+  }
 }
 
 function packageHostReceipt(args: {
@@ -2910,20 +3146,40 @@ function packageHostReceipt(args: {
   patch: DeckPatch;
   deckVersion: number;
   operation: PackageHostReceiptOperation;
+  authorizationAction: PackageHostAuthorizationAction;
 }): PackageHostReceipt {
   const recordedAt = args.patch.updatedAt;
+  const receiptId = nodeslideStableId(
+    'repository_receipt',
+    args.patch.deckId,
+    args.patch.id,
+    args.operation,
+    String(args.deckVersion),
+  );
+  const principal = packageHostPrincipal(args.ownerAccessKey);
+  const authorization = createNodeSlideAuthorizationReceipt(
+    packageHostAuthorizationRequest({
+      action: args.authorizationAction,
+      patch: args.patch,
+      principal,
+    }),
+    {
+      issuer: 'nodeslide.convex.capability-host',
+      policyId: 'anonymous-owner-capability',
+      policyVersion: '1',
+      evidenceId: receiptId,
+    },
+    {
+      id: nodeslideStableId('repository_authorization', receiptId, args.authorizationAction),
+      authorizedAt: recordedAt,
+    },
+  );
   return {
-    id: nodeslideStableId(
-      'repository_receipt',
-      args.patch.deckId,
-      args.patch.id,
-      args.operation,
-      String(args.deckVersion),
-    ),
+    id: receiptId,
     deckId: args.patch.deckId,
     deckVersion: args.deckVersion,
     operation: args.operation,
-    principalId: packageHostPrincipalId(args.ownerAccessKey),
+    principalId: principal.userId,
     patchId: args.patch.id,
     ...(args.patch.traceId === undefined ? {} : { traceId: args.patch.traceId }),
     recordedAt,
@@ -2932,6 +3188,7 @@ function packageHostReceipt(args: {
       status: args.patch.status,
       governancePath: 'existing_nodeslide_server',
     },
+    authorization,
   };
 }
 
@@ -3000,17 +3257,15 @@ async function persistProposal(ctx: MutationCtx, args: PatchMutationArgs) {
   assertPatchOperationCount(args.operations);
   assertPatchProfileReference(args);
   assertProposalMetadata(args);
-  const snapshot = await requireSnapshot(ctx, args.deckId);
   const existing = args.id ? await findPatchRow(ctx, args.id) : null;
   if (existing) {
-    if (existing.deckId !== args.deckId) {
-      throw new Error('Patch is unavailable.');
-    }
+    assertExactPatchCommandReplay(existing, args);
     return {
       patch: patchFromRow(existing),
       workspace: await loadNodeSlideWorkspace(ctx, args.deckId, Date.now()),
     };
   }
+  const snapshot = await requireSnapshot(ctx, args.deckId);
   const signatureProfile = await resolvePatchSignatureProfile(
     ctx,
     deckRow.projectId,
@@ -3038,7 +3293,13 @@ async function persistProposal(ctx: MutationCtx, args: PatchMutationArgs) {
       candidateValidation: candidate.receipt,
     };
   }
-  const row = patchRow(boundArgs, now, cas.canCommit ? 'ready' : 'stale');
+  const row = patchRow(
+    boundArgs,
+    now,
+    cas.canCommit ? 'ready' : 'stale',
+    now,
+    snapshot.deck.version,
+  );
   await ctx.db.insert('nodeslide_patches', row);
   return {
     patch: row,
@@ -3057,6 +3318,21 @@ async function commitPatch(
   assertPatchOperationCount(args.operations);
   assertPatchProfileReference(args);
   assertProposalMetadata(args);
+  const persisted = existing ?? (args.id ? await findPatchRow(ctx, args.id) : null);
+  if (persisted) {
+    assertExactPatchCommandReplay(persisted, args);
+    if (persisted.status === 'accepted' || persisted.status === 'stale') {
+      return {
+        patch: patchFromRow(persisted),
+        workspace: await loadNodeSlideWorkspace(ctx, args.deckId, Date.now()),
+        rebased: false,
+        staleReasons: persisted.status === 'stale' ? ['The patch is stale.'] : undefined,
+      };
+    }
+    if (persisted.status === 'rejected') {
+      throw new Error(`Patch ${persisted.id} was rejected.`);
+    }
+  }
   const snapshot = await requireSnapshot(ctx, args.deckId);
   const signatureProfile = await resolvePatchSignatureProfile(
     ctx,
@@ -3071,12 +3347,34 @@ async function commitPatch(
   const cas = evaluateNodeSlideCas(snapshot, input);
   const now = Date.now();
   const id =
-    existing?.id ?? args.id ?? nodeslideEventId('patch', now, args.deckId, args.summary ?? 'apply');
+    persisted?.id ??
+    args.id ??
+    nodeslideEventId('patch', now, args.deckId, args.summary ?? 'apply');
   if (!cas.canCommit) {
-    const stale = patchRow({ ...args, id }, now, 'stale', existing?.createdAt);
-    if (existing) await ctx.db.patch(existing._id, { status: 'stale', updatedAt: now });
+    const stale = patchRow(
+      {
+        ...args,
+        id,
+        ...(persisted?.candidateDigest === undefined
+          ? {}
+          : { candidateDigest: persisted.candidateDigest }),
+        ...(persisted?.candidateValidation === undefined
+          ? {}
+          : { candidateValidation: persisted.candidateValidation }),
+      },
+      now,
+      'stale',
+      persisted?.createdAt,
+      snapshot.deck.version,
+    );
+    if (persisted)
+      await ctx.db.patch(persisted._id, {
+        status: 'stale',
+        resultingDeckVersion: snapshot.deck.version,
+        updatedAt: now,
+      });
     else await ctx.db.insert('nodeslide_patches', stale);
-    if (existing) await finishPatchTrace(ctx, existing, now, 'failed');
+    if (persisted) await finishPatchTrace(ctx, persisted, now, 'failed');
     return {
       patch: stale,
       workspace: await loadNodeSlideWorkspace(ctx, args.deckId, now),
@@ -3086,15 +3384,15 @@ async function commitPatch(
   }
   const candidate = preflightNodeSlideCandidate(snapshot, args, signatureProfile, id, now);
   const hasPersistedBinding =
-    existing?.candidateDigest !== undefined || existing?.candidateValidation !== undefined;
+    persisted?.candidateDigest !== undefined || persisted?.candidateValidation !== undefined;
   const bindingMatches = candidateValidationBindingMatches({
     patchId: id,
     candidateDigest: candidate.digest,
-    ...(existing?.candidateDigest !== undefined
-      ? { persistedDigest: existing.candidateDigest }
+    ...(persisted?.candidateDigest !== undefined
+      ? { persistedDigest: persisted.candidateDigest }
       : {}),
-    ...(existing?.candidateValidation !== undefined
-      ? { persistedReceipt: existing.candidateValidation }
+    ...(persisted?.candidateValidation !== undefined
+      ? { persistedReceipt: persisted.candidateValidation }
       : {}),
     validation: candidate.validation,
   });
@@ -3108,11 +3406,19 @@ async function commitPatch(
       },
       now,
       'stale',
-      existing?.createdAt,
+      persisted?.createdAt,
+      snapshot.deck.version,
     );
-    if (existing) await ctx.db.patch(existing._id, { status: 'stale', updatedAt: now });
+    if (persisted)
+      await ctx.db.patch(persisted._id, {
+        status: 'stale',
+        resultingDeckVersion: snapshot.deck.version,
+        candidateDigest: candidate.digest,
+        candidateValidation: candidate.receipt,
+        updatedAt: now,
+      });
     else await ctx.db.insert('nodeslide_patches', stale);
-    if (existing) await finishPatchTrace(ctx, existing, now, 'failed');
+    if (persisted) await finishPatchTrace(ctx, persisted, now, 'failed');
     return {
       patch: stale,
       workspace: await loadNodeSlideWorkspace(ctx, args.deckId, now),
@@ -3126,7 +3432,7 @@ async function commitPatch(
   }
   const appliedSnapshot = candidate.snapshot;
   const validation = candidate.validation;
-  const persistedCandidateValidation = existing?.candidateValidation ?? candidate.receipt;
+  const persistedCandidateValidation = persisted?.candidateValidation ?? candidate.receipt;
   const accepted = patchRow(
     {
       ...args,
@@ -3136,12 +3442,12 @@ async function commitPatch(
     },
     now,
     'accepted',
-    existing?.createdAt,
+    persisted?.createdAt,
     appliedSnapshot.deck.version,
   );
   await writeNodeSlideSnapshot(ctx, snapshot, appliedSnapshot, now);
-  if (existing) {
-    await ctx.db.patch(existing._id, {
+  if (persisted) {
+    await ctx.db.patch(persisted._id, {
       status: 'accepted',
       resultingDeckVersion: appliedSnapshot.deck.version,
       ...(args.profileId !== undefined ? { profileId: args.profileId } : {}),
@@ -3257,7 +3563,11 @@ function preflightNodeSlideCandidate(
     snapshot: candidateSnapshot,
     digest,
     validation,
-    receipt: candidateValidationReceipt({ patchId, candidateDigest: digest, validation }),
+    receipt: candidateValidationReceipt({
+      patchId,
+      candidateDigest: digest,
+      validation,
+    }),
   };
 }
 
@@ -3513,7 +3823,9 @@ async function validateWithActiveSignature(
   if (!deckRow) throw new Error(`Deck ${snapshot.deck.id} not found.`);
   const signatureProfile = await requireDeckSignatureProfile(ctx, deckRow.projectId, snapshot.deck);
   if (!signatureProfile) throw new Error('Active signature profile identity/digest is incomplete.');
-  return validateNodeSlideSnapshot(snapshot, checkedAt, undefined, { signatureProfile });
+  return validateNodeSlideSnapshot(snapshot, checkedAt, undefined, {
+    signatureProfile,
+  });
 }
 
 async function ownerWorkspaceResponse(
@@ -3551,7 +3863,11 @@ async function resolveLinkedComment(
   const comment = await findCommentRow(ctx, commentId);
   if (!comment || comment.deckId !== deckId)
     throw new Error('Linked comment does not belong to this deck.');
-  await ctx.db.patch(comment._id, { status: 'resolved', linkedPatchId: patchId, updatedAt: now });
+  await ctx.db.patch(comment._id, {
+    status: 'resolved',
+    linkedPatchId: patchId,
+    updatedAt: now,
+  });
 }
 
 async function finishPatchTrace(

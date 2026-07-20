@@ -1,8 +1,9 @@
-import type {
-  NodeSlidePatchCommand,
-  NodeSlidePrincipal,
-  NodeSlideProposalResolution,
-  NodeSlideRepository,
+import {
+  NODESLIDE_AUTHORIZATION_RECEIPT_VERSION,
+  type NodeSlidePatchCommand,
+  type NodeSlidePrincipal,
+  type NodeSlideProposalResolution,
+  type NodeSlideRepository,
 } from '@nodeslide/backend';
 import type { DeckSnapshot } from '@nodeslide/contracts';
 
@@ -74,6 +75,32 @@ export async function runNodeSlideRepositoryConformance(
   }
   if (resolution.snapshot.deck.version !== before.deck.version + 1) {
     throw new Error('Conformance failed: accepted proposal did not advance exactly one version.');
+  }
+  const { receipt } = resolution;
+  if (
+    receipt.operation !== 'proposal.accepted' ||
+    receipt.principalId !== input.principal.userId ||
+    receipt.deckId !== before.deck.id ||
+    receipt.deckVersion !== resolution.snapshot.deck.version ||
+    receipt.patchId !== proposal.id ||
+    receipt.traceId !== proposal.traceId ||
+    !Number.isSafeInteger(receipt.recordedAt) ||
+    receipt.recordedAt < 0 ||
+    receipt.authorization.schemaVersion !== NODESLIDE_AUTHORIZATION_RECEIPT_VERSION ||
+    receipt.authorization.principalId !== receipt.principalId ||
+    receipt.authorization.organizationId !== input.principal.organizationId ||
+    receipt.authorization.deckId !== receipt.deckId ||
+    receipt.authorization.action !== 'proposal.accept' ||
+    receipt.authorization.resource.kind !== 'proposal' ||
+    receipt.authorization.resource.id !== proposal.id ||
+    !Number.isSafeInteger(receipt.authorization.authorizedAt) ||
+    receipt.authorization.authorizedAt < 0 ||
+    receipt.authorization.id.length === 0 ||
+    receipt.authorization.evidence.issuer.length === 0 ||
+    receipt.authorization.evidence.policyId.length === 0 ||
+    receipt.authorization.evidence.policyVersion.length === 0
+  ) {
+    throw new Error('Conformance failed: acceptance receipt is not bound to host authorization.');
   }
 
   const versions = await input.repository.listVersions({

@@ -1,4 +1,12 @@
-import type { NodeSlidePatchCommand, NodeSlidePrincipal } from '@nodeslide/backend';
+import {
+  NODESLIDE_PERMISSIONS,
+  type NodeSlideAuthorize,
+  type NodeSlidePatchCommand,
+  type NodeSlidePermission,
+  type NodeSlidePrincipal,
+  type NodeSlideRepositoryAuthorizationAction,
+  NodeSlideRepositoryError,
+} from '@nodeslide/backend';
 import {
   type DeckSnapshot,
   NODESLIDE_SCHEMA_VERSION,
@@ -10,12 +18,55 @@ export const NODESLIDE_TEST_PRINCIPAL: NodeSlidePrincipal = {
   organizationId: 'organization:test',
   roles: ['owner'],
   permissions: [
-    'nodeslide:read',
-    'nodeslide:propose',
-    'nodeslide:write',
-    'nodeslide:approve',
-    'nodeslide:assets',
+    NODESLIDE_PERMISSIONS.read,
+    NODESLIDE_PERMISSIONS.propose,
+    NODESLIDE_PERMISSIONS.write,
+    NODESLIDE_PERMISSIONS.approve,
+    NODESLIDE_PERMISSIONS.manageAssets,
   ],
+};
+
+function permissionForTestAuthorizationAction(
+  action: NodeSlideRepositoryAuthorizationAction,
+): NodeSlidePermission {
+  switch (action) {
+    case 'deck.read':
+    case 'versions.list':
+      return NODESLIDE_PERMISSIONS.read;
+    case 'proposal.create':
+      return NODESLIDE_PERMISSIONS.propose;
+    case 'proposal.accept':
+    case 'proposal.reject':
+      return NODESLIDE_PERMISSIONS.approve;
+    case 'patch.apply':
+    case 'receipt.store':
+      return NODESLIDE_PERMISSIONS.write;
+  }
+}
+
+/** Deterministic host policy for package tests; production hosts supply their own. */
+export const authorizeNodeSlideTestPrincipal: NodeSlideAuthorize = (request) => {
+  const requiredPermission = permissionForTestAuthorizationAction(request.action);
+  if (!request.principal.permissions.includes(requiredPermission)) {
+    throw new NodeSlideRepositoryError(
+      'forbidden',
+      `The test principal lacks ${requiredPermission}.`,
+    );
+  }
+  const resourceId =
+    request.action === 'patch.apply' || request.action === 'proposal.create'
+      ? request.patch.id
+      : request.action === 'proposal.accept' || request.action === 'proposal.reject'
+        ? request.proposalId
+        : request.action === 'receipt.store'
+          ? request.receipt.id
+          : request.deckId;
+  return {
+    issuer: '@nodeslide/testing',
+    policyId: 'testing.permission-map',
+    policyVersion: '1',
+    evidenceId: `test-policy:${request.action}:${resourceId}`,
+  };
 };
 
 export function createNodeSlideTestSnapshot(

@@ -2,6 +2,7 @@
 import {
   MemoryNodeSlideRepository,
   NODESLIDE_TEST_PRINCIPAL,
+  authorizeNodeSlideTestPrincipal,
   createNodeSlideTestSnapshot,
   createNodeSlideTextPatch,
 } from '@nodeslide/testing';
@@ -17,7 +18,10 @@ import {
 describe('@nodeslide/react-headless', () => {
   it('loads and mutates only from authoritative repository results', async () => {
     const snapshot = createNodeSlideTestSnapshot();
-    const repository = new MemoryNodeSlideRepository({ snapshots: [snapshot] });
+    const repository = new MemoryNodeSlideRepository({
+      snapshots: [snapshot],
+      authorize: authorizeNodeSlideTestPrincipal,
+    });
     const { result } = renderHook(() =>
       useNodeSlideRepositoryController({
         repository,

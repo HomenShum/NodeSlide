@@ -1,38 +1,38 @@
 import {
   type NodeSlideApplyPatchInput,
   type NodeSlideApplyPatchResult,
+  type NodeSlideAuthorizationReceipt,
+  type NodeSlideAuthorize,
   type NodeSlideCreateProposalInput,
   type NodeSlideGetDeckInput,
+  type NodeSlideJsonValue,
   type NodeSlideListVersionsInput,
   type NodeSlidePatchCommand,
   type NodeSlidePrincipal,
   type NodeSlideProposalResolution,
   type NodeSlideReceipt,
+  type NodeSlideReceiptDraft,
   type NodeSlideReceiptOperation,
   type NodeSlideRepository,
+  type NodeSlideRepositoryAuthorizationAction,
+  type NodeSlideRepositoryAuthorizationRequest,
   type NodeSlideRepositoryDescriptor,
   NodeSlideRepositoryError,
   type NodeSlideResolveProposalInput,
-  explicitPermissionAuthorization,
+  type NodeSlideStoreReceiptInput,
+  createNodeSlideAuthorizationReceipt,
+  parseNodeSlidePrincipal,
 } from '@nodeslide/backend';
 import type { DeckPatch, DeckSnapshot, DeckVersion } from '@nodeslide/contracts';
 import { applyDeckPatch } from '@nodeslide/engine';
 
-export type MemoryNodeSlideRepositoryAction =
-  | 'read'
-  | 'apply_patch'
-  | 'create_proposal'
-  | 'resolve_proposal'
-  | 'list_versions';
+export type MemoryNodeSlideRepositoryAction = NodeSlideRepositoryAuthorizationAction;
+type MemoryNodeSlideMutationReceiptOperation = Exclude<NodeSlideReceiptOperation, 'custom'>;
 
 export interface MemoryNodeSlideRepositoryOptions {
   snapshots?: readonly DeckSnapshot[];
   now?: () => number;
-  authorize?: (
-    principal: NodeSlidePrincipal,
-    deckId: string,
-    action: MemoryNodeSlideRepositoryAction,
-  ) => void | Promise<void>;
+  authorize: NodeSlideAuthorize;
 }
 
 interface MemoryDeckState {
@@ -46,6 +46,142 @@ interface MemoryDeckState {
 
 function clone<T>(value: T): T {
   return structuredClone(value);
+}
+
+function deepFreeze<T>(value: T): Readonly<T> {
+  if (typeof value !== 'object' || value === null || Object.isFrozen(value)) return value;
+  for (const key of Reflect.ownKeys(value)) {
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (descriptor && 'value' in descriptor) deepFreeze(descriptor.value);
+  }
+  return Object.freeze(value);
+}
+
+function cloneReceiptJson(
+  value: unknown,
+  path: string,
+  seen: WeakSet<object>,
+  budget: { nodes: number; characters: number },
+  depth = 0,
+): NodeSlideJsonValue {
+  budget.nodes += 1;
+  if (budget.nodes > 2_048 || depth > 16) {
+    throw new NodeSlideRepositoryError('invalid_state', 'Receipt attributes exceed safe bounds.');
+  }
+  if (value === null || typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    budget.characters += value.length;
+    if (budget.characters > 1_000_000) {
+      throw new NodeSlideRepositoryError('invalid_state', 'Receipt attributes exceed safe bounds.');
+    }
+    return value;
+  }
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) {
+      throw new NodeSlideRepositoryError('invalid_state', `${path} must be finite JSON data.`);
+    }
+    return value;
+  }
+  if (typeof value !== 'object') {
+    throw new NodeSlideRepositoryError('invalid_state', `${path} must be JSON data.`);
+  }
+  if (seen.has(value)) {
+    throw new NodeSlideRepositoryError(
+      'invalid_state',
+      `${path} must not contain cyclic or shared identities.`,
+    );
+  }
+  seen.add(value);
+
+  if (Array.isArray(value)) {
+    if (Object.getPrototypeOf(value) !== Array.prototype) {
+      throw new NodeSlideRepositoryError('invalid_state', `${path} must be a bounded plain array.`);
+    }
+    const keys = Reflect.ownKeys(value);
+    const captured = new Map<string, unknown>();
+    for (const key of keys) {
+      if (typeof key !== 'string') {
+        throw new NodeSlideRepositoryError(
+          'invalid_state',
+          `${path} must be a dense array without extra properties.`,
+        );
+      }
+      const descriptor = Object.getOwnPropertyDescriptor(value, key);
+      if (!descriptor || !('value' in descriptor)) {
+        throw new NodeSlideRepositoryError(
+          'invalid_state',
+          `${path}.${key} must be a data property.`,
+        );
+      }
+      captured.set(key, descriptor.value);
+    }
+    const length = captured.get('length');
+    if (
+      typeof length !== 'number' ||
+      !Number.isSafeInteger(length) ||
+      length < 0 ||
+      length > 256 ||
+      captured.size !== length + 1
+    ) {
+      throw new NodeSlideRepositoryError(
+        'invalid_state',
+        `${path} must be a dense array without extra properties.`,
+      );
+    }
+    const result: NodeSlideJsonValue[] = [];
+    for (let index = 0; index < length; index += 1) {
+      if (!captured.has(String(index))) {
+        throw new NodeSlideRepositoryError('invalid_state', `${path} must be a dense array.`);
+      }
+      result.push(
+        cloneReceiptJson(captured.get(String(index)), `${path}[${index}]`, seen, budget, depth + 1),
+      );
+    }
+    return result;
+  }
+
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== Object.prototype && prototype !== null) {
+    throw new NodeSlideRepositoryError('invalid_state', `${path} must be a plain object.`);
+  }
+  const keys = Reflect.ownKeys(value);
+  if (keys.length > 256) {
+    throw new NodeSlideRepositoryError('invalid_state', `${path} has too many fields.`);
+  }
+  const result: Record<string, NodeSlideJsonValue> = {};
+  for (const key of keys) {
+    if (
+      typeof key !== 'string' ||
+      key === '__proto__' ||
+      key === 'prototype' ||
+      key === 'constructor'
+    ) {
+      throw new NodeSlideRepositoryError('invalid_state', `${path} has an unsafe field.`);
+    }
+    const descriptor = Object.getOwnPropertyDescriptor(value, key);
+    if (!descriptor || !('value' in descriptor)) {
+      throw new NodeSlideRepositoryError(
+        'invalid_state',
+        `${path}.${key} must be a data property.`,
+      );
+    }
+    result[key] = cloneReceiptJson(descriptor.value, `${path}.${key}`, seen, budget, depth + 1);
+  }
+  return result;
+}
+
+function cloneReceiptAttributes(value: unknown): Record<string, NodeSlideJsonValue> {
+  const cloned = cloneReceiptJson(value, 'Receipt draft.attributes', new WeakSet(), {
+    nodes: 0,
+    characters: 0,
+  });
+  if (typeof cloned !== 'object' || cloned === null || Array.isArray(cloned)) {
+    throw new NodeSlideRepositoryError(
+      'invalid_state',
+      'Receipt draft.attributes must be a plain object.',
+    );
+  }
+  return cloned;
 }
 
 /**
@@ -68,19 +204,20 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
   };
   readonly #states = new Map<string, MemoryDeckState>();
   readonly #now: () => number;
-  readonly #authorize: NonNullable<MemoryNodeSlideRepositoryOptions['authorize']>;
+  readonly #authorizer: NodeSlideAuthorize;
+  #authorizationSequence = 0;
   #receiptSequence = 0;
 
-  constructor(options: MemoryNodeSlideRepositoryOptions = {}) {
+  constructor(options: MemoryNodeSlideRepositoryOptions) {
+    const authorizer = options?.authorize;
+    if (typeof authorizer !== 'function') {
+      throw new NodeSlideRepositoryError(
+        'forbidden',
+        'MemoryNodeSlideRepository requires a host authorizer.',
+      );
+    }
     this.#now = options.now ?? (() => Date.now());
-    this.#authorize =
-      options.authorize ??
-      ((principal, deckId, action) =>
-        explicitPermissionAuthorization.authorize({
-          principal,
-          deckId,
-          action: MEMORY_ACTIONS[action],
-        }));
+    this.#authorizer = authorizer;
     for (const snapshot of options.snapshots ?? []) this.seed(snapshot);
   }
 
@@ -107,74 +244,115 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
   }
 
   async getDeck(input: NodeSlideGetDeckInput): Promise<DeckSnapshot | null> {
-    await this.#authorize(input.principal, input.deckId, 'read');
-    const state = this.#states.get(input.deckId);
+    const { request } = await this.#authorizeRequest({
+      action: 'deck.read',
+      deckId: input.deckId,
+      principal: input.principal,
+    });
+    const state = this.#states.get(request.deckId);
     return state ? clone(state.snapshot) : null;
   }
 
   async applyPatch(input: NodeSlideApplyPatchInput): Promise<NodeSlideApplyPatchResult> {
-    const state = await this.#stateFor(input, 'apply_patch');
-    this.#assertPatchDeck(input.patch, input.deckId);
-    const prior = state.applyResults.get(input.patch.id);
-    if (prior) return clone(prior);
-    const existing = state.patches.get(input.patch.id);
+    const { request, authorization } = await this.#authorizeRequest({
+      action: 'patch.apply',
+      deckId: input.deckId,
+      principal: input.principal,
+      patch: input.patch,
+    });
+    const state = this.#stateFor(request.deckId);
+    this.#assertPatchDeck(request.patch, request.deckId);
+    const prior = state.applyResults.get(request.patch.id);
+    if (prior) {
+      if (this.#sameCommand(prior.patch, request.patch)) return clone(prior);
+      throw new NodeSlideRepositoryError(
+        'invalid_state',
+        `Patch ID ${request.patch.id} is already bound to another command.`,
+      );
+    }
+    const existing = state.patches.get(request.patch.id);
     if (existing) {
       throw new NodeSlideRepositoryError(
         'invalid_state',
-        `Patch ${input.patch.id} already exists with status ${existing.status}.`,
+        `Patch ${request.patch.id} already exists with status ${existing.status}.`,
       );
     }
-    return clone(this.#commit(state, input.patch, input.principal, 'patch.applied', this.#now()));
+    return clone(
+      this.#commit(
+        state,
+        request.patch,
+        request.principal,
+        authorization,
+        'patch.applied',
+        this.#now(),
+      ),
+    );
   }
 
   async createProposal(input: NodeSlideCreateProposalInput): Promise<DeckPatch> {
-    const state = await this.#stateFor(input, 'create_proposal');
-    this.#assertPatchDeck(input.patch, input.deckId);
-    const existing = state.patches.get(input.patch.id);
+    const { request, authorization } = await this.#authorizeRequest({
+      action: 'proposal.create',
+      deckId: input.deckId,
+      principal: input.principal,
+      patch: input.patch,
+    });
+    const state = this.#stateFor(request.deckId);
+    this.#assertPatchDeck(request.patch, request.deckId);
+    const existing = state.patches.get(request.patch.id);
     if (existing) {
-      if (this.#sameCommand(existing, input.patch)) return clone(existing);
+      if (this.#sameCommand(existing, request.patch)) return clone(existing);
       throw new NodeSlideRepositoryError(
         'invalid_state',
-        `Proposal ID ${input.patch.id} is already bound to another patch.`,
+        `Proposal ID ${request.patch.id} is already bound to another patch.`,
       );
     }
-    this.#previewOrConflict(state.snapshot, input.patch);
+    this.#previewOrConflict(state.snapshot, request.patch);
     const now = this.#now();
-    const proposal = this.#persistedPatch(input.patch, 'ready', now);
-    state.patches.set(proposal.id, proposal);
-    this.#appendReceipt(
-      state,
-      this.#receipt(
-        input.principal,
-        proposal,
-        state.snapshot.deck.version,
-        'proposal.created',
-        now,
-      ),
+    const proposal = this.#persistedPatch(request.patch, 'ready', now);
+    const receipt = this.#receipt(
+      request.principal,
+      proposal,
+      state.snapshot.deck.version,
+      'proposal.created',
+      now,
+      authorization,
     );
+    this.#assertReceiptIdAvailable(state, receipt);
+    state.patches.set(proposal.id, proposal);
+    this.#appendReceipt(state, receipt);
     return clone(proposal);
   }
 
   async resolveProposal(
     input: NodeSlideResolveProposalInput,
   ): Promise<NodeSlideProposalResolution> {
-    const state = await this.#stateFor(input, 'resolve_proposal');
-    const existingResolution = state.resolutions.get(input.proposalId);
+    if (input.decision !== 'accept' && input.decision !== 'reject') {
+      throw new NodeSlideRepositoryError('invalid_state', 'Proposal decision is invalid.');
+    }
+    const { request, authorization } = await this.#authorizeRequest({
+      action: input.decision === 'accept' ? 'proposal.accept' : 'proposal.reject',
+      deckId: input.deckId,
+      principal: input.principal,
+      proposalId: input.proposalId,
+    });
+    const state = this.#stateFor(request.deckId);
+    const existingResolution = state.resolutions.get(request.proposalId);
     if (existingResolution) {
-      const existingDecision = existingResolution.status === 'accepted' ? 'accept' : 'reject';
-      if (existingResolution.status !== 'stale' && existingDecision !== input.decision) {
+      const existingDecision = existingResolution.status === 'rejected' ? 'reject' : 'accept';
+      const decision = request.action === 'proposal.accept' ? 'accept' : 'reject';
+      if (existingDecision !== decision) {
         throw new NodeSlideRepositoryError(
           'invalid_state',
-          `Proposal ${input.proposalId} is already ${existingResolution.status}.`,
+          `Proposal ${request.proposalId} is already ${existingResolution.status}.`,
         );
       }
       return clone(existingResolution);
     }
-    const proposal = state.patches.get(input.proposalId);
+    const proposal = state.patches.get(request.proposalId);
     if (!proposal) {
       throw new NodeSlideRepositoryError(
         'not_found',
-        `Proposal ${input.proposalId} was not found for deck ${input.deckId}.`,
+        `Proposal ${request.proposalId} was not found for deck ${request.deckId}.`,
       );
     }
     if (proposal.status !== 'ready' && proposal.status !== 'draft') {
@@ -184,16 +362,22 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
       );
     }
     const now = this.#now();
-    if (input.decision === 'reject') {
-      const rejected = { ...clone(proposal), status: 'rejected' as const, updatedAt: now };
-      state.patches.set(rejected.id, rejected);
+    if (request.action === 'proposal.reject') {
+      const rejected = {
+        ...clone(proposal),
+        status: 'rejected' as const,
+        updatedAt: now,
+      };
       const receipt = this.#receipt(
-        input.principal,
+        request.principal,
         rejected,
         state.snapshot.deck.version,
         'proposal.rejected',
         now,
+        authorization,
       );
+      this.#assertReceiptIdAvailable(state, receipt);
+      state.patches.set(rejected.id, rejected);
       this.#appendReceipt(state, receipt);
       const resolution: NodeSlideProposalResolution = {
         status: 'rejected',
@@ -209,7 +393,8 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
       const applied = this.#commit(
         state,
         this.#commandFromPatch(proposal),
-        input.principal,
+        request.principal,
+        authorization,
         'proposal.accepted',
         now,
       );
@@ -223,15 +408,21 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
       return clone(resolution);
     } catch (error) {
       if (!(error instanceof NodeSlideRepositoryError) || error.code !== 'conflict') throw error;
-      const stale = { ...clone(proposal), status: 'stale' as const, updatedAt: now };
-      state.patches.set(stale.id, stale);
+      const stale = {
+        ...clone(proposal),
+        status: 'stale' as const,
+        updatedAt: now,
+      };
       const receipt = this.#receipt(
-        input.principal,
+        request.principal,
         stale,
         state.snapshot.deck.version,
         'proposal.stale',
         now,
+        authorization,
       );
+      this.#assertReceiptIdAvailable(state, receipt);
+      state.patches.set(stale.id, stale);
       this.#appendReceipt(state, receipt);
       const resolution: NodeSlideProposalResolution = {
         status: 'stale',
@@ -245,22 +436,103 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
   }
 
   async listVersions(input: NodeSlideListVersionsInput): Promise<DeckVersion[]> {
-    const state = await this.#stateFor(input, 'list_versions');
-    const limit = Math.max(1, Math.floor(input.limit ?? state.versions.length));
+    const { request } = await this.#authorizeRequest({
+      action: 'versions.list',
+      deckId: input.deckId,
+      principal: input.principal,
+      ...(input.limit === undefined ? {} : { limit: input.limit }),
+    });
+    const state = this.#stateFor(request.deckId);
+    const limit = Math.max(1, Math.floor(request.limit ?? state.versions.length));
     return clone(
       [...state.versions].sort((left, right) => right.version - left.version).slice(0, limit),
     );
   }
 
-  async storeReceipt(receipt: NodeSlideReceipt): Promise<void> {
-    const state = this.#states.get(receipt.deckId);
-    if (!state) {
+  async storeReceipt(input: NodeSlideStoreReceiptInput): Promise<NodeSlideReceipt> {
+    const capturedInput = this.#storeReceiptInput(input);
+    const draft = this.#receiptDraft(capturedInput.receipt);
+    if (draft.deckId !== capturedInput.deckId) {
       throw new NodeSlideRepositoryError(
-        'not_found',
-        `Deck ${receipt.deckId} was not found while storing receipt ${receipt.id}.`,
+        'invalid_state',
+        `Receipt ${draft.id} is not scoped to deck ${capturedInput.deckId}.`,
       );
     }
+    const { request, authorization } = await this.#authorizeRequest({
+      action: 'receipt.store',
+      deckId: capturedInput.deckId,
+      principal: capturedInput.principal,
+      receipt: draft,
+    });
+    const state = this.#stateFor(request.deckId);
+    const existing = state.receipts.find((candidate) => candidate.id === request.receipt.id);
+    if (existing) {
+      const {
+        principalId: existingPrincipalId,
+        authorization: _existingAuthorization,
+        ...existingDraft
+      } = existing;
+      if (
+        existingPrincipalId === request.principal.userId &&
+        JSON.stringify(existingDraft) === JSON.stringify(request.receipt)
+      ) {
+        return clone(existing);
+      }
+      throw new NodeSlideRepositoryError(
+        'invalid_state',
+        `Receipt ID ${request.receipt.id} is already bound to another receipt.`,
+      );
+    }
+    const receipt: NodeSlideReceipt = {
+      ...clone(request.receipt),
+      principalId: request.principal.userId,
+      authorization,
+    };
     this.#appendReceipt(state, receipt);
+    return clone(receipt);
+  }
+
+  #storeReceiptInput(value: unknown): NodeSlideStoreReceiptInput {
+    if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+      throw new NodeSlideRepositoryError(
+        'invalid_state',
+        'Store-receipt input must be a plain object.',
+      );
+    }
+    const prototype = Object.getPrototypeOf(value);
+    if (prototype !== Object.prototype && prototype !== null) {
+      throw new NodeSlideRepositoryError(
+        'invalid_state',
+        'Store-receipt input must be a plain object.',
+      );
+    }
+    const allowedKeys = new Set(['deckId', 'principal', 'receipt']);
+    const captured: Record<string, unknown> = {};
+    for (const key of Reflect.ownKeys(value)) {
+      if (typeof key !== 'string' || !allowedKeys.has(key)) {
+        throw new NodeSlideRepositoryError(
+          'invalid_state',
+          'Store-receipt input contains an invalid field.',
+        );
+      }
+      const descriptor = Object.getOwnPropertyDescriptor(value, key);
+      if (!descriptor || !('value' in descriptor)) {
+        throw new NodeSlideRepositoryError(
+          'invalid_state',
+          'Store-receipt input fields must be data properties.',
+        );
+      }
+      captured[key] = descriptor.value;
+    }
+    for (const key of allowedKeys) {
+      if (!Object.hasOwn(captured, key)) {
+        throw new NodeSlideRepositoryError(
+          'invalid_state',
+          `Store-receipt input.${key} is required.`,
+        );
+      }
+    }
+    return captured as unknown as NodeSlideStoreReceiptInput;
   }
 
   receiptsForDeck(deckId: string): NodeSlideReceipt[] {
@@ -268,14 +540,113 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
     return state ? clone(state.receipts) : [];
   }
 
-  async #stateFor(
-    input: { deckId: string; principal: NodeSlidePrincipal },
-    action: MemoryNodeSlideRepositoryAction,
-  ): Promise<MemoryDeckState> {
-    await this.#authorize(input.principal, input.deckId, action);
-    const state = this.#states.get(input.deckId);
-    if (!state)
-      throw new NodeSlideRepositoryError('not_found', `Deck ${input.deckId} was not found.`);
+  async #authorizeRequest<T extends NodeSlideRepositoryAuthorizationRequest>(
+    request: T,
+  ): Promise<{ request: T; authorization: NodeSlideAuthorizationReceipt }> {
+    let principal: NodeSlidePrincipal;
+    try {
+      principal = parseNodeSlidePrincipal(request.principal);
+    } catch {
+      throw new NodeSlideRepositoryError('forbidden', 'NodeSlide principal validation failed.');
+    }
+
+    const frozenRequest = deepFreeze(clone({ ...request, principal })) as unknown as T;
+    try {
+      const evidence = await this.#authorizer(frozenRequest);
+      const nextSequence = this.#authorizationSequence + 1;
+      const authorization = createNodeSlideAuthorizationReceipt(frozenRequest, evidence, {
+        id: `authorization:${frozenRequest.action}:${nextSequence}`,
+        authorizedAt: this.#now(),
+      });
+      this.#authorizationSequence = nextSequence;
+      return { request: frozenRequest, authorization };
+    } catch {
+      throw new NodeSlideRepositoryError('forbidden', 'NodeSlide host authorization denied.');
+    }
+  }
+
+  #receiptDraft(value: NodeSlideReceiptDraft): NodeSlideReceiptDraft {
+    if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+      throw new NodeSlideRepositoryError('invalid_state', 'Receipt draft must be a plain object.');
+    }
+    const prototype = Object.getPrototypeOf(value);
+    if (prototype !== Object.prototype && prototype !== null) {
+      throw new NodeSlideRepositoryError('invalid_state', 'Receipt draft must be a plain object.');
+    }
+    const allowedKeys = new Set([
+      'id',
+      'deckId',
+      'deckVersion',
+      'operation',
+      'patchId',
+      'traceId',
+      'recordedAt',
+      'attributes',
+    ]);
+    const captured: Record<string, unknown> = {};
+    for (const key of Reflect.ownKeys(value)) {
+      if (typeof key !== 'string' || !allowedKeys.has(key)) {
+        throw new NodeSlideRepositoryError(
+          'invalid_state',
+          'Receipt draft contains a caller-controlled identity or authorization field.',
+        );
+      }
+      const descriptor = Object.getOwnPropertyDescriptor(value, key);
+      if (!descriptor || !('value' in descriptor)) {
+        throw new NodeSlideRepositoryError(
+          'invalid_state',
+          'Receipt draft fields must be data properties.',
+        );
+      }
+      captured[key] = descriptor.value;
+    }
+    const id = captured['id'];
+    const deckId = captured['deckId'];
+    const deckVersion = captured['deckVersion'];
+    const operation = captured['operation'];
+    const recordedAt = captured['recordedAt'];
+    const attributes = captured['attributes'];
+    const patchId = captured['patchId'];
+    const traceId = captured['traceId'];
+    if (
+      typeof id !== 'string' ||
+      !id.startsWith('custom-receipt:') ||
+      id.length === 'custom-receipt:'.length ||
+      typeof deckId !== 'string' ||
+      typeof deckVersion !== 'number' ||
+      !Number.isSafeInteger(deckVersion) ||
+      deckVersion < 0 ||
+      typeof recordedAt !== 'number' ||
+      !Number.isSafeInteger(recordedAt) ||
+      recordedAt < 0 ||
+      operation !== 'custom' ||
+      typeof attributes !== 'object' ||
+      attributes === null ||
+      Array.isArray(attributes)
+    ) {
+      throw new NodeSlideRepositoryError('invalid_state', 'Receipt draft is malformed.');
+    }
+    if (patchId !== undefined && typeof patchId !== 'string') {
+      throw new NodeSlideRepositoryError('invalid_state', 'Receipt draft.patchId is malformed.');
+    }
+    if (traceId !== undefined && typeof traceId !== 'string') {
+      throw new NodeSlideRepositoryError('invalid_state', 'Receipt draft.traceId is malformed.');
+    }
+    return {
+      id: id as NodeSlideReceiptDraft['id'],
+      deckId,
+      deckVersion,
+      operation,
+      ...(patchId === undefined ? {} : { patchId }),
+      ...(traceId === undefined ? {} : { traceId }),
+      recordedAt,
+      attributes: cloneReceiptAttributes(attributes),
+    };
+  }
+
+  #stateFor(deckId: string): MemoryDeckState {
+    const state = this.#states.get(deckId);
+    if (!state) throw new NodeSlideRepositoryError('not_found', `Deck ${deckId} was not found.`);
     return state;
   }
 
@@ -283,13 +654,12 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
     state: MemoryDeckState,
     command: NodeSlidePatchCommand,
     principal: NodeSlidePrincipal,
-    operation: NodeSlideReceiptOperation,
+    authorization: NodeSlideAuthorizationReceipt,
+    operation: 'patch.applied' | 'proposal.accepted',
     now: number,
   ): NodeSlideApplyPatchResult {
     const result = this.#previewOrConflict(state.snapshot, command, now);
     const accepted = this.#persistedPatch(command, 'accepted', now, result.snapshot.deck.version);
-    state.snapshot = clone(result.snapshot);
-    state.patches.set(accepted.id, accepted);
     const version: DeckVersion = {
       id: `version:${accepted.deckId}:${result.snapshot.deck.version}`,
       deckId: accepted.deckId,
@@ -300,14 +670,18 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
       snapshot: clone(result.snapshot),
       createdAt: now,
     };
-    state.versions.push(version);
     const receipt = this.#receipt(
       principal,
       accepted,
       result.snapshot.deck.version,
       operation,
       now,
+      authorization,
     );
+    this.#assertReceiptIdAvailable(state, receipt);
+    state.snapshot = clone(result.snapshot);
+    state.patches.set(accepted.id, accepted);
+    state.versions.push(version);
     this.#appendReceipt(state, receipt);
     const applied: NodeSlideApplyPatchResult = {
       patch: accepted,
@@ -401,9 +775,37 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
     principal: NodeSlidePrincipal,
     patch: Pick<DeckPatch, 'id' | 'deckId' | 'source' | 'traceId'>,
     deckVersion: number,
-    operation: NodeSlideReceiptOperation,
+    operation: MemoryNodeSlideMutationReceiptOperation,
     now: number,
+    authorization: NodeSlideAuthorizationReceipt,
   ): NodeSlideReceipt {
+    let expectedAction: NodeSlideRepositoryAuthorizationAction;
+    switch (operation) {
+      case 'patch.applied':
+        expectedAction = 'patch.apply';
+        break;
+      case 'proposal.created':
+        expectedAction = 'proposal.create';
+        break;
+      case 'proposal.rejected':
+        expectedAction = 'proposal.reject';
+        break;
+      case 'proposal.accepted':
+      case 'proposal.stale':
+        expectedAction = 'proposal.accept';
+        break;
+    }
+    if (
+      authorization.action !== expectedAction ||
+      authorization.principalId !== principal.userId ||
+      authorization.deckId !== patch.deckId ||
+      authorization.resource.id !== patch.id
+    ) {
+      throw new NodeSlideRepositoryError(
+        'invalid_state',
+        'Repository receipt authorization binding is inconsistent.',
+      );
+    }
     this.#receiptSequence += 1;
     return {
       id: `receipt:${patch.id}:${this.#receiptSequence}`,
@@ -415,19 +817,28 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
       ...(patch.traceId === undefined ? {} : { traceId: patch.traceId }),
       recordedAt: now,
       attributes: { source: patch.source },
+      authorization,
     };
   }
 
   #appendReceipt(state: MemoryDeckState, receipt: NodeSlideReceipt): void {
-    if (state.receipts.some((candidate) => candidate.id === receipt.id)) return;
+    const existing = state.receipts.find((candidate) => candidate.id === receipt.id);
+    if (existing) {
+      if (JSON.stringify(existing) === JSON.stringify(receipt)) return;
+      throw new NodeSlideRepositoryError(
+        'invalid_state',
+        `Receipt ID ${receipt.id} is already bound to another receipt.`,
+      );
+    }
     state.receipts.push(clone(receipt));
   }
-}
 
-const MEMORY_ACTIONS = {
-  read: 'deck.read',
-  apply_patch: 'deck.mutate',
-  create_proposal: 'deck.propose',
-  resolve_proposal: 'proposal.resolve',
-  list_versions: 'versions.read',
-} as const;
+  #assertReceiptIdAvailable(state: MemoryDeckState, receipt: NodeSlideReceipt): void {
+    if (state.receipts.some((candidate) => candidate.id === receipt.id)) {
+      throw new NodeSlideRepositoryError(
+        'invalid_state',
+        `Receipt ID ${receipt.id} is already reserved.`,
+      );
+    }
+  }
+}

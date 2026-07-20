@@ -18,6 +18,7 @@ import {
   type NodeSlideRepositoryErrorCode,
   type NodeSlideResolveProposalInput,
   type NodeSlideServerGovernanceDeclaration,
+  type NodeSlideStoreReceiptInput,
   type NodeSlideStoredAsset,
   type NodeSlideTelemetryAdapter,
   type NodeSlideTelemetryRecord,
@@ -30,7 +31,7 @@ export interface NodeSlideHttpAdapterConfig {
   governance: NodeSlideServerGovernanceDeclaration;
   /** Must derive credentials from trusted host state; the principal is never sent in JSON. */
   headersForPrincipal(principal: NodeSlidePrincipal): HeadersInit | Promise<HeadersInit>;
-  /** Required only for backend-only receipt and telemetry endpoints. */
+  /** Required only for backend-only telemetry endpoints. */
   systemHeaders?: HeadersInit | (() => HeadersInit | Promise<HeadersInit>);
   apiPrefix?: string;
   fetch?: typeof globalThis.fetch;
@@ -121,8 +122,12 @@ export class NodeSlideHttpRepository implements NodeSlideRepository {
     );
   }
 
-  async storeReceipt(receipt: NodeSlideReceipt): Promise<void> {
-    await this.transport.requiredSystemRequest('/receipts', jsonRequest('POST', { receipt }));
+  async storeReceipt(input: NodeSlideStoreReceiptInput): Promise<NodeSlideReceipt> {
+    return this.transport.requiredPrincipalRequest(
+      input.principal,
+      `/decks/${segment(input.deckId)}/receipts`,
+      jsonRequest('POST', { receipt: input.receipt }),
+    );
   }
 }
 

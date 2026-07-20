@@ -11,16 +11,16 @@ Before public npm publication, install an immutable release set:
 
 ```bash
 npm run artifacts:build -- \
-  --out ./artifacts/v0.2.0 \
+  --out ./artifacts/v0.2.1 \
   --release-id <full-40-character-lowercase-git-commit-sha> \
-  --release-version 0.2.0 \
-  --registry-version 0.2.0
+  --release-version 0.2.1 \
+  --registry-version 0.2.1
 
 npx @nodeslide/cli init \
   --profile full-studio \
   --backend convex \
   --ui headless \
-  --artifacts ./artifacts/v0.2.0
+  --artifacts ./artifacts/v0.2.1
 ```
 
 `nodeslide-artifacts.json` pins one release ID and version across the complete
@@ -37,10 +37,10 @@ The local release proof builds two artifact directories and runs:
 ```bash
 npm run proof:install-upgrade -- \
   --from ./artifacts/v0.1.0 \
-  --to ./artifacts/v0.2.0 \
-  --rebuilt-to ./artifacts/rebuilt-v0.2.0 \
+  --to ./artifacts/v0.2.1 \
+  --rebuilt-to ./artifacts/rebuilt-v0.2.1 \
   --from-release-id <exact-v0.1.0-tag-commit-sha> \
-  --to-release-id <exact-v0.2.0-tag-commit-sha> \
+  --to-release-id <exact-v0.2.1-tag-commit-sha> \
   --report ./artifacts/immutable-install-upgrade-proof.json
 ```
 

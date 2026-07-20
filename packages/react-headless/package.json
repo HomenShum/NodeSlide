@@ -1,6 +1,6 @@
 {
   "name": "@nodeslide/react-headless",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
@@ -16,14 +16,14 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@nodeslide/backend": "0.2.0",
-    "@nodeslide/contracts": "0.2.0",
-    "@nodeslide/engine": "0.2.0"
+    "@nodeslide/backend": "0.2.1",
+    "@nodeslide/contracts": "0.2.1",
+    "@nodeslide/engine": "0.2.1"
   },
   "peerDependencies": {
     "react": ">=18 <20"
   },
   "devDependencies": {
-    "@nodeslide/testing": "0.2.0"
+    "@nodeslide/testing": "0.2.1"
   }
 }

@@ -24,7 +24,7 @@ import {
 } from '@nodeslide/registry';
 
 export const NODESLIDE_INSTALLATION_RECEIPT_VERSION = 'nodeslide.installation/v1' as const;
-export const NODESLIDE_PACKAGE_VERSION = '0.2.0' as const;
+export const NODESLIDE_PACKAGE_VERSION = '0.2.1' as const;
 export const NODESLIDE_ARTIFACT_MANIFEST_VERSION = 'nodeslide.artifacts/v1' as const;
 export const NODESLIDE_ARTIFACT_MANIFEST_FILE = 'nodeslide-artifacts.json' as const;
 

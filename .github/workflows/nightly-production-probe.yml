@@ -19,6 +19,7 @@ jobs:
     if: github.event_name == 'schedule' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 12
+    environment: production
     permissions:
       contents: read
     steps:
@@ -46,16 +47,11 @@ jobs:
         continue-on-error: true
         shell: bash
         env:
-          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DIAGNOSTICS_KEY }}
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
           CONVEX_LOG_HISTORY: '50'
           CONVEX_LOG_DURATION_MS: '15000'
           CONVEX_LOG_OUTPUT: artifacts/convex-logs/production.jsonl
-        run: |
-          if [[ -z "${CONVEX_DEPLOY_KEY:-}" ]]; then
-            echo "::notice::CONVEX_DIAGNOSTICS_KEY is not configured; skipping the optional production-log capture."
-            exit 0
-          fi
-          node scripts/capture-convex-logs.mjs
+        run: node scripts/capture-convex-logs.mjs
       - name: Upload sanitized diagnostics
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

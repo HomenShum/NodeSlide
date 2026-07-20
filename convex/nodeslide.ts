@@ -42,6 +42,7 @@ import {
   requireShareSlug,
 } from './lib/nodeslideAccess';
 import { summarizeNodeSlideExecutionTraces } from './lib/nodeslideAgenticTelemetry';
+import { NODESLIDE_ASSISTANT_STREAM_CONTENT_LIMIT } from './lib/nodeslideAssistantStream';
 import {
   candidateValidationBindingMatches,
   candidateValidationReceipt,
@@ -2587,6 +2588,17 @@ export const recoverStaleAgentRunsInternal = internalMutation({
         leaseExpiresAt: now,
         nextTelemetrySequence: sequence + 2,
       });
+      const openAssistantStreams = await ctx.db
+        .query('nodeslide_agent_messages')
+        .withIndex('by_run_created', (query) => query.eq('runId', run.id))
+        .filter((query) => query.eq(query.field('streamState'), 'streaming'))
+        .take(32);
+      for (const stream of openAssistantStreams) {
+        await ctx.db.patch(stream._id, {
+          streamState: 'interrupted',
+          updatedAt: now,
+        });
+      }
       const root = await ctx.db
         .query('nodeslide_agent_spans')
         .withIndex('by_stable_id', (query) =>
@@ -5038,7 +5050,11 @@ function requiredText(value: string, label: string, max: number): string {
 
 function requiredAgentStreamText(value: string): string {
   if (!value.trim()) throw new Error('assistant stream content is required.');
-  if (value.length > 4000) throw new Error('assistant stream content exceeds 4000 characters.');
+  if (value.length > NODESLIDE_ASSISTANT_STREAM_CONTENT_LIMIT) {
+    throw new Error(
+      `assistant stream content exceeds ${NODESLIDE_ASSISTANT_STREAM_CONTENT_LIMIT} characters.`,
+    );
+  }
   // Preserve provider-observed whitespace exactly so each streaming mutation
   // can prove it extends the previously persisted prefix.
   return value;

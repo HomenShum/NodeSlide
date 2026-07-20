@@ -28,9 +28,10 @@ const outputPath = path.resolve(
 const includeMessages = process.env.CONVEX_LOG_INCLUDE_MESSAGES === '1';
 const deployKey = process.env.CONVEX_DEPLOY_KEY;
 
-if (!deployKey)
-  fail('CONVEX_DEPLOY_KEY is required (use a production key with deployment:logs:view only)');
-if (!/^prod:agile-stoat-411\|/.test(deployKey)) {
+if (process.env.CI && !deployKey) {
+  fail('CONVEX_DEPLOY_KEY is required for non-interactive CI capture');
+}
+if (deployKey && !/^prod:agile-stoat-411\|/.test(deployKey)) {
   fail('CONVEX_DEPLOY_KEY is not scoped to the expected agile-stoat-411 production deployment');
 }
 if (process.env.CI && includeMessages) {
@@ -72,14 +73,16 @@ child.on('exit', (code) => {
   childExitCode = code;
 });
 
+let fallbackTimer;
 await new Promise((resolve) => {
   child.once('close', resolve);
-  setTimeout(() => {
+  fallbackTimer = setTimeout(() => {
     stop('timeout');
     resolve();
   }, durationMs + 2_000);
 });
 clearTimeout(timer);
+clearTimeout(fallbackTimer);
 if (stdoutBuffer.trim()) acceptLine(stdoutBuffer);
 
 const cliFailed = childExitCode !== null && childExitCode !== 0 && stopReason !== 'max-events';
@@ -99,6 +102,7 @@ lines.push(
       maxEvents,
       capturedEvents: eventCount,
       includeMessages,
+      credentialMode: deployKey ? 'production-deploy-key' : 'local-convex-session',
       stopReason: cliFailed ? 'cli-error' : emptyHistory ? 'empty-history' : stopReason,
       status: failed ? 'failed' : 'completed',
       failureCode: cliFailed ? 'convex-cli-error' : emptyHistory ? 'no-production-events' : null,

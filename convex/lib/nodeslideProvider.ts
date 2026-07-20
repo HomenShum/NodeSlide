@@ -195,6 +195,97 @@ interface NodeSlideProviderDependencies {
   timeoutMs?: number;
 }
 
+export interface NodeSlideModelProbeReceipt {
+  model: NodeSlideAgentModelId;
+  provider: NodeSlideExternalProvider;
+  upstreamModel: string;
+  maxTokens: 1;
+  status: 'passed' | 'failed';
+  stopReason?: string;
+  latencyMs: number;
+  costMicroUsd: number;
+  inputTokens: number;
+  outputTokens: number;
+  failure?: string;
+}
+
+/**
+ * Executes exactly one one-token completion for a catalog route. This is kept
+ * below a server-only Convex action so an unauthenticated client cannot turn
+ * the fleet probe into a cost-bearing endpoint.
+ */
+export async function probeNodeSlideModelOnce(
+  modelId: NodeSlideAgentModelId,
+  dependencies: NodeSlideProviderDependencies = {},
+): Promise<NodeSlideModelProbeReceipt> {
+  const route = nodeSlideAgentModel(modelId);
+  const complete = dependencies.complete ?? completeNodeSlideWithPiAi;
+  const controller = new AbortController();
+  const startedAt = Date.now();
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  const deadline = new Promise<never>((_, reject) => {
+    timeout = setTimeout(() => {
+      controller.abort();
+      reject(new Error('nodeslide_provider_timeout'));
+    }, dependencies.timeoutMs ?? MODEL_TIMEOUT_MS);
+  });
+
+  try {
+    const result = await Promise.race([
+      complete({
+        provider: route.provider,
+        model: route.upstreamId,
+        supportsTemperature: route.supportsTemperature,
+        reasoningEffort: 'low',
+        systemPrompt: 'Reply with one character.',
+        userText: '1',
+        maxTokens: 1,
+        repairAttempt: false,
+        signal: controller.signal,
+      }),
+      deadline,
+    ]);
+    const passed = result.stopReason !== 'error' && result.stopReason !== 'aborted';
+    return {
+      model: modelId,
+      provider: route.provider,
+      upstreamModel: route.upstreamId,
+      maxTokens: 1,
+      status: passed ? 'passed' : 'failed',
+      stopReason: result.stopReason,
+      latencyMs: Date.now() - startedAt,
+      costMicroUsd: result.costMicroUsd,
+      inputTokens: result.inputTokens,
+      outputTokens: result.outputTokens,
+      ...(passed
+        ? {}
+        : {
+            failure: providerErrorReason(
+              result.errorMessage,
+              `${route.label} via ${providerDisplayName(route.provider)}`,
+            ),
+          }),
+    };
+  } catch {
+    return {
+      model: modelId,
+      provider: route.provider,
+      upstreamModel: route.upstreamId,
+      maxTokens: 1,
+      status: 'failed',
+      latencyMs: Date.now() - startedAt,
+      costMicroUsd: 0,
+      inputTokens: 0,
+      outputTokens: 0,
+      failure: controller.signal.aborted
+        ? `The ${route.label} route timed out.`
+        : `The ${route.label} route was unavailable.`,
+    };
+  } finally {
+    if (timeout !== undefined) clearTimeout(timeout);
+  }
+}
+
 export async function callNodeSlideFreeJson(
   args: {
     systemPrompt: string;

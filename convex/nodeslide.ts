@@ -86,6 +86,11 @@ import {
   validateNodeSlidePatch,
 } from './lib/nodeslidePatches';
 import { planNodeSlidePropagation } from './lib/nodeslidePropagation';
+import {
+  NODESLIDE_APPROVER_ROW_LIMIT,
+  decideNodeSlidePublishApproval,
+  selectAuthorizingApproval,
+} from './lib/nodeslidePublishApprovalPolicy';
 import { NodeSlidePreviewQuotaError, consumePreviewQuotaBuckets } from './lib/nodeslideQuota';
 import {
   buildBriefNodeSlide,
@@ -528,6 +533,43 @@ export const publishDeck = mutation({
     if (!validationAllowsPublication(snapshot, validation)) {
       throw new Error('The current deck version must pass publish validation before sharing.');
     }
+
+    // D9 governance: when the approval gate is on, only an approver sign-off
+    // bound to this exact version + validation receipt authorizes publish.
+    const approvalRows = await ctx.db
+      .query('nodeslide_publish_approvals')
+      .withIndex('by_deck_version', (queryBuilder) =>
+        queryBuilder.eq('deckId', deckId).eq('deckVersion', snapshot.deck.version),
+      )
+      .collect();
+    // A revoked approver's sign-off is void — publishing must not proceed on the
+    // authority of a capability the owner has since rescinded. Exclude them before
+    // choosing the newest authorizing sign-off (fail-closed governance).
+    // Bounded read on the critical publish path: the approver table is capped at
+    // NODESLIDE_APPROVER_ROW_LIMIT on issue, so this take() reads the whole table without
+    // risking a Convex per-query read-limit failure at pathological row counts.
+    const approverRows = await ctx.db
+      .query('nodeslide_publish_approvers')
+      .withIndex('by_deck', (queryBuilder) => queryBuilder.eq('deckId', deckId))
+      .take(NODESLIDE_APPROVER_ROW_LIMIT);
+    const revokedApproverIds = new Set(
+      approverRows.filter((row) => row.revokedAt).map((row) => row.id),
+    );
+    const newestApproval = selectAuthorizingApproval(approvalRows, revokedApproverIds);
+    const approvalDecision = decideNodeSlidePublishApproval({
+      required: deckRow.publishApprovalRequired === true,
+      deckVersion: snapshot.deck.version,
+      validationId: validation.id,
+      approval: newestApproval
+        ? {
+            deckVersion: newestApproval.deckVersion,
+            validationId: newestApproval.validationId,
+            approverId: newestApproval.approverId,
+            approvedAt: newestApproval.approvedAt,
+          }
+        : null,
+    });
+    if (!approvalDecision.allowed) throw new Error(approvalDecision.message);
 
     const now = Date.now();
     const previous = await findLatestPublicationForDeck(ctx, deckId);

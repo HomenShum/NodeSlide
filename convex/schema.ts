@@ -262,6 +262,9 @@ export default defineSchema({
     ),
     activeSignatureProfileId: v.optional(v.string()),
     activeSignatureProfileDigest: v.optional(v.string()),
+    // D9 governance: when true, publishing needs an approver sign-off bound to the
+    // exact current version. Optional so existing rows stay valid (additive field).
+    publishApprovalRequired: v.optional(v.boolean()),
     // Optional so deployed anonymous-session rows can be claimed lazily.
     ownerAccessKey: v.optional(v.string()),
     shareSlug: v.optional(v.string()),
@@ -745,6 +748,33 @@ export default defineSchema({
     .index('by_stable_id', ['id'])
     .index('by_deck_revision', ['deckId', 'revision'])
     .index('by_share_slug_revision', ['shareSlug', 'revision']),
+
+  /**
+   * D9 approver capabilities: the token is returned exactly once at issue time and only
+   * its digest persists — holding the token IS the approver role. Revoked rows are
+   * retained (never deleted) so a past sign-off stays attributable in audits; a hard
+   * per-deck row cap keeps every read of this table bounded by construction.
+   */
+  nodeslide_publish_approvers: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    tokenDigest: v.string(),
+    label: v.string(),
+    issuedAt: v.number(),
+    revokedAt: v.optional(v.number()),
+  })
+    .index('by_deck', ['deckId'])
+    .index('by_token_digest', ['tokenDigest']),
+
+  /** Append-only approver sign-offs bound to an exact deck version + validation. */
+  nodeslide_publish_approvals: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    deckVersion: v.number(),
+    validationId: v.string(),
+    approverId: v.string(),
+    approvedAt: v.number(),
+  }).index('by_deck_version', ['deckId', 'deckVersion']),
 
   nodeslide_preference_events: defineTable({
     schemaVersion: v.literal('nodeslide.preference/v1'),

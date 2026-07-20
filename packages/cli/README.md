@@ -11,16 +11,16 @@ Before public npm publication, install an immutable release set:
 
 ```bash
 npm run artifacts:build -- \
-  --out ./artifacts/v0.2.1 \
+  --out ./artifacts/v0.2.2 \
   --release-id <full-40-character-lowercase-git-commit-sha> \
-  --release-version 0.2.1 \
-  --registry-version 0.2.1
+  --release-version 0.2.2 \
+  --registry-version 0.2.2
 
 npx @nodeslide/cli init \
   --profile full-studio \
   --backend convex \
   --ui headless \
-  --artifacts ./artifacts/v0.2.1
+  --artifacts ./artifacts/v0.2.2
 ```
 
 `nodeslide-artifacts.json` pins one release ID and version across the complete
@@ -32,15 +32,19 @@ manifest digest plus every exact name, version, filename, digest, and integrity
 pin; upgrades must advance the release version and cannot downgrade the source
 registry.
 
+Use the Ubuntu `immutable-package-build.yml` workflow artifact for a
+public GitHub release. The operating system affects npm's tar mode for the CLI
+bin, so a Windows-built set is not accepted as the canonical public producer.
+
 The local release proof builds two artifact directories and runs:
 
 ```bash
 npm run proof:install-upgrade -- \
   --from ./artifacts/v0.1.0 \
-  --to ./artifacts/v0.2.1 \
-  --rebuilt-to ./artifacts/rebuilt-v0.2.1 \
+  --to ./artifacts/v0.2.2 \
+  --rebuilt-to ./artifacts/rebuilt-v0.2.2 \
   --from-release-id <exact-v0.1.0-tag-commit-sha> \
-  --to-release-id <exact-v0.2.1-tag-commit-sha> \
+  --to-release-id <exact-v0.2.2-tag-commit-sha> \
   --report ./artifacts/immutable-install-upgrade-proof.json
 ```
 

@@ -47,16 +47,23 @@ with:
 
 ```bash
 npm run artifacts:build -- \
-  --out ./artifacts/v0.2.1 \
+  --out ./artifacts/v0.2.2 \
   --release-id <full-40-character-lowercase-git-commit-sha> \
-  --release-version 0.2.1 \
-  --registry-version 0.2.1
+  --release-version 0.2.2 \
+  --registry-version 0.2.2
 ```
 
 The manifest pins the exact 11-package closure with SHA-256 and npm SHA-512
 integrity. Artifact-mode installs consume the whole verified closure so npm
 never resolves an unpublished internal `@nodeslide/*` dependency from a mutable
 registry.
+
+Public immutable assets must come from the Ubuntu
+`immutable-package-build.yml` workflow artifact. `npm pack` encodes a
+CLI bin's executable mode differently on Windows, so two same-OS local builds
+are useful rehearsal but are not the canonical cross-run producer proof. The
+workflow builds twice, requires the exact 12-file roster and byte identity, and
+binds its downloadable artifact to a full commit SHA already on `main`.
 
 After building, prove the actual publish-shaped artifacts in a fresh temporary
 consumer with scripts disabled:
@@ -102,7 +109,7 @@ is confirmed; the CLI does not claim an unpublished alias.
 
 For upgrades, use a separately generated, strictly newer release set and run
 `nodeslide upgrade --artifacts <directory>`. The immutable proof workflow
-installs v0.1.0 into a clean consumer, upgrades to v0.2.1, checks the lockfile
+installs v0.1.0 into a clean consumer, upgrades to v0.2.2, checks the lockfile
 and receipt pins, and rejects mixed or tampered sets. Public-release acceptance
 additionally requires GitHub release immutability, the exact canonical
 11-package asset roster, manifest release IDs equal to both tag commit SHAs,

@@ -1,4 +1,5 @@
 import {
+  type NodeSlideAssetKind,
   type NodeSlideJsonValue,
   type NodeSlidePatchCommand,
   type NodeSlideReceipt,
@@ -13,15 +14,26 @@ import {
 } from '@nodeslide/engine';
 import { v } from 'convex/values';
 import { type DatabaseReader, type DatabaseWriter, mutation, query } from './_generated/server.js';
+import { NODESLIDE_CONVEX_MIGRATIONS } from './migrations.js';
+import { parseNodeSlideComponentPatchCommand } from './patchCommand.js';
 import {
   type NodeSlideComponentGrant,
   nodeSlideAuthorizationReceiptFromGrant,
   nodeSlideComponentGrantValidator,
+  nodeSlideComponentPatchDigest,
 } from './protocol.js';
 
 const snapshotValidator = v.any();
 const patchValidator = v.any();
 const receiptValidator = v.any();
+const assetKindValidator = v.union(
+  v.literal('image'),
+  v.literal('video'),
+  v.literal('document'),
+  v.literal('data'),
+  v.literal('export'),
+  v.literal('other'),
+);
 
 export const initializeDeck = mutation({
   args: { snapshot: snapshotValidator, grant: nodeSlideComponentGrantValidator },
@@ -71,8 +83,9 @@ export const applyPatch = mutation({
   args: { deckId: v.string(), patch: patchValidator, grant: nodeSlideComponentGrantValidator },
   returns: v.any(),
   handler: async (ctx, args) => {
-    const command = clone(args.patch as NodeSlidePatchCommand);
-    assertGrant(args.grant, 'patch.apply', 'patch', command.id, args.deckId);
+    const command = await parseNodeSlideComponentPatchCommand(args.patch);
+    const requestDigest = await nodeSlideComponentPatchDigest(command);
+    assertGrant(args.grant, 'patch.apply', 'patch', command.id, args.deckId, requestDigest);
     await consumeGrant(ctx.db, args.grant);
     return (await applyCommand(
       ctx.db,
@@ -88,8 +101,9 @@ export const createProposal = mutation({
   args: { deckId: v.string(), patch: patchValidator, grant: nodeSlideComponentGrantValidator },
   returns: patchValidator,
   handler: async (ctx, args) => {
-    const command = clone(args.patch as NodeSlidePatchCommand);
-    assertGrant(args.grant, 'proposal.create', 'patch', command.id, args.deckId);
+    const command = await parseNodeSlideComponentPatchCommand(args.patch);
+    const requestDigest = await nodeSlideComponentPatchDigest(command);
+    assertGrant(args.grant, 'proposal.create', 'patch', command.id, args.deckId, requestDigest);
     const row = await requiredDeckRow(ctx.db, args.deckId);
     assertPatchCanApply(row.snapshot as DeckSnapshot, command, args.grant.authorizedAt);
     const existing = await proposalRow(ctx.db, command.id);
@@ -232,7 +246,7 @@ export const putAsset = mutation({
   args: {
     deckId: v.string(),
     assetId: v.optional(v.string()),
-    kind: v.string(),
+    kind: assetKindValidator,
     fileName: v.string(),
     contentType: v.string(),
     contentDigest: v.string(),
@@ -248,18 +262,30 @@ export const putAsset = mutation({
     if (!/^sha256:[0-9a-f]{64}$/u.test(args.contentDigest)) {
       throw new Error('Asset contentDigest must be a canonical sha256 digest.');
     }
+    const computedDigest = await sha256Bytes(args.bytes);
+    if (computedDigest !== args.contentDigest) {
+      throw new Error('Asset contentDigest does not match the supplied bytes.');
+    }
+    if (args.bytes.byteLength > 512_000) throw new Error('Component asset exceeds 512000 bytes.');
+    if (!bounded(args.fileName) || args.fileName.length > 240) {
+      throw new Error('Asset fileName is not bounded.');
+    }
+    if (!/^[A-Za-z0-9][A-Za-z0-9.+-]*\/[A-Za-z0-9][A-Za-z0-9.+-]*$/u.test(args.contentType)) {
+      throw new Error('Asset contentType is not canonical.');
+    }
+    const metadata = parseAssetMetadata(args.metadata);
     if (await assetRow(ctx.db, assetId)) throw new Error(`Asset ${assetId} already exists.`);
     await consumeGrant(ctx.db, args.grant);
     const reference = {
       id: assetId,
       deckId: args.deckId,
-      kind: args.kind,
+      kind: args.kind as NodeSlideAssetKind,
       fileName: args.fileName,
       contentType: args.contentType,
       byteSize: args.bytes.byteLength,
       contentDigest: args.contentDigest,
       createdAt: args.grant.authorizedAt,
-      metadata: clone(args.metadata as Record<string, NodeSlideJsonValue>),
+      metadata,
     };
     await ctx.db.insert('nodeslide_assets', {
       deckId: args.deckId,
@@ -306,12 +332,28 @@ export const applyMigration = mutation({
   returns: v.any(),
   handler: async (ctx, args) => {
     assertGrant(args.grant, 'migration.apply', 'migration', args.stepId);
-    if (args.toVersion !== args.fromVersion + 1) throw new Error('Migration must be contiguous.');
+    const declaredStep = NODESLIDE_CONVEX_MIGRATIONS.find((step) => step.id === args.stepId);
+    if (
+      !declaredStep ||
+      declaredStep.fromVersion !== args.fromVersion ||
+      declaredStep.toVersion !== args.toVersion
+    ) {
+      throw new Error(`Migration ${args.stepId} is not an exact declared component step.`);
+    }
     const existing = await ctx.db
       .query('nodeslide_migration_receipts')
       .withIndex('by_step_id', (range) => range.eq('stepId', args.stepId))
       .unique();
-    if (existing) return clone(existing);
+    if (existing) {
+      if (
+        existing.fromVersion !== declaredStep.fromVersion ||
+        existing.toVersion !== declaredStep.toVersion
+      ) {
+        throw new Error(`Migration ${args.stepId} has a contradictory persisted receipt.`);
+      }
+      await consumeGrant(ctx.db, args.grant);
+      return clone(existing);
+    }
     const receipts = await ctx.db.query('nodeslide_migration_receipts').collect();
     const installedVersion = receipts.reduce(
       (maximum, receipt) => Math.max(maximum, receipt.toVersion),
@@ -431,6 +473,7 @@ function assertGrant(
   resourceKind: NodeSlideComponentGrant['resource']['kind'],
   resourceId: string,
   deckId = grant.deckId,
+  requestDigest?: string,
 ): void {
   parseNodeSlideAuthorizationEvidence(grant.evidence);
   if (
@@ -438,6 +481,7 @@ function assertGrant(
     grant.deckId !== deckId ||
     grant.resource.kind !== resourceKind ||
     grant.resource.id !== resourceId ||
+    (requestDigest !== undefined && grant.requestDigest !== requestDigest) ||
     !bounded(grant.id) ||
     !bounded(grant.principalId) ||
     !Number.isSafeInteger(grant.authorizedAt) ||
@@ -610,6 +654,59 @@ function bounded(value: string): boolean {
       return codePoint <= 31 || codePoint === 127;
     })
   );
+}
+
+async function sha256Bytes(bytes: ArrayBuffer): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return `sha256:${[...new Uint8Array(digest)]
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('')}`;
+}
+
+function parseAssetMetadata(value: unknown): Record<string, NodeSlideJsonValue> {
+  const budget = { nodes: 0, characters: 0 };
+  const parsed = parseAssetJson(value, 'Asset metadata', budget, 0);
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    throw new Error('Asset metadata must be a plain JSON object.');
+  }
+  return parsed;
+}
+
+function parseAssetJson(
+  value: unknown,
+  path: string,
+  budget: { nodes: number; characters: number },
+  depth: number,
+): NodeSlideJsonValue {
+  budget.nodes += 1;
+  if (budget.nodes > 256 || depth > 8) throw new Error('Asset metadata exceeds safe bounds.');
+  if (value === null || typeof value === 'boolean') return value;
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) throw new Error(`${path} must contain finite JSON numbers.`);
+    return value;
+  }
+  if (typeof value === 'string') {
+    budget.characters += value.length;
+    if (budget.characters > 16_000) throw new Error('Asset metadata exceeds safe bounds.');
+    return value;
+  }
+  if (Array.isArray(value)) {
+    if (value.length > 64) throw new Error(`${path} has too many items.`);
+    return value.map((entry, index) =>
+      parseAssetJson(entry, `${path}[${index}]`, budget, depth + 1),
+    );
+  }
+  if (!value || typeof value !== 'object') throw new Error(`${path} must be JSON data.`);
+  const entries = Object.entries(value as Record<string, unknown>);
+  if (entries.length > 64) throw new Error(`${path} has too many fields.`);
+  const parsed: Record<string, NodeSlideJsonValue> = {};
+  for (const [key, entry] of entries) {
+    if (!bounded(key) || ['__proto__', 'prototype', 'constructor'].includes(key)) {
+      throw new Error(`${path} contains an unsafe field.`);
+    }
+    parsed[key] = parseAssetJson(entry, `${path}.${key}`, budget, depth + 1);
+  }
+  return parsed;
 }
 
 function isConflict(error: unknown): boolean {

@@ -1,6 +1,17 @@
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import {
+  access,
+  lstat,
+  mkdir,
+  mkdtemp,
+  open,
+  readFile,
+  readdir,
+  rm,
+  writeFile,
+} from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import {
   NODESLIDE_REGISTRY_VERSION,
@@ -36,6 +47,7 @@ export interface NodeSlideArtifactManifest {
 export interface VerifiedNodeSlideArtifactSet {
   directory: string;
   manifestPath: string;
+  stagingDirectory: string;
   manifestSha256: string;
   manifest: NodeSlideArtifactManifest;
   packages: ReadonlyMap<string, NodeSlideArtifactManifestPackage & { absolutePath: string }>;
@@ -140,34 +152,41 @@ export async function runNodeSlideInit(
   options: NodeSlideInitOptions,
 ): Promise<NodeSlideInstallationReceipt> {
   const plan = await planNodeSlideInstallation(options);
-  await assertMissing(plan.receiptPath, 'NodeSlide is already installed; run `nodeslide upgrade`.');
-  const prepared = await prepareRegistryWrites(plan);
-  if (options.dryRun) return receiptFor(options, plan, [], [], 'skipped');
+  try {
+    await assertMissing(
+      plan.receiptPath,
+      'NodeSlide is already installed; run `nodeslide upgrade`.',
+    );
+    const prepared = await prepareRegistryWrites(plan);
+    if (options.dryRun) return receiptFor(options, plan, [], [], 'skipped');
 
-  if (!options.skipInstall) {
-    await runCommand('npm', ['install', '--save-exact', ...plan.installSpecs], plan.root);
-  }
-  const files: NodeSlideReceiptFile[] = [];
-  for (const item of prepared) {
-    await mkdir(path.dirname(item.destination), { recursive: true });
-    await writeFile(item.destination, item.content, { encoding: 'utf8', flag: 'wx' });
-    files.push({
-      registryId: item.entry.id,
-      path: relativePortable(plan.root, item.destination),
-      sha256: digest(item.content),
+    if (!options.skipInstall) {
+      await runCommand('npm', ['install', '--save-exact', ...plan.installSpecs], plan.root);
+    }
+    const files: NodeSlideReceiptFile[] = [];
+    for (const item of prepared) {
+      await mkdir(path.dirname(item.destination), { recursive: true });
+      await writeFile(item.destination, item.content, { encoding: 'utf8', flag: 'wx' });
+      files.push({
+        registryId: item.entry.id,
+        path: relativePortable(plan.root, item.destination),
+        sha256: digest(item.content),
+      });
+    }
+    const checks = options.skipChecks ? skippedChecks() : await runProjectChecks(plan.root);
+    const receipt = receiptFor(options, plan, files, checks, plan.packageSource);
+    await mkdir(path.dirname(plan.receiptPath), { recursive: true });
+    await writeFile(plan.receiptPath, `${JSON.stringify(receipt, null, 2)}\n`, {
+      encoding: 'utf8',
+      flag: 'wx',
     });
+    if (checks.some((check) => check.status === 'failed')) {
+      throw new Error(`NodeSlide installed, but a project check failed. See ${plan.receiptPath}.`);
+    }
+    return receipt;
+  } finally {
+    await disposeNodeSlideArtifactSet(plan.artifactSet);
   }
-  const checks = options.skipChecks ? skippedChecks() : await runProjectChecks(plan.root);
-  const receipt = receiptFor(options, plan, files, checks, plan.packageSource);
-  await mkdir(path.dirname(plan.receiptPath), { recursive: true });
-  await writeFile(plan.receiptPath, `${JSON.stringify(receipt, null, 2)}\n`, {
-    encoding: 'utf8',
-    flag: 'wx',
-  });
-  if (checks.some((check) => check.status === 'failed')) {
-    throw new Error(`NodeSlide installed, but a project check failed. See ${plan.receiptPath}.`);
-  }
-  return receipt;
 }
 
 export async function runNodeSlideUpgrade(options: {
@@ -192,84 +211,89 @@ export async function runNodeSlideUpgrade(options: {
     ...(options.skipChecks === undefined ? {} : { skipChecks: options.skipChecks }),
   };
   const plan = await planNodeSlideInstallation(initOptions);
-  if (previous.artifactSet && plan.artifactSet) {
-    assertArtifactUpgrade(previous.artifactSet, plan.artifactSet);
-  }
-  if (!options.skipInstall && !options.dryRun) {
-    await runCommand('npm', ['install', '--save-exact', ...plan.installSpecs], root);
-  }
-  const priorFiles = new Map(previous.files.map((file) => [file.registryId, file]));
-  const nextFiles: NodeSlideReceiptFile[] = [];
-  const diffs: string[] = [];
-  for (const entry of plan.entries) {
-    const content = await readNodeSlideRegistryEntry(entry);
-    const destination = safeDestination(root, entry.destination);
-    const prior = priorFiles.get(entry.id);
-    const current = await readOptional(destination);
-    const nextHash = digest(content);
-    if (current === null) {
-      const diffPath = await writeUpgradeDiff(root, entry, '', content, options.dryRun);
+  try {
+    if (previous.artifactSet && !plan.artifactSet) {
+      throw new Error(
+        'This installation is pinned to an immutable artifact set; --artifacts is required for every upgrade.',
+      );
+    }
+    if (previous.artifactSet && plan.artifactSet) {
+      assertArtifactUpgrade(previous.artifactSet, plan.artifactSet);
+    }
+    if (!options.skipInstall && !options.dryRun) {
+      await runCommand('npm', ['install', '--save-exact', ...plan.installSpecs], root);
+    }
+    const priorFiles = new Map(previous.files.map((file) => [file.registryId, file]));
+    const nextFiles: NodeSlideReceiptFile[] = [];
+    const diffs: string[] = [];
+    for (const entry of plan.entries) {
+      const content = await readNodeSlideRegistryEntry(entry);
+      const destination = safeDestination(root, entry.destination);
+      const prior = priorFiles.get(entry.id);
+      const current = await readOptional(destination);
+      const nextHash = digest(content);
+      if (current === null) {
+        const diffPath = await writeUpgradeDiff(root, entry, '', content, options.dryRun);
+        diffs.push(diffPath);
+        if (prior) nextFiles.push(prior);
+        continue;
+      }
+      const currentHash = digest(current);
+      if (currentHash === nextHash) {
+        nextFiles.push({
+          registryId: entry.id,
+          path: relativePortable(root, destination),
+          sha256: nextHash,
+        });
+        continue;
+      }
+      if (prior && currentHash === prior.sha256) {
+        if (!options.dryRun) await writeFile(destination, content, 'utf8');
+        nextFiles.push({
+          registryId: entry.id,
+          path: relativePortable(root, destination),
+          sha256: nextHash,
+        });
+        continue;
+      }
+      const diffPath = await writeUpgradeDiff(root, entry, current, content, options.dryRun);
       diffs.push(diffPath);
       if (prior) nextFiles.push(prior);
-      continue;
     }
-    const currentHash = digest(current);
-    if (currentHash === nextHash) {
-      nextFiles.push({
-        registryId: entry.id,
-        path: relativePortable(root, destination),
-        sha256: nextHash,
-      });
-      continue;
+    for (const prior of previous.files) {
+      if (!nextFiles.some((file) => file.registryId === prior.registryId)) nextFiles.push(prior);
     }
-    if (prior && currentHash === prior.sha256) {
-      if (!options.dryRun) await writeFile(destination, content, 'utf8');
-      nextFiles.push({
-        registryId: entry.id,
-        path: relativePortable(root, destination),
-        sha256: nextHash,
-      });
-      continue;
+    const checks =
+      options.skipChecks || options.dryRun ? skippedChecks() : await runProjectChecks(root);
+    const updatedAt = new Date().toISOString();
+    const next: NodeSlideInstallationReceipt = {
+      ...previous,
+      cliVersion: NODESLIDE_PACKAGE_VERSION,
+      registryVersion: NODESLIDE_REGISTRY_VERSION,
+      updatedAt,
+      packages: plan.packages,
+      packageSource: options.skipInstall ? 'skipped' : plan.packageSource,
+      files: nextFiles,
+      checks,
+      ...(plan.artifactSet ? { artifactSet: artifactReceipt(plan.artifactSet) } : {}),
+      upgrades: [
+        ...previous.upgrades,
+        {
+          upgradedAt: updatedAt,
+          fromRegistryVersion: previous.registryVersion,
+          toRegistryVersion: NODESLIDE_REGISTRY_VERSION,
+          diffs,
+        },
+      ],
+    };
+    if (!options.dryRun) await writeFile(receiptPath, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
+    if (checks.some((check) => check.status === 'failed')) {
+      throw new Error(`NodeSlide upgraded, but a project check failed. See ${receiptPath}.`);
     }
-    const diffPath = await writeUpgradeDiff(root, entry, current, content, options.dryRun);
-    diffs.push(diffPath);
-    if (prior) nextFiles.push(prior);
+    return next;
+  } finally {
+    await disposeNodeSlideArtifactSet(plan.artifactSet);
   }
-  for (const prior of previous.files) {
-    if (!nextFiles.some((file) => file.registryId === prior.registryId)) nextFiles.push(prior);
-  }
-  const checks =
-    options.skipChecks || options.dryRun ? skippedChecks() : await runProjectChecks(root);
-  const updatedAt = new Date().toISOString();
-  const next: NodeSlideInstallationReceipt = {
-    ...previous,
-    cliVersion: NODESLIDE_PACKAGE_VERSION,
-    registryVersion: NODESLIDE_REGISTRY_VERSION,
-    updatedAt,
-    packages: plan.packages,
-    packageSource: options.skipInstall ? 'skipped' : plan.packageSource,
-    files: nextFiles,
-    checks,
-    ...(plan.artifactSet
-      ? { artifactSet: artifactReceipt(plan.artifactSet) }
-      : previous.artifactSet
-        ? { artifactSet: previous.artifactSet }
-        : {}),
-    upgrades: [
-      ...previous.upgrades,
-      {
-        upgradedAt: updatedAt,
-        fromRegistryVersion: previous.registryVersion,
-        toRegistryVersion: NODESLIDE_REGISTRY_VERSION,
-        diffs,
-      },
-    ],
-  };
-  if (!options.dryRun) await writeFile(receiptPath, `${JSON.stringify(next, null, 2)}\n`, 'utf8');
-  if (checks.some((check) => check.status === 'failed')) {
-    throw new Error(`NodeSlide upgraded, but a project check failed. See ${receiptPath}.`);
-  }
-  return next;
 }
 
 async function detectFramework(
@@ -410,28 +434,34 @@ export async function verifyNodeSlideArtifactSet(
   expectedPackages?: readonly string[],
 ): Promise<VerifiedNodeSlideArtifactSet> {
   const root = path.resolve(directory);
-  const manifestPath = path.join(root, NODESLIDE_ARTIFACT_MANIFEST_FILE);
-  const manifestBytes = await readFile(manifestPath);
+  const sourceManifestPath = path.join(root, NODESLIDE_ARTIFACT_MANIFEST_FILE);
+  const manifestBytes = await readRegularFileSnapshot(
+    sourceManifestPath,
+    'NodeSlide artifact manifest',
+  );
   const manifestValue: unknown = JSON.parse(manifestBytes.toString('utf8'));
   const manifest = parseArtifactManifest(manifestValue);
-  const packages = new Map<string, NodeSlideArtifactManifestPackage & { absolutePath: string }>();
+  const verifiedArtifacts: Array<{ artifact: NodeSlideArtifactManifestPackage; bytes: Buffer }> =
+    [];
+  const packageNames = new Set<string>();
   for (const artifact of manifest.packages) {
-    if (packages.has(artifact.name)) {
+    if (packageNames.has(artifact.name)) {
       throw new Error(`Artifact manifest contains duplicate package ${artifact.name}.`);
     }
+    packageNames.add(artifact.name);
     if (artifact.version !== manifest.releaseVersion) {
       throw new Error(
         `Artifact ${artifact.name}@${artifact.version} is mixed into release ${manifest.releaseVersion}.`,
       );
     }
     const absolutePath = safeArtifactPath(root, artifact.file);
-    const bytes = await readFile(absolutePath);
+    const bytes = await readRegularFileSnapshot(absolutePath, `Artifact ${artifact.name}`);
     const sha256 = `sha256:${createHash('sha256').update(bytes).digest('hex')}`;
     const integrity = `sha512-${createHash('sha512').update(bytes).digest('base64')}`;
     if (sha256 !== artifact.sha256 || integrity !== artifact.integrity) {
       throw new Error(`Artifact integrity mismatch for ${artifact.name}.`);
     }
-    packages.set(artifact.name, { ...artifact, absolutePath });
+    verifiedArtifacts.push({ artifact, bytes });
   }
   const listedTarballs = new Set(manifest.packages.map((artifact) => artifact.file));
   const strayTarballs = (await readdir(root)).filter(
@@ -441,15 +471,38 @@ export async function verifyNodeSlideArtifactSet(
     throw new Error(`Artifact directory contains unlisted tarballs: ${strayTarballs.join(', ')}.`);
   }
   for (const packageName of expectedPackages ?? []) {
-    if (!packages.has(packageName)) throw new Error(`Artifact set is missing ${packageName}.`);
+    if (!packageNames.has(packageName)) throw new Error(`Artifact set is missing ${packageName}.`);
   }
-  return {
-    directory: root,
-    manifestPath,
-    manifestSha256: `sha256:${createHash('sha256').update(manifestBytes).digest('hex')}`,
-    manifest,
-    packages,
-  };
+
+  const stagingDirectory = await mkdtemp(path.join(tmpdir(), 'nodeslide-verified-artifacts-'));
+  try {
+    const manifestPath = path.join(stagingDirectory, NODESLIDE_ARTIFACT_MANIFEST_FILE);
+    await writeFile(manifestPath, manifestBytes, { flag: 'wx', mode: 0o400 });
+    const packages = new Map<string, NodeSlideArtifactManifestPackage & { absolutePath: string }>();
+    for (const { artifact, bytes } of verifiedArtifacts) {
+      const absolutePath = path.join(stagingDirectory, artifact.file);
+      await writeFile(absolutePath, bytes, { flag: 'wx', mode: 0o400 });
+      packages.set(artifact.name, { ...artifact, absolutePath });
+    }
+    return {
+      directory: root,
+      manifestPath,
+      stagingDirectory,
+      manifestSha256: `sha256:${createHash('sha256').update(manifestBytes).digest('hex')}`,
+      manifest,
+      packages,
+    };
+  } catch (error) {
+    await rm(stagingDirectory, { recursive: true, force: true, maxRetries: 3 });
+    throw error;
+  }
+}
+
+export async function disposeNodeSlideArtifactSet(
+  artifactSet: VerifiedNodeSlideArtifactSet | null | undefined,
+): Promise<void> {
+  if (!artifactSet) return;
+  await rm(artifactSet.stagingDirectory, { recursive: true, force: true, maxRetries: 3 });
 }
 
 function parseArtifactManifest(value: unknown): NodeSlideArtifactManifest {
@@ -531,6 +584,21 @@ function safeArtifactPath(root: string, file: string): string {
   return resolved;
 }
 
+async function readRegularFileSnapshot(file: string, label: string): Promise<Buffer> {
+  const entry = await lstat(file);
+  if (entry.isSymbolicLink() || !entry.isFile()) {
+    throw new Error(`${label} must be a regular, non-symlink file.`);
+  }
+  const handle = await open(file, 'r');
+  try {
+    const opened = await handle.stat();
+    if (!opened.isFile()) throw new Error(`${label} must be a regular file.`);
+    return await handle.readFile();
+  } finally {
+    await handle.close();
+  }
+}
+
 function canonicalPackageName(value: unknown): string {
   if (typeof value !== 'string' || !/^@nodeslide\/[a-z0-9-]+$/u.test(value)) {
     throw new Error(`Artifact package name ${String(value)} is invalid.`);
@@ -570,20 +638,59 @@ function containsControlCharacter(value: string): boolean {
 }
 
 function canonicalSemver(value: unknown, label: string): string {
-  if (typeof value !== 'string' || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/u.test(value)) {
+  if (
+    typeof value !== 'string' ||
+    !/^(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*)?$/u.test(
+      value,
+    )
+  ) {
     throw new Error(`${label} must be an exact semantic version.`);
   }
   return value;
 }
 
 function compareSemver(left: string, right: string): number {
-  const leftParts = left.split('-', 1)[0]?.split('.').map(Number) ?? [];
-  const rightParts = right.split('-', 1)[0]?.split('.').map(Number) ?? [];
+  const leftVersion = splitSemver(left);
+  const rightVersion = splitSemver(right);
+  const leftParts = leftVersion.core.split('.').map(Number);
+  const rightParts = rightVersion.core.split('.').map(Number);
   for (let index = 0; index < 3; index += 1) {
     const difference = (leftParts[index] ?? 0) - (rightParts[index] ?? 0);
     if (difference !== 0) return difference;
   }
-  return left.localeCompare(right);
+  if (leftVersion.prerelease === undefined && rightVersion.prerelease === undefined) return 0;
+  if (leftVersion.prerelease === undefined) return 1;
+  if (rightVersion.prerelease === undefined) return -1;
+  const leftIdentifiers = leftVersion.prerelease.split('.');
+  const rightIdentifiers = rightVersion.prerelease.split('.');
+  for (
+    let index = 0;
+    index < Math.max(leftIdentifiers.length, rightIdentifiers.length);
+    index += 1
+  ) {
+    const leftIdentifier = leftIdentifiers[index];
+    const rightIdentifier = rightIdentifiers[index];
+    if (leftIdentifier === undefined) return -1;
+    if (rightIdentifier === undefined) return 1;
+    if (leftIdentifier === rightIdentifier) continue;
+    const leftNumeric = /^\d+$/u.test(leftIdentifier);
+    const rightNumeric = /^\d+$/u.test(rightIdentifier);
+    if (leftNumeric !== rightNumeric) return leftNumeric ? -1 : 1;
+    if (leftNumeric && rightNumeric) {
+      if (leftIdentifier.length !== rightIdentifier.length) {
+        return leftIdentifier.length - rightIdentifier.length;
+      }
+    }
+    return leftIdentifier < rightIdentifier ? -1 : 1;
+  }
+  return 0;
+}
+
+function splitSemver(value: string): { core: string; prerelease?: string } {
+  const separator = value.indexOf('-');
+  return separator < 0
+    ? { core: value }
+    : { core: value.slice(0, separator), prerelease: value.slice(separator + 1) };
 }
 
 async function runProjectChecks(root: string): Promise<NodeSlideInstallationReceipt['checks']> {

@@ -4,28 +4,20 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
+import {
+  NODESLIDE_IMMUTABLE_MANIFEST_FILE,
+  NODESLIDE_IMMUTABLE_PACKAGE_NAMES,
+  assertCanonicalPackageRoster,
+  assertFullCommitSha,
+} from './immutable-package-set.mjs';
 
 const execFileAsync = promisify(execFile);
 const npmCli = process.env.npm_execpath;
 assert(npmCli, 'Run this proof through npm so npm_execpath is available.');
 
-const packageNames = [
-  '@nodeslide/agent',
-  '@nodeslide/contracts',
-  '@nodeslide/engine',
-  '@nodeslide/backend',
-  '@nodeslide/client-http',
-  '@nodeslide/convex',
-  '@nodeslide/testing',
-  '@nodeslide/react-headless',
-  '@nodeslide/react',
-  '@nodeslide/registry',
-  '@nodeslide/cli',
-];
-
 const flags = parseFlags(process.argv.slice(2));
 const output = path.resolve(required(flags, 'out'));
-const releaseId = required(flags, 'release-id');
+const releaseId = assertFullCommitSha(required(flags, 'release-id'), '--release-id');
 const expectedVersion = flags.get('release-version');
 const producerRoot = path.resolve(flags.get('root') ?? process.cwd());
 await mkdir(path.dirname(output), { recursive: true });
@@ -34,7 +26,7 @@ await mkdir(output);
 const registryVersion =
   flags.get('registry-version') ?? (await import('@nodeslide/registry')).NODESLIDE_REGISTRY_VERSION;
 const packages = [];
-for (const packageName of packageNames) {
+for (const packageName of NODESLIDE_IMMUTABLE_PACKAGE_NAMES) {
   const { stdout } = await execFileAsync(
     process.execPath,
     [npmCli, 'pack', '--json', '--workspace', packageName, '--pack-destination', output],
@@ -60,6 +52,10 @@ const versions = new Set(packages.map((artifact) => artifact.version));
 assert.equal(versions.size, 1, `Package set is mixed: ${[...versions].join(', ')}.`);
 const releaseVersion = packages[0]?.version;
 assert(releaseVersion, 'Package set is empty.');
+assertCanonicalPackageRoster(
+  packages.map((artifact) => artifact.name),
+  'Packed artifact set',
+);
 if (expectedVersion) {
   assert.equal(
     releaseVersion,
@@ -74,7 +70,7 @@ const manifest = {
   registryVersion,
   packages,
 };
-const manifestPath = path.join(output, 'nodeslide-artifacts.json');
+const manifestPath = path.join(output, NODESLIDE_IMMUTABLE_MANIFEST_FILE);
 const manifestBytes = Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
 await writeFile(manifestPath, manifestBytes, { flag: 'wx' });
 process.stdout.write(

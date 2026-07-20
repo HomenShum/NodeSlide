@@ -48,7 +48,7 @@ with:
 ```bash
 npm run artifacts:build -- \
   --out ./artifacts/v0.2.0 \
-  --release-id <git-commit-sha> \
+  --release-id <full-40-character-lowercase-git-commit-sha> \
   --release-version 0.2.0 \
   --registry-version 0.2.0
 ```
@@ -104,5 +104,7 @@ For upgrades, use a separately generated, strictly newer release set and run
 `nodeslide upgrade --artifacts <directory>`. The immutable proof workflow
 installs v0.1.0 into a clean consumer, upgrades to v0.2.0, checks the lockfile
 and receipt pins, and rejects mixed or tampered sets. Public-release acceptance
-additionally requires GitHub release immutability plus successful
-`gh release verify` and per-asset `gh release verify-asset` checks.
+additionally requires GitHub release immutability, the exact canonical
+11-package asset roster, manifest release IDs equal to both tag commit SHAs,
+successful `gh release verify` and per-asset `gh release verify-asset` checks,
+and a byte-identical rebuild of the checked-out candidate tag.

@@ -71,6 +71,7 @@ try {
     '@types/react': lockedDependencyVersion(rootLock, '@types/react'),
     '@types/react-dom': lockedDependencyVersion(rootLock, '@types/react-dom'),
     convex: lockedDependencyVersion(rootLock, 'convex'),
+    'convex-test': lockedDependencyVersion(rootLock, 'convex-test'),
     typescript: lockedDependencyVersion(rootLock, 'typescript'),
   };
 
@@ -133,6 +134,7 @@ try {
     cssExported: true,
     httpAdapter: true,
     migrationCount: 2,
+    packedComponentMounted: true,
     registrySource: true,
     cliPlan: true,
     agentProposal: true,
@@ -264,6 +266,8 @@ import type {
   NodeSlideProposalReviewProps,
 } from '@nodeslide/react';
 import type { ComponentApi } from '@nodeslide/convex/_generated/component.js';
+import nodeslideComponent from '@nodeslide/convex/convex.config.js';
+import { defineApp } from 'convex/server';
 import { MemoryNodeSlideRepository } from '@nodeslide/testing';
 
 declare const snapshot: DeckSnapshot;
@@ -303,6 +307,8 @@ const customReceiptInput: NodeSlideStoreReceiptInput = {
   },
 };
 const typedRepository = new MemoryNodeSlideRepository({ snapshots: [snapshot], authorize });
+const convexApp = defineApp();
+convexApp.use(nodeslideComponent);
 const navigationInput: UseNodeSlideDeckNavigationInput = {
   snapshot,
   activeSlideId: '',
@@ -339,6 +345,7 @@ void [
   authorizationReceipt,
   customReceiptInput,
   typedRepository,
+  convexApp,
   {} as ComponentApi,
 ];
 `;
@@ -349,7 +356,7 @@ function consumerSource() {
 import assert from 'node:assert/strict';
 import { access } from 'node:fs/promises';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { createNodeSlideRoomTools } from '@nodeslide/agent';
@@ -360,7 +367,13 @@ import {
 import { planNodeSlideInstallation } from '@nodeslide/cli';
 import { createNodeSlideHttpAdapters } from '@nodeslide/client-http';
 import { NODESLIDE_SCHEMA_VERSION } from '@nodeslide/contracts';
-import { planNodeSlideConvexMigrations } from '@nodeslide/convex/component';
+import {
+  nodeSlideComponentPatchDigest,
+  planNodeSlideConvexMigrations,
+} from '@nodeslide/convex/component';
+import componentSchema from '@nodeslide/convex/component-schema';
+import { componentsGeneric } from 'convex/server';
+import { convexTest } from 'convex-test';
 import { applyDeckPatch } from '@nodeslide/engine';
 import { createNodeSlideProposalReviewModel } from '@nodeslide/react-headless';
 import { NodeSlideDeckViewer } from '@nodeslide/react';
@@ -460,6 +473,71 @@ assert.equal(nodeSlideStudioPermissionsForPrincipal(NODESLIDE_TEST_PRINCIPAL).ca
 assert.equal(planNodeSlideConvexMigrations(0).length, 2);
 const componentConfig = await import('@nodeslide/convex/convex.config.js');
 assert(componentConfig.default, 'Convex component config export is missing.');
+const componentDirectory = path.dirname(
+  fileURLToPath(import.meta.resolve('@nodeslide/convex/convex.config.js')),
+);
+const mountedTest = convexTest({
+  modules: { './_generated/server.js': async () => ({}) },
+});
+mountedTest.registerComponent('nodeslide', componentSchema, {
+  './_generated/server.js': () =>
+    import(pathToFileURL(path.join(componentDirectory, '_generated', 'server.js')).href),
+  './repository.js': () =>
+    import(pathToFileURL(path.join(componentDirectory, 'repository.js')).href),
+});
+const mountedApi = componentsGeneric().nodeslide.repository;
+const mountedSnapshot = createNodeSlideTestSnapshot('deck:packed-mounted-component');
+const componentGrant = (id, action, resourceKind, resourceId, requestDigest) => ({
+  schemaVersion: 'nodeslide.component-grant/v1',
+  id,
+  principalId: 'user:packed-component',
+  deckId: mountedSnapshot.deck.id,
+  action,
+  resource: { kind: resourceKind, id: resourceId },
+  ...(requestDigest === undefined ? {} : { requestDigest }),
+  authorizedAt: mountedSnapshot.deck.updatedAt,
+  evidence: {
+    issuer: 'packed-consumer',
+    policyId: 'packed-component-policy',
+    policyVersion: '1',
+    evidenceId: id,
+  },
+});
+await mountedTest.mutation(mountedApi.initializeDeck, {
+  snapshot: mountedSnapshot,
+  grant: componentGrant(
+    'grant:packed-initialize',
+    'deck.initialize',
+    'deck',
+    mountedSnapshot.deck.id,
+  ),
+});
+const mountedPatch = createNodeSlideTextPatch(
+  mountedSnapshot,
+  'Packed mounted component applied',
+  'patch:packed-mounted',
+);
+await mountedTest.mutation(mountedApi.applyPatch, {
+  deckId: mountedSnapshot.deck.id,
+  patch: mountedPatch,
+  grant: componentGrant(
+    'grant:packed-patch',
+    'patch.apply',
+    'patch',
+    mountedPatch.id,
+    await nodeSlideComponentPatchDigest(mountedPatch),
+  ),
+});
+const mountedRead = await mountedTest.query(mountedApi.getDeck, {
+  deckId: mountedSnapshot.deck.id,
+  grant: componentGrant(
+    'grant:packed-read',
+    'deck.read',
+    'deck',
+    mountedSnapshot.deck.id,
+  ),
+});
+assert.equal(mountedRead?.elements[0]?.content, 'Packed mounted component applied');
 const registrySource = await readNodeSlideRegistryEntry(NODESLIDE_REGISTRY_ENTRIES[0]);
 assert.match(registrySource, /NodeSlideStudioShell/);
 const cliPlan = await planNodeSlideInstallation({
@@ -520,6 +598,8 @@ process.stdout.write(JSON.stringify({
   cssExported: true,
   httpAdapter: http.repository.descriptor.adapter === 'http',
   migrationCount: planNodeSlideConvexMigrations(0).length,
+  packedComponentMounted:
+    mountedRead?.elements[0]?.content === 'Packed mounted component applied',
   registrySource: registrySource.includes('NodeSlideStudioShell'),
   cliPlan: cliPlan.packages.includes('@nodeslide/agent'),
   agentProposal: agentOutcome.ok === false && agentOutcome.pendingApproval === true,

@@ -126,6 +126,7 @@ try {
     ok: true,
     proposalVersion: 1,
     acceptedVersion: 2,
+    authorizationBound: true,
     headless: true,
     typesChecked: true,
     rendered: true,
@@ -236,7 +237,13 @@ async function assertPackedInstallProvenance(consumerDirectory, packedArtifacts,
 
 function consumerTypeScriptSource() {
   return `
-import type { NodeSlideProposalDecision } from '@nodeslide/backend';
+import type {
+  NodeSlideAuthorizationReceipt,
+  NodeSlideAuthorize,
+  NodeSlidePrincipal,
+  NodeSlideProposalDecision,
+  NodeSlideStoreReceiptInput,
+} from '@nodeslide/backend';
 import type { DeckPatch, DeckSnapshot } from '@nodeslide/contracts';
 import {
   createNodeSlideProposalReviewModel,
@@ -248,9 +255,45 @@ import type {
   NodeSlideDeckViewerProps,
   NodeSlideProposalReviewProps,
 } from '@nodeslide/react';
+import { MemoryNodeSlideRepository } from '@nodeslide/testing';
 
 declare const snapshot: DeckSnapshot;
 declare const proposal: DeckPatch;
+declare const authorizationReceipt: NodeSlideAuthorizationReceipt;
+const principal: NodeSlidePrincipal = {
+  userId: 'user:typed-consumer',
+  roles: ['reviewer'],
+  permissions: ['nodeslide:read', 'nodeslide:propose', 'nodeslide:write'],
+};
+const authorize: NodeSlideAuthorize = (request) => {
+  const resourceId =
+    request.action === 'patch.apply' || request.action === 'proposal.create'
+      ? request.patch.id
+      : request.action === 'proposal.accept' || request.action === 'proposal.reject'
+        ? request.proposalId
+        : request.action === 'receipt.store'
+          ? request.receipt.id
+          : request.deckId;
+  return {
+    issuer: 'typed-consumer',
+    policyId: 'typed-policy',
+    policyVersion: '1',
+    evidenceId: resourceId,
+  };
+};
+const customReceiptInput: NodeSlideStoreReceiptInput = {
+  deckId: snapshot.deck.id,
+  principal,
+  receipt: {
+    id: 'custom-receipt:typed-consumer',
+    deckId: snapshot.deck.id,
+    deckVersion: snapshot.deck.version,
+    operation: 'custom',
+    recordedAt: snapshot.deck.updatedAt,
+    attributes: {},
+  },
+};
+const typedRepository = new MemoryNodeSlideRepository({ snapshots: [snapshot], authorize });
 const navigationInput: UseNodeSlideDeckNavigationInput = {
   snapshot,
   activeSlideId: '',
@@ -276,7 +319,18 @@ const reviewProps: NodeSlideProposalReviewProps = {
 function acceptsNavigation(value: NodeSlideDeckNavigation): number {
   return value.activeIndex;
 }
-void [navigationInput, reviewModel, viewerProps, decision, reviewProps, acceptsNavigation];
+void [
+  navigationInput,
+  reviewModel,
+  viewerProps,
+  decision,
+  reviewProps,
+  acceptsNavigation,
+  authorize,
+  authorizationReceipt,
+  customReceiptInput,
+  typedRepository,
+];
 `;
 }
 
@@ -308,6 +362,7 @@ import {
 import {
   MemoryNodeSlideRepository,
   NODESLIDE_TEST_PRINCIPAL,
+  authorizeNodeSlideTestPrincipal,
   createNodeSlideTestSnapshot,
   createNodeSlideTextPatch,
   runNodeSlideRepositoryConformance,
@@ -343,9 +398,18 @@ assert.equal(review.preview.ok, true);
 assert.equal(review.actionsDisabled, false);
 const normalizedError = new NodeSlideRepositoryError('not_found', 'Packed runtime export');
 assert.equal(normalizedError.code, 'not_found');
+assert.throws(
+  () => new MemoryNodeSlideRepository({}),
+  (error) => error instanceof NodeSlideRepositoryError && error.code === 'forbidden',
+  'Testing package did not preserve the canonical backend error class.',
+);
 
 let now = snapshot.deck.updatedAt;
-const repository = new MemoryNodeSlideRepository({ snapshots: [snapshot], now: () => ++now });
+const repository = new MemoryNodeSlideRepository({
+  snapshots: [snapshot],
+  now: () => ++now,
+  authorize: authorizeNodeSlideTestPrincipal,
+});
 const result = await runNodeSlideRepositoryConformance({
   repository,
   principal: NODESLIDE_TEST_PRINCIPAL,
@@ -354,6 +418,15 @@ const result = await runNodeSlideRepositoryConformance({
 });
 assert.equal(result.proposalVersion, 1);
 assert.equal(result.acceptedVersion, 2);
+assert.equal(result.resolution.receipt.authorization.action, 'proposal.accept');
+assert.deepEqual(result.resolution.receipt.authorization.resource, {
+  kind: 'proposal',
+  id: proposal.id,
+});
+assert.equal(
+  result.resolution.receipt.authorization.evidence.policyId,
+  'testing.permission-map',
+);
 
 const governance = {
   version: NODESLIDE_GOVERNANCE_CONTRACT_VERSION,
@@ -428,6 +501,7 @@ process.stdout.write(JSON.stringify({
   ok: true,
   proposalVersion: result.proposalVersion,
   acceptedVersion: result.acceptedVersion,
+  authorizationBound: true,
   headless: true,
   typesChecked: true,
   rendered: true,

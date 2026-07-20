@@ -38,7 +38,7 @@ This is the root of the visual monotony AND the collision/overflow bug class.
       show green while export blocks — dishonest-by-accident.)
       — DONE 2e8ce2d: single-source geometry checks in shared validator; server
       and client verdicts agree.
-- [x] A5. Acceptance: 20 fresh prod generations → 0 collisions, 0 overflows,
+- [ ] A5. Acceptance: 20 fresh prod generations → 0 collisions, 0 overflows,
       100% export-clean, ≥3 visually distinct layouts per deck at thumbnail
       scale (assert distinct archetype ids per deck).
 
@@ -103,9 +103,13 @@ No decomposition, no sub-agents, no self-verification against the render.
       1 op), Verify ("applied candidate to a shadow snapshot — clean"), and
       Validation steps before the Accept/Reject patch. Repair step correctly
       absent (verify was clean — honest, not decorative).
-- [ ] B5. Variations become a judged fan-out (P2): 3 executor generations + a
+- [x] B5. Variations become a judged fan-out (P2): 3 executor generations + a
       judge pass with tradeoff labels (pairs with A2 for layout-distinct
       directions).
+      — DONE in PR #13: the variation harness runs bounded candidates through
+      deterministic quality signals plus a separate judge contract, records
+      the selected tradeoffs, and keeps dev-only repair outside official
+      scoring. Unit and UI tests cover the judged result path.
 - [ ] B6. Acceptance: one routed run on camera — two models in one thread turn
       with parent-child spans, tokens, cost; creation self-corrects an induced
       layout issue without human input.
@@ -213,10 +217,14 @@ with empty slots unless a human uploads art.
       commercially-licensed results, inserted the first; image rendered
       (1024x768, converted to local data URI) and the credit field auto-filled
       "Twechie · BY-SA 2.0 via Openverse".
-- [ ] E2. (P2) Optional generation via user-keyed provider (BYOK), labeled
+- [x] E2. (P2) Optional generation via user-keyed provider (BYOK), labeled
       illustrative.
-- [ ] E3. (P1) Crop/focal-point + aspect handling in the Design tab.
-- [x] E4. Acceptance: placeholder → search → insert with license credit on
+      — DONE in PR #13: session-only BYOK image generation is explicit,
+      consented, never persisted, and labels generated assets illustrative.
+- [x] E3. (P1) Crop/focal-point + aspect handling in the Design tab.
+      — DONE in PR #13: the image inspector exposes crop fit, focal point, and
+      aspect controls with renderer and regression coverage.
+- [ ] E4. Acceptance: placeholder → search → insert with license credit on
       camera; export stays clean (capability sync already shipped).
       — DONE functionally (live headless probe 2026-07-19, DOM evidence not
       video): placeholder → Openverse search → first-result insert with
@@ -261,10 +269,17 @@ but never live-verified.
       again on green CI).
       — DONE 5e60dcf: `scripts/smoke.mjs` serves dist, asserts React mounts,
       zero page errors; wired into CI.
-- [ ] H2. Nightly prod probe: the fail-closed create→edit→export script on a
+- [x] H2. Nightly prod probe: the fail-closed create→edit→export script on a
       schedule; alert on first red.
+      — DONE in PR #13: the scheduled workflow runs the bounded production
+      probe and uploads its evidence; the same exact-SHA journey also passed
+      manually during the PR #13 handoff.
 - [ ] H3. Vercel deploys from CI on main push (replace manual prebuilt deploys);
       keep VITE_CONVEX_URL pinned to prod.
+      — WORKFLOW DONE in PR #13 and hardened in PR #14. External repository
+      configuration remains open: create the production environment, install
+      its secrets and enable variable, then retain a successful exact-SHA
+      deploy receipt before checking this item.
 - [ ] H4. Repo hygiene: retire stale parity worktrees/branches; remove
       `nodeslide-deploy` staging folder; decide parity-studio's demo fate.
 - [ ] H5. Human: send the Mike draft (video URL now public via the README).
@@ -305,30 +320,36 @@ registry/                  shadcn-style source-owned compositions (studio route,
       Implement Memory (tests), Convex (reference, as a mountable Convex
       component with isolated tables + migrations), Http (hosted). The Convex
       component is the reference production backend, not the abstraction.
-      First boundary slice: package entrypoints, host-neutral ports, Memory
-      implementations, and conformance smoke now live under `packages/`;
-      Convex/HTTP adapters and the source move remain open. Parity capability
-      preservation is tracked in `PARITY_CAPABILITY_MIGRATION_LEDGER.md`.
-      The package release gate now builds every workspace and installs the
-      packed tarballs into a fresh script-disabled consumer for repository +
-      React SSR proof; this hardens distribution but does not complete the
-      missing production adapters.
-- [ ] I3. **Controlled React surfaces**: `<NodeSlideStudio/>` /
+      Memory, HTTP, auth-session Convex, and owner-capability Convex adapters,
+      governance descriptors, migrations, conformance tests, and packed
+      consumer proof now live under `packages/`. The remaining blocker is the
+      true isolated Convex mutation component/source extraction; the current
+      package binding deliberately reuses the production app mutation core.
+- [x] I3. **Controlled React surfaces**: `<NodeSlideStudio/>` /
       `<DeckAgentThread/>` take snapshot/selection/proposal/permissions +
       onPatch/onPropose/onAccept/onReject/onExport — backend-neutral; ship
       `<ConvexNodeSlideStudio deckId/>` as optional convenience binding.
       Split headless (hooks/state) from styled (CSS-variable tokens:
       `--nodeslide-*`); a host can adopt the engine without NodeSlide's
       visual identity. "Scoped Tailwind" alone is not the isolation contract.
-      First controlled slice: `@nodeslide/react-headless` now owns navigation
-      and fail-closed proposal-review state; `@nodeslide/react` consumes it for
-      the styled deck viewer and review surface with scoped opt-in CSS.
-      StudioShell, agent thread, presenter, and the Convex convenience binding
-      remain open.
+      — DONE in PR #13: `@nodeslide/react-headless` owns navigation,
+      selection, permissions, repository control, and fail-closed review
+      state; `@nodeslide/react` ships the controlled StudioShell, viewer,
+      proposal review, and agent thread over opt-in scoped CSS; the Convex
+      package and source registry provide the optional binding and presenter.
 - [ ] I4. **Auth is host-supplied**: normalize to `NodeSlidePrincipal`
       {userId, organizationId?, roles, permissions}; host adapters resolve it
       from WorkOS/Clerk/Auth0/Convex/Supabase/custom. No auth vendor inside
-      the packages.
+      the packages. First authorization-spine slice: the backend package now
+      runtime-validates an exact bounded principal shape; the reference
+      repository requires a constructor-injected host authorizer and binds
+      every mutation receipt to opaque policy evidence for the exact action
+      and resource. Acceptance is therefore bound to the reviewer, deck, and
+      proposal without persisting a bearer credential. PR #13 also supplied
+      default-deny asset policy plus HTTP, auth-session Convex, and
+      owner-capability host adapters. The authorization-spine follow-up binds
+      their server-produced receipts to the exact principal, action, resource,
+      deck, and opaque policy evidence without serializing credentials.
 - [ ] I5. **Governance = enforced invariants, configurable UX.** Required and
       non-bypassable server-side: mutation authority checks, version clocks
       (CAS), validation, trace lineage, source authorization, rollback.
@@ -347,6 +368,11 @@ registry/                  shadcn-style source-owned compositions (studio route,
       silently touches auth, global CSS, routing, or existing schemas.
       Upgrades: engine/schemas semver + migrations; snapshots carry
       schemaVersion + migration chain; registry sources upgrade by diff.
+      — IMPLEMENTED SLICE in PR #13: framework/shadcn detection, explicit
+      profile/backend/UI selection, exact install plans, versioned registry
+      sources, env/conformance output, hashed receipts, validation hooks, and
+      diff-only upgrades with migrations. Keep unchecked until a clean
+      external consumer installs and upgrades immutable/public artifacts.
 - [ ] I7. **NodeRoom consumer proof** (a required architectural test, not
       optional dogfood): from a clean NodeRoom branch — installer →
       NodeRoom's own principal adapter → mount as a room artifact → create
@@ -357,9 +383,17 @@ registry/                  shadcn-style source-owned compositions (studio route,
       no duplicate auth, no second Convex client, no global CSS
       contamination, no table collisions, clean uninstall, same snapshot runs
       against Memory and Convex adapters.
+      — PARTIAL: the NodeRoom proof consumes packed artifacts, compiles the
+      real NodeAgent adapter, exercises proposal/CAS/reload/receipt behavior,
+      and emits explicit false flags for every unproved surface. The real room
+      artifact adapter, ActorProof/membership policy, mounted canvas,
+      presenter/PPTX/reopen, browser/a11y, and Memory/Convex parity remain.
 - [ ] I8. **Cross-repo CI**: a NodeSlide package regression must fail
       NodeRoom's consumer suite; both CIs run the same smallest journey
       (load → create → render → edit → version++ → export).
+      — PARTIAL: bilateral cross-repo CI wiring is merged and green. The
+      shared proof does not yet mount/render/export, so the full journey in
+      this item remains open.
 
 ## J · Ecosystem organization — who owns what across HomenShum repos (P1, audit-first)
 
@@ -387,9 +421,10 @@ discipline as I1: audit before asserting; no invented org maps.
 - [x] J4. **Inter-repo distribution decision** — done 2026-07-19: versioned `npm pack` tarball via `file:` pin (link/git-tag rejected for this Windows multi-repo setup; rationale in docs/ECOSYSTEM.md). How noderoom consumes
       `@nodeslide/*` before public npm (workspace link / git tag / tarball /
       private registry), with the same semver+migration rules as I6.
-- [ ] J5. Acceptance: J1's adapter contract compiles against real NodeAgent
+- [x] J5. Acceptance: J1's adapter contract compiles against real NodeAgent
       types; J2's decision is recorded with rationale; ECOSYSTEM.md merged in
       nodeslide and cross-linked from noderoom.
+      — DONE across the NodeRoom packed-consumer proof and bilateral CI wiring.
 
 ---
 

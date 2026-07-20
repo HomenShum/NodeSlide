@@ -10,7 +10,7 @@ can migrate without a second DeckSpec, patch engine, or validator.
 |---|---|---|
 | `@nodeslide/contracts` | DeckSpec, patch, proposal, validation, trace, export, and attachment contracts | React, Convex, DOM, host auth |
 | `@nodeslide/engine` | Pure `applyDeckPatch`, patch/snapshot validation, scope validation, affected-ID calculation, migrations | Persistence, approval UI, provider calls |
-| `@nodeslide/backend` | Ports, default-deny principal adapter, approval policy, production-governance declarations, receipts | Any auth vendor or database SDK |
+| `@nodeslide/backend` | Repository, asset, and telemetry ports; default-deny permissions; approval and production-governance declarations; runtime-validated principals; host authorization evidence; bound receipts | Any concrete database or auth vendor |
 | `@nodeslide/testing` | Deterministic fixtures, memory repository/assets/telemetry, repository conformance smoke | Production persistence |
 | `@nodeslide/agent` | Runtime-neutral room tools, host tool contract, governed direct-edit/proposal routing | A second agent loop or model provider |
 | `@nodeslide/react-headless` | Controlled deck navigation, repository controller, proposal previews/review state, and permission derivation | Rendering, CSS, DOM queries, persistence SDKs |
@@ -59,6 +59,16 @@ permissions and review model, server-renders the controlled deck viewer,
 compiles a strict TypeScript consumer against the packed declarations, verifies
 the exported CSS, and removes the temporary directory. Source-workspace imports
 cannot satisfy this gate.
+
+The in-memory reference adapter receives authorization from a
+constructor-injected host policy and fails closed when none is supplied.
+Production adapters must invoke their own server-side host policy before
+repository work. The portable package validates the normalized principal and
+records only an opaque host audit reference; credentials, JWTs, and host
+ActorProofs stay outside NodeSlide. Acceptance receipts bind the reviewer,
+deck, action, and exact proposal. Caller-authored audit receipts are limited to
+the disjoint `custom-receipt:*` ID namespace and `custom` operation; canonical
+mutation receipt IDs and operation claims remain repository-owned.
 
 External coding agents can use the bundled CLI or the adapted MCP server as
 documented in `docs/EXTERNAL_AGENT_ACCESS.md`. Both transports consume these

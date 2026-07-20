@@ -77,6 +77,21 @@ describe('@nodeslide/convex', () => {
       patchId: patch.id,
       recordedAt: snapshot.deck.updatedAt + 1,
       attributes: { governancePath: 'existing_nodeslide_server' },
+      authorization: {
+        schemaVersion: 'nodeslide.authorization/v1' as const,
+        id: 'authorization:capability:patch',
+        principalId: 'anonymous-owner:server-derived',
+        deckId: snapshot.deck.id,
+        action: 'patch.apply' as const,
+        resource: { kind: 'patch' as const, id: patch.id },
+        authorizedAt: snapshot.deck.updatedAt + 1,
+        evidence: {
+          issuer: 'nodeslide.convex.capability-host',
+          policyId: 'anonymous-owner-capability',
+          policyVersion: '1',
+          evidenceId: 'receipt:server-path',
+        },
+      },
     };
     const acceptedPatch = {
       ...patch,
@@ -130,7 +145,65 @@ describe('@nodeslide/convex', () => {
     expect(sent.patch).not.toHaveProperty('source');
     expect(sent.patch).not.toHaveProperty('traceId');
     expect(result.receipt).toBe(serverReceipt);
+    expect(result.receipt.authorization).toMatchObject({
+      principalId: 'anonymous-owner:server-derived',
+      action: 'patch.apply',
+      resource: { kind: 'patch', id: patch.id },
+    });
+    expect(JSON.stringify(result.receipt.authorization)).not.toContain(ownerAccessKey);
     expect(result.patch.source).toBe('human');
+  });
+
+  it('binds the principal before a host callback returns a custom bound receipt', async () => {
+    const snapshot = createNodeSlideTestSnapshot('deck:convex-receipt');
+    const draft = {
+      id: 'custom-receipt:convex-host' as const,
+      deckId: snapshot.deck.id,
+      deckVersion: snapshot.deck.version,
+      operation: 'custom' as const,
+      recordedAt: snapshot.deck.updatedAt,
+      attributes: {},
+    };
+    const serverReceipt = {
+      ...draft,
+      principalId: NODESLIDE_TEST_PRINCIPAL.userId,
+      authorization: {
+        schemaVersion: 'nodeslide.authorization/v1' as const,
+        id: 'authorization:convex:receipt',
+        principalId: NODESLIDE_TEST_PRINCIPAL.userId,
+        deckId: snapshot.deck.id,
+        action: 'receipt.store' as const,
+        resource: { kind: 'receipt' as const, id: draft.id },
+        authorizedAt: snapshot.deck.updatedAt,
+        evidence: {
+          issuer: 'convex-test-host',
+          policyId: 'convex-test-policy',
+          policyVersion: '1',
+        },
+      },
+    };
+    const bindPrincipal = vi.fn();
+    const storeReceipt = vi.fn().mockResolvedValue(serverReceipt);
+    const { repository } = createNodeSlideConvexAdapters({
+      client: { query: vi.fn(), mutation: vi.fn() },
+      references: {} as NodeSlideConvexReferences,
+      governance,
+      bindPrincipal,
+      storeReceipt,
+    });
+
+    const result = await repository.storeReceipt({
+      deckId: snapshot.deck.id,
+      principal: NODESLIDE_TEST_PRINCIPAL,
+      receipt: draft,
+    });
+
+    expect(bindPrincipal).toHaveBeenCalledWith(NODESLIDE_TEST_PRINCIPAL);
+    expect(storeReceipt).toHaveBeenCalledWith({ deckId: snapshot.deck.id, receipt: draft });
+    expect(storeReceipt.mock.invocationCallOrder[0]).toBeGreaterThan(
+      bindPrincipal.mock.invocationCallOrder[0] ?? 0,
+    );
+    expect(result).toBe(serverReceipt);
   });
 
   it('fails closed before Convex when a capability resolver returns a malformed key', async () => {
@@ -164,15 +237,18 @@ describe('@nodeslide/convex', () => {
 
     await expect(
       repository.storeReceipt({
-        id: 'forged-receipt',
         deckId: 'deck:capability',
-        deckVersion: 999,
-        operation: 'proposal.accepted',
-        principalId: 'anonymous-owner:forged',
-        patchId: 'forged-patch',
-        traceId: 'forged-trace',
-        recordedAt: 1,
-        attributes: {},
+        principal: NODESLIDE_TEST_PRINCIPAL,
+        receipt: {
+          id: 'custom-receipt:forged',
+          deckId: 'deck:capability',
+          deckVersion: 999,
+          operation: 'custom',
+          patchId: 'forged-patch',
+          traceId: 'forged-trace',
+          recordedAt: 1,
+          attributes: {},
+        },
       }),
     ).rejects.toMatchObject({ code: 'forbidden' });
     expect(mutation).not.toHaveBeenCalled();

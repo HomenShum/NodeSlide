@@ -16,6 +16,7 @@ import {
   applyPatch,
   getPresenterSnapshot,
   packageApplyPatch,
+  packageCreateProposal,
   proposePatch,
   publishDeck,
   rejectPatch,
@@ -149,7 +150,11 @@ class MemoryDatabase {
 
   async insert(tableName: string, value: object): Promise<string> {
     const row = this.seed(tableName, value);
-    this.writes.push({ kind: 'insert', tableName, value: structuredClone(value) });
+    this.writes.push({
+      kind: 'insert',
+      tableName,
+      value: structuredClone(value),
+    });
     return row._id;
   }
 
@@ -309,9 +314,29 @@ const packageApplyPatchHandler = registeredHandler<
   },
   {
     status: 'accepted';
-    result: { patch: DeckPatch; receipt: { principalId: string; attributes: unknown } };
+    result: {
+      patch: DeckPatch;
+      receipt: {
+        principalId: string;
+        attributes: unknown;
+        authorization: {
+          principalId: string;
+          action: string;
+          resource: { kind: string; id: string };
+          evidence: unknown;
+        };
+      };
+    };
   }
 >(packageApplyPatch);
+const packageCreateProposalHandler = registeredHandler<
+  {
+    deckId: string;
+    ownerAccessKey: string;
+    patch: Omit<PatchRequest, 'ownerAccessKey'>;
+  },
+  { patch: DeckPatch; receipt: { id: string } }
+>(packageCreateProposal);
 
 describe('NodeSlide release security', () => {
   it('derives package receipts from owner capability and ignores forged principal/provenance', async () => {
@@ -353,8 +378,251 @@ describe('NodeSlide release security', () => {
     expect(response.result.receipt.attributes).toEqual(
       expect.objectContaining({ governancePath: 'existing_nodeslide_server' }),
     );
+    expect(response.result.receipt.authorization).toEqual(
+      expect.objectContaining({
+        principalId: `anonymous-owner:${nodeslideIdDigest(OWNER_ACCESS_KEY)}`,
+        action: 'patch.apply',
+        resource: { kind: 'patch', id: 'package-host-patch' },
+        evidence: expect.objectContaining({
+          issuer: 'nodeslide.convex.capability-host',
+          policyId: 'anonymous-owner-capability',
+          policyVersion: '1',
+        }),
+      }),
+    );
+    expect(JSON.stringify(response.result.receipt.authorization)).not.toContain(OWNER_ACCESS_KEY);
     expect(database.rows('nodeslide_package_receipts')).toHaveLength(1);
     expect(database.rows('nodeslide_versions')).toHaveLength(2);
+  });
+
+  it('replays an exact package apply from immutable history and rejects a conflicting command', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-apply-replay', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Idempotent package edit');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-apply-replay-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Idempotent package apply',
+      },
+    };
+
+    const first = await packageApplyPatchHandler(context, request);
+    const afterFirst = await requiredSnapshot(context, snapshot.deck.id);
+    expect(first.status).toBe('accepted');
+    expect(afterFirst.deck.version).toBe(snapshot.deck.version + 1);
+    expect(database.rows('nodeslide_patches')).toHaveLength(1);
+    expect(database.rows('nodeslide_versions')).toHaveLength(2);
+    expect(database.rows('nodeslide_package_receipts')).toHaveLength(1);
+
+    const laterEdit = textEdit(afterFirst, 'Later independent edit');
+    await applyPatchHandler(context, {
+      id: 'later-independent-patch',
+      deckId: afterFirst.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: afterFirst.deck.version,
+      ...clocksForNodeSlideOperations(afterFirst, [laterEdit.operation]),
+      scope: laterEdit.scope,
+      operations: [laterEdit.operation],
+      summary: 'Advance after the package apply',
+    });
+    const afterLaterEdit = await requiredSnapshot(context, snapshot.deck.id);
+    expect(afterLaterEdit.deck.version).toBe(snapshot.deck.version + 2);
+
+    database.resetObservations();
+    const replay = await packageApplyPatchHandler(context, request);
+    expect(replay).toEqual(first);
+    expect(database.writes).toEqual([]);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(afterLaterEdit);
+    expect(database.rows('nodeslide_patches')).toHaveLength(2);
+    expect(database.rows('nodeslide_versions')).toHaveLength(3);
+    expect(database.rows('nodeslide_package_receipts')).toHaveLength(1);
+
+    await expect(
+      packageApplyPatchHandler(context, {
+        ...request,
+        patch: { ...request.patch, summary: 'Conflicting package apply' },
+      }),
+    ).rejects.toThrow(/already bound to a different command/i);
+    expect(database.writes).toEqual([]);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(afterLaterEdit);
+    expect(database.rows('nodeslide_patches')).toHaveLength(2);
+    expect(database.rows('nodeslide_versions')).toHaveLength(3);
+    expect(database.rows('nodeslide_package_receipts')).toHaveLength(1);
+  });
+
+  it('replays an exact stale package apply without duplicating rows or receipts', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-stale-replay', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Stale package edit');
+    const clocks = clocksForNodeSlideOperations(snapshot, [edit.operation]);
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-stale-replay-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        baseSlideVersions: clocks.baseSlideVersions,
+        baseElementVersions: clocks.baseElementVersions,
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Stale package apply',
+      },
+    };
+
+    const proposal = await packageCreateProposalHandler(context, request);
+    expect(proposal.patch.status).toBe('ready');
+
+    const firstAdvance = textEdit(snapshot, 'Advance before stale evaluation');
+    await applyPatchHandler(context, {
+      id: 'before-stale-patch',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: snapshot.deck.version,
+      ...clocksForNodeSlideOperations(snapshot, [firstAdvance.operation]),
+      scope: firstAdvance.scope,
+      operations: [firstAdvance.operation],
+      summary: 'Advance before stale evaluation',
+    });
+
+    const first = await packageApplyPatchHandler(context, request);
+    expect(first.status).toBe('stale');
+    expect(database.rows('nodeslide_patches')).toHaveLength(2);
+    expect(database.rows('nodeslide_versions')).toHaveLength(2);
+    expect(database.rows('nodeslide_package_receipts')).toHaveLength(2);
+
+    const afterStale = await requiredSnapshot(context, snapshot.deck.id);
+    const laterAdvance = textEdit(afterStale, 'Advance after stale evaluation');
+    await applyPatchHandler(context, {
+      id: 'after-stale-patch',
+      deckId: afterStale.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: afterStale.deck.version,
+      ...clocksForNodeSlideOperations(afterStale, [laterAdvance.operation]),
+      scope: laterAdvance.scope,
+      operations: [laterAdvance.operation],
+      summary: 'Advance after stale evaluation',
+    });
+    const afterLaterAdvance = await requiredSnapshot(context, snapshot.deck.id);
+
+    database.resetObservations();
+    const replay = await packageApplyPatchHandler(context, request);
+    expect(replay).toEqual(first);
+    expect(database.writes).toEqual([]);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(afterLaterAdvance);
+    expect(database.rows('nodeslide_patches')).toHaveLength(3);
+    expect(database.rows('nodeslide_versions')).toHaveLength(3);
+    expect(database.rows('nodeslide_package_receipts')).toHaveLength(2);
+  });
+
+  it('replays an exact package proposal and rejects a conflicting command before receipt writes', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-proposal-replay', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Idempotent proposal edit');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-proposal-replay-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Idempotent package proposal',
+      },
+    };
+
+    const first = await packageCreateProposalHandler(context, request);
+    expect(first.patch.status).toBe('ready');
+    expect(database.rows('nodeslide_patches')).toHaveLength(1);
+    expect(database.rows('nodeslide_versions')).toHaveLength(1);
+    expect(database.rows('nodeslide_package_receipts')).toHaveLength(1);
+
+    const interveningEdit = textEdit(snapshot, 'Advance after proposal creation');
+    await applyPatchHandler(context, {
+      id: 'after-proposal-patch',
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      baseDeckVersion: snapshot.deck.version,
+      ...clocksForNodeSlideOperations(snapshot, [interveningEdit.operation]),
+      scope: interveningEdit.scope,
+      operations: [interveningEdit.operation],
+      summary: 'Advance after proposal creation',
+    });
+
+    database.resetObservations();
+    const replay = await packageCreateProposalHandler(context, request);
+    expect(replay).toEqual(first);
+    expect(database.writes).toEqual([]);
+
+    await expect(
+      packageCreateProposalHandler(context, {
+        ...request,
+        patch: { ...request.patch, summary: 'Conflicting package proposal' },
+      }),
+    ).rejects.toThrow(/already bound to a different command/i);
+    expect(database.writes).toEqual([]);
+    expect(database.rows('nodeslide_patches')).toHaveLength(2);
+    expect(database.rows('nodeslide_versions')).toHaveLength(2);
+    expect(database.rows('nodeslide_package_receipts')).toHaveLength(1);
+  });
+
+  it('fails closed when a resolved proposal creation response can no longer be reconstructed', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(
+      database,
+      'package-resolved-proposal-replay',
+      OWNER_ACCESS_KEY,
+      '8',
+    );
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Resolved proposal edit');
+    const request = {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patch: {
+        id: 'package-resolved-proposal-replay-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Resolved package proposal',
+      },
+    };
+
+    await packageCreateProposalHandler(context, request);
+    await acceptPatchHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      patchId: request.patch.id,
+    });
+    const afterAcceptance = await requiredSnapshot(context, snapshot.deck.id);
+    database.resetObservations();
+
+    await expect(packageCreateProposalHandler(context, request)).rejects.toThrow(
+      /already resolved/i,
+    );
+    expect(database.writes).toEqual([]);
+    expect(await requiredSnapshot(context, snapshot.deck.id)).toEqual(afterAcceptance);
+    expect(database.rows('nodeslide_patches')).toHaveLength(1);
+    expect(database.rows('nodeslide_versions')).toHaveLength(2);
+    expect(database.rows('nodeslide_package_receipts')).toHaveLength(1);
   });
 
   it('removes public provenance arguments and forces direct human mutations to human', async () => {
@@ -406,7 +674,10 @@ describe('NodeSlide release security', () => {
     };
     database.resetObservations();
     await expect(
-      applyPatchHandler(context, { ...pairedBase, profileId: 'profile-without-digest' }),
+      applyPatchHandler(context, {
+        ...pairedBase,
+        profileId: 'profile-without-digest',
+      }),
     ).rejects.toThrow(/profileId and profileDigest must appear together/i);
     await expect(
       applyPatchHandler(context, {
@@ -537,7 +808,10 @@ describe('NodeSlide release security', () => {
     expect('activeSignatureProfileId' in publicRead.snapshot.deck).toBe(false);
     expect('shareSlug' in publicRead.snapshot.deck).toBe(false);
     expect(publicRead.snapshot.sources).toEqual([
-      expect.objectContaining({ sourceType: 'url', url: 'https://example.com/evidence' }),
+      expect.objectContaining({
+        sourceType: 'url',
+        url: 'https://example.com/evidence',
+      }),
     ]);
     expect(publicRead.snapshot.elements.flatMap((element) => element.sourceIds)).toEqual([
       `public-source-${fixture.snapshot.deck.id}`,
@@ -604,7 +878,9 @@ describe('NodeSlide release security', () => {
     expect(afterRevoke.publication.shareSlug).not.toBe(slug);
     expect(await presenterHandler(context, { shareSlug: slug })).toBeNull();
     expect(
-      await presenterHandler(context, { shareSlug: afterRevoke.publication.shareSlug }),
+      await presenterHandler(context, {
+        shareSlug: afterRevoke.publication.shareSlug,
+      }),
     ).not.toBeNull();
   });
 
@@ -664,7 +940,10 @@ describe('NodeSlide release security', () => {
       'rejected',
     );
     expect(onlyStableRow(database, 'nodeslide_traces', 'trace-reject')).toEqual(
-      expect.objectContaining({ status: 'awaiting_review', deckId: second.snapshot.deck.id }),
+      expect.objectContaining({
+        status: 'awaiting_review',
+        deckId: second.snapshot.deck.id,
+      }),
     );
     expect(onlyStableRow(database, 'nodeslide_traces', 'trace-reject').completedAt).toBeUndefined();
 
@@ -683,7 +962,10 @@ describe('NodeSlide release security', () => {
     });
     expect(accepted.patch.status).toBe('accepted');
     expect(onlyStableRow(database, 'nodeslide_traces', 'trace-accept')).toEqual(
-      expect.objectContaining({ status: 'awaiting_review', deckId: second.snapshot.deck.id }),
+      expect.objectContaining({
+        status: 'awaiting_review',
+        deckId: second.snapshot.deck.id,
+      }),
     );
     expect(onlyStableRow(database, 'nodeslide_traces', 'trace-accept').completedAt).toBeUndefined();
 
@@ -899,7 +1181,10 @@ describe('NodeSlide release security', () => {
     expect(receipt.workspace?.sources).toEqual(before.sources);
     expect(await requiredSnapshot(context, fixture.snapshot.deck.id)).toEqual(before);
     expect(database.writes).toEqual([
-      expect.objectContaining({ kind: 'insert', tableName: 'nodeslide_patches' }),
+      expect.objectContaining({
+        kind: 'insert',
+        tableName: 'nodeslide_patches',
+      }),
     ]);
     expect(onlyStableRow(database, 'nodeslide_patches', receipt.patch.id).status).toBe('stale');
   });
@@ -938,7 +1223,11 @@ function seedWorkspace(
     spec: {},
   });
   for (const slide of snapshot.slides) {
-    database.seed('nodeslide_slides', { ...slide, createdAt: 1_000, updatedAt: 1_000 });
+    database.seed('nodeslide_slides', {
+      ...slide,
+      createdAt: 1_000,
+      updatedAt: 1_000,
+    });
   }
   for (const element of snapshot.elements) {
     database.seed('nodeslide_elements', {
@@ -1003,7 +1292,12 @@ function textEdit(
   if (!element) throw new Error('Editable text fixture is missing.');
   return {
     elementId: element.id,
-    operation: { op: 'replace_text', slideId: element.slideId, elementId: element.id, text },
+    operation: {
+      op: 'replace_text',
+      slideId: element.slideId,
+      elementId: element.id,
+      text,
+    },
     scope: {
       kind: 'elements',
       deckId: snapshot.deck.id,
@@ -1150,6 +1444,8 @@ function isDescending(values: readonly number[]): boolean {
 function publicArgNames(value: unknown): string[] {
   const exportArgs = (value as { exportArgs?: () => string }).exportArgs;
   if (!exportArgs) throw new Error('Registered Convex argument validator is unavailable.');
-  const exported = JSON.parse(exportArgs()) as { value?: Record<string, unknown> };
+  const exported = JSON.parse(exportArgs()) as {
+    value?: Record<string, unknown>;
+  };
   return Object.keys(exported.value ?? {});
 }

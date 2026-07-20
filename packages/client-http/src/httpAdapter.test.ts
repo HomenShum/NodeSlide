@@ -41,6 +41,21 @@ describe('@nodeslide/client-http', () => {
           principalId: NODESLIDE_TEST_PRINCIPAL.userId,
           recordedAt: 1,
           attributes: {},
+          authorization: {
+            schemaVersion: 'nodeslide.authorization/v1',
+            id: 'authorization:http:patch',
+            principalId: NODESLIDE_TEST_PRINCIPAL.userId,
+            organizationId: NODESLIDE_TEST_PRINCIPAL.organizationId,
+            deckId: snapshot.deck.id,
+            action: 'patch.apply',
+            resource: { kind: 'patch', id: patch.id },
+            authorizedAt: 1,
+            evidence: {
+              issuer: 'http-test-host',
+              policyId: 'http-test-policy',
+              policyVersion: '1',
+            },
+          },
         },
       }),
     );
@@ -63,6 +78,57 @@ describe('@nodeslide/client-http', () => {
     expect(new Headers(init?.headers).get('authorization')).toBe('Bearer host-session');
     expect(String(init?.body)).not.toContain(NODESLIDE_TEST_PRINCIPAL.userId);
     expect(() => assertProductionNodeSlideRepository(repository)).not.toThrow();
+  });
+
+  it('sends only a custom draft and returns the server-issued bound receipt', async () => {
+    const snapshot = createNodeSlideTestSnapshot('deck/http-receipt');
+    const draft = {
+      id: 'custom-receipt:http-client' as const,
+      deckId: snapshot.deck.id,
+      deckVersion: snapshot.deck.version,
+      operation: 'custom' as const,
+      recordedAt: 2,
+      attributes: { source: 'consumer' },
+    };
+    const serverReceipt = {
+      ...draft,
+      principalId: NODESLIDE_TEST_PRINCIPAL.userId,
+      authorization: {
+        schemaVersion: 'nodeslide.authorization/v1' as const,
+        id: 'authorization:http:receipt',
+        principalId: NODESLIDE_TEST_PRINCIPAL.userId,
+        organizationId: NODESLIDE_TEST_PRINCIPAL.organizationId,
+        deckId: snapshot.deck.id,
+        action: 'receipt.store' as const,
+        resource: { kind: 'receipt' as const, id: draft.id },
+        authorizedAt: 3,
+        evidence: {
+          issuer: 'http-test-host',
+          policyId: 'http-test-policy',
+          policyVersion: '1',
+        },
+      },
+    };
+    const fetch = vi.fn<typeof globalThis.fetch>(async () => Response.json(serverReceipt));
+    const { repository } = createNodeSlideHttpAdapters({
+      baseUrl: 'https://api.example.test',
+      governance,
+      headersForPrincipal: () => ({ authorization: 'Bearer host-session' }),
+      fetch,
+    });
+
+    const result = await repository.storeReceipt({
+      deckId: snapshot.deck.id,
+      principal: NODESLIDE_TEST_PRINCIPAL,
+      receipt: draft,
+    });
+
+    expect(result).toEqual(serverReceipt);
+    const [url, init] = fetch.mock.calls[0] ?? [];
+    expect(String(url)).toBe('https://api.example.test/v1/decks/deck%2Fhttp-receipt/receipts');
+    expect(JSON.parse(String(init?.body))).toEqual({ receipt: draft });
+    expect(String(init?.body)).not.toContain(NODESLIDE_TEST_PRINCIPAL.userId);
+    expect(String(init?.body)).not.toContain('authorization:http:receipt');
   });
 
   it('round-trips binary assets and normalizes server conflicts', async () => {

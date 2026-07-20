@@ -72,6 +72,11 @@ review authorization mechanism. The proposal ID is intentionally present in
 the proposal; echoing it proves that the caller selected that exact
 digest-bound candidate. A host that needs separation of duties must authenticate
 the principal and enforce reviewer authorization outside this offline package.
+A host-backed `NodeSlideRepository` adapter must invoke its server-side policy
+and bind the resulting opaque evidence to the exact principal, deck, action,
+and proposal. The reference in-memory adapter demonstrates this with an
+injected authorizer. The offline CLI never fabricates that
+`NodeSlideAuthorizationReceipt`.
 
 Offline commands accept edit proposals only. Propagation provenance depends on
 an authoritative parent-patch ledger, so propagation metadata is rejected here

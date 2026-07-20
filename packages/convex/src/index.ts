@@ -17,6 +17,7 @@ import {
   NodeSlideRepositoryError,
   type NodeSlideResolveProposalInput,
   type NodeSlideServerGovernanceDeclaration,
+  type NodeSlideStoreReceiptInput,
   type NodeSlideStoredAsset,
   type NodeSlideTelemetryAdapter,
   type NodeSlideTelemetryRecord,
@@ -83,8 +84,15 @@ export interface NodeSlideConvexAdapterConfig {
   governance: NodeSlideServerGovernanceDeclaration;
   /** Confirms that the client session represents the supplied host principal. */
   bindPrincipal(principal: NodeSlidePrincipal): void | Promise<void>;
-  /** Receipt storage is server-only; browser function references are never used for it. */
-  storeReceipt?: (receipt: NodeSlideReceipt) => Promise<void>;
+  /**
+   * Validates a custom draft server-side and returns the canonical receipt
+   * with host-issued authorization evidence. The principal is bound through
+   * `bindPrincipal` and is never serialized into the draft.
+   */
+  storeReceipt?: (input: {
+    deckId: string;
+    receipt: NodeSlideStoreReceiptInput['receipt'];
+  }) => Promise<NodeSlideReceipt>;
 }
 
 export interface NodeSlideConvexAdapters {
@@ -154,14 +162,15 @@ export class NodeSlideConvexRepository implements NodeSlideRepository {
     });
   }
 
-  async storeReceipt(receipt: NodeSlideReceipt): Promise<void> {
+  async storeReceipt(input: NodeSlideStoreReceiptInput): Promise<NodeSlideReceipt> {
     if (!this.config.storeReceipt) {
       throw new NodeSlideRepositoryError(
         'forbidden',
         'Convex receipt storage requires a server-only callback.',
       );
     }
-    await this.config.storeReceipt(receipt);
+    await this.config.bindPrincipal(input.principal);
+    return this.config.storeReceipt({ deckId: input.deckId, receipt: input.receipt });
   }
 }
 

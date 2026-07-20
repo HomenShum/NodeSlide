@@ -17,6 +17,7 @@
     "codegen": "convex codegen",
     "build": "npm run packages:build && tsc -b && vite build",
     "packages:build": "npm run build --workspaces --if-present",
+    "packages:consumer:smoke": "node scripts/package-consumer-smoke.mjs",
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "lint": "biome check .",

@@ -36,3 +36,16 @@ npm run packages:build
 Each workspace is private to prevent accidental publication but supports
 `npm pack` for the version-pinned tarball workflow documented in
 `docs/ECOSYSTEM.md`.
+
+After building, prove the actual publish-shaped artifacts in a fresh temporary
+consumer with scripts disabled:
+
+```bash
+npm run packages:consumer:smoke
+```
+
+The smoke packs every workspace, installs only those tarballs plus React into
+an isolated consumer, runs the repository proposal/acceptance conformance
+journey, server-renders the controlled deck viewer, verifies the exported CSS,
+and removes the temporary directory. Source-workspace imports cannot satisfy
+this gate.

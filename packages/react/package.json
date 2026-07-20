@@ -14,13 +14,13 @@
     "./styles.css": "./src/styles.css"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external react --external react/jsx-runtime",
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external react --external react/jsx-runtime --external @nodeslide/backend --external @nodeslide/contracts --external @nodeslide/react-headless",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
     "@nodeslide/backend": "0.1.0",
     "@nodeslide/contracts": "0.1.0",
-    "@nodeslide/engine": "0.1.0"
+    "@nodeslide/react-headless": "0.1.0"
   },
   "peerDependencies": {
     "react": ">=18 <20"

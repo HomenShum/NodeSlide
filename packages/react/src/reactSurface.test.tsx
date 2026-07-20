@@ -12,8 +12,10 @@ import {
 
 afterEach(cleanup);
 
-function withSecondSlide(snapshot: DeckSnapshot): DeckSnapshot {
-  const secondSlideId = `${snapshot.deck.id}:slide:2`;
+function withSecondSlide(
+  snapshot: DeckSnapshot,
+  secondSlideId = `${snapshot.deck.id}:slide:2`,
+): DeckSnapshot {
   const secondElementId = `${secondSlideId}:title`;
   const secondSlide: Slide = {
     id: secondSlideId,
@@ -87,6 +89,25 @@ describe('@nodeslide/react controlled surfaces', () => {
     firstTab.focus();
     await user.keyboard('{ArrowRight}');
     expect(onActiveSlideChange).toHaveBeenCalledWith(snapshot.deck.slideOrder[1]);
+    expect(document.activeElement).toBe(screen.getByRole('tab', { name: /Proof/ }));
+  });
+
+  it('requests focus by slide identity even when the ID contains selector punctuation', async () => {
+    const user = userEvent.setup();
+    const base = createNodeSlideTestSnapshot();
+    const snapshot = withSecondSlide(base, `${base.deck.id}:slide:"[proof]`);
+    const activeSlideId = snapshot.deck.slideOrder[0] ?? '';
+    render(
+      <NodeSlideDeckViewer
+        snapshot={snapshot}
+        activeSlideId={activeSlideId}
+        onActiveSlideChange={vi.fn()}
+      />,
+    );
+
+    const firstTab = screen.getByRole('tab', { name: /Portable boundary/ });
+    firstTab.focus();
+    await user.keyboard('{End}');
     expect(document.activeElement).toBe(screen.getByRole('tab', { name: /Proof/ }));
   });
 

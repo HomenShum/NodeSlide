@@ -15,6 +15,7 @@ const packageNames = [
   '@nodeslide/engine',
   '@nodeslide/backend',
   '@nodeslide/testing',
+  '@nodeslide/react-headless',
   '@nodeslide/react',
 ];
 const npmCli = process.env.npm_execpath;
@@ -59,6 +60,13 @@ try {
   );
   const reactVersion = lockedDependencyVersion(rootLock, 'react');
   const reactDomVersion = lockedDependencyVersion(rootLock, 'react-dom');
+  const consumerToolVersions = {
+    react: reactVersion,
+    'react-dom': reactDomVersion,
+    '@types/react': lockedDependencyVersion(rootLock, '@types/react'),
+    '@types/react-dom': lockedDependencyVersion(rootLock, '@types/react-dom'),
+    typescript: lockedDependencyVersion(rootLock, 'typescript'),
+  };
 
   await writeFile(
     path.join(consumerDirectory, 'package.json'),
@@ -71,16 +79,33 @@ try {
       '--no-audit',
       '--no-fund',
       ...[...packedArtifacts.values()].map((artifact) => artifact.tarball),
-      `react@${reactVersion}`,
-      `react-dom@${reactDomVersion}`,
+      ...Object.entries(consumerToolVersions).map(([name, version]) => `${name}@${version}`),
     ],
     consumerDirectory,
   );
-  await assertPackedInstallProvenance(
-    consumerDirectory,
-    packedArtifacts,
-    reactVersion,
-    reactDomVersion,
+  await assertPackedInstallProvenance(consumerDirectory, packedArtifacts, consumerToolVersions);
+
+  const typeConsumerScript = path.join(consumerDirectory, 'verify-types.ts');
+  await writeFile(typeConsumerScript, consumerTypeScriptSource());
+  await execFileAsync(
+    process.execPath,
+    [
+      path.join(consumerDirectory, 'node_modules', 'typescript', 'bin', 'tsc'),
+      '--noEmit',
+      '--strict',
+      '--exactOptionalPropertyTypes',
+      '--noUncheckedIndexedAccess',
+      '--target',
+      'ES2022',
+      '--module',
+      'NodeNext',
+      '--moduleResolution',
+      'NodeNext',
+      '--lib',
+      'ES2022,DOM',
+      typeConsumerScript,
+    ],
+    { cwd: consumerDirectory, encoding: 'utf8', maxBuffer: 20 * 1024 * 1024 },
   );
 
   const consumerScript = path.join(consumerDirectory, 'verify.mjs');
@@ -95,6 +120,8 @@ try {
     ok: true,
     proposalVersion: 1,
     acceptedVersion: 2,
+    headless: true,
+    typesChecked: true,
     rendered: true,
     cssExported: true,
   });
@@ -141,12 +168,7 @@ function lockedDependencyVersion(lock, packageName) {
   return version;
 }
 
-async function assertPackedInstallProvenance(
-  consumerDirectory,
-  packedArtifacts,
-  reactVersion,
-  reactDomVersion,
-) {
+async function assertPackedInstallProvenance(consumerDirectory, packedArtifacts, toolVersions) {
   const lock = JSON.parse(
     await readFile(path.join(consumerDirectory, 'package-lock.json'), 'utf8'),
   );
@@ -171,8 +193,59 @@ async function assertPackedInstallProvenance(
     [],
     `Packed consumer installed unexpected NodeSlide copies: ${unexpectedNodeSlideCopies.join(', ')}`,
   );
-  assert.equal(lock.packages?.['node_modules/react']?.version, reactVersion);
-  assert.equal(lock.packages?.['node_modules/react-dom']?.version, reactDomVersion);
+  for (const [packageName, version] of Object.entries(toolVersions)) {
+    assert.equal(
+      lock.packages?.[`node_modules/${packageName}`]?.version,
+      version,
+      `Packed consumer did not install locked ${packageName}@${version}.`,
+    );
+  }
+}
+
+function consumerTypeScriptSource() {
+  return `
+import type { NodeSlideProposalDecision } from '@nodeslide/backend';
+import type { DeckPatch, DeckSnapshot } from '@nodeslide/contracts';
+import {
+  createNodeSlideProposalReviewModel,
+  type NodeSlideDeckNavigation,
+  type NodeSlideProposalReviewModel,
+  type UseNodeSlideDeckNavigationInput,
+} from '@nodeslide/react-headless';
+import type {
+  NodeSlideDeckViewerProps,
+  NodeSlideProposalReviewProps,
+} from '@nodeslide/react';
+
+declare const snapshot: DeckSnapshot;
+declare const proposal: DeckPatch;
+const navigationInput: UseNodeSlideDeckNavigationInput = {
+  snapshot,
+  activeSlideId: '',
+  onActiveSlideChange: undefined,
+};
+const reviewModel: NodeSlideProposalReviewModel = createNodeSlideProposalReviewModel({
+  currentSnapshot: snapshot,
+  proposal,
+  activeSlideId: '',
+});
+const viewerProps: NodeSlideDeckViewerProps = { snapshot, activeSlideId: '' };
+const decision: NodeSlideProposalDecision = 'accept';
+const reviewProps: NodeSlideProposalReviewProps = {
+  currentSnapshot: snapshot,
+  proposal,
+  activeSlideId: '',
+  onActiveSlideChange: () => undefined,
+  onDecision: (nextDecision) => {
+    const checked: NodeSlideProposalDecision = nextDecision;
+    void checked;
+  },
+};
+function acceptsNavigation(value: NodeSlideDeckNavigation): number {
+  return value.activeIndex;
+}
+void [navigationInput, reviewModel, viewerProps, decision, reviewProps, acceptsNavigation];
+`;
 }
 
 function consumerSource() {
@@ -186,6 +259,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { NodeSlideRepositoryError } from '@nodeslide/backend';
 import { NODESLIDE_SCHEMA_VERSION } from '@nodeslide/contracts';
 import { applyDeckPatch } from '@nodeslide/engine';
+import { createNodeSlideProposalReviewModel } from '@nodeslide/react-headless';
 import { NodeSlideDeckViewer } from '@nodeslide/react';
 import {
   MemoryNodeSlideRepository,
@@ -211,6 +285,18 @@ const proposal = createNodeSlideTextPatch(snapshot, 'Packed package accepted');
 const enginePreview = applyDeckPatch(snapshot, proposal, snapshot.deck.updatedAt + 1);
 assert.equal(enginePreview.snapshot.elements[0]?.content, 'Packed package accepted');
 assert.equal(snapshot.elements[0]?.content, 'Before');
+const review = createNodeSlideProposalReviewModel({
+  currentSnapshot: snapshot,
+  proposal: {
+    ...proposal,
+    status: 'ready',
+    createdAt: snapshot.deck.updatedAt,
+    updatedAt: snapshot.deck.updatedAt,
+  },
+  activeSlideId: snapshot.deck.slideOrder[0],
+});
+assert.equal(review.preview.ok, true);
+assert.equal(review.actionsDisabled, false);
 const normalizedError = new NodeSlideRepositoryError('not_found', 'Packed runtime export');
 assert.equal(normalizedError.code, 'not_found');
 
@@ -244,6 +330,8 @@ process.stdout.write(JSON.stringify({
   ok: true,
   proposalVersion: result.proposalVersion,
   acceptedVersion: result.acceptedVersion,
+  headless: true,
+  typesChecked: true,
   rendered: true,
   cssExported: true,
 }));

@@ -1,6 +1,7 @@
 import type { ChartData, DeckSnapshot, Slide, SlideElement, ThemeSpec } from '@nodeslide/contracts';
-import { useId } from 'react';
-import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react';
+import { useNodeSlideDeckNavigation } from '@nodeslide/react-headless';
+import { useRef } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
 export interface NodeSlideSlideFrameProps {
   slide: Slide;
@@ -92,45 +93,14 @@ export function NodeSlideDeckViewer({
   nextSlideLabel = 'Next slide',
   unavailableLabel = 'The selected slide is unavailable.',
 }: NodeSlideDeckViewerProps) {
-  const panelId = `nodeslide-panel-${useId().replaceAll(':', '')}`;
-  const orderedSlides = snapshot.deck.slideOrder
-    .map((slideId) => snapshot.slides.find((slide) => slide.id === slideId))
-    .filter((slide): slide is Slide => slide !== undefined);
-  const activeIndex = orderedSlides.findIndex((slide) => slide.id === activeSlideId);
-  const activeSlide = activeIndex >= 0 ? orderedSlides[activeIndex] : undefined;
-
-  function selectRelative(offset: number): void {
-    if (!onActiveSlideChange || activeIndex < 0 || orderedSlides.length === 0) return;
-    const nextIndex = (activeIndex + offset + orderedSlides.length) % orderedSlides.length;
-    const next = orderedSlides[nextIndex];
-    if (next) onActiveSlideChange(next.id);
-  }
-
-  function handleTabKeyDown(event: ReactKeyboardEvent<HTMLButtonElement>, slideId: string): void {
-    if (!onActiveSlideChange) return;
-    const currentIndex = orderedSlides.findIndex((slide) => slide.id === slideId);
-    if (currentIndex < 0) return;
-    let targetIndex: number | null = null;
-    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
-      targetIndex = (currentIndex + 1) % orderedSlides.length;
-    } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
-      targetIndex = (currentIndex - 1 + orderedSlides.length) % orderedSlides.length;
-    } else if (event.key === 'Home') {
-      targetIndex = 0;
-    } else if (event.key === 'End') {
-      targetIndex = orderedSlides.length - 1;
-    }
-    if (targetIndex === null) return;
-    event.preventDefault();
-    const target = orderedSlides[targetIndex];
-    if (!target) return;
-    onActiveSlideChange(target.id);
-    const tabList = event.currentTarget.parentElement;
-    const tab = tabList?.querySelector<HTMLButtonElement>(
-      `[data-nodeslide-slide-tab="${cssAttributeValue(target.id)}"]`,
-    );
-    tab?.focus();
-  }
+  const slideTabRefs = useRef(new Map<string, HTMLButtonElement>());
+  const navigation = useNodeSlideDeckNavigation({
+    snapshot,
+    activeSlideId,
+    onActiveSlideChange,
+    onFocusRequest: (slideId) => slideTabRefs.current.get(slideId)?.focus(),
+  });
+  const { activeIndex, activeSlide, orderedSlides } = navigation;
 
   return (
     <section
@@ -149,10 +119,9 @@ export function NodeSlideDeckViewer({
       </header>
 
       <div
+        {...navigation.getPanelProps()}
         aria-label={activeSlide?.title ?? 'Selected slide'}
         className="nsx-slide-stage"
-        id={panelId}
-        role="tabpanel"
       >
         {activeSlide ? (
           <NodeSlideSlideFrame
@@ -168,34 +137,35 @@ export function NodeSlideDeckViewer({
       <nav aria-label="Slide navigation" className="nsx-deck-navigation">
         <button
           aria-label={previousSlideLabel}
-          disabled={!activeSlide || orderedSlides.length < 2 || !onActiveSlideChange}
-          onClick={() => selectRelative(-1)}
+          disabled={!navigation.canNavigate}
+          onClick={navigation.previous}
           type="button"
         >
           Previous
         </button>
         <div aria-label="Choose a slide" className="nsx-slide-tabs" role="tablist">
-          {orderedSlides.map((slide, index) => (
-            <button
-              aria-controls={panelId}
-              aria-selected={slide.id === activeSlideId}
-              data-nodeslide-slide-tab={slide.id}
-              key={slide.id}
-              onClick={() => onActiveSlideChange?.(slide.id)}
-              onKeyDown={(event) => handleTabKeyDown(event, slide.id)}
-              role="tab"
-              tabIndex={slide.id === activeSlideId ? 0 : -1}
-              type="button"
-            >
-              <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-              <span>{slide.title}</span>
-            </button>
-          ))}
+          {orderedSlides.map((slide, index) => {
+            const tabProps = navigation.getTabProps(slide.id);
+            return (
+              <button
+                {...tabProps}
+                key={slide.id}
+                ref={(element) => {
+                  if (element) slideTabRefs.current.set(slide.id, element);
+                  else slideTabRefs.current.delete(slide.id);
+                }}
+                type="button"
+              >
+                <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                <span>{slide.title}</span>
+              </button>
+            );
+          })}
         </div>
         <button
           aria-label={nextSlideLabel}
-          disabled={!activeSlide || orderedSlides.length < 2 || !onActiveSlideChange}
-          onClick={() => selectRelative(1)}
+          disabled={!navigation.canNavigate}
+          onClick={navigation.next}
           type="button"
         >
           Next
@@ -369,8 +339,4 @@ function mediaFragmentUrl(url: string, start?: number, end?: number): string {
 
 function joinClassNames(...values: Array<string | undefined>): string {
   return values.filter(Boolean).join(' ');
-}
-
-function cssAttributeValue(value: string): string {
-  return value.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
 }

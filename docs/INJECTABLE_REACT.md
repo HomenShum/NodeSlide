@@ -1,16 +1,21 @@
 # Injectable React contract
 
-`@nodeslide/react` is the first UI consumer of the portable contracts extracted
-in the injectable core. It deliberately exposes a smaller surface than the
-standalone NodeSlide studio.
+`@nodeslide/react-headless` and `@nodeslide/react` are the first UI consumers of
+the portable contracts extracted in the injectable core. They deliberately
+expose a smaller surface than the standalone NodeSlide studio.
 
 ## Ownership boundary
 
-NodeSlide React owns:
+NodeSlide headless owns:
+
+- ordered-slide and active-slide derivation;
+- controlled previous, next, click, and keyboard navigation intent;
+- ARIA tab/panel props and focus-request intent without DOM queries;
+- deterministic proposal previews and fail-closed review-state models.
+
+NodeSlide styled React owns:
 
 - read-only normalized slide rendering;
-- controlled slide navigation intent;
-- in-memory proposal materialization through `@nodeslide/engine`;
 - current/proposed comparison;
 - accept/reject intent callbacks;
 - accessible names, focus order, and keyboard tab navigation;
@@ -25,8 +30,9 @@ The host owns:
 - CAS enforcement, durable application, and receipts;
 - React error boundaries and product-specific loading states.
 
-The package has no imports from `convex/`, `src/`, WorkOS, the standalone
-router, or standalone global styles.
+Neither package imports from `convex/`, `src/`, WorkOS, the standalone router,
+or standalone global styles. The headless package ships no CSS and performs no
+DOM query; `@nodeslide/react` supplies focus refs and opt-in visual styling.
 
 The host must pass a validated `DeckSnapshot`. Rendering an image, video,
 poster, or captions URL causes the browser to request that resource, so a host

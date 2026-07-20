@@ -1,7 +1,9 @@
 # `@nodeslide/react`
 
 Controlled, backend-neutral React surfaces for embedding NodeSlide in an
-existing product.
+existing product. The styled package consumes `@nodeslide/react-headless` for
+navigation and proposal-review state, while retaining rendering, focus refs,
+markup, and opt-in CSS.
 
 ```tsx
 import { useState } from 'react';

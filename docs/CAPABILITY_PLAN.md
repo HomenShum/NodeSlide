@@ -320,10 +320,11 @@ registry/                  shadcn-style source-owned compositions (studio route,
       Split headless (hooks/state) from styled (CSS-variable tokens:
       `--nodeslide-*`); a host can adopt the engine without NodeSlide's
       visual identity. "Scoped Tailwind" alone is not the isolation contract.
-      First controlled slice: `@nodeslide/react` now ships a deck viewer and
-      fail-closed proposal review surface with scoped opt-in CSS. The true
-      `@nodeslide/react-headless` split, StudioShell, agent thread, presenter,
-      and Convex convenience binding remain open.
+      First controlled slice: `@nodeslide/react-headless` now owns navigation
+      and fail-closed proposal-review state; `@nodeslide/react` consumes it for
+      the styled deck viewer and review surface with scoped opt-in CSS.
+      StudioShell, agent thread, presenter, and the Convex convenience binding
+      remain open.
 - [ ] I4. **Auth is host-supplied**: normalize to `NodeSlidePrincipal`
       {userId, organizationId?, roles, permissions}; host adapters resolve it
       from WorkOS/Clerk/Auth0/Convex/Supabase/custom. No auth vendor inside

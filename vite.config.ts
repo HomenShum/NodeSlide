@@ -17,6 +17,9 @@ export default defineConfig({
       '@nodeslide/engine': fileURLToPath(
         new URL('./packages/engine/src/index.ts', import.meta.url),
       ),
+      '@nodeslide/react-headless': fileURLToPath(
+        new URL('./packages/react-headless/src/index.ts', import.meta.url),
+      ),
       '@nodeslide/testing': fileURLToPath(
         new URL('./packages/testing/src/index.ts', import.meta.url),
       ),

@@ -12,6 +12,7 @@ can migrate without a second DeckSpec, patch engine, or validator.
 | `@nodeslide/engine` | Pure `applyDeckPatch`, patch/snapshot validation, scope validation, affected-ID calculation | Persistence, approval UI, provider calls |
 | `@nodeslide/backend` | `NodeSlideRepository`, `NodeSlideAssetStore`, `NodeSlideTelemetryAdapter`, normalized principal and receipts | Any concrete database or auth vendor |
 | `@nodeslide/testing` | Deterministic fixtures, memory repository/assets/telemetry, repository conformance smoke | Production persistence |
+| `@nodeslide/react-headless` | Controlled deck navigation props, proposal previews, and fail-closed review-state models | Rendering, DOM queries, CSS, persistence, routing |
 | `@nodeslide/react` | Controlled read-only deck rendering, deterministic proposal comparison, accessible review callbacks, opt-in scoped styles | Convex, auth, routing, global CSS, standalone app state |
 | `@nodeslide/external-agent` | Bundled library + `nodeslide` CLI for offline inspect/validate/propose/apply | UI, hosted auth, provider calls, a second patch engine |
 
@@ -45,11 +46,13 @@ consumer with scripts disabled:
 npm run packages:consumer:smoke
 ```
 
-The smoke packs every workspace, installs only those tarballs plus React into
-an isolated consumer, runs the repository proposal/acceptance conformance
-journey, server-renders the controlled deck viewer, verifies the exported CSS,
-and removes the temporary directory. Source-workspace imports cannot satisfy
-this gate.
+The smoke packs the reusable application-boundary workspaces, installs only
+those tarballs plus React into an isolated consumer, runs the repository
+proposal/acceptance conformance
+journey, exercises the headless review model, server-renders the controlled
+deck viewer, compiles a strict TypeScript consumer against the packed
+declarations, verifies the exported CSS, and removes the temporary directory.
+Source-workspace imports cannot satisfy this gate.
 
 External coding agents can use the bundled CLI or the adapted MCP server as
 documented in `docs/EXTERNAL_AGENT_ACCESS.md`. Both transports consume these

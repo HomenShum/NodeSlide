@@ -96,8 +96,13 @@ No decomposition, no sub-agents, no self-verification against the render.
       audit the rest of the fleet with a 1-token probe script.
       — DONE 9d18ab6: generalized OpenRouter overrides pin reasoning:false for
       Gemini 3.5 Flash.
-- [ ] B4. Edit-path tool loop (P1): read → propose → verify-against-render →
+- [x] B4. Edit-path tool loop (P1): read → propose → verify-against-render →
       finalize, with real steps in the thread replacing status labels.
+      — DONE f041168; LIVE-PROVED on prod 2026-07-19: sample deck, prompt
+      "Tighten the headline and body copy." → thread showed Planner (Kimi K3,
+      1 op), Verify ("applied candidate to a shadow snapshot — clean"), and
+      Validation steps before the Accept/Reject patch. Repair step correctly
+      absent (verify was clean — honest, not decorative).
 - [ ] B5. Variations become a judged fan-out (P2): 3 executor generations + a
       judge pass with tradeoff labels (pairs with A2 for layout-distinct
       directions).
@@ -125,13 +130,20 @@ The formula element stores a `latex`-tagged string; nothing typesets it.
 - [x] C1. KaTeX render for math elements in the browser canvas (SSR-safe).
       — DONE 5b0faac: real KaTeX typesetting in SlideRenderer with jsdom test
       coverage.
-- [ ] C2. PPTX export: KaTeX → SVG → raster embed, replacing "math as text";
+- [x] C2. PPTX export: KaTeX → SVG → raster embed, replacing "math as text";
       capability report updated truthfully (`pptx_static_fallback`).
+      — DONE 9141672: rendered-equation raster via injectable raster seam,
+      unit-tested; deployed to prod 2026-07-19.
 - [x] C3. Expression validation + honest plain-text fallback when parse fails.
       — DONE 5b0faac: parse failures fall back to labeled plain text, never a
       silent blank.
 - [ ] C4. Acceptance: golden formula typesets in browser; PPTX shows the
       rendered equation; capability claims match the adapter.
+      — PARTIAL (honest, 2026-07-19): browser half proved live — sample-deck
+      slide 4 exposes a real `math` role ("scope … ∩ …") on prod. The
+      PPTX-shows-rendered-equation half is unit-tested (9141672) but a live
+      export download was NOT inspected; left unchecked until a prod PPTX is
+      opened and the equation raster is seen.
 
 ## D · Charts — from primitive to charting (P1)
 
@@ -199,18 +211,28 @@ but never live-verified.
 - [ ] F1. Verify (or finish) snapshot capture on the web-research path; honest
       no-badge state when capture fails.
 - [ ] F2. Region highlight on the snapshot bound to the claim.
-- [ ] F3. Evidence tab: claim → source → element binding made visible/clickable.
+- [x] F3. Evidence tab: claim → source → element binding made visible/clickable.
+      — DONE bbf4aaf; LIVE-PROVED on prod 2026-07-19: Evidence tab lists
+      per-source citing elements ("Cited by 8/35 elements"); clicking
+      `evidence-citing-element` "Headline · Stories with structure" flipped
+      the inspector badge to "Selection · 1".
 - [ ] F4. Acceptance: live run showing a web claim whose snapshot region opens
       from the element that cites it.
 
 ## G · Thread/UX debt (P2)
 
-- [ ] G1. Policy controls → popover; delete the stopgap agentic-CSS block in
+- [x] G1. Policy controls → popover; delete the stopgap agentic-CSS block in
       `nodeslideV3.css` (slice-3 leftovers).
+      — DONE c69b164: advanced-controls popover (live composer shows the
+      "Advanced provider, privacy, scope, and editing controls" trigger on
+      prod); stopgap CSS block gone (repo grep clean).
 - [ ] G2. Streaming assistant text in AgentThread (reads as alive, not batch).
 - [ ] G3. Nested handoff rendering (pairs with B2).
-- [ ] G4. Creation wait UX: informative staged progress on the landing (what
+- [x] G4. Creation wait UX: informative staged progress on the landing (what
       the 2–4 min is doing), since Kimi's tail is slow.
+      — DONE c69b164; LIVE-PROVED on prod 2026-07-19: real creation from the
+      landing showed "The model is drafting the slide plan…" plus a counting
+      elapsed timer (0:40 → 0:58 across two DOM reads) while the job ran.
 
 ## H · Ops, CI, hygiene (P0-quick)
 

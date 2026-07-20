@@ -9,6 +9,7 @@ import {
   callNodeSlideFreeJson,
   nodeSlideStructuredOutputPayload,
   openrouterProviderWithOverrides,
+  probeNodeSlideModelOnce,
 } from './nodeslideProvider';
 
 const defaultRoute = nodeSlideAgentModel(NODESLIDE_EDIT_MODEL);
@@ -278,5 +279,48 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       reason: 'The GLM 5.2 route does not support the selected reasoning effort.',
     });
     expect(complete).not.toHaveBeenCalled();
+  });
+
+  it('probes a catalog route with exactly one output token', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () =>
+      completion('1', { inputTokens: 5, outputTokens: 1, costMicroUsd: 7 }),
+    );
+
+    const result = await probeNodeSlideModelOnce(NODESLIDE_EDIT_MODEL, { complete });
+
+    expect(result).toMatchObject({
+      model: NODESLIDE_EDIT_MODEL,
+      maxTokens: 1,
+      status: 'passed',
+      inputTokens: 5,
+      outputTokens: 1,
+      costMicroUsd: 7,
+    });
+    expect(complete).toHaveBeenCalledTimes(1);
+    expect(complete.mock.calls[0]?.[0]).toMatchObject({
+      maxTokens: 1,
+      reasoningEffort: 'low',
+      repairAttempt: false,
+    });
+  });
+
+  it('returns a sanitized failed receipt when a fleet route times out', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(() => new Promise(() => {}));
+
+    const result = await probeNodeSlideModelOnce(NODESLIDE_EDIT_MODEL, {
+      complete,
+      timeoutMs: 5,
+    });
+
+    expect(result).toMatchObject({
+      model: NODESLIDE_EDIT_MODEL,
+      maxTokens: 1,
+      status: 'failed',
+      costMicroUsd: 0,
+      inputTokens: 0,
+      outputTokens: 0,
+      failure: 'The Kimi K3 route timed out.',
+    });
+    expect(complete.mock.calls[0]?.[0].signal.aborted).toBe(true);
   });
 });

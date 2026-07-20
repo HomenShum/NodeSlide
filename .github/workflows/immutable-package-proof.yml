@@ -1,0 +1,72 @@
+name: Immutable package install + upgrade proof
+
+on:
+  workflow_dispatch:
+    inputs:
+      from_tag:
+        description: Public immutable baseline release tag
+        required: true
+        type: string
+      to_tag:
+        description: Public immutable candidate release tag
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  prove:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      FROM_TAG: ${{ inputs.from_tag }}
+      TO_TAG: ${{ inputs.to_tag }}
+    steps:
+      - name: Validate bounded release tags
+        shell: bash
+        run: |
+          [[ "$FROM_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][A-Za-z0-9.-]+)?$ ]]
+          [[ "$TO_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][A-Za-z0-9.-]+)?$ ]]
+          [[ "$FROM_TAG" != "$TO_TAG" ]]
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ inputs.to_tag }}
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - run: npm ci
+      - run: npm run packages:build
+      - name: Download the two public release artifact sets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p artifacts/from artifacts/to
+          gh release download "$FROM_TAG" --repo "$GITHUB_REPOSITORY" --dir artifacts/from --pattern '*.tgz' --pattern 'nodeslide-artifacts.json'
+          gh release download "$TO_TAG" --repo "$GITHUB_REPOSITORY" --dir artifacts/to --pattern '*.tgz' --pattern 'nodeslide-artifacts.json'
+          gh release verify "$FROM_TAG" --repo "$GITHUB_REPOSITORY"
+          gh release verify "$TO_TAG" --repo "$GITHUB_REPOSITORY"
+          for asset in artifacts/from/*; do
+            gh release verify-asset "$FROM_TAG" "$asset" --repo "$GITHUB_REPOSITORY"
+          done
+          for asset in artifacts/to/*; do
+            gh release verify-asset "$TO_TAG" "$asset" --repo "$GITHUB_REPOSITORY"
+          done
+      - name: Prove clean install, immutable upgrade, and fail-closed artifacts
+        run: >-
+          npm run proof:install-upgrade --
+          --from artifacts/from
+          --to artifacts/to
+          --from-url "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${FROM_TAG}"
+          --to-url "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TO_TAG}"
+          --require-public
+          --report artifacts/immutable-install-upgrade-proof.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: immutable-install-upgrade-${{ inputs.from_tag }}-to-${{ inputs.to_tag }}
+          path: artifacts/immutable-install-upgrade-proof.json
+          if-no-files-found: error
+          retention-days: 30

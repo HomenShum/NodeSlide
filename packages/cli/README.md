@@ -1,10 +1,49 @@
 # `@nodeslide/cli`
 
-Run `npx @nodeslide/cli init` (the installed binary is `nodeslide`). Before
-public npm releases, pass `--artifacts <directory>` to install the exact
-versioned tarballs produced by `npm pack`.
+Run `npx @nodeslide/cli init` (the installed binary is `nodeslide`). The CLI
+detects the host framework, installs the selected NodeSlide profile, and writes
+only package-owned sources. It never silently edits auth, routing, global CSS,
+`.env`, or an existing Convex schema. Every generated file is hashed in
+`.nodeslide/installation.json`; upgrades replace only unchanged generated
+files and emit reviewable diffs for host-edited files.
 
-The CLI never modifies auth, routing, global CSS, `.env`, or an existing Convex
-schema. Generated source lives in package-specific paths. Every write is
-hashed in `.nodeslide/installation.json`; upgrades overwrite only an unchanged
-generated file and emit a reviewable diff for host-modified files.
+Before public npm publication, install an immutable release set:
+
+```bash
+npm run artifacts:build -- \
+  --out ./artifacts/v0.2.0 \
+  --release-id <git-commit-sha> \
+  --release-version 0.2.0 \
+  --registry-version 0.2.0
+
+npx @nodeslide/cli init \
+  --profile full-studio \
+  --backend convex \
+  --ui headless \
+  --artifacts ./artifacts/v0.2.0
+```
+
+`nodeslide-artifacts.json` pins one release ID and version across the complete
+11-package closure. Every tarball has an independent SHA-256 digest and npm
+SHA-512 integrity value. Artifact installs verify the manifest, reject
+unlisted tarballs, mixed versions, unsafe filenames, missing packages, and
+tampered bytes before invoking npm. The installation receipt preserves the
+manifest digest plus every exact name, version, filename, digest, and integrity
+pin; upgrades must advance the release version and cannot downgrade the source
+registry.
+
+The local release proof builds two artifact directories and runs:
+
+```bash
+npm run proof:install-upgrade -- \
+  --from ./artifacts/v0.1.0 \
+  --to ./artifacts/v0.2.0 \
+  --report ./artifacts/immutable-install-upgrade-proof.json
+```
+
+That proof uses the candidate CLI from a separate controller, installs the
+baseline into a clean consumer, verifies `package-lock.json` version and
+integrity pins, upgrades to the candidate, verifies the advanced receipt, and
+proves tampered and mixed release sets fail closed. The GitHub workflow also
+requires public release URLs and verifies immutable releases and every asset
+with `gh release verify` and `gh release verify-asset`.

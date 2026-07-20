@@ -1,4 +1,11 @@
-export const NODESLIDE_CONVEX_COMPONENT_SCHEMA_VERSION = 1 as const;
+export const NODESLIDE_CONVEX_COMPONENT_SCHEMA_VERSION = 2 as const;
+
+export {
+  NODESLIDE_COMPONENT_GRANT_VERSION,
+  type NodeSlideComponentGrant,
+  type NodeSlideComponentGrantAction,
+  type NodeSlideComponentResourceKind,
+} from '../component/protocol';
 
 export const NODESLIDE_CONVEX_TABLES = {
   decks: 'nodeslide_decks',
@@ -7,6 +14,7 @@ export const NODESLIDE_CONVEX_TABLES = {
   receipts: 'nodeslide_receipts',
   assets: 'nodeslide_assets',
   migrationReceipts: 'nodeslide_migration_receipts',
+  authorizationGrants: 'nodeslide_authorization_grants',
 } as const;
 
 export interface NodeSlideConvexMigrationStep {
@@ -32,6 +40,13 @@ export const NODESLIDE_CONVEX_MIGRATIONS: readonly NodeSlideConvexMigrationStep[
     toVersion: 1,
     destructive: false,
     description: 'Initialize the isolated NodeSlide component tables and migration ledger.',
+  },
+  {
+    id: 'add_authorization_grant_ledger_v2',
+    fromVersion: 1,
+    toVersion: 2,
+    destructive: false,
+    description: 'Add the one-time host authorization grant ledger for isolated mutations.',
   },
 ];
 

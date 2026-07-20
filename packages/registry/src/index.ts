@@ -20,7 +20,7 @@ export interface NodeSlideRegistryEntry {
   uiModes?: readonly NodeSlideUiMode[];
 }
 
-export const NODESLIDE_REGISTRY_VERSION = '0.1.0' as const;
+export const NODESLIDE_REGISTRY_VERSION = '0.2.0' as const;
 
 export const NODESLIDE_REGISTRY_ENTRIES: readonly NodeSlideRegistryEntry[] = [
   {
@@ -61,13 +61,6 @@ export const NODESLIDE_REGISTRY_ENTRIES: readonly NodeSlideRegistryEntry[] = [
     id: 'convex-component-config',
     source: 'convex/convex.config.ts',
     destination: 'convex/nodeslide/convex.config.ts',
-    profiles: ['full-studio', 'backend-only'],
-    backends: ['convex'],
-  },
-  {
-    id: 'convex-component-schema',
-    source: 'convex/schema.ts',
-    destination: 'convex/nodeslide/schema.ts',
     profiles: ['full-studio', 'backend-only'],
     backends: ['convex'],
   },

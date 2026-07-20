@@ -1,8 +1,11 @@
 # Next coding-agent session — start here
 
-Written 2026-07-19 at `main` = `71c63d6` (clean tree, all branches merged,
-prod verified). Read this, then `docs/CAPABILITY_PLAN.md` (the checklist of
-record), then `docs/EXTRACTION_BOUNDARY.md` (rules you must not break).
+Written 2026-07-19; last updated same day at `main` = `7e20b9c` (clean tree,
+prod verified live). Read this, then `docs/CAPABILITY_PLAN.md` (the checklist
+of record), then `docs/EXTRACTION_BOUNDARY.md` (rules you must not break).
+Mirror rule: every change under `src/domains/nodeslide/` or `convex/` must
+also land in `HomenShum/parity-studio` (dev monorepo, main @ `96c6e45`) in the
+same session.
 
 ## Where things stand
 
@@ -38,10 +41,30 @@ record), then `docs/EXTRACTION_BOUNDARY.md` (rules you must not break).
    scripts exist in session scratchpads — rewrite cleanly into `scripts/`),
    CI-driven Vercel deploys (replace manual prebuilt staging).
 4. Smaller: C4 (open the math-raster PPTX in real PowerPoint), B6-camera
-   (routed run recorded + trace token/cost readout + induced-fault
-   self-correction), B5 judged variations, E2/E3 (BYOK image gen, crop),
-   J5, H4 (repo hygiene: `nodeslide-deploy/` staging dir, stale parity
-   worktrees).
+   (routed run recorded on video — the trace token/cost readout half is now
+   PROVED live, see CAPABILITY_PLAN B6), B5 judged variations, E2/E3 (BYOK
+   image gen, crop), J5, H4 (repo hygiene: `nodeslide-deploy/` staging dir,
+   stale local branches `extract/codebase` / `feat/ai-elements-composer` /
+   `feat/depth-governance-port` are merged — prune).
+5. **B6 revise-branch demo (small, honest-checkmark blocker)**: the
+   2026-07-19 fault-injection runs showed a robust model absorbs induced
+   layout faults at generation time, so the self-critique REVISE pass never
+   fires live ("1 pass, clean" every run). To demonstrate + regression-test
+   the 2-pass path honestly, add a dev-only synthetic fault flag (env-gated,
+   labeled in the trace) or run a deliberately weak model. Do not fake it.
+6. **Stale-socket UX (real user pain, found live)**: after a prod redeploy,
+   an already-open client's Convex ACTIONS fail with masked "Server Error"
+   until reload (queries keep working). Reproduced this session; backend
+   proven healthy via direct `npx convex run`. Detect the failure class and
+   show an honest "NodeSlide was updated — reload to continue" banner.
+7. **Convex log observability**: `npx convex logs --prod` streamed nothing
+   during live failing AND succeeding actions this session (CLI vs
+   deployment issue?). Diagnose — blind prod made a 10-minute bug chase into
+   an hour.
+8. **Open PRs to triage (do not blind-merge)**: nodeslide draft PR #5
+   "injectable core boundary" (Codex); parity-studio draft PR #18
+   "external interoperability" (Codex) and PR #17 (nodeslide README docs,
+   open since 07-14 — review or close).
 
 ## How to work (proven pattern, keep it)
 
@@ -94,6 +117,18 @@ npx vercel deploy --prod --yes --archive=tgz   # archive flag: plain deploy once
 - Playwright scripts must run from the repo root (module resolution); the
   landing model select is native (`selectOption`), the composer/radix
   selects are not.
+- Native `<dialog>` elements resolve to `position:absolute` — flex centering
+  on a backdrop never applies, and a content-sized dialog collapses its
+  `minmax(0,1fr)` grid row to 0. Fixed on `.ns-project-dialog` with
+  `inset:0; margin:auto` + definite `height` (commit `40dc0bd`, live-verified
+  via computed geometry on prod). Reuse this pattern for any future modal.
+- git-bash `/tmp` is invisible to Windows Python; use a real Windows path
+  (session scratchpad) for files shared across tools. Stray `./NUL` files
+  break `git add -A`.
+- `npx convex run <fn> '<json>' --prod` is the fastest way to get an
+  UNSANITIZED server error when the client only shows "Server Error" —
+  valid providerModes are `deterministic` / `openrouter_free` / `nebius`,
+  consent token `openrouter_full_brief_v1`.
 
 ## Submission context (why this repo exists)
 

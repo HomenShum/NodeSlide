@@ -7,8 +7,8 @@ import {
 
 /**
  * Scenario: an owner runs web research; the agent persists text excerpts as
- * source records (there is no screenshot pipeline). These validators are the
- * exact storage path used by attachWebSourcesInternal, so they must reject
+ * source records before attachWebSourcesInternal binds the normalized text to
+ * an immutable retrieved-excerpt snapshot. These validators must reject
  * garbage the same way the mutation always has: throw on empty/oversized text
  * (the search adapter guarantees non-empty snippets, so silence would hide a
  * contract break) and SKIP — never abort the run — on a malformed URL.

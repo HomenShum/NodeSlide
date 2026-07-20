@@ -80,10 +80,17 @@ No decomposition, no sub-agents, no self-verification against the render.
       validator + quality signals produce a concrete report, exactly one
       revision call embeds it, and the revision is adopted only when it
       strictly reduces the report.
-- [ ] B2. Orchestrator/worker routing (P1, specced in AI_TAB_THREAD_REBUILD.md):
+- [x] B2. Orchestrator/worker routing (P1, specced in AI_TAB_THREAD_REBUILD.md):
       planner model → op skeleton + copy briefs; cheap executor model → copy;
       orchestrator validates before candidate assembly. Spans carry
       `parentSpanId` + per-model attribution; AgentThread shows roles.
+      — DONE 4a0b44c (policy module + executor copy lane + attribution) and
+      live-proved on prod 2026-07-19: sample deck, "Rewrite the headline and
+      the body copy to be more direct." → thread showed BOTH roles in one
+      turn: "Planner · Kimi K3: proposed 2 operations and delegated 2 copy
+      targets to the executor lane." and "Executor · Gemini 3.5 Flash: wrote
+      copy for 2 text elements; deterministic validation reran on the
+      assembled operations." Patch card (2 ops) validated and reviewable.
 - [x] B3. Unblock cheap executors (P1): pin `reasoning:false` for Gemini 3.5
       Flash in the pi-ai catalog override (same disease as Kimi's original bug);
       audit the rest of the fleet with a 1-token probe script.
@@ -97,6 +104,12 @@ No decomposition, no sub-agents, no self-verification against the render.
 - [ ] B6. Acceptance: one routed run on camera — two models in one thread turn
       with parent-child spans, tokens, cost; creation self-corrects an induced
       layout issue without human input.
+      — PARTIAL (honest, 2026-07-19): routed run live-proved headless on prod
+      (two models, per-role thread labels, validated 2-op patch — see B2), but
+      NOT on camera, and span tokens/cost were not read off the Trace tab in
+      this probe. The creation-self-corrects-induced-issue half remains
+      unproven live (server self-critique loop shipped in a99edcd, no induced
+      fault run yet). Left unchecked until the camera run + trace readout.
 
 ## C · Math — typeset it or stop saying LaTeX (P1)
 
@@ -152,14 +165,24 @@ Single-series flat bars only.
 Placeholder governance is excellent; capability is thin. Generated decks arrive
 with empty slots unless a human uploads art.
 
-- [ ] E1. (P1) License-aware image search (Openverse first: no key, CC-licensed,
+- [x] E1. (P1) License-aware image search (Openverse first: no key, CC-licensed,
       credit metadata) behind explicit consent; insert fills alt/credit
       automatically and stays export-truthful.
+      — DONE 8c9f6f1 and live-proved on prod 2026-07-19: selected the image
+      element on slide 3 of the sample deck, searched "circuit board" (exact
+      consent copy shown: query goes to api.openverse.org on click), got 8
+      commercially-licensed results, inserted the first; image rendered
+      (1024x768, converted to local data URI) and the credit field auto-filled
+      "Twechie · BY-SA 2.0 via Openverse".
 - [ ] E2. (P2) Optional generation via user-keyed provider (BYOK), labeled
       illustrative.
 - [ ] E3. (P1) Crop/focal-point + aspect handling in the Design tab.
-- [ ] E4. Acceptance: placeholder → search → insert with license credit on
+- [x] E4. Acceptance: placeholder → search → insert with license credit on
       camera; export stays clean (capability sync already shipped).
+      — DONE functionally (live headless probe 2026-07-19, DOM evidence not
+      video): placeholder → Openverse search → first-result insert with
+      license credit verified end-to-end on prod (see E1). Capability sync
+      keeps export truthful. Re-run on camera when the next demo is recorded.
 
 ## F · Evidence & screenshots — prove the lineage (P1)
 

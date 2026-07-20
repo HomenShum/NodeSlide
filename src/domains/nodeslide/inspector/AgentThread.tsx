@@ -195,18 +195,29 @@ function ThreadTurn({
         {/* Visible steps (tool messages) — the Cursor-style timeline */}
         {steps.length > 0 && (
           <ol className="flex flex-col gap-0.5" data-testid="agent-thread-steps">
-            {steps.map((step) => (
-              <li
-                key={step.id}
-                className="flex items-start gap-1.5 text-[11px] text-muted-foreground"
-              >
-                <Wrench aria-hidden className="mt-0.5 size-3 shrink-0" />
-                <span className="font-medium">{humanizeToolName(step.toolName)}</span>
-                <span className="truncate" title={step.content}>
-                  {step.content}
-                </span>
-              </li>
-            ))}
+            {steps.map((step) => {
+              const label = humanizeToolName(step.toolName);
+              const content = step.content ?? '';
+              // Self-labeled steps ("Planner · …", "Verify: …", "Repair · …",
+              // "Read context: …") drop the redundant prefix from the visible
+              // text so the line fits the 340px rail without truncating the
+              // substance; the full message stays available in the title.
+              const display = content.toLowerCase().startsWith(label.toLowerCase())
+                ? content.slice(label.length).replace(/^[\s:·—-]+/u, '')
+                : content;
+              return (
+                <li
+                  key={step.id}
+                  className="flex items-start gap-1.5 text-[11px] text-muted-foreground"
+                >
+                  <Wrench aria-hidden className="mt-0.5 size-3 shrink-0" />
+                  <span className="font-medium">{label}</span>
+                  <span className="truncate" title={step.content}>
+                    {display}
+                  </span>
+                </li>
+              );
+            })}
           </ol>
         )}
 
@@ -291,6 +302,9 @@ function humanizeToolName(toolName?: string) {
     candidate_validation: 'Validation',
     web_research: 'Web research',
     source_snapshot: 'Source capture',
+    read_context: 'Read context',
+    verify: 'Verify',
+    repair: 'Repair',
   };
   if (knownLabels[toolName]) return knownLabels[toolName];
   return toolName.replaceAll('_', ' ').replace(/\b\w/g, (character) => character.toUpperCase());

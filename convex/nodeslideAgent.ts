@@ -36,7 +36,10 @@ import {
   type NodeSlideEditPlannerReceipt,
   type NodeSlideEditPlanningRequest,
   type NodeSlideEditRoutingReceipt,
+  nodeSlideRepairStepMessage,
+  nodeSlideVerifyStepMessage,
   planNodeSlideEditRouted,
+  verifyNodeSlideEditCandidate,
 } from './lib/nodeslideEditPlanner';
 import {
   NODESLIDE_EDIT_SHADOW_ADAPTER_ID,
@@ -330,6 +333,20 @@ export const proposeEdit = action({
         writeScope: args.scope,
         ...(requestedReadContext.length ? { requested: requestedReadContext } : {}),
       });
+      // B4: the read-context step is real work (scope resolution just ran);
+      // surface it in the thread with the same counts the trace records.
+      await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
+        deckId: args.deckId,
+        ownerAccessKey: args.ownerAccessKey,
+        runId,
+        status: 'planning',
+        message: `Read context: ${readContext.elements.length} element${readContext.elements.length === 1 ? '' : 's'}, ${readContext.sources.length} source${readContext.sources.length === 1 ? '' : 's'} in scope.`,
+        role: 'tool',
+        toolName: 'read_context',
+        ...(readContext.sources.length
+          ? { sourceIds: readContext.sources.map((source) => source.id) }
+          : {}),
+      });
       const traceContext = [
         `Read context: ${readContext.slides.length} slide${readContext.slides.length === 1 ? '' : 's'}, ${readContext.elements.length} element${readContext.elements.length === 1 ? '' : 's'}, ${readContext.sources.length} source${readContext.sources.length === 1 ? '' : 's'}, ${readContext.comments.length} comment${readContext.comments.length === 1 ? '' : 's'}`,
         ...readContext.sources.map(
@@ -444,20 +461,86 @@ export const proposeEdit = action({
           `Routing: ${routing.policyVersion} kept a single model (${routing.reason})`,
         );
       }
+      if (!routing?.executorModel) {
+        // Single-model turns get the same honest planner attribution the
+        // executor-split path already records.
+        const plannerRoute =
+          providerChoice.providerMode !== 'deterministic' &&
+          baseline.receipt.origin === 'free_route'
+            ? nodeSlideAgentModel(providerChoice.providerModel)
+            : null;
+        const plannerLabel =
+          plannerRoute?.label ??
+          (providerChoice.providerMode === 'deterministic'
+            ? 'deterministic planner'
+            : 'deterministic fallback');
+        await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
+          deckId: args.deckId,
+          ownerAccessKey: args.ownerAccessKey,
+          runId,
+          status: 'planning',
+          message: `Planner · ${plannerLabel}: proposed ${baseline.operations.length} operation${baseline.operations.length === 1 ? '' : 's'}.`,
+          role: 'tool',
+          toolName: 'planner',
+          ...(plannerRoute
+            ? { spanProvider: plannerRoute.provider, spanModel: plannerRoute.upstreamId }
+            : {}),
+        });
+      }
+      // B4 verify lane: shadow-apply the candidate (planner + executor lane, if
+      // routed) and run the shared geometry gates on the result; one bounded
+      // repair call may replace the operations when strictly better.
+      const verified = await verifyNodeSlideEditCandidate({
+        snapshot,
+        scopedComment,
+        readContext,
+        request,
+        operations: baseline.operations,
+        summary: baseline.summary,
+      });
+      const verification = verified.verification;
+      await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
+        deckId: args.deckId,
+        ownerAccessKey: args.ownerAccessKey,
+        runId,
+        status: 'planning',
+        message: nodeSlideVerifyStepMessage(verification),
+        role: 'tool',
+        toolName: 'verify',
+      });
+      if (verification.repair) {
+        const repairRoute = nodeSlideAgentModel(verification.repair.model);
+        await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
+          deckId: args.deckId,
+          ownerAccessKey: args.ownerAccessKey,
+          runId,
+          status: 'planning',
+          message: nodeSlideRepairStepMessage(verification.repair, repairRoute.label),
+          role: 'tool',
+          toolName: 'repair',
+          spanProvider: repairRoute.provider,
+          spanModel: repairRoute.upstreamId,
+        });
+      }
+      traceContext.push(
+        verification.issueCount === 0
+          ? 'Verify: shadow-applied the candidate — no introduced geometry issues'
+          : `Verify: shadow-applied the candidate — ${verification.issueCount} introduced geometry issue${verification.issueCount === 1 ? '' : 's'}${verification.repair ? `; repair ${verification.repair.outcome}` : ''}`,
+      );
+      const finalOperations = verified.operations;
+      const summary = verified.summary;
       await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
         deckId: args.deckId,
         ownerAccessKey: args.ownerAccessKey,
         runId,
         status: 'validating',
-        message: `Validating ${baseline.operations.length} proposed operation${baseline.operations.length === 1 ? '' : 's'} against scope, versions, and layout rules.`,
+        message: `Validating ${finalOperations.length} proposed operation${finalOperations.length === 1 ? '' : 's'} against scope, versions, and layout rules.`,
         role: 'tool',
         toolName: 'candidate_validation',
         ...(readContext.sources.length
           ? { sourceIds: readContext.sources.map((source) => source.id) }
           : {}),
       });
-      const finalOperations = baseline.operations;
-      const summary = baseline.summary;
       const providerRequested = providerChoice.providerMode !== 'deterministic';
       const requestedProviderModel =
         providerChoice.providerMode !== 'deterministic'
@@ -470,7 +553,18 @@ export const proposeEdit = action({
       const usedFallback =
         providerRequested &&
         (providerErrored || baseline.receipt.origin === 'deterministic_fallback');
-      const telemetry = baseline.receipt.providerTelemetry;
+      // Cost/token receipts stay honest across the optional repair pass.
+      const baselineTelemetry = baseline.receipt.providerTelemetry;
+      const repairTelemetry = verification.repair?.telemetry;
+      const telemetry =
+        baselineTelemetry && repairTelemetry
+          ? {
+              ...baselineTelemetry,
+              costMicroUsd: baselineTelemetry.costMicroUsd + repairTelemetry.costMicroUsd,
+              inputTokens: baselineTelemetry.inputTokens + repairTelemetry.inputTokens,
+              outputTokens: baselineTelemetry.outputTokens + repairTelemetry.outputTokens,
+            }
+          : (baselineTelemetry ?? repairTelemetry);
       const traceAttribution = telemetry
         ? {
             provider: telemetry.provider,
@@ -569,6 +663,12 @@ export const proposeEdit = action({
           ...(routing?.executorModel
             ? [
                 `Routed copy execution to ${nodeSlideAgentModel(routing.executorModel).label} under ${routing.policyVersion} (${routing.executorOutcome ?? 'granted'})`,
+              ]
+            : []),
+          `Shadow-applied the candidate to an in-memory snapshot and ran geometry gates (${verification.issueCount === 0 ? 'clean' : `${verification.issueCount} introduced issue${verification.issueCount === 1 ? '' : 's'}`})`,
+          ...(verification.repair
+            ? [
+                `Ran one bounded repair pass with ${nodeSlideAgentModel(verification.repair.model).label} (${verification.repair.outcome})`,
               ]
             : []),
           'Persisted proposal and human-readable trace atomically',

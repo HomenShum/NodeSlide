@@ -12,6 +12,7 @@ patch engine.
 | `@nodeslide/engine` | Pure `applyDeckPatch`, scope validation, affected-ID calculation | Persistence, approval UI, provider calls |
 | `@nodeslide/backend` | `NodeSlideRepository`, `NodeSlideAssetStore`, `NodeSlideTelemetryAdapter`, normalized principal and receipts | Any concrete database or auth vendor |
 | `@nodeslide/testing` | Deterministic fixtures, memory repository/assets/telemetry, repository conformance smoke | Production persistence |
+| `@nodeslide/react` | Controlled read-only deck rendering, deterministic proposal comparison, accessible review callbacks, opt-in scoped styles | Convex, auth, routing, global CSS, standalone app state |
 
 The compatibility direction is deliberate:
 

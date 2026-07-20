@@ -114,7 +114,11 @@ describe('NodeSlide AI review inspector', () => {
   });
 
   it('recommends the live Kimi K3 route with provider-native effort controls', () => {
-    const markup = renderAi();
+    // The provider/privacy/policy block now lives in a footer-triggered
+    // popover (G1). Render it open to pin its contents; the closed-by-default
+    // behaviour is pinned in the idle-surface test below and in
+    // AiInspector.advancedPopover.test.tsx (jsdom interaction).
+    const markup = renderAi({ initialAdvancedControlsOpen: true });
     expect(markup).toContain('External model: on · OpenRouter · Kimi K3');
     expect(markup).toMatch(/data-testid="ai-provider-external"[^>]*checked=""/);
     expect(markup).toContain('OpenRouter · Moonshot AI · Kimi K3 — external');
@@ -199,9 +203,13 @@ describe('NodeSlide AI review inspector', () => {
     expect(markup).toContain('Generate 3 directions');
     expect(markup).toContain('Current agent scope and policy');
     expect(markup).toContain('Whole slide');
-    expect(markup).toContain('Advanced controls');
-    expect(markup).not.toMatch(/data-testid="ai-provider-controls"[^>]*open=/);
-    expect(markup).toContain('data-testid="ai-provider-route-status"');
+    // G1: the advanced block is a footer-triggered popover now. Idle surface
+    // shows only the compact trigger; the panel stays out of the DOM.
+    expect(markup).toContain('data-testid="ai-provider-summary"');
+    expect(markup).not.toContain('data-testid="ai-provider-controls"');
+    const openMarkup = renderAi({ initialAdvancedControlsOpen: true });
+    expect(openMarkup).toContain('Advanced controls');
+    expect(openMarkup).toContain('data-testid="ai-provider-route-status"');
     expect(markup).not.toContain('ns-ai-v3-route-disclosure');
     expect(markup).not.toContain('data-testid="variation-section"');
     expect(markup).not.toContain('No proposal waiting');
@@ -305,7 +313,13 @@ describe('NodeSlide AI review inspector', () => {
       { id: '/edit', label: 'Edit the current scope' },
       { id: '/propagate', label: 'Propose propagation' },
     ];
-    const commandMenu = renderAi({ commands, initialInstruction: '/' });
+    const commandMenu = renderAi({
+      commands,
+      initialInstruction: '/',
+      // The policy selects live in the advanced-controls popover (G1); render
+      // it open so their native <option> counts stay pinned.
+      initialAdvancedControlsOpen: true,
+    });
     expect(commandMenu).toContain('/variations');
     expect(commandMenu).toContain('/edit');
     expect(commandMenu).toContain('/propagate');
@@ -414,6 +428,7 @@ interface RenderAiOptions {
   onAttachDataFile?: (file: File) => Promise<AiReadReference>;
   initialProviderMode?: 'deterministic' | 'openrouter_free' | 'nebius';
   initialProviderModel?: (typeof NODESLIDE_AGENT_MODELS)[number]['id'];
+  initialAdvancedControlsOpen?: boolean;
 }
 
 function renderAi({
@@ -428,6 +443,7 @@ function renderAi({
   onAttachDataFile,
   initialProviderMode,
   initialProviderModel,
+  initialAdvancedControlsOpen = false,
 }: RenderAiOptions = {}) {
   const snapshot = fixture();
   const slide = requiredSlide(snapshot);
@@ -449,6 +465,7 @@ function renderAi({
       commands={commands}
       initialInstruction={initialInstruction}
       initialReadContext={initialReadContext}
+      initialAdvancedControlsOpen={initialAdvancedControlsOpen}
       {...(initialProviderMode ? { initialProviderMode } : {})}
       {...(initialProviderModel ? { initialProviderModel } : {})}
       {...(commentContext ? { commentContext } : {})}

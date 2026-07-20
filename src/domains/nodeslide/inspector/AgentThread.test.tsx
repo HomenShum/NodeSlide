@@ -144,4 +144,63 @@ describe('AgentThread', () => {
     );
     expect(html).toContain('agent-thread-empty');
   });
+
+  it('renders the B4 verify-loop steps compactly: self-labeled prefixes are deduped for the 340px rail', () => {
+    const html = renderToStaticMarkup(
+      <AgentThread
+        runs={[run({ id: 'run-1' })]}
+        messages={[
+          message({
+            id: 's1',
+            runId: 'run-1',
+            role: 'tool',
+            toolName: 'read_context',
+            content: 'Read context: 5 elements, 2 sources in scope.',
+            createdAt: 1,
+          }),
+          message({
+            id: 's2',
+            runId: 'run-1',
+            role: 'tool',
+            toolName: 'planner',
+            content: 'Planner · Kimi K3: proposed 2 operations.',
+            createdAt: 2,
+          }),
+          message({
+            id: 's3',
+            runId: 'run-1',
+            role: 'tool',
+            toolName: 'verify',
+            content: 'Verify: applied candidate to a shadow snapshot — 1 issue, repairing.',
+            createdAt: 3,
+          }),
+          message({
+            id: 's4',
+            runId: 'run-1',
+            role: 'tool',
+            toolName: 'repair',
+            content: 'Repair · Kimi K3: revised 2 operations — the shadow snapshot is now clean.',
+            createdAt: 4,
+          }),
+        ]}
+        patches={[]}
+        onAcceptPatch={() => {}}
+        onRejectPatch={() => {}}
+      />,
+    );
+
+    // Labels render once (humanized), the message body drops the duplicate prefix.
+    expect(html).toContain('Read context');
+    expect(html).toContain('5 elements, 2 sources in scope.');
+    expect(html).not.toContain('Read context Read context');
+    expect(html).toContain('Verify');
+    expect(html).toContain('applied candidate to a shadow snapshot — 1 issue, repairing.');
+    expect(html).not.toContain('>Verify: applied');
+    expect(html).toContain('Repair');
+    expect(html).toContain('Kimi K3: revised 2 operations — the shadow snapshot is now clean.');
+    // Full message text stays reachable via the title attribute.
+    expect(html).toContain(
+      'title="Verify: applied candidate to a shadow snapshot — 1 issue, repairing."',
+    );
+  });
 });

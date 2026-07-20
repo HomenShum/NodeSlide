@@ -31,6 +31,7 @@ import {
   PlugZap,
   RotateCcw,
   ShieldCheck,
+  SlidersHorizontal,
   Sparkles,
   TriangleAlert,
   X,
@@ -156,6 +157,12 @@ export interface AiInspectorProps<CommandId extends string = string> {
   initialReadContext?: readonly AiReadReference[];
   initialProviderMode?: AiProviderMode;
   initialProviderModel?: NodeSlideAgentModelId;
+  /**
+   * Render the advanced-controls popover open on first paint. Only used by
+   * static-markup tests that pin the popover's contents; the product surface
+   * always starts closed so the thread and composer stay primary.
+   */
+  initialAdvancedControlsOpen?: boolean;
   previewedPatchId?: string | null;
   onPropose: (
     instruction: string,
@@ -207,6 +214,7 @@ export function AiInspector<CommandId extends string = string>({
   initialReadContext = [],
   initialProviderMode = nodeSlideProviderModeForModel(NODESLIDE_DEFAULT_AGENT_MODEL),
   initialProviderModel = NODESLIDE_DEFAULT_AGENT_MODEL,
+  initialAdvancedControlsOpen = false,
   previewedPatchId = null,
   onPropose,
   onAttachDataFile,
@@ -241,7 +249,7 @@ export function AiInspector<CommandId extends string = string>({
   // preserved; only the per-request checkbox friction is removed.
   const providerConsent = true;
   const [webResearch, setWebResearch] = useState(false);
-  const [providerControlsOpen, setProviderControlsOpen] = useState(false);
+  const [providerControlsOpen, setProviderControlsOpen] = useState(initialAdvancedControlsOpen);
   const [selectedReadContext, setSelectedReadContext] =
     useState<readonly AiReadReference[]>(initialReadContext);
   const [selectedCommand, setSelectedCommand] = useState<AiComposerCommand<CommandId> | null>(null);
@@ -1007,191 +1015,220 @@ export function AiInspector<CommandId extends string = string>({
           <span>{referenceUseLabel(referenceUse)}</span>
         </div>
 
-        <details
-          className="ns-ai-v3-controls-disclosure"
-          data-testid="ai-provider-controls"
-          open={providerControlsOpen}
-          onToggle={(event) => setProviderControlsOpen(event.currentTarget.open)}
-        >
-          <summary
-            data-testid="ai-provider-summary"
-            aria-label="Advanced provider, privacy, scope, and editing controls"
-          >
-            <span>Advanced controls</span>
-            <span
-              className={`ns-route-pill ${
-                providerMode !== 'deterministic' ? 'is-external' : 'is-private'
-              }`}
+        {providerControlsOpen ? (
+          <div className="ns-ai-advanced-layer">
+            {/* Transparent outside-click backdrop. It is a real button so the
+                dismiss affordance stays keyboard-reachable via the labelled
+                close control; tabIndex -1 keeps it out of the tab order. */}
+            <button
+              type="button"
+              className="ns-ai-advanced-backdrop"
+              aria-hidden="true"
+              tabIndex={-1}
+              onClick={() => setProviderControlsOpen(false)}
+            />
+            <dialog
+              open
+              className="ns-ai-advanced-popover"
+              aria-label="Advanced provider, privacy, scope, and editing controls"
+              data-testid="ai-provider-controls"
+              onKeyDown={(event) => {
+                if (event.key === 'Escape') {
+                  event.stopPropagation();
+                  setProviderControlsOpen(false);
+                }
+              }}
             >
-              {providerMode === 'deterministic' ? (
-                <>
-                  <ShieldCheck size={11} /> Private
-                </>
-              ) : (
-                <>
-                  <Sparkles size={11} /> {providerNameForMode(providerMode)}
-                </>
-              )}
-            </span>
-          </summary>
-          <div className="ns-ai-v3-controls-body">
-            <div className="ns-ai-v3-route-summary" data-testid="ai-provider-route-status">
-              {providerMode === 'deterministic' ? (
-                <>
-                  <ShieldCheck size={13} /> External model: off · Private deterministic
-                </>
-              ) : (
-                <>
-                  <Sparkles size={13} /> External model: on · {providerNameForMode(providerMode)} ·{' '}
-                  {selectedAgentModel.label} · {effortLabel(providerEffort)} effort
-                </>
-              )}
-            </div>
-            {providerMode !== 'deterministic' ? (
-              <p className="ns-ai-model-guidance">
-                <strong>{selectedAgentModel.bestFor}</strong> · {selectedAgentModel.description} ·{' '}
-                {selectedAgentModel.costTier} cost tier. Exact tokens and cost are recorded in
-                Trace.
-              </p>
-            ) : null}
-            <fieldset className="ns-ai-provider-controls ns-ai-v3-provider-controls">
-              <legend>Provider and privacy</legend>
-              <label className={providerMode === 'deterministic' ? 'is-active' : ''}>
-                <input
-                  type="radio"
-                  name={providerName}
-                  value="deterministic"
-                  checked={providerMode === 'deterministic'}
-                  onChange={() => {
-                    setProviderMode('deterministic');
-                  }}
-                  data-testid="ai-provider-deterministic"
-                />
-                <ShieldCheck size={15} />
-                <span>
-                  <strong>Deterministic and private</strong>
-                  <small>No instruction or context is sent to an external model.</small>
+              <header className="ns-ai-advanced-popover-head">
+                <span>Advanced controls</span>
+                <span
+                  className={`ns-route-pill ${
+                    providerMode !== 'deterministic' ? 'is-external' : 'is-private'
+                  }`}
+                >
+                  {providerMode === 'deterministic' ? (
+                    <>
+                      <ShieldCheck size={11} /> Private
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={11} /> {providerNameForMode(providerMode)}
+                    </>
+                  )}
                 </span>
-              </label>
-              <label className={providerMode !== 'deterministic' ? 'is-active' : ''}>
-                <input
-                  type="radio"
-                  name={providerName}
-                  value={nodeSlideProviderModeForModel(providerModel)}
-                  checked={providerMode !== 'deterministic'}
-                  onChange={() => {
-                    setProviderMode(nodeSlideProviderModeForModel(providerModel));
-                  }}
-                  data-testid="ai-provider-external"
-                />
-                <Sparkles size={15} />
-                <span>
-                  <strong>
-                    {providerNameForMode(nodeSlideProviderModeForModel(providerModel))} ·{' '}
-                    {selectedAgentModel.vendor} · {selectedAgentModel.label} — external
-                  </strong>
-                  <small>
-                    Sends this ask, selected read context, and scoped slide content to the selected
-                    model through{' '}
-                    {providerNameForMode(nodeSlideProviderModeForModel(providerModel))}. It does not
-                    browse or fetch URLs.
-                  </small>
-                </span>
-              </label>
-            </fieldset>
-
-            {commentContext ? (
-              <div className="ns-ai-comment-scope-chip" data-testid="ai-comment-scope-chip">
-                <MessageCircle size={14} />
-                <span>
-                  <small>Comment write scope</small>
-                  <strong>{commentContext.label}</strong>
-                </span>
-                {onClearCommentContext ? (
-                  <button
-                    type="button"
-                    onClick={onClearCommentContext}
-                    aria-label={`Remove comment scope ${commentContext.label}`}
-                  >
-                    <X size={13} />
-                  </button>
+                <button
+                  type="button"
+                  onClick={() => setProviderControlsOpen(false)}
+                  aria-label="Close advanced controls"
+                  data-testid="ai-advanced-close"
+                >
+                  <X size={13} />
+                </button>
+              </header>
+              <div className="ns-ai-v3-controls-body">
+                <div className="ns-ai-v3-route-summary" data-testid="ai-provider-route-status">
+                  {providerMode === 'deterministic' ? (
+                    <>
+                      <ShieldCheck size={13} /> External model: off · Private deterministic
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={13} /> External model: on ·{' '}
+                      {providerNameForMode(providerMode)} · {selectedAgentModel.label} ·{' '}
+                      {effortLabel(providerEffort)} effort
+                    </>
+                  )}
+                </div>
+                {providerMode !== 'deterministic' ? (
+                  <p className="ns-ai-model-guidance">
+                    <strong>{selectedAgentModel.bestFor}</strong> · {selectedAgentModel.description}{' '}
+                    · {selectedAgentModel.costTier} cost tier. Exact tokens and cost are recorded in
+                    Trace.
+                  </p>
                 ) : null}
-              </div>
-            ) : (
-              <div className="ns-scope-row" aria-label="AI write scope">
-                <span>Write</span>
-                <div className="ns-chip-group">
-                  <button
-                    type="button"
-                    className={scopeChoice === 'deck' ? 'is-active' : ''}
-                    onClick={() => setScopeChoice('deck')}
-                  >
-                    Deck
-                  </button>
-                  <button
-                    type="button"
-                    className={scopeChoice === 'slide' ? 'is-active' : ''}
-                    onClick={() => setScopeChoice('slide')}
-                  >
-                    This slide
-                  </button>
-                  <button
-                    type="button"
-                    className={scopeChoice === 'elements' ? 'is-active' : ''}
-                    disabled={selectedElements.length === 0}
-                    onClick={() => setScopeChoice('elements')}
-                  >
-                    Selection{selectedElements.length > 0 ? ` · ${selectedElements.length}` : ''}
-                  </button>
+                <fieldset className="ns-ai-provider-controls ns-ai-v3-provider-controls">
+                  <legend>Provider and privacy</legend>
+                  <label className={providerMode === 'deterministic' ? 'is-active' : ''}>
+                    <input
+                      type="radio"
+                      name={providerName}
+                      value="deterministic"
+                      checked={providerMode === 'deterministic'}
+                      onChange={() => {
+                        setProviderMode('deterministic');
+                      }}
+                      data-testid="ai-provider-deterministic"
+                    />
+                    <ShieldCheck size={15} />
+                    <span>
+                      <strong>Deterministic and private</strong>
+                      <small>No instruction or context is sent to an external model.</small>
+                    </span>
+                  </label>
+                  <label className={providerMode !== 'deterministic' ? 'is-active' : ''}>
+                    <input
+                      type="radio"
+                      name={providerName}
+                      value={nodeSlideProviderModeForModel(providerModel)}
+                      checked={providerMode !== 'deterministic'}
+                      onChange={() => {
+                        setProviderMode(nodeSlideProviderModeForModel(providerModel));
+                      }}
+                      data-testid="ai-provider-external"
+                    />
+                    <Sparkles size={15} />
+                    <span>
+                      <strong>
+                        {providerNameForMode(nodeSlideProviderModeForModel(providerModel))} ·{' '}
+                        {selectedAgentModel.vendor} · {selectedAgentModel.label} — external
+                      </strong>
+                      <small>
+                        Sends this ask, selected read context, and scoped slide content to the
+                        selected model through{' '}
+                        {providerNameForMode(nodeSlideProviderModeForModel(providerModel))}. It does
+                        not browse or fetch URLs.
+                      </small>
+                    </span>
+                  </label>
+                </fieldset>
+
+                {commentContext ? (
+                  <div className="ns-ai-comment-scope-chip" data-testid="ai-comment-scope-chip">
+                    <MessageCircle size={14} />
+                    <span>
+                      <small>Comment write scope</small>
+                      <strong>{commentContext.label}</strong>
+                    </span>
+                    {onClearCommentContext ? (
+                      <button
+                        type="button"
+                        onClick={onClearCommentContext}
+                        aria-label={`Remove comment scope ${commentContext.label}`}
+                      >
+                        <X size={13} />
+                      </button>
+                    ) : null}
+                  </div>
+                ) : (
+                  <div className="ns-scope-row" aria-label="AI write scope">
+                    <span>Write</span>
+                    <div className="ns-chip-group">
+                      <button
+                        type="button"
+                        className={scopeChoice === 'deck' ? 'is-active' : ''}
+                        onClick={() => setScopeChoice('deck')}
+                      >
+                        Deck
+                      </button>
+                      <button
+                        type="button"
+                        className={scopeChoice === 'slide' ? 'is-active' : ''}
+                        onClick={() => setScopeChoice('slide')}
+                      >
+                        This slide
+                      </button>
+                      <button
+                        type="button"
+                        className={scopeChoice === 'elements' ? 'is-active' : ''}
+                        disabled={selectedElements.length === 0}
+                        onClick={() => setScopeChoice('elements')}
+                      >
+                        Selection
+                        {selectedElements.length > 0 ? ` · ${selectedElements.length}` : ''}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                <div className="ns-ai-policy-grid">
+                  <label>
+                    <span>Operation mode</span>
+                    <select
+                      value={operationMode}
+                      onChange={(event) => setOperationMode(event.target.value as OperationMode)}
+                      aria-label="Operation mode"
+                    >
+                      <option value="unrestricted">Full edit</option>
+                      <option value="copy">Copy only</option>
+                      <option value="style">Style only</option>
+                      <option value="layout">Layout only</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span>Design behavior</span>
+                    <select
+                      value={designBehavior}
+                      onChange={(event) =>
+                        setDesignBehavior(event.target.value as AiDesignBehaviorPolicy)
+                      }
+                      data-testid="ai-design-behavior"
+                    >
+                      <option value="preserve">Preserve exactly</option>
+                      <option value="refine">Refine subtly</option>
+                      <option value="rebalance">Rebalance hierarchy</option>
+                      <option value="reinterpret">Explore a new direction</option>
+                      <option value="reimagine">Reimagine boldly</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span>Reference use</span>
+                    <select
+                      value={referenceUse}
+                      onChange={(event) =>
+                        setReferenceUse(event.target.value as AiReferenceUsePolicy)
+                      }
+                      data-testid="ai-reference-use"
+                    >
+                      <option value="context_only">Context only</option>
+                      <option value="inspiration">Use as inspiration</option>
+                      <option value="style_direction">Follow style direction</option>
+                    </select>
+                  </label>
                 </div>
               </div>
-            )}
-
-            <div className="ns-ai-policy-grid">
-              <label>
-                <span>Operation mode</span>
-                <select
-                  value={operationMode}
-                  onChange={(event) => setOperationMode(event.target.value as OperationMode)}
-                  aria-label="Operation mode"
-                >
-                  <option value="unrestricted">Full edit</option>
-                  <option value="copy">Copy only</option>
-                  <option value="style">Style only</option>
-                  <option value="layout">Layout only</option>
-                </select>
-              </label>
-              <label>
-                <span>Design behavior</span>
-                <select
-                  value={designBehavior}
-                  onChange={(event) =>
-                    setDesignBehavior(event.target.value as AiDesignBehaviorPolicy)
-                  }
-                  data-testid="ai-design-behavior"
-                >
-                  <option value="preserve">Preserve exactly</option>
-                  <option value="refine">Refine subtly</option>
-                  <option value="rebalance">Rebalance hierarchy</option>
-                  <option value="reinterpret">Explore a new direction</option>
-                  <option value="reimagine">Reimagine boldly</option>
-                </select>
-              </label>
-              <label>
-                <span>Reference use</span>
-                <select
-                  value={referenceUse}
-                  onChange={(event) => setReferenceUse(event.target.value as AiReferenceUsePolicy)}
-                  data-testid="ai-reference-use"
-                >
-                  <option value="context_only">Context only</option>
-                  <option value="inspiration">Use as inspiration</option>
-                  <option value="style_direction">Follow style direction</option>
-                </select>
-              </label>
-            </div>
+            </dialog>
           </div>
-        </details>
+        ) : null}
 
         {commentContext || selectedReadContext.length > 0 || selectedCommand ? (
           <div className="ns-composer-tokens" aria-label="Composer tokens">
@@ -1328,6 +1365,17 @@ export function AiInspector<CommandId extends string = string>({
                       </PromptInputSelectContent>
                     </PromptInputSelect>
                   ) : null}
+                  <PromptInputButton
+                    variant={providerControlsOpen ? 'default' : 'ghost'}
+                    onClick={() => setProviderControlsOpen((open) => !open)}
+                    aria-expanded={providerControlsOpen}
+                    aria-haspopup="dialog"
+                    aria-label="Advanced provider, privacy, scope, and editing controls"
+                    tooltip="Advanced controls (provider, privacy, scope, policy)"
+                    data-testid="ai-provider-summary"
+                  >
+                    <SlidersHorizontal size={14} />
+                  </PromptInputButton>
                   <PromptInputButton
                     onClick={() => setConnectionsOpen(true)}
                     tooltip="Connect BYOK model or coding agent"

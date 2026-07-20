@@ -11,7 +11,7 @@ import {
   Sparkles,
   X,
 } from 'lucide-react';
-import { type ChangeEvent, type FormEvent, useRef, useState } from 'react';
+import { type ChangeEvent, type FormEvent, useEffect, useRef, useState } from 'react';
 import {
   NODESLIDE_AGENT_MODELS,
   NODESLIDE_DEFAULT_AGENT_MODEL,
@@ -157,6 +157,22 @@ export function NodeSlideLanding({
   };
 
   const canCreate = Boolean(prompt.trim()) && !creating;
+
+  // Honest creation-wait narrative (G4): the create route does not stream
+  // progress, so the only truthful signal is wall-clock time. Tick once per
+  // second while a creation is in flight and reset when it settles.
+  const [creationElapsedSeconds, setCreationElapsedSeconds] = useState(0);
+  useEffect(() => {
+    if (!creating) {
+      setCreationElapsedSeconds(0);
+      return;
+    }
+    const startedAt = Date.now();
+    const interval = window.setInterval(() => {
+      setCreationElapsedSeconds(Math.floor((Date.now() - startedAt) / 1000));
+    }, 1000);
+    return () => window.clearInterval(interval);
+  }, [creating]);
 
   return (
     <main
@@ -334,9 +350,18 @@ export function NodeSlideLanding({
             </button>
           </div>
           {creating ? (
-            <output className="ns-landing-create-status" aria-live="polite">
-              <LoaderCircle className="ns-spin" size={13} /> Planning, composing, and validating
-              your editable deck…
+            <output
+              className="ns-landing-create-status"
+              aria-live="polite"
+              data-testid="landing-create-status"
+            >
+              <LoaderCircle className="ns-spin" size={13} />
+              <span data-testid="landing-create-stage">
+                {creationStageMessage(creationElapsedSeconds)}
+              </span>
+              <span className="ns-landing-create-elapsed" data-testid="landing-create-elapsed">
+                {formatElapsed(creationElapsedSeconds)}
+              </span>
             </output>
           ) : error ? (
             <output className="ns-landing-create-error" role="alert">
@@ -422,6 +447,26 @@ function titleFromPrompt(prompt: string): string {
   const compact = prompt.replace(/\s+/g, ' ').trim();
   const sentence = compact.split(/[.!?]/, 1)[0]?.trim() || compact;
   return sentence.length <= 72 ? sentence : `${sentence.slice(0, 69).trimEnd()}…`;
+}
+
+/**
+ * Elapsed-time staged copy for the creation wait (G4). Honest and time-based:
+ * the server does not stream progress, so stages advance on wall-clock time
+ * only — no fake percent bars.
+ */
+export function creationStageMessage(elapsedSeconds: number): string {
+  if (elapsedSeconds < 15) return 'Reading the brief and evidence…';
+  if (elapsedSeconds < 60) return 'The model is drafting the slide plan…';
+  if (elapsedSeconds < 150) {
+    return 'Still generating — long briefs take 2–4 minutes on the live route…';
+  }
+  return 'Validating and building the deck…';
+}
+
+export function formatElapsed(elapsedSeconds: number): string {
+  const minutes = Math.floor(elapsedSeconds / 60);
+  const seconds = elapsedSeconds % 60;
+  return `${minutes}:${String(seconds).padStart(2, '0')}`;
 }
 
 function providerDisplayName(mode: NodeSlideBriefProviderMode): string {

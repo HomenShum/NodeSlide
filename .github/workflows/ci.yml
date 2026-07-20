@@ -43,15 +43,14 @@ jobs:
   mcp:
     name: MCP — typecheck · test · build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: mcp
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm ci || npm install
-      - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
+      - run: npm ci
+      - name: Build external-agent dependency
+        run: npm run build --workspace @nodeslide/external-agent
+      - run: npm run typecheck --workspace nodeslide-mcp
+      - run: npm test --workspace nodeslide-mcp
+      - run: npm run build --workspace nodeslide-mcp

@@ -1,10 +1,14 @@
 {
   "name": "@nodeslide/registry",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
-  "files": ["dist", "sources", "README.md"],
+  "files": [
+    "dist",
+    "sources",
+    "README.md"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

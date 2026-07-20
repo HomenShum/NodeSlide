@@ -1,11 +1,17 @@
 {
   "name": "@nodeslide/react",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
-  "sideEffects": ["./src/styles.css"],
-  "files": ["dist", "src/styles.css", "README.md"],
+  "sideEffects": [
+    "./src/styles.css"
+  ],
+  "files": [
+    "dist",
+    "src/styles.css",
+    "README.md"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -18,9 +24,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@nodeslide/backend": "0.2.1",
-    "@nodeslide/contracts": "0.2.1",
-    "@nodeslide/react-headless": "0.2.1"
+    "@nodeslide/backend": "0.2.2",
+    "@nodeslide/contracts": "0.2.2",
+    "@nodeslide/react-headless": "0.2.2"
   },
   "peerDependencies": {
     "react": ">=18 <20"

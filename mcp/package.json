@@ -1,6 +1,6 @@
 {
   "name": "nodeslide-mcp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "type": "module",
   "description": "Governed MCP server for NodeSlide — drive deck edits through the same consent, write-scope, and propose-before-mutate gates as the UI.",
@@ -8,7 +8,9 @@
   "bin": {
     "nodeslide-mcp": "dist/index.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --format esm --platform node --dts --clean --sourcemap",
     "dev": "tsup src/index.ts --format esm --platform node --dts --sourcemap --watch",
@@ -22,8 +24,8 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@nodeslide/external-agent": "0.2.1",
-    "@nodeslide/testing": "0.2.1",
+    "@nodeslide/external-agent": "0.2.2",
+    "@nodeslide/testing": "0.2.2",
     "@types/node": "^22.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.7.0",

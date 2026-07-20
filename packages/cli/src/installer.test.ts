@@ -140,8 +140,8 @@ describe('@nodeslide/cli installer', () => {
       releaseId: 'release:0.2.0',
     });
     expect(upgraded.upgrades.at(-1)).toMatchObject({
-      fromRegistryVersion: '0.2.1',
-      toRegistryVersion: '0.2.1',
+      fromRegistryVersion: '0.2.2',
+      toRegistryVersion: '0.2.2',
     });
   });
 

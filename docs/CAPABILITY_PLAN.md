@@ -360,7 +360,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
       the real ActorProof/membership authorizer, but its release binding used
       the superseded pre-review v0.2.0 artifact set. The sanitized follow-up
       retains the authorization ordering and credential-handling hardening;
-      keep this unchecked until it is rebound to approved v0.2.1 artifacts
+      keep this unchecked until it is rebound to approved v0.2.2 artifacts
       and the full mounted journey passes on NodeRoom main.
 - [x] I5. **Governance = enforced invariants, configurable UX.** Required and
       non-bypassable server-side: mutation authority checks, version clocks
@@ -395,9 +395,12 @@ registry/                  shadcn-style source-owned compositions (studio route,
       rejected. Public v0.1.0 is verified and immutable. Public v0.2.0 was
       published concurrently from a pre-review producer and is itself
       immutable, so it is preserved but explicitly superseded; it is not the
-      acceptance target. Keep this unchecked until v0.2.1 is rebuilt twice
-      byte-for-byte from its exact green main SHA, published and verified, and
-      the public v0.1.0 → v0.2.1 workflow passes exact pins, lock integrity,
+      acceptance target. Public v0.2.1 was also immutable and asset-verified,
+      but its Windows-built manifest did not reproduce on the required Ubuntu
+      verifier, so it too is preserved and superseded. Keep this unchecked
+      until v0.2.2 is built twice byte-for-byte on Ubuntu from its exact green
+      main SHA, published and verified, and the public v0.1.0 → v0.2.2 workflow
+      passes exact pins, lock integrity,
       tamper rejection, mixed-release rejection, and source reproducibility.
 - [ ] I7. **NodeRoom consumer proof** (a required architectural test, not
       optional dogfood): from a clean NodeRoom branch — installer →
@@ -415,7 +418,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
       reconstructed-repository reload, presenter/PPTX/reopen, and Memory/Convex
       parity are deterministic and green. Its pre-review v0.2.0 package lock is
       rejected and removed by the sanitized follow-up. Rebind to approved
-      v0.2.1, rerun the mounted release proof, and record the literal browser/
+      v0.2.2, rerun the mounted release proof, and record the literal browser/
       a11y observation before checking this item.
 - [ ] I8. **Cross-repo CI**: a NodeSlide package regression must fail
       NodeRoom's consumer suite; both CIs run the same smallest journey
@@ -423,7 +426,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
       — PLUMBING COMPLETE, APPROVED PIN PENDING. Both repositories run the
       publish-shaped package proof and smallest mounted Memory/Convex/React
       journey, but the first NodeRoom immutable pin targeted superseded
-      pre-review v0.2.0. Keep this unchecked until NodeRoom pins v0.2.1's exact
+      pre-review v0.2.0. Keep this unchecked until NodeRoom pins v0.2.2's exact
       producer SHA and digests and both repositories are green against that
       approved pair.
 
@@ -463,8 +466,8 @@ discipline as I1: audit before asserting; no invented org maps.
 ## Suggested sequence — remaining literal acceptance
 
 ```text
-1.  I6          publish and prove immutable v0.1.0 → v0.2.1
-2.  I4/I7/I8    bind NodeRoom to v0.2.1, rerun full journey and bilateral CI
+1.  I6          publish and prove immutable v0.1.0 → v0.2.2
+2.  I4/I7/I8    bind NodeRoom to v0.2.2, rerun full journey and bilateral CI
 3.  H3          retain a green exact-main automated deployment receipt
 4.  B6 / E4     record the literal camera acceptances
 5.  F1/F2/F4    visually prove snapshot capture and claim-bound regions
@@ -475,7 +478,7 @@ discipline as I1: audit before asserting; no invented org maps.
 Organizing principle: **NodeSlide is an app plus a reusable governed
 presentation engine.** The app is the verified product consumer today;
 NodeRoom becomes the second verified product consumer only after the approved
-v0.2.1 binding, deterministic mounted journey, bilateral CI, and browser/a11y
+v0.2.2 binding, deterministic mounted journey, bilateral CI, and browser/a11y
 observation all pass. Shared capability belongs in the engine and is
 independently verified by the smallest honest consumer proof available.
 

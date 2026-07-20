@@ -106,10 +106,17 @@ No decomposition, no sub-agents, no self-verification against the render.
       layout issue without human input.
       — PARTIAL (honest, 2026-07-19): routed run live-proved headless on prod
       (two models, per-role thread labels, validated 2-op patch — see B2), but
-      NOT on camera, and span tokens/cost were not read off the Trace tab in
-      this probe. The creation-self-corrects-induced-issue half remains
-      unproven live (server self-critique loop shipped in a99edcd, no induced
-      fault run yet). Left unchecked until the camera run + trace readout.
+      NOT on camera. Trace-tab tokens/cost readout: PROVED in the second
+      2026-07-19 prod probe — a fresh Kimi K3 creation (6-slide investor
+      update) surfaced RUN TIME 1s · TOKENS 1,197 → 1,778 · COST $0.0052 ·
+      VALIDATION Passed · "openrouter · moonshotai/kimi-k3 · High effort" on
+      the Trace tab, plus the honest disclosure "The external attempt was
+      billed before the deterministic fallback" (DOM-text evidence; browser
+      screenshot pipeline was down during the probe). The run's self-critique
+      recorded "1 pass, clean" — the loop runs live but this run had nothing
+      to correct, so the creation-self-corrects-INDUCED-issue half remains
+      unproven (needs a fault-injection run). Left unchecked until the camera
+      run + induced-repair demonstration.
 
 ## C · Math — typeset it or stop saying LaTeX (P1)
 

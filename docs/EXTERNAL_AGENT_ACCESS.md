@@ -36,8 +36,11 @@ Offline mode needs no Convex deployment, model key, browser, or network. A
 
 The abbreviated object above is explanatory only; runtime validation requires
 the complete contract and fails closed on malformed JSON, unknown patch fields,
-invalid relationships, stale clocks, out-of-scope operations, or tampered
-digests.
+invalid relationships, product patch/candidate validation errors, stale clocks,
+out-of-scope operations, or tampered digests. The JSON boundary accepts only
+plain data objects and dense arrays; class instances, accessors, Maps, Dates,
+symbols, sparse arrays, shared/cyclic object identities, and non-finite numbers
+are rejected before hashing.
 
 Build the local tarball:
 
@@ -63,6 +66,21 @@ stderr with a non-zero exit code. `apply` never accepts a raw patch. It requires
 the exact proposal ID, verifies the base snapshot digest and all version clocks,
 re-runs canonical preflight, and writes a new snapshot. It will not overwrite
 an input or any existing output path.
+
+`--approve` is a caller-confirmation interlock, not an identity or independent
+review authorization mechanism. The proposal ID is intentionally present in
+the proposal; echoing it proves that the caller selected that exact
+digest-bound candidate. A host that needs separation of duties must authenticate
+the principal and enforce reviewer authorization outside this offline package.
+
+Offline commands accept edit proposals only. Propagation provenance depends on
+an authoritative parent-patch ledger, so propagation metadata is rejected here
+and must use the host-backed workflow. `candidateValidation` is derived proof
+state: callers may provide `candidateDigest` as an expectation, but may not
+submit their own validation receipt. Signature-profile references likewise
+require host resolution and are rejected by the offline mutation boundary.
+Profiled snapshots may be inspected, but validate/propose/apply must use the
+host so on-brand rules can be evaluated against the exact stored profile.
 
 Candidate compilation is deterministic: absent an explicit override, the
 candidate uses `base deck.updatedAt + 1`. Separate `validate` and `propose`
@@ -92,12 +110,19 @@ set NODESLIDE_LOCAL_ROOT=D:\work\my-decks
 node mcp/dist/index.js
 ```
 
-`NODESLIDE_LOCAL_ROOT` defaults to the MCP process working directory. Absolute
-and relative paths are resolved under that root; path traversal outside it is
-rejected. Existing inputs and output parents are resolved to their real paths,
-so an in-root symlink or junction cannot escape the root. Output parents must
-already exist, destinations are created atomically without clobbering an
-existing file, and inputs are capped at 16 MiB.
+`NODESLIDE_LOCAL_ROOT` defaults to the MCP process working directory and is a
+trusted local-workspace boundary. Absolute and relative paths are resolved under
+that root; path traversal outside it is rejected. Existing inputs and output
+parents are resolved to their real paths, so an in-root symlink or junction
+cannot escape the root at check time. Output parents must already exist,
+destinations are created atomically without clobbering an existing file, and
+inputs are capped at 16 MiB.
+
+Portable Node filesystem APIs cannot make the realpath check and later open
+one indivisible operation. The configured root and its parent directories must
+therefore not be concurrently renameable or writable by untrusted local
+processes while the MCP server is running. Use a dedicated, permission-restricted
+root when local users or processes are outside the same trust boundary.
 
 The four offline tools are:
 
@@ -106,7 +131,7 @@ The four offline tools are:
 | `nodeslide.inspect_file` | Read and summarize a DeckSnapshot |
 | `nodeslide.validate_file_patch` | Canonical, non-writing patch preflight |
 | `nodeslide.propose_file_patch` | Return or store a digest-bound, unapplied proposal |
-| `nodeslide.apply_file_proposal` | Revalidate approval and write a new deck file |
+| `nodeslide.apply_file_proposal` | Revalidate exact caller confirmation and write a new deck file |
 
 ## MCP host-backed mode
 

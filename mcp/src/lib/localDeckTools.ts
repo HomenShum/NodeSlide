@@ -53,7 +53,7 @@ export function registerNodeSlideLocalTools(server: McpServer): void {
     {
       title: 'Inspect a local NodeSlide DeckSpec file',
       description:
-        'Offline, read-only inspection of canonical DeckSnapshot JSON under NODESLIDE_LOCAL_ROOT.',
+        'Offline, read-only inspection of canonical DeckSnapshot JSON under a trusted NODESLIDE_LOCAL_ROOT.',
       inputSchema: { snapshotPath: z.string().min(1) },
       annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     },
@@ -66,7 +66,7 @@ export function registerNodeSlideLocalTools(server: McpServer): void {
     {
       title: 'Validate a local governed NodeSlide patch',
       description:
-        'Offline preflight through the canonical patch engine. Requires exact deck, slide, and element version clocks and never writes a file.',
+        'Offline edit preflight through the canonical patch engine and product validators. Requires exact deck, slide, and element version clocks, rejects caller-authored validation receipts and propagation metadata, and never writes a file.',
       inputSchema: { snapshotPath: z.string().min(1), patchPath: z.string().min(1) },
       annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     },
@@ -96,9 +96,9 @@ export function registerNodeSlideLocalTools(server: McpServer): void {
     server,
     'nodeslide.apply_file_proposal',
     {
-      title: 'Apply an approved local NodeSlide proposal',
+      title: 'Apply a caller-confirmed local NodeSlide proposal',
       description:
-        'Offline governed application. Requires the exact proposal ID, revalidates every digest and pinned version, and writes a new output file without overwriting an input.',
+        'Offline governed application. Requires the caller to echo the exact proposal ID, revalidates every digest and pinned version, and writes a new output file without overwriting an input. The echoed ID binds the proposal but is not independent reviewer authorization.',
       inputSchema: {
         snapshotPath: z.string().min(1),
         proposalPath: z.string().min(1),
@@ -184,12 +184,11 @@ async function readRootJson(path: string): Promise<unknown> {
   if (info.size > MAX_INPUT_BYTES) {
     throw new Error(`${absolute} exceeds the ${MAX_INPUT_BYTES}-byte input limit.`);
   }
+  const text = await readFile(absolute, 'utf8');
   try {
-    return JSON.parse(await readFile(absolute, 'utf8')) as unknown;
-  } catch (error) {
-    throw new Error(
-      `${absolute} is not valid JSON: ${error instanceof Error ? error.message : 'parse failed'}`,
-    );
+    return JSON.parse(text) as unknown;
+  } catch {
+    throw new Error(`${absolute} is not valid JSON.`);
   }
 }
 

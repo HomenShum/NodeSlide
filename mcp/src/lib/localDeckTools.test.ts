@@ -49,6 +49,20 @@ describe('NodeSlide MCP local-file containment', () => {
     await expect(readFile(join(root, 'occupied.json'), 'utf8')).resolves.toBe('sentinel');
   });
 
+  it('does not echo malformed JSON contents in tool errors', async () => {
+    const marker = 'secret-prefix-must-not-escape';
+    await writeFile(join(root, 'malformed.json'), `{"private":"${marker}", nope`);
+
+    let message = '';
+    try {
+      await inspectLocalDeckFile('malformed.json');
+    } catch (error) {
+      message = error instanceof Error ? error.message : String(error);
+    }
+    expect(message).toContain('is not valid JSON.');
+    expect(message).not.toContain(marker);
+  });
+
   it('rejects read and write escapes through a symlink or junction', async (context) => {
     await writeFile(
       join(outside, 'deck.json'),

@@ -16,8 +16,18 @@ nodeslide apply <deck.json> <proposal.json> --approve <proposal-id> [--out next-
 
 All successful command output is JSON. Failures emit a JSON error envelope to
 stderr and exit non-zero. `apply` only accepts a digest-bound proposal created by
-`propose`, requires an exact approval ID, and never overwrites an input or an
-existing output path.
+`propose`, requires the caller to echo its exact proposal ID, and never
+overwrites an input or an existing output path. The `--approve` flag binds the
+chosen proposal; it does not authenticate a reviewer or provide independent
+authorization. Hosts that need separation of duties must enforce it outside
+this offline package.
+
+The boundary runs the same pure patch and snapshot validators as the product,
+accepts plain JSON data only, rejects caller-authored validation receipts, and
+supports edit proposals only. Propagation requires the authoritative host patch
+ledger, and signature profiles require host resolution; both are intentionally
+unavailable for offline mutation. Profiled snapshots remain inspectable, while
+validate/propose/apply fail closed and require the host.
 
 Default candidate compilation is reproducible from the base deck clock;
 proposal and application timestamps are separate event metadata.

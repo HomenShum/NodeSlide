@@ -27,7 +27,9 @@ Usage:
 Safety:
   - Inputs must be canonical NodeSlide DeckSnapshot and patch-command JSON.
   - validate/propose/apply fail closed on stale deck, slide, or element clocks.
-  - apply accepts only a digest-bound proposal and exact --approve proposal ID.
+  - Offline patches are edits; propagation metadata and supplied receipts are rejected.
+  - apply accepts only a digest-bound proposal and exact --approve caller confirmation.
+  - --approve binds the selected proposal; it does not authenticate an independent reviewer.
   - Input files are never overwritten; --out must name a different path.
 
 Output:
@@ -181,10 +183,8 @@ async function readJson(path: string): Promise<unknown> {
   const text = await readFile(absolute, 'utf8');
   try {
     return JSON.parse(text) as unknown;
-  } catch (error) {
-    throw new Error(
-      `${absolute} is not valid JSON: ${error instanceof Error ? error.message : 'parse failed'}`,
-    );
+  } catch {
+    throw new Error(`${absolute} is not valid JSON.`);
   }
 }
 

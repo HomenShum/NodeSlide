@@ -8,7 +8,13 @@ import {
   type PatchScope,
   operationElementIds,
 } from '@nodeslide/contracts';
-import { applyDeckPatch, validatePatchScope } from '@nodeslide/engine';
+import {
+  applyDeckPatch,
+  isAllowedNodeSlideAddedImageUrl,
+  validateNodeSlidePatch,
+  validateNodeSlideSnapshot,
+  validatePatchScope,
+} from '@nodeslide/engine';
 
 export const NODESLIDE_FILE_PROPOSAL_VERSION = 'nodeslide.file-proposal/v1' as const;
 export const NODESLIDE_FILE_APPLICATION_VERSION = 'nodeslide.file-application/v1' as const;
@@ -17,6 +23,31 @@ const DIGEST_PATTERN = /^sha256:[0-9a-f]{64}$/;
 const MAX_JSON_DEPTH = 64;
 const MAX_JSON_NODES = 250_000;
 const MAX_OPERATIONS = 128;
+const ELEMENT_KINDS = ['text', 'shape', 'image', 'chart', 'math', 'video', 'connector'] as const;
+const EXPORT_CAPABILITIES = [
+  'web_native',
+  'pptx_editable',
+  'pptx_static_fallback',
+  'google_importable',
+  'web_only',
+] as const;
+const CHART_TYPES = [
+  'bar',
+  'bar-horizontal',
+  'line',
+  'area',
+  'pie',
+  'donut',
+  'stacked-bar',
+] as const;
+const SLIDE_ARCHETYPES = [
+  'statement',
+  'stat-dominant',
+  'chart-dominant',
+  'media-dominant',
+  'comparison',
+  'split',
+] as const;
 
 export type NodeSlideExternalErrorCode =
   | 'invalid_snapshot'
@@ -99,6 +130,7 @@ export interface NodeSlideFileApplication {
     baseSnapshotDigest: string;
     resultingSnapshotDigest: string;
     patchDigest: string;
+    /** Caller confirmation of the bound proposal ID; not an independent authorization receipt. */
     approval: 'exact_proposal_id';
     appliedAt: string;
     affectedSlideIds: string[];
@@ -135,54 +167,22 @@ export function parseDeckSnapshot(value: unknown): DeckSnapshot {
   );
 
   const deck = requireRecord(snapshot['deck'], 'snapshot.deck', 'invalid_snapshot');
-  requireExactString(
-    deck['schemaVersion'],
-    NODESLIDE_SCHEMA_VERSION,
-    'snapshot.deck.schemaVersion',
-    'invalid_snapshot',
-  );
-  requireString(deck['toolchainVersion'], 'snapshot.deck.toolchainVersion', 'invalid_snapshot');
-  const deckId = requireString(deck['id'], 'snapshot.deck.id', 'invalid_snapshot');
-  requireString(deck['projectId'], 'snapshot.deck.projectId', 'invalid_snapshot');
-  requireString(deck['title'], 'snapshot.deck.title', 'invalid_snapshot');
-  requireRecord(deck['brief'], 'snapshot.deck.brief', 'invalid_snapshot');
-  requireRecord(deck['theme'], 'snapshot.deck.theme', 'invalid_snapshot');
-  const slideOrder = requireStringArray(
-    deck['slideOrder'],
-    'snapshot.deck.slideOrder',
-    'invalid_snapshot',
-  );
-  requireUnique(slideOrder, 'snapshot.deck.slideOrder', 'invalid_snapshot');
-  requireNonNegativeInteger(deck['version'], 'snapshot.deck.version', 'invalid_snapshot');
-  requireOneOf(
-    deck['status'],
-    ['draft', 'validating', 'ready', 'published'],
-    'snapshot.deck.status',
-    'invalid_snapshot',
-  );
-  requireNonNegativeNumber(deck['createdAt'], 'snapshot.deck.createdAt', 'invalid_snapshot');
-  requireNonNegativeNumber(deck['updatedAt'], 'snapshot.deck.updatedAt', 'invalid_snapshot');
+  const { deckId, slideOrder } = assertDeck(deck, 'snapshot.deck');
 
   const slides = requireArray(snapshot['slides'], 'snapshot.slides', 'invalid_snapshot');
   const slideIds = new Set<string>();
   const elementOrderBySlide = new Map<string, string[]>();
   for (const [index, candidate] of slides.entries()) {
     const path = `snapshot.slides[${index}]`;
-    const slide = requireRecord(candidate, path, 'invalid_snapshot');
-    const slideId = requireString(slide['id'], `${path}.id`, 'invalid_snapshot');
-    if (slideIds.has(slideId)) invalid('invalid_snapshot', `${path}.id duplicates ${slideId}.`);
-    slideIds.add(slideId);
-    requireExactString(slide['deckId'], deckId, `${path}.deckId`, 'invalid_snapshot');
-    requireString(slide['title'], `${path}.title`, 'invalid_snapshot');
-    requireString(slide['background'], `${path}.background`, 'invalid_snapshot');
-    const elementOrder = requireStringArray(
-      slide['elementOrder'],
-      `${path}.elementOrder`,
+    const { slideId, elementOrder, declaredDeckId } = assertSlide(
+      candidate,
+      path,
       'invalid_snapshot',
     );
-    requireUnique(elementOrder, `${path}.elementOrder`, 'invalid_snapshot');
+    if (slideIds.has(slideId)) invalid('invalid_snapshot', `${path}.id duplicates ${slideId}.`);
+    slideIds.add(slideId);
+    requireExactString(declaredDeckId, deckId, `${path}.deckId`, 'invalid_snapshot');
     elementOrderBySlide.set(slideId, elementOrder);
-    requireNonNegativeInteger(slide['version'], `${path}.version`, 'invalid_snapshot');
   }
   if (slideOrder.length !== slideIds.size || slideOrder.some((id) => !slideIds.has(id))) {
     invalid(
@@ -196,30 +196,16 @@ export function parseDeckSnapshot(value: unknown): DeckSnapshot {
   const elementsBySlide = new Map<string, Set<string>>();
   for (const [index, candidate] of elements.entries()) {
     const path = `snapshot.elements[${index}]`;
-    const element = requireRecord(candidate, path, 'invalid_snapshot');
-    const elementId = requireString(element['id'], `${path}.id`, 'invalid_snapshot');
+    const { elementId, slideId } = assertSlideElement(candidate, path, 'invalid_snapshot');
     if (elementIds.has(elementId))
       invalid('invalid_snapshot', `${path}.id duplicates ${elementId}.`);
     elementIds.add(elementId);
-    const slideId = requireString(element['slideId'], `${path}.slideId`, 'invalid_snapshot');
     if (!slideIds.has(slideId)) {
       invalid('invalid_snapshot', `${path}.slideId references an unknown slide.`);
     }
     const onSlide = elementsBySlide.get(slideId) ?? new Set<string>();
     onSlide.add(elementId);
     elementsBySlide.set(slideId, onSlide);
-    requireString(element['name'], `${path}.name`, 'invalid_snapshot');
-    requireString(element['kind'], `${path}.kind`, 'invalid_snapshot');
-    assertBoundingBox(element['bbox'], `${path}.bbox`, 'invalid_snapshot');
-    requireRecord(element['style'], `${path}.style`, 'invalid_snapshot');
-    requireStringArray(element['sourceIds'], `${path}.sourceIds`, 'invalid_snapshot');
-    requireBoolean(element['locked'], `${path}.locked`, 'invalid_snapshot');
-    requireStringArray(
-      element['exportCapabilities'],
-      `${path}.exportCapabilities`,
-      'invalid_snapshot',
-    );
-    requireNonNegativeInteger(element['version'], `${path}.version`, 'invalid_snapshot');
   }
   for (const slideId of slideOrder) {
     const ordered = elementOrderBySlide.get(slideId) ?? [];
@@ -236,24 +222,14 @@ export function parseDeckSnapshot(value: unknown): DeckSnapshot {
   const sourceIds = new Set<string>();
   for (const [index, candidate] of sources.entries()) {
     const path = `snapshot.sources[${index}]`;
-    const source = requireRecord(candidate, path, 'invalid_snapshot');
-    const sourceId = requireString(source['id'], `${path}.id`, 'invalid_snapshot');
+    const { sourceId, declaredDeckId } = assertSourceRecord(candidate, path, 'invalid_snapshot');
     if (sourceIds.has(sourceId)) invalid('invalid_snapshot', `${path}.id duplicates ${sourceId}.`);
     sourceIds.add(sourceId);
-    requireExactString(source['deckId'], deckId, `${path}.deckId`, 'invalid_snapshot');
-    requireString(source['title'], `${path}.title`, 'invalid_snapshot');
-    requireOneOf(
-      source['sourceType'],
-      ['internal', 'url', 'document', 'spreadsheet', 'note'],
-      `${path}.sourceType`,
-      'invalid_snapshot',
-    );
-    requireNonNegativeNumber(source['retrievedAt'], `${path}.retrievedAt`, 'invalid_snapshot');
-    requireString(source['citation'], `${path}.citation`, 'invalid_snapshot');
+    requireExactString(declaredDeckId, deckId, `${path}.deckId`, 'invalid_snapshot');
   }
   for (const [index, candidate] of elements.entries()) {
     const element = candidate as Record<string, unknown>;
-    const referenced = element['sourceIds'] as string[];
+    const referenced = [...(element['sourceIds'] as string[]), ...nestedSourceIds(element)];
     if (referenced.some((id) => !sourceIds.has(id))) {
       invalid(
         'invalid_snapshot',
@@ -262,7 +238,19 @@ export function parseDeckSnapshot(value: unknown): DeckSnapshot {
     }
   }
 
-  return structuredClone(value) as DeckSnapshot;
+  const parsed = structuredClone(value) as DeckSnapshot;
+  const validation = validateNodeSlideSnapshot(parsed, parsed.deck.updatedAt);
+  const errors = validation.issues
+    .filter((issue) => issue.severity === 'error')
+    .map((issue) => issue.message);
+  if (!validation.ok || errors.length > 0) {
+    throw new NodeSlideExternalError(
+      'invalid_snapshot',
+      'The snapshot failed NodeSlide canonical validation.',
+      errors,
+    );
+  }
+  return parsed;
 }
 
 export function parsePatchCommand(value: unknown): NodeSlidePatchCommand {
@@ -316,17 +304,30 @@ export function parsePatchCommand(value: unknown): NodeSlidePatchCommand {
   assertOptionalString(patch, 'linkedCommentId');
   assertOptionalString(patch, 'traceId');
   assertOptionalOneOf(patch, 'proposalKind', ['edit', 'propagation']);
-  assertOptionalString(patch, 'parentPatchId');
-  if (patch['affectedSlideIds'] !== undefined) {
-    requireStringArray(patch['affectedSlideIds'], 'patch.affectedSlideIds', 'invalid_patch');
+  if (
+    patch['proposalKind'] === 'propagation' ||
+    patch['parentPatchId'] !== undefined ||
+    patch['affectedSlideIds'] !== undefined ||
+    patch['affectedSlideDigest'] !== undefined
+  ) {
+    invalid(
+      'invalid_patch',
+      'Offline patches accept edit proposals only; propagation requires an authoritative host ledger.',
+    );
   }
-  assertOptionalString(patch, 'affectedSlideDigest');
-  assertOptionalString(patch, 'candidateDigest');
+  assertOptionalDigest(patch, 'candidateDigest');
   if (patch['candidateValidation'] !== undefined) {
-    requireRecord(patch['candidateValidation'], 'patch.candidateValidation', 'invalid_patch');
+    invalid(
+      'invalid_patch',
+      'patch.candidateValidation is a derived receipt and is not accepted from offline callers.',
+    );
   }
-  assertOptionalString(patch, 'profileId');
-  assertOptionalString(patch, 'profileDigest');
+  if (patch['profileId'] !== undefined || patch['profileDigest'] !== undefined) {
+    invalid(
+      'invalid_patch',
+      'Offline patches cannot resolve signature profiles; profile metadata requires an authoritative host.',
+    );
+  }
   return structuredClone(value) as NodeSlidePatchCommand;
 }
 
@@ -337,6 +338,15 @@ export function validateDeckPatch(
 ): NodeSlidePatchValidation {
   const snapshot = parseDeckSnapshot(snapshotValue);
   const patch = parsePatchCommand(patchValue);
+  if (
+    snapshot.deck.activeSignatureProfileId !== undefined ||
+    snapshot.deck.activeSignatureProfileDigest !== undefined
+  ) {
+    throw new NodeSlideExternalError(
+      'governance_violation',
+      'Offline mutation cannot validate an active signature profile; use an authoritative host.',
+    );
+  }
   if (patch.deckId !== snapshot.deck.id || patch.scope.deckId !== snapshot.deck.id) {
     invalid('invalid_patch', 'Patch deckId and scope.deckId must match the snapshot deck.');
   }
@@ -347,6 +357,14 @@ export function validateDeckPatch(
     );
   }
   assertPatchClocks(snapshot, patch);
+  const patchIssues = validateNodeSlidePatch(snapshot, patch);
+  if (patchIssues.length > 0) {
+    throw new NodeSlideExternalError(
+      'governance_violation',
+      'The patch failed NodeSlide canonical validation.',
+      patchIssues,
+    );
+  }
   const scopeIssues = validatePatchScope(patch.scope, patch.operations);
   if (scopeIssues.length > 0) {
     throw new NodeSlideExternalError(
@@ -368,7 +386,17 @@ export function validateDeckPatch(
       error instanceof Error ? error.message : 'The canonical patch engine rejected the patch.',
     );
   }
-  const candidateSnapshotDigest = digestJson(result.snapshot);
+  let candidateSnapshot: DeckSnapshot;
+  try {
+    candidateSnapshot = parseDeckSnapshot(result.snapshot);
+  } catch (error) {
+    throw new NodeSlideExternalError(
+      'governance_violation',
+      'The canonical patch engine produced a candidate that failed the external schema boundary.',
+      [error instanceof Error ? error.message : 'Candidate snapshot validation failed.'],
+    );
+  }
+  const candidateSnapshotDigest = digestJson(candidateSnapshot);
   if (patch.candidateDigest && patch.candidateDigest !== candidateSnapshotDigest) {
     throw new NodeSlideExternalError(
       'governance_violation',
@@ -379,13 +407,13 @@ export function validateDeckPatch(
     valid: true,
     deckId: snapshot.deck.id,
     baseDeckVersion: snapshot.deck.version,
-    candidateDeckVersion: result.snapshot.deck.version,
+    candidateDeckVersion: candidateSnapshot.deck.version,
     baseSnapshotDigest: digestJson(snapshot),
     patchDigest: digestJson(patch),
     candidateSnapshotDigest,
     affectedSlideIds: [...result.affectedSlideIds].sort(),
     affectedElementIds: [...result.affectedElementIds].sort(),
-    candidateSnapshot: result.snapshot,
+    candidateSnapshot,
   };
 }
 
@@ -505,7 +533,7 @@ export function applyDeckProposal(
   if (!options.approvedProposalId || options.approvedProposalId !== proposal.id) {
     throw new NodeSlideExternalError(
       'approval_required',
-      `Explicit approval must equal proposal ID ${proposal.id}.`,
+      `Explicit caller confirmation must equal proposal ID ${proposal.id}.`,
     );
   }
   if (
@@ -699,25 +727,30 @@ function assertPatchOperation(value: unknown, index: number): asserts value is P
       requireString(operation['text'], `${path}.text`, 'invalid_patch', true);
       if (operation['sourceIds'] !== undefined) {
         keys.push('sourceIds');
-        requireStringArray(operation['sourceIds'], `${path}.sourceIds`, 'invalid_patch');
+        const sourceIds = requireStringArray(
+          operation['sourceIds'],
+          `${path}.sourceIds`,
+          'invalid_patch',
+        );
+        requireUnique(sourceIds, `${path}.sourceIds`, 'invalid_patch');
       }
       break;
     case 'update_style':
       keys.push('properties');
-      requireRecord(operation['properties'], `${path}.properties`, 'invalid_patch');
+      assertElementStyle(operation['properties'], `${path}.properties`, 'invalid_patch');
       break;
     case 'update_chart':
       if (operation['chart'] !== undefined) {
         keys.push('chart');
-        requireRecord(operation['chart'], `${path}.chart`, 'invalid_patch');
+        assertChartData(operation['chart'], `${path}.chart`, 'invalid_patch');
       }
       if (operation['chartType'] !== undefined) {
         keys.push('chartType');
-        requireString(operation['chartType'], `${path}.chartType`, 'invalid_patch');
+        requireOneOf(operation['chartType'], CHART_TYPES, `${path}.chartType`, 'invalid_patch');
       }
       if (operation['series'] !== undefined) {
         keys.push('series');
-        requireArray(operation['series'], `${path}.series`, 'invalid_patch');
+        assertChartSeriesArray(operation['series'], `${path}.series`, 'invalid_patch');
       }
       if (
         operation['chart'] === undefined &&
@@ -737,12 +770,17 @@ function assertPatchOperation(value: unknown, index: number): asserts value is P
       }
       if (operation['sourceIds'] !== undefined) {
         keys.push('sourceIds');
-        requireStringArray(operation['sourceIds'], `${path}.sourceIds`, 'invalid_patch');
+        const sourceIds = requireStringArray(
+          operation['sourceIds'],
+          `${path}.sourceIds`,
+          'invalid_patch',
+        );
+        requireUnique(sourceIds, `${path}.sourceIds`, 'invalid_patch');
       }
       break;
     case 'add_element':
       keys.push('element');
-      assertLooseElement(operation['element'], `${path}.element`);
+      assertSlideElement(operation['element'], `${path}.element`, 'invalid_patch');
       break;
     case 'remove_element':
       break;
@@ -768,11 +806,32 @@ function assertPatchOperation(value: unknown, index: number): asserts value is P
       break;
     case 'add_slide': {
       keys.push('slide', 'elements', 'index');
-      assertLooseSlide(operation['slide'], `${path}.slide`);
+      const slide = assertSlide(operation['slide'], `${path}.slide`, 'invalid_patch');
       const elements = requireArray(operation['elements'], `${path}.elements`, 'invalid_patch');
-      elements.forEach((element, elementIndex) =>
-        assertLooseElement(element, `${path}.elements[${elementIndex}]`),
-      );
+      const elementIds = elements.map((element, elementIndex) => {
+        const parsed = assertSlideElement(
+          element,
+          `${path}.elements[${elementIndex}]`,
+          'invalid_patch',
+        );
+        requireExactString(
+          parsed.slideId,
+          slide.slideId,
+          `${path}.elements[${elementIndex}].slideId`,
+          'invalid_patch',
+        );
+        return parsed.elementId;
+      });
+      requireUnique(elementIds, `${path}.elements`, 'invalid_patch');
+      if (
+        slide.elementOrder.length !== elementIds.length ||
+        slide.elementOrder.some((id) => !elementIds.includes(id))
+      ) {
+        invalid(
+          'invalid_patch',
+          `${path}.slide.elementOrder must contain every bundled element ID exactly once.`,
+        );
+      }
       requireNonNegativeInteger(operation['index'], `${path}.index`, 'invalid_patch');
       break;
     }
@@ -782,14 +841,41 @@ function assertPatchOperation(value: unknown, index: number): asserts value is P
       keys.push('index');
       requireNonNegativeInteger(operation['index'], `${path}.index`, 'invalid_patch');
       break;
-    case 'update_slide':
+    case 'update_slide': {
       keys.push('properties');
-      requireRecord(operation['properties'], `${path}.properties`, 'invalid_patch');
+      const properties = requireRecord(
+        operation['properties'],
+        `${path}.properties`,
+        'invalid_patch',
+      );
+      rejectUnknownKeys(
+        properties,
+        ['title', 'notes', 'background'],
+        `${path}.properties`,
+        'invalid_patch',
+      );
+      if (properties['title'] !== undefined) {
+        requireString(properties['title'], `${path}.properties.title`, 'invalid_patch');
+      }
+      if (properties['notes'] !== undefined) {
+        requireString(properties['notes'], `${path}.properties.notes`, 'invalid_patch', true);
+      }
+      if (properties['background'] !== undefined) {
+        requireString(properties['background'], `${path}.properties.background`, 'invalid_patch');
+      }
       break;
-    case 'update_deck':
+    }
+    case 'update_deck': {
       keys.push('properties');
-      requireRecord(operation['properties'], `${path}.properties`, 'invalid_patch');
+      const properties = requireRecord(
+        operation['properties'],
+        `${path}.properties`,
+        'invalid_patch',
+      );
+      rejectUnknownKeys(properties, ['title'], `${path}.properties`, 'invalid_patch');
+      requireString(properties['title'], `${path}.properties.title`, 'invalid_patch');
       break;
+    }
   }
   rejectUnknownKeys(operation, keys, path, 'invalid_patch');
 }
@@ -861,38 +947,514 @@ function assertPatchClocks(snapshot: DeckSnapshot, patch: NodeSlidePatchCommand)
   }
 }
 
-function assertLooseSlide(value: unknown, path: string): void {
-  const slide = requireRecord(value, path, 'invalid_patch');
-  requireString(slide['id'], `${path}.id`, 'invalid_patch');
-  requireString(slide['deckId'], `${path}.deckId`, 'invalid_patch');
-  requireString(slide['title'], `${path}.title`, 'invalid_patch');
-  requireString(slide['background'], `${path}.background`, 'invalid_patch');
-  const order = requireStringArray(slide['elementOrder'], `${path}.elementOrder`, 'invalid_patch');
-  requireUnique(order, `${path}.elementOrder`, 'invalid_patch');
-  requireNonNegativeInteger(slide['version'], `${path}.version`, 'invalid_patch');
+function assertDeck(value: unknown, path: string): { deckId: string; slideOrder: string[] } {
+  const deck = requireRecord(value, path, 'invalid_snapshot');
+  rejectUnknownKeys(
+    deck,
+    [
+      'schemaVersion',
+      'toolchainVersion',
+      'id',
+      'projectId',
+      'title',
+      'brief',
+      'theme',
+      'slideOrder',
+      'version',
+      'status',
+      'activeSignatureProfileId',
+      'activeSignatureProfileDigest',
+      'shareSlug',
+      'createdAt',
+      'updatedAt',
+    ],
+    path,
+    'invalid_snapshot',
+  );
+  requireExactString(
+    deck['schemaVersion'],
+    NODESLIDE_SCHEMA_VERSION,
+    `${path}.schemaVersion`,
+    'invalid_snapshot',
+  );
+  requireString(deck['toolchainVersion'], `${path}.toolchainVersion`, 'invalid_snapshot');
+  const deckId = requireString(deck['id'], `${path}.id`, 'invalid_snapshot');
+  requireString(deck['projectId'], `${path}.projectId`, 'invalid_snapshot');
+  requireString(deck['title'], `${path}.title`, 'invalid_snapshot');
+  assertDeckBrief(deck['brief'], `${path}.brief`, 'invalid_snapshot');
+  assertTheme(deck['theme'], `${path}.theme`, 'invalid_snapshot');
+  const slideOrder = requireStringArray(
+    deck['slideOrder'],
+    `${path}.slideOrder`,
+    'invalid_snapshot',
+  );
+  requireUnique(slideOrder, `${path}.slideOrder`, 'invalid_snapshot');
+  requireNonNegativeInteger(deck['version'], `${path}.version`, 'invalid_snapshot');
+  requireOneOf(
+    deck['status'],
+    ['draft', 'validating', 'ready', 'published'],
+    `${path}.status`,
+    'invalid_snapshot',
+  );
+  assertOptionalTypedString(deck, 'activeSignatureProfileId', path, 'invalid_snapshot');
+  assertOptionalTypedString(deck, 'activeSignatureProfileDigest', path, 'invalid_snapshot');
+  if (
+    (deck['activeSignatureProfileId'] === undefined) !==
+    (deck['activeSignatureProfileDigest'] === undefined)
+  ) {
+    invalid(
+      'invalid_snapshot',
+      `${path}.activeSignatureProfileId and activeSignatureProfileDigest must appear together.`,
+    );
+  }
+  assertOptionalTypedString(deck, 'shareSlug', path, 'invalid_snapshot');
+  requireNonNegativeNumber(deck['createdAt'], `${path}.createdAt`, 'invalid_snapshot');
+  requireNonNegativeNumber(deck['updatedAt'], `${path}.updatedAt`, 'invalid_snapshot');
+  return { deckId, slideOrder };
 }
 
-function assertLooseElement(value: unknown, path: string): void {
-  const element = requireRecord(value, path, 'invalid_patch');
-  requireString(element['id'], `${path}.id`, 'invalid_patch');
-  requireString(element['slideId'], `${path}.slideId`, 'invalid_patch');
-  requireString(element['name'], `${path}.name`, 'invalid_patch');
-  requireString(element['kind'], `${path}.kind`, 'invalid_patch');
-  assertBoundingBox(element['bbox'], `${path}.bbox`, 'invalid_patch');
-  requireRecord(element['style'], `${path}.style`, 'invalid_patch');
-  requireStringArray(element['sourceIds'], `${path}.sourceIds`, 'invalid_patch');
-  requireBoolean(element['locked'], `${path}.locked`, 'invalid_patch');
-  requireStringArray(element['exportCapabilities'], `${path}.exportCapabilities`, 'invalid_patch');
-  requireNonNegativeInteger(element['version'], `${path}.version`, 'invalid_patch');
+function assertDeckBrief(value: unknown, path: string, code: NodeSlideExternalErrorCode): void {
+  const brief = requireRecord(value, path, code);
+  rejectUnknownKeys(brief, ['prompt', 'audience', 'purpose', 'successCriteria'], path, code);
+  requireString(brief['prompt'], `${path}.prompt`, code);
+  requireString(brief['audience'], `${path}.audience`, code);
+  requireString(brief['purpose'], `${path}.purpose`, code);
+  requireStringArray(brief['successCriteria'], `${path}.successCriteria`, code);
+}
+
+function assertTheme(value: unknown, path: string, code: NodeSlideExternalErrorCode): void {
+  const theme = requireRecord(value, path, code);
+  rejectUnknownKeys(
+    theme,
+    ['id', 'name', 'mode', 'colors', 'typography', 'defaultRadius', 'spacingUnit'],
+    path,
+    code,
+  );
+  requireString(theme['id'], `${path}.id`, code);
+  requireString(theme['name'], `${path}.name`, code);
+  requireOneOf(theme['mode'], ['light', 'dark'], `${path}.mode`, code);
+  const colors = requireRecord(theme['colors'], `${path}.colors`, code);
+  const colorKeys = [
+    'canvas',
+    'ink',
+    'muted',
+    'accent',
+    'accentSoft',
+    'insight',
+    'insightInk',
+    'trace',
+    'border',
+  ] as const;
+  rejectUnknownKeys(colors, colorKeys, `${path}.colors`, code);
+  for (const key of colorKeys) requireString(colors[key], `${path}.colors.${key}`, code);
+  const typography = requireRecord(theme['typography'], `${path}.typography`, code);
+  const typographyKeys = ['display', 'body', 'data'] as const;
+  rejectUnknownKeys(typography, typographyKeys, `${path}.typography`, code);
+  for (const key of typographyKeys) {
+    requireString(typography[key], `${path}.typography.${key}`, code);
+  }
+  requireNonNegativeNumber(theme['defaultRadius'], `${path}.defaultRadius`, code);
+  requireNonNegativeNumber(theme['spacingUnit'], `${path}.spacingUnit`, code);
+}
+
+function assertSlide(
+  value: unknown,
+  path: string,
+  code: NodeSlideExternalErrorCode,
+): { slideId: string; declaredDeckId: string; elementOrder: string[] } {
+  const slide = requireRecord(value, path, code);
+  rejectUnknownKeys(
+    slide,
+    [
+      'id',
+      'deckId',
+      'title',
+      'section',
+      'notes',
+      'archetype',
+      'background',
+      'elementOrder',
+      'version',
+    ],
+    path,
+    code,
+  );
+  const slideId = requireString(slide['id'], `${path}.id`, code);
+  const declaredDeckId = requireString(slide['deckId'], `${path}.deckId`, code);
+  requireString(slide['title'], `${path}.title`, code);
+  assertOptionalTypedString(slide, 'section', path, code, true);
+  assertOptionalTypedString(slide, 'notes', path, code, true);
+  if (slide['archetype'] !== undefined) {
+    requireOneOf(slide['archetype'], SLIDE_ARCHETYPES, `${path}.archetype`, code);
+  }
+  requireString(slide['background'], `${path}.background`, code);
+  const elementOrder = requireStringArray(slide['elementOrder'], `${path}.elementOrder`, code);
+  requireUnique(elementOrder, `${path}.elementOrder`, code);
+  requireNonNegativeInteger(slide['version'], `${path}.version`, code);
+  return { slideId, declaredDeckId, elementOrder };
+}
+
+function assertSlideElement(
+  value: unknown,
+  path: string,
+  code: NodeSlideExternalErrorCode,
+): { elementId: string; slideId: string } {
+  const element = requireRecord(value, path, code);
+  rejectUnknownKeys(
+    element,
+    [
+      'id',
+      'slideId',
+      'name',
+      'kind',
+      'role',
+      'bbox',
+      'rotation',
+      'content',
+      'style',
+      'chart',
+      'math',
+      'video',
+      'image',
+      'imageUrl',
+      'altText',
+      'sourceIds',
+      'locked',
+      'visible',
+      'groupId',
+      'exportCapabilities',
+      'version',
+    ],
+    path,
+    code,
+  );
+  const elementId = requireString(element['id'], `${path}.id`, code);
+  const slideId = requireString(element['slideId'], `${path}.slideId`, code);
+  requireString(element['name'], `${path}.name`, code);
+  requireOneOf(element['kind'], ELEMENT_KINDS, `${path}.kind`, code);
+  assertOptionalTypedString(element, 'role', path, code, true);
+  assertBoundingBox(element['bbox'], `${path}.bbox`, code);
+  requireFiniteNumber(element['rotation'], `${path}.rotation`, code);
+  assertOptionalTypedString(element, 'content', path, code, true);
+  assertElementStyle(element['style'], `${path}.style`, code);
+  if (element['chart'] !== undefined) assertChartData(element['chart'], `${path}.chart`, code);
+  if (element['math'] !== undefined) assertMathData(element['math'], `${path}.math`, code);
+  if (element['video'] !== undefined) assertVideoData(element['video'], `${path}.video`, code);
+  if (element['image'] !== undefined) assertImageData(element['image'], `${path}.image`, code);
+  if (element['imageUrl'] !== undefined) {
+    const imageUrl = requireString(element['imageUrl'], `${path}.imageUrl`, code);
+    if (!isAllowedNodeSlideAddedImageUrl(imageUrl)) {
+      invalid(
+        code,
+        `${path}.imageUrl must be a bounded https URL or supported embedded data:image URL.`,
+      );
+    }
+  }
+  assertOptionalTypedString(element, 'altText', path, code, true);
+  const sourceIds = requireStringArray(element['sourceIds'], `${path}.sourceIds`, code);
+  requireUnique(sourceIds, `${path}.sourceIds`, code);
+  requireBoolean(element['locked'], `${path}.locked`, code);
+  if (element['visible'] !== undefined) requireBoolean(element['visible'], `${path}.visible`, code);
+  assertOptionalTypedString(element, 'groupId', path, code);
+  const exportCapabilities = requireArray(
+    element['exportCapabilities'],
+    `${path}.exportCapabilities`,
+    code,
+  ).map((candidate, index) =>
+    requireOneOf(candidate, EXPORT_CAPABILITIES, `${path}.exportCapabilities[${index}]`, code),
+  );
+  requireUnique(exportCapabilities, `${path}.exportCapabilities`, code);
+  requireNonNegativeInteger(element['version'], `${path}.version`, code);
+  return { elementId, slideId };
+}
+
+function assertElementStyle(value: unknown, path: string, code: NodeSlideExternalErrorCode): void {
+  const style = requireRecord(value, path, code);
+  const stringKeys = ['fill', 'stroke', 'color', 'fontFamily', 'shadow'] as const;
+  const numberKeys = [
+    'strokeWidth',
+    'fontSize',
+    'fontWeight',
+    'lineHeight',
+    'letterSpacing',
+    'radius',
+    'opacity',
+    'padding',
+  ] as const;
+  rejectUnknownKeys(
+    style,
+    [...stringKeys, ...numberKeys, 'textAlign', 'verticalAlign'],
+    path,
+    code,
+  );
+  for (const key of stringKeys) assertOptionalTypedString(style, key, path, code, true);
+  for (const key of numberKeys) {
+    if (style[key] !== undefined) requireFiniteNumber(style[key], `${path}.${key}`, code);
+  }
+  for (const key of ['strokeWidth', 'radius', 'padding'] as const) {
+    if (style[key] !== undefined && (style[key] as number) < 0) {
+      invalid(code, `${path}.${key} must be non-negative.`);
+    }
+  }
+  for (const key of ['fontSize', 'fontWeight', 'lineHeight'] as const) {
+    if (style[key] !== undefined && (style[key] as number) <= 0) {
+      invalid(code, `${path}.${key} must be positive.`);
+    }
+  }
+  if (
+    style['opacity'] !== undefined &&
+    ((style['opacity'] as number) < 0 || (style['opacity'] as number) > 1)
+  ) {
+    invalid(code, `${path}.opacity must be between 0 and 1.`);
+  }
+  if (style['textAlign'] !== undefined) {
+    requireOneOf(style['textAlign'], ['left', 'center', 'right'], `${path}.textAlign`, code);
+  }
+  if (style['verticalAlign'] !== undefined) {
+    requireOneOf(
+      style['verticalAlign'],
+      ['top', 'middle', 'bottom'],
+      `${path}.verticalAlign`,
+      code,
+    );
+  }
+}
+
+function assertChartData(value: unknown, path: string, code: NodeSlideExternalErrorCode): void {
+  const chart = requireRecord(value, path, code);
+  rejectUnknownKeys(chart, ['chartType', 'labels', 'series', 'unit', 'sourceId'], path, code);
+  requireOneOf(chart['chartType'], CHART_TYPES, `${path}.chartType`, code);
+  const labels = requireStringArray(chart['labels'], `${path}.labels`, code);
+  const series = assertChartSeriesArray(chart['series'], `${path}.series`, code);
+  for (const [index, item] of series.entries()) {
+    if (item.values.length !== labels.length) {
+      invalid(code, `${path}.series[${index}].values must match the label count.`);
+    }
+  }
+  assertOptionalTypedString(chart, 'unit', path, code, true);
+  assertOptionalTypedString(chart, 'sourceId', path, code);
+}
+
+function assertChartSeriesArray(
+  value: unknown,
+  path: string,
+  code: NodeSlideExternalErrorCode,
+): Array<{ values: number[] }> {
+  return requireArray(value, path, code).map((candidate, index) => {
+    const itemPath = `${path}[${index}]`;
+    const series = requireRecord(candidate, itemPath, code);
+    rejectUnknownKeys(series, ['name', 'values', 'color'], itemPath, code);
+    requireString(series['name'], `${itemPath}.name`, code);
+    const values = requireArray(series['values'], `${itemPath}.values`, code).map(
+      (item, valueIndex) => requireFiniteNumber(item, `${itemPath}.values[${valueIndex}]`, code),
+    );
+    assertOptionalTypedString(series, 'color', itemPath, code, true);
+    return { values };
+  });
+}
+
+function assertMathData(value: unknown, path: string, code: NodeSlideExternalErrorCode): void {
+  const math = requireRecord(value, path, code);
+  rejectUnknownKeys(
+    math,
+    ['expression', 'syntax', 'displayMode', 'description', 'display', 'variables', 'sourceId'],
+    path,
+    code,
+  );
+  requireString(math['expression'], `${path}.expression`, code);
+  if (math['syntax'] !== undefined) {
+    requireOneOf(math['syntax'], ['plain', 'latex'], `${path}.syntax`, code);
+  }
+  if (math['displayMode'] !== undefined) {
+    requireOneOf(math['displayMode'], ['inline', 'block'], `${path}.displayMode`, code);
+  }
+  assertOptionalTypedString(math, 'description', path, code, true);
+  assertOptionalTypedString(math, 'display', path, code, true);
+  if (math['variables'] !== undefined) {
+    requireArray(math['variables'], `${path}.variables`, code).forEach((candidate, index) => {
+      const itemPath = `${path}.variables[${index}]`;
+      const variable = requireRecord(candidate, itemPath, code);
+      rejectUnknownKeys(variable, ['label', 'value', 'unit'], itemPath, code);
+      requireString(variable['label'], `${itemPath}.label`, code);
+      requireFiniteNumber(variable['value'], `${itemPath}.value`, code);
+      assertOptionalTypedString(variable, 'unit', itemPath, code, true);
+    });
+  }
+  assertOptionalTypedString(math, 'sourceId', path, code);
+}
+
+function assertVideoData(value: unknown, path: string, code: NodeSlideExternalErrorCode): void {
+  const video = requireRecord(value, path, code);
+  rejectUnknownKeys(
+    video,
+    [
+      'url',
+      'posterUrl',
+      'title',
+      'captionsUrl',
+      'captionsLanguage',
+      'startAtSeconds',
+      'endAtSeconds',
+    ],
+    path,
+    code,
+  );
+  const url = requireString(video['url'], `${path}.url`, code);
+  if (!isSafeExternalUrl(url, 'video')) {
+    invalid(code, `${path}.url must be https or supported embedded video data.`);
+  }
+  for (const key of ['posterUrl', 'title', 'captionsUrl', 'captionsLanguage'] as const) {
+    assertOptionalTypedString(video, key, path, code, true);
+  }
+  if (
+    typeof video['posterUrl'] === 'string' &&
+    video['posterUrl'] &&
+    !isSafeExternalUrl(video['posterUrl'], 'image')
+  ) {
+    invalid(code, `${path}.posterUrl must be https or supported embedded image data.`);
+  }
+  if (
+    typeof video['captionsUrl'] === 'string' &&
+    video['captionsUrl'] &&
+    !isSafeCaptionUrl(video['captionsUrl'])
+  ) {
+    invalid(code, `${path}.captionsUrl must be https or embedded WebVTT data.`);
+  }
+  if (
+    typeof video['captionsLanguage'] === 'string' &&
+    video['captionsLanguage'].trim().length > 32
+  ) {
+    invalid(code, `${path}.captionsLanguage cannot exceed 32 characters.`);
+  }
+  for (const key of ['startAtSeconds', 'endAtSeconds'] as const) {
+    if (video[key] !== undefined) requireNonNegativeNumber(video[key], `${path}.${key}`, code);
+  }
+  if (
+    typeof video['endAtSeconds'] === 'number' &&
+    video['endAtSeconds'] <=
+      (typeof video['startAtSeconds'] === 'number' ? video['startAtSeconds'] : 0)
+  ) {
+    invalid(code, `${path}.endAtSeconds must be greater than startAtSeconds.`);
+  }
+}
+
+function isSafeExternalUrl(value: string, kind: 'image' | 'video'): boolean {
+  const normalized = value.trim().toLowerCase();
+  return normalized.startsWith('https://') || normalized.startsWith(`data:${kind}/`);
+}
+
+function isSafeCaptionUrl(value: string): boolean {
+  const normalized = value.trim().toLowerCase();
+  return normalized.startsWith('https://') || normalized.startsWith('data:text/vtt');
+}
+
+function assertImageData(value: unknown, path: string, code: NodeSlideExternalErrorCode): void {
+  const image = requireRecord(value, path, code);
+  rejectUnknownKeys(image, ['placeholder', 'credit', 'sourceId'], path, code);
+  requireBoolean(image['placeholder'], `${path}.placeholder`, code);
+  assertOptionalTypedString(image, 'credit', path, code, true);
+  assertOptionalTypedString(image, 'sourceId', path, code);
+}
+
+function assertSourceRecord(
+  value: unknown,
+  path: string,
+  code: NodeSlideExternalErrorCode,
+): { sourceId: string; declaredDeckId: string } {
+  const source = requireRecord(value, path, code);
+  rejectUnknownKeys(
+    source,
+    [
+      'id',
+      'deckId',
+      'title',
+      'url',
+      'sourceType',
+      'retrievedAt',
+      'citation',
+      'license',
+      'format',
+      'contentDigest',
+      'byteSize',
+      'rowCount',
+      'columns',
+      'provider',
+      'retention',
+      'status',
+      'lastRefreshedAt',
+    ],
+    path,
+    code,
+  );
+  const sourceId = requireString(source['id'], `${path}.id`, code);
+  const declaredDeckId = requireString(source['deckId'], `${path}.deckId`, code);
+  requireString(source['title'], `${path}.title`, code);
+  assertOptionalTypedString(source, 'url', path, code, true);
+  requireOneOf(
+    source['sourceType'],
+    ['internal', 'url', 'document', 'spreadsheet', 'note'],
+    `${path}.sourceType`,
+    code,
+  );
+  requireNonNegativeNumber(source['retrievedAt'], `${path}.retrievedAt`, code);
+  requireString(source['citation'], `${path}.citation`, code);
+  assertOptionalTypedString(source, 'license', path, code, true);
+  if (source['format'] !== undefined) {
+    requireOneOf(source['format'], ['csv', 'json', 'txt', 'web'], `${path}.format`, code);
+  }
+  assertOptionalTypedString(source, 'contentDigest', path, code);
+  for (const key of ['byteSize', 'rowCount'] as const) {
+    if (source[key] !== undefined) requireNonNegativeInteger(source[key], `${path}.${key}`, code);
+  }
+  if (source['columns'] !== undefined) {
+    requireStringArray(source['columns'], `${path}.columns`, code);
+  }
+  assertOptionalTypedString(source, 'provider', path, code, true);
+  if (source['retention'] !== undefined) {
+    requireOneOf(
+      source['retention'],
+      ['until_deleted', 'public_snapshot'],
+      `${path}.retention`,
+      code,
+    );
+  }
+  if (source['status'] !== undefined) {
+    requireOneOf(source['status'], ['ready', 'refreshing', 'failed'], `${path}.status`, code);
+  }
+  if (source['lastRefreshedAt'] !== undefined) {
+    requireNonNegativeNumber(source['lastRefreshedAt'], `${path}.lastRefreshedAt`, code);
+  }
+  return { sourceId, declaredDeckId };
+}
+
+function nestedSourceIds(element: Record<string, unknown>): string[] {
+  const ids: string[] = [];
+  for (const key of ['chart', 'math', 'image'] as const) {
+    const payload = element[key];
+    if (!payload || typeof payload !== 'object' || Array.isArray(payload)) continue;
+    const sourceId = (payload as Record<string, unknown>)['sourceId'];
+    if (typeof sourceId === 'string') ids.push(sourceId);
+  }
+  return ids;
 }
 
 function assertBoundingBox(value: unknown, path: string, code: NodeSlideExternalErrorCode): void {
   const bbox = requireRecord(value, path, code);
   rejectUnknownKeys(bbox, ['x', 'y', 'width', 'height'], path, code);
-  requireFiniteNumber(bbox['x'], `${path}.x`, code);
-  requireFiniteNumber(bbox['y'], `${path}.y`, code);
-  requireFiniteNumber(bbox['width'], `${path}.width`, code);
-  requireFiniteNumber(bbox['height'], `${path}.height`, code);
+  const x = requireFiniteNumber(bbox['x'], `${path}.x`, code);
+  const y = requireFiniteNumber(bbox['y'], `${path}.y`, code);
+  const width = requireFiniteNumber(bbox['width'], `${path}.width`, code);
+  const height = requireFiniteNumber(bbox['height'], `${path}.height`, code);
+  if (
+    x < 0 ||
+    y < 0 ||
+    width <= 0 ||
+    height <= 0 ||
+    x + width > 1 + Number.EPSILON ||
+    y + height > 1 + Number.EPSILON
+  ) {
+    invalid(code, `${path} must be positive and contained within normalized slide bounds.`);
+  }
 }
 
 function assertClockMap(value: unknown, path: string): void {
@@ -905,6 +1467,22 @@ function assertClockMap(value: unknown, path: string): void {
 
 function assertOptionalString(record: Record<string, unknown>, key: string): void {
   if (record[key] !== undefined) requireString(record[key], `patch.${key}`, 'invalid_patch');
+}
+
+function assertOptionalDigest(record: Record<string, unknown>, key: string): void {
+  if (record[key] !== undefined) requireDigest(record[key], `patch.${key}`, 'invalid_patch');
+}
+
+function assertOptionalTypedString(
+  record: Record<string, unknown>,
+  key: string,
+  path: string,
+  code: NodeSlideExternalErrorCode,
+  allowEmpty = false,
+): void {
+  if (record[key] !== undefined) {
+    requireString(record[key], `${path}.${key}`, code, allowEmpty);
+  }
 }
 
 function assertOptionalOneOf(
@@ -1036,6 +1614,7 @@ function rejectUnknownKeys(
 
 function assertSafeJson(value: unknown, path: string): void {
   let nodes = 0;
+  const seen = new WeakSet<object>();
   const visit = (candidate: unknown, candidatePath: string, depth: number): void => {
     nodes += 1;
     if (nodes > MAX_JSON_NODES)
@@ -1051,16 +1630,56 @@ function assertSafeJson(value: unknown, path: string): void {
       }
       return;
     }
+    if (candidate && typeof candidate === 'object') {
+      if (seen.has(candidate)) {
+        invalid(
+          'governance_violation',
+          `${candidatePath} repeats an object identity; JSON inputs must be trees.`,
+        );
+      }
+      seen.add(candidate);
+    }
     if (Array.isArray(candidate)) {
-      candidate.forEach((item, index) => visit(item, `${candidatePath}[${index}]`, depth + 1));
+      if (Object.getPrototypeOf(candidate) !== Array.prototype) {
+        invalid('governance_violation', `${candidatePath} must be a plain JSON array.`);
+      }
+      const keys = Reflect.ownKeys(candidate).filter((key) => key !== 'length');
+      if (
+        keys.some((key) => typeof key !== 'string') ||
+        keys.length !== candidate.length ||
+        keys.some((key, index) => key !== String(index))
+      ) {
+        invalid(
+          'governance_violation',
+          `${candidatePath} must be a dense JSON array without extra properties.`,
+        );
+      }
+      for (let index = 0; index < candidate.length; index += 1) {
+        const descriptor = Object.getOwnPropertyDescriptor(candidate, String(index));
+        if (!descriptor?.enumerable || !('value' in descriptor)) {
+          invalid('governance_violation', `${candidatePath}[${index}] must be JSON data.`);
+        }
+        visit(descriptor.value, `${candidatePath}[${index}]`, depth + 1);
+      }
       return;
     }
     if (candidate && typeof candidate === 'object') {
-      for (const [key, item] of Object.entries(candidate)) {
+      const prototype = Object.getPrototypeOf(candidate);
+      if (prototype !== Object.prototype && prototype !== null) {
+        invalid('governance_violation', `${candidatePath} must be a plain JSON object.`);
+      }
+      for (const key of Reflect.ownKeys(candidate)) {
+        if (typeof key !== 'string') {
+          invalid('governance_violation', `${candidatePath} contains a symbol property.`);
+        }
         if (key === '__proto__' || key === 'prototype' || key === 'constructor') {
           invalid('governance_violation', `${candidatePath} contains forbidden key ${key}.`);
         }
-        visit(item, `${candidatePath}.${key}`, depth + 1);
+        const descriptor = Object.getOwnPropertyDescriptor(candidate, key);
+        if (!descriptor?.enumerable || !('value' in descriptor)) {
+          invalid('governance_violation', `${candidatePath}.${key} must be JSON data.`);
+        }
+        visit(descriptor.value, `${candidatePath}.${key}`, depth + 1);
       }
       return;
     }
@@ -1080,7 +1699,10 @@ function stableStringify(value: unknown): string {
 }
 
 function sameStrings(left: readonly string[], right: readonly string[]): boolean {
-  return [...left].sort().join('\u0000') === [...right].sort().join('\u0000');
+  if (left.length !== right.length) return false;
+  const sortedLeft = [...left].sort();
+  const sortedRight = [...right].sort();
+  return sortedLeft.every((value, index) => value === sortedRight[index]);
 }
 
 function proposalIdFor(

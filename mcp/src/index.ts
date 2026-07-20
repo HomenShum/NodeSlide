@@ -46,9 +46,11 @@ Usage:
   nodeslide-mcp [--help] [--version]
 
 Modes:
-  Offline file tools are always available and are restricted to NODESLIDE_LOCAL_ROOT
-  (default: process cwd). Set NODESLIDE_CONVEX_URL to enable the existing 11
-  host-backed deck, proposal, source, research, trace, and BYOK tools.
+  Offline file tools are always available and are restricted to a trusted
+  NODESLIDE_LOCAL_ROOT (default: process cwd). Keep that root and its parents
+  outside untrusted concurrent write/rename access. Set NODESLIDE_CONVEX_URL to
+  enable the existing 11 host-backed deck, proposal, source, research, trace,
+  and BYOK tools.
 
 Transport:
   stdio (stdout is reserved for MCP protocol messages).`);

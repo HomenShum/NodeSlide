@@ -15,6 +15,8 @@
     "check": "npm run lint && npm run typecheck && npm run test && npm run build",
     "proof": "npm run test && npm run proof:external-agent",
     "proof:external-agent": "node scripts/smoke-external-agent-package.mjs",
+    "probe:model-fleet:prod": "convex run nodeslideModelProbe:runFleet --prod",
+    "diagnostics:convex-logs:prod": "node scripts/capture-convex-logs.mjs",
     "codegen": "convex codegen",
     "build": "npm run packages:build && tsc -b && vite build",
     "packages:build": "npm run build --workspace @nodeslide/contracts && npm run build --workspace @nodeslide/engine && npm run build --workspace @nodeslide/backend && npm run build --workspace @nodeslide/testing && npm run build --workspace @nodeslide/agent && npm run build --workspace @nodeslide/client-http && npm run build --workspace @nodeslide/react-headless && npm run build --workspace @nodeslide/react && npm run build --workspace @nodeslide/convex && npm run build --workspace @nodeslide/registry && npm run build --workspace @nodeslide/cli && npm run build --workspace @nodeslide/external-agent && npm run build --workspace nodeslide-mcp",

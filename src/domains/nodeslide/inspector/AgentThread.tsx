@@ -2,6 +2,7 @@ import {
   CheckCircle2,
   ChevronRight,
   CircleDashed,
+  GitBranch,
   Loader2,
   Search,
   Wrench,
@@ -86,7 +87,12 @@ export function AgentThread({
   }, [patches]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const tailKey = `${orderedRuns.length}:${messages.length}:${orderedRuns[orderedRuns.length - 1]?.status ?? ''}`;
+  const latestMessage = messages.reduce<NodeSlideAgentMessage | undefined>((latest, message) => {
+    const latestTime = latest?.updatedAt ?? latest?.createdAt ?? -1;
+    const messageTime = message.updatedAt ?? message.createdAt;
+    return messageTime >= latestTime ? message : latest;
+  }, undefined);
+  const tailKey = `${orderedRuns.length}:${messages.length}:${latestMessage?.id ?? ''}:${latestMessage?.updatedAt ?? latestMessage?.createdAt ?? ''}:${latestMessage?.content.length ?? 0}:${latestMessage?.streamState ?? ''}:${orderedRuns[orderedRuns.length - 1]?.status ?? ''}`;
   // biome-ignore lint/correctness/useExhaustiveDependencies: tailKey is the intentional trigger — re-pin the scroll to the newest turn whenever the thread tail changes.
   useEffect(() => {
     const el = scrollRef.current;
@@ -148,7 +154,8 @@ function ThreadTurn({
   onCancelRun: ((runId: string) => void) | undefined;
 }) {
   const active = ACTIVE_STATUSES.includes(run.status);
-  const steps = messages.filter((message) => message.role === 'tool');
+  const steps = messages.filter((message) => message.role === 'tool' && !message.handoff);
+  const handoffs = messages.filter((message) => message.role === 'tool' && message.handoff);
   const prose = messages.filter((message) => message.role === 'assistant');
   const citationCount = new Set(messages.flatMap((message) => message.sourceIds ?? [])).size;
   const patchReviewable = patch && ['draft', 'validating', 'ready', 'stale'].includes(patch.status);
@@ -221,13 +228,35 @@ function ThreadTurn({
           </ol>
         )}
 
+        {handoffs.length > 0 && <NestedHandoffs messages={handoffs} />}
+
         {/* Streamed prose */}
         {prose.map((message) => (
           <p
             key={message.id}
-            className="whitespace-pre-wrap break-words text-xs leading-relaxed text-foreground"
+            className={`whitespace-pre-wrap break-words text-xs leading-relaxed ${
+              message.streamState === 'interrupted'
+                ? 'text-muted-foreground line-through decoration-muted-foreground/50'
+                : 'text-foreground'
+            }`}
+            data-testid={message.streamState ? 'agent-thread-stream' : undefined}
+            data-stream-state={message.streamState}
+            aria-live={message.streamState === 'streaming' ? 'polite' : undefined}
           >
+            {message.streamState === 'streaming' ? (
+              <span className="mr-1 font-medium">Drafting ·</span>
+            ) : null}
+            {message.streamState === 'interrupted' ? (
+              <span className="mr-1 font-medium no-underline">Draft discarded ·</span>
+            ) : null}
             {message.content}
+            {message.streamState === 'streaming' ? (
+              <span
+                aria-hidden
+                className="ml-0.5 inline-block h-3 w-0.5 animate-pulse bg-current align-middle"
+                data-testid="agent-thread-stream-cursor"
+              />
+            ) : null}
           </p>
         ))}
         {active && prose.length === 0 && (
@@ -288,6 +317,86 @@ function ThreadTurn({
         )}
       </div>
     </section>
+  );
+}
+
+function NestedHandoffs({ messages }: { messages: readonly NodeSlideAgentMessage[] }) {
+  const ids = new Set(messages.flatMap((message) => (message.handoff ? [message.handoff.id] : [])));
+  const roots = messages.filter(
+    (message) => !message.handoff?.parentId || !ids.has(message.handoff.parentId),
+  );
+  const childrenByParent = new Map<string, NodeSlideAgentMessage[]>();
+  for (const message of messages) {
+    const parentId = message.handoff?.parentId;
+    if (!parentId || !ids.has(parentId)) continue;
+    const children = childrenByParent.get(parentId) ?? [];
+    children.push(message);
+    childrenByParent.set(parentId, children);
+  }
+
+  return (
+    <ol className="flex flex-col gap-1" data-testid="agent-thread-handoffs">
+      {roots.map((message) => (
+        <HandoffRow
+          key={message.id}
+          message={message}
+          nestedMessages={childrenByParent.get(message.handoff?.id ?? '') ?? []}
+        />
+      ))}
+    </ol>
+  );
+}
+
+function HandoffRow({
+  message,
+  nestedMessages,
+}: {
+  message: NodeSlideAgentMessage;
+  nestedMessages: readonly NodeSlideAgentMessage[];
+}) {
+  const handoff = message.handoff;
+  if (!handoff) return null;
+  return (
+    <li
+      className="rounded border border-border/70 bg-background/60 px-2 py-1.5 text-[11px]"
+      data-testid="agent-thread-handoff"
+      data-handoff-id={handoff.id}
+      data-handoff-parent-id={handoff.parentId}
+      data-handoff-status={handoff.status}
+    >
+      <div className="flex items-center gap-1 text-muted-foreground">
+        <GitBranch aria-hidden className="size-3 shrink-0" />
+        <strong className="font-medium text-foreground">{handoff.from}</strong>
+        <span aria-hidden>→</span>
+        <strong className="font-medium text-foreground">{handoff.to}</strong>
+        <span className="ml-auto capitalize">{handoff.status}</span>
+      </div>
+      <p className="mt-1 text-muted-foreground">{message.content}</p>
+      {nestedMessages.length > 0 ? (
+        <ol
+          className="mt-1.5 border-l border-border pl-2"
+          data-testid="agent-thread-handoff-children"
+        >
+          {nestedMessages.map((child) => (
+            <li
+              key={child.id}
+              className="py-1"
+              data-testid="agent-thread-handoff-child"
+              data-handoff-id={child.handoff?.id}
+              data-handoff-parent-id={child.handoff?.parentId}
+              data-handoff-status={child.handoff?.status}
+            >
+              <div className="flex items-center gap-1 text-muted-foreground">
+                <ChevronRight aria-hidden className="size-3 shrink-0" />
+                <strong className="font-medium text-foreground">{child.handoff?.to}</strong>
+                <span className="ml-auto capitalize">{child.handoff?.status}</span>
+              </div>
+              <p className="mt-0.5 text-muted-foreground">{child.content}</p>
+            </li>
+          ))}
+        </ol>
+      ) : null}
+    </li>
   );
 }
 

@@ -113,6 +113,8 @@ export interface InspectorPanelProps<CommandId extends string = string> {
   ) => Promise<void>;
   onDeleteAiMemory?: (memoryId: string) => Promise<void>;
   onDeleteAiDataSource?: (sourceId: string) => Promise<void>;
+  /** Evidence tab: select a citing element on its slide. */
+  onSelectEvidenceElement?: (slideId: string, elementId: string) => void;
   onCancelAiRun?: (runId: string) => void;
   onSelectAgentRun?: (runId: string) => void;
   onLoadMoreAgentTelemetry?: (runId: string, beforeSequence: number) => void | Promise<void>;
@@ -194,6 +196,7 @@ export function InspectorPanel<CommandId extends string = string>({
   onUpdateAiMemory,
   onDeleteAiMemory,
   onDeleteAiDataSource,
+  onSelectEvidenceElement,
   onCancelAiRun,
   onSelectAgentRun,
   onLoadMoreAgentTelemetry,
@@ -461,6 +464,9 @@ export function InspectorPanel<CommandId extends string = string>({
           <DataInspector
             sources={workspace.sources}
             selectedElements={selectedElements}
+            elements={workspace.elements}
+            slides={workspace.slides}
+            {...(onSelectEvidenceElement ? { onSelectElement: onSelectEvidenceElement } : {})}
             {...(onDeleteAiDataSource ? { onDeleteSource: onDeleteAiDataSource } : {})}
           />
         ) : null}

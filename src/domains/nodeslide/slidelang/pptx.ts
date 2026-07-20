@@ -6,6 +6,7 @@ import {
   type Slide,
   type SlideElement,
 } from '../../../../shared/nodeslide';
+import { getMathPptxPlan, resolveMathRasterizer } from './mathRaster';
 import { type SlideSourceReference, slideSourceReferences } from './provenance';
 import type { PptxBinary } from './types';
 import {
@@ -298,12 +299,54 @@ function addNativeChart(
   });
 }
 
-function addNativeMath(
+/** 96dpi: the same CSS-pixel scale the web renderer uses for slide geometry. */
+const PPTX_RASTER_DPI = 96;
+
+/**
+ * C2: math exports as a rendered equation when (and only when) the shared
+ * plan (getMathPptxPlan) says raster — the same predicate capabilities.ts
+ * uses, so the capability report and this compiler agree. Any rasterizer
+ * failure falls back to the editable text path with an honest object name.
+ */
+async function addNativeMath(
   pptxSlide: PptxSlide,
   snapshot: DeckSnapshot,
   element: SlideElement,
   box: PptxBox,
-): void {
+): Promise<void> {
+  const plan = getMathPptxPlan(element);
+  if (plan.kind === 'raster') {
+    const rasterizer = resolveMathRasterizer();
+    let dataUrl: string | null = null;
+    if (rasterizer) {
+      try {
+        dataUrl = await rasterizer({
+          expression: plan.expression,
+          katexHtml: plan.katexHtml,
+          widthPx: Math.max(1, Math.round(box.w * PPTX_RASTER_DPI)),
+          heightPx: Math.max(1, Math.round(box.h * PPTX_RASTER_DPI)),
+          color: element.style.color ?? snapshot.deck.theme.colors.ink,
+          fontSizePx: clamp(finite(element.style.fontSize, 24), 1, 240),
+        });
+      } catch {
+        dataUrl = null; // honest fallback below; never a broken embed
+      }
+    }
+    if (dataUrl?.startsWith('data:image/')) {
+      pptxSlide.addImage({
+        ...box,
+        data: dataUrl,
+        objectName: `${element.id} [math static fallback]`,
+        altText:
+          element.math?.description ??
+          element.altText ??
+          `${element.name}: ${plan.expression} (rendered equation, static image)`,
+        rotate: clamp(finite(element.rotation, 0), -360, 360),
+        transparency: transparency(element),
+      });
+      return;
+    }
+  }
   const expression = element.math?.display ?? element.math?.expression ?? element.content ?? '';
   addNativeText(pptxSlide, snapshot, element, box, expression, element.id);
 }
@@ -328,12 +371,12 @@ function addVideoFallback(
   );
 }
 
-function addElement(
+async function addElement(
   pptx: PptxGenJS,
   pptxSlide: PptxSlide,
   snapshot: DeckSnapshot,
   element: SlideElement,
-): void {
+): Promise<void> {
   const box = boxFor(element);
   if (element.kind === 'text') addNativeText(pptxSlide, snapshot, element, box);
   else if (element.kind === 'shape') addNativeShape(pptx, pptxSlide, snapshot, element, box);
@@ -342,7 +385,7 @@ function addElement(
   } else if (element.kind === 'chart') {
     addNativeChart(pptx, pptxSlide, snapshot, element, box);
   } else if (element.kind === 'math') {
-    addNativeMath(pptxSlide, snapshot, element, box);
+    await addNativeMath(pptxSlide, snapshot, element, box);
   } else if (element.kind === 'video') {
     addVideoFallback(pptx, pptxSlide, snapshot, element, box);
   } else {
@@ -380,7 +423,8 @@ export async function buildPptx(snapshot: DeckSnapshot): Promise<PptxBinary> {
       color: colorToPptxHex(slide.background, snapshot.deck.theme.colors.canvas),
     };
     for (const element of orderedExportElements(snapshot, slide)) {
-      addElement(pptx, pptxSlide, snapshot, element);
+      // Sequential awaits keep deterministic object order in the slide XML.
+      await addElement(pptx, pptxSlide, snapshot, element);
     }
     const notes = speakerNotesForSlide(snapshot, slide);
     if (notes) pptxSlide.addNotes(notes);

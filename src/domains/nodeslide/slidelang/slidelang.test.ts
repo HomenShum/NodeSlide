@@ -1,5 +1,5 @@
 import JSZip from 'jszip';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
   type DeckSnapshot,
   NODESLIDE_SCHEMA_VERSION,
@@ -8,6 +8,7 @@ import {
 } from '../../../../shared/nodeslide';
 import { createHostedSlideLangAdapter } from './hosted';
 import { createLocalSlideLangAdapter } from './localAdapter';
+import { type MathRasterInput, getMathPptxPlan, registerMathRasterizer } from './mathRaster';
 
 const HIDDEN_ELEMENT_ID = 'element:hidden-export-sentinel';
 const HIDDEN_ELEMENT_NAME = 'Hidden export sentinel label';
@@ -729,5 +730,158 @@ describe('SlideLang PPTX native chart types (D3)', () => {
     const xml = await chartXml('stacked-bar');
     expect(xml).toContain('<c:barChart>');
     expect(xml).toContain('<c:grouping val="stacked"/>');
+  });
+});
+
+describe('SlideLang PPTX math raster seam (C2+C4)', () => {
+  // Persona: an analyst exports an investor deck with a LaTeX energy formula
+  // to PowerPoint for a partner who reviews in Office. The equation must
+  // arrive as the *rendered* math (image, truthfully labeled static), not as
+  // raw LaTeX source — and when rendering is impossible the export must fall
+  // back to editable text with a capability report that says exactly that.
+  const adapter = createLocalSlideLangAdapter();
+  const PNG_DATA_URL =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+
+  afterEach(() => {
+    registerMathRasterizer(undefined); // reset the seam to auto-detect
+  });
+
+  function latexMathSnapshot(expression: string): {
+    snapshot: DeckSnapshot;
+    element: SlideElement;
+  } {
+    const snapshot = cleanSnapshot();
+    const slide = snapshot.slides[0];
+    if (!slide) throw new Error('Missing slide fixture.');
+    const element: SlideElement = {
+      id: 'element:latex-math',
+      slideId: slide.id,
+      name: 'Mass-energy equivalence',
+      kind: 'math',
+      role: 'formula',
+      bbox: { x: 0.1, y: 0.1, width: 0.5, height: 0.2 },
+      rotation: 0,
+      content: 'LATEX_TEXT_FALLBACK_SENTINEL',
+      style: { color: '#f7f4ec', fontFamily: 'Aptos Mono', fontSize: 28 },
+      math: {
+        expression,
+        syntax: 'latex',
+        displayMode: 'block',
+        description: 'Mass-energy equivalence',
+        display: 'LATEX_TEXT_FALLBACK_SENTINEL',
+      },
+      sourceIds: [],
+      locked: false,
+      exportCapabilities: ['web_native', 'pptx_editable', 'google_importable'],
+      version: 1,
+    };
+    snapshot.elements.push(element);
+    slide.elementOrder.push(element.id);
+    return { snapshot, element };
+  }
+
+  it('jsdom honestly cannot rasterize: default plan is text and capability stays native', async () => {
+    // No injected rasterizer: the environment probe must fail under jsdom, so
+    // the shared plan — and therefore BOTH the capability report and the
+    // compiler — choose the editable text path. No silent fake raster claims.
+    const { snapshot, element } = latexMathSnapshot('E = mc^2');
+    expect(getMathPptxPlan(element).kind).toBe('text');
+    const report = adapter.getElementCapability(element);
+    expect(report.pptx).toBe('native');
+    expect(report.effective).toContain('pptx_editable');
+
+    const binary = await adapter.buildPptx(snapshot);
+    const zip = await JSZip.loadAsync(binary);
+    const slideXml = await zip.file('ppt/slides/slide1.xml')?.async('string');
+    expect(slideXml).toContain('<a:t>LATEX_TEXT_FALLBACK_SENTINEL</a:t>');
+    // The pptx ZIP always carries an empty ppt/media/ folder entry; the
+    // honest check is that no media *file* was embedded.
+    expect(
+      Object.values(zip.files).some((file) => !file.dir && file.name.startsWith('ppt/media/')),
+    ).toBe(false);
+  });
+
+  it('embeds the rendered equation as a labeled static image and reports pptx_static_fallback', async () => {
+    const calls: MathRasterInput[] = [];
+    registerMathRasterizer(async (input) => {
+      calls.push(input);
+      return PNG_DATA_URL;
+    });
+    const { snapshot, element } = latexMathSnapshot('E = mc^2');
+
+    // C4: capability report agrees with the raster branch before export runs.
+    const report = adapter.getElementCapability(element);
+    expect(report.pptx).toBe('static_fallback');
+    expect(report.effective).toContain('pptx_static_fallback');
+    expect(report.effective).not.toContain('pptx_editable');
+    expect(report.web).toBe('native');
+    expect(report.warnings.join(' ')).toContain('rasterized image of the rendered equation');
+
+    const binary = await adapter.buildPptx(snapshot);
+    const zip = await JSZip.loadAsync(binary);
+    const slideXml = await zip.file('ppt/slides/slide1.xml')?.async('string');
+    if (!slideXml) throw new Error('Missing exported slide XML.');
+
+    // Call contract of the injectable seam.
+    expect(calls).toHaveLength(1);
+    expect(calls[0]?.expression).toBe('E = mc^2');
+    expect(calls[0]?.katexHtml).toContain('katex');
+    expect(calls[0]?.widthPx).toBeGreaterThan(0);
+    expect(calls[0]?.heightPx).toBeGreaterThan(0);
+    expect(calls[0]?.color).toBe('#f7f4ec');
+
+    // The slide holds a truthfully labeled image, not the text fallback.
+    expect(slideXml).toContain('math static fallback');
+    expect(slideXml).not.toContain('<a:t>LATEX_TEXT_FALLBACK_SENTINEL</a:t>');
+    expect(Object.keys(zip.files).some((path) => /^ppt\/media\/.+\.png$/.test(path))).toBe(true);
+  });
+
+  it('falls back to editable text when the rasterizer fails at export time', async () => {
+    registerMathRasterizer(async () => null);
+    const { snapshot } = latexMathSnapshot('E = mc^2');
+    const binary = await adapter.buildPptx(snapshot);
+    const zip = await JSZip.loadAsync(binary);
+    const slideXml = await zip.file('ppt/slides/slide1.xml')?.async('string');
+    // Never a broken or empty embed: the honest text path ships instead.
+    expect(slideXml).toContain('<a:t>LATEX_TEXT_FALLBACK_SENTINEL</a:t>');
+    expect(
+      Object.values(zip.files).some((file) => !file.dir && file.name.startsWith('ppt/media/')),
+    ).toBe(false);
+  });
+
+  it('falls back to editable text when the rasterizer throws', async () => {
+    registerMathRasterizer(async () => {
+      throw new Error('canvas taint');
+    });
+    const { snapshot } = latexMathSnapshot('E = mc^2');
+    const binary = await adapter.buildPptx(snapshot);
+    const zip = await JSZip.loadAsync(binary);
+    const slideXml = await zip.file('ppt/slides/slide1.xml')?.async('string');
+    expect(slideXml).toContain('<a:t>LATEX_TEXT_FALLBACK_SENTINEL</a:t>');
+  });
+
+  it('never calls the rasterizer for unparsable LaTeX or plain-syntax math', async () => {
+    const calls: MathRasterInput[] = [];
+    registerMathRasterizer(async (input) => {
+      calls.push(input);
+      return PNG_DATA_URL;
+    });
+
+    // Unparsable LaTeX: plan is text, capability keeps the editable claim.
+    const broken = latexMathSnapshot('\\frac{');
+    expect(getMathPptxPlan(broken.element).kind).toBe('text');
+    expect(adapter.getElementCapability(broken.element).pptx).toBe('native');
+    await adapter.buildPptx(broken.snapshot);
+
+    // Plain-syntax math stays editable native text even with a rasterizer
+    // available (guards the "without rasterizing them" corpus contract).
+    const plain = latexMathSnapshot('goals / matches');
+    if (!plain.element.math) throw new Error('Missing math fixture.');
+    plain.element.math.syntax = 'plain';
+    expect(getMathPptxPlan(plain.element).kind).toBe('text');
+    await adapter.buildPptx(plain.snapshot);
+
+    expect(calls).toHaveLength(0);
   });
 });

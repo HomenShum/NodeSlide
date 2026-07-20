@@ -17,6 +17,7 @@ import {
   type ValidationResult,
   clampNormalized,
 } from '../shared/nodeslide';
+import { normalizeWebSourceExcerpt } from '../shared/nodeslideEvidence';
 import { applyDeckPatch } from '../shared/nodeslidePatch';
 import type { SlideVariation } from '../shared/nodeslideVariation';
 import { internal } from './_generated/api';
@@ -2011,17 +2012,9 @@ export const attachWebSourcesInternal = internalMutation({
     const now = Date.now();
     const refs: Array<{ id: string; kind: 'source'; label: string }> = [];
     for (const input of args.sources.slice(0, 12)) {
-      const title = requiredText(input.title, 'web source title', 180);
-      const snippet = requiredText(input.snippet, 'web source excerpt', 1000);
-      const provider = requiredText(input.provider, 'web source provider', 80);
-      let url: string;
-      try {
-        const parsed = new URL(input.url);
-        if (!['https:', 'http:'].includes(parsed.protocol)) throw new Error('unsupported');
-        url = parsed.toString().slice(0, 900);
-      } catch {
-        continue;
-      }
+      const normalized = normalizeWebSourceExcerpt(input);
+      if (!normalized) continue;
+      const { title, snippet, provider, url } = normalized;
       const id = nodeslideStableId('source_web', args.deckId, url);
       const existing = await ctx.db
         .query('nodeslide_sources')

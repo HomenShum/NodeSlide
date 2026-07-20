@@ -3,7 +3,10 @@ import type { DeckComment, DeckSnapshot, PatchScope, SlideElement } from '../../
 import {
   type NodeSlideEditPlanningRequest,
   type NodeSlideEditProvider,
+  nodeSlideRepairStepMessage,
+  nodeSlideVerifyStepMessage,
   planNodeSlideEdit,
+  verifyNodeSlideEditCandidate,
 } from './nodeslideEditPlanner';
 import { NODESLIDE_EDIT_MODEL, NODESLIDE_EDIT_PROVIDER } from './nodeslideProvider';
 import { buildGoldenNodeSlide } from './nodeslideSeed';
@@ -662,5 +665,133 @@ describe('NodeSlide baseline edit planner extraction', () => {
     });
     if (result.ok) return;
     expect(result.message).toContain('could not safely infer');
+  });
+});
+
+describe('NodeSlide edit shadow verification + bounded repair (B4)', () => {
+  function overflowFixture() {
+    const { snapshot, target, scope } = fixture();
+    // A tiny box (192x36px on the 1600x900 raster) that fits "Before" but
+    // overflows on any long replacement copy.
+    target.bbox = { x: 0.05, y: 0.05, width: 0.12, height: 0.04 };
+    const planningInput = input(snapshot, target, scope);
+    const longText = 'lorem ipsum dolor sit amet '.repeat(60).trim();
+    const overflowingOps = [
+      {
+        op: 'replace_text' as const,
+        slideId: target.slideId,
+        elementId: target.id,
+        text: longText,
+      },
+    ];
+    const cleanOps = [
+      {
+        op: 'replace_text' as const,
+        slideId: target.slideId,
+        elementId: target.id,
+        text: 'Short.',
+      },
+    ];
+    return { snapshot, target, planningInput, overflowingOps, cleanOps, longText };
+  }
+
+  it('runs ONE repair call when the shadow apply introduces geometry issues and adopts a strictly better revision', async () => {
+    const { planningInput, overflowingOps, cleanOps } = overflowFixture();
+    const provider = vi.fn<NodeSlideEditProvider>(async () => ({
+      ok: true as const,
+      value: { summary: 'Repaired copy', operations: cleanOps },
+      telemetry: {
+        provider: 'openrouter',
+        model: 'z-ai/glm-5.2',
+        inputTokens: 20,
+        outputTokens: 10,
+        costMicroUsd: 2,
+      },
+    }));
+
+    const verified = await verifyNodeSlideEditCandidate(
+      { ...planningInput, operations: overflowingOps, summary: 'Overflowing copy' },
+      { callProvider: provider },
+    );
+
+    expect(provider).toHaveBeenCalledTimes(1);
+    const call = provider.mock.calls[0]?.[0];
+    expect(call?.systemPrompt).toContain('REPAIR PASS');
+    expect(call?.jsonSchema?.name).toBe('nodeslide_edit_patch_repair');
+    expect(verified.verification.issueCount).toBeGreaterThan(0);
+    expect(verified.verification.repair).toMatchObject({
+      outcome: 'adopted',
+      operationCount: 1,
+      residualIssueCount: 0,
+    });
+    expect(verified.operations[0]).toMatchObject({ op: 'replace_text', text: 'Short.' });
+    expect(nodeSlideVerifyStepMessage(verified.verification)).toContain('repairing');
+    const repair = verified.verification.repair;
+    if (!repair) throw new Error('Expected a repair receipt.');
+    expect(nodeSlideRepairStepMessage(repair, 'GLM 5.2')).toContain('revised 1 operation');
+  });
+
+  it('keeps the planner operations when the repair revision is not strictly better', async () => {
+    const { planningInput, overflowingOps, longText } = overflowFixture();
+    const provider = vi.fn<NodeSlideEditProvider>(async () => ({
+      ok: true as const,
+      value: { summary: 'Still overflowing', operations: overflowingOps },
+      telemetry: {
+        provider: 'openrouter',
+        model: 'z-ai/glm-5.2',
+        inputTokens: 20,
+        outputTokens: 10,
+        costMicroUsd: 2,
+      },
+    }));
+
+    const verified = await verifyNodeSlideEditCandidate(
+      { ...planningInput, operations: overflowingOps, summary: 'Overflowing copy' },
+      { callProvider: provider },
+    );
+
+    expect(verified.verification.repair?.outcome).toBe('not_better');
+    expect(verified.operations[0]).toMatchObject({ text: longText });
+    expect(verified.summary).toBe('Overflowing copy');
+  });
+
+  it('skips the repair call entirely when the shadow snapshot is clean', async () => {
+    const { planningInput, cleanOps } = overflowFixture();
+    const provider = vi.fn<NodeSlideEditProvider>(async () => {
+      throw new Error('The verify lane must not call the provider on a clean candidate.');
+    });
+
+    const verified = await verifyNodeSlideEditCandidate(
+      { ...planningInput, operations: cleanOps, summary: 'Clean copy' },
+      { callProvider: provider },
+    );
+
+    expect(provider).not.toHaveBeenCalled();
+    expect(verified.verification).toEqual({ issueCount: 0, issues: [] });
+    expect(nodeSlideVerifyStepMessage(verified.verification)).toContain('clean');
+    expect(verified.operations).toBe(cleanOps);
+  });
+
+  it('reports issues without a repair call on the deterministic route', async () => {
+    const { planningInput, overflowingOps } = overflowFixture();
+    const provider = vi.fn<NodeSlideEditProvider>(async () => {
+      throw new Error('The deterministic route has no provider lane.');
+    });
+
+    const verified = await verifyNodeSlideEditCandidate(
+      {
+        ...planningInput,
+        request: { ...planningInput.request, providerMode: 'deterministic' as const },
+        operations: overflowingOps,
+        summary: 'Overflowing copy',
+      },
+      { callProvider: provider },
+    );
+
+    expect(provider).not.toHaveBeenCalled();
+    expect(verified.verification.issueCount).toBeGreaterThan(0);
+    expect(verified.verification.repair).toBeUndefined();
+    expect(nodeSlideVerifyStepMessage(verified.verification)).toContain('noted for review');
+    expect(verified.operations).toBe(overflowingOps);
   });
 });

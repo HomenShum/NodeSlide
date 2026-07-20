@@ -86,6 +86,11 @@ import {
   validateNodeSlidePatch,
 } from './lib/nodeslidePatches';
 import { planNodeSlidePropagation } from './lib/nodeslidePropagation';
+import {
+  NODESLIDE_APPROVER_ROW_LIMIT,
+  decideNodeSlidePublishApproval,
+  selectAuthorizingApproval,
+} from './lib/nodeslidePublishApprovalPolicy';
 import { NodeSlidePreviewQuotaError, consumePreviewQuotaBuckets } from './lib/nodeslideQuota';
 import {
   buildBriefNodeSlide,
@@ -528,6 +533,43 @@ export const publishDeck = mutation({
     if (!validationAllowsPublication(snapshot, validation)) {
       throw new Error('The current deck version must pass publish validation before sharing.');
     }
+
+    // D9 governance: when the approval gate is on, only an approver sign-off
+    // bound to this exact version + validation receipt authorizes publish.
+    const approvalRows = await ctx.db
+      .query('nodeslide_publish_approvals')
+      .withIndex('by_deck_version', (queryBuilder) =>
+        queryBuilder.eq('deckId', deckId).eq('deckVersion', snapshot.deck.version),
+      )
+      .collect();
+    // A revoked approver's sign-off is void — publishing must not proceed on the
+    // authority of a capability the owner has since rescinded. Exclude them before
+    // choosing the newest authorizing sign-off (fail-closed governance).
+    // Bounded read on the critical publish path: the approver table is capped at
+    // NODESLIDE_APPROVER_ROW_LIMIT on issue, so this take() reads the whole table without
+    // risking a Convex per-query read-limit failure at pathological row counts.
+    const approverRows = await ctx.db
+      .query('nodeslide_publish_approvers')
+      .withIndex('by_deck', (queryBuilder) => queryBuilder.eq('deckId', deckId))
+      .take(NODESLIDE_APPROVER_ROW_LIMIT);
+    const revokedApproverIds = new Set(
+      approverRows.filter((row) => row.revokedAt).map((row) => row.id),
+    );
+    const newestApproval = selectAuthorizingApproval(approvalRows, revokedApproverIds);
+    const approvalDecision = decideNodeSlidePublishApproval({
+      required: deckRow.publishApprovalRequired === true,
+      deckVersion: snapshot.deck.version,
+      validationId: validation.id,
+      approval: newestApproval
+        ? {
+            deckVersion: newestApproval.deckVersion,
+            validationId: newestApproval.validationId,
+            approverId: newestApproval.approverId,
+            approvedAt: newestApproval.approvedAt,
+          }
+        : null,
+    });
+    if (!approvalDecision.allowed) throw new Error(approvalDecision.message);
 
     const now = Date.now();
     const previous = await findLatestPublicationForDeck(ctx, deckId);
@@ -1701,6 +1743,9 @@ export const advanceAgentRunInternal = internalMutation({
     memoryIds: v.optional(v.array(v.string())),
     memoryDigests: v.optional(v.array(v.string())),
     activity: v.optional(v.literal('memory_retrieval')),
+    /** B2 routing attribution: per-model span rows (planner/executor) may override the run model. */
+    spanProvider: v.optional(v.string()),
+    spanModel: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
@@ -1718,6 +1763,10 @@ export const advanceAgentRunInternal = internalMutation({
     const phase = agentOperation(row.status, args.activity);
     const phaseSpanId = agentSpanId(traceId, phase.operationName, sequence);
     const phaseStatus = args.status === 'failed' ? 'error' : 'ok';
+    const spanProvider = args.spanProvider
+      ? requiredText(args.spanProvider, 'span provider', 80)
+      : row.provider;
+    const spanModel = args.spanModel ? requiredText(args.spanModel, 'span model', 180) : row.model;
     await ctx.db.insert('nodeslide_agent_spans', {
       id: nodeslideStableId('agent_span', args.runId, phaseSpanId),
       deckId: args.deckId,
@@ -1732,14 +1781,18 @@ export const advanceAgentRunInternal = internalMutation({
       startTime: row.updatedAt,
       endTime: now,
       durationMs: Math.max(0, now - row.updatedAt),
-      provider: row.provider,
-      model: row.model,
-      ...(phase.toolName ? { toolName: phase.toolName } : {}),
+      provider: spanProvider,
+      model: spanModel,
+      ...(phase.toolName
+        ? { toolName: phase.toolName }
+        : args.toolName
+          ? { toolName: requiredText(args.toolName, 'tool name', 120) }
+          : {}),
       ...(args.sourceIds ? { sourceIds: args.sourceIds.slice(0, 32) } : {}),
       attributes: [
         { key: 'gen_ai.operation.name', value: phase.operationName },
-        { key: 'gen_ai.provider.name', value: row.provider },
-        { key: 'gen_ai.request.model', value: row.model },
+        { key: 'gen_ai.provider.name', value: spanProvider },
+        { key: 'gen_ai.request.model', value: spanModel },
         { key: 'nodeslide.run.status.from', value: row.status },
         { key: 'nodeslide.run.status.to', value: args.status },
         { key: 'nodeslide.checkpoint', value: args.status },

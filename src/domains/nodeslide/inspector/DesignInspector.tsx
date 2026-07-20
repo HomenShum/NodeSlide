@@ -13,12 +13,20 @@ import {
   Move,
   Palette,
   Plus,
+  Search,
   Square,
   Type,
   X,
 } from 'lucide-react';
 import { useId, useRef, useState } from 'react';
-import type { PatchOperation, Slide, SlideElement, ThemeSpec } from '../../../../shared/nodeslide';
+import {
+  type LicensedImageResult,
+  NODESLIDE_IMAGE_SEARCH_CONSENT,
+  type PatchOperation,
+  type Slide,
+  type SlideElement,
+  type ThemeSpec,
+} from '../../../../shared/nodeslide';
 import type { TasteProfile } from '../../../../shared/nodeslidePreference';
 import type { SignatureProfile } from '../../../../shared/nodeslideSignature';
 import { NODESLIDE_TASTE_PACKS, type NodeSlideTastePackId } from '../signature/packs/index';
@@ -44,7 +52,13 @@ interface DesignInspectorProps {
   onOpenPreferenceEvidence: ((eventId: string) => void) | undefined;
   onClearTastePack: () => void;
   onApplyPatch: (operations: PatchOperation[], summary: string) => void;
+  onSearchImages?: DesignInspectorSearchImagesHandler;
 }
+
+export type DesignInspectorSearchImagesHandler = (
+  query: string,
+  consent: typeof NODESLIDE_IMAGE_SEARCH_CONSENT,
+) => Promise<{ results: LicensedImageResult[] }>;
 
 export type DesignInspectorSectionId = 'content' | 'data' | 'appearance' | 'advanced';
 
@@ -98,6 +112,7 @@ export function DesignInspector({
   onOpenPreferenceEvidence,
   onClearTastePack,
   onApplyPatch,
+  onSearchImages,
 }: DesignInspectorProps) {
   const [openSections, setOpenSections] = useState(initialDesignInspectorSections);
   const toggleSection = (section: DesignInspectorSectionId) => {
@@ -354,6 +369,7 @@ export function DesignInspector({
             element={primary}
             slideElements={slideElements}
             onApplyPatch={onApplyPatch}
+            onSearchImages={onSearchImages}
           />
         ) : null}
       </CollapsibleInspectorSection>
@@ -864,17 +880,109 @@ function ChartDataEditor({
   );
 }
 
+export function licensedImageCredit(result: LicensedImageResult): string {
+  return `${result.creator} · ${result.license} via Openverse`;
+}
+
+function buildImageReplacementOperations({
+  element,
+  slideElements,
+  imageUrl,
+  altText,
+  credit,
+}: {
+  element: SlideElement;
+  slideElements: readonly SlideElement[];
+  imageUrl: string;
+  altText: string;
+  credit: string;
+}): PatchOperation[] {
+  const operations: PatchOperation[] = [
+    {
+      op: 'update_image',
+      slideId: element.slideId,
+      elementId: element.id,
+      imageUrl,
+      altText,
+      ...(credit ? { credit } : {}),
+    },
+  ];
+  const creditElement = slideElements.find(
+    (candidate) =>
+      candidate.kind === 'text' &&
+      !candidate.locked &&
+      (candidate.name.toLowerCase().includes('image credit') || candidate.role === 'caption'),
+  );
+  if (credit && creditElement && creditElement.content !== credit) {
+    operations.push({
+      op: 'replace_text',
+      slideId: creditElement.slideId,
+      elementId: creditElement.id,
+      text: credit,
+    });
+  }
+  return operations;
+}
+
 function ImageAssetEditor({
   element,
   slideElements,
   onApplyPatch,
+  onSearchImages,
 }: {
   element: SlideElement;
   slideElements: readonly SlideElement[];
   onApplyPatch: DesignInspectorProps['onApplyPatch'];
+  onSearchImages: DesignInspectorProps['onSearchImages'];
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchBusy, setSearchBusy] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [searchResults, setSearchResults] = useState<readonly LicensedImageResult[] | null>(null);
+
+  const runLicensedSearch = () => {
+    const query = searchQuery.trim();
+    if (!onSearchImages || !query || searchBusy) return;
+    setSearchBusy(true);
+    setSearchError(null);
+    // Clicking Search IS the consent act: the exact receipt travels with the query.
+    onSearchImages(query, NODESLIDE_IMAGE_SEARCH_CONSENT)
+      .then((outcome) => setSearchResults(outcome.results.slice(0, 8)))
+      .catch((cause) => {
+        setSearchResults(null);
+        setSearchError(
+          cause instanceof Error ? cause.message : 'The licensed image search failed.',
+        );
+      })
+      .finally(() => setSearchBusy(false));
+  };
+
+  const applyLicensedImage = async (result: LicensedImageResult) => {
+    const altText = result.title;
+    const credit = licensedImageCredit(result);
+    setBusy(true);
+    setError(null);
+    let imageUrl = result.url;
+    try {
+      // Prefer an embedded compressed copy so the deck stays self-contained.
+      const response = await fetch(result.url);
+      if (!response.ok) throw new Error(`Image fetch failed with status ${response.status}.`);
+      imageUrl = await imageBlobToEmbeddedWebp(await response.blob());
+    } catch {
+      // CORS or conversion failure: keep the remote Openverse URL. The
+      // claim-truthful capability sync marks remote images honestly on export.
+    }
+    try {
+      onApplyPatch(
+        buildImageReplacementOperations({ element, slideElements, imageUrl, altText, credit }),
+        `Inserted licensed image "${result.title}" from Openverse`,
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <InspectorGroup icon={<ImageUp size={14} />} title="Image asset">
@@ -907,34 +1015,18 @@ function ImageAssetEditor({
               const credit = String(formData.get('credit') ?? '').trim();
               setError(null);
               setBusy(true);
-              void imageFileToEmbeddedWebp(file)
+              void imageBlobToEmbeddedWebp(file)
                 .then((imageUrl) => {
-                  const operations: PatchOperation[] = [
-                    {
-                      op: 'update_image',
-                      slideId: element.slideId,
-                      elementId: element.id,
+                  onApplyPatch(
+                    buildImageReplacementOperations({
+                      element,
+                      slideElements,
                       imageUrl,
                       altText,
-                      ...(credit ? { credit } : {}),
-                    },
-                  ];
-                  const creditElement = slideElements.find(
-                    (candidate) =>
-                      candidate.kind === 'text' &&
-                      !candidate.locked &&
-                      (candidate.name.toLowerCase().includes('image credit') ||
-                        candidate.role === 'caption'),
+                      credit,
+                    }),
+                    `Replaced image asset for ${element.name}`,
                   );
-                  if (credit && creditElement && creditElement.content !== credit) {
-                    operations.push({
-                      op: 'replace_text',
-                      slideId: creditElement.slideId,
-                      elementId: creditElement.id,
-                      text: credit,
-                    });
-                  }
-                  onApplyPatch(operations, `Replaced image asset for ${element.name}`);
                 })
                 .catch((cause) =>
                   setError(cause instanceof Error ? cause.message : 'The image could not be read.'),
@@ -947,11 +1039,73 @@ function ImageAssetEditor({
         <small>PNG, JPEG, WebP, or GIF. NodeSlide embeds a compressed copy in the deck.</small>
         {error ? <output role="alert">{error}</output> : null}
       </form>
+      {onSearchImages ? (
+        <div className="ns-primitive-editor" data-testid="licensed-image-search">
+          <label>
+            <span>Search licensed images</span>
+            <input
+              type="search"
+              value={searchQuery}
+              maxLength={200}
+              placeholder="e.g. wind turbines at dusk"
+              data-testid="licensed-image-query"
+              disabled={searchBusy}
+              onChange={(event) => setSearchQuery(event.currentTarget.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.preventDefault();
+                  runLicensedSearch();
+                }
+              }}
+            />
+          </label>
+          <small>
+            Clicking Search sends this query to Openverse (api.openverse.org) and is your consent
+            for that single request. Results are commercial-use licensed.
+          </small>
+          <button
+            type="button"
+            className="ns-button ns-button--quiet"
+            data-testid="licensed-image-search-button"
+            disabled={searchBusy || !searchQuery.trim()}
+            onClick={runLicensedSearch}
+          >
+            <Search size={13} aria-hidden="true" /> {searchBusy ? 'Searching…' : 'Search Openverse'}
+          </button>
+          {searchError ? <output role="alert">{searchError}</output> : null}
+          {searchResults && searchResults.length === 0 ? (
+            <small>No commercially licensed images matched that query.</small>
+          ) : null}
+          {searchResults && searchResults.length > 0 ? (
+            <ul className="ns-licensed-image-grid" data-testid="licensed-image-results">
+              {searchResults.map((result) => (
+                <li key={result.id}>
+                  <button
+                    type="button"
+                    data-testid={`licensed-image-${result.id}`}
+                    disabled={busy}
+                    title={`${result.title} — ${licensedImageCredit(result)}`}
+                    onClick={() => void applyLicensedImage(result)}
+                  >
+                    <img
+                      src={result.thumbnailUrl || result.url}
+                      alt={result.title}
+                      loading="lazy"
+                    />
+                    <span>{result.title}</span>
+                    <small>{licensedImageCredit(result)}</small>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ) : null}
     </InspectorGroup>
   );
 }
 
-async function imageFileToEmbeddedWebp(file: File): Promise<string> {
+async function imageBlobToEmbeddedWebp(file: Blob): Promise<string> {
   if (file.size > 8_000_000) throw new Error('Choose an image smaller than 8 MB.');
   const bitmap = await createImageBitmap(file);
   try {

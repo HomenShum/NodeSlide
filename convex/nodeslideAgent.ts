@@ -35,7 +35,8 @@ import {
   NODESLIDE_BASELINE_EDIT_ADAPTER_VERSION,
   type NodeSlideEditPlannerReceipt,
   type NodeSlideEditPlanningRequest,
-  planNodeSlideEdit,
+  type NodeSlideEditRoutingReceipt,
+  planNodeSlideEditRouted,
 } from './lib/nodeslideEditPlanner';
 import {
   NODESLIDE_EDIT_SHADOW_ADAPTER_ID,
@@ -365,14 +366,14 @@ export const proposeEdit = action({
       // But a THROWN provider failure (external GLM timeout, network, or abort after retries)
       // would otherwise escape here as a raw Convex "Server Error Called by client". Converge every
       // failure mode on the same graceful deterministic fallback, keeping attribution honest.
-      let baseline: Awaited<ReturnType<typeof planNodeSlideEdit>>;
+      let baseline: Awaited<ReturnType<typeof planNodeSlideEditRouted>>;
       let providerErrored = false;
       try {
-        baseline = await planNodeSlideEdit({ snapshot, scopedComment, readContext, request });
+        baseline = await planNodeSlideEditRouted({ snapshot, scopedComment, readContext, request });
       } catch {
         providerErrored = true;
         try {
-          baseline = await planNodeSlideEdit({
+          baseline = await planNodeSlideEditRouted({
             snapshot,
             scopedComment,
             readContext,
@@ -395,6 +396,53 @@ export const proposeEdit = action({
       });
       if (runBeforeValidation?.status === 'cancelled') {
         throw publicAgentError('invalid_request', 'The agent run was cancelled before validation.');
+      }
+      // B2 routing attribution: when the standalone policy split the turn, the
+      // thread and span ledger record one row per model with an explicit role.
+      const routing: NodeSlideEditRoutingReceipt | undefined = baseline.routing;
+      if (routing?.executorModel) {
+        const plannerRoute = nodeSlideAgentModel(routing.plannerModel);
+        const executorRoute = nodeSlideAgentModel(routing.executorModel);
+        const replaceTextCount = baseline.operations.filter(
+          (operation) => operation.op === 'replace_text',
+        ).length;
+        await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
+          deckId: args.deckId,
+          ownerAccessKey: args.ownerAccessKey,
+          runId,
+          status: 'planning',
+          message: `Planner · ${plannerRoute.label}: proposed ${baseline.operations.length} operation${baseline.operations.length === 1 ? '' : 's'} and delegated ${replaceTextCount} copy target${replaceTextCount === 1 ? '' : 's'} to the executor lane.`,
+          role: 'tool',
+          toolName: 'planner',
+          spanProvider: plannerRoute.provider,
+          spanModel: plannerRoute.upstreamId,
+        });
+        const executorMessage =
+          routing.executorOutcome === 'applied'
+            ? `Executor · ${executorRoute.label}: wrote copy for ${routing.executorAppliedOps ?? 0} text element${(routing.executorAppliedOps ?? 0) === 1 ? '' : 's'}; deterministic validation reran on the assembled operations.`
+            : routing.executorOutcome === 'invalid'
+              ? `Executor · ${executorRoute.label}: returned copy that failed validation — the planner's copy stands.`
+              : routing.executorOutcome === 'no_briefs'
+                ? `Executor · ${executorRoute.label}: skipped (the planner supplied no copy briefs) — the planner's copy stands.`
+                : `Executor · ${executorRoute.label}: was unavailable — the planner's copy stands.`;
+        await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
+          deckId: args.deckId,
+          ownerAccessKey: args.ownerAccessKey,
+          runId,
+          status: 'planning',
+          message: executorMessage,
+          role: 'tool',
+          toolName: 'executor',
+          spanProvider: executorRoute.provider,
+          spanModel: executorRoute.upstreamId,
+        });
+        traceContext.push(
+          `Routing: ${routing.policyVersion} split — planner ${plannerRoute.upstreamId}, executor ${executorRoute.upstreamId} (${routing.executorOutcome ?? 'granted'})`,
+        );
+      } else if (routing) {
+        traceContext.push(
+          `Routing: ${routing.policyVersion} kept a single model (${routing.reason})`,
+        );
       }
       await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
         deckId: args.deckId,
@@ -518,6 +566,11 @@ export const proposeEdit = action({
               ? 'Used deterministic bounded edit fallback'
               : `Parsed and validated ${requestedProviderLabel} JSON`
             : 'Produced deterministic bounded edit operations',
+          ...(routing?.executorModel
+            ? [
+                `Routed copy execution to ${nodeSlideAgentModel(routing.executorModel).label} under ${routing.policyVersion} (${routing.executorOutcome ?? 'granted'})`,
+              ]
+            : []),
           'Persisted proposal and human-readable trace atomically',
         ],
         ...traceAttribution,

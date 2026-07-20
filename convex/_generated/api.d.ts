@@ -24,6 +24,7 @@ import type * as lib_nodeslideEditShadowPlanner from "../lib/nodeslideEditShadow
 import type * as lib_nodeslideExecutionTrace from "../lib/nodeslideExecutionTrace.js";
 import type * as lib_nodeslideExecutionTraceValidator from "../lib/nodeslideExecutionTraceValidator.js";
 import type * as lib_nodeslideIds from "../lib/nodeslideIds.js";
+import type * as lib_nodeslideImageSearch from "../lib/nodeslideImageSearch.js";
 import type * as lib_nodeslideInspirationSearch from "../lib/nodeslideInspirationSearch.js";
 import type * as lib_nodeslideManagedKernel from "../lib/nodeslideManagedKernel.js";
 import type * as lib_nodeslideOtlp from "../lib/nodeslideOtlp.js";
@@ -33,9 +34,11 @@ import type * as lib_nodeslidePreferenceRetention from "../lib/nodeslidePreferen
 import type * as lib_nodeslidePropagation from "../lib/nodeslidePropagation.js";
 import type * as lib_nodeslideProvider from "../lib/nodeslideProvider.js";
 import type * as lib_nodeslideProviderConsent from "../lib/nodeslideProviderConsent.js";
+import type * as lib_nodeslidePublishApprovalPolicy from "../lib/nodeslidePublishApprovalPolicy.js";
 import type * as lib_nodeslideQuota from "../lib/nodeslideQuota.js";
 import type * as lib_nodeslideReadContext from "../lib/nodeslideReadContext.js";
 import type * as lib_nodeslideRenderRepairLoop from "../lib/nodeslideRenderRepairLoop.js";
+import type * as lib_nodeslideRoutingPolicy from "../lib/nodeslideRoutingPolicy.js";
 import type * as lib_nodeslideSeed from "../lib/nodeslideSeed.js";
 import type * as lib_nodeslideShadowComparison from "../lib/nodeslideShadowComparison.js";
 import type * as lib_nodeslideShadowComparisonValidator from "../lib/nodeslideShadowComparisonValidator.js";
@@ -48,8 +51,10 @@ import type * as lib_nodeslideVariationHarness from "../lib/nodeslideVariationHa
 import type * as lib_nodeslideWorkflowCandidate from "../lib/nodeslideWorkflowCandidate.js";
 import type * as nodeslide from "../nodeslide.js";
 import type * as nodeslideAgent from "../nodeslideAgent.js";
+import type * as nodeslideImages from "../nodeslideImages.js";
 import type * as nodeslideMemory from "../nodeslideMemory.js";
 import type * as nodeslidePreferences from "../nodeslidePreferences.js";
+import type * as nodeslidePublishApproval from "../nodeslidePublishApproval.js";
 import type * as nodeslideSignatures from "../nodeslideSignatures.js";
 import type * as nodeslideTelemetry from "../nodeslideTelemetry.js";
 import type * as nodeslideVariationProof from "../nodeslideVariationProof.js";
@@ -79,6 +84,7 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslideExecutionTrace": typeof lib_nodeslideExecutionTrace;
   "lib/nodeslideExecutionTraceValidator": typeof lib_nodeslideExecutionTraceValidator;
   "lib/nodeslideIds": typeof lib_nodeslideIds;
+  "lib/nodeslideImageSearch": typeof lib_nodeslideImageSearch;
   "lib/nodeslideInspirationSearch": typeof lib_nodeslideInspirationSearch;
   "lib/nodeslideManagedKernel": typeof lib_nodeslideManagedKernel;
   "lib/nodeslideOtlp": typeof lib_nodeslideOtlp;
@@ -88,9 +94,11 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslidePropagation": typeof lib_nodeslidePropagation;
   "lib/nodeslideProvider": typeof lib_nodeslideProvider;
   "lib/nodeslideProviderConsent": typeof lib_nodeslideProviderConsent;
+  "lib/nodeslidePublishApprovalPolicy": typeof lib_nodeslidePublishApprovalPolicy;
   "lib/nodeslideQuota": typeof lib_nodeslideQuota;
   "lib/nodeslideReadContext": typeof lib_nodeslideReadContext;
   "lib/nodeslideRenderRepairLoop": typeof lib_nodeslideRenderRepairLoop;
+  "lib/nodeslideRoutingPolicy": typeof lib_nodeslideRoutingPolicy;
   "lib/nodeslideSeed": typeof lib_nodeslideSeed;
   "lib/nodeslideShadowComparison": typeof lib_nodeslideShadowComparison;
   "lib/nodeslideShadowComparisonValidator": typeof lib_nodeslideShadowComparisonValidator;
@@ -103,8 +111,10 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslideWorkflowCandidate": typeof lib_nodeslideWorkflowCandidate;
   nodeslide: typeof nodeslide;
   nodeslideAgent: typeof nodeslideAgent;
+  nodeslideImages: typeof nodeslideImages;
   nodeslideMemory: typeof nodeslideMemory;
   nodeslidePreferences: typeof nodeslidePreferences;
+  nodeslidePublishApproval: typeof nodeslidePublishApproval;
   nodeslideSignatures: typeof nodeslideSignatures;
   nodeslideTelemetry: typeof nodeslideTelemetry;
   nodeslideVariationProof: typeof nodeslideVariationProof;

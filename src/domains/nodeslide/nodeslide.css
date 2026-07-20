@@ -3717,3 +3717,237 @@
     transition-duration: .01ms !important;
   }
 }
+
+/* D9 governance: Share-dialog approval section + dedicated approver review surface (ported from parity-studio DEPTH arc). */
+.nodeslide-studio .ns-share-approval {
+  border: 1px solid var(--ns-line);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+.nodeslide-studio .ns-share-approval-toggle {
+  align-items: flex-start;
+  display: flex;
+  gap: 12px;
+}
+.nodeslide-studio .ns-share-approval-toggle input {
+  margin-top: 3px;
+}
+.nodeslide-studio .ns-share-approval-toggle strong {
+  display: block;
+  font-size: 13px;
+}
+.nodeslide-studio .ns-share-approval-toggle small {
+  color: var(--ns-muted);
+  display: block;
+  max-width: 52ch;
+}
+.nodeslide-studio .ns-share-approval-state {
+  color: var(--ns-accent-dark);
+  font-size: 12.5px;
+  font-weight: 650;
+}
+.nodeslide-studio .ns-share-approval-state.is-approved {
+  align-items: center;
+  color: var(--ns-positive);
+  display: inline-flex;
+  gap: 6px;
+}
+.nodeslide-studio .ns-share-approvers {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ns-space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nodeslide-studio .ns-share-approvers li {
+  align-items: center;
+  display: flex;
+  font-size: 12.5px;
+  gap: 12px;
+  justify-content: space-between;
+}
+.nodeslide-studio .ns-share-approvers li.is-revoked span {
+  color: var(--ns-faint);
+  text-decoration: line-through;
+}
+.nodeslide-studio .ns-share-approvers li button {
+  background: none;
+  border: 0;
+  color: var(--ns-danger);
+  font-size: 11.5px;
+  font-weight: 650;
+}
+.nodeslide-studio .ns-share-approval-row {
+  display: flex;
+  /* The full-width drift notice (flex-basis: 100%) needs a wrappable row — without this
+     it gets crushed into a sliver beside the token input instead of its own line. */
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nodeslide-studio .ns-share-approval-row input {
+  background: var(--ns-raised);
+  border: 1px solid var(--ns-line);
+  border-radius: var(--ns-radius-s, 6px);
+  flex: 1;
+  font-size: 12.5px;
+  min-width: 0;
+  padding: 7px 10px;
+}
+.nodeslide-studio .ns-share-approval-drift {
+  color: var(--ns-accent);
+  flex-basis: 100%;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+.nodeslide-studio .ns-share-approval-token {
+  background: color-mix(in srgb, var(--ns-accent) 7%, var(--ns-surface));
+  border: 1px solid color-mix(in srgb, var(--ns-accent) 26%, var(--ns-line-soft));
+  border-radius: var(--ns-radius-s, 6px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+}
+.nodeslide-studio .ns-share-approval-token strong {
+  font-size: 12px;
+}
+.nodeslide-studio .ns-share-approval-token input {
+  background: var(--ns-surface);
+  border: 1px solid var(--ns-line);
+  border-radius: var(--ns-radius-s, 6px);
+  font: 11.5px ui-monospace, "JetBrains Mono", Consolas, monospace;
+  padding: 6px 9px;
+}
+.nodeslide-studio .ns-share-approval-token small {
+  color: var(--ns-muted);
+}
+
+/* D9 approver surface (?approve=): token-gated, read-only review + pinned sign-off. */
+.ns-approver-surface {
+  background: var(--ns-paper, #17150f);
+  color: var(--ns-ink);
+  display: flex;
+  flex-direction: column;
+  /* This element ALSO carries .nodeslide-studio, whose base rule in this repo sets
+     height: 100dvh + overflow: hidden. Without these overrides (later rule, same
+     specificity), a multi-slide review would be clipped to the first viewport with no
+     scrollbar — unreachable slides under a working sign-off button. */
+  height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+}
+/* Give each reviewed slide real dimensions: the base .ns-slide-renderer has no intrinsic
+   height (every child is absolutely positioned), so unwrapped it collapses to 0px and the
+   approver would see only captions — sign-off on faith, the exact thing this surface
+   exists to prevent. Other call sites size it via their own frames; this scope is ours. */
+.ns-approver-surface .ns-approver-slide .ns-slide-renderer {
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--ns-line-soft);
+  border-radius: 8px;
+  width: 100%;
+}
+.ns-approver-surface .ns-approver-gate {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: auto;
+  max-width: 460px;
+  padding: 40px 16px;
+}
+.ns-approver-surface .ns-approver-gate h1 {
+  font-size: 26px;
+  margin: 0;
+}
+.ns-approver-surface .ns-approver-gate form {
+  display: flex;
+  gap: 8px;
+}
+.ns-approver-surface .ns-approver-gate input {
+  flex: 1;
+  font: 12.5px ui-monospace, "JetBrains Mono", Consolas, monospace;
+}
+.ns-approver-surface .ns-approver-error {
+  color: var(--ns-trace-danger, #fb7185);
+}
+.ns-approver-surface .ns-approver-exit {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--ns-muted);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+.ns-approver-surface .ns-approver-bar {
+  align-items: center;
+  border-bottom: 1px solid var(--ns-line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 12px 16px;
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 2;
+}
+.ns-approver-surface .ns-approver-bar h1 {
+  font-size: 19px;
+  margin: 0;
+}
+.ns-approver-surface .ns-approver-actions {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+.ns-approver-surface .ns-approver-pill {
+  border: 1px solid var(--ns-line-soft);
+  border-radius: 999px;
+  font-size: 12px;
+  padding: 4px 10px;
+}
+.ns-approver-surface .ns-approver-pill.is-validated {
+  border-color: color-mix(in srgb, var(--ns-positive) 32%, transparent);
+  color: var(--ns-positive);
+}
+.ns-approver-surface .ns-approver-pill.is-unvalidated {
+  border-color: color-mix(in srgb, var(--ns-trace-warning, #f6ad55) 32%, transparent);
+  color: var(--ns-trace-warning, #f6ad55);
+}
+.ns-approver-surface .ns-approver-pill.is-signed {
+  border-color: color-mix(in srgb, var(--ns-positive) 32%, transparent);
+  color: var(--ns-positive);
+  font-weight: 650;
+}
+.ns-approver-surface .ns-approver-banner {
+  align-items: center;
+  background: color-mix(in srgb, var(--ns-accent) 12%, transparent);
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  padding: 8px 16px;
+}
+.ns-approver-surface .ns-approver-banner.is-error {
+  background: color-mix(in srgb, var(--ns-trace-danger, #fb7185) 14%, transparent);
+}
+.ns-approver-surface .ns-approver-slides {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 24px 16px 40px;
+  width: 100%;
+}
+.ns-approver-surface .ns-approver-slide {
+  margin: 0;
+}
+.ns-approver-surface .ns-approver-slide figcaption {
+  color: var(--ns-muted);
+  font-size: 12.5px;
+  margin-bottom: 8px;
+}

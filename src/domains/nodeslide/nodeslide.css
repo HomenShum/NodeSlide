@@ -3783,6 +3783,9 @@
 }
 .nodeslide-studio .ns-share-approval-row {
   display: flex;
+  /* The full-width drift notice (flex-basis: 100%) needs a wrappable row — without this
+     it gets crushed into a sliver beside the token input instead of its own line. */
+  flex-wrap: wrap;
   gap: 8px;
 }
 .nodeslide-studio .ns-share-approval-row input {
@@ -3829,7 +3832,23 @@
   color: var(--ns-ink);
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  /* This element ALSO carries .nodeslide-studio, whose base rule in this repo sets
+     height: 100dvh + overflow: hidden. Without these overrides (later rule, same
+     specificity), a multi-slide review would be clipped to the first viewport with no
+     scrollbar — unreachable slides under a working sign-off button. */
+  height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+}
+/* Give each reviewed slide real dimensions: the base .ns-slide-renderer has no intrinsic
+   height (every child is absolutely positioned), so unwrapped it collapses to 0px and the
+   approver would see only captions — sign-off on faith, the exact thing this surface
+   exists to prevent. Other call sites size it via their own frames; this scope is ours. */
+.ns-approver-surface .ns-approver-slide .ns-slide-renderer {
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--ns-line-soft);
+  border-radius: 8px;
+  width: 100%;
 }
 .ns-approver-surface .ns-approver-gate {
   display: flex;

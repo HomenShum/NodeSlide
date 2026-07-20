@@ -196,9 +196,9 @@ export function PublicationDialog({
                     : `Awaiting sign-off for v${approval.deckVersion}.`}
                 </div>
                 {approval.approvers.length > 0 ? (
-                  <ul className="ns-share-approval-approvers">
+                  <ul className="ns-share-approvers">
                     {approval.approvers.map((entry) => (
-                      <li key={entry.approverId}>
+                      <li key={entry.approverId} className={entry.revoked ? 'is-revoked' : ''}>
                         <span>{entry.label}</span>
                         {entry.revoked ? (
                           <small>revoked</small>

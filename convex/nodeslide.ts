@@ -3629,6 +3629,28 @@ function assertPackageSubmissionRow(
   }
 }
 
+function assertPackageOriginReceiptVersion(
+  patch: DeckPatch,
+  receipt: StoredPackageHostReceipt,
+  kind: PackageSubmissionKind,
+): void {
+  const bindsSubmissionVersion =
+    kind === 'direct' ||
+    patch.status === 'ready' ||
+    patch.status === 'draft' ||
+    (patch.status === 'stale' && receipt.operation === 'proposal.stale');
+  if (!bindsSubmissionVersion) return;
+  if (patch.resultingDeckVersion === undefined) {
+    if (patch.status !== 'stale') {
+      throw new Error(`Patch ID ${patch.id} is missing its package submission deck version.`);
+    }
+    return;
+  }
+  if (receipt.deckVersion !== patch.resultingDeckVersion) {
+    throw new Error(`Patch ID ${patch.id} has a conflicting package origin deck version.`);
+  }
+}
+
 async function persistPackageSubmission(
   ctx: MutationCtx,
   args: {
@@ -3682,6 +3704,12 @@ async function requirePackageSubmission(
     ) {
       throw new Error(`Patch ID ${patch.id} has a conflicting package origin receipt.`);
     }
+    const storedOriginReceipt = preflightStoredPackageReceiptRow({
+      row: originRow,
+      patch,
+      ownerAccessKey: args.ownerAccessKey,
+    });
+    assertPackageOriginReceiptVersion(patch, storedOriginReceipt, existing.kind);
     const originReceipt = await authorizedPackageReceipt(ctx, {
       row: originRow,
       patch,
@@ -3715,6 +3743,12 @@ async function requirePackageSubmission(
       `Patch ID ${patch.id} is already bound to a ${inferred.kind} package submission.`,
     );
   }
+  const storedOriginReceipt = preflightStoredPackageReceiptRow({
+    row: inferred.originRow,
+    patch,
+    ownerAccessKey: args.ownerAccessKey,
+  });
+  assertPackageOriginReceiptVersion(patch, storedOriginReceipt, inferred.kind);
   const originReceipt = await authorizedPackageReceipt(ctx, {
     row: inferred.originRow,
     patch,

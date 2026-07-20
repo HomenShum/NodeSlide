@@ -1627,6 +1627,73 @@ describe('NodeSlide release security', () => {
     expect(database.rows('nodeslide_package_submissions')).toHaveLength(1);
   });
 
+  it('rejects direct and unresolved proposal replays with a mismatched origin deck version', async () => {
+    const cases = [
+      { kind: 'direct' as const, suffix: 'direct' },
+      { kind: 'proposal' as const, suffix: 'proposal' },
+    ];
+
+    for (const testCase of cases) {
+      const database = new MemoryDatabase();
+      const fixture = seedWorkspace(
+        database,
+        `package-origin-version-${testCase.suffix}`,
+        OWNER_ACCESS_KEY,
+        '8',
+      );
+      const context = { db: database } as unknown as MutationCtx;
+      const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+      const edit = textEdit(snapshot, `Origin version ${testCase.suffix}`);
+      const request = {
+        deckId: snapshot.deck.id,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+        patch: {
+          id: `package-origin-version-patch-${testCase.suffix}`,
+          deckId: snapshot.deck.id,
+          baseDeckVersion: snapshot.deck.version,
+          ...clocksForNodeSlideOperations(snapshot, [edit.operation]),
+          scope: edit.scope,
+          operations: [edit.operation],
+          summary: `Reject mismatched ${testCase.suffix} origin version`,
+        },
+      };
+      if (testCase.kind === 'direct') await packageApplyPatchHandler(context, request);
+      else await packageCreateProposalHandler(context, request);
+
+      const submission = database
+        .rows('nodeslide_package_submissions')
+        .find((row) => row.patchId === request.patch.id);
+      const originRow = database
+        .rows('nodeslide_package_receipts')
+        .find((row) => row.patchId === request.patch.id);
+      if (!submission || !originRow) throw new Error('Expected package submission fixture.');
+      const receipt = originRow.receipt as Record<string, unknown>;
+      const operation = String(receipt.operation);
+      const wrongDeckVersion = Number(receipt.deckVersion) + 7;
+      const wrongReceiptId = nodeslideStableId(
+        'repository_receipt',
+        request.deckId,
+        request.patch.id,
+        operation,
+        String(wrongDeckVersion),
+      );
+      receipt.id = wrongReceiptId;
+      receipt.deckVersion = wrongDeckVersion;
+      Reflect.deleteProperty(receipt, 'authorization');
+      originRow.receiptId = wrongReceiptId;
+      submission.originReceiptId = wrongReceiptId;
+      database.resetObservations();
+
+      const replay =
+        testCase.kind === 'direct'
+          ? packageApplyPatchHandler(context, request)
+          : packageCreateProposalHandler(context, request);
+      await expect(replay).rejects.toThrow(/conflicting package origin deck version/i);
+      expect(database.writes).toEqual([]);
+      expect((originRow.receipt as { authorization?: unknown }).authorization).toBeUndefined();
+    }
+  });
+
   it('rejects an accepted proposal replay whose immutable version misses its candidate digest', async () => {
     const database = new MemoryDatabase();
     const fixture = seedWorkspace(

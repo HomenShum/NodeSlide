@@ -6016,7 +6016,6 @@
 }
 
 /* user ask: accent bubble, right-biased */
-.nodeslide-studio .ns-ai-v3-chat-turn.is-user > div,
 .nodeslide-studio .ns-ai-optimistic-ask.is-user {
   max-width: 88%;
   margin: 0;
@@ -6025,7 +6024,6 @@
   border-radius: 12px 12px 4px 12px;
   padding: 8px 12px;
 }
-.nodeslide-studio .ns-ai-v3-chat-turn.is-user .ns-eyebrow,
 .nodeslide-studio .ns-ai-optimistic-ask.is-user > span {
   display: none;
 }
@@ -6046,23 +6044,6 @@
 }
 .nodeslide-studio .ns-ai-optimistic-ask.is-user p {
   margin: 0;
-}
-
-/* tool turns: quiet inline step, not a card */
-.nodeslide-studio .ns-ai-v3-chat-turn[data-testid="agent-message-tool"] > div {
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  padding: 1px 0;
-}
-.nodeslide-studio .ns-ai-v3-chat-turn[data-testid="agent-message-tool"] p {
-  font-size: 11px;
-  color: var(--ns-ink2);
-}
-.nodeslide-studio .ns-ai-v3-chat-turn[data-testid="agent-message-tool"] .ns-ai-v3-agent-mark {
-  background: transparent;
-  border-color: transparent;
-  color: var(--ns-ink2);
 }
 
 .nodeslide-studio .ns-ai-v3-welcome {
@@ -6090,4 +6071,100 @@
   border-radius: 12px;
   border: 1px solid rgb(217 119 87 / 26%);
   box-shadow: 0 2px 8px rgb(31 24 20 / 5%);
+}
+
+/* ============================================================
+ * Advanced controls popover (G1)
+ * The provider/privacy/scope/policy block opens from a compact
+ * composer-footer trigger as an anchored panel instead of an
+ * inline disclosure, so the chat and composer stay primary.
+ * ============================================================ */
+.nodeslide-studio .ns-ai-composer {
+  position: relative;
+}
+
+.nodeslide-studio .ns-ai-advanced-backdrop {
+  background: transparent;
+  border: 0;
+  cursor: default;
+  inset: 0;
+  padding: 0;
+  position: fixed;
+  z-index: 40;
+}
+
+/* The panel is a native non-modal <dialog open>; reset the UA's centered
+   fit-content box so the anchored popover geometry wins. */
+.nodeslide-studio .ns-ai-advanced-popover {
+  color: inherit;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  width: auto;
+}
+
+.nodeslide-studio .ns-ai-advanced-popover {
+  background: var(--ns-surface);
+  border: 1px solid var(--ns-line-b);
+  border-radius: 12px;
+  bottom: calc(100% + 6px);
+  box-shadow: 0 14px 34px rgb(31 24 20 / 16%);
+  display: flex;
+  flex-direction: column;
+  left: 10px;
+  max-height: min(440px, 64vh);
+  overflow: hidden;
+  position: absolute;
+  right: 10px;
+  z-index: 41;
+}
+
+.nodeslide-studio .ns-ai-advanced-popover .ns-ai-v3-controls-body {
+  overflow-y: auto;
+}
+
+.nodeslide-studio .ns-ai-advanced-popover-head {
+  align-items: center;
+  border-bottom: 1px solid var(--ns-line-b);
+  color: var(--ns-ink);
+  display: flex;
+  font-size: 11px;
+  font-weight: 700;
+  gap: 8px;
+  padding: 9px 12px;
+}
+
+.nodeslide-studio .ns-ai-advanced-popover-head .ns-route-pill {
+  margin-left: auto;
+}
+
+.nodeslide-studio .ns-ai-advanced-popover-head button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: var(--ns-ink2);
+  cursor: pointer;
+  display: inline-flex;
+  height: 22px;
+  justify-content: center;
+  width: 22px;
+}
+
+.nodeslide-studio .ns-ai-advanced-popover-head button:hover {
+  background: var(--ns-accent-soft);
+  color: var(--ns-ink);
+}
+
+/* ============================================================
+ * Landing creation wait (G4)
+ * Honest, elapsed-time-driven staged narrative while a creation
+ * is in flight. No fake percent bars: the server does not stream
+ * progress, so copy advances on wall-clock stages plus a visible
+ * elapsed timer.
+ * ============================================================ */
+.nodeslide-studio .ns-landing-create-status .ns-landing-create-elapsed {
+  color: var(--ns-faint);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
 }

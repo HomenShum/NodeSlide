@@ -6,7 +6,7 @@
 
 > NodeSlide turns a prompt, a structured brief, or raw data into a presentation you can *inspect and defend* — a canonical structured document that compiles to editable slides, where every change (human or agent) flows through one validated mutation path.
 
-> **Repository status (2026-07-18):** the NodeSlide app now lives in this repo and **builds green** — the Convex backend deploys, `tsc -b` passes, and **485/485 tests** pass. Extracted from the `parity-studio` monorepo with an IP-carve-out + secrets pass. See [Repository status](#repository-status).
+> **Repository status (2026-07-20):** the NodeSlide app lives in this repo and **builds green** — the Convex backend deploys, `tsc -b` passes, and **764 tests across 99 files** pass. Extracted from the `parity-studio` monorepo with an IP-carve-out + secrets pass. See [Repository status](#repository-status).
 
 ---
 
@@ -75,23 +75,23 @@ Human edits and agent edits converge on **one** path. Nothing lands silently, an
 
 ## Capability matrix — honest status
 
-Capability honesty is the product, so it's the README too. As of 2026-07-13:
+Capability honesty is the product, so it's the README too. As of 2026-07-20:
 
 | Workflow | State | Ease |
 |---|---|:--:|
-| NodeSlide → PowerPoint | One-click **editable** PPTX export (text, shapes, connectors, native charts, embedded images; math as editable text; video/remote-image as labeled fallbacks) | ✅ Good |
+| NodeSlide → PowerPoint | One-click PPTX export (editable text, shapes, connectors, native charts, embedded images; typeset math as a rendered static fallback; video/remote-image as labeled fallbacks) | ✅ Good |
 | PowerPoint → NodeSlide | **Design-signature extraction only** (colors, type, density) — does *not* reconstruct slides | ⚠️ Poor |
 | NodeSlide → Google Slides | Manual: export `.pptx`, import into Google | ⚠️ Mediocre |
 | Google Slides → NodeSlide | Not implemented | ❌ None |
 | Ongoing PowerPoint / Google sync | Not implemented | ❌ None |
 | Inspect agent changes | Proposal cards, before/after diff, trace telemetry, version compare/restore | ✅ Good |
-| Full deck as user-facing JSON | Serializes faithfully **internally**; no view/edit/download surface yet | 🔶 In progress |
-| Deck JSON import / download | Not shipped | 🔶 In progress |
+| Full deck as user-facing JSON | Full-deck view/copy/download shipped; supported selection JSON edits become governed proposals; arbitrary full-snapshot editing remains partial | 🔶 In progress |
+| Deck JSON import / download | Download shipped; import not shipped | 🔶 In progress |
 | Full DeckSpec over MCP | MCP exposes bounded metadata, slides, traces, proposals — **not** the complete snapshot | ⚠️ Partial |
 
-**PPTX export** is real and substantive, honestly labeled *"Editable PPTX with fallbacks"* in the toolbar. Fidelity loss (math-as-text, linked-video placeholder, un-fetched remote image) is disclosed as **blocking** export-validation warnings and surfaced in the Trace panel, not swallowed. The one inbound `.pptx` reader extracts *design taste*, not content — the "Upload a past deck" control means *import design style*, not import slides.
+**PPTX export** is real and substantive, honestly labeled *"Editable PPTX with fallbacks"* in the toolbar. Valid math exports visibly as `pptx_static_fallback` and is non-editable; linked-video and unavailable remote-image paths remain explicitly labeled rather than swallowed. The one inbound `.pptx` reader extracts *design taste*, not content — the "Upload a past deck" control means *import design style*, not import slides.
 
-**Agent-mutated state is already fully modeled and round-trips.** `SlideElement` captures identity, geometry, rotation, content, style, chart data, math, images/credits, video, source bindings, lock/visibility, grouping, and version clocks; `applyDeckPatch` writes agent EditOps into exactly those fields. The gap is only the *user-facing* JSON surface — see the roadmap.
+**Agent-mutated state is already fully modeled and round-trips.** `SlideElement` captures identity, geometry, rotation, content, style, chart data, math, images/credits, video, source bindings, lock/visibility, grouping, and version clocks; `applyDeckPatch` writes agent EditOps into exactly those fields. The remaining JSON gaps are import, arbitrary full-snapshot editing, and full-snapshot MCP parity — see the roadmap.
 
 ## Documentation
 
@@ -113,7 +113,7 @@ npm run dev        # vite + convex dev (concurrently) — open the printed local
 The **deterministic path needs no API keys** and produces a complete, reproducible deck. For live model runs, set `OPENROUTER_API_KEY` in Convex (`npx convex env set OPENROUTER_API_KEY …`) or bring your own key (BYOK). See [`.env.example`](.env.example).
 
 ```bash
-npm test            # vitest run — 469 tests
+npm test            # vitest run — 764 tests across 99 files in the full CI corpus
 npm run typecheck   # tsc -b
 npm run build       # tsc -b && vite build
 npm run lint        # biome check .
@@ -121,7 +121,7 @@ npm run lint        # biome check .
 
 ## Architecture
 
-React 19 + TypeScript + Vite editor over a **Convex** authoritative backend; PptxGenJS and a self-contained HTML compiler for export; [`pi-ai`](https://www.npmjs.com/package/@earendil-works/pi-ai) for governed model routing (managed Nebius GLM 5.2 + BYOK); JSZip + OOXML parsing for style extraction. Deployed on Vercel + Convex.
+React 19 + TypeScript + Vite editor over a **Convex** authoritative backend; PptxGenJS and a self-contained HTML compiler for export; [`pi-ai`](https://www.npmjs.com/package/@earendil-works/pi-ai) for governed routing (Kimi K3 planning, Gemini 3.5 Flash execution, deterministic fallback, and BYOK paths); JSZip + OOXML parsing for style extraction. Deployed on Vercel + Convex.
 
 Key modules:
 
@@ -158,13 +158,13 @@ flowchart LR
 
 Prioritized:
 
-1. **Deck JSON surface + MCP parity** — a first-class *Source* panel (Structure · JSON · Changes) to view, copy, download, import, and validate the DeckSpec, plus full-snapshot access over MCP. Highest leverage, lowest risk: a UI over data that already serializes and round-trips.
+1. **JSON import + full-snapshot MCP parity** — Source/JSON view, copy, download, validation, and supported selection editing already ship; add governed DeckSpec import, arbitrary full-snapshot editing, and complete snapshot access over MCP.
 2. **Capability-honest labels** — rename "Upload a past deck" to "Import design style from PPTX"; explicit math semantic-fidelity note.
 3. **Full PPTX content import + re-import diff** — parse OOXML into primitives with a per-element `native / approximated / dropped` fidelity report; never claim a 1:1 import.
 4. **Google Slides connector** — `presentations.batchUpdate` with `requiredRevisionId` guards, behind scoped OAuth; each push a propose→confirm action.
 5. **Durable bidirectional sync + conflict management** — a per-connection sync ledger (provider, external ID, last-synced versions, ID mappings, prior snapshot, capability report).
 
-*Editing source JSON must never bypass the mutation system:* saving compiles changes into `PatchOperation[]`, runs schema + layout validation, shows the visual diff, then requires acceptance. The foundational data model already supports all of this — the missing work is the connector layer, the sync ledger, and the source UI, not a schema rewrite.
+*Editing source JSON must never bypass the mutation system:* saving compiles supported changes into `PatchOperation[]`, runs schema + layout validation, shows the visual diff, then requires acceptance. The foundational model and bounded Source UI already support this path; the remaining work is import, arbitrary full-snapshot editing, full-snapshot MCP parity, connectors, and the sync ledger — not a schema rewrite.
 
 ## Built · Reused · Broke
 
@@ -180,7 +180,7 @@ The disclosure discipline from the AI Fund Build Challenge template, kept as a p
 
 Trust is a product surface, not a hidden backend step. Validation covers schema and referential integrity, bounds/overlap/text-fit, required chart/math data, safe media URLs, source coverage, export capability, and publication cleanliness — and it *blocks* unsafe present, publish, or export. Repairs are explicit proposals through the same gate.
 
-- **485 Vitest tests**: schema coercion, planner attribution, one-repair fallback convergence, acceptance gating, editor-state integrity, publishing privacy, web-research/ingestion contracts, governed-MCP consent parity, HTML/PPTX generation, and the AgentThread conversational-review scenarios. TypeScript compile is a release gate; `npx impeccable detect` runs zero-findings on the agent UI surfaces.
+- **764 Vitest tests across 99 files**: schema coercion, planner attribution, repair convergence, acceptance and authorization gating, editor-state integrity, publishing privacy, web-research/ingestion contracts, governed-MCP consent parity, HTML/PPTX generation, reusable-package conformance, and AgentThread review scenarios. TypeScript compile is a release gate; `npx impeccable detect` runs zero-findings on the agent UI surfaces.
 - **Independent UI audit** via the open-source [`agentic-ui-qa`](https://github.com/HomenShum/agentic-ui-qa) protocol — the Agentic UI Bar (B1–B11) for surface trust/operability and a Depth tier (D1–D11) for agent-product maturity — with findings tracked in an append-only ledger.
 
 The Trace inspector exposes the exact provider/model, plan, tool calls, operations, validation state, digests, token/cost usage, and the human decision — a compact run-metrics card over an auditable events chain, closing on a validation seal honestly labeled by run type (countersigned for a live run, provisional for a deterministic one).
@@ -190,11 +190,11 @@ The Trace inspector exposes the exact provider/model, plan, tool calls, operatio
 This repository is the public home for NodeSlide, extracted from the `parity-studio` monorepo.
 
 1. **Docs + overview** — ✅ done.
-2. **Source extraction** — ✅ done. `shared/nodeslide*`, `src/domains/nodeslide/`, the `convex/nodeslide*` server (schema trimmed to NodeSlide's 27 tables), and the MCP tools lifted into a standalone, buildable package. IP-carve-out verified (no Parity Studio platform IP; the frontend imports zero shell components) and secrets-scanned (none found).
-3. **Standalone build** — ✅ green. Convex backend deploys; `tsc -b` + `vite build` pass; **469/469 Vitest tests** pass; biome clean.
-4. **CI + release gates** — ⏳ next: wire typecheck + Vitest + build + the `agentic-ui-qa` audit into CI, and author the standalone MCP sub-package entry.
+2. **Source extraction** — ✅ done. `shared/nodeslide*`, `src/domains/nodeslide/`, the `convex/nodeslide*` server (schema scoped to the standalone product), and the MCP tools lifted into a standalone, buildable package. IP-carve-out verified (no Parity Studio platform IP; the frontend imports zero shell components) and secrets-scanned (none found).
+3. **Standalone build** — ✅ green. Convex backend deploys; `tsc -b` + `vite build` pass; **764 Vitest tests across 99 files** pass; biome clean.
+4. **CI + release gates** — ✅ typecheck, Vitest, build, runtime smoke, MCP, node-platform conformance, and packed NodeRoom/NodeAgent consumer checks run in CI. Scheduled production probing is also present; automatic production deployment still awaits repository secrets/environment configuration.
 
-The **live demo** currently runs the monorepo build at [parity-studio.vercel.app/?domain=nodeslide](https://parity-studio.vercel.app/?domain=nodeslide); a dedicated NodeSlide deployment can be published from this repo.
+The dedicated **live demo** is [nodeslide.vercel.app](https://nodeslide.vercel.app), backed by the production Convex deployment.
 
 ## License
 

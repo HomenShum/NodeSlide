@@ -309,7 +309,9 @@ function renderShape(snapshot: DeckSnapshot, element: SlideElement, box: SvgBox)
 
 function renderImage(snapshot: DeckSnapshot, element: SlideElement, box: SvgBox): string {
   if (isEmbeddedImageData(element.imageUrl)) {
-    return `<image x="${box.x}" y="${box.y}" width="${box.width}" height="${box.height}" href="${escapeHtml(element.imageUrl.trim())}" preserveAspectRatio="xMidYMid slice" opacity="${clamp(finite(element.style.opacity, 1), 0, 1)}"/>`;
+    const focalPoint = element.image?.focalPoint ?? { x: 0.5, y: 0.5 };
+    const fit = element.image?.fit === 'contain' ? 'contain' : 'cover';
+    return `<foreignObject x="${box.x}" y="${box.y}" width="${box.width}" height="${box.height}" opacity="${clamp(finite(element.style.opacity, 1), 0, 1)}"><div xmlns="http://www.w3.org/1999/xhtml" style="width:100%;height:100%;overflow:hidden"><img src="${escapeHtml(element.imageUrl.trim())}" alt="" style="display:block;width:100%;height:100%;object-fit:${fit};object-position:${clamp(focalPoint.x, 0, 1) * 100}% ${clamp(focalPoint.y, 0, 1) * 100}%"/></div></foreignObject>`;
   }
   const fill = colorToHex(element.style.fill, snapshot.deck.theme.colors.accentSoft);
   const stroke = colorToHex(element.style.stroke, snapshot.deck.theme.colors.border);

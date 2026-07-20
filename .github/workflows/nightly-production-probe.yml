@@ -1,0 +1,148 @@
+name: Nightly production probe
+
+on:
+  schedule:
+    # 02:37 PDT / 01:37 PST. Offset from the top of the hour to reduce runner contention.
+    - cron: '37 09 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: nodeslide-production-probe
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    name: Create -> edit -> reload -> export
+    if: github.event_name == 'schedule' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: read
+    steps:
+      - name: Check out the default branch
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run fail-closed production journey
+        id: production_probe
+        run: node scripts/prod-probe.mjs
+        env:
+          PROD_PROBE_URL: https://nodeslide.vercel.app
+          PROD_PROBE_REPORT: artifacts/prod-probe/report.json
+      - name: Capture bounded Convex history after a red probe
+        if: failure() && steps.production_probe.outcome == 'failure'
+        continue-on-error: true
+        shell: bash
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DIAGNOSTICS_KEY }}
+          CONVEX_LOG_HISTORY: '50'
+          CONVEX_LOG_DURATION_MS: '15000'
+          CONVEX_LOG_OUTPUT: artifacts/convex-logs/production.jsonl
+        run: |
+          if [[ -z "${CONVEX_DEPLOY_KEY:-}" ]]; then
+            echo "::notice::CONVEX_DIAGNOSTICS_KEY is not configured; skipping the optional production-log capture."
+            exit 0
+          fi
+          node scripts/capture-convex-logs.mjs
+      - name: Upload sanitized diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: production-probe-${{ github.run_id }}
+          path: |
+            artifacts/prod-probe/report.json
+            artifacts/convex-logs/production.jsonl
+          if-no-files-found: warn
+          include-hidden-files: false
+          retention-days: 14
+
+  alert:
+    name: Alert on first red
+    needs: probe
+    if: always() && needs.probe.result != 'skipped'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      contents: read
+      issues: write
+    steps:
+      - name: Download sanitized probe diagnostics
+        continue-on-error: true
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: production-probe-${{ github.run_id }}
+          path: artifacts
+      - name: Open one incident on first red; close it on recovery
+        continue-on-error: true
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        env:
+          PROBE_JOB_RESULT: ${{ needs.probe.result }}
+        with:
+          script: |
+            const fs = require('fs');
+            const title = '[ops] Nightly NodeSlide production probe is red';
+            const { owner, repo } = context.repo;
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner,
+              repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const incident = issues.find(
+              (issue) => !issue.pull_request && issue.title === title,
+            );
+            const passed = process.env.PROBE_JOB_RESULT === 'success';
+            const runUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+            let stage = 'runner/setup';
+            try {
+              const report = JSON.parse(
+                fs.readFileSync('artifacts/prod-probe/report.json', 'utf8'),
+              );
+              if (/^[a-z0-9-]{1,80}$/.test(report.stage)) stage = report.stage;
+            } catch {}
+
+            if (!passed && !incident) {
+              await github.rest.issues.create({
+                owner,
+                repo,
+                title,
+                body: [
+                  'The fail-closed create -> edit -> reload -> export probe failed.',
+                  '',
+                  `Failure stage: \`${stage}\``,
+                  `Run: [sanitized diagnostics and logs](${runUrl})`,
+                  '',
+                  'The artifact intentionally excludes capability keys, browser storage, screenshots, and exported deck files.',
+                ].join('\n'),
+              });
+            } else if (passed && incident) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: incident.number,
+                body: `Recovered: the next scheduled production journey passed. [Run](${runUrl})`,
+              });
+              await github.rest.issues.update({
+                owner,
+                repo,
+                issue_number: incident.number,
+                state: 'closed',
+                state_reason: 'completed',
+              });
+            }
+      - name: Keep the workflow red when the journey failed
+        if: needs.probe.result != 'success'
+        run: exit 1

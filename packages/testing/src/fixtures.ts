@@ -1,12 +1,21 @@
-import type { DeckSnapshot } from '../../../shared/nodeslide';
-import { NODESLIDE_SCHEMA_VERSION, NODESLIDE_TOOLCHAIN_VERSION } from '../../../shared/nodeslide';
-import type { NodeSlidePatchCommand, NodeSlidePrincipal } from '../../backend/src';
+import type { NodeSlidePatchCommand, NodeSlidePrincipal } from '@nodeslide/backend';
+import {
+  type DeckSnapshot,
+  NODESLIDE_SCHEMA_VERSION,
+  NODESLIDE_TOOLCHAIN_VERSION,
+} from '@nodeslide/contracts';
 
 export const NODESLIDE_TEST_PRINCIPAL: NodeSlidePrincipal = {
   userId: 'user:test-owner',
   organizationId: 'organization:test',
   roles: ['owner'],
-  permissions: ['nodeslide:read', 'nodeslide:propose', 'nodeslide:write'],
+  permissions: [
+    'nodeslide:read',
+    'nodeslide:propose',
+    'nodeslide:write',
+    'nodeslide:approve',
+    'nodeslide:assets',
+  ],
 };
 
 export function createNodeSlideTestSnapshot(

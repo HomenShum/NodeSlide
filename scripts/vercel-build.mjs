@@ -17,12 +17,8 @@ const run = (command, args) => {
   }
 };
 
-if (process.env.CONVEX_DEPLOY_KEY) {
-  run('convex', ['deploy', '--cmd', 'tsc -b && vite build', '--typecheck', 'disable']);
-} else {
-  console.log(
-    'no CONVEX_DEPLOY_KEY - skipping backend deploy, building frontend with committed _generated/',
-  );
-  run('tsc', ['-b']);
-  run('vite', ['build']);
-}
+// Backend deployment is intentionally owned by deploy-production.yml. Keeping
+// it out of the Vercel build prevents a remote rebuild from racing or silently
+// redeploying Convex with a differently scoped key.
+console.log('building frontend only; GitHub Actions owns Convex deployment');
+run('npm', ['run', 'build']);

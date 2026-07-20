@@ -1,0 +1,40 @@
+{
+  "name": "@nodeslide/convex",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "files": ["dist", "component", "README.md"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js"
+    },
+    "./component": {
+      "types": "./dist/component.d.ts",
+      "import": "./dist/component.js"
+    },
+    "./component-schema": {
+      "types": "./dist/componentSchema.d.ts",
+      "import": "./dist/componentSchema.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts src/capabilityHost.ts src/react.tsx src/component.ts src/componentSchema.ts --format esm --dts --clean --sourcemap --external react --external react/jsx-runtime --external convex --external convex/browser --external convex/server --external convex/values --external @nodeslide/backend --external @nodeslide/contracts --external @nodeslide/react --external @nodeslide/react-headless",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nodeslide/backend": "0.1.0",
+    "@nodeslide/contracts": "0.1.0",
+    "@nodeslide/react": "0.1.0",
+    "@nodeslide/react-headless": "0.1.0"
+  },
+  "peerDependencies": {
+    "convex": ">=1.42 <2",
+    "react": ">=18 <20"
+  }
+}

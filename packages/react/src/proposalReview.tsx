@@ -1,9 +1,14 @@
 import type { NodeSlideProposalDecision } from '@nodeslide/backend';
 import type { DeckPatch, DeckSnapshot } from '@nodeslide/contracts';
-import { createNodeSlideProposalReviewModel } from '@nodeslide/react-headless';
+import {
+  type NodeSlideProposalPreview,
+  createNodeSlideProposalPreview,
+  createNodeSlideProposalReviewModel,
+} from '@nodeslide/react-headless';
 import type { ReactNode } from 'react';
 import { NodeSlideSlideFrame } from './viewer';
 
+export { createNodeSlideProposalPreview, type NodeSlideProposalPreview };
 export interface NodeSlideProposalReviewProps {
   currentSnapshot: DeckSnapshot;
   proposal: DeckPatch;

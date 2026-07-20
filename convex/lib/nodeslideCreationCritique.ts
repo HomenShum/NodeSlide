@@ -16,6 +16,14 @@ const MAX_REPORT_COMPRESSED_SLIDES = 8;
 const MAX_REPORT_PROMPT_BYTES = 4_000;
 
 export type NodeSlideBriefPrimitive = 'chart' | 'formula' | 'image';
+export type NodeSlideSyntheticCreationFault = 'drop_requested_chart';
+
+export interface NodeSlideSyntheticFaultResult {
+  spec: unknown;
+  fault: NodeSlideSyntheticCreationFault;
+  applied: boolean;
+  traceLabel: string;
+}
 
 export interface NodeSlideCreationQualityIssue {
   severity: 'error' | 'warning';
@@ -48,6 +56,84 @@ const PRIMITIVE_REQUESTS: ReadonlyArray<[NodeSlideBriefPrimitive, RegExp]> = [
   ['formula', /\bformulas?\b|\bequations?\b/u],
   ['image', /\bimages?\b|\bphotos?\b/u],
 ];
+
+/**
+ * Synthetic faults are opt-in twice: an explicit development runtime marker
+ * and one allowlisted fault name. Missing/production markers fail closed.
+ */
+export function resolveNodeSlideSyntheticCreationFault(input: {
+  runtimeEnvironment?: string;
+  faultFlag?: string;
+}): NodeSlideSyntheticCreationFault | null {
+  if (input.runtimeEnvironment?.trim().toLowerCase() !== 'development') return null;
+  return input.faultFlag?.trim().toLowerCase() === 'drop_requested_chart'
+    ? 'drop_requested_chart'
+    : null;
+}
+
+/**
+ * Deliberately damage a provider spec before pass 1 so the real report and
+ * real revision call can prove the repair branch. The mutation is cloned,
+ * bounded, and only applies when the brief requested a chart and the provider
+ * actually supplied one. The trace label always states its synthetic origin.
+ */
+export function injectNodeSlideSyntheticCreationFault(input: {
+  rawSpec: unknown;
+  brief: DeckBrief;
+  fault: NodeSlideSyntheticCreationFault;
+}): NodeSlideSyntheticFaultResult {
+  const tracePrefix = 'Development-only synthetic fault (drop_requested_chart)';
+  if (!chartRequested(input.brief) || !isCreationSpecRecord(input.rawSpec)) {
+    return {
+      spec: input.rawSpec,
+      fault: input.fault,
+      applied: false,
+      traceLabel: `${tracePrefix}: requested but not applicable; pass 1 was not modified.`,
+    };
+  }
+  const slides = input.rawSpec.slides;
+  if (!Array.isArray(slides)) {
+    return {
+      spec: input.rawSpec,
+      fault: input.fault,
+      applied: false,
+      traceLabel: `${tracePrefix}: requested but not applicable; pass 1 was not modified.`,
+    };
+  }
+  let removedCharts = 0;
+  const faultedSlides = slides.map((slide) => {
+    if (!isCreationSpecRecord(slide) || !Object.hasOwn(slide, 'chart')) return slide;
+    removedCharts += 1;
+    const { chart: _removedChart, ...slideWithoutChart } = slide;
+    // The deterministic materializer supplies a chart for a primitive-empty
+    // evidence slot. Keep this intentionally broken pass chartless by placing
+    // an explicitly labeled synthetic image primitive in an otherwise empty
+    // slot; the provider revision still receives the real missing-chart issue.
+    if (!slideWithoutChart['formula'] && !slideWithoutChart['image']) {
+      slideWithoutChart['image'] = {
+        altText: 'Development-only synthetic fault placeholder',
+        credit: 'NodeSlide fault injection',
+      };
+    }
+    return slideWithoutChart;
+  });
+  if (removedCharts === 0) {
+    return {
+      spec: input.rawSpec,
+      fault: input.fault,
+      applied: false,
+      traceLabel: `${tracePrefix}: requested but the provider emitted no chart to remove.`,
+    };
+  }
+  return {
+    spec: { ...input.rawSpec, slides: faultedSlides },
+    fault: input.fault,
+    applied: true,
+    traceLabel: `${tracePrefix}: removed ${removedCharts} provider-supplied requested chart${
+      removedCharts === 1 ? '' : 's'
+    } before pass 1.`,
+  };
+}
 
 /**
  * Materialize the spec exactly the way `createFromBriefInternal` will (same
@@ -171,6 +257,18 @@ function describeReport(report: NodeSlideCreationQualityReport): string {
     );
   }
   return parts.join(', ') || 'reported issues';
+}
+
+function chartRequested(brief: DeckBrief): boolean {
+  return /\bcharts?\b|\bgraphs?\b/iu.test(
+    `${brief.prompt} ${brief.purpose} ${brief.successCriteria.join(' ')}`,
+  );
+}
+
+function isCreationSpecRecord(value: unknown): value is Record<string, unknown> & {
+  slides?: unknown;
+} {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
 /**

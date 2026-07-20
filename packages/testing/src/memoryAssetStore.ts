@@ -7,7 +7,8 @@ import {
   type NodeSlidePutAssetInput,
   NodeSlideRepositoryError,
   type NodeSlideStoredAsset,
-} from '../../backend/src';
+  explicitPermissionAuthorization,
+} from '@nodeslide/backend';
 
 export type MemoryNodeSlideAssetAction = 'put' | 'get' | 'delete';
 
@@ -35,7 +36,14 @@ export class MemoryNodeSlideAssetStore implements NodeSlideAssetStore {
 
   constructor(options: MemoryNodeSlideAssetStoreOptions = {}) {
     this.#now = options.now ?? (() => Date.now());
-    this.#authorize = options.authorize ?? (() => undefined);
+    this.#authorize =
+      options.authorize ??
+      ((principal, deckId) =>
+        explicitPermissionAuthorization.authorize({
+          principal,
+          deckId,
+          action: 'assets.manage',
+        }));
   }
 
   async put(input: NodeSlidePutAssetInput): Promise<NodeSlideAssetReference> {

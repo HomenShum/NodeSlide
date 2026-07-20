@@ -9,6 +9,18 @@ export {
   type NodeSlideProposalReviewProps,
 } from './proposalReview';
 export {
+  DeckAgentThread,
+  type DeckAgentThreadProps,
+  type NodeSlideAgentThreadEntry,
+  type NodeSlideAgentThreadRole,
+} from './agentThread';
+export {
+  NodeSlideStudioShell,
+  type NodeSlideStudioComposerActions,
+  type NodeSlideStudioShellActions,
+  type NodeSlideStudioShellProps,
+} from './studioShell';
+export {
   createNodeSlideProposalPreview,
   createNodeSlideProposalReviewModel,
   type NodeSlideProposalPreview,

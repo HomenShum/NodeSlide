@@ -22,5 +22,8 @@
   },
   "peerDependencies": {
     "react": ">=18 <20"
+  },
+  "devDependencies": {
+    "@nodeslide/testing": "0.1.0"
   }
 }

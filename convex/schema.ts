@@ -26,6 +26,7 @@ import {
   nodeslideVariationAxesValidator,
   nodeslideVariationCandidateValidator,
   nodeslideVariationDecisionEventValidator,
+  nodeslideVariationJudgeReceiptValidator,
   nodeslideVariationOriginValidator,
   nodeslideVariationStatusValidator,
   nodeslideVersionClockValidator,
@@ -398,6 +399,7 @@ export default defineSchema({
     operations: v.array(nodeslidePatchOperationValidator),
     candidate: nodeslideVariationCandidateValidator,
     validation: nodeslideValidationResultValidator,
+    judge: v.optional(nodeslideVariationJudgeReceiptValidator),
     status: nodeslideVariationStatusValidator,
     selectedPatchId: v.optional(v.string()),
     createdAt: v.number(),
@@ -458,6 +460,34 @@ export default defineSchema({
   })
     .index('by_stable_id', ['id'])
     .index('by_deck_version', ['deckId', 'version']),
+
+  /**
+   * Durable package-port receipts and assets for the existing app host. These
+   * tables do not duplicate deck state; package mutations still execute the
+   * authoritative nodeslide_* commit path and only persist port-specific
+   * envelopes that the monolith did not previously need.
+   */
+  nodeslide_package_receipts: defineTable({
+    receiptId: v.string(),
+    deckId: v.string(),
+    patchId: v.optional(v.string()),
+    principalId: v.string(),
+    receipt: v.any(),
+    recordedAt: v.number(),
+  })
+    .index('by_stable_id', ['receiptId'])
+    .index('by_deck_recorded', ['deckId', 'recordedAt']),
+
+  nodeslide_package_assets: defineTable({
+    assetId: v.string(),
+    deckId: v.string(),
+    reference: v.any(),
+    bytes: v.bytes(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_stable_id', ['assetId'])
+    .index('by_deck_created', ['deckId', 'createdAt']),
 
   nodeslide_sources: defineTable({
     id: v.string(),

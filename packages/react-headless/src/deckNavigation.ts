@@ -108,6 +108,7 @@ export function useNodeSlideDeckNavigation({
 }
 
 function targetIndexForKey(key: string, currentIndex: number, length: number): number | null {
+  if (currentIndex < 0 || length === 0) return null;
   if (key === 'ArrowRight' || key === 'ArrowDown') return (currentIndex + 1) % length;
   if (key === 'ArrowLeft' || key === 'ArrowUp') return (currentIndex - 1 + length) % length;
   if (key === 'Home') return 0;

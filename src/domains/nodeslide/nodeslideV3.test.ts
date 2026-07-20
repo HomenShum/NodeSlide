@@ -9,6 +9,14 @@ const aiInspectorSource = readFileSync(
 );
 
 describe('NodeSlide v3 visual contract', () => {
+  it('mounts the rich editor through the controlled package shell', () => {
+    expect(studioSource).toContain('NodeSlideStudioShell');
+    expect(studioSource).toContain('renderSurface={renderStudioSurface}');
+    expect(studioSource).toContain('data-nodeslide-surface="studio-shell"');
+    expect(studioSource).toContain('studioShell.select({');
+    expect(studioSource).toContain('onExportPptx={studioShell.exportDeck}');
+  });
+
   it('loads the v3 contract after the authoritative editor shell styles', () => {
     expect(studioSource.indexOf("import './nodeslide.css'")).toBeLessThan(
       studioSource.indexOf("import './nodeslideV3.css'"),

@@ -1,0 +1,25 @@
+{
+  "name": "@nodeslide/client-http",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "files": ["dist", "README.md"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/backend --external @nodeslide/contracts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nodeslide/backend": "0.1.0",
+    "@nodeslide/contracts": "0.1.0"
+  },
+  "devDependencies": {
+    "@nodeslide/testing": "0.1.0"
+  }
+}

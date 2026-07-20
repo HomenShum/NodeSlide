@@ -383,6 +383,16 @@ export function applyDeckPatch(
         placeholder: false,
         ...(operation.credit ? { credit: operation.credit } : {}),
         ...(element.image?.sourceId ? { sourceId: element.image.sourceId } : {}),
+        ...(operation.fit
+          ? { fit: operation.fit }
+          : element.image?.fit
+            ? { fit: element.image.fit }
+            : {}),
+        ...(operation.focalPoint
+          ? { focalPoint: structuredClone(operation.focalPoint) }
+          : element.image?.focalPoint
+            ? { focalPoint: structuredClone(element.image.focalPoint) }
+            : {}),
       };
       if (operation.sourceIds !== undefined) element.sourceIds = [...operation.sourceIds];
     } else if (operation.op === 'set_visibility_v1') {

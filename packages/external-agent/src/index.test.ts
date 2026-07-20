@@ -40,6 +40,19 @@ describe('NodeSlide external-agent boundary', () => {
     expect(validation.candidateSnapshot.elements[0]?.content).toBe('After');
   });
 
+  it('compiles the same candidate digest across separate default validate and propose calls', () => {
+    const snapshot = createNodeSlideTestSnapshot();
+    const patch = createNodeSlideTextPatch(snapshot, 'After');
+
+    const validation = validateDeckPatch(snapshot, patch);
+    const proposal = proposeDeckPatch(snapshot, patch);
+
+    expect(proposal.candidate.snapshotDigest).toBe(validation.candidateSnapshotDigest);
+    expect(proposal.candidate.committedAt).toBe(snapshot.deck.updatedAt + 1);
+    expect(validation.candidateSnapshot.deck.updatedAt).toBe(snapshot.deck.updatedAt + 1);
+    expect(Date.parse(proposal.createdAt)).not.toBe(proposal.candidate.committedAt);
+  });
+
   it('fails closed when any deck, slide, or element clock is stale', () => {
     const snapshot = createNodeSlideTestSnapshot();
     const staleDeck = { ...createNodeSlideTextPatch(snapshot, 'After'), baseDeckVersion: 0 };
@@ -100,7 +113,7 @@ describe('NodeSlide external-agent boundary', () => {
     });
     const application = applyDeckProposal(snapshot, proposal, {
       approvedProposalId: proposal.id,
-      appliedAt: snapshot.deck.updatedAt + 2,
+      appliedAt: snapshot.deck.updatedAt + 5_000,
     });
     expect(application.schemaVersion).toBe(NODESLIDE_FILE_APPLICATION_VERSION);
     expect(application.snapshot.deck.version).toBe(2);
@@ -111,6 +124,8 @@ describe('NodeSlide external-agent boundary', () => {
       baseDeckVersion: 1,
       resultingDeckVersion: 2,
     });
+    expect(application.snapshot.deck.updatedAt).toBe(snapshot.deck.updatedAt + 1);
+    expect(Date.parse(application.receipt.appliedAt)).toBe(snapshot.deck.updatedAt + 5_000);
     expect(snapshot).toEqual(before);
   });
 });

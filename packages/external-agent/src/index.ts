@@ -355,7 +355,9 @@ export function validateDeckPatch(
       scopeIssues,
     );
   }
-  const committedAt = options.committedAt ?? Math.max(Date.now(), snapshot.deck.updatedAt + 1);
+  // Candidate compilation must be reproducible. Wall-clock event time belongs
+  // on the proposal/application receipt, not inside the candidate snapshot.
+  const committedAt = options.committedAt ?? snapshot.deck.updatedAt + 1;
   requireNonNegativeNumber(committedAt, 'committedAt', 'invalid_patch');
   let result: ReturnType<typeof applyDeckPatch>;
   try {
@@ -390,18 +392,25 @@ export function validateDeckPatch(
 export function proposeDeckPatch(
   snapshotValue: unknown,
   patchValue: unknown,
-  options: { committedAt?: number } = {},
+  options: { committedAt?: number; createdAt?: number } = {},
 ): NodeSlideFileProposal {
   const snapshot = parseDeckSnapshot(snapshotValue);
   const patch = parsePatchCommand(patchValue);
-  const committedAt = options.committedAt ?? Math.max(Date.now(), snapshot.deck.updatedAt + 1);
+  const committedAt = options.committedAt ?? snapshot.deck.updatedAt + 1;
   const validation = validateDeckPatch(snapshot, patch, { committedAt });
+  const createdAtMillis = options.createdAt ?? Date.now();
+  requireNonNegativeNumber(createdAtMillis, 'createdAt', 'invalid_proposal');
+  const createdAtDate = new Date(createdAtMillis);
+  if (!Number.isFinite(createdAtDate.getTime())) {
+    invalid('invalid_proposal', 'createdAt must be a valid timestamp.');
+  }
+  const createdAt = createdAtDate.toISOString();
   return {
     schemaVersion: NODESLIDE_FILE_PROPOSAL_VERSION,
     id: proposalIdFor(validation),
     status: 'ready',
     applied: false,
-    createdAt: new Date(committedAt).toISOString(),
+    createdAt,
     base: {
       deckId: snapshot.deck.id,
       deckVersion: snapshot.deck.version,
@@ -478,12 +487,6 @@ export function parseFileProposal(value: unknown): NodeSlideFileProposal {
     'proposal.candidate.affectedSlideIds',
     'invalid_proposal',
   );
-  if (Date.parse(createdAt) !== candidate['committedAt']) {
-    invalid(
-      'invalid_proposal',
-      'proposal.createdAt must bind the exact candidate committedAt timestamp.',
-    );
-  }
   requireStringArray(
     candidate['affectedElementIds'],
     'proposal.candidate.affectedElementIds',
@@ -537,6 +540,10 @@ export function applyDeckProposal(
   }
   const appliedAt = options.appliedAt ?? Date.now();
   requireNonNegativeNumber(appliedAt, 'appliedAt', 'invalid_proposal');
+  const appliedAtDate = new Date(appliedAt);
+  if (!Number.isFinite(appliedAtDate.getTime())) {
+    invalid('invalid_proposal', 'appliedAt must be a valid timestamp.');
+  }
   const receiptBinding = digestJson({
     proposalId: proposal.id,
     baseSnapshotDigest: validation.baseSnapshotDigest,
@@ -556,7 +563,7 @@ export function applyDeckProposal(
       resultingSnapshotDigest: validation.candidateSnapshotDigest,
       patchDigest: validation.patchDigest,
       approval: 'exact_proposal_id',
-      appliedAt: new Date(appliedAt).toISOString(),
+      appliedAt: appliedAtDate.toISOString(),
       affectedSlideIds: validation.affectedSlideIds,
       affectedElementIds: validation.affectedElementIds,
     },

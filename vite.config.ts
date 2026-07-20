@@ -8,6 +8,18 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@nodeslide/backend': fileURLToPath(
+        new URL('./packages/backend/src/index.ts', import.meta.url),
+      ),
+      '@nodeslide/contracts': fileURLToPath(
+        new URL('./packages/contracts/src/index.ts', import.meta.url),
+      ),
+      '@nodeslide/engine': fileURLToPath(
+        new URL('./packages/engine/src/index.ts', import.meta.url),
+      ),
+      '@nodeslide/testing': fileURLToPath(
+        new URL('./packages/testing/src/index.ts', import.meta.url),
+      ),
     },
   },
   test: {

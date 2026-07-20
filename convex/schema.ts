@@ -541,6 +541,14 @@ export default defineSchema({
     retention: v.optional(v.union(v.literal('until_deleted'), v.literal('public_snapshot'))),
     status: v.optional(v.union(v.literal('ready'), v.literal('refreshing'), v.literal('failed'))),
     lastRefreshedAt: v.optional(v.number()),
+    snapshot: v.optional(
+      v.object({
+        kind: v.literal('search_excerpt'),
+        capturedAt: v.number(),
+        text: v.string(),
+        contentDigest: v.string(),
+      }),
+    ),
   })
     .index('by_stable_id', ['id'])
     .index('by_deck', ['deckId']),

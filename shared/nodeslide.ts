@@ -643,6 +643,17 @@ export interface SourceRecord {
   retention?: 'until_deleted' | 'public_snapshot';
   status?: 'ready' | 'refreshing' | 'failed';
   lastRefreshedAt?: number;
+  /**
+   * Immutable evidence captured by the search provider at retrieval time.
+   * This is deliberately a retrieved excerpt snapshot, not a claim that
+   * NodeSlide photographed the third-party page.
+   */
+  snapshot?: {
+    kind: 'search_excerpt';
+    capturedAt: number;
+    text: string;
+    contentDigest: string;
+  };
 }
 
 export type NodeSlideAgentRunStatus =

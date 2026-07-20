@@ -2467,6 +2467,7 @@ export const attachWebSourcesInternal = internalMutation({
       const normalized = normalizeWebSourceExcerpt(input);
       if (!normalized) continue;
       const { title, snippet, provider, url } = normalized;
+      const snapshotDigest = nodeslideContentDigest(snippet);
       const id = nodeslideStableId('source_web', args.deckId, url);
       const existing = await ctx.db
         .query('nodeslide_sources')
@@ -2482,12 +2483,18 @@ export const attachWebSourcesInternal = internalMutation({
         citation: snippet,
         license: 'Web source; verify reuse rights',
         format: 'web' as const,
-        contentDigest: nodeslideContentDigest(snippet),
+        contentDigest: snapshotDigest,
         byteSize: new TextEncoder().encode(snippet).byteLength,
         provider,
         retention: 'public_snapshot' as const,
         status: 'ready' as const,
         lastRefreshedAt: now,
+        snapshot: {
+          kind: 'search_excerpt' as const,
+          capturedAt: now,
+          text: snippet,
+          contentDigest: snapshotDigest,
+        },
       };
       if (existing) await ctx.db.patch(existing._id, source);
       else await ctx.db.insert('nodeslide_sources', source);

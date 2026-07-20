@@ -1,139 +1,192 @@
 # Next coding-agent session — start here
 
-Written 2026-07-19; last updated same day at `main` = `7e20b9c` (clean tree,
-prod verified live). Read this, then `docs/CAPABILITY_PLAN.md` (the checklist
-of record), then `docs/EXTRACTION_BOUNDARY.md` (rules you must not break).
-Mirror rule: every change under `src/domains/nodeslide/` or `convex/` must
-also land in `HomenShum/parity-studio` (dev monorepo, main @ `96c6e45`) in the
-same session.
+Last updated 2026-07-20. Read this first, then
+`docs/CAPABILITY_PLAN.md` (literal checklist of record),
+`docs/EXTRACTION_BOUNDARY.md` (package boundary), and
+`docs/ops/PRODUCTION_RUNBOOK.md` (intended deployment path).
 
-## Where things stand
+Code baselines before this docs-only handoff commit:
 
-- **Prod is live and publicly replicable**: https://nodeslide.vercel.app
-  (frontend, Vercel project `nodeslide`) + Convex prod `agile-stoat-411`
-  (has `OPENROUTER_API_KEY`, `NODESLIDE_PUBLIC_CREATION=true`). Deployed
-  bundle at handoff: `index-C0jhFaau.js`.
-- **Test corpus: 635 tests / 84 files, all green.** tsc 0, biome clean.
-  The corpus only grows — never delete a failing test; retarget honestly.
-- Four capability arcs shipped today (see CAPABILITY_PLAN checkmarks, each
-  with commit + live-proof evidence): measured layout + 6 archetypes +
-  geometry gates (A complete, 6/6 live-deck acceptance), charts D complete
-  (7 types, native PPTX, live bar→line switch), creation self-critique B1,
-  orchestrator/worker routing B2 (live-proved: Planner · Kimi K3 +
-  Executor · Gemini 3.5 Flash in one turn), edit shadow-verify loop B4,
-  KaTeX C1/C3 + PPTX math seam C2, Openverse licensed images E1/E4,
-  evidence lineage F1–F3, UX debt G1/G4, CI runtime smoke H1,
-  ecosystem map J1–J4 (`docs/ECOSYSTEM.md`).
+- NodeSlide: `4fcbf588da2031b0209ab247b851d7ab2436b106`
+- parity-studio: `de4a67585f9040db95b2af7caeae69c92894e4e5`
+- NodeRoom: `45444488d33c69ad3f3b261375d2e3e1557d9866`
 
-## What is open (priority order for the next arc)
+## Verified production state
 
-1. **I2–I6 packaging** (the platform arc — everything else is stable enough):
-   backend ports (`NodeSlideRepository` + Memory/Convex/Http adapters),
-   StudioShell/ConvexStudioAdapter split of `NodeSlideStudio.tsx` (the ONE
-   backend seam — see EXTRACTION_BOUNDARY.md "one-seam discovery"),
-   headless/styled react split, installer. The adapter contract draft is in
-   `docs/ECOSYSTEM.md`.
-2. **I7–I8 NodeRoom consumer proof** — required architectural test; NodeRoom
-   repo is at `D:/VSCode Projects/noderoom` (NodeAgent surface mapped in
-   ECOSYSTEM.md with file anchors). Use NodeRoom's existing NodeAgent
-   runtime; never embed a second runtime.
-3. **H2–H3 ops**: nightly fail-closed prod probe (create→edit→export;
-   scripts exist in session scratchpads — rewrite cleanly into `scripts/`),
-   CI-driven Vercel deploys (replace manual prebuilt staging).
-4. Smaller: C4 (open the math-raster PPTX in real PowerPoint), B6-camera
-   (routed run recorded on video — the trace token/cost readout half is now
-   PROVED live, see CAPABILITY_PLAN B6), B5 judged variations, E2/E3 (BYOK
-   image gen, crop), J5, H4 (repo hygiene: `nodeslide-deploy/` staging dir,
-   stale local branches `extract/codebase` / `feat/ai-elements-composer` /
-   `feat/depth-governance-port` are merged — prune).
-5. **B6 revise-branch demo (small, honest-checkmark blocker)**: the
-   2026-07-19 fault-injection runs showed a robust model absorbs induced
-   layout faults at generation time, so the self-critique REVISE pass never
-   fires live ("1 pass, clean" every run). To demonstrate + regression-test
-   the 2-pass path honestly, add a dev-only synthetic fault flag (env-gated,
-   labeled in the trace) or run a deliberately weak model. Do not fake it.
-6. **Stale-socket UX (real user pain, found live)**: after a prod redeploy,
-   an already-open client's Convex ACTIONS fail with masked "Server Error"
-   until reload (queries keep working). Reproduced this session; backend
-   proven healthy via direct `npx convex run`. Detect the failure class and
-   show an honest "NodeSlide was updated — reload to continue" banner.
-7. **Convex log observability**: `npx convex logs --prod` streamed nothing
-   during live failing AND succeeding actions this session (CLI vs
-   deployment issue?). Diagnose — blind prod made a 10-minute bug chase into
-   an hour.
-8. **Open PRs to triage (do not blind-merge)**: nodeslide draft PR #5
-   "injectable core boundary" (Codex); parity-studio draft PR #18
-   "external interoperability" (Codex) and PR #17 (nodeslide README docs,
-   open since 07-14 — review or close).
+- Public app: https://nodeslide.vercel.app
+- Immutable Vercel deployment:
+  https://nodeslide-3h78aruec-hshum2018-gmailcoms-projects.vercel.app
+  (`dpl_FdrshFwD6ZpUmkaBmHgaURtXBofg`; the immutable hostname is protected by
+  Vercel login, while the canonical alias is public).
+- Exact frontend entry: `/assets/index-B-8KKdg_.js`.
+- Convex production: `agile-stoat-411` at
+  https://agile-stoat-411.convex.cloud.
+- The authorization spine from PR #17 is deployed to Convex. The canonical
+  alias serves the same frontend entry produced by a production-bound local
+  build from final main `4fcbf58`. PR #19's replay hardening is merged and all
+  CI/consumer gates pass, but there is no exact-SHA automated deployment
+  receipt proving its Convex backend deployment; retain that distinction until
+  H3 is configured and run.
+- Final CI corpus at the code baseline: **764 tests across 99 files**
+  (core 744/96 + external-agent 11/1 + MCP 9/2), plus typecheck, Biome,
+  production build, MCP, node-platform, and packed NodeRoom/NodeAgent consumer
+  gates.
 
-## How to work (proven pattern, keep it)
+## What this session actually closed
 
-- **Arc = one Workflow run, sequential agents, each: implement → gate →
-  commit.** Parallel only for read-only work. One git-index owner at a time.
-- Every agent prompt carries: boundary rules, gate commands, honest-return
-  clause ("complete every step before returning — no 'waiting' returns"),
-  and a stop-rule (revert + report if blast radius explodes).
-- **Fail-closed verification is the house style**: assert real product
-  state, never claim by caption/log. "Build passed" is not "it runs" —
-  `scripts/smoke.mjs` exists because a green build once shipped a blank
-  page. Live-DOM verify prod after every deploy (bundle hash must match
-  local dist).
-- A **second Claude session pushes to origin/main mid-arc** sometimes
-  (PR #4, dialog fixes landed that way). On push rejection: pull --rebase,
-  re-run gates, push. Never force-push, never reset.
+- B5 judged variations; E2 BYOK image generation; E3 crop/focal controls;
+  stale-redeploy reload UX; H2 scheduled production probe; I3 controlled
+  React surfaces; and J5 ecosystem acceptance.
+- C4 live math acceptance. The persisted golden exported a 201,283-byte PPTX
+  with SHA256
+  `B1FCFB1A480E30B5D364A3D800694A9C568C46D1E135238A336D5EB90E4C50B6`.
+  Slide 4 contained exactly one math picture backed by a 998×346 PNG, no
+  equation text run, and the equation rendered visibly in desktop PowerPoint.
+  The portable export boundary used Georgia three times and Fraunces zero
+  times, without changing the canonical deck snapshot.
+- Production log diagnosis and the bounded capture wrapper. Use
+  `npx convex logs --history 50 --success --jsonl --prod`; the repository
+  wrapper is `scripts/capture-convex-logs.mjs`.
+- The repository authorization spine now requires host-supplied authorization
+  for all governed repository mutations and binds receipts to frozen request
+  evidence. NodeRoom's package consumer supports legacy-v0 and operation-v1
+  fail-closed during rollout; operation-v1 is the required path for current
+  NodeSlide main.
+- PR #19 closes the post-review replay gaps: immutable proposal decisions and
+  stale results, lazy legacy upgrades, canonical receipt/submission IDs,
+  dual-index envelope collision checks, contradictory-history rejection, and
+  organization-bound custom receipt replay. Its focused security suite is
+  33/33, and two independent final reviews found no remaining P1/P2 issues.
+- NodeRoom has bilateral package-level CI and real NodeAgent type compatibility.
+  The jobs currently pair moving `main` branches rather than an atomic
+  immutable-SHA pair. This is not yet a mounted second product consumer; I7
+  remains open.
+- Portable PPTX font fallback behavior was mirrored into parity-studio and its
+  full suite passed: **1,494 tests across 198 files**.
+
+## Remaining work — literal acceptance only
+
+1. **A5:** run the remaining 14 production generations. Six of the required
+   20 passed; do not convert 6/20 into a checkmark.
+2. **B3:** add and run the fleet-wide 1-token model probe. The Gemini 3.5 Flash
+   `reasoning:false` override shipped, but the fleet audit did not.
+3. **B6 and E4:** record the camera acceptances. The dev-only
+   `NODESLIDE_DEV_CREATION_FAULT=drop_requested_chart` repair path and the
+   headless image-search journey are tested, but the checklist explicitly asks
+   for recorded proof.
+4. **F1/F2/F4:** finish live screenshot capture, claim-bound region highlight,
+   and the element-to-region acceptance. F3 alone is complete.
+5. **G2/G3:** stream assistant text and render nested handoffs.
+6. **H3:** configure the production GitHub environment and retain a successful
+   exact-SHA automated deploy receipt. No repository environment, secrets, or
+   variables exist yet. Required secrets: `CONVEX_DEPLOY_KEY`, `VERCEL_TOKEN`,
+   `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`,
+   `VERCEL_AUTOMATION_BYPASS_SECRET`; optional diagnostics secret:
+   `CONVEX_DIAGNOSTICS_KEY`; required variable:
+   `NODESLIDE_PRODUCTION_DEPLOY_ENABLED=true`.
+7. **I2:** extract a truly isolated, mountable Convex mutation component. The
+   current package binding intentionally reuses the app mutation core.
+8. **I4:** mount NodeRoom ActorProof/membership policy as the production host
+   authorizer. Package-level authorization/evidence is real; the product host
+   adapter is not mounted.
+9. **I5/I6:** meet the literal invariant/configuration acceptance and prove a
+   clean consumer install + upgrade from immutable/public artifacts.
+10. **I7/I8:** mount the full NodeRoom room-artifact journey, including its own
+    principal, canvas, presenter/PPTX/reopen, browser/a11y, and Memory/Convex
+    parity; then make that smallest full journey bilateral CI.
+11. **H5:** the human still sends Mike's draft.
+
+## Mirror rule
+
+Mirror shared product behavior in `shared/`, `src/domains/nodeslide/`, and
+relevant application Convex code. Do not mechanically mirror NodeSlide-owned
+`packages/`, `mcp/`, production workflows/probes, registry/installer assets,
+isolated component-install material, or product-specific deployment adapters.
+
+For each mirrored behavior change: implement and gate NodeSlide first, port the
+smallest behavior-equivalent patch to parity-studio, run the parity release/UI
+gates, and record both commits. Exact file identity is not the contract;
+observable product behavior is.
+
+## Cross-repo truth and preserved work
+
+- NodeSlide and parity-studio should have zero open PRs after this handoff.
+  NodeRoom intentionally retains unrelated draft PRs #182, #190, and #219.
+- `D:/VSCode Projects/NodeSlide-external-agent-restack` contains the clean
+  follow-up branch commit `5f5634a`, squash-merged as main `4fcbf58` by PR #19.
+  It is no longer a source of uncommitted work and may be removed after no
+  process depends on it.
+- Preserve the active NodeSlide React-headless work and the unmerged external
+  agent / React-headless remote branches; they were not part of this closeout.
+- Preserve parity-studio's primary-worktree `NUL` entry while fast-forwarding
+  main. Its five unmerged remote branches need deliberate triage, not deletion.
+- Preserve unrelated dirty NodeRoom clones/worktrees and the worktrees backing
+  open PRs. Only clean, tree-equal authorization-rollout artifacts were cleanup
+  candidates.
+
+## How to work
+
+- Start with root-cause evidence before changing code. Keep one git-index owner
+  per worktree; parallelize read-only audits and independent repos.
+- Every implementation arc is implement → focused gate → full relevant gate →
+  commit. Never delete a failing test just to reduce the corpus.
+- Verification is fail-closed: assert real product state, not captions. A green
+  build is not runtime proof; run `scripts/smoke.mjs` locally and
+  `scripts/live-smoke.mjs` against production after deploys.
+- Never force-push or reset another session's work. On a push race, fetch,
+  rebase/merge deliberately, rerun gates, then push.
+- Check the exact checklist wording before marking an item complete. “Partial,”
+  “headless,” and “package-level” are meaningful boundaries here.
 
 ## Commands that matter
 
 ```bash
-# gates
-npm run typecheck && npm test
-npx biome check --write <touched files>
-# prod build + runtime smoke
+# full local gate
+npm run check
+
+# production-bound build and local runtime smoke
 VITE_CONVEX_URL=https://agile-stoat-411.convex.cloud \
 VITE_CONVEX_SITE_URL=https://agile-stoat-411.convex.site npm run build
-SMOKE_PORT=43xx node scripts/smoke.mjs
-# deploy
-npx convex deploy -y
-# frontend: stage dist/* + vercel.json rewrites into
-# "D:/VSCode Projects/nodeslide-deploy/nodeslide", then from there:
-npx vercel deploy --prod --yes --archive=tgz   # archive flag: plain deploy once hung 13min
+node scripts/smoke.mjs
+
+# production logs
+npx convex logs --history 50 --success --jsonl --prod
+node scripts/capture-convex-logs.mjs
 ```
 
-## Traps already paid for (do not re-pay)
+The capture wrapper requires a production-scoped `CONVEX_DEPLOY_KEY`; it writes
+only the bounded, sanitized artifact described in the script header.
 
-- `manualChunks` substring matches break React init order — exact folder
-  regex only (vite.config.ts comment).
-- OpenRouter models with `reasoning:true` burn budget before JSON (Kimi,
-  Gemini Flash) — pin overrides via `NODESLIDE_OPENREF_MODEL_OVERRIDES`
-  pattern in `convex/lib/nodeslideProvider.ts` (`openrouterProviderWithOverrides`).
-- Creation needs the 240s provider budget; slide count is enforced by the
-  response schema, not the prompt.
-- The default bar chart is DIV-based (`.ns-chart--bar`); SVG only for the
-  other chart types — probes must not assume `svg rect`.
-- Export gate = client `validateSnapshot`; geometry checks are now
-  single-sourced in shared — keep them agreeing (A4).
-- Windows autocrlf: local biome CRLF noise on untouched files is expected;
-  committed blobs are LF.
-- Playwright scripts must run from the repo root (module resolution); the
-  landing model select is native (`selectOption`), the composer/radix
-  selects are not.
-- Native `<dialog>` elements resolve to `position:absolute` — flex centering
-  on a backdrop never applies, and a content-sized dialog collapses its
-  `minmax(0,1fr)` grid row to 0. Fixed on `.ns-project-dialog` with
-  `inset:0; margin:auto` + definite `height` (commit `40dc0bd`, live-verified
-  via computed geometry on prod). Reuse this pattern for any future modal.
-- git-bash `/tmp` is invisible to Windows Python; use a real Windows path
-  (session scratchpad) for files shared across tools. Stray `./NUL` files
-  break `git add -A`.
-- `npx convex run <fn> '<json>' --prod` is the fastest way to get an
-  UNSANITIZED server error when the client only shows "Server Error" —
-  valid providerModes are `deterministic` / `openrouter_free` / `nebius`,
-  consent token `openrouter_full_brief_v1`.
+The intended production path is `.github/workflows/deploy-production.yml`:
+exact CI-tested main → production-bound build → local smoke → Convex deploy →
+Vercel deploy → exact-bundle live-DOM gate. It remains disabled until H3's
+external configuration exists. Manual prebuilt staging is emergency-only; no
+`nodeslide-deploy/` directory should remain after a run.
 
-## Submission context (why this repo exists)
+## Traps already paid for
 
-AI Fund SlideLang Build Challenge (Mike Rubino). The demo video is embedded
-in README (plays on GitHub); the Gmail draft to mike@aifund.ai has a
-`<VIDEO LINK TO INSERT>` placeholder — the human sends it. Honesty doctrine
-is the product thesis: never let a caption, capability claim, or trace say
-something the system didn't do.
+- Vite `manualChunks` substring matches can break React initialization order;
+  use exact folder matching.
+- OpenRouter `reasoning:true` can consume the response budget before JSON.
+  Keep explicit provider overrides and test them; B3's fleet probe is still due.
+- Creation needs the 240-second provider budget; slide count is enforced by the
+  response schema, not prompt prose.
+- The default bar chart is DIV-based; SVG-only probes are wrong for that case.
+- Keep shared/server/client validation verdicts aligned. Export uses the same
+  fail-closed geometry truth.
+- Native `<dialog>` uses `position:absolute`. Center it with `inset:0;
+  margin:auto` and give the grid a definite height to avoid the collapsed
+  `minmax(0,1fr)` body row.
+- Windows Git/PowerShell: autocrlf can create noise; Git Bash `/tmp` is not a
+  Windows Python path; a stray `NUL` entry breaks broad `git add -A`.
+- `npx convex run <fn> '<json>' --prod` exposes an unsanitized server error when
+  the browser only reports “Server Error.”
+- An open Convex action socket can go stale across a redeploy. The shipped UI
+  now asks the user to reload; do not misdiagnose that class as backend failure.
+
+## Submission context
+
+This is the AI Fund SlideLang Build Challenge submission for Mike Rubino. The
+demo is embedded in the README. The final email send is deliberately human.
+The product doctrine remains: no caption, trace, checkmark, or handoff may claim
+what the system did not prove.

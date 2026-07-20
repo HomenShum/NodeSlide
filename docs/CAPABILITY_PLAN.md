@@ -60,16 +60,18 @@ This is the root of the visual monotony AND the collision/overflow bug class.
       | gen2-deck2 (Farline Logistics) | 75 | 0 | 0 | true | 6 | 4 (media-dominant, split, stat-dominant, chart-dominant) | 0 | PASS |
       | gen2-deck3 (Quietdesk) | 87 | 0 | 0 | true | 6 | 3 (stat-dominant, media-dominant, split) | 1 | PASS |
 
-      Result: 6/6 decks pass every gate — 0 geometry errors and 0 warnings
-      across all decks, all export-clean (publishOk), all exactly 6 slides,
-      all ≥3 distinct archetypes. One adjacent archetype repeat observed
-      (gen2-deck3); not a gate, noted for honesty. Checked off on the
-      strength of 6/6 green with the N=6-vs-20 deviation stated above.
+      Result: 6/20 required live generations passed every gate — 0 geometry
+      errors and 0 warnings across those decks, all export-clean (publishOk),
+      all exactly 6 slides, and all ≥3 distinct archetypes. One adjacent
+      archetype repeat was observed (gen2-deck3); it is not a gate. Fourteen
+      generations remain, so the item stays unchecked until the literal N=20
+      acceptance is complete.
 
 ## B · Agentic depth — a real loop, not a labeled function call (P0/P1)
 
-Today: one planner call + one JSON repair. Thread steps are status labels.
-No decomposition, no sub-agents, no self-verification against the render.
+Original gap: one planner call + one JSON repair, status-label thread steps,
+and no decomposition or render-aware self-verification. B1/B2/B4/B5 now close
+most of that gap; the literal B3 fleet probe and B6 camera acceptance remain.
 
 - [x] B1. Creation loop (P0): generate spec → materialize → validate (incl.
       geometry after A3) → feed issue list back to the model → revise ops →
@@ -91,11 +93,12 @@ No decomposition, no sub-agents, no self-verification against the render.
       targets to the executor lane." and "Executor · Gemini 3.5 Flash: wrote
       copy for 2 text elements; deterministic validation reran on the
       assembled operations." Patch card (2 ops) validated and reviewable.
-- [x] B3. Unblock cheap executors (P1): pin `reasoning:false` for Gemini 3.5
+- [ ] B3. Unblock cheap executors (P1): pin `reasoning:false` for Gemini 3.5
       Flash in the pi-ai catalog override (same disease as Kimi's original bug);
       audit the rest of the fleet with a 1-token probe script.
-      — DONE 9d18ab6: generalized OpenRouter overrides pin reasoning:false for
-      Gemini 3.5 Flash.
+      — PARTIAL 9d18ab6: generalized OpenRouter overrides pin
+      `reasoning:false` for Gemini 3.5 Flash. The required fleet-wide 1-token
+      probe is not implemented or run.
 - [x] B4. Edit-path tool loop (P1): read → propose → verify-against-render →
       finalize, with real steps in the thread replacing status labels.
       — DONE f041168; LIVE-PROVED on prod 2026-07-19: sample deck, prompt
@@ -113,43 +116,16 @@ No decomposition, no sub-agents, no self-verification against the render.
 - [ ] B6. Acceptance: one routed run on camera — two models in one thread turn
       with parent-child spans, tokens, cost; creation self-corrects an induced
       layout issue without human input.
-      — PARTIAL (honest, 2026-07-19): routed run live-proved headless on prod
-      (two models, per-role thread labels, validated 2-op patch — see B2), but
-      NOT on camera. Trace-tab tokens/cost readout: PROVED in the second
-      2026-07-19 prod probe — a fresh Kimi K3 creation (6-slide investor
-      update) surfaced RUN TIME 1s · TOKENS 1,197 → 1,778 · COST $0.0052 ·
-      VALIDATION Passed · "openrouter · moonshotai/kimi-k3 · High effort" on
-      the Trace tab, plus the honest disclosure "The external attempt was
-      billed before the deterministic fallback" (DOM-text evidence; browser
-      screenshot pipeline was down during the probe). The run's self-critique
-      recorded "1 pass, clean" — the loop runs live but this run had nothing
-      to correct, so the creation-self-corrects-INDUCED-issue half remains
-      unproven (needs a fault-injection run). Left unchecked until the camera
-      run + induced-repair demonstration.
-
-      — FAULT-INJECTION RUN (2026-07-19, prod): ran three overflow-inducing
-      briefs on live prod (Kimi K3) designed to force a compression fault —
-      "EXACTLY 3 slides" hard-cap + a ~150-word verbatim legal disclaimer plus
-      six 25-word bullets all mandated onto one content slide. Outcome across
-      every run (UI + 5 direct `convex run` calls with args matched to the UI):
-      the model ABSORBS the induced fault at generation time — it splits/expands
-      content across slides (the "3-slide" and "4-slide" briefs materialized as
-      6 slides) so `collectNodeSlideCreationQualityReport` finds issueCount 0 and
-      the revision pass is a no-op ("Self-critique: 1 pass, clean"). Net honest
-      finding: the self-critique loop is present, runs on every creation, and is
-      verified clean live, but a genuine 2-pass REVISE event cannot be shown with
-      a robust model because strong generation never emits a spec bad enough to
-      fail the quality report. Forcing the revise branch would require a
-      deliberately weak model or synthetic spec-level fault injection (artificial),
-      so this half stays honestly unproven-live rather than faked. Side finding
-      (not a code bug): the in-app browser's Convex WebSocket went stale after a
-      mid-session prod redeploy and surfaced masked "Server Error" on subsequent
-      creates; fresh CLI calls and post-reload creates succeed — recent-decks
-      confirms the decks were created. Backend create path is sound.
+      — PARTIAL (2026-07-20): the routed two-model thread and tokens/cost trace
+      are live-proved headlessly. The dev-only
+      `NODESLIDE_DEV_CREATION_FAULT=drop_requested_chart` path and second-provider
+      repair are regression-tested. The required on-camera routed run showing
+      spans/tokens/cost plus a real induced repair remains.
 
 ## C · Math — typeset it or stop saying LaTeX (P1)
 
-The formula element stores a `latex`-tagged string; nothing typesets it.
+Original gap: the formula element stored a `latex`-tagged string but nothing
+typeset it. Browser and PPTX rendering now ship; C4 records the live proof.
 
 - [x] C1. KaTeX render for math elements in the browser canvas (SSR-safe).
       — DONE 5b0faac: real KaTeX typesetting in SlideRenderer with jsdom test
@@ -161,17 +137,19 @@ The formula element stores a `latex`-tagged string; nothing typesets it.
 - [x] C3. Expression validation + honest plain-text fallback when parse fails.
       — DONE 5b0faac: parse failures fall back to labeled plain text, never a
       silent blank.
-- [ ] C4. Acceptance: golden formula typesets in browser; PPTX shows the
+- [x] C4. Acceptance: golden formula typesets in browser; PPTX shows the
       rendered equation; capability claims match the adapter.
-      — PARTIAL (honest, 2026-07-19): browser half proved live — sample-deck
-      slide 4 exposes a real `math` role ("scope … ∩ …") on prod. The
-      PPTX-shows-rendered-equation half is unit-tested (9141672) but a live
-      export download was NOT inspected; left unchecked until a prod PPTX is
-      opened and the equation raster is seen.
+      — DONE 2026-07-20: the live golden typeset in-browser and exported as
+      `pptx_static_fallback`. The 201,283-byte PPTX (SHA256
+      `B1FCFB1A480E30B5D364A3D800694A9C568C46D1E135238A336D5EB90E4C50B6`)
+      contained one slide-4 math picture backed by a 998×346 PNG and no
+      equation text run; the equation was visibly rendered when opened in
+      desktop PowerPoint. Portable font proof: Georgia ×3, Fraunces ×0.
 
 ## D · Charts — from primitive to charting (P1)
 
-Single-series flat bars only.
+Original gap: single-series flat bars only. D1–D5 now cover the expanded chart
+model, renderer, governed edit path, native PPTX export, and live acceptance.
 
 - [x] D1. Types: line, horizontal bar, pie/donut, stacked bar; axis labels,
       ticks, units; multi-series schema (`labels` + `series[]`).
@@ -205,8 +183,9 @@ Single-series flat bars only.
 
 ## E · Images — fill the grey boxes (P1/P2)
 
-Placeholder governance is excellent; capability is thin. Generated decks arrive
-with empty slots unless a human uploads art.
+Original gap: generated decks arrived with empty slots unless a human uploaded
+art. Search, BYOK generation, and crop/focal controls now ship; E4's camera
+acceptance remains.
 
 - [x] E1. (P1) License-aware image search (Openverse first: no key, CC-licensed,
       credit metadata) behind explicit consent; insert fills alt/credit
@@ -226,15 +205,14 @@ with empty slots unless a human uploads art.
       aspect controls with renderer and regression coverage.
 - [ ] E4. Acceptance: placeholder → search → insert with license credit on
       camera; export stays clean (capability sync already shipped).
-      — DONE functionally (live headless probe 2026-07-19, DOM evidence not
-      video): placeholder → Openverse search → first-result insert with
-      license credit verified end-to-end on prod (see E1). Capability sync
-      keeps export truthful. Re-run on camera when the next demo is recorded.
+      — PARTIAL: a headless live search → insert → credit journey passed on
+      production and capability sync keeps export truthful. The literal camera
+      acceptance remains.
 
 ## F · Evidence & screenshots — prove the lineage (P1)
 
-Web-research snapshot capture and region-highlighted evidence are schema-real
-but never live-verified.
+Original gap: web-research snapshot capture and region-highlighted evidence
+were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
 
 - [ ] F1. Verify (or finish) snapshot capture on the web-research path; honest
       no-badge state when capture fails.
@@ -277,11 +255,20 @@ but never live-verified.
 - [ ] H3. Vercel deploys from CI on main push (replace manual prebuilt deploys);
       keep VITE_CONVEX_URL pinned to prod.
       — WORKFLOW DONE in PR #13 and hardened in PR #14. External repository
-      configuration remains open: create the production environment, install
-      its secrets and enable variable, then retain a successful exact-SHA
+      configuration remains open: no repository environment, secrets, or
+      variables are configured. Required secrets: `CONVEX_DEPLOY_KEY`,
+      `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, and
+      `VERCEL_AUTOMATION_BYPASS_SECRET`; optional diagnostics secret:
+      `CONVEX_DIAGNOSTICS_KEY`; required variable:
+      `NODESLIDE_PRODUCTION_DEPLOY_ENABLED=true`. Retain a successful exact-SHA
       deploy receipt before checking this item.
-- [ ] H4. Repo hygiene: retire stale parity worktrees/branches; remove
+- [x] H4. Repo hygiene: retire stale parity worktrees/branches; remove
       `nodeslide-deploy` staging folder; decide parity-studio's demo fate.
+      — DONE 2026-07-20: removed emergency deploy staging and temporary
+      consumer/proof worktrees, pruned only verified merged or tree-equivalent
+      branches, and preserved unrelated dirty/unmerged work for explicit
+      triage. The standalone NodeSlide deployment is the canonical live demo;
+      parity-studio remains the bounded dev-monorepo behavior mirror.
 - [ ] H5. Human: send the Mike draft (video URL now public via the README).
 
 ## I · Injectable engine — NodeSlide as a reusable governed presentation system (P0 boundary, P1 packaging)
@@ -290,9 +277,11 @@ Corrected after architecture review (2026-07-19): the product is NOT
 `<NodeSlideStudio/>` as a mega-component. It is a layered, independently
 consumable stack — **portable deck model + governed mutation engine + agent
 pack + backend ports + controlled React surfaces + optional source-owned
-registry + conformance/consumer tests**. The current app and NodeRoom become
-the first two consumers. Every other track builds against these interfaces
-from now on — capability work that crosses the boundary is a regression.
+registry + conformance/consumer tests**. The NodeSlide app is the product
+consumer; NodeRoom currently provides package-level packed-consumer and
+NodeAgent compatibility proof. A mounted end-to-end NodeRoom product journey
+remains I7. Every other track builds against these interfaces from now on —
+capability work that crosses the boundary is a regression.
 
 Package layout (target):
 
@@ -349,7 +338,12 @@ registry/                  shadcn-style source-owned compositions (studio route,
       default-deny asset policy plus HTTP, auth-session Convex, and
       owner-capability host adapters. The authorization-spine follow-up binds
       their server-produced receipts to the exact principal, action, resource,
-      deck, and opaque policy evidence without serializing credentials.
+      deck, and opaque policy evidence without serializing credentials. PR #19
+      additionally binds production replay to immutable submission, decision,
+      receipt, and version coordinates and fails closed on contradictory,
+      duplicate, noncanonical, or cross-envelope legacy state.
+      The production gap remains: NodeRoom ActorProof/membership authorization
+      is not yet the mounted host authorizer.
 - [ ] I5. **Governance = enforced invariants, configurable UX.** Required and
       non-bypassable server-side: mutation authority checks, version clocks
       (CAS), validation, trace lineage, source authorization, rollback.
@@ -392,8 +386,10 @@ registry/                  shadcn-style source-owned compositions (studio route,
       NodeRoom's consumer suite; both CIs run the same smallest journey
       (load → create → render → edit → version++ → export).
       — PARTIAL: bilateral cross-repo CI wiring is merged and green. The
-      shared proof does not yet mount/render/export, so the full journey in
-      this item remains open.
+      jobs currently test each repository against the other repository's
+      moving `main`; they do not create an atomic immutable-SHA pair. The
+      shared proof also does not yet mount/render/export, so the full journey
+      in this item remains open.
 
 ## J · Ecosystem organization — who owns what across HomenShum repos (P1, audit-first)
 
@@ -428,31 +424,26 @@ discipline as I1: audit before asserting; no invented org maps.
 
 ---
 
-## Suggested sequence (corrected)
+## Suggested sequence — remaining literal acceptance
 
 ```text
-1.  I1      extraction boundary (before ANY new capability work)
-2.  H1      real runtime smoke gate (NodeSlide CI now; NodeRoom CI at I7)
-3.  A1-A4   measured layout, 5 archetypes, unified validation
-4.  B1      generate -> render -> inspect -> critique -> repair loop
-            (the agent must SEE renders, geometry reports, Deck CI findings,
-            references - otherwise self-critique is theatre)
-5.  C       KaTeX (removes the fastest credibility gap)
-6.  D       real charts (multi-series line/bar/area, native PPTX)
-7.  E       image search/licensing pipeline
-8.  F       visual evidence lineage (screenshot + region binding)
-9.  I2-I6   ports, packages, installer (package only proven behavior -
-            release bar: install -> mount -> create -> edit -> live agent
-            change -> chart render -> PPTX -> Deck CI green, no copy-paste)
-10. J1-J4   ecosystem audits: NodeAgent runtime, eve control plane,
-            responsibility map, distribution decision (J1 gates I7)
-11. I7-I8   NodeRoom consumer proof + permanent cross-repo CI
+1.  A5          run the remaining 14 production generations
+2.  B3          add and run the fleet-wide 1-token probe
+3.  B6 / E4     record the literal camera acceptances
+4.  F1/F2/F4    finish visual evidence lineage
+5.  G2/G3       stream assistant text and render nested handoffs
+6.  H3          configure external deployment credentials + exact-SHA receipt
+7.  I2/I4/I5/I6 finish the isolated component, production host auth,
+                invariant acceptance, and immutable install/upgrade proof
+8.  I7/I8       mount and prove the full NodeRoom journey and bilateral CI
+9.  H5          human sends the Mike draft
 ```
 
-Organizing principle: **NodeSlide is no longer just an app — it is a reusable
-governed presentation engine with two consumers (this app, NodeRoom).** Every
-capability is implemented once in the engine, proven here, and independently
-verified in NodeRoom.
+Organizing principle: **NodeSlide is an app plus a reusable governed
+presentation engine.** The app is the product consumer today; NodeRoom proves
+package compatibility today and becomes the second product consumer only when
+the mounted I7 journey passes. Shared capability belongs in the engine and is
+independently verified by the smallest honest consumer proof available.
 
 Definition of done for the plan itself: every checked item has a fail-closed
 verification run linked in the commit message, and no caption anywhere claims

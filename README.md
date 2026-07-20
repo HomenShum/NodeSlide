@@ -6,7 +6,7 @@
 
 > NodeSlide turns a prompt, a structured brief, or raw data into a presentation you can *inspect and defend* — a canonical structured document that compiles to editable slides, where every change (human or agent) flows through one validated mutation path.
 
-> **Repository status (2026-07-20):** the NodeSlide app lives in this repo and **builds green** — the Convex backend deploys, `tsc -b` passes, and **764 tests across 99 files** pass. Extracted from the `parity-studio` monorepo with an IP-carve-out + secrets pass. See [Repository status](#repository-status).
+> **Repository status (2026-07-20):** the NodeSlide app lives in this repo and **builds green** — the Convex backend deploys, `tsc -b` passes, and **765 tests across 99 files** pass. Extracted from the `parity-studio` monorepo with an IP-carve-out + secrets pass. See [Repository status](#repository-status).
 
 ---
 
@@ -113,7 +113,7 @@ npm run dev        # vite + convex dev (concurrently) — open the printed local
 The **deterministic path needs no API keys** and produces a complete, reproducible deck. For live model runs, set `OPENROUTER_API_KEY` in Convex (`npx convex env set OPENROUTER_API_KEY …`) or bring your own key (BYOK). See [`.env.example`](.env.example).
 
 ```bash
-npm test            # vitest run — 764 tests across 99 files in the full CI corpus
+npm test            # vitest run — 765 tests across 99 files in the full CI corpus
 npm run typecheck   # tsc -b
 npm run build       # tsc -b && vite build
 npm run lint        # biome check .
@@ -180,7 +180,7 @@ The disclosure discipline from the AI Fund Build Challenge template, kept as a p
 
 Trust is a product surface, not a hidden backend step. Validation covers schema and referential integrity, bounds/overlap/text-fit, required chart/math data, safe media URLs, source coverage, export capability, and publication cleanliness — and it *blocks* unsafe present, publish, or export. Repairs are explicit proposals through the same gate.
 
-- **764 Vitest tests across 99 files**: schema coercion, planner attribution, repair convergence, acceptance and authorization gating, editor-state integrity, publishing privacy, web-research/ingestion contracts, governed-MCP consent parity, HTML/PPTX generation, reusable-package conformance, and AgentThread review scenarios. TypeScript compile is a release gate; `npx impeccable detect` runs zero-findings on the agent UI surfaces.
+- **765 Vitest tests across 99 files**: schema coercion, planner attribution, repair convergence, acceptance and authorization gating, immutable replay receipts, editor-state integrity, publishing privacy, web-research/ingestion contracts, governed-MCP consent parity, HTML/PPTX generation, reusable-package conformance, and AgentThread review scenarios. TypeScript compile is a release gate; `npx impeccable detect` runs zero-findings on the agent UI surfaces.
 - **Independent UI audit** via the open-source [`agentic-ui-qa`](https://github.com/HomenShum/agentic-ui-qa) protocol — the Agentic UI Bar (B1–B11) for surface trust/operability and a Depth tier (D1–D11) for agent-product maturity — with findings tracked in an append-only ledger.
 
 The Trace inspector exposes the exact provider/model, plan, tool calls, operations, validation state, digests, token/cost usage, and the human decision — a compact run-metrics card over an auditable events chain, closing on a validation seal honestly labeled by run type (countersigned for a live run, provisional for a deterministic one).
@@ -191,7 +191,7 @@ This repository is the public home for NodeSlide, extracted from the `parity-stu
 
 1. **Docs + overview** — ✅ done.
 2. **Source extraction** — ✅ done. `shared/nodeslide*`, `src/domains/nodeslide/`, the `convex/nodeslide*` server (schema scoped to the standalone product), and the MCP tools lifted into a standalone, buildable package. IP-carve-out verified (no Parity Studio platform IP; the frontend imports zero shell components) and secrets-scanned (none found).
-3. **Standalone build** — ✅ green. Convex backend deploys; `tsc -b` + `vite build` pass; **764 Vitest tests across 99 files** pass; biome clean.
+3. **Standalone build** — ✅ green. Convex backend deploys; `tsc -b` + `vite build` pass; **765 Vitest tests across 99 files** pass; biome clean.
 4. **CI + release gates** — ✅ typecheck, Vitest, build, runtime smoke, MCP, node-platform conformance, and packed NodeRoom/NodeAgent consumer checks run in CI. Scheduled production probing is also present; automatic production deployment still awaits repository secrets/environment configuration.
 
 The dedicated **live demo** is [nodeslide.vercel.app](https://nodeslide.vercel.app), backed by the production Convex deployment.

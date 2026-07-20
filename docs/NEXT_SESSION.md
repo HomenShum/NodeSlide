@@ -7,9 +7,9 @@ Last updated 2026-07-20. Read this first, then
 
 Code baselines before this docs-only handoff commit:
 
-- NodeSlide: `4fcbf588da2031b0209ab247b851d7ab2436b106`
+- NodeSlide: `c4fa556866adce9db8333d699ef45946dd02e4ef`
 - parity-studio: `de4a67585f9040db95b2af7caeae69c92894e4e5`
-- NodeRoom: `45444488d33c69ad3f3b261375d2e3e1557d9866`
+- NodeRoom: `4a4a3c259ddfa96e51b8194685a7c3b9ff56c384`
 
 ## Verified production state
 
@@ -21,14 +21,14 @@ Code baselines before this docs-only handoff commit:
 - Exact frontend entry: `/assets/index-B-8KKdg_.js`.
 - Convex production: `agile-stoat-411` at
   https://agile-stoat-411.convex.cloud.
-- The authorization spine from PR #17 is deployed to Convex. The canonical
-  alias serves the same frontend entry produced by a production-bound local
-  build from final main `4fcbf58`. PR #19's replay hardening is merged and all
-  CI/consumer gates pass, but there is no exact-SHA automated deployment
-  receipt proving its Convex backend deployment; retain that distinction until
-  H3 is configured and run.
-- Final CI corpus at the code baseline: **764 tests across 99 files**
-  (core 744/96 + external-agent 11/1 + MCP 9/2), plus typecheck, Biome,
+- The authorization spine and replay hardening from PRs #17, #19, and #21 were
+  manually deployed from exact code baseline `c4fa556` to production Convex.
+  The canonical alias serves the unchanged production-bound frontend entry;
+  PR #21 is server/test-only. Local and canonical live smokes pass. There is
+  still no automated exact-SHA deployment receipt; retain that distinction
+  until H3 is configured and run.
+- Final CI corpus at the code baseline: **765 tests across 99 files**
+  (core 745/96 + external-agent 11/1 + MCP 9/2), plus typecheck, Biome,
   production build, MCP, node-platform, and packed NodeRoom/NodeAgent consumer
   gates.
 
@@ -42,21 +42,22 @@ Code baselines before this docs-only handoff commit:
   `B1FCFB1A480E30B5D364A3D800694A9C568C46D1E135238A336D5EB90E4C50B6`.
   Slide 4 contained exactly one math picture backed by a 998×346 PNG, no
   equation text run, and the equation rendered visibly in desktop PowerPoint.
-  The portable export boundary used Georgia three times and Fraunces zero
-  times, without changing the canonical deck snapshot.
+  Slide-4 XML used Georgia three times and Fraunces zero times at the portable
+  export boundary, without changing the canonical deck snapshot.
 - Production log diagnosis and the bounded capture wrapper. Use
   `npx convex logs --history 50 --success --jsonl --prod`; the repository
   wrapper is `scripts/capture-convex-logs.mjs`.
 - The repository authorization spine now requires host-supplied authorization
   for all governed repository mutations and binds receipts to frozen request
-  evidence. NodeRoom's package consumer supports legacy-v0 and operation-v1
-  fail-closed during rollout; operation-v1 is the required path for current
-  NodeSlide main.
+  evidence. NodeRoom's package consumer is operation-v1-only for current
+  NodeSlide main; the old three-argument legacy ABI now fails closed.
 - PR #19 closes the post-review replay gaps: immutable proposal decisions and
   stale results, lazy legacy upgrades, canonical receipt/submission IDs,
   dual-index envelope collision checks, contradictory-history rejection, and
-  organization-bound custom receipt replay. Its focused security suite is
-  33/33, and two independent final reviews found no remaining P1/P2 issues.
+  organization-bound custom receipt replay. A subsequent review found one
+  origin deck-version binding gap; PR #21 closes it before any write for direct
+  and unresolved submissions. The focused security suite is now 34/34, and the
+  combined security/memory suite is 49/49.
 - NodeRoom has bilateral package-level CI and real NodeAgent type compatibility.
   The jobs currently pair moving `main` branches rather than an atomic
   immutable-SHA pair. This is not yet a mounted second product consumer; I7
@@ -112,10 +113,6 @@ observable product behavior is.
 
 - NodeSlide and parity-studio should have zero open PRs after this handoff.
   NodeRoom intentionally retains unrelated draft PRs #182, #190, and #219.
-- `D:/VSCode Projects/NodeSlide-external-agent-restack` contains the clean
-  follow-up branch commit `5f5634a`, squash-merged as main `4fcbf58` by PR #19.
-  It is no longer a source of uncommitted work and may be removed after no
-  process depends on it.
 - Preserve the active NodeSlide React-headless work and the unmerged external
   agent / React-headless remote branches; they were not part of this closeout.
 - Preserve parity-studio's primary-worktree `NUL` entry while fast-forwarding

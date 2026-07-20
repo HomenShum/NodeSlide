@@ -17,12 +17,7 @@
       "status": "passed",
       "durationMs": 49564,
       "slideCount": 6,
-      "distinctArchetypes": [
-        "chart-dominant",
-        "media-dominant",
-        "split",
-        "stat-dominant"
-      ],
+      "distinctArchetypes": ["chart-dominant", "media-dominant", "split", "stat-dominant"],
       "adjacentArchetypeRepeats": 2,
       "geometryErrors": 0,
       "geometryWarnings": 0,
@@ -89,12 +84,7 @@
       "status": "passed",
       "durationMs": 42693,
       "slideCount": 6,
-      "distinctArchetypes": [
-        "chart-dominant",
-        "media-dominant",
-        "split",
-        "stat-dominant"
-      ],
+      "distinctArchetypes": ["chart-dominant", "media-dominant", "split", "stat-dominant"],
       "adjacentArchetypeRepeats": 2,
       "geometryErrors": 0,
       "geometryWarnings": 0,
@@ -112,12 +102,7 @@
       "status": "passed",
       "durationMs": 61311,
       "slideCount": 6,
-      "distinctArchetypes": [
-        "chart-dominant",
-        "media-dominant",
-        "split",
-        "stat-dominant"
-      ],
+      "distinctArchetypes": ["chart-dominant", "media-dominant", "split", "stat-dominant"],
       "adjacentArchetypeRepeats": 2,
       "geometryErrors": 0,
       "geometryWarnings": 0,
@@ -183,12 +168,7 @@
       "status": "passed",
       "durationMs": 42978,
       "slideCount": 6,
-      "distinctArchetypes": [
-        "chart-dominant",
-        "media-dominant",
-        "split",
-        "stat-dominant"
-      ],
+      "distinctArchetypes": ["chart-dominant", "media-dominant", "split", "stat-dominant"],
       "adjacentArchetypeRepeats": 2,
       "geometryErrors": 0,
       "geometryWarnings": 0,
@@ -230,12 +210,7 @@
       "status": "passed",
       "durationMs": 49731,
       "slideCount": 6,
-      "distinctArchetypes": [
-        "chart-dominant",
-        "media-dominant",
-        "split",
-        "stat-dominant"
-      ],
+      "distinctArchetypes": ["chart-dominant", "media-dominant", "split", "stat-dominant"],
       "adjacentArchetypeRepeats": 2,
       "geometryErrors": 0,
       "geometryWarnings": 0,
@@ -253,12 +228,7 @@
       "status": "passed",
       "durationMs": 41463,
       "slideCount": 6,
-      "distinctArchetypes": [
-        "chart-dominant",
-        "media-dominant",
-        "split",
-        "stat-dominant"
-      ],
+      "distinctArchetypes": ["chart-dominant", "media-dominant", "split", "stat-dominant"],
       "adjacentArchetypeRepeats": 2,
       "geometryErrors": 0,
       "geometryWarnings": 0,
@@ -276,12 +246,7 @@
       "status": "passed",
       "durationMs": 49130,
       "slideCount": 6,
-      "distinctArchetypes": [
-        "chart-dominant",
-        "media-dominant",
-        "split",
-        "stat-dominant"
-      ],
+      "distinctArchetypes": ["chart-dominant", "media-dominant", "split", "stat-dominant"],
       "adjacentArchetypeRepeats": 2,
       "geometryErrors": 0,
       "geometryWarnings": 0,
@@ -299,12 +264,7 @@
       "status": "passed",
       "durationMs": 41529,
       "slideCount": 6,
-      "distinctArchetypes": [
-        "chart-dominant",
-        "media-dominant",
-        "split",
-        "stat-dominant"
-      ],
+      "distinctArchetypes": ["chart-dominant", "media-dominant", "split", "stat-dominant"],
       "adjacentArchetypeRepeats": 2,
       "geometryErrors": 0,
       "geometryWarnings": 0,

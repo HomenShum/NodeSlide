@@ -256,6 +256,10 @@ registry/                  shadcn-style source-owned compositions (studio route,
       Implement Memory (tests), Convex (reference, as a mountable Convex
       component with isolated tables + migrations), Http (hosted). The Convex
       component is the reference production backend, not the abstraction.
+      First boundary slice: package entrypoints, host-neutral ports, Memory
+      implementations, and conformance smoke now live under `packages/`;
+      Convex/HTTP adapters and the source move remain open. Parity capability
+      preservation is tracked in `PARITY_CAPABILITY_MIGRATION_LEDGER.md`.
 - [ ] I3. **Controlled React surfaces**: `<NodeSlideStudio/>` /
       `<DeckAgentThread/>` take snapshot/selection/proposal/permissions +
       onPatch/onPropose/onAccept/onReject/onExport — backend-neutral; ship

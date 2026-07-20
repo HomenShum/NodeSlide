@@ -19,7 +19,9 @@ import {
 } from './lib/nodeslideAgenticControls';
 import { authorizeBeforeConsumingQuota, nodeSlideActorQuotaKey } from './lib/nodeslideAuthority';
 import {
+  injectNodeSlideSyntheticCreationFault,
   nodeSlideCreationCritiquePromptReport,
+  resolveNodeSlideSyntheticCreationFault,
   runNodeSlideCreationCritique,
 } from './lib/nodeslideCreationCritique';
 import {
@@ -1288,7 +1290,22 @@ export const createDeckFromBrief = action({
     const provider = await invokeNodeSlideBriefProvider(providerChoice, async () =>
       callBriefProvider(),
     );
-    const firstSpec = provider?.ok === true ? provider.value : fallbackSpec;
+    const providerSpec = provider?.ok === true ? provider.value : fallbackSpec;
+    const runtimeEnvironment = process.env['NODESLIDE_RUNTIME_ENV'];
+    const faultFlag = process.env['NODESLIDE_DEV_CREATION_FAULT'];
+    const syntheticFault = resolveNodeSlideSyntheticCreationFault({
+      ...(runtimeEnvironment ? { runtimeEnvironment } : {}),
+      ...(faultFlag ? { faultFlag } : {}),
+    });
+    const syntheticFaultResult =
+      provider?.ok === true && syntheticFault
+        ? injectNodeSlideSyntheticCreationFault({
+            rawSpec: providerSpec,
+            brief,
+            fault: syntheticFault,
+          })
+        : null;
+    const firstSpec = syntheticFaultResult?.spec ?? providerSpec;
     // Bounded self-critique: materialize pass 1 in memory, collect concrete
     // quality signals, and run at most one revision call when the report is
     // non-empty. A failed or non-improving revision keeps pass 1.
@@ -1333,7 +1350,9 @@ export const createDeckFromBrief = action({
         : providerSucceeded
           ? `The user consented to send the full brief${attachments.length > 0 ? ` and ${attachments.length} uploaded data source${attachments.length === 1 ? '' : 's'}` : ''} to ${selectedProviderName}. The named ${selectedModelLabel} model supplied the narrative plan through pi-ai; NodeSlide normalized, persisted, and validated the deck deterministically.`
           : `The user consented to send the full brief${attachments.length > 0 ? ' and uploaded data sources' : ''} to ${selectedProviderName}. NodeSlide used its deterministic fallback because ${provider?.ok === false ? provider.reason : `the ${selectedModelLabel} route was unavailable.`}`;
-    const traceSummaryWithCritique = `${traceSummary} Self-critique: ${critique.summary}.`;
+    const traceSummaryWithCritique = `${traceSummary}${
+      syntheticFaultResult ? ` ${syntheticFaultResult.traceLabel}` : ''
+    } Self-critique: ${critique.summary}.`;
     return await ctx.runMutation(nodeslideInternal.createFromBriefInternal, {
       deckId,
       projectId,

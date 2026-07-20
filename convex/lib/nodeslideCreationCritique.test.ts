@@ -3,7 +3,9 @@ import type { DeckBrief, SlideElement } from '../../shared/nodeslide';
 import { findCompressedTextElements } from '../../shared/nodeslideLayoutMetrics';
 import {
   collectNodeSlideCreationQualityReport,
+  injectNodeSlideSyntheticCreationFault,
   nodeSlideCreationCritiquePromptReport,
+  resolveNodeSlideSyntheticCreationFault,
   runNodeSlideCreationCritique,
 } from './nodeslideCreationCritique';
 import type { NodeSlideProviderResult } from './nodeslideProvider';
@@ -242,6 +244,78 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(outcome.passes).toBe(1);
     expect(outcome.decision).toBe('skipped');
     expect(outcome.summary).toContain('self-critique loop skipped');
+  });
+});
+
+describe('development-only creation fault injection', () => {
+  it('fails closed unless both the runtime and allowlisted flag opt in', () => {
+    expect(
+      resolveNodeSlideSyntheticCreationFault({
+        runtimeEnvironment: 'production',
+        faultFlag: 'drop_requested_chart',
+      }),
+    ).toBeNull();
+    expect(
+      resolveNodeSlideSyntheticCreationFault({
+        runtimeEnvironment: 'development',
+        faultFlag: 'unknown',
+      }),
+    ).toBeNull();
+    expect(
+      resolveNodeSlideSyntheticCreationFault({
+        runtimeEnvironment: 'development',
+        faultFlag: 'drop_requested_chart',
+      }),
+    ).toBe('drop_requested_chart');
+  });
+
+  it('removes a requested provider chart and labels the synthetic origin', async () => {
+    const injected = injectNodeSlideSyntheticCreationFault({
+      rawSpec: CORRECTED_SPEC,
+      brief: ROADSHOW_BRIEF,
+      fault: 'drop_requested_chart',
+    });
+    expect(injected.applied).toBe(true);
+    expect(injected.traceLabel).toContain('Development-only synthetic fault');
+    expect(reportFor(injected.spec).missingPrimitives).toEqual(['chart']);
+
+    const outcome = await runNodeSlideCreationCritique({
+      title: 'Roadshow',
+      brief: ROADSHOW_BRIEF,
+      themeId: THEME_ID,
+      now: NOW,
+      firstSpec: injected.spec,
+      providerLive: true,
+      requestRevision: async () => ({
+        ok: true,
+        value: CORRECTED_SPEC,
+        telemetry: {
+          provider: 'openrouter',
+          model: 'kimi-k3',
+          costMicroUsd: 20,
+          inputTokens: 900,
+          outputTokens: 1_400,
+        },
+      }),
+    });
+    expect(outcome.decision).toBe('revised');
+    expect(outcome.passes).toBe(2);
+    expect(outcome.chosenReport?.issueCount).toBe(0);
+  });
+
+  it('records a requested but inapplicable fault without changing the spec', () => {
+    const withoutChartRequest: DeckBrief = {
+      ...ROADSHOW_BRIEF,
+      prompt: 'Roadshow narrative with a concise formula.',
+    };
+    const injected = injectNodeSlideSyntheticCreationFault({
+      rawSpec: CORRECTED_SPEC,
+      brief: withoutChartRequest,
+      fault: 'drop_requested_chart',
+    });
+    expect(injected.applied).toBe(false);
+    expect(injected.spec).toBe(CORRECTED_SPEC);
+    expect(injected.traceLabel).toContain('not applicable');
   });
 });
 

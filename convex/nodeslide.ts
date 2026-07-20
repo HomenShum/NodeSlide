@@ -11,6 +11,7 @@ import {
   NODESLIDE_LAYER_OPERATION_VERSION,
   NODESLIDE_PATCH_OPERATION_LIMIT,
   NODESLIDE_REFERENCE_USE_POLICIES,
+  type NodeSlideWorkspace,
   type PatchOperation,
   type PatchScope,
   type PatchSource,
@@ -197,6 +198,62 @@ type PatchMutationArgs = {
   profileId?: string;
   profileDigest?: string;
 };
+
+type PackageHostPatchCommand = Omit<HumanPatchMutationArgs, 'ownerAccessKey'>;
+
+const packageHostPatchValidator = v.object({
+  id: v.optional(v.string()),
+  deckId: v.string(),
+  baseDeckVersion: v.number(),
+  baseSlideVersions: nodeslideVersionClockValidator,
+  baseElementVersions: nodeslideVersionClockValidator,
+  scope: nodeslidePatchScopeValidator,
+  operations: v.array(nodeslidePatchOperationValidator),
+  summary: v.optional(v.string()),
+  linkedCommentId: v.optional(v.string()),
+  profileId: v.optional(v.string()),
+  profileDigest: v.optional(v.string()),
+});
+
+const packageAssetKindValidator = v.union(
+  v.literal('image'),
+  v.literal('video'),
+  v.literal('document'),
+  v.literal('data'),
+  v.literal('export'),
+  v.literal('other'),
+);
+
+const PACKAGE_ASSET_MAX_BYTES = 8 * 1024 * 1024;
+const PACKAGE_ASSET_METADATA_MAX_BYTES = 32 * 1024;
+
+type PackageHostReceiptOperation =
+  | 'patch.applied'
+  | 'proposal.created'
+  | 'proposal.accepted'
+  | 'proposal.rejected'
+  | 'proposal.stale'
+  | 'custom';
+
+type PackageHostReceipt = {
+  id: string;
+  deckId: string;
+  deckVersion: number;
+  operation: PackageHostReceiptOperation;
+  principalId: string;
+  patchId?: string;
+  traceId?: string;
+  recordedAt: number;
+  attributes: Record<string, PackageJsonValue>;
+};
+
+type PackageJsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | PackageJsonValue[]
+  | { [key: string]: PackageJsonValue };
 
 export const ensureWorkspace = mutation({
   args: { clientSessionId: v.string(), ownerAccessKey: v.optional(v.string()) },
@@ -699,19 +756,7 @@ export const proposePropagation = mutation({
 
 export const acceptPatch = mutation({
   args: { deckId: v.string(), ownerAccessKey: v.string(), patchId: v.string() },
-  handler: async (ctx, { deckId, ownerAccessKey, patchId }) => {
-    await requireOwnerAccess(ctx, deckId, ownerAccessKey);
-    const row = await findPatchRow(ctx, patchId);
-    if (!row || row.deckId !== deckId) throw new Error(`Patch ${patchId} not found.`);
-    if (row.status === 'accepted' || row.status === 'stale') {
-      return {
-        patch: patchFromRow(row),
-        workspace: await loadNodeSlideWorkspace(ctx, row.deckId, Date.now()),
-      };
-    }
-    if (row.status === 'rejected') throw new Error(`Patch ${patchId} was rejected.`);
-    return await commitPatch(ctx, { ...row, ownerAccessKey }, row);
-  },
+  handler: async (ctx, args) => await acceptPatchForOwner(ctx, args),
 });
 
 /**
@@ -927,18 +972,250 @@ export const acceptVariationPatch = internalMutation({
 
 export const rejectPatch = mutation({
   args: { deckId: v.string(), ownerAccessKey: v.string(), patchId: v.string() },
-  handler: async (ctx, { deckId, ownerAccessKey, patchId }) => {
-    await requireOwnerAccess(ctx, deckId, ownerAccessKey);
-    const row = await findPatchRow(ctx, patchId);
-    if (!row || row.deckId !== deckId) throw new Error(`Patch ${patchId} not found.`);
-    if (row.status === 'accepted') throw new Error('Accepted patches cannot be rejected.');
-    if (row.status !== 'rejected') {
-      const now = Date.now();
-      await ctx.db.patch(row._id, { status: 'rejected', updatedAt: now });
-      await finishPatchTrace(ctx, row, now, 'cancelled');
+  handler: async (ctx, args) => await rejectPatchForOwner(ctx, args),
+});
+
+/**
+ * Package-host wrappers for the existing anonymous-capability deployment.
+ * They deliberately reuse the production mutation core above instead of
+ * mounting a second copy of the NodeSlide data model. Serialized package
+ * principals are not accepted; owner identity is derived from the bearer
+ * capability only after requireOwnerAccess succeeds.
+ */
+export const packageGetDeck = query({
+  args: { deckId: v.string(), ownerAccessKey: v.string() },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    return await loadNodeSlideSnapshot(ctx, args.deckId);
+  },
+});
+
+export const packageApplyPatch = mutation({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    patch: packageHostPatchValidator,
+  },
+  handler: async (ctx, args) => {
+    const normalized = normalizePackageHostPatch(args);
+    const before = await requireSnapshot(ctx, args.deckId);
+    const committed = await commitPatch(ctx, normalized, null);
+    const snapshot = packageSnapshot(requirePackageWorkspace(committed.workspace));
+    const receipt = await persistPackageHostReceipt(
+      ctx,
+      packageHostReceipt({
+        ownerAccessKey: args.ownerAccessKey,
+        patch: committed.patch,
+        deckVersion: snapshot.deck.version,
+        operation: committed.patch.status === 'accepted' ? 'patch.applied' : 'custom',
+      }),
+    );
+    if (committed.patch.status !== 'accepted') {
+      return {
+        status: 'stale' as const,
+        patch: committed.patch,
+        snapshot,
+        receipt,
+        reasons: committed.staleReasons ?? ['The patch is stale.'],
+      };
     }
-    const updated = await findPatchRow(ctx, patchId);
-    return updated ? patchFromRow(updated) : null;
+    const applied = applyDeckPatch(
+      before,
+      {
+        baseDeckVersion: before.deck.version,
+        scope: committed.patch.scope,
+        operations: committed.patch.operations,
+      },
+      committed.patch.updatedAt,
+    );
+    return {
+      status: 'accepted' as const,
+      result: {
+        patch: committed.patch,
+        snapshot,
+        affectedSlideIds: applied.affectedSlideIds,
+        affectedElementIds: applied.affectedElementIds,
+        receipt,
+      },
+    };
+  },
+});
+
+export const packageCreateProposal = mutation({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    patch: packageHostPatchValidator,
+  },
+  handler: async (ctx, args) => {
+    const proposed = await persistProposal(ctx, normalizePackageHostPatch(args));
+    const receipt = await persistPackageHostReceipt(
+      ctx,
+      packageHostReceipt({
+        ownerAccessKey: args.ownerAccessKey,
+        patch: proposed.patch,
+        deckVersion: requirePackageWorkspace(proposed.workspace).deck.version,
+        operation: proposed.patch.status === 'stale' ? 'proposal.stale' : 'proposal.created',
+      }),
+    );
+    return { patch: proposed.patch, receipt };
+  },
+});
+
+export const packageResolveProposal = mutation({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    proposalId: v.string(),
+    decision: v.union(v.literal('accept'), v.literal('reject')),
+  },
+  handler: async (ctx, args) => {
+    if (args.decision === 'accept') {
+      const resolved = await acceptPatchForOwner(ctx, {
+        deckId: args.deckId,
+        ownerAccessKey: args.ownerAccessKey,
+        patchId: args.proposalId,
+      });
+      const snapshot = packageSnapshot(requirePackageWorkspace(resolved.workspace));
+      const status = resolved.patch.status === 'accepted' ? 'accepted' : 'stale';
+      const receipt = await persistPackageHostReceipt(
+        ctx,
+        packageHostReceipt({
+          ownerAccessKey: args.ownerAccessKey,
+          patch: resolved.patch,
+          deckVersion: snapshot.deck.version,
+          operation: status === 'accepted' ? 'proposal.accepted' : 'proposal.stale',
+        }),
+      );
+      return { status: status as 'accepted' | 'stale', patch: resolved.patch, snapshot, receipt };
+    }
+
+    const patch = await rejectPatchForOwner(ctx, {
+      deckId: args.deckId,
+      ownerAccessKey: args.ownerAccessKey,
+      patchId: args.proposalId,
+    });
+    if (!patch) throw new Error(`Patch ${args.proposalId} not found.`);
+    const snapshot = await requireSnapshot(ctx, args.deckId);
+    const receipt = await persistPackageHostReceipt(
+      ctx,
+      packageHostReceipt({
+        ownerAccessKey: args.ownerAccessKey,
+        patch,
+        deckVersion: snapshot.deck.version,
+        operation: 'proposal.rejected',
+      }),
+    );
+    return { status: 'rejected' as const, patch, snapshot, receipt };
+  },
+});
+
+export const packageListVersions = query({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const limit = Math.max(1, Math.min(100, Math.floor(args.limit ?? 50)));
+    const workspace = await loadNodeSlideWorkspace(ctx, args.deckId, Date.now());
+    return [...requirePackageWorkspace(workspace).versions]
+      .sort((left, right) => right.version - left.version)
+      .slice(0, limit);
+  },
+});
+
+export const packagePutAsset = mutation({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    id: v.optional(v.string()),
+    kind: packageAssetKindValidator,
+    fileName: v.string(),
+    contentType: v.string(),
+    contentDigest: v.string(),
+    bytes: v.bytes(),
+    metadata: v.any(),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const bytes = new Uint8Array(args.bytes);
+    if (bytes.byteLength > PACKAGE_ASSET_MAX_BYTES) {
+      throw new Error(`NodeSlide package assets support at most ${PACKAGE_ASSET_MAX_BYTES} bytes.`);
+    }
+    if (nodeslideContentDigest(bytes) !== args.contentDigest) {
+      throw new Error('NodeSlide package asset digest mismatch.');
+    }
+    const fileName = requiredText(args.fileName, 'fileName', 240);
+    const contentType = requiredText(args.contentType, 'contentType', 160);
+    const metadata = boundedPackageMetadata(args.metadata);
+    const now = Date.now();
+    const assetId = args.id
+      ? requiredText(args.id, 'assetId', 240)
+      : nodeslideEventId('asset', now, args.deckId, args.contentDigest, fileName);
+    const existing = await ctx.db
+      .query('nodeslide_package_assets')
+      .withIndex('by_stable_id', (index) => index.eq('assetId', assetId))
+      .first();
+    if (existing && existing.deckId !== args.deckId) throw new Error('Asset is unavailable.');
+    const reference = {
+      id: assetId,
+      deckId: args.deckId,
+      kind: args.kind,
+      fileName,
+      contentType,
+      byteSize: bytes.byteLength,
+      contentDigest: args.contentDigest,
+      createdAt: existing?.createdAt ?? now,
+      metadata,
+    };
+    const row = {
+      assetId,
+      deckId: args.deckId,
+      reference,
+      bytes: args.bytes,
+      createdAt: existing?.createdAt ?? now,
+      updatedAt: now,
+    };
+    if (existing) await ctx.db.replace(existing._id, row);
+    else await ctx.db.insert('nodeslide_package_assets', row);
+    return reference;
+  },
+});
+
+export const packageGetAsset = query({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    assetId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const asset = await ctx.db
+      .query('nodeslide_package_assets')
+      .withIndex('by_stable_id', (index) => index.eq('assetId', args.assetId))
+      .first();
+    if (!asset || asset.deckId !== args.deckId) return null;
+    return { reference: asset.reference, bytes: asset.bytes };
+  },
+});
+
+export const packageDeleteAsset = mutation({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    assetId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const asset = await ctx.db
+      .query('nodeslide_package_assets')
+      .withIndex('by_stable_id', (index) => index.eq('assetId', args.assetId))
+      .first();
+    if (!asset || asset.deckId !== args.deckId) return false;
+    await ctx.db.delete(asset._id);
+    return true;
   },
 });
 
@@ -2541,6 +2818,7 @@ function atomicVariationFromRow(row: Doc<'nodeslide_variations'>): SlideVariatio
     operations: row.operations,
     candidate: row.candidate,
     validation: row.validation,
+    ...(row.judge !== undefined ? { judge: row.judge } : {}),
     status: row.status,
     ...(row.selectedPatchId !== undefined ? { selectedPatchId: row.selectedPatchId } : {}),
     createdAt: row.createdAt,
@@ -2558,6 +2836,163 @@ function stableJson(value: unknown): string {
       .join(',')}}`;
   }
   return JSON.stringify(value);
+}
+
+async function acceptPatchForOwner(
+  ctx: MutationCtx,
+  args: { deckId: string; ownerAccessKey: string; patchId: string },
+) {
+  await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+  const row = await findPatchRow(ctx, args.patchId);
+  if (!row || row.deckId !== args.deckId) throw new Error(`Patch ${args.patchId} not found.`);
+  if (row.status === 'accepted' || row.status === 'stale') {
+    return {
+      patch: patchFromRow(row),
+      workspace: await loadNodeSlideWorkspace(ctx, row.deckId, Date.now()),
+    };
+  }
+  if (row.status === 'rejected') throw new Error(`Patch ${args.patchId} was rejected.`);
+  return await commitPatch(ctx, { ...row, ownerAccessKey: args.ownerAccessKey }, row);
+}
+
+async function rejectPatchForOwner(
+  ctx: MutationCtx,
+  args: { deckId: string; ownerAccessKey: string; patchId: string },
+): Promise<DeckPatch | null> {
+  await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+  const row = await findPatchRow(ctx, args.patchId);
+  if (!row || row.deckId !== args.deckId) throw new Error(`Patch ${args.patchId} not found.`);
+  if (row.status === 'accepted') throw new Error('Accepted patches cannot be rejected.');
+  if (row.status !== 'rejected') {
+    const now = Date.now();
+    await ctx.db.patch(row._id, { status: 'rejected', updatedAt: now });
+    await finishPatchTrace(ctx, row, now, 'cancelled');
+  }
+  const updated = await findPatchRow(ctx, args.patchId);
+  return updated ? patchFromRow(updated) : null;
+}
+
+function normalizePackageHostPatch(args: {
+  deckId: string;
+  ownerAccessKey: string;
+  patch: PackageHostPatchCommand;
+}): PatchMutationArgs {
+  if (args.patch.deckId !== args.deckId || args.patch.scope.deckId !== args.deckId) {
+    throw new Error('The package patch is outside the authorized deck.');
+  }
+  return normalizeHumanPatchArgs({
+    ...args.patch,
+    deckId: args.deckId,
+    ownerAccessKey: args.ownerAccessKey,
+  });
+}
+
+function packageSnapshot(workspace: NodeSlideWorkspace): DeckSnapshot {
+  return {
+    deck: workspace.deck,
+    slides: workspace.slides,
+    elements: workspace.elements,
+    sources: workspace.sources,
+  };
+}
+
+function requirePackageWorkspace(workspace: NodeSlideWorkspace | null): NodeSlideWorkspace {
+  if (!workspace) throw new Error('NodeSlide package workspace is unavailable.');
+  return workspace;
+}
+
+function packageHostPrincipalId(ownerAccessKey: string): string {
+  return `anonymous-owner:${nodeslideIdDigest(ownerAccessKey)}`;
+}
+
+function packageHostReceipt(args: {
+  ownerAccessKey: string;
+  patch: DeckPatch;
+  deckVersion: number;
+  operation: PackageHostReceiptOperation;
+}): PackageHostReceipt {
+  const recordedAt = args.patch.updatedAt;
+  return {
+    id: nodeslideStableId(
+      'repository_receipt',
+      args.patch.deckId,
+      args.patch.id,
+      args.operation,
+      String(args.deckVersion),
+    ),
+    deckId: args.patch.deckId,
+    deckVersion: args.deckVersion,
+    operation: args.operation,
+    principalId: packageHostPrincipalId(args.ownerAccessKey),
+    patchId: args.patch.id,
+    ...(args.patch.traceId === undefined ? {} : { traceId: args.patch.traceId }),
+    recordedAt,
+    attributes: {
+      source: args.patch.source,
+      status: args.patch.status,
+      governancePath: 'existing_nodeslide_server',
+    },
+  };
+}
+
+async function persistPackageHostReceipt(
+  ctx: MutationCtx,
+  receipt: PackageHostReceipt,
+): Promise<PackageHostReceipt> {
+  const existing = await ctx.db
+    .query('nodeslide_package_receipts')
+    .withIndex('by_stable_id', (index) => index.eq('receiptId', receipt.id))
+    .first();
+  if (existing) {
+    const persisted = existing.receipt as PackageHostReceipt;
+    if (stableJson(persisted) !== stableJson(receipt)) {
+      throw new Error('NodeSlide package receipt ID collision.');
+    }
+    return persisted;
+  }
+  await ctx.db.insert('nodeslide_package_receipts', {
+    receiptId: receipt.id,
+    deckId: receipt.deckId,
+    ...(receipt.patchId === undefined ? {} : { patchId: receipt.patchId }),
+    principalId: receipt.principalId,
+    receipt,
+    recordedAt: receipt.recordedAt,
+  });
+  return receipt;
+}
+
+function boundedPackageMetadata(value: unknown): Record<string, PackageJsonValue> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) {
+    throw new Error('NodeSlide package metadata must be an object.');
+  }
+  const encoded = JSON.stringify(value);
+  if (encoded.length > PACKAGE_ASSET_METADATA_MAX_BYTES) {
+    throw new Error(
+      `NodeSlide package metadata supports at most ${PACKAGE_ASSET_METADATA_MAX_BYTES} bytes.`,
+    );
+  }
+  assertPackageJsonValue(value);
+  return structuredClone(value as Record<string, PackageJsonValue>);
+}
+
+function assertPackageJsonValue(value: unknown): asserts value is PackageJsonValue {
+  if (
+    value === null ||
+    typeof value === 'string' ||
+    typeof value === 'boolean' ||
+    (typeof value === 'number' && Number.isFinite(value))
+  ) {
+    return;
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) assertPackageJsonValue(item);
+    return;
+  }
+  if (value && typeof value === 'object') {
+    for (const item of Object.values(value)) assertPackageJsonValue(item);
+    return;
+  }
+  throw new Error('NodeSlide package metadata must contain JSON values only.');
 }
 
 async function persistProposal(ctx: MutationCtx, args: PatchMutationArgs) {

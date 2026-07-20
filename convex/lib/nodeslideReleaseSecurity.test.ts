@@ -15,6 +15,7 @@ import {
   addComment,
   applyPatch,
   getPresenterSnapshot,
+  packageApplyPatch,
   proposePatch,
   publishDeck,
   rejectPatch,
@@ -27,6 +28,7 @@ import {
   loadNodeSlideSnapshot,
   loadNodeSlideWorkspace,
 } from './nodeslideData';
+import { nodeslideIdDigest } from './nodeslideIds';
 import { clocksForNodeSlideOperations } from './nodeslidePatches';
 import { buildGoldenNodeSlide } from './nodeslideSeed';
 import {
@@ -298,8 +300,63 @@ const restoreVersionHandler = registeredHandler<
   },
   { patch: DeckPatch; workspace: NodeSlideWorkspace | null }
 >(restoreVersion);
+const packageApplyPatchHandler = registeredHandler<
+  {
+    deckId: string;
+    ownerAccessKey: string;
+    patch: Omit<PatchRequest, 'ownerAccessKey'> & Record<string, unknown>;
+    principal?: unknown;
+  },
+  {
+    status: 'accepted';
+    result: { patch: DeckPatch; receipt: { principalId: string; attributes: unknown } };
+  }
+>(packageApplyPatch);
 
 describe('NodeSlide release security', () => {
+  it('derives package receipts from owner capability and ignores forged principal/provenance', async () => {
+    const database = new MemoryDatabase();
+    const fixture = seedWorkspace(database, 'package-host', OWNER_ACCESS_KEY, '8');
+    const context = { db: database } as unknown as MutationCtx;
+    const snapshot = await requiredSnapshot(context, fixture.snapshot.deck.id);
+    const edit = textEdit(snapshot, 'Package-hosted edit');
+    const clocks = clocksForNodeSlideOperations(snapshot, [edit.operation]);
+
+    const response = await packageApplyPatchHandler(context, {
+      deckId: snapshot.deck.id,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+      principal: {
+        userId: 'forged:administrator',
+        roles: ['administrator'],
+        permissions: ['*'],
+      },
+      patch: {
+        id: 'package-host-patch',
+        deckId: snapshot.deck.id,
+        baseDeckVersion: snapshot.deck.version,
+        ...clocks,
+        scope: edit.scope,
+        operations: [edit.operation],
+        summary: 'Package host path',
+        source: 'agent',
+        traceId: 'forged-trace',
+      },
+    });
+
+    expect(response.status).toBe('accepted');
+    expect(response.result.patch.source).toBe('human');
+    expect(response.result.patch.traceId).toBeUndefined();
+    expect(response.result.receipt.principalId).toBe(
+      `anonymous-owner:${nodeslideIdDigest(OWNER_ACCESS_KEY)}`,
+    );
+    expect(response.result.receipt.principalId).not.toContain('forged');
+    expect(response.result.receipt.attributes).toEqual(
+      expect.objectContaining({ governancePath: 'existing_nodeslide_server' }),
+    );
+    expect(database.rows('nodeslide_package_receipts')).toHaveLength(1);
+    expect(database.rows('nodeslide_versions')).toHaveLength(2);
+  });
+
   it('removes public provenance arguments and forces direct human mutations to human', async () => {
     expect(publicArgNames(applyPatch)).not.toContain('source');
     expect(publicArgNames(applyPatch)).not.toContain('traceId');

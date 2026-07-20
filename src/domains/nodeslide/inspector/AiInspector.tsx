@@ -339,7 +339,14 @@ export function AiInspector<CommandId extends string = string>({
   }, [traces]);
   const latestBatchId = variations[0]?.batchId;
   const directions = useMemo(
-    () => variations.filter((variation) => variation.batchId === latestBatchId),
+    () =>
+      variations
+        .filter((variation) => variation.batchId === latestBatchId)
+        .sort(
+          (left, right) =>
+            (left.judge?.rank ?? Number.MAX_SAFE_INTEGER) -
+            (right.judge?.rank ?? Number.MAX_SAFE_INTEGER),
+        ),
     [latestBatchId, variations],
   );
   const previewedVariation = directions.find(
@@ -924,7 +931,10 @@ export function AiInspector<CommandId extends string = string>({
               {variationGenerating ? (
                 <div className="ns-variation-loading" aria-live="polite">
                   <LoaderCircle className="ns-spin" size={16} />
-                  <span>Generating, materializing, and validating three bounded directions...</span>
+                  <span>
+                    Generating, materializing, and validating three independent branches, then
+                    judging the bounded directions...
+                  </span>
                 </div>
               ) : variationsLoading ? (
                 <div className="ns-variation-loading" aria-live="polite">
@@ -1625,7 +1635,24 @@ function VariationCard({
               : 'Validation clean'
             : 'Validation blocked'}
         </span>
+        <span
+          className={variation.judge ? 'is-valid' : 'is-invalid'}
+          data-testid="variation-judge-score"
+        >
+          {variation.judge
+            ? `Judge #${variation.judge.rank} · ${variation.judge.score}/${variation.judge.maxScore}`
+            : 'Legacy direction · not ranked'}
+        </span>
       </div>
+      {variation.judge ? (
+        <details className="ns-variation-validation-details">
+          <summary>Why the judge ranked this #{variation.judge.rank}</summary>
+          <p>{variation.judge.rationale}</p>
+          <small>
+            Receipt {variation.judge.candidateDigest} · branch {variation.judge.branchId}
+          </small>
+        </details>
+      ) : null}
       {validationNotes.length > 0 ? (
         <details className="ns-variation-validation-details">
           <summary>View validation notes</summary>

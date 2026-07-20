@@ -1,0 +1,116 @@
+name: Deploy production
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: nodeslide-production-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Convex + Vercel + live DOM gate
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (vars.NODESLIDE_PRODUCTION_DEPLOY_ENABLED == 'true' &&
+       github.event_name == 'workflow_run' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: production
+      url: ${{ steps.vercel_deploy.outputs.deployment_url }}
+    env:
+      PROD_CONVEX_URL: https://agile-stoat-411.convex.cloud
+      PROD_CONVEX_SITE_URL: https://agile-stoat-411.convex.site
+      PROD_WEB_URL: https://nodeslide.vercel.app
+    steps:
+      - name: Check out the exact CI-tested main commit
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - name: Verify production credentials are configured
+        shell: bash
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          missing=()
+          for name in CONVEX_DEPLOY_KEY VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+            if [[ -z "${!name:-}" ]]; then missing+=("$name"); fi
+          done
+          if (( ${#missing[@]} > 0 )); then
+            echo "::error::Missing production secret(s): ${missing[*]}"
+            exit 1
+          fi
+          if [[ "$CONVEX_DEPLOY_KEY" != prod:agile-stoat-411\|* ]]; then
+            echo "::error::CONVEX_DEPLOY_KEY is not scoped to agile-stoat-411 production."
+            exit 1
+          fi
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Build the production-bound frontend
+        run: npm run build
+        env:
+          VITE_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
+          VITE_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
+      - name: Run the local built-bundle smoke gate
+        run: node scripts/smoke.mjs
+      - name: Deploy Convex functions to the pinned production deployment
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        run: npx convex deploy --typecheck enable --message "GitHub Actions ${DEPLOY_SHA}"
+      - name: Deploy the source commit to Vercel production
+        id: vercel_deploy
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          deployment_url="$(
+            npx --yes vercel@56.3.2 deploy \
+              --prod \
+              --yes \
+              --non-interactive \
+              --no-color \
+              --archive=tgz \
+              --token="$VERCEL_TOKEN" \
+              --build-env "VITE_CONVEX_URL=$PROD_CONVEX_URL" \
+              --build-env "VITE_CONVEX_SITE_URL=$PROD_CONVEX_SITE_URL" \
+              --meta "githubCommitSha=$DEPLOY_SHA"
+          )"
+          deployment_url="$(printf '%s\n' "$deployment_url" | tail -n 1 | tr -d '\r')"
+          if [[ ! "$deployment_url" =~ ^https://[A-Za-z0-9.-]+\.vercel\.app$ ]]; then
+            echo "::error::Vercel CLI did not return a valid deployment URL."
+            exit 1
+          fi
+          echo "deployment_url=$deployment_url" >> "$GITHUB_OUTPUT"
+      - name: Verify deployment URL and canonical alias serve the gated bundle
+        env:
+          EXPECTED_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
+          EXPECTED_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
+          DEPLOYMENT_URL: ${{ steps.vercel_deploy.outputs.deployment_url }}
+        run: node scripts/live-smoke.mjs "$DEPLOYMENT_URL" "$PROD_WEB_URL"

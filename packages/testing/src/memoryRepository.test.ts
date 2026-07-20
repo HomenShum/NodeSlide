@@ -1,5 +1,9 @@
+import {
+  type NodeSlideRepositoryError,
+  assertProductionNodeSlideRepository,
+  nodeSlideApprovalModeForPatch,
+} from '@nodeslide/backend';
 import { describe, expect, it } from 'vitest';
-import type { NodeSlideRepositoryError } from '../../backend/src';
 import { runNodeSlideRepositoryConformance } from './conformance';
 import {
   NODESLIDE_TEST_PRINCIPAL,
@@ -159,5 +163,28 @@ describe('injectable NodeSlide testkit', () => {
       attributes: { version: 2 },
     });
     expect(telemetry.records()).toHaveLength(1);
+  });
+
+  it('defaults authorization to explicit permissions and labels memory as test-only', async () => {
+    const snapshot = createNodeSlideTestSnapshot();
+    const repository = new MemoryNodeSlideRepository({ snapshots: [snapshot] });
+    await expect(
+      repository.getDeck({
+        deckId: snapshot.deck.id,
+        principal: { ...NODESLIDE_TEST_PRINCIPAL, permissions: [] },
+      }),
+    ).rejects.toMatchObject({ code: 'forbidden' });
+    expect(() => assertProductionNodeSlideRepository(repository)).toThrow(
+      /not production-governed/,
+    );
+  });
+
+  it('fails closed to proposal review for unspecified governance modes', () => {
+    const snapshot = createNodeSlideTestSnapshot();
+    const patch = createNodeSlideTextPatch(snapshot, 'Policy');
+    expect(nodeSlideApprovalModeForPatch({ byOperationMode: {} }, patch)).toBe('proposal_required');
+    expect(nodeSlideApprovalModeForPatch({ byOperationMode: { copy: 'auto_commit' } }, patch)).toBe(
+      'auto_commit',
+    );
   });
 });

@@ -1,4 +1,4 @@
-import type { NodeSlideTelemetryAdapter, NodeSlideTelemetryRecord } from '../../backend/src';
+import type { NodeSlideTelemetryAdapter, NodeSlideTelemetryRecord } from '@nodeslide/backend';
 
 export class MemoryNodeSlideTelemetryAdapter implements NodeSlideTelemetryAdapter {
   readonly #records: NodeSlideTelemetryRecord[] = [];

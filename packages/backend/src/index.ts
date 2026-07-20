@@ -4,10 +4,11 @@ import type {
   DeckSnapshot,
   DeckVersion,
   NodeSlideProposalKind,
+  OperationMode,
   PatchOperation,
   PatchScope,
   PatchSource,
-} from '../../../shared/nodeslide';
+} from '@nodeslide/contracts';
 
 /** Host-authenticated identity normalized before it enters NodeSlide. */
 export interface NodeSlidePrincipal {
@@ -15,6 +16,162 @@ export interface NodeSlidePrincipal {
   organizationId?: string;
   roles: readonly string[];
   permissions: readonly string[];
+}
+
+export const NODESLIDE_PERMISSIONS = {
+  read: 'nodeslide:read',
+  propose: 'nodeslide:propose',
+  write: 'nodeslide:write',
+  approve: 'nodeslide:approve',
+  export: 'nodeslide:export',
+  publish: 'nodeslide:publish',
+  rollback: 'nodeslide:rollback',
+  manageAssets: 'nodeslide:assets',
+} as const;
+
+export type NodeSlidePermission =
+  (typeof NODESLIDE_PERMISSIONS)[keyof typeof NODESLIDE_PERMISSIONS];
+
+/** Host auth is resolved before repository calls; packages never import an auth vendor. */
+export interface NodeSlidePrincipalAdapter<HostContext = unknown> {
+  resolvePrincipal(context: HostContext): Promise<NodeSlidePrincipal | null>;
+}
+
+export type NodeSlideRepositoryAction =
+  | 'deck.read'
+  | 'deck.propose'
+  | 'deck.mutate'
+  | 'proposal.resolve'
+  | 'versions.read'
+  | 'deck.export'
+  | 'deck.publish'
+  | 'deck.rollback'
+  | 'assets.manage';
+
+export interface NodeSlideAuthorizationRequest {
+  principal: NodeSlidePrincipal;
+  deckId: string;
+  action: NodeSlideRepositoryAction;
+}
+
+export interface NodeSlideAuthorizationAdapter {
+  authorize(request: NodeSlideAuthorizationRequest): Promise<void>;
+}
+
+const ACTION_PERMISSION: Readonly<Record<NodeSlideRepositoryAction, NodeSlidePermission>> = {
+  'deck.read': NODESLIDE_PERMISSIONS.read,
+  'deck.propose': NODESLIDE_PERMISSIONS.propose,
+  'deck.mutate': NODESLIDE_PERMISSIONS.write,
+  'proposal.resolve': NODESLIDE_PERMISSIONS.approve,
+  'versions.read': NODESLIDE_PERMISSIONS.read,
+  'deck.export': NODESLIDE_PERMISSIONS.export,
+  'deck.publish': NODESLIDE_PERMISSIONS.publish,
+  'deck.rollback': NODESLIDE_PERMISSIONS.rollback,
+  'assets.manage': NODESLIDE_PERMISSIONS.manageAssets,
+};
+
+/** Default-deny permission adapter suitable for test stores and server adapters. */
+export const explicitPermissionAuthorization: NodeSlideAuthorizationAdapter = {
+  async authorize({ principal, action }) {
+    const permission = ACTION_PERMISSION[action];
+    if (!principal.permissions.includes(permission)) {
+      throw new NodeSlideRepositoryError(
+        'forbidden',
+        `Principal ${principal.userId} lacks required permission ${permission}.`,
+      );
+    }
+  },
+};
+
+export type NodeSlideApprovalMode = 'auto_commit' | 'proposal_required';
+
+export interface NodeSlideApprovalPolicy {
+  /** Unspecified modes fail closed to proposal_required. */
+  byOperationMode: Partial<Record<OperationMode, NodeSlideApprovalMode>>;
+  /** Hosts may require approval for specific operations regardless of mode. */
+  alwaysRequireProposalFor?: readonly PatchOperation['op'][];
+}
+
+export function nodeSlideApprovalModeForPatch(
+  policy: NodeSlideApprovalPolicy,
+  patch: Pick<NodeSlidePatchCommand, 'operations' | 'scope'>,
+): NodeSlideApprovalMode {
+  const forced = new Set(policy.alwaysRequireProposalFor ?? []);
+  if (patch.operations.some((operation) => forced.has(operation.op))) return 'proposal_required';
+  return policy.byOperationMode[patch.scope.operationMode] ?? 'proposal_required';
+}
+
+export type NodeSlideMutationInvariant =
+  | 'mutation_authority'
+  | 'version_cas'
+  | 'candidate_validation'
+  | 'trace_lineage'
+  | 'source_authorization'
+  | 'rollback';
+
+export type NodeSlideInvariantEnforcement = 'server' | 'in_process_test';
+
+export interface NodeSlideRepositoryDescriptor {
+  adapter: 'memory' | 'convex' | 'http' | 'custom';
+  name: string;
+  invariants: Readonly<Record<NodeSlideMutationInvariant, NodeSlideInvariantEnforcement>>;
+}
+
+export const NODESLIDE_REQUIRED_MUTATION_INVARIANTS: readonly NodeSlideMutationInvariant[] = [
+  'mutation_authority',
+  'version_cas',
+  'candidate_validation',
+  'trace_lineage',
+  'source_authorization',
+  'rollback',
+];
+
+export const NODESLIDE_GOVERNANCE_CONTRACT_VERSION = 'nodeslide.governance/v1' as const;
+
+/** A server adapter must make this explicit and pass conformance before release. */
+export interface NodeSlideServerGovernanceDeclaration {
+  version: typeof NODESLIDE_GOVERNANCE_CONTRACT_VERSION;
+  enforced: Readonly<Record<NodeSlideMutationInvariant, true>>;
+}
+
+export function createProductionRepositoryDescriptor(
+  adapter: 'convex' | 'http' | 'custom',
+  name: string,
+  declaration: NodeSlideServerGovernanceDeclaration,
+): NodeSlideRepositoryDescriptor {
+  if (declaration.version !== NODESLIDE_GOVERNANCE_CONTRACT_VERSION) {
+    throw new NodeSlideRepositoryError(
+      'invalid_state',
+      `Unsupported governance declaration ${String(declaration.version)}.`,
+    );
+  }
+  const invariants = Object.fromEntries(
+    NODESLIDE_REQUIRED_MUTATION_INVARIANTS.map((invariant) => {
+      if (declaration.enforced[invariant] !== true) {
+        throw new NodeSlideRepositoryError(
+          'invalid_state',
+          `${name} did not declare server enforcement for ${invariant}.`,
+        );
+      }
+      return [invariant, 'server'];
+    }),
+  ) as Record<NodeSlideMutationInvariant, NodeSlideInvariantEnforcement>;
+  return { adapter, name, invariants };
+}
+
+/** Prevents a test-only or partially governed adapter from being labeled production-ready. */
+export function assertProductionNodeSlideRepository(
+  repository: Pick<NodeSlideRepository, 'descriptor'>,
+): void {
+  const missing = NODESLIDE_REQUIRED_MUTATION_INVARIANTS.filter(
+    (invariant) => repository.descriptor.invariants[invariant] !== 'server',
+  );
+  if (missing.length > 0) {
+    throw new NodeSlideRepositoryError(
+      'invalid_state',
+      `${repository.descriptor.name} is not production-governed: ${missing.join(', ')}.`,
+    );
+  }
 }
 
 export type NodeSlideJsonValue =
@@ -125,6 +282,7 @@ export type NodeSlideProposalResolution =
  * use Convex, HTTP, Postgres, or an in-memory test store.
  */
 export interface NodeSlideRepository {
+  readonly descriptor: NodeSlideRepositoryDescriptor;
   getDeck(input: NodeSlideGetDeckInput): Promise<DeckSnapshot | null>;
   applyPatch(input: NodeSlideApplyPatchInput): Promise<NodeSlideApplyPatchResult>;
   createProposal(input: NodeSlideCreateProposalInput): Promise<DeckPatch>;

@@ -217,6 +217,87 @@
   opacity: 0.5;
 }
 
+.nsx-studio-shell {
+  display: grid;
+  gap: 1rem;
+  color: var(--nodeslide-ink, #111111);
+  font-family: var(--nodeslide-font-body, system-ui, sans-serif);
+}
+
+.nsx-studio-toolbar,
+.nsx-agent-entry > header,
+.nsx-agent-composer > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.nsx-studio-toolbar h1,
+.nsx-agent-entry p {
+  margin: 0;
+}
+
+.nsx-studio-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(17rem, 0.34fr);
+  gap: 1rem;
+}
+
+.nsx-studio-agent,
+.nsx-agent-thread,
+.nsx-agent-entries {
+  min-width: 0;
+}
+
+.nsx-agent-entries {
+  display: grid;
+  max-height: 34rem;
+  margin: 0;
+  padding: 0;
+  gap: 0.65rem;
+  overflow: auto;
+  list-style: none;
+}
+
+.nsx-agent-entry {
+  padding: 0.75rem;
+  border: 1px solid var(--nodeslide-border, #d9d9d2);
+  border-radius: var(--nodeslide-radius, 8px);
+}
+
+.nsx-agent-entry > header,
+.nsx-agent-entry small {
+  color: var(--nodeslide-muted, #666666);
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+
+.nsx-agent-composer label,
+.nsx-agent-composer textarea {
+  display: grid;
+  width: 100%;
+  gap: 0.4rem;
+}
+
+.nsx-agent-composer textarea {
+  min-height: 6rem;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.nsx-studio-error {
+  padding: 0.75rem;
+  border: 1px solid #b42318;
+  color: #b42318;
+}
+
+@media (max-width: 52rem) {
+  .nsx-studio-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .nsx-proposal-status {
   background: var(--nodeslide-accent-soft);
   border-radius: 999px;

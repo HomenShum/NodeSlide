@@ -1,0 +1,29 @@
+{
+  "name": "@nodeslide/react-headless",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "files": ["dist", "README.md"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external react --external @nodeslide/backend --external @nodeslide/contracts --external @nodeslide/engine",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nodeslide/backend": "0.1.0",
+    "@nodeslide/contracts": "0.1.0",
+    "@nodeslide/engine": "0.1.0"
+  },
+  "peerDependencies": {
+    "react": ">=18 <20"
+  },
+  "devDependencies": {
+    "@nodeslide/testing": "0.1.0"
+  }
+}

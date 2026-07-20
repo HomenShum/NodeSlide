@@ -1,4 +1,3 @@
-import type { DeckPatch, DeckSnapshot, DeckVersion } from '../../../shared/nodeslide';
 import {
   type NodeSlideApplyPatchInput,
   type NodeSlideApplyPatchResult,
@@ -11,10 +10,13 @@ import {
   type NodeSlideReceipt,
   type NodeSlideReceiptOperation,
   type NodeSlideRepository,
+  type NodeSlideRepositoryDescriptor,
   NodeSlideRepositoryError,
   type NodeSlideResolveProposalInput,
-} from '../../backend/src';
-import { applyDeckPatch } from '../../engine/src';
+  explicitPermissionAuthorization,
+} from '@nodeslide/backend';
+import type { DeckPatch, DeckSnapshot, DeckVersion } from '@nodeslide/contracts';
+import { applyDeckPatch } from '@nodeslide/engine';
 
 export type MemoryNodeSlideRepositoryAction =
   | 'read'
@@ -52,6 +54,18 @@ function clone<T>(value: T): T {
  * engine instead of maintaining a second mutation implementation.
  */
 export class MemoryNodeSlideRepository implements NodeSlideRepository {
+  readonly descriptor: NodeSlideRepositoryDescriptor = {
+    adapter: 'memory',
+    name: 'MemoryNodeSlideRepository',
+    invariants: {
+      mutation_authority: 'in_process_test',
+      version_cas: 'in_process_test',
+      candidate_validation: 'in_process_test',
+      trace_lineage: 'in_process_test',
+      source_authorization: 'in_process_test',
+      rollback: 'in_process_test',
+    },
+  };
   readonly #states = new Map<string, MemoryDeckState>();
   readonly #now: () => number;
   readonly #authorize: NonNullable<MemoryNodeSlideRepositoryOptions['authorize']>;
@@ -59,7 +73,14 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
 
   constructor(options: MemoryNodeSlideRepositoryOptions = {}) {
     this.#now = options.now ?? (() => Date.now());
-    this.#authorize = options.authorize ?? (() => undefined);
+    this.#authorize =
+      options.authorize ??
+      ((principal, deckId, action) =>
+        explicitPermissionAuthorization.authorize({
+          principal,
+          deckId,
+          action: MEMORY_ACTIONS[action],
+        }));
     for (const snapshot of options.snapshots ?? []) this.seed(snapshot);
   }
 
@@ -402,3 +423,11 @@ export class MemoryNodeSlideRepository implements NodeSlideRepository {
     state.receipts.push(clone(receipt));
   }
 }
+
+const MEMORY_ACTIONS = {
+  read: 'deck.read',
+  apply_patch: 'deck.mutate',
+  create_proposal: 'deck.propose',
+  resolve_proposal: 'proposal.resolve',
+  list_versions: 'versions.read',
+} as const;

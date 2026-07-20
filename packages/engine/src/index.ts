@@ -22,3 +22,4 @@ export {
   validateNodeSlidePatch,
 } from '../../../convex/lib/nodeslidePatches';
 export { validateNodeSlideSnapshot } from '../../../convex/lib/nodeslideValidation';
+export * from './migrations';

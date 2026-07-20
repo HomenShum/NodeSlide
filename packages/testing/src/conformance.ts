@@ -1,10 +1,10 @@
-import type { DeckSnapshot } from '../../../shared/nodeslide';
 import type {
   NodeSlidePatchCommand,
   NodeSlidePrincipal,
   NodeSlideProposalResolution,
   NodeSlideRepository,
-} from '../../backend/src';
+} from '@nodeslide/backend';
+import type { DeckSnapshot } from '@nodeslide/contracts';
 
 export interface NodeSlideRepositoryConformanceInput {
   repository: NodeSlideRepository;
@@ -29,6 +29,18 @@ export interface NodeSlideRepositoryConformanceResult {
 export async function runNodeSlideRepositoryConformance(
   input: NodeSlideRepositoryConformanceInput,
 ): Promise<NodeSlideRepositoryConformanceResult> {
+  for (const invariant of [
+    'mutation_authority',
+    'version_cas',
+    'candidate_validation',
+    'trace_lineage',
+    'source_authorization',
+    'rollback',
+  ] as const) {
+    if (!input.repository.descriptor.invariants[invariant]) {
+      throw new Error(`Conformance failed: adapter omitted ${invariant} enforcement.`);
+    }
+  }
   const before = await input.repository.getDeck({
     deckId: input.initialSnapshot.deck.id,
     principal: input.principal,

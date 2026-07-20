@@ -58,3 +58,45 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+
+  noderoom-consumer:
+    name: NodeRoom / NodeAgent packed consumer
+    needs: app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate NodeSlide
+        uses: actions/checkout@v4
+        with:
+          path: nodeslide
+      - name: Checkout NodeRoom consumer
+        uses: actions/checkout@v4
+        with:
+          repository: HomenShum/NodeRoom
+          ref: main
+          path: noderoom
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            nodeslide/package-lock.json
+            noderoom/package-lock.json
+      - name: Install producer and consumer dependencies
+        run: |
+          npm ci --prefix nodeslide
+          npm ci --prefix noderoom
+      - name: Build and prove publish-shaped NodeSlide packages
+        working-directory: nodeslide
+        run: |
+          npm run packages:build
+          npm run packages:consumer:smoke
+          mkdir -p "$RUNNER_TEMP/nodeslide-packages"
+          npm pack --workspace @nodeslide/contracts --pack-destination "$RUNNER_TEMP/nodeslide-packages"
+          npm pack --workspace @nodeslide/engine --pack-destination "$RUNNER_TEMP/nodeslide-packages"
+          npm pack --workspace @nodeslide/backend --pack-destination "$RUNNER_TEMP/nodeslide-packages"
+          npm pack --workspace @nodeslide/testing --pack-destination "$RUNNER_TEMP/nodeslide-packages"
+      - name: Run NodeRoom's canonical NodeAgent journey
+        working-directory: noderoom
+        env:
+          NODESLIDE_PACKAGE_ARTIFACT: ${{ runner.temp }}/nodeslide-packages
+        run: npm run nodeslide:consumer:proof

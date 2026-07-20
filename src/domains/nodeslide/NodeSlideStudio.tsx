@@ -1,3 +1,4 @@
+import { NodeSlideStudioShell, type NodeSlideStudioShellActions } from '@nodeslide/react';
 import { useAction, useConvex, useMutation, useQuery } from 'convex/react';
 import type { DefaultFunctionArgs, FunctionReference } from 'convex/server';
 import {
@@ -48,8 +49,13 @@ import {
   listStoredDeckAccess,
   storeDeckOwnerAccessKey,
 } from '../../lib/sessionIdentity';
+import { generateSessionIllustrativeImage } from '../../lib/sessionImageGeneration';
 import { type ApproverReviewState, ApproverReviewView } from './components/ApproverReviewView';
 import { CommandPalette, type StudioCommand } from './components/CommandPalette';
+import {
+  DeploymentUpdateBoundary,
+  useDeploymentActionMonitor,
+} from './components/DeploymentUpdateBoundary';
 import {
   type EditorCandidateReceipt,
   type EditorCanvasMode,
@@ -455,7 +461,16 @@ function mergeAgentTelemetryPages(
 }
 
 export function NodeSlideStudio() {
+  return (
+    <DeploymentUpdateBoundary>
+      <NodeSlideStudioContent />
+    </DeploymentUpdateBoundary>
+  );
+}
+
+function NodeSlideStudioContent() {
   const convex = useConvex();
+  const monitorDeploymentAction = useDeploymentActionMonitor();
   const clientSessionId = useMemo(() => getOrCreateSessionId(), []);
   const requestedDeck = useMemo(() => new URLSearchParams(window.location.search).get('deck'), []);
   const requestedShare = useMemo(
@@ -1659,7 +1674,7 @@ export function NodeSlideStudio() {
     setProjectError(null);
     setCreating(true);
     try {
-      const result = await createDeckFromBrief({ ...request });
+      const result = await monitorDeploymentAction(createDeckFromBrief({ ...request }));
       if (!requestGate.isCurrent(requestToken)) return;
       setCreating(false);
       const accessDurable = installWorkspace(result, undefined, false, true);
@@ -2402,16 +2417,18 @@ export function NodeSlideStudio() {
     const { commentContext: _commentContext, ...requestOptions } = options;
     void (async () => {
       try {
-        const receipt = await proposeEdit({
-          deckId: requestedDeckId,
-          ownerAccessKey: requestedOwnerAccessKey,
-          instruction,
-          baseDeckVersion: workspace.deck.version,
-          ...clocks,
-          scope,
-          ...(focusSlideId ? { focusSlideId } : {}),
-          ...requestOptions,
-        });
+        const receipt = await monitorDeploymentAction(
+          proposeEdit({
+            deckId: requestedDeckId,
+            ownerAccessKey: requestedOwnerAccessKey,
+            instruction,
+            baseDeckVersion: workspace.deck.version,
+            ...clocks,
+            scope,
+            ...(focusSlideId ? { focusSlideId } : {}),
+            ...requestOptions,
+          }),
+        );
         if (!requestGate.isCurrent(requestToken)) return;
         if (!receipt.workspace) {
           throw new Error('The proposal completed without an authoritative workspace receipt.');
@@ -2464,12 +2481,14 @@ export function NodeSlideStudio() {
     setVariationGenerating(true);
     void (async () => {
       try {
-        const receipt = await generateVariations({
-          deckId: requestedDeckId,
-          ownerAccessKey: requestedOwnerAccessKey,
-          slideId: requestedSlideId,
-          ...providerRequest,
-        });
+        const receipt = await monitorDeploymentAction(
+          generateVariations({
+            deckId: requestedDeckId,
+            ownerAccessKey: requestedOwnerAccessKey,
+            slideId: requestedSlideId,
+            ...providerRequest,
+          }),
+        );
         if (!requestGate.isCurrent(requestToken)) return;
         if (receipt.variations.length !== 3) {
           throw new Error('The variation service did not return exactly three directions.');
@@ -2539,11 +2558,13 @@ export function NodeSlideStudio() {
           return false;
         }
         try {
-          const receipt = await acceptVariation({
-            deckId: requestedDeckId,
-            ownerAccessKey: currentOwnerAccessKey,
-            variationId: variation.id,
-          });
+          const receipt = await monitorDeploymentAction(
+            acceptVariation({
+              deckId: requestedDeckId,
+              ownerAccessKey: currentOwnerAccessKey,
+              variationId: variation.id,
+            }),
+          );
           if (!requestGate.isCurrent(requestToken)) return false;
           setPreviewedVariation(null);
           setCanvasMode('edit');
@@ -2785,10 +2806,11 @@ export function NodeSlideStudio() {
     },
   ];
 
-  return (
+  const renderStudioSurface = (studioShell: NodeSlideStudioShellActions) => (
     <main
       className="nodeslide-studio"
       data-testid="nodeslide-studio"
+      data-nodeslide-surface="studio-shell"
       data-app-id="nodeslide"
       data-agent-surface="deck-editor"
       data-mcp-compat="webmcp chrome-devtools-mcp"
@@ -2827,7 +2849,7 @@ export function NodeSlideStudio() {
         onShare={() => setShareOpen(true)}
         onPresent={beginPresentation}
         onExportHtml={() => exportDeck('html')}
-        onExportPptx={() => exportDeck('pptx')}
+        onExportPptx={studioShell.exportDeck}
         onOpenCommandPalette={() => setCommandOpen(true)}
         onToggleInspector={() => setInspectorCollapsed((value) => !value)}
         onThemeModeChange={(mode) => {
@@ -2865,7 +2887,7 @@ export function NodeSlideStudio() {
           selectedElementIds={selectedElementIds}
           canAddSlide
           canDeleteSlide={orderedSlides.length > 1}
-          onSelectSlide={(slideId) => selectSlide(slideId, setActiveSlideId, setSelectedElementIds)}
+          onSelectSlide={(slideId) => studioShell.select({ slideId, elementIds: [] })}
           onToggleCollapsed={() => setNavigatorCollapsed((value) => !value)}
           onTabChange={setNavigatorTab}
           onToggleSection={(section) =>
@@ -3020,7 +3042,7 @@ export function NodeSlideStudio() {
           elements={workspace.elements}
           theme={workspace.deck.theme}
           activeSlideId={activeSlide.id}
-          onSelectSlide={(slideId) => selectSlide(slideId, setActiveSlideId, setSelectedElementIds)}
+          onSelectSlide={(slideId) => studioShell.select({ slideId, elementIds: [] })}
           affectedSlideIds={affectedSlideIds}
           validationStatus={editorValidationStatus(workspace.validations[0])}
           {...(navigatorTab === 'outline'
@@ -3031,7 +3053,7 @@ export function NodeSlideStudio() {
                     slides={orderedSlides}
                     activeSlideId={activeSlide.id}
                     onOpenSlide={(slideId) => {
-                      selectSlide(slideId, setActiveSlideId, setSelectedElementIds);
+                      studioShell.select({ slideId, elementIds: [] });
                       setNavigatorTab('slides');
                       setCanvasMode('edit');
                     }}
@@ -3079,7 +3101,9 @@ export function NodeSlideStudio() {
               readOnly={false}
               zoom={zoom}
               onZoomChange={setZoom}
-              onSelectionChange={selectElements}
+              onSelectionChange={(elementIds) =>
+                studioShell.select({ slideId: activeSlide.id, elementIds })
+              }
               onOpenAi={() => openInspector('ai')}
               onOpenComments={() => openInspector('comments')}
               onDuplicateElements={(ids) => {
@@ -3158,11 +3182,11 @@ export function NodeSlideStudio() {
               onCursorChange={updatePresenceCursor}
               onPreviousSlide={() => {
                 const previous = orderedSlides[activeSlideIndex - 1];
-                if (previous) selectSlide(previous.id, setActiveSlideId, setSelectedElementIds);
+                if (previous) studioShell.select({ slideId: previous.id, elementIds: [] });
               }}
               onNextSlide={() => {
                 const next = orderedSlides[activeSlideIndex + 1];
-                if (next) selectSlide(next.id, setActiveSlideId, setSelectedElementIds);
+                if (next) studioShell.select({ slideId: next.id, elementIds: [] });
               }}
             />
           }
@@ -3199,8 +3223,7 @@ export function NodeSlideStudio() {
             setTelemetryLoadError(null);
           }}
           onSelectEvidenceElement={(slideId, elementId) => {
-            setActiveSlideId(slideId);
-            setSelectedElementIds([elementId]);
+            studioShell.select({ slideId, elementIds: [elementId] });
           }}
           onLoadMoreAgentTelemetry={loadOlderAgentTelemetry}
           {...(agentTelemetry ? { agentTelemetry } : {})}
@@ -3312,7 +3335,10 @@ export function NodeSlideStudio() {
               summary,
             )
           }
-          onSearchImages={(query, consent) => searchLicensedImages({ query, consent })}
+          onSearchImages={(query, consent) =>
+            monitorDeploymentAction(searchLicensedImages({ query, consent }))
+          }
+          onGenerateImage={(prompt, aspect) => generateSessionIllustrativeImage({ prompt, aspect })}
           onAddComment={(text, anchor) =>
             ownerAccessKey
               ? void addComment({
@@ -3563,6 +3589,55 @@ export function NodeSlideStudio() {
       />
       {toast ? <Toast toast={toast} onClose={() => setToast(null)} /> : null}
     </main>
+  );
+
+  return (
+    <NodeSlideStudioShell
+      snapshot={snapshot}
+      selection={{ slideId: activeSlide.id, elementIds: selectedElementIds }}
+      proposal={previewedPatch}
+      permissions={{
+        canRead: true,
+        canPropose: false,
+        canPatch: Boolean(ownerAccessKey),
+        canApprove: Boolean(ownerAccessKey),
+        canExport: true,
+      }}
+      onSelectionChange={(selection) => {
+        if (selection.slideId) setActiveSlideId(selection.slideId);
+        selectElements([...selection.elementIds]);
+      }}
+      onPatch={(command) => {
+        if (
+          command.deckId !== workspace.deck.id ||
+          command.baseDeckVersion !== workspace.deck.version
+        ) {
+          setToast({
+            kind: 'error',
+            message: 'The portable edit is based on another deck version. Reload before retrying.',
+          });
+          return;
+        }
+        void applyOperations(
+          command.operations,
+          command.scope,
+          command.summary,
+          undefined,
+          command.baseElementVersions,
+        );
+      }}
+      onPropose={() => undefined}
+      onAccept={(proposalId) => {
+        const proposal = workspace.patches.find((candidate) => candidate.id === proposalId);
+        if (proposal) handleAcceptPatch(proposal);
+      }}
+      onReject={(proposalId) => {
+        const proposal = workspace.patches.find((candidate) => candidate.id === proposalId);
+        if (proposal) handleRejectPatch(proposal);
+      }}
+      onExport={() => exportDeck('pptx')}
+      renderSurface={renderStudioSurface}
+    />
   );
 }
 

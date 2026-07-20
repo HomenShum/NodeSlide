@@ -9,10 +9,16 @@ can migrate without a second DeckSpec, patch engine, or validator.
 | Package | Current public surface | Explicitly excluded |
 |---|---|---|
 | `@nodeslide/contracts` | DeckSpec, patch, proposal, validation, trace, export, and attachment contracts | React, Convex, DOM, host auth |
-| `@nodeslide/engine` | Pure `applyDeckPatch`, patch/snapshot validation, scope validation, affected-ID calculation | Persistence, approval UI, provider calls |
-| `@nodeslide/backend` | `NodeSlideRepository`, `NodeSlideAssetStore`, `NodeSlideTelemetryAdapter`, normalized principal and receipts | Any concrete database or auth vendor |
+| `@nodeslide/engine` | Pure `applyDeckPatch`, patch/snapshot validation, scope validation, affected-ID calculation, migrations | Persistence, approval UI, provider calls |
+| `@nodeslide/backend` | Ports, default-deny principal adapter, approval policy, production-governance declarations, receipts | Any auth vendor or database SDK |
 | `@nodeslide/testing` | Deterministic fixtures, memory repository/assets/telemetry, repository conformance smoke | Production persistence |
-| `@nodeslide/react` | Controlled read-only deck rendering, deterministic proposal comparison, accessible review callbacks, opt-in scoped styles | Convex, auth, routing, global CSS, standalone app state |
+| `@nodeslide/agent` | Runtime-neutral room tools, host tool contract, governed direct-edit/proposal routing | A second agent loop or model provider |
+| `@nodeslide/react-headless` | Repository controller, selection/navigation state, proposal-review model, permission derivation | Rendering, CSS, DOM queries, backend SDKs |
+| `@nodeslide/react` | Controlled StudioShell, deck renderer, proposal review, agent transcript/composer, opt-in scoped styles | Convex, auth, routing, global CSS, standalone app state |
+| `@nodeslide/client-http` | Hosted repository/assets/telemetry client with normalized errors and host credentials | Trusting a serialized client principal |
+| `@nodeslide/convex` | Injected generated refs, auth-session and bearer-capability adapters, optional Studio binding, isolated component schema and migration chain | App `_generated/api` imports or auth-vendor policy |
+| `@nodeslide/registry` | Versioned source-owned compositions for studio/agent/renderer/presenter/backend proof | Automatic routing, auth, `.env`, or global-style edits |
+| `@nodeslide/cli` | Preflighted init/upgrade, exact package/tarball plan, hashed receipt, diff-only source upgrades | Silent overwrites or unpublished-package claims |
 | `@nodeslide/external-agent` | Bundled library + `nodeslide` CLI for offline inspect/validate/propose/apply | UI, hosted auth, provider calls, a second patch engine |
 
 The compatibility direction is deliberate:
@@ -45,12 +51,25 @@ consumer with scripts disabled:
 npm run packages:consumer:smoke
 ```
 
-The smoke packs every workspace, installs only those tarballs plus React into
+The smoke packs every workspace, installs only those tarballs plus React and
+Convex peers into
 an isolated consumer, runs the repository proposal/acceptance conformance
-journey, server-renders the controlled deck viewer, verifies the exported CSS,
-and removes the temporary directory. Source-workspace imports cannot satisfy
-this gate.
+journey, exercises the agent proposal path, HTTP descriptor, migration plan,
+registry reader, CLI planner, headless permissions, server-rendered viewer, and
+exported CSS, then removes the temporary directory. Source-workspace imports
+cannot satisfy this gate.
 
 External coding agents can use the bundled CLI or the adapted MCP server as
 documented in `docs/EXTERNAL_AGENT_ACCESS.md`. Both transports consume these
 package boundaries instead of copying the deck model or patch engine.
+
+Before public npm publication, initialize from the exact artifacts:
+
+```bash
+npx @nodeslide/cli init --profile full-studio --backend convex --ui host-tokens \
+  --artifacts ./artifacts
+```
+
+The `nodeslide` binary supports interactive prompts. The scoped `npx` package
+name remains explicit until ownership of the unscoped `nodeslide` registry name
+is confirmed; the CLI does not claim an unpublished alias.

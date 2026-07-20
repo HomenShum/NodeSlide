@@ -11,11 +11,17 @@ const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const rootDirectory = path.resolve(scriptDirectory, '..');
 const temporaryRoot = path.resolve(tmpdir());
 const packageNames = [
+  '@nodeslide/agent',
   '@nodeslide/contracts',
   '@nodeslide/engine',
   '@nodeslide/backend',
+  '@nodeslide/client-http',
+  '@nodeslide/convex',
   '@nodeslide/testing',
+  '@nodeslide/react-headless',
   '@nodeslide/react',
+  '@nodeslide/registry',
+  '@nodeslide/cli',
 ];
 const npmCli = process.env.npm_execpath;
 
@@ -59,6 +65,7 @@ try {
   );
   const reactVersion = lockedDependencyVersion(rootLock, 'react');
   const reactDomVersion = lockedDependencyVersion(rootLock, 'react-dom');
+  const convexVersion = lockedDependencyVersion(rootLock, 'convex');
 
   await writeFile(
     path.join(consumerDirectory, 'package.json'),
@@ -73,6 +80,7 @@ try {
       ...[...packedArtifacts.values()].map((artifact) => artifact.tarball),
       `react@${reactVersion}`,
       `react-dom@${reactDomVersion}`,
+      `convex@${convexVersion}`,
     ],
     consumerDirectory,
   );
@@ -97,6 +105,12 @@ try {
     acceptedVersion: 2,
     rendered: true,
     cssExported: true,
+    headless: true,
+    httpAdapter: true,
+    migrationCount: 1,
+    registrySource: true,
+    cliPlan: true,
+    agentProposal: true,
   });
   process.stdout.write(`${JSON.stringify(receipt)}\n`);
 } finally {
@@ -129,6 +143,27 @@ function assertPackedEntrypoints(packageName, files) {
       paths.has('src/styles.css'),
       '@nodeslide/react tarball is missing its opt-in CSS export.',
     );
+  }
+  if (packageName === '@nodeslide/convex') {
+    assert(paths.has('dist/react.js'), '@nodeslide/convex tarball is missing its React binding.');
+    assert(paths.has('dist/component.js'), '@nodeslide/convex tarball is missing migrations.');
+    assert(
+      paths.has('dist/componentSchema.js'),
+      '@nodeslide/convex tarball is missing its isolated schema.',
+    );
+    assert(
+      paths.has('component/convex.config.ts'),
+      '@nodeslide/convex tarball is missing its source-owned component config.',
+    );
+  }
+  if (packageName === '@nodeslide/registry') {
+    assert(
+      paths.has('sources/studio/NodeSlideExample.tsx'),
+      '@nodeslide/registry tarball is missing studio source.',
+    );
+  }
+  if (packageName === '@nodeslide/cli') {
+    assert(paths.has('dist/cli.js'), '@nodeslide/cli tarball is missing its executable.');
   }
 }
 
@@ -183,10 +218,22 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { NodeSlideRepositoryError } from '@nodeslide/backend';
+import { createNodeSlideRoomTools } from '@nodeslide/agent';
+import {
+  NODESLIDE_GOVERNANCE_CONTRACT_VERSION,
+  NodeSlideRepositoryError,
+} from '@nodeslide/backend';
+import { planNodeSlideInstallation } from '@nodeslide/cli';
+import { createNodeSlideHttpAdapters } from '@nodeslide/client-http';
 import { NODESLIDE_SCHEMA_VERSION } from '@nodeslide/contracts';
+import { planNodeSlideConvexMigrations } from '@nodeslide/convex/component';
 import { applyDeckPatch } from '@nodeslide/engine';
 import { NodeSlideDeckViewer } from '@nodeslide/react';
+import { nodeSlideStudioPermissionsForPrincipal } from '@nodeslide/react-headless';
+import {
+  NODESLIDE_REGISTRY_ENTRIES,
+  readNodeSlideRegistryEntry,
+} from '@nodeslide/registry';
 import {
   MemoryNodeSlideRepository,
   NODESLIDE_TEST_PRINCIPAL,
@@ -225,6 +272,60 @@ const result = await runNodeSlideRepositoryConformance({
 assert.equal(result.proposalVersion, 1);
 assert.equal(result.acceptedVersion, 2);
 
+const governance = {
+  version: NODESLIDE_GOVERNANCE_CONTRACT_VERSION,
+  enforced: {
+    mutation_authority: true,
+    version_cas: true,
+    candidate_validation: true,
+    trace_lineage: true,
+    source_authorization: true,
+    rollback: true,
+  },
+};
+const http = createNodeSlideHttpAdapters({
+  baseUrl: 'https://api.example.test',
+  governance,
+  headersForPrincipal: () => ({ authorization: 'Bearer consumer' }),
+  fetch: async () => new Response(null, { status: 204 }),
+});
+assert.equal(http.repository.descriptor.adapter, 'http');
+assert.equal(nodeSlideStudioPermissionsForPrincipal(NODESLIDE_TEST_PRINCIPAL).canRead, true);
+assert.equal(planNodeSlideConvexMigrations(0).length, 1);
+const registrySource = await readNodeSlideRegistryEntry(NODESLIDE_REGISTRY_ENTRIES[0]);
+assert.match(registrySource, /NodeSlideStudioShell/);
+const cliPlan = await planNodeSlideInstallation({
+  cwd: consumerDirectory,
+  profile: 'agent-pack-only',
+  backend: 'custom',
+  uiMode: 'headless',
+  skipInstall: true,
+  skipChecks: true,
+});
+assert(cliPlan.packages.includes('@nodeslide/agent'));
+
+const agentPatch = createNodeSlideTextPatch(
+  result.resolution.snapshot,
+  'Agent proposal remains unapplied',
+);
+const roomTools = createNodeSlideRoomTools({
+  deckId: snapshot.deck.id,
+  principal: NODESLIDE_TEST_PRINCIPAL,
+  repository,
+  approvalPolicy: { byOperationMode: {} },
+  locks: {
+    acquire: async () => ({ ok: true }),
+    release: async () => undefined,
+  },
+  say: async () => undefined,
+});
+const agentOutcome = await roomTools.applyDeckPatch({
+  patch: agentPatch,
+  expectedVersion: result.acceptedVersion,
+});
+assert.equal(agentOutcome.ok, false);
+assert.equal(agentOutcome.pendingApproval, true);
+
 const markup = renderToStaticMarkup(
   React.createElement(NodeSlideDeckViewer, {
     snapshot: result.resolution.snapshot,
@@ -246,6 +347,12 @@ process.stdout.write(JSON.stringify({
   acceptedVersion: result.acceptedVersion,
   rendered: true,
   cssExported: true,
+  headless: true,
+  httpAdapter: http.repository.descriptor.adapter === 'http',
+  migrationCount: planNodeSlideConvexMigrations(0).length,
+  registrySource: registrySource.includes('NodeSlideStudioShell'),
+  cliPlan: cliPlan.packages.includes('@nodeslide/agent'),
+  agentProposal: agentOutcome.ok === false && agentOutcome.pendingApproval === true,
 }));
 `;
 }

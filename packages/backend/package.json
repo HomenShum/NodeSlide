@@ -12,7 +12,10 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap",
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/contracts",
     "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nodeslide/contracts": "0.1.0"
   }
 }

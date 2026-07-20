@@ -70,6 +70,9 @@ try {
   if ((await readFile(join(consumer, 'occupied.json'), 'utf8')) !== 'sentinel') {
     throw new Error('Packed CLI changed an existing output after refusing it.');
   }
+  const validated = JSON.parse(
+    run(process.execPath, [cli, 'validate', 'deck.json', 'patch.json', '--compact'], consumer),
+  );
 
   const proposed = JSON.parse(
     run(
@@ -79,6 +82,9 @@ try {
     ),
   );
   if (!proposed.proposalId) throw new Error('Packed CLI did not create a proposal.');
+  if (proposed.candidateSnapshotDigest !== validated.validation?.candidateSnapshotDigest) {
+    throw new Error('Packed CLI validate and propose compiled different candidate digests.');
+  }
   run(
     process.execPath,
     [

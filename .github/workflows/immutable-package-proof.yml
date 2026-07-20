@@ -32,13 +32,23 @@ jobs:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
           ref: ${{ inputs.to_tag }}
+          fetch-depth: 0
           persist-credentials: false
+      - name: Resolve exact tag commit SHAs
+        shell: bash
+        run: |
+          FROM_RELEASE_ID="$(git rev-parse "${FROM_TAG}^{commit}")"
+          TO_RELEASE_ID="$(git rev-parse "${TO_TAG}^{commit}")"
+          [[ "$FROM_RELEASE_ID" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$TO_RELEASE_ID" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$(git rev-parse HEAD)" == "$TO_RELEASE_ID" ]]
+          echo "FROM_RELEASE_ID=$FROM_RELEASE_ID" >> "$GITHUB_ENV"
+          echo "TO_RELEASE_ID=$TO_RELEASE_ID" >> "$GITHUB_ENV"
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: 22
           package-manager-cache: false
       - run: npm ci
-      - run: npm run packages:build
       - name: Download the two public release artifact sets
         shell: bash
         env:
@@ -55,11 +65,31 @@ jobs:
           for asset in artifacts/to/*; do
             gh release verify-asset "$TO_TAG" "$asset" --repo "$GITHUB_REPOSITORY"
           done
+          gh release view "$FROM_TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | LC_ALL=C sort > /tmp/from-release-assets.txt
+          gh release view "$TO_TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | LC_ALL=C sort > /tmp/to-release-assets.txt
+          find artifacts/from -mindepth 1 -maxdepth 1 -type f -printf '%f\n' | LC_ALL=C sort > /tmp/from-downloaded-assets.txt
+          find artifacts/to -mindepth 1 -maxdepth 1 -type f -printf '%f\n' | LC_ALL=C sort > /tmp/to-downloaded-assets.txt
+          diff -u /tmp/from-release-assets.txt /tmp/from-downloaded-assets.txt
+          diff -u /tmp/to-release-assets.txt /tmp/to-downloaded-assets.txt
+      - name: Rebuild the checked-out candidate tag
+        shell: bash
+        run: |
+          FROM_RELEASE_VERSION="$(node -e "process.stdout.write(JSON.parse(require('node:fs').readFileSync('artifacts/from/nodeslide-artifacts.json', 'utf8')).releaseVersion)")"
+          TO_RELEASE_VERSION="$(node -e "process.stdout.write(JSON.parse(require('node:fs').readFileSync('artifacts/to/nodeslide-artifacts.json', 'utf8')).releaseVersion)")"
+          [[ "$FROM_TAG" == "v${FROM_RELEASE_VERSION}" ]]
+          [[ "$TO_TAG" == "v${TO_RELEASE_VERSION}" ]]
+          npm run artifacts:build -- \
+            --out artifacts/rebuilt-to \
+            --release-id "$TO_RELEASE_ID" \
+            --release-version "$TO_RELEASE_VERSION"
       - name: Prove clean install, immutable upgrade, and fail-closed artifacts
         run: >-
           npm run proof:install-upgrade --
           --from artifacts/from
           --to artifacts/to
+          --rebuilt-to artifacts/rebuilt-to
+          --from-release-id "$FROM_RELEASE_ID"
+          --to-release-id "$TO_RELEASE_ID"
           --from-url "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${FROM_TAG}"
           --to-url "https://github.com/${GITHUB_REPOSITORY}/releases/tag/${TO_TAG}"
           --require-public

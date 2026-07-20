@@ -12,6 +12,9 @@ describe('production Convex log observability gate', () => {
     );
     expect(source).toContain('const emptyHistory = !cliFailed && eventCount === 0');
     expect(source).toContain("'no-production-events'");
+    expect(source).toContain('clearTimeout(fallbackTimer)');
+    expect(source).toContain("'local-convex-session'");
+    expect(source).not.toContain('deployment:logs:view');
     expect(source).not.toContain('lines.push(line)');
   });
 });

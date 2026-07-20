@@ -18,6 +18,7 @@ import {
 } from '../../shared/nodeslide';
 import { geometryIssueDrafts } from '../../shared/nodeslideGeometryChecks';
 import { applyDeckPatch } from '../../shared/nodeslidePatch';
+import { NODESLIDE_ASSISTANT_STREAM_CONTENT_LIMIT } from './nodeslideAssistantStream';
 import {
   deterministicAgentOperations,
   summarizePatchOperations,
@@ -43,7 +44,7 @@ const NODESLIDE_EDIT_RESPONSE_SCHEMA = {
   additionalProperties: false,
   required: ['summary', 'operations'],
   properties: {
-    summary: { type: 'string' },
+    summary: { type: 'string', maxLength: NODESLIDE_ASSISTANT_STREAM_CONTENT_LIMIT },
     operations: {
       type: 'array',
       minItems: 1,

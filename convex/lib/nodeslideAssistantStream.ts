@@ -2,6 +2,8 @@ import type { NodeSlideProviderTextDelta } from './nodeslideProvider';
 
 export type NodeSlideAssistantStreamState = 'streaming' | 'complete' | 'interrupted';
 
+export const NODESLIDE_ASSISTANT_STREAM_CONTENT_LIMIT = 4000;
+
 export interface NodeSlideAssistantStreamUpdate {
   content: string;
   state: NodeSlideAssistantStreamState;
@@ -39,6 +41,17 @@ export function createNodeSlideAssistantStreamProjector(args: {
       }
       const summary = partialJsonStringField(event.accumulatedText, 'summary');
       if (summary === undefined || !summary.startsWith(persisted)) return;
+      if (summary.length > NODESLIDE_ASSISTANT_STREAM_CONTENT_LIMIT) {
+        interrupted = true;
+        if (started) {
+          await bestEffortWrite(args.write, {
+            content:
+              "The provider draft exceeded NodeSlide's safe streaming limit and was discarded.",
+            state: 'interrupted',
+          });
+        }
+        return;
+      }
       const requiredDelta = started ? minChunkChars : 1;
       if (summary.length - persisted.length < requiredDelta) return;
       if (await bestEffortWrite(args.write, { content: summary, state: 'streaming' })) {

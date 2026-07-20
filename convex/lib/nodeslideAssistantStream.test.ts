@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
+  NODESLIDE_ASSISTANT_STREAM_CONTENT_LIMIT,
   createNodeSlideAssistantStreamProjector,
   partialJsonStringField,
 } from './nodeslideAssistantStream';
@@ -63,6 +64,34 @@ describe('NodeSlide durable assistant streaming', () => {
     expect(write).toHaveBeenLastCalledWith({
       content:
         'The initial provider draft was discarded while NodeSlide repaired its structured response.',
+      state: 'interrupted',
+    });
+  });
+
+  it('interrupts once when an untrusted summary crosses the persistence bound', async () => {
+    const write = vi.fn(async () => undefined);
+    const projector = createNodeSlideAssistantStreamProjector({ write, minChunkChars: 8 });
+    await projector.observe({
+      delta: '',
+      accumulatedText: '{"summary":"Visible prefix',
+      attempt: 1,
+      repairAttempt: false,
+    });
+    for (let index = 0; index < 20; index += 1) {
+      await projector.observe({
+        delta: 'x',
+        accumulatedText: `{"summary":"Visible prefix${'x'.repeat(
+          NODESLIDE_ASSISTANT_STREAM_CONTENT_LIMIT + index + 1,
+        )}`,
+        attempt: 1,
+        repairAttempt: false,
+      });
+    }
+
+    expect(projector.wasInterrupted()).toBe(true);
+    expect(write).toHaveBeenCalledTimes(2);
+    expect(write).toHaveBeenLastCalledWith({
+      content: "The provider draft exceeded NodeSlide's safe streaming limit and was discarded.",
       state: 'interrupted',
     });
   });

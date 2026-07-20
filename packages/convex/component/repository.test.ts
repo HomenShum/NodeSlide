@@ -11,6 +11,7 @@ import { convexTest } from 'convex-test';
 import { describe, expect, it } from 'vitest';
 import { api } from './_generated/api.js';
 import type { NodeSlideComponentGrant, NodeSlideComponentGrantAction } from './protocol.js';
+import { nodeSlideComponentPatchDigest } from './protocol.js';
 import schema from './schema.js';
 
 const modules = import.meta.glob('./**/*.ts');
@@ -28,7 +29,7 @@ describe('isolated NodeSlide Convex component', () => {
     await t.mutation(api.repository.createProposal, {
       deckId: snapshot.deck.id,
       patch: proposal,
-      grant: grant('propose', 'proposal.create', snapshot.deck.id, 'patch', proposal.id),
+      grant: await patchGrant('propose', 'proposal.create', snapshot.deck.id, proposal),
     });
     const resolution = (await t.mutation(api.repository.resolveProposal, {
       deckId: snapshot.deck.id,
@@ -72,7 +73,7 @@ describe('isolated NodeSlide Convex component', () => {
       grant: grant('initialize', 'deck.initialize', snapshot.deck.id, 'deck', snapshot.deck.id),
     });
     const first = createNodeSlideTextPatch(snapshot, 'First accepted', 'patch:first');
-    const firstGrant = grant('first', 'patch.apply', snapshot.deck.id, 'patch', first.id);
+    const firstGrant = await patchGrant('first', 'patch.apply', snapshot.deck.id, first);
     await t.mutation(api.repository.applyPatch, {
       deckId: snapshot.deck.id,
       patch: first,
@@ -91,7 +92,7 @@ describe('isolated NodeSlide Convex component', () => {
       t.mutation(api.repository.applyPatch, {
         deckId: snapshot.deck.id,
         patch: stale,
-        grant: grant('stale', 'patch.apply', snapshot.deck.id, 'patch', stale.id),
+        grant: await patchGrant('stale', 'patch.apply', snapshot.deck.id, stale),
       }),
     ).rejects.toThrow(/CONFLICT/);
 
@@ -124,16 +125,15 @@ describe('isolated NodeSlide Convex component', () => {
       t.mutation(api.repository.applyPatch, {
         deckId: snapshot.deck.id,
         patch: invalid,
-        grant: grant('invalid', 'patch.apply', snapshot.deck.id, 'patch', invalid.id),
+        grant: await patchGrant('invalid', 'patch.apply', snapshot.deck.id, invalid),
       }),
     ).rejects.toThrow(/Invalid patch/);
 
-    const mismatchedGrant = grant(
+    const mismatchedGrant = await patchGrant(
       'mismatch',
       'proposal.create',
       snapshot.deck.id,
-      'patch',
-      invalid.id,
+      invalid,
     );
     await expect(
       t.mutation(api.repository.applyPatch, {
@@ -147,18 +147,27 @@ describe('isolated NodeSlide Convex component', () => {
   it('records contiguous migrations and rejects skipped schema versions', async () => {
     const t = convexTest(schema, modules);
     const componentDeckId = 'component:nodeslide';
+    const firstMigrationGrant = grant(
+      'migration-v1',
+      'migration.apply',
+      componentDeckId,
+      'migration',
+      'initialize_isolated_tables_v1',
+    );
     await t.mutation(api.repository.applyMigration, {
       stepId: 'initialize_isolated_tables_v1',
       fromVersion: 0,
       toVersion: 1,
-      grant: grant(
-        'migration-v1',
-        'migration.apply',
-        componentDeckId,
-        'migration',
-        'initialize_isolated_tables_v1',
-      ),
+      grant: firstMigrationGrant,
     });
+    await expect(
+      t.mutation(api.repository.applyMigration, {
+        stepId: 'initialize_isolated_tables_v1',
+        fromVersion: 0,
+        toVersion: 1,
+        grant: firstMigrationGrant,
+      }),
+    ).rejects.toThrow(/already consumed/);
     await expect(
       t.mutation(api.repository.applyMigration, {
         stepId: 'skip-v3',
@@ -166,7 +175,107 @@ describe('isolated NodeSlide Convex component', () => {
         toVersion: 3,
         grant: grant('migration-v3', 'migration.apply', componentDeckId, 'migration', 'skip-v3'),
       }),
-    ).rejects.toThrow(/expected version 2, found 1/);
+    ).rejects.toThrow(/not an exact declared/);
+    await expect(
+      t.mutation(api.repository.applyMigration, {
+        stepId: 'add_authorization_grant_ledger_v2',
+        fromVersion: 1,
+        toVersion: 99,
+        grant: grant(
+          'migration-forged',
+          'migration.apply',
+          componentDeckId,
+          'migration',
+          'add_authorization_grant_ledger_v2',
+        ),
+      }),
+    ).rejects.toThrow(/not an exact declared/);
+  });
+
+  it('binds grants to canonical patch content and rejects caller-owned provenance fields', async () => {
+    const t = convexTest(schema, modules);
+    const snapshot = createNodeSlideTestSnapshot('deck:component-command-binding');
+    await t.mutation(api.repository.initializeDeck, {
+      snapshot,
+      grant: grant(
+        'initialize-binding',
+        'deck.initialize',
+        snapshot.deck.id,
+        'deck',
+        snapshot.deck.id,
+      ),
+    });
+    const authorized = createNodeSlideTextPatch(snapshot, 'Authorized bytes', 'patch:bound');
+    const substituted = { ...authorized, summary: 'Substituted after host authorization.' };
+    await expect(
+      t.mutation(api.repository.applyPatch, {
+        deckId: snapshot.deck.id,
+        patch: substituted,
+        grant: await patchGrant('bound-content', 'patch.apply', snapshot.deck.id, authorized),
+      }),
+    ).rejects.toThrow(/not bound/);
+    await expect(
+      t.mutation(api.repository.applyPatch, {
+        deckId: snapshot.deck.id,
+        patch: { ...authorized, source: 'forged', status: 'accepted' },
+        grant: await patchGrant('forged-fields', 'patch.apply', snapshot.deck.id, authorized),
+      }),
+    ).rejects.toThrow(/unsupported field|source is invalid/);
+  });
+
+  it('hashes asset bytes and rejects unsafe metadata before consuming the grant', async () => {
+    const t = convexTest(schema, modules);
+    const snapshot = createNodeSlideTestSnapshot('deck:component-assets');
+    await t.mutation(api.repository.initializeDeck, {
+      snapshot,
+      grant: grant(
+        'initialize-assets',
+        'deck.initialize',
+        snapshot.deck.id,
+        'deck',
+        snapshot.deck.id,
+      ),
+    });
+    const bytes = new TextEncoder().encode('verified component asset').buffer;
+    const digest = await sha256(bytes);
+    const assetGrant = grant('asset', 'asset.put', snapshot.deck.id, 'asset', 'asset:verified');
+    await expect(
+      t.mutation(api.repository.putAsset, {
+        deckId: snapshot.deck.id,
+        assetId: 'asset:verified',
+        kind: 'image',
+        fileName: 'verified.png',
+        contentType: 'image/png',
+        contentDigest: `sha256:${'0'.repeat(64)}`,
+        bytes,
+        metadata: {},
+        grant: assetGrant,
+      }),
+    ).rejects.toThrow(/does not match/);
+    await t.mutation(api.repository.putAsset, {
+      deckId: snapshot.deck.id,
+      assetId: 'asset:verified',
+      kind: 'image',
+      fileName: 'verified.png',
+      contentType: 'image/png',
+      contentDigest: digest,
+      bytes,
+      metadata: { source: 'fixture' },
+      grant: assetGrant,
+    });
+    await expect(
+      t.mutation(api.repository.putAsset, {
+        deckId: snapshot.deck.id,
+        assetId: 'asset:unsafe',
+        kind: 'image',
+        fileName: 'unsafe.png',
+        contentType: 'image/png',
+        contentDigest: digest,
+        bytes,
+        metadata: { unsupported: 1n },
+        grant: grant('asset-unsafe', 'asset.put', snapshot.deck.id, 'asset', 'asset:unsafe'),
+      }),
+    ).rejects.toThrow(/JSON data/);
   });
 });
 
@@ -176,6 +285,7 @@ function grant(
   deckId: string,
   resourceKind: NodeSlideComponentGrant['resource']['kind'],
   resourceId: string,
+  requestDigest?: string,
 ): NodeSlideComponentGrant {
   return {
     schemaVersion: 'nodeslide.component-grant/v1',
@@ -187,6 +297,7 @@ function grant(
     deckId,
     action,
     resource: { kind: resourceKind, id: resourceId },
+    ...(requestDigest === undefined ? {} : { requestDigest }),
     authorizedAt: 1_700_000_000_000 + id.length,
     evidence: {
       issuer: 'nodeslide.component.test',
@@ -195,4 +306,20 @@ function grant(
       evidenceId: `evidence:${id}`,
     },
   };
+}
+
+async function patchGrant(
+  id: string,
+  action: 'patch.apply' | 'proposal.create',
+  deckId: string,
+  patch: Parameters<typeof nodeSlideComponentPatchDigest>[0],
+): Promise<NodeSlideComponentGrant> {
+  return grant(id, action, deckId, 'patch', patch.id, await nodeSlideComponentPatchDigest(patch));
+}
+
+async function sha256(bytes: ArrayBuffer): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return `sha256:${[...new Uint8Array(digest)]
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('')}`;
 }

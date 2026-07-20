@@ -1,6 +1,7 @@
 import type {
   NodeSlideAuthorizationEvidence,
   NodeSlideAuthorizationReceipt,
+  NodeSlidePatchCommand,
   NodeSlideRepositoryAuthorizationAction,
 } from '@nodeslide/backend';
 import { v } from 'convex/values';
@@ -31,6 +32,8 @@ export interface NodeSlideComponentGrant {
   deckId: string;
   action: NodeSlideComponentGrantAction;
   resource: { kind: NodeSlideComponentResourceKind; id: string };
+  /** Required for patch mutations; binds the grant to the entire canonical command. */
+  requestDigest?: string;
   authorizedAt: number;
   evidence: NodeSlideAuthorizationEvidence;
 }
@@ -68,6 +71,7 @@ export const nodeSlideComponentGrantValidator = v.object({
     ),
     id: v.string(),
   }),
+  requestDigest: v.optional(v.string()),
   authorizedAt: v.number(),
   evidence: v.object({
     issuer: v.string(),
@@ -76,6 +80,34 @@ export const nodeSlideComponentGrantValidator = v.object({
     evidenceId: v.optional(v.string()),
   }),
 });
+
+export async function nodeSlideComponentPatchDigest(patch: NodeSlidePatchCommand): Promise<string> {
+  const bytes = new TextEncoder().encode(stableJson(patch));
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return `sha256:${[...new Uint8Array(digest)]
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('')}`;
+}
+
+function stableJson(value: unknown): string {
+  if (value === null || typeof value === 'boolean' || typeof value === 'string') {
+    return JSON.stringify(value);
+  }
+  if (typeof value === 'number') {
+    if (!Number.isFinite(value)) throw new Error('Patch digest input must contain finite JSON.');
+    return JSON.stringify(value);
+  }
+  if (Array.isArray(value)) return `[${value.map(stableJson).join(',')}]`;
+  if (!value || typeof value !== 'object') {
+    throw new Error('Patch digest input must be JSON data.');
+  }
+  const record = value as Record<string, unknown>;
+  return `{${Object.keys(record)
+    .sort()
+    .filter((key) => record[key] !== undefined)
+    .map((key) => `${JSON.stringify(key)}:${stableJson(record[key])}`)
+    .join(',')}}`;
+}
 
 const REPOSITORY_ACTIONS = new Set<NodeSlideRepositoryAuthorizationAction>([
   'deck.read',

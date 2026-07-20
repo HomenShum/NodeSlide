@@ -1,10 +1,11 @@
 import { createHash } from 'node:crypto';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { access, mkdtemp, readFile, rename, rm, symlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   NODESLIDE_ARTIFACT_MANIFEST_FILE,
+  disposeNodeSlideArtifactSet,
   planNodeSlideInstallation,
   runNodeSlideInit,
   runNodeSlideUpgrade,
@@ -109,6 +110,9 @@ describe('@nodeslide/cli installer', () => {
     expect(plan.artifactSet?.manifest.releaseVersion).toBe('0.1.0');
     expect(plan.installSpecs.every((specifier) => path.isAbsolute(specifier))).toBe(true);
     expect(plan.installSpecs).toHaveLength(5);
+    const stagingDirectory = plan.artifactSet?.stagingDirectory;
+    await disposeNodeSlideArtifactSet(plan.artifactSet);
+    await expect(access(String(stagingDirectory))).rejects.toMatchObject({ code: 'ENOENT' });
 
     const installed = await runNodeSlideInit({
       cwd,
@@ -136,8 +140,8 @@ describe('@nodeslide/cli installer', () => {
       releaseId: 'release:0.2.0',
     });
     expect(upgraded.upgrades.at(-1)).toMatchObject({
-      fromRegistryVersion: '0.2.0',
-      toRegistryVersion: '0.2.0',
+      fromRegistryVersion: '0.2.1',
+      toRegistryVersion: '0.2.1',
     });
   });
 
@@ -181,6 +185,119 @@ describe('@nodeslide/cli installer', () => {
         skipChecks: true,
       }),
     ).rejects.toThrow(/must advance 0.2.0/);
+  });
+
+  it('uses canonical SemVer precedence across prerelease upgrades', async () => {
+    const stableProject = await project();
+    const stable = await artifactSet('0.2.0', 'release:stable');
+    const prerelease = await artifactSet('0.2.0-beta.1', 'release:prerelease');
+    await runNodeSlideInit({
+      cwd: stableProject,
+      profile: 'agent-pack-only',
+      backend: 'custom',
+      uiMode: 'headless',
+      artifactsDirectory: stable,
+      skipInstall: true,
+      skipChecks: true,
+    });
+    await expect(
+      runNodeSlideUpgrade({
+        cwd: stableProject,
+        artifactsDirectory: prerelease,
+        skipInstall: true,
+        skipChecks: true,
+      }),
+    ).rejects.toThrow(/must advance 0.2.0/);
+
+    const prereleaseProject = await project();
+    await runNodeSlideInit({
+      cwd: prereleaseProject,
+      profile: 'agent-pack-only',
+      backend: 'custom',
+      uiMode: 'headless',
+      artifactsDirectory: prerelease,
+      skipInstall: true,
+      skipChecks: true,
+    });
+    await expect(
+      runNodeSlideUpgrade({
+        cwd: prereleaseProject,
+        artifactsDirectory: stable,
+        skipInstall: true,
+        skipChecks: true,
+      }),
+    ).resolves.toMatchObject({ artifactSet: { releaseVersion: '0.2.0' } });
+
+    const malformed = await artifactSet('0.2.1', 'release:malformed');
+    const malformedManifestPath = path.join(malformed, NODESLIDE_ARTIFACT_MANIFEST_FILE);
+    const malformedManifest = JSON.parse(await readFile(malformedManifestPath, 'utf8')) as {
+      releaseVersion: string;
+    };
+    malformedManifest.releaseVersion = '0.2.1-.beta';
+    await writeFile(
+      malformedManifestPath,
+      `${JSON.stringify(malformedManifest, null, 2)}\n`,
+      'utf8',
+    );
+    await expect(verifyNodeSlideArtifactSet(malformed)).rejects.toThrow(/exact semantic version/);
+  });
+
+  it('refuses to detach an artifact-pinned install from its immutable provenance', async () => {
+    const cwd = await project();
+    const pinned = await artifactSet('0.2.0', 'release:pinned');
+    const installed = await runNodeSlideInit({
+      cwd,
+      profile: 'agent-pack-only',
+      backend: 'custom',
+      uiMode: 'headless',
+      artifactsDirectory: pinned,
+      skipInstall: true,
+      skipChecks: true,
+    });
+
+    await expect(runNodeSlideUpgrade({ cwd, skipInstall: true, skipChecks: true })).rejects.toThrow(
+      /--artifacts is required/,
+    );
+    const unchanged = JSON.parse(
+      await readFile(path.join(cwd, '.nodeslide', 'installation.json'), 'utf8'),
+    ) as { artifactSet?: { manifestSha256: string }; upgrades: unknown[] };
+    expect(unchanged.artifactSet?.manifestSha256).toBe(installed.artifactSet?.manifestSha256);
+    expect(unchanged.upgrades).toHaveLength(0);
+  });
+
+  it('rejects symlinked artifacts and installs only a private snapshot of verified bytes', async () => {
+    const source = await artifactSet('0.2.0', 'release:private-snapshot');
+    const manifest = JSON.parse(
+      await readFile(path.join(source, NODESLIDE_ARTIFACT_MANIFEST_FILE), 'utf8'),
+    ) as { packages: Array<{ file: string; sha256: string }> };
+    const first = manifest.packages[0];
+    if (!first) throw new Error('Fixture artifact manifest is empty.');
+
+    const verified = await verifyNodeSlideArtifactSet(source);
+    const staged = [...verified.packages.values()][0];
+    if (!staged) throw new Error('Verified artifact set is empty.');
+    expect(path.dirname(staged.absolutePath)).toBe(verified.stagingDirectory);
+    expect(verified.stagingDirectory).not.toBe(source);
+    await writeFile(path.join(source, first.file), 'changed-after-verification', 'utf8');
+    expect(
+      `sha256:${createHash('sha256')
+        .update(await readFile(staged.absolutePath))
+        .digest('hex')}`,
+    ).toBe(first.sha256);
+    await disposeNodeSlideArtifactSet(verified);
+    await expect(access(verified.stagingDirectory)).rejects.toMatchObject({ code: 'ENOENT' });
+
+    const linked = await artifactSet('0.2.0', 'release:symlink');
+    const linkedManifest = JSON.parse(
+      await readFile(path.join(linked, NODESLIDE_ARTIFACT_MANIFEST_FILE), 'utf8'),
+    ) as { packages: Array<{ file: string }> };
+    const linkedFile = linkedManifest.packages[0]?.file;
+    if (!linkedFile) throw new Error('Fixture artifact manifest is empty.');
+    const linkPath = path.join(linked, linkedFile);
+    const targetPath = `${linkPath}.source`;
+    await rename(linkPath, targetPath);
+    await symlink(targetPath, linkPath, 'file');
+    await expect(verifyNodeSlideArtifactSet(linked)).rejects.toThrow(/non-symlink/);
   });
 });
 

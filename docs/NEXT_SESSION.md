@@ -5,9 +5,9 @@ Last updated 2026-07-20. Read this first, then
 `docs/EXTRACTION_BOUNDARY.md` (package boundary), and
 `docs/ops/PRODUCTION_RUNBOOK.md` (intended deployment path).
 
-Code checkpoints before this rejected-origin follow-up:
+Code checkpoints before this docs-only deployment-proof update:
 
-- NodeSlide: `c4fa556866adce9db8333d699ef45946dd02e4ef`
+- NodeSlide: `12a8527cb99adf5e80af2302a53332509ce7c283`
 - parity-studio: `de4a67585f9040db95b2af7caeae69c92894e4e5`
 - NodeRoom: `4a4a3c259ddfa96e51b8194685a7c3b9ff56c384`
 
@@ -21,13 +21,14 @@ Code checkpoints before this rejected-origin follow-up:
 - Exact frontend entry: `/assets/index-B-8KKdg_.js`.
 - Convex production: `agile-stoat-411` at
   https://agile-stoat-411.convex.cloud.
-- The authorization spine and replay hardening from PRs #17, #19, and #21 were
-  manually deployed from exact code baseline `c4fa556` to production Convex.
-  The canonical alias serves the unchanged production-bound frontend entry;
-  PR #21 is server/test-only. Local and canonical live smokes pass. There is
-  still no automated exact-SHA deployment receipt, and the rejected-origin
-  follow-up in this change is not part of that deployed baseline. Retain those
-  distinctions until H3 is configured and run.
+- The authorization spine and replay hardening from PRs #17, #19, #21, and #23
+  were manually deployed from exact code baseline `12a8527` to production
+  Convex. PR #23 is server/test/docs-only, so the canonical alias correctly
+  retains the unchanged frontend entry. The production-bound local build and
+  runtime smoke pass; the canonical entry still embeds production Convex and
+  passes live DOM, CSP, and zero-browser-error checks. There is still no
+  automated exact-SHA deployment receipt; retain that distinction until H3 is
+  configured and run.
 - Final CI corpus at the code baseline: **765 tests across 99 files**
   (core 745/96 + external-agent 11/1 + MCP 9/2), plus typecheck, Biome,
   production build, MCP, node-platform, and packed NodeRoom/NodeAgent consumer
@@ -60,7 +61,7 @@ Code checkpoints before this rejected-origin follow-up:
   organization-bound custom receipt replay. A subsequent review found one
   origin deck-version binding gap; PR #21 closes it before any write for direct
   and unresolved submissions. A follow-up review found that rejected proposals
-  preserve the same submission-version coordinate; this change closes that path
+  preserve the same submission-version coordinate; PR #23 closes that path
   before any authorization write and extends the regression matrix. The focused
   security suite is 34/34, and the combined security/memory suite is 49/49.
 - NodeRoom has bilateral package-level CI and real NodeAgent type compatibility.

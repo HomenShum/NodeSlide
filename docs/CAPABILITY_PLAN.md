@@ -116,8 +116,8 @@ most of that gap; the literal B3 fleet probe and B6 camera acceptance remain.
 - [ ] B6. Acceptance: one routed run on camera — two models in one thread turn
       with parent-child spans, tokens, cost; creation self-corrects an induced
       layout issue without human input.
-      — PARTIAL (2026-07-20): the routed two-model thread and tokens/cost trace
-      are live-proved headlessly. The dev-only
+      — PARTIAL (2026-07-20): the routed two-model thread and the tokens/cost
+      trace were each live-proved in separate headless probes. The dev-only
       `NODESLIDE_DEV_CREATION_FAULT=drop_requested_chart` path and second-provider
       repair are regression-tested. The required on-camera routed run showing
       spans/tokens/cost plus a real induced repair remains.
@@ -144,7 +144,8 @@ typeset it. Browser and PPTX rendering now ship; C4 records the live proof.
       `B1FCFB1A480E30B5D364A3D800694A9C568C46D1E135238A336D5EB90E4C50B6`)
       contained one slide-4 math picture backed by a 998×346 PNG and no
       equation text run; the equation was visibly rendered when opened in
-      desktop PowerPoint. Portable font proof: Georgia ×3, Fraunces ×0.
+      desktop PowerPoint. Slide-4 XML portable-font proof: Georgia ×3,
+      Fraunces ×0.
 
 ## D · Charts — from primitive to charting (P1)
 
@@ -333,15 +334,18 @@ registry/                  shadcn-style source-owned compositions (studio route,
       runtime-validates an exact bounded principal shape; the reference
       repository requires a constructor-injected host authorizer and binds
       every mutation receipt to opaque policy evidence for the exact action
-      and resource. Acceptance is therefore bound to the reviewer, deck, and
-      proposal without persisting a bearer credential. PR #13 also supplied
+      and resource. Package-level acceptance is therefore bound to the
+      reviewer, deck, and proposal without persisting a bearer credential.
+      PR #13 also supplied
       default-deny asset policy plus HTTP, auth-session Convex, and
       owner-capability host adapters. The authorization-spine follow-up binds
       their server-produced receipts to the exact principal, action, resource,
       deck, and opaque policy evidence without serializing credentials. PR #19
       additionally binds production replay to immutable submission, decision,
       receipt, and version coordinates and fails closed on contradictory,
-      duplicate, noncanonical, or cross-envelope legacy state.
+      duplicate, noncanonical, or cross-envelope legacy state. PR #21 also
+      rejects an origin replay receipt before any write when its deck version
+      differs from the persisted direct or unresolved submission.
       The production gap remains: NodeRoom ActorProof/membership authorization
       is not yet the mounted host authorizer.
 - [ ] I5. **Governance = enforced invariants, configurable UX.** Required and

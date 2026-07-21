@@ -58,6 +58,13 @@ integrity. Artifact-mode installs consume the whole verified closure so npm
 never resolves an unpublished internal `@nodeslide/*` dependency from a mutable
 registry.
 
+Public immutable assets must come from the Ubuntu
+`immutable-package-build.yml` workflow artifact. `npm pack` encodes a
+CLI bin's executable mode differently on Windows, so two same-OS local builds
+are useful rehearsal but are not the canonical cross-run producer proof. The
+workflow builds twice, requires the exact 12-file roster and byte identity, and
+binds its downloadable artifact to a full commit SHA already on `main`.
+
 After building, prove the actual publish-shaped artifacts in a fresh temporary
 consumer with scripts disabled:
 

@@ -32,6 +32,10 @@ manifest digest plus every exact name, version, filename, digest, and integrity
 pin; upgrades must advance the release version and cannot downgrade the source
 registry.
 
+Use the Ubuntu `immutable-package-build.yml` workflow artifact for a
+public GitHub release. The operating system affects npm's tar mode for the CLI
+bin, so a Windows-built set is not accepted as the canonical public producer.
+
 The local release proof builds two artifact directories and runs:
 
 ```bash

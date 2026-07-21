@@ -409,6 +409,79 @@ describe('NodeSlide baseline edit planner extraction', () => {
     expect(JSON.stringify(provider.mock.calls[0]?.[0].jsonSchema?.schema)).toContain(source.id);
   });
 
+  it('keeps an authorized matching web snapshot bound through deterministic fallback', async () => {
+    const { snapshot, target, scope } = fixture();
+    const slide = snapshot.slides.find((candidate) => candidate.id === target.slideId);
+    if (!slide) throw new Error('Expected slide fixture.');
+    const source = {
+      ...snapshot.sources[0],
+      id: 'source-openai-responses',
+      title: 'Migrate to the Responses API',
+      citation: 'OpenAI recommends the Responses API for all new projects.',
+      format: 'web' as const,
+      provider: 'linkup',
+      snapshot: {
+        kind: 'search_excerpt' as const,
+        capturedAt: NOW,
+        text: 'OpenAI recommends the Responses API for all new projects.',
+        contentDigest: 'sha256:responses-api',
+      },
+    };
+    const planningInput = {
+      ...input(snapshot, target, scope),
+      readContext: {
+        references: [{ id: source.id, kind: 'source' as const, label: source.title }],
+        slides: [slide],
+        elements: [target],
+        sources: [source],
+        comments: [],
+      },
+    };
+    planningInput.request.providerMode = 'deterministic';
+    planningInput.request.instruction =
+      'Replace the selected text exactly with "OpenAI recommends the Responses API for new projects." Cite the retrieved source.';
+
+    const result = await planNodeSlideEdit(planningInput);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.operations).toEqual([
+      {
+        op: 'replace_text',
+        slideId: target.slideId,
+        elementId: target.id,
+        text: 'OpenAI recommends the Responses API for new projects.',
+        sourceIds: [source.id],
+      },
+    ]);
+  });
+
+  it('does not bind a deterministic fallback to a weakly related source', async () => {
+    const { snapshot, target, scope } = fixture();
+    const slide = snapshot.slides.find((candidate) => candidate.id === target.slideId);
+    const source = snapshot.sources[0];
+    if (!slide || !source) throw new Error('Expected source and slide fixtures.');
+    const planningInput = {
+      ...input(snapshot, target, scope),
+      readContext: {
+        references: [{ id: source.id, kind: 'source' as const, label: source.title }],
+        slides: [slide],
+        elements: [target],
+        sources: [source],
+        comments: [],
+      },
+    };
+    planningInput.request.providerMode = 'deterministic';
+    planningInput.request.instruction =
+      'Replace the selected text exactly with "OpenAI recommends the Responses API for new projects." Cite the retrieved source.';
+
+    const result = await planNodeSlideEdit(planningInput);
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.operations[0]).not.toHaveProperty('sourceIds');
+  });
+
   it('accepts a typed chart update only when its data source is in bounded read context', async () => {
     const { snapshot } = fixture();
     const chart = snapshot.elements.find((element) => element.kind === 'chart' && element.chart);

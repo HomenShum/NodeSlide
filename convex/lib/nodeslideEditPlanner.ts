@@ -350,11 +350,14 @@ export async function planNodeSlideEdit(
 
   let finalOperations: PatchOperation[];
   try {
-    finalOperations =
+    const plannedOperations =
       operations ??
       deterministicAgentOperations(snapshot, request.instruction, request.scope, {
         ...(request.focusSlideId ? { preferredSlideId: request.focusSlideId } : {}),
       });
+    finalOperations = usedFallback
+      ? bindDeterministicFallbackSources(plannedOperations, request.instruction, readContext)
+      : plannedOperations;
   } catch (error) {
     const message =
       error instanceof Error && error.message.startsWith(`The ${providerLabel} route returned`)
@@ -389,6 +392,61 @@ export async function planNodeSlideEdit(
     receipt: { ...receiptBase, terminalOutcome: 'completed' },
     ...(!usedFallback && copyBriefs && copyBriefs.length > 0 ? { copyBriefs } : {}),
   };
+}
+
+const SOURCE_BINDING_STOPWORDS = new Set([
+  'about',
+  'after',
+  'before',
+  'claim',
+  'cited',
+  'cites',
+  'exactly',
+  'projects',
+  'replace',
+  'selected',
+  'source',
+  'supports',
+  'text',
+  'with',
+]);
+
+function sourceBindingTokens(value: string): Set<string> {
+  return new Set(
+    value
+      .toLocaleLowerCase('en-US')
+      .match(/[a-z0-9][a-z0-9.-]{2,}/gu)
+      ?.filter((token) => !SOURCE_BINDING_STOPWORDS.has(token)) ?? [],
+  );
+}
+
+/**
+ * Provider failure must not discard already-captured provenance. For an exact-copy
+ * deterministic fallback that explicitly requests a citation, bind only the best
+ * authorized source with at least two concrete overlapping terms. Otherwise leave
+ * the operation unbound so the UI cannot imply evidence that was not established.
+ */
+function bindDeterministicFallbackSources(
+  operations: readonly PatchOperation[],
+  instruction: string,
+  readContext: ResolvedNodeSlideReadContext,
+): PatchOperation[] {
+  if (!/\b(?:cite|cited|citation|source|source-backed)\b/iu.test(instruction)) {
+    return [...operations];
+  }
+  return operations.map((operation) => {
+    if (operation.op !== 'replace_text' || operation.sourceIds !== undefined) return operation;
+    const claimTokens = sourceBindingTokens(operation.text);
+    let best: { id: string; overlap: number } | null = null;
+    for (const source of readContext.sources) {
+      const sourceTokens = sourceBindingTokens(
+        `${source.title} ${source.citation} ${source.snapshot?.text ?? ''}`,
+      );
+      const overlap = [...claimTokens].filter((token) => sourceTokens.has(token)).length;
+      if (overlap >= 2 && (!best || overlap > best.overlap)) best = { id: source.id, overlap };
+    }
+    return best ? { ...operation, sourceIds: [best.id] } : operation;
+  });
 }
 
 const NODESLIDE_COPY_EXECUTOR_MAX_TOKENS = 2000;

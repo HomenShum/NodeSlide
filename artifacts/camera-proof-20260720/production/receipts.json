@@ -46,7 +46,14 @@
       "cited": 2,
       "parentChild": {
         "level1": "Invoke NodeSlide agent · invoke_agent",
-        "level2": ["Queue and authorize · agent.queue", "Plan bounded slide edit · read_context", "Plan bounded slide edit · planner", "Plan bounded slide edit · verify", "Plan bounded slide edit · candidate_validation", "Validate candidate · candidate_validation"],
+        "level2": [
+          "Queue and authorize · agent.queue",
+          "Plan bounded slide edit · read_context",
+          "Plan bounded slide edit · planner",
+          "Plan bounded slide edit · verify",
+          "Plan bounded slide edit · candidate_validation",
+          "Validate candidate · candidate_validation"
+        ],
         "level3": "Plan bounded slide edit · executor"
       },
       "screenshots": ["g3-trace-tokens-cost.png", "g3-parent-child-trace-waterfall.png"]
@@ -76,7 +83,12 @@
       "Interactive HTML · Web-native deck and notes",
       "PowerPoint · Editable PPTX with fallbacks"
     ],
-    "screenshots": ["e4-openverse-results-before-insert.png", "e4-insert-attempt1-server-error.png", "e4-insert-attempt2-blocked.png", "e4-export-capability-menu.png"]
+    "screenshots": [
+      "e4-openverse-results-before-insert.png",
+      "e4-insert-attempt1-server-error.png",
+      "e4-insert-attempt2-blocked.png",
+      "e4-export-capability-menu.png"
+    ]
   },
   "f1_f2_f4": {
     "verdict": "BLOCKED",
@@ -93,7 +105,11 @@
       "snapshotRegions": 0,
       "snapshotHighlights": 0
     },
-    "screenshots": ["f4-attempt1-research-not-configured.png", "f4-attempt2-blocked-not-configured.png", "f4-evidence-tab-no-web-snapshot-after-failure.png"]
+    "screenshots": [
+      "f4-attempt1-research-not-configured.png",
+      "f4-attempt2-blocked-not-configured.png",
+      "f4-evidence-tab-no-web-snapshot-after-failure.png"
+    ]
   },
   "sha256": {
     "e4-export-capability-menu.png": "F30018CCD394FA849EA5E3F3D1984949B1021B4291D5494BB19EAD652378F935",

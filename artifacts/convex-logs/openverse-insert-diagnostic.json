@@ -1,15 +1,9 @@
 {
   "schemaVersion": 1,
   "scope": "production",
-  "observedAt": [
-    "2026-07-21T01:00:47.304Z",
-    "2026-07-21T01:01:39.914Z"
-  ],
+  "observedAt": ["2026-07-21T01:00:47.304Z", "2026-07-21T01:01:39.914Z"],
   "source": "bounded local Convex diagnostic capture; raw message log intentionally not retained",
-  "requests": [
-    "30c4d6477c508dec",
-    "7c761f638890d9af"
-  ],
+  "requests": ["30c4d6477c508dec", "7c761f638890d9af"],
   "function": "nodeslide:applyPatch",
   "errorDigest": "sha256:58546ec2cb70e554",
   "rootCause": "The client caught a licensed-image fetch or conversion failure, substituted the new remote Openverse result URL, and then submitted update_image. The server correctly permits a remote URL only when it is the element's unchanged URL for reframing, so both replacement attempts failed closed.",

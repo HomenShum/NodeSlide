@@ -77,9 +77,21 @@ Do not convert any of these into a green claim without the named evidence:
    failure/banner was not reproduced. Preserve both raw receipts and do not
    relabel the deterministic banner tests as a live camera pass. Reopen only if
    a natural stale-action rejection supplies the missing production condition.
-3. The production fleet probe is a completed red audit, not a healthy-fleet
-   claim: 4/9 catalog routes returned assistant text and 5/9 failed or returned
-   none. Its exact receipt is `artifacts/prod-proof-20260720/model-fleet-probe.json`.
+3. Model-fleet health remains the only open production blocker. The historical
+   1-token audit is retained at
+   `artifacts/prod-proof-20260720/model-fleet-probe.json`. Commit `7edc66f`
+   removed the uncredentialed Nebius route from the offered fleet, raised the
+   bounded probe to 64 tokens, and pinned affected OpenRouter metadata. Commit
+   `8bc12a7` fixed the pi-ai provider-option boundary and explicitly disabled
+   hidden reasoning for pinned routes. Its exact-commit CI, conformance, and
+   deploy gates passed, but the second and final authorized production probe
+   still returned 4/8: Kimi, Sonnet, GPT Sol, and GPT Terra passed; GLM exhausted
+   64 output tokens; Fable, Gemini 3.5, and Gemini 3.1 rejected or failed the
+   explicit-disable request. The red receipt is
+   `artifacts/prod-proof-20260721/model-fleet-probe.json`. Do not claim a healthy
+   fleet. The next pass should inspect sanitized upstream error classifications
+   and implement route-specific reasoning controls, then begin a fresh bounded
+   production QA pass; this pass exhausted its two-attempt stop limit.
 4. H5 is closed by the user's confirmation that the Mike draft was already
    sent. Do not draft or send another copy.
 
@@ -111,8 +123,10 @@ gate is `npm run nodeslide:mounted:release:proof`; the fast repository gate is
 ## Traps already paid for
 
 - Do not weaken fail-closed verification to make a receipt green.
-- Do not use `reasoning:true` on the affected OpenRouter routes; it can consume
-  the response budget before structured JSON.
+- Do not apply one global reasoning shape to every OpenRouter route. Kimi needs
+  an explicit disable; GLM consumed the 64-token probe budget; Fable and both
+  Gemini routes require route-specific handling. Preserve sanitized error
+  classification without logging provider bodies or credentials.
 - Creation needs the 240-second provider budget.
 - The default bar chart is DIV-based; SVG-only probes are invalid.
 - Vite `manualChunks` substring matches can break React initialization order.

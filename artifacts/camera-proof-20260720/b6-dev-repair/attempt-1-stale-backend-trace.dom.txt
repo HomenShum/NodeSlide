@@ -1,0 +1,290 @@
+- main:
+  - button "Create or open a NodeSlide deck":
+    - generic: "N"
+    - generic: NodeSlide
+  - generic: /
+  - textbox "Deck title": Create a 6-slide evidence-led deck about the 2022 FIFA World Cup
+  - generic: v1
+  - generic "History controls":
+    - button "Undo" [disabled]:
+    - button "Redo" [disabled]:
+  - button "Switch to dark theme":
+  - 'button "Language and clarity: English"':
+    - generic: EN
+  - button "Reset demo view":
+    - generic: Reset demo
+  - button "Share deck":
+    - generic: Share
+  - button "Present deck":
+    - generic: Present
+  - button "Export deck":
+    - generic: Export
+  - button "Open command palette":
+    - generic: Commands
+  - navigation "Slides":
+    - tablist "Navigator views":
+      - tab "Slides" [selected]
+      - tab "Outline"
+      - tab "Layers"
+    - tabpanel "Slides":
+      - region "Context":
+        - button "Context 1" [expanded]:
+          - generic: Context
+          - generic: "1"
+        - generic: "01"
+        - 'button "Slide 1: Qatar 2022 at a Glance"':
+          - generic: CONTEXT
+          - generic: A tournament of firsts in the Middle East
+          - generic: The 22nd FIFA World Cup ran from 20 November to 18 December 2022 in Qatar — the first edition hosted in the Middle East and the first moved to November–December to avoid the Gulf summer. Thirty-two teams contested 64 matches across eight stadiums.
+          - generic: "01 Host: Qatar; dates: 20 Nov – 18 Dec 2022"
+          - generic: 02 32 teams, 64 matches, 8 stadiums
+          - generic: "03 Champions: Argentina, their third title"
+          - generic: "64"
+          - generic: Matches played
+          - generic: NODESLIDE · SOURCE-AWARE · EDITABLE
+          - generic: "01"
+        - button "Qatar 2022 at a Glance"
+        - generic: 2 sources · current
+        - button "Slide 1 actions":
+      - region "Scoring Output":
+        - button "Scoring Output 1" [expanded]:
+          - generic: Scoring Output
+          - generic: "1"
+        - generic: "02"
+        - 'button "Slide 2: An Attacking Tournament"':
+          - generic: SCORING OUTPUT
+          - generic: The highest-scoring 32-team World Cup
+          - generic: Qatar 2022 produced 172 goals, a record for the 32-team format used since 1998. Dividing total goals by total matches yields an average of 2.69 goals per match — evidence of a consistently open, attacking tournament.
+          - generic: "01 172 goals: record for the 32-team era"
+          - generic: 02 Average held above 2.5 goals per match
+          - generic: 03 Formula is editable for scenario testing
+          - 'math "Editable formula: 172 ÷ 64 = 2.69 goals per match"':
+            - generic: 172/64
+            - generic: Total goals scored = 172 goals · Total matches played = 64 matches
+          - generic: NODESLIDE · SOURCE-AWARE · EDITABLE
+          - generic: "02"
+        - button "An Attacking Tournament"
+        - generic: 2 sources · current
+        - button "Slide 2 actions":
+      - region "Top Scorers":
+        - button "Top Scorers 1" [expanded]:
+          - generic: Top Scorers
+          - generic: "1"
+        - generic: "03"
+        - 'button "Slide 3: The Golden Boot Race"':
+          - generic: TOP SCORERS
+          - generic: Mbappé edged Messi in a historic scoring duel
+          - generic: Kylian Mbappé won the Golden Boot with 8 goals, one ahead of Lionel Messi on 7. Julián Álvarez and Olivier Giroud tied on 4 each, meaning the final's two finalists supplied all four of the tournament's top scorers.
+          - generic: 01 Mbappé's 8 included a final hat-trick
+          - generic: 02 Messi's 7 earned him the Golden Ball
+          - generic: 03 Chart values are editable for re-analysis
+          - generic: "8"
+          - generic: Mbappé goals — Golden Boot
+          - img "Mbappé (FRA), Messi (ARG), Álvarez (ARG), Giroud (FRA) bar chart":
+            - generic: Mbappé (FRA)
+            - generic: Messi (ARG)
+            - generic: Álvarez (ARG)
+            - generic: Giroud (FRA)
+          - generic: NODESLIDE · SOURCE-AWARE · EDITABLE
+          - generic: "03"
+        - button "The Golden Boot Race"
+        - generic: 2 sources · current
+        - button "Slide 3 actions":
+      - region "Showpiece Match":
+        - button "Showpiece Match 1" [expanded]:
+          - generic: Showpiece Match
+          - generic: "1"
+        - generic: "04"
+        - 'button "Slide 4: The Final: Argentina vs France"':
+          - generic: SHOWPIECE MATCH
+          - generic: A 3–3 epic settled 4–2 on penalties
+          - generic: On 18 December at Lusail Stadium, Argentina led 2–0 and 3–2, but Mbappé's hat-trick forced extra time and penalties. Argentina converted all four spot-kicks to win their first title since 1986 before a crowd of 88,966.
+          - generic: "01 Mbappé: first final hat-trick since 1966"
+          - generic: 02 Messi scored twice in his record 26th WC match
+          - generic: "03 Attendance: 88,966 at Lusail Stadium"
+          - 'img "Illustrative placeholder: stadium bowl during the 2022 World Cup final at Lusail, Argentina vs France"':
+            - strong: "Illustrative placeholder: stadium bowl during the 2022 World Cup final at Lusail, Argentina vs France"
+            - generic: Replace image
+            - generic: Placeholder — no licensed image supplied; replace with a rights-cleared photo (e.g., FIFA or agency archive)
+          - generic: Replace image before external use · Placeholder — no licensed image supplied; replace with a rights-cleared photo (e.g., FIFA or agency archive)
+          - generic: NODESLIDE · SOURCE-AWARE · EDITABLE
+          - generic: "04"
+        - 'button "The Final: Argentina vs France"'
+        - generic: 2 sources · current
+        - button "Slide 4 actions":
+      - region "Breakout Stories":
+        - button "Breakout Stories 1" [expanded]:
+          - generic: Breakout Stories
+          - generic: "1"
+        - generic: "05"
+        - 'button "Slide 5: Beyond the Champions"':
+          - generic: BREAKOUT STORIES
+          - generic: Morocco rewrote African football history
+          - generic: Morocco became the first African and first Arab nation to reach a World Cup semifinal, defeating Belgium, Spain, and Portugal before falling to France and finishing fourth — the run that broadened the tournament's competitive map.
+          - generic: "01 Morocco: first African semifinalist, finished 4th"
+          - generic: 02 Álvarez emerged as Argentina's second scorer
+          - generic: 03 Messi completed his trophy set at age 35
+          - generic: 4th
+          - generic: Morocco — best African finish ever
+          - img "S1, S2, S3 bar chart":
+            - generic: S1
+            - generic: S2
+            - generic: S3
+          - generic: NODESLIDE · SOURCE-AWARE · EDITABLE
+          - generic: "05"
+        - button "Beyond the Champions"
+        - generic: 2 sources · current
+        - button "Slide 5 actions":
+      - region "Conclusion":
+        - button "Conclusion 1" [expanded]:
+          - generic: Conclusion
+          - generic: "1"
+        - generic: "06"
+        - 'button "Slide 6: Legacy and Takeaways"':
+          - generic: CONCLUSION
+          - generic: A record-scoring tournament with global reach
+          - generic: "FIFA reported around 5 billion people engaged with the tournament worldwide (organizer estimate; treat as indicative). The evidence-led picture: record goals, an iconic final, and new geographic milestones for the sport."
+          - generic: 01 ~5B reached (FIFA estimate, illustrative)
+          - generic: 02 69 goals/match signals attacking balance
+          - generic: "03 Decision lens: winter scheduling proved viable"
+          - img "Structured evidence map derived from the supplied brief":
+            - strong: Structured evidence map derived from the supplied brief
+            - generic: Replace image
+            - generic: The visual is illustrative and remains replaceable as an image object.
+          - generic: The visual is illustrative and remains replaceable as an image object.
+          - generic: NODESLIDE · SOURCE-AWARE · EDITABLE
+          - generic: "06"
+        - button "Legacy and Takeaways"
+        - generic: 2 sources · current
+        - button "Slide 6 actions":
+      - button "Add slide":
+        - text: Add slide
+      - text: drag rows to reorder · double-click to rename
+  - region "Editor canvas":
+    - tablist "Canvas views":
+      - tab "Edit" [selected]
+      - tab "Overview"
+      - tab "Compare"
+    - generic: "01"
+    - strong: Qatar 2022 at a Glance
+    - generic: verified
+    - complementary "Narrative context":
+      - generic: Slide job
+      - generic: "Narrative role: Context. Keep the spoken transition focused on “A tournament of firsts in the Middle East” Evidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication."
+    - tabpanel "Edit":
+      - region "Canvas, slide 1":
+        - button "Accent rail, shape slide element, locked"
+        - button "Section label, text slide element":
+          - generic: CONTEXT
+        - button "Headline, text slide element":
+          - generic: A tournament of firsts in the Middle East
+        - button "Body copy, text slide element":
+          - generic: The 22nd FIFA World Cup ran from 20 November to 18 December 2022 in Qatar — the first edition hosted in the Middle East and the first moved to November–December to avoid the Gulf summer. Thirty-two teams contested 64 matches across eight stadiums.
+        - button "Key point 1, text slide element":
+          - generic: "01 Host: Qatar; dates: 20 Nov – 18 Dec 2022"
+        - button "Key point 2, text slide element":
+          - generic: 02 32 teams, 64 matches, 8 stadiums
+        - button "Key point 3, text slide element":
+          - generic: "03 Champions: Argentina, their third title"
+        - button "Primary metric, text slide element":
+          - generic: "64"
+        - button "Metric label, text slide element":
+          - generic: Matches played
+        - button "Deck footer, text slide element, locked":
+          - generic: NODESLIDE · SOURCE-AWARE · EDITABLE
+        - button "Page number, text slide element, locked":
+          - generic: "01"
+        - generic "Slide navigation":
+          - button "Previous slide" [disabled]:
+          - generic: 1 / 6
+          - button "Next slide":
+        - generic "Canvas zoom and pan controls":
+          - button "Zoom out":
+          - generic: 65%
+          - button "Zoom in":
+          - button "Fit slide to workspace": Fit
+  - complementary "NodeSlide inspector":
+    - button "Resize inspector"
+    - generic: Inspector
+    - generic "Current inspector context":
+      - generic: Selection · none
+    - button "Collapse inspector":
+    - tablist "Inspector views":
+      - tab "AI":
+        - generic: AI
+      - tab "Design":
+        - generic: Design
+      - tab "Comments":
+        - generic: Comments
+      - tab "Versions":
+        - generic: Versions
+      - tab "Evidence":
+        - generic: Evidence
+      - tab "JSON":
+        - generic: JSON
+      - tab "Trace" [active] [selected]:
+        - generic: Trace
+    - tabpanel "Trace":
+      - generic: Agent activity
+      - heading "Run details" [level=2]
+      - tablist "Trace detail level":
+        - tab "Summary":
+          - text: Summary
+        - tab "Timeline" [selected]:
+          - text: Timeline
+        - tab "Raw":
+          - text: Raw
+      - paragraph: Provider, work performed, validation, and human approval in one auditable run.
+      - 'heading "Current deck validation: passed" [level=3]':
+        - text: "Current deck validation: passed"
+      - paragraph: Deck v1 · publish ready
+      - generic: Run
+      - combobox "Run":
+        - 'option "The user consented to send the full brief to OpenRouter. The named Kimi K3 model supplied the narrative plan through pi-ai; NodeSlide normalized, persisted, and validated the deck deterministically. Self-critique: 1 pass, clean." [selected]'
+      - article:
+        - generic: Completed
+        - generic: deck v1
+        - time: Started 6:03:12 PM
+        - 'heading "The user consented to send the full brief to OpenRouter. The named Kimi K3 model supplied the narrative plan through pi-ai; NodeSlide normalized, persisted, and validated the deck deterministically. Self-critique: 1 pass, clean." [level=3]'
+        - generic "provider · model · reasoning effort attribution":
+          - generic: openrouter · moonshotai/kimi-k3 · High effort
+        - generic "Run metrics":
+          - generic: Run time
+          - strong:
+            - text: 1s
+          - generic: Tokens
+          - strong: 1,216 → 1,983
+          - generic: Cost
+          - strong:
+            - text: $0.0057
+          - generic: Validation
+          - strong: Passed
+        - paragraph: The external attempt was billed before the deterministic fallback.
+        - generic: Execution
+        - generic: 6 auditable records
+        - strong: Structured timeline unavailable
+        - paragraph: Legacy runs keep their custody receipt but do not invent span timing.
+        - generic "Run events":
+          - button "Authorization — expand":
+            - text: Authorization
+            - text: Consent evidence missing
+          - button "Context — expand":
+            - text: Context
+            - generic "planningInputDigest — not sealed": — unsealed
+            - text: 3 context references read — attribution route degraded
+          - button "Plan — expand":
+            - text: Plan
+            - generic "planningSnapshotDigest — not sealed": — unsealed
+            - text: 6-step plan drafted
+          - button "Actions — expand":
+            - text: Actions
+            - text: Deck built deterministically (3 tool calls)
+          - button "Validation — expand":
+            - text: Validation
+            - text: Deterministic validation passed (v1)
+          - button "Approval — expand":
+            - text: Approval
+            - generic "candidateDigest — not sealed": — unsealed
+            - text: Provisional seal — machine only, not signable
+    - button "Structure, presentation, and cleanup checks passed. Open validation details.":
+      - status: Structure, presentation, and cleanup checks passed

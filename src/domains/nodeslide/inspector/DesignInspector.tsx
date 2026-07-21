@@ -983,33 +983,23 @@ function ImageAssetEditor({
     setBusy(true);
     setError(null);
     try {
-      // Openverse's thumbnail endpoint is CORS-enabled and bounded, while many
-      // original-media hosts are not. Always materialize an embedded copy: a
-      // new arbitrary remote URL is intentionally rejected by the patch gate.
-      const candidates = [result.thumbnailUrl, result.url].filter(Boolean);
-      let imageUrl: string | null = null;
-      for (const candidate of candidates) {
-        try {
-          const response = await fetch(candidate);
-          if (!response.ok) continue;
-          imageUrl = await imageBlobToEmbeddedWebp(await response.blob());
-          break;
-        } catch {
-          // Try the next bounded candidate before surfacing an honest failure.
-        }
-      }
-      if (!imageUrl) {
-        throw new Error(
-          'The licensed image could not be embedded. Download it and use Upload downloaded image.',
-        );
-      }
+      // Openverse's allowlisted thumbnail endpoint returns a bounded raster and
+      // avoids the CORS/size variance of fetching the original third-party
+      // asset. The patch contract accepts only embedded replacements, so never
+      // fall back to a new remote URL that the server must reject.
+      const sourceUrl = result.thumbnailUrl || result.url;
+      const response = await fetch(sourceUrl);
+      if (!response.ok) throw new Error(`Image fetch failed with status ${response.status}.`);
+      const imageUrl = await imageBlobToEmbeddedRaster(await response.blob());
       onApplyPatch(
         buildImageReplacementOperations({ element, slideElements, imageUrl, altText, credit }),
         `Inserted licensed image "${result.title}" from Openverse`,
       );
     } catch (cause) {
       setError(
-        cause instanceof Error ? cause.message : 'The licensed image could not be embedded.',
+        cause instanceof Error
+          ? `NodeSlide could not embed this Openverse image: ${cause.message}`
+          : 'NodeSlide could not embed this Openverse image.',
       );
     } finally {
       setBusy(false);
@@ -1075,7 +1065,7 @@ function ImageAssetEditor({
               const credit = String(formData.get('credit') ?? '').trim();
               setError(null);
               setBusy(true);
-              void imageBlobToEmbeddedWebp(file)
+              void imageBlobToEmbeddedRaster(file)
                 .then((imageUrl) => {
                   onApplyPatch(
                     buildImageReplacementOperations({
@@ -1286,27 +1276,54 @@ function ImageFramingControls({
   );
 }
 
-async function imageBlobToEmbeddedWebp(file: Blob): Promise<string> {
+const MAX_EMBEDDED_IMAGE_DATA_URL_CHARS = 680_000;
+const ACCEPTED_EMBEDDED_IMAGE_TYPE = /^image\/(?:png|jpeg|webp|gif)$/iu;
+
+async function imageBlobToEmbeddedRaster(file: Blob): Promise<string> {
   if (file.size > 8_000_000) throw new Error('Choose an image smaller than 8 MB.');
+  if (!ACCEPTED_EMBEDDED_IMAGE_TYPE.test(file.type)) {
+    throw new Error('Openverse returned an unsupported image format.');
+  }
+
+  const original = await blobToDataUrl(file);
+  if (original.length <= MAX_EMBEDDED_IMAGE_DATA_URL_CHARS) return original;
+
   const bitmap = await createImageBitmap(file);
   try {
     const maxEdge = 1_100;
-    const scale = Math.min(1, maxEdge / Math.max(bitmap.width, bitmap.height));
+    const initialScale = Math.min(1, maxEdge / Math.max(bitmap.width, bitmap.height));
     const canvas = document.createElement('canvas');
-    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
-    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
-    const context = canvas.getContext('2d');
-    if (!context) throw new Error('This browser cannot prepare image uploads.');
-    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-    let dataUrl = canvas.toDataURL('image/webp', 0.8);
-    if (dataUrl.length > 680_000) dataUrl = canvas.toDataURL('image/webp', 0.58);
-    if (dataUrl.length > 680_000) {
-      throw new Error('This image remains too large after compression. Choose a smaller image.');
+    const qualities = [0.82, 0.66, 0.5, 0.38];
+    for (let resizePass = 0; resizePass < 6; resizePass += 1) {
+      const scale = initialScale * 0.8 ** resizePass;
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+      const context = canvas.getContext('2d');
+      if (!context) throw new Error('This browser cannot prepare image uploads.');
+      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      for (const quality of qualities) {
+        const dataUrl = canvas.toDataURL('image/webp', quality);
+        if (dataUrl.length <= MAX_EMBEDDED_IMAGE_DATA_URL_CHARS) return dataUrl;
+      }
     }
-    return dataUrl;
+    throw new Error('This image remains too large after bounded compression.');
   } finally {
     bitmap.close();
   }
+}
+
+function blobToDataUrl(file: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      if (typeof reader.result === 'string') resolve(reader.result);
+      else reject(new Error('This browser could not encode the image.'));
+    });
+    reader.addEventListener('error', () =>
+      reject(reader.error ?? new Error('This browser could not read the image.')),
+    );
+    reader.readAsDataURL(file);
+  });
 }
 
 function InspectorGroup({

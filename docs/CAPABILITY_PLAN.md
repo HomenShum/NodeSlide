@@ -93,7 +93,8 @@ of that gap; only the literal B6 camera acceptance remains.
       Flash in the pi-ai catalog override (same disease as Kimi's original bug);
       audit the rest of the fleet with a 1-token probe script.
       — DONE: 9d18ab6 pins the override and PR #28 adds the operator-only,
-      fail-closed fleet probe. The production audit at 2026-07-20T21:48:36Z
+      fail-closed fleet probe. The post-deploy production audit at
+      2026-07-21T01:02:07Z
       probed all 9 catalog routes: 4 returned assistant output and 5 failed or
       returned no text. That is an honest completed audit, not a green fleet
       claim; the exact red receipt is committed at
@@ -112,14 +113,19 @@ of that gap; only the literal B6 camera acceptance remains.
       deterministic quality signals plus a separate judge contract, records
       the selected tradeoffs, and keeps dev-only repair outside official
       scoring. Unit and UI tests cover the judged result path.
-- [ ] B6. Acceptance: one routed run on camera — two models in one thread turn
+- [x] B6. Acceptance: one routed run on camera — two models in one thread turn
       with parent-child spans, tokens, cost; creation self-corrects an induced
       layout issue without human input.
-      — PARTIAL (2026-07-20): the routed two-model thread and the tokens/cost
-      trace were each live-proved in separate headless probes. The dev-only
-      `NODESLIDE_DEV_CREATION_FAULT=drop_requested_chart` path and second-provider
-      repair are regression-tested. The required on-camera routed run showing
-      spans/tokens/cost plus a real induced repair remains.
+      — DONE in DEV-only camera proof (2026-07-20): the synthetic fault removed
+      the exact Mbappé 8 / Messi 7 / Álvarez 4 / Giroud 4 chart while leaving an
+      unrelated chart present; self-critique ran two passes and reduced the
+      exact semantic issue count 1 → 0. The same disposable deck then showed a
+      Kimi K3 planner → Gemini 3.5 Flash executor as level-2/level-3 spans,
+      6,756 → 568 tokens, $0.0055, 8 spans, 16 records, validation passed, and a
+      reviewable two-operation patch. Receipt and pixels live under
+      `artifacts/camera-proof-20260720/b6-dev-repair/`. A separate open P1 is
+      preserved: this generated deck's narrow formula box renders its KaTeX
+      characters vertically, so no formula visual-acceptance claim is made.
 
 ## C · Math — typeset it or stop saying LaTeX (P1)
 
@@ -205,9 +211,15 @@ acceptance remains.
       aspect controls with renderer and regression coverage.
 - [ ] E4. Acceptance: placeholder → search → insert with license credit on
       camera; export stays clean (capability sync already shipped).
-      — PARTIAL: a headless live search → insert → credit journey passed on
-      production and capability sync keeps export truthful. The literal camera
-      acceptance remains.
+      — RED PRODUCTION RECEIPT (2026-07-20): the camera reached 8 commercially
+      licensed Openverse results, but both insert attempts failed closed in
+      `nodeslide:applyPatch` (digest `sha256:58546ec2cb70e554`) and left the
+      placeholder/credit unchanged. The sanitized diagnosis is retained at
+      `artifacts/convex-logs/openverse-insert-diagnostic.json`; it identified a
+      client fallback to a new remote URL that the server correctly rejects.
+      The bounded-thumbnail/embed fix is regression-tested locally. Keep E4
+      open until that fix is deployed and a separate post-fix camera receipt
+      proves insertion, license credit, and export truth.
 
 ## F · Evidence & screenshots — prove the lineage (P1)
 
@@ -224,6 +236,14 @@ were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
       the inspector badge to "Selection · 1".
 - [ ] F4. Acceptance: live run showing a web claim whose snapshot region opens
       from the element that cites it.
+      — BLOCKED BY PRODUCTION CONFIGURATION (2026-07-20): two consented camera
+      attempts failed before egress with “Web research is not configured on
+      this deployment. No search request was sent.” The deck remained
+      unchanged; the Evidence tab had zero web snapshots, regions, or
+      highlights. Production has none of the supported provider variables
+      (`LINKUP_API_KEY`, `BRAVE_SEARCH_API_KEY`/`BRAVE_API_KEY`,
+      `SERPER_API_KEY`, `TAVILY_API_KEY`). Credentials found in unrelated local
+      projects were deliberately not copied across trust boundaries.
 
 ## G · Thread/UX debt (P2)
 
@@ -235,9 +255,16 @@ were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
 - [x] G2. Streaming assistant text in AgentThread (reads as alive, not batch).
       — DONE in PR #28: provider deltas persist into the active assistant step
       and render incrementally with deterministic regression coverage.
+      LIVE-PROVED on exact deployed SHA `d1119ae664cda26e3b183350c34f91ae4da9ca41`:
+      the production DOM exposed `data-stream-state=streaming`, a live cursor,
+      and incremental assistant text before the review card existed.
 - [x] G3. Nested handoff rendering (pairs with B2).
       — DONE in PR #28: parent/child handoffs render as a nested thread tree
-      with model attribution instead of a flat status list.
+      with model attribution instead of a flat status list. The same production
+      run showed Kimi K3 planner → Gemini 3.5 Flash executor, two reviewable
+      operations with Accept/Reject, `5,885 → 435` tokens, `$0.0046`, 8 spans,
+      16 trace records, zero errors, and the executor nested beneath its planner.
+      The evidence-only proposal was rejected after capture.
 - [x] G4. Creation wait UX: informative staged progress on the landing (what
       the 2–4 min is doing), since Kimi's tail is slow.
       — DONE c69b164; LIVE-PROVED on prod 2026-07-19: real creation from the
@@ -255,17 +282,23 @@ were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
       schedule; alert on first red.
       — DONE in PR #13: the scheduled workflow runs the bounded production
       probe and uploads its evidence; the same exact-SHA journey also passed
-      manually during the PR #13 handoff.
+      manually during the PR #13 handoff. The post-deploy operator capture at
+      `artifacts/convex-logs/production.jsonl` additionally retained 54
+      sanitized production completions and closed with `status: completed`,
+      proving `logs --history --success --jsonl --prod` is no longer silently
+      empty.
 - [x] H3. Vercel deploys from CI on main push (replace manual prebuilt deploys);
       keep VITE_CONVEX_URL pinned to prod.
-      — WORKFLOW DONE in PR #13 and hardened in PRs #14 and #34. Closed
-      2026-07-20 after the production environment, required secrets, and
-      `NODESLIDE_PRODUCTION_DEPLOY_ENABLED=true` were configured: automated
-      [run 29786276438](https://github.com/HomenShum/NodeSlide/actions/runs/29786276438)
-      deployed exact tested main SHA
-      `71fb8726b15da70408692e6e6aeafac6a438ef1a`; authenticated immutable-host
-      and public canonical-alias checks verified the exact production bundle
-      and mounted DOM.
+      — DONE 2026-07-20: the production environment permits only `main`, the
+      four scoped deployment secrets (`CONVEX_DEPLOY_KEY`, `VERCEL_TOKEN`,
+      `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`) and
+      `NODESLIDE_PRODUCTION_DEPLOY_ENABLED=true` are configured, and the
+      workflow checks out the exact CI-tested SHA. Automated
+      [run 29791509370](https://github.com/HomenShum/NodeSlide/actions/runs/29791509370)
+      deployed
+      `d1119ae664cda26e3b183350c34f91ae4da9ca41` through the production-bound
+      build, local smoke, Convex deploy, Vercel deploy, authenticated immutable
+      URL check, and public canonical live-DOM gate with every step green.
 - [x] H4. Repo hygiene: retire stale parity worktrees/branches; remove
       `nodeslide-deploy` staging folder; decide parity-studio's demo fate.
       — DONE 2026-07-20: removed emergency deploy staging and temporary
@@ -400,16 +433,25 @@ registry/                  shadcn-style source-owned compositions (studio route,
       immutable, so it is preserved but explicitly superseded; it is not the
       acceptance target. Public v0.2.1 was also immutable and asset-verified,
       but its Windows-built manifest did not reproduce on the required Ubuntu
-      verifier, so it too is preserved and superseded. Closed 2026-07-20:
-      v0.2.2 was
-      built twice independently on Ubuntu from exact green SHA
-      `a88fb57f111db82e9334d68fa7611a51ed54c3c1` (runs
+      verifier, so it too is preserved and superseded. Closed 2026-07-20 by
+      immutable v0.2.2 at exact green producer
+      `a88fb57f111db82e9334d68fa7611a51ed54c3c1`: two independent Ubuntu
+      producer runs
+      [29786787854](https://github.com/HomenShum/NodeSlide/actions/runs/29786787854)
+      and
       [29786786189](https://github.com/HomenShum/NodeSlide/actions/runs/29786786189)
-      and [29786787854](https://github.com/HomenShum/NodeSlide/actions/runs/29786787854))
-      with byte-identical output, then published as an immutable, attested
-      [release](https://github.com/HomenShum/NodeSlide/releases/tag/v0.2.2).
-      Public [run 29787121559](https://github.com/HomenShum/NodeSlide/actions/runs/29787121559)
-      passed every required proof.
+      emitted byte-identical exact 12-file sets, and those bytes exactly match
+      the immutable, attested public release. Release verification plus all 12
+      per-asset checks pass; the manifest SHA-256 is
+      `3930276da868ab25853a7857cb5c2ddab724d9931eabb3e5fb499394a806856a`.
+      Public
+      [workflow 29787121559](https://github.com/HomenShum/NodeSlide/actions/runs/29787121559)
+      proves v0.1.0 → v0.2.2 clean install,
+      controller selection, exact version and lock integrity pins, advancing
+      upgrade receipt, tamper and mixed-release rejection, and an Ubuntu
+      rebuild byte-equal to the public assets. PR #36 makes the same two-build,
+      exact-roster, byte-identity, and main-ancestry gates mandatory for every
+      future producer artifact.
 - [ ] I7. **NodeRoom consumer proof** (a required architectural test, not
       optional dogfood): from a clean NodeRoom branch — installer →
       NodeRoom's own principal adapter → mount as a room artifact → create

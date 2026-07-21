@@ -1,0 +1,128 @@
+{
+  "runMode": "AUTHORIZED PRODUCTION",
+  "target": {
+    "url": "https://nodeslide.vercel.app/",
+    "sourceSha": "d1119ae664cda26e3b183350c34f91ae4da9ca41",
+    "deploymentRun": 29791509370,
+    "deploymentConclusion": "success",
+    "deploymentCompletedAt": "2026-07-21T00:55:11Z",
+    "deploymentUrl": "https://github.com/HomenShum/NodeSlide/actions/runs/29791509370",
+    "sampleDeckUrl": "https://nodeslide.vercel.app/?deck=deck_golden_0junw4e"
+  },
+  "g2_g3": {
+    "verdict": "PASS",
+    "prompt": "Rewrite the headline and the body copy to be more direct.",
+    "streaming": {
+      "state": "streaming",
+      "cursor": true,
+      "text": "Drafting ·Rewrote the headline and body copy in a more direct voice while preserving the slide's meaning, layout, and provenance to the product brief. No other elements changed",
+      "preStreamScreenshot": "g2-inflight-composer-before-stream.png",
+      "screenshot": "g2-genuine-streaming.png",
+      "pixelNote": "The inspector was scrolled above the newly emitted message, so the PNG visibly proves the in-flight composer while this concurrent DOM receipt proves the streamed text and cursor."
+    },
+    "review": {
+      "status": "Ready for review",
+      "planner": "Kimi K3",
+      "executor": "Gemini 3.5 Flash",
+      "operationCount": 2,
+      "handoffText": "Planner · Kimi K3: proposed 2 operations and delegated 2 copy targets to the executor lane. Executor · Gemini 3.5 Flash: wrote copy for 2 text elements; deterministic validation reran on the assembled operations.",
+      "humanControls": ["Accept", "Reject"],
+      "accepted": false,
+      "finalDisposition": "rejected after evidence capture",
+      "screenshot": "g3-reviewable-patch-nested-handoff.png"
+    },
+    "trace": {
+      "provider": "openrouter",
+      "model": "moonshotai/kimi-k3",
+      "effort": "High",
+      "tokens": "5,885 → 435",
+      "cost": "$0.0046",
+      "validation": "Passed",
+      "status": "Awaiting review",
+      "records": 16,
+      "spans": 8,
+      "duration": "18.0 s",
+      "errors": 0,
+      "cited": 2,
+      "parentChild": {
+        "level1": "Invoke NodeSlide agent · invoke_agent",
+        "level2": [
+          "Queue and authorize · agent.queue",
+          "Plan bounded slide edit · read_context",
+          "Plan bounded slide edit · planner",
+          "Plan bounded slide edit · verify",
+          "Plan bounded slide edit · candidate_validation",
+          "Validate candidate · candidate_validation"
+        ],
+        "level3": "Plan bounded slide edit · executor"
+      },
+      "screenshots": ["g3-trace-tokens-cost.png", "g3-parent-child-trace-waterfall.png"]
+    }
+  },
+  "e4": {
+    "verdict": "BLOCKED",
+    "query": "circuit board",
+    "consent": "Clicking Search sends this query to Openverse (api.openverse.org) and is your consent for that single request. Results are commercial-use licensed.",
+    "resultCount": 8,
+    "requestedResult": "Twechie circuit board · Twechie · BY-SA 2.0 via Openverse",
+    "attempts": [
+      {
+        "requestId": "30c4d6477c508dec",
+        "error": "[CONVEX M(nodeslide:applyPatch)] Server Error"
+      },
+      {
+        "requestId": "7c761f638890d9af",
+        "error": "[CONVEX M(nodeslide:applyPatch)] Server Error"
+      }
+    ],
+    "unchangedAfterFailure": {
+      "imageAlt": "Structured deck graph connecting slides, elements, sources, and versions",
+      "credit": "A canonical deck graph keeps every artifact connected."
+    },
+    "exportCapability": [
+      "Interactive HTML · Web-native deck and notes",
+      "PowerPoint · Editable PPTX with fallbacks"
+    ],
+    "screenshots": [
+      "e4-openverse-results-before-insert.png",
+      "e4-insert-attempt1-server-error.png",
+      "e4-insert-attempt2-blocked.png",
+      "e4-export-capability-menu.png"
+    ]
+  },
+  "f1_f2_f4": {
+    "verdict": "BLOCKED",
+    "prompt": "Research current AI presentation software adoption statistics, then rewrite both this slide’s headline and body with one source-backed factual claim. Bind the exact source to each changed element.",
+    "webResearchToggle": "aria-pressed=true",
+    "attempts": 2,
+    "failure": "Web research is not configured on this deployment. No search request was sent.",
+    "mutation": "No proposal was created or applied. Your deck remains unchanged.",
+    "postFailureEvidenceTab": {
+      "sourceCount": 2,
+      "sourceTypes": ["internal", "note"],
+      "citingElementButtons": 43,
+      "snapshotToggles": 0,
+      "snapshotRegions": 0,
+      "snapshotHighlights": 0
+    },
+    "screenshots": [
+      "f4-attempt1-research-not-configured.png",
+      "f4-attempt2-blocked-not-configured.png",
+      "f4-evidence-tab-no-web-snapshot-after-failure.png"
+    ]
+  },
+  "sha256": {
+    "e4-export-capability-menu.png": "F30018CCD394FA849EA5E3F3D1984949B1021B4291D5494BB19EAD652378F935",
+    "e4-insert-attempt1-server-error.png": "2A45A77D1994D55B223AFBD793904CF44A901F1282EC29987190842147F6C6D0",
+    "e4-insert-attempt2-blocked.png": "F879D4BC7DDBFAE4E0FC750FB8CF902AA4318C6BEE1828BB9B20CEEB3A549082",
+    "e4-openverse-results-before-insert.png": "FEE488D83C7FEAF4FC8ED7EB790F2DCBEA7470E199D42500AB9C3BD842CE1204",
+    "f4-attempt1-research-not-configured.png": "22143497175F35AE8462D791C324315DD9D3DF634A5560034F84EBC06AEAF2AD",
+    "f4-attempt2-blocked-not-configured.png": "8527BC18C263BE1412FF5D6C726561C0AAE2FC07EAE8D46F3CFFBBC112DB772B",
+    "f4-evidence-tab-no-web-snapshot-after-failure.png": "2AE1D9BBDDBBE77FA6D116BA6E8E67A15C31A1ED75C06E757F4ED6612DA44F6C",
+    "g2-genuine-streaming.png": "B6AC06B89C99723288F39D6B9C8BAEBA8EE19E1BF32991971F2D6C26518593B1",
+    "g2-inflight-composer-before-stream.png": "FF3EF99180C92BF3978F0E5436EA2D65223D0761DD52E52C3DD996A3B3518FB6",
+    "g3-parent-child-trace-waterfall.png": "DBC5B72D1B061B5F264486FBEB923BD9FB549CFA9C1C89A5186388D00F654171",
+    "g3-reviewable-patch-nested-handoff.png": "4A3C4064FAD311891478897E9028FCCE8CB15BD1CCDD145AA09E873C06AE849A",
+    "g3-trace-tokens-cost.png": "F36CCE8B931230AE85A40DF6DA87B9675F826819C1C242DB25D27EA863FD661C"
+  }
+}

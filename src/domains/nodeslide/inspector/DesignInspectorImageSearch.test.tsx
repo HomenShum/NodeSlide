@@ -30,23 +30,12 @@ const licensedResult: LicensedImageResult = {
 };
 
 beforeAll(() => {
-  vi.stubGlobal('createImageBitmap', async () => ({
-    width: 1,
-    height: 1,
-    close: vi.fn(),
-  }));
-  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
-    drawImage: vi.fn(),
-  } as unknown as CanvasRenderingContext2D);
-  vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockReturnValue(
-    'data:image/webp;base64,UklGRg==',
-  );
+  // jsdom has no network. Individual success cases opt into a bounded raster;
+  // the default proves that replacement fails closed instead of sending a
+  // remote URL that the server-side patch contract rejects.
   vi.stubGlobal(
     'fetch',
-    vi.fn(async (url: string) => ({
-      ok: true,
-      blob: async () => new Blob([String(url)], { type: 'image/jpeg' }),
-    })),
+    vi.fn(() => Promise.reject(new TypeError('jsdom has no network'))),
   );
 });
 
@@ -119,6 +108,10 @@ describe('Design inspector licensed image search', () => {
     const user = userEvent.setup();
     const onApplyPatch = vi.fn<(operations: PatchOperation[], summary: string) => void>();
     const onSearchImages = vi.fn().mockResolvedValue({ results: [licensedResult] });
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      blob: async () => new Blob(['bounded-openverse-raster'], { type: 'image/webp' }),
+    } as Response);
     renderImageInspector({ onApplyPatch, onSearchImages });
 
     await user.type(screen.getByTestId('licensed-image-query'), 'wind turbines');
@@ -134,26 +127,23 @@ describe('Design inspector licensed image search', () => {
     expect(update.altText).toBe('Wind turbines at dusk');
     expect(update.credit).toBe('Ada Fotograf · BY-SA 4.0 via Openverse');
     expect(update.credit).toBe(licensedImageCredit(licensedResult));
+    expect(update.imageUrl).toMatch(/^data:image\/webp;base64,/u);
+    expect(update.imageUrl.length).toBeLessThanOrEqual(680_000);
     expect(fetch).toHaveBeenCalledWith(licensedResult.thumbnailUrl);
-    expect(update.imageUrl).toBe('data:image/webp;base64,UklGRg==');
     expect(summary).toContain('Openverse');
   });
 
-  it('does not submit a remote image patch when neither licensed asset can be embedded', async () => {
+  it('fails closed when the licensed raster cannot be embedded', async () => {
     const user = userEvent.setup();
-    vi.mocked(fetch).mockRejectedValueOnce(new TypeError('thumbnail CORS failure'));
-    vi.mocked(fetch).mockRejectedValueOnce(new TypeError('original CORS failure'));
     const onApplyPatch = vi.fn<(operations: PatchOperation[], summary: string) => void>();
-    renderImageInspector({
-      onApplyPatch,
-      onSearchImages: vi.fn().mockResolvedValue({ results: [licensedResult] }),
-    });
+    const onSearchImages = vi.fn().mockResolvedValue({ results: [licensedResult] });
+    renderImageInspector({ onApplyPatch, onSearchImages });
 
     await user.type(screen.getByTestId('licensed-image-query'), 'wind turbines');
     await user.click(screen.getByTestId('licensed-image-search-button'));
     await user.click(await screen.findByTestId('licensed-image-ov-123'));
 
-    expect(await screen.findByText(/licensed image could not be embedded/i)).toBeTruthy();
+    expect(await screen.findByText(/could not embed this Openverse image/i)).toBeTruthy();
     expect(onApplyPatch).not.toHaveBeenCalled();
   });
 

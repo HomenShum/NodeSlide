@@ -12,7 +12,6 @@ const distDir = path.resolve(process.env.LIVE_SMOKE_DIST_DIR ?? 'dist');
 const htmlPath = path.join(distDir, 'index.html');
 const expectedConvexUrl = process.env.EXPECTED_CONVEX_URL;
 const expectedConvexSiteUrl = process.env.EXPECTED_CONVEX_SITE_URL;
-const vercelAutomationBypassSecret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET?.trim();
 const retryTimeoutMs = boundedInteger(process.env.LIVE_SMOKE_RETRY_TIMEOUT_MS, 90_000, {
   min: 5_000,
   max: 300_000,
@@ -77,7 +76,6 @@ async function waitForMatchingHtml(url, expected, timeoutMs) {
         headers: {
           'cache-control': 'no-cache',
           pragma: 'no-cache',
-          ...vercelProtectionHeaders(),
         },
       });
       const html = await response.text();
@@ -95,10 +93,7 @@ async function waitForMatchingHtml(url, expected, timeoutMs) {
 }
 
 async function verifyDom(browserInstance, url) {
-  const context = await browserInstance.newContext({
-    serviceWorkers: 'block',
-    extraHTTPHeaders: vercelProtectionHeaders(),
-  });
+  const context = await browserInstance.newContext({ serviceWorkers: 'block' });
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', (error) => errors.push(`pageerror: ${redact(error.message)}`));
@@ -127,14 +122,6 @@ async function verifyDom(browserInstance, url) {
   } finally {
     await context.close();
   }
-}
-
-function vercelProtectionHeaders() {
-  if (!vercelAutomationBypassSecret) return {};
-  return {
-    'x-vercel-protection-bypass': vercelAutomationBypassSecret,
-    'x-vercel-set-bypass-cookie': 'true',
-  };
 }
 
 function liveUrl(value) {

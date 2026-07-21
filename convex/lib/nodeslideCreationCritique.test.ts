@@ -25,6 +25,14 @@ const ROADSHOW_BRIEF: DeckBrief = {
   successCriteria: ['Clear ask', 'Auditable evidence'],
 };
 
+const WORLD_CUP_BRIEF: DeckBrief = {
+  prompt:
+    'Create a 6-slide evidence-led deck about the 2022 FIFA World Cup. Include an editable bar chart comparing Mbappé 8, Messi 7, Álvarez 4, and Giroud 4, plus a formula showing 172 ÷ 64 = 2.69 goals per match. The returned slide specification must include a chart primitive.',
+  audience: 'football operations leaders',
+  purpose: 'Make the tournament evidence auditable',
+  successCriteria: ['Six slides', 'Exact scorer comparison', 'Editable formula'],
+};
+
 const THEME_ID = 'editorial-signal';
 const NOW = 1_700_000_000_000;
 
@@ -83,6 +91,23 @@ const CORRECTED_SPEC = {
 const WORSE_SPEC = {
   ...FLAWED_SPEC,
   slides: specSlides({ 3: EXPLICIT_IMAGE, 4: EXPLICIT_IMAGE }),
+};
+
+const WORLD_CUP_CHART: SlideOverride = {
+  chart: {
+    labels: ['Mbappé', 'Messi', 'Álvarez', 'Giroud'],
+    values: [8, 7, 4, 4],
+    unit: 'goals',
+  },
+};
+const UNRELATED_CHART: SlideOverride = {
+  chart: { labels: ['S1', 'S2', 'S3'], values: [64, 48, 32], unit: 'matches' },
+};
+const WORLD_CUP_SPEC = {
+  title: 'World Cup evidence',
+  narrative: ['Tournament', 'Scorers', 'Rate'],
+  plan: ['1. Context', '2. Evidence', '3. Takeaway'],
+  slides: specSlides({ 2: EXPLICIT_FORMULA, 3: WORLD_CUP_CHART, 4: UNRELATED_CHART }).slice(0, 6),
 };
 
 function reportFor(rawSpec: unknown) {
@@ -277,6 +302,7 @@ describe('development-only creation fault injection', () => {
     });
     expect(injected.applied).toBe(true);
     expect(injected.traceLabel).toContain('Development-only synthetic fault');
+    expect(injected.requiredCharts).toEqual([EXPLICIT_CHART.chart]);
     expect(reportFor(injected.spec).missingPrimitives).toEqual(['chart']);
 
     const outcome = await runNodeSlideCreationCritique({
@@ -285,6 +311,7 @@ describe('development-only creation fault injection', () => {
       themeId: THEME_ID,
       now: NOW,
       firstSpec: injected.spec,
+      requiredCharts: injected.requiredCharts,
       providerLive: true,
       requestRevision: async () => ({
         ok: true,
@@ -301,6 +328,100 @@ describe('development-only creation fault injection', () => {
     expect(outcome.decision).toBe('revised');
     expect(outcome.passes).toBe(2);
     expect(outcome.chosenReport?.issueCount).toBe(0);
+  });
+
+  it('requires the exact requested scorer series even when another chart exists', async () => {
+    const injected = injectNodeSlideSyntheticCreationFault({
+      rawSpec: WORLD_CUP_SPEC,
+      brief: WORLD_CUP_BRIEF,
+      fault: 'drop_requested_chart',
+    });
+    expect(injected.applied).toBe(true);
+    expect(injected.requiredCharts).toEqual([
+      {
+        labels: ['Mbappé', 'Messi', 'Álvarez', 'Giroud'],
+        values: [8, 7, 4, 4],
+      },
+    ]);
+    expect(
+      (injected.spec as typeof WORLD_CUP_SPEC).slides.some(
+        (slide) => slide.chart?.labels.join('/') === 'S1/S2/S3',
+      ),
+    ).toBe(true);
+
+    const firstReport = collectNodeSlideCreationQualityReport({
+      title: 'World Cup evidence',
+      brief: WORLD_CUP_BRIEF,
+      themeId: THEME_ID,
+      rawSpec: injected.spec,
+      requiredCharts: injected.requiredCharts,
+      now: NOW,
+    });
+    expect(firstReport.missingPrimitives).toEqual(['chart']);
+    expect(firstReport.missingRequiredCharts).toEqual(injected.requiredCharts);
+    expect(JSON.parse(nodeSlideCreationCritiquePromptReport(firstReport))).toMatchObject({
+      missingPrimitives: ['chart'],
+      missingRequiredCharts: injected.requiredCharts,
+    });
+
+    const requestRevision = vi.fn(
+      async (): Promise<NodeSlideProviderResult> => ({
+        ok: true,
+        value: WORLD_CUP_SPEC,
+        telemetry: {
+          provider: 'openrouter',
+          model: 'kimi-k3',
+          costMicroUsd: 20,
+          inputTokens: 900,
+          outputTokens: 1_400,
+        },
+      }),
+    );
+    const outcome = await runNodeSlideCreationCritique({
+      firstSpec: injected.spec,
+      title: 'World Cup evidence',
+      brief: WORLD_CUP_BRIEF,
+      themeId: THEME_ID,
+      now: NOW,
+      requiredCharts: injected.requiredCharts,
+      providerLive: true,
+      requestRevision,
+    });
+    expect(requestRevision).toHaveBeenCalledTimes(1);
+    expect(outcome.decision).toBe('revised');
+    expect(outcome.passes).toBe(2);
+    expect(outcome.firstReport?.missingRequiredCharts).toEqual(injected.requiredCharts);
+    expect(outcome.chosenReport?.missingRequiredCharts).toEqual([]);
+  });
+
+  it('rejects a second pass that keeps only the unrelated fallback chart', async () => {
+    const injected = injectNodeSlideSyntheticCreationFault({
+      rawSpec: WORLD_CUP_SPEC,
+      brief: WORLD_CUP_BRIEF,
+      fault: 'drop_requested_chart',
+    });
+    const outcome = await runNodeSlideCreationCritique({
+      firstSpec: injected.spec,
+      title: 'World Cup evidence',
+      brief: WORLD_CUP_BRIEF,
+      themeId: THEME_ID,
+      now: NOW,
+      requiredCharts: injected.requiredCharts,
+      providerLive: true,
+      requestRevision: async () => ({
+        ok: true,
+        value: injected.spec,
+        telemetry: {
+          provider: 'openrouter',
+          model: 'kimi-k3',
+          costMicroUsd: 20,
+          inputTokens: 900,
+          outputTokens: 1_400,
+        },
+      }),
+    });
+    expect(outcome.decision).toBe('revision_not_better');
+    expect(outcome.chosenReport?.missingRequiredCharts).toEqual(injected.requiredCharts);
   });
 
   it('records a requested but inapplicable fault without changing the spec', () => {

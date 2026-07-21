@@ -1,0 +1,96 @@
+{
+  "verdict": "PASS_WITH_SEPARATE_P1",
+  "scope": "B6 development-only camera acceptance",
+  "runMode": "SANDBOX_DOGFOOD",
+  "productionTouched": false,
+  "source": {
+    "baseCommit": "d1119ae664cda26e3b183350c34f91ae4da9ca41",
+    "branch": "codex/b6-dev-camera-repair",
+    "localUrl": "http://127.0.0.1:62210/",
+    "convexDeploymentClass": "development",
+    "devFunctionsDeployedFromWorkingTree": true
+  },
+  "prompt": "Create a 6-slide evidence-led deck about the 2022 FIFA World Cup. Include an editable bar chart comparing Mbappé 8, Messi 7, Álvarez 4, and Giroud 4, plus a formula showing 172 ÷ 64 = 2.69 goals per match. The returned slide specification must include a chart primitive.",
+  "semanticRepair": {
+    "status": "PASS",
+    "syntheticFault": "drop_requested_chart",
+    "traceSummary": "Development-only synthetic fault removed 1 provider-supplied chart matching the requested label/value series before pass 1. Self-critique: 2 passes: revised to fix missing chart (1 -> 0 issues).",
+    "requiredChart": {
+      "labels": ["Mbappé", "Messi", "Álvarez", "Giroud"],
+      "values": [8, 7, 4, 4]
+    },
+    "slides": 6,
+    "provider": "openrouter",
+    "model": "moonshotai/kimi-k3",
+    "reasoningEffort": "high",
+    "inputTokens": 3985,
+    "outputTokens": 3764,
+    "costUsd": 0.0118,
+    "validation": "passed",
+    "pixelEvidence": "attempt-3-repaired-chart-and-trace.png",
+    "domEvidence": "attempt-3-trace.dom.txt"
+  },
+  "routedThread": {
+    "status": "PASS",
+    "instruction": "Rewrite the headline and the body copy to be more direct.",
+    "planner": "Kimi K3",
+    "executor": "Gemini 3.5 Flash",
+    "operations": 2,
+    "records": 16,
+    "spans": 8,
+    "wallSeconds": 25.5,
+    "inputTokens": 6756,
+    "outputTokens": 568,
+    "costUsd": 0.0055,
+    "validation": "passed",
+    "reviewState": "awaiting_review",
+    "parentChildProof": "planner is a level-2 span and executor is its level-3 child",
+    "streamingEvidence": "attempt-3-routed-edit-streaming.png",
+    "handoffEvidence": "attempt-3-two-model-reviewable-handoff.png",
+    "waterfallEvidence": "attempt-3-parent-child-trace-waterfall.png"
+  },
+  "separateFinding": {
+    "severity": "P1",
+    "area": "formula canvas rendering",
+    "status": "open",
+    "symptom": "The formula DOM carries the accessible 172 ÷ 64 ≈ 2.69 expression, but the rendered green formula box stacks characters vertically and is not visually legible.",
+    "rootCause": "The broad .ns-element-math span rule applies wrapping and font overrides to every nested KaTeX span; the generated formula element is also narrow enough that those overrides wrap the expression character-by-character.",
+    "evidence": "attempt-3-formula-and-repair-trace.png",
+    "claimBoundary": "Formula structure/accessibility is present, but formula visual acceptance is not claimed. This finding is separate from the B6 requested-chart repair and routed parent-child acceptance."
+  },
+  "environmentRestoration": {
+    "NODESLIDE_RUNTIME_ENV": "restored_absent",
+    "NODESLIDE_DEV_CREATION_FAULT": "restored_absent",
+    "NODESLIDE_PUBLIC_CREATION": "restored_absent"
+  },
+  "browserDiagnostics": {
+    "applicationErrors": 0,
+    "extensionOnlyWarningsOrErrors": 13,
+    "evidence": "attempt-3-browser-warnings.json"
+  },
+  "stopRule": {
+    "priorFailedModelRunsPreserved": 2,
+    "repairRunNumber": 3,
+    "additionalRepairModelRunsAfterPass": 0
+  },
+  "artifacts": [
+    "attempt-3-before-create-exact-brief.png",
+    "attempt-3-self-repair-trace.png",
+    "attempt-3-repaired-chart-and-trace.png",
+    "attempt-3-formula-and-repair-trace.png",
+    "attempt-3-before-routed-edit.png",
+    "attempt-3-routed-edit-streaming.png",
+    "attempt-3-two-model-reviewable-handoff.png",
+    "attempt-3-parent-child-trace-waterfall.png",
+    "attempt-3-trace.dom.txt",
+    "attempt-3-browser-warnings.json"
+  ],
+  "priorFailureArtifactsPreserved": [
+    "attempt-1-stale-backend-trace.dom.txt",
+    "attempt-2-blocked-synthetic-placeholder-trace.png",
+    "attempt-2-formula-present-trace.png",
+    "attempt-2-stray-s1-s2-s3-chart-trace.png",
+    "attempt-2-final-deck.dom.txt",
+    "attempt-2-trace.dom.txt"
+  ]
+}

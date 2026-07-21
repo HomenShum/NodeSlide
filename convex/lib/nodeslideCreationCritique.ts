@@ -1,7 +1,7 @@
 import type { DeckBrief } from '../../shared/nodeslide';
 import { findCompressedTextElements } from '../../shared/nodeslideLayoutMetrics';
 import type { NodeSlideProviderResult } from './nodeslideProvider';
-import { buildBriefNodeSlide } from './nodeslideSeed';
+import { type NodeSlidePlannedChart, buildBriefNodeSlide } from './nodeslideSeed';
 import { validateNodeSlideSnapshot } from './nodeslideValidation';
 
 /**
@@ -22,6 +22,8 @@ export interface NodeSlideSyntheticFaultResult {
   spec: unknown;
   fault: NodeSlideSyntheticCreationFault;
   applied: boolean;
+  /** Canonical chart payloads removed from pass 1 and required in a valid repair. */
+  requiredCharts: NodeSlidePlannedChart[];
   traceLabel: string;
 }
 
@@ -39,6 +41,8 @@ export interface NodeSlideCreationQualityReport {
   compressedSlides: Array<{ slideIndex: number; elementName: string }>;
   /** Brief-requested primitives absent from every materialized slide. */
   missingPrimitives: NodeSlideBriefPrimitive[];
+  /** Exact brief-requested chart series still absent after materialization. */
+  missingRequiredCharts: NodeSlidePlannedChart[];
   /** Archetype per slide, in deck order, for monotony inspection downstream. */
   archetypes: string[];
 }
@@ -49,6 +53,12 @@ export interface NodeSlideCreationCritiqueInput {
   themeId: string;
   rawSpec: unknown;
   now: number;
+  /**
+   * Optional exact chart semantics that must survive materialization. This is
+   * used by the development-only repair proof so an unrelated fallback chart
+   * cannot satisfy the deliberately removed requested chart.
+   */
+  requiredCharts?: readonly NodeSlidePlannedChart[];
 }
 
 const PRIMITIVE_REQUESTS: ReadonlyArray<[NodeSlideBriefPrimitive, RegExp]> = [
@@ -88,6 +98,7 @@ export function injectNodeSlideSyntheticCreationFault(input: {
       spec: input.rawSpec,
       fault: input.fault,
       applied: false,
+      requiredCharts: [],
       traceLabel: `${tracePrefix}: requested but not applicable; pass 1 was not modified.`,
     };
   }
@@ -97,13 +108,18 @@ export function injectNodeSlideSyntheticCreationFault(input: {
       spec: input.rawSpec,
       fault: input.fault,
       applied: false,
+      requiredCharts: [],
       traceLabel: `${tracePrefix}: requested but not applicable; pass 1 was not modified.`,
     };
   }
-  let removedCharts = 0;
+  const requestedChart = readRequestedChart(input.brief);
+  const requiredCharts: NodeSlidePlannedChart[] = [];
   const faultedSlides = slides.map((slide) => {
     if (!isCreationSpecRecord(slide) || !Object.hasOwn(slide, 'chart')) return slide;
-    removedCharts += 1;
+    const providerChart = readRequiredChart(slide['chart']);
+    if (!providerChart) return slide;
+    if (requestedChart && !chartsSemanticallyMatch(providerChart, requestedChart)) return slide;
+    requiredCharts.push(requestedChart ?? providerChart);
     const { chart: _removedChart, ...slideWithoutChart } = slide;
     // The deterministic materializer supplies a chart for a primitive-empty
     // evidence slot. Keep this intentionally broken pass chartless by placing
@@ -117,11 +133,12 @@ export function injectNodeSlideSyntheticCreationFault(input: {
     }
     return slideWithoutChart;
   });
-  if (removedCharts === 0) {
+  if (requiredCharts.length === 0) {
     return {
       spec: input.rawSpec,
       fault: input.fault,
       applied: false,
+      requiredCharts: [],
       traceLabel: `${tracePrefix}: requested but the provider emitted no chart to remove.`,
     };
   }
@@ -129,9 +146,10 @@ export function injectNodeSlideSyntheticCreationFault(input: {
     spec: { ...input.rawSpec, slides: faultedSlides },
     fault: input.fault,
     applied: true,
-    traceLabel: `${tracePrefix}: removed ${removedCharts} provider-supplied requested chart${
-      removedCharts === 1 ? '' : 's'
-    } before pass 1.`,
+    requiredCharts,
+    traceLabel: `${tracePrefix}: removed ${requiredCharts.length} provider-supplied chart${
+      requiredCharts.length === 1 ? '' : 's'
+    } matching the requested label/value series before pass 1.`,
   };
 }
 
@@ -176,8 +194,16 @@ export function collectNodeSlideCreationQualityReport(
 
   const requestText =
     `${input.brief.prompt} ${input.brief.purpose} ${input.brief.successCriteria.join(' ')}`.toLowerCase();
+  const missingRequiredCharts = (input.requiredCharts ?? []).filter(
+    (requiredChart) =>
+      !built.spec.slides.some(
+        (slide) => slide.chart !== undefined && chartsSemanticallyMatch(slide.chart, requiredChart),
+      ),
+  );
   const missingPrimitives = PRIMITIVE_REQUESTS.filter(([primitive, pattern]) => {
     if (!pattern.test(requestText)) return false;
+    if (primitive === 'chart' && input.requiredCharts?.length)
+      return missingRequiredCharts.length > 0;
     return !built.spec.slides.some((slide) =>
       primitive === 'chart'
         ? slide.chart !== undefined
@@ -194,6 +220,7 @@ export function collectNodeSlideCreationQualityReport(
     validationIssues,
     compressedSlides,
     missingPrimitives,
+    missingRequiredCharts,
     archetypes,
   };
 }
@@ -206,6 +233,7 @@ export function nodeSlideCreationCritiquePromptReport(
     validationIssues: report.validationIssues,
     compressedSlides: report.compressedSlides,
     missingPrimitives: report.missingPrimitives,
+    missingRequiredCharts: report.missingRequiredCharts,
   }).slice(0, MAX_REPORT_PROMPT_BYTES);
 }
 
@@ -235,6 +263,8 @@ export interface RunNodeSlideCreationCritiqueInput {
   brief: DeckBrief;
   themeId: string;
   now: number;
+  /** Exact chart payloads removed by an authorized development-only fault. */
+  requiredCharts?: readonly NodeSlidePlannedChart[];
   /** True only when pass 1 actually came from a live provider route. */
   providerLive: boolean;
   requestRevision: (promptReport: string) => Promise<NodeSlideProviderResult>;
@@ -257,6 +287,98 @@ function describeReport(report: NodeSlideCreationQualityReport): string {
     );
   }
   return parts.join(', ') || 'reported issues';
+}
+
+function readRequiredChart(value: unknown): NodeSlidePlannedChart | null {
+  if (
+    !isCreationSpecRecord(value) ||
+    !Array.isArray(value['labels']) ||
+    !Array.isArray(value['values'])
+  ) {
+    return null;
+  }
+  const labels = value['labels']
+    .filter((label): label is string => typeof label === 'string')
+    .map((label) => label.replace(/\s+/gu, ' ').trim().slice(0, 30))
+    .slice(0, 8);
+  const values = value['values']
+    .filter((item): item is number => typeof item === 'number' && Number.isFinite(item))
+    .slice(0, labels.length);
+  if (labels.length < 2 || values.length !== labels.length) return null;
+  const unit =
+    typeof value['unit'] === 'string'
+      ? value['unit'].replace(/\s+/gu, ' ').trim().slice(0, 16)
+      : '';
+  return { labels, values, ...(unit ? { unit } : {}) };
+}
+
+function chartsSemanticallyMatch(
+  candidate: NodeSlidePlannedChart,
+  required: NodeSlidePlannedChart,
+): boolean {
+  const candidatePairs = chartSemanticPairs(candidate);
+  const requiredPairs = chartSemanticPairs(required);
+  if (candidatePairs.length !== requiredPairs.length) return false;
+  const pairsMatch = requiredPairs.every(([requiredLabel, requiredValue]) =>
+    candidatePairs.some(
+      ([candidateLabel, candidateValue]) =>
+        candidateValue === requiredValue &&
+        chartLabelsSemanticallyMatch(candidateLabel, requiredLabel),
+    ),
+  );
+  if (!pairsMatch) return false;
+  const requiredUnit = normalizeChartLabel(required.unit ?? '');
+  return requiredUnit.length === 0 || normalizeChartLabel(candidate.unit ?? '') === requiredUnit;
+}
+
+function chartSemanticPairs(chart: NodeSlidePlannedChart): Array<readonly [string, number]> {
+  return chart.labels
+    .map((label, index): readonly [string, number] => [
+      normalizeChartLabel(label),
+      Object.is(chart.values[index], -0) ? 0 : (chart.values[index] ?? Number.NaN),
+    ])
+    .filter((pair) => pair[0].length > 0 && Number.isFinite(pair[1]));
+}
+
+function chartLabelsSemanticallyMatch(candidate: string, required: string): boolean {
+  return (
+    candidate === required ||
+    candidate.endsWith(` ${required}`) ||
+    required.endsWith(` ${candidate}`)
+  );
+}
+
+function normalizeChartLabel(value: string): string {
+  return value.normalize('NFKC').replace(/\s+/gu, ' ').trim().toLocaleLowerCase('en-US');
+}
+
+/**
+ * Extract the explicitly requested label/value comparison from the brief.
+ * This intentionally handles only clear "chart comparing A 1, B 2" language;
+ * ambiguous prose leaves the synthetic hook on its provider-chart fallback.
+ */
+function readRequestedChart(brief: DeckBrief): NodeSlidePlannedChart | null {
+  const requestText = `${brief.prompt} ${brief.purpose} ${brief.successCriteria.join(' ')}`;
+  const comparisonText = requestText.match(
+    /\b(?:bar\s+)?chart\b[^.;]{0,80}?\bcompar(?:e|ing)\s+(.+?)(?=,?\s+plus\b|\s+(?:formula|equation)\b|[.;]|$)/iu,
+  )?.[1];
+  if (!comparisonText) return null;
+  const points = comparisonText.split(/,\s*(?:and\s+)?|\s+and\s+/iu).flatMap((part) => {
+    const match = part.trim().match(/^(.+?)\s+(-?\d+(?:\.\d+)?)$/u);
+    if (!match) return [];
+    const label = (match[1] ?? '')
+      .replace(/^an?\s+/iu, '')
+      .replace(/\s+/gu, ' ')
+      .trim()
+      .slice(0, 30);
+    const value = Number(match[2]);
+    return label && Number.isFinite(value) ? [{ label, value }] : [];
+  });
+  if (points.length < 2) return null;
+  return {
+    labels: points.slice(0, 8).map((point) => point.label),
+    values: points.slice(0, 8).map((point) => point.value),
+  };
 }
 
 function chartRequested(brief: DeckBrief): boolean {
@@ -295,6 +417,7 @@ export async function runNodeSlideCreationCritique(
     brief: input.brief,
     themeId: input.themeId,
     now: input.now,
+    ...(input.requiredCharts?.length ? { requiredCharts: input.requiredCharts } : {}),
   };
   const firstReport = collectNodeSlideCreationQualityReport({
     ...reportInput,

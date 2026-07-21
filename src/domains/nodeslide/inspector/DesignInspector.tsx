@@ -982,20 +982,34 @@ function ImageAssetEditor({
     const credit = licensedImageCredit(result);
     setBusy(true);
     setError(null);
-    let imageUrl = result.url;
     try {
-      // Prefer an embedded compressed copy so the deck stays self-contained.
-      const response = await fetch(result.url);
-      if (!response.ok) throw new Error(`Image fetch failed with status ${response.status}.`);
-      imageUrl = await imageBlobToEmbeddedWebp(await response.blob());
-    } catch {
-      // CORS or conversion failure: keep the remote Openverse URL. The
-      // claim-truthful capability sync marks remote images honestly on export.
-    }
-    try {
+      // Openverse's thumbnail endpoint is CORS-enabled and bounded, while many
+      // original-media hosts are not. Always materialize an embedded copy: a
+      // new arbitrary remote URL is intentionally rejected by the patch gate.
+      const candidates = [result.thumbnailUrl, result.url].filter(Boolean);
+      let imageUrl: string | null = null;
+      for (const candidate of candidates) {
+        try {
+          const response = await fetch(candidate);
+          if (!response.ok) continue;
+          imageUrl = await imageBlobToEmbeddedWebp(await response.blob());
+          break;
+        } catch {
+          // Try the next bounded candidate before surfacing an honest failure.
+        }
+      }
+      if (!imageUrl) {
+        throw new Error(
+          'The licensed image could not be embedded. Download it and use Upload downloaded image.',
+        );
+      }
       onApplyPatch(
         buildImageReplacementOperations({ element, slideElements, imageUrl, altText, credit }),
         `Inserted licensed image "${result.title}" from Openverse`,
+      );
+    } catch (cause) {
+      setError(
+        cause instanceof Error ? cause.message : 'The licensed image could not be embedded.',
       );
     } finally {
       setBusy(false);

@@ -30,11 +30,23 @@ const licensedResult: LicensedImageResult = {
 };
 
 beforeAll(() => {
-  // jsdom has no network and no createImageBitmap: the editor must fall back
-  // to the remote Openverse URL instead of embedding a compressed copy.
+  vi.stubGlobal('createImageBitmap', async () => ({
+    width: 1,
+    height: 1,
+    close: vi.fn(),
+  }));
+  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+    drawImage: vi.fn(),
+  } as unknown as CanvasRenderingContext2D);
+  vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockReturnValue(
+    'data:image/webp;base64,UklGRg==',
+  );
   vi.stubGlobal(
     'fetch',
-    vi.fn(() => Promise.reject(new TypeError('jsdom has no network'))),
+    vi.fn(async (url: string) => ({
+      ok: true,
+      blob: async () => new Blob([String(url)], { type: 'image/jpeg' }),
+    })),
   );
 });
 
@@ -122,9 +134,27 @@ describe('Design inspector licensed image search', () => {
     expect(update.altText).toBe('Wind turbines at dusk');
     expect(update.credit).toBe('Ada Fotograf · BY-SA 4.0 via Openverse');
     expect(update.credit).toBe(licensedImageCredit(licensedResult));
-    // jsdom cannot embed, so the honest fallback is the remote licensed URL.
-    expect(update.imageUrl).toBe(licensedResult.url);
+    expect(fetch).toHaveBeenCalledWith(licensedResult.thumbnailUrl);
+    expect(update.imageUrl).toBe('data:image/webp;base64,UklGRg==');
     expect(summary).toContain('Openverse');
+  });
+
+  it('does not submit a remote image patch when neither licensed asset can be embedded', async () => {
+    const user = userEvent.setup();
+    vi.mocked(fetch).mockRejectedValueOnce(new TypeError('thumbnail CORS failure'));
+    vi.mocked(fetch).mockRejectedValueOnce(new TypeError('original CORS failure'));
+    const onApplyPatch = vi.fn<(operations: PatchOperation[], summary: string) => void>();
+    renderImageInspector({
+      onApplyPatch,
+      onSearchImages: vi.fn().mockResolvedValue({ results: [licensedResult] }),
+    });
+
+    await user.type(screen.getByTestId('licensed-image-query'), 'wind turbines');
+    await user.click(screen.getByTestId('licensed-image-search-button'));
+    await user.click(await screen.findByTestId('licensed-image-ov-123'));
+
+    expect(await screen.findByText(/licensed image could not be embedded/i)).toBeTruthy();
+    expect(onApplyPatch).not.toHaveBeenCalled();
   });
 
   it('surfaces search failures honestly instead of an empty grid', async () => {

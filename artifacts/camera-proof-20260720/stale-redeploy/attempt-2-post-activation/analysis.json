@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "nodeslide.stale-redeploy-analysis/v1",
+  "status": "not_reproduced",
+  "productionUrl": "https://nodeslide.vercel.app/",
+  "preDeployClientReadyAt": "2026-07-21T03:11:27.871Z",
+  "deployment": {
+    "runId": 29798347209,
+    "headSha": "6ee3aab402d3c599cccd322c140004663ae8a6da",
+    "conclusion": "success",
+    "convexStepCompletedAt": "2026-07-21T03:25:39.000Z",
+    "signalAt": "2026-07-21T03:25:41.834Z",
+    "actionSubmittedAt": "2026-07-21T03:25:41.880Z",
+    "submissionAfterConvexActivationMs": 2880
+  },
+  "observation": {
+    "reloadBannerVisible": false,
+    "consoleErrorCount": 0,
+    "reviewState": "ready_for_review",
+    "planner": "Kimi K3",
+    "executor": "Gemini 3.5 Flash",
+    "operations": 2,
+    "accepted": false,
+    "claim": "The pre-deploy client remained operational after Convex activation and produced a reviewable, unapplied proposal; the stale-action rejection was not reproduced."
+  },
+  "rawHarnessReceipt": {
+    "path": "receipt.json",
+    "status": "failed",
+    "reason": "The banner wait timed out because the action succeeded; the first continuity locator targeted a different proposal-card rendering and did not classify the visible Ready for review thread state. The raw receipt is preserved unchanged."
+  },
+  "screenshot": {
+    "path": "stale-socket-proof-failed.png",
+    "sha256": "1a4b6972c0cf69339e5517d9a50a0c0cd9054bfcf903685517be1bac9104f570",
+    "visuallyInspected": true
+  },
+  "claimBoundary": "The fail-closed reload component remains deterministically regression-covered, but its banner was not production-reproduced in either timed deployment. This observation does not prove that stale action failures are impossible or that reload recovery occurred."
+}

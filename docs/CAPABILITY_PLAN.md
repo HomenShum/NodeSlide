@@ -278,8 +278,12 @@ were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
       attempt 1 in run 29796788784 signalled before Convex activation; the old
       client remained operational and produced a reviewable, unapplied proposal,
       so no banner was expected or observed. The red/non-reproduced receipt is
-      preserved under `artifacts/camera-proof-20260720/stale-redeploy/`; a
-      post-activation attempt remains required for literal banner acceptance.
+      preserved under `artifacts/camera-proof-20260720/stale-redeploy/`.
+      Attempt 2 submitted 2.880 seconds after exact Convex activation in run
+      29798347209; it again produced a reviewable, unapplied proposal with zero
+      console errors. The stale failure was not reproduced in either deployment,
+      so the banner remains deterministic regression proof, not a production
+      camera-pass claim.
 
 ## H · Ops, CI, hygiene (P0-quick)
 
@@ -330,11 +334,11 @@ Corrected after architecture review (2026-07-19): the product is NOT
 `<NodeSlideStudio/>` as a mega-component. It is a layered, independently
 consumable stack — **portable deck model + governed mutation engine + agent
 pack + backend ports + controlled React surfaces + optional source-owned
-registry + conformance/consumer tests**. The NodeSlide app is the product
-consumer; NodeRoom currently provides package-level packed-consumer and
-NodeAgent compatibility proof. A mounted end-to-end NodeRoom product journey
-remains I7. Every other track builds against these interfaces from now on —
-capability work that crosses the boundary is a regression.
+registry + conformance/consumer tests**. The NodeSlide app is the first verified
+product consumer; NodeRoom is the second, with package-level, NodeAgent,
+mounted-browser, accessibility, authorization, and full-journey proof closed in
+I7. Every other track builds against these interfaces from now on — capability
+work that crosses the boundary is a regression.
 
 Package layout (target):
 
@@ -468,7 +472,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
       rebuild byte-equal to the public assets. PR #36 makes the same two-build,
       exact-roster, byte-identity, and main-ancestry gates mandatory for every
       future producer artifact.
-- [ ] I7. **NodeRoom consumer proof** (a required architectural test, not
+- [x] I7. **NodeRoom consumer proof** (a required architectural test, not
       optional dogfood): from a clean NodeRoom branch — installer →
       NodeRoom's own principal adapter → mount as a room artifact → create
       → manual edit → invoke NodeRoom's existing NodeAgent runtime (no
@@ -478,14 +482,26 @@ registry/                  shadcn-style source-owned compositions (studio route,
       no duplicate auth, no second Convex client, no global CSS
       contamination, no table collisions, clean uninstall, same snapshot runs
       against Memory and Convex adapters.
-      — CANDIDATE PATH IMPLEMENTED in NodeRoom PR #233: the real room artifact,
-      ActorProof/membership policy, package StudioShell, existing NodeAgent,
-      unapplied proposals, CAS acceptance/rejection, activity/receipts,
-      reconstructed-repository reload, presenter/PPTX/reopen, and Memory/Convex
-      parity are deterministic and green on approved v0.2.2 at NodeRoom main
-      `d2c77bcb8fcbdd11b0e87d3fd597f2ec1103eb04`. The mounted release and
-      bilateral CI proofs pass. Record the literal browser/a11y observation
-      before checking this item; that is the only remaining I7 acceptance.
+      — CLOSED 2026-07-20 in NodeRoom
+      [PR #235](https://github.com/HomenShum/NodeRoom/pull/235), merged at exact
+      NodeRoom main SHA `0d13dffe88190e7911986bfe5027761cae6294c5`.
+      A clean browser tab edited the real room artifact to
+      `Capture Notebook — mounted v0.2.2`, made it live, reopened it, asserted
+      the mounted NodeSlide accessibility region and package/authority/surface
+      DOM attributes, and recorded zero local application errors or warnings.
+      An unverified memory-camera write failed closed instead of bypassing room
+      identity. Exact PR CI
+      [29798115351](https://github.com/HomenShum/NodeRoom/actions/runs/29798115351)
+      separately passed the v0.2.2 release binding, authenticated
+      ActorProof/membership and digest authorization, substitution/replay
+      rejection, Memory/Convex/isolated-component/React journeys, existing
+      NodeAgent paths, CAS acceptance, reload, presenter, and export proof.
+      Post-merge NodeRoom main CI
+      [29798490823](https://github.com/HomenShum/NodeRoom/actions/runs/29798490823),
+      [conformance 29798491024](https://github.com/HomenShum/NodeRoom/actions/runs/29798491024),
+      and [ProofLoop 29798490834](https://github.com/HomenShum/NodeRoom/actions/runs/29798490834)
+      are green. The literal camera was a local memory sample; no NodeRoom
+      production Convex deployment is being claimed.
 - [x] I8. **Cross-repo CI**: a NodeSlide package regression must fail
       NodeRoom's consumer suite; both CIs run the same smallest journey
       (load → create → render → edit → version++ → export).
@@ -533,15 +549,14 @@ discipline as I1: audit before asserting; no invented org maps.
 
 ```text
 1.  F1/F2/F4    visually prove snapshot capture and claim-bound regions
-2.  I7          record the literal mounted NodeRoom browser/a11y observation
-3.  H5          human sends the Mike draft
+2.  H5          human sends the Mike draft
 ```
 
 Organizing principle: **NodeSlide is an app plus a reusable governed
-presentation engine.** The app is the verified product consumer today;
-NodeRoom becomes the second verified product consumer only after the approved
-v0.2.2 binding, deterministic mounted journey, bilateral CI, and browser/a11y
-observation all pass. Shared capability belongs in the engine and is
+presentation engine.** The app is the first verified product consumer;
+NodeRoom is the second after the approved v0.2.2 binding, deterministic mounted
+journey, bilateral CI, and browser/a11y observation all passed. Shared
+capability belongs in the engine and is
 independently verified by the smallest honest consumer proof available.
 
 Definition of done for the plan itself: every checked item has a fail-closed

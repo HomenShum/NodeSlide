@@ -1,4 +1,4 @@
-# Next session: literal visual and human acceptance only
+# Next session: remaining literal visual and human acceptance
 
 Last updated 2026-07-20.
 
@@ -9,7 +9,14 @@ deterministic evidence.
 
 ## Exact shipped state
 
-- NodeSlide main at handoff: `d1119ae664cda26e3b183350c34f91ae4da9ca41`.
+- NodeSlide main includes the merged B6 camera receipt plus E4 implementation
+  SHA `67154cf03bca1419175f577070b15f7ab80c0549` and its proof artifacts.
+- Exact-main CI
+  [29795473157](https://github.com/HomenShum/NodeSlide/actions/runs/29795473157)
+  and production deployment
+  [29795711517](https://github.com/HomenShum/NodeSlide/actions/runs/29795711517)
+  passed. E4's production camera, screenshot, editable PPTX, and receipt are in
+  `docs/demo/nodeslide-e4-openverse.*`.
 - Approved package release: immutable, attested
   [`v0.2.2`](https://github.com/HomenShum/NodeSlide/releases/tag/v0.2.2), built
   from exact SHA `a88fb57f111db82e9334d68fa7611a51ed54c3c1`.
@@ -42,16 +49,12 @@ Windows-built manifest. Never rewrite that failure as a pass.
 
 Only work that requires a real recorded UI or a human action remains:
 
-1. B6: record one routed creation/repair run showing two models in one thread
-   turn and the required chart repair.
-2. E4: record placeholder to search to licensed insertion, including license
-   credit on camera.
-3. F1/F2/F4: record live web snapshot capture, the claim-bound region, and the
+1. F1/F2/F4: record live web snapshot capture, the claim-bound region, and the
    element-to-region opening behavior.
-4. I7: record the mounted NodeRoom journey in a real browser with accessibility
+2. I7: record the mounted NodeRoom journey in a real browser with accessibility
    observation. The deterministic product path, reload, export, Memory/Convex
    parity, v0.2.2 pin, and bilateral CI are already complete.
-5. H5: a human sends the Mike draft.
+3. H5: a human sends the Mike draft.
 
 Screenshots, component tests, captions, and CI summaries are not substitutes
 for the checklist's explicit camera/browser/human wording.

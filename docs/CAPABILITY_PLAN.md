@@ -209,17 +209,17 @@ acceptance remains.
 - [x] E3. (P1) Crop/focal-point + aspect handling in the Design tab.
       — DONE in PR #13: the image inspector exposes crop fit, focal point, and
       aspect controls with renderer and regression coverage.
-- [ ] E4. Acceptance: placeholder → search → insert with license credit on
+- [x] E4. Acceptance: placeholder → search → insert with license credit on
       camera; export stays clean (capability sync already shipped).
-      — RED PRODUCTION RECEIPT (2026-07-20): the camera reached 8 commercially
-      licensed Openverse results, but both insert attempts failed closed in
-      `nodeslide:applyPatch` (digest `sha256:58546ec2cb70e554`) and left the
-      placeholder/credit unchanged. The sanitized diagnosis is retained at
-      `artifacts/convex-logs/openverse-insert-diagnostic.json`; it identified a
-      client fallback to a new remote URL that the server correctly rejects.
-      The bounded-thumbnail/embed fix is regression-tested locally. Keep E4
-      open until that fix is deployed and a separate post-fix camera receipt
-      proves insertion, license credit, and export truth.
+      — DONE 67154cf (production proof 2026-07-20): the recorded live journey
+      searched Openverse for "circuit board", embedded the selected asset,
+      filled "Twechie · BY-SA 2.0 via Openverse", kept structure,
+      presentation, and cleanup checks green, and downloaded a 254,730-byte
+      editable PPTX. Evidence: `docs/demo/nodeslide-e4-openverse.mp4`, `.png`,
+      `.pptx`, and `.receipt.json`; exact-main CI 29795473157 and deployment
+      29795711517 passed. This closes the earlier red production receipt: the
+      invalid remote-URL fallback and missing Openverse `connect-src` policy
+      were repaired without weakening the server's remote-image gate.
 
 ## F · Evidence & screenshots — prove the lineage (P1)
 
@@ -516,10 +516,9 @@ discipline as I1: audit before asserting; no invented org maps.
 ## Suggested sequence — remaining literal acceptance
 
 ```text
-1.  B6 / E4     record the literal camera acceptances
-2.  F1/F2/F4    visually prove snapshot capture and claim-bound regions
-3.  I7          record the literal mounted NodeRoom browser/a11y observation
-4.  H5          human sends the Mike draft
+1.  F1/F2/F4    visually prove snapshot capture and claim-bound regions
+2.  I7          record the literal mounted NodeRoom browser/a11y observation
+3.  H5          human sends the Mike draft
 ```
 
 Organizing principle: **NodeSlide is an app plus a reusable governed

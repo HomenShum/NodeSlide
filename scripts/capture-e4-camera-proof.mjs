@@ -61,7 +61,10 @@ try {
     undefined,
     { timeout: 30_000 },
   );
-  await page.getByText('Twechie · BY-SA 2.0 via Openverse', { exact: true }).waitFor();
+  await page
+    .getByTestId('slide-canvas')
+    .getByText('Twechie · BY-SA 2.0 via Openverse', { exact: true })
+    .waitFor();
   await pause(1_000);
   await shot('04-inserted-with-credit');
 

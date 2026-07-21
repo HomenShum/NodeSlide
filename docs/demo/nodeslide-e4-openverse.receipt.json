@@ -1,0 +1,28 @@
+{
+  "capability": "E4",
+  "status": "passed",
+  "sourceSha": "67154cf03bca1419175f577070b15f7ab80c0549",
+  "ciRun": "https://github.com/HomenShum/NodeSlide/actions/runs/29795473157",
+  "deploymentRun": "https://github.com/HomenShum/NodeSlide/actions/runs/29795711517",
+  "productionUrl": "https://nodeslide.vercel.app/",
+  "journey": [
+    "opened the editable sample workspace",
+    "selected the placeholder image on slide 3",
+    "searched Openverse for circuit board with the UI's one-request consent",
+    "inserted Twechie circuit board",
+    "verified Twechie · BY-SA 2.0 via Openverse on the slide and in the credit field",
+    "verified structure, presentation, and cleanup checks passed",
+    "downloaded the validated editable PowerPoint export"
+  ],
+  "artifacts": {
+    "video": "docs/demo/nodeslide-e4-openverse.mp4",
+    "screenshot": "docs/demo/nodeslide-e4-openverse.png",
+    "powerPoint": "docs/demo/nodeslide-e4-openverse.pptx",
+    "powerPointBytes": 254730
+  },
+  "capturedAt": "2026-07-21T02:27:58.871Z",
+  "independentVideoJudge": {
+    "status": "skipped",
+    "reason": "No vision-egress authorization was provided; deterministic UI assertions, the deployment gate, the saved export, and local screenshot inspection are recorded without claiming an external visual judge."
+  }
+}

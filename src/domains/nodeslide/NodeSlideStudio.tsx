@@ -3223,7 +3223,8 @@ function NodeSlideStudioContent() {
             setTelemetryLoadError(null);
           }}
           onSelectEvidenceElement={(slideId, elementId) => {
-            studioShell.select({ slideId, elementIds: [elementId] });
+            setActiveSlideId(slideId);
+            setSelectedElementIds([elementId]);
           }}
           onLoadMoreAgentTelemetry={loadOlderAgentTelemetry}
           {...(agentTelemetry ? { agentTelemetry } : {})}

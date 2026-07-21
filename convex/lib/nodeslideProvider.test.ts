@@ -7,6 +7,7 @@ import {
   type NodeSlideCompletion,
   type NodeSlideCompletionResult,
   callNodeSlideFreeJson,
+  nodeSlideProviderPayload,
   nodeSlideStructuredOutputPayload,
   openrouterProviderWithOverrides,
   probeNodeSlideModelOnce,
@@ -134,6 +135,35 @@ describe('NodeSlide named pi-ai JSON provider', () => {
           schema: request.jsonSchema.schema,
         },
       },
+    });
+  });
+
+  it('explicitly disables OpenRouter reasoning while preserving schema routing', () => {
+    expect(
+      nodeSlideProviderPayload(
+        { model: 'moonshotai/kimi-k3', provider: { data_collection: 'deny' } },
+        request.jsonSchema,
+        true,
+      ),
+    ).toEqual({
+      model: 'moonshotai/kimi-k3',
+      provider: { data_collection: 'deny' },
+      reasoning: { enabled: false },
+      response_format: {
+        type: 'json_schema',
+        json_schema: {
+          name: request.jsonSchema.name,
+          strict: false,
+          schema: request.jsonSchema.schema,
+        },
+      },
+    });
+  });
+
+  it('can disable OpenRouter reasoning without requiring a JSON schema', () => {
+    expect(nodeSlideProviderPayload({ model: 'moonshotai/kimi-k3' }, undefined, true)).toEqual({
+      model: 'moonshotai/kimi-k3',
+      reasoning: { enabled: false },
     });
   });
 

@@ -468,14 +468,18 @@ async function completeNodeSlideWithPiAi(
       },
     ],
   };
+  const reasoningDisabled = request.provider === 'openrouter' && model.reasoning === false;
   const options = {
     signal: request.signal,
     maxTokens: request.maxTokens,
     maxRetries: 0,
-    reasoning: request.reasoningEffort,
+    // pi-ai's provider-specific OpenAI completions API reads
+    // `reasoningEffort` (the higher-level `reasoning` option is ignored here).
+    ...(reasoningDisabled ? {} : { reasoningEffort: request.reasoningEffort }),
     ...(request.supportsTemperature ? { temperature: 0 } : {}),
     ...(request.provider === 'openrouter' ? { headers: OPENROUTER_ATTRIBUTION_HEADERS } : {}),
-    onPayload: (payload: unknown) => nodeSlideStructuredOutputPayload(payload, request.jsonSchema),
+    onPayload: (payload: unknown) =>
+      nodeSlideProviderPayload(payload, request.jsonSchema, reasoningDisabled),
   };
   let result: AssistantMessage;
   if (request.onTextDelta) {
@@ -519,17 +523,32 @@ export function nodeSlideStructuredOutputPayload(
   payload: unknown,
   jsonSchema: NodeSlideJsonSchema | undefined,
 ): unknown {
-  if (!jsonSchema || !isPlainObject(payload)) return payload;
+  return nodeSlideProviderPayload(payload, jsonSchema, false);
+}
+
+export function nodeSlideProviderPayload(
+  payload: unknown,
+  jsonSchema: NodeSlideJsonSchema | undefined,
+  reasoningDisabled: boolean,
+): unknown {
+  if (!isPlainObject(payload)) return payload;
   return {
     ...payload,
-    response_format: {
-      type: 'json_schema',
-      json_schema: {
-        name: jsonSchema.name,
-        strict: false,
-        schema: jsonSchema.schema,
-      },
-    },
+    // OpenRouter otherwise lets some models default to hidden reasoning even
+    // when pi-ai's pinned model metadata says reasoning:false.
+    ...(reasoningDisabled ? { reasoning: { enabled: false } } : {}),
+    ...(jsonSchema
+      ? {
+          response_format: {
+            type: 'json_schema',
+            json_schema: {
+              name: jsonSchema.name,
+              strict: false,
+              schema: jsonSchema.schema,
+            },
+          },
+        }
+      : {}),
   };
 }
 

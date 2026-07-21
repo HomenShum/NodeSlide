@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "probe": "create-edit-reload-export",
+  "status": "passed",
+  "origin": "https://nodeslide.vercel.app",
+  "startedAt": "2026-07-21T22:53:13.861Z",
+  "completedAt": "2026-07-21T22:53:18.679Z",
+  "stage": "complete",
+  "assertions": [
+    {
+      "name": "landing-live",
+      "status": "passed",
+      "durationMs": 431
+    },
+    {
+      "name": "create-deterministic",
+      "status": "passed",
+      "durationMs": 2482
+    },
+    {
+      "name": "edit-and-commit",
+      "status": "passed",
+      "durationMs": 329
+    },
+    {
+      "name": "reload-persisted-edit",
+      "status": "passed",
+      "durationMs": 365
+    },
+    {
+      "name": "export-pptx",
+      "status": "passed",
+      "durationMs": 889,
+      "detail": {
+        "slideCount": 7
+      }
+    }
+  ],
+  "failure": null
+}

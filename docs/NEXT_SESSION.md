@@ -77,21 +77,22 @@ Do not convert any of these into a green claim without the named evidence:
    failure/banner was not reproduced. Preserve both raw receipts and do not
    relabel the deterministic banner tests as a live camera pass. Reopen only if
    a natural stale-action rejection supplies the missing production condition.
-3. Model-fleet health remains an open production blocker. The historical
+3. Model-fleet health is closed with a fresh bounded production pass. The historical
    1-token audit is retained at
    `artifacts/prod-proof-20260720/model-fleet-probe.json`. Commit `7edc66f`
    removed the uncredentialed Nebius route from the offered fleet, raised the
    bounded probe to 64 tokens, and pinned affected OpenRouter metadata. Commit
-   `8bc12a7` fixed the pi-ai provider-option boundary and explicitly disabled
-   hidden reasoning for pinned routes. Its exact-commit CI, conformance, and
-   deploy gates passed, but the second and final authorized production probe
-   still returned 4/8: Kimi, Sonnet, GPT Sol, and GPT Terra passed; GLM exhausted
-   64 output tokens; Fable, Gemini 3.5, and Gemini 3.1 rejected or failed the
-   explicit-disable request. The red receipt is
-   `artifacts/prod-proof-20260721/model-fleet-probe.json`. Do not claim a healthy
-   fleet. The next pass should inspect sanitized upstream error classifications
-   and implement route-specific reasoning controls, then begin a fresh bounded
-   production QA pass; this pass exhausted its two-attempt stop limit.
+   `8bc12a7` fixed the pi-ai provider-option boundary but the second pass still
+   returned 4/8; preserve that red receipt at
+   `artifacts/prod-proof-20260721/model-fleet-probe.json` as historical evidence.
+   Commit `76a6623` then removed the invalid reasoning-disable overrides for
+   mandatory-reasoning Fable/Gemini routes, aligned the UI effort allowlists with
+   current provider metadata, and assigned route-specific probe budgets. The
+   first fresh production audit passed all 8/8 routes at
+   2026-07-21T22:53:19Z. Its sanitized receipt is
+   `artifacts/prod-proof-20260721-final/model-fleet/model-fleet-probe.json`; the
+   companion production create → edit → reload → seven-slide PPTX export receipt
+   is in the sibling `prod-probe/report.json`. Reopen only on a new red receipt.
 4. H5 is closed by the user's confirmation that the Mike draft was already
    sent. Do not draft or send another copy.
 5. Visual-generation acceptance is reopened by contradictory rendered-deck

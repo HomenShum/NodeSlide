@@ -1,0 +1,152 @@
+{
+  "catalogModelCount": 8,
+  "durationMs": 29622,
+  "failedModelCount": 0,
+  "generatedAt": "2026-07-21T22:53:19.614Z",
+  "passed": true,
+  "probedModelCount": 8,
+  "receipts": [
+    {
+      "costMicroUsd": 48,
+      "inputTokens": 35,
+      "latencyMs": 2583,
+      "maxTokens": 64,
+      "model": "moonshotai/kimi-k3",
+      "outputTokens": 11,
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "response": {
+        "bytes": 1,
+        "present": true
+      },
+      "status": "passed",
+      "stopReason": "stop",
+      "upstreamModel": "moonshotai/kimi-k3"
+    },
+    {
+      "costMicroUsd": 244,
+      "inputTokens": 19,
+      "latencyMs": 3776,
+      "maxTokens": 512,
+      "model": "z-ai/glm-5.2",
+      "outputTokens": 140,
+      "provider": "openrouter",
+      "reasoningEffort": "high",
+      "response": {
+        "bytes": 1,
+        "present": true
+      },
+      "status": "passed",
+      "stopReason": "stop",
+      "upstreamModel": "z-ai/glm-5.2"
+    },
+    {
+      "costMicroUsd": 60,
+      "inputTokens": 15,
+      "latencyMs": 2053,
+      "maxTokens": 64,
+      "model": "anthropic/claude-sonnet-5",
+      "outputTokens": 3,
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "response": {
+        "bytes": 1,
+        "present": true
+      },
+      "status": "passed",
+      "stopReason": "stop",
+      "upstreamModel": "anthropic/claude-sonnet-5"
+    },
+    {
+      "costMicroUsd": 1550,
+      "inputTokens": 15,
+      "latencyMs": 4972,
+      "maxTokens": 2048,
+      "model": "anthropic/claude-fable-5",
+      "outputTokens": 28,
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "response": {
+        "bytes": 1,
+        "present": true
+      },
+      "status": "passed",
+      "stopReason": "stop",
+      "upstreamModel": "anthropic/claude-fable-5"
+    },
+    {
+      "costMicroUsd": 972,
+      "inputTokens": 6,
+      "latencyMs": 1439,
+      "maxTokens": 256,
+      "model": "google/gemini-3.5-flash",
+      "outputTokens": 107,
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "response": {
+        "bytes": 1,
+        "present": true
+      },
+      "status": "passed",
+      "stopReason": "stop",
+      "upstreamModel": "google/gemini-3.5-flash"
+    },
+    {
+      "costMicroUsd": 1660,
+      "inputTokens": 8,
+      "latencyMs": 12590,
+      "maxTokens": 256,
+      "model": "google/gemini-3.1-pro-preview",
+      "outputTokens": 137,
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "response": {
+        "bytes": 1,
+        "present": true
+      },
+      "status": "passed",
+      "stopReason": "stop",
+      "upstreamModel": "google/gemini-3.1-pro-preview"
+    },
+    {
+      "costMicroUsd": 230,
+      "inputTokens": 16,
+      "latencyMs": 1411,
+      "maxTokens": 64,
+      "model": "openai/gpt-5.6-sol",
+      "outputTokens": 5,
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "response": {
+        "bytes": 1,
+        "present": true
+      },
+      "status": "passed",
+      "stopReason": "stop",
+      "upstreamModel": "openai/gpt-5.6-sol"
+    },
+    {
+      "costMicroUsd": 355,
+      "inputTokens": 16,
+      "latencyMs": 796,
+      "maxTokens": 64,
+      "model": "openai/gpt-5.6-terra",
+      "outputTokens": 21,
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "response": {
+        "bytes": 1,
+        "present": true
+      },
+      "status": "passed",
+      "stopReason": "stop",
+      "upstreamModel": "openai/gpt-5.6-terra"
+    }
+  ],
+  "schemaVersion": "nodeslide.model-fleet-probe/v1",
+  "sourceCommit": "9127f1cf0fe8e9221d7d8dd23ee84be4c3cef261",
+  "productionDeployment": "prod:agile-stoat-411",
+  "verification": {
+    "workflowRun": 29875245782
+  }
+}

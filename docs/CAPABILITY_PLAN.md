@@ -108,12 +108,17 @@ of that gap; only the literal B6 camera acceptance remains.
       `artifacts/prod-proof-20260720/model-fleet-probe.json`.
       Follow-up commits `7edc66f` and `8bc12a7` removed the uncredentialed
       Nebius offer, upgraded the probe budget, and fixed the pi-ai reasoning
-      option boundary. Exact-commit CI/conformance/deploy passed, but the final
-      bounded production retry at 2026-07-21T09:38:46Z remained red at 4/8.
-      Kimi, Sonnet, GPT Sol, and GPT Terra passed; GLM exhausted 64 tokens and
-      Fable/Gemini 3.5/Gemini 3.1 returned provider errors. The route-level
-      receipt is `artifacts/prod-proof-20260721/model-fleet-probe.json`; fleet
-      health remains open and must not be inferred from completion of B3's audit.
+      option boundary. That pass remained red at 4/8 because one global request
+      shape disabled reasoning on three mandatory-reasoning models, while GLM
+      received an unsupported effort and insufficient visible-output budget.
+      Commit `76a6623` now retains reasoning for Fable and both Gemini routes,
+      aligns every offered effort selector with OpenRouter's live metadata, and
+      uses bounded route-specific probe profiles. After exact-commit CI,
+      conformance, deployment, and live-DOM gates passed, the first fresh
+      production audit passed all 8/8 routes at 2026-07-21T22:53:19Z. The
+      sanitized receipt is
+      `artifacts/prod-proof-20260721-final/model-fleet/model-fleet-probe.json`;
+      the same manual workflow also passed create → edit → reload → PPTX export.
 - [x] B4. Edit-path tool loop (P1): read → propose → verify-against-render →
       finalize, with real steps in the thread replacing status labels.
       — DONE f041168; LIVE-PROVED on prod 2026-07-19: sample deck, prompt
@@ -656,10 +661,9 @@ and export receipts.
 ## Suggested sequence
 
 ```text
-Visual authoring K1-K5 complete. Preserve and rerun the proof artifacts when
-materialization, HTML rendering, or PPTX export changes.
-
-In parallel only: bounded route-specific fleet repair from B3.
+Visual authoring K1-K5 and the bounded production fleet repair are complete.
+Preserve and rerun the proof artifacts when materialization, HTML rendering,
+PPTX export, provider metadata, or routing changes.
 ```
 
 Organizing principle: **NodeSlide is an app plus a reusable governed

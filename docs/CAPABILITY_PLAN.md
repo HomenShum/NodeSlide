@@ -270,6 +270,16 @@ were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
       — DONE c69b164; LIVE-PROVED on prod 2026-07-19: real creation from the
       landing showed "The model is drafting the slide plan…" plus a counting
       elapsed timer (0:40 → 0:58 across two DOM reads) while the job ran.
+- [x] G5. Stale-action recovery UX: when a monitored Convex action rejects with
+      the masked deployment-error shapes, preserve the rejection and show an
+      explicit fail-closed reload banner rather than claiming a successful
+      change.
+      — DONE 82fe487 with classifier/render regression coverage. Production
+      attempt 1 in run 29796788784 signalled before Convex activation; the old
+      client remained operational and produced a reviewable, unapplied proposal,
+      so no banner was expected or observed. The red/non-reproduced receipt is
+      preserved under `artifacts/camera-proof-20260720/stale-redeploy/`; a
+      post-activation attempt remains required for literal banner acceptance.
 
 ## H · Ops, CI, hygiene (P0-quick)
 
@@ -283,22 +293,28 @@ were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
       — DONE in PR #13: the scheduled workflow runs the bounded production
       probe and uploads its evidence; the same exact-SHA journey also passed
       manually during the PR #13 handoff. The post-deploy operator capture at
-      `artifacts/convex-logs/production.jsonl` additionally retained 54
+      `artifacts/convex-logs/production.jsonl` additionally retained 50 fresh
       sanitized production completions and closed with `status: completed`,
       proving `logs --history --success --jsonl --prod` is no longer silently
-      empty.
+      empty. The artifact SHA-256 is
+      `64273d4e447db27d9ef424c1b6dffe4c42a10681ac293ca10d3f5045bb096fac`;
+      no messages or credentials are included.
 - [x] H3. Vercel deploys from CI on main push (replace manual prebuilt deploys);
       keep VITE_CONVEX_URL pinned to prod.
-      — DONE 2026-07-20: the production environment permits only `main`, the
-      four scoped deployment secrets (`CONVEX_DEPLOY_KEY`, `VERCEL_TOKEN`,
-      `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`) and
-      `NODESLIDE_PRODUCTION_DEPLOY_ENABLED=true` are configured, and the
-      workflow checks out the exact CI-tested SHA. Automated
-      [run 29791509370](https://github.com/HomenShum/NodeSlide/actions/runs/29791509370)
-      deployed
-      `d1119ae664cda26e3b183350c34f91ae4da9ca41` through the production-bound
-      build, local smoke, Convex deploy, Vercel deploy, authenticated immutable
-      URL check, and public canonical live-DOM gate with every step green.
+      — DONE and re-audited 2026-07-20: the custom production branch-policy
+      roster contains only `main` (GitHub reports that administrators may
+      bypass it), the exact four scoped deployment secrets
+      (`CONVEX_DEPLOY_KEY`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`,
+      `VERCEL_PROJECT_ID`) and
+      `NODESLIDE_PRODUCTION_DEPLOY_ENABLED=true` are configured, and the stale
+      bypass secret is absent. Exact-main CI
+      [29796540673](https://github.com/HomenShum/NodeSlide/actions/runs/29796540673)
+      and deployment
+      [29796788784](https://github.com/HomenShum/NodeSlide/actions/runs/29796788784)
+      shipped `04b034d8888202259db561deaa0525a4e552dd8e` through the pinned build,
+      local smoke, Convex and Vercel deploys, immutable URL check, and public
+      canonical live-DOM gate. Sanitized configuration evidence is committed at
+      `artifacts/github-production-environment.json`; no secret value is stored.
 - [x] H4. Repo hygiene: retire stale parity worktrees/branches; remove
       `nodeslide-deploy` staging folder; decide parity-studio's demo fate.
       — DONE 2026-07-20: removed emergency deploy staging and temporary

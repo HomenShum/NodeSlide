@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "nodeslide.stale-redeploy-proof/v1",
+  "status": "failed",
+  "productionUrl": "https://nodeslide.vercel.app/",
+  "observedAt": "2026-07-21T02:54:22.223Z",
+  "failure": "locator.waitFor: Timeout 180000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('deployment-update-banner') to be visible\u001b[22m\n",
+  "consoleErrorCount": 0,
+  "consoleErrors": [],
+  "screenshot": "stale-socket-proof-failed.png"
+}

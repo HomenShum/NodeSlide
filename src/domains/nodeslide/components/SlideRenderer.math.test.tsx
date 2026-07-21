@@ -1,4 +1,6 @@
 // @vitest-environment jsdom
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { cleanup, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import type { Slide, SlideElement, ThemeSpec } from '../../../../shared/nodeslide';
@@ -65,6 +67,13 @@ function slideWith(elements: SlideElement[]): Slide {
 afterEach(cleanup);
 
 describe('SlideRenderer math typesetting (C1+C3)', () => {
+  it('keeps fallback wrapping rules away from nested KaTeX spans', () => {
+    const css = readFileSync(resolve(process.cwd(), 'src/domains/nodeslide/nodeslide.css'), 'utf8');
+    expect(css).toContain('.ns-element-math > code');
+    expect(css).toContain('.ns-element-math > .ns-math-typeset .katex');
+    expect(css).not.toMatch(/\.ns-element-math\s+span\s*\{/);
+  });
+
   it('renders KaTeX markup for a valid latex expression', () => {
     const element = mathElement('el-valid', 'E = mc^2', 'latex');
     const { container } = render(

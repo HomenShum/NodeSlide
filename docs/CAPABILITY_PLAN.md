@@ -123,9 +123,12 @@ of that gap; only the literal B6 camera acceptance remains.
       Kimi K3 planner → Gemini 3.5 Flash executor as level-2/level-3 spans,
       6,756 → 568 tokens, $0.0055, 8 spans, 16 records, validation passed, and a
       reviewable two-operation patch. Receipt and pixels live under
-      `artifacts/camera-proof-20260720/b6-dev-repair/`. A separate open P1 is
-      preserved: this generated deck's narrow formula box renders its KaTeX
-      characters vertically, so no formula visual-acceptance claim is made.
+      `artifacts/camera-proof-20260720/b6-dev-repair/`. The separate formula
+      layout P1 exposed by that run is now closed: fallback wrapping/font rules
+      no longer target nested KaTeX spans, narrow math elements use their own
+      inline-size container, and the committed Chromium proof renders
+      `172 ÷ 64 ≈ 2.69` horizontally inside a 160 × 96 px element. See
+      `docs/demo/nodeslide-b6-formula-css-proof.receipt.json` and its screenshot.
 
 ## C · Math — typeset it or stop saying LaTeX (P1)
 
@@ -134,7 +137,8 @@ typeset it. Browser and PPTX rendering now ship; C4 records the live proof.
 
 - [x] C1. KaTeX render for math elements in the browser canvas (SSR-safe).
       — DONE 5b0faac: real KaTeX typesetting in SlideRenderer with jsdom test
-      coverage.
+      coverage. Follow-up 2026-07-20 scopes fallback CSS away from KaTeX's
+      nested glyph spans and adds a deterministic narrow-element browser proof.
 - [x] C2. PPTX export: KaTeX → SVG → raster embed, replacing "math as text";
       capability report updated truthfully (`pptx_static_fallback`).
       — DONE 9141672: rendered-equation raster via injectable raster seam,

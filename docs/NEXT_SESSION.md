@@ -78,14 +78,16 @@ Do not convert any of these into a green claim without the named evidence:
 3. The production fleet probe is a completed red audit, not a healthy-fleet
    claim: 4/9 catalog routes returned assistant text and 5/9 failed or returned
    none. Its exact receipt is `artifacts/prod-proof-20260720/model-fleet-probe.json`.
-4. B6 itself passed, but its generated narrow formula box exposed a separate
-   open P1: broad math-span CSS stacks nested KaTeX characters vertically.
-5. H5 remains human-only: send the Mike draft.
+4. H5 remains human-only: send the Mike draft.
 
 I7 is closed by [NodeRoom PR #236](https://github.com/HomenShum/NodeRoom/pull/236)
 at NodeRoom main `616c902f09743613ae1cbddc97b5819fb29c831e`. Its committed
 browser/accessibility receipt, screenshot, video, and PPTX are linked from the
 capability plan.
+
+The B6 narrow-formula P1 is also closed. Product CSS no longer overrides nested
+KaTeX spans, and `docs/demo/nodeslide-b6-formula-css-proof.receipt.json` records
+a green 160 × 96 px Chromium geometry/accessibility proof with its screenshot.
 
 Screenshots, component tests, captions, and CI summaries are not substitutes
 for the checklist's explicit camera/browser/human wording.

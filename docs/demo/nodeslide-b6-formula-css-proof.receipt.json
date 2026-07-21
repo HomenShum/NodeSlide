@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "nodeslide.formula-css-proof/v1",
+  "capturedAt": "2026-07-21T03:54:18.474Z",
+  "expression": "172 ÷ 64 ≈ 2.69",
+  "browser": "chromium",
+  "css": ["node_modules/katex/dist/katex.min.css", "src/domains/nodeslide/nodeslide.css"],
+  "metrics": {
+    "container": {
+      "width": 160,
+      "height": 96
+    },
+    "formula": {
+      "width": 122.9375,
+      "height": 21
+    },
+    "aspectRatio": 5.854166666666667,
+    "fitsHorizontally": true,
+    "fitsVertically": true,
+    "wrapperWhiteSpace": "nowrap",
+    "nestedAnywhereWrapCount": 0,
+    "katexFontFamily": "KaTeX_Main, \"Times New Roman\", serif",
+    "accessibleName": "Goals per match: 172 divided by 64 is approximately 2.69",
+    "nestedSpanCount": 17
+  },
+  "screenshot": "docs/demo/nodeslide-b6-formula-css-proof.png",
+  "status": "passed",
+  "failures": []
+}

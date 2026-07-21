@@ -702,6 +702,9 @@
 .ns-slide-element--text {
   white-space: pre-wrap;
 }
+.ns-slide-element--math {
+  container-type: inline-size;
+}
 .ns-element-copy {
   display: block;
   max-width: 100%;
@@ -767,8 +770,7 @@
   min-height: 100%;
   width: 100%;
 }
-.ns-element-math code,
-.ns-element-math span {
+.ns-element-math > code {
   color: inherit;
   font: inherit;
   font-size: 1em;
@@ -778,6 +780,17 @@
   overflow-wrap: anywhere;
   text-align: center;
   white-space: pre-wrap;
+}
+.ns-element-math > .ns-math-typeset {
+  color: inherit;
+  font-size: min(1em, 10cqw);
+  max-width: 100%;
+  text-align: center;
+  white-space: nowrap;
+}
+.ns-element-math > .ns-math-typeset .katex {
+  overflow-wrap: normal;
+  white-space: nowrap;
 }
 .ns-element-math small {
   font-size: .28em;

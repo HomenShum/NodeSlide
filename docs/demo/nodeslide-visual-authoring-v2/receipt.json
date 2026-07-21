@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "nodeslide.visual-authoring-v2-proof/v1",
+  "generatedAt": "2026-07-21T22:25:41.513Z",
+  "status": "passed",
+  "checks": {
+    "sevenSlides": true,
+    "everySlideHasFourReferences": true,
+    "threeCandidatesPerImportantSlide": true,
+    "cleanCandidateSelected": true,
+    "browserIssuesZero": true,
+    "unresolvedImagePlaceholdersZero": true,
+    "nativeChartPresent": true,
+    "editableShapesPresent": true,
+    "pptxRenderedSlidesSeven": true,
+    "pptxMontagePresent": true,
+    "pptxOverflowTestPassed": true,
+    "fullSizeVisualInspectionPassed": true
+  },
+  "browserIssues": [],
+  "slideCount": 7,
+  "designPlanCount": 7,
+  "compositionCandidateCount": 21,
+  "selectedCandidateCount": 7,
+  "pptx": {
+    "file": "nodeslide-visual-authoring-v2.pptx",
+    "nativeChartCount": 2,
+    "editableShapeCount": 76,
+    "rendered": true,
+    "renderedSlides": 7,
+    "overflowTest": "passed",
+    "visualVerdict": "passed after one diagram-slide copy-budget repair"
+  },
+  "artifacts": {
+    "htmlMontage": "deck-montage.png",
+    "compositionCandidates": "composition-candidates.png",
+    "htmlSlides": "html-slides/",
+    "pptxMontage": "pptx-montage.png",
+    "pptxSlides": "pptx-rendered/"
+  }
+}

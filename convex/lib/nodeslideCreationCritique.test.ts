@@ -44,6 +44,12 @@ interface SlideOverride {
     variables: Array<{ label: string; value: number }>;
   };
   image?: { altText: string; credit: string };
+  diagram?: {
+    kind: 'process';
+    direction: 'horizontal';
+    nodes: Array<{ id: string; label: string }>;
+    edges: Array<{ from: string; to: string }>;
+  };
 }
 
 function specSlides(overrides: Record<number, SlideOverride>) {
@@ -52,7 +58,24 @@ function specSlides(overrides: Record<number, SlideOverride>) {
     section: `Act / 0${index + 1}`,
     headline: `Concise headline for act ${index + 1}.`,
     body: 'Short grounded copy that fits its measured block without compression.',
-    bullets: ['Point one', 'Point two'],
+    bullets: index === 2 ? ['Point one', 'Point two', 'Point three'] : ['Point one', 'Point two'],
+    ...(index === 1
+      ? {
+          diagram: {
+            kind: 'process' as const,
+            direction: 'horizontal' as const,
+            nodes: [
+              { id: 'brief', label: 'Brief' },
+              { id: 'proof', label: 'Proof' },
+              { id: 'decision', label: 'Decision' },
+            ],
+            edges: [
+              { from: 'brief', to: 'proof' },
+              { from: 'proof', to: 'decision' },
+            ],
+          },
+        }
+      : {}),
     ...(overrides[index] ?? {}),
   }));
 }
@@ -133,7 +156,52 @@ describe('NodeSlide creation quality report', () => {
     const report = reportFor(CORRECTED_SPEC);
     expect(report.missingPrimitives).toEqual([]);
     expect(report.validationIssues).toEqual([]);
+    expect(report.visualRhythmIssues).toEqual([]);
     expect(report.issueCount).toBe(0);
+  });
+
+  it('flags repetitive text-only compositions even when geometry is clean', () => {
+    const repetitive = {
+      ...CORRECTED_SPEC,
+      slides: Array.from({ length: 7 }, (_, index) => ({
+        title: `Repeated ${index + 1}`,
+        section: `Repeat / 0${index + 1}`,
+        headline: 'The same composition repeats.',
+        body: 'Geometry can be valid while the deck remains visually monotonous.',
+        bullets: ['One point', 'Second point'],
+      })),
+    };
+
+    const report = reportFor(repetitive);
+
+    expect(report.visualRhythmIssues.map((issue) => issue.code)).toEqual(
+      expect.arrayContaining([
+        'visual_archetype_variety',
+        'visual_composition_repeat',
+        'visual_text_dominant_run',
+      ]),
+    );
+    expect(report.issueCount).toBeGreaterThan(0);
+  });
+
+  it('rejects several dominant visuals on one provider slide', () => {
+    const conflicted = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 4 ? { ...slide, image: EXPLICIT_IMAGE.image } : slide,
+      ),
+    };
+
+    const report = reportFor(conflicted);
+
+    expect(report.visualRhythmIssues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: 'multiple_primary_visuals',
+          message: expect.stringContaining('chart, image'),
+        }),
+      ]),
+    );
   });
 
   it('bounds the prompt report payload', () => {

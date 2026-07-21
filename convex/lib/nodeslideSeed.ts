@@ -21,18 +21,48 @@ import {
   stackBlocks,
 } from '../../shared/nodeslideLayoutMetrics';
 import {
+  type NodeSlideCompositionCandidateSummary,
+  fanOutNodeSlideComposition,
+} from './nodeslideCompositionFanout';
+import { type NodeSlideDesignPlan, buildNodeSlideDesignPlans } from './nodeslideDesignPlan';
+import {
   nodeslideCleanText,
   nodeslideContentDigest,
   nodeslideHash,
   nodeslideSlug,
   nodeslideStableId,
 } from './nodeslideIds';
+import {
+  type NodeSlideStorySpec,
+  type NodeSlideVisualMaterialInventory,
+  buildNodeSlideStoryContext,
+} from './nodeslideStoryContext';
 import { validateNodeSlideSnapshot } from './nodeslideValidation';
 
 export interface NodeSlidePlannedChart {
   labels: string[];
   values: number[];
   unit?: string;
+}
+
+export interface NodeSlidePlannedDiagramNode {
+  id: string;
+  label: string;
+  kind?: 'step' | 'system' | 'decision' | 'milestone';
+}
+
+export interface NodeSlidePlannedDiagramEdge {
+  from: string;
+  to: string;
+  label?: string;
+}
+
+/** Structured, editable relationships; never an ASCII-arrow text box. */
+export interface NodeSlidePlannedDiagram {
+  kind: 'process' | 'architecture' | 'timeline';
+  direction: 'horizontal' | 'vertical';
+  nodes: NodeSlidePlannedDiagramNode[];
+  edges: NodeSlidePlannedDiagramEdge[];
 }
 
 export interface NodeSlidePlannedFormula {
@@ -70,6 +100,7 @@ export interface NodeSlidePlannedSlide {
   metric?: string;
   metricLabel?: string;
   chart?: NodeSlidePlannedChart;
+  diagram?: NodeSlidePlannedDiagram;
   formula?: NodeSlidePlannedFormula;
   image?: NodeSlidePlannedImage;
   video?: NodeSlidePlannedVideo;
@@ -79,6 +110,14 @@ export interface NodeSlideDeckSpec {
   title: string;
   narrative: string[];
   slides: NodeSlidePlannedSlide[];
+  /** Server-derived before composition; providers may consume but never author it. */
+  storySpec?: NodeSlideStorySpec;
+  /** Honest inventory: placeholders and missing assets are never counted as evidence. */
+  materialInventory?: NodeSlideVisualMaterialInventory;
+  /** Server-owned semantic and reference-bound plan for every slide. */
+  designPlans?: NodeSlideDesignPlan[];
+  /** Three-way composition comparison receipts for visually important slides. */
+  compositionFanout?: NodeSlideCompositionCandidateSummary[];
 }
 
 export interface NodeSlideBuildResult {
@@ -460,7 +499,11 @@ export function buildGoldenNodeSlide(clientSessionId: string, now: number): Node
   });
 }
 
-export function deterministicBriefSpec(title: string, brief: DeckBrief): NodeSlideDeckSpec {
+export function deterministicBriefSpec(
+  title: string,
+  brief: DeckBrief,
+  attachments: readonly NodeSlideDataAttachment[] = [],
+): NodeSlideDeckSpec {
   const cleanTitle = nodeslideCleanText(title, 80) || 'Untitled story';
   const audience = nodeslideCleanText(brief.audience, 120) || 'the audience';
   const purpose = nodeslideCleanText(brief.purpose, 180) || nodeslideCleanText(brief.prompt, 180);
@@ -493,6 +536,19 @@ export function deterministicBriefSpec(title: string, brief: DeckBrief): NodeSli
         headline: 'The cost of waiting is usually hidden in repeated work.',
         body: `Frame the current reality for ${audience}: what is fragmented today, why it matters now, and where momentum is being lost.`,
         bullets: ['Name the friction', 'Expose the consequence', 'Create urgency without hype'],
+        diagram: {
+          kind: 'process',
+          direction: 'horizontal',
+          nodes: [
+            { id: 'friction', label: 'Friction', kind: 'step' },
+            { id: 'consequence', label: 'Consequence', kind: 'step' },
+            { id: 'urgency', label: 'Decision window', kind: 'milestone' },
+          ],
+          edges: [
+            { from: 'friction', to: 'consequence' },
+            { from: 'consequence', to: 'urgency' },
+          ],
+        },
       },
       {
         title: 'The decisive insight',
@@ -552,8 +608,13 @@ export function deterministicBriefSpec(title: string, brief: DeckBrief): NodeSli
         bullets: ['Agree the outcome', 'Name the owner', 'Set the next checkpoint'],
       },
     ],
+    ...buildNodeSlideStoryContext({ title: cleanTitle, brief, attachments }),
   };
   applyDeterministicBriefPrimitives(spec.slides, brief.prompt);
+  spec.designPlans = buildNodeSlideDesignPlans({
+    slides: spec.slides,
+    ...(spec.storySpec ? { storySpec: spec.storySpec } : {}),
+  });
   return spec;
 }
 
@@ -743,8 +804,9 @@ export function coerceBriefSpec(
   rawSpec: unknown,
   title: string,
   brief: DeckBrief,
+  attachments: readonly NodeSlideDataAttachment[] = [],
 ): NodeSlideDeckSpec {
-  const fallback = deterministicBriefSpec(title, brief);
+  const fallback = deterministicBriefSpec(title, brief, attachments);
   if (!isRecord(rawSpec) || !Array.isArray(rawSpec.slides)) return fallback;
   const slides = rawSpec.slides
     .map((value, index) => coercePlannedSlide(value, fallback.slides[index], index))
@@ -759,18 +821,25 @@ export function coerceBriefSpec(
         .filter(Boolean)
         .slice(0, 5)
     : fallback.narrative;
-  return {
+  const storyContext = buildNodeSlideStoryContext({ title, brief, attachments });
+  const spec: NodeSlideDeckSpec = {
     title:
       typeof rawSpec.title === 'string'
         ? nodeslideCleanText(rawSpec.title, 80) || fallback.title
         : fallback.title,
     narrative: narrative.length > 0 ? narrative : fallback.narrative,
     slides,
+    ...storyContext,
   };
+  spec.designPlans = buildNodeSlideDesignPlans({
+    slides: spec.slides,
+    storySpec: storyContext.storySpec,
+  });
+  return spec;
 }
 
 export function buildBriefNodeSlide(input: BuildBriefDeckInput): NodeSlideBuildResult {
-  const spec = coerceBriefSpec(input.rawSpec, input.title, input.brief);
+  const spec = coerceBriefSpec(input.rawSpec, input.title, input.brief, input.attachments ?? []);
   const fallbackPlan = spec.slides.map(
     (slide, index) => `${index + 1}. ${slide.section}: ${slide.headline}`,
   );
@@ -874,6 +943,7 @@ function buildNodeSlideDeck(input: {
     total: input.spec.slides.length,
     hasMetric: planned.metric !== undefined,
     hasChart: planned.chart !== undefined,
+    hasDiagram: planned.diagram !== undefined,
     hasMedia: planned.image !== undefined || planned.video !== undefined,
     hasFormula: planned.formula !== undefined,
     bulletCount: planned.bullets.filter(Boolean).length,
@@ -882,6 +952,7 @@ function buildNodeSlideDeck(input: {
 
   const slides: Slide[] = [];
   const elements: SlideElement[] = [];
+  const compositionFanout: NodeSlideCompositionCandidateSummary[] = [];
   for (let index = 0; index < input.spec.slides.length; index += 1) {
     const planned = input.spec.slides[index];
     if (!planned) continue;
@@ -899,8 +970,16 @@ function buildNodeSlideDeck(input: {
       linkedSourceIds,
     });
     slides.push(built.slide);
-    elements.push(...built.elements);
+    const designPlan = input.spec.designPlans?.[index];
+    if (designPlan) {
+      const fanout = fanOutNodeSlideComposition({ elements: built.elements, plan: designPlan });
+      elements.push(...fanout.selectedElements);
+      compositionFanout.push(...fanout.candidates);
+    } else {
+      elements.push(...built.elements);
+    }
   }
+  if (compositionFanout.length > 0) input.spec.compositionFanout = compositionFanout;
 
   const deck = {
     schemaVersion: NODESLIDE_SCHEMA_VERSION,
@@ -993,6 +1072,7 @@ function buildSlide(input: {
   const isStatement = archetype === 'statement';
   const isComparison = archetype === 'comparison';
   const isChartDominant = archetype === 'chart-dominant';
+  const isDiagramDominant = archetype === 'diagram-dominant';
   // Media-dominant slides alternate sides by slide index for deck rhythm:
   // even index keeps the visual on the right, odd index moves it left.
   const mediaOnLeft = archetype === 'media-dominant' && input.index % 2 === 1;
@@ -1033,7 +1113,10 @@ function buildSlide(input: {
     }),
   );
   const hasPrimaryMedia =
-    planned.formula !== undefined || planned.image !== undefined || planned.video !== undefined;
+    planned.formula !== undefined ||
+    planned.image !== undefined ||
+    planned.video !== undefined ||
+    planned.diagram !== undefined;
   const hasStructuredPrimitive = Boolean(planned.chart || hasPrimaryMedia);
   const hasVisual = hasStructuredPrimitive || planned.metric !== undefined;
   const claimSourceIds = [input.sourceBriefId, ...input.linkedSourceIds];
@@ -1044,23 +1127,37 @@ function buildSlide(input: {
     ? 0.79
     : isChartDominant
       ? 0.3
-      : mediaOnLeft
-        ? 0.4
-        : hasVisual
-          ? 0.39
-          : isStatement
-            ? 0.66
-            : 0.48;
+      : isDiagramDominant
+        ? 0.32
+        : mediaOnLeft
+          ? 0.4
+          : hasVisual
+            ? 0.39
+            : isStatement
+              ? 0.66
+              : 0.48;
   const horizontalBullets = isStatement;
   // The body starts below the measured headline; its own height is measured
   // from content (legacy proportions as minimums) and capped so the bullet
   // stack that follows it always stays above the footer band. Comparison
   // slides cap the body earlier to leave room for the three columns below.
-  const bodyY = headlineY + headlineHeight + (isOpening ? 0.06 : 0.05);
-  const bodyMaxBottom = isComparison ? 0.58 : hasVisual ? 0.7 : horizontalBullets ? 0.78 : 0.9;
+  const bodyFontSize = isDiagramDominant ? 17 : 19;
+  const bodyY = headlineY + headlineHeight + (isOpening ? 0.06 : isDiagramDominant ? 0.03 : 0.05);
+  const bodyMaxBottom = isComparison
+    ? 0.58
+    : isDiagramDominant
+      ? 0.56
+      : hasVisual
+        ? 0.7
+        : horizontalBullets
+          ? 0.78
+          : 0.9;
   const bodyHeight = Math.min(
     Math.max(0.06, bodyMaxBottom - bodyY),
-    Math.max(isOpening ? 0.17 : 0.2, estimateTextHeight(planned.body, 19, 1.35, bodyWidth)),
+    Math.max(
+      isOpening ? 0.17 : isDiagramDominant ? 0.16 : 0.2,
+      estimateTextHeight(planned.body, bodyFontSize, 1.35, bodyWidth),
+    ),
   );
   add(
     element('body', {
@@ -1073,7 +1170,7 @@ function buildSlide(input: {
       style: {
         color: theme.colors.muted,
         fontFamily: theme.typography.body,
-        fontSize: 19,
+        fontSize: bodyFontSize,
         fontWeight: 430,
         lineHeight: 1.35,
       },
@@ -1091,11 +1188,13 @@ function buildSlide(input: {
       ? 0.26
       : isChartDominant
         ? 0.3
-        : mediaOnLeft
-          ? 0.4
-          : hasVisual
-            ? 0.39
-            : 0.33;
+        : isDiagramDominant
+          ? 0.3
+          : mediaOnLeft
+            ? 0.4
+            : hasVisual
+              ? 0.39
+              : 0.33;
   const bulletTexts = planned.bullets
     .slice(0, 3)
     .map((bullet, bulletIndex) => `${horizontalBullets ? '•' : `0${bulletIndex + 1}`}  ${bullet}`);
@@ -1111,7 +1210,11 @@ function buildSlide(input: {
   // compressed by stackBlocks if they would run past the footer band.
   const horizontalRowY = Math.min(0.9, Math.max(0.72, bodyY + bodyHeight + 0.03));
   const comparisonRowY = Math.min(0.7, bodyY + bodyHeight + 0.04);
-  const bulletStackStart = hasVisual ? bodyY + bodyHeight + 0.02 : 0.42;
+  const bulletStackStart = isDiagramDominant
+    ? Math.max(0.62, bodyY + bodyHeight + 0.04)
+    : hasVisual
+      ? bodyY + bodyHeight + 0.02
+      : 0.42;
   const stackedBullets =
     horizontalBullets || isComparison
       ? []
@@ -1382,6 +1485,96 @@ function buildSlide(input: {
     );
   }
 
+  if (planned.diagram) {
+    const diagramX = 0.42;
+    const diagramY = Math.max(0.43, headlineY + headlineHeight + 0.04);
+    const diagramWidth = 0.51;
+    const diagramHeight = Math.max(0.24, 0.87 - diagramY);
+    const positions = layoutDiagramNodes(
+      planned.diagram,
+      diagramX,
+      diagramY,
+      diagramWidth,
+      diagramHeight,
+    );
+    const positionsById = new Map(positions.map((position) => [position.id, position]));
+    planned.diagram.edges.forEach((edge, edgeIndex) => {
+      const from = positionsById.get(edge.from);
+      const to = positionsById.get(edge.to);
+      if (!from || !to) return;
+      const fromCenter = { x: from.x + from.width / 2, y: from.y + from.height / 2 };
+      const toCenter = { x: to.x + to.width / 2, y: to.y + to.height / 2 };
+      const deltaX = toCenter.x - fromCenter.x;
+      const deltaY = toCenter.y - fromCenter.y;
+      const centerDistance = Math.max(0.02, Math.hypot(deltaX, deltaY));
+      const unitX = deltaX / centerDistance;
+      const unitY = deltaY / centerDistance;
+      const fromInset = diagramNodeRayInset(from, unitX, unitY) + 0.006;
+      const toInset = diagramNodeRayInset(to, unitX, unitY) + 0.006;
+      const start = {
+        x: fromCenter.x + unitX * fromInset,
+        y: fromCenter.y + unitY * fromInset,
+      };
+      const end = {
+        x: toCenter.x - unitX * toInset,
+        y: toCenter.y - unitY * toInset,
+      };
+      const distance = Math.max(0.02, Math.hypot(end.x - start.x, end.y - start.y));
+      add(
+        element(`diagram-edge-${edgeIndex + 1}`, {
+          name: edge.label ? `Diagram edge: ${edge.label}` : 'Diagram edge',
+          kind: 'connector',
+          role: 'diagram_edge',
+          bbox: box(
+            (start.x + end.x) / 2 - distance / 2,
+            (start.y + end.y) / 2 - 0.012,
+            distance,
+            0.024,
+          ),
+          rotation: (Math.atan2(deltaY, deltaX) * 180) / Math.PI,
+          style: { color: theme.colors.trace, strokeWidth: 2 },
+          sourceIds: evidenceSourceIds,
+          locked: false,
+          exportCapabilities: [...EDITABLE_CAPABILITIES],
+        }),
+      );
+    });
+    positions.forEach((position, nodeIndex) => {
+      const node = planned.diagram?.nodes[nodeIndex];
+      if (!node) return;
+      add(
+        element(`diagram-node-${node.id}`, {
+          name: `Diagram node: ${node.label}`,
+          kind: 'shape',
+          role: `diagram_${node.kind ?? 'step'}`,
+          bbox: box(position.x, position.y, position.width, position.height),
+          rotation: 0,
+          content: node.label,
+          style: {
+            fill:
+              node.kind === 'decision' || node.kind === 'milestone'
+                ? theme.colors.insight
+                : theme.colors.accentSoft,
+            stroke: node.kind === 'decision' ? theme.colors.accent : theme.colors.border,
+            strokeWidth: node.kind === 'decision' ? 2 : 1,
+            color: theme.colors.ink,
+            fontFamily: theme.typography.body,
+            fontSize: 16,
+            fontWeight: 650,
+            lineHeight: 1.15,
+            padding: 12,
+            radius: theme.defaultRadius,
+            textAlign: 'center',
+            verticalAlign: 'middle',
+          },
+          sourceIds: claimSourceIds,
+          locked: false,
+          exportCapabilities: [...EDITABLE_CAPABILITIES],
+        }),
+      );
+    });
+  }
+
   if (planned.chart) {
     const labels = planned.chart.labels.slice(0, 8);
     const values = planned.chart.values.slice(0, labels.length);
@@ -1504,6 +1697,48 @@ function buildSlide(input: {
   };
 }
 
+function layoutDiagramNodes(
+  diagram: NodeSlidePlannedDiagram,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+): Array<{ id: string; x: number; y: number; width: number; height: number }> {
+  const count = diagram.nodes.length;
+  const columns =
+    diagram.direction === 'vertical' ? (count > 4 ? 2 : 1) : Math.min(count, count > 4 ? 4 : 3);
+  const rows = Math.ceil(count / columns);
+  const gapX = columns > 1 ? 0.025 : 0;
+  const gapY = rows > 1 ? 0.035 : 0;
+  const nodeWidth = (width - gapX * (columns - 1)) / columns;
+  const nodeHeight = Math.min(0.14, (height - gapY * (rows - 1)) / rows);
+  const usedHeight = nodeHeight * rows + gapY * (rows - 1);
+  const startY = y + Math.max(0, (height - usedHeight) / 2);
+  return diagram.nodes.map((node, index) => {
+    const column = index % columns;
+    const row = Math.floor(index / columns);
+    return {
+      id: node.id,
+      x: x + column * (nodeWidth + gapX),
+      y: startY + row * (nodeHeight + gapY),
+      width: nodeWidth,
+      height: nodeHeight,
+    };
+  });
+}
+
+function diagramNodeRayInset(
+  node: { width: number; height: number },
+  unitX: number,
+  unitY: number,
+): number {
+  const horizontal =
+    Math.abs(unitX) > 1e-6 ? node.width / 2 / Math.abs(unitX) : Number.POSITIVE_INFINITY;
+  const vertical =
+    Math.abs(unitY) > 1e-6 ? node.height / 2 / Math.abs(unitY) : Number.POSITIVE_INFINITY;
+  return Math.min(horizontal, vertical);
+}
+
 function coercePlannedSlide(
   value: unknown,
   fallback: NodeSlidePlannedSlide | undefined,
@@ -1526,16 +1761,23 @@ function coercePlannedSlide(
   const metricLabel =
     typeof value.metricLabel === 'string' ? nodeslideCleanText(value.metricLabel, 100) : undefined;
   const explicitChart = coerceChart(value.chart);
+  const explicitDiagram = coerceDiagram(value['diagram']);
   const explicitFormula = coerceFormula(value.formula ?? value.math);
   const explicitImage = coerceImage(value.image);
   const explicitVideo = coerceVideo(value.video);
-  const hasExplicitPrimary = Boolean(
-    explicitChart || explicitFormula || explicitImage || explicitVideo,
-  );
-  const chart = explicitChart ?? (hasExplicitPrimary ? undefined : fallback?.chart);
-  const formula = explicitFormula ?? (hasExplicitPrimary ? undefined : fallback?.formula);
-  const image = explicitImage ?? (hasExplicitPrimary ? undefined : fallback?.image);
-  const video = explicitVideo ?? (hasExplicitPrimary ? undefined : fallback?.video);
+  // A valid provider slide must stand on the structured artifacts it actually
+  // supplied. Borrowing a fallback artifact by slide index can make a prose-only
+  // response look complete and prevents the creation critique from detecting
+  // the missing visual. The deterministic route already supplies its own
+  // explicit primitives, so it remains unchanged.
+  // Keep one dominant visual if malformed provider output supplies several.
+  // Numeric semantics win first, followed by explicit relationships, formula,
+  // image, and video. The critique reports the conflict and requests a revision.
+  const chart = explicitChart;
+  const diagram = chart ? undefined : explicitDiagram;
+  const formula = chart || diagram ? undefined : explicitFormula;
+  const image = chart || diagram || formula ? undefined : explicitImage;
+  const video = chart || diagram || formula || image ? undefined : explicitVideo;
   return {
     title,
     section,
@@ -1545,9 +1787,61 @@ function coercePlannedSlide(
     ...(metric ? { metric } : {}),
     ...(metricLabel ? { metricLabel } : {}),
     ...(chart ? { chart } : {}),
+    ...(diagram ? { diagram } : {}),
     ...(formula ? { formula } : {}),
     ...(image ? { image } : {}),
     ...(video ? { video } : {}),
+  };
+}
+
+function coerceDiagram(value: unknown): NodeSlidePlannedDiagram | undefined {
+  if (!isRecord(value) || !Array.isArray(value['nodes']) || !Array.isArray(value['edges'])) {
+    return undefined;
+  }
+  const rawToCleanId = new Map<string, string>();
+  const usedIds = new Set<string>();
+  const nodes = value['nodes'].slice(0, 7).flatMap((candidate, index) => {
+    if (!isRecord(candidate)) return [];
+    const label = cleanField(candidate['label'], '', 80);
+    if (!label) return [];
+    const rawId = cleanField(candidate['id'], `node-${index + 1}`, 48);
+    if (rawToCleanId.has(rawId)) return [];
+    const baseId =
+      rawId
+        .normalize('NFKC')
+        .toLocaleLowerCase('en-US')
+        .replace(/[^a-z0-9_-]+/gu, '-')
+        .replace(/^-+|-+$/gu, '') || `node-${index + 1}`;
+    let id = baseId;
+    let suffix = 2;
+    while (usedIds.has(id)) {
+      id = `${baseId}-${suffix}`;
+      suffix += 1;
+    }
+    usedIds.add(id);
+    rawToCleanId.set(rawId, id);
+    const kind = ['step', 'system', 'decision', 'milestone'].includes(String(candidate['kind']))
+      ? (candidate['kind'] as NodeSlidePlannedDiagramNode['kind'])
+      : undefined;
+    return [{ id, label, ...(kind ? { kind } : {}) }];
+  });
+  if (nodes.length < 2) return undefined;
+  const edges = value['edges'].slice(0, 10).flatMap((candidate) => {
+    if (!isRecord(candidate)) return [];
+    const from = rawToCleanId.get(cleanField(candidate['from'], '', 48));
+    const to = rawToCleanId.get(cleanField(candidate['to'], '', 48));
+    if (!from || !to || from === to) return [];
+    const label = cleanField(candidate['label'], '', 64);
+    return [{ from, to, ...(label ? { label } : {}) }];
+  });
+  if (edges.length === 0) return undefined;
+  const kind =
+    value['kind'] === 'architecture' || value['kind'] === 'timeline' ? value['kind'] : 'process';
+  return {
+    kind,
+    direction: value['direction'] === 'vertical' ? 'vertical' : 'horizontal',
+    nodes,
+    edges,
   };
 }
 

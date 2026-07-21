@@ -36,10 +36,10 @@ describe('NodeSlide informed provider controls', () => {
     expect(markup).toContain('data-testid="create-model-select"');
     expect(markup).toContain('data-testid="create-effort-select"');
     expect(markup).toContain('<option value="low">Light</option>');
-    expect(markup).toContain('<option value="medium">Medium</option>');
+    expect(markup).not.toContain('<option value="medium">Medium</option>');
     expect(markup).toContain('<option value="high" selected="">High</option>');
     expect(markup).not.toContain('<option value="xhigh">Extra High</option>');
-    expect(markup).not.toContain('<option value="max">Ultra</option>');
+    expect(markup).toContain('<option value="max">Ultra</option>');
     expect(markup).toContain('data-testid="create-file-input"');
     expect(markup).toContain('type="password"');
     expect(markup).toContain('name="nodeslide-preview-access-code"');
@@ -100,7 +100,7 @@ describe('NodeSlide informed provider controls', () => {
     expect(markup).toContain('data-testid="landing-effort-select"');
     expect(markup).toContain('<option value="high" selected="">High</option>');
     expect(markup).not.toContain('<option value="xhigh">Extra High</option>');
-    expect(markup).not.toContain('<option value="max">Ultra</option>');
+    expect(markup).toContain('<option value="max">Ultra</option>');
     expect(markup).toContain('data-testid="landing-file-input"');
     expect(markup).not.toContain('data-testid="landing-provider-consent"');
     expect(markup).toContain('Attach data');

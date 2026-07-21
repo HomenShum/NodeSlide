@@ -28,7 +28,7 @@ export const NODESLIDE_AGENT_MODELS = [
     bestFor: 'Recommended agent route',
     productionEnabled: true,
     supportsTemperature: true,
-    supportedEfforts: ['low', 'medium', 'high'],
+    supportedEfforts: ['low', 'high', 'max'],
   },
   {
     id: 'z-ai/glm-5.2',
@@ -41,7 +41,7 @@ export const NODESLIDE_AGENT_MODELS = [
     bestFor: 'Long, structured deck work',
     productionEnabled: true,
     supportsTemperature: true,
-    supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
+    supportedEfforts: ['high', 'xhigh'],
   },
   {
     id: 'anthropic/claude-sonnet-5',
@@ -80,7 +80,7 @@ export const NODESLIDE_AGENT_MODELS = [
     bestFor: 'Fast iteration and large context',
     productionEnabled: true,
     supportsTemperature: true,
-    supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
+    supportedEfforts: ['low', 'medium', 'high'],
   },
   {
     id: 'google/gemini-3.1-pro-preview',
@@ -93,7 +93,7 @@ export const NODESLIDE_AGENT_MODELS = [
     bestFor: 'Data-heavy analysis',
     productionEnabled: true,
     supportsTemperature: true,
-    supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
+    supportedEfforts: ['low', 'medium', 'high'],
   },
   {
     id: 'openai/gpt-5.6-sol',
@@ -442,6 +442,7 @@ export type SlideArchetype =
   | 'statement'
   | 'stat-dominant'
   | 'chart-dominant'
+  | 'diagram-dominant'
   | 'media-dominant'
   | 'comparison'
   | 'split';

@@ -135,10 +135,10 @@ describe('NodeSlide AI review inspector', () => {
       nodeSlideModelSupportsReasoningEffort(NODESLIDE_DEFAULT_AGENT_MODEL, effort.id),
     ).map((effort) => effort.id);
     expect(defaultEffortIds).toContain('low');
-    expect(defaultEffortIds).toContain('medium');
+    expect(defaultEffortIds).not.toContain('medium');
     expect(defaultEffortIds).toContain('high');
     expect(defaultEffortIds).not.toContain('xhigh');
-    expect(defaultEffortIds).not.toContain('max');
+    expect(defaultEffortIds).toContain('max');
     expect(markup).not.toMatch(/data-testid="ai-provider-controls"[^>]*open=/);
     const modelLabels = NODESLIDE_OFFERED_AGENT_MODELS.map(
       (model) => `${model.label} · ${model.vendor}`,
@@ -194,7 +194,7 @@ describe('NodeSlide AI review inspector', () => {
       nodeSlideModelSupportsReasoningEffort('z-ai/glm-5.2', effort.id),
     ).map((effort) => effort.id);
     expect(glmEffortIds).toContain('xhigh');
-    expect(glmEffortIds).toContain('max');
+    expect(glmEffortIds).not.toContain('max');
     expect(markup).toContain('data-testid="ai-effort-select"');
   });
 

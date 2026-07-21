@@ -9,6 +9,8 @@ export interface SlideContentShape {
   total: number;
   hasMetric: boolean;
   hasChart: boolean;
+  /** A structured process, architecture, or timeline diagram is present. */
+  hasDiagram: boolean;
   /** Image or video present. */
   hasMedia: boolean;
   hasFormula: boolean;
@@ -27,6 +29,7 @@ export function archetypeCandidates(shape: SlideContentShape): SlideArchetype[] 
   if (shape.hasMedia) return ['media-dominant'];
   // A formula renders as a right-column panel; that is the split layout.
   if (shape.hasFormula) return ['split'];
+  if (shape.hasDiagram) return ['diagram-dominant'];
   if (shape.hasMetric) {
     return shape.hasChart ? ['stat-dominant', 'chart-dominant'] : ['stat-dominant'];
   }

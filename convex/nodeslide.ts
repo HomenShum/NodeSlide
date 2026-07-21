@@ -2739,6 +2739,9 @@ export const createFromBriefInternal = internalMutation({
       ...(args.attachments ? { attachments: args.attachments } : {}),
       now: Date.now(),
     });
+    const materialInventory = built.spec.materialInventory;
+    const proofObligationCount = built.spec.storySpec?.proofObligations.length ?? 0;
+    const designPlanCount = built.spec.designPlans?.length ?? 0;
     await createWorkspaceRows(ctx, {
       clientSessionId: args.clientSessionId,
       ownerAccessKey: args.ownerAccessKey,
@@ -2752,6 +2755,19 @@ export const createFromBriefInternal = internalMutation({
                 `Read ${args.attachments.length} user-supplied data source${args.attachments.length === 1 ? '' : 's'}`,
               ]
             : []),
+          ...(proofObligationCount > 0
+            ? [
+                `StorySpec: ${proofObligationCount} proof obligation${proofObligationCount === 1 ? '' : 's'}`,
+              ]
+            : []),
+          ...(designPlanCount > 0
+            ? [`Design plans: ${designPlanCount} slides with reference-bound composition intent`]
+            : []),
+          ...(materialInventory?.blockedKinds.length
+            ? [
+                `Missing visual evidence kept explicit: ${materialInventory.blockedKinds.join(', ')}`,
+              ]
+            : []),
           ...(args.critiquePasses !== undefined
             ? [
                 `Self-critique: ${args.critiquePasses} pass${args.critiquePasses === 1 ? '' : 'es'}${args.critiqueDecision ? ` (${args.critiqueDecision})` : ''}`,
@@ -2763,6 +2779,8 @@ export const createFromBriefInternal = internalMutation({
           'Persisted deterministic plan and deck specification',
         ],
         toolCalls: [
+          'Built StorySpec and visual-material inventory',
+          'Bound each slide to an annotated composition reference set',
           'Planned six-to-eight slide narrative',
           'Built normalized deck',
           ...(args.critiquePasses === 2 ? ['Ran bounded self-critique revision'] : []),

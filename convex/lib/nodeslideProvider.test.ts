@@ -7,6 +7,7 @@ import {
   type NodeSlideCompletion,
   type NodeSlideCompletionResult,
   callNodeSlideFreeJson,
+  nodeSlideModelProbeProfile,
   nodeSlideProviderPayload,
   nodeSlideStructuredOutputPayload,
   openrouterProviderWithOverrides,
@@ -99,22 +100,28 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     expect(complete.mock.calls[0]?.[0].reasoningEffort).toBe('xhigh');
   });
 
-  it('pins reasoning:false OpenRouter overrides for routes that reject or exhaust reasoning', () => {
+  it('pins only the optional-reasoning Kimi override', () => {
     const provider = openrouterProviderWithOverrides();
     const models = provider.getModels();
     const overrideIds = NODESLIDE_OPENROUTER_MODEL_OVERRIDES.map((model) => model.id);
-    expect(overrideIds).toEqual([
-      'moonshotai/kimi-k3',
-      'google/gemini-3.5-flash',
-      'anthropic/claude-fable-5',
-      'google/gemini-3.1-pro-preview',
-    ]);
+    expect(overrideIds).toEqual(['moonshotai/kimi-k3']);
     for (const override of NODESLIDE_OPENROUTER_MODEL_OVERRIDES) {
       const matches = models.filter((model) => model.id === override.id);
       // Exactly one entry per id: our pinned definition wins over any bundled
       // catalog entry that would re-enable reasoning and burn the JSON budget.
       expect(matches).toHaveLength(1);
       expect(matches[0]).toMatchObject({ reasoning: false });
+    }
+  });
+
+  it('retains reasoning for mandatory OpenRouter routes', () => {
+    const models = openrouterProviderWithOverrides().getModels();
+    for (const id of [
+      'anthropic/claude-fable-5',
+      'google/gemini-3.5-flash',
+      'google/gemini-3.1-pro-preview',
+    ]) {
+      expect(models.find((model) => model.id === id)).toMatchObject({ reasoning: true });
     }
   });
 
@@ -357,6 +364,25 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       maxTokens: 64,
       reasoningEffort: 'low',
       repairAttempt: false,
+    });
+  });
+
+  it('uses supported reasoning and bounded visible-output budgets for mandatory routes', () => {
+    expect(nodeSlideModelProbeProfile('z-ai/glm-5.2')).toEqual({
+      reasoningEffort: 'high',
+      maxTokens: 512,
+    });
+    expect(nodeSlideModelProbeProfile('anthropic/claude-fable-5')).toEqual({
+      reasoningEffort: 'low',
+      maxTokens: 2_048,
+    });
+    expect(nodeSlideModelProbeProfile('google/gemini-3.5-flash')).toEqual({
+      reasoningEffort: 'low',
+      maxTokens: 256,
+    });
+    expect(nodeSlideModelProbeProfile('google/gemini-3.1-pro-preview')).toEqual({
+      reasoningEffort: 'low',
+      maxTokens: 256,
     });
   });
 

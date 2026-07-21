@@ -46,6 +46,7 @@ function shape(
     total,
     hasMetric: false,
     hasChart: false,
+    hasDiagram: false,
     hasMedia: false,
     hasFormula: false,
     bulletCount: 3,
@@ -178,6 +179,67 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
     expect(chartElement).toBeDefined();
     expect(chartElement?.bbox.width ?? 0).toBeGreaterThanOrEqual(0.5);
     expect(chartElement?.bbox.x ?? 1).toBeLessThanOrEqual(0.45);
+  });
+
+  it('materializes a structured process as editable nodes and connectors', () => {
+    const textSlide = (label: string) => ({
+      title: label,
+      section: `${label} / section`,
+      headline: `${label} advances the story.`,
+      body: 'Concise supporting copy.',
+      bullets: ['Signal', 'Action'],
+    });
+    const { snapshot, spec } = buildBriefNodeSlide({
+      deckId: 'deck_diagram',
+      projectId: 'project_diagram',
+      title: 'Structured diagram proof',
+      brief: BRIEF,
+      themeId: 'editorial-signal',
+      rawSpec: {
+        title: 'Structured diagram proof',
+        narrative: ['Show relationships spatially.'],
+        slides: [
+          textSlide('Opening'),
+          {
+            ...textSlide('Workflow'),
+            diagram: {
+              kind: 'process',
+              direction: 'horizontal',
+              nodes: [
+                { id: 'intake', label: 'Intake', kind: 'step' },
+                { id: 'review', label: 'Review', kind: 'decision' },
+                { id: 'ship', label: 'Ship', kind: 'milestone' },
+              ],
+              edges: [
+                { from: 'intake', to: 'review' },
+                { from: 'review', to: 'ship' },
+                { from: 'missing', to: 'ship' },
+              ],
+            },
+          },
+          textSlide('Evidence'),
+          textSlide('Mechanics'),
+          textSlide('Delivery'),
+          textSlide('Decision'),
+        ],
+      },
+      now: 1_700_000_000_000,
+    });
+
+    const slide = snapshot.slides[1];
+    expect(slide?.archetype).toBe('diagram-dominant');
+    const diagramElements = snapshot.elements.filter(
+      (element) => element.slideId === slide?.id && element.role?.startsWith('diagram_'),
+    );
+    expect(diagramElements.filter((element) => element.kind === 'shape')).toHaveLength(3);
+    expect(diagramElements.filter((element) => element.kind === 'connector')).toHaveLength(2);
+    expect(
+      diagramElements
+        .filter((element) => element.kind === 'shape')
+        .map((element) => element.content),
+    ).toEqual(['Intake', 'Review', 'Ship']);
+    expect(spec.slides[1]?.diagram?.edges).toHaveLength(2);
+    expectZeroCollisions(snapshot);
   });
 
   it('alternates the media column by slide index for deck rhythm', () => {

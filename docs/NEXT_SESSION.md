@@ -77,7 +77,7 @@ Do not convert any of these into a green claim without the named evidence:
    failure/banner was not reproduced. Preserve both raw receipts and do not
    relabel the deterministic banner tests as a live camera pass. Reopen only if
    a natural stale-action rejection supplies the missing production condition.
-3. Model-fleet health remains the only open production blocker. The historical
+3. Model-fleet health remains an open production blocker. The historical
    1-token audit is retained at
    `artifacts/prod-proof-20260720/model-fleet-probe.json`. Commit `7edc66f`
    removed the uncredentialed Nebius route from the offered fleet, raised the
@@ -94,6 +94,19 @@ Do not convert any of these into a green claim without the named evidence:
    production QA pass; this pass exhausted its two-attempt stop limit.
 4. H5 is closed by the user's confirmation that the Mike draft was already
    sent. Do not draft or send another copy.
+5. Visual-generation acceptance is reopened by contradictory rendered-deck
+   evidence. The prior A5 N=20 receipt proved geometry, publishability, and
+   archetype IDs, not visual storytelling. Track K in `docs/CAPABILITY_PLAN.md`
+   is the new ordered work: K1 structured diagrams/rhythm preflight and K2's
+   server-owned StorySpec/material inventory are implemented. K2's receipt
+   proves that an uncaptured screenshot stays a blocked placeholder even when
+   provider output tries to promote it. K3-K5 are now also implemented and
+   accepted through real candidate pixels, complete-deck rhythm review, and
+   seven individually inspected exported-PPTX renders. The first PPTX pass
+   exposed a diagram-body/bullet collision; the repaired second pass and the
+   overflow gate are green. See
+   `docs/demo/nodeslide-visual-authoring-v2/receipt.json`. Never replace this
+   acceptance with layout IDs or compilation alone.
 
 I7 is closed by [NodeRoom PR #236](https://github.com/HomenShum/NodeRoom/pull/236)
 at NodeRoom main `616c902f09743613ae1cbddc97b5819fb29c831e`. Its committed

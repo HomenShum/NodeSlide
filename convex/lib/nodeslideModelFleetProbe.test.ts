@@ -12,6 +12,7 @@ describe('NodeSlide fleet-wide bounded probe', () => {
         model,
         provider: route.provider,
         upstreamModel: route.upstreamId,
+        reasoningEffort: 'low',
         maxTokens: 64,
         status: 'passed',
         stopReason: 'length',

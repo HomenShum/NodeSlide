@@ -85,58 +85,13 @@ const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
   },
 };
 
-// Gemini 3.5 Flash exists in the bundled catalog but with reasoning enabled;
-// via OpenRouter it burns its whole token budget on reasoning before emitting
-// JSON (finish=length with ~70 chars of content) — same disease Kimi K3 had.
-// Pin reasoning:false with the same minimal compat surface as the Kimi fix.
-// Cost/context mirror the bundled catalog entry.
-const NODESLIDE_GEMINI_35_FLASH: Model<'openai-completions'> = {
-  id: 'google/gemini-3.5-flash',
-  name: 'Google: Gemini 3.5 Flash',
-  api: 'openai-completions',
-  provider: 'openrouter',
-  baseUrl: 'https://openrouter.ai/api/v1',
-  reasoning: false,
-  input: ['text', 'image'],
-  cost: { input: 1.5, output: 9, cacheRead: 0.15, cacheWrite: 0.083333 },
-  contextWindow: 1_048_576,
-  maxTokens: 65_536,
-  compat: {
-    supportsDeveloperRole: false,
-    maxTokensField: 'max_tokens',
-  },
-};
-
-function reasoningDisabledBundledOpenRouterModel(
-  id: 'anthropic/claude-fable-5' | 'google/gemini-3.1-pro-preview',
-): Model<'openai-completions'> {
-  const model = openrouterProvider()
-    .getModels()
-    .find((candidate) => candidate.id === id);
-  if (!model || model.api !== 'openai-completions') {
-    throw new Error(`The pinned OpenRouter model ${id} is missing from the bundled catalog.`);
-  }
-  return { ...model, reasoning: false };
-}
-
-const NODESLIDE_CLAUDE_FABLE_5 = reasoningDisabledBundledOpenRouterModel(
-  'anthropic/claude-fable-5',
-);
-const NODESLIDE_GEMINI_31_PRO = reasoningDisabledBundledOpenRouterModel(
-  'google/gemini-3.1-pro-preview',
-);
-
 /**
- * NodeSlide-pinned OpenRouter model definitions. Each entry replaces the
- * bundled catalog entry with the same id (or is appended when the catalog
- * predates the model), so newer catalog releases cannot silently reintroduce
- * behavior we had to pin away (e.g. reasoning burning the JSON token budget).
+ * Kimi permits reasoning to be disabled and is newer than the bundled catalog.
+ * Mandatory-reasoning routes retain their bundled metadata and receive a
+ * bounded supported effort instead of an invalid disabled-reasoning payload.
  */
 export const NODESLIDE_OPENROUTER_MODEL_OVERRIDES: readonly Model<'openai-completions'>[] = [
   NODESLIDE_KIMI_K3,
-  NODESLIDE_GEMINI_35_FLASH,
-  NODESLIDE_CLAUDE_FABLE_5,
-  NODESLIDE_GEMINI_31_PRO,
 ];
 
 export function openrouterProviderWithOverrides() {
@@ -230,7 +185,8 @@ export interface NodeSlideModelProbeReceipt {
   model: NodeSlideAgentModelId;
   provider: NodeSlideExternalProvider;
   upstreamModel: string;
-  maxTokens: 64;
+  reasoningEffort: NodeSlideReasoningEffort;
+  maxTokens: number;
   status: 'passed' | 'failed';
   stopReason?: string;
   latencyMs: number;
@@ -243,17 +199,18 @@ export interface NodeSlideModelProbeReceipt {
 }
 
 /**
- * Executes exactly one bounded completion for an offered catalog route. Some
- * providers spend their first tokens on hidden deliberation, so 64 tokens is
- * the smallest cross-fleet budget proven to yield visible text. This is kept
- * below a server-only Convex action so an unauthenticated client cannot turn
- * the fleet probe into a cost-bearing endpoint.
+ * Executes exactly one bounded completion for an offered catalog route. The
+ * cap is route-specific because mandatory reasoning counts against output
+ * tokens; a universal 64-token cap can prove only hidden deliberation. This is
+ * kept below a server-only Convex action so an unauthenticated client cannot
+ * turn the fleet probe into a cost-bearing endpoint.
  */
 export async function probeNodeSlideModelOnce(
   modelId: NodeSlideAgentModelId,
   dependencies: NodeSlideProviderDependencies = {},
 ): Promise<NodeSlideModelProbeReceipt> {
   const route = nodeSlideAgentModel(modelId);
+  const probeProfile = nodeSlideModelProbeProfile(modelId);
   const complete = dependencies.complete ?? completeNodeSlideWithPiAi;
   const controller = new AbortController();
   const startedAt = Date.now();
@@ -271,10 +228,10 @@ export async function probeNodeSlideModelOnce(
         provider: route.provider,
         model: route.upstreamId,
         supportsTemperature: route.supportsTemperature,
-        reasoningEffort: 'low',
+        reasoningEffort: probeProfile.reasoningEffort,
         systemPrompt: 'Reply with one character.',
         userText: '1',
-        maxTokens: 64,
+        maxTokens: probeProfile.maxTokens,
         repairAttempt: false,
         signal: controller.signal,
       }),
@@ -287,7 +244,8 @@ export async function probeNodeSlideModelOnce(
       model: modelId,
       provider: route.provider,
       upstreamModel: route.upstreamId,
-      maxTokens: 64,
+      reasoningEffort: probeProfile.reasoningEffort,
+      maxTokens: probeProfile.maxTokens,
       status: passed ? 'passed' : 'failed',
       stopReason: result.stopReason,
       latencyMs: Date.now() - startedAt,
@@ -303,7 +261,7 @@ export async function probeNodeSlideModelOnce(
                   result.errorMessage,
                   `${route.label} via ${providerDisplayName(route.provider)}`,
                 )
-              : `The ${route.label} route returned no assistant text within 64 output tokens.`,
+              : `The ${route.label} route returned no assistant text within ${probeProfile.maxTokens} output tokens.`,
           }),
     };
   } catch {
@@ -311,7 +269,8 @@ export async function probeNodeSlideModelOnce(
       model: modelId,
       provider: route.provider,
       upstreamModel: route.upstreamId,
-      maxTokens: 64,
+      reasoningEffort: probeProfile.reasoningEffort,
+      maxTokens: probeProfile.maxTokens,
       status: 'failed',
       latencyMs: Date.now() - startedAt,
       costMicroUsd: 0,
@@ -324,6 +283,23 @@ export async function probeNodeSlideModelOnce(
     };
   } finally {
     if (timeout !== undefined) clearTimeout(timeout);
+  }
+}
+
+export function nodeSlideModelProbeProfile(modelId: NodeSlideAgentModelId): {
+  reasoningEffort: NodeSlideReasoningEffort;
+  maxTokens: number;
+} {
+  switch (modelId) {
+    case 'z-ai/glm-5.2':
+      return { reasoningEffort: 'high', maxTokens: 512 };
+    case 'anthropic/claude-fable-5':
+      return { reasoningEffort: 'low', maxTokens: 2_048 };
+    case 'google/gemini-3.5-flash':
+    case 'google/gemini-3.1-pro-preview':
+      return { reasoningEffort: 'low', maxTokens: 256 };
+    default:
+      return { reasoningEffort: 'low', maxTokens: 64 };
   }
 }
 

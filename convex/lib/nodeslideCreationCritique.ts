@@ -1,4 +1,5 @@
-import type { DeckBrief } from '../../shared/nodeslide';
+import type { DeckBrief, DeckSnapshot } from '../../shared/nodeslide';
+import type { NodeSlideDataAttachment } from '../../shared/nodeslideAttachments';
 import { findCompressedTextElements } from '../../shared/nodeslideLayoutMetrics';
 import type { NodeSlideProviderResult } from './nodeslideProvider';
 import { type NodeSlidePlannedChart, buildBriefNodeSlide } from './nodeslideSeed';
@@ -15,7 +16,7 @@ const MAX_REPORT_VALIDATION_ISSUES = 12;
 const MAX_REPORT_COMPRESSED_SLIDES = 8;
 const MAX_REPORT_PROMPT_BYTES = 4_000;
 
-export type NodeSlideBriefPrimitive = 'chart' | 'formula' | 'image';
+export type NodeSlideBriefPrimitive = 'chart' | 'diagram' | 'formula' | 'image';
 export type NodeSlideSyntheticCreationFault = 'drop_requested_chart';
 
 export interface NodeSlideSyntheticFaultResult {
@@ -45,6 +46,8 @@ export interface NodeSlideCreationQualityReport {
   missingRequiredCharts: NodeSlidePlannedChart[];
   /** Archetype per slide, in deck order, for monotony inspection downstream. */
   archetypes: string[];
+  /** Deck-level visual grammar defects that geometry-only validation cannot see. */
+  visualRhythmIssues: NodeSlideCreationQualityIssue[];
 }
 
 export interface NodeSlideCreationCritiqueInput {
@@ -53,6 +56,7 @@ export interface NodeSlideCreationCritiqueInput {
   themeId: string;
   rawSpec: unknown;
   now: number;
+  attachments?: readonly NodeSlideDataAttachment[];
   /**
    * Optional exact chart semantics that must survive materialization. This is
    * used by the development-only repair proof so an unrelated fallback chart
@@ -63,6 +67,7 @@ export interface NodeSlideCreationCritiqueInput {
 
 const PRIMITIVE_REQUESTS: ReadonlyArray<[NodeSlideBriefPrimitive, RegExp]> = [
   ['chart', /\bcharts?\b|\bgraphs?\b/u],
+  ['diagram', /\bdiagrams?\b|\barchitectures?\b|\bprocess(?:es)?\b|\btimelines?\b|\bflows?\b/u],
   ['formula', /\bformulas?\b|\bequations?\b/u],
   ['image', /\bimages?\b|\bphotos?\b/u],
 ];
@@ -168,6 +173,7 @@ export function collectNodeSlideCreationQualityReport(
     brief: input.brief,
     themeId: input.themeId,
     rawSpec: input.rawSpec,
+    ...(input.attachments ? { attachments: input.attachments } : {}),
     now: input.now,
   });
   const validation = validateNodeSlideSnapshot(built.snapshot, input.now);
@@ -207,22 +213,115 @@ export function collectNodeSlideCreationQualityReport(
     return !built.spec.slides.some((slide) =>
       primitive === 'chart'
         ? slide.chart !== undefined
-        : primitive === 'formula'
-          ? slide.formula !== undefined
-          : slide.image !== undefined,
+        : primitive === 'diagram'
+          ? slide.diagram !== undefined
+          : primitive === 'formula'
+            ? slide.formula !== undefined
+            : slide.image !== undefined,
     );
   }).map(([primitive]) => primitive);
 
   const archetypes = built.snapshot.slides.map((slide) => slide.archetype ?? 'unknown');
+  const visualRhythmIssues = [
+    ...collectPrimaryVisualConflicts(input.rawSpec),
+    ...collectVisualRhythmIssues(built.snapshot, archetypes),
+  ];
 
   return {
-    issueCount: validationIssues.length + compressedSlides.length + missingPrimitives.length,
+    issueCount:
+      validationIssues.length +
+      compressedSlides.length +
+      missingPrimitives.length +
+      visualRhythmIssues.length,
     validationIssues,
     compressedSlides,
     missingPrimitives,
     missingRequiredCharts,
     archetypes,
+    visualRhythmIssues,
   };
+}
+
+function collectPrimaryVisualConflicts(rawSpec: unknown): NodeSlideCreationQualityIssue[] {
+  if (!isCreationSpecRecord(rawSpec) || !Array.isArray(rawSpec.slides)) return [];
+  return rawSpec.slides.flatMap((slide, index) => {
+    if (!isCreationSpecRecord(slide)) return [];
+    const primaryKeys = ['chart', 'diagram', 'formula', 'math', 'image', 'video'].filter((key) =>
+      Object.hasOwn(slide, key),
+    );
+    // formula/math are aliases for the same primitive.
+    const primaryKinds = new Set(primaryKeys.map((key) => (key === 'math' ? 'formula' : key)));
+    if (primaryKinds.size <= 1) return [];
+    return [
+      {
+        severity: 'warning' as const,
+        code: 'multiple_primary_visuals',
+        message: `Slide ${index + 1} supplies multiple dominant visuals (${[...primaryKinds].join(', ')}); choose the one that best proves its narrative job.`,
+      },
+    ];
+  });
+}
+
+function collectVisualRhythmIssues(
+  snapshot: DeckSnapshot,
+  archetypes: readonly string[],
+): NodeSlideCreationQualityIssue[] {
+  const issues: NodeSlideCreationQualityIssue[] = [];
+  const requiredDistinctArchetypes = snapshot.slides.length >= 7 ? 5 : 4;
+  const distinctArchetypes = new Set(archetypes).size;
+  if (distinctArchetypes < requiredDistinctArchetypes) {
+    issues.push({
+      severity: 'warning',
+      code: 'visual_archetype_variety',
+      message: `Deck uses ${distinctArchetypes} layout archetypes; ${requiredDistinctArchetypes} are required for ${snapshot.slides.length} slides.`,
+    });
+  }
+
+  const archetypeCounts = new Map<string, number>();
+  for (const archetype of archetypes) {
+    archetypeCounts.set(archetype, (archetypeCounts.get(archetype) ?? 0) + 1);
+  }
+  const overused = [...archetypeCounts.entries()].filter(([, count]) => count > 2);
+  if (overused.length > 0) {
+    issues.push({
+      severity: 'warning',
+      code: 'visual_composition_repeat',
+      message: `No composition may carry more than two slides; overused: ${overused.map(([name, count]) => `${name} (${count})`).join(', ')}.`,
+    });
+  }
+
+  let textDominantRun = 0;
+  let runStart = 0;
+  for (let index = 0; index < snapshot.slides.length; index += 1) {
+    const slide = snapshot.slides[index];
+    if (!slide) continue;
+    const hasStructuredVisual = snapshot.elements.some(
+      (element) =>
+        element.slideId === slide.id &&
+        (element.kind === 'chart' ||
+          element.kind === 'image' ||
+          element.kind === 'video' ||
+          element.kind === 'math' ||
+          element.role === 'metric' ||
+          element.role?.startsWith('diagram_')),
+    );
+    if (hasStructuredVisual) {
+      textDominantRun = 0;
+      runStart = index + 1;
+      continue;
+    }
+    if (textDominantRun === 0) runStart = index;
+    textDominantRun += 1;
+    if (textDominantRun === 3) {
+      issues.push({
+        severity: 'warning',
+        code: 'visual_text_dominant_run',
+        message: `Slides ${runStart + 1}-${index + 1} are three consecutive text-dominant compositions; insert a structured visual argument.`,
+        slideId: slide.id,
+      });
+    }
+  }
+  return issues;
 }
 
 /** Bounded JSON body handed to the provider inside the revision system prompt. */
@@ -234,6 +333,7 @@ export function nodeSlideCreationCritiquePromptReport(
     compressedSlides: report.compressedSlides,
     missingPrimitives: report.missingPrimitives,
     missingRequiredCharts: report.missingRequiredCharts,
+    visualRhythmIssues: report.visualRhythmIssues,
   }).slice(0, MAX_REPORT_PROMPT_BYTES);
 }
 
@@ -263,6 +363,7 @@ export interface RunNodeSlideCreationCritiqueInput {
   brief: DeckBrief;
   themeId: string;
   now: number;
+  attachments?: readonly NodeSlideDataAttachment[];
   /** Exact chart payloads removed by an authorized development-only fault. */
   requiredCharts?: readonly NodeSlidePlannedChart[];
   /** True only when pass 1 actually came from a live provider route. */
@@ -284,6 +385,11 @@ function describeReport(report: NodeSlideCreationQualityReport): string {
     const codes = [...new Set(report.validationIssues.map((issue) => issue.code))].slice(0, 3);
     parts.push(
       `${codes.join('/')} validation issue${report.validationIssues.length === 1 ? '' : 's'}`,
+    );
+  }
+  if (report.visualRhythmIssues.length > 0) {
+    parts.push(
+      `${report.visualRhythmIssues.map((issue) => issue.code).join('/')} visual-rhythm issue${report.visualRhythmIssues.length === 1 ? '' : 's'}`,
     );
   }
   return parts.join(', ') || 'reported issues';
@@ -417,6 +523,7 @@ export async function runNodeSlideCreationCritique(
     brief: input.brief,
     themeId: input.themeId,
     now: input.now,
+    ...(input.attachments ? { attachments: input.attachments } : {}),
     ...(input.requiredCharts?.length ? { requiredCharts: input.requiredCharts } : {}),
   };
   const firstReport = collectNodeSlideCreationQualityReport({

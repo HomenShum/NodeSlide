@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "nodeslide.story-context-proof/v1",
+  "generatedAt": "2026-07-21T21:52:51.594Z",
+  "status": "passed",
+  "checks": {
+    "storySpecPersisted": true,
+    "narrativeJobRecorded": true,
+    "materialInventoryPersisted": true,
+    "pacingTotalsSevenSlides": true,
+    "chartIsConstructibleFromSuppliedData": true,
+    "screenshotRemainsPlaceholder": true,
+    "screenshotIsBlockedProof": true,
+    "providerCannotPromoteScreenshot": true
+  },
+  "storySpec": {
+    "narrativeJob": "Decide whether the launch is ready to expand",
+    "audienceNeed": "Help engineering and product leaders decide whether the launch is ready to expand.",
+    "memorableTakeaway": "Decide whether the launch is ready to expand",
+    "proofObligations": [
+      {
+        "id": "proof-1",
+        "claim": "Show the requested numeric series as an inspectable artifact.",
+        "requiredMaterialKinds": ["numeric-series"],
+        "materialIds": ["material-numeric-series"],
+        "fulfillment": "constructible"
+      },
+      {
+        "id": "proof-2",
+        "claim": "Show the requested diagram as an inspectable artifact.",
+        "requiredMaterialKinds": ["diagram"],
+        "materialIds": ["material-diagram"],
+        "fulfillment": "constructible"
+      },
+      {
+        "id": "proof-3",
+        "claim": "Show the requested screenshot as an inspectable artifact.",
+        "requiredMaterialKinds": ["screenshot"],
+        "materialIds": ["material-screenshot"],
+        "fulfillment": "blocked"
+      },
+      {
+        "id": "proof-4",
+        "claim": "Show the requested code as an inspectable artifact.",
+        "requiredMaterialKinds": ["code"],
+        "materialIds": ["material-attachment-2"],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "proof-5",
+        "claim": "Show the requested execution trace as an inspectable artifact.",
+        "requiredMaterialKinds": ["execution-trace"],
+        "materialIds": ["material-execution-trace"],
+        "fulfillment": "blocked"
+      },
+      {
+        "id": "success-1",
+        "claim": "Make the evidence boundary obvious",
+        "requiredMaterialKinds": ["brief"],
+        "materialIds": ["material-brief"],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-2",
+        "claim": "Name the rollout owner",
+        "requiredMaterialKinds": ["brief"],
+        "materialIds": ["material-brief"],
+        "fulfillment": "supported"
+      }
+    ],
+    "pacing": [
+      {
+        "phase": "orient",
+        "slideCount": 1,
+        "intent": "Establish the audience tension and central promise."
+      },
+      {
+        "phase": "build",
+        "slideCount": 2,
+        "intent": "Develop the causal argument with distinct visual jobs."
+      },
+      {
+        "phase": "prove",
+        "slideCount": 3,
+        "intent": "Resolve proof obligations with inspectable artifacts."
+      },
+      {
+        "phase": "decide",
+        "slideCount": 1,
+        "intent": "Close with a decision, owner, and next checkpoint."
+      }
+    ]
+  },
+  "materialInventory": {
+    "materials": [
+      {
+        "id": "material-brief",
+        "kind": "brief",
+        "status": "available",
+        "title": "Creation brief",
+        "provenance": "brief",
+        "detail": "User-supplied narrative intent; usable as context, not independent external proof."
+      },
+      {
+        "id": "material-attachment-1",
+        "kind": "dataset",
+        "status": "available",
+        "title": "revenue.csv",
+        "provenance": "attachment",
+        "detail": "User-supplied structured data available for editable charts and calculations.",
+        "attachmentTitle": "revenue.csv"
+      },
+      {
+        "id": "material-attachment-2",
+        "kind": "code",
+        "status": "available",
+        "title": "renderer.ts",
+        "provenance": "attachment",
+        "detail": "User-supplied text evidence available for citation and synthesis.",
+        "attachmentTitle": "renderer.ts"
+      },
+      {
+        "id": "material-numeric-series",
+        "kind": "numeric-series",
+        "status": "constructible",
+        "title": "Chart-ready numeric series",
+        "provenance": "derived",
+        "detail": "An editable chart may be constructed from supplied values; chart semantics still require validation."
+      },
+      {
+        "id": "material-diagram",
+        "kind": "diagram",
+        "status": "constructible",
+        "title": "Editable relationship diagram",
+        "provenance": "derived",
+        "detail": "NodeSlide can construct typed nodes and connectors from relationships in the story."
+      },
+      {
+        "id": "material-screenshot",
+        "kind": "screenshot",
+        "status": "placeholder",
+        "title": "screenshot evidence",
+        "provenance": "derived",
+        "detail": "No captured screenshot was supplied; composition may reserve an explicitly labeled replacement slot only."
+      },
+      {
+        "id": "material-execution-trace",
+        "kind": "execution-trace",
+        "status": "missing",
+        "title": "Execution trace evidence",
+        "provenance": "derived",
+        "detail": "The requested execution-trace artifact was not supplied and must not be claimed as evidence."
+      }
+    ],
+    "availableKinds": ["brief", "dataset", "code"],
+    "constructibleKinds": ["numeric-series", "diagram"],
+    "blockedKinds": ["screenshot", "execution-trace"]
+  }
+}

@@ -510,6 +510,7 @@ export const nodeslideSlideArchetypeValidator = v.union(
   v.literal('statement'),
   v.literal('stat-dominant'),
   v.literal('chart-dominant'),
+  v.literal('diagram-dominant'),
   v.literal('media-dominant'),
   v.literal('comparison'),
   v.literal('split'),

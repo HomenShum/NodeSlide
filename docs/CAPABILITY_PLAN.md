@@ -63,6 +63,13 @@ This is the root of the visual monotony AND the collision/overflow bug class.
       Result: 20/20 required live generations passed every gate. One adjacent
       archetype repeat was observed in the initial six; it is not a gate.
 
+      Reassessment 2026-07-21: this receipt remains valid for geometry,
+      publishability, and archetype-selection coverage, but it did **not**
+      visually inspect the rendered thumbnails. Counting archetype IDs cannot
+      prove visual storytelling, artifact scale, or slide-to-slide identity.
+      Track K below owns the stronger acceptance contract; A5 must not be cited
+      as proof that generated decks are visually rich.
+
 ## B · Agentic depth — a real loop, not a labeled function call (P0/P1)
 
 Original gap: one planner call + one JSON repair, status-label thread steps,
@@ -579,12 +586,80 @@ discipline as I1: audit before asserting; no invented org maps.
       nodeslide and cross-linked from noderoom.
       — DONE across the NodeRoom packed-consumer proof and bilateral CI wiring.
 
+## K · Visual authoring harness v2 — from varied templates to visual arguments (P0/P1)
+
+Contradictory deck evidence received 2026-07-21 showed that geometry-clean,
+multi-archetype output can still read as one editorial template repeated. This
+reopens visual-generation acceptance without invalidating the earlier geometry
+and export receipts.
+
+- [x] K1. **Honest structured diagrams and rhythm preflight.** Add an editable
+      process/architecture/timeline diagram primitive with typed nodes and
+      edges; materialize it as native shapes/connectors in a diagram-dominant
+      layout. Stop silently borrowing fallback visuals into valid provider
+      slides. Creation critique now flags fewer than 4 distinct layouts for six
+      slides / 5 for seven-eight, any composition used more than twice, and
+      three consecutive text-dominant slides. These issues enter the existing
+      bounded revision loop. The real SlideLang render is retained at
+      `docs/demo/nodeslide-k1-diagram-proof.png` with its machine-readable
+      receipt; it shows three editable nodes, two editable edges, and zero
+      browser errors. The full repository gate passed on the same tree.
+- [x] K2. **StorySpec + visual-material inventory.** Before composition, record
+      narrative job, takeaway, proof obligations, pacing, and the real available
+      screenshots, traces, code symbols, data, sources, and media. Missing
+      evidence stays explicit; placeholders never count as captured proof.
+      The server derives this contract from the validated brief and attachments
+      before provider invocation, includes it in provider context, recomputes it
+      during materialization so provider-authored status upgrades cannot
+      survive, and persists it in the canonical deck spec and creation trace.
+      `available`, `constructible`, `placeholder`, and `missing` remain distinct.
+      `docs/demo/nodeslide-k2-story-context-proof.receipt.json` covers a supplied
+      dataset/code file, a constructible chart/diagram, a missing trace, an
+      uncaptured screenshot placeholder, seven-slide pacing, and an attempted
+      provider promotion of that screenshot; every check passed. Unit tests
+      additionally cover the no-numeric-data chart boundary.
+- [x] K3. **Per-slide design plans + references.** Persist an explicit semantic
+      archetype, dominant visual center, required artifacts, reference IDs,
+      density, composition intent, and forbidden patterns. Retrieve 3–5
+      annotated references per archetype and bind them to the slide job.
+      Every normalized slide now receives a server-owned design plan and four
+      annotated references from NodeSlide's bounded composition catalog. The
+      catalog records layout family, dominant region, density, use/avoid rules,
+      and rejects provider-authored reference IDs. The combined K3-K5 receipt is
+      `docs/demo/nodeslide-visual-authoring-v2/receipt.json`.
+- [x] K4. **Rendered composition fan-out and visual repair.** Generate three
+      materially different compositions for important slides, render each to
+      pixels, compare against its references, and emit concrete repair
+      operations through the existing bounded render-repair loop. Text or color
+      variants alone do not count.
+      Materialization now fans out canonical, mirrored, and visual-focus
+      geometry for every slide, scores clean candidates against its design plan,
+      persists every receipt, and selects one fail-closed. Pixel-adapter bounds
+      findings produce exact clock-bound `move` operations through the existing
+      bounded render-repair loop; tests prove the base remains immutable.
+- [x] K5. **Deck-rhythm and exported-PPTX acceptance.** Review the complete
+      thumbnail strip for repetition and pacing, render the exported PPTX again,
+      visually inspect it, and verify editability plus real evidence. Acceptance
+      requires pixel artifacts and a held-out visual verdict; archetype IDs,
+      captions, and successful compilation are insufficient.
+      The held-out seven-slide deck uses left-rail, centered top-rule, and
+      mirrored right-rail silhouettes with an editable diagram, formula, two
+      native charts, and metrics; it has zero unresolved image placeholders.
+      The exported PPTX contains 76 editable shapes/connectors and two native
+      chart objects. All seven slides were rendered and inspected individually.
+      Pass one exposed a diagram-body/bullet collision; the product copy budget
+      was repaired, pass two was clean, and the overflow test passed. All proof
+      artifacts live under `docs/demo/nodeslide-visual-authoring-v2/`.
+
 ---
 
-## Suggested sequence — plan complete
+## Suggested sequence
 
 ```text
-No unchecked capability-plan items remain.
+Visual authoring K1-K5 complete. Preserve and rerun the proof artifacts when
+materialization, HTML rendering, or PPTX export changes.
+
+In parallel only: bounded route-specific fleet repair from B3.
 ```
 
 Organizing principle: **NodeSlide is an app plus a reusable governed

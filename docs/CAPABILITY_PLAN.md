@@ -502,6 +502,21 @@ registry/                  shadcn-style source-owned compositions (studio route,
       and [ProofLoop 29798490834](https://github.com/HomenShum/NodeRoom/actions/runs/29798490834)
       are green. The literal camera was a local memory sample; no NodeRoom
       production Convex deployment is being claimed.
+      Strengthened the same day by
+      [NodeRoom PR #236](https://github.com/HomenShum/NodeRoom/pull/236), merged
+      at exact NodeRoom main SHA
+      `616c902f09743613ae1cbddc97b5819fb29c831e`. A real Chromium journey now
+      enters the keyless room, opens Work Artifacts, persists the generated
+      collaborative deck, observes the literal `@nodeslide/react` mount at
+      v0.2.2 under NodeRoom CAS authority, verifies keyboard reachability and
+      the browser accessibility tree with no unnamed interactive controls or
+      console/page errors, and exports a valid PPTX. The committed
+      [receipt](https://github.com/HomenShum/NodeRoom/blob/main/docs/demo/nodeslide-i7-mounted-browser.receipt.json),
+      [screenshot](https://github.com/HomenShum/NodeRoom/blob/main/docs/demo/nodeslide-i7-mounted-browser.png),
+      [video](https://github.com/HomenShum/NodeRoom/blob/main/docs/demo/nodeslide-i7-mounted-browser.webm),
+      and [PPTX](https://github.com/HomenShum/NodeRoom/blob/main/docs/demo/nodeslide-i7-mounted-browser.pptx)
+      close the only remaining literal observation. Both comprehensive verify
+      jobs and every specialized PR check passed on the merged change.
 - [x] I8. **Cross-repo CI**: a NodeSlide package regression must fail
       NodeRoom's consumer suite; both CIs run the same smallest journey
       (load → create → render → edit → version++ → export).

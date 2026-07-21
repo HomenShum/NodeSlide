@@ -82,6 +82,11 @@ Do not convert any of these into a green claim without the named evidence:
    open P1: broad math-span CSS stacks nested KaTeX characters vertically.
 5. H5 remains human-only: send the Mike draft.
 
+I7 is closed by [NodeRoom PR #236](https://github.com/HomenShum/NodeRoom/pull/236)
+at NodeRoom main `616c902f09743613ae1cbddc97b5819fb29c831e`. Its committed
+browser/accessibility receipt, screenshot, video, and PPTX are linked from the
+capability plan.
+
 Screenshots, component tests, captions, and CI summaries are not substitutes
 for the checklist's explicit camera/browser/human wording.
 

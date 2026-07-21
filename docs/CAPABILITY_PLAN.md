@@ -256,16 +256,16 @@ were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
       — DONE in PR #13: the scheduled workflow runs the bounded production
       probe and uploads its evidence; the same exact-SHA journey also passed
       manually during the PR #13 handoff.
-- [ ] H3. Vercel deploys from CI on main push (replace manual prebuilt deploys);
+- [x] H3. Vercel deploys from CI on main push (replace manual prebuilt deploys);
       keep VITE_CONVEX_URL pinned to prod.
-      — WORKFLOW DONE in PR #13 and hardened in PR #14. External repository
-      configuration remains open: no repository environment, secrets, or
-      variables are configured. Required secrets: `CONVEX_DEPLOY_KEY`,
-      `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, and
-      `VERCEL_AUTOMATION_BYPASS_SECRET`; optional diagnostics secret:
-      `CONVEX_DIAGNOSTICS_KEY`; required variable:
-      `NODESLIDE_PRODUCTION_DEPLOY_ENABLED=true`. Retain a successful exact-SHA
-      deploy receipt before checking this item.
+      — WORKFLOW DONE in PR #13 and hardened in PRs #14 and #34. Closed
+      2026-07-20 after the production environment, required secrets, and
+      `NODESLIDE_PRODUCTION_DEPLOY_ENABLED=true` were configured: automated
+      [run 29786276438](https://github.com/HomenShum/NodeSlide/actions/runs/29786276438)
+      deployed exact tested main SHA
+      `71fb8726b15da70408692e6e6aeafac6a438ef1a`; authenticated immutable-host
+      and public canonical-alias checks verified the exact production bundle
+      and mounted DOM.
 - [x] H4. Repo hygiene: retire stale parity worktrees/branches; remove
       `nodeslide-deploy` staging folder; decide parity-studio's demo fate.
       — DONE 2026-07-20: removed emergency deploy staging and temporary
@@ -335,7 +335,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
       state; `@nodeslide/react` ships the controlled StudioShell, viewer,
       proposal review, and agent thread over opt-in scoped CSS; the Convex
       package and source registry provide the optional binding and presenter.
-- [ ] I4. **Auth is host-supplied**: normalize to `NodeSlidePrincipal`
+- [x] I4. **Auth is host-supplied**: normalize to `NodeSlidePrincipal`
       {userId, organizationId?, roles, permissions}; host adapters resolve it
       from WorkOS/Clerk/Auth0/Convex/Supabase/custom. No auth vendor inside
       the packages. First authorization-spine slice: the backend package now
@@ -356,12 +356,15 @@ registry/                  shadcn-style source-owned compositions (studio route,
       differs from the persisted direct or unresolved submission. PR #23
       applies the same fail-closed binding to rejected submissions, which
       preserve the proposal's original submission version.
-      — PACKAGE COMPLETE; FINAL HOST MOUNT PENDING. NodeRoom PR #233 landed
+      — PACKAGE AND HOST MOUNT COMPLETE. NodeRoom PR #233 landed
       the real ActorProof/membership authorizer, but its release binding used
       the superseded pre-review v0.2.0 artifact set. The sanitized follow-up
       retains the authorization ordering and credential-handling hardening;
-      keep this unchecked until it is rebound to approved v0.2.2 artifacts
-      and the full mounted journey passes on NodeRoom main.
+      Closed 2026-07-20: NodeRoom PR #234 rebound the same mounted journey to
+      approved immutable v0.2.2 and merged at exact NodeRoom main SHA
+      `d2c77bcb8fcbdd11b0e87d3fd597f2ec1103eb04`; authorization ordering,
+      credential exclusion, mounted-release verification, and the full
+      Memory/Convex/React journey passed bilateral CI.
 - [x] I5. **Governance = enforced invariants, configurable UX.** Required and
       non-bypassable server-side: mutation authority checks, version clocks
       (CAS), validation, trace lineage, source authorization, rollback.
@@ -374,7 +377,7 @@ registry/                  shadcn-style source-owned compositions (studio route,
       validator. Approval mode, per-operation policy, Turbo, publishing, and
       retention remain host-configurable; tests prove none can disable the
       server invariants.
-- [ ] I6. **Installer + upgrade contract**: `npx nodeslide init` asks what to
+- [x] I6. **Installer + upgrade contract**: `npx nodeslide init` asks what to
       install (full studio / agent thread / renderer / presenter / backend
       only / agent pack only), which backend (Convex / hosted / custom), and
       which UI mode (default theme / host tokens / headless); detects
@@ -397,11 +400,16 @@ registry/                  shadcn-style source-owned compositions (studio route,
       immutable, so it is preserved but explicitly superseded; it is not the
       acceptance target. Public v0.2.1 was also immutable and asset-verified,
       but its Windows-built manifest did not reproduce on the required Ubuntu
-      verifier, so it too is preserved and superseded. Keep this unchecked
-      until v0.2.2 is built twice byte-for-byte on Ubuntu from its exact green
-      main SHA, published and verified, and the public v0.1.0 → v0.2.2 workflow
-      passes exact pins, lock integrity,
-      tamper rejection, mixed-release rejection, and source reproducibility.
+      verifier, so it too is preserved and superseded. Closed 2026-07-20:
+      v0.2.2 was
+      built twice independently on Ubuntu from exact green SHA
+      `a88fb57f111db82e9334d68fa7611a51ed54c3c1` (runs
+      [29786786189](https://github.com/HomenShum/NodeSlide/actions/runs/29786786189)
+      and [29786787854](https://github.com/HomenShum/NodeSlide/actions/runs/29786787854))
+      with byte-identical output, then published as an immutable, attested
+      [release](https://github.com/HomenShum/NodeSlide/releases/tag/v0.2.2).
+      Public [run 29787121559](https://github.com/HomenShum/NodeSlide/actions/runs/29787121559)
+      passed every required proof.
 - [ ] I7. **NodeRoom consumer proof** (a required architectural test, not
       optional dogfood): from a clean NodeRoom branch — installer →
       NodeRoom's own principal adapter → mount as a room artifact → create
@@ -416,19 +424,19 @@ registry/                  shadcn-style source-owned compositions (studio route,
       ActorProof/membership policy, package StudioShell, existing NodeAgent,
       unapplied proposals, CAS acceptance/rejection, activity/receipts,
       reconstructed-repository reload, presenter/PPTX/reopen, and Memory/Convex
-      parity are deterministic and green. Its pre-review v0.2.0 package lock is
-      rejected and removed by the sanitized follow-up. Rebind to approved
-      v0.2.2, rerun the mounted release proof, and record the literal browser/
-      a11y observation before checking this item.
-- [ ] I8. **Cross-repo CI**: a NodeSlide package regression must fail
+      parity are deterministic and green on approved v0.2.2 at NodeRoom main
+      `d2c77bcb8fcbdd11b0e87d3fd597f2ec1103eb04`. The mounted release and
+      bilateral CI proofs pass. Record the literal browser/a11y observation
+      before checking this item; that is the only remaining I7 acceptance.
+- [x] I8. **Cross-repo CI**: a NodeSlide package regression must fail
       NodeRoom's consumer suite; both CIs run the same smallest journey
       (load → create → render → edit → version++ → export).
-      — PLUMBING COMPLETE, APPROVED PIN PENDING. Both repositories run the
+      — CLOSED 2026-07-20. Both repositories run the
       publish-shaped package proof and smallest mounted Memory/Convex/React
-      journey, but the first NodeRoom immutable pin targeted superseded
-      pre-review v0.2.0. Keep this unchecked until NodeRoom pins v0.2.2's exact
-      producer SHA and digests and both repositories are green against that
-      approved pair.
+      journey. Closed 2026-07-20: NodeRoom PR #234 pins v0.2.2's exact producer
+      SHA, manifest, public upgrade receipt, package bytes, and lock
+      integrities. Both NodeRoom CI triggers passed, and NodeSlide main CI
+      independently consumed NodeRoom's canonical journey in run 29786776403.
 
 ## J · Ecosystem organization — who owns what across HomenShum repos (P1, audit-first)
 
@@ -466,13 +474,10 @@ discipline as I1: audit before asserting; no invented org maps.
 ## Suggested sequence — remaining literal acceptance
 
 ```text
-1.  I6          publish and prove immutable v0.1.0 → v0.2.2
-2.  I4/I7/I8    bind NodeRoom to v0.2.2, rerun full journey and bilateral CI
-3.  H3          retain a green exact-main automated deployment receipt
-4.  B6 / E4     record the literal camera acceptances
-5.  F1/F2/F4    visually prove snapshot capture and claim-bound regions
-6.  I7          record the literal mounted NodeRoom browser/a11y observation
-7.  H5          human sends the Mike draft
+1.  B6 / E4     record the literal camera acceptances
+2.  F1/F2/F4    visually prove snapshot capture and claim-bound regions
+3.  I7          record the literal mounted NodeRoom browser/a11y observation
+4.  H5          human sends the Mike draft
 ```
 
 Organizing principle: **NodeSlide is an app plus a reusable governed

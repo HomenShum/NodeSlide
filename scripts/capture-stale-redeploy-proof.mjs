@@ -75,7 +75,7 @@ try {
   await submit.click();
 
   const banner = page.getByTestId('deployment-update-banner');
-  const proposal = page.getByTestId('proposal-card').first();
+  const proposal = page.getByText('Ready for review', { exact: false }).first();
   const outcome = await Promise.race([
     banner.waitFor({ state: 'visible', timeout: 180_000 }).then(() => 'reload-banner'),
     proposal.waitFor({ state: 'visible', timeout: 180_000 }).then(() => 'proposal-ready'),

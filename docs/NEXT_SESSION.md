@@ -1,23 +1,23 @@
-# Next session: externally blocked and literal acceptance tail
+# Next session: externally blocked and human acceptance tail
 
 Last updated 2026-07-20.
 
 NodeSlide's code-completable release, deployment, packaging, production camera,
-and bilateral-CI work is merged. The stronger mounted NodeRoom browser proof is
-being finalized separately. Start with `docs/CAPABILITY_PLAN.md`, which remains
-the checklist of record. Do not reopen completed items without contradictory
-deterministic evidence.
+bilateral-CI work, and the stronger mounted NodeRoom browser proof are merged.
+Start with `docs/CAPABILITY_PLAN.md`, which remains the checklist of record. Do
+not reopen completed items without contradictory deterministic evidence.
 
 ## Exact shipped state
 
-- NodeSlide main `04b034d8888202259db561deaa0525a4e552dd8e` includes the B6
-  DEV-only repair-camera receipt, the bounded Openverse repair, and E4's
-  production video, screenshot, editable PPTX, and receipt in
-  `docs/demo/nodeslide-e4-openverse.*`.
+- NodeSlide shipped-app main `6ee3aab402d3c599cccd322c140004663ae8a6da`
+  includes the B6 DEV-only repair-camera receipt, the bounded Openverse repair,
+  E4's production video/screenshot/editable PPTX, fresh production logging, and
+  GitHub-environment receipts. The evidence-only handoff commit after that SHA
+  preserves both stale-redeploy observations.
 - Exact-main CI
-  [29796540673](https://github.com/HomenShum/NodeSlide/actions/runs/29796540673)
+  [29798111891](https://github.com/HomenShum/NodeSlide/actions/runs/29798111891)
   and production deployment
-  [29796788784](https://github.com/HomenShum/NodeSlide/actions/runs/29796788784)
+  [29798347209](https://github.com/HomenShum/NodeSlide/actions/runs/29798347209)
   passed through Convex, Vercel, immutable-URL, and canonical live-DOM gates.
 - The GitHub `production` environment's custom branch roster contains only
   `main` (administrators can bypass); exactly four deployment secret names are
@@ -36,11 +36,21 @@ deterministic evidence.
   covering exact rebuild, clean install, v0.1.0 to v0.2.2 upgrade, lock pins,
   tamper rejection, and mixed-release rejection.
 - NodeRoom mounted consumer main:
-  `d2c77bcb8fcbdd11b0e87d3fd597f2ec1103eb04` via
-  [PR #234](https://github.com/HomenShum/NodeRoom/pull/234). It pins the exact
-  v0.2.2 producer, manifest, public proof, all package bytes, and lock
-  integrities. Both CI triggers passed the full production gate and bilateral
-  Memory/Convex/React/NodeAgent consumer journey.
+  `0d13dffe88190e7911986bfe5027761cae6294c5` via
+  [PR #235](https://github.com/HomenShum/NodeRoom/pull/235). It preserves the
+  exact v0.2.2 producer/manifest/public-proof/package-byte/lock-integrity pins
+  and adds a clean literal browser/a11y receipt for edit → Make live → reopen,
+  mounted package-boundary attributes, and fail-closed unverified writes. Exact
+  PR CI
+  [29798115351](https://github.com/HomenShum/NodeRoom/actions/runs/29798115351)
+  passed the production gate plus authenticated authorization, isolated
+  component, Memory/Convex/React, and both existing NodeAgent journeys.
+  Post-merge main CI
+  [29798490823](https://github.com/HomenShum/NodeRoom/actions/runs/29798490823),
+  [conformance 29798491024](https://github.com/HomenShum/NodeRoom/actions/runs/29798491024),
+  and [ProofLoop 29798490834](https://github.com/HomenShum/NodeRoom/actions/runs/29798490834)
+  are green. The literal camera used a local memory sample; no NodeRoom
+  production Convex deployment is claimed.
 - NodeSlide exact release-candidate CI:
   [29786776403](https://github.com/HomenShum/NodeSlide/actions/runs/29786776403),
   including NodeRoom's canonical NodeAgent packed-consumer journey.
@@ -58,20 +68,19 @@ Do not convert any of these into a green claim without the named evidence:
    egress and mutated nothing. Never copy a credential from an unrelated local
    project; configure one explicitly, then record snapshot → region → citing
    element acceptance.
-2. I7 still needs its stronger mounted NodeRoom browser/accessibility receipt
-   merged before checking the item. The deterministic reload/export,
-   Memory/Convex/isolated-component, authorization, v0.2.2 pin, and bilateral
-   CI paths are already green.
-3. The stale-action reload component is implemented and regression-covered.
-   The first production timing attempt signalled before Convex activation and
-   the old client succeeded, so the banner was not reproduced. Preserve that
-   receipt and run the next attempt only after exact Convex activation.
-4. The production fleet probe is a completed red audit, not a healthy-fleet
+2. The stale-action reload component is implemented and regression-covered.
+   The first production timing attempt signalled before Convex activation; a
+   second submitted 2.880 seconds after activation. Both old clients succeeded
+   with reviewable, unapplied proposals and zero console errors, so the stale
+   failure/banner was not reproduced. Preserve both raw receipts and do not
+   relabel the deterministic banner tests as a live camera pass. Reopen only if
+   a natural stale-action rejection supplies the missing production condition.
+3. The production fleet probe is a completed red audit, not a healthy-fleet
    claim: 4/9 catalog routes returned assistant text and 5/9 failed or returned
    none. Its exact receipt is `artifacts/prod-proof-20260720/model-fleet-probe.json`.
-5. B6 itself passed, but its generated narrow formula box exposed a separate
+4. B6 itself passed, but its generated narrow formula box exposed a separate
    open P1: broad math-span CSS stacks nested KaTeX characters vertically.
-6. H5 remains human-only: send the Mike draft.
+5. H5 remains human-only: send the Mike draft.
 
 Screenshots, component tests, captions, and CI summaries are not substitutes
 for the checklist's explicit camera/browser/human wording.

@@ -20,7 +20,7 @@ page.on('console', (message) => {
 page.on('pageerror', (error) => browserIssues.push(`pageerror: ${error.message}`));
 
 const instruction =
-  'Research official OpenAI documentation. Replace the selected text exactly with "OpenAI recommends the Responses API for new projects." Cite the retrieved source that supports this claim.';
+  'Research the official OpenAI Responses API migration guide. Replace the selected text exactly with "Migrate to the Responses API." Cite the retrieved source that supports this claim.';
 
 let receipt;
 let failure;
@@ -90,7 +90,18 @@ try {
     }
   }
   if (!provenArticle) {
-    throw new Error('No persisted web source had both a snapshot and a citing slide element.');
+    const candidates = await sourceArticles.evaluateAll((articles) =>
+      articles.map((article) => ({
+        title: article.querySelector('strong')?.textContent?.trim() ?? '',
+        excerpt:
+          article.querySelector('[data-testid="evidence-excerpt"]')?.textContent?.trim() ?? '',
+        hasSnapshot: article.querySelector('[data-testid="evidence-snapshot-toggle"]') !== null,
+        citingElements: article.querySelectorAll('[data-testid="evidence-citing-element"]').length,
+      })),
+    );
+    throw new Error(
+      `No persisted web source had both a snapshot and a citing slide element. Candidates: ${JSON.stringify(candidates)}`,
+    );
   }
 
   const citingElement = provenArticle.getByTestId('evidence-citing-element').first();

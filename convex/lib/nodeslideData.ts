@@ -114,6 +114,16 @@ export function sourceFromRow(row: Doc<'nodeslide_sources'>): SourceRecord {
     retrievedAt: row.retrievedAt,
     citation: row.citation,
     ...(row.license !== undefined ? { license: row.license } : {}),
+    ...(row.format !== undefined ? { format: row.format } : {}),
+    ...(row.contentDigest !== undefined ? { contentDigest: row.contentDigest } : {}),
+    ...(row.byteSize !== undefined ? { byteSize: row.byteSize } : {}),
+    ...(row.rowCount !== undefined ? { rowCount: row.rowCount } : {}),
+    ...(row.columns !== undefined ? { columns: [...row.columns] } : {}),
+    ...(row.provider !== undefined ? { provider: row.provider } : {}),
+    ...(row.retention !== undefined ? { retention: row.retention } : {}),
+    ...(row.status !== undefined ? { status: row.status } : {}),
+    ...(row.lastRefreshedAt !== undefined ? { lastRefreshedAt: row.lastRefreshedAt } : {}),
+    ...(row.snapshot !== undefined ? { snapshot: { ...row.snapshot } } : {}),
   };
 }
 

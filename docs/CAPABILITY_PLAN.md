@@ -113,14 +113,19 @@ of that gap; only the literal B6 camera acceptance remains.
       deterministic quality signals plus a separate judge contract, records
       the selected tradeoffs, and keeps dev-only repair outside official
       scoring. Unit and UI tests cover the judged result path.
-- [ ] B6. Acceptance: one routed run on camera — two models in one thread turn
+- [x] B6. Acceptance: one routed run on camera — two models in one thread turn
       with parent-child spans, tokens, cost; creation self-corrects an induced
       layout issue without human input.
-      — PARTIAL (2026-07-20): the routed two-model thread and the tokens/cost
-      trace were each live-proved in separate headless probes. The dev-only
-      `NODESLIDE_DEV_CREATION_FAULT=drop_requested_chart` path and second-provider
-      repair are regression-tested. The required on-camera routed run showing
-      spans/tokens/cost plus a real induced repair remains.
+      — DONE in DEV-only camera proof (2026-07-20): the synthetic fault removed
+      the exact Mbappé 8 / Messi 7 / Álvarez 4 / Giroud 4 chart while leaving an
+      unrelated chart present; self-critique ran two passes and reduced the
+      exact semantic issue count 1 → 0. The same disposable deck then showed a
+      Kimi K3 planner → Gemini 3.5 Flash executor as level-2/level-3 spans,
+      6,756 → 568 tokens, $0.0055, 8 spans, 16 records, validation passed, and a
+      reviewable two-operation patch. Receipt and pixels live under
+      `artifacts/camera-proof-20260720/b6-dev-repair/`. A separate open P1 is
+      preserved: this generated deck's narrow formula box renders its KaTeX
+      characters vertically, so no formula visual-acceptance claim is made.
 
 ## C · Math — typeset it or stop saying LaTeX (P1)
 

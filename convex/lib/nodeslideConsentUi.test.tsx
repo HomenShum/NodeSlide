@@ -93,7 +93,8 @@ describe('NodeSlide informed provider controls', () => {
     expect(markup).toContain('data-testid="nodeslide-landing"');
     expect(markup).toContain('What presentation should we build?');
     expect(markup).toContain('Kimi K3 · Moonshot AI · Recommended');
-    expect(markup).toContain('GLM 5.2 · Z.ai · Nebius');
+    expect(markup).toContain('GLM 5.2 · Z.ai · OpenRouter');
+    expect(markup).not.toContain('GLM 5.2 · Z.ai · Nebius');
     expect(markup).toContain('Claude Sonnet 5 · Anthropic');
     expect(markup).toContain('GPT-5.6 Sol · OpenAI');
     expect(markup).toContain('data-testid="landing-effort-select"');

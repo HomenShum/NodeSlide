@@ -98,20 +98,22 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     expect(complete.mock.calls[0]?.[0].reasoningEffort).toBe('xhigh');
   });
 
-  it('pins reasoning:false OpenRouter overrides for Kimi K3 and Gemini 3.5 Flash', () => {
+  it('pins reasoning:false OpenRouter overrides for routes that reject or exhaust reasoning', () => {
     const provider = openrouterProviderWithOverrides();
     const models = provider.getModels();
     const overrideIds = NODESLIDE_OPENROUTER_MODEL_OVERRIDES.map((model) => model.id);
-    expect(overrideIds).toEqual(['moonshotai/kimi-k3', 'google/gemini-3.5-flash']);
+    expect(overrideIds).toEqual([
+      'moonshotai/kimi-k3',
+      'google/gemini-3.5-flash',
+      'anthropic/claude-fable-5',
+      'google/gemini-3.1-pro-preview',
+    ]);
     for (const override of NODESLIDE_OPENROUTER_MODEL_OVERRIDES) {
       const matches = models.filter((model) => model.id === override.id);
       // Exactly one entry per id: our pinned definition wins over any bundled
       // catalog entry that would re-enable reasoning and burn the JSON budget.
       expect(matches).toHaveLength(1);
-      expect(matches[0]).toMatchObject({
-        reasoning: false,
-        compat: { supportsDeveloperRole: false, maxTokensField: 'max_tokens' },
-      });
+      expect(matches[0]).toMatchObject({ reasoning: false });
     }
   });
 
@@ -305,7 +307,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     expect(complete).not.toHaveBeenCalled();
   });
 
-  it('probes a catalog route with exactly one output token', async () => {
+  it('probes a catalog route with the bounded cross-fleet output budget', async () => {
     const complete = vi.fn<NodeSlideCompletion>(async () =>
       completion('1', { inputTokens: 5, outputTokens: 1, costMicroUsd: 7 }),
     );
@@ -314,7 +316,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
 
     expect(result).toMatchObject({
       model: NODESLIDE_EDIT_MODEL,
-      maxTokens: 1,
+      maxTokens: 64,
       status: 'passed',
       inputTokens: 5,
       outputTokens: 1,
@@ -322,7 +324,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     });
     expect(complete).toHaveBeenCalledTimes(1);
     expect(complete.mock.calls[0]?.[0]).toMatchObject({
-      maxTokens: 1,
+      maxTokens: 64,
       reasoningEffort: 'low',
       repairAttempt: false,
     });
@@ -338,7 +340,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
 
     expect(result).toMatchObject({
       model: NODESLIDE_EDIT_MODEL,
-      maxTokens: 1,
+      maxTokens: 64,
       status: 'failed',
       costMicroUsd: 0,
       inputTokens: 0,
@@ -348,7 +350,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     expect(complete.mock.calls[0]?.[0].signal.aborted).toBe(true);
   });
 
-  it('fails a one-token probe honestly when the route returns no assistant text', async () => {
+  it('fails a bounded probe honestly when the route returns no assistant text', async () => {
     const complete = vi.fn<NodeSlideCompletion>(async () =>
       completion('', { outputTokens: 1, stopReason: 'length' }),
     );
@@ -356,7 +358,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     expect(result).toMatchObject({
       status: 'failed',
       response: { present: false, bytes: 0 },
-      failure: 'The Kimi K3 route returned no assistant text within one output token.',
+      failure: 'The Kimi K3 route returned no assistant text within 64 output tokens.',
     });
     expect(JSON.stringify(result)).not.toContain('errorMessage');
   });

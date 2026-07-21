@@ -12,6 +12,7 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Direct managed Nebius route for long-horizon planning and structured edits.',
     costTier: 'balanced',
     bestFor: 'Direct managed Nebius route',
+    productionEnabled: false,
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high'],
   },
@@ -25,6 +26,7 @@ export const NODESLIDE_AGENT_MODELS = [
       'Moonshot Kimi K3 with large-context planning and structured edits, routed via OpenRouter.',
     costTier: 'balanced',
     bestFor: 'Recommended agent route',
+    productionEnabled: true,
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high'],
   },
@@ -37,6 +39,7 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Long-horizon planning and structured slide edits.',
     costTier: 'balanced',
     bestFor: 'Long, structured deck work',
+    productionEnabled: true,
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
@@ -49,6 +52,7 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Latest balanced Claude for agents and professional writing.',
     costTier: 'premium',
     bestFor: 'Executive writing and synthesis',
+    productionEnabled: true,
     supportsTemperature: false,
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
@@ -61,6 +65,7 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Anthropic flagship for ambitious, long-running agent work.',
     costTier: 'premium',
     bestFor: 'Complex planning and review',
+    productionEnabled: true,
     supportsTemperature: false,
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
@@ -73,6 +78,7 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Latest stable Gemini for sustained agentic and coding tasks.',
     costTier: 'fast',
     bestFor: 'Fast iteration and large context',
+    productionEnabled: true,
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
@@ -85,6 +91,7 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Google Pro reasoning for complex, data-heavy presentations.',
     costTier: 'premium',
     bestFor: 'Data-heavy analysis',
+    productionEnabled: true,
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
@@ -97,6 +104,7 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'OpenAI flagship for highest-capability production workflows.',
     costTier: 'premium',
     bestFor: 'Highest-capability production work',
+    productionEnabled: true,
     supportsTemperature: false,
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
@@ -109,11 +117,16 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Strong OpenAI reasoning with a balanced cost profile.',
     costTier: 'balanced',
     bestFor: 'General professional decks',
+    productionEnabled: true,
     supportsTemperature: false,
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
 ] as const;
 export type NodeSlideAgentModelId = (typeof NODESLIDE_AGENT_MODELS)[number]['id'];
+/** Models actually offered by this production deployment. */
+export const NODESLIDE_OFFERED_AGENT_MODELS = NODESLIDE_AGENT_MODELS.filter(
+  (model) => model.productionEnabled,
+);
 export type NodeSlideExternalProvider = (typeof NODESLIDE_AGENT_MODELS)[number]['provider'];
 export const NODESLIDE_DEFAULT_AGENT_MODEL: NodeSlideAgentModelId = 'moonshotai/kimi-k3';
 export const NODESLIDE_DEFAULT_OPENROUTER_AGENT_MODEL: NodeSlideAgentModelId = 'moonshotai/kimi-k3';
@@ -142,6 +155,10 @@ export function nodeSlideReasoningEffort(effortId: NodeSlideReasoningEffort) {
 
 export function isNodeSlideAgentModelId(value: unknown): value is NodeSlideAgentModelId {
   return NODESLIDE_AGENT_MODELS.some((model) => model.id === value);
+}
+
+export function isNodeSlideOfferedAgentModelId(value: unknown): value is NodeSlideAgentModelId {
+  return NODESLIDE_OFFERED_AGENT_MODELS.some((model) => model.id === value);
 }
 
 export function nodeSlideAgentModel(modelId: NodeSlideAgentModelId) {

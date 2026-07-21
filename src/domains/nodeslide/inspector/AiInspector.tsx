@@ -50,9 +50,9 @@ import {
   type AgentTrace,
   type Deck,
   type DeckPatch,
-  NODESLIDE_AGENT_MODELS,
   NODESLIDE_DEFAULT_AGENT_MODEL,
   NODESLIDE_DEFAULT_REASONING_EFFORT,
+  NODESLIDE_OFFERED_AGENT_MODELS,
   NODESLIDE_REASONING_EFFORTS,
   type NodeSlideAgentMemory,
   type NodeSlideAgentMemoryCategory,
@@ -65,7 +65,7 @@ import {
   type PatchScope,
   type Slide,
   type SlideElement,
-  isNodeSlideAgentModelId,
+  isNodeSlideOfferedAgentModelId,
   nodeSlideAgentModel,
   nodeSlideDefaultModelForProviderMode,
   nodeSlideModelSupportsReasoningEffort,
@@ -231,6 +231,13 @@ export function AiInspector<CommandId extends string = string>({
   onAcceptVariation,
   onRejectVariation,
 }: AiInspectorProps<CommandId>) {
+  const offeredInitialProviderModel = isNodeSlideOfferedAgentModelId(initialProviderModel)
+    ? initialProviderModel
+    : NODESLIDE_DEFAULT_AGENT_MODEL;
+  const offeredInitialProviderMode =
+    initialProviderMode === 'deterministic'
+      ? 'deterministic'
+      : nodeSlideProviderModeForModel(offeredInitialProviderModel);
   const [instruction, setInstruction] = useState(initialInstruction);
   const [scopeChoice, setScopeChoice] = useState<ScopeChoice>(
     selectedElements.length > 0 ? 'elements' : 'slide',
@@ -238,8 +245,10 @@ export function AiInspector<CommandId extends string = string>({
   const [operationMode, setOperationMode] = useState<OperationMode>('unrestricted');
   const [designBehavior, setDesignBehavior] = useState<AiDesignBehaviorPolicy>('refine');
   const [referenceUse, setReferenceUse] = useState<AiReferenceUsePolicy>('context_only');
-  const [providerMode, setProviderMode] = useState<AiProviderMode>(initialProviderMode);
-  const [providerModel, setProviderModel] = useState<NodeSlideAgentModelId>(initialProviderModel);
+  const [providerMode, setProviderMode] = useState<AiProviderMode>(offeredInitialProviderMode);
+  const [providerModel, setProviderModel] = useState<NodeSlideAgentModelId>(
+    offeredInitialProviderModel,
+  );
   const [providerEffort, setProviderEffort] = useState<NodeSlideReasoningEffort>(
     NODESLIDE_DEFAULT_REASONING_EFFORT,
   );
@@ -278,8 +287,10 @@ export function AiInspector<CommandId extends string = string>({
 
   useEffect(() => {
     const stored = window.localStorage.getItem('nodeslide.agent-model');
-    const storedModel = isNodeSlideAgentModelId(stored) ? stored : NODESLIDE_DEFAULT_AGENT_MODEL;
-    if (isNodeSlideAgentModelId(stored)) {
+    const storedModel = isNodeSlideOfferedAgentModelId(stored)
+      ? stored
+      : NODESLIDE_DEFAULT_AGENT_MODEL;
+    if (isNodeSlideOfferedAgentModelId(stored)) {
       setProviderModel(storedModel);
       setProviderMode(nodeSlideProviderModeForModel(storedModel));
     }
@@ -483,7 +494,7 @@ export function AiInspector<CommandId extends string = string>({
       setProviderControlsOpen(false);
       return;
     }
-    if (!isNodeSlideAgentModelId(value)) return;
+    if (!isNodeSlideOfferedAgentModelId(value)) return;
     setProviderModel(value);
     setProviderMode(nodeSlideProviderModeForModel(value));
     if (!nodeSlideModelSupportsReasoningEffort(value, providerEffort)) {
@@ -1327,7 +1338,7 @@ export function AiInspector<CommandId extends string = string>({
                       </SelectGroup>
                       <SelectGroup>
                         <SelectLabel>More live models</SelectLabel>
-                        {NODESLIDE_AGENT_MODELS.filter(
+                        {NODESLIDE_OFFERED_AGENT_MODELS.filter(
                           (model) => model.id !== NODESLIDE_DEFAULT_AGENT_MODEL,
                         ).map((model) => (
                           <PromptInputSelectItem

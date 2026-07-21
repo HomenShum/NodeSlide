@@ -13,9 +13,9 @@ import {
 } from 'lucide-react';
 import { type ChangeEvent, type FormEvent, useEffect, useRef, useState } from 'react';
 import {
-  NODESLIDE_AGENT_MODELS,
   NODESLIDE_DEFAULT_AGENT_MODEL,
   NODESLIDE_DEFAULT_REASONING_EFFORT,
+  NODESLIDE_OFFERED_AGENT_MODELS,
   NODESLIDE_REASONING_EFFORTS,
   type NodeSlideAgentModelId,
   type NodeSlideReasoningEffort,
@@ -300,7 +300,7 @@ export function NodeSlideLanding({
                     </option>
                   </optgroup>
                   <optgroup label="More live models">
-                    {NODESLIDE_AGENT_MODELS.filter(
+                    {NODESLIDE_OFFERED_AGENT_MODELS.filter(
                       (model) => model.id !== NODESLIDE_DEFAULT_AGENT_MODEL,
                     ).map((model) => (
                       <option key={model.id} value={model.id}>

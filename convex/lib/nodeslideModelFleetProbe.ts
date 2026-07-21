@@ -1,4 +1,4 @@
-import { NODESLIDE_AGENT_MODELS } from '../../shared/nodeslide';
+import { NODESLIDE_OFFERED_AGENT_MODELS } from '../../shared/nodeslide';
 import { type NodeSlideModelProbeReceipt, probeNodeSlideModelOnce } from './nodeslideProvider';
 
 export const NODESLIDE_MODEL_FLEET_PROBE_SCHEMA = 'nodeslide.model-fleet-probe/v1' as const;
@@ -11,7 +11,7 @@ export const NODESLIDE_MODEL_FLEET_PROBE_SCHEMA = 'nodeslide.model-fleet-probe/v
 export async function runNodeSlideModelFleetProbe(
   dependencies: {
     probe?: (
-      model: (typeof NODESLIDE_AGENT_MODELS)[number]['id'],
+      model: (typeof NODESLIDE_OFFERED_AGENT_MODELS)[number]['id'],
     ) => Promise<NodeSlideModelProbeReceipt>;
     now?: () => number;
   } = {},
@@ -20,16 +20,16 @@ export async function runNodeSlideModelFleetProbe(
   const now = dependencies.now ?? Date.now;
   const startedAt = now();
   const receipts: NodeSlideModelProbeReceipt[] = [];
-  for (const route of NODESLIDE_AGENT_MODELS) receipts.push(await probe(route.id));
+  for (const route of NODESLIDE_OFFERED_AGENT_MODELS) receipts.push(await probe(route.id));
   const failedModelCount = receipts.filter((receipt) => receipt.status === 'failed').length;
   return {
     schemaVersion: NODESLIDE_MODEL_FLEET_PROBE_SCHEMA,
     generatedAt: new Date(startedAt).toISOString(),
     durationMs: Math.max(0, now() - startedAt),
-    catalogModelCount: NODESLIDE_AGENT_MODELS.length,
+    catalogModelCount: NODESLIDE_OFFERED_AGENT_MODELS.length,
     probedModelCount: receipts.length,
     failedModelCount,
-    passed: receipts.length === NODESLIDE_AGENT_MODELS.length && failedModelCount === 0,
+    passed: receipts.length === NODESLIDE_OFFERED_AGENT_MODELS.length && failedModelCount === 0,
     receipts,
   };
 }

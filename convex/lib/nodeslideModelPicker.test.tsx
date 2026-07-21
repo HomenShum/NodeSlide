@@ -2,7 +2,7 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
-import { type DeckSnapshot, NODESLIDE_AGENT_MODELS } from '../../shared/nodeslide';
+import { type DeckSnapshot, NODESLIDE_OFFERED_AGENT_MODELS } from '../../shared/nodeslide';
 import { AiInspector } from '../../src/domains/nodeslide/inspector/AiInspector';
 import { buildGoldenNodeSlide } from './nodeslideSeed';
 
@@ -101,7 +101,7 @@ describe('NodeSlide AI composer — model picker render coverage', () => {
       .map((option) => option.textContent ?? '');
 
     // Every model in the data source is rendered as its own option.
-    for (const model of NODESLIDE_AGENT_MODELS) {
+    for (const model of NODESLIDE_OFFERED_AGENT_MODELS) {
       const rendered = optionText.filter((text) => text.includes(model.label)).length;
       expect(rendered, `model "${model.label}" is missing from the picker`).toBeGreaterThan(0);
     }
@@ -114,6 +114,6 @@ describe('NodeSlide AI composer — model picker render coverage', () => {
     expect(optionText.some((text) => text.includes('Deterministic'))).toBe(true);
 
     // Guards the count against a future collapse to one/zero rows.
-    expect(optionText.length).toBeGreaterThanOrEqual(NODESLIDE_AGENT_MODELS.length);
+    expect(optionText.length).toBeGreaterThanOrEqual(NODESLIDE_OFFERED_AGENT_MODELS.length);
   });
 });

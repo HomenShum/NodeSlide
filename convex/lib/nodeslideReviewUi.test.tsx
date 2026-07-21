@@ -5,11 +5,11 @@ import {
   type DeckComment,
   type DeckPatch,
   type DeckSnapshot,
-  NODESLIDE_AGENT_MODELS,
   NODESLIDE_DEFAULT_AGENT_MODEL,
   NODESLIDE_NEBIUS_AGENT_MODEL,
   NODESLIDE_NEBIUS_REVIEW_CONSENT,
   NODESLIDE_NEBIUS_VARIATIONS_CONSENT,
+  NODESLIDE_OFFERED_AGENT_MODELS,
   NODESLIDE_OPENROUTER_REVIEW_CONSENT,
   NODESLIDE_OPENROUTER_VARIATIONS_CONSENT,
   NODESLIDE_REASONING_EFFORTS,
@@ -140,7 +140,9 @@ describe('NodeSlide AI review inspector', () => {
     expect(defaultEffortIds).not.toContain('xhigh');
     expect(defaultEffortIds).not.toContain('max');
     expect(markup).not.toMatch(/data-testid="ai-provider-controls"[^>]*open=/);
-    const modelLabels = NODESLIDE_AGENT_MODELS.map((model) => `${model.label} · ${model.vendor}`);
+    const modelLabels = NODESLIDE_OFFERED_AGENT_MODELS.map(
+      (model) => `${model.label} · ${model.vendor}`,
+    );
     expect(modelLabels).toEqual(
       expect.arrayContaining([
         'Claude Sonnet 5 · Anthropic',

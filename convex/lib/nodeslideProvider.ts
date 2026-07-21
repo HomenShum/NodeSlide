@@ -107,6 +107,25 @@ const NODESLIDE_GEMINI_35_FLASH: Model<'openai-completions'> = {
   },
 };
 
+function reasoningDisabledBundledOpenRouterModel(
+  id: 'anthropic/claude-fable-5' | 'google/gemini-3.1-pro-preview',
+): Model<'openai-completions'> {
+  const model = openrouterProvider()
+    .getModels()
+    .find((candidate) => candidate.id === id);
+  if (!model || model.api !== 'openai-completions') {
+    throw new Error(`The pinned OpenRouter model ${id} is missing from the bundled catalog.`);
+  }
+  return { ...model, reasoning: false };
+}
+
+const NODESLIDE_CLAUDE_FABLE_5 = reasoningDisabledBundledOpenRouterModel(
+  'anthropic/claude-fable-5',
+);
+const NODESLIDE_GEMINI_31_PRO = reasoningDisabledBundledOpenRouterModel(
+  'google/gemini-3.1-pro-preview',
+);
+
 /**
  * NodeSlide-pinned OpenRouter model definitions. Each entry replaces the
  * bundled catalog entry with the same id (or is appended when the catalog
@@ -116,6 +135,8 @@ const NODESLIDE_GEMINI_35_FLASH: Model<'openai-completions'> = {
 export const NODESLIDE_OPENROUTER_MODEL_OVERRIDES: readonly Model<'openai-completions'>[] = [
   NODESLIDE_KIMI_K3,
   NODESLIDE_GEMINI_35_FLASH,
+  NODESLIDE_CLAUDE_FABLE_5,
+  NODESLIDE_GEMINI_31_PRO,
 ];
 
 export function openrouterProviderWithOverrides() {
@@ -209,7 +230,7 @@ export interface NodeSlideModelProbeReceipt {
   model: NodeSlideAgentModelId;
   provider: NodeSlideExternalProvider;
   upstreamModel: string;
-  maxTokens: 1;
+  maxTokens: 64;
   status: 'passed' | 'failed';
   stopReason?: string;
   latencyMs: number;
@@ -222,7 +243,9 @@ export interface NodeSlideModelProbeReceipt {
 }
 
 /**
- * Executes exactly one one-token completion for a catalog route. This is kept
+ * Executes exactly one bounded completion for an offered catalog route. Some
+ * providers spend their first tokens on hidden deliberation, so 64 tokens is
+ * the smallest cross-fleet budget proven to yield visible text. This is kept
  * below a server-only Convex action so an unauthenticated client cannot turn
  * the fleet probe into a cost-bearing endpoint.
  */
@@ -251,7 +274,7 @@ export async function probeNodeSlideModelOnce(
         reasoningEffort: 'low',
         systemPrompt: 'Reply with one character.',
         userText: '1',
-        maxTokens: 1,
+        maxTokens: 64,
         repairAttempt: false,
         signal: controller.signal,
       }),
@@ -264,7 +287,7 @@ export async function probeNodeSlideModelOnce(
       model: modelId,
       provider: route.provider,
       upstreamModel: route.upstreamId,
-      maxTokens: 1,
+      maxTokens: 64,
       status: passed ? 'passed' : 'failed',
       stopReason: result.stopReason,
       latencyMs: Date.now() - startedAt,
@@ -280,7 +303,7 @@ export async function probeNodeSlideModelOnce(
                   result.errorMessage,
                   `${route.label} via ${providerDisplayName(route.provider)}`,
                 )
-              : `The ${route.label} route returned no assistant text within one output token.`,
+              : `The ${route.label} route returned no assistant text within 64 output tokens.`,
           }),
     };
   } catch {
@@ -288,7 +311,7 @@ export async function probeNodeSlideModelOnce(
       model: modelId,
       provider: route.provider,
       upstreamModel: route.upstreamId,
-      maxTokens: 1,
+      maxTokens: 64,
       status: 'failed',
       latencyMs: Date.now() - startedAt,
       costMicroUsd: 0,

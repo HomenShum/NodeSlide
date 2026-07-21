@@ -23,12 +23,13 @@ import {
 } from 'react';
 import {
   type CreateDeckRequest,
-  NODESLIDE_AGENT_MODELS,
   NODESLIDE_DEFAULT_AGENT_MODEL,
   NODESLIDE_DEFAULT_REASONING_EFFORT,
+  NODESLIDE_OFFERED_AGENT_MODELS,
   NODESLIDE_REASONING_EFFORTS,
   type NodeSlideAgentModelId,
   type NodeSlideReasoningEffort,
+  isNodeSlideOfferedAgentModelId,
   nodeSlideAgentModel,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
@@ -130,6 +131,13 @@ export function ProjectDialog({
   initialMode = 'create',
   createEnabled = true,
 }: ProjectDialogProps) {
+  const initialDraftProviderModel = isNodeSlideOfferedAgentModelId(initialDraft?.providerModel)
+    ? initialDraft.providerModel
+    : NODESLIDE_DEFAULT_AGENT_MODEL;
+  const initialDraftProviderMode =
+    initialDraft?.providerMode === 'deterministic'
+      ? 'deterministic'
+      : nodeSlideProviderModeForModel(initialDraftProviderModel);
   const [mode, setMode] = useState<'create' | 'open'>(createEnabled ? initialMode : 'open');
   const [title, setTitle] = useState(initialDraft?.title ?? '');
   const [prompt, setPrompt] = useState(initialDraft?.prompt ?? '');
@@ -138,12 +146,10 @@ export function ProjectDialog({
   const [successCriteria, setSuccessCriteria] = useState('');
   const [themeId, setThemeId] = useState(profiles[0]?.id ?? 'editorial-signal');
   const [accessCode, setAccessCode] = useState('');
-  const [providerMode, setProviderMode] = useState<NodeSlideBriefProviderMode>(
-    initialDraft?.providerMode ?? nodeSlideProviderModeForModel(NODESLIDE_DEFAULT_AGENT_MODEL),
-  );
-  const [providerModel, setProviderModel] = useState<NodeSlideAgentModelId>(
-    initialDraft?.providerModel ?? NODESLIDE_DEFAULT_AGENT_MODEL,
-  );
+  const [providerMode, setProviderMode] =
+    useState<NodeSlideBriefProviderMode>(initialDraftProviderMode);
+  const [providerModel, setProviderModel] =
+    useState<NodeSlideAgentModelId>(initialDraftProviderModel);
   const [providerEffort, setProviderEffort] = useState<NodeSlideReasoningEffort>(
     initialDraft?.providerEffort ?? NODESLIDE_DEFAULT_REASONING_EFFORT,
   );
@@ -188,10 +194,8 @@ export function ProjectDialog({
       setMode(createEnabled ? initialMode : 'open');
       setTitle(initialDraft?.title ?? '');
       setPrompt(initialDraft?.prompt ?? '');
-      setProviderMode(
-        initialDraft?.providerMode ?? nodeSlideProviderModeForModel(NODESLIDE_DEFAULT_AGENT_MODEL),
-      );
-      setProviderModel(initialDraft?.providerModel ?? NODESLIDE_DEFAULT_AGENT_MODEL);
+      setProviderMode(initialDraftProviderMode);
+      setProviderModel(initialDraftProviderModel);
       setProviderEffort(initialDraft?.providerEffort ?? NODESLIDE_DEFAULT_REASONING_EFFORT);
       setAttachments(initialDraft?.attachments ?? []);
       setAttachmentError(null);
@@ -205,7 +209,14 @@ export function ProjectDialog({
     setProviderConsent(false);
     setAttachments([]);
     setAttachmentError(null);
-  }, [createEnabled, initialDraft, initialMode, open]);
+  }, [
+    createEnabled,
+    initialDraft,
+    initialDraftProviderMode,
+    initialDraftProviderModel,
+    initialMode,
+    open,
+  ]);
 
   const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     let nextMode: 'create' | 'open';
@@ -606,7 +617,7 @@ export function ProjectDialog({
                       setProviderConsent(false);
                     }}
                   >
-                    {NODESLIDE_AGENT_MODELS.map((model) => (
+                    {NODESLIDE_OFFERED_AGENT_MODELS.map((model) => (
                       <option key={model.id} value={model.id}>
                         {model.vendor} · {model.label} ·{' '}
                         {providerDisplayName(nodeSlideProviderModeForModel(model.id))}

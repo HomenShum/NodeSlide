@@ -1,6 +1,6 @@
-# Next session: externally blocked and human acceptance tail
+# Next session: maintenance and new goals
 
-Last updated 2026-07-20.
+Last updated 2026-07-21.
 
 NodeSlide's code-completable release, deployment, packaging, production camera,
 bilateral-CI work, and the stronger mounted NodeRoom browser proof are merged.
@@ -9,15 +9,14 @@ not reopen completed items without contradictory deterministic evidence.
 
 ## Exact shipped state
 
-- NodeSlide shipped-app main `6ee3aab402d3c599cccd322c140004663ae8a6da`
+- NodeSlide shipped-app main `955fbdbc5d7d635ba67ecc830515d78a94d0f2c0`
   includes the B6 DEV-only repair-camera receipt, the bounded Openverse repair,
-  E4's production video/screenshot/editable PPTX, fresh production logging, and
-  GitHub-environment receipts. The evidence-only handoff commit after that SHA
-  preserves both stale-redeploy observations.
+  E4's production video/screenshot/editable PPTX, production logging, the
+  credential-backed Linkup proof, and element-bound snapshot navigation.
 - Exact-main CI
-  [29798111891](https://github.com/HomenShum/NodeSlide/actions/runs/29798111891)
+  [29810144284](https://github.com/HomenShum/NodeSlide/actions/runs/29810144284)
   and production deployment
-  [29798347209](https://github.com/HomenShum/NodeSlide/actions/runs/29798347209)
+  [29810501034](https://github.com/HomenShum/NodeSlide/actions/runs/29810501034)
   passed through Convex, Vercel, immutable-URL, and canonical live-DOM gates.
 - The GitHub `production` environment's custom branch roster contains only
   `main` (administrators can bypass); exactly four deployment secret names are
@@ -59,15 +58,18 @@ not reopen completed items without contradictory deterministic evidence.
 `v0.2.1` was superseded because its public Ubuntu rebuild did not match its
 Windows-built manifest. Never rewrite that failure as a pass.
 
-## Remaining literal or externally blocked acceptance
+## Closed acceptance and retained observations
 
 Do not convert any of these into a green claim without the named evidence:
 
-1. F1/F2/F4 is externally blocked: production has no NodeSlide-owned Linkup,
-   Brave, Serper, or Tavily credential. Two consented attempts failed before
-   egress and mutated nothing. Never copy a credential from an unrelated local
-   project; configure one explicitly, then record snapshot → region → citing
-   element acceptance.
+1. F1/F2/F4 is closed. With explicit user authorization, the configured
+   production Linkup credential was transferred from NodeBench AI to the pinned
+   NodeSlide production Convex environment without exposing its value. The
+   committed production proof records consent, eight retained web sources, a
+   reviewable proposal, explicit acceptance, and an element-bound highlighted
+   snapshot region with zero browser errors. See
+   `docs/demo/nodeslide-web-research-proof/receipt.json` and its PNG/video
+   siblings.
 2. The stale-action reload component is implemented and regression-covered.
    The first production timing attempt signalled before Convex activation; a
    second submitted 2.880 seconds after activation. Both old clients succeeded
@@ -78,7 +80,8 @@ Do not convert any of these into a green claim without the named evidence:
 3. The production fleet probe is a completed red audit, not a healthy-fleet
    claim: 4/9 catalog routes returned assistant text and 5/9 failed or returned
    none. Its exact receipt is `artifacts/prod-proof-20260720/model-fleet-probe.json`.
-4. H5 remains human-only: send the Mike draft.
+4. H5 is closed by the user's confirmation that the Mike draft was already
+   sent. Do not draft or send another copy.
 
 I7 is closed by [NodeRoom PR #236](https://github.com/HomenShum/NodeRoom/pull/236)
 at NodeRoom main `616c902f09743613ae1cbddc97b5819fb29c831e`. Its committed

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "nodeslide.web-research-proof/v1",
+  "capturedAt": "2026-07-21T07:32:18.831Z",
+  "productionUrl": "https://nodeslide.vercel.app/?deck=deck_golden_1jklbty",
+  "instruction": "Research the official OpenAI Responses API migration guide. Replace the selected text exactly with \"Migrate to the Responses API.\" Cite the retrieved source that supports this claim.",
+  "consent": {
+    "control": "Toggle web research",
+    "enabledBeforeSubmit": true
+  },
+  "proposal": {
+    "reviewableBeforeMutation": true,
+    "acceptedExplicitly": true
+  },
+  "evidence": {
+    "sourceTitle": "OpenAI Assistants API Shutdown: Port Your Bot Before Aug 26 — Effloow",
+    "provider": "linkup",
+    "snapshotOpenedFromCitingElement": true,
+    "citingElement": "Section label\n· Stories with structure",
+    "highlightedRegionCount": 1,
+    "binding": "Claim region bound to Section label."
+  },
+  "browserIssues": [],
+  "status": "passed",
+  "screenshots": [
+    "01-consented-request.png",
+    "02-reviewable-proposal.png",
+    "03-snapshot-region-citing-element.png"
+  ]
+}

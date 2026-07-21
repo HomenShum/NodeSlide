@@ -107,17 +107,10 @@ try {
   const citingElement = provenArticle.getByTestId('evidence-citing-element').first();
   const citingElementText = (await citingElement.innerText()).trim();
   await citingElement.click();
-  await page.getByTestId('inspector-tab-data').click();
-  const reopenedArticle = page.locator('.ns-source-list article').filter({
-    has: page.getByTestId('evidence-citing-element').filter({ hasText: citingElementText }),
-  });
-  await reopenedArticle.getByTestId('evidence-snapshot-toggle').click();
-  const region = reopenedArticle.getByTestId('evidence-snapshot-region');
+  const region = provenArticle.getByTestId('evidence-snapshot-region');
   await region.waitFor({ timeout: 30_000 });
   const highlightCount = await region.getByTestId('evidence-snapshot-highlight').count();
-  const binding = (
-    await reopenedArticle.getByTestId('evidence-snapshot-binding').innerText()
-  ).trim();
+  const binding = (await provenArticle.getByTestId('evidence-snapshot-binding').innerText()).trim();
   if (highlightCount < 1 || !binding.startsWith('Claim region bound to ')) {
     throw new Error(`Snapshot region was not claim-bound: ${binding}`);
   }
@@ -127,9 +120,9 @@ try {
     fullPage: true,
   });
 
-  const articleText = await reopenedArticle.innerText();
+  const articleText = await provenArticle.innerText();
   const provider = articleText.match(/immutable excerpt returned by ([^,]+),/i)?.[1] ?? 'unknown';
-  const sourceTitle = (await reopenedArticle.locator('strong').first().innerText()).trim();
+  const sourceTitle = (await provenArticle.locator('strong').first().innerText()).trim();
   receipt = {
     schemaVersion: 'nodeslide.web-research-proof/v1',
     capturedAt: new Date().toISOString(),

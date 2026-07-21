@@ -228,26 +228,33 @@ acceptance remains.
 ## F · Evidence & screenshots — prove the lineage (P1)
 
 Original gap: web-research snapshot capture and region-highlighted evidence
-were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
+were schema-real but never live-verified. The complete lineage is now live-proved.
 
-- [ ] F1. Verify (or finish) snapshot capture on the web-research path; honest
+- [x] F1. Verify (or finish) snapshot capture on the web-research path; honest
       no-badge state when capture fails.
-- [ ] F2. Region highlight on the snapshot bound to the claim.
+- [x] F2. Region highlight on the snapshot bound to the claim.
 - [x] F3. Evidence tab: claim → source → element binding made visible/clickable.
       — DONE bbf4aaf; LIVE-PROVED on prod 2026-07-19: Evidence tab lists
       per-source citing elements ("Cited by 8/35 elements"); clicking
       `evidence-citing-element` "Headline · Stories with structure" flipped
       the inspector badge to "Selection · 1".
-- [ ] F4. Acceptance: live run showing a web claim whose snapshot region opens
+- [x] F4. Acceptance: live run showing a web claim whose snapshot region opens
       from the element that cites it.
-      — BLOCKED BY PRODUCTION CONFIGURATION (2026-07-20): two consented camera
-      attempts failed before egress with “Web research is not configured on
-      this deployment. No search request was sent.” The deck remained
-      unchanged; the Evidence tab had zero web snapshots, regions, or
-      highlights. Production has none of the supported provider variables
-      (`LINKUP_API_KEY`, `BRAVE_SEARCH_API_KEY`/`BRAVE_API_KEY`,
-      `SERPER_API_KEY`, `TAVILY_API_KEY`). Credentials found in unrelated local
-      projects were deliberately not copied across trust boundaries.
+      — DONE 2026-07-21. With the user's explicit authorization, the existing
+      production Linkup credential was transferred from NodeBench AI into the
+      pinned NodeSlide production Convex environment without printing or
+      persisting its value. Production retained eight web sources, held the
+      edit as a reviewable proposal until explicit acceptance, then opened the
+      citing element's immutable excerpt with one highlighted region and the
+      binding `Claim region bound to Section label.` Browser issues: zero.
+      Evidence: `docs/demo/nodeslide-web-research-proof/receipt.json`, three
+      PNGs, and `nodeslide-web-research-proof.webm`; exact-main CI
+      [29810144284](https://github.com/HomenShum/NodeSlide/actions/runs/29810144284),
+      conformance
+      [29810144771](https://github.com/HomenShum/NodeSlide/actions/runs/29810144771),
+      and production deploy
+      [29810501034](https://github.com/HomenShum/NodeSlide/actions/runs/29810501034)
+      passed at `955fbdbc5d7d635ba67ecc830515d78a94d0f2c0`.
 
 ## G · Thread/UX debt (P2)
 
@@ -330,7 +337,9 @@ were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
       branches, and preserved unrelated dirty/unmerged work for explicit
       triage. The standalone NodeSlide deployment is the canonical live demo;
       parity-studio remains the bounded dev-monorepo behavior mirror.
-- [ ] H5. Human: send the Mike draft (video URL now public via the README).
+- [x] H5. Human: send the Mike draft (video URL now public via the README).
+      — CLOSED 2026-07-21 by human confirmation: it was already sent. Do not
+      draft or send another copy.
 
 ## I · Injectable engine — NodeSlide as a reusable governed presentation system (P0 boundary, P1 packaging)
 
@@ -564,11 +573,10 @@ discipline as I1: audit before asserting; no invented org maps.
 
 ---
 
-## Suggested sequence — remaining literal acceptance
+## Suggested sequence — plan complete
 
 ```text
-1.  F1/F2/F4    visually prove snapshot capture and claim-bound regions
-2.  H5          human sends the Mike draft
+No unchecked capability-plan items remain.
 ```
 
 Organizing principle: **NodeSlide is an app plus a reusable governed

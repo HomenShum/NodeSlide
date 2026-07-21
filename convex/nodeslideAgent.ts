@@ -1401,6 +1401,9 @@ export const createDeckFromBrief = action({
       themeId,
       now: Date.now(),
       providerLive: provider?.ok === true,
+      ...(syntheticFaultResult?.applied
+        ? { requiredCharts: syntheticFaultResult.requiredCharts }
+        : {}),
       requestRevision: async (promptReport) =>
         await callBriefProvider({ previousSpec: firstSpec, reportJson: promptReport }),
     });

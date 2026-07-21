@@ -13,6 +13,9 @@ const signalTimeoutMs = boundedInteger(
   process.env.NODESLIDE_STALE_PROOF_SIGNAL_TIMEOUT_MS,
   1_800_000,
 );
+const deploymentRun = process.env.NODESLIDE_STALE_PROOF_DEPLOY_RUN ?? null;
+const deployedSha = process.env.NODESLIDE_STALE_PROOF_DEPLOY_SHA ?? null;
+const convexActivatedAt = process.env.NODESLIDE_STALE_PROOF_CONVEX_ACTIVATED_AT ?? null;
 
 if (!signalPath) fail('NODESLIDE_STALE_PROOF_SIGNAL is required');
 await mkdir(outputDirectory, { recursive: true });
@@ -27,6 +30,7 @@ page.on('console', (message) => {
 });
 
 let report;
+let submittedAt = null;
 try {
   const response = await page.goto(productionUrl, {
     waitUntil: 'domcontentloaded',
@@ -66,34 +70,62 @@ try {
   );
   await waitForSignal(signalPath, signalTimeoutMs);
 
-  const submittedAt = new Date().toISOString();
+  submittedAt = new Date().toISOString();
   await instruction.fill('Rewrite the headline and the body copy to be more direct.');
   await submit.click();
 
   const banner = page.getByTestId('deployment-update-banner');
-  await banner.waitFor({ state: 'visible', timeout: 180_000 });
-  const bannerText = (await banner.innerText()).replace(/\s+/gu, ' ').trim();
+  const proposal = page.getByTestId('proposal-card').first();
+  const outcome = await Promise.race([
+    banner.waitFor({ state: 'visible', timeout: 180_000 }).then(() => 'reload-banner'),
+    proposal.waitFor({ state: 'visible', timeout: 180_000 }).then(() => 'proposal-ready'),
+  ]);
   const threadErrors = await page.getByTestId('agent-thread-error').allTextContents();
-  const screenshotPath = path.join(outputDirectory, 'stale-socket-reload-banner.png');
-  await page.screenshot({ path: screenshotPath, fullPage: true });
+  if (outcome === 'proposal-ready') {
+    const screenshotPath = path.join(outputDirectory, 'stale-socket-not-reproduced.png');
+    await page.screenshot({ path: screenshotPath, fullPage: true });
+    report = {
+      schemaVersion: 'nodeslide.stale-redeploy-proof/v1',
+      status: 'not_reproduced',
+      productionUrl,
+      submittedAt,
+      observedAt: new Date().toISOString(),
+      deploymentRun,
+      deployedSha,
+      convexActivatedAt,
+      observation:
+        'The pre-deploy client remained operational after Convex activation and produced a reviewable, unapplied proposal; the stale-action rejection was not reproduced.',
+      threadErrors: threadErrors.map((value) => value.replace(/\s+/gu, ' ').trim()).slice(0, 3),
+      consoleErrorCount: consoleErrors.length,
+      consoleErrors: consoleErrors.slice(0, 5),
+      screenshot: path.basename(screenshotPath),
+    };
+  } else {
+    const bannerText = (await banner.innerText()).replace(/\s+/gu, ' ').trim();
+    const screenshotPath = path.join(outputDirectory, 'stale-socket-reload-banner.png');
+    await page.screenshot({ path: screenshotPath, fullPage: true });
 
-  const passed =
-    bannerText.includes('NodeSlide may have been updated.') &&
-    bannerText.includes('Reload before retrying; no successful change is being claimed.') &&
-    bannerText.includes('Reload NodeSlide');
-  report = {
-    schemaVersion: 'nodeslide.stale-redeploy-proof/v1',
-    status: passed ? 'passed' : 'failed',
-    productionUrl,
-    submittedAt,
-    observedAt: new Date().toISOString(),
-    bannerText,
-    threadErrors: threadErrors.map((value) => value.replace(/\s+/gu, ' ').trim()).slice(0, 3),
-    consoleErrorCount: consoleErrors.length,
-    consoleErrors: consoleErrors.slice(0, 5),
-    screenshot: path.basename(screenshotPath),
-  };
-  if (!passed) throw new Error('deployment reload banner did not contain its fail-closed copy');
+    const passed =
+      bannerText.includes('NodeSlide may have been updated.') &&
+      bannerText.includes('Reload before retrying; no successful change is being claimed.') &&
+      bannerText.includes('Reload NodeSlide');
+    report = {
+      schemaVersion: 'nodeslide.stale-redeploy-proof/v1',
+      status: passed ? 'passed' : 'failed',
+      productionUrl,
+      submittedAt,
+      observedAt: new Date().toISOString(),
+      deploymentRun,
+      deployedSha,
+      convexActivatedAt,
+      bannerText,
+      threadErrors: threadErrors.map((value) => value.replace(/\s+/gu, ' ').trim()).slice(0, 3),
+      consoleErrorCount: consoleErrors.length,
+      consoleErrors: consoleErrors.slice(0, 5),
+      screenshot: path.basename(screenshotPath),
+    };
+    if (!passed) throw new Error('deployment reload banner did not contain its fail-closed copy');
+  }
 } catch (error) {
   const screenshotPath = path.join(outputDirectory, 'stale-socket-proof-failed.png');
   await page.screenshot({ path: screenshotPath, fullPage: true }).catch(() => undefined);
@@ -101,7 +133,11 @@ try {
     schemaVersion: 'nodeslide.stale-redeploy-proof/v1',
     status: 'failed',
     productionUrl,
+    submittedAt,
     observedAt: new Date().toISOString(),
+    deploymentRun,
+    deployedSha,
+    convexActivatedAt,
     failure: error instanceof Error ? error.message : String(error),
     consoleErrorCount: consoleErrors.length,
     consoleErrors: consoleErrors.slice(0, 5),
@@ -116,7 +152,13 @@ try {
   await browser.close();
 }
 
-if (report.status !== 'passed') process.exit(1);
+if (report.status === 'failed') process.exit(1);
+if (report.status === 'not_reproduced') {
+  console.error(
+    `[stale-redeploy-proof] NOT_REPRODUCED ${path.join(outputDirectory, report.screenshot)}`,
+  );
+  process.exit(2);
+}
 console.log(`[stale-redeploy-proof] PASS ${path.join(outputDirectory, report.screenshot)}`);
 
 async function waitForSignal(file, timeoutMs) {

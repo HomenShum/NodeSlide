@@ -16,9 +16,12 @@
   ],
   "artifacts": {
     "video": "docs/demo/nodeslide-e4-openverse.mp4",
+    "videoSha256": "56fd886097fb2b1892d3992211d0729772c18d65191d6b0099c8561966101e68",
     "screenshot": "docs/demo/nodeslide-e4-openverse.png",
+    "screenshotSha256": "dc6a7f7080fdd7fb4d45a1831ad8e2c012f56c90c9f30c4e0cea1f7ebcefd2a2",
     "powerPoint": "docs/demo/nodeslide-e4-openverse.pptx",
-    "powerPointBytes": 254730
+    "powerPointBytes": 254730,
+    "powerPointSha256": "d545df10aeecfd1db9b4b22fa2de5baaf354cd4f11393ff35b283f9dbadb4b43"
   },
   "capturedAt": "2026-07-21T02:27:58.871Z",
   "independentVideoJudge": {

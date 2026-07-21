@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "nodeslide.github-production-environment/v1",
+  "auditedAt": "2026-07-21T02:59:45Z",
+  "repository": "HomenShum/NodeSlide",
+  "auditedMainSha": "04b034d8888202259db561deaa0525a4e552dd8e",
+  "environment": {
+    "name": "production",
+    "id": 18460150005,
+    "deploymentBranchPolicy": {
+      "customBranchPolicies": true,
+      "protectedBranches": false,
+      "policies": [
+        {
+          "name": "main",
+          "type": "branch"
+        }
+      ],
+      "canAdminsBypass": true
+    },
+    "secretNames": ["CONVEX_DEPLOY_KEY", "VERCEL_ORG_ID", "VERCEL_PROJECT_ID", "VERCEL_TOKEN"],
+    "variables": {
+      "NODESLIDE_PRODUCTION_DEPLOY_ENABLED": "true"
+    },
+    "obsoleteBypassSecretPresent": false
+  },
+  "exactMainDeployment": {
+    "ciRunId": 29796540673,
+    "deployRunId": 29796788784,
+    "deploymentId": 5531980190,
+    "headSha": "04b034d8888202259db561deaa0525a4e552dd8e",
+    "conclusion": "success",
+    "completedAt": "2026-07-21T02:51:48Z",
+    "convexDeploy": "success",
+    "vercelDeploy": "success",
+    "immutableUrlAndCanonicalLiveDomGate": "success",
+    "canonicalUrl": "https://nodeslide.vercel.app"
+  },
+  "immutableRelease": {
+    "tag": "v0.2.2",
+    "releaseId": 357037915,
+    "immutable": true,
+    "producerCommit": "a88fb57f111db82e9334d68fa7611a51ed54c3c1",
+    "annotatedTagObjectSha": "ec4870300e1ad7ddd74209aada3a47a26779b4bb",
+    "annotatedTagSigned": false,
+    "githubReleaseAttestationVerified": true,
+    "publicAssetCount": 12,
+    "downloadedAssetsHashMatched": 12,
+    "manifestSha256": "3930276da868ab25853a7857cb5c2ddab724d9931eabb3e5fb499394a806856a",
+    "producerRunIds": [29786787854, 29786786189],
+    "producerArtifactsByteIdentical": true,
+    "publicInstallUpgradeProofRunId": 29787121559,
+    "publicInstallUpgradeProofConclusion": "success",
+    "tamperRejected": true,
+    "mixedReleaseRejected": true,
+    "candidateRebuildMatchesPublicAssets": true
+  },
+  "claimBoundary": "Secret values were never read or recorded. The custom branch-policy roster contains only main, but GitHub reports that administrators can bypass the environment policy. The annotated tag is unsigned; the immutable GitHub release attestation and all twelve public asset digests verified."
+}

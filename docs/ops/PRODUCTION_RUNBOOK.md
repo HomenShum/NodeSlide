@@ -154,7 +154,7 @@ Convex backend defect. Authentication and CLI failures use the separate
 `convex-cli-error` code. For durable history and alerting beyond the CLI's
 recent window, configure a Convex log stream to an approved sink.
 
-## Model fleet one-token audit
+## Model fleet bounded audit
 
 Run the operator-only model audit after deploying the candidate Convex code:
 
@@ -163,11 +163,19 @@ npm run probe:model-fleet:prod
 ```
 
 The internal action invokes every `NODESLIDE_AGENT_MODELS` entry sequentially
-with `maxTokens: 1`. Its `nodeslide.model-fleet-probe/v1` JSON receipt records
+with a route-specific reasoning effort and bounded output cap. Mandatory-reasoning
+routes receive enough budget to emit visible text after deliberation. Its
+`nodeslide.model-fleet-probe/v1` JSON receipt records
 catalog/probed/failed counts, route identity, timing, token/cost telemetry, and
 only the presence and byte length of assistant output. It never returns model
 text or upstream error bodies. Treat the audit as passed only when the top-level
 `passed` field is `true` and `probedModelCount` equals `catalogModelCount`.
+
+For an auditable run without copying the protected deployment key locally,
+manually dispatch `nightly-production-probe.yml`. The manual path runs the same
+server-only action and uploads only the sanitized receipt; scheduled nightly
+runs retain the lower-cost create/edit/reload/export journey without the fleet
+audit.
 
 ## Read-only repository hygiene (H4 support)
 

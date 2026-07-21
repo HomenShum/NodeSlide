@@ -42,6 +42,12 @@ jobs:
         env:
           PROD_PROBE_URL: https://nodeslide.vercel.app
           PROD_PROBE_REPORT: artifacts/prod-probe/report.json
+      - name: Run bounded model-fleet audit for a manual operator probe
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          MODEL_FLEET_PROBE_OUTPUT: artifacts/model-fleet/model-fleet-probe.json
+        run: node scripts/capture-model-fleet-probe.mjs
       - name: Capture bounded Convex history after a red probe
         if: failure() && steps.production_probe.outcome == 'failure'
         continue-on-error: true
@@ -60,6 +66,7 @@ jobs:
           path: |
             artifacts/prod-probe/report.json
             artifacts/convex-logs/production.jsonl
+            artifacts/model-fleet/model-fleet-probe.json
           if-no-files-found: warn
           include-hidden-files: false
           retention-days: 14

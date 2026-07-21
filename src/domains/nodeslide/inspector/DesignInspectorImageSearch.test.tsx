@@ -30,8 +30,9 @@ const licensedResult: LicensedImageResult = {
 };
 
 beforeAll(() => {
-  // jsdom has no network and no createImageBitmap: the editor must fall back
-  // to the remote Openverse URL instead of embedding a compressed copy.
+  // jsdom has no network. Individual success cases opt into a bounded raster;
+  // the default proves that replacement fails closed instead of sending a
+  // remote URL that the server-side patch contract rejects.
   vi.stubGlobal(
     'fetch',
     vi.fn(() => Promise.reject(new TypeError('jsdom has no network'))),
@@ -107,6 +108,10 @@ describe('Design inspector licensed image search', () => {
     const user = userEvent.setup();
     const onApplyPatch = vi.fn<(operations: PatchOperation[], summary: string) => void>();
     const onSearchImages = vi.fn().mockResolvedValue({ results: [licensedResult] });
+    vi.mocked(fetch).mockResolvedValueOnce({
+      ok: true,
+      blob: async () => new Blob(['bounded-openverse-raster'], { type: 'image/webp' }),
+    } as Response);
     renderImageInspector({ onApplyPatch, onSearchImages });
 
     await user.type(screen.getByTestId('licensed-image-query'), 'wind turbines');
@@ -122,9 +127,24 @@ describe('Design inspector licensed image search', () => {
     expect(update.altText).toBe('Wind turbines at dusk');
     expect(update.credit).toBe('Ada Fotograf · BY-SA 4.0 via Openverse');
     expect(update.credit).toBe(licensedImageCredit(licensedResult));
-    // jsdom cannot embed, so the honest fallback is the remote licensed URL.
-    expect(update.imageUrl).toBe(licensedResult.url);
+    expect(update.imageUrl).toMatch(/^data:image\/webp;base64,/u);
+    expect(update.imageUrl.length).toBeLessThanOrEqual(680_000);
+    expect(fetch).toHaveBeenCalledWith(licensedResult.thumbnailUrl);
     expect(summary).toContain('Openverse');
+  });
+
+  it('fails closed when the licensed raster cannot be embedded', async () => {
+    const user = userEvent.setup();
+    const onApplyPatch = vi.fn<(operations: PatchOperation[], summary: string) => void>();
+    const onSearchImages = vi.fn().mockResolvedValue({ results: [licensedResult] });
+    renderImageInspector({ onApplyPatch, onSearchImages });
+
+    await user.type(screen.getByTestId('licensed-image-query'), 'wind turbines');
+    await user.click(screen.getByTestId('licensed-image-search-button'));
+    await user.click(await screen.findByTestId('licensed-image-ov-123'));
+
+    expect(await screen.findByText(/could not embed this Openverse image/i)).toBeTruthy();
+    expect(onApplyPatch).not.toHaveBeenCalled();
   });
 
   it('surfaces search failures honestly instead of an empty grid', async () => {

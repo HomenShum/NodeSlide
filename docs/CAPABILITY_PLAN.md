@@ -206,9 +206,15 @@ acceptance remains.
       aspect controls with renderer and regression coverage.
 - [ ] E4. Acceptance: placeholder → search → insert with license credit on
       camera; export stays clean (capability sync already shipped).
-      — PARTIAL: a headless live search → insert → credit journey passed on
-      production and capability sync keeps export truthful. The literal camera
-      acceptance remains.
+      — RED PRODUCTION RECEIPT (2026-07-20): the camera reached 8 commercially
+      licensed Openverse results, but both insert attempts failed closed in
+      `nodeslide:applyPatch` (digest `sha256:58546ec2cb70e554`) and left the
+      placeholder/credit unchanged. The sanitized diagnosis is retained at
+      `artifacts/convex-logs/openverse-insert-diagnostic.json`; it identified a
+      client fallback to a new remote URL that the server correctly rejects.
+      The bounded-thumbnail/embed fix is regression-tested locally. Keep E4
+      open until that fix is deployed and a separate post-fix camera receipt
+      proves insertion, license credit, and export truth.
 
 ## F · Evidence & screenshots — prove the lineage (P1)
 
@@ -225,6 +231,14 @@ were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
       the inspector badge to "Selection · 1".
 - [ ] F4. Acceptance: live run showing a web claim whose snapshot region opens
       from the element that cites it.
+      — BLOCKED BY PRODUCTION CONFIGURATION (2026-07-20): two consented camera
+      attempts failed before egress with “Web research is not configured on
+      this deployment. No search request was sent.” The deck remained
+      unchanged; the Evidence tab had zero web snapshots, regions, or
+      highlights. Production has none of the supported provider variables
+      (`LINKUP_API_KEY`, `BRAVE_SEARCH_API_KEY`/`BRAVE_API_KEY`,
+      `SERPER_API_KEY`, `TAVILY_API_KEY`). Credentials found in unrelated local
+      projects were deliberately not copied across trust boundaries.
 
 ## G · Thread/UX debt (P2)
 
@@ -236,9 +250,16 @@ were schema-real but never live-verified. F3 is complete; F1/F2/F4 remain.
 - [x] G2. Streaming assistant text in AgentThread (reads as alive, not batch).
       — DONE in PR #28: provider deltas persist into the active assistant step
       and render incrementally with deterministic regression coverage.
+      LIVE-PROVED on exact deployed SHA `d1119ae664cda26e3b183350c34f91ae4da9ca41`:
+      the production DOM exposed `data-stream-state=streaming`, a live cursor,
+      and incremental assistant text before the review card existed.
 - [x] G3. Nested handoff rendering (pairs with B2).
       — DONE in PR #28: parent/child handoffs render as a nested thread tree
-      with model attribution instead of a flat status list.
+      with model attribution instead of a flat status list. The same production
+      run showed Kimi K3 planner → Gemini 3.5 Flash executor, two reviewable
+      operations with Accept/Reject, `5,885 → 435` tokens, `$0.0046`, 8 spans,
+      16 trace records, zero errors, and the executor nested beneath its planner.
+      The evidence-only proposal was rejected after capture.
 - [x] G4. Creation wait UX: informative staged progress on the landing (what
       the 2–4 min is doing), since Kimi's tail is slow.
       — DONE c69b164; LIVE-PROVED on prod 2026-07-19: real creation from the

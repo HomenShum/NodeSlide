@@ -172,11 +172,7 @@ describe('production GitHub workflow configuration', () => {
     }
     expect(workflow).toContain('rm -rf artifacts/close-all-gaps-20260722/acceptance/ui-qa');
     expect(
-      appearsBefore(
-        workflow,
-        'Clear checkout-bundled evidence outputs',
-        'Set up Node.js',
-      ),
+      appearsBefore(workflow, 'Clear checkout-bundled evidence outputs', 'Set up Node.js'),
     ).toBe(true);
 
     const requiredManualStages = [

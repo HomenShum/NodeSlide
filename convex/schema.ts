@@ -2,6 +2,7 @@ import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
 import { nodeslideExecutionTraceFields } from './lib/nodeslideExecutionTraceValidator';
 import { nodeslideShadowComparisonFields } from './lib/nodeslideShadowComparisonValidator';
+import { nodekitCaseflowTables } from './nodekitCaseflowTables';
 import {
   nodeslideBoundingBoxValidator,
   nodeslideBriefValidator,
@@ -222,6 +223,7 @@ const nodeslidePublishedSnapshotValidator = v.object({
 });
 
 export default defineSchema({
+  ...nodekitCaseflowTables,
   projects: defineTable({
     clientSessionId: v.optional(v.string()),
     title: v.string(),

@@ -161,13 +161,21 @@ describe('production GitHub workflow configuration', () => {
       appearsBefore(workflow, 'id: deployed', 'Check out the exact deployed source commit'),
     ).toBe(true);
     expect(workflow).toContain('Clear checkout-bundled evidence outputs');
-    expect(workflow).toContain('rm -f artifacts/prod-probe/report.json');
+    for (const artifact of [
+      'artifacts/prod-probe/report.json',
+      'artifacts/convex-logs/production.jsonl',
+      'artifacts/model-fleet/model-fleet-probe.json',
+      'artifacts/model-fleet/free-router-fleet-probe.json',
+      'artifacts/model-fleet/free-router-structured-probe.json',
+    ]) {
+      expect(workflow).toContain(`rm -f ${artifact}`);
+    }
     expect(workflow).toContain('rm -rf artifacts/close-all-gaps-20260722/acceptance/ui-qa');
     expect(
       appearsBefore(
         workflow,
         'Clear checkout-bundled evidence outputs',
-        'Run fail-closed production journey',
+        'Set up Node.js',
       ),
     ).toBe(true);
 
@@ -184,6 +192,7 @@ describe('production GitHub workflow configuration', () => {
     }
     for (const artifact of [
       'artifacts/prod-probe/report.json',
+      'artifacts/convex-logs/production.jsonl',
       'artifacts/model-fleet/model-fleet-probe.json',
       'artifacts/model-fleet/free-router-fleet-probe.json',
       'artifacts/model-fleet/free-router-structured-probe.json',

@@ -12,6 +12,11 @@ source revision:
 The package is pinned by full Git commit in `package.json` and `package-lock.json`. No deep
 NodeKit source import is used.
 
+This candidate proves an authenticated application-owned Convex implementation and transport
+adapter. The current anonymous live Studio still uses its established owner-capability flow and
+does not yet invoke Caseflow; wiring a signed-in Studio journey is a separate adoption and
+screenshot gate. This evidence must not be represented as production traffic.
+
 ## Authority boundary
 
 NodeKit Caseflow is a lifecycle projection. It does not replace or fork the existing
@@ -81,6 +86,9 @@ functions. It proves:
 - receipt hash recomputation with NodeKit's public `contentHash()`;
 - real deck, generation, patch, validation, and domain-receipt references in the completion
   receipt.
+
+The candidate-keyed machine-readable evidence is stored in
+`proof/nodekit-caseflow-consumer.json`.
 
 ## Extraction boundary
 

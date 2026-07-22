@@ -1,0 +1,10 @@
+{
+  "_comment": "Slide->archetype fixtures for the native builder proof deck. Titles match build-atlas-native-pptx.mjs exactly. artifactType is the archetype id; the companion map resolves it identically.",
+  "fixtures": [
+    { "number": 1, "title": "Model cost per accepted slide", "artifactType": "data.bar-comparison" },
+    { "number": 2, "title": "Repair count by harness version", "artifactType": "data.trend-line" },
+    { "number": 3, "title": "Atlas gate outcomes on v3", "artifactType": "data.table" },
+    { "number": 4, "title": "Cost/quality objective", "artifactType": "technical.equation" },
+    { "number": 5, "title": "Source to evidence to claim to slide to export", "artifactType": "systems.architecture" }
+  ]
+}

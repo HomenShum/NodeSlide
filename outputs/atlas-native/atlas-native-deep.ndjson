@@ -1,0 +1,15 @@
+{"kind":"slide","slide":1,"title":"DATA.BAR-COMPARISON","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":1}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":1}
+{"kind":"slide","slide":2,"title":"DATA.TREND-LINE","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":2}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":2}
+{"kind":"slide","slide":3,"title":"DATA.TABLE","counts":{"textRuns":15,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"15 text runs","artifactKind":"text","slide":3}
+{"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":3}
+{"kind":"slide","slide":4,"title":"TECHNICAL.EQUATION","counts":{"textRuns":3,"equations":1,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":4}
+{"kind":"artifact","signal":"1 OMML oMath elements","artifactKind":"equation","slide":4}
+{"kind":"slide","slide":5,"title":"SYSTEMS.ARCHITECTURE","counts":{"textRuns":8,"equations":0,"tables":0,"graphicFrames":0,"connectors":4,"shapes":13,"pictures":0}}
+{"kind":"artifact","signal":"8 text runs","artifactKind":"text","slide":5}
+{"kind":"artifact","signal":"4 connectors joining 13 shapes","artifactKind":"diagram","slide":5}

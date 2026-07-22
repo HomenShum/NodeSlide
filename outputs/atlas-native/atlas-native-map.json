@@ -1,0 +1,8 @@
+{
+  "_comment": "Identity map: the native builder already labels each slide with its archetype id, so the topology gate resolves it directly rather than through a deck-vocabulary alias.",
+  "data.bar-comparison": "data.bar-comparison",
+  "data.trend-line": "data.trend-line",
+  "data.table": "data.table",
+  "technical.equation": "technical.equation",
+  "systems.architecture": "systems.architecture"
+}

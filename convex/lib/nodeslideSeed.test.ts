@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { NODESLIDE_ARTIFACT_SPEC_VERSION } from '../../shared/nodeslideArtifactRegistry.js';
 import { validateSnapshot } from '../../src/domains/nodeslide/slidelang/validation';
 import {
   buildBriefNodeSlide,
@@ -244,6 +245,98 @@ describe('NodeSlide seed', () => {
       'Execute the critical moves',
       'Review measurable outcomes',
     ]);
+  });
+
+  it('compiles deterministic success criteria through a source-bound canonical ArtifactSpec', () => {
+    const brief = {
+      prompt: 'Explain a bounded pilot.',
+      audience: 'Reviewers',
+      purpose: 'earn confidence in the pilot',
+      successCriteria: ['Show the boundary', 'Name the owner'],
+    };
+    const spec = deterministicBriefSpec('Pilot story', brief);
+    const successSlide = spec.slides.find((slide) => slide.title === 'What success looks like');
+
+    expect(successSlide?.artifactSpec).toMatchObject({
+      schemaVersion: NODESLIDE_ARTIFACT_SPEC_VERSION,
+      id: 'deterministic-success-signals',
+      kind: 'chart',
+      sourceIds: ['brief:success-criteria'],
+      provenance: {
+        truthState: 'derived',
+        sourceRefs: ['brief:success-criteria'],
+      },
+      payload: {
+        xAxis: { labels: ['S1', 'S2'] },
+        series: [{ id: 'defined-signals', values: [1, 1] }],
+      },
+    });
+
+    const snapshot = buildBriefNodeSlide({
+      deckId: 'deck-deterministic-typed-success',
+      projectId: 'project-deterministic-typed-success',
+      title: 'Pilot story',
+      brief,
+      themeId: 'quiet-precision',
+      now: 1_000,
+    }).snapshot;
+    const authoredChart = snapshot.elements.find(
+      (element) => element.kind === 'chart' && element.authoredArtifactBinding?.kind === 'chart',
+    );
+    const successCriteriaSource = snapshot.sources.find(
+      (source) => source.title === 'Brief success criteria',
+    );
+
+    expect(authoredChart).toMatchObject({
+      kind: 'chart',
+      sourceIds: [successCriteriaSource?.id],
+      authoredArtifactBinding: {
+        artifactId: 'deterministic-success-signals',
+        kind: 'chart',
+        truthState: 'derived',
+        sourceIds: [successCriteriaSource?.id],
+      },
+    });
+    expect(validateSnapshot(snapshot).issues).toEqual([]);
+  });
+
+  it('labels default deterministic success signals illustrative without inventing source refs', () => {
+    const brief = {
+      prompt: 'Explain a bounded pilot.',
+      audience: 'Reviewers',
+      purpose: 'earn confidence in the pilot',
+      successCriteria: [],
+    };
+    const spec = deterministicBriefSpec('Pilot story', brief);
+    const successSlide = spec.slides.find((slide) => slide.title === 'What success looks like');
+
+    expect(successSlide?.artifactSpec).toMatchObject({
+      schemaVersion: NODESLIDE_ARTIFACT_SPEC_VERSION,
+      kind: 'chart',
+      sourceIds: [],
+      provenance: { truthState: 'illustrative', sourceRefs: [] },
+    });
+
+    const snapshot = buildBriefNodeSlide({
+      deckId: 'deck-deterministic-illustrative-success',
+      projectId: 'project-deterministic-illustrative-success',
+      title: 'Pilot story',
+      brief,
+      themeId: 'quiet-precision',
+      now: 1_000,
+    }).snapshot;
+    expect(
+      snapshot.elements.find((element) => element.authoredArtifactBinding?.kind === 'chart')
+        ?.authoredArtifactBinding,
+    ).toMatchObject({
+      artifactId: 'deterministic-success-signals',
+      truthState: 'illustrative',
+      sourceIds: [],
+    });
+    expect(validateSnapshot(snapshot).issues.filter((issue) => issue.severity === 'error')).toEqual(
+      [],
+    );
+    expect(validateNodeSlideSnapshot(snapshot, 1_000).publishOk).toBe(true);
   });
 
   it('retains requested structured primitives when the named model falls back', () => {

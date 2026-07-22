@@ -107,7 +107,7 @@ export function assertProductionProbeRetentionReceipt(value, cleanupToken) {
     (value.alreadyAbsent && (value.deletedRowCount !== 0 || countValues.length !== 0)) ||
     value.cleanupBindingDigest !== productionProbeCleanupBinding(cleanupToken) ||
     !SHA256_PATTERN.test(receiptDigest ?? '') ||
-    receiptDigest !== digest(JSON.stringify(unsigned))
+    receiptDigest !== digest(canonicalJson(unsigned))
   ) {
     throw new Error('Production probe cleanup did not prove token-bound zero retention.');
   }
@@ -188,7 +188,7 @@ export function assertRetentionReceipt(value, expectedBindings) {
     !SHA256_PATTERN.test(value.principalBindingDigest ?? '') ||
     !SHA256_PATTERN.test(value.cleanupTicket ?? '') ||
     !SHA256_PATTERN.test(receiptDigest ?? '') ||
-    receiptDigest !== digest(JSON.stringify(unsigned))
+    receiptDigest !== digest(canonicalJson(unsigned))
   ) {
     throw new Error('Fixture cleanup did not prove zero retained deck/source rows.');
   }
@@ -205,4 +205,16 @@ export function assertRetentionReceipt(value, expectedBindings) {
 
 function digest(value) {
   return `sha256:${createHash('sha256').update(value, 'utf8').digest('hex')}`;
+}
+
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value)
+      .filter((key) => value[key] !== undefined)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value);
 }

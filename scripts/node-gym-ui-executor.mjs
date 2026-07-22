@@ -470,7 +470,7 @@ async function ownedWorkspaceCredentials(targetPage) {
 async function captureArtifactSpecShadow(targetConvexUrl, deckId, accessKey) {
   if (!deckId || !accessKey) return sanitizeNodeGymArtifactShadowReceipt(null);
   try {
-    const client = new ConvexHttpClient(targetConvexUrl.href);
+    const client = new ConvexHttpClient(targetConvexUrl.origin);
     const receipt = await client.query(api.nodeslideArtifactSpec.shadowCompile, {
       deckId,
       ownerAccessKey: accessKey,
@@ -502,7 +502,7 @@ async function captureGymArtifactEvidence(
   if (!deckId || !accessKey || artifactSpecShadow?.status !== 'passed')
     return failed('gym_projection_prerequisite_missing');
   try {
-    const client = new ConvexHttpClient(targetConvexUrl.href);
+    const client = new ConvexHttpClient(targetConvexUrl.origin);
     const receipt = await client.query(api.nodeslideArtifactSpec.gymArtifactEvidence, {
       deckId,
       ownerAccessKey: accessKey,
@@ -552,7 +552,7 @@ async function cleanupUiFixture() {
   }
   diagnosticTokens.add(createdDeckId);
   diagnosticTokens.add(ownerAccessKey);
-  const client = new ConvexHttpClient(convexUrl.href);
+  const client = new ConvexHttpClient(convexUrl.origin);
   const receipt = await cleanupNodeSlideProductionFixture({
     client,
     mutation: api.nodeslideRetention.deleteOwnedWorkspace,

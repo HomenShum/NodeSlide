@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { buildArtifactArenaCoverage, scoreReceiptGates } from './artifact-atlas-coverage.mjs';
 
 export const ARTIFACT_ATLAS_SCHEMA_VERSION = 'nodeslide.artifact-atlas/v1';
 export const ARTIFACT_ARENA_HARNESS_SCHEMA_VERSION = 'nodeslide.artifact-arena-harness/v1';
@@ -207,6 +208,9 @@ export function buildArtifactArenaMatrix(atlas, harness, filters = {}) {
     harnessDigest: validation.harnessDigest,
     candidateCount: candidates.length,
     candidateDigests: candidates.map((candidate) => candidate.candidateDigest),
+    // Coverage against the FULL matrix, so a filtered run cannot read as exhaustive. Every
+    // combination the filters omitted is listed with a typed reason.
+    coverage: buildArtifactArenaCoverage(atlas, harness, filters),
     candidates,
   };
   return { ...partial, matrixDigest: digest(partial) };
@@ -253,6 +257,9 @@ export function createArtifactShowcaseReceipt({ candidate, evaluation, outputs, 
       outputTokens: finiteOrNull(evaluation?.outputTokens),
       costMicroUsd: finiteOrNull(evaluation?.costMicroUsd),
     },
+    // Honest tri-state gate scoring over the RAW evaluation: a gate passed with null/undefined is
+    // recorded as not-run, never as a pass or a fail. The booleans above stay for back-compat.
+    gateScore: scoreReceiptGates(evaluation),
     outputs: {
       browserRender: outputs?.browserRender ?? null,
       pptxRender: outputs?.pptxRender ?? null,

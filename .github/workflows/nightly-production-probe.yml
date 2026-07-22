@@ -69,6 +69,14 @@ jobs:
         run: npm ci
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
+      - name: Clear checkout-bundled evidence outputs
+        shell: bash
+        run: |
+          rm -f artifacts/prod-probe/report.json
+          rm -f artifacts/model-fleet/model-fleet-probe.json
+          rm -f artifacts/model-fleet/free-router-fleet-probe.json
+          rm -f artifacts/model-fleet/free-router-structured-probe.json
+          rm -rf artifacts/close-all-gaps-20260722/acceptance/ui-qa
       - name: Run fail-closed production journey
         id: production_probe
         run: node scripts/prod-probe.mjs

@@ -144,6 +144,10 @@ describe('production GitHub workflow configuration', () => {
       path.join(root, 'scripts', 'capture-model-fleet-probe.mjs'),
       'utf8',
     );
+    const deploymentIdentity = await readFile(
+      path.join(root, 'scripts', 'lib', 'production-deployment-identity.mjs'),
+      'utf8',
+    );
 
     expect(workflow).toContain('timeout-minutes: 60');
     expect(workflow).toContain('environment: production');
@@ -151,9 +155,20 @@ describe('production GitHub workflow configuration', () => {
     expect(workflow).toContain('source === context.sha');
     expect(workflow).toContain("candidate.path === '.github/workflows/deploy-production.yml'");
     expect(workflow).not.toContain("candidate.name === 'Deploy production'");
+    expect(deploymentIdentity).not.toContain("run?.name !== 'Deploy production'");
     expect(workflow).toContain('ref: ${{ steps.deployed.outputs.sha }}');
     expect(
       appearsBefore(workflow, 'id: deployed', 'Check out the exact deployed source commit'),
+    ).toBe(true);
+    expect(workflow).toContain('Clear checkout-bundled evidence outputs');
+    expect(workflow).toContain('rm -f artifacts/prod-probe/report.json');
+    expect(workflow).toContain('rm -rf artifacts/close-all-gaps-20260722/acceptance/ui-qa');
+    expect(
+      appearsBefore(
+        workflow,
+        'Clear checkout-bundled evidence outputs',
+        'Run fail-closed production journey',
+      ),
     ).toBe(true);
 
     const requiredManualStages = [

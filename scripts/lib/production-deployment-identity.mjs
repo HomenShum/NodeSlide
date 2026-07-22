@@ -106,7 +106,6 @@ export async function verifyNodeSlideDeploymentRun(workflowRun, expectedCommitSh
   if (
     run?.html_url !== workflowRun.url ||
     run?.repository?.full_name !== NODESLIDE_REPOSITORY ||
-    run?.name !== 'Deploy production' ||
     run?.path !== NODESLIDE_DEPLOY_WORKFLOW_PATH ||
     run?.display_title !== nodeSlideDeploymentRunTitle(expectedCommitSha) ||
     !['workflow_run', 'workflow_dispatch'].includes(run?.event) ||

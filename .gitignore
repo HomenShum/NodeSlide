@@ -1,5 +1,8 @@
 node_modules/
 dist/
+!scripts/fixtures/node-gym-core-v0.0.1/dist/
+!scripts/fixtures/node-gym-core-v0.0.1/dist/index.js
+!scripts/fixtures/node-gym-core-v0.0.1/dist/index.d.ts
 .env
 .env.*
 *.local

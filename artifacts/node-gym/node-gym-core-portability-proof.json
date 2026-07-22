@@ -1,6 +1,6 @@
 {
   "schemaVersion": "nodekit.gym-core-portability-proof/v1",
-  "passedAt": "2026-07-22T13:27:57.135Z",
+  "passedAt": "2026-07-22T13:39:18.705Z",
   "package": "@nodekit/gym-core",
   "packageSchemaVersion": "nodekit.gym/v1",
   "dependencyFree": true,

@@ -51,8 +51,10 @@
     "typecheck": "tsc -b && npm run typecheck --workspaces --if-present",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "test": "vitest run && npm run test --workspaces --if-present",
+    "test": "vitest run && npm run test:nodekit-proof-guard && npm run test --workspaces --if-present",
     "test:nodekit-caseflow": "vitest run convex/nodekitCaseflow.test.ts",
+    "test:nodekit-proof-guard": "node --test scripts/lib/nodekit-consumer-proof-guard.test.mjs",
+    "proof:nodekit-caseflow": "node scripts/prove-nodekit-caseflow-consumer.mjs",
     "test:watch": "vitest"
   },
   "dependencies": {

@@ -11,6 +11,8 @@ import {
   type ValidationIssue,
   type ValidationResult,
 } from '../../shared/nodeslide';
+import { isSafeNodeSlideArtifactSourceUrl } from '../../shared/nodeslideArtifactRegistry.js';
+import { compileNodeSlideArtifactSpecs } from '../../shared/nodeslideArtifactSpec';
 import { geometryIssueDrafts } from '../../shared/nodeslideGeometryChecks';
 import type { SignatureProfile } from '../../shared/nodeslideSignature';
 import { onBrandIssues } from '../../shared/nodeslideSignatureApply';
@@ -239,6 +241,20 @@ export function validateNodeSlideSnapshot(
     });
   }
 
+  const artifactCompilation = compileNodeSlideArtifactSpecs(snapshot).receipt;
+  artifactCompilation.issues.forEach((artifactIssue, index) => {
+    addIssue(
+      {
+        severity: artifactIssue.severity,
+        code: 'artifact_spec',
+        message: `[${artifactIssue.code}] ${artifactIssue.message}`,
+        ...(artifactIssue.slideId ? { slideId: artifactIssue.slideId } : {}),
+        ...(artifactIssue.elementId ? { elementId: artifactIssue.elementId } : {}),
+      },
+      `artifact:${artifactIssue.artifactId ?? ''}:${index}`,
+    );
+  });
+
   const hasErrors = issues.some((issue) => issue.severity === 'error');
   const hasPublishBlocker = issues.some(
     (issue) =>
@@ -264,6 +280,7 @@ export function validateNodeSlideSnapshot(
     issues,
     checkedAt,
     toolchainVersion: NODESLIDE_TOOLCHAIN_VERSION,
+    artifactCompilation,
   };
 }
 
@@ -589,13 +606,16 @@ function validateElement(
 
 function isSafeMediaUrl(value: string, kind: 'image' | 'video'): boolean {
   const normalized = value.trim().toLowerCase();
-  if (normalized.startsWith('https://')) return true;
+  if (normalized.startsWith('https://')) return isSafeNodeSlideArtifactSourceUrl(value);
   return normalized.startsWith(`data:${kind}/`);
 }
 
 function isSafeCaptionUrl(value: string): boolean {
   const normalized = value.trim().toLowerCase();
-  return normalized.startsWith('https://') || normalized.startsWith('data:text/vtt');
+  return (
+    (normalized.startsWith('https://') && isSafeNodeSlideArtifactSourceUrl(value)) ||
+    normalized.startsWith('data:text/vtt')
+  );
 }
 
 function validateFlatGroups(

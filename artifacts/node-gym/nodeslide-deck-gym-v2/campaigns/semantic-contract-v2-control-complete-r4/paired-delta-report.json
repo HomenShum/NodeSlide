@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "nodekit.gym-paired-delta-report/v1",
+  "ok": true,
+  "issueCodes": [],
+  "pairCount": 1,
+  "dimensions": {
+    "briefAdherence": {
+      "sampleSize": 1,
+      "mean": 0,
+      "confidence95": null,
+      "probabilityPositive": 0
+    },
+    "storyQuality": {
+      "sampleSize": 1,
+      "mean": 0,
+      "confidence95": null,
+      "probabilityPositive": 0
+    },
+    "factualAccuracy": {
+      "sampleSize": 1,
+      "mean": 0,
+      "confidence95": null,
+      "probabilityPositive": 0
+    },
+    "toolReliability": {
+      "sampleSize": 1,
+      "mean": 0,
+      "confidence95": null,
+      "probabilityPositive": 0
+    },
+    "exportFidelity": {
+      "sampleSize": 1,
+      "mean": 0,
+      "confidence95": null,
+      "probabilityPositive": 0
+    },
+    "repairSuccess": {
+      "sampleSize": 1,
+      "mean": 0,
+      "confidence95": null,
+      "probabilityPositive": 0
+    },
+    "editability": {
+      "sampleSize": 1,
+      "mean": 0,
+      "confidence95": null,
+      "probabilityPositive": 0
+    },
+    "visualStructuralQuality": {
+      "sampleSize": 1,
+      "mean": 0,
+      "confidence95": null,
+      "probabilityPositive": 0
+    }
+  },
+  "expectedPairCount": 1,
+  "complete": true
+}

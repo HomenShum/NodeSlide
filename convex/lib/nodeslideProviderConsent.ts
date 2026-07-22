@@ -8,6 +8,7 @@ import {
   type NodeSlideProviderMode,
   type NodeSlideReasoningEffort,
   isNodeSlideAgentModelId,
+  isNodeSlideOfferedAgentModelId,
   isNodeSlideReasoningEffort,
   nodeSlideAgentModel,
   nodeSlideDefaultModelForProviderMode,
@@ -83,6 +84,12 @@ export function validateNodeSlideProviderChoice(
     throw new NodeSlideProviderConsentError(
       'invalid_request',
       'Choose a supported NodeSlide agent model.',
+    );
+  }
+  if (!isNodeSlideOfferedAgentModelId(selectedModel)) {
+    throw new NodeSlideProviderConsentError(
+      'invalid_request',
+      'The selected model is not production-qualified for user requests.',
     );
   }
   if (

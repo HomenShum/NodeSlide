@@ -9,18 +9,28 @@ import { pathToFileURL } from 'node:url';
  * deployment, or malformed HTML all fail closed without logging response data.
  */
 export function verifyDeployedHtml(distHtml, deployedHtml) {
-  const expectedEntry = hashedEntry(distHtml, 'locally gated dist HTML');
-  const deployedEntry = hashedEntry(deployedHtml, 'authenticated deployment HTML');
-  if (deployedEntry !== expectedEntry) {
-    throw new Error('Authenticated immutable deployment served a different bundle entry.');
+  const expectedAssets = hashedAssets(distHtml, 'locally gated dist HTML');
+  const deployedAssets = hashedAssets(deployedHtml, 'authenticated deployment HTML');
+  if (JSON.stringify(deployedAssets) !== JSON.stringify(expectedAssets)) {
+    throw new Error('Authenticated deployment served a different hashed asset manifest.');
   }
-  return expectedEntry;
+  return expectedAssets.find((asset) => asset.endsWith('.js'));
 }
 
-function hashedEntry(html, label) {
-  const match = String(html).match(/\/assets\/index-[\w-]+\.js/);
-  if (!match) throw new Error(`${label} did not reference a hashed application entry.`);
-  return match[0];
+function hashedAssets(html, label) {
+  const assets = [
+    ...new Set(
+      [
+        ...String(html).matchAll(
+          /(?:src|href)=["'](\/assets\/[A-Za-z0-9._/-]+\.(?:css|js))["']/giu,
+        ),
+      ].map((match) => match[1]),
+    ),
+  ].sort();
+  if (!assets.some((asset) => asset.endsWith('.js'))) {
+    throw new Error(`${label} did not reference a hashed application entry.`);
+  }
+  return assets;
 }
 
 async function main() {

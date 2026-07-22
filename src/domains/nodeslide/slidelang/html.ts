@@ -1,4 +1,5 @@
 import type { ChartData, DeckSnapshot, Slide, SlideElement } from '../../../../shared/nodeslide';
+import { assertNodeSlideArtifactCompilation } from '../../../../shared/nodeslideArtifactSpec';
 import { type SlideSourceReference, elementSourceIds, slideSourceReferences } from './provenance';
 import {
   SVG_HEIGHT,
@@ -545,12 +546,14 @@ function renderVideo(snapshot: DeckSnapshot, element: SlideElement, box: SvgBox)
   if (!video?.url.trim()) {
     return renderImage(snapshot, { ...element, altText: 'Video unavailable' }, box);
   }
-  const poster = video.posterUrl?.trim() ? ` poster="${escapeHtml(video.posterUrl.trim())}"` : '';
   const label = video.title?.trim() || element.altText?.trim() || element.name;
-  const captions = video.captionsUrl?.trim()
-    ? `<track default="default" kind="captions" src="${escapeHtml(video.captionsUrl.trim())}" srclang="${escapeHtml(video.captionsLanguage?.trim() || 'en')}" />`
+  const poster = video.posterUrl?.trim()
+    ? ` data-video-poster="${escapeHtml(video.posterUrl.trim())}"`
     : '';
-  return `<foreignObject x="${box.x}" y="${box.y}" width="${box.width}" height="${box.height}"><video xmlns="http://www.w3.org/1999/xhtml" controls="controls" preload="metadata" src="${escapeHtml(mediaFragmentUrl(video.url.trim(), video.startAtSeconds, video.endAtSeconds))}"${poster} aria-label="${escapeHtml(label)}" style="display:block;width:100%;height:100%;object-fit:cover;background:#111">${captions}</video></foreignObject>`;
+  const captions = video.captionsUrl?.trim()
+    ? ` data-video-captions="${escapeHtml(video.captionsUrl.trim())}" data-video-captions-language="${escapeHtml(video.captionsLanguage?.trim() || 'en')}"`
+    : '';
+  return `<foreignObject x="${box.x}" y="${box.y}" width="${box.width}" height="${box.height}"><button xmlns="http://www.w3.org/1999/xhtml" type="button" data-nodeslide-video-load data-video-src="${escapeHtml(mediaFragmentUrl(video.url.trim(), video.startAtSeconds, video.endAtSeconds))}"${poster}${captions} data-video-label="${escapeHtml(label)}" aria-label="${escapeHtml(`Load remote video: ${label}`)}" style="display:grid;place-items:center;width:100%;height:100%;border:1px solid #475569;border-radius:10px;background:#111;color:#f7f4ec;font:600 15px/1.2 system-ui;cursor:pointer">Load remote video</button></foreignObject>`;
 }
 
 function renderConnector(
@@ -602,6 +605,7 @@ function renderSlideSection(
 }
 
 export function renderSlideHtml(snapshot: DeckSnapshot, slideId: string): string {
+  assertNodeSlideArtifactCompilation(snapshot);
   const slides = orderedSlides(snapshot);
   const index = slides.findIndex((slide) => slide.id === slideId);
   const slide = slides[index];
@@ -610,6 +614,7 @@ export function renderSlideHtml(snapshot: DeckSnapshot, slideId: string): string
 }
 
 export function renderDeckHtml(snapshot: DeckSnapshot): string {
+  assertNodeSlideArtifactCompilation(snapshot);
   const slides = orderedSlides(snapshot);
   const renderedSlides = slides
     .map((slide, index) => renderSlideSection(snapshot, slide, index, slides.length))
@@ -639,7 +644,7 @@ export function renderDeckHtml(snapshot: DeckSnapshot): string {
   <script type="application/json" data-nodeslide-source-records data-deck-id="${escapeHtml(snapshot.deck.id)}" data-source-count="${exportedSources.length}">${sourceRecords}</script>
   <nav aria-label="Presenter navigation"><button type="button" data-action="previous" aria-label="Previous slide">← Previous</button><output aria-live="polite">1 / ${slides.length}</output><button type="button" data-action="next" aria-label="Next slide">Next →</button></nav>
   <script>
-    (()=>{const slides=[...document.querySelectorAll('[data-slide-id]')];const output=document.querySelector('output');const previous=document.querySelector('[data-action="previous"]');const next=document.querySelector('[data-action="next"]');let index=Math.max(0,slides.findIndex(slide=>decodeURIComponent(location.hash.slice(1))===slide.dataset.slideId));const show=(value)=>{index=Math.max(0,Math.min(slides.length-1,value));slides.forEach((slide,i)=>{slide.hidden=i!==index;slide.setAttribute('aria-hidden',String(i!==index));});if(output)output.textContent=(index+1)+' / '+slides.length;if(previous)previous.disabled=index===0;if(next)next.disabled=index===slides.length-1;const id=slides[index]?.dataset.slideId;if(id&&location.hash.slice(1)!==encodeURIComponent(id))history.replaceState(null,'','#'+encodeURIComponent(id));};previous?.addEventListener('click',()=>show(index-1));next?.addEventListener('click',()=>show(index+1));addEventListener('keydown',(event)=>{if(['ArrowRight','PageDown',' '].includes(event.key)){event.preventDefault();show(index+1);}else if(['ArrowLeft','PageUp'].includes(event.key)){event.preventDefault();show(index-1);}else if(event.key==='Home')show(0);else if(event.key==='End')show(slides.length-1);else if(event.key.toLowerCase()==='p'){const notes=slides[index]?.querySelector('[data-presenter-notes]');if(notes)notes.hidden=!notes.hidden;}});addEventListener('hashchange',()=>{const target=slides.findIndex(slide=>decodeURIComponent(location.hash.slice(1))===slide.dataset.slideId);if(target>=0)show(target);});show(index);})();
+    (()=>{const slides=[...document.querySelectorAll('[data-slide-id]')];const output=document.querySelector('output');const previous=document.querySelector('[data-action="previous"]');const next=document.querySelector('[data-action="next"]');let index=Math.max(0,slides.findIndex(slide=>decodeURIComponent(location.hash.slice(1))===slide.dataset.slideId));const show=(value)=>{index=Math.max(0,Math.min(slides.length-1,value));slides.forEach((slide,i)=>{slide.hidden=i!==index;slide.setAttribute('aria-hidden',String(i!==index));});if(output)output.textContent=(index+1)+' / '+slides.length;if(previous)previous.disabled=index===0;if(next)next.disabled=index===slides.length-1;const id=slides[index]?.dataset.slideId;if(id&&location.hash.slice(1)!==encodeURIComponent(id))history.replaceState(null,'','#'+encodeURIComponent(id));};previous?.addEventListener('click',()=>show(index-1));next?.addEventListener('click',()=>show(index+1));document.addEventListener('click',(event)=>{const target=event.target instanceof Element?event.target.closest('[data-nodeslide-video-load]'):null;if(!(target instanceof HTMLButtonElement))return;const source=target.dataset.videoSrc;if(!source)return;const video=document.createElement('video');video.controls=true;video.crossOrigin='anonymous';video.preload='metadata';video.setAttribute('aria-label',target.dataset.videoLabel||'Remote video');video.style.cssText='display:block;width:100%;height:100%;object-fit:cover;background:#111';video.src=source;if(target.dataset.videoPoster)video.poster=target.dataset.videoPoster;if(target.dataset.videoCaptions){const track=document.createElement('track');track.default=true;track.kind='captions';track.src=target.dataset.videoCaptions;track.srclang=target.dataset.videoCaptionsLanguage||'en';video.append(track);}target.replaceWith(video);video.load();});addEventListener('keydown',(event)=>{if(['ArrowRight','PageDown',' '].includes(event.key)){event.preventDefault();show(index+1);}else if(['ArrowLeft','PageUp'].includes(event.key)){event.preventDefault();show(index-1);}else if(event.key==='Home')show(0);else if(event.key==='End')show(slides.length-1);else if(event.key.toLowerCase()==='p'){const notes=slides[index]?.querySelector('[data-presenter-notes]');if(notes)notes.hidden=!notes.hidden;}});addEventListener('hashchange',()=>{const target=slides.findIndex(slide=>decodeURIComponent(location.hash.slice(1))===slide.dataset.slideId);if(target>=0)show(target);});show(index);})();
   </script>
 </body>
 </html>`;

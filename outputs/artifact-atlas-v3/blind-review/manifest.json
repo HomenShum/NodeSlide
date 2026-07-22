@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "nodeslide.artifact-atlas-v3-blind-review/v1",
+  "status": "insufficient_eligible_pairs",
+  "eligiblePairCount": 0,
+  "pairs": [],
+  "calibrationControls": [],
+  "exclusions": [],
+  "anonymized": true,
+  "humanReview": {
+    "status": "not_run"
+  },
+  "promotionEligible": false
+}

@@ -6,7 +6,13 @@
 
 > NodeSlide turns a prompt, a structured brief, or raw data into a presentation you can *inspect and defend* — a canonical structured document that compiles to editable slides, where every change (human or agent) flows through one validated mutation path.
 
-> **Repository status (2026-07-20):** the NodeSlide app lives in this repo and **builds green** — the Convex backend deploys, `tsc -b` passes, and **765 tests across 99 files** pass. Extracted from the `parity-studio` monorepo with an IP-carve-out + secrets pass. See [Repository status](#repository-status).
+> **Repository status (2026-07-22):** NodeSlide is a standalone product repo with
+> exact-commit CI, Convex/Vercel deployment gates, production probes, and packed
+> consumer proofs. The test corpus changes with the product, so this README does
+> not freeze a test/file count; run the gates below for the current tree. See
+> [Repository status](#repository-status) and
+> [the session handoff](docs/NEXT_SESSION.md) for evidence and deliberately open
+> human/external gates.
 
 ---
 
@@ -48,18 +54,21 @@ NodeSlide's wedge is **decks that must be defended**: diligence memos, operating
 
 ## What it is
 
-A canonical `nodeslide.slidelang/v1` **DeckSpec** is the single source of truth. Every slide and element carries a stable ID, normalized geometry, type-specific data, style, sources, export capabilities, and version clocks. Render targets (browser, HTML, PowerPoint) are *derived*, never the source.
+A canonical `nodeslide.slidelang/v1` **DeckSnapshot** is the single source of truth. Every slide and element carries a stable ID, normalized geometry, type-specific data, style, sources, export capabilities, and version clocks. Render targets (browser, HTML, PowerPoint) are *derived*, never the source.
 
 ```mermaid
 flowchart LR
-  P["Prompt · spec · data"] --> PLAN["Bounded planner"]
-  PLAN --> SPEC["nodeslide.slidelang/v1<br/>DeckSpec"]
-  SPEC --> ED["Browser editor"]
+  P["Prompt · brief · data · evidence"] --> STORY["Server-owned StorySpec<br/>materials · proof obligations"]
+  STORY --> PLAN["Bounded model plan<br/>typed planned primitives"]
+  PLAN --> MAT["Design plans · composition fan-out<br/>deterministic materializer"]
+  MAT --> SPEC["nodeslide.slidelang/v1<br/>canonical DeckSnapshot"]
+  SPEC --> ART["Production artifact projection<br/>semantic compiler receipt"]
+  ART --> ED["Browser editor"]
   ED -->|"human or agent edit"| PROP["Proposal<br/>EditOp[] + digest + scope"]
   PROP --> VAL["Server: validate ·<br/>CAS on baseVersion"]
   VAL -->|accept| VER["New canonical version"]
   VAL -->|reject / stale| PROP
-  VER --> OUT["Present · Publish ·<br/>HTML · PPTX"]
+  VER --> OUT["Present · Publish ·<br/>semantic HTML · editable PPTX"]
 ```
 
 That structure buys what a static slide image cannot: direct editing without regeneration, data-bound charts and preserved math, element- and slide-scoped AI operations, deterministic validation and repair, reviewable diffs and versions, multiple render targets from one deck, and immutable public publishing while private notes stay private.
@@ -75,21 +84,28 @@ safe element-level collaboration required identity, provenance, scope, and
 version clocks that the render syntax did not own.
 
 The decisive architectural change was to stop treating the authoring/render
-format as the database:
+format as the database. The later change was equally important: stop asking a
+model to invent final geometry when it can instead choose intent and fill a
+bounded typed intermediate that deterministic code validates and compiles.
 
 ```mermaid
 flowchart LR
   J0["sl0 JSON<br/>positional arrays · pixels"]
   J1["DeckSnapshot<br/>typed records · normalized geometry · stable IDs"]
   GOV["Governed changes<br/>PatchOperation[] · scope · CAS · review"]
-  MAT["Materializer<br/>model plan → typed elements"]
+  PLAN["Typed planned-slide spec<br/>bounded model output"]
+  STORY["StorySpec + design plans<br/>materials · references · fan-out"]
+  MAT["Materializer<br/>plan → typed elements"]
   CHECK["Shared validation<br/>text fit · geometry · evidence · capabilities"]
+  ART["Artifact semantics<br/>typed specs · compiler receipts"]
   HTML["Semantic HTML<br/>accessible DOM + SVG visual"]
   PPTX["Editable PPTX<br/>honest fallbacks"]
+  GYM["NodeGym<br/>paired immutable receipts"]
 
-  J0 --> J1 --> GOV --> MAT --> CHECK
+  J0 --> J1 --> GOV --> PLAN --> STORY --> MAT --> CHECK --> ART
   CHECK --> HTML
   CHECK --> PPTX
+  ART --> GYM
   GOV --> J1
 ```
 
@@ -100,16 +116,81 @@ Each generation closed a failure that the simpler representation could not:
 | Compact JSON → canonical records | Positional tokens and pixels were hard to inspect, migrate, or patch safely. | Split canonical state into deck, slides, elements, and sources; add stable IDs, normalized geometry, explicit types/styles, target capabilities, and record versions. |
 | Canonical records → governed mutations | Direct JSON/DOM edits could bypass policy or overwrite concurrent work. | Compile human and agent changes into typed operations; validate scope and locks; use base versions, per-record clocks, CAS/rebase, review, and immutable versions. |
 | Text boxes → structured artifacts | Prose could claim a chart, process, formula, or screenshot without creating one. | Add typed chart, image, diagram, math, video, connector, source, and fallback contracts; verify the requested primitive exists in browser and PowerPoint. |
-| Fixed boxes → content-aware materialization | Valid JSON still produced collisions, overflow, and one repeated composition. | Measure text, reflow before persistence, share geometry checks, select archetypes from slide jobs, and review deck rhythm rather than trusting labels. |
+| Unbounded model JSON → typed planned-slide spec | Provider prose and JSON quirks could ignore slide counts, invent unsupported fields, or time out. | Bound and coerce the response schema, verify requested slide counts, limit primary artifacts, assign stable identities, and keep an honestly labeled deterministic fallback. |
+| Typed plan → StorySpec and material inventory | A valid plan could still invent a screenshot, use evidence that was not captured, or give every slide the same narrative job. | Derive server-owned proof obligations, pacing, and `available`/`constructible`/`placeholder`/`missing` materials before provider invocation; a model cannot promote their truth state. |
+| StorySpec → design plans and composition fan-out | Clean slides could still repeat one editorial card and bore the audience. | Bind each slide to a semantic job, dominant visual center, references, density, required artifacts, and forbidden patterns; render three materially different geometries and review whole-deck rhythm. |
+| Fixed boxes → content-aware materialization | Valid JSON still produced collisions and overflow. | Measure text, reflow before persistence, share geometry checks, and accept only candidates that pass the same policy used by browser and export. |
 | Visual SVG → semantic HTML | A spatial SVG was not a useful reading order and citations/media could disappear. | Generate a parallel semantic DOM with headings, lists, chart tables, media/math descriptions, stable IDs, and bound sources; keep the visible SVG derived and decorative to assistive technology. |
 | Schema validation → render-aware repair | Types and bounds could not prove pixels, artifact presence, or improvement. | Render real candidates, retain issue/digest receipts, generate bounded typed repairs, preserve the base, and accept only strict improvement. |
-| Prompt-only generation → server-owned story/design context | Models ignored slide counts, invented evidence, or chose generic layouts. | Use bounded response schemas, StorySpec, proof obligations, material status, per-slide design plans, references, composition fan-out, and honest deterministic fallback. |
-| Successful render → semantic/evidence proof | Atlas V2 showed that overflow-clean slides can still contain wrong math, malformed diagrams, stale evidence, and unmeasured data plotted as observed. | Reopen eligibility; separate render, geometry, semantic, evidence, accessibility, cross-format, and human gates; move toward typed ArtifactSpecs and paired Model Gym evaluation. |
+| Successful render → shared 16-kind ArtifactSpec | Atlas V2 showed that overflow-clean slides can still contain wrong math, malformed diagrams, stale evidence, and unmeasured data plotted as observed. | Define `nodeslide.artifact-spec/v1` for 16 semantic artifact families, validate truth/evidence invariants, reuse the same runtime in Atlas, NodeGym, Convex, and provider schemas, and bind the repaired 38-artifact museum to spec/inspection digests plus a tested 23-entry issue-to-slide/artifact/validator/repair ledger. |
+| Legacy production JSON → canonical artifact authoring | Calling an eight-kind reconstruction and the 16-kind semantic schema by one version would have hidden incompatible contracts. | Make `nodeslide.artifact-spec/v1` the shared 16-kind, pre-geometry provider/tool boundary; retain the old four-shape contract only through an explicit read adapter; keep the eight-kind downstream `DeckSnapshot` projection separately versioned. Unknown versions, kinds, refs, and promoted truth states fail closed. |
+| One-off model probes → NodeGym receipts | Different models, harnesses, routes, budgets, and failures could not be compared causally. | Bind exact raw config bytes to a deterministically ordered immutable matrix; use paired plans, exact requested/returned route attribution, executable harness profiles, protected task pools, cumulative resume accounting (including paid failures), per-format evidence, paired deltas, blind-review packets, and `autoApply: false`. |
+| App-local experiment types → portable Gym core | Evaluation contracts could drift between NodeSlide and NodeKit consumers. | Extract dependency-free `@nodekit/gym-core`, adapt runner receipts to one canonical scored receipt, and prove exact packed install plus `0.0.1 → 0.1.0` upgrade in isolated NodeSlide and NodeRoom-domain consumers. Direct repository adoption is tracked separately from that isolated portability proof. |
+| Trusting model-authored evidence → server-owned provenance receipts | Brief text, success criteria, or an unfetched URL could be mislabeled as observed evidence, and a client-provided receipt could be replayed against different content. | Classify evidence before compilation; require immutable upload/runtime receipts for observed claims; validate safe HTTPS/source URLs and exact receipt digests; bind authored spec, native geometry, materialization, projection, and render handles with SHA-256; strip client/model-authored receipts at public boundaries. |
+| Generic fallbacks → native typed geometry | Advanced semantic families existed but could collapse into a generic chart or diagram, losing editability and visual meaning. | Compile waterfall, Sankey, Gantt, risk-matrix, trace, and spatial-scene specs into source-bound grouped shapes, connectors, and text before generic fallback; preserve one artifact identity across browser, semantic HTML, and editable PPTX objects. |
+| Disposable production fixtures → verified zero retention | A green UI/probe run could still leave private decks and source rows in production, especially if the create response was lost before the runner learned the owner key. | Keep owner-authenticated transactional cleanup for Gym runs; bind the production probe to a one-use pre-submit cleanup lease whose digest + expiry are persisted, delete by digest + client session, and sweep expired tagged workspaces after crashes. Missing cleanup evidence or any remaining deck/source/project row fails the run. |
+| Valid remote URL → explicit privacy boundary | Automatically rendering an HTTPS image/video could leak network metadata, reach private hosts, or make an export depend on mutable bytes. | Accept only bounded embedded raster data in canonical output, withhold remote images everywhere, instantiate remote video only after a click, reject private/credential hosts, and fetch a consented Openverse result through a derived license-bounded, credential-free, redirect/size-limited thumbnail path before embedding. |
+| Canonical URL/requested route → exact deployed identity | A green URL or requested router alias did not prove the frontend, backend, or model that actually ran. A commit also cannot contain its own final SHA without changing it. | Bind frontend metadata and compiled Convex identity to one exact main SHA, verify the trusted deployment workflow and live asset hashes, require provider-returned actual model attribution, keep free routes non-offered pending qualification, and append final workflow/probe URLs to the merged PR rather than a self-invalidating follow-up commit. |
+| Training/routing ideas → bounded portable contracts | “Self-improvement” could otherwise imply unlicensed training or automatic route mutation. | Add accepted/rejected training-pair contracts, provider-neutral fake-checkpoint replay, governed shadow/production route selection, approval receipts, budgets, circuit breakers, and typed escalation. External training and user-visible routing remain separately authorized; every default stays `autoApply: false`. |
+| Isolated portability → direct NodeRoom adoption | A fixture consumer did not prove that the real NodeAgent repository could install and exercise the exact package bytes. | Pack the candidate in NodeSlide CI, stage the byte-identical tarball into NodeRoom, verify lock/integrity/release identity, run `npm ci`, and execute direct `nodegym:consumer:proof` plus NodeAgent smokes. Adoption and warning-free exact-main CI are now recorded below; changing package bytes reopens the gate. |
 
 The full chronology—including the predecessor `parity-studio` commits, original
 JSON examples, failures, resolutions, current module ownership, and the next
 typed-artifact evolution—is in
 [**From compact JSON to governed, semantic HTML**](docs/JSON_TO_HTML_EVOLUTION.md).
+That document also names the contract versions and the remaining fidelity
+boundary: all 16 canonical kinds can now be authored before geometry, while the
+separate downstream projection describes materialized output. Six advanced
+families now have native grouped-editable geometry; remaining semantic/static
+fallbacks must still never be advertised as native geometry.
+
+### 2026-07-22 technical closure boundary
+
+The integrated source tree now contains the security/provenance receipt chain,
+six native advanced-geometry families, an evidence-complete UI executor,
+governed training/checkpoint/routing contracts, owner-authenticated Gym cleanup,
+the production probe's pre-submit cleanup lease and expiry backstop, remote-media
+privacy gates, exact frontend/backend/model identity checks, and direct NodeRoom
+repository adoption described above. Focused tests and local package/consumer
+proofs are recorded in the
+[gap-closure ledger](docs/GAP_CLOSURE_2026-07-22.md).
+
+Direct NodeRoom adoption landed in
+[NodeRoom PR #242](https://github.com/HomenShum/NodeRoom/pull/242) at merge SHA
+`c9b699f416a68dfe29298d62b6559690c7ccaa6a`; its exact-main
+[CI](https://github.com/HomenShum/NodeRoom/actions/runs/29916176474),
+[Node Platform conformance](https://github.com/HomenShum/NodeRoom/actions/runs/29916177044),
+and [ProofLoop](https://github.com/HomenShum/NodeRoom/actions/runs/29916176323)
+passed. Runtime hardening then landed in
+[NodeRoom PR #243](https://github.com/HomenShum/NodeRoom/pull/243), producing
+current NodeRoom main `83f9b7442065652208f3a641e65bfed2752d5d13` with green
+exact-main [CI](https://github.com/HomenShum/NodeRoom/actions/runs/29919737217),
+[conformance](https://github.com/HomenShum/NodeRoom/actions/runs/29919737570),
+and [ProofLoop](https://github.com/HomenShum/NodeRoom/actions/runs/29919737301).
+The reusable producer fix is
+[node-platform PR #8](https://github.com/HomenShum/node-platform/pull/8), merged
+at `5c9aa6443ca8e61dc8886fbf0a0b4a7b72858e63`; its exact-main
+[quality run](https://github.com/HomenShum/node-platform/actions/runs/29918399950)
+passed. The final NodeRoom main check-run audit contains zero warnings and zero
+Node 20 runtime annotations.
+
+The current deterministic semantic control at
+`artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/semantic-contract-v2-control-complete-r4/summary.json`
+passes 2/2 and produces one complete paired harness-control report with bound
+browser, PPTX, PDF, montage, source, fact, and harness-behavior evidence. It is a
+zero-cost deterministic control, not a live-model quality result, a full 720-run
+matrix, a blind human preference result, or permission to promote a route.
+
+Still explicitly open: the coverage-balanced live/full matrix, independently
+identified blind review, optional fine-tuning authorization and execution,
+exact-main NodeSlide CI/deployment receipts, post-deploy production
+retention/UI/fleet probes, public Atlas release, and any user-visible routing or
+promotion decision. `publicReleaseApproved` and `promotionEligible` remain
+`false` until their named evidence exists. The five zero-priced routes are Gym
+qualification candidates, not production offerings. Because a final SHA cannot
+attest itself from inside its own commit, the merged SHA and immutable workflow,
+deployment, and probe URLs must be appended to the merged closure PR or retained
+as workflow artifacts.
 
 ## The single mutation path
 
@@ -122,7 +203,7 @@ Human edits and agent edits converge on **one** path. Nothing lands silently, an
 
 ## Capability matrix — honest status
 
-Capability honesty is the product, so it's the README too. As of 2026-07-20:
+Capability honesty is the product, so it's the README too. As of 2026-07-22:
 
 | Workflow | State | Ease |
 |---|---|:--:|
@@ -142,7 +223,8 @@ Capability honesty is the product, so it's the README too. As of 2026-07-20:
 
 ## Documentation
 
-- [**JSON-to-HTML evolution**](docs/JSON_TO_HTML_EVOLUTION.md) — the complete lineage from compact positional slide JSON to canonical records, governed patches, content-aware materialization, semantic HTML, render repair, and typed artifact specifications.
+- [**JSON-to-HTML evolution**](docs/JSON_TO_HTML_EVOLUTION.md) — the complete lineage from compact positional slide JSON through canonical records, governed patches, typed planned slides, StorySpec/material inventory, design fan-out, semantic HTML, the shared 16-kind ArtifactSpec, downstream production projections, and portable NodeGym receipts.
+- [**2026-07-22 gap-closure ledger**](docs/GAP_CLOSURE_2026-07-22.md) — automated implementation, exact-main production, human/external, and optional fidelity-depth gates kept separate.
 - [**External-agent access**](docs/EXTERNAL_AGENT_ACCESS.md) - offline CLI and MCP file tools, host-backed MCP mode, proposal receipts, and tarball consumer proof.
 
 - [**Product Requirements (PRD)**](docs/PRD.md) — problem, user, workflow, why structured authoring wins, trust surface, launch requirements, metrics, wedge.
@@ -161,7 +243,7 @@ npm run dev        # vite + convex dev (concurrently) — open the printed local
 The **deterministic path needs no API keys** and produces a complete, reproducible deck. For live model runs, set `OPENROUTER_API_KEY` in Convex (`npx convex env set OPENROUTER_API_KEY …`) or bring your own key (BYOK). See [`.env.example`](.env.example).
 
 ```bash
-npm test            # vitest run — 765 tests across 99 files in the full CI corpus
+npm test            # current Vitest + workspace suites; no frozen count in docs
 npm run typecheck   # tsc -b
 npm run build       # tsc -b && vite build
 npm run lint        # biome check .
@@ -180,6 +262,9 @@ Key modules:
 | Server authority — `applyPatch` / `commitPatch`, CAS | [`convex/nodeslide.ts`](convex/nodeslide.ts), [`convex/lib/nodeslidePatches.ts`](convex/lib/nodeslidePatches.ts) |
 | Durable agent — plan, propose, trace | [`convex/nodeslideAgent.ts`](convex/nodeslideAgent.ts) |
 | Compilers — PPTX, HTML, capabilities, validation | [`src/domains/nodeslide/slidelang/`](src/domains/nodeslide/slidelang) |
+| Shared 16-kind authored ArtifactSpec, compiler/fallback registry, and external schema | [`shared/nodeslideArtifactRegistry.js`](shared/nodeslideArtifactRegistry.js), [`shared/nodeslideArtifactSpec.schema.json`](shared/nodeslideArtifactSpec.schema.json), [`convex/lib/nodeslideAuthoredArtifact.ts`](convex/lib/nodeslideAuthoredArtifact.ts) |
+| Downstream projection, authored bindings, validation, and receipts | [`shared/nodeslideArtifactSpec.ts`](shared/nodeslideArtifactSpec.ts), [`convex/nodeslideArtifactSpec.ts`](convex/nodeslideArtifactSpec.ts) |
+| Paired model/harness evaluation and portable contracts | [`scripts/lib/node-gym-runner-core.mjs`](scripts/lib/node-gym-runner-core.mjs), [`packages/gym-core/`](packages/gym-core) |
 | Inspectors — AI · Design · Data · Comments · Versions · Trace | [`src/domains/nodeslide/inspector/`](src/domains/nodeslide/inspector) |
 | Governed MCP surface | [`mcp/src/lib/nodeslideTools.ts`](mcp/src/lib/nodeslideTools.ts) |
 
@@ -228,7 +313,7 @@ The disclosure discipline from the AI Fund Build Challenge template, kept as a p
 
 Trust is a product surface, not a hidden backend step. Validation covers schema and referential integrity, bounds/overlap/text-fit, required chart/math data, safe media URLs, source coverage, export capability, and publication cleanliness — and it *blocks* unsafe present, publish, or export. Repairs are explicit proposals through the same gate.
 
-- **765 Vitest tests across 99 files**: schema coercion, planner attribution, repair convergence, acceptance and authorization gating, immutable replay receipts, editor-state integrity, publishing privacy, web-research/ingestion contracts, governed-MCP consent parity, HTML/PPTX generation, reusable-package conformance, and AgentThread review scenarios. TypeScript compile is a release gate; `npx impeccable detect` runs zero-findings on the agent UI surfaces.
+- **Executable repository and package suites** cover schema coercion, planner attribution, repair convergence, acceptance and authorization gating, immutable replay receipts, editor-state integrity, publishing privacy, web-research/ingestion contracts, governed-MCP consent parity, HTML/PPTX generation, artifact semantics, NodeGym receipts, reusable-package conformance, and AgentThread review scenarios. TypeScript compile is a release gate; the exact test count belongs to the run receipt, not this prose.
 - **Independent UI audit** via the open-source [`agentic-ui-qa`](https://github.com/HomenShum/agentic-ui-qa) protocol — the Agentic UI Bar (B1–B11) for surface trust/operability and a Depth tier (D1–D11) for agent-product maturity — with findings tracked in an append-only ledger.
 
 The Trace inspector exposes the exact provider/model, plan, tool calls, operations, validation state, digests, token/cost usage, and the human decision — a compact run-metrics card over an auditable events chain, closing on a validation seal honestly labeled by run type (countersigned for a live run, provisional for a deterministic one).
@@ -239,8 +324,8 @@ This repository is the public home for NodeSlide, extracted from the `parity-stu
 
 1. **Docs + overview** — ✅ done.
 2. **Source extraction** — ✅ done. `shared/nodeslide*`, `src/domains/nodeslide/`, the `convex/nodeslide*` server (schema scoped to the standalone product), and the MCP tools lifted into a standalone, buildable package. IP-carve-out verified (no Parity Studio platform IP; the frontend imports zero shell components) and secrets-scanned (none found).
-3. **Standalone build** — ✅ green. Convex backend deploys; `tsc -b` + `vite build` pass; **765 Vitest tests across 99 files** pass; biome clean.
-4. **CI + release gates** — ✅ typecheck, Vitest, build, runtime smoke, MCP, node-platform conformance, and packed NodeRoom/NodeAgent consumer checks run in CI. Scheduled production probing is also present; automatic production deployment still awaits repository secrets/environment configuration.
+3. **Standalone build** — ✅ governed by Biome, TypeScript, Vitest/workspace suites, package builds, and the production Vite build. Use `npm run check` for the current corpus; do not infer a pass from an old README count.
+4. **CI + release gates** — ✅ typecheck, Vitest, build, runtime smoke, MCP, node-platform conformance, packed consumer checks, scheduled production probing, and exact-commit Convex/Vercel deployment are configured. Sanitized GitHub environment evidence records secret names and branch policy without exposing values.
 
 The dedicated **live demo** is [nodeslide.vercel.app](https://nodeslide.vercel.app), backed by the production Convex deployment.
 

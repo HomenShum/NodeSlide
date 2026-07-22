@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "nodekit.gym-executor-result/v1",
+  "runId": "public-equation__google-gemma-4-26b-a4b-it-free__light-director__1",
+  "pairingKey": "sha256:e333810f3064203cd740c4c7966e27d0697e7a0664484ff909f2364151b71957::sha256:c023bbf580cee4b49726c24b280aad5bb067f0bf490aa6af86a77023be3669f2::sha256:f04608945726aa9fa562d1808fc965b11ce5f0736569c07adef8c19b52ce129d::google/gemma-4-26b-a4b-it:free::1::8000:300000:200000:2",
+  "status": "completed",
+  "route": {
+    "mode": "degraded"
+  },
+  "usage": {
+    "latencyMs": 53424,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0
+  },
+  "artifacts": {
+    "browser": {
+      "path": "artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/pinned-free-artifact-recovery-v1/runs/public-equation__google-gemma-4-26b-a4b-it-free__light-director__1/editor.png",
+      "digest": "sha256:f0817c6064ca3c69746dd4f636fcb57a2d0f6a0a102e5131992da4cdfaccdb2b",
+      "bytes": 129443,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pptx": {
+      "path": "artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/pinned-free-artifact-recovery-v1/runs/public-equation__google-gemma-4-26b-a4b-it-free__light-director__1/deck.pptx",
+      "digest": "sha256:a8e4b89e624aaabcbddb5241af03088b924958dd9099b60df5912f3dd33e93c5",
+      "bytes": 160367,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pdf": {
+      "path": "artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/pinned-free-artifact-recovery-v1/runs/public-equation__google-gemma-4-26b-a4b-it-free__light-director__1/deck.pdf",
+      "digest": "sha256:0b2ebcab2c8154e92d9c5bac037976c823baae8ee5c6cd212231e0280658e793",
+      "bytes": 395687,
+      "validation": {
+        "status": "passed"
+      },
+      "fidelity": "rasterized-static-fallback",
+      "validationMethod": "source-render-identity-and-pypdf-page-count"
+    }
+  },
+  "diagnostics": {
+    "recoveredFromCampaign": "pinned-free-paired-smoke-v1",
+    "recoveredWithoutProviderCall": true,
+    "estimatedTextOverflowCount": 0,
+    "exportTimedOut": false,
+    "unsupportedClaimCount": 0,
+    "unsupportedClaims": [],
+    "freeModelClaimUnattributed": false,
+    "claimAudit": {
+      "status": "passed",
+      "method": "bounded-forbidden-claim-scan"
+    },
+    "renderedSlides": 6
+  },
+  "issueCodes": [
+    "returned_model_attribution_missing",
+    "metering_not_independently_recovered",
+    "typed_artifact_spec_not_observed"
+  ]
+}

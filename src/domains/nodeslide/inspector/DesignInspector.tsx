@@ -26,6 +26,7 @@ import {
   type Slide,
   type SlideElement,
   type ThemeSpec,
+  isNodeSlideOpenverseThumbnailUrl,
 } from '../../../../shared/nodeslide';
 import type { TasteProfile } from '../../../../shared/nodeslidePreference';
 import type { SignatureProfile } from '../../../../shared/nodeslideSignature';
@@ -987,10 +988,16 @@ function ImageAssetEditor({
       // avoids the CORS/size variance of fetching the original third-party
       // asset. The patch contract accepts only embedded replacements, so never
       // fall back to a new remote URL that the server must reject.
-      const sourceUrl = result.thumbnailUrl || result.url;
-      const response = await fetch(sourceUrl);
+      if (!isNodeSlideOpenverseThumbnailUrl(result.thumbnailUrl)) {
+        throw new Error('The Openverse thumbnail URL failed the exact API allowlist.');
+      }
+      const response = await fetch(result.thumbnailUrl, {
+        credentials: 'omit',
+        redirect: 'error',
+        referrerPolicy: 'no-referrer',
+      });
       if (!response.ok) throw new Error(`Image fetch failed with status ${response.status}.`);
-      const imageUrl = await imageBlobToEmbeddedRaster(await response.blob());
+      const imageUrl = await imageBlobToEmbeddedRaster(await readBoundedImageResponse(response));
       onApplyPatch(
         buildImageReplacementOperations({ element, slideElements, imageUrl, altText, credit }),
         `Inserted licensed image "${result.title}" from Openverse`,
@@ -1114,7 +1121,9 @@ function ImageAssetEditor({
           </label>
           <small>
             Clicking Search sends this query to Openverse (api.openverse.org) and is your consent
-            for that single request. Results are commercial-use licensed.
+            for that single metadata request. Results stay text-only until you choose one; that
+            click separately fetches the exact Openverse API thumbnail for local embedding. The
+            original media host is never contacted by the editor.
           </small>
           <button
             type="button"
@@ -1140,11 +1149,7 @@ function ImageAssetEditor({
                     title={`${result.title} — ${licensedImageCredit(result)}`}
                     onClick={() => void applyLicensedImage(result)}
                   >
-                    <img
-                      src={result.thumbnailUrl || result.url}
-                      alt={result.title}
-                      loading="lazy"
-                    />
+                    <span aria-hidden="true">Licensed image</span>
                     <span>{result.title}</span>
                     <small>{licensedImageCredit(result)}</small>
                   </button>
@@ -1277,7 +1282,32 @@ function ImageFramingControls({
 }
 
 const MAX_EMBEDDED_IMAGE_DATA_URL_CHARS = 680_000;
+const MAX_OPENVERSE_IMAGE_RESPONSE_BYTES = 8_000_000;
 const ACCEPTED_EMBEDDED_IMAGE_TYPE = /^image\/(?:png|jpeg|webp|gif)$/iu;
+
+export async function readBoundedImageResponse(response: Response): Promise<Blob> {
+  const declaredLength = Number(response.headers.get('content-length') ?? '0');
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_OPENVERSE_IMAGE_RESPONSE_BYTES) {
+    throw new Error('Choose an image smaller than 8 MB.');
+  }
+  const reader = response.body?.getReader();
+  if (!reader) throw new Error('This browser cannot safely stream the selected image.');
+  const chunks: ArrayBuffer[] = [];
+  let bytes = 0;
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    bytes += value.byteLength;
+    if (bytes > MAX_OPENVERSE_IMAGE_RESPONSE_BYTES) {
+      await reader.cancel();
+      throw new Error('Choose an image smaller than 8 MB.');
+    }
+    const copy = new Uint8Array(value.byteLength);
+    copy.set(value);
+    chunks.push(copy.buffer);
+  }
+  return new Blob(chunks, { type: response.headers.get('content-type') ?? '' });
+}
 
 async function imageBlobToEmbeddedRaster(file: Blob): Promise<string> {
   if (file.size > 8_000_000) throw new Error('Choose an image smaller than 8 MB.');

@@ -37,8 +37,13 @@
         "atlas-v2-hero-thesis"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-hero-thesis"
+        ],
         "status": "derived",
-        "sourceDigest": "a2ee1cb40e6d71183ee05dada38a017b88cf8b08c280f6a0bb00407fdee93920",
+        "sourceDigest": "sha256:a2ee1cb40e6d71183ee05dada38a017b88cf8b08c280f6a0bb00407fdee93920",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -55,13 +60,26 @@
       "payload": {
         "label": "Reviewability turns generation into a product decision"
       },
-      "specDigest": "d9eec7fd58c9e1bed7adacf9c7f5a96712205497f93a4a1708df2c8ee3814b9e"
+      "specDigest": "6bc534007aa89f029bb93d3800e5f13419459c91fb8fedcd4c176d54791b944a"
     },
-    "specDigest": "d9eec7fd58c9e1bed7adacf9c7f5a96712205497f93a4a1708df2c8ee3814b9e",
+    "specDigest": "6bc534007aa89f029bb93d3800e5f13419459c91fb8fedcd4c176d54791b944a",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "d9eec7fd58c9e1bed7adacf9c7f5a96712205497f93a4a1708df2c8ee3814b9e"
+      "kind": "generic",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-hero-thesis"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:a2ee1cb40e6d71183ee05dada38a017b88cf8b08c280f6a0bb00407fdee93920"
+      },
+      "sourceRefs": [
+        "atlas-v2-hero-thesis"
+      ],
+      "specDigest": "6bc534007aa89f029bb93d3800e5f13419459c91fb8fedcd4c176d54791b944a"
     },
     "stages": {
       "spec": {
@@ -204,8 +222,13 @@
         "atlas-v2-section-opener"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-section-opener"
+        ],
         "status": "derived",
-        "sourceDigest": "4f1e75b8ab7d0bf5ea4bb7ee4d87936827908ddbf23f1a92d9846c8e915c73cb",
+        "sourceDigest": "sha256:4f1e75b8ab7d0bf5ea4bb7ee4d87936827908ddbf23f1a92d9846c8e915c73cb",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -222,13 +245,26 @@
       "payload": {
         "label": "A museum needs chapters, not a wall of thumbnails"
       },
-      "specDigest": "ee5dbf25034ae29e3a008dba25475cf949b68a0c85e1230507bca4d19ec8ae57"
+      "specDigest": "f49b56d29e1aa4fd8011d589f34cf5b82b40ac599f57b153cf1eb42fda4607a1"
     },
-    "specDigest": "ee5dbf25034ae29e3a008dba25475cf949b68a0c85e1230507bca4d19ec8ae57",
+    "specDigest": "f49b56d29e1aa4fd8011d589f34cf5b82b40ac599f57b153cf1eb42fda4607a1",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "ee5dbf25034ae29e3a008dba25475cf949b68a0c85e1230507bca4d19ec8ae57"
+      "kind": "generic",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-section-opener"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:4f1e75b8ab7d0bf5ea4bb7ee4d87936827908ddbf23f1a92d9846c8e915c73cb"
+      },
+      "sourceRefs": [
+        "atlas-v2-section-opener"
+      ],
+      "specDigest": "f49b56d29e1aa4fd8011d589f34cf5b82b40ac599f57b153cf1eb42fda4607a1"
     },
     "stages": {
       "spec": {
@@ -369,8 +405,13 @@
         "atlas-v2-big-metric"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-big-metric"
+        ],
         "status": "derived",
-        "sourceDigest": "248a0f2542920ce810a9a150c4c20dd93e76bc1b134f635f8489d7ec475e5aa6",
+        "sourceDigest": "sha256:248a0f2542920ce810a9a150c4c20dd93e76bc1b134f635f8489d7ec475e5aa6",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -387,13 +428,26 @@
       "payload": {
         "label": "82 of 84 candidates cleared browser and PowerPoint proof"
       },
-      "specDigest": "9cfc9f2c86eed6053c823cca6bdbd1b10325c9465533d08483eb1d56849a3304"
+      "specDigest": "7fc188addcc3cec831213c632cec9ed037712833fc7bab6867b0dfbdda5281aa"
     },
-    "specDigest": "9cfc9f2c86eed6053c823cca6bdbd1b10325c9465533d08483eb1d56849a3304",
+    "specDigest": "7fc188addcc3cec831213c632cec9ed037712833fc7bab6867b0dfbdda5281aa",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "9cfc9f2c86eed6053c823cca6bdbd1b10325c9465533d08483eb1d56849a3304"
+      "kind": "generic",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-big-metric"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:248a0f2542920ce810a9a150c4c20dd93e76bc1b134f635f8489d7ec475e5aa6"
+      },
+      "sourceRefs": [
+        "atlas-v2-big-metric"
+      ],
+      "specDigest": "7fc188addcc3cec831213c632cec9ed037712833fc7bab6867b0dfbdda5281aa"
     },
     "stages": {
       "spec": {
@@ -536,8 +590,13 @@
         "atlas-v2-customer-voice"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-customer-voice"
+        ],
         "status": "derived",
-        "sourceDigest": "daad4c23334d2eaf6f443163162e33af5b17acff441caedacb14424746efa324",
+        "sourceDigest": "sha256:daad4c23334d2eaf6f443163162e33af5b17acff441caedacb14424746efa324",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -554,13 +613,26 @@
       "payload": {
         "label": "The useful promise is editable evidence, not instant polish"
       },
-      "specDigest": "3563674fc990b912355bb0d4921cea7d805356a38c163141a81458af8528197d"
+      "specDigest": "cc0b72f60a77921653ac214526f606aa7c4b31fa044702241a4dcac9308b0a5b"
     },
-    "specDigest": "3563674fc990b912355bb0d4921cea7d805356a38c163141a81458af8528197d",
+    "specDigest": "cc0b72f60a77921653ac214526f606aa7c4b31fa044702241a4dcac9308b0a5b",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "3563674fc990b912355bb0d4921cea7d805356a38c163141a81458af8528197d"
+      "kind": "generic",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-customer-voice"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:daad4c23334d2eaf6f443163162e33af5b17acff441caedacb14424746efa324"
+      },
+      "sourceRefs": [
+        "atlas-v2-customer-voice"
+      ],
+      "specDigest": "cc0b72f60a77921653ac214526f606aa7c4b31fa044702241a4dcac9308b0a5b"
     },
     "stages": {
       "spec": {
@@ -703,8 +775,13 @@
         "atlas-v2-before-after-story"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-before-after-story"
+        ],
         "status": "derived",
-        "sourceDigest": "1a6b3c261d050a6668c3155e3efac6291be7825b25c213d061187a88c81832fd",
+        "sourceDigest": "sha256:1a6b3c261d050a6668c3155e3efac6291be7825b25c213d061187a88c81832fd",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -721,13 +798,26 @@
       "payload": {
         "label": "The harness removes clutter before it adds decoration"
       },
-      "specDigest": "02dd56b70e18fa05dc83a6b8e1ca136a38ae8e7b937b30cbee5623741136d248"
+      "specDigest": "b9907746996dab52f6fa9cf990416fab42d0f417d20c6561e39f54f3af3c2f00"
     },
-    "specDigest": "02dd56b70e18fa05dc83a6b8e1ca136a38ae8e7b937b30cbee5623741136d248",
+    "specDigest": "b9907746996dab52f6fa9cf990416fab42d0f417d20c6561e39f54f3af3c2f00",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "02dd56b70e18fa05dc83a6b8e1ca136a38ae8e7b937b30cbee5623741136d248"
+      "kind": "generic",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-before-after-story"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:1a6b3c261d050a6668c3155e3efac6291be7825b25c213d061187a88c81832fd"
+      },
+      "sourceRefs": [
+        "atlas-v2-before-after-story"
+      ],
+      "specDigest": "b9907746996dab52f6fa9cf990416fab42d0f417d20c6561e39f54f3af3c2f00"
     },
     "stages": {
       "spec": {
@@ -870,8 +960,13 @@
         "atlas-v2-kpi-strip"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-kpi-strip"
+        ],
         "status": "derived",
-        "sourceDigest": "7d8566c45f7664f1a6cefbf376ffc93d758c0930deb5e0588cb93efc3c8ee941",
+        "sourceDigest": "sha256:7d8566c45f7664f1a6cefbf376ffc93d758c0930deb5e0588cb93efc3c8ee941",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -907,13 +1002,26 @@
           }
         ]
       },
-      "specDigest": "645c96c186b683acb71d887bf9f86f44fe3989e0da0e832f33d0b75909659b81"
+      "specDigest": "d9f9d7ca8dad9c942dbd82e34daf0a0e5167a36f43e6e2ff8ee67ce6dd75047c"
     },
-    "specDigest": "645c96c186b683acb71d887bf9f86f44fe3989e0da0e832f33d0b75909659b81",
+    "specDigest": "d9f9d7ca8dad9c942dbd82e34daf0a0e5167a36f43e6e2ff8ee67ce6dd75047c",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "645c96c186b683acb71d887bf9f86f44fe3989e0da0e832f33d0b75909659b81"
+      "kind": "chart",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-kpi-strip"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:7d8566c45f7664f1a6cefbf376ffc93d758c0930deb5e0588cb93efc3c8ee941"
+      },
+      "sourceRefs": [
+        "atlas-v2-kpi-strip"
+      ],
+      "specDigest": "d9f9d7ca8dad9c942dbd82e34daf0a0e5167a36f43e6e2ff8ee67ce6dd75047c"
     },
     "stages": {
       "spec": {
@@ -1057,8 +1165,13 @@
         "atlas-v2-multi-series-trend"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-multi-series-trend"
+        ],
         "status": "derived",
-        "sourceDigest": "fbff74955fec2ab34769c34b621a3da6fdd6c9d8e52ada907e480c8f777fc2e4",
+        "sourceDigest": "sha256:fbff74955fec2ab34769c34b621a3da6fdd6c9d8e52ada907e480c8f777fc2e4",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -1094,13 +1207,26 @@
           }
         ]
       },
-      "specDigest": "f66d3c3887b11caecde871285dc701429404a634024b2fb920beb87fcd5375f6"
+      "specDigest": "50c6836c40e2d7fd6f6de0fcd5abab6dc9c6c943c5fe4004b572360c68c2c6fb"
     },
-    "specDigest": "f66d3c3887b11caecde871285dc701429404a634024b2fb920beb87fcd5375f6",
+    "specDigest": "50c6836c40e2d7fd6f6de0fcd5abab6dc9c6c943c5fe4004b572360c68c2c6fb",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "f66d3c3887b11caecde871285dc701429404a634024b2fb920beb87fcd5375f6"
+      "kind": "chart",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-multi-series-trend"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:fbff74955fec2ab34769c34b621a3da6fdd6c9d8e52ada907e480c8f777fc2e4"
+      },
+      "sourceRefs": [
+        "atlas-v2-multi-series-trend"
+      ],
+      "specDigest": "50c6836c40e2d7fd6f6de0fcd5abab6dc9c6c943c5fe4004b572360c68c2c6fb"
     },
     "stages": {
       "spec": {
@@ -1248,8 +1374,13 @@
         "atlas-v2-uncertainty-range"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-uncertainty-range"
+        ],
         "status": "derived",
-        "sourceDigest": "b151c5443bd7cdd215ca6e537a4543d50ddb9f52fe1caa98737783c1c6572c53",
+        "sourceDigest": "sha256:b151c5443bd7cdd215ca6e537a4543d50ddb9f52fe1caa98737783c1c6572c53",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -1314,13 +1445,26 @@
           }
         ]
       },
-      "specDigest": "0c4bd2ce08784c27d0eb790f518e3166bfb98672c9a3db53359add10a5466578"
+      "specDigest": "7f17991ce8740f7986d2dcb5f3a3396912af577be4b6858958f70872d5a7a913"
     },
-    "specDigest": "0c4bd2ce08784c27d0eb790f518e3166bfb98672c9a3db53359add10a5466578",
+    "specDigest": "7f17991ce8740f7986d2dcb5f3a3396912af577be4b6858958f70872d5a7a913",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "0c4bd2ce08784c27d0eb790f518e3166bfb98672c9a3db53359add10a5466578"
+      "kind": "chart",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-uncertainty-range"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:b151c5443bd7cdd215ca6e537a4543d50ddb9f52fe1caa98737783c1c6572c53"
+      },
+      "sourceRefs": [
+        "atlas-v2-uncertainty-range"
+      ],
+      "specDigest": "7f17991ce8740f7986d2dcb5f3a3396912af577be4b6858958f70872d5a7a913"
     },
     "stages": {
       "spec": {
@@ -1470,8 +1614,13 @@
         "atlas-v2-waterfall"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-waterfall"
+        ],
         "status": "derived",
-        "sourceDigest": "db7b7a9465b56474cfd5c529830c0701d1f00171c7a12fbacc537ba3d55d0072",
+        "sourceDigest": "sha256:db7b7a9465b56474cfd5c529830c0701d1f00171c7a12fbacc537ba3d55d0072",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -1509,13 +1658,26 @@
         "final": 86,
         "tolerance": 0
       },
-      "specDigest": "ca88353517dc98f28ca8c91b0b85703bb910c8b18f50a79ee8ea6898b2971392"
+      "specDigest": "94686021cde88d7b9e8cffab4f0108b0c0c938aa81727a270b854abb69f449f7"
     },
-    "specDigest": "ca88353517dc98f28ca8c91b0b85703bb910c8b18f50a79ee8ea6898b2971392",
+    "specDigest": "94686021cde88d7b9e8cffab4f0108b0c0c938aa81727a270b854abb69f449f7",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "ca88353517dc98f28ca8c91b0b85703bb910c8b18f50a79ee8ea6898b2971392"
+      "kind": "waterfall",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-waterfall"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:db7b7a9465b56474cfd5c529830c0701d1f00171c7a12fbacc537ba3d55d0072"
+      },
+      "sourceRefs": [
+        "atlas-v2-waterfall"
+      ],
+      "specDigest": "94686021cde88d7b9e8cffab4f0108b0c0c938aa81727a270b854abb69f449f7"
     },
     "stages": {
       "spec": {
@@ -1665,8 +1827,13 @@
         "atlas-v2-quality-cost-scatter"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-quality-cost-scatter"
+        ],
         "status": "derived",
-        "sourceDigest": "1ed9ebb2dfb40f6b6efd7fab6c37fc501d0c140c6679cf295a0fd65d4a8b45c6",
+        "sourceDigest": "sha256:1ed9ebb2dfb40f6b6efd7fab6c37fc501d0c140c6679cf295a0fd65d4a8b45c6",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -1747,13 +1914,26 @@
           }
         ]
       },
-      "specDigest": "31495125b5d72ec169185821de83b3ab763951db928a276c8861cad825989a53"
+      "specDigest": "ec1cf3fbddb454598036fc1ec24d266fee6168e21d9097680004a7d237715c87"
     },
-    "specDigest": "31495125b5d72ec169185821de83b3ab763951db928a276c8861cad825989a53",
+    "specDigest": "ec1cf3fbddb454598036fc1ec24d266fee6168e21d9097680004a7d237715c87",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "31495125b5d72ec169185821de83b3ab763951db928a276c8861cad825989a53"
+      "kind": "comparison",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-quality-cost-scatter"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:1ed9ebb2dfb40f6b6efd7fab6c37fc501d0c140c6679cf295a0fd65d4a8b45c6"
+      },
+      "sourceRefs": [
+        "atlas-v2-quality-cost-scatter"
+      ],
+      "specDigest": "ec1cf3fbddb454598036fc1ec24d266fee6168e21d9097680004a7d237715c87"
     },
     "stages": {
       "spec": {
@@ -1900,8 +2080,13 @@
         "atlas-v2-operating-table-sparklines"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-operating-table-sparklines"
+        ],
         "status": "derived",
-        "sourceDigest": "3d0d53ccd74e62863eb27859d1832d8c057914d0e7c7e61e9f227858f1e73cd9",
+        "sourceDigest": "sha256:3d0d53ccd74e62863eb27859d1832d8c057914d0e7c7e61e9f227858f1e73cd9",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -1937,13 +2122,26 @@
           }
         ]
       },
-      "specDigest": "ba62cfb5335718ede5b76964254e23df4aa529689af0786128d8b64b18be8330"
+      "specDigest": "d27c8f7a47ddd57d6c6610670b38322200e9fea307507a2e3e5ef4107ec627ec"
     },
-    "specDigest": "ba62cfb5335718ede5b76964254e23df4aa529689af0786128d8b64b18be8330",
+    "specDigest": "d27c8f7a47ddd57d6c6610670b38322200e9fea307507a2e3e5ef4107ec627ec",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "ba62cfb5335718ede5b76964254e23df4aa529689af0786128d8b64b18be8330"
+      "kind": "chart",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-operating-table-sparklines"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:3d0d53ccd74e62863eb27859d1832d8c057914d0e7c7e61e9f227858f1e73cd9"
+      },
+      "sourceRefs": [
+        "atlas-v2-operating-table-sparklines"
+      ],
+      "specDigest": "d27c8f7a47ddd57d6c6610670b38322200e9fea307507a2e3e5ef4107ec627ec"
     },
     "stages": {
       "spec": {
@@ -2091,8 +2289,13 @@
         "atlas-v2-dense-dashboard-funnel"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-dense-dashboard-funnel"
+        ],
         "status": "derived",
-        "sourceDigest": "fd5b9df1c7a2929d08eca1ef313d1a5f6e5bf0462f79f63a85117fb2bd58f4cd",
+        "sourceDigest": "sha256:fd5b9df1c7a2929d08eca1ef313d1a5f6e5bf0462f79f63a85117fb2bd58f4cd",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -2128,13 +2331,26 @@
           }
         ]
       },
-      "specDigest": "cb7e0db619806534d575d6c3cf3460c964ed85ec33aedd501fad74d91ac8b7dd"
+      "specDigest": "d1daac2aad8a90902fff57bec932aba54387cfa370674d6ecf647581c0e0d5e5"
     },
-    "specDigest": "cb7e0db619806534d575d6c3cf3460c964ed85ec33aedd501fad74d91ac8b7dd",
+    "specDigest": "d1daac2aad8a90902fff57bec932aba54387cfa370674d6ecf647581c0e0d5e5",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "cb7e0db619806534d575d6c3cf3460c964ed85ec33aedd501fad74d91ac8b7dd"
+      "kind": "chart",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-dense-dashboard-funnel"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:fd5b9df1c7a2929d08eca1ef313d1a5f6e5bf0462f79f63a85117fb2bd58f4cd"
+      },
+      "sourceRefs": [
+        "atlas-v2-dense-dashboard-funnel"
+      ],
+      "specDigest": "d1daac2aad8a90902fff57bec932aba54387cfa370674d6ecf647581c0e0d5e5"
     },
     "stages": {
       "spec": {
@@ -2283,8 +2499,13 @@
         "atlas-v2-system-architecture"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-system-architecture"
+        ],
         "status": "derived",
-        "sourceDigest": "097c3da8a02ecebfde575e8d7a5fc10285e9bc2c61825f5ca6e3b26bea0b1660",
+        "sourceDigest": "sha256:097c3da8a02ecebfde575e8d7a5fc10285e9bc2c61825f5ca6e3b26bea0b1660",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -2317,13 +2538,26 @@
           }
         ]
       },
-      "specDigest": "6d56e0056459372ae8ee25c1679f42e1bbde0c12236bfc219e3e2040206f5786"
+      "specDigest": "e3f5e48591014026d1b749e2e4b78c631ba79723aed566d748a5f0f40bbba455"
     },
-    "specDigest": "6d56e0056459372ae8ee25c1679f42e1bbde0c12236bfc219e3e2040206f5786",
+    "specDigest": "e3f5e48591014026d1b749e2e4b78c631ba79723aed566d748a5f0f40bbba455",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "6d56e0056459372ae8ee25c1679f42e1bbde0c12236bfc219e3e2040206f5786"
+      "kind": "graph",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-system-architecture"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:097c3da8a02ecebfde575e8d7a5fc10285e9bc2c61825f5ca6e3b26bea0b1660"
+      },
+      "sourceRefs": [
+        "atlas-v2-system-architecture"
+      ],
+      "specDigest": "e3f5e48591014026d1b749e2e4b78c631ba79723aed566d748a5f0f40bbba455"
     },
     "stages": {
       "spec": {
@@ -2471,8 +2705,13 @@
         "atlas-v2-request-sequence"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-request-sequence"
+        ],
         "status": "derived",
-        "sourceDigest": "48b365ec565675367b6cf8318a4b65c4a7d9c48a8f24b8b6f486045541d4d1c4",
+        "sourceDigest": "sha256:48b365ec565675367b6cf8318a4b65c4a7d9c48a8f24b8b6f486045541d4d1c4",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -2505,13 +2744,26 @@
           }
         ]
       },
-      "specDigest": "169dce31a6d4164dd20e1f695511505f6b80341abd756f72c432a5ba498d334c"
+      "specDigest": "10cec5f8e365edb556a25ad70e5201c63d6bdc2a8d418eb8c66506f7c218dfdf"
     },
-    "specDigest": "169dce31a6d4164dd20e1f695511505f6b80341abd756f72c432a5ba498d334c",
+    "specDigest": "10cec5f8e365edb556a25ad70e5201c63d6bdc2a8d418eb8c66506f7c218dfdf",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "169dce31a6d4164dd20e1f695511505f6b80341abd756f72c432a5ba498d334c"
+      "kind": "graph",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-request-sequence"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:48b365ec565675367b6cf8318a4b65c4a7d9c48a8f24b8b6f486045541d4d1c4"
+      },
+      "sourceRefs": [
+        "atlas-v2-request-sequence"
+      ],
+      "specDigest": "10cec5f8e365edb556a25ad70e5201c63d6bdc2a8d418eb8c66506f7c218dfdf"
     },
     "stages": {
       "spec": {
@@ -2659,8 +2911,13 @@
         "atlas-v2-causal-loop"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-causal-loop"
+        ],
         "status": "derived",
-        "sourceDigest": "5ec5066238f6c571933215ac7e688247884b6ef0711d3cb7ac11834dee3ac3c8",
+        "sourceDigest": "sha256:5ec5066238f6c571933215ac7e688247884b6ef0711d3cb7ac11834dee3ac3c8",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -2758,13 +3015,26 @@
           }
         ]
       },
-      "specDigest": "cf066b9d2e0a71ae872aa48c1c6a1b097ec4a60658258a6ae02bc0a55ea7af07"
+      "specDigest": "5d85c8c90078cbaccca5e7c5b891aea24f1d27ffab0780335e28a2455c74299a"
     },
-    "specDigest": "cf066b9d2e0a71ae872aa48c1c6a1b097ec4a60658258a6ae02bc0a55ea7af07",
+    "specDigest": "5d85c8c90078cbaccca5e7c5b891aea24f1d27ffab0780335e28a2455c74299a",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "cf066b9d2e0a71ae872aa48c1c6a1b097ec4a60658258a6ae02bc0a55ea7af07"
+      "kind": "causal-loop",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-causal-loop"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:5ec5066238f6c571933215ac7e688247884b6ef0711d3cb7ac11834dee3ac3c8"
+      },
+      "sourceRefs": [
+        "atlas-v2-causal-loop"
+      ],
+      "specDigest": "5d85c8c90078cbaccca5e7c5b891aea24f1d27ffab0780335e28a2455c74299a"
     },
     "stages": {
       "spec": {
@@ -2915,8 +3185,13 @@
         "atlas-v2-source-allocation-sankey"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-source-allocation-sankey"
+        ],
         "status": "derived",
-        "sourceDigest": "870bb908b1e0dd26918e43062cd9a9666a1569b93f2f77dfe27e226e5a2c8ea3",
+        "sourceDigest": "sha256:870bb908b1e0dd26918e43062cd9a9666a1569b93f2f77dfe27e226e5a2c8ea3",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -3028,13 +3303,26 @@
           }
         ]
       },
-      "specDigest": "d0da89f6d703742b4f64f806ab0ff18e7ec5a21cffa3487599fec768d52cdc58"
+      "specDigest": "e21d761d451e467470a35e1cceea0c5746d014d5a74c7c32e3807dbdfeb765f1"
     },
-    "specDigest": "d0da89f6d703742b4f64f806ab0ff18e7ec5a21cffa3487599fec768d52cdc58",
+    "specDigest": "e21d761d451e467470a35e1cceea0c5746d014d5a74c7c32e3807dbdfeb765f1",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "d0da89f6d703742b4f64f806ab0ff18e7ec5a21cffa3487599fec768d52cdc58"
+      "kind": "sankey",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-source-allocation-sankey"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:870bb908b1e0dd26918e43062cd9a9666a1569b93f2f77dfe27e226e5a2c8ea3"
+      },
+      "sourceRefs": [
+        "atlas-v2-source-allocation-sankey"
+      ],
+      "specDigest": "e21d761d451e467470a35e1cceea0c5746d014d5a74c7c32e3807dbdfeb765f1"
     },
     "stages": {
       "spec": {
@@ -3184,8 +3472,13 @@
         "atlas-v2-routing-decision-tree"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-routing-decision-tree"
+        ],
         "status": "derived",
-        "sourceDigest": "da33b46c5acd8048dfb5de751ca250214b233d84c0f68ecf40c1b090a87465f6",
+        "sourceDigest": "sha256:da33b46c5acd8048dfb5de751ca250214b233d84c0f68ecf40c1b090a87465f6",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -3218,13 +3511,26 @@
           }
         ]
       },
-      "specDigest": "736bb97af78593582ee7edad3029f36f6d79254deeb2640e40532a65d1308dbe"
+      "specDigest": "ad68bef03577b98ed7ee9486aab3b0b2131c3dc64c102db2d475f349609264f2"
     },
-    "specDigest": "736bb97af78593582ee7edad3029f36f6d79254deeb2640e40532a65d1308dbe",
+    "specDigest": "ad68bef03577b98ed7ee9486aab3b0b2131c3dc64c102db2d475f349609264f2",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "736bb97af78593582ee7edad3029f36f6d79254deeb2640e40532a65d1308dbe"
+      "kind": "graph",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-routing-decision-tree"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:da33b46c5acd8048dfb5de751ca250214b233d84c0f68ecf40c1b090a87465f6"
+      },
+      "sourceRefs": [
+        "atlas-v2-routing-decision-tree"
+      ],
+      "specDigest": "ad68bef03577b98ed7ee9486aab3b0b2131c3dc64c102db2d475f349609264f2"
     },
     "stages": {
       "spec": {
@@ -3371,8 +3677,13 @@
         "atlas-v2-ecosystem-geography"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-ecosystem-geography"
+        ],
         "status": "derived",
-        "sourceDigest": "915fadf9d90e7a2ba4fcc1fd89eca5bf52cf529b308ba1cd303e8edf5d5de7a4",
+        "sourceDigest": "sha256:915fadf9d90e7a2ba4fcc1fd89eca5bf52cf529b308ba1cd303e8edf5d5de7a4",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -3389,13 +3700,26 @@
       "payload": {
         "label": "NodeKit connects the stack while NodeSlide proves the journey"
       },
-      "specDigest": "bcc811010a14c41fdca37633a367d0a72a4dcc80b70891c4765d3dff5164c239"
+      "specDigest": "93fe2e79285c1cb0fe8960c5256239c958f744e47346dfda8801158bec51b3b6"
     },
-    "specDigest": "bcc811010a14c41fdca37633a367d0a72a4dcc80b70891c4765d3dff5164c239",
+    "specDigest": "93fe2e79285c1cb0fe8960c5256239c958f744e47346dfda8801158bec51b3b6",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "bcc811010a14c41fdca37633a367d0a72a4dcc80b70891c4765d3dff5164c239"
+      "kind": "generic",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-ecosystem-geography"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:915fadf9d90e7a2ba4fcc1fd89eca5bf52cf529b308ba1cd303e8edf5d5de7a4"
+      },
+      "sourceRefs": [
+        "atlas-v2-ecosystem-geography"
+      ],
+      "specDigest": "93fe2e79285c1cb0fe8960c5256239c958f744e47346dfda8801158bec51b3b6"
     },
     "stages": {
       "spec": {
@@ -3538,8 +3862,13 @@
         "atlas-v2-research-timeline"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-research-timeline"
+        ],
         "status": "derived",
-        "sourceDigest": "203247c77b49bd955b151aa0b17d91b80e8161e268831197a61befa3dbc23bc1",
+        "sourceDigest": "sha256:203247c77b49bd955b151aa0b17d91b80e8161e268831197a61befa3dbc23bc1",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -3583,13 +3912,26 @@
           }
         ]
       },
-      "specDigest": "f9aa828568b603363f166f729a1def2405bbee601aadcbccbbc51f75b5453705"
+      "specDigest": "d2b0c6857e1ddadf1b50489cf30baab315c24b6db392e36d488951f9e8618605"
     },
-    "specDigest": "f9aa828568b603363f166f729a1def2405bbee601aadcbccbbc51f75b5453705",
+    "specDigest": "d2b0c6857e1ddadf1b50489cf30baab315c24b6db392e36d488951f9e8618605",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "f9aa828568b603363f166f729a1def2405bbee601aadcbccbbc51f75b5453705"
+      "kind": "timeline",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-research-timeline"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:203247c77b49bd955b151aa0b17d91b80e8161e268831197a61befa3dbc23bc1"
+      },
+      "sourceRefs": [
+        "atlas-v2-research-timeline"
+      ],
+      "specDigest": "d2b0c6857e1ddadf1b50489cf30baab315c24b6db392e36d488951f9e8618605"
     },
     "stages": {
       "spec": {
@@ -3732,8 +4074,13 @@
         "atlas-v2-roadmap-gantt"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-roadmap-gantt"
+        ],
         "status": "derived",
-        "sourceDigest": "0b5321e5fd0d0187851f0b2673d337ab7f18b641853ac490ac195b85ee4c078a",
+        "sourceDigest": "sha256:0b5321e5fd0d0187851f0b2673d337ab7f18b641853ac490ac195b85ee4c078a",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -3795,13 +4142,26 @@
           }
         ]
       },
-      "specDigest": "c8803a14eb9bc8d61674f774b0edfe53de92f5d9421a207ef28c62f44eebe55f"
+      "specDigest": "eb503700b9badf7224aa7e757e1ef464da658bd941e8ccaecfcd4af895d74fb5"
     },
-    "specDigest": "c8803a14eb9bc8d61674f774b0edfe53de92f5d9421a207ef28c62f44eebe55f",
+    "specDigest": "eb503700b9badf7224aa7e757e1ef464da658bd941e8ccaecfcd4af895d74fb5",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "c8803a14eb9bc8d61674f774b0edfe53de92f5d9421a207ef28c62f44eebe55f"
+      "kind": "gantt",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-roadmap-gantt"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:0b5321e5fd0d0187851f0b2673d337ab7f18b641853ac490ac195b85ee4c078a"
+      },
+      "sourceRefs": [
+        "atlas-v2-roadmap-gantt"
+      ],
+      "specDigest": "eb503700b9badf7224aa7e757e1ef464da658bd941e8ccaecfcd4af895d74fb5"
     },
     "stages": {
       "spec": {
@@ -3946,8 +4306,13 @@
         "atlas-v2-evidence-scrollytelling"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-evidence-scrollytelling"
+        ],
         "status": "derived",
-        "sourceDigest": "1bba559aa2eba2253e72b17713ab84dd8a440ada34f5283eb1fbf42d9e31306e",
+        "sourceDigest": "sha256:1bba559aa2eba2253e72b17713ab84dd8a440ada34f5283eb1fbf42d9e31306e",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -3982,13 +4347,26 @@
         "transition": "scrub",
         "staticFallbackStateId": "state-5"
       },
-      "specDigest": "be7e5810cc11e8e0712301f453d6670bdd6adadf2c0f6e0e76fc8287f6df21b6"
+      "specDigest": "eb0b8062cb5ca50e4031f4fea5eb8a73c85573aeaae4ba574c2a31fde0cdd223"
     },
-    "specDigest": "be7e5810cc11e8e0712301f453d6670bdd6adadf2c0f6e0e76fc8287f6df21b6",
+    "specDigest": "eb0b8062cb5ca50e4031f4fea5eb8a73c85573aeaae4ba574c2a31fde0cdd223",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "be7e5810cc11e8e0712301f453d6670bdd6adadf2c0f6e0e76fc8287f6df21b6"
+      "kind": "motion",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-evidence-scrollytelling"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:1bba559aa2eba2253e72b17713ab84dd8a440ada34f5283eb1fbf42d9e31306e"
+      },
+      "sourceRefs": [
+        "atlas-v2-evidence-scrollytelling"
+      ],
+      "specDigest": "eb0b8062cb5ca50e4031f4fea5eb8a73c85573aeaae4ba574c2a31fde0cdd223"
     },
     "stages": {
       "spec": {
@@ -4136,8 +4514,13 @@
         "atlas-v2-animated-chart-progression"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-animated-chart-progression"
+        ],
         "status": "derived",
-        "sourceDigest": "ad8514d7be775bbf6bf408821931fbc718064b4dede4f0453d67bbd976c4ec4a",
+        "sourceDigest": "sha256:ad8514d7be775bbf6bf408821931fbc718064b4dede4f0453d67bbd976c4ec4a",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -4172,13 +4555,26 @@
         "transition": "step",
         "staticFallbackStateId": "state-5"
       },
-      "specDigest": "b976d148f0aeefecb908d17bdfc24eef96cd98ea0d4af552b9f8f38cc0ddb7fa"
+      "specDigest": "1d52ad205315250a726ebaee249c1833b86ad3b0340377a9acefb9bda6c79e15"
     },
-    "specDigest": "b976d148f0aeefecb908d17bdfc24eef96cd98ea0d4af552b9f8f38cc0ddb7fa",
+    "specDigest": "1d52ad205315250a726ebaee249c1833b86ad3b0340377a9acefb9bda6c79e15",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "b976d148f0aeefecb908d17bdfc24eef96cd98ea0d4af552b9f8f38cc0ddb7fa"
+      "kind": "motion",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-animated-chart-progression"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:ad8514d7be775bbf6bf408821931fbc718064b4dede4f0453d67bbd976c4ec4a"
+      },
+      "sourceRefs": [
+        "atlas-v2-animated-chart-progression"
+      ],
+      "specDigest": "1d52ad205315250a726ebaee249c1833b86ad3b0340377a9acefb9bda6c79e15"
     },
     "stages": {
       "spec": {
@@ -4327,8 +4723,13 @@
         "atlas-v2-full-bleed-editorial-image"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-full-bleed-editorial-image"
+        ],
         "status": "derived",
-        "sourceDigest": "37f04d6a56736b710e861e240a9f4d2f5fb7d2667361ee33aab61d8ec893bdd1",
+        "sourceDigest": "sha256:37f04d6a56736b710e861e240a9f4d2f5fb7d2667361ee33aab61d8ec893bdd1",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -4345,13 +4746,26 @@
       "payload": {
         "label": "A visual story can lead with atmosphere and still preserve proof"
       },
-      "specDigest": "0d73fc12751248a2ca386c78d5cba7362e965da751ab35e19e5aebe8f4d1c9c6"
+      "specDigest": "b992c6abd415d03a9024e9197884c8ef6e2193c8130ff7558891e4f9a3dc5f81"
     },
-    "specDigest": "0d73fc12751248a2ca386c78d5cba7362e965da751ab35e19e5aebe8f4d1c9c6",
+    "specDigest": "b992c6abd415d03a9024e9197884c8ef6e2193c8130ff7558891e4f9a3dc5f81",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "0d73fc12751248a2ca386c78d5cba7362e965da751ab35e19e5aebe8f4d1c9c6"
+      "kind": "generic",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-full-bleed-editorial-image"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:37f04d6a56736b710e861e240a9f4d2f5fb7d2667361ee33aab61d8ec893bdd1"
+      },
+      "sourceRefs": [
+        "atlas-v2-full-bleed-editorial-image"
+      ],
+      "specDigest": "b992c6abd415d03a9024e9197884c8ef6e2193c8130ff7558891e4f9a3dc5f81"
     },
     "stages": {
       "spec": {
@@ -4496,8 +4910,13 @@
         "atlas-v2-real-screenshot-callouts"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-real-screenshot-callouts"
+        ],
         "status": "derived",
-        "sourceDigest": "913b46b42ff6cea9043da5a0b643d2411dc480e1d7256bd172348233bbfb7b91",
+        "sourceDigest": "sha256:913b46b42ff6cea9043da5a0b643d2411dc480e1d7256bd172348233bbfb7b91",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -4513,18 +4932,31 @@
       },
       "payload": {
         "mimeType": "image/png",
-        "digest": "nodeslide-artifact-lab-v1-gallery-capture",
+        "digest": "sha256:f91425413b65d3c9a7e0f2f457a4879907fd45769d17e6876674707ce4a02948",
         "claimId": "real-screenshot-callouts:claim:1",
         "captureVersion": "artifact-atlas-v1",
         "callouts": 3
       },
-      "specDigest": "f000d4b8ce8a8d388c8261b2c3c2e1fd65d71f17eee0becd6bf9350950067c43"
+      "specDigest": "b7aa783464bf9663ab714ce8a14fef00d420c3b3c0ef8126fa53fba47c14685b"
     },
-    "specDigest": "f000d4b8ce8a8d388c8261b2c3c2e1fd65d71f17eee0becd6bf9350950067c43",
+    "specDigest": "b7aa783464bf9663ab714ce8a14fef00d420c3b3c0ef8126fa53fba47c14685b",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "f000d4b8ce8a8d388c8261b2c3c2e1fd65d71f17eee0becd6bf9350950067c43"
+      "kind": "evidence-media",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-real-screenshot-callouts"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:913b46b42ff6cea9043da5a0b643d2411dc480e1d7256bd172348233bbfb7b91"
+      },
+      "sourceRefs": [
+        "atlas-v2-real-screenshot-callouts"
+      ],
+      "specDigest": "b7aa783464bf9663ab714ce8a14fef00d420c3b3c0ef8126fa53fba47c14685b"
     },
     "stages": {
       "spec": {
@@ -4674,8 +5106,13 @@
         "atlas-v2-interaction-clip"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-interaction-clip"
+        ],
         "status": "derived",
-        "sourceDigest": "162130281edf588052c517a1b3ebe38938704ba3bee4b819f05301af6e33fc4d",
+        "sourceDigest": "sha256:162130281edf588052c517a1b3ebe38938704ba3bee4b819f05301af6e33fc4d",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -4704,13 +5141,26 @@
         "transition": "step",
         "staticFallbackStateId": "state-3"
       },
-      "specDigest": "7fe2a19ddba94faf2902b1b19dc0998cdf597bf82664b5ead54c50fe2be980e5"
+      "specDigest": "5c8a9905845ab0b80445608e793b68a616979ac47e6ddcfb72046867f0b26208"
     },
-    "specDigest": "7fe2a19ddba94faf2902b1b19dc0998cdf597bf82664b5ead54c50fe2be980e5",
+    "specDigest": "5c8a9905845ab0b80445608e793b68a616979ac47e6ddcfb72046867f0b26208",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "7fe2a19ddba94faf2902b1b19dc0998cdf597bf82664b5ead54c50fe2be980e5"
+      "kind": "motion",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-interaction-clip"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:162130281edf588052c517a1b3ebe38938704ba3bee4b819f05301af6e33fc4d"
+      },
+      "sourceRefs": [
+        "atlas-v2-interaction-clip"
+      ],
+      "specDigest": "5c8a9905845ab0b80445608e793b68a616979ac47e6ddcfb72046867f0b26208"
     },
     "stages": {
       "spec": {
@@ -4863,8 +5313,13 @@
         "atlas-v2-product-before-after"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-product-before-after"
+        ],
         "status": "derived",
-        "sourceDigest": "d8d7e3510f7598697e0db27d6a1cb9a1b800a3e9d0a792207653c155d0bde408",
+        "sourceDigest": "sha256:d8d7e3510f7598697e0db27d6a1cb9a1b800a3e9d0a792207653c155d0bde408",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -4880,17 +5335,30 @@
       },
       "payload": {
         "mimeType": "image/png",
-        "digest": "nodeslide-product-before-after",
+        "digest": "sha256:b8bae123c91bf1db95cd07c07f6757ddcd7d21966f13d831a86672bf27d1a253",
         "claimId": "product-before-after:claim:1",
         "captureVersion": "artifact-atlas-v2"
       },
-      "specDigest": "2d405dae3c2591ef1bc775a92d1897ee7d997b3080970cce0fe189be7bb9bc1d"
+      "specDigest": "2bb2d6f14a279db2f180d7cea9ab8edd4602a0c7975637a13348564c04bda9a5"
     },
-    "specDigest": "2d405dae3c2591ef1bc775a92d1897ee7d997b3080970cce0fe189be7bb9bc1d",
+    "specDigest": "2bb2d6f14a279db2f180d7cea9ab8edd4602a0c7975637a13348564c04bda9a5",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "2d405dae3c2591ef1bc775a92d1897ee7d997b3080970cce0fe189be7bb9bc1d"
+      "kind": "evidence-media",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-product-before-after"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:d8d7e3510f7598697e0db27d6a1cb9a1b800a3e9d0a792207653c155d0bde408"
+      },
+      "sourceRefs": [
+        "atlas-v2-product-before-after"
+      ],
+      "specDigest": "2bb2d6f14a279db2f180d7cea9ab8edd4602a0c7975637a13348564c04bda9a5"
     },
     "stages": {
       "spec": {
@@ -5039,8 +5507,13 @@
         "atlas-v2-spatial-scene"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-spatial-scene"
+        ],
         "status": "derived",
-        "sourceDigest": "e12c0c1d143e304a76205d4c7bf1094ff035eb03f15cb7437a3540d2814b4d53",
+        "sourceDigest": "sha256:e12c0c1d143e304a76205d4c7bf1094ff035eb03f15cb7437a3540d2814b4d53",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -5079,13 +5552,26 @@
           }
         ]
       },
-      "specDigest": "837aa0e68bd1a722b98dbdf6f5acf9d763404fddfef08cd349fed353575bc277"
+      "specDigest": "75d6e2c20a3ec2c119e3e4251b266867537f969387b2a176e930c693e0a667f4"
     },
-    "specDigest": "837aa0e68bd1a722b98dbdf6f5acf9d763404fddfef08cd349fed353575bc277",
+    "specDigest": "75d6e2c20a3ec2c119e3e4251b266867537f969387b2a176e930c693e0a667f4",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "837aa0e68bd1a722b98dbdf6f5acf9d763404fddfef08cd349fed353575bc277"
+      "kind": "spatial-scene",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-spatial-scene"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:e12c0c1d143e304a76205d4c7bf1094ff035eb03f15cb7437a3540d2814b4d53"
+      },
+      "sourceRefs": [
+        "atlas-v2-spatial-scene"
+      ],
+      "specDigest": "75d6e2c20a3ec2c119e3e4251b266867537f969387b2a176e930c693e0a667f4"
     },
     "stages": {
       "spec": {
@@ -5234,8 +5720,13 @@
         "atlas-v2-claim-source-lineage"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-claim-source-lineage"
+        ],
         "status": "derived",
-        "sourceDigest": "327802fbad6d4abe4a73c3337b2c2d75c109f8e883f5a22d213ebe02d44392e9",
+        "sourceDigest": "sha256:327802fbad6d4abe4a73c3337b2c2d75c109f8e883f5a22d213ebe02d44392e9",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -5268,13 +5759,26 @@
           }
         ]
       },
-      "specDigest": "4a1d2e66497fb0036a33271911fc8fb85fae2efc24b5d1dcdf0d1be4a96128b1"
+      "specDigest": "6d80df8bf5e25470521a0e02c8fae29a7265be12a43253df0c099c16cbf8d8e3"
     },
-    "specDigest": "4a1d2e66497fb0036a33271911fc8fb85fae2efc24b5d1dcdf0d1be4a96128b1",
+    "specDigest": "6d80df8bf5e25470521a0e02c8fae29a7265be12a43253df0c099c16cbf8d8e3",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "4a1d2e66497fb0036a33271911fc8fb85fae2efc24b5d1dcdf0d1be4a96128b1"
+      "kind": "graph",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-claim-source-lineage"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:327802fbad6d4abe4a73c3337b2c2d75c109f8e883f5a22d213ebe02d44392e9"
+      },
+      "sourceRefs": [
+        "atlas-v2-claim-source-lineage"
+      ],
+      "specDigest": "6d80df8bf5e25470521a0e02c8fae29a7265be12a43253df0c099c16cbf8d8e3"
     },
     "stages": {
       "spec": {
@@ -5421,8 +5925,13 @@
         "atlas-v2-pdf-evidence-region"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-pdf-evidence-region"
+        ],
         "status": "derived",
-        "sourceDigest": "41dda075bf1a654abe4abe6f1b2117d2ef6d250b0132ab640cdc247708e5dd60",
+        "sourceDigest": "sha256:41dda075bf1a654abe4abe6f1b2117d2ef6d250b0132ab640cdc247708e5dd60",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -5449,13 +5958,26 @@
         },
         "captureVersion": "artifact-atlas-v2"
       },
-      "specDigest": "f4a94bd5dfbaf597f976b22728c2b8d7157bcf22c6cee1815e8aa84b21a96a36"
+      "specDigest": "904df91299c63ac3db4b0c96d00e14db9a5ee0d3dc3d7535b2808e9237181d27"
     },
-    "specDigest": "f4a94bd5dfbaf597f976b22728c2b8d7157bcf22c6cee1815e8aa84b21a96a36",
+    "specDigest": "904df91299c63ac3db4b0c96d00e14db9a5ee0d3dc3d7535b2808e9237181d27",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "f4a94bd5dfbaf597f976b22728c2b8d7157bcf22c6cee1815e8aa84b21a96a36"
+      "kind": "evidence-media",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-pdf-evidence-region"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:41dda075bf1a654abe4abe6f1b2117d2ef6d250b0132ab640cdc247708e5dd60"
+      },
+      "sourceRefs": [
+        "atlas-v2-pdf-evidence-region"
+      ],
+      "specDigest": "904df91299c63ac3db4b0c96d00e14db9a5ee0d3dc3d7535b2808e9237181d27"
     },
     "stages": {
       "spec": {
@@ -5603,8 +6125,13 @@
         "atlas-v2-code-runtime-proof"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-code-runtime-proof"
+        ],
         "status": "derived",
-        "sourceDigest": "42429662fb1fcfb84bfe953df09e5ca6981c1c2767607cbc5a5ec2a9730724ad",
+        "sourceDigest": "sha256:42429662fb1fcfb84bfe953df09e5ca6981c1c2767607cbc5a5ec2a9730724ad",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -5624,40 +6151,35 @@
         "receiptDigest": "",
         "status": "illustrative-not-measured"
       },
-      "specDigest": "0d101a04a5354e5ba5792309406fa739054582551e4b1686db974b41ce863c0a"
+      "specDigest": "4e5441f8aad30d8f31c79d4c746331be64ef3058f36f9915c9415f50e9d151ac"
     },
-    "specDigest": "0d101a04a5354e5ba5792309406fa739054582551e4b1686db974b41ce863c0a",
+    "specDigest": "4e5441f8aad30d8f31c79d4c746331be64ef3058f36f9915c9415f50e9d151ac",
     "semanticValidation": {
       "ok": true,
-      "issues": [
-        {
-          "code": "runtime_receipt_unbound",
-          "severity": "warning",
-          "message": "Runtime panel is explicitly illustrative and cannot support a measured claim."
-        }
+      "issues": [],
+      "kind": "runtime-proof",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-code-runtime-proof"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:42429662fb1fcfb84bfe953df09e5ca6981c1c2767607cbc5a5ec2a9730724ad"
+      },
+      "sourceRefs": [
+        "atlas-v2-code-runtime-proof"
       ],
-      "specDigest": "0d101a04a5354e5ba5792309406fa739054582551e4b1686db974b41ce863c0a"
+      "specDigest": "4e5441f8aad30d8f31c79d4c746331be64ef3058f36f9915c9415f50e9d151ac"
     },
     "stages": {
       "spec": {
         "status": "passed",
-        "issues": [
-          {
-            "code": "runtime_receipt_unbound",
-            "severity": "warning",
-            "message": "Runtime panel is explicitly illustrative and cannot support a measured claim."
-          }
-        ]
+        "issues": []
       },
       "semantic": {
         "status": "passed",
-        "issues": [
-          {
-            "code": "runtime_receipt_unbound",
-            "severity": "warning",
-            "message": "Runtime panel is explicitly illustrative and cannot support a measured claim."
-          }
-        ]
+        "issues": []
       },
       "evidence": {
         "status": "passed",
@@ -5791,8 +6313,13 @@
         "atlas-v2-otel-trace"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-otel-trace"
+        ],
         "status": "derived",
-        "sourceDigest": "391204d668c6c04ae2c35f683ca157af2183191a7ccf6a825d5bacb1222c79d0",
+        "sourceDigest": "sha256:391204d668c6c04ae2c35f683ca157af2183191a7ccf6a825d5bacb1222c79d0",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -5811,40 +6338,35 @@
         "spans": [],
         "status": "illustrative-not-observed"
       },
-      "specDigest": "6f7e584f174b8584013f3b11b0e34f9a9eda49045dcb8abf5327701fc171e6ed"
+      "specDigest": "53e29a35e4acbab482e10113b0e651dc2bb0fc23e57f9f94df4837cc7d996173"
     },
-    "specDigest": "6f7e584f174b8584013f3b11b0e34f9a9eda49045dcb8abf5327701fc171e6ed",
+    "specDigest": "53e29a35e4acbab482e10113b0e651dc2bb0fc23e57f9f94df4837cc7d996173",
     "semanticValidation": {
       "ok": true,
-      "issues": [
-        {
-          "code": "trace_receipt_unbound",
-          "severity": "warning",
-          "message": "Illustrative trace is not observed production evidence."
-        }
+      "issues": [],
+      "kind": "trace",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-otel-trace"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:391204d668c6c04ae2c35f683ca157af2183191a7ccf6a825d5bacb1222c79d0"
+      },
+      "sourceRefs": [
+        "atlas-v2-otel-trace"
       ],
-      "specDigest": "6f7e584f174b8584013f3b11b0e34f9a9eda49045dcb8abf5327701fc171e6ed"
+      "specDigest": "53e29a35e4acbab482e10113b0e651dc2bb0fc23e57f9f94df4837cc7d996173"
     },
     "stages": {
       "spec": {
         "status": "passed",
-        "issues": [
-          {
-            "code": "trace_receipt_unbound",
-            "severity": "warning",
-            "message": "Illustrative trace is not observed production evidence."
-          }
-        ]
+        "issues": []
       },
       "semantic": {
         "status": "passed",
-        "issues": [
-          {
-            "code": "trace_receipt_unbound",
-            "severity": "warning",
-            "message": "Illustrative trace is not observed production evidence."
-          }
-        ]
+        "issues": []
       },
       "evidence": {
         "status": "passed",
@@ -5979,8 +6501,13 @@
         "atlas-v2-quality-cost-equation"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-quality-cost-equation"
+        ],
         "status": "derived",
-        "sourceDigest": "c33408154d08d526cb5c94a2651f52f42c6f6fb176409f6209d6cc6f66d3d5c8",
+        "sourceDigest": "sha256:c33408154d08d526cb5c94a2651f52f42c6f6fb176409f6209d6cc6f66d3d5c8",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -6051,13 +6578,26 @@
         "tolerance": 0.0001,
         "rounding": 3
       },
-      "specDigest": "0b1fa53421fe22a66c73e1bd9240c77d3f6e88b8722ae1f7a47b7c084e88ae90"
+      "specDigest": "b7dd72535d50355dbc47c0cbb05ffbefd42ab3ff7533a36af5a0be75e3d72335"
     },
-    "specDigest": "0b1fa53421fe22a66c73e1bd9240c77d3f6e88b8722ae1f7a47b7c084e88ae90",
+    "specDigest": "b7dd72535d50355dbc47c0cbb05ffbefd42ab3ff7533a36af5a0be75e3d72335",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "0b1fa53421fe22a66c73e1bd9240c77d3f6e88b8722ae1f7a47b7c084e88ae90"
+      "kind": "equation",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-quality-cost-equation"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:c33408154d08d526cb5c94a2651f52f42c6f6fb176409f6209d6cc6f66d3d5c8"
+      },
+      "sourceRefs": [
+        "atlas-v2-quality-cost-equation"
+      ],
+      "specDigest": "b7dd72535d50355dbc47c0cbb05ffbefd42ab3ff7533a36af5a0be75e3d72335"
     },
     "stages": {
       "spec": {
@@ -6206,8 +6746,13 @@
         "atlas-v2-deck-ci-receipt"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-deck-ci-receipt"
+        ],
         "status": "derived",
-        "sourceDigest": "644b3dfe41804f631e830731f9168ebda36ae6b6026ef3e0ad0839c368b016b9",
+        "sourceDigest": "sha256:644b3dfe41804f631e830731f9168ebda36ae6b6026ef3e0ad0839c368b016b9",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -6224,13 +6769,26 @@
       "payload": {
         "label": "A deck is not done until both pixels and semantics pass"
       },
-      "specDigest": "98e96569ca5c821a85e9d04ed91f78e2f62d28c57f985dd1e1c3e01b19209dce"
+      "specDigest": "ba13f4bec11232c594b61b8058474070779adbef43f2cd863567ca08e7d0d3f9"
     },
-    "specDigest": "98e96569ca5c821a85e9d04ed91f78e2f62d28c57f985dd1e1c3e01b19209dce",
+    "specDigest": "ba13f4bec11232c594b61b8058474070779adbef43f2cd863567ca08e7d0d3f9",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "98e96569ca5c821a85e9d04ed91f78e2f62d28c57f985dd1e1c3e01b19209dce"
+      "kind": "generic",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-deck-ci-receipt"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:644b3dfe41804f631e830731f9168ebda36ae6b6026ef3e0ad0839c368b016b9"
+      },
+      "sourceRefs": [
+        "atlas-v2-deck-ci-receipt"
+      ],
+      "specDigest": "ba13f4bec11232c594b61b8058474070779adbef43f2cd863567ca08e7d0d3f9"
     },
     "stages": {
       "spec": {
@@ -6373,8 +6931,13 @@
         "atlas-v2-risk-matrix"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-risk-matrix"
+        ],
         "status": "derived",
-        "sourceDigest": "9f6eb75c98fee520ef9194e7e029805c8a8a7f349d5245569ed151501242d0a3",
+        "sourceDigest": "sha256:9f6eb75c98fee520ef9194e7e029805c8a8a7f349d5245569ed151501242d0a3",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -6415,13 +6978,26 @@
           }
         ]
       },
-      "specDigest": "28c2bf01aec1987048d32de582e8e825f34d11228fd1db9905e4b6524ed074d7"
+      "specDigest": "174df3a24c8408ae8ba9a0638e2c795c47307242ea41c0b74c3ca1968a5c2c5d"
     },
-    "specDigest": "28c2bf01aec1987048d32de582e8e825f34d11228fd1db9905e4b6524ed074d7",
+    "specDigest": "174df3a24c8408ae8ba9a0638e2c795c47307242ea41c0b74c3ca1968a5c2c5d",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "28c2bf01aec1987048d32de582e8e825f34d11228fd1db9905e4b6524ed074d7"
+      "kind": "risk-matrix",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-risk-matrix"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:9f6eb75c98fee520ef9194e7e029805c8a8a7f349d5245569ed151501242d0a3"
+      },
+      "sourceRefs": [
+        "atlas-v2-risk-matrix"
+      ],
+      "specDigest": "174df3a24c8408ae8ba9a0638e2c795c47307242ea41c0b74c3ca1968a5c2c5d"
     },
     "stages": {
       "spec": {
@@ -6565,8 +7141,13 @@
         "atlas-v2-cost-quality-frontier"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-cost-quality-frontier"
+        ],
         "status": "derived",
-        "sourceDigest": "8beeaea1793af1535987b1c66f96d760b4b45d544de573d5979ed2203c0ab1cc",
+        "sourceDigest": "sha256:8beeaea1793af1535987b1c66f96d760b4b45d544de573d5979ed2203c0ab1cc",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -6647,13 +7228,26 @@
           }
         ]
       },
-      "specDigest": "4f80de957af332154e075dd6791ae61853929eecb7832935ae03d4c4e25103c7"
+      "specDigest": "0aa7ea0e8e7bd4aaec90586695a916e2cce3f21242965960b681ad33bf7825ff"
     },
-    "specDigest": "4f80de957af332154e075dd6791ae61853929eecb7832935ae03d4c4e25103c7",
+    "specDigest": "0aa7ea0e8e7bd4aaec90586695a916e2cce3f21242965960b681ad33bf7825ff",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "4f80de957af332154e075dd6791ae61853929eecb7832935ae03d4c4e25103c7"
+      "kind": "comparison",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-cost-quality-frontier"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:8beeaea1793af1535987b1c66f96d760b4b45d544de573d5979ed2203c0ab1cc"
+      },
+      "sourceRefs": [
+        "atlas-v2-cost-quality-frontier"
+      ],
+      "specDigest": "0aa7ea0e8e7bd4aaec90586695a916e2cce3f21242965960b681ad33bf7825ff"
     },
     "stages": {
       "spec": {
@@ -6801,8 +7395,13 @@
         "atlas-v2-model-compare"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-model-compare"
+        ],
         "status": "derived",
-        "sourceDigest": "1d05ff875308a2ad9b547474dd68c575ffb7825de38e869daa2cf7cd2647492a",
+        "sourceDigest": "sha256:1d05ff875308a2ad9b547474dd68c575ffb7825de38e869daa2cf7cd2647492a",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -6883,13 +7482,26 @@
           }
         ]
       },
-      "specDigest": "b300de59b317b13e44da987ac54cdcfc5cfe1a5486717ca74f1ad5f6a7a3bafb"
+      "specDigest": "2f0b42ee53f0cba3cdac2aef7f1c766def7a39feabfe9f319c6546a0d00f2ebe"
     },
-    "specDigest": "b300de59b317b13e44da987ac54cdcfc5cfe1a5486717ca74f1ad5f6a7a3bafb",
+    "specDigest": "2f0b42ee53f0cba3cdac2aef7f1c766def7a39feabfe9f319c6546a0d00f2ebe",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "b300de59b317b13e44da987ac54cdcfc5cfe1a5486717ca74f1ad5f6a7a3bafb"
+      "kind": "comparison",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-model-compare"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:1d05ff875308a2ad9b547474dd68c575ffb7825de38e869daa2cf7cd2647492a"
+      },
+      "sourceRefs": [
+        "atlas-v2-model-compare"
+      ],
+      "specDigest": "2f0b42ee53f0cba3cdac2aef7f1c766def7a39feabfe9f319c6546a0d00f2ebe"
     },
     "stages": {
       "spec": {
@@ -7032,8 +7644,13 @@
         "atlas-v2-harness-compare"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-harness-compare"
+        ],
         "status": "derived",
-        "sourceDigest": "13029ab44bf2fa272763383d3953d38694fb95e38d0c770c7f0a1404514d37d2",
+        "sourceDigest": "sha256:13029ab44bf2fa272763383d3953d38694fb95e38d0c770c7f0a1404514d37d2",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -7074,13 +7691,26 @@
           }
         ]
       },
-      "specDigest": "f29e92cf5eb4c11b7345eb7cb5eb7399ba832f1e7fa978ae8f81ff357cb620f2"
+      "specDigest": "12942b2200f053f9a3ca5d1cfc779f51b0293848f19673d4b712f73f2ffb0eb9"
     },
-    "specDigest": "f29e92cf5eb4c11b7345eb7cb5eb7399ba832f1e7fa978ae8f81ff357cb620f2",
+    "specDigest": "12942b2200f053f9a3ca5d1cfc779f51b0293848f19673d4b712f73f2ffb0eb9",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "f29e92cf5eb4c11b7345eb7cb5eb7399ba832f1e7fa978ae8f81ff357cb620f2"
+      "kind": "comparison",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-harness-compare"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:13029ab44bf2fa272763383d3953d38694fb95e38d0c770c7f0a1404514d37d2"
+      },
+      "sourceRefs": [
+        "atlas-v2-harness-compare"
+      ],
+      "specDigest": "12942b2200f053f9a3ca5d1cfc779f51b0293848f19673d4b712f73f2ffb0eb9"
     },
     "stages": {
       "spec": {
@@ -7225,8 +7855,13 @@
         "atlas-v2-final-recommendation"
       ],
       "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-final-recommendation"
+        ],
         "status": "derived",
-        "sourceDigest": "3491eae6eda844bc78162e3fb4749f19a00a327cf9e06137d0ccc1ada34f04ee",
+        "sourceDigest": "sha256:3491eae6eda844bc78162e3fb4749f19a00a327cf9e06137d0ccc1ada34f04ee",
         "assumptions": []
       },
       "browserContract": "semantic-and-visual",
@@ -7243,13 +7878,26 @@
       "payload": {
         "label": "Reuse the visual vocabulary, then adapt the communication contract"
       },
-      "specDigest": "2ec5965101d1089e0ba8fb3d670851e04f0622df5f5d9049fd5e04eaacfe90f6"
+      "specDigest": "9da599088d01c86439fd5926d5b2ad248f1f8606b65cf7180c340bd5ae7f10eb"
     },
-    "specDigest": "2ec5965101d1089e0ba8fb3d670851e04f0622df5f5d9049fd5e04eaacfe90f6",
+    "specDigest": "9da599088d01c86439fd5926d5b2ad248f1f8606b65cf7180c340bd5ae7f10eb",
     "semanticValidation": {
       "ok": true,
       "issues": [],
-      "specDigest": "2ec5965101d1089e0ba8fb3d670851e04f0622df5f5d9049fd5e04eaacfe90f6"
+      "kind": "generic",
+      "provenance": {
+        "truthState": "derived",
+        "rationale": "Artifact is deterministically derived from its declared evidence.",
+        "sourceRefs": [
+          "atlas-v2-final-recommendation"
+        ],
+        "assumptions": [],
+        "sourceDigest": "sha256:3491eae6eda844bc78162e3fb4749f19a00a327cf9e06137d0ccc1ada34f04ee"
+      },
+      "sourceRefs": [
+        "atlas-v2-final-recommendation"
+      ],
+      "specDigest": "9da599088d01c86439fd5926d5b2ad248f1f8606b65cf7180c340bd5ae7f10eb"
     },
     "stages": {
       "spec": {

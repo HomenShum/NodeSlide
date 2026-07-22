@@ -1,0 +1,490 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nodeslide.vercel.app/schemas/nodeslide.artifact-spec.v1.json",
+  "title": "NodeSlide ArtifactSpec v1",
+  "description": "Canonical pre-geometry artifact intent. Runtime validation remains authoritative.",
+  "oneOf": [
+    { "$ref": "#/$defs/generic" },
+    { "$ref": "#/$defs/chart" },
+    { "$ref": "#/$defs/waterfall" },
+    { "$ref": "#/$defs/sankey" },
+    { "$ref": "#/$defs/graph" },
+    { "$ref": "#/$defs/causal-loop" },
+    { "$ref": "#/$defs/timeline" },
+    { "$ref": "#/$defs/gantt" },
+    { "$ref": "#/$defs/evidence-media" },
+    { "$ref": "#/$defs/motion" },
+    { "$ref": "#/$defs/comparison" },
+    { "$ref": "#/$defs/equation" },
+    { "$ref": "#/$defs/runtime-proof" },
+    { "$ref": "#/$defs/trace" },
+    { "$ref": "#/$defs/risk-matrix" },
+    { "$ref": "#/$defs/spatial-scene" }
+  ],
+  "$defs": {
+    "provenance": {
+      "type": "object",
+      "required": ["truthState", "rationale", "sourceRefs"],
+      "properties": {
+        "truthState": {
+          "enum": ["observed", "derived", "estimated", "illustrative", "missing", "not-run"]
+        },
+        "rationale": { "type": "string", "minLength": 1, "maxLength": 320 },
+        "sourceRefs": {
+          "type": "array",
+          "maxItems": 8,
+          "items": { "type": "string", "minLength": 1, "maxLength": 160 }
+        },
+        "sourceDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      },
+      "additionalProperties": true
+    },
+    "base": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "id",
+        "kind",
+        "narrativeJob",
+        "claimIds",
+        "sourceIds",
+        "provenance",
+        "payload"
+      ],
+      "properties": {
+        "schemaVersion": { "const": "nodeslide.artifact-spec/v1" },
+        "id": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "narrativeJob": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "claimIds": { "type": "array", "items": { "type": "string" } },
+        "sourceIds": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      },
+      "additionalProperties": true
+    },
+    "node": {
+      "type": "object",
+      "required": ["id"],
+      "properties": { "id": { "type": "string", "minLength": 1 }, "label": { "type": "string" } },
+      "additionalProperties": true
+    },
+    "edge": {
+      "type": "object",
+      "required": ["from", "to"],
+      "properties": {
+        "id": { "type": "string" },
+        "from": { "type": "string", "minLength": 1 },
+        "to": { "type": "string", "minLength": 1 },
+        "directed": { "type": "boolean" },
+        "label": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "interval": {
+      "type": "object",
+      "required": ["id", "start", "end"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" },
+        "start": { "type": "number" },
+        "end": { "type": "number" }
+      },
+      "additionalProperties": true
+    },
+    "expression": {
+      "type": "object",
+      "required": ["op"],
+      "properties": {
+        "op": { "enum": ["value", "add", "subtract", "multiply", "divide"] },
+        "name": { "type": "string" },
+        "args": { "type": "array", "items": { "$ref": "#/$defs/expression" } }
+      },
+      "additionalProperties": false
+    },
+    "generic": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "generic" },
+            "payload": { "type": "object", "minProperties": 1 }
+          }
+        }
+      ]
+    },
+    "chart": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "chart" },
+            "payload": {
+              "type": "object",
+              "required": ["unit", "xAxis", "yAxis", "series"],
+              "properties": {
+                "unit": { "type": "string", "minLength": 1 },
+                "xAxis": {
+                  "type": "object",
+                  "required": ["labels"],
+                  "properties": {
+                    "labels": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+                  }
+                },
+                "yAxis": {
+                  "type": "object",
+                  "required": ["min", "max"],
+                  "properties": { "min": { "type": "number" }, "max": { "type": "number" } }
+                },
+                "series": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["id", "values"],
+                    "properties": {
+                      "id": { "type": "string" },
+                      "values": { "type": "array", "items": { "type": "number" } }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "waterfall": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "waterfall" },
+            "payload": {
+              "type": "object",
+              "required": ["unit", "baseline", "deltas", "final"],
+              "properties": {
+                "unit": { "type": "string" },
+                "baseline": { "type": "number" },
+                "deltas": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["label", "value"],
+                    "properties": { "label": { "type": "string" }, "value": { "type": "number" } }
+                  }
+                },
+                "final": { "type": "number" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sankey": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "sankey" },
+            "payload": {
+              "type": "object",
+              "required": ["unit", "nodes", "links"],
+              "properties": {
+                "unit": { "type": "string" },
+                "nodes": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/node" } },
+                "links": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["source", "target", "value"],
+                    "properties": {
+                      "source": { "type": "string" },
+                      "target": { "type": "string" },
+                      "value": { "type": "number", "minimum": 0 }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "graph": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "graph" },
+            "payload": {
+              "type": "object",
+              "required": ["nodes", "edges"],
+              "properties": {
+                "nodes": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/node" } },
+                "edges": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/edge" } }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "causal-loop": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "causal-loop" },
+            "payload": {
+              "type": "object",
+              "required": ["nodes", "edges", "loops"],
+              "properties": {
+                "nodes": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/node" } },
+                "edges": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "allOf": [
+                      { "$ref": "#/$defs/edge" },
+                      {
+                        "required": ["id", "directed", "polarity"],
+                        "properties": {
+                          "directed": { "const": true },
+                          "polarity": { "enum": ["+", "-"] }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "loops": { "type": "array", "minItems": 1, "items": { "type": "object" } }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "timeline": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "timeline" },
+            "payload": {
+              "type": "object",
+              "required": ["unit", "events"],
+              "properties": {
+                "unit": { "type": "string" },
+                "events": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "$ref": "#/$defs/interval" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "gantt": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "gantt" },
+            "payload": {
+              "type": "object",
+              "required": ["unit", "tasks"],
+              "properties": {
+                "unit": { "type": "string" },
+                "tasks": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "allOf": [
+                      { "$ref": "#/$defs/interval" },
+                      {
+                        "required": ["confidence"],
+                        "properties": {
+                          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+                          "dependsOn": { "type": "array", "items": { "type": "string" } }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "evidence-media": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "evidence-media" },
+            "payload": {
+              "type": "object",
+              "required": ["mimeType", "digest", "claimId"],
+              "properties": {
+                "mimeType": { "enum": ["application/pdf", "image/png", "image/jpeg", "text/html"] },
+                "digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+                "claimId": { "type": "string" },
+                "sourceUrl": { "type": "string", "pattern": "^https://", "maxLength": 900 },
+                "page": { "type": "number" },
+                "region": { "type": "object" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "motion": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "motion" },
+            "payload": {
+              "type": "object",
+              "required": ["states", "staticFallbackStateId"],
+              "properties": {
+                "states": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/node" } },
+                "staticFallbackStateId": { "type": "string" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "comparison": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "comparison" },
+            "payload": {
+              "type": "object",
+              "required": ["metrics", "cohorts"],
+              "properties": {
+                "metrics": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "object", "required": ["id", "unit"] }
+                },
+                "cohorts": {
+                  "type": "array",
+                  "minItems": 2,
+                  "items": { "type": "object", "required": ["id", "status", "values"] }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "equation": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "equation" },
+            "payload": {
+              "type": "object",
+              "required": ["expression", "values", "result"],
+              "properties": {
+                "expression": { "$ref": "#/$defs/expression" },
+                "values": { "type": "object", "additionalProperties": { "type": "number" } },
+                "result": { "type": "number" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "runtime-proof": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "runtime-proof" },
+            "payload": {
+              "type": "object",
+              "required": ["sampleSize", "unit", "status"],
+              "properties": {
+                "sampleSize": { "type": "integer", "minimum": 0 },
+                "unit": { "type": "string" },
+                "status": { "type": "string" },
+                "receiptDigest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "trace": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "trace" },
+            "payload": {
+              "type": "object",
+              "required": ["traceId", "spans", "status"],
+              "properties": {
+                "traceId": { "type": "string" },
+                "status": { "type": "string" },
+                "spans": { "type": "array", "items": { "type": "object", "required": ["spanId"] } }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "risk-matrix": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "risk-matrix" },
+            "payload": {
+              "type": "object",
+              "required": ["likelihoodAxis", "impactAxis", "risks"],
+              "properties": {
+                "likelihoodAxis": { "type": "object", "required": ["low", "high"] },
+                "impactAxis": { "type": "object", "required": ["low", "high"] },
+                "risks": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "object", "required": ["id", "likelihood", "impact"] }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "spatial-scene": {
+      "allOf": [
+        { "$ref": "#/$defs/base" },
+        {
+          "properties": {
+            "kind": { "const": "spatial-scene" },
+            "payload": {
+              "type": "object",
+              "required": ["viewports"],
+              "properties": {
+                "viewports": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "object", "required": ["id"] }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "nodekit.gym-run-receipt/v2",
+  "runId": "public-equation__openai-gpt-oss-20b-free__structured-planner__1",
+  "pairingKey": "sha256:e333810f3064203cd740c4c7966e27d0697e7a0664484ff909f2364151b71957::sha256:c023bbf580cee4b49726c24b280aad5bb067f0bf490aa6af86a77023be3669f2::sha256:f04608945726aa9fa562d1808fc965b11ce5f0736569c07adef8c19b52ce129d::openai/gpt-oss-20b:free::1::8000:300000:200000:2",
+  "repetition": 1,
+  "planDigest": "sha256:23274e59f9653a14070e905138286ef41f9f0f923eb8117e371217ec9695d80d",
+  "executorResultDigest": "sha256:f007513fbbd0f2c2fea5c68d1ec2db3d7b7f37e4bc62ecd122037ceee054c5ee",
+  "status": "degraded",
+  "returnedModel": null,
+  "routeMode": "degraded",
+  "automatedHardGatesPassed": false,
+  "promotionEligible": false,
+  "humanPreference": {
+    "status": "not_run"
+  },
+  "issueCodes": [
+    "degraded_route",
+    "returned_model_attribution_missing",
+    "typed_artifact_spec_not_observed"
+  ],
+  "usage": {
+    "latencyMs": 105422,
+    "inputTokens": 5198,
+    "outputTokens": 2436,
+    "costMicroUsd": 0,
+    "repairCount": 0
+  },
+  "artifacts": {
+    "browser": {
+      "path": "artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/gpt-oss-free-paired-smoke-v1/runs/public-equation__openai-gpt-oss-20b-free__structured-planner__1/editor.png",
+      "digest": "sha256:795554b5b2a8ed67b3371caaaf23e064bc0aa10dcab9748c94590d0fc3fd05c3",
+      "bytes": 135314,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pptx": {
+      "path": "artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/gpt-oss-free-paired-smoke-v1/runs/public-equation__openai-gpt-oss-20b-free__structured-planner__1/deck.pptx",
+      "digest": "sha256:bf1a102d07744b506130763ab467279fb983b26603d3bc50d622f8c31178e5e6",
+      "bytes": 175978,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pdf": {
+      "path": "artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/gpt-oss-free-paired-smoke-v1/runs/public-equation__openai-gpt-oss-20b-free__structured-planner__1/deck.pdf",
+      "digest": "sha256:08a0f46cdfd2f0e88eb7b1e62dccf3ac171281d48a4a10be2a899cc2dcd55af9",
+      "bytes": 584500,
+      "validation": {
+        "status": "passed"
+      },
+      "fidelity": "rasterized-static-fallback",
+      "validationMethod": "source-render-identity-and-pypdf-page-count"
+    }
+  },
+  "executor": "ui",
+  "attempt": 1,
+  "recordedAt": "2026-07-22T08:20:38.545Z"
+}

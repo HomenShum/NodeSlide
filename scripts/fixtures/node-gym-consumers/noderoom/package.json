@@ -1,0 +1,6 @@
+{
+  "name": "@noderoom/gym-core-consumer-proof",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module"
+}

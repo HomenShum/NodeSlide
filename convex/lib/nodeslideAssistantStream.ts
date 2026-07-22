@@ -62,6 +62,15 @@ export function createNodeSlideAssistantStreamProjector(args: {
 
     async complete(validatedSummary: string, sourceIds: readonly string[] = []): Promise<boolean> {
       if (!started || interrupted) return false;
+      if (!validatedSummary.startsWith(persisted)) {
+        interrupted = true;
+        await bestEffortWrite(args.write, {
+          content:
+            'The validated assistant result did not extend the visible provider prefix and was withheld.',
+          state: 'interrupted',
+        });
+        return false;
+      }
       const completed = await bestEffortWrite(args.write, {
         content: validatedSummary,
         state: 'complete',
@@ -100,25 +109,43 @@ async function bestEffortWrite(
 }
 
 /**
- * Incrementally decodes one JSON string field without attempting to parse an
- * incomplete response. The scanner skips escaped quotes and returns only the
- * complete prefix that is safe to display; an unfinished escape is withheld
+ * Incrementally decodes one top-level JSON string field without attempting to
+ * parse the incomplete target value. Completed members before the target are
+ * still structurally validated, so a nested or JSON-looking `summary` cannot be
+ * mistaken for the assistant-readable field. An unfinished escape is withheld
  * until the next provider delta.
  */
 export function partialJsonStringField(source: string, field: string): string | undefined {
-  let cursor = 0;
+  let cursor = skipWhitespace(source, 0);
+  if (source[cursor] !== '{') return undefined;
+  cursor += 1;
+
   while (cursor < source.length) {
-    const quote = source.indexOf('"', cursor);
-    if (quote < 0) return undefined;
-    const key = readJsonString(source, quote);
-    if (!key.closed) return undefined;
-    cursor = key.next;
-    if (key.value !== field) continue;
-    let separator = skipWhitespace(source, cursor);
-    if (source[separator] !== ':') continue;
-    separator = skipWhitespace(source, separator + 1);
-    if (source[separator] !== '"') continue;
-    return readJsonString(source, separator).value;
+    cursor = skipWhitespace(source, cursor);
+    if (source[cursor] === '}') return undefined;
+    if (source[cursor] !== '"') return undefined;
+
+    const key = readJsonString(source, cursor);
+    if (!key.valid || !key.closed) return undefined;
+    cursor = skipWhitespace(source, key.next);
+    if (source[cursor] !== ':') return undefined;
+    cursor = skipWhitespace(source, cursor + 1);
+
+    if (key.value === field) {
+      if (source[cursor] !== '"') return undefined;
+      const value = readJsonString(source, cursor);
+      return value.valid ? value.value : undefined;
+    }
+
+    const valueEnd = skipCompleteJsonValue(source, cursor);
+    if (valueEnd === undefined) return undefined;
+    cursor = skipWhitespace(source, valueEnd);
+    if (source[cursor] === ',') {
+      cursor += 1;
+      continue;
+    }
+    if (source[cursor] === '}') return undefined;
+    return undefined;
   }
   return undefined;
 }
@@ -126,19 +153,27 @@ export function partialJsonStringField(source: string, field: string): string | 
 function readJsonString(
   source: string,
   openingQuote: number,
-): { value: string; next: number; closed: boolean } {
+): { value: string; next: number; closed: boolean; valid: boolean } {
+  if (source[openingQuote] !== '"') {
+    return { value: '', next: openingQuote, closed: false, valid: false };
+  }
   let value = '';
   let cursor = openingQuote + 1;
   while (cursor < source.length) {
     const character = source[cursor];
-    if (character === '"') return { value, next: cursor + 1, closed: true };
+    if (character === '"') return { value, next: cursor + 1, closed: true, valid: true };
     if (character !== '\\') {
+      if ((character?.charCodeAt(0) ?? 0) <= 0x1f) {
+        return { value, next: cursor, closed: false, valid: false };
+      }
       value += character;
       cursor += 1;
       continue;
     }
     const escapeCode = source[cursor + 1];
-    if (escapeCode === undefined) return { value, next: source.length, closed: false };
+    if (escapeCode === undefined) {
+      return { value, next: source.length, closed: false, valid: true };
+    }
     const simpleEscapes: Record<string, string> = {
       '"': '"',
       '\\': '\\',
@@ -156,15 +191,70 @@ function readJsonString(
     }
     if (escapeCode === 'u') {
       const digits = source.slice(cursor + 2, cursor + 6);
-      if (digits.length < 4) return { value, next: source.length, closed: false };
-      if (!/^[0-9a-f]{4}$/iu.test(digits)) return { value, next: cursor + 2, closed: false };
+      if (digits.length < 4) {
+        return { value, next: source.length, closed: false, valid: true };
+      }
+      if (!/^[0-9a-f]{4}$/iu.test(digits)) {
+        return { value, next: cursor + 2, closed: false, valid: false };
+      }
       value += String.fromCharCode(Number.parseInt(digits, 16));
       cursor += 6;
       continue;
     }
-    return { value, next: cursor + 2, closed: false };
+    return { value, next: cursor + 2, closed: false, valid: false };
   }
-  return { value, next: cursor, closed: false };
+  return { value, next: cursor, closed: false, valid: true };
+}
+
+function skipCompleteJsonValue(source: string, start: number): number | undefined {
+  const first = source[start];
+  if (first === '"') {
+    const value = readJsonString(source, start);
+    return value.valid && value.closed ? value.next : undefined;
+  }
+
+  if (first === '{' || first === '[') {
+    const closers: string[] = [first === '{' ? '}' : ']'];
+    let cursor = start + 1;
+    while (cursor < source.length) {
+      const character = source[cursor];
+      if (character === '"') {
+        const value = readJsonString(source, cursor);
+        if (!value.valid || !value.closed) return undefined;
+        cursor = value.next;
+        continue;
+      }
+      if (character === '{' || character === '[') {
+        closers.push(character === '{' ? '}' : ']');
+        cursor += 1;
+        continue;
+      }
+      if (character === '}' || character === ']') {
+        if (closers.pop() !== character) return undefined;
+        cursor += 1;
+        if (closers.length === 0) {
+          return isCompleteJsonValue(source.slice(start, cursor)) ? cursor : undefined;
+        }
+        continue;
+      }
+      cursor += 1;
+    }
+    return undefined;
+  }
+
+  let cursor = start;
+  while (cursor < source.length && source[cursor] !== ',' && source[cursor] !== '}') cursor += 1;
+  if (cursor === source.length) return undefined;
+  return isCompleteJsonValue(source.slice(start, cursor)) ? cursor : undefined;
+}
+
+function isCompleteJsonValue(source: string): boolean {
+  try {
+    JSON.parse(source);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function skipWhitespace(source: string, start: number): number {

@@ -1,0 +1,431 @@
+{
+  "schemaVersion": "nodeslide.artifact-atlas-v3-visual-inspection/v1",
+  "pptx": {
+    "path": "outputs/artifact-atlas-v3/nodeslide-artifact-atlas-v3.pptx",
+    "sha256": "sha256:aeb63576335eb26a95c4d408877b6e17aeed48f2fcfb0f7adf83302067065053",
+    "bytes": 4725391,
+    "receiptPath": "outputs/artifact-atlas-v3/atlas-v3-pptx-receipt.json",
+    "receiptSha256": "sha256:4ef5b9c3cce3ead247f82fc282fa4a901dbe51865451e000e16f7aa00315a7a4"
+  },
+  "render": {
+    "renderer": "@oai/artifact-tool PowerPoint round-trip renderer",
+    "command": "render_slides.py nodeslide-artifact-atlas-v3.pptx --width 1280 --height 720",
+    "slideCount": 43,
+    "slideSetDigest": "sha256:32f0cdb01783a5cf7bf2926c20368840e1e0f976a193e597558ba15337b99321",
+    "slides": [
+      {
+        "slide": 1,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-1.png",
+        "sha256": "sha256:7c7de80faaca3ec3c7957c382c76da1f83ce9a3dd4c1d46539fd1622b39606dd",
+        "bytes": 49699,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 2,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-2.png",
+        "sha256": "sha256:57a0bed8f8bb0c06f6768b60eb76d2c1d18f80a33288718d2be559487b518ee3",
+        "bytes": 47030,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 3,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-3.png",
+        "sha256": "sha256:ea12ec0692d180912b05b6907c04968178d91fdc9629e9802c85bb5b149a64ed",
+        "bytes": 57542,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 4,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-4.png",
+        "sha256": "sha256:a41c87cf3bc703044111dfffcd20885776ec988c5325be7fce5c2897f8aa4ec2",
+        "bytes": 52406,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 5,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-5.png",
+        "sha256": "sha256:75d4b171a0ef2971941a6557d4dedfa20faef5c62447eeee4b152d29dd95df27",
+        "bytes": 50232,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 6,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-6.png",
+        "sha256": "sha256:5759820f50781b79aa9619bb8ab736fd50880bd2d2d5312322fa0fea84e0a4bd",
+        "bytes": 53405,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 7,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-7.png",
+        "sha256": "sha256:15907dae66f43e7acb44ac596e63ea848c52d5dab8377dfe9057ac06045cea43",
+        "bytes": 43489,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 8,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-8.png",
+        "sha256": "sha256:c93987b57a429de3eb05567159f618d09038b54781a2f6f021b2feccb8c60ff6",
+        "bytes": 47733,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 9,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-9.png",
+        "sha256": "sha256:7c11f1886c5ec5f49c5da1adcc05541b6070d103771ce1b2639a63032de9dad0",
+        "bytes": 44236,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 10,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-10.png",
+        "sha256": "sha256:7025e3667e30034ba759131c48459ab4d61348a16c3556522a64b529d983170e",
+        "bytes": 53999,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 11,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-11.png",
+        "sha256": "sha256:ba1be3a9eeb71ed18f3429da23d2d9abf2058497c7d5261cfa841eba7d7c4d61",
+        "bytes": 57129,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 12,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-12.png",
+        "sha256": "sha256:782379a900bfbc032671923562c68a77e424762a3b73673fc2b42fddf9ff44e0",
+        "bytes": 66650,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 13,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-13.png",
+        "sha256": "sha256:32017eccea5ad1a2619b7c9743ee7983cde52eddea8dad6d0ecb15df2c6d66d6",
+        "bytes": 56408,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 14,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-14.png",
+        "sha256": "sha256:c3927a6266170867df6cf0a314ee6ea25f5fd0aa33a233a4f0b5ece193d2d06c",
+        "bytes": 40448,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 15,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-15.png",
+        "sha256": "sha256:ab4be181e54006a5da0756a2dac0effec0e4bf428b9606723cbc1d4d2101ad7d",
+        "bytes": 58828,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 16,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-16.png",
+        "sha256": "sha256:5092f3fc91718947119409cd3509894b8159a74efae08f81c5ce93d9786584d6",
+        "bytes": 52676,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 17,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-17.png",
+        "sha256": "sha256:59b4aa7392b8c9af805cdfec58bbdf6731c0c8f0d8db44f65ec201da8b9daaae",
+        "bytes": 51949,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 18,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-18.png",
+        "sha256": "sha256:d2f21dafe9fa5ece592a63d24c53587c4d6fe44a9aa70a75c8eff7d975d03125",
+        "bytes": 71338,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 19,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-19.png",
+        "sha256": "sha256:8658110f48753078e30716eecaf4e627e133109ecbcd905c81ffc5fa9e0505d2",
+        "bytes": 45581,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 20,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-20.png",
+        "sha256": "sha256:f06c592c59d7f21c08938e5d7bf2e14a060aeeebf25d43ee179814649d344a38",
+        "bytes": 53848,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 21,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-21.png",
+        "sha256": "sha256:c73c0fc5639e22153c7f1d2a7225aba84b3554231b03e6c98bfe64ebecb4029c",
+        "bytes": 52282,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 22,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-22.png",
+        "sha256": "sha256:8225e8d09bfffc31ab88b1793a074e2b93b9b1dcadd7815c1926ad8ae9ef09d5",
+        "bytes": 51333,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 23,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-23.png",
+        "sha256": "sha256:6b2871ff9c85767215e0f868ff3829f332a65c8a06424a38e9a8f50667c6fa96",
+        "bytes": 967826,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 24,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-24.png",
+        "sha256": "sha256:bac7cd120a00741a49df2d9fecd539d1a923bfb270a5dfe5809b4fcb07baebba",
+        "bytes": 213186,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 25,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-25.png",
+        "sha256": "sha256:c11e0e5520b61a3ff79f666d9a3e885455ee36af189ddc2a2cd1685b98cc3f51",
+        "bytes": 94781,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 26,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-26.png",
+        "sha256": "sha256:99915d53b0494824deba25946fe3343435cd71d0aa715fdf39a822f7c82c9d95",
+        "bytes": 138220,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 27,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-27.png",
+        "sha256": "sha256:2436a9bfbfbb0d5620340118b3532ae565519ee8b98a2e6b8ba901c4909856ae",
+        "bytes": 454075,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 28,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-28.png",
+        "sha256": "sha256:8115fa619204f3794d92246735b627c63ccf454a2d184154680a3c13ef912bf8",
+        "bytes": 48177,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 29,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-29.png",
+        "sha256": "sha256:c6e53ac8b60b6653ece5cfe2faeba21eb4d22a0419482c2a970ddf0626072ca1",
+        "bytes": 95966,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 30,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-30.png",
+        "sha256": "sha256:dbc47e0c84a5ae855ec185c989178e798b5ffbeecbb6a732e10ab403d53422e2",
+        "bytes": 68145,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 31,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-31.png",
+        "sha256": "sha256:4d7f1e22ec40ef6272f36f3354a8455bc47c6278a8ed4b8056184f791cf1d713",
+        "bytes": 48589,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 32,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-32.png",
+        "sha256": "sha256:bb1bc52bad77055dbc256b1c4003913ed8baf3c1c635215d809514db30fd7f10",
+        "bytes": 62357,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 33,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-33.png",
+        "sha256": "sha256:928754567ab5c5c4efcc548124d24a2d720b6f85632ce6d800e2e9805644fb2a",
+        "bytes": 59227,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 34,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-34.png",
+        "sha256": "sha256:12e168ccc7ab05361f9e7c5eb672367c6f70e28f993c2be34f19b76a280f8ade",
+        "bytes": 53720,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 35,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-35.png",
+        "sha256": "sha256:08faea7339bbc8e63014c56aba20c7fd97418eebad249df02bb4c397c1bf962d",
+        "bytes": 65091,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 36,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-36.png",
+        "sha256": "sha256:3632fcaa03c51e44fd557b6c97417697811d1a3e3116e8f68cd48e969ff4893a",
+        "bytes": 61264,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 37,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-37.png",
+        "sha256": "sha256:985d0713ed040115b7f76e125873ae2a889ed6b259bec2ee9ab21c1049de5586",
+        "bytes": 67951,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 38,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-38.png",
+        "sha256": "sha256:f3dfc6f23556fef2ad252d8b857e4bcae9377c8d75c33121ccbbae089a1dcda8",
+        "bytes": 73329,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 39,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-39.png",
+        "sha256": "sha256:9959bee551b45da6b50d620f0c15bb26f7dde8156c615cad48dd9a1f062ebdf5",
+        "bytes": 55951,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 40,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-40.png",
+        "sha256": "sha256:e8c2813f69219422437824003737340bf60c63c8d38bda7123e807aa6af29cc5",
+        "bytes": 69189,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 41,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-41.png",
+        "sha256": "sha256:f53a686310023d1c2b0b19a9b85b89265ec20fe29be60af3a68302feb8319182",
+        "bytes": 71918,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 42,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-42.png",
+        "sha256": "sha256:922ab34162bec4df31af73b28fa32f2a23e4feb6967d79f894d0556ad682865e",
+        "bytes": 70855,
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "slide": 43,
+        "path": "outputs/artifact-atlas-v3/rendered/slide-43.png",
+        "sha256": "sha256:e6629fc135f892994dbd7b5bf9dfe8a3e79f12cde9284b8c018a98685547fa94",
+        "bytes": 78013,
+        "width": 1280,
+        "height": 720
+      }
+    ],
+    "contactSheet": {
+      "path": "outputs/artifact-atlas-v3/atlas-v3-contact-sheet.png",
+      "sha256": "sha256:21d6c50a52def6919c52eba296e2fefdcfe34b55a0a193fc1bdb740802a15a2d",
+      "bytes": 1494451,
+      "width": 2016,
+      "height": 2320
+    }
+  },
+  "automatedChecks": {
+    "slidesTest": {
+      "status": "passed",
+      "overflowCount": 0,
+      "command": "slides_test.py nodeslide-artifact-atlas-v3.pptx"
+    }
+  },
+  "visualInspection": {
+    "status": "passed",
+    "inspectedSlides": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43
+    ],
+    "method": "individual 1280x720 slide review plus ordered contact-sheet review",
+    "unresolvedDefects": [],
+    "completedOn": "2026-07-22"
+  },
+  "blindAudiencePreference": {
+    "status": "not_run",
+    "note": "Visual QA is not a substitute for blind audience preference."
+  }
+}

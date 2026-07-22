@@ -152,6 +152,7 @@ describe('NodeSlide signature application', () => {
     });
 
     expect(Object.keys(clientBefore).sort()).toEqual([
+      'artifactCompilation',
       'checkedAt',
       'cleanOk',
       'deckId',

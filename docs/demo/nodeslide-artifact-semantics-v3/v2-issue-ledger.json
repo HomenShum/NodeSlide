@@ -1,0 +1,219 @@
+{
+  "schemaVersion": "nodeslide.artifact-atlas-v2-issue-ledger/v1",
+  "atlasVersion": "artifact-atlas-v2",
+  "atlasPptx": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2.pptx",
+  "atlasPptxDigest": "sha256:3f8afac5ce771bc5e4a98256e59de0496bd9d3584ac498442b908a2d19c3bd78",
+  "visualInspection": "docs/demo/nodeslide-artifact-semantics-v3/visual-inspection.json",
+  "visualInspectionDigest": "sha256:2d029e49c42d324f4661bcb80a5ed7a0a67c3e78b0fa6a3ed915efa327bfff9d",
+  "status": "repaired-and-inspected",
+  "issueCount": 23,
+  "issues": [
+    {
+      "issueCode": "atlas_chapter_count_mismatch",
+      "slide": 2,
+      "artifactId": "section-opener",
+      "severity": "error",
+      "validatorOwner": "atlas-copy-contract",
+      "repairStatus": "repaired",
+      "repairEvidence": "chapter count and footer count reconcile"
+    },
+    {
+      "issueCode": "chart_axis_unit_uncertainty_missing",
+      "slide": 8,
+      "artifactId": "uncertainty-range",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/chart",
+      "repairStatus": "repaired",
+      "repairEvidence": "units, ticks, periods, and continuous uncertainty encoding present"
+    },
+    {
+      "issueCode": "waterfall_reconciliation_and_binding",
+      "slide": 9,
+      "artifactId": "waterfall",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/waterfall",
+      "repairStatus": "repaired",
+      "repairEvidence": "labels bind to bars and deltas reconcile baseline to final"
+    },
+    {
+      "issueCode": "causal_loop_direction_polarity_crossing",
+      "slide": 15,
+      "artifactId": "causal-loop",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/causal-loop",
+      "repairStatus": "repaired",
+      "repairEvidence": "directed signed edges and explicit R/B loops are traceable"
+    },
+    {
+      "issueCode": "sankey_quantitative_semantics_missing",
+      "slide": 16,
+      "artifactId": "source-allocation-sankey",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/sankey",
+      "repairStatus": "repaired",
+      "repairEvidence": "labeled widths and conserved totals are visible"
+    },
+    {
+      "issueCode": "gantt_dependency_confidence_missing",
+      "slide": 20,
+      "artifactId": "roadmap-gantt",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/gantt",
+      "repairStatus": "repaired",
+      "repairEvidence": "dependency connectors and confidence encoding present"
+    },
+    {
+      "issueCode": "chart_panel_scale_version_mismatch",
+      "slide": 22,
+      "artifactId": "animated-chart-progression",
+      "severity": "error",
+      "validatorOwner": "atlas-chart-contract",
+      "repairStatus": "repaired",
+      "repairEvidence": "series stay inside panels on a shared scale with reconciled version"
+    },
+    {
+      "issueCode": "capture_version_digest_mismatch",
+      "slide": 24,
+      "artifactId": "real-screenshot-callouts",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/evidence-media",
+      "repairStatus": "repaired",
+      "repairEvidence": "V2 claim binds to the V2 product-capture digest"
+    },
+    {
+      "issueCode": "workflow_capture_count_overclaim",
+      "slide": 25,
+      "artifactId": "interaction-clip",
+      "severity": "error",
+      "validatorOwner": "atlas-evidence-contract",
+      "repairStatus": "repaired",
+      "repairEvidence": "three captured checkpoints are distinguished from five declared steps"
+    },
+    {
+      "issueCode": "spatial_state_unproved",
+      "slide": 27,
+      "artifactId": "spatial-scene",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/spatial-scene",
+      "repairStatus": "repaired",
+      "repairEvidence": "scene is explicitly illustrative where interaction states are not captured"
+    },
+    {
+      "issueCode": "pdf_region_lineage_missing",
+      "slide": 29,
+      "artifactId": "pdf-evidence-region",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/evidence-media",
+      "repairStatus": "repaired",
+      "repairEvidence": "PDF page and region receipt replaces the web-inspector proxy"
+    },
+    {
+      "issueCode": "runtime_statistic_lineage_missing",
+      "slide": 30,
+      "artifactId": "code-runtime-proof",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/runtime-proof",
+      "repairStatus": "repaired",
+      "repairEvidence": "sample size, unit, environment, and raw receipt digest are bound"
+    },
+    {
+      "issueCode": "trace_identity_lineage_missing",
+      "slide": 31,
+      "artifactId": "otel-trace",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/trace",
+      "repairStatus": "repaired",
+      "repairEvidence": "trace/span IDs and sanitized raw receipt are bound"
+    },
+    {
+      "issueCode": "equation_ast_result_mismatch",
+      "slide": 32,
+      "artifactId": "quality-cost-equation",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/equation",
+      "repairStatus": "repaired",
+      "repairEvidence": "displayed result is evaluated from the exact AST and substitutions"
+    },
+    {
+      "issueCode": "frontier_unobserved_cohort_plotted",
+      "slide": 35,
+      "artifactId": "cost-quality-frontier",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/comparison",
+      "repairStatus": "repaired",
+      "repairEvidence": "point geometry uses observed normalized metrics and missing values remain missing"
+    },
+    {
+      "issueCode": "cohort_status_and_unit_conflation",
+      "slide": 36,
+      "artifactId": "model-compare",
+      "severity": "error",
+      "validatorOwner": "artifact-registry/comparison",
+      "repairStatus": "repaired",
+      "repairEvidence": "observed, pilot, control, and unrun cohorts remain distinct with normalized units"
+    },
+    {
+      "issueCode": "unpaired_harness_improvement_claim",
+      "slide": 37,
+      "artifactId": "harness-compare",
+      "severity": "error",
+      "validatorOwner": "node-gym/evaluator",
+      "repairStatus": "repaired",
+      "repairEvidence": "result is labeled coverage comparison; causal improvement requires matched pairs"
+    },
+    {
+      "issueCode": "customer_voice_attribution_missing",
+      "slide": 4,
+      "artifactId": "customer-voice",
+      "severity": "warning",
+      "validatorOwner": "artifact-registry/provenance",
+      "repairStatus": "repaired",
+      "repairEvidence": "voice is sourced or visibly labeled hypothetical"
+    },
+    {
+      "issueCode": "dashboard_density_causal_binding",
+      "slide": 12,
+      "artifactId": "dense-dashboard-funnel",
+      "severity": "warning",
+      "validatorOwner": "atlas-visual-inspection",
+      "repairStatus": "repaired",
+      "repairEvidence": "funnel values bind to receipts and hierarchy preserves the takeaway"
+    },
+    {
+      "issueCode": "decision_edge_labels_missing",
+      "slide": 17,
+      "artifactId": "routing-decision-tree",
+      "severity": "warning",
+      "validatorOwner": "artifact-registry/graph",
+      "repairStatus": "repaired",
+      "repairEvidence": "decision branches carry explicit yes/no labels"
+    },
+    {
+      "issueCode": "map_encoding_decorative",
+      "slide": 18,
+      "artifactId": "ecosystem-geography",
+      "severity": "warning",
+      "validatorOwner": "atlas-visual-inspection",
+      "repairStatus": "repaired",
+      "repairEvidence": "geography has labels and a meaningful legend/encoding"
+    },
+    {
+      "issueCode": "risk_axis_direction_missing",
+      "slide": 34,
+      "artifactId": "risk-matrix",
+      "severity": "warning",
+      "validatorOwner": "artifact-registry/risk-matrix",
+      "repairStatus": "repaired",
+      "repairEvidence": "likelihood and impact direction anchors are visible"
+    },
+    {
+      "issueCode": "deck_rhythm_repetition",
+      "slide": null,
+      "artifactId": "complete-deck",
+      "severity": "warning",
+      "validatorOwner": "atlas-visual-inspection",
+      "repairStatus": "repaired",
+      "repairEvidence": "digest-bound complete-deck thumbnail inspection passed all 38 slides"
+    }
+  ]
+}

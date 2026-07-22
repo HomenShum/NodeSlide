@@ -323,14 +323,11 @@ describe('NodeSlide provider consent contract', () => {
     ).toThrow(ConvexError);
   });
 
-  it('requires exact, provider-bound consent and native effort values for Nebius', () => {
+  it('requires exact consent and keeps unqualified Nebius routes unavailable', () => {
     expect(() => validateNodeSlideBriefProviderChoice('nebius', undefined)).toThrow(ConvexError);
-    expect(validateNodeSlideBriefProviderChoice('nebius', NODESLIDE_NEBIUS_BRIEF_CONSENT)).toEqual({
-      providerMode: 'nebius',
-      providerModel: 'nebius/zai-org/GLM-5.2',
-      providerEffort: 'high',
-      providerConsent: NODESLIDE_NEBIUS_BRIEF_CONSENT,
-    });
+    expect(() =>
+      validateNodeSlideBriefProviderChoice('nebius', NODESLIDE_NEBIUS_BRIEF_CONSENT),
+    ).toThrow(/not production-qualified/i);
     expect(() =>
       validateNodeSlideBriefProviderChoice(
         'nebius',
@@ -342,6 +339,14 @@ describe('NodeSlide provider consent contract', () => {
     expect(() =>
       validateNodeSlideBriefProviderChoice('nebius', NODESLIDE_OPENROUTER_BRIEF_CONSENT),
     ).toThrow(ConvexError);
+    expect(() =>
+      validateNodeSlideBriefProviderChoice(
+        'openrouter_free',
+        NODESLIDE_OPENROUTER_BRIEF_CONSENT,
+        'openrouter/free',
+        'low',
+      ),
+    ).toThrow(/not production-qualified/i);
   });
 
   it('never invokes the provider callback in deterministic mode', async () => {

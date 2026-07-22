@@ -1,8 +1,8 @@
 {
   "schemaVersion": "nodekit.gym-config-validation/v1",
   "gymVersion": "nodeslide-deck-gym-v2",
-  "configDigest": "sha256:bf3c807089a0c944d22c156874e3cdf040866cbfe2a307608b52d57ec957041b",
+  "configDigest": "sha256:e7aef1f13cccfbe86c11146d4c960ac8b29b2464ed1df2a0235cc77b478b3939",
   "status": "passed",
-  "matrixSize": 360,
+  "matrixSize": 720,
   "failures": []
 }

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { DeckBrief, SlideElement } from '../../shared/nodeslide';
 import { findCompressedTextElements } from '../../shared/nodeslideLayoutMetrics';
+import { NODESLIDE_AUTHORED_ARTIFACT_VERSION } from './nodeslideAuthoredArtifact';
 import {
   collectNodeSlideCreationQualityReport,
   injectNodeSlideSyntheticCreationFault,
@@ -505,6 +506,64 @@ describe('development-only creation fault injection', () => {
     expect(injected.applied).toBe(false);
     expect(injected.spec).toBe(CORRECTED_SPEC);
     expect(injected.traceLabel).toContain('not applicable');
+  });
+});
+
+describe('typed authored artifact critique repair', () => {
+  it('reports an unknown canonical source and accepts a materializable revision', async () => {
+    const invalid = structuredClone(CORRECTED_SPEC);
+    const firstSlide = invalid.slides[0] as unknown as Record<string, unknown>;
+    firstSlide['artifactSpec'] = {
+      schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+      id: 'unknown-source-metric',
+      kind: 'metric',
+      narrativeJob: 'Land a sourced metric.',
+      provenance: {
+        truthState: 'observed',
+        rationale: 'Provider claimed an unknown source.',
+        sourceRefs: ['source:invented'],
+      },
+      payload: { displayValue: '42%', label: 'Activation' },
+    };
+    const firstReport = collectNodeSlideCreationQualityReport({
+      title: 'Roadshow',
+      brief: ROADSHOW_BRIEF,
+      themeId: THEME_ID,
+      rawSpec: invalid,
+      now: NOW,
+    });
+
+    expect(firstReport).toMatchObject({
+      materializationFailed: true,
+      validationIssues: [expect.objectContaining({ code: 'artifact_provenance_evidence_class' })],
+    });
+    expect(nodeSlideCreationCritiquePromptReport(firstReport)).toContain(
+      'artifact_provenance_evidence_class',
+    );
+
+    const outcome = await runNodeSlideCreationCritique({
+      firstSpec: invalid,
+      title: 'Roadshow',
+      brief: ROADSHOW_BRIEF,
+      themeId: THEME_ID,
+      now: NOW,
+      providerLive: true,
+      requestRevision: async () => ({
+        ok: true,
+        value: CORRECTED_SPEC,
+        telemetry: {
+          provider: 'openrouter',
+          model: 'kimi-k3',
+          costMicroUsd: 20,
+          inputTokens: 900,
+          outputTokens: 1_400,
+        },
+      }),
+    });
+
+    expect(outcome.decision).toBe('revised');
+    expect(outcome.spec).toBe(CORRECTED_SPEC);
+    expect(outcome.chosenReport?.materializationFailed).toBe(false);
   });
 });
 

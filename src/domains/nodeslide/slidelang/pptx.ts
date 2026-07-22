@@ -6,6 +6,7 @@ import {
   type Slide,
   type SlideElement,
 } from '../../../../shared/nodeslide';
+import { assertNodeSlideArtifactCompilation } from '../../../../shared/nodeslideArtifactSpec';
 import { getMathPptxPlan, resolveMathRasterizer } from './mathRaster';
 import { type SlideSourceReference, slideSourceReferences } from './provenance';
 import type { PptxBinary } from './types';
@@ -592,6 +593,7 @@ function normalizeOutput(
 }
 
 export async function buildPptx(snapshot: DeckSnapshot): Promise<PptxBinary> {
+  assertNodeSlideArtifactCompilation(snapshot);
   // Keep the sizeable MIT exporter out of the normal NodeSlide bundle until export is requested.
   const { default: PptxGenJSClass } = await import('pptxgenjs');
   const pptx = new PptxGenJSClass();

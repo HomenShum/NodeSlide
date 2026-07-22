@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "nodekit.gym-executor-result/v1",
+  "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+  "pairingKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::1::8000:300000:200000:2::nodeslide/deterministic-compiler",
+  "status": "completed",
+  "route": {
+    "mode": "deterministic",
+    "requestedRoute": "nodeslide/deterministic-compiler",
+    "actualProvider": "local",
+    "actualModel": "nodeslide/deterministic-compiler",
+    "traceId": "control-public-equation__nodeslide-deterministic-compiler__light-director__1"
+  },
+  "normalizedSpec": {
+    "schemaVersion": "nodeslide.artifact-spec/v1",
+    "id": "quality-cost-equation",
+    "kind": "equation",
+    "narrativeJob": "Real mathematics, definitions, and a bound calculation share one frame.",
+    "claimIds": [
+      "quality-cost-equation:claim:1",
+      "quality-cost-equation:claim:2",
+      "quality-cost-equation:claim:3",
+      "quality-cost-equation:claim:4"
+    ],
+    "sourceIds": [
+      "atlas-v2-quality-cost-equation"
+    ],
+    "provenance": {
+      "truthState": "derived",
+      "rationale": "Artifact is deterministically derived from its declared evidence.",
+      "sourceRefs": [
+        "atlas-v2-quality-cost-equation"
+      ],
+      "status": "derived",
+      "sourceDigest": "c33408154d08d526cb5c94a2651f52f42c6f6fb176409f6209d6cc6f66d3d5c8",
+      "assumptions": []
+    },
+    "browserContract": "semantic-and-visual",
+    "pptxContract": "editable-or-declared-fallback",
+    "accessibility": {
+      "altText": "The score is only useful when every symbol maps to evidence. Real mathematics, definitions, and a bound calculation share one frame.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "payload": {
+      "expression": {
+        "op": "divide",
+        "args": [
+          {
+            "op": "value",
+            "name": "Q"
+          },
+          {
+            "op": "add",
+            "args": [
+              {
+                "op": "value",
+                "name": "one"
+              },
+              {
+                "op": "multiply",
+                "args": [
+                  {
+                    "op": "value",
+                    "name": "alpha"
+                  },
+                  {
+                    "op": "value",
+                    "name": "C"
+                  }
+                ]
+              },
+              {
+                "op": "multiply",
+                "args": [
+                  {
+                    "op": "value",
+                    "name": "beta"
+                  },
+                  {
+                    "op": "value",
+                    "name": "L"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "values": {
+        "Q": 0.75,
+        "one": 1,
+        "alpha": 0.4,
+        "C": 0.038,
+        "beta": 0.1,
+        "L": 1.04
+      },
+      "result": 0.6701,
+      "tolerance": 0.0001,
+      "rounding": 3
+    },
+    "specDigest": "d19c525326e6ea92ebe28a7d2867cca7b330fc0e62766efdc4f0b5976edaaed9"
+  },
+  "generatedClaims": [],
+  "specFactBindings": [],
+  "harnessExecution": {
+    "observed": false,
+    "profileId": "light-director",
+    "profileVersion": "2.0.0",
+    "traceDigest": "sha256:7fa65eed48890a8aaea1e13a2ae2aa95ceb926b141a5ab20c269862f1ce551eb"
+  },
+  "usage": {
+    "latencyMs": 534,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0
+  },
+  "artifacts": {
+    "browser": {
+      "path": "control-browser.png",
+      "digest": "sha256:048a5f299f11037cd3c1ee484a53c95db3a6d352f53411acbde5b9079177c972",
+      "bytes": 79318,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pptx": {
+      "path": "control-deck.pptx",
+      "digest": "sha256:3f8afac5ce771bc5e4a98256e59de0496bd9d3584ac498442b908a2d19c3bd78",
+      "bytes": 5420862,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pdf": {
+      "path": "control-evidence.pdf",
+      "digest": "sha256:78473e2c158b02b34bac658288d893644307a63e96a83f736e8d12146265709c",
+      "bytes": 2697,
+      "validation": {
+        "status": "passed"
+      },
+      "fidelity": "deterministic-evidence-pdf"
+    }
+  },
+  "diagnostics": {
+    "semanticIssueCodes": [],
+    "estimatedTextOverflowCount": 0,
+    "exportTimedOut": false,
+    "unsupportedClaimCount": 0,
+    "freeModelClaimUnattributed": false,
+    "claimAudit": {
+      "status": "passed",
+      "method": "typed-artifact-spec"
+    }
+  },
+  "issueCodes": []
+}

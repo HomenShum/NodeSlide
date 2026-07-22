@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "nodekit.gym-campaign-plan/v1",
+  "campaignId": "deterministic-proof-v1",
+  "gymVersion": "nodeslide-deck-gym-v2",
+  "configDigest": "sha256:bf3c807089a0c944d22c156874e3cdf040866cbfe2a307608b52d57ec957041b",
+  "matrixDigest": "sha256:7272eb2af159cce82f350b7cec1d4de16596ea7f3c9a9dd27129425fb54f073d",
+  "selection": "deterministic",
+  "executor": "deterministic",
+  "selectedRunCount": 2,
+  "selectedRunIds": [
+    "public-equation__nodeslide-deterministic-compiler__light-director__1",
+    "public-equation__nodeslide-deterministic-compiler__structured-planner__1"
+  ],
+  "maxTotalCostMicroUsd": 0,
+  "maxFailures": 2,
+  "maxAttempts": 2,
+  "fullMatrixExplicitlyConfirmed": false,
+  "promotionAutoApply": false
+}

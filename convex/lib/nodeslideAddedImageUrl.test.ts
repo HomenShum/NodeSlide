@@ -10,8 +10,9 @@ describe('isAllowedNodeSlideAddedImageUrl', () => {
     }
   });
 
-  it('accepts a bounded https URL (the agent planner contract)', () => {
-    expect(isAllowedNodeSlideAddedImageUrl('https://cdn.example.com/chart.png')).toBe(true);
+  it('rejects remote URLs so a deck cannot make viewers contact a third party', () => {
+    expect(isAllowedNodeSlideAddedImageUrl('https://cdn.example.com/chart.png')).toBe(false);
+    expect(isAllowedNodeSlideAddedImageUrl('https://[2606:4700:4700::1111]/chart.png')).toBe(false);
   });
 
   it('rejects non-https remote schemes and script/exfil URLs', () => {
@@ -25,8 +26,7 @@ describe('isAllowedNodeSlideAddedImageUrl', () => {
     expect(isAllowedNodeSlideAddedImageUrl('//protocol-relative.example/x.png')).toBe(false);
   });
 
-  it('rejects oversized URLs on both contracts (sync-serializer character cap)', () => {
-    // Embedded over 700 KB, and an https URL over the planner's 2048-char bound.
+  it('rejects oversized embedded images and every remote URL', () => {
     expect(isAllowedNodeSlideAddedImageUrl(`data:image/webp;base64,${'A'.repeat(700_001)}`)).toBe(
       false,
     );

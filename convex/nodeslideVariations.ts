@@ -568,6 +568,7 @@ function assertPersistableVariationSet(args: {
       variation.operations.length < 1 ||
       variation.operations.length > 8 ||
       !variation.validation.ok ||
+      variation.validation.artifactCompilation?.status !== 'passed' ||
       variation.validation.issues.some((issue) => issue.severity === 'error') ||
       new TextEncoder().encode(JSON.stringify(variation.candidate)).byteLength >
         NODESLIDE_VARIATION_CANDIDATE_BYTE_LIMIT ||

@@ -15,6 +15,7 @@ describe('NodeSlide v3 studio toolbar', () => {
     expect(markup).toContain('aria-label="Share deck"');
     expect(markup).toContain('aria-label="Present deck"');
     expect(markup).toContain('aria-label="Export deck"');
+    expect(markup).toContain('aria-label="Switch to dark theme"');
     expect(markup).toContain('aria-label="Open command palette"');
     expect(markup).toContain('aria-label="Collapse slide navigator"');
     expect(source).toContain(

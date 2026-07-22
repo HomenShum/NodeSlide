@@ -20,6 +20,7 @@ import type {
   SourceRecord,
   ValidationResult,
 } from '../../shared/nodeslide';
+import { migrateNodeSlideProductionArtifactBinding } from '../../shared/nodeslideArtifactSpec';
 import type { Doc, Id } from '../_generated/dataModel';
 import type { MutationCtx, QueryCtx } from '../_generated/server';
 
@@ -99,6 +100,12 @@ export function elementFromRow(row: Doc<'nodeslide_elements'>): SlideElement {
     locked: row.locked,
     visible: row.visible ?? true,
     ...(row.groupId !== undefined ? { groupId: row.groupId } : {}),
+    ...(row.artifactBinding !== undefined
+      ? { artifactBinding: migrateNodeSlideProductionArtifactBinding(row.artifactBinding) }
+      : {}),
+    ...(row.authoredArtifactBinding !== undefined
+      ? { authoredArtifactBinding: row.authoredArtifactBinding }
+      : {}),
     exportCapabilities: row.exportCapabilities,
     version: row.version,
   };
@@ -679,6 +686,8 @@ export async function insertNodeSlideSnapshot(
     ownerAccessKey: string;
     plan: string[];
     spec: unknown;
+    productionProbeCleanupDigest?: string;
+    productionProbeExpiresAt?: number;
   },
 ) {
   const { deck, slides, elements, sources } = args.snapshot;
@@ -703,6 +712,12 @@ export async function insertNodeSlideSnapshot(
       ? { activeSignatureProfileDigest: deck.activeSignatureProfileDigest }
       : {}),
     ...(deck.shareSlug !== undefined ? { shareSlug: deck.shareSlug } : {}),
+    ...(args.productionProbeCleanupDigest !== undefined
+      ? { productionProbeCleanupDigest: args.productionProbeCleanupDigest }
+      : {}),
+    ...(args.productionProbeExpiresAt !== undefined
+      ? { productionProbeExpiresAt: args.productionProbeExpiresAt }
+      : {}),
     plan: args.plan,
     spec: args.spec,
     createdAt: deck.createdAt,
@@ -835,6 +850,10 @@ function elementFields(
     locked: element.locked,
     visible: element.visible ?? true,
     ...(element.groupId !== undefined ? { groupId: element.groupId } : {}),
+    ...(element.artifactBinding !== undefined ? { artifactBinding: element.artifactBinding } : {}),
+    ...(element.authoredArtifactBinding !== undefined
+      ? { authoredArtifactBinding: element.authoredArtifactBinding }
+      : {}),
     exportCapabilities: element.exportCapabilities,
     version: element.version,
     createdAt,

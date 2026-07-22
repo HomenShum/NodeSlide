@@ -56,6 +56,10 @@ describe('Openverse image search: SSRF allowlist', () => {
       'https://evil.example.com/v1/images/',
       'https://api.openverse.org.evil.com/v1/images/',
       'http://api.openverse.org/v1/images/', // https only
+      'https://api.openverse.org:8443/v1/images/',
+      'https://user:password@api.openverse.org/v1/images/',
+      'https://api.openverse.org/v1/audio/',
+      'https://api.openverse.org/v1/images/#unexpected',
       'https://localhost:6379/',
       'file:///etc/passwd',
       'not a url',
@@ -92,19 +96,58 @@ describe('Openverse image search: field mapping', () => {
     const requested = new URL(String(fetchMock.mock.calls[0]?.[0]));
     expect(requested.hostname).toBe('api.openverse.org');
     expect(requested.searchParams.get('license_type')).toBe('commercial');
+    expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({
+      redirect: 'error',
+      credentials: 'omit',
+      referrerPolicy: 'no-referrer',
+    });
   });
 
-  it('caps results at 8, drops rows without a usable url, and defaults missing credit fields', () => {
+  it('caps results at 8 and drops rows without a bounded id or public source url', () => {
     const rows = Array.from({ length: 20 }, (_, index) => openverseRow(index));
     expect(mapOpenverseResults({ results: rows })).toHaveLength(OPENVERSE_MAX_RESULTS);
     expect(mapOpenverseResults({ results: [{ title: 'no url' }] })).toEqual([]);
-    const sparse = mapOpenverseResults({
-      results: [{ url: 'https://example.com/a.jpg' }],
-    });
-    expect(sparse[0]?.creator).toBe('Unknown creator');
-    expect(sparse[0]?.license).toBe('Unknown license');
+    expect(mapOpenverseResults({ results: [{ url: 'https://example.com/a.jpg' }] })).toEqual([]);
+    expect(
+      mapOpenverseResults({
+        results: [{ ...openverseRow(1), id: '../../private', url: 'https://example.com/a.jpg' }],
+      }),
+    ).toEqual([]);
+    expect(
+      mapOpenverseResults({
+        results: [{ ...openverseRow(1), url: 'https://127.0.0.1/a.jpg' }],
+      }),
+    ).toEqual([]);
     expect(mapOpenverseResults(null)).toEqual([]);
     expect(mapOpenverseResults({ results: 'nope' })).toEqual([]);
+  });
+
+  it('ignores provider-controlled thumbnail URLs and derives the exact Openverse API endpoint', () => {
+    const [mapped] = mapOpenverseResults({
+      results: [
+        {
+          ...openverseRow(7),
+          thumbnail: 'https://tracker.example.test/pixel.gif',
+        },
+      ],
+    });
+    expect(mapped?.thumbnailUrl).toBe('https://api.openverse.org/v1/images/img-7/thumb/');
+    expect(JSON.stringify(mapped)).not.toContain('tracker.example.test');
+  });
+
+  it('drops missing, unknown, non-commercial, or unsafe license claims', () => {
+    for (const license of [undefined, 'unknown', 'by-nc']) {
+      expect(
+        mapOpenverseResults({
+          results: [{ ...openverseRow(2), license }],
+        }),
+      ).toEqual([]);
+    }
+    expect(
+      mapOpenverseResults({
+        results: [{ ...openverseRow(2), license_url: 'http://127.0.0.1/license' }],
+      }),
+    ).toEqual([]);
   });
 });
 

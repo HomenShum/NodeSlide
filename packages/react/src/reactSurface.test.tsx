@@ -1,4 +1,4 @@
-import type { DeckPatch, DeckSnapshot, Slide } from '@nodeslide/contracts';
+import type { DeckPatch, DeckSnapshot, Slide, SlideElement } from '@nodeslide/contracts';
 import { createNodeSlideTestSnapshot, createNodeSlideTextPatch } from '@nodeslide/testing';
 // @vitest-environment jsdom
 import { cleanup, render, screen } from '@testing-library/react';
@@ -72,6 +72,71 @@ describe('@nodeslide/react controlled surfaces', () => {
     expect(screen.queryByText('Verified')).toBeNull();
     await user.click(screen.getByRole('button', { name: 'Next slide' }));
     expect(onActiveSlideChange).toHaveBeenCalledWith(snapshot.deck.slideOrder[1]);
+  });
+
+  it('keeps remote video resources inert until the viewer explicitly loads them', async () => {
+    const user = userEvent.setup();
+    const snapshot = createNodeSlideTestSnapshot();
+    const slide = snapshot.slides[0];
+    if (!slide) throw new Error('Missing slide fixture.');
+    const video: SlideElement = {
+      id: `${slide.id}:video`,
+      slideId: slide.id,
+      name: 'Private walkthrough',
+      kind: 'video',
+      bbox: { x: 0.1, y: 0.1, width: 0.8, height: 0.7 },
+      rotation: 0,
+      style: {},
+      video: {
+        url: 'https://media.example.test/private.mp4',
+        posterUrl: 'https://media.example.test/private.jpg',
+        captionsUrl: 'https://media.example.test/private.vtt',
+        title: 'Private walkthrough',
+      },
+      sourceIds: [],
+      locked: false,
+      exportCapabilities: ['web_native'],
+      version: 1,
+    };
+    snapshot.elements = [video];
+    slide.elementOrder = [video.id];
+
+    const { container, rerender } = render(
+      <NodeSlideDeckViewer
+        snapshot={snapshot}
+        activeSlideId={slide.id}
+        onActiveSlideChange={vi.fn()}
+      />,
+    );
+    expect(container.querySelector('video')).toBeNull();
+    expect(container.innerHTML).not.toContain('media.example.test');
+
+    await user.click(
+      screen.getByRole('button', { name: 'Load remote video: Private walkthrough' }),
+    );
+    expect(container.querySelector('video')?.getAttribute('src')).toContain('private.mp4');
+    expect(container.querySelector('video')?.crossOrigin).toBe('anonymous');
+    expect(container.querySelector('track')?.getAttribute('src')).toContain('private.vtt');
+
+    const replacement = structuredClone(snapshot);
+    const replacementVideo = replacement.elements.find((element) => element.id === video.id);
+    if (!replacementVideo?.video) throw new Error('Missing replacement video fixture.');
+    replacementVideo.video.url = 'https://replacement.example.test/new.mp4';
+    replacementVideo.video.posterUrl = 'https://replacement.example.test/new.jpg';
+    replacementVideo.video.captionsUrl = 'https://replacement.example.test/new.vtt';
+    replacementVideo.version += 1;
+    rerender(
+      <NodeSlideDeckViewer
+        snapshot={replacement}
+        activeSlideId={slide.id}
+        onActiveSlideChange={vi.fn()}
+      />,
+    );
+    expect(container.querySelector('video')).toBeNull();
+    expect(container.innerHTML).not.toContain('replacement.example.test');
+    expect(
+      screen.getByRole('button', { name: 'Load remote video: Private walkthrough' }),
+    ).toBeTruthy();
   });
 
   it('supports roving slide-tab keyboard navigation without owning selection state', async () => {

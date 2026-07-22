@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "nodekit.gym-campaign-plan/v1",
+  "campaignId": "semantic-contract-v2-control-complete-r4",
+  "gymVersion": "nodeslide-deck-gym-v2",
+  "configDigest": "sha256:e7aef1f13cccfbe86c11146d4c960ac8b29b2464ed1df2a0235cc77b478b3939",
+  "matrixDigest": "sha256:5d6b83add794c915617cf7e0c31cd91005734643bf10ea2a6deb2af20358fe25",
+  "selection": "deterministic",
+  "executor": "deterministic",
+  "selectedRunCount": 2,
+  "selectedRunIds": [
+    "public-equation__nodeslide-deterministic-compiler__light-director__1",
+    "public-equation__nodeslide-deterministic-compiler__structured-planner__1"
+  ],
+  "filters": {
+    "tasks": ["public-equation"],
+    "models": ["nodeslide/deterministic-compiler"],
+    "harnesses": ["light-director", "structured-planner"],
+    "repetitions": []
+  },
+  "maxTotalCostMicroUsd": 0,
+  "maxFailures": 3,
+  "maxAttempts": 1,
+  "fullMatrixExplicitlyConfirmed": false,
+  "promotionAutoApply": false
+}

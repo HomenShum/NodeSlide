@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "nodekit.gym-campaign-plan/v1",
+  "campaignId": "pinned-free-artifact-recovery-v1",
+  "gymVersion": "nodeslide-deck-gym-v2",
+  "configDigest": "sha256:bf3c807089a0c944d22c156874e3cdf040866cbfe2a307608b52d57ec957041b",
+  "matrixDigest": "sha256:7272eb2af159cce82f350b7cec1d4de16596ea7f3c9a9dd27129425fb54f073d",
+  "selection": "live-smoke",
+  "executor": "recovery",
+  "selectedRunCount": 2,
+  "selectedRunIds": [
+    "public-equation__google-gemma-4-26b-a4b-it-free__light-director__1",
+    "public-equation__google-gemma-4-26b-a4b-it-free__structured-planner__1"
+  ],
+  "maxTotalCostMicroUsd": 0,
+  "maxFailures": 2,
+  "maxAttempts": 1,
+  "fullMatrixExplicitlyConfirmed": false,
+  "promotionAutoApply": false,
+  "sourceCampaign": "artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/pinned-free-paired-smoke-v1"
+}

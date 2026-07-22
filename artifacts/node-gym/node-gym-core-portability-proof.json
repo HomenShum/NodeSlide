@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "nodekit.gym-core-portability-proof/v1",
+  "passedAt": "2026-07-22T13:27:57.135Z",
+  "package": "@nodekit/gym-core",
+  "packageSchemaVersion": "nodekit.gym/v1",
+  "dependencyFree": true,
+  "baseline": {
+    "name": "@nodekit/gym-core",
+    "version": "0.0.1",
+    "filename": "nodekit-gym-core-0.0.1.tgz",
+    "sha256": "sha256:24bf7a44c8521fcdc4e0b1c86965d21596b5d2918e193f856bf3883c0546c4e8",
+    "integrity": "sha512-VDDk0V+WJKFaVsfKRJbuemibMOOk6SJu4O5LTCdLZjBT9MTrUjm1GTw0pEinAG80ylWqchfcpyLk//hR1oUeeQ==",
+    "fileCount": 3,
+    "unpackedBytes": 2507
+  },
+  "candidate": {
+    "name": "@nodekit/gym-core",
+    "version": "0.1.0",
+    "filename": "nodekit-gym-core-0.1.0.tgz",
+    "sha256": "sha256:b8c14013a54fc7419ebfda806553573c4b6e3d1dde2a17f11a61f5ddd88fc0c2",
+    "integrity": "sha512-jzQ7eapfnmwnBJZyh0SfOJkXhGFHDRQo30uU3rpRAWwp7T8QcP6OwloLTciTsvr4ICEHDMmNM+JoouELSHMa1Q==",
+    "fileCount": 5,
+    "unpackedBytes": 147413
+  },
+  "cleanInstall": true,
+  "exactTarballPins": true,
+  "lockfileIntegrityPins": true,
+  "runtimeExportsVerified": true,
+  "declarationFilesTypeChecked": true,
+  "upgradeReceiptAdvanced": true,
+  "candidateAddedShadowRouteContract": true,
+  "runPlanCompatibility": true,
+  "persistedStateMigration": "not-required-schema-unchanged",
+  "autoPromotionDisabled": true,
+  "byteIdenticalCandidateProvenance": true,
+  "isolatedSecondProductContractProof": true,
+  "directNodeRoomRepositoryIntegration": false,
+  "consumers": {
+    "nodeslide": {
+      "fixture": "scripts/fixtures/node-gym-consumers/nodeslide",
+      "version": "0.1.0",
+      "integrity": "sha512-jzQ7eapfnmwnBJZyh0SfOJkXhGFHDRQo30uU3rpRAWwp7T8QcP6OwloLTciTsvr4ICEHDMmNM+JoouELSHMa1Q==",
+      "domainEvaluator": "equation-semantics",
+      "result": "passed"
+    },
+    "noderoom": {
+      "fixture": "scripts/fixtures/node-gym-consumers/noderoom",
+      "fromVersion": "0.0.1",
+      "toVersion": "0.1.0",
+      "integrity": "sha512-jzQ7eapfnmwnBJZyh0SfOJkXhGFHDRQo30uU3rpRAWwp7T8QcP6OwloLTciTsvr4ICEHDMmNM+JoouELSHMa1Q==",
+      "domainEvaluator": "NodeAgent frame evidence",
+      "independentTaskClass": "nodeagent-frame-verification",
+      "result": "passed"
+    }
+  },
+  "externalNodeRoomCheckout": {
+    "available": true,
+    "product": "NodeRoom",
+    "head": "387a924c5880eece5ad477c29df4b6166e5b19d6",
+    "branch": "codex/hackwithbay-3.0",
+    "clean": false,
+    "dirtyEntryCount": 11,
+    "workingTreeFingerprint": "sha256:ec20df366e2791c73b0a9b02fd755b7918f97e8443362cfefbc80f4cc63e662d",
+    "mutated": false,
+    "note": "The checkout was inspected and fingerprinted but not modified; its dirty user work was preserved."
+  }
+}

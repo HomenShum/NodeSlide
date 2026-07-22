@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "nodekit.gym-semantic-evaluation/v1",
+  "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+  "comparisonKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::1::8000:300000:200000:2",
+  "harnessPairingKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::nodeslide/deterministic-compiler::1::8000:300000:200000:2",
+  "taskClass": "equation",
+  "curriculumLevel": 3,
+  "requestedModel": "nodeslide/deterministic-compiler",
+  "actualRoute": {
+    "requestedProvider": "local",
+    "requestedRoute": "nodeslide/deterministic-compiler",
+    "actualProvider": "local",
+    "actualModel": "nodeslide/deterministic-compiler",
+    "attributionId": "control-public-equation__nodeslide-deterministic-compiler__light-director__1",
+    "attributionIdKind": "nodeslide-trace"
+  },
+  "harness": "light-director@2.0.0",
+  "fixtureDigest": "sha256:e8f7bc80846afe720c705f147186a3a25dad35934eb47dcdbabfaff7fe53df88",
+  "normalizedSpecDigest": "sha256:84990b5f7500f2e8caf7b882b85599981894f4f46843ef626434ab65c91cbac9",
+  "sourceRunDigest": "sha256:7af66554fdd404d4a3189b50d7adc49b590163f90fbf0c33f7180a75eb7225bd",
+  "status": "passed",
+  "hardGatesPassed": true,
+  "promotionReady": false,
+  "issueCodes": [],
+  "scores": {
+    "briefAdherence": 1,
+    "storyQuality": 1,
+    "factualAccuracy": 1,
+    "toolReliability": 1,
+    "exportFidelity": 1,
+    "repairSuccess": 1,
+    "editability": 1,
+    "visualStructuralQuality": 1,
+    "visualPreference": null
+  },
+  "scoreEvidence": {
+    "briefCoverage": {
+      "requiredTopics": [
+        "quality",
+        "cost",
+        "ratio"
+      ],
+      "coveredTopics": [
+        "quality",
+        "cost",
+        "ratio"
+      ],
+      "requiredStoryBeats": [
+        "inputs",
+        "calculation",
+        "result"
+      ],
+      "observedStoryBeats": [
+        "inputs",
+        "calculation",
+        "result"
+      ],
+      "harnessProfile": "light-director"
+    },
+    "claimAudit": {
+      "generatedClaimCount": 1,
+      "supportedClaimCount": 1,
+      "allowedClaimCount": 1,
+      "supportedNumericFactCount": 3,
+      "requiredNumericFactCount": 3
+    },
+    "artifactValidation": {
+      "sourceRunDigest": "sha256:7af66554fdd404d4a3189b50d7adc49b590163f90fbf0c33f7180a75eb7225bd",
+      "slideCount": 1,
+      "crossFormatCounts": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "lineageEntryCount": 1,
+      "exportFidelityPassed": true
+    },
+    "specValidation": {
+      "validator": "ArtifactSpec equation validator v1",
+      "validatorStatus": "passed",
+      "boundFactCount": 3,
+      "requiredFactPathCount": 3
+    },
+    "humanPreference": {
+      "status": "not_run"
+    },
+    "harnessExecution": {
+      "observed": true,
+      "profileId": "light-director",
+      "profileVersion": "2.0.0",
+      "traceDigest": "sha256:3d2acdc4e16d12b1bea0dc9b69c37c84aa22d960602f0803d0d00e3eaef8714f"
+    }
+  },
+  "artifacts": {
+    "browser": {
+      "path": "control-browser.png",
+      "digest": "sha256:9bf489ba3aebe1ca1d4c01ade09b12f6bb869eac5e5d35c06dead43182743f51",
+      "bytes": 70818,
+      "sourceRunDigest": "sha256:7af66554fdd404d4a3189b50d7adc49b590163f90fbf0c33f7180a75eb7225bd",
+      "validation": {
+        "status": "passed"
+      },
+      "slideCount": 1
+    },
+    "pptx": {
+      "path": "control-deck.pptx",
+      "digest": "sha256:83e6fd6e9c9169ac2b825fb534d94b2d5d0dffc75e780578cc1f2f9c092c44fa",
+      "bytes": 50301,
+      "sourceRunDigest": "sha256:7af66554fdd404d4a3189b50d7adc49b590163f90fbf0c33f7180a75eb7225bd",
+      "validation": {
+        "status": "passed"
+      },
+      "slideCount": 1
+    },
+    "pdf": {
+      "path": "control-deck.pdf",
+      "digest": "sha256:012ab91ee66c4cedb9f484305ef0b0362e19209c0f2339b79c8490f500261fc3",
+      "bytes": 45943,
+      "sourceRunDigest": "sha256:7af66554fdd404d4a3189b50d7adc49b590163f90fbf0c33f7180a75eb7225bd",
+      "validation": {
+        "status": "passed"
+      },
+      "pageCount": 1,
+      "fidelity": "deterministic-browser-identical-content"
+    },
+    "montage": {
+      "path": "control-montage.png",
+      "digest": "sha256:9bf489ba3aebe1ca1d4c01ade09b12f6bb869eac5e5d35c06dead43182743f51",
+      "bytes": 70818,
+      "sourceRunDigest": "sha256:7af66554fdd404d4a3189b50d7adc49b590163f90fbf0c33f7180a75eb7225bd",
+      "validation": {
+        "status": "passed"
+      },
+      "slideCount": 1
+    },
+    "slides": [
+      {
+        "path": "control-slide-1.png",
+        "digest": "sha256:9bf489ba3aebe1ca1d4c01ade09b12f6bb869eac5e5d35c06dead43182743f51",
+        "bytes": 70818,
+        "sourceRunDigest": "sha256:7af66554fdd404d4a3189b50d7adc49b590163f90fbf0c33f7180a75eb7225bd",
+        "validation": {
+          "status": "passed"
+        },
+        "slideIndex": 1,
+        "specDigest": "sha256:84990b5f7500f2e8caf7b882b85599981894f4f46843ef626434ab65c91cbac9"
+      }
+    ],
+    "sourceLineage": [
+      {
+        "claimId": "equation-claim",
+        "sourceId": "public-equation-source",
+        "slideIndex": 1,
+        "specDigest": "sha256:84990b5f7500f2e8caf7b882b85599981894f4f46843ef626434ab65c91cbac9",
+        "sourceRunDigest": "sha256:7af66554fdd404d4a3189b50d7adc49b590163f90fbf0c33f7180a75eb7225bd"
+      }
+    ]
+  }
+}

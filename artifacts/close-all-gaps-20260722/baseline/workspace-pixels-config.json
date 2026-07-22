@@ -1,0 +1,44 @@
+{
+  "repo": ".",
+  "url": "https://nodeslide.vercel.app/",
+  "outDir": "artifacts/close-all-gaps-20260722/baseline/workspace-pixels",
+  "assert": ["NodeSlide", "Ask NodeSlide"],
+  "shots": [
+    {
+      "name": "workspace-desktop-light",
+      "viewport": { "width": 1512, "height": 982 },
+      "clicks": ["text=Explore the editable sample workspace"],
+      "waitMs": 700,
+      "fullPage": true
+    },
+    {
+      "name": "workspace-desktop-dark",
+      "viewport": { "width": 1512, "height": 982 },
+      "clicks": [
+        "text=Explore the editable sample workspace",
+        "[aria-label=\"Switch to dark theme\"]"
+      ],
+      "waitMs": 700,
+      "fullPage": true
+    },
+    {
+      "name": "workspace-mobile-light",
+      "viewport": { "width": 390, "height": 844 },
+      "clicks": ["text=Explore the editable sample workspace"],
+      "waitMs": 700,
+      "fullPage": true,
+      "reducedMotion": true
+    },
+    {
+      "name": "workspace-mobile-dark",
+      "viewport": { "width": 390, "height": 844 },
+      "clicks": [
+        "text=Explore the editable sample workspace",
+        "[aria-label=\"Switch to dark theme\"]"
+      ],
+      "waitMs": 700,
+      "fullPage": true,
+      "reducedMotion": true
+    }
+  ]
+}

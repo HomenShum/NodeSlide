@@ -27,6 +27,7 @@ import {
   type ValidationResult,
   clampNormalized,
 } from '../shared/nodeslide';
+import { assertNodeSlideArtifactCompilation } from '../shared/nodeslideArtifactSpec';
 import { normalizeWebSourceExcerpt } from '../shared/nodeslideEvidence';
 import { applyDeckPatch } from '../shared/nodeslidePatch';
 import type { SlideVariation } from '../shared/nodeslideVariation';
@@ -2198,6 +2199,12 @@ export const writeAgentAssistantStreamInternal = internalMutation({
       if (terminalRun) {
         throw new Error('A terminal agent run cannot begin an assistant stream.');
       }
+      const otherOpenStream = await ctx.db
+        .query('nodeslide_agent_messages')
+        .withIndex('by_run_created', (query) => query.eq('runId', args.runId))
+        .filter((query) => query.eq(query.field('streamState'), 'streaming'))
+        .first();
+      if (otherOpenStream) throw new Error('An agent run may have only one open assistant stream.');
       await ctx.db.insert('nodeslide_agent_messages', {
         id: messageId,
         deckId: args.deckId,
@@ -2232,7 +2239,10 @@ export const writeAgentAssistantStreamInternal = internalMutation({
       if (terminalRun && args.state !== 'interrupted') {
         throw new Error('A terminal agent run may only interrupt an open assistant stream.');
       }
-      if (args.state === 'streaming' && !content.startsWith(existing.content)) {
+      if (
+        (args.state === 'streaming' || args.state === 'complete') &&
+        !content.startsWith(existing.content)
+      ) {
         throw new Error('Assistant stream updates must extend the persisted prefix.');
       }
       await ctx.db.patch(existing._id, {
@@ -2470,6 +2480,9 @@ export const advanceAgentRunInternal = internalMutation({
       ...(args.traceId ? { traceId: args.traceId } : {}),
       ...(args.error ? { error: requiredText(args.error, 'run error', 600) } : {}),
     });
+    if (args.status === 'awaiting_review' || terminal) {
+      await interruptOpenAssistantStreams(ctx, args.runId, now);
+    }
     if (terminal) {
       const root = await ctx.db
         .query('nodeslide_agent_spans')
@@ -2588,17 +2601,7 @@ export const recoverStaleAgentRunsInternal = internalMutation({
         leaseExpiresAt: now,
         nextTelemetrySequence: sequence + 2,
       });
-      const openAssistantStreams = await ctx.db
-        .query('nodeslide_agent_messages')
-        .withIndex('by_run_created', (query) => query.eq('runId', run.id))
-        .filter((query) => query.eq(query.field('streamState'), 'streaming'))
-        .take(32);
-      for (const stream of openAssistantStreams) {
-        await ctx.db.patch(stream._id, {
-          streamState: 'interrupted',
-          updatedAt: now,
-        });
-      }
+      await interruptOpenAssistantStreams(ctx, run.id, now);
       const root = await ctx.db
         .query('nodeslide_agent_spans')
         .withIndex('by_stable_id', (query) =>
@@ -2718,6 +2721,8 @@ export const createFromBriefInternal = internalMutation({
     costMicroUsd: v.optional(v.number()),
     inputTokens: v.optional(v.number()),
     outputTokens: v.optional(v.number()),
+    productionProbeCleanupDigest: v.optional(v.string()),
+    productionProbeExpiresAt: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     if (!isOwnerAccessKey(args.ownerAccessKey))
@@ -2746,6 +2751,12 @@ export const createFromBriefInternal = internalMutation({
       clientSessionId: args.clientSessionId,
       ownerAccessKey: args.ownerAccessKey,
       built,
+      ...(args.productionProbeCleanupDigest !== undefined
+        ? { productionProbeCleanupDigest: args.productionProbeCleanupDigest }
+        : {}),
+      ...(args.productionProbeExpiresAt !== undefined
+        ? { productionProbeExpiresAt: args.productionProbeExpiresAt }
+        : {}),
       trace: {
         summary: args.traceSummary,
         context: [
@@ -4646,6 +4657,8 @@ async function createWorkspaceRows(
     clientSessionId: string;
     ownerAccessKey: string;
     built: ReturnType<typeof buildGoldenNodeSlide>;
+    productionProbeCleanupDigest?: string;
+    productionProbeExpiresAt?: number;
     trace: {
       summary: string;
       context: string[];
@@ -4667,6 +4680,14 @@ async function createWorkspaceRows(
     deck: { ...builtSnapshot.deck, shareSlug: createShareSlug() },
   };
   const now = snapshot.deck.createdAt;
+  // Creation fails before the first database write when a model/deterministic
+  // materialization cannot compile into the versioned ArtifactSpec boundary.
+  assertNodeSlideArtifactCompilation(snapshot);
+  const validation = validateNodeSlideSnapshot(
+    snapshot,
+    now,
+    nodeslideStableId('validation', snapshot.deck.id, 'initial'),
+  );
   const projectRowId = await ctx.db.insert('projects', {
     clientSessionId: args.clientSessionId,
     title: snapshot.deck.title,
@@ -4684,12 +4705,13 @@ async function createWorkspaceRows(
     ownerAccessKey: args.ownerAccessKey,
     plan,
     spec,
+    ...(args.productionProbeCleanupDigest !== undefined
+      ? { productionProbeCleanupDigest: args.productionProbeCleanupDigest }
+      : {}),
+    ...(args.productionProbeExpiresAt !== undefined
+      ? { productionProbeExpiresAt: args.productionProbeExpiresAt }
+      : {}),
   });
-  const validation = validateNodeSlideSnapshot(
-    snapshot,
-    now,
-    nodeslideStableId('validation', snapshot.deck.id, 'initial'),
-  );
   await ctx.db.insert('nodeslide_validations', validation);
   await insertVersion(ctx, snapshot, 'Initial deck', 'system', undefined, now);
   await ctx.db.insert('nodeslide_traces', {
@@ -5064,6 +5086,18 @@ function requiredText(value: string, label: string, max: number): string {
   if (!clean) throw new Error(`${label} is required.`);
   if (clean.length > max) throw new Error(`${label} exceeds ${max} characters.`);
   return clean;
+}
+
+async function interruptOpenAssistantStreams(ctx: MutationCtx, runId: string, now: number) {
+  const open = await ctx.db
+    .query('nodeslide_agent_messages')
+    .withIndex('by_run_created', (query) => query.eq('runId', runId))
+    .filter((query) => query.eq(query.field('streamState'), 'streaming'))
+    .collect();
+  for (const stream of open) {
+    await ctx.db.patch(stream._id, { streamState: 'interrupted', updatedAt: now });
+  }
+  return open.length;
 }
 
 function requiredAgentStreamText(value: string): string {

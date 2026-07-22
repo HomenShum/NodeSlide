@@ -36,7 +36,10 @@ import type {
   Slide,
   SlideElement,
 } from '../../../shared/nodeslide';
-import { operationElementIds } from '../../../shared/nodeslide';
+import {
+  NODESLIDE_PRODUCTION_PROBE_CLEANUP_STORAGE_KEY,
+  operationElementIds,
+} from '../../../shared/nodeslide';
 import { applyDeckPatch } from '../../../shared/nodeslidePatch';
 import type { TasteProfile } from '../../../shared/nodeslidePreference';
 import type { SignatureProfile } from '../../../shared/nodeslideSignature';
@@ -50,6 +53,7 @@ import {
   storeDeckOwnerAccessKey,
 } from '../../lib/sessionIdentity';
 import { generateSessionIllustrativeImage } from '../../lib/sessionImageGeneration';
+import { cloneNodeSlideElementWithoutAuthoredBinding } from './clientArtifactAuthorship';
 import { type ApproverReviewState, ApproverReviewView } from './components/ApproverReviewView';
 import { CommandPalette, type StudioCommand } from './components/CommandPalette';
 import {
@@ -1674,7 +1678,25 @@ function NodeSlideStudioContent() {
     setProjectError(null);
     setCreating(true);
     try {
-      const result = await monitorDeploymentAction(createDeckFromBrief({ ...request }));
+      const productionProbeCleanupToken = window.sessionStorage.getItem(
+        NODESLIDE_PRODUCTION_PROBE_CLEANUP_STORAGE_KEY,
+      );
+      const validProductionProbeCleanupToken =
+        productionProbeCleanupToken &&
+        /^probe_[A-Za-z0-9_-]{43}$/u.test(productionProbeCleanupToken)
+          ? productionProbeCleanupToken
+          : null;
+      if (validProductionProbeCleanupToken) {
+        window.sessionStorage.removeItem(NODESLIDE_PRODUCTION_PROBE_CLEANUP_STORAGE_KEY);
+      }
+      const result = await monitorDeploymentAction(
+        createDeckFromBrief({
+          ...request,
+          ...(validProductionProbeCleanupToken
+            ? { productionProbeCleanupToken: validProductionProbeCleanupToken }
+            : {}),
+        }),
+      );
       if (!requestGate.isCurrent(requestToken)) return;
       setCreating(false);
       const accessDurable = installWorkspace(result, undefined, false, true);
@@ -3899,7 +3921,7 @@ function elementScope(deckId: string, elements: readonly SlideElement[]): PatchS
 function duplicateElement(element: SlideElement, index: number): SlideElement {
   const suffix = `${Date.now().toString(36)}-${index}`;
   return {
-    ...structuredClone(element),
+    ...cloneNodeSlideElementWithoutAuthoredBinding(element),
     id: `${element.id}-copy-${suffix}`,
     name: `${element.name} copy`,
     bbox: {

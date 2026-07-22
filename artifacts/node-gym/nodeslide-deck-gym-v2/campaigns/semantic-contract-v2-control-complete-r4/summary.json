@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "nodekit.gym-campaign-summary/v1",
+  "campaignId": "semantic-contract-v2-control-complete-r4",
+  "campaignPlanDigest": "sha256:e165c48b0df84655f1bc6114fba0069f05eb933fc830590368b9712dc475fa12",
+  "generatedAt": "2026-07-22T10:25:15.757Z",
+  "selectedRunCount": 2,
+  "attemptedOrResumed": 2,
+  "passed": 2,
+  "failed": 0,
+  "unrun": [],
+  "spentCostMicroUsd": 0,
+  "stoppedBy": null,
+  "pairedCausalClaimReady": true,
+  "pairedDeltaReport": {
+    "status": "complete",
+    "reportDigest": "sha256:cd9e0cdd98e6235aa3a6dd9a33121bb6a95386168ccba103581b38f786a735a6",
+    "pairCount": 1,
+    "expectedPairCount": 1
+  },
+  "promotionEligible": false,
+  "humanPreference": {
+    "status": "not_run"
+  },
+  "runs": [
+    {
+      "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+      "status": "passed",
+      "attempt": 1,
+      "issueCodes": [],
+      "semanticEvaluationDigest": "sha256:29bbc6312c9a6806220a00454e855ac840cc3eaaf88ff4659198ef9f0afd4fab",
+      "harnessBehaviorObserved": true
+    },
+    {
+      "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+      "status": "passed",
+      "attempt": 1,
+      "issueCodes": [],
+      "semanticEvaluationDigest": "sha256:3234785ab439ea81777a97dd11944c331cb360ece779244921d7e09efdc58cbd",
+      "harnessBehaviorObserved": true
+    }
+  ]
+}

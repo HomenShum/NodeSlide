@@ -83,6 +83,12 @@ function repairDefinition(issue: ValidationIssue): RepairDefinition {
         'Accept the explicit fallback or replace the element with a natively editable kind.',
       automatic: false,
     },
+    artifact_spec: {
+      kind: 'repair_schema',
+      description:
+        'Repair the typed artifact source or binding; export cannot infer missing semantics.',
+      automatic: false,
+    },
     on_brand_color: {
       kind: 'repair_schema',
       description:

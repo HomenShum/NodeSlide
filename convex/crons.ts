@@ -24,4 +24,11 @@ crons.interval(
   {},
 );
 
+crons.interval(
+  'delete expired NodeSlide production probe workspaces',
+  { minutes: 30 },
+  internal.nodeslideRetention.deleteExpiredProductionProbeWorkspaces,
+  {},
+);
+
 export default crons;

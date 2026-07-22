@@ -1,0 +1,123 @@
+{
+  "schemaVersion": "nodekit.gym-semantic-evaluation/v1",
+  "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+  "comparisonKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::1::8000:300000:200000:2",
+  "harnessPairingKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::1::8000:300000:200000:2::nodeslide/deterministic-compiler",
+  "taskClass": "equation",
+  "curriculumLevel": 3,
+  "requestedModel": "nodeslide/deterministic-compiler",
+  "actualRoute": {
+    "requestedProvider": "local",
+    "requestedRoute": "nodeslide/deterministic-compiler",
+    "actualProvider": "local",
+    "actualModel": "nodeslide/deterministic-compiler",
+    "attributionId": "control-public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+    "attributionIdKind": "nodeslide-trace"
+  },
+  "harness": "structured-planner@2.0.0",
+  "fixtureDigest": "sha256:e8f7bc80846afe720c705f147186a3a25dad35934eb47dcdbabfaff7fe53df88",
+  "normalizedSpecDigest": "sha256:d19c525326e6ea92ebe28a7d2867cca7b330fc0e62766efdc4f0b5976edaaed9",
+  "sourceRunDigest": null,
+  "status": "failed",
+  "hardGatesPassed": false,
+  "promotionReady": false,
+  "issueCodes": [
+    "cross_format_page_count_mismatch",
+    "generated_claims_missing",
+    "harness_behavior_not_observed",
+    "montage_artifact_missing",
+    "normalized_spec_claim_binding_invalid",
+    "normalized_spec_source_binding_invalid",
+    "per_slide_evidence_missing",
+    "required_fixture_claim_missing",
+    "source_lineage_missing",
+    "source_run_digest_invalid",
+    "spec_required_fact_unbound"
+  ],
+  "scores": {
+    "briefAdherence": 0,
+    "storyQuality": 0,
+    "factualAccuracy": 0,
+    "toolReliability": 1,
+    "exportFidelity": 0,
+    "repairSuccess": 0,
+    "editability": 0,
+    "visualStructuralQuality": 0,
+    "visualPreference": null
+  },
+  "scoreEvidence": {
+    "briefCoverage": {
+      "requiredTopics": [
+        "quality",
+        "cost",
+        "ratio"
+      ],
+      "coveredTopics": [],
+      "requiredStoryBeats": [
+        "inputs",
+        "calculation",
+        "result"
+      ],
+      "observedStoryBeats": [],
+      "harnessProfile": "structured-planner"
+    },
+    "claimAudit": {
+      "generatedClaimCount": 0,
+      "supportedClaimCount": 0,
+      "allowedClaimCount": 1,
+      "supportedNumericFactCount": 0,
+      "requiredNumericFactCount": 3
+    },
+    "artifactValidation": {
+      "sourceRunDigest": null,
+      "slideCount": 0,
+      "crossFormatCounts": [
+        0
+      ],
+      "lineageEntryCount": 0,
+      "exportFidelityPassed": false
+    },
+    "specValidation": {
+      "validator": "ArtifactSpec equation validator v1",
+      "validatorStatus": "passed",
+      "boundFactCount": 0,
+      "requiredFactPathCount": 3
+    },
+    "humanPreference": {
+      "status": "not_run"
+    },
+    "harnessExecution": {
+      "observed": false,
+      "profileId": "structured-planner",
+      "profileVersion": "2.0.0",
+      "traceDigest": "sha256:113f78acbee7c7c8ba37257d83e343e037cab70ead2c69b1c69931c23872d9d5"
+    }
+  },
+  "artifacts": {
+    "browser": {
+      "path": "control-browser.png",
+      "digest": "sha256:048a5f299f11037cd3c1ee484a53c95db3a6d352f53411acbde5b9079177c972",
+      "bytes": 79318,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pptx": {
+      "path": "control-deck.pptx",
+      "digest": "sha256:3f8afac5ce771bc5e4a98256e59de0496bd9d3584ac498442b908a2d19c3bd78",
+      "bytes": 5420862,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pdf": {
+      "path": "control-evidence.pdf",
+      "digest": "sha256:78473e2c158b02b34bac658288d893644307a63e96a83f736e8d12146265709c",
+      "bytes": 2697,
+      "validation": {
+        "status": "passed"
+      },
+      "fidelity": "deterministic-evidence-pdf"
+    }
+  }
+}

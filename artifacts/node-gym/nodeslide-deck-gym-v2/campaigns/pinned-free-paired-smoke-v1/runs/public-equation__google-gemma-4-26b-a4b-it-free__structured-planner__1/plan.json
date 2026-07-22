@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "nodekit.gym/v1",
+  "runId": "public-equation__google-gemma-4-26b-a4b-it-free__structured-planner__1",
+  "task": {
+    "id": "public-equation",
+    "taskClass": "equation",
+    "curriculumLevel": 3,
+    "pool": "public-development",
+    "taskDigest": "sha256:e333810f3064203cd740c4c7966e27d0697e7a0664484ff909f2364151b71957",
+    "evidenceDigest": "sha256:c023bbf580cee4b49726c24b280aad5bb067f0bf490aa6af86a77023be3669f2",
+    "referenceDigest": "sha256:f04608945726aa9fa562d1808fc965b11ce5f0736569c07adef8c19b52ce129d"
+  },
+  "model": {
+    "id": "google/gemma-4-26b-a4b-it:free",
+    "provider": "openrouter",
+    "route": "google/gemma-4-26b-a4b-it:free",
+    "returnedModelRequired": true,
+    "cohort": "pinned-free"
+  },
+  "harness": {
+    "id": "structured-planner",
+    "version": "2.0.0",
+    "weight": "structured",
+    "role": "artifact-planner",
+    "contextStrategy": "bounded-story-spec-and-reference-pack",
+    "toolIds": [
+      "select_artifact",
+      "validate_artifact_spec"
+    ],
+    "repairPolicy": "one-typed-repair"
+  },
+  "budget": {
+    "maxTokens": 8000,
+    "maxLatencyMs": 300000,
+    "maxCostMicroUsd": 200000,
+    "maxRepairs": 2
+  },
+  "repetition": 1,
+  "pairingKey": "sha256:e333810f3064203cd740c4c7966e27d0697e7a0664484ff909f2364151b71957::sha256:c023bbf580cee4b49726c24b280aad5bb067f0bf490aa6af86a77023be3669f2::sha256:f04608945726aa9fa562d1808fc965b11ce5f0736569c07adef8c19b52ce129d::google/gemma-4-26b-a4b-it:free::1::8000:300000:200000:2"
+}

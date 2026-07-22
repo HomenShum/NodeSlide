@@ -120,7 +120,15 @@ nodeSlideModels.setProvider(nebiusProvider());
 
 export interface NodeSlideProviderTelemetry {
   provider: string;
+  /** Requested catalog route; differs from model when a router resolves upstream dynamically. */
+  requestedModel?: string;
+  /** Effective model used for persisted compatibility; see actualModel for qualification. */
   model: string;
+  /** Provider-returned identity only; never synthesized from the requested route. */
+  actualProvider?: string;
+  /** Provider-returned resolved model only; required to qualify production routes. */
+  actualModel?: string;
+  responseId?: string;
   /** Present for current model calls; optional keeps persisted and fixture telemetry compatible. */
   reasoningEffort?: NodeSlideReasoningEffort;
   costMicroUsd: number;
@@ -159,6 +167,9 @@ export interface NodeSlideCompletionResult {
   text: string;
   stopReason: string;
   errorMessage?: string;
+  provider?: string;
+  model?: string;
+  responseId?: string;
   costMicroUsd: number;
   inputTokens: number;
   outputTokens: number;
@@ -185,6 +196,8 @@ export interface NodeSlideModelProbeReceipt {
   model: NodeSlideAgentModelId;
   provider: NodeSlideExternalProvider;
   upstreamModel: string;
+  actualProvider?: string;
+  actualModel?: string;
   reasoningEffort: NodeSlideReasoningEffort;
   maxTokens: number;
   status: 'passed' | 'failed';
@@ -239,11 +252,22 @@ export async function probeNodeSlideModelOnce(
     ]);
     const bytes = responseBytes(result.text);
     const hasOutput = result.text.trim().length > 0;
-    const passed = result.stopReason !== 'error' && result.stopReason !== 'aborted' && hasOutput;
+    const hasExactAttribution = isVerifiedNodeSlideRouteAttribution(
+      route,
+      result.provider,
+      result.model,
+    );
+    const passed =
+      result.stopReason !== 'error' &&
+      result.stopReason !== 'aborted' &&
+      hasOutput &&
+      hasExactAttribution;
     return {
       model: modelId,
       provider: route.provider,
       upstreamModel: route.upstreamId,
+      ...(result.provider ? { actualProvider: result.provider } : {}),
+      ...(result.model ? { actualModel: result.model } : {}),
       reasoningEffort: probeProfile.reasoningEffort,
       maxTokens: probeProfile.maxTokens,
       status: passed ? 'passed' : 'failed',
@@ -256,12 +280,15 @@ export async function probeNodeSlideModelOnce(
       ...(passed
         ? {}
         : {
-            failure: hasOutput
-              ? providerErrorReason(
-                  result.errorMessage,
-                  `${route.label} via ${providerDisplayName(route.provider)}`,
-                )
-              : `The ${route.label} route returned no assistant text within ${probeProfile.maxTokens} output tokens.`,
+            failure:
+              hasOutput && !hasExactAttribution
+                ? `The ${route.label} route did not return verifiable provider/model attribution.`
+                : hasOutput
+                  ? providerErrorReason(
+                      result.errorMessage,
+                      `${route.label} via ${providerDisplayName(route.provider)}`,
+                    )
+                  : `The ${route.label} route returned no assistant text within ${probeProfile.maxTokens} output tokens.`,
           }),
     };
   } catch {
@@ -494,6 +521,9 @@ function completionResult(result: AssistantMessage): NodeSlideCompletionResult {
     text,
     stopReason: result.stopReason,
     ...(result.errorMessage ? { errorMessage: result.errorMessage } : {}),
+    provider: result.provider,
+    model: result.responseModel ?? result.model,
+    ...(result.responseId ? { responseId: result.responseId } : {}),
     costMicroUsd: usdToMicroUsd(result.usage.cost.total),
     inputTokens: result.usage.input,
     outputTokens: result.usage.output,
@@ -590,6 +620,7 @@ function emptyTelemetry(
 ): NodeSlideProviderTelemetry {
   return {
     provider: nodeSlideAgentModel(model).provider,
+    requestedModel: nodeSlideAgentModel(model).upstreamId,
     model: nodeSlideAgentModel(model).upstreamId,
     reasoningEffort,
     costMicroUsd: 0,
@@ -603,8 +634,24 @@ function addTelemetry(
   result: NodeSlideCompletionResult,
 ): NodeSlideProviderTelemetry {
   return {
-    provider: telemetry.provider,
-    model: telemetry.model,
+    provider: result.provider || telemetry.provider,
+    requestedModel: telemetry.requestedModel ?? telemetry.model,
+    model: result.model || telemetry.model,
+    ...(result.provider
+      ? { actualProvider: result.provider }
+      : telemetry.actualProvider
+        ? { actualProvider: telemetry.actualProvider }
+        : {}),
+    ...(result.model
+      ? { actualModel: result.model }
+      : telemetry.actualModel
+        ? { actualModel: telemetry.actualModel }
+        : {}),
+    ...(result.responseId
+      ? { responseId: result.responseId }
+      : telemetry.responseId
+        ? { responseId: telemetry.responseId }
+        : {}),
     ...(telemetry.reasoningEffort ? { reasoningEffort: telemetry.reasoningEffort } : {}),
     costMicroUsd: telemetry.costMicroUsd + Math.max(0, result.costMicroUsd),
     inputTokens: telemetry.inputTokens + Math.max(0, result.inputTokens),
@@ -622,6 +669,26 @@ function providerFailure(
 
 function responseBytes(text: string): number {
   return new TextEncoder().encode(text).byteLength;
+}
+
+export function isVerifiedNodeSlideRouteAttribution(
+  route: { id: string; provider: string; upstreamId: string },
+  actualProvider: unknown,
+  actualModel: unknown,
+): boolean {
+  const normalizedModel =
+    typeof actualModel === 'string' &&
+    actualModel === actualModel.trim() &&
+    actualModel.length >= 3 &&
+    actualModel.length <= 256 &&
+    /^[A-Za-z0-9._-]+\/[A-Za-z0-9._:-]+$/u.test(actualModel);
+  return (
+    actualProvider === route.provider &&
+    normalizedModel &&
+    (route.id === 'openrouter/free'
+      ? actualModel !== route.upstreamId
+      : actualModel === route.upstreamId)
+  );
 }
 
 function usdToMicroUsd(usd: number): number {

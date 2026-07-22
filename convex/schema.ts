@@ -3,6 +3,8 @@ import { v } from 'convex/values';
 import { nodeslideExecutionTraceFields } from './lib/nodeslideExecutionTraceValidator';
 import { nodeslideShadowComparisonFields } from './lib/nodeslideShadowComparisonValidator';
 import {
+  nodeslideArtifactCompilationReceiptValidator,
+  nodeslideAuthoredArtifactBindingValidator,
   nodeslideBoundingBoxValidator,
   nodeslideBriefValidator,
   nodeslideCandidateValidationReceiptValidator,
@@ -20,6 +22,7 @@ import {
   nodeslidePatchStatusValidator,
   nodeslideSlideArchetypeValidator,
   nodeslideSnapshotValidator,
+  nodeslideStoredArtifactBindingValidator,
   nodeslideThemeValidator,
   nodeslideValidationIssueValidator,
   nodeslideValidationResultValidator,
@@ -269,6 +272,8 @@ export default defineSchema({
     // Optional so deployed anonymous-session rows can be claimed lazily.
     ownerAccessKey: v.optional(v.string()),
     shareSlug: v.optional(v.string()),
+    productionProbeCleanupDigest: v.optional(v.string()),
+    productionProbeExpiresAt: v.optional(v.number()),
     plan: v.array(v.string()),
     spec: v.any(),
     createdAt: v.number(),
@@ -276,7 +281,10 @@ export default defineSchema({
   })
     .index('by_stable_id', ['id'])
     .index('by_session_updated', ['clientSessionId', 'updatedAt'])
-    .index('by_share_slug', ['shareSlug']),
+    .index('by_share_slug', ['shareSlug'])
+    .index('by_production_probe_cleanup', ['productionProbeCleanupDigest'])
+    .index('by_production_probe_expiry', ['productionProbeExpiresAt'])
+    .index('by_project_row', ['projectRowId']),
 
   nodeslide_slides: defineTable({
     id: v.string(),
@@ -325,6 +333,8 @@ export default defineSchema({
     locked: v.boolean(),
     visible: v.optional(v.boolean()),
     groupId: v.optional(v.string()),
+    artifactBinding: v.optional(nodeslideStoredArtifactBindingValidator),
+    authoredArtifactBinding: v.optional(nodeslideAuthoredArtifactBindingValidator),
     exportCapabilities: v.array(nodeslideExportCapabilityValidator),
     version: v.number(),
     createdAt: v.number(),
@@ -726,6 +736,7 @@ export default defineSchema({
     issues: v.array(nodeslideValidationIssueValidator),
     checkedAt: v.number(),
     toolchainVersion: v.string(),
+    artifactCompilation: v.optional(nodeslideArtifactCompilationReceiptValidator),
   })
     .index('by_stable_id', ['id'])
     .index('by_deck_checked', ['deckId', 'checkedAt'])
@@ -874,7 +885,8 @@ export default defineSchema({
   })
     .index('by_stable_id', ['id'])
     .index('by_tenant_actor_recorded', ['tenantId', 'actorId', 'recordedAt'])
-    .index('by_tenant_deck_recorded', ['tenantId', 'deckId', 'recordedAt']),
+    .index('by_tenant_deck_recorded', ['tenantId', 'deckId', 'recordedAt'])
+    .index('by_deck_recorded', ['deckId', 'recordedAt']),
 
   nodeslide_signature_profiles: defineTable({
     id: v.string(),
@@ -908,6 +920,19 @@ export default defineSchema({
   })
     .index('by_stable_id', ['id'])
     .index('by_tenant_actor', ['tenantId', 'actorId']),
+
+  /**
+   * Content-free deletion tombstones authenticate idempotent cleanup after the
+   * deck/project rows are gone. They contain only one-way target/principal
+   * bindings and cannot recover workspace IDs, content, or bearer keys.
+   */
+  nodeslide_retention_tombstones: defineTable({
+    schemaVersion: v.literal('nodeslide.retention-tombstone/v1'),
+    targetBindingDigest: v.string(),
+    principalBindingDigest: v.string(),
+    cleanupTicketDigest: v.string(),
+    createdAt: v.number(),
+  }).index('by_target_binding', ['targetBindingDigest']),
 
   nodeslide_rate_limits: defineTable({
     key: v.string(),

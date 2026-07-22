@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "nodekit.gym-paired-delta-report/v1",
+  "ok": false,
+  "issueCodes": ["harness_pair_behavior_not_observed", "pair_hard_gate_failure"],
+  "dimensions": {},
+  "expectedPairCount": 1,
+  "complete": false
+}

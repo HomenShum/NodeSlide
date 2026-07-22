@@ -288,7 +288,7 @@ describe('NodeSlide external-agent boundary', () => {
     const image = imageSnapshot.elements[0];
     if (!image) throw new Error('Unexpected fixture image.');
     image.kind = 'image';
-    image.imageUrl = 'https://example.com/base.png';
+    image.imageUrl = 'data:image/webp;base64,UklGRgAAAAA=';
     image.altText = 'Base image';
     image.image = { placeholder: false };
     expect(() =>

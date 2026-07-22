@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "nodekit.gym/v1",
+  "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+  "task": {
+    "id": "public-equation",
+    "taskClass": "equation",
+    "curriculumLevel": 3,
+    "pool": "public-development",
+    "taskDigest": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a",
+    "evidenceDigest": "sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426",
+    "referenceDigest": "sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9"
+  },
+  "model": {
+    "id": "nodeslide/deterministic-compiler",
+    "provider": "local",
+    "route": "nodeslide/deterministic-compiler",
+    "returnedModelRequired": false,
+    "cohort": "control"
+  },
+  "harness": {
+    "id": "light-director",
+    "version": "2.0.0",
+    "weight": "light",
+    "role": "story-director",
+    "contextStrategy": "brief-and-evidence",
+    "toolIds": [
+      "select_artifact"
+    ],
+    "repairPolicy": "escalate-on-semantic-failure"
+  },
+  "budget": {
+    "maxTokens": 8000,
+    "maxLatencyMs": 300000,
+    "maxCostMicroUsd": 200000,
+    "maxRepairs": 2
+  },
+  "repetition": 1,
+  "comparisonKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::1::8000:300000:200000:2",
+  "harnessPairingKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::1::8000:300000:200000:2::nodeslide/deterministic-compiler",
+  "pairingKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::1::8000:300000:200000:2::nodeslide/deterministic-compiler",
+  "runtimeFixtureDigest": "sha256:e8f7bc80846afe720c705f147186a3a25dad35934eb47dcdbabfaff7fe53df88"
+}

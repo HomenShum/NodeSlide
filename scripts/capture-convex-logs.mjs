@@ -15,6 +15,8 @@ import { createHash } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { isRecognizedConvexExecutionRecord } from './lib/convex-log-capture-core.mjs';
+import { assertNodeSlideProductionDeployKey } from './lib/production-deployment-identity.mjs';
 
 const history = boundedInteger(process.env.CONVEX_LOG_HISTORY, 50, { min: 1, max: 1_000 });
 const durationMs = boundedInteger(process.env.CONVEX_LOG_DURATION_MS, 15_000, {
@@ -31,8 +33,12 @@ const deployKey = process.env.CONVEX_DEPLOY_KEY;
 if (process.env.CI && !deployKey) {
   fail('CONVEX_DEPLOY_KEY is required for non-interactive CI capture');
 }
-if (deployKey && !/^prod:agile-stoat-411\|/.test(deployKey)) {
-  fail('CONVEX_DEPLOY_KEY is not scoped to the expected agile-stoat-411 production deployment');
+if (deployKey) {
+  try {
+    assertNodeSlideProductionDeployKey(deployKey);
+  } catch {
+    fail('CONVEX_DEPLOY_KEY is not scoped to the expected agile-stoat-411 production deployment');
+  }
 }
 if (process.env.CI && includeMessages) {
   fail('CONVEX_LOG_INCLUDE_MESSAGES=1 is forbidden in CI artifacts');
@@ -50,8 +56,11 @@ let stdoutBuffer = '';
 let stderrBuffer = '';
 let stopReason = 'timeout';
 let eventCount = 0;
+let unknownJsonRecordCount = 0;
+let unparsedLineCount = 0;
 let childExitCode = null;
 const lines = [];
+const unparsedDiagnostics = [];
 
 child.stdout.setEncoding('utf8');
 child.stderr.setEncoding('utf8');
@@ -101,6 +110,8 @@ lines.push(
       durationMs,
       maxEvents,
       capturedEvents: eventCount,
+      unknownJsonRecords: unknownJsonRecordCount,
+      unparsedLines: unparsedLineCount,
       includeMessages,
       credentialMode: deployKey ? 'production-deploy-key' : 'local-convex-session',
       stopReason: cliFailed ? 'cli-error' : emptyHistory ? 'empty-history' : stopReason,
@@ -109,6 +120,7 @@ lines.push(
       ...(cliFailed && stderrBuffer.trim()
         ? { diagnostic: redact(stderrBuffer.trim()).slice(0, 800) }
         : {}),
+      ...(unparsedDiagnostics.length ? { unparsedDiagnostics } : {}),
     },
   }),
 );
@@ -124,13 +136,18 @@ function acceptLine(line) {
   if (!line.trim() || eventCount >= maxEvents) return;
   try {
     const parsed = JSON.parse(line);
+    if (!isRecognizedConvexExecutionRecord(parsed)) {
+      unknownJsonRecordCount += 1;
+      return;
+    }
     lines.push(JSON.stringify(safeExecution(parsed, includeMessages)));
     eventCount += 1;
     if (eventCount >= maxEvents) stop('max-events');
   } catch {
     // Status text belongs on stderr in --jsonl mode. If a future CLI writes it
     // to stdout, preserve only a redacted diagnostic rather than raw content.
-    lines.push(JSON.stringify({ kind: 'unparsed', message: redact(line).slice(0, 300) }));
+    unparsedLineCount += 1;
+    if (unparsedDiagnostics.length < 5) unparsedDiagnostics.push(redact(line).slice(0, 300));
   }
 }
 
@@ -139,10 +156,13 @@ function safeExecution(value, withMessages) {
   const logLines = Array.isArray(record.logLines) ? record.logLines : [];
   const levels = {};
   for (const line of logLines) {
-    const level =
+    const candidate =
       line && typeof line === 'object' && !Array.isArray(line) && typeof line.level === 'string'
         ? line.level
         : 'UNKNOWN';
+    const level = ['DEBUG', 'ERROR', 'WARN', 'INFO', 'LOG'].includes(candidate)
+      ? candidate
+      : 'UNKNOWN';
     levels[level] = (levels[level] ?? 0) + 1;
   }
   const error = typeof record.error === 'string' && record.error ? record.error : null;

@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "nodeslide.artifact-atlas-v3-pptx-receipt/v2",
+  "file": "outputs/artifact-atlas-v3/nodeslide-artifact-atlas-v3.pptx",
+  "digest": "sha256:aeb63576335eb26a95c4d408877b6e17aeed48f2fcfb0f7adf83302067065053",
+  "bytes": 4725391,
+  "slideCount": 43,
+  "candidateDigest": "sha256:76de9d9bd743992cbfba16083f589b48dfcf2d09127478b242f9b2fc6f468501",
+  "buildRecipeDigest": "sha256:6e0329e206485c2b454979e2bd6bb1546ada8b1ea9d4f3d2ab41f2594b7c01a8",
+  "assetSetDigest": "sha256:6bdcba100a0ca360315cfbf096cc111cbadb891639b940467168cb4155be3a1a",
+  "sourceAtlasDigest": "sha256:3f8afac5ce771bc5e4a98256e59de0496bd9d3584ac498442b908a2d19c3bd78",
+  "receiptCoreDigest": "sha256:24488f53541997b5edbf28ccd02e00e1efe1494cbf5b733add22ba09788bf6c4",
+  "releaseGateDigest": "sha256:3587c6bbdf2e1380f7d68b7424e0527fceb279005ee1df3dc625bc5a81f377cb",
+  "releaseGates": {
+    "repositoryGates": "passed",
+    "typedSpecCompiler": "passed",
+    "portabilityPackage": "passed",
+    "productionJourney": "pending",
+    "fleetAvailability": "pending",
+    "atlasUiRenders": "passed",
+    "blindPreference": "pending",
+    "routingPromotion": "hold",
+    "fineTuningRun": "not_authorized"
+  },
+  "generator": "@oai/artifact-tool",
+  "generatorEvidence": {
+    "exporterApplication": "Walnut Exporter",
+    "creator": "Walnut Exporter",
+    "packageVersion": "2.8.24",
+    "exporterDependency": "@oai/walnut@0.1.225",
+    "workflow": "artifact-tool-import-edit-export",
+    "buildCommand": "node scripts/build-artifact-atlas-v3-pptx.mjs",
+    "receiptSlide": 43
+  },
+  "composition": {
+    "titleSlides": 1,
+    "auditedMuseumPreviewSlides": 37,
+    "evidenceAppendixSlides": 5,
+    "verifiedContentSlides": 43,
+    "verifiedShapeCount": 1303,
+    "verifiedImageRelationships": 12
+  },
+  "contentVerification": {
+    "verifiedSlideCount": 43,
+    "slideProofDigest": "sha256:aa4f479616c00c5ecfe2c3a29e3b6d3f9bd4acbcb252e06fb732034361875f9f",
+    "sourceSlidesVerified": 37,
+    "sourceBindingDigest": "sha256:270cdbd167452d4b5917e4cdae852d1e1054e4bfc345070a9989e2f187e22130",
+    "embeddedAssets": [
+      {
+        "target": "ppt/media/image10.png",
+        "sha256": "sha256:12bb656c83b2c750e453e77c73751051dbff515ee157275adf6cbda426976488",
+        "bytes": 80301
+      },
+      {
+        "target": "ppt/media/image11.png",
+        "sha256": "sha256:25ed34a8c301e67fceab52bb8d0203c7b9b053c43df589ac291a5cdbc50bae21",
+        "bytes": 84425
+      },
+      {
+        "target": "ppt/media/image12.png",
+        "sha256": "sha256:60643a805cffcc7ecbbf28c7599bcba1e6232d604ccecd47599d1427338b402d",
+        "bytes": 75927
+      }
+    ],
+    "modelEvidence": [
+      {
+        "assetId": "claude-sonnet-5",
+        "candidateId": "risk-matrix__evidence-editorial__anthropic-claude-sonnet-5",
+        "model": "anthropic/claude-sonnet-5",
+        "provider": "openrouter",
+        "costMicroUsd": 5010,
+        "planResultDigest": "sha256:96a0a6cd213d118a80caa5826fa7c7175babe4d2c790ab9f9c2182ff03f03866",
+        "showcaseReceiptDigest": "sha256:be0d12beb22d8d61204960aff9d806b3354539ae42d6d567e311e36d0862347c",
+        "screenshotPath": "artifacts/deck-gym/artifact-atlas-v1/runs/risk-matrix__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "screenshotDigest": "sha256:12bb656c83b2c750e453e77c73751051dbff515ee157275adf6cbda426976488"
+      },
+      {
+        "assetId": "kimi-k3",
+        "candidateId": "risk-matrix__evidence-editorial__moonshotai-kimi-k3",
+        "model": "moonshotai/kimi-k3",
+        "provider": "openrouter",
+        "costMicroUsd": 1261,
+        "planResultDigest": "sha256:e8fedc46905cb70c0ad895ed653e38a434d2b3a7bae0b6efa4fc535afc1b84cc",
+        "showcaseReceiptDigest": "sha256:c50c9b78ab1e4b7241b65ab0f0e9f9db519732b4ebef2d4a0b4f628c340fd3ec",
+        "screenshotPath": "artifacts/deck-gym/artifact-atlas-v1/runs/risk-matrix__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "screenshotDigest": "sha256:25ed34a8c301e67fceab52bb8d0203c7b9b053c43df589ac291a5cdbc50bae21"
+      },
+      {
+        "assetId": "gemma-4-26b-free",
+        "candidateId": "risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+        "model": "google/gemma-4-26b-a4b-it:free",
+        "provider": "openrouter",
+        "costMicroUsd": 0,
+        "planResultDigest": "sha256:a8f86ccddb0e28d8b3f6763997293e8aab43c8bd3bffc5c4107939fbb2e52ea4",
+        "showcaseReceiptDigest": "sha256:2ff83599c6af7c6fe1a0bd9859f396afc799fcd99d4d11beba17ed02340394f0",
+        "screenshotPath": "artifacts/deck-gym/artifact-atlas-v1/runs/risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "screenshotDigest": "sha256:60643a805cffcc7ecbbf28c7599bcba1e6232d604ccecd47599d1427338b402d"
+      }
+    ],
+    "modelEvidenceSetDigest": "sha256:8888eeef69626b377e4ae39b0df623799d5ea00ed07b5e78780973b93a7eb222"
+  },
+  "publicReleaseApproved": false,
+  "promotionEligible": false,
+  "humanPreference": "not_run"
+}

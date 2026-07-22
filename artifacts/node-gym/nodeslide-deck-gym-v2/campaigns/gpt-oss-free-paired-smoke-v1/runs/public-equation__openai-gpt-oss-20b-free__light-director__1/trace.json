@@ -1,0 +1,7 @@
+{
+  "fallback": false,
+  "returnedModel": "openai/gpt-oss-20b:free",
+  "attribution": "openrouter · openai/gpt-oss-20b:free · Light effort",
+  "summary": "The user consented to send the full brief and 1 uploaded data source to OpenRouter. The named GPT-OSS 20B (Free) model supplied the narrative plan through pi-ai; NodeSlide normalized, persisted, and validated the deck deterministically. Self-critique: 1 pass, clean.",
+  "metrics": "RUN TIME 1s TOKENS 1,989 → 934 COST $0.0000 VALIDATION Passed"
+}

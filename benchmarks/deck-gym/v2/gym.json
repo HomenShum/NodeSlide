@@ -2,9 +2,139 @@
   "schemaVersion": "nodekit.gym-config/v1",
   "gymVersion": "nodeslide-deck-gym-v2",
   "description": "Paired repeated artifact experiments across model and harness cohorts. Planning a run never promotes or routes it.",
-  "expectedMatrixSize": 360,
+  "expectedMatrixSize": 720,
   "repetitions": 3,
   "tasks": [
+    {
+      "id": "public-artifact-selection",
+      "taskClass": "artifact-selection",
+      "curriculumLevel": 1,
+      "pool": "public-development",
+      "task": "Classify the narrative job and select one dominant artifact without compiling it.",
+      "evidence": "Public consented fixture containing two qualitative claims.",
+      "reference": "ArtifactSpec comparison selector v1",
+      "trainingEligible": true,
+      "fixture": {
+        "mode": "inline",
+        "payload": {
+          "schemaVersion": "nodekit.gym-task-fixture/v1",
+          "taskId": "public-artifact-selection",
+          "taskClass": "artifact-selection",
+          "pool": "public-development",
+          "brief": "Choose the clearest dominant artifact for a two-option operating-model decision.",
+          "evidence": {
+            "sources": [
+              {
+                "id": "public-selection-source",
+                "title": "NodeGym synthetic public selection fixture",
+                "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+                "claimIds": ["selection-claim-a", "selection-claim-b"],
+                "license": "CC0-1.0",
+                "consentScope": "training-approved",
+                "trainingUseAllowed": true
+              }
+            ],
+            "claims": [
+              {
+                "id": "selection-claim-a",
+                "text": "Option A centralizes governance.",
+                "sourceIds": ["public-selection-source"]
+              },
+              {
+                "id": "selection-claim-b",
+                "text": "Option B preserves team autonomy.",
+                "sourceIds": ["public-selection-source"]
+              }
+            ]
+          },
+          "reference": {
+            "artifactKind": "comparison",
+            "validator": "ArtifactSpec comparison validator v1",
+            "semanticAssertions": ["both options represented", "trade-off explicit"]
+          },
+          "constraints": {
+            "requiredTopics": ["governance", "autonomy"],
+            "requiredStoryBeats": ["decision", "trade-off"],
+            "minimumDistinctVisualKinds": 1
+          },
+          "repairCase": {
+            "sourceSpecDigest": "sha256:1212121212121212121212121212121212121212121212121212121212121212",
+            "sourceSpec": { "kind": "comparison", "payload": { "cohorts": [] } },
+            "renderIssue": { "code": "comparison_labels_missing", "paths": ["/payload/cohorts"] }
+          },
+          "governance": {
+            "consentScope": "training-approved",
+            "trainingEligible": true,
+            "retention": "retained",
+            "containsPersonalData": false
+          }
+        }
+      }
+    },
+    {
+      "id": "public-dominant-visual",
+      "taskClass": "dominant-visual",
+      "curriculumLevel": 2,
+      "pool": "public-development",
+      "task": "Plan one evidence-bound chart and its narrative job from a bounded public fixture.",
+      "evidence": "Public consented fixture with one explicit numeric fact and unit.",
+      "reference": "ArtifactSpec chart validator v1",
+      "trainingEligible": true,
+      "fixture": {
+        "mode": "inline",
+        "payload": {
+          "schemaVersion": "nodekit.gym-task-fixture/v1",
+          "taskId": "public-dominant-visual",
+          "taskClass": "dominant-visual",
+          "pool": "public-development",
+          "brief": "Show the observed annual recurring revenue result as one legible dominant chart.",
+          "evidence": {
+            "sources": [
+              {
+                "id": "public-arr-source",
+                "title": "NodeGym synthetic public ARR fixture",
+                "digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+                "claimIds": ["arr-claim"],
+                "license": "CC0-1.0",
+                "consentScope": "training-approved",
+                "trainingUseAllowed": true
+              }
+            ],
+            "claims": [
+              {
+                "id": "arr-claim",
+                "text": "Annual recurring revenue reached 42 million dollars.",
+                "acceptedRenderings": ["ARR reached $42M."],
+                "sourceIds": ["public-arr-source"],
+                "numericFacts": [{ "id": "arr-value", "value": 42, "unit": "USDm", "tolerance": 0 }]
+              }
+            ]
+          },
+          "reference": {
+            "artifactKind": "chart",
+            "validator": "ArtifactSpec chart validator v1",
+            "requiredFactPaths": ["/payload/series/0/values/0"],
+            "semanticAssertions": ["unit shown", "axis labeled", "claim bound"]
+          },
+          "constraints": {
+            "requiredTopics": ["arr", "unit"],
+            "requiredStoryBeats": ["result", "implication"],
+            "minimumDistinctVisualKinds": 1
+          },
+          "repairCase": {
+            "sourceSpecDigest": "sha256:2323232323232323232323232323232323232323232323232323232323232323",
+            "sourceSpec": { "kind": "chart", "payload": { "unit": "", "series": [] } },
+            "renderIssue": { "code": "chart_unit_missing", "paths": ["/payload/unit"] }
+          },
+          "governance": {
+            "consentScope": "training-approved",
+            "trainingEligible": true,
+            "retention": "retained",
+            "containsPersonalData": false
+          }
+        }
+      }
+    },
     {
       "id": "public-equation",
       "taskClass": "equation",
@@ -13,7 +143,64 @@
       "task": "Produce a typed quality-cost equation artifact and evaluated result.",
       "evidence": "Public deterministic fixture with Q, cost, latency, and weights.",
       "reference": "ArtifactSpec equation validator v1",
-      "trainingEligible": true
+      "trainingEligible": true,
+      "fixture": {
+        "mode": "inline",
+        "payload": {
+          "schemaVersion": "nodekit.gym-task-fixture/v1",
+          "taskId": "public-equation",
+          "taskClass": "equation",
+          "pool": "public-development",
+          "brief": "Evaluate a quality-to-cost ratio from the supplied public values and show the typed equation.",
+          "evidence": {
+            "sources": [
+              {
+                "id": "public-equation-source",
+                "title": "NodeGym synthetic public equation fixture",
+                "digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+                "claimIds": ["equation-claim"],
+                "license": "CC0-1.0",
+                "consentScope": "training-approved",
+                "trainingUseAllowed": true
+              }
+            ],
+            "claims": [
+              {
+                "id": "equation-claim",
+                "text": "The quality-to-cost ratio is 2.",
+                "sourceIds": ["public-equation-source"],
+                "numericFacts": [
+                  { "id": "quality-value", "value": 0.8, "unit": "score", "tolerance": 0 },
+                  { "id": "cost-value", "value": 0.4, "unit": "index", "tolerance": 0 },
+                  { "id": "ratio-value", "value": 2, "unit": "ratio", "tolerance": 0 }
+                ]
+              }
+            ]
+          },
+          "reference": {
+            "artifactKind": "equation",
+            "validator": "ArtifactSpec equation validator v1",
+            "requiredFactPaths": ["/payload/values/Q", "/payload/values/C", "/payload/result"],
+            "semanticAssertions": ["AST evaluates to result", "variables carry units"]
+          },
+          "constraints": {
+            "requiredTopics": ["quality", "cost", "ratio"],
+            "requiredStoryBeats": ["inputs", "calculation", "result"],
+            "minimumDistinctVisualKinds": 1
+          },
+          "repairCase": {
+            "sourceSpecDigest": "sha256:3434343434343434343434343434343434343434343434343434343434343434",
+            "sourceSpec": { "kind": "equation", "payload": { "result": 0 } },
+            "renderIssue": { "code": "equation_evaluation_mismatch", "paths": ["/payload/result"] }
+          },
+          "governance": {
+            "consentScope": "training-approved",
+            "trainingEligible": true,
+            "retention": "retained",
+            "containsPersonalData": false
+          }
+        }
+      }
     },
     {
       "id": "hidden-waterfall",
@@ -23,7 +210,12 @@
       "task": "Produce a reconciled contribution waterfall from held-out values.",
       "evidence": "Held-out evidence digest supplied at run time.",
       "reference": "ArtifactSpec waterfall validator v1",
-      "trainingEligible": false
+      "trainingEligible": false,
+      "fixture": {
+        "mode": "runtime-sealed",
+        "payloadEnv": "NODE_GYM_HIDDEN_WATERFALL_JSON",
+        "digestEnv": "NODE_GYM_HIDDEN_WATERFALL_SHA256"
+      }
     },
     {
       "id": "rotating-causal-loop",
@@ -33,7 +225,12 @@
       "task": "Construct and repair a directed causal loop with typed polarity.",
       "evidence": "Rotating challenge evidence digest supplied at run time.",
       "reference": "ArtifactSpec causal-loop validator v1",
-      "trainingEligible": false
+      "trainingEligible": false,
+      "fixture": {
+        "mode": "runtime-sealed",
+        "payloadEnv": "NODE_GYM_ROTATING_CAUSAL_LOOP_JSON",
+        "digestEnv": "NODE_GYM_ROTATING_CAUSAL_LOOP_SHA256"
+      }
     },
     {
       "id": "shadow-evidence-media",
@@ -43,7 +240,42 @@
       "task": "Bind an anonymized claim to a source page and region without changing user output.",
       "evidence": "Anonymized live-shadow digest only.",
       "reference": "ArtifactSpec evidence-media validator v1",
-      "trainingEligible": false
+      "trainingEligible": false,
+      "fixture": {
+        "mode": "runtime-sealed",
+        "payloadEnv": "NODE_GYM_SHADOW_EVIDENCE_MEDIA_JSON",
+        "digestEnv": "NODE_GYM_SHADOW_EVIDENCE_MEDIA_SHA256"
+      }
+    },
+    {
+      "id": "hidden-full-deck",
+      "taskClass": "full-deck",
+      "curriculumLevel": 7,
+      "pool": "hidden-validation",
+      "task": "Plan, compile, repair, and bind a held-out multi-slide narrative across typed artifacts.",
+      "evidence": "Held-out full-deck evidence digest supplied at run time.",
+      "reference": "NodeSlide full-deck semantic contract v1",
+      "trainingEligible": false,
+      "fixture": {
+        "mode": "runtime-sealed",
+        "payloadEnv": "NODE_GYM_HIDDEN_FULL_DECK_JSON",
+        "digestEnv": "NODE_GYM_HIDDEN_FULL_DECK_SHA256"
+      }
+    },
+    {
+      "id": "shadow-orchestration",
+      "taskClass": "orchestration",
+      "curriculumLevel": 8,
+      "pool": "live-shadow",
+      "task": "Execute an anonymized shadow journey with route attribution, repair, and cross-format receipts without changing user output.",
+      "evidence": "Anonymized live-shadow orchestration digest supplied at run time.",
+      "reference": "NodeSlide production orchestration contract v1",
+      "trainingEligible": false,
+      "fixture": {
+        "mode": "runtime-sealed",
+        "payloadEnv": "NODE_GYM_SHADOW_ORCHESTRATION_JSON",
+        "digestEnv": "NODE_GYM_SHADOW_ORCHESTRATION_SHA256"
+      }
     }
   ],
   "models": [

@@ -1,0 +1,7 @@
+{
+  "fallback": true,
+  "returnedModel": null,
+  "attribution": "openrouter · openai/gpt-oss-20b:free (deterministic fallback) · Light effort",
+  "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The GPT-OSS 20B (Free) via OpenRouter route returned invalid JSON after one repair attempt. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+  "metrics": "RUN TIME 1s TOKENS 5,198 → 2,436 COST $0.0000 VALIDATION Passed"
+}

@@ -41,6 +41,9 @@ function completion(
     text,
     stopReason: options.stopReason ?? 'stop',
     ...(options.errorMessage ? { errorMessage: options.errorMessage } : {}),
+    ...(options.provider ? { provider: options.provider } : {}),
+    ...(options.model ? { model: options.model } : {}),
+    ...(options.responseId ? { responseId: options.responseId } : {}),
     costMicroUsd: options.costMicroUsd ?? 1_250,
     inputTokens: options.inputTokens ?? 120,
     outputTokens: options.outputTokens ?? 30,
@@ -98,6 +101,31 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     });
     expect(complete.mock.calls[0]?.[0].model).toBe('anthropic/claude-sonnet-5');
     expect(complete.mock.calls[0]?.[0].reasoningEffort).toBe('xhigh');
+  });
+
+  it('records the actual upstream model and response id returned by a dynamic router', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () =>
+      completion('{"summary":"Routed result","operations":[]}', {
+        provider: 'openrouter',
+        model: 'google/gemma-actual:free',
+        responseId: 'openrouter-response-123',
+      }),
+    );
+
+    const result = await callNodeSlideFreeJson(
+      { ...request, model: 'openrouter/free', reasoningEffort: 'low' },
+      { complete },
+    );
+
+    expect(result).toMatchObject({
+      ok: true,
+      telemetry: {
+        provider: 'openrouter',
+        requestedModel: 'openrouter/free',
+        model: 'google/gemma-actual:free',
+        responseId: 'openrouter-response-123',
+      },
+    });
   });
 
   it('pins only the optional-reasoning Kimi override', () => {
@@ -346,7 +374,13 @@ describe('NodeSlide named pi-ai JSON provider', () => {
 
   it('probes a catalog route with the bounded cross-fleet output budget', async () => {
     const complete = vi.fn<NodeSlideCompletion>(async () =>
-      completion('1', { inputTokens: 5, outputTokens: 1, costMicroUsd: 7 }),
+      completion('1', {
+        provider: defaultRoute.provider,
+        model: defaultRoute.upstreamId,
+        inputTokens: 5,
+        outputTokens: 1,
+        costMicroUsd: 7,
+      }),
     );
 
     const result = await probeNodeSlideModelOnce(NODESLIDE_EDIT_MODEL, { complete });
@@ -355,6 +389,8 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       model: NODESLIDE_EDIT_MODEL,
       maxTokens: 64,
       status: 'passed',
+      actualProvider: defaultRoute.provider,
+      actualModel: defaultRoute.upstreamId,
       inputTokens: 5,
       outputTokens: 1,
       costMicroUsd: 7,
@@ -365,6 +401,38 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       reasoningEffort: 'low',
       repairAttempt: false,
     });
+  });
+
+  it('never fabricates actual route attribution when the provider omits it', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () => completion('1'));
+    const probe = await probeNodeSlideModelOnce(NODESLIDE_EDIT_MODEL, { complete });
+    expect(probe).toMatchObject({
+      status: 'failed',
+      failure: expect.stringMatching(/verifiable provider\/model attribution/i),
+    });
+    expect(probe).not.toHaveProperty('actualProvider');
+    expect(probe).not.toHaveProperty('actualModel');
+
+    const structured = await callNodeSlideFreeJson(request, { complete });
+    expect(structured.ok).toBe(false);
+    if (structured.telemetry) {
+      expect(structured.telemetry).not.toHaveProperty('actualProvider');
+      expect(structured.telemetry).not.toHaveProperty('actualModel');
+    }
+  });
+
+  it('rejects a meaningless resolved identity from the dynamic free router', async () => {
+    for (const actualModel of ['', ' ', 'unqualified-model', ' vendor/model', 'vendor/model ']) {
+      const complete = vi.fn<NodeSlideCompletion>(async () =>
+        completion('1', { provider: 'openrouter', model: actualModel }),
+      );
+      await expect(probeNodeSlideModelOnce('openrouter/free', { complete })).resolves.toMatchObject(
+        {
+          status: 'failed',
+          failure: expect.stringMatching(/verifiable provider\/model attribution/i),
+        },
+      );
+    }
   });
 
   it('uses supported reasoning and bounded visible-output budgets for mandatory routes', () => {

@@ -15,17 +15,51 @@ permissions:
 
 jobs:
   probe:
-    name: Create -> edit -> reload -> export
+    name: Create -> edit -> reload -> export -> delete
     if: github.event_name == 'schedule' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 60
     environment: production
     permissions:
+      actions: read
       contents: read
     steps:
-      - name: Check out the default branch
+      - name: Resolve the latest successful exact-main production deployment
+        id: deployed
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
+        with:
+          script: |
+            const runs = await github.rest.actions.listWorkflowRuns({
+              ...context.repo,
+              workflow_id: 'deploy-production.yml',
+              branch: 'main',
+              status: 'success',
+              per_page: 20,
+            });
+            const title = /^Deploy production - ([0-9a-f]{40})$/;
+            const run = runs.data.workflow_runs.find((candidate) => {
+              const source = candidate.display_title?.match(title)?.[1];
+              return Boolean(
+                source &&
+                source === context.sha &&
+                candidate.repository?.full_name === 'HomenShum/NodeSlide' &&
+                candidate.name === 'Deploy production' &&
+                candidate.path === '.github/workflows/deploy-production.yml' &&
+                ['workflow_run', 'workflow_dispatch'].includes(candidate.event) &&
+                candidate.head_branch === 'main' &&
+                candidate.status === 'completed' &&
+                candidate.conclusion === 'success',
+              );
+            });
+            if (!run) core.setFailed('No successful main production deployment was found.');
+            else {
+              core.setOutput('sha', run.display_title.match(title)[1]);
+              core.setOutput('url', run.html_url);
+            }
+      - name: Check out the exact deployed source commit
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
+          ref: ${{ steps.deployed.outputs.sha }}
           persist-credentials: false
       - name: Set up Node.js
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
@@ -40,14 +74,56 @@ jobs:
         id: production_probe
         run: node scripts/prod-probe.mjs
         env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PROD_PROBE_COMMIT_SHA: ${{ steps.deployed.outputs.sha }}
           PROD_PROBE_URL: https://nodeslide.vercel.app
           PROD_PROBE_REPORT: artifacts/prod-probe/report.json
-      - name: Run bounded model-fleet audit for a manual operator probe
-        if: github.event_name == 'workflow_dispatch'
+          PROD_PROBE_WORKFLOW_RUN_URL: ${{ steps.deployed.outputs.url }}
+      - name: Run bounded offered-model fleet audit for a manual operator probe
+        id: offered_fleet
+        if: always() && github.event_name == 'workflow_dispatch'
+        continue-on-error: true
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          MODEL_FLEET_PROBE_COMMIT_SHA: ${{ steps.deployed.outputs.sha }}
           MODEL_FLEET_PROBE_OUTPUT: artifacts/model-fleet/model-fleet-probe.json
+          MODEL_FLEET_PROBE_URL: https://nodeslide.vercel.app/
+          MODEL_FLEET_PROBE_WORKFLOW_RUN_URL: ${{ steps.deployed.outputs.url }}
         run: node scripts/capture-model-fleet-probe.mjs
+      - name: Run bounded free-router text fleet audit
+        id: free_text_fleet
+        if: always() && github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          MODEL_FLEET_PROBE_COMMIT_SHA: ${{ steps.deployed.outputs.sha }}
+          MODEL_FLEET_PROBE_URL: https://nodeslide.vercel.app/
+          MODEL_FLEET_PROBE_WORKFLOW_RUN_URL: ${{ steps.deployed.outputs.url }}
+        run: npm run capture:free-router:prod
+      - name: Run bounded free-router structured-output audit
+        id: free_structured_fleet
+        if: always() && github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          MODEL_FLEET_PROBE_COMMIT_SHA: ${{ steps.deployed.outputs.sha }}
+          MODEL_FLEET_PROBE_URL: https://nodeslide.vercel.app/
+          MODEL_FLEET_PROBE_WORKFLOW_RUN_URL: ${{ steps.deployed.outputs.url }}
+        run: npm run capture:free-router:structured:prod
+      - name: Capture the production UI QA matrix
+        id: ui_qa
+        if: always() && github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          NODESLIDE_GAP_QA_COMMIT: ${{ steps.deployed.outputs.sha }}
+          NODESLIDE_GAP_QA_OUTPUT: artifacts/close-all-gaps-20260722/acceptance/ui-qa
+          NODESLIDE_GAP_QA_URL: https://nodeslide.vercel.app/
+          NODESLIDE_GAP_QA_WORKFLOW_RUN_URL: ${{ steps.deployed.outputs.url }}
+        run: node scripts/capture-gap-closure-ui-qa.mjs
       - name: Capture bounded Convex history after a red probe
         if: failure() && steps.production_probe.outcome == 'failure'
         continue-on-error: true
@@ -67,9 +143,27 @@ jobs:
             artifacts/prod-probe/report.json
             artifacts/convex-logs/production.jsonl
             artifacts/model-fleet/model-fleet-probe.json
+            artifacts/model-fleet/free-router-fleet-probe.json
+            artifacts/model-fleet/free-router-structured-probe.json
+            artifacts/close-all-gaps-20260722/acceptance/ui-qa
           if-no-files-found: warn
           include-hidden-files: false
           retention-days: 14
+      - name: Keep a manual evidence run red when any bounded matrix is incomplete
+        if: always() && github.event_name == 'workflow_dispatch'
+        env:
+          OFFERED_FLEET: ${{ steps.offered_fleet.outcome }}
+          FREE_TEXT_FLEET: ${{ steps.free_text_fleet.outcome }}
+          FREE_STRUCTURED_FLEET: ${{ steps.free_structured_fleet.outcome }}
+          UI_QA: ${{ steps.ui_qa.outcome }}
+        shell: bash
+        run: |
+          for outcome in "$OFFERED_FLEET" "$FREE_TEXT_FLEET" "$FREE_STRUCTURED_FLEET" "$UI_QA"; do
+            if [[ "$outcome" != "success" ]]; then
+              echo "::error::At least one bounded production evidence matrix is incomplete."
+              exit 1
+            fi
+          done
 
   alert:
     name: Alert on first red
@@ -96,7 +190,10 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const title = '[ops] Nightly NodeSlide production probe is red';
+            const manual = context.eventName === 'workflow_dispatch';
+            const title = manual
+              ? '[ops] Manual NodeSlide production evidence matrix is red'
+              : '[ops] Nightly NodeSlide production probe is red';
             const { owner, repo } = context.repo;
             const issues = await github.paginate(github.rest.issues.listForRepo, {
               owner,
@@ -123,12 +220,14 @@ jobs:
                 repo,
                 title,
                 body: [
-                  'The fail-closed create -> edit -> reload -> export probe failed.',
+                  manual
+                    ? 'The fail-closed production evidence workflow failed in the deterministic journey or the manual bounded matrix.'
+                    : 'The fail-closed scheduled create -> edit -> reload -> ArtifactSpec/NodeGym shadow -> export -> delete journey failed.',
                   '',
-                  `Failure stage: \`${stage}\``,
+                  `Last deterministic journey stage: \`${stage}\``,
                   `Run: [sanitized diagnostics and logs](${runUrl})`,
                   '',
-                  'The artifact intentionally excludes capability keys, browser storage, screenshots, and exported deck files.',
+                  'Artifacts exclude capability keys, browser storage, stable deck ids, and exported deck files. A manual run may include only the six public-sample viewport/theme screenshots documented in the runbook.',
                 ].join('\n'),
               });
             } else if (passed && incident) {
@@ -136,7 +235,7 @@ jobs:
                 owner,
                 repo,
                 issue_number: incident.number,
-                body: `Recovered: the next scheduled production journey passed. [Run](${runUrl})`,
+                body: `Recovered: the next ${manual ? 'manual evidence matrix' : 'scheduled production journey'} passed. [Run](${runUrl})`,
               });
               await github.rest.issues.update({
                 owner,

@@ -319,7 +319,7 @@ describe('NodeSlide patch protocol', () => {
     });
   });
 
-  it('reframes an existing image without replacing its asset', () => {
+  it('reframes an embedded image without replacing its asset', () => {
     const current = snapshot();
     current.slides[0]?.elementOrder.push('portrait');
     current.elements.push({
@@ -330,7 +330,7 @@ describe('NodeSlide patch protocol', () => {
       bbox: { x: 0.08, y: 0.34, width: 0.84, height: 0.5 },
       rotation: 0,
       style: {},
-      imageUrl: 'https://images.example.test/portrait.webp',
+      imageUrl: 'data:image/webp;base64,UklGRgAAAAA=',
       altText: 'Mike Rubino, Head of Talent at AI Fund',
       image: {
         placeholder: false,
@@ -348,7 +348,7 @@ describe('NodeSlide patch protocol', () => {
         op: 'update_image',
         slideId: 'slide-1',
         elementId: 'portrait',
-        imageUrl: 'https://images.example.test/portrait.webp',
+        imageUrl: 'data:image/webp;base64,UklGRgAAAAA=',
         altText: 'Mike Rubino, Head of Talent at AI Fund',
         credit: 'AI Fund team page',
         fit: 'contain',
@@ -364,7 +364,7 @@ describe('NodeSlide patch protocol', () => {
     });
 
     expect(result.snapshot.elements.find((element) => element.id === 'portrait')).toMatchObject({
-      imageUrl: 'https://images.example.test/portrait.webp',
+      imageUrl: 'data:image/webp;base64,UklGRgAAAAA=',
       image: {
         placeholder: false,
         credit: 'AI Fund team page',
@@ -686,6 +686,45 @@ describe('NodeSlide patch protocol', () => {
     expect(result.snapshot.elements.some((element) => element.id === 'headline')).toBe(false);
     expect(result.snapshot.elements.find((element) => element.id === 'takeaway')?.version).toBe(1);
     expect(result.snapshot.slides[0]?.elementOrder).toEqual(['chart', 'takeaway']);
+  });
+
+  it('rejects client-forged authored ArtifactSpec bindings on added elements', () => {
+    const current = snapshot();
+    const source = current.elements.find((element) => element.kind === 'chart');
+    if (!source) throw new Error('Chart fixture unavailable.');
+    const forged: SlideElement = {
+      ...structuredClone(source),
+      id: 'forged-authored-chart',
+      version: 0,
+      authoredArtifactBinding: {
+        schemaVersion: 'nodeslide.authored-artifact-binding/v1',
+        artifactId: 'forged-artifact',
+        kind: 'chart',
+        narrativeJob: 'Pretend this was server-authored.',
+        truthState: 'observed',
+        rationale: 'Client supplied.',
+        claimIds: ['claim:forged'],
+        sourceIds: [],
+        specDigest: `sha256:${'a'.repeat(64)}`,
+        projection: {
+          primitive: 'chart',
+          mode: 'native',
+          browserContract: 'semantic',
+          pptxContract: 'editable',
+          editability: 'native',
+          knownFidelityDifferences: [],
+        },
+      },
+    };
+    const operation: PatchOperation = {
+      op: 'add_element',
+      slideId: forged.slideId,
+      element: forged,
+    };
+
+    expect(validateNodeSlidePatch(current, serverPatch(current, [operation]))).toContain(
+      'Added element forged-authored-chart cannot supply authoredArtifactBinding; canonical authorship is minted only by the server compiler.',
+    );
   });
 
   it('clamps drag and resize geometry inside the slide', () => {

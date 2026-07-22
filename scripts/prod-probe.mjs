@@ -9,13 +9,31 @@
  * keys, deck ids, browser storage, screenshots, and the PPTX are never written
  * to the diagnostic artifact.
  */
+import { randomBytes } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { ConvexHttpClient } from 'convex/browser';
 import JSZip from 'jszip';
 import { chromium } from 'playwright';
+import { api } from '../convex/_generated/api.js';
+import { redactNodeGymDiagnostic } from './lib/node-gym-redaction-core.mjs';
+import {
+  captureWebDeploymentIdentity,
+  requiredExactMainSha,
+  requiredNodeSlideProductionOrigin,
+  requiredNodeSlideWorkflowRun,
+  validateNodeSlideConvexBuildIdentity,
+  verifyNodeSlideDeploymentRun,
+  verifyNodeSlideExactMainSource,
+} from './lib/production-deployment-identity.mjs';
+import {
+  assertProductionProbeCleanupDisposition,
+  cleanupNodeSlideProductionProbe,
+} from './lib/production-fixture-retention.mjs';
 
 const DEFAULT_URL = 'https://nodeslide.vercel.app';
+const DEFAULT_CONVEX_URL = 'https://agile-stoat-411.convex.cloud';
 const DEFAULT_REPORT = 'artifacts/prod-probe/report.json';
 const CREATE_TIMEOUT_MS = boundedInteger(process.env.PROD_PROBE_CREATE_TIMEOUT_MS, 180_000, {
   min: 10_000,
@@ -25,17 +43,37 @@ const ACTION_TIMEOUT_MS = boundedInteger(process.env.PROD_PROBE_ACTION_TIMEOUT_M
   min: 5_000,
   max: 120_000,
 });
-const baseUrl = productionUrl(process.env.PROD_PROBE_URL ?? DEFAULT_URL);
+const baseUrl = requiredNodeSlideProductionOrigin(
+  process.env.PROD_PROBE_URL ?? DEFAULT_URL,
+  'PROD_PROBE_URL',
+);
+const convexUrl = productionConvexUrl(process.env.PROD_PROBE_CONVEX_URL ?? DEFAULT_CONVEX_URL);
+const expectedMainSha = requiredExactMainSha(
+  process.env.PROD_PROBE_COMMIT_SHA,
+  'PROD_PROBE_COMMIT_SHA',
+);
+const workflowRun = requiredNodeSlideWorkflowRun(
+  process.env.PROD_PROBE_WORKFLOW_RUN_URL,
+  'PROD_PROBE_WORKFLOW_RUN_URL',
+);
 const reportPath = path.resolve(process.env.PROD_PROBE_REPORT ?? DEFAULT_REPORT);
 const startedAt = new Date();
 const runLabel = safeRunLabel(process.env.GITHUB_RUN_ID, startedAt);
 const editedTitle = `NodeSlide ops probe ${runLabel}`;
+const probeCleanupToken = `probe_${randomBytes(32).toString('base64url')}`;
 
 const report = {
-  schemaVersion: 1,
-  probe: 'create-edit-reload-export',
+  schemaVersion: 3,
+  probe: 'create-edit-reload-artifact-shadow-export-delete',
   status: 'running',
   origin: baseUrl.origin,
+  exactMain: {
+    commitSha: expectedMainSha,
+    workflowRunId: workflowRun.id,
+    workflowRunUrl: workflowRun.url,
+  },
+  deploymentIdentity: null,
+  convexDeploymentIdentity: null,
   startedAt: startedAt.toISOString(),
   completedAt: null,
   stage: 'startup',
@@ -45,16 +83,54 @@ const report = {
 
 /** @type {import('playwright').Browser | null} */
 let browser = null;
+/** @type {import('playwright').BrowserContext | null} */
+let context = null;
+/** @type {import('playwright').Page | null} */
+let page = null;
 /** @type {string[]} */
 const runtimeErrors = [];
+const diagnosticTokens = new Set();
+let createdDeckId = '';
+let ownerAccessKey = '';
+let creationSubmitted = false;
+let probeClientSessionId = '';
+diagnosticTokens.add(probeCleanupToken);
 
 try {
+  await step('deployment-identity', async () => {
+    const [verifiedWorkflowRun, exactMainSource] = await Promise.all([
+      verifyNodeSlideDeploymentRun(workflowRun, expectedMainSha),
+      verifyNodeSlideExactMainSource(expectedMainSha, process.env.GITHUB_TOKEN),
+    ]);
+    report.exactMain = { ...report.exactMain, ...exactMainSource };
+    report.deploymentIdentity = await captureWebDeploymentIdentity(baseUrl, expectedMainSha);
+    const convex = new ConvexHttpClient(convexUrl.href);
+    report.convexDeploymentIdentity = validateNodeSlideConvexBuildIdentity(
+      await convex.query(api.nodeslideBuildIdentity.get, {}),
+      expectedMainSha,
+    );
+    return {
+      workflowRun: verifiedWorkflowRun,
+      exactMainSource,
+      live: report.deploymentIdentity,
+      convex: report.convexDeploymentIdentity,
+    };
+  });
   browser = await chromium.launch();
-  const context = await browser.newContext({
+  context = await browser.newContext({
     acceptDownloads: true,
     serviceWorkers: 'block',
   });
-  const page = await context.newPage();
+  await context.addInitScript(
+    ({ storageKey, cleanupToken }) => {
+      window.sessionStorage.setItem(storageKey, cleanupToken);
+    },
+    {
+      storageKey: 'nodeslide.productionProbeCleanupToken.v1',
+      cleanupToken: probeCleanupToken,
+    },
+  );
+  page = await context.newPage();
   page.setDefaultTimeout(ACTION_TIMEOUT_MS);
   page.setDefaultNavigationTimeout(ACTION_TIMEOUT_MS);
   page.on('pageerror', (error) => {
@@ -73,6 +149,17 @@ try {
       'deployment guard rendered',
     );
     await page.locator('.ns-landing-sample').waitFor({ state: 'visible' });
+    probeClientSessionId = await page.evaluate(
+      () =>
+        window.localStorage.getItem('parity.studio.sessionId') ??
+        window.sessionStorage.getItem('parity.studio.sessionId') ??
+        '',
+    );
+    assert(
+      probeClientSessionId.length > 0 && probeClientSessionId.length <= 256,
+      'production probe client session was not initialized',
+    );
+    diagnosticTokens.add(probeClientSessionId);
     assertNoRuntimeErrors(runtimeErrors);
   });
 
@@ -83,6 +170,7 @@ try {
       .fill(
         'Create a concise six-slide operational readiness review with a clear decision, a small editable chart, and source-safe claims. This is an automated synthetic production probe.',
       );
+    creationSubmitted = true;
     await page.getByLabel('Create presentation').click();
     try {
       await page.getByTestId('nodeslide-studio').waitFor({
@@ -105,6 +193,21 @@ try {
     const deckUrl = new URL(page.url());
     assert(deckUrl.origin === baseUrl.origin, 'creation navigated away from the production origin');
     assert(deckUrl.searchParams.has('deck'), 'editor URL did not receive a deck id');
+    createdDeckId = deckUrl.searchParams.get('deck') ?? '';
+    if (createdDeckId) diagnosticTokens.add(createdDeckId);
+    ownerAccessKey = await page.evaluate((deckId) => {
+      try {
+        const raw = window.localStorage.getItem('nodeslide.deckAccess.v1');
+        const parsed = raw ? JSON.parse(raw) : null;
+        return parsed && typeof parsed === 'object' && typeof parsed[deckId] === 'string'
+          ? parsed[deckId]
+          : '';
+      } catch {
+        return '';
+      }
+    }, createdDeckId);
+    if (ownerAccessKey) diagnosticTokens.add(ownerAccessKey);
+    assert(ownerAccessKey.length > 0, 'editor did not retain the owner capability in-session');
     await page.getByTestId('slide-canvas').waitFor({ state: 'visible' });
     assertNoRuntimeErrors(runtimeErrors);
   });
@@ -158,6 +261,76 @@ try {
     assertNoRuntimeErrors(runtimeErrors);
   });
 
+  await step('artifact-and-routing-shadow', async () => {
+    assert(
+      createdDeckId && ownerAccessKey,
+      'owned deck capability is unavailable for shadow proof',
+    );
+    const convex = new ConvexHttpClient(convexUrl.href);
+    const [artifactReceipt, routeReceipt] = await Promise.all([
+      convex.query(api.nodeslideArtifactSpec.shadowCompile, {
+        deckId: createdDeckId,
+        ownerAccessKey,
+      }),
+      convex.query(api.nodeslideGymShadow.route, {
+        deckId: createdDeckId,
+        ownerAccessKey,
+        taskClass: 'artifact-spec',
+      }),
+    ]);
+    assert(
+      artifactReceipt.schemaVersion === 'nodeslide.artifact-shadow-receipt/v1' &&
+        artifactReceipt.status === 'passed' &&
+        artifactReceipt.userVisible === false &&
+        artifactReceipt.mutationApplied === false &&
+        artifactReceipt.anonymized === true,
+      'ArtifactSpec production shadow receipt was not a passing non-mutating receipt',
+    );
+    assert(
+      Number.isSafeInteger(artifactReceipt.canonicalArtifactCount) &&
+        artifactReceipt.canonicalArtifactCount > 0 &&
+        Number.isSafeInteger(artifactReceipt.authoredBindingCount) &&
+        artifactReceipt.authoredBindingCount > 0,
+      'ArtifactSpec shadow did not observe an authored canonical artifact and persisted binding',
+    );
+    assert(
+      Array.isArray(artifactReceipt.canonicalKindCounts) &&
+        artifactReceipt.canonicalKindCounts.some(
+          (entry) =>
+            entry?.kind === 'chart' && Number.isSafeInteger(entry.count) && entry.count > 0,
+        ),
+      'Deterministic production fixture did not retain its required canonical chart',
+    );
+    assert(
+      routeReceipt.schemaVersion === 'nodeslide.node-gym-shadow-route-receipt/v1' &&
+        routeReceipt.userVisible === false &&
+        routeReceipt.mutationApplied === false &&
+        routeReceipt.autoApply === false &&
+        routeReceipt.anonymized === true &&
+        routeReceipt.eligibleInput === true &&
+        routeReceipt.route?.mode === 'fallback',
+      'NodeGym production shadow route did not remain advisory and fail closed',
+    );
+    const serialized = JSON.stringify({ artifactReceipt, routeReceipt });
+    assert(!serialized.includes(createdDeckId), 'shadow receipt exposed the stable deck id');
+    assert(!serialized.includes(ownerAccessKey), 'shadow receipt exposed the owner capability');
+    return {
+      artifactStatus: artifactReceipt.status,
+      artifactCount: artifactReceipt.artifactCount,
+      authoredBindingCount: artifactReceipt.authoredBindingCount,
+      canonicalArtifactCount: artifactReceipt.canonicalArtifactCount,
+      canonicalKindCounts: artifactReceipt.canonicalKindCounts,
+      preservedIntentDigest: artifactReceipt.preservedIntentDigest,
+      artifactReceiptDigest: artifactReceipt.receiptDigest,
+      routeMode: routeReceipt.route.mode,
+      routeModel: routeReceipt.route.model,
+      routeReceiptDigest: routeReceipt.receiptDigest,
+      userVisible: false,
+      mutationApplied: false,
+      autoApply: false,
+    };
+  });
+
   await step('export-pptx', async () => {
     await page.getByLabel('Export deck').click();
     await page.getByTestId('export-pptx').waitFor({ state: 'visible' });
@@ -179,18 +352,33 @@ try {
       /^ppt\/slides\/slide\d+\.xml$/.test(entry),
     );
     assert(slideEntries.length >= 1, 'PPTX contains no slide XML');
+    const chartEntries = Object.keys(archive.files).filter((entry) =>
+      /^ppt\/charts\/chart\d+\.xml$/.test(entry),
+    );
+    assert(chartEntries.length >= 1, 'PPTX contains no editable chart XML for the canonical chart');
     await page.getByText('Validated PowerPoint export prepared.', { exact: true }).waitFor({
       state: 'visible',
       timeout: ACTION_TIMEOUT_MS,
     });
     await page.waitForTimeout(750);
     assertNoRuntimeErrors(runtimeErrors);
-    return { slideCount: slideEntries.length };
+    return { slideCount: slideEntries.length, editableChartCount: chartEntries.length };
+  });
+
+  await step('exact-main-final', async () => {
+    const exactMainSource = await verifyNodeSlideExactMainSource(
+      expectedMainSha,
+      process.env.GITHUB_TOKEN,
+    );
+    report.exactMain = { ...report.exactMain, ...exactMainSource };
+    return exactMainSource;
   });
 
   report.status = 'passed';
   report.stage = 'complete';
-  console.log('[prod-probe] PASS create -> edit -> reload -> PPTX export');
+  console.log(
+    '[prod-probe] PASS create -> edit -> reload -> ArtifactSpec/NodeGym shadow -> PPTX export; cleanup pending',
+  );
 } catch (error) {
   report.status = 'failed';
   report.failure = {
@@ -202,11 +390,71 @@ try {
   );
   process.exitCode = 1;
 } finally {
+  await retainNoOwnedFixture();
+  ownerAccessKey = '';
+  await context?.close().catch(() => undefined);
   await browser?.close().catch(() => undefined);
   report.completedAt = new Date().toISOString();
   await mkdir(path.dirname(reportPath), { recursive: true });
   await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`, { mode: 0o600 });
   console.log(`[prod-probe] sanitized report: ${path.relative(process.cwd(), reportPath)}`);
+}
+
+async function retainNoOwnedFixture() {
+  const cleanupStartedAt = Date.now();
+  report.stage = 'retention-cleanup';
+  try {
+    if (!probeClientSessionId && !creationSubmitted) {
+      report.assertions.push({
+        name: 'retention-cleanup',
+        status: 'passed',
+        durationMs: Date.now() - cleanupStartedAt,
+        detail: { cleanupRequired: false, retentionSafe: true, creationSubmitted: false },
+      });
+      if (report.status === 'passed') report.stage = 'complete';
+      return;
+    }
+    assert(probeClientSessionId.length > 0, 'production probe cleanup session is unavailable');
+    const convex = new ConvexHttpClient(convexUrl.href);
+    const receipt = await cleanupNodeSlideProductionProbe({
+      client: convex,
+      mutation: api.nodeslideRetention.deleteProductionProbeWorkspace,
+      clientSessionId: probeClientSessionId,
+      cleanupToken: probeCleanupToken,
+    });
+    assertProductionProbeCleanupDisposition(receipt, creationSubmitted);
+    report.assertions.push({
+      name: 'retention-cleanup',
+      status: 'passed',
+      durationMs: Date.now() - cleanupStartedAt,
+      detail: {
+        cleanupRequired: true,
+        retentionSafe: receipt.retentionSafe,
+        remainingDeckRows: receipt.remainingDeckRows,
+        remainingSourceRows: receipt.remainingSourceRows,
+        deletedRowCount: receipt.deletedRowCount,
+        receiptDigest: receipt.receiptDigest,
+        cleanupLeaseBoundBeforeSubmit: true,
+        expiryBackstopConfigured: true,
+      },
+    });
+    if (report.status === 'passed') report.stage = 'complete';
+    console.log('[prod-probe] PASS retention-cleanup');
+  } catch (error) {
+    report.assertions.push({
+      name: 'retention-cleanup',
+      status: 'failed',
+      durationMs: Date.now() - cleanupStartedAt,
+      code: 'retention-cleanup',
+    });
+    report.status = 'failed';
+    report.failure = {
+      code: 'retention-cleanup',
+      message: redact(error instanceof Error ? error.message : String(error)),
+    };
+    console.error(`[prod-probe] FAIL retention-cleanup: ${report.failure.message}`);
+    process.exitCode = 1;
+  }
 }
 
 async function step(name, run) {
@@ -251,16 +499,19 @@ function parseVersion(text) {
   return version;
 }
 
-function productionUrl(value) {
+function productionConvexUrl(value) {
   const url = new URL(value);
-  const allowHttp = process.env.PROD_PROBE_ALLOW_HTTP === '1';
-  if (url.protocol !== 'https:' && !(allowHttp && url.protocol === 'http:')) {
-    throw new Error('PROD_PROBE_URL must use HTTPS');
+  if (
+    url.protocol !== 'https:' ||
+    url.username ||
+    url.password ||
+    url.search ||
+    url.hash ||
+    !url.hostname.endsWith('.convex.cloud')
+  ) {
+    throw new Error('PROD_PROBE_CONVEX_URL must be a clean HTTPS convex.cloud URL');
   }
-  if (url.username || url.password || url.search || url.hash) {
-    throw new Error('PROD_PROBE_URL must not contain credentials, query parameters, or a fragment');
-  }
-  url.pathname = url.pathname.replace(/\/$/, '') || '/';
+  url.pathname = '/';
   return url;
 }
 
@@ -289,14 +540,8 @@ function failureCode(error) {
 }
 
 function redact(value) {
-  return String(value)
-    .replace(/\bBearer\s+[A-Za-z0-9._~+/=-]+/gi, 'Bearer [REDACTED]')
-    .replace(/\b(?:prod|dev|preview):[^|\s]+\|[^\s"']+/gi, '[REDACTED_DEPLOY_KEY]')
-    .replace(/([?&](?:token|key|secret|authorization|ownerAccessKey)=)[^&\s]+/gi, '$1[REDACTED]')
-    .replace(
-      /("?(?:ownerAccessKey|accessToken|apiKey|secret|authorization)"?\s*[:=]\s*)["']?[^\s,"'}]+/gi,
-      '$1[REDACTED]',
-    )
-    .replace(/\b[A-Za-z0-9_-]{64,}\b/g, '[REDACTED_LONG_VALUE]')
-    .slice(0, 1_500);
+  return redactNodeGymDiagnostic(value, {
+    tokens: [...diagnosticTokens],
+    maxLength: 1_500,
+  });
 }

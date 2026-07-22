@@ -62,6 +62,44 @@ describe('NodeSlide seed', () => {
     );
   });
 
+  it('rejects private-network video resources in both server and client validators', () => {
+    const snapshot = buildGoldenNodeSlide('private-video-validation-test', 1_000).snapshot;
+    const slideId = snapshot.slides[0]?.id ?? 'missing-slide';
+    const videoId = 'element:private-video';
+    snapshot.elements.push({
+      id: videoId,
+      slideId,
+      name: 'Private video',
+      kind: 'video',
+      bbox: { x: 0.5, y: 0.5, width: 0.2, height: 0.2 },
+      rotation: 0,
+      style: {},
+      video: {
+        url: 'https://127.0.0.1/private.mp4',
+        posterUrl: 'https://169.254.169.254/poster.jpg',
+        captionsUrl: 'https://[::1]/private.vtt',
+      },
+      sourceIds: [],
+      locked: false,
+      exportCapabilities: ['web_native', 'pptx_static_fallback'],
+      version: 1,
+    });
+    snapshot.slides[0]?.elementOrder.push(videoId);
+
+    for (const issues of [
+      validateNodeSlideSnapshot(snapshot, 1_000).issues,
+      validateSnapshot(snapshot).issues,
+    ]) {
+      expect(issues.filter((issue) => issue.elementId === videoId)).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ code: 'missing_asset' }),
+          expect.objectContaining({ code: 'missing_asset' }),
+          expect.objectContaining({ code: 'missing_asset' }),
+        ]),
+      );
+    }
+  });
+
   it('discloses illustrative brief content so a generated deck is publishable', () => {
     const snapshot = buildBriefNodeSlide({
       deckId: 'deck-illustrative-brief',

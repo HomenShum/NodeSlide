@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "nodekit.gym-campaign-summary/v1",
+  "campaignId": "deterministic-proof-v1",
+  "campaignPlanDigest": "sha256:78dd425dccddc24b8f9630c2c29dec62da0f26f84a37901f7837283c67c39e42",
+  "generatedAt": "2026-07-22T08:03:35.328Z",
+  "selectedRunCount": 2,
+  "attemptedOrResumed": 2,
+  "passed": 2,
+  "failed": 0,
+  "unrun": [],
+  "spentCostMicroUsd": 0,
+  "stoppedBy": null,
+  "pairedCausalClaimReady": true,
+  "promotionEligible": false,
+  "humanPreference": {
+    "status": "not_run"
+  },
+  "runs": [
+    {
+      "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+      "status": "skipped-passed",
+      "receipt": "latest.json"
+    },
+    {
+      "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+      "status": "skipped-passed",
+      "receipt": "latest.json"
+    }
+  ]
+}

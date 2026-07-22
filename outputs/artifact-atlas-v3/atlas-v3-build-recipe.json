@@ -1,0 +1,1117 @@
+{
+  "schemaVersion": "nodeslide.artifact-atlas-v3-build-recipe/v1",
+  "recipeId": "artifact-atlas-v3-final-43",
+  "generator": {
+    "package": "@oai/artifact-tool",
+    "version": "2.8.24",
+    "exporterDependency": "@oai/walnut@0.1.225",
+    "exporterApplication": "Walnut Exporter",
+    "workflow": "artifact-tool-import-edit-export",
+    "buildCommand": "node scripts/build-artifact-atlas-v3-pptx.mjs",
+    "templateStrategy": "audited-v2-template-following"
+  },
+  "inputs": {
+    "candidate": {
+      "path": "outputs/artifact-atlas-v3/atlas-v3-evidence-candidate.json",
+      "sha256": "sha256:76de9d9bd743992cbfba16083f589b48dfcf2d09127478b242f9b2fc6f468501",
+      "bytes": 19114
+    },
+    "sourceAtlas": {
+      "path": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2.pptx",
+      "sha256": "sha256:3f8afac5ce771bc5e4a98256e59de0496bd9d3584ac498442b908a2d19c3bd78",
+      "bytes": 5420862
+    },
+    "builder": {
+      "path": "scripts/build-artifact-atlas-v3-pptx.mjs",
+      "sha256": "sha256:a1842304a25f8fc25b29ad304445a4c27110c195c42de5e4c9ba8add901a0006",
+      "bytes": 15156
+    },
+    "templateStarter": {
+      "path": "outputs/artifact-atlas-v3/atlas-v3-template-starter.pptx",
+      "sha256": "sha256:61e129a389de5db8a5bd9d7ef0db2a9be567be475e5843bfebccde31fa825936",
+      "bytes": 4505793
+    },
+    "releaseGates": {
+      "path": "outputs/artifact-atlas-v3/atlas-v3-release-gates.json",
+      "sha256": "sha256:3587c6bbdf2e1380f7d68b7424e0527fceb279005ee1df3dc625bc5a81f377cb",
+      "bytes": 1565
+    },
+    "receiptCore": {
+      "path": "scripts/lib/artifact-atlas-v3-pptx-receipt.mjs",
+      "sha256": "sha256:24488f53541997b5edbf28ccd02e00e1efe1494cbf5b733add22ba09788bf6c4",
+      "bytes": 29481
+    }
+  },
+  "assets": [
+    {
+      "id": "claude-sonnet-5",
+      "label": "CLAUDE SONNET 5",
+      "meta": "$0.005010 / exact OpenRouter route",
+      "caption": "Strongest decision framing; secondary annotation runs small.",
+      "alt": "Claude Sonnet 5 risk-matrix PowerPoint render",
+      "path": "artifacts/deck-gym/artifact-atlas-v1/runs/risk-matrix__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+      "sha256": "sha256:12bb656c83b2c750e453e77c73751051dbff515ee157275adf6cbda426976488",
+      "bytes": 80301,
+      "modelEvidence": {
+        "candidateId": "risk-matrix__evidence-editorial__anthropic-claude-sonnet-5",
+        "model": "anthropic/claude-sonnet-5",
+        "provider": "openrouter",
+        "costMicroUsd": 5010,
+        "planResult": {
+          "path": "artifacts/deck-gym/artifact-atlas-v1/plan-results/risk-matrix__evidence-editorial__anthropic-claude-sonnet-5.json",
+          "sha256": "sha256:96a0a6cd213d118a80caa5826fa7c7175babe4d2c790ab9f9c2182ff03f03866",
+          "bytes": 2038
+        },
+        "showcaseReceipt": {
+          "path": "artifacts/deck-gym/artifact-atlas-v1/runs/risk-matrix__evidence-editorial__anthropic-claude-sonnet-5/receipt.json",
+          "sha256": "sha256:be0d12beb22d8d61204960aff9d806b3354539ae42d6d567e311e36d0862347c",
+          "bytes": 2180
+        }
+      }
+    },
+    {
+      "id": "kimi-k3",
+      "label": "KIMI K3",
+      "meta": "$0.001261 / exact OpenRouter route",
+      "caption": "Fullest evidence narration; denser and more microtext-heavy.",
+      "alt": "Kimi K3 risk-matrix PowerPoint render",
+      "path": "artifacts/deck-gym/artifact-atlas-v1/runs/risk-matrix__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+      "sha256": "sha256:25ed34a8c301e67fceab52bb8d0203c7b9b053c43df589ac291a5cdbc50bae21",
+      "bytes": 84425,
+      "modelEvidence": {
+        "candidateId": "risk-matrix__evidence-editorial__moonshotai-kimi-k3",
+        "model": "moonshotai/kimi-k3",
+        "provider": "openrouter",
+        "costMicroUsd": 1261,
+        "planResult": {
+          "path": "artifacts/deck-gym/artifact-atlas-v1/plan-results/risk-matrix__evidence-editorial__moonshotai-kimi-k3.json",
+          "sha256": "sha256:e8fedc46905cb70c0ad895ed653e38a434d2b3a7bae0b6efa4fc535afc1b84cc",
+          "bytes": 2198
+        },
+        "showcaseReceipt": {
+          "path": "artifacts/deck-gym/artifact-atlas-v1/runs/risk-matrix__evidence-editorial__moonshotai-kimi-k3/receipt.json",
+          "sha256": "sha256:c50c9b78ab1e4b7241b65ab0f0e9f9db519732b4ebef2d4a0b4f628c340fd3ec",
+          "bytes": 2155
+        }
+      }
+    },
+    {
+      "id": "gemma-4-26b-free",
+      "label": "GEMMA 4 26B FREE",
+      "meta": "$0 / exact returned free route",
+      "caption": "Fastest-reading copy; harness overrode a non-editable image fallback.",
+      "alt": "Gemma 4 26B free risk-matrix PowerPoint render",
+      "path": "artifacts/deck-gym/artifact-atlas-v1/runs/risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+      "sha256": "sha256:60643a805cffcc7ecbbf28c7599bcba1e6232d604ccecd47599d1427338b402d",
+      "bytes": 75927,
+      "modelEvidence": {
+        "candidateId": "risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+        "model": "google/gemma-4-26b-a4b-it:free",
+        "provider": "openrouter",
+        "costMicroUsd": 0,
+        "planResult": {
+          "path": "artifacts/deck-gym/artifact-atlas-v1/plan-results/risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free.json",
+          "sha256": "sha256:a8f86ccddb0e28d8b3f6763997293e8aab43c8bd3bffc5c4107939fbb2e52ea4",
+          "bytes": 1873
+        },
+        "showcaseReceipt": {
+          "path": "artifacts/deck-gym/artifact-atlas-v1/runs/risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free/receipt.json",
+          "sha256": "sha256:2ff83599c6af7c6fe1a0bd9859f396afc799fcd99d4d11beba17ed02340394f0",
+          "bytes": 2220
+        }
+      }
+    }
+  ],
+  "assetSetDigest": "sha256:6bdcba100a0ca360315cfbf096cc111cbadb891639b940467168cb4155be3a1a",
+  "composition": {
+    "slideCount": 43,
+    "segments": {
+      "titleSlides": [
+        1
+      ],
+      "auditedMuseumPreviewSlides": {
+        "from": 2,
+        "to": 38,
+        "count": 37
+      },
+      "evidenceAppendixSlides": {
+        "from": 39,
+        "to": 43,
+        "count": 5
+      }
+    },
+    "sourceSlideMap": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      13,
+      18,
+      36,
+      37,
+      33
+    ],
+    "slides": [
+      {
+        "slide": 1,
+        "requiredText": [
+          "NODEGYM / ARTIFACT ATLAS V3",
+          "Typed evidence turns model variety into governed production"
+        ],
+        "minimumTextRuns": 11,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:91bdbd2281e49dacb32047e3e609ed249cc5e5fbcad7f4624b8412f237cb677b",
+          "shapeXmlDigest": "sha256:ad9078c3230fdc4d3468cf98b08f286a2b7bfc6bcfe6fa3532b38825e7644e70",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:e95f50b815e4e5f249c05b6538a231abbd8eeccd9c5def76ce68212026e78c67",
+          "contentDigest": "sha256:2cc52befc504958e374f49ed4c633f65c1f3ba40d520dc1ef3ea7b36fe4570e8"
+        }
+      },
+      {
+        "slide": 2,
+        "requiredText": [
+          "NARRATIVE FOUNDATIONS · SECTION OPENER",
+          "A museum needs chapters, not a wall of thumbnails"
+        ],
+        "minimumTextRuns": 13,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:9f494e9b4e44c402937396208eb678df9b2e20251d583f71817daa224f9fe316",
+          "shapeXmlDigest": "sha256:d1a10f6a206c24a2825afe2906e960cf5c1c7767662b2b177321f855116f8e83",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:3f5be150bb1750087db38613c0a3adbc4d1573993aadb66cd0847a27390b999a",
+          "contentDigest": "sha256:8e6bf008b7d8e17537429e64ac240cf785f09da789172c95e8cf668b7c40798d"
+        },
+        "sourceBinding": {
+          "slide": 2,
+          "semanticDigest": "sha256:3f5be150bb1750087db38613c0a3adbc4d1573993aadb66cd0847a27390b999a"
+        }
+      },
+      {
+        "slide": 3,
+        "requiredText": [
+          "NARRATIVE FOUNDATIONS · BIG METRIC",
+          "82 of 84 candidates cleared browser and PowerPoint proof"
+        ],
+        "minimumTextRuns": 15,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:251b57b94795b4e7e0fe84747af32e61349e7460a685901c60ca7dc815e27c30",
+          "shapeXmlDigest": "sha256:f3eb7b29c96ebd08dc29fe925df3491ab777d6358fd31d76b266e0b9ad1e89bb",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:6cc166b8acfdf3700cd4fceb8e51bfe9aad1b7662eaf787cec242489935cac81",
+          "contentDigest": "sha256:46d27db73c31de5dcb41de5bc6320a7f65fe89afe01dad58b1020d43a07598db"
+        },
+        "sourceBinding": {
+          "slide": 3,
+          "semanticDigest": "sha256:6cc166b8acfdf3700cd4fceb8e51bfe9aad1b7662eaf787cec242489935cac81"
+        }
+      },
+      {
+        "slide": 4,
+        "requiredText": [
+          "NARRATIVE FOUNDATIONS · CUSTOMER VOICE",
+          "The useful promise is editable evidence, not instant polish"
+        ],
+        "minimumTextRuns": 9,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:9432e3b18ced1d2bf3f8b38eab34af70bec023a2160bded847a76792bae58286",
+          "shapeXmlDigest": "sha256:0a6b5ad70b157c78d14a891e6fedf3f66f94bb77bc509d625306f11a336ab793",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:f85a53cf4037060f033a2d4e8ae36a64d5b4ae435a37e05bd122d2147a51eaa7",
+          "contentDigest": "sha256:40f408bad9671b53a72986ae8c37b1c21f0156a4dd31bf5bc002f6588d9f746f"
+        },
+        "sourceBinding": {
+          "slide": 4,
+          "semanticDigest": "sha256:f85a53cf4037060f033a2d4e8ae36a64d5b4ae435a37e05bd122d2147a51eaa7"
+        }
+      },
+      {
+        "slide": 5,
+        "requiredText": [
+          "NARRATIVE FOUNDATIONS · BEFORE AFTER STORY",
+          "The harness removes clutter before it adds decoration"
+        ],
+        "minimumTextRuns": 13,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:61d1006b309ff7fbfff3a06a43a4ef73246248407d99653e4e2f6489d5c4072f",
+          "shapeXmlDigest": "sha256:3f9da06b8362c8f9258d0385d3c8d2f0c4442b09264bf86797e74e4030e0fb60",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:df01ee590b84fa71cb0ada228ab3c5b64138b272495f0f22600a91437e30a3f7",
+          "contentDigest": "sha256:0b0310f8b488cbc8f858740063b67ce67ea433ffd81a40c9562d308c6ed249ae"
+        },
+        "sourceBinding": {
+          "slide": 5,
+          "semanticDigest": "sha256:df01ee590b84fa71cb0ada228ab3c5b64138b272495f0f22600a91437e30a3f7"
+        }
+      },
+      {
+        "slide": 6,
+        "requiredText": [
+          "DATA · KPI STRIP",
+          "The operating verdict should scan in under five seconds"
+        ],
+        "minimumTextRuns": 21,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:000fb4fb0ffee7c3b48f40d50ca622026a2f7ed4224e26b5660164f9209e3786",
+          "shapeXmlDigest": "sha256:97111b0d48151488ae76f26f6b87bf15b58b1262727dc3d745cad24c98f1b293",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:edb950ff7d0b9dc83958769e1aff658f28ee19b7bbe680768508c06cda1f9d63",
+          "contentDigest": "sha256:b214d06d4214cc9e5c54e27ede9589e6d7737bac042bdd5ebfd380da0dfb510d"
+        },
+        "sourceBinding": {
+          "slide": 6,
+          "semanticDigest": "sha256:edb950ff7d0b9dc83958769e1aff658f28ee19b7bbe680768508c06cda1f9d63"
+        }
+      },
+      {
+        "slide": 7,
+        "requiredText": [
+          "DATA · MULTI SERIES TREND",
+          "Direct labels make divergence visible without inventing a cause"
+        ],
+        "minimumTextRuns": 8,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:4579531e0b657117fcb20d8f1bb1e4091480ea022fc1fd08d2c2a565186f745c",
+          "shapeXmlDigest": "sha256:9005c1472f9f1e6851004eff1fa2b75277fe8d6fe4bb5e0d73a1e88b4b84d63a",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:58153c2180d560991ae98dad620f7ee59363e864a778a087c072e69a829c5a5e",
+          "contentDigest": "sha256:aee506b76d39ccf1a5456c597ab3261101d77234e64feb4d62e1b228815be99e"
+        },
+        "sourceBinding": {
+          "slide": 7,
+          "semanticDigest": "sha256:58153c2180d560991ae98dad620f7ee59363e864a778a087c072e69a829c5a5e"
+        }
+      },
+      {
+        "slide": 8,
+        "requiredText": [
+          "DATA · UNCERTAINTY RANGE",
+          "A forecast is more credible when its range is impossible to miss"
+        ],
+        "minimumTextRuns": 23,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:1026d0f0d429ce7c3db942e6e3bfac9fd349b666b7e06c3ef1ff854c91c7a1de",
+          "shapeXmlDigest": "sha256:680f16e48b3772ad1798e3503f004707e3927fb69a56aadcc4b53241dcf6e29d",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:c74473e2ac6fbfe2a31027f3b4b4a317bbb7ddd2cafdb5b5146361b75d5bcffd",
+          "contentDigest": "sha256:e89bd3cc78abab10aca07e8b29f11cf1a398bf394b77578ac5929ca6f0e8ae2a"
+        },
+        "sourceBinding": {
+          "slide": 8,
+          "semanticDigest": "sha256:c74473e2ac6fbfe2a31027f3b4b4a317bbb7ddd2cafdb5b5146361b75d5bcffd"
+        }
+      },
+      {
+        "slide": 9,
+        "requiredText": [
+          "DATA · WATERFALL",
+          "Harness gains come from several small controls, not one magic prompt"
+        ],
+        "minimumTextRuns": 22,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:c3281f386ce2fd8b2ac85259787c9a1cbef3034b6136721dbfd24f607167e7e6",
+          "shapeXmlDigest": "sha256:76713c0b040ad0de731d97b651c6d1e4b01a418223aeb8db33ff3c658dde914b",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:9c5bc84eca018495c87439ec9285af58fef5737486f78153f53ed071a2ca5538",
+          "contentDigest": "sha256:de4f792a30e97118c68e615d6afb2d76cdd980c58dec12117f43f8ae62d51bc3"
+        },
+        "sourceBinding": {
+          "slide": 9,
+          "semanticDigest": "sha256:9c5bc84eca018495c87439ec9285af58fef5737486f78153f53ed071a2ca5538"
+        }
+      },
+      {
+        "slide": 10,
+        "requiredText": [
+          "DATA · QUALITY COST SCATTER",
+          "The best route sits on a frontier, not at one universal optimum"
+        ],
+        "minimumTextRuns": 20,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:9759254234a14a3e3d8aaa2493974591c5af09c7c6433fa3891f981586315a7b",
+          "shapeXmlDigest": "sha256:dc9c3e35cd08965b48d27a418f0beeb201ca43bf956a9ed7fd4e403a18a53a44",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:60ae5c0ee2db920188b87c77fe456b0dbb018e7995f3030b5d9343280a447ba5",
+          "contentDigest": "sha256:d8df84ec4a356ea79cce9116754ed4aea0f73ddc7ba24247131c3efda2287927"
+        },
+        "sourceBinding": {
+          "slide": 10,
+          "semanticDigest": "sha256:60ae5c0ee2db920188b87c77fe456b0dbb018e7995f3030b5d9343280a447ba5"
+        }
+      },
+      {
+        "slide": 11,
+        "requiredText": [
+          "DATA · OPERATING TABLE SPARKLINES",
+          "Dense tables stay readable when hierarchy does the filtering"
+        ],
+        "minimumTextRuns": 36,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:cc5cbf2d6fec444b514a97c7a2011bd3bd2c91eb0c885203e327f149dd755a25",
+          "shapeXmlDigest": "sha256:f2ee6d0bad7ee2d45f3c5f29e870e70029d19a758ea54e6624e3bdb24294a98f",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:514c906c1eae55b40e12c3653bca6b87f47a52967e5f3f43cc6491f170e1fdf2",
+          "contentDigest": "sha256:b00fc1a92e44f262085743922664bda84252f199d1c87bdff042b1ab09fb1f9b"
+        },
+        "sourceBinding": {
+          "slide": 11,
+          "semanticDigest": "sha256:514c906c1eae55b40e12c3653bca6b87f47a52967e5f3f43cc6491f170e1fdf2"
+        }
+      },
+      {
+        "slide": 12,
+        "requiredText": [
+          "DATA · DENSE DASHBOARD FUNNEL",
+          "A dashboard can be dense without becoming a card graveyard"
+        ],
+        "minimumTextRuns": 18,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:778965388f76d1645a7a3467491678b9a98b4189157528118cd129e8b9f56e45",
+          "shapeXmlDigest": "sha256:7a465a3e3393047d583f2857b2efdee4777106b254132b9fef0073a25dcecc6c",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:c401f1da9a2b5ee6087c48154dbe42398e4a6d68112cc62bcf781df291c3faf0",
+          "contentDigest": "sha256:b35891f13c62ea3a477b021d6f339eb207d7fc342dd98af4d36e452618b5837d"
+        },
+        "sourceBinding": {
+          "slide": 12,
+          "semanticDigest": "sha256:c401f1da9a2b5ee6087c48154dbe42398e4a6d68112cc62bcf781df291c3faf0"
+        }
+      },
+      {
+        "slide": 13,
+        "requiredText": [
+          "SYSTEMS · SYSTEM ARCHITECTURE",
+          "The portable protocol keeps product logic above backend choice"
+        ],
+        "minimumTextRuns": 14,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:9bfca0d7aceec2dfcdd4137fa9ef3bbaf594507e4018281decbd807df3d0b645",
+          "shapeXmlDigest": "sha256:3c98592f7b74a2877ce473041c957b45f263b73e2cb6738e81b3657795816027",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:5d628443383ce887f6c042bb0fe6480880f66c53cf42294a6d3d00f6099fce33",
+          "contentDigest": "sha256:f96c6be541af22767c22a25bbfa9f6572c5353a7c9f9a68e8d80b2616305b7c5"
+        },
+        "sourceBinding": {
+          "slide": 13,
+          "semanticDigest": "sha256:5d628443383ce887f6c042bb0fe6480880f66c53cf42294a6d3d00f6099fce33"
+        }
+      },
+      {
+        "slide": 14,
+        "requiredText": [
+          "SYSTEMS · REQUEST SEQUENCE",
+          "Review custody is visible at every handoff"
+        ],
+        "minimumTextRuns": 16,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:8c5f993bd8e7f8a52a23ceea747ccd4d9c5ce1cf8ac797075579999e3de7d3b6",
+          "shapeXmlDigest": "sha256:7bf515aa16de1ea9631f3d08e0af28a805d2e87f6ae953d4efdce0d6fc578554",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:b88ea5bc9cf69df45e3a4ee052b30f66af75b0cbd7809ec8672a208a5d0bdea2",
+          "contentDigest": "sha256:d8a24b1accc342ae8a0a924618a4358983fe803408b31328d150651ca53b59b4"
+        },
+        "sourceBinding": {
+          "slide": 14,
+          "semanticDigest": "sha256:b88ea5bc9cf69df45e3a4ee052b30f66af75b0cbd7809ec8672a208a5d0bdea2"
+        }
+      },
+      {
+        "slide": 15,
+        "requiredText": [
+          "SYSTEMS · CAUSAL LOOP",
+          "Better receipts reinforce trust; unchecked complexity pushes back"
+        ],
+        "minimumTextRuns": 18,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:e6ff63bfc1ec394c33c88734d12c3cb4d885ac4a4aa5de392d660cc9687c967b",
+          "shapeXmlDigest": "sha256:fbc4842aac8002fe6d290e6961b64d5c43530e762ce93f7d4c2732f32e7e2190",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:1f6a1e9df4148f12579ccaaff1c1089a5b39a34b61596aa894287d4eb7288bd1",
+          "contentDigest": "sha256:2bae5508566aed72a922940ffaffc91d0aaf832cfb1958b9e689d26cde8eb080"
+        },
+        "sourceBinding": {
+          "slide": 15,
+          "semanticDigest": "sha256:1f6a1e9df4148f12579ccaaff1c1089a5b39a34b61596aa894287d4eb7288bd1"
+        }
+      },
+      {
+        "slide": 16,
+        "requiredText": [
+          "SYSTEMS · SOURCE ALLOCATION SANKEY",
+          "Every visual can retain the path from source to slide"
+        ],
+        "minimumTextRuns": 18,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:b0edc1980e9595015e65f8a217ce3068b876438d9b066c3f3f9179442bf1c631",
+          "shapeXmlDigest": "sha256:8df0353be8c4a0831ef7a4d59627375f9eb47a3978509547ffdb5fe81b0a5187",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:f29babdd366d324a69f6252610ce20023625b5d7c361d62558be4eb5d3b4a24f",
+          "contentDigest": "sha256:91e13b9e7740f60e8cc95f307b093d2776238ba39e2899acccf5c7899a222098"
+        },
+        "sourceBinding": {
+          "slide": 16,
+          "semanticDigest": "sha256:f29babdd366d324a69f6252610ce20023625b5d7c361d62558be4eb5d3b4a24f"
+        }
+      },
+      {
+        "slide": 17,
+        "requiredText": [
+          "SYSTEMS · ROUTING DECISION TREE",
+          "Routing should spend capability only where the task needs it"
+        ],
+        "minimumTextRuns": 14,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:1d554263ce2623e260d1fdc950b6e170fcc5d35590f05e89fda4f2a6f2bfaa3c",
+          "shapeXmlDigest": "sha256:69a0a6ccf6eea2537e201c216fc8973a4799e5dcafe895b1c0cc9710fced590c",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:2a7e31d99f476915874bc6f8cb6f90bc6e93592a4af6e1e574b4636abb6c605b",
+          "contentDigest": "sha256:9abaad0c755f722f89500a8c2a471182e68778b63a3c9db20e39307d00f5e200"
+        },
+        "sourceBinding": {
+          "slide": 17,
+          "semanticDigest": "sha256:2a7e31d99f476915874bc6f8cb6f90bc6e93592a4af6e1e574b4636abb6c605b"
+        }
+      },
+      {
+        "slide": 18,
+        "requiredText": [
+          "SYSTEMS · ECOSYSTEM GEOGRAPHY",
+          "NodeKit connects the stack while NodeSlide proves the journey"
+        ],
+        "minimumTextRuns": 20,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:415c92512121b52072148a45ed95555d50286566eb5c344521486a3d8b71ca70",
+          "shapeXmlDigest": "sha256:bbf45a075f41a18ded71c46b5efa0f26ab06c09786efe10ab2f3a3c9013d5a3b",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:f18f4240a7e898a3f6e363db789c8b212878e361e166e89c2572c5beedb6d07c",
+          "contentDigest": "sha256:a6a09c75acf816f41cb864cb53592352f5196ea8582c05d00d15cd83d60f406e"
+        },
+        "sourceBinding": {
+          "slide": 18,
+          "semanticDigest": "sha256:f18f4240a7e898a3f6e363db789c8b212878e361e166e89c2572c5beedb6d07c"
+        }
+      },
+      {
+        "slide": 19,
+        "requiredText": [
+          "PROGRESSION · RESEARCH TIMELINE",
+          "Human approval remains the gate between experiment and harness change"
+        ],
+        "minimumTextRuns": 16,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:71b57185fe8a5ef01cf0f2dd6de1f0c143831bee978c9a67d1b9a0227533ed06",
+          "shapeXmlDigest": "sha256:3d89f29e07278a9c7eb47de9c31e10321a874ea6a422691cad372c0131b40a13",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:4ca1cb415c4de27cf2902e686b8d157b26bf3d4060fd74fd743881d39e97b507",
+          "contentDigest": "sha256:11424afc7f5eae185f7d3ceb7a480ac3cddd09ac111b1b82c325d5dac493d6d2"
+        },
+        "sourceBinding": {
+          "slide": 19,
+          "semanticDigest": "sha256:4ca1cb415c4de27cf2902e686b8d157b26bf3d4060fd74fd743881d39e97b507"
+        }
+      },
+      {
+        "slide": 20,
+        "requiredText": [
+          "PROGRESSION · ROADMAP GANTT",
+          "The next release sequence exposes dependencies and confidence"
+        ],
+        "minimumTextRuns": 27,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:b44db510a1337fb6da704bee9734d700b49615e540bbd863008a35796013f98f",
+          "shapeXmlDigest": "sha256:09b9f66b5b8c426c67cfa0df86a559084767fae6d289d413c4d26dd96827fd45",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:67015f7ca389a941005eee8d1aea3c57198c0295b9b4ed659f6a4e2d6a92dc96",
+          "contentDigest": "sha256:739ba05b968f533ce999d70214df46b2ad7999e58770fc9ad256dca64c42566c"
+        },
+        "sourceBinding": {
+          "slide": 20,
+          "semanticDigest": "sha256:67015f7ca389a941005eee8d1aea3c57198c0295b9b4ed659f6a4e2d6a92dc96"
+        }
+      },
+      {
+        "slide": 21,
+        "requiredText": [
+          "PROGRESSION · EVIDENCE SCROLLYTELLING",
+          "Evidence becomes a decision through five inspectable states"
+        ],
+        "minimumTextRuns": 16,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:25d063f0597a413814a322f28ee98861c44a4ff0159c865b9d2c8f7d8e1d54a8",
+          "shapeXmlDigest": "sha256:6f7d00b975136db588b208e1da9000da79c34939cdd91e5062773111b7f8be02",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:b00fd43a1e798797092ffd2f35710290e226e43183b2e55dc65b9678402eb5af",
+          "contentDigest": "sha256:7930a40681370b41398a1e173d90d2ccdc6cbd78b8220ede93975e521a1f658a"
+        },
+        "sourceBinding": {
+          "slide": 21,
+          "semanticDigest": "sha256:b00fd43a1e798797092ffd2f35710290e226e43183b2e55dc65b9678402eb5af"
+        }
+      },
+      {
+        "slide": 22,
+        "requiredText": [
+          "PROGRESSION · ANIMATED CHART PROGRESSION",
+          "The trend means more when the audience sees the baseline move"
+        ],
+        "minimumTextRuns": 14,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:2505c4e15e41836de0a3caace64ef4b14882e2031f909f4678804c09a00babeb",
+          "shapeXmlDigest": "sha256:7a0c890be35ed27cfe6092af614b0dc4b370ace27734129e47bccdba0a5545dc",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:fda1c8573a054e2f7fc2e854b4ec3defa6cd0ed904545f8a63d0dc5848dc60d9",
+          "contentDigest": "sha256:06f3c55261eb73170fccfc1139cb79254f3f0fafe6fcdbdbdd0c44b334d93896"
+        },
+        "sourceBinding": {
+          "slide": 22,
+          "semanticDigest": "sha256:fda1c8573a054e2f7fc2e854b4ec3defa6cd0ed904545f8a63d0dc5848dc60d9"
+        }
+      },
+      {
+        "slide": 23,
+        "requiredText": [
+          "FULL-BLEED EDITORIAL IMAGE",
+          "A visual story can lead with atmosphere and still preserve proof"
+        ],
+        "minimumTextRuns": 5,
+        "imageRelationships": 1,
+        "contentProof": {
+          "textRunDigest": "sha256:ec01bfa460015ca224ee1e728b07f683230c86c97fd43345f545ddb177723d45",
+          "shapeXmlDigest": "sha256:825be73588741d90167e7e6b8ce00e71b6f300815f62293e9af00eefadf27a8e",
+          "pictureXmlDigest": "sha256:25f283b6af8918eb187858f83780b69aa0e6fa3329863feaf99ebb7ccb5fe243",
+          "imagePayloadDigest": "sha256:25de77cd87544082cd55afb2b2eb45bbb5833dab8ba6d2a788ab18f8bb38eb6f",
+          "semanticDigest": "sha256:6a53ea3065a1f5029d6f2ee6a7d5fa5e33fc81bfa73657c78dfc965738e5ed01",
+          "contentDigest": "sha256:f40db1fee3678e66920bee7f92baa709f5dff6d67db021f2fb7aa88f8e9c352b"
+        },
+        "sourceBinding": {
+          "slide": 23,
+          "semanticDigest": "sha256:6a53ea3065a1f5029d6f2ee6a7d5fa5e33fc81bfa73657c78dfc965738e5ed01"
+        }
+      },
+      {
+        "slide": 24,
+        "requiredText": [
+          "PRODUCT MEDIA · REAL SCREENSHOT CALLOUTS",
+          "The product proof is the interface people actually use"
+        ],
+        "minimumTextRuns": 14,
+        "imageRelationships": 1,
+        "contentProof": {
+          "textRunDigest": "sha256:493288f2a7d38fe1679f12d072b9f5e5fb8b3022a055bd2fb4da2be9118fbc0b",
+          "shapeXmlDigest": "sha256:39b0b74e34236d906dd40bb945a34caa26fa6877e9ac4ccef671c76669efa7ac",
+          "pictureXmlDigest": "sha256:5b5e813ac8c4cf8df29918d23db81b41012883a72ec935f741667d4f42355180",
+          "imagePayloadDigest": "sha256:f1f83c2d24567a07a1d07dd0b071ae12b3a75b6b336abded44a569135a43ba00",
+          "semanticDigest": "sha256:b4747418791b03b855ce8804d39da7fc4fe03756101104fa33e26c25a5d002ee",
+          "contentDigest": "sha256:c044cf8f6879169ee591700cb115e679cb47d40d2009bfa20ab6647b853969cf"
+        },
+        "sourceBinding": {
+          "slide": 24,
+          "semanticDigest": "sha256:b4747418791b03b855ce8804d39da7fc4fe03756101104fa33e26c25a5d002ee"
+        }
+      },
+      {
+        "slide": 25,
+        "requiredText": [
+          "PRODUCT MEDIA · INTERACTION CLIP",
+          "One bounded interaction carries the story from selection to receipt"
+        ],
+        "minimumTextRuns": 14,
+        "imageRelationships": 3,
+        "contentProof": {
+          "textRunDigest": "sha256:224d1675780222779b69e590998e9d0c8c88a9e53e3f89da36a9f304f32df8de",
+          "shapeXmlDigest": "sha256:84cceaff0f4996a48dfd967cee50bc5771033084835fdb7062459e16f50547c4",
+          "pictureXmlDigest": "sha256:1797b57ae02987989c1a5e906b741d760cfdcb03614fbf4a1e3dce7fa0b63636",
+          "imagePayloadDigest": "sha256:fe470a7eb3a92a1c586e6d0d5e92f2b87e62f030ae02ff564fbdb1149b639ccd",
+          "semanticDigest": "sha256:ea35750456bc3e560b1991854b9186b068b91dc97e6018426c71a74ed8714241",
+          "contentDigest": "sha256:39701d884c1fc1d7aeaab120e93a783c4d91c605a967191f0c1b2d848b80721b"
+        },
+        "sourceBinding": {
+          "slide": 25,
+          "semanticDigest": "sha256:ea35750456bc3e560b1991854b9186b068b91dc97e6018426c71a74ed8714241"
+        }
+      },
+      {
+        "slide": 26,
+        "requiredText": [
+          "PRODUCT MEDIA · PRODUCT BEFORE AFTER",
+          "Review transforms a rough generation into a governed workspace"
+        ],
+        "minimumTextRuns": 8,
+        "imageRelationships": 2,
+        "contentProof": {
+          "textRunDigest": "sha256:f6dfd5accee56b54b0402002595411b201ab356a930baa2af3a6a4e70380deed",
+          "shapeXmlDigest": "sha256:6ca40a7258ada411c8c994c3c6e33376b102579c3b0f87459eec58e8110540c8",
+          "pictureXmlDigest": "sha256:5b0da1dc1dc57755fac64bd91bc48aec79f8e775659fac3668ee8f59ad23b869",
+          "imagePayloadDigest": "sha256:12c87050b827ffe5f2026d908d576d5e02f06adebd4b4a1e8a651b0435f83d23",
+          "semanticDigest": "sha256:68776b75b09050aaee4fd3d90c0ba98f9c72f97932f9695bf387b9adddb306b4",
+          "contentDigest": "sha256:95d4a5c1e1df0f8c576e8431e36fe72ad64eb3d250c3ab9549e8463328bff78b"
+        },
+        "sourceBinding": {
+          "slide": 26,
+          "semanticDigest": "sha256:68776b75b09050aaee4fd3d90c0ba98f9c72f97932f9695bf387b9adddb306b4"
+        }
+      },
+      {
+        "slide": 27,
+        "requiredText": [
+          "PRODUCT MEDIA · SPATIAL SCENE",
+          "The canvas can move from whole system to exact evidence"
+        ],
+        "minimumTextRuns": 9,
+        "imageRelationships": 1,
+        "contentProof": {
+          "textRunDigest": "sha256:46f3805bcadb70cd6176812aa7ac26664ecabb5ea247803429e2082706a49e8f",
+          "shapeXmlDigest": "sha256:1ed0af275faed78ee1bd737cd93cff6c67b774f5f764d3f0191f21887d64f756",
+          "pictureXmlDigest": "sha256:8b1f7c01edcbb26e02a73af940c0177f94fbe2601c69755343baaae456c2f749",
+          "imagePayloadDigest": "sha256:25de77cd87544082cd55afb2b2eb45bbb5833dab8ba6d2a788ab18f8bb38eb6f",
+          "semanticDigest": "sha256:80cec40f9407adeb957ab7ee3886df2ee5f32856d93f0bd7920f3acb03ee6e66",
+          "contentDigest": "sha256:d63b070ce43b9a98bad5de16a02b2437dae1cfcab446eb2fdaf2a7e2ff592e78"
+        },
+        "sourceBinding": {
+          "slide": 27,
+          "semanticDigest": "sha256:80cec40f9407adeb957ab7ee3886df2ee5f32856d93f0bd7920f3acb03ee6e66"
+        }
+      },
+      {
+        "slide": 28,
+        "requiredText": [
+          "EVIDENCE TECHNICAL PROOF · CLAIM SOURCE LINEAGE",
+          "A claim is trustworthy when its entire path remains inspectable"
+        ],
+        "minimumTextRuns": 16,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:2026c71d18d76b372cc272fd383958f2a604e164cdf26b877155618b4c17be0e",
+          "shapeXmlDigest": "sha256:453e2bd007747ede33d47925fffa7b68e3d5d4b466a45781e2f4e9e6c65810ea",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:aa3c8ce2d6daf57bb7f422e80e481c23debb409b97e6280251eb3524e4620789",
+          "contentDigest": "sha256:8a8bd43377e0926a1a54703c51016796a258aa9fa5c241c8ba8da76863cdeb94"
+        },
+        "sourceBinding": {
+          "slide": 28,
+          "semanticDigest": "sha256:aa3c8ce2d6daf57bb7f422e80e481c23debb409b97e6280251eb3524e4620789"
+        }
+      },
+      {
+        "slide": 29,
+        "requiredText": [
+          "EVIDENCE TECHNICAL PROOF · PDF EVIDENCE REGION",
+          "Citation quality depends on the exact source region"
+        ],
+        "minimumTextRuns": 9,
+        "imageRelationships": 1,
+        "contentProof": {
+          "textRunDigest": "sha256:851587fd3742daf7efdb02504db06129c88b2499692edce92d7d4fc9e3d49e14",
+          "shapeXmlDigest": "sha256:043608668a279355cd9cde68b8b868afcba42e98e2594f26e55d8f157a177d52",
+          "pictureXmlDigest": "sha256:62b8c2bd73d5e345952912def066e534d6f69c45de5a3ae9b72816855aa8507b",
+          "imagePayloadDigest": "sha256:235a80b31941ef22bb93b3b2ebcf9e8f736aa7a1aae89624cfb81afc79684177",
+          "semanticDigest": "sha256:a687724e0b8cab1de5b179a21355164d4183a3b703136d09bf04a174d97035d2",
+          "contentDigest": "sha256:34837fd11bf55d7f3a3081f1a681949100df1335f49e800eee39ea8a235686c6"
+        },
+        "sourceBinding": {
+          "slide": 29,
+          "semanticDigest": "sha256:a687724e0b8cab1de5b179a21355164d4183a3b703136d09bf04a174d97035d2"
+        }
+      },
+      {
+        "slide": 30,
+        "requiredText": [
+          "EVIDENCE TECHNICAL PROOF · CODE RUNTIME PROOF",
+          "Runtime claims require a reproducible benchmark receipt"
+        ],
+        "minimumTextRuns": 15,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:6cef2ece2840d3186b9bab292cde215dac79629c73f54e5e4bdc2e3b99e26ea7",
+          "shapeXmlDigest": "sha256:f8b20eb9960f3ee58396712085db501fc473daf0f35188d8e920446fe5a5b3b3",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:ecf303e6d9aeab8811a8493e90e8063e785accd9bc0ce26c0b75efa6c366ef6f",
+          "contentDigest": "sha256:8b955a35185e73a26a5b21f5b679f227c23c6d533e021d5550d59b73344d4ac0"
+        },
+        "sourceBinding": {
+          "slide": 30,
+          "semanticDigest": "sha256:ecf303e6d9aeab8811a8493e90e8063e785accd9bc0ce26c0b75efa6c366ef6f"
+        }
+      },
+      {
+        "slide": 31,
+        "requiredText": [
+          "EVIDENCE TECHNICAL PROOF · OTEL TRACE",
+          "Trace anatomy is illustrative until trace and span IDs are bound"
+        ],
+        "minimumTextRuns": 14,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:f3972afcc7ebdefaef968703048183454936fad7ddcdfd8b4c3ddae0b6abfd7c",
+          "shapeXmlDigest": "sha256:344095788523e114e59dbe018c9afd1f813bc9524b4bd210be556d557d1d425c",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:44e2fc3fab29867bca1a867135f28779ebeecbac63c816130fcae8ca0408e96e",
+          "contentDigest": "sha256:fb1dc6aead1627a445235d9e03fdca4a375815435abf5505d80f15c46bb4ae67"
+        },
+        "sourceBinding": {
+          "slide": 31,
+          "semanticDigest": "sha256:44e2fc3fab29867bca1a867135f28779ebeecbac63c816130fcae8ca0408e96e"
+        }
+      },
+      {
+        "slide": 32,
+        "requiredText": [
+          "EVIDENCE TECHNICAL PROOF · QUALITY COST EQUATION",
+          "The score is only useful when every symbol maps to evidence"
+        ],
+        "minimumTextRuns": 20,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:cf65fb629de78d444515d9cff99bfee93cbf7ed6ed2ea3561856167defaa39b4",
+          "shapeXmlDigest": "sha256:760319cf61a08a6bb6cc9196235f3cdcc46d0f813b78ec63e486413463910901",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:4d799aeee6d8651ddc73858252fa9c136d35f2a064bc3b05f649cffb47e349a1",
+          "contentDigest": "sha256:fbfb68411fa3e05011c3fd3d27d0cdda95c4ddd26d3c02059147f93eb367238c"
+        },
+        "sourceBinding": {
+          "slide": 32,
+          "semanticDigest": "sha256:4d799aeee6d8651ddc73858252fa9c136d35f2a064bc3b05f649cffb47e349a1"
+        }
+      },
+      {
+        "slide": 33,
+        "requiredText": [
+          "EVIDENCE TECHNICAL PROOF · DECK CI RECEIPT",
+          "A deck is not done until both pixels and semantics pass"
+        ],
+        "minimumTextRuns": 32,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:62798568258b926da95ed671765301b2c46db54121e68f1d845a3da3ed87322e",
+          "shapeXmlDigest": "sha256:b9b16d0861e7cd54867a4257289834a62bfeb8b4cd7b23d2eee2225c607815c9",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:7d5e494a0142a90c25ad483818ed010b07fdc223519148554a0374989cf8579a",
+          "contentDigest": "sha256:9d1606716345a81e4b4fa1b2afc46c66e3a29bba12ba25408d9f559e970da42c"
+        },
+        "sourceBinding": {
+          "slide": 33,
+          "semanticDigest": "sha256:7d5e494a0142a90c25ad483818ed010b07fdc223519148554a0374989cf8579a"
+        }
+      },
+      {
+        "slide": 34,
+        "requiredText": [
+          "DECISION EVALUATION · RISK MATRIX",
+          "Pipeline coverage is the risk that deserves action first"
+        ],
+        "minimumTextRuns": 16,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:db811292a754f46215fb63e4f0333d26ddaa1839ad5d3c29cff03fdf3e7cddd2",
+          "shapeXmlDigest": "sha256:1cc1cba9993a3c507d33dcad9b4ebe11a11bc747757bf699ddad38e00a5c7ff7",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:09fa7b32e06c7ef9387d2f8231e1d19a9526be3239cfa5453802b3f019cf540f",
+          "contentDigest": "sha256:90d0ec38d044ff0b8b3617768d0adae20d3a9e809af72a9b33c27a4695e0a477"
+        },
+        "sourceBinding": {
+          "slide": 34,
+          "semanticDigest": "sha256:09fa7b32e06c7ef9387d2f8231e1d19a9526be3239cfa5453802b3f019cf540f"
+        }
+      },
+      {
+        "slide": 35,
+        "requiredText": [
+          "DECISION EVALUATION · COST QUALITY FRONTIER",
+          "Routing improves when quality, cost, and latency are judged together"
+        ],
+        "minimumTextRuns": 22,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:a9b437dfb5b783878e3d18b6134452273295333b62abaec4ce2defe952d71474",
+          "shapeXmlDigest": "sha256:5ec303e802fa16bde3a40905894ddcd986bc0e7fb97cb44cf7436786fb598d6d",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:12c95d15392ead1ff6a936cbd7862fe4d2b9924bf82bdd4249567deacd35d016",
+          "contentDigest": "sha256:26dad92e639767342130adeb91dd9c834122af235809eb0100edbcb9972d1992"
+        },
+        "sourceBinding": {
+          "slide": 35,
+          "semanticDigest": "sha256:12c95d15392ead1ff6a936cbd7862fe4d2b9924bf82bdd4249567deacd35d016"
+        }
+      },
+      {
+        "slide": 36,
+        "requiredText": [
+          "DECISION EVALUATION · MODEL COMPARE",
+          "Different models fail differently under the same contract"
+        ],
+        "minimumTextRuns": 45,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:22cd84fd6660685130354f8df01fa064d54b5aa0c5d05a13d887a6b14c34b9a4",
+          "shapeXmlDigest": "sha256:771653713a1361b0632264104ad6562a2e0dc7b74dfd8dc170a5cc4aceaf0443",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:dc69c0e6ec5e4b7204b7952613950ef0f772644fb11f3355caf7ecaf88180ff7",
+          "contentDigest": "sha256:5cbe261ffeb45cf5ec2c21f8838484087d765a3aac6d0c25e858dc1e337bd428"
+        },
+        "sourceBinding": {
+          "slide": 36,
+          "semanticDigest": "sha256:dc69c0e6ec5e4b7204b7952613950ef0f772644fb11f3355caf7ecaf88180ff7"
+        }
+      },
+      {
+        "slide": 37,
+        "requiredText": [
+          "DECISION EVALUATION · HARNESS COMPARE",
+          "V2 expands the harness without crediting the model"
+        ],
+        "minimumTextRuns": 18,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:aaa71dd49516d0eee13915b96a45f1043e0e1a1579c859b7a5df25d3d712f22b",
+          "shapeXmlDigest": "sha256:b0bdcb94cac80faccb2e0dfee36170d0b492f31a46ab6d6dec4c098451aac827",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:b668188045990ef927c84a437d6e2747a0e18bfd52792dea902e80d953b8f699",
+          "contentDigest": "sha256:5d6b5946c8280049b78b80bc4858999c1d4455ead7156a50cc032a507ef5593b"
+        },
+        "sourceBinding": {
+          "slide": 37,
+          "semanticDigest": "sha256:b668188045990ef927c84a437d6e2747a0e18bfd52792dea902e80d953b8f699"
+        }
+      },
+      {
+        "slide": 38,
+        "requiredText": [
+          "DECISION EVALUATION · FINAL RECOMMENDATION",
+          "Reuse the visual vocabulary, then adapt the communication contract"
+        ],
+        "minimumTextRuns": 12,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:814037c28ae14eaaf7f373552c4bda483bf043bb16a2f57046659bbbe6903fae",
+          "shapeXmlDigest": "sha256:89aeb9c1c88fef394f255a404258ba776f978b1fc652ccac5f378b75316441ac",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:e0840c7f43cc497a50e253c0845b84fa6aef2bebca98d318a6d12247798dd622",
+          "contentDigest": "sha256:70ca221830fafa9862aeb7d8865538eb8c10e60a8add053b78ba28cb17c72fcc"
+        },
+        "sourceBinding": {
+          "slide": 38,
+          "semanticDigest": "sha256:e0840c7f43cc497a50e253c0845b84fa6aef2bebca98d318a6d12247798dd622"
+        }
+      },
+      {
+        "slide": 39,
+        "requiredText": [
+          "SYSTEMS / PRODUCTION ARTIFACT SPEC",
+          "A typed compiler boundary catches semantic drift before export"
+        ],
+        "minimumTextRuns": 14,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:3b3f1d01047308ff7b72ddaa883fff075546fdb2b9cd7c256b9295f3623f2eba",
+          "shapeXmlDigest": "sha256:8007218a4aaa936a8852eb2a80eb1b104cc741face785ec1221edf471755af47",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:eb4177041ecd250256d9839fcf3720572d02931075671cd6addfb8b1c95ae6c2",
+          "contentDigest": "sha256:4c5b1a20455c34e9c7cfaf3bd9afb141e0be18d4fe5e3782b4252d5fbddaa436"
+        }
+      },
+      {
+        "slide": 40,
+        "requiredText": [
+          "SYSTEMS / PORTABLE NODEGYM",
+          "NodeGym isolates model, harness, evidence, and promotion decisions"
+        ],
+        "minimumTextRuns": 20,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:6594b2168e5daa12b1b80be3103437dd96bfd185f8bec858f055423b21ae9124",
+          "shapeXmlDigest": "sha256:2c213c21d5c2a29bb61238dcf2c119e57fe9be592e729e657021eef313164292",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:85ab09cfd7ec7d0c41b2aa5fec7fb1772adfe528f2010a1a5dfa40fd84219771",
+          "contentDigest": "sha256:a27bf463aa992e3cf7bef4ea35f199e9be47707adb2e577e7bc4e8200a768fd7"
+        }
+      },
+      {
+        "slide": 41,
+        "requiredText": [
+          "DECISION EVALUATION / MODEL + FREE ROUTE EVIDENCE",
+          "files captured; semantic gate failed",
+          "0/2 semantic"
+        ],
+        "minimumTextRuns": 45,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:dcba8eead56887211736f74c229e5032a5d9c39ee867ade87a0ae2f789dc68af",
+          "shapeXmlDigest": "sha256:0f26dd95270f6d8e14f5d3acf27a779dfaacb2965965404c7042a706698fd6c4",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:85293db7116d7d21250652e8394b4281cfe8e2d60090cac4e3d451e49557a019",
+          "contentDigest": "sha256:df54e9d8c7df8c441f71e603b79808d644492e7a7b62b9c712466b07a65e7c57"
+        }
+      },
+      {
+        "slide": 42,
+        "requiredText": [
+          "DECISION EVALUATION / SAME TASK, THREE MODELS",
+          "CLAUDE SONNET 5",
+          "KIMI K3",
+          "GEMMA 4 26B FREE"
+        ],
+        "minimumTextRuns": 15,
+        "imageRelationships": 3,
+        "contentProof": {
+          "textRunDigest": "sha256:230b8ea5a15685ae45a0bc171f4f393f899277e56d718d50c7c006abbe5f93ad",
+          "shapeXmlDigest": "sha256:357d73ee8fdb75cc12b9e806a924e300a849dee5ffe005de6e86cc1f48dc91b4",
+          "pictureXmlDigest": "sha256:2c176bc125a534edef533e9e641bebfcfbc31b8c1fc72dc55efb0dca8a9cacd1",
+          "imagePayloadDigest": "sha256:132b92bd27114ff6d35b2f3031a1645537d1e80e36bc7ed2119a95b2c4874144",
+          "semanticDigest": "sha256:17307a5ff7ed24f9834a770726a8f870e1012b853733cddfc561bef2e454e96d",
+          "contentDigest": "sha256:e0c717676f71fbf04eabc8b99ba8aec1e07880bbdbe2508046a319b8fb0c32c9"
+        }
+      },
+      {
+        "slide": 43,
+        "requiredText": [
+          "EVIDENCE TECHNICAL PROOF / RELEASE RECEIPT",
+          "Production journey",
+          "Fleet availability",
+          "Atlas + UI renders",
+          "PASSED",
+          "PENDING",
+          "HOLD",
+          "NOT AUTHORIZED",
+          "ATLAS_V3_PROVENANCE_V1"
+        ],
+        "minimumTextRuns": 33,
+        "imageRelationships": 0,
+        "contentProof": {
+          "textRunDigest": "sha256:e00dca5ed8290629e46f2b2d23e73e5bf0b68b54a390850d8196af259ae875ef",
+          "shapeXmlDigest": "sha256:99c9bd0947ac2ab85e12efe4d77016cf0ae181810c1356963b2e58f173ea1cff",
+          "pictureXmlDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "imagePayloadDigest": "sha256:4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "semanticDigest": "sha256:27d896d35e9636a87a37cdd789a1d8e53ecd29e366e4756670bc87fd38b0473a",
+          "contentDigest": "sha256:4232678e6226f104a35bd73980b744735ed45ae760d460f0d1a58dbfedd664cb"
+        }
+      }
+    ]
+  },
+  "slide42AssetBinding": {
+    "slide": 42,
+    "assetIds": [
+      "claude-sonnet-5",
+      "kimi-k3",
+      "gemma-4-26b-free"
+    ],
+    "relationshipType": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
+  },
+  "receiptBinding": {
+    "slide": 43,
+    "marker": "ATLAS_V3_PROVENANCE_V1",
+    "bind": [
+      "candidateDigest",
+      "buildRecipeDigest",
+      "assetSetDigest",
+      "sourceAtlasDigest",
+      "releaseGateDigest",
+      "generator",
+      "composition"
+    ]
+  },
+  "truthCorrections": {
+    "slide41": "GPT-OSS files captured; semantic gate failed (0/2).",
+    "slide43": {
+      "repositoryGates": "passed",
+      "typedSpecCompiler": "passed",
+      "portabilityPackage": "passed",
+      "productionJourney": "pending",
+      "fleetAvailability": "pending",
+      "atlasUiRenders": "passed",
+      "blindPreference": "pending",
+      "routingPromotion": "hold",
+      "fineTuningRun": "not_authorized"
+    }
+  },
+  "modelEvidenceSetDigest": "sha256:8888eeef69626b377e4ae39b0df623799d5ea00ed07b5e78780973b93a7eb222"
+}

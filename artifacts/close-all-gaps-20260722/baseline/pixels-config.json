@@ -1,0 +1,34 @@
+{
+  "repo": ".",
+  "url": "https://nodeslide.vercel.app/",
+  "outDir": "artifacts/close-all-gaps-20260722/baseline/pixels",
+  "assert": ["NodeSlide", "What presentation should we build?"],
+  "shots": [
+    {
+      "name": "landing-desktop-light",
+      "scheme": "light",
+      "viewport": { "width": 1512, "height": 982 },
+      "fullPage": true
+    },
+    {
+      "name": "landing-desktop-dark",
+      "scheme": "dark",
+      "viewport": { "width": 1512, "height": 982 },
+      "fullPage": true
+    },
+    {
+      "name": "landing-mobile-light",
+      "scheme": "light",
+      "viewport": { "width": 390, "height": 844 },
+      "fullPage": true,
+      "reducedMotion": true
+    },
+    {
+      "name": "landing-mobile-dark",
+      "scheme": "dark",
+      "viewport": { "width": 390, "height": 844 },
+      "fullPage": true,
+      "reducedMotion": true
+    }
+  ]
+}

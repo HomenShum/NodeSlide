@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "nodekit.gym-run-receipt/v2",
+  "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+  "comparisonKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::1::8000:300000:200000:2",
+  "harnessPairingKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::nodeslide/deterministic-compiler::1::8000:300000:200000:2",
+  "pairingKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::nodeslide/deterministic-compiler::1::8000:300000:200000:2",
+  "repetition": 1,
+  "planDigest": "sha256:36c3ca132ea1eb116947177d03e55d87907ab303f1c9e33986ef0c65be373a19",
+  "executorResultDigest": "sha256:cfa63131cc5d1c6878a5e040e9022e767dd65a919385b57108bdf01db18f6bc2",
+  "semanticEvaluationDigest": "sha256:3234785ab439ea81777a97dd11944c331cb360ece779244921d7e09efdc58cbd",
+  "status": "passed",
+  "returnedModel": "nodeslide/deterministic-compiler",
+  "actualRoute": {
+    "requestedProvider": "local",
+    "requestedRoute": "nodeslide/deterministic-compiler",
+    "actualProvider": "local",
+    "actualModel": "nodeslide/deterministic-compiler",
+    "attributionId": "control-public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+    "attributionIdKind": "nodeslide-trace"
+  },
+  "routeMode": "deterministic",
+  "automatedHardGatesPassed": true,
+  "promotionEligible": false,
+  "humanPreference": {
+    "status": "not_run"
+  },
+  "issueCodes": [],
+  "usage": {
+    "latencyMs": 1343,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0
+  },
+  "artifacts": {
+    "browser": {
+      "path": "control-browser.png",
+      "digest": "sha256:9bf489ba3aebe1ca1d4c01ade09b12f6bb869eac5e5d35c06dead43182743f51",
+      "bytes": 70818,
+      "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848",
+      "validation": {
+        "status": "passed"
+      },
+      "slideCount": 1
+    },
+    "pptx": {
+      "path": "control-deck.pptx",
+      "digest": "sha256:b28a343e4c00246fc43519e7818df61985fd29c1e35843b44421cc9900859450",
+      "bytes": 50301,
+      "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848",
+      "validation": {
+        "status": "passed"
+      },
+      "slideCount": 1
+    },
+    "pdf": {
+      "path": "control-deck.pdf",
+      "digest": "sha256:129e675bc9fb246ea533ac6dafe7fda8713c9b8584b6b479d9133f575d6db881",
+      "bytes": 45943,
+      "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848",
+      "validation": {
+        "status": "passed"
+      },
+      "pageCount": 1,
+      "fidelity": "deterministic-browser-identical-content"
+    },
+    "montage": {
+      "path": "control-montage.png",
+      "digest": "sha256:9bf489ba3aebe1ca1d4c01ade09b12f6bb869eac5e5d35c06dead43182743f51",
+      "bytes": 70818,
+      "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848",
+      "validation": {
+        "status": "passed"
+      },
+      "slideCount": 1
+    },
+    "slides": [
+      {
+        "path": "control-slide-1.png",
+        "digest": "sha256:9bf489ba3aebe1ca1d4c01ade09b12f6bb869eac5e5d35c06dead43182743f51",
+        "bytes": 70818,
+        "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848",
+        "validation": {
+          "status": "passed"
+        },
+        "slideIndex": 1,
+        "specDigest": "sha256:84990b5f7500f2e8caf7b882b85599981894f4f46843ef626434ab65c91cbac9"
+      }
+    ],
+    "sourceLineage": [
+      {
+        "claimId": "equation-claim",
+        "sourceId": "public-equation-source",
+        "slideIndex": 1,
+        "specDigest": "sha256:84990b5f7500f2e8caf7b882b85599981894f4f46843ef626434ab65c91cbac9",
+        "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848"
+      }
+    ]
+  },
+  "executor": "deterministic",
+  "attempt": 1,
+  "recordedAt": "2026-07-22T10:25:15.729Z"
+}

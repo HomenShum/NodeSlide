@@ -48,6 +48,8 @@ export interface NodeSlideCreationQualityReport {
   archetypes: string[];
   /** Deck-level visual grammar defects that geometry-only validation cannot see. */
   visualRhythmIssues: NodeSlideCreationQualityIssue[];
+  /** True when typed artifact or materialization validation blocked snapshot construction. */
+  materializationFailed: boolean;
 }
 
 export interface NodeSlideCreationCritiqueInput {
@@ -120,12 +122,21 @@ export function injectNodeSlideSyntheticCreationFault(input: {
   const requestedChart = readRequestedChart(input.brief);
   const requiredCharts: NodeSlidePlannedChart[] = [];
   const faultedSlides = slides.map((slide) => {
-    if (!isCreationSpecRecord(slide) || !Object.hasOwn(slide, 'chart')) return slide;
-    const providerChart = readRequiredChart(slide['chart']);
+    if (!isCreationSpecRecord(slide)) return slide;
+    const authoredArtifact = isCreationSpecRecord(slide['artifactSpec'])
+      ? slide['artifactSpec']
+      : null;
+    const authoredChart =
+      authoredArtifact?.['kind'] === 'chart' ? authoredArtifact['payload'] : undefined;
+    if (!Object.hasOwn(slide, 'chart') && authoredChart === undefined) return slide;
+    const providerChart = readRequiredChart(slide['chart'] ?? authoredChart);
     if (!providerChart) return slide;
     if (requestedChart && !chartsSemanticallyMatch(providerChart, requestedChart)) return slide;
     requiredCharts.push(requestedChart ?? providerChart);
-    const { chart: _removedChart, ...slideWithoutChart } = slide;
+    const { chart: _removedChart, artifactSpec: _artifactSpec, ...slideWithoutChart } = slide;
+    if (authoredChart === undefined && _artifactSpec !== undefined) {
+      slideWithoutChart['artifactSpec'] = _artifactSpec;
+    }
     // The deterministic materializer supplies a chart for a primitive-empty
     // evidence slot. Keep this intentionally broken pass chartless by placing
     // an explicitly labeled synthetic image primitive in an otherwise empty
@@ -166,16 +177,32 @@ export function injectNodeSlideSyntheticCreationFault(input: {
 export function collectNodeSlideCreationQualityReport(
   input: NodeSlideCreationCritiqueInput,
 ): NodeSlideCreationQualityReport {
-  const built = buildBriefNodeSlide({
-    deckId: 'deck_critique_preview',
-    projectId: 'project_critique_preview',
-    title: input.title,
-    brief: input.brief,
-    themeId: input.themeId,
-    rawSpec: input.rawSpec,
-    ...(input.attachments ? { attachments: input.attachments } : {}),
-    now: input.now,
-  });
+  let built: ReturnType<typeof buildBriefNodeSlide>;
+  try {
+    built = buildBriefNodeSlide({
+      deckId: 'deck_critique_preview',
+      projectId: 'project_critique_preview',
+      title: input.title,
+      brief: input.brief,
+      themeId: input.themeId,
+      rawSpec: input.rawSpec,
+      ...(input.attachments ? { attachments: input.attachments } : {}),
+      now: input.now,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Artifact materialization failed.';
+    const issueCode = message.match(/\[([a-z0-9_]+)\]/u)?.[1] ?? 'artifact_spec';
+    return {
+      issueCount: 1,
+      validationIssues: [{ severity: 'error', code: issueCode, message: message.slice(0, 220) }],
+      compressedSlides: [],
+      missingPrimitives: [],
+      missingRequiredCharts: [],
+      archetypes: [],
+      visualRhythmIssues: [],
+      materializationFailed: true,
+    };
+  }
   const validation = validateNodeSlideSnapshot(built.snapshot, input.now);
   const validationIssues: NodeSlideCreationQualityIssue[] = validation.issues
     .filter(
@@ -239,6 +266,7 @@ export function collectNodeSlideCreationQualityReport(
     missingRequiredCharts,
     archetypes,
     visualRhythmIssues,
+    materializationFailed: false,
   };
 }
 
@@ -246,9 +274,21 @@ function collectPrimaryVisualConflicts(rawSpec: unknown): NodeSlideCreationQuali
   if (!isCreationSpecRecord(rawSpec) || !Array.isArray(rawSpec.slides)) return [];
   return rawSpec.slides.flatMap((slide, index) => {
     if (!isCreationSpecRecord(slide)) return [];
-    const primaryKeys = ['chart', 'diagram', 'formula', 'math', 'image', 'video'].filter((key) =>
-      Object.hasOwn(slide, key),
+    const primaryKeys = ['metric', 'chart', 'diagram', 'formula', 'math', 'image', 'video'].filter(
+      (key) => Object.hasOwn(slide, key),
     );
+    const authoredArtifact = isCreationSpecRecord(slide['artifactSpec'])
+      ? slide['artifactSpec']
+      : null;
+    if (typeof authoredArtifact?.['kind'] === 'string') {
+      const authoredKind =
+        authoredArtifact['kind'] === 'graph'
+          ? 'diagram'
+          : authoredArtifact['kind'] === 'equation'
+            ? 'formula'
+            : authoredArtifact['kind'];
+      primaryKeys.push(String(authoredKind));
+    }
     // formula/math are aliases for the same primitive.
     const primaryKinds = new Set(primaryKeys.map((key) => (key === 'math' ? 'formula' : key)));
     if (primaryKinds.size <= 1) return [];
@@ -334,6 +374,7 @@ export function nodeSlideCreationCritiquePromptReport(
     missingPrimitives: report.missingPrimitives,
     missingRequiredCharts: report.missingRequiredCharts,
     visualRhythmIssues: report.visualRhythmIssues,
+    materializationFailed: report.materializationFailed,
   }).slice(0, MAX_REPORT_PROMPT_BYTES);
 }
 
@@ -567,7 +608,7 @@ export async function runNodeSlideCreationCritique(
     ...reportInput,
     rawSpec: revision.value,
   });
-  if (secondReport.issueCount < firstReport.issueCount) {
+  if (creationReportScore(secondReport) < creationReportScore(firstReport)) {
     return {
       spec: revision.value,
       passes: 2,
@@ -587,4 +628,8 @@ export async function runNodeSlideCreationCritique(
     chosenReport: firstReport,
     revision,
   };
+}
+
+function creationReportScore(report: NodeSlideCreationQualityReport): number {
+  return (report.materializationFailed ? 1_000 : 0) + report.issueCount;
 }

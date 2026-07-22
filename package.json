@@ -27,6 +27,8 @@
     "deck-gym:evaluate": "node scripts/deck-gym.mjs evaluate",
     "deck-gym:tournament": "node scripts/deck-gym.mjs tournament",
     "deck-gym:model-ledger": "node scripts/build-model-capability-ledger.mjs",
+    "node-gym:validate": "node scripts/node-gym.mjs validate",
+    "node-gym:matrix": "node scripts/node-gym.mjs matrix",
     "artifact-atlas:validate": "node scripts/artifact-atlas.mjs validate",
     "artifact-atlas:matrix": "node scripts/artifact-atlas.mjs matrix",
     "artifact-atlas:gallery": "node scripts/artifact-atlas.mjs gallery",

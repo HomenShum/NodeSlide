@@ -1,3 +1,5 @@
+import { artifactSpecEnvelope } from './artifact-spec-core.mjs';
+
 export const ATLAS_V2_VERSION = 'artifact-atlas-v2';
 
 export const ATLAS_V2_THEMES = {
@@ -97,7 +99,7 @@ const rows = [
     'section-opener',
     'section',
     'A museum needs chapters, not a wall of thumbnails',
-    'Six chapters organize artifacts by the job they perform for an audience.',
+    'Seven chapters organize artifacts by the job they perform for an audience.',
     'product-launch-cinematic',
   ],
   [
@@ -304,7 +306,7 @@ const rows = [
     'interaction-clip',
     'interaction',
     'One bounded interaction carries the story from selection to receipt',
-    'Five real product states form a playable web sequence and a stepped PowerPoint fallback.',
+    'Three captured product states anchor a five-step workflow and its PowerPoint fallback.',
     'technical-dark',
   ],
   [
@@ -348,8 +350,8 @@ const rows = [
     'evidence-technical-proof',
     'code-runtime-proof',
     'code',
-    'The contract matters more when runtime evidence sits beside it',
-    'Editable code context and measured adapter latency reinforce each other.',
+    'Runtime claims require a reproducible benchmark receipt',
+    'Editable code context stays separate from latency until samples and environment are bound.',
     'technical-dark',
   ],
   [
@@ -357,8 +359,8 @@ const rows = [
     'evidence-technical-proof',
     'otel-trace',
     'trace',
-    'A trace shows where orchestration time and repair actually went',
-    'Nested spans expose planning, tools, validation, repair, and export.',
+    'Trace anatomy is illustrative until trace and span IDs are bound',
+    'Nested spans explain the required structure without claiming observed timing.',
     'technical-dark',
   ],
   [
@@ -428,7 +430,7 @@ const rows = [
 
 const interactiveFamilies = new Set(['scrolly', 'chart-states', 'interaction', 'spatial']);
 
-export const ATLAS_V2_ARTIFACTS = rows.map(
+const ATLAS_V2_BASE_ARTIFACTS = rows.map(
   ([number, chapter, id, family, title, takeaway, theme], index) => ({
     number,
     chapter,
@@ -448,10 +450,10 @@ export const ATLAS_V2_ARTIFACTS = rows.map(
       recipeId: `nodeslide.recipe.${id}.v2`,
       artifactType: id,
       narrativeJobs: [takeaway],
-      requiredInputs: ['audience', 'bounded claim', 'source receipt'],
+      requiredInputs: requiredInputsFor(family),
       supportedTools: toolsFor(family),
       referenceIds: [`atlas-v2-${family}`, `chapter-${chapter}`],
-      designRules: designRulesFor(family),
+      designRules: designRulesFor(family, id),
       exportCapabilities: ['browser', 'pptx', 'pdf'],
     },
     behavior: {
@@ -472,6 +474,11 @@ export const ATLAS_V2_ARTIFACTS = rows.map(
     },
   }),
 );
+
+export const ATLAS_V2_ARTIFACTS = ATLAS_V2_BASE_ARTIFACTS.map((artifact) => ({
+  ...artifact,
+  artifactSpec: artifactSpecEnvelope(artifact, specKindFor(artifact), specPayloadFor(artifact)),
+}));
 
 export const ATLAS_V2_SHOWCASE_IDS = [
   'hero-thesis',
@@ -615,7 +622,25 @@ function toolsFor(family) {
   return tools;
 }
 
-function designRulesFor(family) {
+function requiredInputsFor(family) {
+  const inputs = ['audience', 'bounded claim', 'source receipt'];
+  if (
+    ['line', 'uncertainty', 'waterfall', 'scatter', 'frontier', 'dashboard', 'table'].includes(
+      family,
+    )
+  )
+    inputs.push('typed data', 'unit', 'scale policy');
+  if (['architecture', 'sequence', 'causal', 'sankey', 'decision-tree', 'lineage'].includes(family))
+    inputs.push('typed nodes', 'typed edges', 'reading direction');
+  if (['screenshot', 'interaction', 'product-compare', 'pdf'].includes(family))
+    inputs.push('immutable media digest', 'capture version', 'claim region');
+  if (['scrolly', 'chart-states', 'interaction', 'spatial'].includes(family))
+    inputs.push('named states', 'transition policy', 'static fallback state');
+  if (family === 'equation') inputs.push('expression AST', 'symbol values', 'rounding policy');
+  return inputs;
+}
+
+function designRulesFor(family, id) {
   const rules = ['one primary claim', 'visible source', 'editable PowerPoint semantics'];
   if (['dashboard', 'table'].includes(family))
     rules.push('controlled density', 'exception-first hierarchy');
@@ -623,5 +648,283 @@ function designRulesFor(family) {
     rules.push('visible static fallback', 'reduced-motion final state');
   if (['screenshot', 'product-compare'].includes(family))
     rules.push('real capture only', 'callouts must bind to visible controls');
+  if (family === 'uncertainty')
+    rules.push('axis labels and units', 'distinguish observed from modeled');
+  if (family === 'waterfall') rules.push('deltas reconcile to final', 'labels bind to bars');
+  if (family === 'causal')
+    rules.push('directed edges', 'edge polarity is plus or minus', 'loops are R or B');
+  if (family === 'sankey')
+    rules.push('band width encodes quantity', 'flow conserves at intermediate nodes');
+  if (family === 'gantt') rules.push('visible dependencies', 'confidence is encoded');
+  if (family === 'equation')
+    rules.push('calculation evaluates the expression AST', 'symbols map to evidence');
+  if (['frontier', 'model-compare', 'harness-compare'].includes(family))
+    rules.push('observed and pilot cohorts stay separate', 'missing metrics remain missing');
+  if (id === 'pdf-evidence-region')
+    rules.push('source MIME must be application/pdf', 'page and region are digest-bound');
   return rules;
+}
+
+function specKindFor(artifact) {
+  if (artifact.family === 'waterfall') return 'waterfall';
+  if (artifact.family === 'sankey') return 'sankey';
+  if (artifact.family === 'causal') return 'causal-loop';
+  if (['architecture', 'sequence', 'decision-tree', 'lineage'].includes(artifact.family))
+    return 'graph';
+  if (artifact.family === 'timeline') return 'timeline';
+  if (artifact.family === 'gantt') return 'gantt';
+  if (['screenshot', 'product-compare', 'pdf'].includes(artifact.family)) return 'evidence-media';
+  if (['scrolly', 'chart-states', 'interaction'].includes(artifact.family)) return 'motion';
+  if (artifact.family === 'spatial') return 'spatial-scene';
+  if (['scatter', 'frontier', 'model-compare', 'harness-compare'].includes(artifact.family))
+    return 'comparison';
+  if (artifact.family === 'equation') return 'equation';
+  if (artifact.family === 'code') return 'runtime-proof';
+  if (artifact.family === 'trace') return 'trace';
+  if (artifact.family === 'risk') return 'risk-matrix';
+  if (['line', 'uncertainty', 'kpi', 'table', 'dashboard'].includes(artifact.family))
+    return 'chart';
+  return 'generic';
+}
+
+function specPayloadFor(artifact) {
+  if (artifact.family === 'uncertainty')
+    return {
+      unit: 'quality points',
+      xAxis: { labels: ['Q1 observed', 'Q2 observed', 'Q3 modeled', 'Q4 modeled', 'Q5 modeled'] },
+      yAxis: { min: 8, max: 14 },
+      series: [
+        { id: 'low', values: [9.0, 9.4, 9.6, 9.2, 9.0], status: 'modeled-bound' },
+        { id: 'base', values: [9.0, 9.4, 10.2, 10.8, 11.4], status: 'observed-then-modeled' },
+        { id: 'high', values: [9.0, 9.4, 10.8, 12.0, 13.8], status: 'modeled-bound' },
+      ],
+    };
+  if (artifact.family === 'waterfall')
+    return {
+      unit: 'quality points',
+      baseline: 62,
+      deltas: [
+        { label: 'Plan', value: 8 },
+        { label: 'Tools', value: 7 },
+        { label: 'Repair', value: 5 },
+        { label: 'Deck CI', value: 4 },
+      ],
+      final: 86,
+      tolerance: 0,
+    };
+  if (artifact.family === 'sankey')
+    return {
+      unit: 'evidence units',
+      tolerance: 0,
+      nodes: [
+        { id: 'source-a', label: 'Source A', layer: 'source' },
+        { id: 'source-b', label: 'Source B', layer: 'source' },
+        { id: 'source-c', label: 'Source C', layer: 'source' },
+        { id: 'claims', label: 'Claims', layer: 'middle' },
+        { id: 'rejections', label: 'Rejections', layer: 'middle' },
+        { id: 'charts', label: 'Charts', layer: 'sink' },
+        { id: 'diagrams', label: 'Diagrams', layer: 'sink' },
+        { id: 'proof', label: 'Proof', layer: 'sink' },
+      ],
+      links: [
+        { source: 'source-a', target: 'claims', value: 26 },
+        { source: 'source-b', target: 'claims', value: 38 },
+        { source: 'source-c', target: 'claims', value: 22 },
+        { source: 'source-c', target: 'rejections', value: 12 },
+        { source: 'source-a', target: 'rejections', value: 10 },
+        { source: 'claims', target: 'charts', value: 26 },
+        { source: 'claims', target: 'diagrams', value: 38 },
+        { source: 'claims', target: 'proof', value: 22 },
+        { source: 'rejections', target: 'diagrams', value: 10 },
+        { source: 'rejections', target: 'proof', value: 12 },
+      ],
+    };
+  if (artifact.family === 'causal')
+    return {
+      nodes: ['receipt', 'trust', 'reuse', 'signal', 'complexity'].map((id) => ({ id })),
+      edges: [
+        { id: 'e1', from: 'receipt', to: 'trust', directed: true, polarity: '+' },
+        { id: 'e2', from: 'trust', to: 'reuse', directed: true, polarity: '+' },
+        { id: 'e3', from: 'reuse', to: 'signal', directed: true, polarity: '+' },
+        { id: 'e4', from: 'signal', to: 'receipt', directed: true, polarity: '+' },
+        { id: 'e5', from: 'reuse', to: 'complexity', directed: true, polarity: '+' },
+        { id: 'e6', from: 'complexity', to: 'trust', directed: true, polarity: '-' },
+      ],
+      loops: [
+        { id: 'R1', type: 'reinforcing', edgeIds: ['e1', 'e2', 'e3', 'e4'] },
+        { id: 'B1', type: 'balancing', edgeIds: ['e2', 'e5', 'e6'] },
+      ],
+    };
+  if (artifact.family === 'gantt')
+    return {
+      unit: 'week',
+      tasks: [
+        { id: 'media', start: 1, end: 2, confidence: 0.95, dependsOn: [] },
+        { id: 'data', start: 2, end: 3, confidence: 0.9, dependsOn: [] },
+        { id: 'motion', start: 3, end: 5, confidence: 0.72, dependsOn: ['media', 'data'] },
+        { id: 'domains', start: 3, end: 5, confidence: 0.88, dependsOn: ['data'] },
+        { id: 'review', start: 6, end: 6, confidence: 0.6, dependsOn: ['motion', 'domains'] },
+      ],
+    };
+  if (artifact.family === 'equation') {
+    const expression = {
+      op: 'divide',
+      args: [
+        { op: 'value', name: 'Q' },
+        {
+          op: 'add',
+          args: [
+            { op: 'value', name: 'one' },
+            {
+              op: 'multiply',
+              args: [
+                { op: 'value', name: 'alpha' },
+                { op: 'value', name: 'C' },
+              ],
+            },
+            {
+              op: 'multiply',
+              args: [
+                { op: 'value', name: 'beta' },
+                { op: 'value', name: 'L' },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+    return {
+      expression,
+      values: { Q: 0.75, one: 1, alpha: 0.4, C: 0.038, beta: 0.1, L: 1.04 },
+      result: 0.6701,
+      tolerance: 0.0001,
+      rounding: 3,
+    };
+  }
+  if (artifact.family === 'pdf')
+    return {
+      mimeType: 'application/pdf',
+      digest: 'sha256:78473e2c158b02b34bac658288d893644307a63e96a83f736e8d12146265709c',
+      claimId: `${artifact.id}:claim:1`,
+      page: 1,
+      region: { x: 0.08, y: 0.42, width: 0.84, height: 0.18 },
+      captureVersion: 'artifact-atlas-v2',
+    };
+  if (artifact.family === 'screenshot')
+    return {
+      mimeType: 'image/png',
+      digest: 'nodeslide-artifact-lab-v1-gallery-capture',
+      claimId: `${artifact.id}:claim:1`,
+      captureVersion: 'artifact-atlas-v1',
+      callouts: 3,
+    };
+  if (artifact.family === 'code')
+    return { sampleSize: 0, unit: 'ms', receiptDigest: '', status: 'illustrative-not-measured' };
+  if (artifact.family === 'trace')
+    return { traceId: 'illustrative', spans: [], status: 'illustrative-not-observed' };
+  if (artifact.family === 'risk')
+    return {
+      likelihoodAxis: { low: 'rare', high: 'likely' },
+      impactAxis: { low: 'minor', high: 'critical' },
+      risks: [
+        { id: 'pipeline', likelihood: 4, impact: 5 },
+        { id: 'capacity', likelihood: 3, impact: 4 },
+        { id: 'retention', likelihood: 2, impact: 5 },
+      ],
+    };
+  if (artifact.family === 'spatial')
+    return {
+      viewports: [
+        { id: 'whole', level: 1 },
+        { id: 'subsystem', level: 2 },
+        { id: 'node', level: 3, selectedNodeId: 'validator' },
+        {
+          id: 'source',
+          level: 4,
+          selectedNodeId: 'validator',
+          sourceIds: artifact.evidence.map((source) => source.sourceId),
+        },
+      ],
+    };
+  if (['scrolly', 'chart-states', 'interaction'].includes(artifact.family))
+    return {
+      states: Array.from({ length: artifact.family === 'interaction' ? 3 : 5 }, (_, index) => ({
+        id: `state-${index + 1}`,
+      })),
+      transition: artifact.family === 'scrolly' ? 'scrub' : 'step',
+      staticFallbackStateId: artifact.family === 'interaction' ? 'state-3' : 'state-5',
+    };
+  if (['frontier', 'model-compare', 'harness-compare', 'scatter'].includes(artifact.family))
+    return comparisonPayload(artifact.family);
+  if (artifact.family === 'timeline')
+    return {
+      unit: 'day',
+      events: [1, 3, 6, 9, 11].map((day, index) => ({
+        id: `event-${index + 1}`,
+        start: day,
+        end: day,
+      })),
+    };
+  if (['architecture', 'sequence', 'decision-tree', 'lineage'].includes(artifact.family))
+    return {
+      directed: true,
+      nodes: [{ id: 'source' }, { id: 'output' }],
+      edges: [{ id: 'edge-1', from: 'source', to: 'output', directed: true }],
+    };
+  if (['line', 'kpi', 'table', 'dashboard'].includes(artifact.family))
+    return {
+      unit: 'score',
+      xAxis: { labels: ['A', 'B'] },
+      yAxis: { min: 0, max: 100 },
+      series: [{ id: 'series-1', values: [62, 86] }],
+    };
+  if (artifact.family === 'product-compare')
+    return {
+      mimeType: 'image/png',
+      digest: 'nodeslide-product-before-after',
+      claimId: `${artifact.id}:claim:1`,
+      captureVersion: 'artifact-atlas-v2',
+    };
+  return { label: artifact.title };
+}
+
+function comparisonPayload(family) {
+  if (family === 'harness-compare')
+    return {
+      comparisonType: 'coverage-only',
+      metrics: [{ id: 'artifactCoverage', unit: 'artifact count' }],
+      cohorts: [
+        { id: 'v1', status: 'observed', plotted: true, values: { artifactCoverage: 12 } },
+        { id: 'v2', status: 'observed', plotted: true, values: { artifactCoverage: 38 } },
+      ],
+    };
+  const metrics = [
+    { id: 'quality', unit: 'eligible fraction' },
+    { id: 'cost', unit: 'USD per candidate' },
+    { id: 'latency', unit: 'seconds' },
+  ];
+  const cohorts = [
+    {
+      id: 'claude',
+      status: 'observed',
+      plotted: true,
+      values: { quality: 1, cost: 0.00862, latency: 8.193 },
+    },
+    {
+      id: 'kimi',
+      status: 'observed',
+      plotted: true,
+      values: { quality: 23 / 24, cost: 0.001303, latency: 17.617 },
+    },
+    {
+      id: 'gemma',
+      status: 'observed',
+      plotted: true,
+      values: { quality: 23 / 24, cost: 0, latency: 17.271 },
+    },
+    { id: 'nemotron', status: 'pilot', plotted: false, values: {} },
+    { id: 'gpt-oss', status: 'pilot', plotted: false, values: {} },
+    { id: 'ensemble', status: 'not-run', plotted: false, values: {} },
+  ];
+  return { comparisonType: 'observed-routes', metrics, cohorts };
 }

@@ -123,17 +123,28 @@ for the checklist's explicit camera/browser/human wording.
 
 ## Artifact Atlas / Arena V2 milestone
 
-The expansion plan is implemented as Artifact Atlas V2. The source is
+The expansion plan is implemented as Artifact Atlas V2. The 2026-07-21 semantic
+audit reopened release eligibility; the follow-up repaired every identified
+artifact defect, introduced typed specifications and semantic validators for all
+38 artifacts, and replaced screenshot-existence approval with a digest-bound
+inspection ledger. Treat V2 as a validated deterministic-builder museum, not yet
+as a live-model benchmark result or approved training corpus. The source is
 `benchmarks/artifact-atlas/v2/atlas.json`; the newest deliverable is
 `outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2.pptx`. It contains 38
 canonical recipes, a 14-slide public showcase, seven design languages, twelve
 controlled theme variants, six domain packs, four motion/fallback contracts,
 real product/media proof, advanced data/system artifacts, accessibility
 contracts, free-router/model ledgers, and a same-control harness comparison.
-Both PowerPoint files were independently rendered and passed `slides_test.py`.
-The V2 finalizer records the observed visual gate in all receipts; human
-preference remains pending. See `docs/ARTIFACT_ATLAS_ARENA.md` for exact outputs
-and commands.
+Both PowerPoint files were independently rendered, passed `slides_test.py`, and
+were inspected slide-by-slide at full size. Regression tests now cover the wrong
+equation, malformed diagram semantics, misbound labels, stale/mismatched evidence,
+dependency precedence, and observed-vs-pilot failures the render gate missed.
+Human preference remains pending, so public release approval remains false. Deck
+Gym V2 commits a validated 360-run paired plan, but the live provider campaign,
+production shadow proof, second-consumer install/upgrade proof, and full Convex
+generation-path integration remain future evidence work. The exact boundary is
+in `docs/ARTIFACT_SEMANTICS_MODEL_GYM_GOAL.md`; see
+`docs/ARTIFACT_ATLAS_ARENA.md` for outputs and commands.
 
 ## Artifact Atlas / Arena V1 history
 

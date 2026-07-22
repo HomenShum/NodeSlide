@@ -64,6 +64,53 @@ flowchart LR
 
 That structure buys what a static slide image cannot: direct editing without regeneration, data-bound charts and preserved math, element- and slide-scoped AI operations, deterministic validation and repair, reviewable diffs and versions, multiple render targets from one deck, and immutable public publishing while private notes stay private.
 
+## How the JSON-to-HTML architecture evolved
+
+NodeSlide did not begin with today's `DeckSnapshot`. The first source deck used
+a compact `sl0` JSON format: positional arrays, abbreviated style tokens, a
+fixed 1440 × 810 frame, and separate box/text/connector lists. That format was
+excellent for a deterministic compiler proof and poor as shared application
+state: array position carried meaning, pixel geometry was output-specific, and
+safe element-level collaboration required identity, provenance, scope, and
+version clocks that the render syntax did not own.
+
+The decisive architectural change was to stop treating the authoring/render
+format as the database:
+
+```mermaid
+flowchart LR
+  J0["sl0 JSON<br/>positional arrays · pixels"]
+  J1["DeckSnapshot<br/>typed records · normalized geometry · stable IDs"]
+  GOV["Governed changes<br/>PatchOperation[] · scope · CAS · review"]
+  MAT["Materializer<br/>model plan → typed elements"]
+  CHECK["Shared validation<br/>text fit · geometry · evidence · capabilities"]
+  HTML["Semantic HTML<br/>accessible DOM + SVG visual"]
+  PPTX["Editable PPTX<br/>honest fallbacks"]
+
+  J0 --> J1 --> GOV --> MAT --> CHECK
+  CHECK --> HTML
+  CHECK --> PPTX
+  GOV --> J1
+```
+
+Each generation closed a failure that the simpler representation could not:
+
+| Evolution | Challenge faced | Resolution retained |
+|---|---|---|
+| Compact JSON → canonical records | Positional tokens and pixels were hard to inspect, migrate, or patch safely. | Split canonical state into deck, slides, elements, and sources; add stable IDs, normalized geometry, explicit types/styles, target capabilities, and record versions. |
+| Canonical records → governed mutations | Direct JSON/DOM edits could bypass policy or overwrite concurrent work. | Compile human and agent changes into typed operations; validate scope and locks; use base versions, per-record clocks, CAS/rebase, review, and immutable versions. |
+| Text boxes → structured artifacts | Prose could claim a chart, process, formula, or screenshot without creating one. | Add typed chart, image, diagram, math, video, connector, source, and fallback contracts; verify the requested primitive exists in browser and PowerPoint. |
+| Fixed boxes → content-aware materialization | Valid JSON still produced collisions, overflow, and one repeated composition. | Measure text, reflow before persistence, share geometry checks, select archetypes from slide jobs, and review deck rhythm rather than trusting labels. |
+| Visual SVG → semantic HTML | A spatial SVG was not a useful reading order and citations/media could disappear. | Generate a parallel semantic DOM with headings, lists, chart tables, media/math descriptions, stable IDs, and bound sources; keep the visible SVG derived and decorative to assistive technology. |
+| Schema validation → render-aware repair | Types and bounds could not prove pixels, artifact presence, or improvement. | Render real candidates, retain issue/digest receipts, generate bounded typed repairs, preserve the base, and accept only strict improvement. |
+| Prompt-only generation → server-owned story/design context | Models ignored slide counts, invented evidence, or chose generic layouts. | Use bounded response schemas, StorySpec, proof obligations, material status, per-slide design plans, references, composition fan-out, and honest deterministic fallback. |
+| Successful render → semantic/evidence proof | Atlas V2 showed that overflow-clean slides can still contain wrong math, malformed diagrams, stale evidence, and unmeasured data plotted as observed. | Reopen eligibility; separate render, geometry, semantic, evidence, accessibility, cross-format, and human gates; move toward typed ArtifactSpecs and paired Model Gym evaluation. |
+
+The full chronology—including the predecessor `parity-studio` commits, original
+JSON examples, failures, resolutions, current module ownership, and the next
+typed-artifact evolution—is in
+[**From compact JSON to governed, semantic HTML**](docs/JSON_TO_HTML_EVOLUTION.md).
+
 ## The single mutation path
 
 Human edits and agent edits converge on **one** path. Nothing lands silently, and stale work can't overwrite newer state.
@@ -95,6 +142,7 @@ Capability honesty is the product, so it's the README too. As of 2026-07-20:
 
 ## Documentation
 
+- [**JSON-to-HTML evolution**](docs/JSON_TO_HTML_EVOLUTION.md) — the complete lineage from compact positional slide JSON to canonical records, governed patches, content-aware materialization, semantic HTML, render repair, and typed artifact specifications.
 - [**External-agent access**](docs/EXTERNAL_AGENT_ACCESS.md) - offline CLI and MCP file tools, host-backed MCP mode, proposal receipts, and tarball consumer proof.
 
 - [**Product Requirements (PRD)**](docs/PRD.md) — problem, user, workflow, why structured authoring wins, trust surface, launch requirements, metrics, wedge.

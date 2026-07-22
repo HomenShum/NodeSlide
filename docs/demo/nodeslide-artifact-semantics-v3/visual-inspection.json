@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "nodeslide.artifact-visual-inspection/v1",
+  "atlasPptxSha256": "3f8afac5ce771bc5e4a98256e59de0496bd9d3584ac498442b908a2d19c3bd78",
+  "status": "passed",
+  "inspector": {
+    "type": "codex-presentation-qa",
+    "id": "codex-root",
+    "attribution": "OpenAI Codex primary coding agent in the NodeSlide workspace"
+  },
+  "method": {
+    "renderer": "bundled artifact-tool presentation renderer",
+    "renderSize": "1600x900",
+    "scope": "Every one of the 38 Atlas slides and every one of the 14 public-showcase slides inspected individually at full size after overflow tests passed.",
+    "checks": [
+      "title and body clipping",
+      "unintended overlap",
+      "text wrapping and legibility",
+      "connector and arrow direction",
+      "chart scale, unit, and label binding",
+      "evidence-type honesty",
+      "observed, pilot, illustrative, pending, and not-run state labels",
+      "browser and PowerPoint fidelity"
+    ]
+  },
+  "inspectedAt": "2026-07-22T00:25:32.8385994-07:00",
+  "inspectedArtifactIds": [
+    "hero-thesis",
+    "section-opener",
+    "big-metric",
+    "customer-voice",
+    "before-after-story",
+    "kpi-strip",
+    "multi-series-trend",
+    "uncertainty-range",
+    "waterfall",
+    "quality-cost-scatter",
+    "operating-table-sparklines",
+    "dense-dashboard-funnel",
+    "system-architecture",
+    "request-sequence",
+    "causal-loop",
+    "source-allocation-sankey",
+    "routing-decision-tree",
+    "ecosystem-geography",
+    "research-timeline",
+    "roadmap-gantt",
+    "evidence-scrollytelling",
+    "animated-chart-progression",
+    "full-bleed-editorial-image",
+    "real-screenshot-callouts",
+    "interaction-clip",
+    "product-before-after",
+    "spatial-scene",
+    "claim-source-lineage",
+    "pdf-evidence-region",
+    "code-runtime-proof",
+    "otel-trace",
+    "quality-cost-equation",
+    "deck-ci-receipt",
+    "risk-matrix",
+    "cost-quality-frontier",
+    "model-compare",
+    "harness-compare",
+    "final-recommendation"
+  ],
+  "findings": [
+    {
+      "severity": "resolved",
+      "artifacts": ["waterfall"],
+      "summary": "Contribution labels are now bound directly to Plan, Tools, Repair, and Deck CI bars."
+    },
+    {
+      "severity": "resolved",
+      "artifacts": ["causal-loop"],
+      "summary": "The graph clears the title and shows visible directed arrowheads, plus or minus polarity, and R1/B1 loop classes."
+    },
+    {
+      "severity": "resolved",
+      "artifacts": ["quality-cost-scatter", "cost-quality-frontier", "model-compare"],
+      "summary": "Only observed cohorts are plotted; scales, candidate denominators, cost, latency, and the not-run ensemble are explicit."
+    },
+    {
+      "severity": "resolved",
+      "artifacts": ["roadmap-gantt"],
+      "summary": "Dependencies now obey finish-to-start precedence and connectors sit behind task bars."
+    },
+    {
+      "severity": "resolved",
+      "artifacts": [
+        "pdf-evidence-region",
+        "code-runtime-proof",
+        "otel-trace",
+        "quality-cost-equation",
+        "deck-ci-receipt"
+      ],
+      "summary": "Evidence types, not-run/illustrative states, evaluated mathematics, and pending gates are no longer presented as observed success."
+    }
+  ],
+  "disposition": "Visual and semantic presentation QA passed for the digest-bound Atlas and showcase. Blind audience preference remains a separate pending release gate.",
+  "humanPreference": "pending",
+  "publicReleaseApproved": false
+}

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "nodeslide.artifact-atlas/v2",
   "atlasVersion": "artifact-atlas-v2",
-  "generatedAt": "2026-07-22T04:54:43.193Z",
+  "generatedAt": "2026-07-22T07:23:21.850Z",
   "communicationJob": "By the end, product and engineering leaders should understand the complete NodeSlide visual vocabulary, see proof that it survives browser and PowerPoint output, and know how to reuse each pattern.",
   "canonicalArtifactCount": 38,
   "publicShowcaseCount": 14,
@@ -109,6 +109,41 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "hero-thesis",
+        "kind": "generic",
+        "narrativeJob": "One evidence-bounded thesis anchors the complete visual vocabulary.",
+        "claimIds": [
+          "hero-thesis:claim:1",
+          "hero-thesis:claim:2",
+          "hero-thesis:claim:3",
+          "hero-thesis:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-hero-thesis"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "a2ee1cb40e6d71183ee05dada38a017b88cf8b08c280f6a0bb00407fdee93920",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Reviewability turns generation into a product decision. One evidence-bounded thesis anchors the complete visual vocabulary.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "label": "Reviewability turns generation into a product decision"
+        },
+        "specDigest": "d9eec7fd58c9e1bed7adacf9c7f5a96712205497f93a4a1708df2c8ee3814b9e"
       }
     },
     {
@@ -119,9 +154,9 @@
       "slideArchetype": "section",
       "family": "section",
       "title": "A museum needs chapters, not a wall of thumbnails",
-      "takeaway": "Six chapters organize artifacts by the job they perform for an audience.",
+      "takeaway": "Seven chapters organize artifacts by the job they perform for an audience.",
       "theme": "product-launch-cinematic",
-      "narrativeJob": "Six chapters organize artifacts by the job they perform for an audience.",
+      "narrativeJob": "Seven chapters organize artifacts by the job they perform for an audience.",
       "evidence": [
         {
           "sourceId": "atlas-v2-section-opener",
@@ -148,7 +183,7 @@
         "recipeId": "nodeslide.recipe.section-opener.v2",
         "artifactType": "section-opener",
         "narrativeJobs": [
-          "Six chapters organize artifacts by the job they perform for an audience."
+          "Seven chapters organize artifacts by the job they perform for an audience."
         ],
         "requiredInputs": [
           "audience",
@@ -184,13 +219,48 @@
         "interactive": false
       },
       "accessibility": {
-        "altText": "A museum needs chapters, not a wall of thumbnails. Six chapters organize artifacts by the job they perform for an audience.",
+        "altText": "A museum needs chapters, not a wall of thumbnails. Seven chapters organize artifacts by the job they perform for an audience.",
         "readingOrder": "title, primary visual, evidence annotation, source, receipt",
         "highContrast": true,
         "reducedMotion": true,
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "section-opener",
+        "kind": "generic",
+        "narrativeJob": "Seven chapters organize artifacts by the job they perform for an audience.",
+        "claimIds": [
+          "section-opener:claim:1",
+          "section-opener:claim:2",
+          "section-opener:claim:3",
+          "section-opener:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-section-opener"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "4f1e75b8ab7d0bf5ea4bb7ee4d87936827908ddbf23f1a92d9846c8e915c73cb",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "A museum needs chapters, not a wall of thumbnails. Seven chapters organize artifacts by the job they perform for an audience.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "label": "A museum needs chapters, not a wall of thumbnails"
+        },
+        "specDigest": "ee5dbf25034ae29e3a008dba25475cf949b68a0c85e1230507bca4d19ec8ae57"
       }
     },
     {
@@ -271,6 +341,39 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "big-metric",
+        "kind": "generic",
+        "narrativeJob": "The headline metric stays tied to the frozen Arena receipt instead of becoming marketing shorthand.",
+        "claimIds": [
+          "big-metric:claim:1",
+          "big-metric:claim:2"
+        ],
+        "sourceIds": [
+          "atlas-v2-big-metric"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "248a0f2542920ce810a9a150c4c20dd93e76bc1b134f635f8489d7ec475e5aa6",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "82 of 84 candidates cleared browser and PowerPoint proof. The headline metric stays tied to the frozen Arena receipt instead of becoming marketing shorthand.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "label": "82 of 84 candidates cleared browser and PowerPoint proof"
+        },
+        "specDigest": "9cfc9f2c86eed6053c823cca6bdbd1b10325c9465533d08483eb1d56849a3304"
       }
     },
     {
@@ -353,6 +456,41 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "customer-voice",
+        "kind": "generic",
+        "narrativeJob": "A customer-voice treatment demonstrates editorial rhythm without inventing a customer.",
+        "claimIds": [
+          "customer-voice:claim:1",
+          "customer-voice:claim:2",
+          "customer-voice:claim:3",
+          "customer-voice:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-customer-voice"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "daad4c23334d2eaf6f443163162e33af5b17acff441caedacb14424746efa324",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "The useful promise is editable evidence, not instant polish. A customer-voice treatment demonstrates editorial rhythm without inventing a customer.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "label": "The useful promise is editable evidence, not instant polish"
+        },
+        "specDigest": "3563674fc990b912355bb0d4921cea7d805356a38c163141a81458af8528197d"
       }
     },
     {
@@ -435,6 +573,41 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "before-after-story",
+        "kind": "generic",
+        "narrativeJob": "Before and after states identify the exact components that changed and why.",
+        "claimIds": [
+          "before-after-story:claim:1",
+          "before-after-story:claim:2",
+          "before-after-story:claim:3",
+          "before-after-story:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-before-after-story"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "1a6b3c261d050a6668c3155e3efac6291be7825b25c213d061187a88c81832fd",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "The harness removes clutter before it adds decoration. Before and after states identify the exact components that changed and why.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "label": "The harness removes clutter before it adds decoration"
+        },
+        "specDigest": "02dd56b70e18fa05dc83a6b8e1ca136a38ae8e7b937b30cbee5623741136d248"
       }
     },
     {
@@ -517,6 +690,60 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "kpi-strip",
+        "kind": "chart",
+        "narrativeJob": "Five metrics preserve actual, prior, target, variance, and status context.",
+        "claimIds": [
+          "kpi-strip:claim:1",
+          "kpi-strip:claim:2",
+          "kpi-strip:claim:3",
+          "kpi-strip:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-kpi-strip"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "7d8566c45f7664f1a6cefbf376ffc93d758c0930deb5e0588cb93efc3c8ee941",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "The operating verdict should scan in under five seconds. Five metrics preserve actual, prior, target, variance, and status context.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "unit": "score",
+          "xAxis": {
+            "labels": [
+              "A",
+              "B"
+            ]
+          },
+          "yAxis": {
+            "min": 0,
+            "max": 100
+          },
+          "series": [
+            {
+              "id": "series-1",
+              "values": [
+                62,
+                86
+              ]
+            }
+          ]
+        },
+        "specDigest": "645c96c186b683acb71d887bf9f86f44fe3989e0da0e832f33d0b75909659b81"
       }
     },
     {
@@ -561,7 +788,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed data",
+          "unit",
+          "scale policy"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -600,6 +830,60 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "multi-series-trend",
+        "kind": "chart",
+        "narrativeJob": "Three series share one scale and one evidence-bounded takeaway.",
+        "claimIds": [
+          "multi-series-trend:claim:1",
+          "multi-series-trend:claim:2",
+          "multi-series-trend:claim:3",
+          "multi-series-trend:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-multi-series-trend"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "fbff74955fec2ab34769c34b621a3da6fdd6c9d8e52ada907e480c8f777fc2e4",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Direct labels make divergence visible without inventing a cause. Three series share one scale and one evidence-bounded takeaway.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "unit": "score",
+          "xAxis": {
+            "labels": [
+              "A",
+              "B"
+            ]
+          },
+          "yAxis": {
+            "min": 0,
+            "max": 100
+          },
+          "series": [
+            {
+              "id": "series-1",
+              "values": [
+                62,
+                86
+              ]
+            }
+          ]
+        },
+        "specDigest": "f66d3c3887b11caecde871285dc701429404a634024b2fb920beb87fcd5375f6"
       }
     },
     {
@@ -644,7 +928,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed data",
+          "unit",
+          "scale policy"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -659,7 +946,9 @@
         "designRules": [
           "one primary claim",
           "visible source",
-          "editable PowerPoint semantics"
+          "editable PowerPoint semantics",
+          "axis labels and units",
+          "distinguish observed from modeled"
         ],
         "exportCapabilities": [
           "browser",
@@ -683,6 +972,89 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "uncertainty-range",
+        "kind": "chart",
+        "narrativeJob": "Observed values, base case, and widening modeled bounds remain editable.",
+        "claimIds": [
+          "uncertainty-range:claim:1",
+          "uncertainty-range:claim:2",
+          "uncertainty-range:claim:3",
+          "uncertainty-range:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-uncertainty-range"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "b151c5443bd7cdd215ca6e537a4543d50ddb9f52fe1caa98737783c1c6572c53",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "A forecast is more credible when its range is impossible to miss. Observed values, base case, and widening modeled bounds remain editable.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "unit": "quality points",
+          "xAxis": {
+            "labels": [
+              "Q1 observed",
+              "Q2 observed",
+              "Q3 modeled",
+              "Q4 modeled",
+              "Q5 modeled"
+            ]
+          },
+          "yAxis": {
+            "min": 8,
+            "max": 14
+          },
+          "series": [
+            {
+              "id": "low",
+              "values": [
+                9,
+                9.4,
+                9.6,
+                9.2,
+                9
+              ],
+              "status": "modeled-bound"
+            },
+            {
+              "id": "base",
+              "values": [
+                9,
+                9.4,
+                10.2,
+                10.8,
+                11.4
+              ],
+              "status": "observed-then-modeled"
+            },
+            {
+              "id": "high",
+              "values": [
+                9,
+                9.4,
+                10.8,
+                12,
+                13.8
+              ],
+              "status": "modeled-bound"
+            }
+          ]
+        },
+        "specDigest": "0c4bd2ce08784c27d0eb790f518e3166bfb98672c9a3db53359add10a5466578"
       }
     },
     {
@@ -727,7 +1099,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed data",
+          "unit",
+          "scale policy"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -742,7 +1117,9 @@
         "designRules": [
           "one primary claim",
           "visible source",
-          "editable PowerPoint semantics"
+          "editable PowerPoint semantics",
+          "deltas reconcile to final",
+          "labels bind to bars"
         ],
         "exportCapabilities": [
           "browser",
@@ -766,6 +1143,62 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "waterfall",
+        "kind": "waterfall",
+        "narrativeJob": "A contribution bridge separates planning, tools, repair, and validation effects.",
+        "claimIds": [
+          "waterfall:claim:1",
+          "waterfall:claim:2",
+          "waterfall:claim:3",
+          "waterfall:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-waterfall"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "db7b7a9465b56474cfd5c529830c0701d1f00171c7a12fbacc537ba3d55d0072",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Harness gains come from several small controls, not one magic prompt. A contribution bridge separates planning, tools, repair, and validation effects.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "unit": "quality points",
+          "baseline": 62,
+          "deltas": [
+            {
+              "label": "Plan",
+              "value": 8
+            },
+            {
+              "label": "Tools",
+              "value": 7
+            },
+            {
+              "label": "Repair",
+              "value": 5
+            },
+            {
+              "label": "Deck CI",
+              "value": 4
+            }
+          ],
+          "final": 86,
+          "tolerance": 0
+        },
+        "specDigest": "ca88353517dc98f28ca8c91b0b85703bb910c8b18f50a79ee8ea6898b2971392"
       }
     },
     {
@@ -810,7 +1243,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed data",
+          "unit",
+          "scale policy"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -849,6 +1285,105 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "quality-cost-scatter",
+        "kind": "comparison",
+        "narrativeJob": "Bubble size adds latency to the quality-versus-cost comparison.",
+        "claimIds": [
+          "quality-cost-scatter:claim:1",
+          "quality-cost-scatter:claim:2",
+          "quality-cost-scatter:claim:3",
+          "quality-cost-scatter:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-quality-cost-scatter"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "1ed9ebb2dfb40f6b6efd7fab6c37fc501d0c140c6679cf295a0fd65d4a8b45c6",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "The best route sits on a frontier, not at one universal optimum. Bubble size adds latency to the quality-versus-cost comparison.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "comparisonType": "observed-routes",
+          "metrics": [
+            {
+              "id": "quality",
+              "unit": "eligible fraction"
+            },
+            {
+              "id": "cost",
+              "unit": "USD per candidate"
+            },
+            {
+              "id": "latency",
+              "unit": "seconds"
+            }
+          ],
+          "cohorts": [
+            {
+              "id": "claude",
+              "status": "observed",
+              "plotted": true,
+              "values": {
+                "quality": 1,
+                "cost": 0.00862,
+                "latency": 8.193
+              }
+            },
+            {
+              "id": "kimi",
+              "status": "observed",
+              "plotted": true,
+              "values": {
+                "quality": 0.9583333333333334,
+                "cost": 0.001303,
+                "latency": 17.617
+              }
+            },
+            {
+              "id": "gemma",
+              "status": "observed",
+              "plotted": true,
+              "values": {
+                "quality": 0.9583333333333334,
+                "cost": 0,
+                "latency": 17.271
+              }
+            },
+            {
+              "id": "nemotron",
+              "status": "pilot",
+              "plotted": false,
+              "values": {}
+            },
+            {
+              "id": "gpt-oss",
+              "status": "pilot",
+              "plotted": false,
+              "values": {}
+            },
+            {
+              "id": "ensemble",
+              "status": "not-run",
+              "plotted": false,
+              "values": {}
+            }
+          ]
+        },
+        "specDigest": "31495125b5d72ec169185821de83b3ab763951db928a276c8861cad825989a53"
       }
     },
     {
@@ -893,7 +1428,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed data",
+          "unit",
+          "scale policy"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -933,6 +1471,60 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "operating-table-sparklines",
+        "kind": "chart",
+        "narrativeJob": "Actual, plan, variance, trend, and status share one executive artifact.",
+        "claimIds": [
+          "operating-table-sparklines:claim:1",
+          "operating-table-sparklines:claim:2",
+          "operating-table-sparklines:claim:3",
+          "operating-table-sparklines:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-operating-table-sparklines"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "3d0d53ccd74e62863eb27859d1832d8c057914d0e7c7e61e9f227858f1e73cd9",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Dense tables stay readable when hierarchy does the filtering. Actual, plan, variance, trend, and status share one executive artifact.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "unit": "score",
+          "xAxis": {
+            "labels": [
+              "A",
+              "B"
+            ]
+          },
+          "yAxis": {
+            "min": 0,
+            "max": 100
+          },
+          "series": [
+            {
+              "id": "series-1",
+              "values": [
+                62,
+                86
+              ]
+            }
+          ]
+        },
+        "specDigest": "ba62cfb5335718ede5b76964254e23df4aa529689af0786128d8b64b18be8330"
       }
     },
     {
@@ -977,7 +1569,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed data",
+          "unit",
+          "scale policy"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -1017,6 +1612,60 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "dense-dashboard-funnel",
+        "kind": "chart",
+        "narrativeJob": "A funnel, trend, exceptions, and decision queue share one controlled surface.",
+        "claimIds": [
+          "dense-dashboard-funnel:claim:1",
+          "dense-dashboard-funnel:claim:2",
+          "dense-dashboard-funnel:claim:3",
+          "dense-dashboard-funnel:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-dense-dashboard-funnel"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "fd5b9df1c7a2929d08eca1ef313d1a5f6e5bf0462f79f63a85117fb2bd58f4cd",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "A dashboard can be dense without becoming a card graveyard. A funnel, trend, exceptions, and decision queue share one controlled surface.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "unit": "score",
+          "xAxis": {
+            "labels": [
+              "A",
+              "B"
+            ]
+          },
+          "yAxis": {
+            "min": 0,
+            "max": 100
+          },
+          "series": [
+            {
+              "id": "series-1",
+              "values": [
+                62,
+                86
+              ]
+            }
+          ]
+        },
+        "specDigest": "cb7e0db619806534d575d6c3cf3460c964ed85ec33aedd501fad74d91ac8b7dd"
       }
     },
     {
@@ -1061,7 +1710,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed nodes",
+          "typed edges",
+          "reading direction"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -1100,6 +1752,57 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "system-architecture",
+        "kind": "graph",
+        "narrativeJob": "Typed connectors and a visible trust boundary preserve system meaning.",
+        "claimIds": [
+          "system-architecture:claim:1",
+          "system-architecture:claim:2",
+          "system-architecture:claim:3",
+          "system-architecture:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-system-architecture"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "097c3da8a02ecebfde575e8d7a5fc10285e9bc2c61825f5ca6e3b26bea0b1660",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "The portable protocol keeps product logic above backend choice. Typed connectors and a visible trust boundary preserve system meaning.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "directed": true,
+          "nodes": [
+            {
+              "id": "source"
+            },
+            {
+              "id": "output"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-1",
+              "from": "source",
+              "to": "output",
+              "directed": true
+            }
+          ]
+        },
+        "specDigest": "6d56e0056459372ae8ee25c1679f42e1bbde0c12236bfc219e3e2040206f5786"
       }
     },
     {
@@ -1144,7 +1847,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed nodes",
+          "typed edges",
+          "reading direction"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -1183,6 +1889,57 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "request-sequence",
+        "kind": "graph",
+        "narrativeJob": "The happy path and failed-validation return path remain distinct.",
+        "claimIds": [
+          "request-sequence:claim:1",
+          "request-sequence:claim:2",
+          "request-sequence:claim:3",
+          "request-sequence:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-request-sequence"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "48b365ec565675367b6cf8318a4b65c4a7d9c48a8f24b8b6f486045541d4d1c4",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Review custody is visible at every handoff. The happy path and failed-validation return path remain distinct.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "directed": true,
+          "nodes": [
+            {
+              "id": "source"
+            },
+            {
+              "id": "output"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-1",
+              "from": "source",
+              "to": "output",
+              "directed": true
+            }
+          ]
+        },
+        "specDigest": "169dce31a6d4164dd20e1f695511505f6b80341abd756f72c432a5ba498d334c"
       }
     },
     {
@@ -1227,7 +1984,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed nodes",
+          "typed edges",
+          "reading direction"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -1242,7 +2002,10 @@
         "designRules": [
           "one primary claim",
           "visible source",
-          "editable PowerPoint semantics"
+          "editable PowerPoint semantics",
+          "directed edges",
+          "edge polarity is plus or minus",
+          "loops are R or B"
         ],
         "exportCapabilities": [
           "browser",
@@ -1266,6 +2029,122 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "causal-loop",
+        "kind": "causal-loop",
+        "narrativeJob": "Reinforcing and balancing loops explain behavior that a flowchart cannot.",
+        "claimIds": [
+          "causal-loop:claim:1",
+          "causal-loop:claim:2",
+          "causal-loop:claim:3",
+          "causal-loop:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-causal-loop"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "5ec5066238f6c571933215ac7e688247884b6ef0711d3cb7ac11834dee3ac3c8",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Better receipts reinforce trust; unchecked complexity pushes back. Reinforcing and balancing loops explain behavior that a flowchart cannot.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "nodes": [
+            {
+              "id": "receipt"
+            },
+            {
+              "id": "trust"
+            },
+            {
+              "id": "reuse"
+            },
+            {
+              "id": "signal"
+            },
+            {
+              "id": "complexity"
+            }
+          ],
+          "edges": [
+            {
+              "id": "e1",
+              "from": "receipt",
+              "to": "trust",
+              "directed": true,
+              "polarity": "+"
+            },
+            {
+              "id": "e2",
+              "from": "trust",
+              "to": "reuse",
+              "directed": true,
+              "polarity": "+"
+            },
+            {
+              "id": "e3",
+              "from": "reuse",
+              "to": "signal",
+              "directed": true,
+              "polarity": "+"
+            },
+            {
+              "id": "e4",
+              "from": "signal",
+              "to": "receipt",
+              "directed": true,
+              "polarity": "+"
+            },
+            {
+              "id": "e5",
+              "from": "reuse",
+              "to": "complexity",
+              "directed": true,
+              "polarity": "+"
+            },
+            {
+              "id": "e6",
+              "from": "complexity",
+              "to": "trust",
+              "directed": true,
+              "polarity": "-"
+            }
+          ],
+          "loops": [
+            {
+              "id": "R1",
+              "type": "reinforcing",
+              "edgeIds": [
+                "e1",
+                "e2",
+                "e3",
+                "e4"
+              ]
+            },
+            {
+              "id": "B1",
+              "type": "balancing",
+              "edgeIds": [
+                "e2",
+                "e5",
+                "e6"
+              ]
+            }
+          ]
+        },
+        "specDigest": "cf066b9d2e0a71ae872aa48c1c6a1b097ec4a60658258a6ae02bc0a55ea7af07"
       }
     },
     {
@@ -1310,7 +2189,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed nodes",
+          "typed edges",
+          "reading direction"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -1325,7 +2207,9 @@
         "designRules": [
           "one primary claim",
           "visible source",
-          "editable PowerPoint semantics"
+          "editable PowerPoint semantics",
+          "band width encodes quantity",
+          "flow conserves at intermediate nodes"
         ],
         "exportCapabilities": [
           "browser",
@@ -1349,6 +2233,136 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "source-allocation-sankey",
+        "kind": "sankey",
+        "narrativeJob": "Allocation bands show evidence flowing through claims into visual forms.",
+        "claimIds": [
+          "source-allocation-sankey:claim:1",
+          "source-allocation-sankey:claim:2",
+          "source-allocation-sankey:claim:3",
+          "source-allocation-sankey:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-source-allocation-sankey"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "870bb908b1e0dd26918e43062cd9a9666a1569b93f2f77dfe27e226e5a2c8ea3",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Every visual can retain the path from source to slide. Allocation bands show evidence flowing through claims into visual forms.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "unit": "evidence units",
+          "tolerance": 0,
+          "nodes": [
+            {
+              "id": "source-a",
+              "label": "Source A",
+              "layer": "source"
+            },
+            {
+              "id": "source-b",
+              "label": "Source B",
+              "layer": "source"
+            },
+            {
+              "id": "source-c",
+              "label": "Source C",
+              "layer": "source"
+            },
+            {
+              "id": "claims",
+              "label": "Claims",
+              "layer": "middle"
+            },
+            {
+              "id": "rejections",
+              "label": "Rejections",
+              "layer": "middle"
+            },
+            {
+              "id": "charts",
+              "label": "Charts",
+              "layer": "sink"
+            },
+            {
+              "id": "diagrams",
+              "label": "Diagrams",
+              "layer": "sink"
+            },
+            {
+              "id": "proof",
+              "label": "Proof",
+              "layer": "sink"
+            }
+          ],
+          "links": [
+            {
+              "source": "source-a",
+              "target": "claims",
+              "value": 26
+            },
+            {
+              "source": "source-b",
+              "target": "claims",
+              "value": 38
+            },
+            {
+              "source": "source-c",
+              "target": "claims",
+              "value": 22
+            },
+            {
+              "source": "source-c",
+              "target": "rejections",
+              "value": 12
+            },
+            {
+              "source": "source-a",
+              "target": "rejections",
+              "value": 10
+            },
+            {
+              "source": "claims",
+              "target": "charts",
+              "value": 26
+            },
+            {
+              "source": "claims",
+              "target": "diagrams",
+              "value": 38
+            },
+            {
+              "source": "claims",
+              "target": "proof",
+              "value": 22
+            },
+            {
+              "source": "rejections",
+              "target": "diagrams",
+              "value": 10
+            },
+            {
+              "source": "rejections",
+              "target": "proof",
+              "value": 12
+            }
+          ]
+        },
+        "specDigest": "d0da89f6d703742b4f64f806ab0ff18e7ec5a21cffa3487599fec768d52cdc58"
       }
     },
     {
@@ -1393,7 +2407,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed nodes",
+          "typed edges",
+          "reading direction"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -1432,6 +2449,57 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "routing-decision-tree",
+        "kind": "graph",
+        "narrativeJob": "A decision tree distinguishes deterministic, cheap-model, and orchestrator paths.",
+        "claimIds": [
+          "routing-decision-tree:claim:1",
+          "routing-decision-tree:claim:2",
+          "routing-decision-tree:claim:3",
+          "routing-decision-tree:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-routing-decision-tree"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "da33b46c5acd8048dfb5de751ca250214b233d84c0f68ecf40c1b090a87465f6",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Routing should spend capability only where the task needs it. A decision tree distinguishes deterministic, cheap-model, and orchestrator paths.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "directed": true,
+          "nodes": [
+            {
+              "id": "source"
+            },
+            {
+              "id": "output"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-1",
+              "from": "source",
+              "to": "output",
+              "directed": true
+            }
+          ]
+        },
+        "specDigest": "736bb97af78593582ee7edad3029f36f6d79254deeb2640e40532a65d1308dbe"
       }
     },
     {
@@ -1514,6 +2582,41 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "ecosystem-geography",
+        "kind": "generic",
+        "narrativeJob": "An ecosystem landscape includes a geospatial deployment inset without confusing categories.",
+        "claimIds": [
+          "ecosystem-geography:claim:1",
+          "ecosystem-geography:claim:2",
+          "ecosystem-geography:claim:3",
+          "ecosystem-geography:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-ecosystem-geography"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "915fadf9d90e7a2ba4fcc1fd89eca5bf52cf529b308ba1cd303e8edf5d5de7a4",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "NodeKit connects the stack while NodeSlide proves the journey. An ecosystem landscape includes a geospatial deployment inset without confusing categories.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "label": "NodeKit connects the stack while NodeSlide proves the journey"
+        },
+        "specDigest": "bcc811010a14c41fdca37633a367d0a72a4dcc80b70891c4765d3dff5164c239"
       }
     },
     {
@@ -1596,6 +2699,68 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "research-timeline",
+        "kind": "timeline",
+        "narrativeJob": "Time-proportional milestones make the review gate explicit.",
+        "claimIds": [
+          "research-timeline:claim:1",
+          "research-timeline:claim:2",
+          "research-timeline:claim:3",
+          "research-timeline:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-research-timeline"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "203247c77b49bd955b151aa0b17d91b80e8161e268831197a61befa3dbc23bc1",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Human approval remains the gate between experiment and harness change. Time-proportional milestones make the review gate explicit.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "unit": "day",
+          "events": [
+            {
+              "id": "event-1",
+              "start": 1,
+              "end": 1
+            },
+            {
+              "id": "event-2",
+              "start": 3,
+              "end": 3
+            },
+            {
+              "id": "event-3",
+              "start": 6,
+              "end": 6
+            },
+            {
+              "id": "event-4",
+              "start": 9,
+              "end": 9
+            },
+            {
+              "id": "event-5",
+              "start": 11,
+              "end": 11
+            }
+          ]
+        },
+        "specDigest": "f9aa828568b603363f166f729a1def2405bbee601aadcbccbbc51f75b5453705"
       }
     },
     {
@@ -1654,7 +2819,9 @@
         "designRules": [
           "one primary claim",
           "visible source",
-          "editable PowerPoint semantics"
+          "editable PowerPoint semantics",
+          "visible dependencies",
+          "confidence is encoded"
         ],
         "exportCapabilities": [
           "browser",
@@ -1678,6 +2845,86 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "roadmap-gantt",
+        "kind": "gantt",
+        "narrativeJob": "Workstreams, milestones, dependencies, status, and confidence share one roadmap.",
+        "claimIds": [
+          "roadmap-gantt:claim:1",
+          "roadmap-gantt:claim:2",
+          "roadmap-gantt:claim:3",
+          "roadmap-gantt:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-roadmap-gantt"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "0b5321e5fd0d0187851f0b2673d337ab7f18b641853ac490ac195b85ee4c078a",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "The next release sequence exposes dependencies and confidence. Workstreams, milestones, dependencies, status, and confidence share one roadmap.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "unit": "week",
+          "tasks": [
+            {
+              "id": "media",
+              "start": 1,
+              "end": 2,
+              "confidence": 0.95,
+              "dependsOn": []
+            },
+            {
+              "id": "data",
+              "start": 2,
+              "end": 3,
+              "confidence": 0.9,
+              "dependsOn": []
+            },
+            {
+              "id": "motion",
+              "start": 3,
+              "end": 5,
+              "confidence": 0.72,
+              "dependsOn": [
+                "media",
+                "data"
+              ]
+            },
+            {
+              "id": "domains",
+              "start": 3,
+              "end": 5,
+              "confidence": 0.88,
+              "dependsOn": [
+                "data"
+              ]
+            },
+            {
+              "id": "review",
+              "start": 6,
+              "end": 6,
+              "confidence": 0.6,
+              "dependsOn": [
+                "motion",
+                "domains"
+              ]
+            }
+          ]
+        },
+        "specDigest": "c8803a14eb9bc8d61674f774b0edfe53de92f5d9421a207ef28c62f44eebe55f"
       }
     },
     {
@@ -1722,7 +2969,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "named states",
+          "transition policy",
+          "static fallback state"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -1762,6 +3012,59 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "evidence-scrollytelling",
+        "kind": "motion",
+        "narrativeJob": "The web version scrubs; PowerPoint shows the same numbered progression.",
+        "claimIds": [
+          "evidence-scrollytelling:claim:1",
+          "evidence-scrollytelling:claim:2",
+          "evidence-scrollytelling:claim:3",
+          "evidence-scrollytelling:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-evidence-scrollytelling"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "1bba559aa2eba2253e72b17713ab84dd8a440ada34f5283eb1fbf42d9e31306e",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Evidence becomes a decision through five inspectable states. The web version scrubs; PowerPoint shows the same numbered progression.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "states": [
+            {
+              "id": "state-1"
+            },
+            {
+              "id": "state-2"
+            },
+            {
+              "id": "state-3"
+            },
+            {
+              "id": "state-4"
+            },
+            {
+              "id": "state-5"
+            }
+          ],
+          "transition": "scrub",
+          "staticFallbackStateId": "state-5"
+        },
+        "specDigest": "be7e5810cc11e8e0712301f453d6670bdd6adadf2c0f6e0e76fc8287f6df21b6"
       }
     },
     {
@@ -1806,7 +3109,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "named states",
+          "transition policy",
+          "static fallback state"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -1846,6 +3152,59 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "animated-chart-progression",
+        "kind": "motion",
+        "narrativeJob": "Four chart states compare baseline, model, harness, and refreshed evidence.",
+        "claimIds": [
+          "animated-chart-progression:claim:1",
+          "animated-chart-progression:claim:2",
+          "animated-chart-progression:claim:3",
+          "animated-chart-progression:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-animated-chart-progression"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "ad8514d7be775bbf6bf408821931fbc718064b4dede4f0453d67bbd976c4ec4a",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "The trend means more when the audience sees the baseline move. Four chart states compare baseline, model, harness, and refreshed evidence.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "states": [
+            {
+              "id": "state-1"
+            },
+            {
+              "id": "state-2"
+            },
+            {
+              "id": "state-3"
+            },
+            {
+              "id": "state-4"
+            },
+            {
+              "id": "state-5"
+            }
+          ],
+          "transition": "step",
+          "staticFallbackStateId": "state-5"
+        },
+        "specDigest": "b976d148f0aeefecb908d17bdfc24eef96cd98ea0d4af552b9f8f38cc0ddb7fa"
       }
     },
     {
@@ -1929,6 +3288,41 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "full-bleed-editorial-image",
+        "kind": "generic",
+        "narrativeJob": "A generated rights-clearable image uses focal crop, credit, and an editable frame.",
+        "claimIds": [
+          "full-bleed-editorial-image:claim:1",
+          "full-bleed-editorial-image:claim:2",
+          "full-bleed-editorial-image:claim:3",
+          "full-bleed-editorial-image:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-full-bleed-editorial-image"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "37f04d6a56736b710e861e240a9f4d2f5fb7d2667361ee33aab61d8ec893bdd1",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "A visual story can lead with atmosphere and still preserve proof. A generated rights-clearable image uses focal crop, credit, and an editable frame.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "label": "A visual story can lead with atmosphere and still preserve proof"
+        },
+        "specDigest": "0d73fc12751248a2ca386c78d5cba7362e965da751ab35e19e5aebe8f4d1c9c6"
       }
     },
     {
@@ -1973,7 +3367,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "immutable media digest",
+          "capture version",
+          "claim region"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -2014,6 +3411,45 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "real-screenshot-callouts",
+        "kind": "evidence-media",
+        "narrativeJob": "A real NodeSlide capture occupies most of the slide with three exact callouts.",
+        "claimIds": [
+          "real-screenshot-callouts:claim:1",
+          "real-screenshot-callouts:claim:2",
+          "real-screenshot-callouts:claim:3",
+          "real-screenshot-callouts:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-real-screenshot-callouts"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "913b46b42ff6cea9043da5a0b643d2411dc480e1d7256bd172348233bbfb7b91",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "The product proof is the interface people actually use. A real NodeSlide capture occupies most of the slide with three exact callouts.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "mimeType": "image/png",
+          "digest": "nodeslide-artifact-lab-v1-gallery-capture",
+          "claimId": "real-screenshot-callouts:claim:1",
+          "captureVersion": "artifact-atlas-v1",
+          "callouts": 3
+        },
+        "specDigest": "f000d4b8ce8a8d388c8261b2c3c2e1fd65d71f17eee0becd6bf9350950067c43"
       }
     },
     {
@@ -2024,9 +3460,9 @@
       "slideArchetype": "interaction",
       "family": "interaction",
       "title": "One bounded interaction carries the story from selection to receipt",
-      "takeaway": "Five real product states form a playable web sequence and a stepped PowerPoint fallback.",
+      "takeaway": "Three captured product states anchor a five-step workflow and its PowerPoint fallback.",
       "theme": "technical-dark",
-      "narrativeJob": "Five real product states form a playable web sequence and a stepped PowerPoint fallback.",
+      "narrativeJob": "Three captured product states anchor a five-step workflow and its PowerPoint fallback.",
       "evidence": [
         {
           "sourceId": "atlas-v2-interaction-clip",
@@ -2053,12 +3489,18 @@
         "recipeId": "nodeslide.recipe.interaction-clip.v2",
         "artifactType": "interaction-clip",
         "narrativeJobs": [
-          "Five real product states form a playable web sequence and a stepped PowerPoint fallback."
+          "Three captured product states anchor a five-step workflow and its PowerPoint fallback."
         ],
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "immutable media digest",
+          "capture version",
+          "claim region",
+          "named states",
+          "transition policy",
+          "static fallback state"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -2092,13 +3534,60 @@
         "interactive": true
       },
       "accessibility": {
-        "altText": "One bounded interaction carries the story from selection to receipt. Five real product states form a playable web sequence and a stepped PowerPoint fallback.",
+        "altText": "One bounded interaction carries the story from selection to receipt. Three captured product states anchor a five-step workflow and its PowerPoint fallback.",
         "readingOrder": "title, primary visual, evidence annotation, source, receipt",
         "highContrast": true,
         "reducedMotion": true,
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "interaction-clip",
+        "kind": "motion",
+        "narrativeJob": "Three captured product states anchor a five-step workflow and its PowerPoint fallback.",
+        "claimIds": [
+          "interaction-clip:claim:1",
+          "interaction-clip:claim:2",
+          "interaction-clip:claim:3",
+          "interaction-clip:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-interaction-clip"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "162130281edf588052c517a1b3ebe38938704ba3bee4b819f05301af6e33fc4d",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "One bounded interaction carries the story from selection to receipt. Three captured product states anchor a five-step workflow and its PowerPoint fallback.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "states": [
+            {
+              "id": "state-1"
+            },
+            {
+              "id": "state-2"
+            },
+            {
+              "id": "state-3"
+            }
+          ],
+          "transition": "step",
+          "staticFallbackStateId": "state-3"
+        },
+        "specDigest": "7fe2a19ddba94faf2902b1b19dc0998cdf597bf82664b5ead54c50fe2be980e5"
       }
     },
     {
@@ -2143,7 +3632,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "immutable media digest",
+          "capture version",
+          "claim region"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -2184,6 +3676,44 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "product-before-after",
+        "kind": "evidence-media",
+        "narrativeJob": "Actual captures identify changed components and the measured workflow outcome.",
+        "claimIds": [
+          "product-before-after:claim:1",
+          "product-before-after:claim:2",
+          "product-before-after:claim:3",
+          "product-before-after:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-product-before-after"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "d8d7e3510f7598697e0db27d6a1cb9a1b800a3e9d0a792207653c155d0bde408",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Review transforms a rough generation into a governed workspace. Actual captures identify changed components and the measured workflow outcome.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "mimeType": "image/png",
+          "digest": "nodeslide-product-before-after",
+          "claimId": "product-before-after:claim:1",
+          "captureVersion": "artifact-atlas-v2"
+        },
+        "specDigest": "2d405dae3c2591ef1bc775a92d1897ee7d997b3080970cce0fe189be7bb9bc1d"
       }
     },
     {
@@ -2228,7 +3758,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "named states",
+          "transition policy",
+          "static fallback state"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -2268,6 +3801,63 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "spatial-scene",
+        "kind": "spatial-scene",
+        "narrativeJob": "A spatial depth treatment previews zoom from system, to node, to trace, to source.",
+        "claimIds": [
+          "spatial-scene:claim:1",
+          "spatial-scene:claim:2",
+          "spatial-scene:claim:3",
+          "spatial-scene:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-spatial-scene"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "e12c0c1d143e304a76205d4c7bf1094ff035eb03f15cb7437a3540d2814b4d53",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "The canvas can move from whole system to exact evidence. A spatial depth treatment previews zoom from system, to node, to trace, to source.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "viewports": [
+            {
+              "id": "whole",
+              "level": 1
+            },
+            {
+              "id": "subsystem",
+              "level": 2
+            },
+            {
+              "id": "node",
+              "level": 3,
+              "selectedNodeId": "validator"
+            },
+            {
+              "id": "source",
+              "level": 4,
+              "selectedNodeId": "validator",
+              "sourceIds": [
+                "atlas-v2-spatial-scene"
+              ]
+            }
+          ]
+        },
+        "specDigest": "837aa0e68bd1a722b98dbdf6f5acf9d763404fddfef08cd349fed353575bc277"
       }
     },
     {
@@ -2312,7 +3902,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed nodes",
+          "typed edges",
+          "reading direction"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -2351,6 +3944,57 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "claim-source-lineage",
+        "kind": "graph",
+        "narrativeJob": "Source, extraction, bounded claim, slide element, and receipt stay connected.",
+        "claimIds": [
+          "claim-source-lineage:claim:1",
+          "claim-source-lineage:claim:2",
+          "claim-source-lineage:claim:3",
+          "claim-source-lineage:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-claim-source-lineage"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "327802fbad6d4abe4a73c3337b2c2d75c109f8e883f5a22d213ebe02d44392e9",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "A claim is trustworthy when its entire path remains inspectable. Source, extraction, bounded claim, slide element, and receipt stay connected.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "directed": true,
+          "nodes": [
+            {
+              "id": "source"
+            },
+            {
+              "id": "output"
+            }
+          ],
+          "edges": [
+            {
+              "id": "edge-1",
+              "from": "source",
+              "to": "output",
+              "directed": true
+            }
+          ]
+        },
+        "specDigest": "4a1d2e66497fb0036a33271911fc8fb85fae2efc24b5d1dcdf0d1be4a96128b1"
       }
     },
     {
@@ -2395,7 +4039,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "immutable media digest",
+          "capture version",
+          "claim region"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -2409,7 +4056,9 @@
         "designRules": [
           "one primary claim",
           "visible source",
-          "editable PowerPoint semantics"
+          "editable PowerPoint semantics",
+          "source MIME must be application/pdf",
+          "page and region are digest-bound"
         ],
         "exportCapabilities": [
           "browser",
@@ -2433,6 +4082,51 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "pdf-evidence-region",
+        "kind": "evidence-media",
+        "narrativeJob": "A PDF-region artifact binds highlighted evidence to the claim it supports.",
+        "claimIds": [
+          "pdf-evidence-region:claim:1",
+          "pdf-evidence-region:claim:2",
+          "pdf-evidence-region:claim:3",
+          "pdf-evidence-region:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-pdf-evidence-region"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "41dda075bf1a654abe4abe6f1b2117d2ef6d250b0132ab640cdc247708e5dd60",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Citation quality depends on the exact source region. A PDF-region artifact binds highlighted evidence to the claim it supports.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "mimeType": "application/pdf",
+          "digest": "sha256:78473e2c158b02b34bac658288d893644307a63e96a83f736e8d12146265709c",
+          "claimId": "pdf-evidence-region:claim:1",
+          "page": 1,
+          "region": {
+            "x": 0.08,
+            "y": 0.42,
+            "width": 0.84,
+            "height": 0.18
+          },
+          "captureVersion": "artifact-atlas-v2"
+        },
+        "specDigest": "f4a94bd5dfbaf597f976b22728c2b8d7157bcf22c6cee1815e8aa84b21a96a36"
       }
     },
     {
@@ -2442,10 +4136,10 @@
       "artifactType": "code-runtime-proof",
       "slideArchetype": "code",
       "family": "code",
-      "title": "The contract matters more when runtime evidence sits beside it",
-      "takeaway": "Editable code context and measured adapter latency reinforce each other.",
+      "title": "Runtime claims require a reproducible benchmark receipt",
+      "takeaway": "Editable code context stays separate from latency until samples and environment are bound.",
       "theme": "technical-dark",
-      "narrativeJob": "Editable code context and measured adapter latency reinforce each other.",
+      "narrativeJob": "Editable code context stays separate from latency until samples and environment are bound.",
       "evidence": [
         {
           "sourceId": "atlas-v2-code-runtime-proof",
@@ -2472,7 +4166,7 @@
         "recipeId": "nodeslide.recipe.code-runtime-proof.v2",
         "artifactType": "code-runtime-proof",
         "narrativeJobs": [
-          "Editable code context and measured adapter latency reinforce each other."
+          "Editable code context stays separate from latency until samples and environment are bound."
         ],
         "requiredInputs": [
           "audience",
@@ -2508,13 +4202,51 @@
         "interactive": false
       },
       "accessibility": {
-        "altText": "The contract matters more when runtime evidence sits beside it. Editable code context and measured adapter latency reinforce each other.",
+        "altText": "Runtime claims require a reproducible benchmark receipt. Editable code context stays separate from latency until samples and environment are bound.",
         "readingOrder": "title, primary visual, evidence annotation, source, receipt",
         "highContrast": true,
         "reducedMotion": true,
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "code-runtime-proof",
+        "kind": "runtime-proof",
+        "narrativeJob": "Editable code context stays separate from latency until samples and environment are bound.",
+        "claimIds": [
+          "code-runtime-proof:claim:1",
+          "code-runtime-proof:claim:2",
+          "code-runtime-proof:claim:3",
+          "code-runtime-proof:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-code-runtime-proof"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "42429662fb1fcfb84bfe953df09e5ca6981c1c2767607cbc5a5ec2a9730724ad",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Runtime claims require a reproducible benchmark receipt. Editable code context stays separate from latency until samples and environment are bound.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "sampleSize": 0,
+          "unit": "ms",
+          "receiptDigest": "",
+          "status": "illustrative-not-measured"
+        },
+        "specDigest": "0d101a04a5354e5ba5792309406fa739054582551e4b1686db974b41ce863c0a"
       }
     },
     {
@@ -2524,10 +4256,10 @@
       "artifactType": "otel-trace",
       "slideArchetype": "trace",
       "family": "trace",
-      "title": "A trace shows where orchestration time and repair actually went",
-      "takeaway": "Nested spans expose planning, tools, validation, repair, and export.",
+      "title": "Trace anatomy is illustrative until trace and span IDs are bound",
+      "takeaway": "Nested spans explain the required structure without claiming observed timing.",
       "theme": "technical-dark",
-      "narrativeJob": "Nested spans expose planning, tools, validation, repair, and export.",
+      "narrativeJob": "Nested spans explain the required structure without claiming observed timing.",
       "evidence": [
         {
           "sourceId": "atlas-v2-otel-trace",
@@ -2554,7 +4286,7 @@
         "recipeId": "nodeslide.recipe.otel-trace.v2",
         "artifactType": "otel-trace",
         "narrativeJobs": [
-          "Nested spans expose planning, tools, validation, repair, and export."
+          "Nested spans explain the required structure without claiming observed timing."
         ],
         "requiredInputs": [
           "audience",
@@ -2590,13 +4322,50 @@
         "interactive": false
       },
       "accessibility": {
-        "altText": "A trace shows where orchestration time and repair actually went. Nested spans expose planning, tools, validation, repair, and export.",
+        "altText": "Trace anatomy is illustrative until trace and span IDs are bound. Nested spans explain the required structure without claiming observed timing.",
         "readingOrder": "title, primary visual, evidence annotation, source, receipt",
         "highContrast": true,
         "reducedMotion": true,
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "otel-trace",
+        "kind": "trace",
+        "narrativeJob": "Nested spans explain the required structure without claiming observed timing.",
+        "claimIds": [
+          "otel-trace:claim:1",
+          "otel-trace:claim:2",
+          "otel-trace:claim:3",
+          "otel-trace:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-otel-trace"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "391204d668c6c04ae2c35f683ca157af2183191a7ccf6a825d5bacb1222c79d0",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Trace anatomy is illustrative until trace and span IDs are bound. Nested spans explain the required structure without claiming observed timing.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "traceId": "illustrative",
+          "spans": [],
+          "status": "illustrative-not-observed"
+        },
+        "specDigest": "6f7e584f174b8584013f3b11b0e34f9a9eda49045dcb8abf5327701fc171e6ed"
       }
     },
     {
@@ -2641,7 +4410,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "expression AST",
+          "symbol values",
+          "rounding policy"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -2656,7 +4428,9 @@
         "designRules": [
           "one primary claim",
           "visible source",
-          "editable PowerPoint semantics"
+          "editable PowerPoint semantics",
+          "calculation evaluates the expression AST",
+          "symbols map to evidence"
         ],
         "exportCapabilities": [
           "browser",
@@ -2680,6 +4454,95 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "quality-cost-equation",
+        "kind": "equation",
+        "narrativeJob": "Real mathematics, definitions, and a bound calculation share one frame.",
+        "claimIds": [
+          "quality-cost-equation:claim:1",
+          "quality-cost-equation:claim:2",
+          "quality-cost-equation:claim:3",
+          "quality-cost-equation:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-quality-cost-equation"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "c33408154d08d526cb5c94a2651f52f42c6f6fb176409f6209d6cc6f66d3d5c8",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "The score is only useful when every symbol maps to evidence. Real mathematics, definitions, and a bound calculation share one frame.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "expression": {
+            "op": "divide",
+            "args": [
+              {
+                "op": "value",
+                "name": "Q"
+              },
+              {
+                "op": "add",
+                "args": [
+                  {
+                    "op": "value",
+                    "name": "one"
+                  },
+                  {
+                    "op": "multiply",
+                    "args": [
+                      {
+                        "op": "value",
+                        "name": "alpha"
+                      },
+                      {
+                        "op": "value",
+                        "name": "C"
+                      }
+                    ]
+                  },
+                  {
+                    "op": "multiply",
+                    "args": [
+                      {
+                        "op": "value",
+                        "name": "beta"
+                      },
+                      {
+                        "op": "value",
+                        "name": "L"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "values": {
+            "Q": 0.75,
+            "one": 1,
+            "alpha": 0.4,
+            "C": 0.038,
+            "beta": 0.1,
+            "L": 1.04
+          },
+          "result": 0.6701,
+          "tolerance": 0.0001,
+          "rounding": 3
+        },
+        "specDigest": "0b1fa53421fe22a66c73e1bd9240c77d3f6e88b8722ae1f7a47b7c084e88ae90"
       }
     },
     {
@@ -2762,6 +4625,41 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "deck-ci-receipt",
+        "kind": "generic",
+        "narrativeJob": "The receipt exposes every check, browser proof, PowerPoint proof, and fidelity difference.",
+        "claimIds": [
+          "deck-ci-receipt:claim:1",
+          "deck-ci-receipt:claim:2",
+          "deck-ci-receipt:claim:3",
+          "deck-ci-receipt:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-deck-ci-receipt"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "644b3dfe41804f631e830731f9168ebda36ae6b6026ef3e0ad0839c368b016b9",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "A deck is not done until both pixels and semantics pass. The receipt exposes every check, browser proof, PowerPoint proof, and fidelity difference.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "label": "A deck is not done until both pixels and semantics pass"
+        },
+        "specDigest": "98e96569ca5c821a85e9d04ed91f78e2f62d28c57f985dd1e1c3e01b19209dce"
       }
     },
     {
@@ -2844,6 +4742,65 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "risk-matrix",
+        "kind": "risk-matrix",
+        "narrativeJob": "Likelihood and impact preserve priority better than an unlabeled list.",
+        "claimIds": [
+          "risk-matrix:claim:1",
+          "risk-matrix:claim:2",
+          "risk-matrix:claim:3",
+          "risk-matrix:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-risk-matrix"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "9f6eb75c98fee520ef9194e7e029805c8a8a7f349d5245569ed151501242d0a3",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Pipeline coverage is the risk that deserves action first. Likelihood and impact preserve priority better than an unlabeled list.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "likelihoodAxis": {
+            "low": "rare",
+            "high": "likely"
+          },
+          "impactAxis": {
+            "low": "minor",
+            "high": "critical"
+          },
+          "risks": [
+            {
+              "id": "pipeline",
+              "likelihood": 4,
+              "impact": 5
+            },
+            {
+              "id": "capacity",
+              "likelihood": 3,
+              "impact": 4
+            },
+            {
+              "id": "retention",
+              "likelihood": 2,
+              "impact": 5
+            }
+          ]
+        },
+        "specDigest": "28c2bf01aec1987048d32de582e8e825f34d11228fd1db9905e4b6524ed074d7"
       }
     },
     {
@@ -2888,7 +4845,10 @@
         "requiredInputs": [
           "audience",
           "bounded claim",
-          "source receipt"
+          "source receipt",
+          "typed data",
+          "unit",
+          "scale policy"
         ],
         "supportedTools": [
           "semantic-primitives",
@@ -2903,7 +4863,9 @@
         "designRules": [
           "one primary claim",
           "visible source",
-          "editable PowerPoint semantics"
+          "editable PowerPoint semantics",
+          "observed and pilot cohorts stay separate",
+          "missing metrics remain missing"
         ],
         "exportCapabilities": [
           "browser",
@@ -2927,6 +4889,105 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "cost-quality-frontier",
+        "kind": "comparison",
+        "narrativeJob": "The observed routes stay separate from the not-yet-run ensemble.",
+        "claimIds": [
+          "cost-quality-frontier:claim:1",
+          "cost-quality-frontier:claim:2",
+          "cost-quality-frontier:claim:3",
+          "cost-quality-frontier:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-cost-quality-frontier"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "8beeaea1793af1535987b1c66f96d760b4b45d544de573d5979ed2203c0ab1cc",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Routing improves when quality, cost, and latency are judged together. The observed routes stay separate from the not-yet-run ensemble.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "comparisonType": "observed-routes",
+          "metrics": [
+            {
+              "id": "quality",
+              "unit": "eligible fraction"
+            },
+            {
+              "id": "cost",
+              "unit": "USD per candidate"
+            },
+            {
+              "id": "latency",
+              "unit": "seconds"
+            }
+          ],
+          "cohorts": [
+            {
+              "id": "claude",
+              "status": "observed",
+              "plotted": true,
+              "values": {
+                "quality": 1,
+                "cost": 0.00862,
+                "latency": 8.193
+              }
+            },
+            {
+              "id": "kimi",
+              "status": "observed",
+              "plotted": true,
+              "values": {
+                "quality": 0.9583333333333334,
+                "cost": 0.001303,
+                "latency": 17.617
+              }
+            },
+            {
+              "id": "gemma",
+              "status": "observed",
+              "plotted": true,
+              "values": {
+                "quality": 0.9583333333333334,
+                "cost": 0,
+                "latency": 17.271
+              }
+            },
+            {
+              "id": "nemotron",
+              "status": "pilot",
+              "plotted": false,
+              "values": {}
+            },
+            {
+              "id": "gpt-oss",
+              "status": "pilot",
+              "plotted": false,
+              "values": {}
+            },
+            {
+              "id": "ensemble",
+              "status": "not-run",
+              "plotted": false,
+              "values": {}
+            }
+          ]
+        },
+        "specDigest": "4f80de957af332154e075dd6791ae61853929eecb7832935ae03d4c4e25103c7"
       }
     },
     {
@@ -2984,7 +5045,9 @@
         "designRules": [
           "one primary claim",
           "visible source",
-          "editable PowerPoint semantics"
+          "editable PowerPoint semantics",
+          "observed and pilot cohorts stay separate",
+          "missing metrics remain missing"
         ],
         "exportCapabilities": [
           "browser",
@@ -3008,6 +5071,104 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "model-compare",
+        "kind": "comparison",
+        "narrativeJob": "Observed outputs compare adherence, primitive choice, repairs, latency, cost, and export truth.",
+        "claimIds": [
+          "model-compare:claim:1",
+          "model-compare:claim:2",
+          "model-compare:claim:3"
+        ],
+        "sourceIds": [
+          "atlas-v2-model-compare"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "1d05ff875308a2ad9b547474dd68c575ffb7825de38e869daa2cf7cd2647492a",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Different models fail differently under the same contract. Observed outputs compare adherence, primitive choice, repairs, latency, cost, and export truth.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "comparisonType": "observed-routes",
+          "metrics": [
+            {
+              "id": "quality",
+              "unit": "eligible fraction"
+            },
+            {
+              "id": "cost",
+              "unit": "USD per candidate"
+            },
+            {
+              "id": "latency",
+              "unit": "seconds"
+            }
+          ],
+          "cohorts": [
+            {
+              "id": "claude",
+              "status": "observed",
+              "plotted": true,
+              "values": {
+                "quality": 1,
+                "cost": 0.00862,
+                "latency": 8.193
+              }
+            },
+            {
+              "id": "kimi",
+              "status": "observed",
+              "plotted": true,
+              "values": {
+                "quality": 0.9583333333333334,
+                "cost": 0.001303,
+                "latency": 17.617
+              }
+            },
+            {
+              "id": "gemma",
+              "status": "observed",
+              "plotted": true,
+              "values": {
+                "quality": 0.9583333333333334,
+                "cost": 0,
+                "latency": 17.271
+              }
+            },
+            {
+              "id": "nemotron",
+              "status": "pilot",
+              "plotted": false,
+              "values": {}
+            },
+            {
+              "id": "gpt-oss",
+              "status": "pilot",
+              "plotted": false,
+              "values": {}
+            },
+            {
+              "id": "ensemble",
+              "status": "not-run",
+              "plotted": false,
+              "values": {}
+            }
+          ]
+        },
+        "specDigest": "b300de59b317b13e44da987ac54cdcfc5cfe1a5486717ca74f1ad5f6a7a3bafb"
       }
     },
     {
@@ -3064,7 +5225,9 @@
         "designRules": [
           "one primary claim",
           "visible source",
-          "editable PowerPoint semantics"
+          "editable PowerPoint semantics",
+          "observed and pilot cohorts stay separate",
+          "missing metrics remain missing"
         ],
         "exportCapabilities": [
           "browser",
@@ -3088,6 +5251,63 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "harness-compare",
+        "kind": "comparison",
+        "narrativeJob": "The same deterministic route isolates fixture, receipt, motion, theme, and accessibility gains.",
+        "claimIds": [
+          "harness-compare:claim:1",
+          "harness-compare:claim:2"
+        ],
+        "sourceIds": [
+          "atlas-v2-harness-compare"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "13029ab44bf2fa272763383d3953d38694fb95e38d0c770c7f0a1404514d37d2",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "V2 expands the harness without crediting the model. The same deterministic route isolates fixture, receipt, motion, theme, and accessibility gains.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "comparisonType": "coverage-only",
+          "metrics": [
+            {
+              "id": "artifactCoverage",
+              "unit": "artifact count"
+            }
+          ],
+          "cohorts": [
+            {
+              "id": "v1",
+              "status": "observed",
+              "plotted": true,
+              "values": {
+                "artifactCoverage": 12
+              }
+            },
+            {
+              "id": "v2",
+              "status": "observed",
+              "plotted": true,
+              "values": {
+                "artifactCoverage": 38
+              }
+            }
+          ]
+        },
+        "specDigest": "f29e92cf5eb4c11b7345eb7cb5eb7399ba832f1e7fa978ae8f81ff357cb620f2"
       }
     },
     {
@@ -3170,6 +5390,41 @@
         "mobile": "Single-column semantic stack with the visual before detail.",
         "presenterNotes": true,
         "sourceHover": true
+      },
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "id": "final-recommendation",
+        "kind": "generic",
+        "narrativeJob": "Researcher, investor, and plain-language Chinese versions share the same evidence.",
+        "claimIds": [
+          "final-recommendation:claim:1",
+          "final-recommendation:claim:2",
+          "final-recommendation:claim:3",
+          "final-recommendation:claim:4"
+        ],
+        "sourceIds": [
+          "atlas-v2-final-recommendation"
+        ],
+        "provenance": {
+          "status": "derived",
+          "sourceDigest": "3491eae6eda844bc78162e3fb4749f19a00a327cf9e06137d0ccc1ada34f04ee",
+          "assumptions": []
+        },
+        "browserContract": "semantic-and-visual",
+        "pptxContract": "editable-or-declared-fallback",
+        "accessibility": {
+          "altText": "Reuse the visual vocabulary, then adapt the communication contract. Researcher, investor, and plain-language Chinese versions share the same evidence.",
+          "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+          "highContrast": true,
+          "reducedMotion": true,
+          "mobile": "Single-column semantic stack with the visual before detail.",
+          "presenterNotes": true,
+          "sourceHover": true
+        },
+        "payload": {
+          "label": "Reuse the visual vocabulary, then adapt the communication contract"
+        },
+        "specDigest": "2ec5965101d1089e0ba8fb3d670851e04f0622df5f5d9049fd5e04eaacfe90f6"
       }
     }
   ]

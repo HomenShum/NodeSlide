@@ -40,7 +40,15 @@ npm run artifact-atlas:v2:test
 npm run artifact-atlas:v2:finalize
 ```
 
-The finalizer fails closed unless both PowerPoint files and all 38 rendered Atlas screenshots exist. It then records the observed browser render, PowerPoint render, overflow gate, visual inspection, and known fidelity differences while leaving human preference pending.
+The finalizer now fails closed unless both PowerPoint files and all 38 rendered
+Atlas screenshots exist, every artifact passes its typed semantic contract, and
+a digest-bound inspection ledger matches the exact Atlas PowerPoint. Screenshot
+existence can no longer approve visual quality. The 2026-07-21 audited arithmetic,
+diagram, label-binding, evidence, schedule, and observed-vs-pilot defects were
+repaired and protected by regression tests. Independent blind preference remains
+pending, so `publicReleaseApproved` stays `false`. The implementation and open
+evidence boundary are recorded in
+`docs/ARTIFACT_SEMANTICS_MODEL_GYM_GOAL.md`.
 
 ## Artifact Atlas v1
 

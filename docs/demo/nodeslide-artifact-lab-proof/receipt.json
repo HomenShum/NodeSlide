@@ -13,9 +13,7 @@
     "cards": 4,
     "loadedImages": 4,
     "freeRouteVisible": true,
-    "retainedFailureModels": [
-      "Gemma 4 26B Free"
-    ]
+    "retainedFailureModels": ["Gemma 4 26B Free"]
   },
   "evidenceModes": {
     "browser": true,

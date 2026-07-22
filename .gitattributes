@@ -20,6 +20,7 @@
 *.mp3 binary
 *.mp4 binary
 *.png binary
+*.pdf binary
 *.pptx binary
 *.webm binary
 *.woff binary

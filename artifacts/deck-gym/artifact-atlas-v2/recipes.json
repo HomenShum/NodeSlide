@@ -39,7 +39,7 @@
       "recipeId": "nodeslide.recipe.section-opener.v2",
       "artifactType": "section-opener",
       "narrativeJobs": [
-        "Six chapters organize artifacts by the job they perform for an audience."
+        "Seven chapters organize artifacts by the job they perform for an audience."
       ],
       "requiredInputs": [
         "audience",
@@ -204,7 +204,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed data",
+        "unit",
+        "scale policy"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -237,7 +240,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed data",
+        "unit",
+        "scale policy"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -252,7 +258,9 @@
       "designRules": [
         "one primary claim",
         "visible source",
-        "editable PowerPoint semantics"
+        "editable PowerPoint semantics",
+        "axis labels and units",
+        "distinguish observed from modeled"
       ],
       "exportCapabilities": [
         "browser",
@@ -270,7 +278,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed data",
+        "unit",
+        "scale policy"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -285,7 +296,9 @@
       "designRules": [
         "one primary claim",
         "visible source",
-        "editable PowerPoint semantics"
+        "editable PowerPoint semantics",
+        "deltas reconcile to final",
+        "labels bind to bars"
       ],
       "exportCapabilities": [
         "browser",
@@ -303,7 +316,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed data",
+        "unit",
+        "scale policy"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -336,7 +352,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed data",
+        "unit",
+        "scale policy"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -370,7 +389,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed data",
+        "unit",
+        "scale policy"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -404,7 +426,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed nodes",
+        "typed edges",
+        "reading direction"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -437,7 +462,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed nodes",
+        "typed edges",
+        "reading direction"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -470,7 +498,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed nodes",
+        "typed edges",
+        "reading direction"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -485,7 +516,10 @@
       "designRules": [
         "one primary claim",
         "visible source",
-        "editable PowerPoint semantics"
+        "editable PowerPoint semantics",
+        "directed edges",
+        "edge polarity is plus or minus",
+        "loops are R or B"
       ],
       "exportCapabilities": [
         "browser",
@@ -503,7 +537,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed nodes",
+        "typed edges",
+        "reading direction"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -518,7 +555,9 @@
       "designRules": [
         "one primary claim",
         "visible source",
-        "editable PowerPoint semantics"
+        "editable PowerPoint semantics",
+        "band width encodes quantity",
+        "flow conserves at intermediate nodes"
       ],
       "exportCapabilities": [
         "browser",
@@ -536,7 +575,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed nodes",
+        "typed edges",
+        "reading direction"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -647,7 +689,9 @@
       "designRules": [
         "one primary claim",
         "visible source",
-        "editable PowerPoint semantics"
+        "editable PowerPoint semantics",
+        "visible dependencies",
+        "confidence is encoded"
       ],
       "exportCapabilities": [
         "browser",
@@ -665,7 +709,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "named states",
+        "transition policy",
+        "static fallback state"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -699,7 +746,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "named states",
+        "transition policy",
+        "static fallback state"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -766,7 +816,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "immutable media digest",
+        "capture version",
+        "claim region"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -796,12 +849,18 @@
       "recipeId": "nodeslide.recipe.interaction-clip.v2",
       "artifactType": "interaction-clip",
       "narrativeJobs": [
-        "Five real product states form a playable web sequence and a stepped PowerPoint fallback."
+        "Three captured product states anchor a five-step workflow and its PowerPoint fallback."
       ],
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "immutable media digest",
+        "capture version",
+        "claim region",
+        "named states",
+        "transition policy",
+        "static fallback state"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -836,7 +895,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "immutable media digest",
+        "capture version",
+        "claim region"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -871,7 +933,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "named states",
+        "transition policy",
+        "static fallback state"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -905,7 +970,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed nodes",
+        "typed edges",
+        "reading direction"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -938,7 +1006,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "immutable media digest",
+        "capture version",
+        "claim region"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -952,7 +1023,9 @@
       "designRules": [
         "one primary claim",
         "visible source",
-        "editable PowerPoint semantics"
+        "editable PowerPoint semantics",
+        "source MIME must be application/pdf",
+        "page and region are digest-bound"
       ],
       "exportCapabilities": [
         "browser",
@@ -965,7 +1038,7 @@
       "recipeId": "nodeslide.recipe.code-runtime-proof.v2",
       "artifactType": "code-runtime-proof",
       "narrativeJobs": [
-        "Editable code context and measured adapter latency reinforce each other."
+        "Editable code context stays separate from latency until samples and environment are bound."
       ],
       "requiredInputs": [
         "audience",
@@ -997,7 +1070,7 @@
       "recipeId": "nodeslide.recipe.otel-trace.v2",
       "artifactType": "otel-trace",
       "narrativeJobs": [
-        "Nested spans expose planning, tools, validation, repair, and export."
+        "Nested spans explain the required structure without claiming observed timing."
       ],
       "requiredInputs": [
         "audience",
@@ -1034,7 +1107,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "expression AST",
+        "symbol values",
+        "rounding policy"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -1049,7 +1125,9 @@
       "designRules": [
         "one primary claim",
         "visible source",
-        "editable PowerPoint semantics"
+        "editable PowerPoint semantics",
+        "calculation evaluates the expression AST",
+        "symbols map to evidence"
       ],
       "exportCapabilities": [
         "browser",
@@ -1131,7 +1209,10 @@
       "requiredInputs": [
         "audience",
         "bounded claim",
-        "source receipt"
+        "source receipt",
+        "typed data",
+        "unit",
+        "scale policy"
       ],
       "supportedTools": [
         "semantic-primitives",
@@ -1146,7 +1227,9 @@
       "designRules": [
         "one primary claim",
         "visible source",
-        "editable PowerPoint semantics"
+        "editable PowerPoint semantics",
+        "observed and pilot cohorts stay separate",
+        "missing metrics remain missing"
       ],
       "exportCapabilities": [
         "browser",
@@ -1178,7 +1261,9 @@
       "designRules": [
         "one primary claim",
         "visible source",
-        "editable PowerPoint semantics"
+        "editable PowerPoint semantics",
+        "observed and pilot cohorts stay separate",
+        "missing metrics remain missing"
       ],
       "exportCapabilities": [
         "browser",
@@ -1210,7 +1295,9 @@
       "designRules": [
         "one primary claim",
         "visible source",
-        "editable PowerPoint semantics"
+        "editable PowerPoint semantics",
+        "observed and pilot cohorts stay separate",
+        "missing metrics remain missing"
       ],
       "exportCapabilities": [
         "browser",

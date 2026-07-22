@@ -7,6 +7,7 @@ import {
   ATLAS_V2_THEME_VARIANTS,
   ATLAS_V2_THEME_VARIANT_IDS,
 } from './lib/artifact-atlas-v2-definition.mjs';
+import { validateArtifactSpec } from './lib/artifact-spec-core.mjs';
 
 describe('NodeSlide Artifact Atlas V2', () => {
   it('freezes the complete 38-artifact museum and 14-slide public narrative', () => {
@@ -67,7 +68,19 @@ describe('NodeSlide Artifact Atlas V2', () => {
       });
       expect(artifact.evidence.length).toBeGreaterThan(0);
       expect(artifact.allowedClaims.length).toBeGreaterThan(0);
+      expect(validateArtifactSpec(artifact.artifactSpec).ok).toBe(true);
     }
+  });
+
+  it('uses artifact-specific inputs and rules instead of one generic recipe', () => {
+    const inputSignatures = new Set(
+      ATLAS_V2_ARTIFACTS.map((artifact) => artifact.recipe.requiredInputs.join('|')),
+    );
+    const ruleSignatures = new Set(
+      ATLAS_V2_ARTIFACTS.map((artifact) => artifact.recipe.designRules.join('|')),
+    );
+    expect(inputSignatures.size).toBeGreaterThanOrEqual(6);
+    expect(ruleSignatures.size).toBeGreaterThanOrEqual(10);
   });
 
   it('expands theme intelligence and domain coverage without multiplying fixtures', () => {

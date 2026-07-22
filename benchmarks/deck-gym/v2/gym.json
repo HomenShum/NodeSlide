@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "nodekit.gym-config/v1",
+  "gymVersion": "nodeslide-deck-gym-v2",
+  "description": "Paired repeated artifact experiments across model and harness cohorts. Planning a run never promotes or routes it.",
+  "expectedMatrixSize": 360,
+  "repetitions": 3,
+  "tasks": [
+    {
+      "id": "public-equation",
+      "taskClass": "equation",
+      "curriculumLevel": 3,
+      "pool": "public-development",
+      "task": "Produce a typed quality-cost equation artifact and evaluated result.",
+      "evidence": "Public deterministic fixture with Q, cost, latency, and weights.",
+      "reference": "ArtifactSpec equation validator v1",
+      "trainingEligible": true
+    },
+    {
+      "id": "hidden-waterfall",
+      "taskClass": "waterfall",
+      "curriculumLevel": 4,
+      "pool": "hidden-validation",
+      "task": "Produce a reconciled contribution waterfall from held-out values.",
+      "evidence": "Held-out evidence digest supplied at run time.",
+      "reference": "ArtifactSpec waterfall validator v1",
+      "trainingEligible": false
+    },
+    {
+      "id": "rotating-causal-loop",
+      "taskClass": "causal-loop",
+      "curriculumLevel": 5,
+      "pool": "rotating-challenge",
+      "task": "Construct and repair a directed causal loop with typed polarity.",
+      "evidence": "Rotating challenge evidence digest supplied at run time.",
+      "reference": "ArtifactSpec causal-loop validator v1",
+      "trainingEligible": false
+    },
+    {
+      "id": "shadow-evidence-media",
+      "taskClass": "evidence-media",
+      "curriculumLevel": 6,
+      "pool": "live-shadow",
+      "task": "Bind an anonymized claim to a source page and region without changing user output.",
+      "evidence": "Anonymized live-shadow digest only.",
+      "reference": "ArtifactSpec evidence-media validator v1",
+      "trainingEligible": false
+    }
+  ],
+  "models": [
+    {
+      "id": "anthropic/claude-sonnet-5",
+      "provider": "openrouter",
+      "route": "anthropic/claude-sonnet-5",
+      "returnedModelRequired": true,
+      "cohort": "frontier"
+    },
+    {
+      "id": "moonshotai/kimi-k3",
+      "provider": "openrouter",
+      "route": "moonshotai/kimi-k3",
+      "returnedModelRequired": true,
+      "cohort": "mid-tier"
+    },
+    {
+      "id": "openai/gpt-oss-20b:free",
+      "provider": "openrouter",
+      "route": "openai/gpt-oss-20b:free",
+      "returnedModelRequired": true,
+      "cohort": "small-legacy"
+    },
+    {
+      "id": "google/gemma-4-26b-a4b-it:free",
+      "provider": "openrouter",
+      "route": "google/gemma-4-26b-a4b-it:free",
+      "returnedModelRequired": true,
+      "cohort": "pinned-free"
+    },
+    {
+      "id": "openrouter/free",
+      "provider": "openrouter",
+      "route": "openrouter/free",
+      "returnedModelRequired": true,
+      "cohort": "random-router"
+    },
+    {
+      "id": "nodeslide/deterministic-compiler",
+      "provider": "local",
+      "route": "nodeslide/deterministic-compiler",
+      "returnedModelRequired": false,
+      "cohort": "control"
+    }
+  ],
+  "harnesses": [
+    {
+      "id": "light-director",
+      "version": "2.0.0",
+      "weight": "light",
+      "role": "story-director",
+      "contextStrategy": "brief-and-evidence",
+      "toolIds": ["select_artifact"],
+      "repairPolicy": "escalate-on-semantic-failure"
+    },
+    {
+      "id": "structured-planner",
+      "version": "2.0.0",
+      "weight": "structured",
+      "role": "artifact-planner",
+      "contextStrategy": "bounded-story-spec-and-reference-pack",
+      "toolIds": ["select_artifact", "validate_artifact_spec"],
+      "repairPolicy": "one-typed-repair"
+    },
+    {
+      "id": "bounded-executor",
+      "version": "2.0.0",
+      "weight": "heavy",
+      "role": "single-artifact-executor",
+      "contextStrategy": "one-task-one-schema-minimal-evidence",
+      "toolIds": ["compile_artifact", "validate_artifact_spec"],
+      "repairPolicy": "two-bounded-repairs"
+    },
+    {
+      "id": "repair-specialist",
+      "version": "2.0.0",
+      "weight": "repair",
+      "role": "artifact-repairer",
+      "contextStrategy": "render-issue-and-source-spec",
+      "toolIds": ["validate_artifact_spec", "apply_typed_repair"],
+      "repairPolicy": "repair-only-no-regeneration"
+    },
+    {
+      "id": "router-robustness",
+      "version": "2.0.0",
+      "weight": "structured",
+      "role": "route-negotiator",
+      "contextStrategy": "capability-probe-and-bounded-task",
+      "toolIds": ["record_returned_route", "validate_artifact_spec"],
+      "repairPolicy": "timeout-fallback-with-attribution"
+    }
+  ],
+  "budget": {
+    "maxTokens": 8000,
+    "maxLatencyMs": 300000,
+    "maxCostMicroUsd": 200000,
+    "maxRepairs": 2
+  },
+  "promotion": {
+    "minimumMatchedCases": 12,
+    "minimumPreferenceWinRate": 0.6,
+    "minimumMeanUtilityDelta": 0.03,
+    "maximumDimensionRegression": 0.02,
+    "minimumStableRepetitions": 3,
+    "requiresHumanReview": true,
+    "autoApply": false
+  }
+}

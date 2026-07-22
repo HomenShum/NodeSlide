@@ -13,6 +13,7 @@ import {
   ATLAS_V2_THEME_VARIANT_IDS,
   ATLAS_V2_VERSION,
 } from './lib/artifact-atlas-v2-definition.mjs';
+import { validateArtifactSpec } from './lib/artifact-spec-core.mjs';
 
 const WIDTH = 1600;
 const HEIGHT = 900;
@@ -522,18 +523,17 @@ function renderUncertainty({ p, theme }) {
     [800, 340],
     [1010, 275],
   ];
-  // Keep the range editable in PowerPoint: stepped translucent bands avoid a
-  // flattened polygon fallback while preserving the same evidence contract.
-  for (let index = 0; index < high.length - 1; index += 1) {
-    const top = Math.min(high[index][1], high[index + 1][1]);
-    const bottom = Math.max(low[index][1], low[index + 1][1]);
+  low.forEach(([x, y], index) =>
     p.push(
-      rect(high[index][0], top, high[index + 1][0] - high[index][0], bottom - top, {
-        fill: theme.soft,
-        opacity: 0.72,
+      line(x, y, high[index][0], high[index][1], {
+        stroke: theme.soft,
+        width: 22,
+        opacity: 0.58,
       }),
-    );
-  }
+    ),
+  );
+  p.push(polyline(low, { stroke: theme.muted, width: 3, dash: true }));
+  p.push(polyline(high, { stroke: theme.muted, width: 3, dash: true }));
   p.push(
     polyline(
       [
@@ -549,35 +549,28 @@ function renderUncertainty({ p, theme }) {
   p.push(text(1080, 275, 280, 38, 'Q5 high · 13.8', 18, theme.muted, 600));
   p.push(text(1080, 350, 280, 38, 'base · 11.4', 20, theme.accent, 700));
   p.push(text(1080, 485, 280, 38, 'Q5 low · 9.0', 18, theme.muted, 600));
-  p.push(
-    text(
-      125,
-      670,
-      1080,
-      30,
-      'Observed             modeled range widens →',
-      16,
-      theme.muted,
-      600,
-      'center',
-      true,
-    ),
+  ['Q1\nobserved', 'Q2\nobserved', 'Q3\nmodeled', 'Q4\nmodeled', 'Q5\nmodeled'].forEach(
+    (label, index) =>
+      p.push(text(130 + index * 210, 676, 120, 42, label, 13, theme.muted, 600, 'center', true)),
   );
+  ['14', '12', '10', '8'].forEach((label, index) =>
+    p.push(text(74, 258 + index * 137, 36, 24, label, 13, theme.muted, 600, 'right', true)),
+  );
+  p.push(text(124, 222, 220, 24, 'QUALITY POINTS', 13, theme.muted, 700, 'left', true));
 }
 
 function renderWaterfall({ p, theme }) {
   const bars = [
-    ['Baseline', 62, 0, theme.muted],
-    ['Plan', 8, 62, theme.accent2],
-    ['Tools', 7, 70, theme.accent],
-    ['Repair', 5, 77, theme.accent2],
-    ['Deck CI', 4, 82, theme.accent],
-    ['Final', 86, 0, theme.ink],
+    ['Baseline', 62, 0, theme.muted, 135],
+    ['Plan', 8, 62, theme.accent2, 365],
+    ['Tools', 7, 70, theme.accent, 595],
+    ['Repair', 5, 77, theme.accent2, 825],
+    ['Deck CI', 4, 82, theme.accent, 1055],
+    ['Final', 86, 0, theme.ink, 1285],
   ];
   const baseY = 680;
   const scale = 3.2;
-  bars.forEach(([label, value, start, color], index) => {
-    const x = 120 + index * 220;
+  bars.forEach(([label, value, start, color, x], index) => {
     const y = baseY - Number(start + value) * scale;
     const h = Number(value) * scale;
     p.push(rect(x, y, 130, h, { fill: color, opacity: index === 5 ? 0.9 : 0.78 }));
@@ -587,15 +580,15 @@ function renderWaterfall({ p, theme }) {
         y - 42,
         130,
         30,
-        index === 0 || index === 5 ? String(value) : `+${value}`,
-        20,
+        index === 0 || index === 5 ? String(value) : `${String(label).toUpperCase()} +${value}`,
+        index === 0 || index === 5 ? 20 : 14,
         theme.ink,
         700,
         'center',
         true,
       ),
     );
-    p.push(text(x - 20, 700, 170, 30, label, 17, theme.muted, 600, 'center'));
+    p.push(text(x - 20, 704, 170, 30, label, 15, theme.muted, 600, 'center'));
     if (index > 0 && index < 5)
       p.push(
         line(x - 90, y + h, x, y + h, {
@@ -605,18 +598,31 @@ function renderWaterfall({ p, theme }) {
         }),
       );
   });
+  p.push(text(72, 252, 240, 24, 'QUALITY POINTS', 13, theme.muted, 700, 'left', true));
+  [20, 40, 60, 80].forEach((value) => {
+    const y = baseY - value * scale;
+    p.push(text(76, y - 10, 42, 22, String(value), 12, theme.muted, 600, 'right', true));
+    p.push(line(125, y, 1490, y, { stroke: theme.soft, width: 1, dash: true }));
+  });
 }
 
 function renderScatter({ p, theme }) {
-  drawChartAxes(p, theme, 150, 260, 1080, 410, 'Cost →', 'Quality →');
+  drawChartAxes(
+    p,
+    theme,
+    150,
+    260,
+    1080,
+    410,
+    'Observed cost per candidate →',
+    'Eligible fraction →',
+  );
   const points = [
-    [260, 560, 26, 'Gemma · free', theme.accent2],
-    [420, 485, 34, 'GPT-OSS · free', theme.muted],
-    [560, 430, 38, 'Nemotron · free', theme.accent2],
-    [760, 365, 44, 'Kimi', theme.accent],
-    [1010, 315, 33, 'Claude', theme.danger],
+    [175, 430, 36, 'Gemma · 23/24 · $0 · 17.3s', theme.accent2, 490],
+    [320, 430, 37, 'Kimi · 23/24 · $0.0013 · 17.6s', theme.accent, 375],
+    [1080, 280, 25, 'Claude · 24/24 · $0.0086 · 8.2s', theme.danger, 320],
   ];
-  points.forEach(([x, y, r, label, color]) => {
+  points.forEach(([x, y, r, label, color, labelY]) => {
     p.push(
       circle(x, y, r, {
         fill: color,
@@ -625,9 +631,24 @@ function renderScatter({ p, theme }) {
         width: 4,
       }),
     );
-    p.push(text(x - 60, y + r + 16, 180, 30, label, 16, theme.ink, 650, 'center'));
+    p.push(text(x - 90, labelY, 280, 30, label, 14, theme.ink, 650, 'center'));
   });
   p.push(text(1245, 320, 250, 80, 'Bubble size\n= latency', 18, theme.muted, 600));
+  [
+    [150, '$0'],
+    [630, '$0.004'],
+    [1110, '$0.008'],
+  ].forEach(([x, label]) =>
+    p.push(text(x - 45, 680, 100, 24, label, 12, theme.muted, 600, 'center', true)),
+  );
+  [
+    [670, '90%'],
+    [465, '95%'],
+    [260, '100%'],
+  ].forEach(([y, label]) =>
+    p.push(text(82, y - 10, 56, 24, label, 12, theme.muted, 600, 'right', true)),
+  );
+  p.push(text(1245, 410, 250, 58, 'Y-axis shown from\n90–100% eligible', 14, theme.muted, 550));
 }
 
 function renderTable({ p, theme }) {
@@ -702,13 +723,15 @@ function renderDashboard({ p, theme }) {
       radius: 20,
     }),
   );
-  p.push(text(105, 265, 500, 36, 'BRIEF → WINNER FUNNEL', 16, theme.muted, 700, 'left', true));
+  p.push(
+    text(105, 265, 500, 36, 'FROZEN ARENA · CANDIDATE FUNNEL', 16, theme.muted, 700, 'left', true),
+  );
   const funnel = [
     ['Briefs', 100],
     ['Candidates', 84],
     ['Valid renders', 83],
     ['Deck CI', 82],
-    ['Human winner', 1],
+    ['Prior human winner', 1],
   ];
   funnel.forEach(([label, value], index) => {
     const w = 640 - index * 105;
@@ -743,8 +766,10 @@ function renderDashboard({ p, theme }) {
     }),
   );
   p.push(text(990, 265, 300, 30, 'EXCEPTIONS', 16, theme.muted, 700, 'left', true));
-  p.push(text(990, 315, 480, 44, '2 artifacts need repair', 30, theme.danger, 700));
-  p.push(text(990, 372, 480, 40, 'Both remain visibly red', 19, theme.ink, 550));
+  p.push(text(990, 315, 480, 44, '2 Arena candidates failed gates', 27, theme.danger, 700));
+  p.push(
+    text(990, 372, 480, 40, 'Historical result; not current Atlas status', 18, theme.ink, 550),
+  );
   p.push(
     rect(960, 476, 560, 214, {
       fill: theme.panel,
@@ -885,29 +910,30 @@ function renderSequence({ p, theme }) {
 
 function renderCausal({ p, theme }) {
   const nodes = [
-    [270, 350, 'Receipt quality'],
-    [660, 260, 'Reviewer trust'],
-    [1030, 350, 'Reuse'],
-    [660, 575, 'Harness signal'],
-    [1220, 590, 'Complexity'],
+    [270, 420, 'Receipt quality', 82],
+    [660, 330, 'Reviewer trust', 82],
+    [1030, 420, 'Reuse', 82],
+    [660, 625, 'Harness signal', 82],
+    [1220, 640, 'Complexity', 70],
   ];
   const edges = [
-    [0, 1, 'R+'],
-    [1, 2, 'R+'],
-    [2, 3, 'R+'],
-    [3, 0, 'R+'],
-    [2, 4, 'B+'],
-    [4, 1, 'B−'],
+    [0, 1, '+'],
+    [1, 2, '+'],
+    [2, 3, '+'],
+    [3, 0, '+'],
+    [2, 4, '+'],
+    [4, 1, '−'],
   ];
   edges.forEach(([from, to, label]) => {
     const a = nodes[from];
     const b = nodes[to];
+    const edge = trimLineToCircles(a[0], a[1], a[3], b[0], b[1], b[3]);
     p.push(
-      line(a[0], a[1], b[0], b[1], {
-        stroke: label === 'B−' ? theme.danger : theme.accent2,
+      line(edge.x1, edge.y1, edge.x2, edge.y2, {
+        stroke: label === '−' ? theme.danger : theme.accent2,
         width: 4,
         arrowEnd: true,
-        dash: label.startsWith('B'),
+        dash: label === '−',
       }),
     );
     p.push(
@@ -918,16 +944,16 @@ function renderCausal({ p, theme }) {
         26,
         label,
         15,
-        label === 'B−' ? theme.danger : theme.accent2,
+        label === '−' ? theme.danger : theme.accent2,
         700,
         'center',
         true,
       ),
     );
   });
-  nodes.forEach(([x, y, label], index) => {
+  nodes.forEach(([x, y, label, radius], index) => {
     p.push(
-      circle(x, y, index === 4 ? 70 : 82, {
+      circle(x, y, radius, {
         fill: theme.panel,
         stroke: index === 4 ? theme.danger : theme.accent,
         width: 4,
@@ -935,6 +961,22 @@ function renderCausal({ p, theme }) {
     );
     p.push(text(x - 72, y - 18, 144, 48, label, 18, theme.ink, 650, 'center'));
   });
+  p.push(text(390, 665, 220, 34, 'R1 · reinforcing', 16, theme.accent2, 700, 'center', true));
+  p.push(text(990, 700, 220, 34, 'B1 · balancing', 16, theme.danger, 700, 'center', true));
+}
+
+function trimLineToCircles(x1, y1, radius1, x2, y2, radius2) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const length = Math.hypot(dx, dy) || 1;
+  const ux = dx / length;
+  const uy = dy / length;
+  return {
+    x1: x1 + ux * radius1,
+    y1: y1 + uy * radius1,
+    x2: x2 - ux * (radius2 + 8),
+    y2: y2 - uy * (radius2 + 8),
+  };
 }
 
 function renderSankey({ p, theme }) {
@@ -969,10 +1011,23 @@ function renderSankey({ p, theme }) {
     p.push(
       line(820, middle[b][1], 1320, right[c][1], {
         stroke: b === 1 ? theme.danger : theme.accent,
-        width: Math.max(8, w - 4),
+        width: w,
         opacity: 0.35,
-        arrowEnd: true,
       }),
+    );
+    p.push(
+      text(
+        500,
+        (left[a][1] + middle[b][1]) / 2 - 18,
+        70,
+        24,
+        String(w),
+        13,
+        theme.ink,
+        700,
+        'center',
+        true,
+      ),
     );
   });
   [
@@ -1001,11 +1056,11 @@ function renderDecisionTree({ p, theme }) {
     [1120, 575, 350, 76, 'No · strong orchestrator'],
   ];
   [
-    [0, 1],
-    [0, 2],
-    [2, 3],
-    [2, 4],
-  ].forEach(([from, to]) => {
+    [0, 1, 'NO'],
+    [0, 2, 'YES'],
+    [2, 3, 'YES'],
+    [2, 4, 'NO'],
+  ].forEach(([from, to, branch]) => {
     const a = boxes[from];
     const b = boxes[to];
     p.push(
@@ -1014,6 +1069,20 @@ function renderDecisionTree({ p, theme }) {
         width: 4,
         arrowEnd: true,
       }),
+    );
+    p.push(
+      text(
+        (a[0] + a[2] / 2 + b[0] + b[2] / 2) / 2 - 34,
+        (a[1] + a[3] + b[1]) / 2 - 16,
+        68,
+        24,
+        branch,
+        13,
+        theme.accent2,
+        700,
+        'center',
+        true,
+      ),
     );
   });
   boxes.forEach(([x, y, w, h, label], index) => {
@@ -1111,7 +1180,22 @@ function renderEcosystem({ p, theme }) {
       }),
     ),
   );
-  p.push(text(1190, 590, 290, 38, 'illustrative regional inset', 15, theme.muted, 500, 'center'));
+  p.push(text(1210, 365, 120, 28, 'US West', 13, theme.muted, 600));
+  p.push(text(1350, 410, 120, 28, 'US East', 13, theme.muted, 600));
+  p.push(text(1260, 540, 160, 28, 'EU fallback', 13, theme.muted, 600));
+  p.push(
+    text(
+      1190,
+      590,
+      290,
+      38,
+      'illustrative topology · not traffic volume',
+      13,
+      theme.muted,
+      500,
+      'center',
+    ),
+  );
 }
 
 function renderTimeline({ p, theme }) {
@@ -1120,15 +1204,15 @@ function renderTimeline({ p, theme }) {
     ['Jul 3', 'Evidence'],
     ['Jul 6', 'Candidates'],
     ['Jul 9', 'Blind review'],
-    ['Jul 11', 'Approved'],
+    ['Jul 11', 'Approval pending'],
   ];
   p.push(line(130, 460, 1450, 460, { stroke: theme.muted, width: 4 }));
   const xs = [150, 420, 790, 1170, 1430];
   items.forEach(([date, label], index) => {
     p.push(
       circle(xs[index], 460, index === 3 ? 28 : 18, {
-        fill: index === 3 ? theme.accent : theme.accent2,
-        stroke: theme.panel,
+        fill: index === 3 ? theme.accent : index === 4 ? theme.canvas : theme.accent2,
+        stroke: index === 4 ? theme.muted : theme.panel,
         width: 4,
       }),
     );
@@ -1151,10 +1235,29 @@ function renderGantt({ p, theme }) {
   const rows = [
     ['Media proof', 0, 2, 'done'],
     ['Data primitives', 1, 3, 'done'],
-    ['Motion fallbacks', 2, 5, 'active'],
-    ['Domain packs', 1, 4, 'done'],
+    ['Motion fallbacks', 3, 5, 'active'],
+    ['Domain packs', 3, 5, 'done'],
     ['Human review', 5, 6, 'next'],
   ];
+  const dependencies = [
+    [0, 2],
+    [1, 2],
+    [1, 3],
+    [2, 4],
+    [3, 4],
+  ];
+  dependencies.forEach(([from, to], index) => {
+    const [, fromStart, fromEnd] = rows[from];
+    const [, toStart] = rows[to];
+    const fromX = 520 + fromStart * 145 + Math.max(100, (fromEnd - fromStart) * 145 - 20);
+    const toX = 520 + toStart * 145;
+    const fromY = 331 + from * 78;
+    const toY = 331 + to * 78;
+    const laneX = Math.min(toX - 8, fromX + 7 + index * 3);
+    p.push(line(fromX, fromY, laneX, fromY, { stroke: theme.danger, width: 2, dash: true }));
+    p.push(line(laneX, fromY, laneX, toY, { stroke: theme.danger, width: 2, dash: true }));
+    p.push(line(laneX, toY, toX - 6, toY, { stroke: theme.danger, width: 2, arrowEnd: true }));
+  });
   rows.forEach(([label, start, end, status], index) => {
     const y = 300 + index * 78;
     p.push(text(88, y + 10, 360, 38, label, 19, theme.ink, 600));
@@ -1167,9 +1270,9 @@ function renderGantt({ p, theme }) {
     );
     p.push(
       text(
-        1250,
+        1225,
         y + 13,
-        180,
+        150,
         30,
         status.toUpperCase(),
         14,
@@ -1179,7 +1282,23 @@ function renderGantt({ p, theme }) {
         true,
       ),
     );
+    const confidence = [95, 90, 72, 88, 60][index];
+    p.push(text(1400, y + 13, 95, 30, `${confidence}%`, 13, theme.muted, 700, 'right', true));
   });
+  p.push(
+    text(
+      980,
+      695,
+      520,
+      24,
+      'bars · schedule   arrows · dependency   % · confidence',
+      12,
+      theme.muted,
+      600,
+      'right',
+      true,
+    ),
+  );
 }
 
 function renderScrolly({ p, theme }) {
@@ -1243,7 +1362,7 @@ function renderScrolly({ p, theme }) {
 }
 
 function renderChartStates({ p, theme }) {
-  const labels = ['Baseline', 'Model', 'Harness v4', 'Evidence refresh'];
+  const labels = ['Baseline', 'Model', 'Harness v2', 'Evidence refresh'];
   labels.forEach((label, panel) => {
     const x = 85 + panel * 370;
     p.push(
@@ -1269,7 +1388,7 @@ function renderChartStates({ p, theme }) {
       ),
     );
     const values = [62 + panel * 3, 69 + panel * 4, 71 + panel * 5, 75 + panel * 4];
-    const points = values.map((v, index) => [x + 45 + index * 75, 590 - (v - 55) * 12]);
+    const points = values.map((v, index) => [x + 45 + index * 75, 590 - (v - 60) * 7.5]);
     p.push(
       polyline(points, {
         stroke: panel === 2 ? theme.accent : theme.accent2,
@@ -1283,6 +1402,20 @@ function renderChartStates({ p, theme }) {
       text(x + 20, 615, 290, 30, `${values.at(-1)} quality`, 17, theme.ink, 700, 'center', true),
     );
   });
+  p.push(
+    text(
+      95,
+      676,
+      1380,
+      24,
+      'Shared scale · 60–90 quality points',
+      13,
+      theme.muted,
+      700,
+      'center',
+      true,
+    ),
+  );
 }
 
 function renderScreenshot({ p, theme, media: slideMedia }) {
@@ -1298,7 +1431,7 @@ function renderScreenshot({ p, theme, media: slideMedia }) {
     image(82, 237, 1086, 466, slideMedia.gallery, 'Real NodeSlide Artifact Lab gallery capture'),
   );
   const callouts = [
-    [1, 1230, 285, '38 reusable\npatterns'],
+    [1, 1230, 285, 'V1 gallery\n12 patterns'],
     [2, 1250, 455, 'model compare\nkeeps failures red'],
     [3, 1215, 615, 'use pattern\nstarts a real workflow'],
   ];
@@ -1340,6 +1473,20 @@ function renderInteraction({ p, theme, media: slideMedia }) {
         }),
       );
   });
+  p.push(
+    text(
+      80,
+      710,
+      1430,
+      24,
+      '3 captured checkpoints · 5 declared workflow steps',
+      13,
+      theme.muted,
+      700,
+      'center',
+      true,
+    ),
+  );
 }
 
 function renderProductCompare({ p, theme, media: slideMedia }) {
@@ -1487,8 +1634,8 @@ function renderPdf({ p, theme, media: slideMedia }) {
       248,
       924,
       454,
-      slideMedia.webEvidence,
-      'Captured source region cited by a NodeSlide element',
+      slideMedia.pdfEvidence,
+      'Rendered PDF page with a highlighted claim region',
     ),
   );
   p.push(
@@ -1581,13 +1728,23 @@ function renderCode({ p, theme }) {
       radius: 20,
     }),
   );
-  p.push(text(1040, 280, 200, 30, 'P50', 16, theme.muted, 700, 'left', true));
-  p.push(text(1040, 320, 200, 64, '38 ms', 46, theme.accent, 720, 'left', true));
-  p.push(text(1280, 280, 200, 30, 'P95', 16, theme.muted, 700, 'left', true));
-  p.push(text(1280, 320, 200, 64, '92 ms', 46, theme.ink, 720, 'left', true));
+  p.push(text(1040, 280, 440, 30, 'MEASUREMENT STATUS', 16, theme.muted, 700, 'center', true));
+  p.push(text(1040, 326, 440, 64, 'NOT RUN', 42, theme.accent, 720, 'center', true));
   p.push(rect(1010, 460, 500, 170, { fill: theme.soft, radius: 20 }));
-  p.push(text(1040, 490, 440, 30, 'RECEIPT BYTES', 16, theme.muted, 700, 'center', true));
-  p.push(text(1040, 535, 440, 62, '1,160', 44, theme.ink, 720, 'center', true));
+  p.push(text(1040, 490, 440, 30, 'REQUIRED RECEIPT', 16, theme.muted, 700, 'center', true));
+  p.push(
+    text(
+      1060,
+      535,
+      400,
+      62,
+      'sample size · environment · raw digest',
+      20,
+      theme.ink,
+      650,
+      'center',
+    ),
+  );
 }
 
 function renderTrace({ p, theme }) {
@@ -1599,8 +1756,8 @@ function renderTrace({ p, theme }) {
     ['repair', 780, 310, 2, theme.danger],
     ['export', 1090, 280, 1, theme.accent],
   ];
-  p.push(text(80, 232, 300, 28, '0s', 14, theme.muted, 600, 'left', true));
-  p.push(text(1430, 232, 100, 28, '58s', 14, theme.muted, 600, 'right', true));
+  p.push(text(80, 232, 420, 28, 'ILLUSTRATIVE TRACE ANATOMY', 14, theme.muted, 700, 'left', true));
+  p.push(text(1270, 232, 230, 28, 'not observed timing', 14, theme.muted, 600, 'right', true));
   spans.forEach(([label, x, w, depth, color]) => {
     const y = 285 + depth * 112;
     p.push(
@@ -1637,7 +1794,7 @@ function renderTrace({ p, theme }) {
       610,
       350,
       48,
-      '1 repair · visible, bounded, receipted',
+      'Example repair span · no trace ID claimed',
       18,
       theme.ink,
       650,
@@ -1684,16 +1841,32 @@ function renderEquation({ p, theme }) {
       true,
     ),
   );
-  p.push(text(150, 565, 710, 40, '0.75 / 0.038 ≈ 19.74', 27, theme.accent, 700, 'center', true));
+  p.push(
+    text(
+      125,
+      565,
+      760,
+      48,
+      '0.75 / (1 + 0.4×0.038 + 0.1×1.04) ≈ 0.670',
+      22,
+      theme.accent,
+      700,
+      'center',
+      true,
+    ),
+  );
   const defs = [
     ['Q', '0.75', 'observed quality'],
-    ['C', '$0.038', 'reported model cost'],
+    ['α · C', '0.4 · 0.038', 'weighted cost'],
+    ['β · L', '0.1 · 1.04', 'weighted latency'],
     ['L', '1.04s', 'measured latency'],
   ];
   defs.forEach(([symbol, value, label], index) => {
-    const y = 265 + index * 130;
-    p.push(text(1010, y, 70, 54, symbol, 38, theme.accent2, 700, 'center', true));
-    p.push(text(1100, y, 180, 54, value, 30, theme.ink, 700, 'right', true));
+    const y = 250 + index * 100;
+    p.push(
+      text(1010, y, 125, 54, symbol.replace('·', '×'), 30, theme.accent2, 700, 'center', true),
+    );
+    p.push(text(1140, y, 140, 54, value, 27, theme.ink, 700, 'right', true));
     p.push(text(1310, y + 8, 210, 40, label, 17, theme.muted, 500));
     p.push(line(1010, y + 70, 1500, y + 70, { stroke: theme.soft, width: 2 }));
   });
@@ -1701,35 +1874,58 @@ function renderEquation({ p, theme }) {
 
 function renderCi({ p, theme }) {
   const checks = [
-    'Brief adherence',
-    'Artifact type',
-    'Allowed claims',
-    'No forbidden claims',
-    'Zero collisions',
-    'Browser render',
-    'PPTX render',
-    'Editable semantics',
-    'Source lineage',
+    ['Brief adherence', 'passed'],
+    ['Typed artifact spec', 'passed'],
+    ['Semantic validators', 'passed'],
+    ['Source lineage', 'passed'],
+    ['Browser render', 'passed'],
+    ['PPTX render', 'passed'],
+    ['Accessibility', 'not run'],
+    ['Visual inspection', 'pending'],
+    ['Blind preference', 'pending'],
   ];
-  checks.forEach((label, index) => {
+  checks.forEach(([label, status], index) => {
     const col = index < 5 ? 0 : 1;
     const row = col ? index - 5 : index;
     const x = 95 + col * 680;
     const y = 245 + row * 86;
-    p.push(circle(x + 20, y + 20, 18, { fill: theme.accent2 }));
-    p.push(text(x + 10, y + 8, 20, 24, '✓', 17, '#FFFFFF', 700, 'center'));
+    const passed = status === 'passed';
+    p.push(
+      circle(x + 20, y + 20, 18, {
+        fill: passed ? theme.accent2 : theme.panel,
+        stroke: passed ? theme.accent2 : theme.muted,
+        width: 2,
+      }),
+    );
+    p.push(
+      text(
+        x + 10,
+        y + 8,
+        20,
+        24,
+        passed ? '✓' : '·',
+        17,
+        passed ? '#FFFFFF' : theme.muted,
+        700,
+        'center',
+      ),
+    );
     p.push(text(x + 60, y + 2, 510, 42, label, 20, theme.ink, 600));
+    p.push(
+      text(
+        x + 430,
+        y + 5,
+        150,
+        28,
+        status.toUpperCase(),
+        12,
+        passed ? theme.accent2 : theme.muted,
+        700,
+        'right',
+        true,
+      ),
+    );
   });
-  p.push(
-    rect(1070, 590, 430, 100, {
-      fill: theme.panel,
-      stroke: theme.accent,
-      width: 3,
-      radius: 18,
-    }),
-  );
-  p.push(text(1095, 612, 380, 28, 'PREFERENCE', 15, theme.muted, 700, 'center', true));
-  p.push(text(1095, 650, 380, 26, 'human review pending', 18, theme.accent, 650, 'center'));
 }
 
 function renderRisk({ p, theme }) {
@@ -1750,6 +1946,10 @@ function renderRisk({ p, theme }) {
   }
   p.push(text(x - 125, y + 170, 100, 100, 'IMPACT', 15, theme.muted, 700, 'center', true));
   p.push(text(x + 130, y + size + 24, 180, 30, 'LIKELIHOOD', 15, theme.muted, 700, 'center', true));
+  p.push(text(x - 85, y + size - 8, 70, 24, 'MINOR', 11, theme.muted, 700, 'right', true));
+  p.push(text(x - 85, y - 8, 70, 24, 'CRITICAL', 11, theme.muted, 700, 'right', true));
+  p.push(text(x, y + size + 54, 90, 24, 'RARE', 11, theme.muted, 700, 'left', true));
+  p.push(text(x + size - 90, y + size + 54, 90, 24, 'LIKELY', 11, theme.muted, 700, 'right', true));
   const risks = [
     [4, 5, 'Pipeline', theme.danger],
     [3, 4, 'Capacity', theme.accent],
@@ -1791,15 +1991,14 @@ function renderFrontier(context) {
   p.push(
     polyline(
       [
-        [250, 558],
-        [560, 428],
-        [760, 363],
-        [1010, 313],
+        [175, 430],
+        [320, 430],
+        [1080, 280],
       ],
       { stroke: theme.accent, width: 4, dash: true },
     ),
   );
-  p.push(text(1080, 255, 330, 34, 'OBSERVED FRONTIER', 15, theme.accent, 700, 'center', true));
+  p.push(text(1080, 235, 330, 34, 'OBSERVED FRONTIER', 15, theme.accent, 700, 'center', true));
   p.push(
     rect(1210, 580, 280, 74, {
       fill: theme.soft,
@@ -1816,10 +2015,10 @@ function renderModelCompare({ p, theme }) {
     ['Claude Sonnet 5', '24/24', '8.2s avg', '$0.0086', 'eligible'],
     ['Kimi K3', '23/24', '17.6s avg', '$0.0013', '1 failed'],
     ['Gemma 4 Free', '23/24', '17.3s avg', '$0', '1 failed'],
-    ['Nemotron Free', 'pilot pass', 'live', '$0', 'semantic caveat'],
-    ['GPT-OSS Free', 'pilot pass', 'live', '$0', 'formula caveat'],
+    ['Nemotron Free', 'pilot only', '—', '$0', 'not comparable'],
+    ['GPT-OSS Free', 'pilot only', '—', '$0', 'not comparable'],
     ['Deterministic', '12/12', 'local', '$0', 'control'],
-    ['Best ensemble', 'not run', '—', '—', 'blocked'],
+    ['Best ensemble', 'not run', '—', '—', 'not run'],
   ];
   const headers = ['Route', 'Observed', 'Latency', 'Cost', 'Truth'];
   const xs = [76, 600, 820, 1040, 1240];
@@ -1901,7 +2100,7 @@ function renderHarnessCompare({ p, theme }) {
       280,
       560,
       30,
-      'HARNESS V2 · SAME CONTROL ROUTE',
+      'HARNESS V2 · COVERAGE EXPANSION',
       16,
       theme.accent,
       700,
@@ -1914,9 +2113,23 @@ function renderHarnessCompare({ p, theme }) {
     '7 design languages',
     'motion + fallback contracts',
     '38 reusable recipes',
-    'browser / PPTX / PDF receipts',
+    'browser / PPTX / PDF artifacts',
   ].forEach((label, index) =>
     p.push(text(955, 445 + index * 48, 500, 34, `· ${label}`, 18, theme.ink, 600)),
+  );
+  p.push(
+    text(
+      395,
+      700,
+      810,
+      28,
+      'Coverage comparison only · no paired performance claim',
+      15,
+      theme.muted,
+      700,
+      'center',
+      true,
+    ),
   );
 }
 
@@ -2144,8 +2357,9 @@ async function publishDomainPacks() {
 }
 
 function buildReceipt(artifact, index, preview, generationMs, primitives) {
+  const semanticValidation = validateArtifactSpec(artifact.artifactSpec);
   return {
-    schemaVersion: 'nodeslide.artifact-showcase-receipt/v2',
+    schemaVersion: 'nodeslide.artifact-receipt/v2',
     artifactId: artifact.id,
     artifactType: artifact.artifactType,
     chapter: artifact.chapter,
@@ -2160,6 +2374,24 @@ function buildReceipt(artifact, index, preview, generationMs, primitives) {
     outputTokens: 0,
     costMicroUsd: 0,
     repairCount: 0,
+    artifactSpec: artifact.artifactSpec,
+    specDigest: artifact.artifactSpec.specDigest,
+    semanticValidation,
+    stages: {
+      spec: {
+        status: semanticValidation.ok ? 'passed' : 'failed',
+        issues: semanticValidation.issues,
+      },
+      semantic: {
+        status: semanticValidation.ok ? 'passed' : 'failed',
+        issues: semanticValidation.issues,
+      },
+      evidence: { status: 'provisional', issues: [] },
+      browser: { status: 'passed', issues: [] },
+      pptx: { status: 'not_run', issues: [] },
+      accessibility: { status: 'provisional', issues: [] },
+      visualInspection: { status: 'not_run', issues: [] },
+    },
     deckCi: {
       briefAdherence: true,
       artifactTypeMatched: true,
@@ -2180,7 +2412,7 @@ function buildReceipt(artifact, index, preview, generationMs, primitives) {
     accessibility: artifact.accessibility,
     recipe: artifact.recipe,
     sourceIds: artifact.evidence.map((source) => source.sourceId),
-    status: 'builder-generated-pending-visual-gate',
+    status: semanticValidation.ok ? 'provisional' : 'failed',
   };
 }
 
@@ -2210,6 +2442,7 @@ function buildCatalog(receiptRows, atlasPptx, showcasePptx) {
       recipe: artifact.recipe,
       behavior: artifact.behavior,
       accessibility: artifact.accessibility,
+      artifactSpec: artifact.artifactSpec,
       receipt: receiptRows[index],
       actions: [
         'use-slide',
@@ -2326,6 +2559,7 @@ async function loadMedia() {
     webEvidence: await dataUri(
       path.resolve('docs/demo/nodeslide-web-research-proof/03-snapshot-region-citing-element.png'),
     ),
+    pdfEvidence: await dataUri(path.resolve('output/pdf/atlas-v2-evidence-region-1.png')),
     beforeProduct: await dataUri(
       path.resolve(
         'artifacts/camera-proof-20260720/b6-dev-repair/attempt-3-before-routed-edit.png',

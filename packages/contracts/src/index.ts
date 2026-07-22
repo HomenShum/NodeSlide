@@ -6,6 +6,7 @@
  * later source move can happen without changing this public API.
  */
 export * from '../../../shared/nodeslide';
+export * from '../../../shared/nodeslideGym';
 export {
   NODESLIDE_CREATE_ATTACHMENT_MAX_FILES,
   NODESLIDE_CREATE_ATTACHMENT_MAX_TOTAL_BYTES,

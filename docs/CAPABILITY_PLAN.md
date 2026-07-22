@@ -676,3 +676,31 @@ independently verified by the smallest honest consumer proof available.
 Definition of done for the plan itself: every checked item has a fail-closed
 verification run linked in the commit message, and no caption anywhere claims
 what a screen hasn't shown.
+
+## L · Semantic artifacts and non-frontier Model Gym (P0/P1/P2)
+
+The 2026-07-21 Artifact Atlas V2 audit found correctness, evidence, and visual
+grammar failures that canvas-overflow and screenshot-existence checks cannot
+detect. K1-K5 remain closed for their literal authoring, geometry, rhythm, and
+export contracts; they must not be cited as semantic validation of every Atlas
+artifact.
+
+- [x] L0-L4 foundation. Restore receipt truth, repair the audited Atlas, add
+      versioned typed artifact specifications, deterministic validation, semantic
+      receipts, digest-bound evidence, and regression coverage for all 38 museum
+      artifacts.
+- [x] L5-L7 framework. Commit an immutable 360-run paired Deck Gym V2 matrix and
+      portable contracts for diagnosis, curriculum boundaries, advisory
+      champion/challenger proposals, safe training export, and shadow routing.
+- [ ] L5-L9 evidence campaign. Execute the live matrix, retain browser/PPTX/PDF
+      evidence, obtain blind preference judgments, and prove a stable challenger
+      before any route promotion or production shadow claim.
+- [ ] L10 portability. Prove the packed NodeGym core through install and upgrade
+      in a second consumer before extracting or versioning it as a shared package.
+- [ ] L11 production integration and release. Wire typed artifact compilation
+      through all production generation routes and release only after the
+      independent human gate. Optional fine-tuning remains separately gated.
+
+The exact implemented/open boundary and exit criteria are in
+`docs/ARTIFACT_SEMANTICS_MODEL_GYM_GOAL.md`. No item is complete merely because a
+deck rendered, a screenshot exists, or an experiment was planned.

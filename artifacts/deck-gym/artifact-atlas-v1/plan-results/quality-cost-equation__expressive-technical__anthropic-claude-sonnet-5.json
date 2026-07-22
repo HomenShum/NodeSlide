@@ -1,0 +1,56 @@
+{
+  "artifactType": "katex-equation",
+  "candidateDigest": "sha256:4ac041961c52e18190016f1f8ee205c1055770cbb91c6447a3c367d19df351cf",
+  "candidateId": "quality-cost-equation__expressive-technical__anthropic-claude-sonnet-5",
+  "directionId": "expressive-technical",
+  "durationMs": 6804,
+  "fixtureId": "quality-cost-equation",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Q is quality_score (0.75) and C is cost_usd (0.038) from the adaptive retrieval result; their ratio gives the adaptive policy value used to compare configurations.",
+    "artifactType": "katex-equation",
+    "composition": "radial",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Render cost-adjusted quality equation",
+        "operationId": "render-katex",
+        "sourceId": "retrieval-result",
+        "value": "\\dfrac{Q}{C} \\approx 19.74"
+      },
+      {
+        "label": "Define Q and C",
+        "operationId": "define-symbols",
+        "sourceId": "retrieval-result",
+        "value": "Q = quality_score = 0.75; C = cost_usd = 0.038"
+      },
+      {
+        "label": "Compute adaptive policy value",
+        "operationId": "bind-calculation",
+        "sourceId": "retrieval-result",
+        "value": "0.75 / 0.038 ≈ 19.74"
+      }
+    ],
+    "pptxFallback": "PowerPoint receives a rendered equation image (SVG-derived) grouped with editable text boxes for the Q and C definitions and the computed ratio; no raw LaTeX string is inserted.",
+    "sourceLabels": [
+      {
+        "label": "Adaptive retrieval result",
+        "sourceId": "retrieval-result"
+      }
+    ],
+    "takeaway": "Q divided by C is approximately 19.74",
+    "title": "Cost-Adjusted Quality Measure"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8476,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 482,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

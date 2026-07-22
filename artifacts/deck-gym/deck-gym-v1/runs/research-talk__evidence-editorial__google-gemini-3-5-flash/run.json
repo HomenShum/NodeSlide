@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "research-talk__evidence-editorial__google-gemini-3-5-flash",
+  "briefId": "research-talk",
+  "model": "google/gemini-3.5-flash",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:2b9baa754ecc4c6ac1e469bc55f930dd8744b5f30029c5d0453a996dacc69b01",
+  "runDigest": "sha256:b610eae1dd0a78706cffe113797ccf3ec5b893f549866ec78751d7049221d285",
+  "title": "Adaptive Retrieval Under Cost Constraints",
+  "family": "research_talk",
+  "audience": "applied machine-learning researchers",
+  "decision": "understand whether the adaptive policy improves answer quality per dollar",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide research talk for applied machine-learning researchers evaluating adaptive retrieval under cost constraints. Explain the question, method, evaluation design, result, failure modes, and implications. Use the supplied experiment table exactly. Include an editable methods diagram, an editable result chart, the cost-adjusted quality formula Q divided by cost, and claim-adjacent source labels. Separate measured results from interpretation.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "retrieval-results.csv",
+      "format": "csv",
+      "content": "policy,quality_score,cost_usd,latency_ms\nno_retrieval,0.61,0.010,640\nalways_retrieve,0.78,0.092,1810\nadaptive,0.75,0.038,1040"
+    },
+    {
+      "fileName": "method.md",
+      "format": "md",
+      "content": "The adaptive policy predicts whether a query requires retrieval, retrieves at most three passages, then answers with claim-linked citations. Reported values are means over the fixed benchmark fixture; no statistical-significance claim is authorized."
+    }
+  ],
+  "requiredClaims": [
+    "0.75",
+    "0.038",
+    "1040"
+  ],
+  "requiredArtifacts": [
+    "chart",
+    "diagram",
+    "formula",
+    "citations"
+  ],
+  "forbiddenClaims": [
+    "statistically significant",
+    "state of the art"
+  ],
+  "referenceIds": [
+    "research/question-method-result",
+    "research/methods-flow",
+    "research/annotated-result"
+  ],
+  "modelLabel": "Gemini 3.5 Flash",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvb4rts_c3ce316ca4cfb196c500320c24f7242c",
+    "durationMs": 4271,
+    "completedAt": "2026-07-21T23:51:23.854Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · google/gemini-3.5-flash (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Gemini 3.5 Flash via OpenRouter route had no compatible provider endpoint. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 0 → 0 COST $0.0000 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 178353
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

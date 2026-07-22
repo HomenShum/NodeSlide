@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-evaluation-summary/v1",
+  "generatedAt": "2026-07-21T23:49:05.703Z",
+  "runCount": 3,
+  "passed": 0,
+  "failed": 3,
+  "byModel": [
+    {
+      "model": "anthropic/claude-sonnet-5",
+      "runs": 1,
+      "passed": 0,
+      "passRate": 0,
+      "meanScore": 0.745641
+    },
+    {
+      "model": "google/gemini-3.5-flash",
+      "runs": 1,
+      "passed": 0,
+      "passRate": 0,
+      "meanScore": 0.691111
+    },
+    {
+      "model": "moonshotai/kimi-k3",
+      "runs": 1,
+      "passed": 0,
+      "passRate": 0,
+      "meanScore": 0.740952
+    }
+  ]
+}

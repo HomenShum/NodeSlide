@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "executive-update__cinematic-minimal__moonshotai-kimi-k3",
+  "briefId": "executive-update",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:a40f1d0d690d639251559e095d11fb9a387e061149247accf51f7c3b60a3316c",
+  "runDigest": "sha256:c7f084de19be9f7d03e95abba7a4419966f08fb2b5793c4c22d987ef46f14aa2",
+  "title": "Q2 Operating Review",
+  "family": "executive_update",
+  "audience": "company executives",
+  "decision": "choose the two operating interventions for Q3",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide Q2 operating review for executives choosing two interventions for Q3. Use the supplied KPI and risk data exactly. Open with the operating verdict, show KPI movement, explain the conversion bottleneck, rank risks, compare intervention options, and close with owners and checkpoints. Include an editable KPI scorecard, trend chart, risk matrix, and decision slide. Keep copy terse and executive-readable.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "q2-kpis.csv",
+      "format": "csv",
+      "content": "metric,q1,q2,target\nrevenue_musd,4.2,4.8,5.0\nnew_pipeline_musd,9.1,7.4,10.0\nwin_rate_percent,24,21,28\nimplementation_days,46,39,35\ngross_retention_percent,93,94,95"
+    },
+    {
+      "fileName": "q2-risks.json",
+      "format": "json",
+      "content": "[{\"risk\":\"pipeline coverage\",\"likelihood\":4,\"impact\":5},{\"risk\":\"implementation capacity\",\"likelihood\":3,\"impact\":4},{\"risk\":\"retention concentration\",\"likelihood\":2,\"impact\":5}]"
+    }
+  ],
+  "requiredClaims": [
+    "4.8",
+    "7.4",
+    "21",
+    "39",
+    "94"
+  ],
+  "requiredArtifacts": [
+    "scorecard",
+    "chart",
+    "matrix",
+    "comparison"
+  ],
+  "forbiddenClaims": [
+    "record quarter",
+    "on target"
+  ],
+  "referenceIds": [
+    "executive/verdict-first",
+    "executive/kpi-trend",
+    "executive/decision-gate"
+  ],
+  "modelLabel": "Kimi K3",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvba8sv_81eb2e038879cb370847de70ba1bc9bb",
+    "durationMs": 45073,
+    "completedAt": "2026-07-21T23:55:38.920Z",
+    "trace": {
+      "classification": "live",
+      "attribution": "openrouter · moonshotai/kimi-k3 · High effort",
+      "summary": "The user consented to send the full brief and 2 uploaded data sources to OpenRouter. The named Kimi K3 model supplied the narrative plan through pi-ai; NodeSlide normalized, persisted, and validated the deck deterministically. Self-critique: 1 pass, clean.",
+      "metrics": "RUN TIME 1s TOKENS 1,332 → 1,828 COST $0.0055 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 206537
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

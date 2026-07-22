@@ -9,6 +9,11 @@ dist/
 playwright-report/
 test-results/
 coverage/
+artifacts/
+outputs/
+.qa/
+benchmarks/
+skills/
 
 # Local recordings and release evidence are uploaded to GitHub Releases, not Vercel.
 runs/

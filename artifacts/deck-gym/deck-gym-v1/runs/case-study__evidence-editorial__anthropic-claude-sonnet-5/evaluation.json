@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-evaluation/v1",
+  "runId": "case-study__evidence-editorial__anthropic-claude-sonnet-5",
+  "runDigest": "sha256:2e9cad0be8758f523c5b3226dcc2a8af124e16d5ed94ab689b53a2fb0272605e",
+  "harnessVersion": "deck-gym-v1",
+  "evaluationGatesDigest": "sha256:b8bbac5b2715a7bdffc997dafc99cd766a13ff35680cc82fa2a0a34aa98d8d2f",
+  "briefId": "case-study",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "routeClassification": "live",
+  "evaluatedAt": "2026-07-22T00:15:46.118Z",
+  "status": "failed",
+  "checks": {
+    "slideCount": true,
+    "claimCoverage": true,
+    "forbiddenClaims": true,
+    "distinctLayouts": true,
+    "layoutRepetition": true,
+    "adjacentSimilarity": true,
+    "textAreaRatio": false,
+    "meaningfulVisuals": false,
+    "internalCollisions": false,
+    "requiredArtifacts": false,
+    "liveModelTrace": true,
+    "renderedPptx": true
+  },
+  "dimensions": {
+    "factual": 1,
+    "visual": 0.6,
+    "narrative": 1,
+    "rhythm": 0.644444,
+    "artifactIntegrity": 0.333333
+  },
+  "rawScore": 0.715555,
+  "score": 0.715555,
+  "evidence": {
+    "slideCount": 7,
+    "renderedSlideCount": 7,
+    "matchedClaims": [
+      "8.4",
+      "5.9",
+      "14.2",
+      "9.6",
+      "84"
+    ],
+    "requiredClaimCount": 5,
+    "claimCoverage": 1,
+    "forbiddenClaims": [],
+    "distinctLayoutSignatures": 6,
+    "repeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.666667,
+    "meaningfulVisualSlides": 3,
+    "maximumTextAreaRatio": 0.614389,
+    "geometryCollisionCount": 1,
+    "estimatedTextOverflowCount": 7,
+    "collisionCount": 8,
+    "missingArtifacts": [
+      "diagram"
+    ],
+    "artifactPresence": {
+      "charts": 1,
+      "images": 0,
+      "connectors": 0,
+      "shapes": 21,
+      "diagrams": 0,
+      "formulas": 2,
+      "codeSlides": 0
+    },
+    "slideDigests": [
+      "sha256:4816b78b276458475661df8a9764b589ffc5a275cabeb6cb45bfac0cc723e2b4",
+      "sha256:7c8b66d56c5e3e167fc6bcb2a068ce11bcefb7381dfcaada8be6f7c0a73ca2c9",
+      "sha256:cb412f25b69377a0cbdfe9eae0ad50bb34bf9800e0029dd311454f2ebfba0fed",
+      "sha256:0b2af992839197170efede3c33bdd2f98b11e917c6cf3b876a898cc9ef754b74",
+      "sha256:9fbd4c6d4adbd6770cc5e458c9c0fc2b5799fe3048b0d129ed29db62d62fcd9a",
+      "sha256:ed75ac4676870e86de789dd9845665f37123236e7739fcf838260a1d9b683a82",
+      "sha256:7696a5cc260490331484991100ad7d0e1819c300aa70c6f0def629ea506671cb"
+    ],
+    "deckDigest": "sha256:7d6d68667e44aa1e27e3ffadcdfe45835f7d9a5b749a72d5d437093d21aee6e8"
+  },
+  "evaluationDigest": "sha256:1d9f847dcdc0cac0db1bea1d145c07b6b7908d55489d8270f59ea5d030fe1bd3"
+}

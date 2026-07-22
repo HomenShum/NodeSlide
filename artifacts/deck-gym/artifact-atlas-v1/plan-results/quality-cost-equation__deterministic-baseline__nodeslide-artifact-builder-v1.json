@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "quality-cost-equation__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:f0750e69518e14414bd4a2d5194ecae828fdc627b71bacca927c902867ead448",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "quality-cost-equation",
+  "artifactType": "katex-equation",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "katex-equation",
+    "title": "Q equals 0.75",
+    "takeaway": "Explain the cost-adjusted quality measure and connect every symbol to the supplied experiment table.",
+    "annotation": "C equals 0.038",
+    "composition": "focal",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "render-katex",
+        "label": "Render Katex",
+        "value": "Q equals 0.75",
+        "sourceId": "retrieval-result"
+      },
+      {
+        "operationId": "define-symbols",
+        "label": "Define Symbols",
+        "value": "C equals 0.038",
+        "sourceId": "retrieval-result"
+      },
+      {
+        "operationId": "bind-calculation",
+        "label": "Bind Calculation",
+        "value": "Q divided by C is approximately 19.74",
+        "sourceId": "retrieval-result"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "retrieval-result",
+        "label": "Adaptive retrieval result"
+      }
+    ],
+    "pptxFallback": "Export the rendered equation as SVG with adjacent editable definitions; raw LaTeX text fails the gate."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "research-timeline",
+  "generatedAt": "2026-07-22T03:23:22.187Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "research-timeline__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:a404868b18752976d8fdc3d00080d0c9ea35eb4e374da613023d498a92f543fa",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/research-timeline__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/research-timeline__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/research-timeline__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Use editable milestone shapes and a line; remove motion before rasterizing the entire timeline."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "research-timeline__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:52f4be8956eabdf69a630dccf718d32a6f571e8fd8ef7a583b993c18645aa438",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/research-timeline__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/research-timeline__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/research-timeline__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Use editable milestone shapes and a line; remove motion before rasterizing the entire timeline."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 10822,
+        "inputTokens": 2,
+        "outputTokens": 544,
+        "costMicroUsd": 9049
+      }
+    },
+    {
+      "candidateId": "research-timeline__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:8987c73f51111aafec47439ddf5c248ab7a3b98357d00ec1de23eb8ce44e1a1f",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/research-timeline__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/research-timeline__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/research-timeline__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Use editable milestone shapes and a line; remove motion before rasterizing the entire timeline."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 11473,
+        "inputTokens": 1113,
+        "outputTokens": 356,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "research-timeline__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:49a4766100234375bd49629080ffe1b0ac444d9c2c7ab8b50979bfe6bd1cd7c5",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/research-timeline__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/research-timeline__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/research-timeline__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Use editable milestone shapes and a line; remove motion before rasterizing the entire timeline."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 19820,
+        "inputTokens": 837,
+        "outputTokens": 337,
+        "costMicroUsd": 1344
+      }
+    },
+    {
+      "candidateId": "research-timeline__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:07e0e99971d027f6a0474118da45f8c79f33f21f731861ea71bfb24c02f709ae",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/research-timeline__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/research-timeline__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/research-timeline__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Use editable milestone shapes and a line; remove motion before rasterizing the entire timeline."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8008,
+        "inputTokens": 2,
+        "outputTokens": 482,
+        "costMicroUsd": 8441
+      }
+    },
+    {
+      "candidateId": "research-timeline__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:711988135ef5299e909388f792aed3b94a72ec11fbcaf3bfdd7fdc8f37e7d87a",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/research-timeline__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/research-timeline__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/research-timeline__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Use editable milestone shapes and a line; remove motion before rasterizing the entire timeline."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 18970,
+        "inputTokens": 1115,
+        "outputTokens": 314,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "research-timeline__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:1c29affeaa282d3e403e189dba8972e5dda9b326197a21a6316a2ca763e92446",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/research-timeline__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/research-timeline__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/research-timeline__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Use editable milestone shapes and a line; remove motion before rasterizing the entire timeline."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 16211,
+        "inputTokens": 839,
+        "outputTokens": 319,
+        "costMicroUsd": 1300
+      }
+    }
+  ]
+}

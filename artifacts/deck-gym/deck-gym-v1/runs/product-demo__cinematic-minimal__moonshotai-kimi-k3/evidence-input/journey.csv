@@ -1,0 +1,6 @@
+stage,elapsed_seconds,status
+brief_submitted,0,complete
+structured_draft,31,complete
+validation,34,complete
+human_accept,52,complete
+pptx_export,58,complete

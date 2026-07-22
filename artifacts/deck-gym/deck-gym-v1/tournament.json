@@ -1,0 +1,1875 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-tournament/v1",
+  "generatedAt": "2026-07-22T00:20:17.199Z",
+  "evaluationCount": 70,
+  "matchCount": 69,
+  "eligibleMatchCount": 69,
+  "promotionEligibleMatchCount": 0,
+  "blind": true,
+  "matches": [
+    {
+      "matchId": "match_d6a86aee69965652",
+      "groupId": "case-study::cinematic-minimal",
+      "briefId": "case-study",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "case-study__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:25e562734e2ef278186198bb4081af95127fe067d27d1182ec34e40ae5f369e3"
+      },
+      "candidateB": {
+        "runId": "case-study__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:cce4d394f16670968c4b3e719547c12893344079616162d020e3da2ad3636a53"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_c5fbcf75b6c97bfd",
+      "groupId": "case-study::cinematic-minimal",
+      "briefId": "case-study",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "case-study__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:c5d9732d84e2a10b163fe045884b460cd058e0290aecbd82d4568a0737efaef8"
+      },
+      "candidateB": {
+        "runId": "case-study__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:25e562734e2ef278186198bb4081af95127fe067d27d1182ec34e40ae5f369e3"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_102a310802120bcf",
+      "groupId": "case-study::cinematic-minimal",
+      "briefId": "case-study",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "case-study__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:c5d9732d84e2a10b163fe045884b460cd058e0290aecbd82d4568a0737efaef8"
+      },
+      "candidateB": {
+        "runId": "case-study__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:cce4d394f16670968c4b3e719547c12893344079616162d020e3da2ad3636a53"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_a0964fbbbf7b8521",
+      "groupId": "case-study::evidence-editorial",
+      "briefId": "case-study",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "case-study__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:1d9f847dcdc0cac0db1bea1d145c07b6b7908d55489d8270f59ea5d030fe1bd3"
+      },
+      "candidateB": {
+        "runId": "case-study__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:135bfef72db79fc13f93a88b073883eb105aafef47afed640cc7ba5ce15d36db"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_02c361d36efb6aca",
+      "groupId": "case-study::evidence-editorial",
+      "briefId": "case-study",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "case-study__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:1d9f847dcdc0cac0db1bea1d145c07b6b7908d55489d8270f59ea5d030fe1bd3"
+      },
+      "candidateB": {
+        "runId": "case-study__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:f0a4c1b5c467bf97dee3a745f8ab03178d371702ddb5ddee66c0e56b525386ff"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_155699d4471f09b3",
+      "groupId": "case-study::evidence-editorial",
+      "briefId": "case-study",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "case-study__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:135bfef72db79fc13f93a88b073883eb105aafef47afed640cc7ba5ce15d36db"
+      },
+      "candidateB": {
+        "runId": "case-study__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:f0a4c1b5c467bf97dee3a745f8ab03178d371702ddb5ddee66c0e56b525386ff"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_d181b20f4045d8f5",
+      "groupId": "data-story::cinematic-minimal",
+      "briefId": "data-story",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "data-story__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:740a112c56b4f8f311fc10d21c94d9492a3e4590a2529940c7af81414baf7921"
+      },
+      "candidateB": {
+        "runId": "data-story__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:a4360aa2b8191fdb9264c071ea1c494e98dc2bda0ed871ae071bde404c8adecf"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_5d2f37a1aff14312",
+      "groupId": "data-story::cinematic-minimal",
+      "briefId": "data-story",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "data-story__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:a4360aa2b8191fdb9264c071ea1c494e98dc2bda0ed871ae071bde404c8adecf"
+      },
+      "candidateB": {
+        "runId": "data-story__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:71533c3984843de80f66c81948984e3a1760c777c1551a161a48f28aa8dcfbee"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_bff33d32d5cdf2b5",
+      "groupId": "data-story::cinematic-minimal",
+      "briefId": "data-story",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "data-story__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:71533c3984843de80f66c81948984e3a1760c777c1551a161a48f28aa8dcfbee"
+      },
+      "candidateB": {
+        "runId": "data-story__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:740a112c56b4f8f311fc10d21c94d9492a3e4590a2529940c7af81414baf7921"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_973c75d6bc2fdf27",
+      "groupId": "data-story::evidence-editorial",
+      "briefId": "data-story",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "data-story__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:e3c703399f729ef8f6cf9b076a740205d876cf5d7842a1d5c1596777e41e1ebb"
+      },
+      "candidateB": {
+        "runId": "data-story__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:63276b32906367d32cd20eea65d602ca8c52509a7fe5107d4a358c22df8fe529"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_a577cfa045ece5fa",
+      "groupId": "data-story::evidence-editorial",
+      "briefId": "data-story",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "data-story__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:e3c703399f729ef8f6cf9b076a740205d876cf5d7842a1d5c1596777e41e1ebb"
+      },
+      "candidateB": {
+        "runId": "data-story__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:5197f0cff40e82500e5bfe45ec98c21cead5780caf23c8e5a9c0d5f89916387a"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_eb0dc682ce3731c8",
+      "groupId": "data-story::evidence-editorial",
+      "briefId": "data-story",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "data-story__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:5197f0cff40e82500e5bfe45ec98c21cead5780caf23c8e5a9c0d5f89916387a"
+      },
+      "candidateB": {
+        "runId": "data-story__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:63276b32906367d32cd20eea65d602ca8c52509a7fe5107d4a358c22df8fe529"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_0c32bda9a7ce8de7",
+      "groupId": "educational-explainer::cinematic-minimal",
+      "briefId": "educational-explainer",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "educational-explainer__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:b48fc16cd3f3a28fe3bc0baa941a475ea806ebe95f91d74d8a342bc255e7646f"
+      },
+      "candidateB": {
+        "runId": "educational-explainer__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:67c5eefaa33202c8222581c769fd3b552cbd4afa07c620eb989780673d90f495"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_28dcb7ed79c2efc6",
+      "groupId": "educational-explainer::cinematic-minimal",
+      "briefId": "educational-explainer",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "educational-explainer__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:1a316a6e10e366c49a3704d907722b087209204dd224292605f5531298b24e55"
+      },
+      "candidateB": {
+        "runId": "educational-explainer__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:b48fc16cd3f3a28fe3bc0baa941a475ea806ebe95f91d74d8a342bc255e7646f"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_f987ac2da69bd944",
+      "groupId": "educational-explainer::cinematic-minimal",
+      "briefId": "educational-explainer",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "educational-explainer__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:67c5eefaa33202c8222581c769fd3b552cbd4afa07c620eb989780673d90f495"
+      },
+      "candidateB": {
+        "runId": "educational-explainer__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:1a316a6e10e366c49a3704d907722b087209204dd224292605f5531298b24e55"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_9fc4ae440ceae7f5",
+      "groupId": "educational-explainer::evidence-editorial",
+      "briefId": "educational-explainer",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "educational-explainer__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:3c1f8c923780233c536297a7fdb9959967b5cba933e930b6692668a43fd62993"
+      },
+      "candidateB": {
+        "runId": "educational-explainer__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:6bc24c69d7d9d59bc39b05b531862ac67d0a310ebc23680fc5ef696f20bd342a"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_0a5a1c8b9b38825b",
+      "groupId": "educational-explainer::evidence-editorial",
+      "briefId": "educational-explainer",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "educational-explainer__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:3c1f8c923780233c536297a7fdb9959967b5cba933e930b6692668a43fd62993"
+      },
+      "candidateB": {
+        "runId": "educational-explainer__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:57ffaa193589eb7365620c4e08ddc44c39110ababa7f41cad86c0a9b5f8b2dfe"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_b099b95574699f04",
+      "groupId": "educational-explainer::evidence-editorial",
+      "briefId": "educational-explainer",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "educational-explainer__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:57ffaa193589eb7365620c4e08ddc44c39110ababa7f41cad86c0a9b5f8b2dfe"
+      },
+      "candidateB": {
+        "runId": "educational-explainer__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:6bc24c69d7d9d59bc39b05b531862ac67d0a310ebc23680fc5ef696f20bd342a"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_658969e9c59458b5",
+      "groupId": "executive-update::cinematic-minimal",
+      "briefId": "executive-update",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "executive-update__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:6597f758a297829e12e7cf489b205feef6a447c133e4c287b1fa9202bd4a8c4e"
+      },
+      "candidateB": {
+        "runId": "executive-update__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:4c39e6c72cd5f0645910e6dda1a1d9ab2fbdb3eaf7438315c31c0ac546ca271e"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_100cac86fa684dcf",
+      "groupId": "executive-update::cinematic-minimal",
+      "briefId": "executive-update",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "executive-update__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:6597f758a297829e12e7cf489b205feef6a447c133e4c287b1fa9202bd4a8c4e"
+      },
+      "candidateB": {
+        "runId": "executive-update__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:8caca3bd3b0014b6437016d1ae711385a2261be137284899f7085abbc4102e90"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_bd614df37ba7192e",
+      "groupId": "executive-update::cinematic-minimal",
+      "briefId": "executive-update",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "executive-update__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:8caca3bd3b0014b6437016d1ae711385a2261be137284899f7085abbc4102e90"
+      },
+      "candidateB": {
+        "runId": "executive-update__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:4c39e6c72cd5f0645910e6dda1a1d9ab2fbdb3eaf7438315c31c0ac546ca271e"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_7a8deb4da10b440d",
+      "groupId": "executive-update::evidence-editorial",
+      "briefId": "executive-update",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "executive-update__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:9619b282a797f3a03c16d85f9fedf25b4f78ff4d79afc4c9902c4f77cf6227f3"
+      },
+      "candidateB": {
+        "runId": "executive-update__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:bf0f91571d4d5855f9a1f95f4afa7f5e217db66773a29ff654ad4f38c5ac11e5"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_d2b5f410b201dce3",
+      "groupId": "executive-update::evidence-editorial",
+      "briefId": "executive-update",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "executive-update__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:d467568ff3bc976969f1b4087e8283edf18514514709c66b15685ddab802b3c3"
+      },
+      "candidateB": {
+        "runId": "executive-update__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:9619b282a797f3a03c16d85f9fedf25b4f78ff4d79afc4c9902c4f77cf6227f3"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_3d0301c7beb47019",
+      "groupId": "executive-update::evidence-editorial",
+      "briefId": "executive-update",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "executive-update__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:d467568ff3bc976969f1b4087e8283edf18514514709c66b15685ddab802b3c3"
+      },
+      "candidateB": {
+        "runId": "executive-update__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:bf0f91571d4d5855f9a1f95f4afa7f5e217db66773a29ff654ad4f38c5ac11e5"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_83e7b08c234536cb",
+      "groupId": "finance-investment::cinematic-minimal",
+      "briefId": "finance-investment",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "finance-investment__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:b442ffd2e6a73d4178c66566ec85b6e211f205a09dacc9e55a41d61023cfceae"
+      },
+      "candidateB": {
+        "runId": "finance-investment__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:a3e9278f4b741eb4b24383b73d2f67b304c18953c46a0c0c7fa1b1ea126a4d50"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_66fadb8fa2b4f22b",
+      "groupId": "finance-investment::cinematic-minimal",
+      "briefId": "finance-investment",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "finance-investment__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:a3e9278f4b741eb4b24383b73d2f67b304c18953c46a0c0c7fa1b1ea126a4d50"
+      },
+      "candidateB": {
+        "runId": "finance-investment__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:4820b4c277186220ca768a7f691ad93fb75f81cac745e56e0a678ed7b6d0f4e1"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_00ce78c9f92057e1",
+      "groupId": "finance-investment::cinematic-minimal",
+      "briefId": "finance-investment",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "finance-investment__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:b442ffd2e6a73d4178c66566ec85b6e211f205a09dacc9e55a41d61023cfceae"
+      },
+      "candidateB": {
+        "runId": "finance-investment__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:4820b4c277186220ca768a7f691ad93fb75f81cac745e56e0a678ed7b6d0f4e1"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_4a17a86ed5024a53",
+      "groupId": "finance-investment::evidence-editorial",
+      "briefId": "finance-investment",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "finance-investment__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:a90a44eef822d2b8ff6ea32dac685a32a2b4ac5f576a1879cdc10df780fd2238"
+      },
+      "candidateB": {
+        "runId": "finance-investment__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:0bfffd3712f0dd9b7c38e0a4edc0c39a414f5cb7329fbaea4e4182bd0dbd2b53"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_c3fe03e4badce3ce",
+      "groupId": "finance-investment::evidence-editorial",
+      "briefId": "finance-investment",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "finance-investment__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:a90a44eef822d2b8ff6ea32dac685a32a2b4ac5f576a1879cdc10df780fd2238"
+      },
+      "candidateB": {
+        "runId": "finance-investment__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:5cc04f2816b6d6991ef284adb907e7715aa729282f798dfb2e320a95c0dfb192"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_dd0a9789d1d62f40",
+      "groupId": "finance-investment::evidence-editorial",
+      "briefId": "finance-investment",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "finance-investment__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:5cc04f2816b6d6991ef284adb907e7715aa729282f798dfb2e320a95c0dfb192"
+      },
+      "candidateB": {
+        "runId": "finance-investment__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:0bfffd3712f0dd9b7c38e0a4edc0c39a414f5cb7329fbaea4e4182bd0dbd2b53"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_296e28ad805b47b4",
+      "groupId": "policy-briefing::cinematic-minimal",
+      "briefId": "policy-briefing",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "policy-briefing__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:60088b90310a1543b909d527a7031f5b426782ca437912b59b94773655cdc333"
+      },
+      "candidateB": {
+        "runId": "policy-briefing__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:2653d521d380189abaa43574e3cd4cfef5348dabd1fb88b76a706841d3d3899d"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_fdbfe7e4fea85410",
+      "groupId": "policy-briefing::cinematic-minimal",
+      "briefId": "policy-briefing",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "policy-briefing__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:2653d521d380189abaa43574e3cd4cfef5348dabd1fb88b76a706841d3d3899d"
+      },
+      "candidateB": {
+        "runId": "policy-briefing__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:d043767857893cfc90f8f5eacb4c52af66a1d8ee59cc302a03e9e461a75d9cfb"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_1827c823bc362d26",
+      "groupId": "policy-briefing::cinematic-minimal",
+      "briefId": "policy-briefing",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "policy-briefing__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:d043767857893cfc90f8f5eacb4c52af66a1d8ee59cc302a03e9e461a75d9cfb"
+      },
+      "candidateB": {
+        "runId": "policy-briefing__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:60088b90310a1543b909d527a7031f5b426782ca437912b59b94773655cdc333"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_c2778156679aaf8b",
+      "groupId": "policy-briefing::evidence-editorial",
+      "briefId": "policy-briefing",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "policy-briefing__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:255bfda9629beec5d903e0b7beaa54aaf28668ae37e1ce7b3b82d4441f81c88c"
+      },
+      "candidateB": {
+        "runId": "policy-briefing__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:c2a52144cd83d3104daa36dfb09c1c5bba38f658f41d4af257c9cba4084dbb6a"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_d24d29547816d2e6",
+      "groupId": "policy-briefing::evidence-editorial",
+      "briefId": "policy-briefing",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "policy-briefing__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:c2a52144cd83d3104daa36dfb09c1c5bba38f658f41d4af257c9cba4084dbb6a"
+      },
+      "candidateB": {
+        "runId": "policy-briefing__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:fa9dbaa128257a388afc1a9320af1c56fdbd55bdb41c8434eb6935b0419c8018"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_dff3c2b995072509",
+      "groupId": "policy-briefing::evidence-editorial",
+      "briefId": "policy-briefing",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "policy-briefing__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:255bfda9629beec5d903e0b7beaa54aaf28668ae37e1ce7b3b82d4441f81c88c"
+      },
+      "candidateB": {
+        "runId": "policy-briefing__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:fa9dbaa128257a388afc1a9320af1c56fdbd55bdb41c8434eb6935b0419c8018"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_df805710f2997bd3",
+      "groupId": "product-demo::cinematic-minimal",
+      "briefId": "product-demo",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "product-demo__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:37e6ebef55970f18edda35e766c091e8f2ce336ce9751f2e25c31ce927827a36"
+      },
+      "candidateB": {
+        "runId": "product-demo__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:00b32ea21bdf2514564b220a45f118666bfd1ae9bc03d5743a897b9ffca50467"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_72f59ad991239f7a",
+      "groupId": "product-demo::cinematic-minimal",
+      "briefId": "product-demo",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "product-demo__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:d7dbd40e02be619a15804a7ebf1e641c9b496d7a11298731e3b42aa58dc9ac5b"
+      },
+      "candidateB": {
+        "runId": "product-demo__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:37e6ebef55970f18edda35e766c091e8f2ce336ce9751f2e25c31ce927827a36"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_8f85ce818706cfa1",
+      "groupId": "product-demo::cinematic-minimal",
+      "briefId": "product-demo",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "product-demo__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:00b32ea21bdf2514564b220a45f118666bfd1ae9bc03d5743a897b9ffca50467"
+      },
+      "candidateB": {
+        "runId": "product-demo__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:d7dbd40e02be619a15804a7ebf1e641c9b496d7a11298731e3b42aa58dc9ac5b"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_02f5673e8e5954b1",
+      "groupId": "product-demo::evidence-editorial",
+      "briefId": "product-demo",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "product-demo__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:02d72f3e60dc175a10e63404003c461fb4dd0df01dbd7c76889766d1228b3388"
+      },
+      "candidateB": {
+        "runId": "product-demo__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:7cd2abdb9f5c821a83ee220992c91f0e08dfd12023bbe7d6b3d93f06d6f3681a"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_1deb722e53a21ded",
+      "groupId": "product-demo::evidence-editorial",
+      "briefId": "product-demo",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "product-demo__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:7cd2abdb9f5c821a83ee220992c91f0e08dfd12023bbe7d6b3d93f06d6f3681a"
+      },
+      "candidateB": {
+        "runId": "product-demo__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:2c020d96e8268510fb17a179168353306baa6880bdaaadc930a7198034922e2f"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_e8fa3d0857680ffe",
+      "groupId": "product-demo::evidence-editorial",
+      "briefId": "product-demo",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "product-demo__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:02d72f3e60dc175a10e63404003c461fb4dd0df01dbd7c76889766d1228b3388"
+      },
+      "candidateB": {
+        "runId": "product-demo__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:2c020d96e8268510fb17a179168353306baa6880bdaaadc930a7198034922e2f"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_7189955f7164077a",
+      "groupId": "research-talk::cinematic-minimal",
+      "briefId": "research-talk",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "research-talk__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:f1e46efea4db2af6e969edf5a63bfc5be6e2acfbae73b3e806eabd4349390e9d"
+      },
+      "candidateB": {
+        "runId": "research-talk__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:8dad27f4ba076445fdd1412948e5c3ffc44f292f0628ba21dc898f2fadab5a94"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_6ee0d5a0738baddd",
+      "groupId": "research-talk::cinematic-minimal",
+      "briefId": "research-talk",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "research-talk__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:f1e46efea4db2af6e969edf5a63bfc5be6e2acfbae73b3e806eabd4349390e9d"
+      },
+      "candidateB": {
+        "runId": "research-talk__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:b389341d71ca673864441bd54c204ca3d2c2fd97dfdcb2c5ae54eba42c09f341"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_f37403c24e2772d6",
+      "groupId": "research-talk::cinematic-minimal",
+      "briefId": "research-talk",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "research-talk__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:8dad27f4ba076445fdd1412948e5c3ffc44f292f0628ba21dc898f2fadab5a94"
+      },
+      "candidateB": {
+        "runId": "research-talk__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:b389341d71ca673864441bd54c204ca3d2c2fd97dfdcb2c5ae54eba42c09f341"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_791a6b6c456887f3",
+      "groupId": "research-talk::evidence-editorial",
+      "briefId": "research-talk",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "research-talk__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:5117cda87759e0a48877ecbbd3a80c15d7ea20db531ae3faaaf5bbf056a34c68"
+      },
+      "candidateB": {
+        "runId": "research-talk__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:abea74e97c461d46a4c7c2fb0ecbb1508aca5a5831630d2ccbe5c74412a100d5"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_44dade5c11904d3a",
+      "groupId": "research-talk::evidence-editorial",
+      "briefId": "research-talk",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "research-talk__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:bbf7ee589f5d6a7f620b341d011070e91bfce3242b7e25aac74ab58057e0048a"
+      },
+      "candidateB": {
+        "runId": "research-talk__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:abea74e97c461d46a4c7c2fb0ecbb1508aca5a5831630d2ccbe5c74412a100d5"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_e0c772b9f1697113",
+      "groupId": "research-talk::evidence-editorial",
+      "briefId": "research-talk",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "research-talk__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:bbf7ee589f5d6a7f620b341d011070e91bfce3242b7e25aac74ab58057e0048a"
+      },
+      "candidateB": {
+        "runId": "research-talk__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:5117cda87759e0a48877ecbbd3a80c15d7ea20db531ae3faaaf5bbf056a34c68"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_62d7d99eebf80ab0",
+      "groupId": "scrollytelling::cinematic-minimal",
+      "briefId": "scrollytelling",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "scrollytelling__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:58d517791ab9f46a313dcce3952a1fc8a579a163d46d803be51a135f67dccdf6"
+      },
+      "candidateB": {
+        "runId": "scrollytelling__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:3e2c1cf49d1fc826ce31064463d294f533d7cba48421f68abf9f4053c4863f21"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_ea62719ab44efd21",
+      "groupId": "scrollytelling::cinematic-minimal",
+      "briefId": "scrollytelling",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "scrollytelling__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:60acd1dca41d91acfda7337b91395a63df3e00277fcbb786b9a2eb7dc41bccfb"
+      },
+      "candidateB": {
+        "runId": "scrollytelling__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:3e2c1cf49d1fc826ce31064463d294f533d7cba48421f68abf9f4053c4863f21"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_9fec1d968ca30afe",
+      "groupId": "scrollytelling::cinematic-minimal",
+      "briefId": "scrollytelling",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "scrollytelling__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:60acd1dca41d91acfda7337b91395a63df3e00277fcbb786b9a2eb7dc41bccfb"
+      },
+      "candidateB": {
+        "runId": "scrollytelling__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:58d517791ab9f46a313dcce3952a1fc8a579a163d46d803be51a135f67dccdf6"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_065ba861ec64a7ef",
+      "groupId": "scrollytelling::evidence-editorial",
+      "briefId": "scrollytelling",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "scrollytelling__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:648c1ac40628334a321afc729514c4ce4c64d884d17b3752b18ba6f335953035"
+      },
+      "candidateB": {
+        "runId": "scrollytelling__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:42f6f270483e2dadc11f1ff0bd52ad1473ca5f582ee01ec8ea99c00fb16c33c6"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_62de25a6db18ea8f",
+      "groupId": "scrollytelling::evidence-editorial",
+      "briefId": "scrollytelling",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "scrollytelling__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:42f6f270483e2dadc11f1ff0bd52ad1473ca5f582ee01ec8ea99c00fb16c33c6"
+      },
+      "candidateB": {
+        "runId": "scrollytelling__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:c7d69e69d88d4670b6bce7643985b1804553e3c2d73e2046d7528d1ec0f8081f"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_2a132c18d3cf38fb",
+      "groupId": "scrollytelling::evidence-editorial",
+      "briefId": "scrollytelling",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "scrollytelling__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:648c1ac40628334a321afc729514c4ce4c64d884d17b3752b18ba6f335953035"
+      },
+      "candidateB": {
+        "runId": "scrollytelling__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:c7d69e69d88d4670b6bce7643985b1804553e3c2d73e2046d7528d1ec0f8081f"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_c74381f33386d3c5",
+      "groupId": "startup-roadshow::cinematic-minimal",
+      "briefId": "startup-roadshow",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "startup-roadshow__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:6eb51374fd39d0c8c2f27dcd4bace99da43fb6ba1f72b59e7b681be154b048a6"
+      },
+      "candidateB": {
+        "runId": "startup-roadshow__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:0d1e048a1af86ebb23764f8f4825e552917a85d79d97be507c32cee4b0b35898"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_bfcad0a4972d59ed",
+      "groupId": "startup-roadshow::cinematic-minimal",
+      "briefId": "startup-roadshow",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "startup-roadshow__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:6eb51374fd39d0c8c2f27dcd4bace99da43fb6ba1f72b59e7b681be154b048a6"
+      },
+      "candidateB": {
+        "runId": "startup-roadshow__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:fe43f48403070863a9eec483a9843f20404302959e293ef29d154fe0a746701b"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_5982fce7e163eb7f",
+      "groupId": "startup-roadshow::cinematic-minimal",
+      "briefId": "startup-roadshow",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "startup-roadshow__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:fe43f48403070863a9eec483a9843f20404302959e293ef29d154fe0a746701b"
+      },
+      "candidateB": {
+        "runId": "startup-roadshow__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:0d1e048a1af86ebb23764f8f4825e552917a85d79d97be507c32cee4b0b35898"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_a49567056035ea85",
+      "groupId": "startup-roadshow::evidence-editorial",
+      "briefId": "startup-roadshow",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "startup-roadshow__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:8db5f2d5fa6e47ec1cf88eaecdf673c2fb9f6e7e0eec95e715014657f8e7b276"
+      },
+      "candidateB": {
+        "runId": "startup-roadshow__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:59f7b616dae68847b3c84e2f7f07b271c1f2d55aebbc6d578633bdf8f0600dd7"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_e67988329820f391",
+      "groupId": "startup-roadshow::evidence-editorial",
+      "briefId": "startup-roadshow",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "startup-roadshow__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:83d417e339d96dd8bc70546d8bc26650d1a4fde2f6db17296b508315193768e0"
+      },
+      "candidateB": {
+        "runId": "startup-roadshow__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:8db5f2d5fa6e47ec1cf88eaecdf673c2fb9f6e7e0eec95e715014657f8e7b276"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_8ad5c719af82e884",
+      "groupId": "startup-roadshow::evidence-editorial",
+      "briefId": "startup-roadshow",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "startup-roadshow__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:83d417e339d96dd8bc70546d8bc26650d1a4fde2f6db17296b508315193768e0"
+      },
+      "candidateB": {
+        "runId": "startup-roadshow__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:59f7b616dae68847b3c84e2f7f07b271c1f2d55aebbc6d578633bdf8f0600dd7"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_84f153ef4ae28b58",
+      "groupId": "strategy-proposal::cinematic-minimal",
+      "briefId": "strategy-proposal",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "strategy-proposal__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:8fb7b61115ce4d775d9804e24f15c34915e9327e77a5dd95915648a691953c98"
+      },
+      "candidateB": {
+        "runId": "strategy-proposal__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:86c801335e16edd51e1db14ed36b199e06cdee28f822c877a8effd0fe0e692a8"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_15e3fe5c8928e80d",
+      "groupId": "strategy-proposal::cinematic-minimal",
+      "briefId": "strategy-proposal",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "strategy-proposal__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:8fb7b61115ce4d775d9804e24f15c34915e9327e77a5dd95915648a691953c98"
+      },
+      "candidateB": {
+        "runId": "strategy-proposal__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:bd9b3219c4abb68bee39cbe53b4ac79721cc9719f6ac6134883ce652984f8bd5"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_396384bf94fdf930",
+      "groupId": "strategy-proposal::cinematic-minimal",
+      "briefId": "strategy-proposal",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "strategy-proposal__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:86c801335e16edd51e1db14ed36b199e06cdee28f822c877a8effd0fe0e692a8"
+      },
+      "candidateB": {
+        "runId": "strategy-proposal__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:bd9b3219c4abb68bee39cbe53b4ac79721cc9719f6ac6134883ce652984f8bd5"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_4cd5a323fe279c73",
+      "groupId": "strategy-proposal::evidence-editorial",
+      "briefId": "strategy-proposal",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "strategy-proposal__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:20a04f266f5b1fc0c22b63caf7ce1e92253c3b84892835cbd8f54408fe82c630"
+      },
+      "candidateB": {
+        "runId": "strategy-proposal__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:41e242d6a0547d699fdba1cb637d0b6dea95ad28dcfbf153a17a4cdc9d58e383"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_6a6c02afffd1bfed",
+      "groupId": "strategy-proposal::evidence-editorial",
+      "briefId": "strategy-proposal",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "strategy-proposal__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:62b1c0ff2824df742bc8046e646978cef719581d216fbc29d67753d481cd6e54"
+      },
+      "candidateB": {
+        "runId": "strategy-proposal__evidence-editorial__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:20a04f266f5b1fc0c22b63caf7ce1e92253c3b84892835cbd8f54408fe82c630"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_0645860ae4114539",
+      "groupId": "strategy-proposal::evidence-editorial",
+      "briefId": "strategy-proposal",
+      "directionId": "evidence-editorial",
+      "candidateA": {
+        "runId": "strategy-proposal__evidence-editorial__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:62b1c0ff2824df742bc8046e646978cef719581d216fbc29d67753d481cd6e54"
+      },
+      "candidateB": {
+        "runId": "strategy-proposal__evidence-editorial__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:41e242d6a0547d699fdba1cb637d0b6dea95ad28dcfbf153a17a4cdc9d58e383"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_087b7e7e578d083f",
+      "groupId": "technical-architecture::cinematic-minimal",
+      "briefId": "technical-architecture",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "technical-architecture__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:11c20df15ada79189a42b7ceae007444abd63f36d1e8c1f4d62e76406329632c"
+      },
+      "candidateB": {
+        "runId": "technical-architecture__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:fe7eb8e2847f2df5a9d96830e77de20ca3842f9ec8f0ddf13c7e5c410500c0a6"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_a6334bbbf07b58e4",
+      "groupId": "technical-architecture::cinematic-minimal",
+      "briefId": "technical-architecture",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "technical-architecture__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:a967ce345ecf7c43d082990cca463dea15a29442310a8b34ca20349b0de53710"
+      },
+      "candidateB": {
+        "runId": "technical-architecture__cinematic-minimal__google-gemini-3-5-flash",
+        "evaluationDigest": "sha256:11c20df15ada79189a42b7ceae007444abd63f36d1e8c1f4d62e76406329632c"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    },
+    {
+      "matchId": "match_6b67df8c270c20ac",
+      "groupId": "technical-architecture::cinematic-minimal",
+      "briefId": "technical-architecture",
+      "directionId": "cinematic-minimal",
+      "candidateA": {
+        "runId": "technical-architecture__cinematic-minimal__anthropic-claude-sonnet-5",
+        "evaluationDigest": "sha256:fe7eb8e2847f2df5a9d96830e77de20ca3842f9ec8f0ddf13c7e5c410500c0a6"
+      },
+      "candidateB": {
+        "runId": "technical-architecture__cinematic-minimal__moonshotai-kimi-k3",
+        "evaluationDigest": "sha256:a967ce345ecf7c43d082990cca463dea15a29442310a8b34ca20349b0de53710"
+      },
+      "eligible": true,
+      "promotionEligible": false,
+      "requiredPreferenceReasons": [
+        "clearer_story",
+        "stronger_visual_hierarchy",
+        "better_artifact_choice",
+        "less_repetition",
+        "better_evidence",
+        "better_data_fidelity",
+        "more_audience_appropriate",
+        "more_editable",
+        "better_export"
+      ]
+    }
+  ],
+  "tournamentDigest": "sha256:9474d1816469b7bffb843e4f5cdc5681102d1139318dd77b1b48712b4ce07a38"
+}

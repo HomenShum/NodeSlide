@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "system-architecture__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:b0f7284925e54a033144694d77b09a96c8a60bc2d5fd545b44873004d33cbad4",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "system-architecture",
+  "artifactType": "architecture-diagram",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "architecture-diagram",
+    "title": "validation before commit",
+    "takeaway": "Make the portable protocol boundary and backend-specific responsibilities immediately inspectable.",
+    "annotation": "memory adapter",
+    "composition": "split",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "create-editable-nodes",
+        "label": "Create Editable Nodes",
+        "value": "validation before commit",
+        "sourceId": "architecture-contract"
+      },
+      {
+        "operationId": "create-typed-connectors",
+        "label": "Create Typed Connectors",
+        "value": "memory adapter",
+        "sourceId": "architecture-contract"
+      },
+      {
+        "operationId": "mark-trust-boundary",
+        "label": "Mark Trust Boundary",
+        "value": "Convex adapter",
+        "sourceId": "architecture-contract"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "architecture-contract",
+        "label": "Portable runtime contract"
+      }
+    ],
+    "pptxFallback": "Prefer grouped editable shapes and connectors; never replace the architecture with paragraph arrows."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

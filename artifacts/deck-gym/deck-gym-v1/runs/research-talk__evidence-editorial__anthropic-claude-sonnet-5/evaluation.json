@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-evaluation/v1",
+  "runId": "research-talk__evidence-editorial__anthropic-claude-sonnet-5",
+  "runDigest": "sha256:dc74b065fbb50adcab4bb08e24c89e24ddd547fadb89ebfd3b335c7fc4db6085",
+  "harnessVersion": "deck-gym-v1",
+  "evaluationGatesDigest": "sha256:b8bbac5b2715a7bdffc997dafc99cd766a13ff35680cc82fa2a0a34aa98d8d2f",
+  "briefId": "research-talk",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "routeClassification": "live",
+  "evaluatedAt": "2026-07-22T00:15:46.292Z",
+  "status": "failed",
+  "checks": {
+    "slideCount": true,
+    "claimCoverage": true,
+    "forbiddenClaims": true,
+    "distinctLayouts": true,
+    "layoutRepetition": true,
+    "adjacentSimilarity": true,
+    "textAreaRatio": false,
+    "meaningfulVisuals": false,
+    "internalCollisions": false,
+    "requiredArtifacts": false,
+    "liveModelTrace": true,
+    "renderedPptx": true
+  },
+  "dimensions": {
+    "factual": 1,
+    "visual": 0.6,
+    "narrative": 1,
+    "rhythm": 0.822222,
+    "artifactIntegrity": 0.333333
+  },
+  "rawScore": 0.751111,
+  "score": 0.751111,
+  "evidence": {
+    "slideCount": 7,
+    "renderedSlideCount": 7,
+    "matchedClaims": [
+      "0.75",
+      "0.038",
+      "1040"
+    ],
+    "requiredClaimCount": 3,
+    "claimCoverage": 1,
+    "forbiddenClaims": [],
+    "distinctLayoutSignatures": 6,
+    "repeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.333333,
+    "meaningfulVisualSlides": 4,
+    "maximumTextAreaRatio": 0.619544,
+    "geometryCollisionCount": 0,
+    "estimatedTextOverflowCount": 8,
+    "collisionCount": 8,
+    "missingArtifacts": [
+      "diagram"
+    ],
+    "artifactPresence": {
+      "charts": 1,
+      "images": 0,
+      "connectors": 0,
+      "shapes": 16,
+      "diagrams": 0,
+      "formulas": 3,
+      "codeSlides": 0
+    },
+    "slideDigests": [
+      "sha256:e6ddacfb678c1f1c96113e35bf8aae8acba85240cfeba66983f323dcaa45b0c1",
+      "sha256:a3932ca727cf4ec63288c33b143155c9b6a1d62f8dba233564adedbfb4a5156e",
+      "sha256:1bb80353c82943ee637ea590f58112ff31e0bc436d925a44b4fc664fec4f3e9a",
+      "sha256:404deac703ac71f9a3e65c2fdb7eb7cb8a45af2cd7493f0fc12b17788ce1dc7a",
+      "sha256:e5923d529ef1535e13bb97dc15ae14e425cbe9fc30d69f8f837c9298628ab98d",
+      "sha256:15b86e0e594a4b3b2fbe1e5e2ce2a9f18588629d794cf1b7caf848b36c10f4c8",
+      "sha256:114b4af13b1576d938d38b2881bb2134da1dc523525507cd6c88b5ebd7b3b6e7"
+    ],
+    "deckDigest": "sha256:faf084a997bf65326f07aa9457445563a0a2c0245012cabcd5d5983066a77a60"
+  },
+  "evaluationDigest": "sha256:bbf7ee589f5d6a7f620b341d011070e91bfce3242b7e25aac74ab58057e0048a"
+}

@@ -1,0 +1,284 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-matrix/v1",
+  "harnessVersion": "deck-gym-free-router-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "generatedAt": "2026-07-22T00:37:09.091Z",
+  "corpusDigest": "sha256:787f497760a31ea0e3b12a5adc1d1cc41b5e750cc6406c767ca930383829628b",
+  "harnessDigest": "sha256:49f668931aaf6f7aeed28f7468ed497110588865734711745db4c030d4bf1779",
+  "runCount": 4,
+  "matrixDigest": "sha256:e0a0bf7a154a305ecc7f174d4334baa37dfaedab073c655871cfd99aab4150ae",
+  "runs": [
+    {
+      "schemaVersion": "nodeslide.deck-gym-run/v1",
+      "runId": "research-talk__evidence-editorial__google-gemma-4-26b-a4b-it:free",
+      "briefId": "research-talk",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "harnessVersion": "deck-gym-free-router-v1",
+      "corpusVersion": "deck-gym-corpus-v1",
+      "promptDigest": "sha256:2b9baa754ecc4c6ac1e469bc55f930dd8744b5f30029c5d0453a996dacc69b01",
+      "runDigest": "sha256:0817e057431600e21cc99955ce0d574730cc2e5176c02dbc2d05976104e3abe9",
+      "title": "Adaptive Retrieval Under Cost Constraints",
+      "family": "research_talk",
+      "audience": "applied machine-learning researchers",
+      "decision": "understand whether the adaptive policy improves answer quality per dollar",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide research talk for applied machine-learning researchers evaluating adaptive retrieval under cost constraints. Explain the question, method, evaluation design, result, failure modes, and implications. Use the supplied experiment table exactly. Include an editable methods diagram, an editable result chart, the cost-adjusted quality formula Q divided by cost, and claim-adjacent source labels. Separate measured results from interpretation.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+      "attachments": [
+        {
+          "fileName": "retrieval-results.csv",
+          "format": "csv",
+          "content": "policy,quality_score,cost_usd,latency_ms\nno_retrieval,0.61,0.010,640\nalways_retrieve,0.78,0.092,1810\nadaptive,0.75,0.038,1040"
+        },
+        {
+          "fileName": "method.md",
+          "format": "md",
+          "content": "The adaptive policy predicts whether a query requires retrieval, retrieves at most three passages, then answers with claim-linked citations. Reported values are means over the fixed benchmark fixture; no statistical-significance claim is authorized."
+        }
+      ],
+      "requiredClaims": ["0.75", "0.038", "1040"],
+      "requiredArtifacts": ["chart", "diagram", "formula", "citations"],
+      "forbiddenClaims": ["statistically significant", "state of the art"],
+      "referenceIds": [
+        "research/question-method-result",
+        "research/methods-flow",
+        "research/annotated-result"
+      ],
+      "modelLabel": "Gemma 4 26B (Free)",
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "designDirection": {
+        "id": "evidence-editorial",
+        "label": "Evidence editorial",
+        "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+      },
+      "budgets": {
+        "maxRuns": 96,
+        "maxAttemptsPerRun": 1,
+        "maxConcurrency": 1,
+        "maxCreateMs": 300000,
+        "maxExportMs": 90000,
+        "maxSlides": 8,
+        "maxEstimatedCostMicroUsdPerRun": 0
+      },
+      "gates": {
+        "minimumClaimCoverage": 0.75,
+        "minimumDistinctLayoutSignatures": 4,
+        "maximumRepeatedLayoutCount": 2,
+        "maximumAdjacentLayoutSimilarity": 0.82,
+        "maximumTextAreaRatio": 0.52,
+        "minimumMeaningfulVisualSlides": 5,
+        "maximumInternalCollisionCount": 0,
+        "requiredSlideCountTolerance": 0,
+        "requireLiveModelTrace": true,
+        "requireEditableChartWhenRequested": true,
+        "requireEditableShapesWhenRequested": true,
+        "requireRenderedPptx": true
+      }
+    },
+    {
+      "schemaVersion": "nodeslide.deck-gym-run/v1",
+      "runId": "research-talk__evidence-editorial__google-gemma-4-31b-it:free",
+      "briefId": "research-talk",
+      "model": "google/gemma-4-31b-it:free",
+      "directionId": "evidence-editorial",
+      "harnessVersion": "deck-gym-free-router-v1",
+      "corpusVersion": "deck-gym-corpus-v1",
+      "promptDigest": "sha256:2b9baa754ecc4c6ac1e469bc55f930dd8744b5f30029c5d0453a996dacc69b01",
+      "runDigest": "sha256:57698b53214c060d9c1b52f49ab3afe84b38fedaa8336e61e1b35a9ecd0d0629",
+      "title": "Adaptive Retrieval Under Cost Constraints",
+      "family": "research_talk",
+      "audience": "applied machine-learning researchers",
+      "decision": "understand whether the adaptive policy improves answer quality per dollar",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide research talk for applied machine-learning researchers evaluating adaptive retrieval under cost constraints. Explain the question, method, evaluation design, result, failure modes, and implications. Use the supplied experiment table exactly. Include an editable methods diagram, an editable result chart, the cost-adjusted quality formula Q divided by cost, and claim-adjacent source labels. Separate measured results from interpretation.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+      "attachments": [
+        {
+          "fileName": "retrieval-results.csv",
+          "format": "csv",
+          "content": "policy,quality_score,cost_usd,latency_ms\nno_retrieval,0.61,0.010,640\nalways_retrieve,0.78,0.092,1810\nadaptive,0.75,0.038,1040"
+        },
+        {
+          "fileName": "method.md",
+          "format": "md",
+          "content": "The adaptive policy predicts whether a query requires retrieval, retrieves at most three passages, then answers with claim-linked citations. Reported values are means over the fixed benchmark fixture; no statistical-significance claim is authorized."
+        }
+      ],
+      "requiredClaims": ["0.75", "0.038", "1040"],
+      "requiredArtifacts": ["chart", "diagram", "formula", "citations"],
+      "forbiddenClaims": ["statistically significant", "state of the art"],
+      "referenceIds": [
+        "research/question-method-result",
+        "research/methods-flow",
+        "research/annotated-result"
+      ],
+      "modelLabel": "Gemma 4 31B (Free)",
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "designDirection": {
+        "id": "evidence-editorial",
+        "label": "Evidence editorial",
+        "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+      },
+      "budgets": {
+        "maxRuns": 96,
+        "maxAttemptsPerRun": 1,
+        "maxConcurrency": 1,
+        "maxCreateMs": 300000,
+        "maxExportMs": 90000,
+        "maxSlides": 8,
+        "maxEstimatedCostMicroUsdPerRun": 0
+      },
+      "gates": {
+        "minimumClaimCoverage": 0.75,
+        "minimumDistinctLayoutSignatures": 4,
+        "maximumRepeatedLayoutCount": 2,
+        "maximumAdjacentLayoutSimilarity": 0.82,
+        "maximumTextAreaRatio": 0.52,
+        "minimumMeaningfulVisualSlides": 5,
+        "maximumInternalCollisionCount": 0,
+        "requiredSlideCountTolerance": 0,
+        "requireLiveModelTrace": true,
+        "requireEditableChartWhenRequested": true,
+        "requireEditableShapesWhenRequested": true,
+        "requireRenderedPptx": true
+      }
+    },
+    {
+      "schemaVersion": "nodeslide.deck-gym-run/v1",
+      "runId": "research-talk__evidence-editorial__nvidia-nemotron-3-super-120b-a12b:free",
+      "briefId": "research-talk",
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "directionId": "evidence-editorial",
+      "harnessVersion": "deck-gym-free-router-v1",
+      "corpusVersion": "deck-gym-corpus-v1",
+      "promptDigest": "sha256:2b9baa754ecc4c6ac1e469bc55f930dd8744b5f30029c5d0453a996dacc69b01",
+      "runDigest": "sha256:c5f7b21e8521099a0b5202b86cee5951b2c1cbe9365543fd354ac1bef1431653",
+      "title": "Adaptive Retrieval Under Cost Constraints",
+      "family": "research_talk",
+      "audience": "applied machine-learning researchers",
+      "decision": "understand whether the adaptive policy improves answer quality per dollar",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide research talk for applied machine-learning researchers evaluating adaptive retrieval under cost constraints. Explain the question, method, evaluation design, result, failure modes, and implications. Use the supplied experiment table exactly. Include an editable methods diagram, an editable result chart, the cost-adjusted quality formula Q divided by cost, and claim-adjacent source labels. Separate measured results from interpretation.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+      "attachments": [
+        {
+          "fileName": "retrieval-results.csv",
+          "format": "csv",
+          "content": "policy,quality_score,cost_usd,latency_ms\nno_retrieval,0.61,0.010,640\nalways_retrieve,0.78,0.092,1810\nadaptive,0.75,0.038,1040"
+        },
+        {
+          "fileName": "method.md",
+          "format": "md",
+          "content": "The adaptive policy predicts whether a query requires retrieval, retrieves at most three passages, then answers with claim-linked citations. Reported values are means over the fixed benchmark fixture; no statistical-significance claim is authorized."
+        }
+      ],
+      "requiredClaims": ["0.75", "0.038", "1040"],
+      "requiredArtifacts": ["chart", "diagram", "formula", "citations"],
+      "forbiddenClaims": ["statistically significant", "state of the art"],
+      "referenceIds": [
+        "research/question-method-result",
+        "research/methods-flow",
+        "research/annotated-result"
+      ],
+      "modelLabel": "Nemotron 3 Super (Free)",
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "designDirection": {
+        "id": "evidence-editorial",
+        "label": "Evidence editorial",
+        "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+      },
+      "budgets": {
+        "maxRuns": 96,
+        "maxAttemptsPerRun": 1,
+        "maxConcurrency": 1,
+        "maxCreateMs": 300000,
+        "maxExportMs": 90000,
+        "maxSlides": 8,
+        "maxEstimatedCostMicroUsdPerRun": 0
+      },
+      "gates": {
+        "minimumClaimCoverage": 0.75,
+        "minimumDistinctLayoutSignatures": 4,
+        "maximumRepeatedLayoutCount": 2,
+        "maximumAdjacentLayoutSimilarity": 0.82,
+        "maximumTextAreaRatio": 0.52,
+        "minimumMeaningfulVisualSlides": 5,
+        "maximumInternalCollisionCount": 0,
+        "requiredSlideCountTolerance": 0,
+        "requireLiveModelTrace": true,
+        "requireEditableChartWhenRequested": true,
+        "requireEditableShapesWhenRequested": true,
+        "requireRenderedPptx": true
+      }
+    },
+    {
+      "schemaVersion": "nodeslide.deck-gym-run/v1",
+      "runId": "research-talk__evidence-editorial__openai-gpt-oss-20b:free",
+      "briefId": "research-talk",
+      "model": "openai/gpt-oss-20b:free",
+      "directionId": "evidence-editorial",
+      "harnessVersion": "deck-gym-free-router-v1",
+      "corpusVersion": "deck-gym-corpus-v1",
+      "promptDigest": "sha256:2b9baa754ecc4c6ac1e469bc55f930dd8744b5f30029c5d0453a996dacc69b01",
+      "runDigest": "sha256:26d01ad7c46c2461e9b595f96c6c9d6f787bd254b1e7c1e3476fc26b0e9cb7d7",
+      "title": "Adaptive Retrieval Under Cost Constraints",
+      "family": "research_talk",
+      "audience": "applied machine-learning researchers",
+      "decision": "understand whether the adaptive policy improves answer quality per dollar",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide research talk for applied machine-learning researchers evaluating adaptive retrieval under cost constraints. Explain the question, method, evaluation design, result, failure modes, and implications. Use the supplied experiment table exactly. Include an editable methods diagram, an editable result chart, the cost-adjusted quality formula Q divided by cost, and claim-adjacent source labels. Separate measured results from interpretation.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+      "attachments": [
+        {
+          "fileName": "retrieval-results.csv",
+          "format": "csv",
+          "content": "policy,quality_score,cost_usd,latency_ms\nno_retrieval,0.61,0.010,640\nalways_retrieve,0.78,0.092,1810\nadaptive,0.75,0.038,1040"
+        },
+        {
+          "fileName": "method.md",
+          "format": "md",
+          "content": "The adaptive policy predicts whether a query requires retrieval, retrieves at most three passages, then answers with claim-linked citations. Reported values are means over the fixed benchmark fixture; no statistical-significance claim is authorized."
+        }
+      ],
+      "requiredClaims": ["0.75", "0.038", "1040"],
+      "requiredArtifacts": ["chart", "diagram", "formula", "citations"],
+      "forbiddenClaims": ["statistically significant", "state of the art"],
+      "referenceIds": [
+        "research/question-method-result",
+        "research/methods-flow",
+        "research/annotated-result"
+      ],
+      "modelLabel": "GPT-OSS 20B (Free)",
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "designDirection": {
+        "id": "evidence-editorial",
+        "label": "Evidence editorial",
+        "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+      },
+      "budgets": {
+        "maxRuns": 96,
+        "maxAttemptsPerRun": 1,
+        "maxConcurrency": 1,
+        "maxCreateMs": 300000,
+        "maxExportMs": 90000,
+        "maxSlides": 8,
+        "maxEstimatedCostMicroUsdPerRun": 0
+      },
+      "gates": {
+        "minimumClaimCoverage": 0.75,
+        "minimumDistinctLayoutSignatures": 4,
+        "maximumRepeatedLayoutCount": 2,
+        "maximumAdjacentLayoutSimilarity": 0.82,
+        "maximumTextAreaRatio": 0.52,
+        "minimumMeaningfulVisualSlides": 5,
+        "maximumInternalCollisionCount": 0,
+        "requiredSlideCountTolerance": 0,
+        "requireLiveModelTrace": true,
+        "requireEditableChartWhenRequested": true,
+        "requireEditableShapesWhenRequested": true,
+        "requireRenderedPptx": true
+      }
+    }
+  ]
+}

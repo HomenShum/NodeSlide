@@ -7,6 +7,7 @@ import {
   LoaderCircle,
   Paperclip,
   PlugZap,
+  Shapes,
   ShieldCheck,
   Sparkles,
   X,
@@ -24,6 +25,7 @@ import {
   nodeSlideProviderModeForModel,
 } from '../../../../shared/nodeslide';
 import type { NodeSlideDataAttachment } from '../../../../shared/nodeslideAttachments';
+import { ArtifactLabDialog } from './ArtifactLabDialog';
 import { NodeSlideConnectionsDialog } from './NodeSlideConnectionsDialog';
 import {
   type CreateDeckAdmissionRequest,
@@ -92,6 +94,7 @@ export function NodeSlideLanding({
   const [attachments, setAttachments] = useState<NodeSlideDataAttachment[]>([]);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
   const [connectionsOpen, setConnectionsOpen] = useState(false);
+  const [artifactLabOpen, setArtifactLabOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const providerMode: NodeSlideBriefProviderMode =
     generation === 'deterministic' ? 'deterministic' : nodeSlideProviderModeForModel(generation);
@@ -188,6 +191,9 @@ export function NodeSlideLanding({
           <strong>NodeSlide</strong>
         </a>
         <div className="ns-landing-header-actions">
+          <button className="ns-landing-lab" type="button" onClick={() => setArtifactLabOpen(true)}>
+            <Shapes size={14} /> Artifact Lab
+          </button>
           <button
             className="ns-landing-connect"
             type="button"
@@ -200,6 +206,17 @@ export function NodeSlideLanding({
           </button>
         </div>
       </header>
+
+      <ArtifactLabDialog
+        open={artifactLabOpen}
+        onClose={() => setArtifactLabOpen(false)}
+        onUsePattern={(nextPrompt) => {
+          setPrompt(nextPrompt);
+          setStarterTitle(null);
+          setArtifactLabOpen(false);
+          onClearError?.();
+        }}
+      />
 
       <section className="ns-landing-main" aria-labelledby="nodeslide-landing-title">
         <div className="ns-landing-intro">

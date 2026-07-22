@@ -1,0 +1,56 @@
+{
+  "artifactType": "architecture-diagram",
+  "candidateDigest": "sha256:cc208f8d4bed95875c252dc0c0abe8c57303405ab0a3493ae9736e404033f8e7",
+  "candidateId": "system-architecture__evidence-editorial__moonshotai-kimi-k3",
+  "directionId": "evidence-editorial",
+  "durationMs": 14910,
+  "fixtureId": "system-architecture",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Source: Portable runtime contract (architecture-contract). Validation runs before commit; three named adapters sit behind the adapter boundary.",
+    "artifactType": "architecture-diagram",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Editable nodes: Client, Portable NodeSlide Protocol (initialize, stage, commit, restore), Validation Engine, Adapter Boundary, Memory Adapter, Convex Adapter, Postgres Adapter",
+        "operationId": "create-editable-nodes",
+        "sourceId": "architecture-contract",
+        "value": "7 native editable nodes in a single left-to-right reading direction"
+      },
+      {
+        "label": "Typed connectors: calls (Client to Protocol), validates-before-commit (Protocol to Validation Engine), persists (Validation Engine to each adapter via boundary)",
+        "operationId": "create-typed-connectors",
+        "sourceId": "architecture-contract",
+        "value": "Labeled typed connectors linking protocol, validation, and the three named adapters"
+      },
+      {
+        "label": "Trust boundary: visually distinct adapter boundary separating portable protocol and validation from backend-specific persistence adapters",
+        "operationId": "mark-trust-boundary",
+        "sourceId": "architecture-contract",
+        "value": "1 visibly distinct trust boundary around the adapter zone"
+      }
+    ],
+    "pptxFallback": "PowerPoint export uses grouped editable shapes and native connectors for the client, protocol, validation engine, adapter boundary, and three adapters; the trust boundary is a distinct editable outline. Nodes and connectors remain editable; the architecture is never replaced with paragraph arrows.",
+    "sourceLabels": [
+      {
+        "label": "Portable runtime contract",
+        "sourceId": "architecture-contract"
+      }
+    ],
+    "takeaway": "Client calls flow through a portable protocol and validation engine before commit, with memory, Convex, and Postgres adapters implementing persistence behind a distinct adapter trust boundary.",
+    "title": "Portable Protocol & Adapter Boundary"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1368,
+    "inputTokens": 826,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 349,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

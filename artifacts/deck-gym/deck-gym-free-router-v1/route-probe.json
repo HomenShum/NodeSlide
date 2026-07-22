@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "nodeslide.free-router-fleet-probe/v1",
+  "generatedAt": "2026-07-22T00:42:37.682Z",
+  "durationMs": 2715,
+  "catalogModelCount": 4,
+  "probedModelCount": 4,
+  "failedModelCount": 2,
+  "passed": false,
+  "receipts": [
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "status": "passed",
+      "costMicroUsd": 0,
+      "inputTokens": 24,
+      "outputTokens": 2,
+      "latencyMs": 798
+    },
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "status": "failed",
+      "costMicroUsd": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "latencyMs": 364,
+      "failure": "The route returned no assistant text within 512 output tokens."
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "status": "passed",
+      "costMicroUsd": 0,
+      "inputTokens": 22,
+      "outputTokens": 97,
+      "latencyMs": 1453
+    },
+    {
+      "model": "openai/gpt-oss-20b:free",
+      "status": "failed",
+      "costMicroUsd": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "latencyMs": 99,
+      "failure": "The route returned no assistant text within 512 output tokens."
+    }
+  ]
+}

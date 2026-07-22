@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "uncertainty-range__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+  "candidateDigest": "sha256:18bf8d67d22cdac2d0d9bb6d7ee119f861f0305959b9a1b6794cdf436538eda2",
+  "fixtureId": "uncertainty-range",
+  "directionId": "evidence-editorial",
+  "artifactType": "uncertainty-range",
+  "slideArchetype": "forecast-range",
+  "narrativeJob": "Show a forecast and its uncertainty honestly instead of presenting one modeled value as certain.",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "modelRole": "zero-cost-bounded-generator-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "forecast-range-data"
+  ],
+  "sourceDigest": "sha256:2372dac53e28a061ed76013468ece742d76fcaf8c6da62fd50dcd4d2cd826787",
+  "referenceIds": [
+    "data-uncertainty-band"
+  ],
+  "artifactRequirementDigest": "sha256:f938548013f2b7e3ccd97be0ddd990046df630d8149423c70b79c814b8d8d783",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 15219,
+    "inputTokens": 1175,
+    "outputTokens": 400,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/uncertainty-range__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+    "pptxRender": "runs/uncertainty-range__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/uncertainty-range__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+    "webPptxDifference": "Use editable boundary lines plus a translucent shape when a native uncertainty band is unavailable."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:34:37.767Z",
+  "receiptDigest": "sha256:1ab908ea742316fe01074d0c720993bccdeddd7fb944a3d490774f460dc11379",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "polyline",
+    "line"
+  ]
+}

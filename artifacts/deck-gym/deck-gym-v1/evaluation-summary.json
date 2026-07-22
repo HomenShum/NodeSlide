@@ -1,0 +1,188 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-evaluation-summary/v1",
+  "generatedAt": "2026-07-22T00:15:46.379Z",
+  "runCount": 70,
+  "passed": 0,
+  "failed": 70,
+  "routeClassifications": {
+    "degraded": 53,
+    "live": 17
+  },
+  "failureChecks": {
+    "claimCoverage": 56,
+    "textAreaRatio": 70,
+    "meaningfulVisuals": 66,
+    "requiredArtifacts": 52,
+    "liveModelTrace": 53,
+    "internalCollisions": 17,
+    "forbiddenClaims": 7,
+    "layoutRepetition": 1
+  },
+  "duplicateDeckGroups": [
+    {
+      "deckDigest": "sha256:5f1cfa653e04976d30f297fd410f3c85c20ab9777f5adbc46293015cf3f602d7",
+      "count": 6,
+      "runIds": [
+        "strategy-proposal__cinematic-minimal__anthropic-claude-sonnet-5",
+        "strategy-proposal__cinematic-minimal__google-gemini-3-5-flash",
+        "strategy-proposal__cinematic-minimal__moonshotai-kimi-k3",
+        "strategy-proposal__evidence-editorial__anthropic-claude-sonnet-5",
+        "strategy-proposal__evidence-editorial__google-gemini-3-5-flash",
+        "strategy-proposal__evidence-editorial__moonshotai-kimi-k3"
+      ]
+    },
+    {
+      "deckDigest": "sha256:627cc0ef614d4fdbd6e6984e2855cdd9f0227f5069e9e039b3008012648710e4",
+      "count": 5,
+      "runIds": [
+        "case-study__cinematic-minimal__anthropic-claude-sonnet-5",
+        "case-study__cinematic-minimal__google-gemini-3-5-flash",
+        "case-study__cinematic-minimal__moonshotai-kimi-k3",
+        "case-study__evidence-editorial__google-gemini-3-5-flash",
+        "case-study__evidence-editorial__moonshotai-kimi-k3"
+      ]
+    },
+    {
+      "deckDigest": "sha256:365fdb0eaefc056930840aa4875ff83df9d6b466fd98f6a677b5bb5756a4a49b",
+      "count": 5,
+      "runIds": [
+        "data-story__cinematic-minimal__anthropic-claude-sonnet-5",
+        "data-story__cinematic-minimal__google-gemini-3-5-flash",
+        "data-story__evidence-editorial__anthropic-claude-sonnet-5",
+        "data-story__evidence-editorial__google-gemini-3-5-flash",
+        "data-story__evidence-editorial__moonshotai-kimi-k3"
+      ]
+    },
+    {
+      "deckDigest": "sha256:188923aa566b361a3536836c97565f4be03e4722afab0d60a639b5c4edee8946",
+      "count": 5,
+      "runIds": [
+        "finance-investment__cinematic-minimal__anthropic-claude-sonnet-5",
+        "finance-investment__cinematic-minimal__google-gemini-3-5-flash",
+        "finance-investment__cinematic-minimal__moonshotai-kimi-k3",
+        "finance-investment__evidence-editorial__anthropic-claude-sonnet-5",
+        "finance-investment__evidence-editorial__google-gemini-3-5-flash"
+      ]
+    },
+    {
+      "deckDigest": "sha256:b2da3bedc4cdc1a87251a42cc3a99071e4941ce3d8d0e50d9a5f81d60fb27e44",
+      "count": 5,
+      "runIds": [
+        "scrollytelling__cinematic-minimal__anthropic-claude-sonnet-5",
+        "scrollytelling__cinematic-minimal__google-gemini-3-5-flash",
+        "scrollytelling__cinematic-minimal__moonshotai-kimi-k3",
+        "scrollytelling__evidence-editorial__google-gemini-3-5-flash",
+        "scrollytelling__evidence-editorial__moonshotai-kimi-k3"
+      ]
+    },
+    {
+      "deckDigest": "sha256:549b322c5a4ecaa05a07903c8471c069f6a83d8954bef0554a45c98b747fcac6",
+      "count": 5,
+      "runIds": [
+        "startup-roadshow__cinematic-minimal__anthropic-claude-sonnet-5",
+        "startup-roadshow__cinematic-minimal__google-gemini-3-5-flash",
+        "startup-roadshow__evidence-editorial__anthropic-claude-sonnet-5",
+        "startup-roadshow__evidence-editorial__google-gemini-3-5-flash",
+        "startup-roadshow__evidence-editorial__moonshotai-kimi-k3"
+      ]
+    },
+    {
+      "deckDigest": "sha256:a5831d0ff73ee428c579607f46f04c7f79511d0b2e08c911d7b04ee485f1e03a",
+      "count": 4,
+      "runIds": [
+        "educational-explainer__cinematic-minimal__anthropic-claude-sonnet-5",
+        "educational-explainer__cinematic-minimal__google-gemini-3-5-flash",
+        "educational-explainer__cinematic-minimal__moonshotai-kimi-k3",
+        "educational-explainer__evidence-editorial__google-gemini-3-5-flash"
+      ]
+    },
+    {
+      "deckDigest": "sha256:67d783be1721b49cd5eb1feeae8ba32de383cab18e699ebfcf67a30922288ce5",
+      "count": 4,
+      "runIds": [
+        "executive-update__cinematic-minimal__anthropic-claude-sonnet-5",
+        "executive-update__cinematic-minimal__google-gemini-3-5-flash",
+        "executive-update__evidence-editorial__anthropic-claude-sonnet-5",
+        "executive-update__evidence-editorial__google-gemini-3-5-flash"
+      ]
+    },
+    {
+      "deckDigest": "sha256:621692700c78e28ffb5444e3d813eb1ac538ed0652084cd9472892c7c2e2140d",
+      "count": 4,
+      "runIds": [
+        "policy-briefing__cinematic-minimal__anthropic-claude-sonnet-5",
+        "policy-briefing__cinematic-minimal__google-gemini-3-5-flash",
+        "policy-briefing__evidence-editorial__anthropic-claude-sonnet-5",
+        "policy-briefing__evidence-editorial__google-gemini-3-5-flash"
+      ]
+    },
+    {
+      "deckDigest": "sha256:72593d25cee48520131a9a6aa72dcc1c0858fa777c7f3fcab75e2639be2754e7",
+      "count": 4,
+      "runIds": [
+        "product-demo__cinematic-minimal__google-gemini-3-5-flash",
+        "product-demo__cinematic-minimal__moonshotai-kimi-k3",
+        "product-demo__evidence-editorial__anthropic-claude-sonnet-5",
+        "product-demo__evidence-editorial__google-gemini-3-5-flash"
+      ]
+    },
+    {
+      "deckDigest": "sha256:25202eb327bf9c2c5c672957c78a4a09ff2851ad42936a84b29f4ec2e20b84c9",
+      "count": 4,
+      "runIds": [
+        "technical-architecture__cinematic-minimal__anthropic-claude-sonnet-5",
+        "technical-architecture__cinematic-minimal__google-gemini-3-5-flash",
+        "technical-architecture__cinematic-minimal__moonshotai-kimi-k3",
+        "technical-architecture__evidence-editorial__google-gemini-3-5-flash"
+      ]
+    },
+    {
+      "deckDigest": "sha256:9fa753f1aa7a9d3a929ab7c8aaca1a9be65c9457a30ba305089961aeee437851",
+      "count": 2,
+      "runIds": [
+        "research-talk__cinematic-minimal__google-gemini-3-5-flash",
+        "research-talk__evidence-editorial__google-gemini-3-5-flash"
+      ]
+    }
+  ],
+  "byModel": [
+    {
+      "model": "anthropic/claude-sonnet-5",
+      "runs": 23,
+      "passed": 0,
+      "passRate": 0,
+      "meanScore": 0.2949122282608695,
+      "meanClaimCoverage": 0.28985508695652173,
+      "estimatedTextOverflows": 34,
+      "routes": {
+        "degraded": 17,
+        "live": 6
+      }
+    },
+    {
+      "model": "google/gemini-3.5-flash",
+      "runs": 24,
+      "passed": 0,
+      "passRate": 0,
+      "meanScore": 0.18012731249999994,
+      "meanClaimCoverage": 0.07638891666666665,
+      "estimatedTextOverflows": 0,
+      "routes": {
+        "degraded": 24
+      }
+    },
+    {
+      "model": "moonshotai/kimi-k3",
+      "runs": 23,
+      "passed": 0,
+      "passRate": 0,
+      "meanScore": 0.3856855217391304,
+      "meanClaimCoverage": 0.4862319130434783,
+      "estimatedTextOverflows": 59,
+      "routes": {
+        "degraded": 12,
+        "live": 11
+      }
+    }
+  ]
+}

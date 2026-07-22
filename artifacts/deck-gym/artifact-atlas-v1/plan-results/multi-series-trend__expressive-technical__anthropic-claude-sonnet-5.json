@@ -1,0 +1,56 @@
+{
+  "artifactType": "multi-series-chart",
+  "candidateDigest": "sha256:0560dbf8b517fce9004ad59a25381c574f16519e2093341339299a25649d519b",
+  "candidateId": "multi-series-trend__expressive-technical__anthropic-claude-sonnet-5",
+  "directionId": "expressive-technical",
+  "durationMs": 8373,
+  "fixtureId": "multi-series-trend",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Local bus rose from 61 to 67, the smallest gain of the three series.",
+    "artifactType": "multi-series-chart",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Plot three monthly series",
+        "operationId": "create-editable-series",
+        "sourceId": "ridership-series",
+        "value": "rapid bus, local bus, rail; Jan–Jun"
+      },
+      {
+        "label": "Label June endpoints",
+        "operationId": "direct-label-endpoints",
+        "sourceId": "ridership-series",
+        "value": "rapid bus 91, rail 82, local bus 67"
+      },
+      {
+        "label": "Flag under-recovery",
+        "operationId": "annotate-supported-pattern",
+        "sourceId": "ridership-series",
+        "value": "local bus recovered least"
+      }
+    ],
+    "pptxFallback": "Exports as a native PowerPoint chart with editable series and directly labeled endpoints; if animation is unsupported, a static chart image is used instead, with no loss of the labeled values.",
+    "sourceLabels": [
+      {
+        "label": "Monthly ridership index",
+        "sourceId": "ridership-series"
+      }
+    ],
+    "takeaway": "By June, rapid bus and rail outpaced local bus, which recovered least across the six months.",
+    "title": "Rapid Bus Recovers Fastest; Local Bus Trails"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8016,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 431,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

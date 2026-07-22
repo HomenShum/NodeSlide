@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "research-timeline__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:5325fc0fb73f9ed3178030a4b4826fa10eac3242a38a9f848050d99ff7e6effb",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "research-timeline",
+  "artifactType": "timeline",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "timeline",
+    "title": "question frozen July 1",
+    "takeaway": "Show the progression from research question to evidence-backed decision with honest stage timing.",
+    "annotation": "blind review completed July 9",
+    "composition": "progressive",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "place-time-proportional-milestones",
+        "label": "Place Time Proportional Milestones",
+        "value": "question frozen July 1",
+        "sourceId": "research-dates"
+      },
+      {
+        "operationId": "emphasize-review-gate",
+        "label": "Emphasize Review Gate",
+        "value": "blind review completed July 9",
+        "sourceId": "research-dates"
+      },
+      {
+        "operationId": "bind-dates",
+        "label": "Bind Dates",
+        "value": "update approved July 11",
+        "sourceId": "research-dates"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "research-dates",
+        "label": "Research ledger"
+      }
+    ],
+    "pptxFallback": "Use editable milestone shapes and a line; remove motion before rasterizing the entire timeline."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

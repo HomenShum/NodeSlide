@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "risk-matrix__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:d57a8dabc73aefa6b3308200900598a6329d46abcd7305c097a94e35d3b026d6",
+  "fixtureId": "risk-matrix",
+  "directionId": "deterministic-baseline",
+  "artifactType": "risk-matrix",
+  "slideArchetype": "decision-risk-matrix",
+  "narrativeJob": "Prioritize operating risks by likelihood and impact instead of presenting an unlabeled list.",
+  "model": "nodeslide-artifact-builder-v1",
+  "modelRole": "geometry-and-export-control",
+  "candidateKind": "deterministic-baseline",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "q2-risks"
+  ],
+  "sourceDigest": "sha256:887c2cc1eadd8882e57468e122b1d136ef1abf1ba8f8b71fc3b728153f3b73f9",
+  "referenceIds": [
+    "decisions-labeled-risk-matrix"
+  ],
+  "artifactRequirementDigest": "sha256:eb8eba774544eec7fc4b56f7d468031b9b58d7b098f3dc69aa59f2394e3f42dc",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/risk-matrix__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+    "pptxRender": "runs/risk-matrix__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/risk-matrix__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+    "webPptxDifference": "Use editable axes, zones, and markers; a bar chart or linear stack fails artifact-type matching."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:40:56.782Z",
+  "receiptDigest": "sha256:b8502f9cc38459689185e55a949a0068874bc1460b2cc3e64f7152f2760fe12c",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line",
+    "circle"
+  ]
+}

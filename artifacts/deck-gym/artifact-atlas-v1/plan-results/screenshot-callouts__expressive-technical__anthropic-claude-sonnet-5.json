@@ -1,0 +1,56 @@
+{
+  "artifactType": "screenshot-callouts",
+  "candidateDigest": "sha256:f170d354c5d1e5ec72a1d01b2d4aef7beb09b9a10594498e48767ae98c3a995a",
+  "candidateId": "screenshot-callouts__expressive-technical__anthropic-claude-sonnet-5",
+  "directionId": "expressive-technical",
+  "durationMs": 7338,
+  "fixtureId": "screenshot-callouts",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Placeholder media region marked replacement-required; three numbered callouts identify verified product surfaces without simulating UI.",
+    "artifactType": "screenshot-callouts",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Screenshot placeholder",
+        "operationId": "create-media-placeholder",
+        "sourceId": "screenshot-absence",
+        "value": "16:9 media region marked replacement-required"
+      },
+      {
+        "label": "Numbered callouts",
+        "operationId": "create-numbered-callouts",
+        "sourceId": "screenshot-absence",
+        "value": "1) Model selection is visible 2) Validation status is visible 3) Trace inspection is available"
+      },
+      {
+        "label": "Missing evidence label",
+        "operationId": "label-missing-evidence",
+        "sourceId": "screenshot-absence",
+        "value": "Screenshot replacement required — no bitmap supplied"
+      }
+    ],
+    "pptxFallback": "Deliver as a grouped, editable PowerPoint object: a labeled placeholder rectangle for the missing screenshot plus three numbered, editable callout text boxes anchored to it. No screenshot image is embedded or simulated; the group remains fully editable text and shapes.",
+    "sourceLabels": [
+      {
+        "label": "Evidence availability: no product screenshot bitmap included",
+        "sourceId": "screenshot-absence"
+      }
+    ],
+    "takeaway": "Model selection, validation status, and trace inspection are verified controls awaiting a real screenshot.",
+    "title": "Reviewable Generation Workflow: Product Controls Mapped"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8969,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 524,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

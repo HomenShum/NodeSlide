@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "candidateDigest": "sha256:67826145a3a6cf315b14b82f1a746f7152a0d6974a25ed68f7b287340c3405b7",
+  "fixtureId": "risk-matrix",
+  "directionId": "expressive-technical",
+  "artifactType": "risk-matrix",
+  "slideArchetype": "decision-risk-matrix",
+  "narrativeJob": "Prioritize operating risks by likelihood and impact instead of presenting an unlabeled list.",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "modelRole": "zero-cost-bounded-generator-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "q2-risks"
+  ],
+  "sourceDigest": "sha256:887c2cc1eadd8882e57468e122b1d136ef1abf1ba8f8b71fc3b728153f3b73f9",
+  "referenceIds": [
+    "decisions-labeled-risk-matrix"
+  ],
+  "artifactRequirementDigest": "sha256:eb8eba774544eec7fc4b56f7d468031b9b58d7b098f3dc69aa59f2394e3f42dc",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 29194,
+    "inputTokens": 1090,
+    "outputTokens": 336,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+    "pptxRender": "runs/risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+    "webPptxDifference": "Use editable axes, zones, and markers; a bar chart or linear stack fails artifact-type matching."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:42:12.373Z",
+  "receiptDigest": "sha256:0bd1d9e8f0881dfbc4c058051fc7cad360f4e81ceab8e956989799777bba695d",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line",
+    "circle"
+  ]
+}

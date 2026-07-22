@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "screenshot-callouts__expressive-technical__anthropic-claude-sonnet-5",
+  "candidateDigest": "sha256:f170d354c5d1e5ec72a1d01b2d4aef7beb09b9a10594498e48767ae98c3a995a",
+  "fixtureId": "screenshot-callouts",
+  "directionId": "expressive-technical",
+  "artifactType": "screenshot-callouts",
+  "slideArchetype": "product-evidence",
+  "narrativeJob": "Connect visible product controls to the claimed reviewable-generation workflow without fabricating UI evidence.",
+  "model": "anthropic/claude-sonnet-5",
+  "modelRole": "story-framing-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "screenshot-absence"
+  ],
+  "sourceDigest": "sha256:f98aa7a7bdfa719b9dfc5757715aebc2922b83d9521a12bd88de99689643a066",
+  "referenceIds": [
+    "product-large-screenshot-callouts"
+  ],
+  "artifactRequirementDigest": "sha256:21696a32873f0382a74a991368a7acf70c5ab3247c64444046323721e433a1d9",
+  "editability": {
+    "web": "native",
+    "pptx": "grouped-editable"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 7338,
+    "inputTokens": 2,
+    "outputTokens": 524,
+    "costMicroUsd": 8969
+  },
+  "outputs": {
+    "browserRender": "runs/screenshot-callouts__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+    "pptxRender": "runs/screenshot-callouts__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/screenshot-callouts__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+    "webPptxDifference": "Keep the placeholder and callouts editable; never manufacture a product screenshot."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:38:45.432Z",
+  "receiptDigest": "sha256:6727ce2a770d0580e4fb0fa5f47f26d6bdf940c0cf90f13eb941041f4a9cc8b7",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "circle",
+    "line"
+  ]
+}

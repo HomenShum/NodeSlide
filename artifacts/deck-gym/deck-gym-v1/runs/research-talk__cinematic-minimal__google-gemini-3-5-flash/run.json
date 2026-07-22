@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "research-talk__cinematic-minimal__google-gemini-3-5-flash",
+  "briefId": "research-talk",
+  "model": "google/gemini-3.5-flash",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:0db04b7a662a123f367fcf051d0cf54b36aac1cd314187f90c0fd0993b12f795",
+  "runDigest": "sha256:36cefd92e427208fa1fb52a5a3563ebd68f4e9509524722f292d48726cdf382f",
+  "title": "Adaptive Retrieval Under Cost Constraints",
+  "family": "research_talk",
+  "audience": "applied machine-learning researchers",
+  "decision": "understand whether the adaptive policy improves answer quality per dollar",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide research talk for applied machine-learning researchers evaluating adaptive retrieval under cost constraints. Explain the question, method, evaluation design, result, failure modes, and implications. Use the supplied experiment table exactly. Include an editable methods diagram, an editable result chart, the cost-adjusted quality formula Q divided by cost, and claim-adjacent source labels. Separate measured results from interpretation.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "retrieval-results.csv",
+      "format": "csv",
+      "content": "policy,quality_score,cost_usd,latency_ms\nno_retrieval,0.61,0.010,640\nalways_retrieve,0.78,0.092,1810\nadaptive,0.75,0.038,1040"
+    },
+    {
+      "fileName": "method.md",
+      "format": "md",
+      "content": "The adaptive policy predicts whether a query requires retrieval, retrieves at most three passages, then answers with claim-linked citations. Reported values are means over the fixed benchmark fixture; no statistical-significance claim is authorized."
+    }
+  ],
+  "requiredClaims": [
+    "0.75",
+    "0.038",
+    "1040"
+  ],
+  "requiredArtifacts": [
+    "chart",
+    "diagram",
+    "formula",
+    "citations"
+  ],
+  "forbiddenClaims": [
+    "statistically significant",
+    "state of the art"
+  ],
+  "referenceIds": [
+    "research/question-method-result",
+    "research/methods-flow",
+    "research/annotated-result"
+  ],
+  "modelLabel": "Gemini 3.5 Flash",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvb4z6q_e8d194571c485cf21ad47877c829ae58",
+    "durationMs": 4249,
+    "completedAt": "2026-07-21T23:51:33.179Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · google/gemini-3.5-flash (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Gemini 3.5 Flash via OpenRouter route had no compatible provider endpoint. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 0 → 0 COST $0.0000 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 178220
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

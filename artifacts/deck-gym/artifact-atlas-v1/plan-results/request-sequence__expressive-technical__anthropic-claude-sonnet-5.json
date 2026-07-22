@@ -1,0 +1,56 @@
+{
+  "artifactType": "sequence-diagram",
+  "candidateDigest": "sha256:6b82f15c387e4ef422c50c0bbee9937f4b553619973d247a4a17d2b92d6aa728",
+  "candidateId": "request-sequence__expressive-technical__anthropic-claude-sonnet-5",
+  "directionId": "expressive-technical",
+  "durationMs": 7885,
+  "fixtureId": "request-sequence",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Five lifelines trace one bounded request: submission flows through planning and validation, only accepted proposals reach adapter commit, and failed validation returns directly to the client rather than silently mutating state.",
+    "artifactType": "sequence-diagram",
+    "composition": "diagonal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Participants",
+        "operationId": "create-lifelines",
+        "sourceId": "sequence-events",
+        "value": "User, NodeSlide Client, Planning Model, Validator, Adapter"
+      },
+      {
+        "label": "Primary Flow",
+        "operationId": "create-ordered-messages",
+        "sourceId": "sequence-events",
+        "value": "Submit brief → send context → return typed plan → validate → route to human review → commit accepted proposal → return versioned receipt"
+      },
+      {
+        "label": "Failure Path",
+        "operationId": "show-failure-return",
+        "sourceId": "sequence-events",
+        "value": "Validator returns issues directly to Client when validation fails, bypassing review and commit"
+      }
+    ],
+    "pptxFallback": "Exports as native PowerPoint lifelines and connector arrows grouped by swimlane; all participants, messages, and the failure-return path remain fully editable shapes, not a flattened image.",
+    "sourceLabels": [
+      {
+        "label": "Lifecycle events",
+        "sourceId": "sequence-events"
+      }
+    ],
+    "takeaway": "Validation precedes review, acceptance precedes commit, and every path—success or failure—ends in an explicit return.",
+    "title": "Request Lifecycle: Custody and Failure Boundaries"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8974,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 523,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

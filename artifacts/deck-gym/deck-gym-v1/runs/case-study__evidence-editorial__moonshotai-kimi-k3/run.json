@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "case-study__evidence-editorial__moonshotai-kimi-k3",
+  "briefId": "case-study",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:5cab5b7d2978eeeb277bffad30dcf81ed5614d55bc51794582a3c158127a4b95",
+  "runDigest": "sha256:946d2cd3e21852d5f255b99decedc9311a8ea0f1e4c8a1909c4ead245bfd1fd0",
+  "title": "Claims Operations Intervention",
+  "family": "case_study",
+  "audience": "operations executives",
+  "decision": "decide whether to replicate the intervention in two additional regions",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide case study for operations executives deciding whether to replicate a claims-processing intervention. Show the initial state, intervention, adoption path, measured before/after outcomes, operator evidence, limitations, and replication decision. Use the supplied data exactly. Include a before/after comparison, editable process diagram, outcome chart, and evidence panel. Do not imply causality beyond the observed before/after association.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "claims-before-after.csv",
+      "format": "csv",
+      "content": "metric,before,after,unit\nmedian_cycle_time,8.4,5.9,days\nmanual_touches,6.1,3.8,touches\nrework_rate,14.2,9.6,percent\non_time_completion,71,84,percent"
+    },
+    {
+      "fileName": "intervention.md",
+      "format": "md",
+      "content": "The intervention introduced structured intake, one review checkpoint, and exception routing. The benchmark authorizes an observed before/after association only; it does not establish a causal effect."
+    }
+  ],
+  "requiredClaims": [
+    "8.4",
+    "5.9",
+    "14.2",
+    "9.6",
+    "84"
+  ],
+  "requiredArtifacts": [
+    "comparison",
+    "diagram",
+    "chart",
+    "evidence"
+  ],
+  "forbiddenClaims": [
+    "caused",
+    "proven impact"
+  ],
+  "referenceIds": [
+    "case/before-after",
+    "case/intervention-mechanism",
+    "case/replication-gate"
+  ],
+  "modelLabel": "Kimi K3",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbgudd_d637a0d5cc319aeab42a2e9ba6c1b68d",
+    "durationMs": 44946,
+    "completedAt": "2026-07-22T00:00:46.849Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · moonshotai/kimi-k3 (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Kimi K3 via OpenRouter route returned invalid JSON after one repair attempt. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 2,151 → 1,814 COST $0.0058 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 178290
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

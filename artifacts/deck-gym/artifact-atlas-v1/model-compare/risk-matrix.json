@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "risk-matrix",
+  "generatedAt": "2026-07-22T03:23:22.707Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "risk-matrix__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:8591e23c47c9c7501a840d22599c8ec56a4379829707da957e8f6927e74fd6a3",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/risk-matrix__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/risk-matrix__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/risk-matrix__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Use editable axes, zones, and markers; a bar chart or linear stack fails artifact-type matching."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "risk-matrix__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:25be20f1a0339898d8becc3862496badb7edebd7899038ecb0452e2570d25fee",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/risk-matrix__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/risk-matrix__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/risk-matrix__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Use editable axes, zones, and markers; a bar chart or linear stack fails artifact-type matching."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7424,
+        "inputTokens": 2,
+        "outputTokens": 471,
+        "costMicroUsd": 5010
+      }
+    },
+    {
+      "candidateId": "risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:b4f1b2b21029ae6a4a095596cbdcdd410e6aa364e49564c85f638f1b3c6c2365",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Use editable axes, zones, and markers; a bar chart or linear stack fails artifact-type matching."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 31902,
+        "inputTokens": 1088,
+        "outputTokens": 352,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "risk-matrix__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:699f4ebf3851b2d4cd7b37eb2429cf27efecc4cf0f84464087cbe1856d82144a",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/risk-matrix__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/risk-matrix__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/risk-matrix__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Use editable axes, zones, and markers; a bar chart or linear stack fails artifact-type matching."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 16696,
+        "inputTokens": 832,
+        "outputTokens": 305,
+        "costMicroUsd": 1261
+      }
+    },
+    {
+      "candidateId": "risk-matrix__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:d8b206258943df4caf2b7f2970c67a3533c6a7766e69b0ab89a28e6074ab3217",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/risk-matrix__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/risk-matrix__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/risk-matrix__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Use editable axes, zones, and markers; a bar chart or linear stack fails artifact-type matching."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 6212,
+        "inputTokens": 2,
+        "outputTokens": 419,
+        "costMicroUsd": 7916
+      }
+    },
+    {
+      "candidateId": "risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:ab80a5308f12cb18c991c58e22f17e365472e6e6943272a2509ae1a59e77f2c4",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Use editable axes, zones, and markers; a bar chart or linear stack fails artifact-type matching."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 29194,
+        "inputTokens": 1090,
+        "outputTokens": 336,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "risk-matrix__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:0cdb4a629c9d0921aad59ab850343dc5837de308cb44dd714eb5ee1325044bb3",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/risk-matrix__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/risk-matrix__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/risk-matrix__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Use editable axes, zones, and markers; a bar chart or linear stack fails artifact-type matching."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 17943,
+        "inputTokens": 834,
+        "outputTokens": 261,
+        "costMicroUsd": 1152
+      }
+    }
+  ]
+}

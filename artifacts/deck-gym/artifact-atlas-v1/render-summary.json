@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-render-summary/v1",
+  "generatedAt": "2026-07-22T03:43:02.990Z",
+  "requestedCandidates": 84,
+  "rerenderedCandidates": 2,
+  "eligible": 82,
+  "failed": 2,
+  "byArtifact": [
+    {
+      "artifactType": "claim-source-lineage",
+      "candidates": 7,
+      "eligible": 7
+    },
+    {
+      "artifactType": "code-runtime-proof",
+      "candidates": 7,
+      "eligible": 7
+    },
+    {
+      "artifactType": "hero-thesis",
+      "candidates": 7,
+      "eligible": 7
+    },
+    {
+      "artifactType": "kpi-strip",
+      "candidates": 7,
+      "eligible": 7
+    },
+    {
+      "artifactType": "multi-series-chart",
+      "candidates": 7,
+      "eligible": 7
+    },
+    {
+      "artifactType": "katex-equation",
+      "candidates": 7,
+      "eligible": 7
+    },
+    {
+      "artifactType": "sequence-diagram",
+      "candidates": 7,
+      "eligible": 7
+    },
+    {
+      "artifactType": "timeline",
+      "candidates": 7,
+      "eligible": 7
+    },
+    {
+      "artifactType": "risk-matrix",
+      "candidates": 7,
+      "eligible": 7
+    },
+    {
+      "artifactType": "screenshot-callouts",
+      "candidates": 7,
+      "eligible": 5
+    },
+    {
+      "artifactType": "architecture-diagram",
+      "candidates": 7,
+      "eligible": 7
+    },
+    {
+      "artifactType": "uncertainty-range",
+      "candidates": 7,
+      "eligible": 7
+    }
+  ]
+}

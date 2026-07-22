@@ -1,0 +1,1 @@
+The benchmark definition is: index approved documents, retrieve passages relevant to a query, provide those passages to the generator, and evaluate whether claims are supported by the retrieved text. Retrieval does not guarantee truth and can return irrelevant evidence.

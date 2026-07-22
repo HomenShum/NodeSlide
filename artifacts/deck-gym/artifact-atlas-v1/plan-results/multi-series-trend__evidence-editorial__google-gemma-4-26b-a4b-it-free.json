@@ -1,0 +1,56 @@
+{
+  "artifactType": "multi-series-chart",
+  "candidateDigest": "sha256:83d868377cebe1b3b81ce72b5c96a23baa993dd78f9f8a63ec7a89ea7a0940b8",
+  "candidateId": "multi-series-trend__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+  "directionId": "evidence-editorial",
+  "durationMs": 9348,
+  "fixtureId": "multi-series-trend",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "Local bus reached 67",
+    "artifactType": "multi-series-chart",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Rapid Bus, Local Bus, Rail",
+        "operationId": "create-editable-series",
+        "sourceId": "ridership-series",
+        "value": "Jan: 72,61,68; Feb: 74,62,70; Mar: 79,63,73; Apr: 83,65,76; May: 87,66,79; Jun: 91,67,82"
+      },
+      {
+        "label": "Endpoint Values",
+        "operationId": "direct-label-endpoints",
+        "sourceId": "ridership-series",
+        "value": "Rapid: 91, Local: 67, Rail: 82"
+      },
+      {
+        "label": "Divergence Trend",
+        "operationId": "annotate-supported-pattern",
+        "sourceId": "ridership-series",
+        "value": "Local bus recovered least"
+      }
+    ],
+    "pptxFallback": "Static chart image with editable text boxes for labels and annotations.",
+    "sourceLabels": [
+      {
+        "label": "Monthly ridership index",
+        "sourceId": "ridership-series"
+      }
+    ],
+    "takeaway": "Local bus ridership shows the lowest growth rate compared to rapid bus and rail.",
+    "title": "City Mobility Ridership Trends"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1144,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 397,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

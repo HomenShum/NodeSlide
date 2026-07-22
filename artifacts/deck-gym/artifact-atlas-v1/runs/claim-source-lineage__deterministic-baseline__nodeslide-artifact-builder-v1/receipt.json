@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "claim-source-lineage__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:64afb0e650b0ad15e8bff0234b6238a4cd7affb21149b795ddd3d8e977b25627",
+  "fixtureId": "claim-source-lineage",
+  "directionId": "deterministic-baseline",
+  "artifactType": "claim-source-lineage",
+  "slideArchetype": "evidence-lineage",
+  "narrativeJob": "Let a reviewer trace one headline claim through source, extraction, validation, and slide usage.",
+  "model": "nodeslide-artifact-builder-v1",
+  "modelRole": "geometry-and-export-control",
+  "candidateKind": "deterministic-baseline",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "journey-receipt"
+  ],
+  "sourceDigest": "sha256:d60bb5f1ebe42e7388e8e2b477e724bd7273748dcdfd38e2242bd9b4feeece58",
+  "referenceIds": [
+    "evidence-claim-lineage"
+  ],
+  "artifactRequirementDigest": "sha256:6de8e9e452c5413cf013248daab4ddc9d1e59bb9ab2bfd15b6a1aba43016699e",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/claim-source-lineage__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+    "pptxRender": "runs/claim-source-lineage__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/claim-source-lineage__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+    "webPptxDifference": "Preserve editable nodes, connectors, source ID, and rejection state; never flatten the lineage into prose."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:38:45.680Z",
+  "receiptDigest": "sha256:24500092ef2332341d0278d481377c765ac2aef82a7caa0cda1fa694ada1507f",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "strategy-proposal__cinematic-minimal__google-gemini-3-5-flash",
+  "briefId": "strategy-proposal",
+  "model": "google/gemini-3.5-flash",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:de1475f384ef64f60f29f49c397e9b98bbdfe596da28a82a0838bb2c6dd8bdb7",
+  "runDigest": "sha256:a8b65e9e13bf1430f7bfea6610f097229571cce90d20228b28cc63a5f47c3962",
+  "title": "AI Support Entry Strategy",
+  "family": "strategy_proposal",
+  "audience": "product and go-to-market leadership",
+  "decision": "select the initial market-entry wedge",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide strategy proposal for product and go-to-market leaders selecting an AI support market-entry wedge. Frame the market tension, compare three segments, show capability fit, sequence the roadmap, surface risks, and recommend one option. Use the supplied scoring table exactly. Include an editable landscape, aligned option comparison, roadmap timeline, and recommendation gate. Avoid generic two-by-two decoration without labeled axes.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "segment-score.csv",
+      "format": "csv",
+      "content": "segment,urgency,ability_to_pay,data_readiness,sales_complexity\nmidmarket_saas,5,4,4,2\nconsumer_fintech,4,5,3,5\nhealthcare_admin,5,5,2,5"
+    }
+  ],
+  "requiredClaims": [
+    "midmarket saas",
+    "consumer fintech",
+    "healthcare admin"
+  ],
+  "requiredArtifacts": [
+    "landscape",
+    "comparison",
+    "timeline",
+    "decision"
+  ],
+  "forbiddenClaims": [
+    "largest market",
+    "easiest sale"
+  ],
+  "referenceIds": [
+    "strategy/market-landscape",
+    "strategy/aligned-options",
+    "strategy/roadmap-gate"
+  ],
+  "modelLabel": "Gemini 3.5 Flash",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbd6hg_4753faa82b20d89641a64506316d9f60",
+    "durationMs": 4253,
+    "completedAt": "2026-07-21T23:57:56.085Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · google/gemini-3.5-flash (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Gemini 3.5 Flash via OpenRouter route had no compatible provider endpoint. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 0 → 0 COST $0.0000 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 175602
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

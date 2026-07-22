@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "technical-architecture__cinematic-minimal__google-gemini-3-5-flash",
+  "briefId": "technical-architecture",
+  "model": "google/gemini-3.5-flash",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:6fac8a7889cd87feda9227643ab8bf61445ea281d17f309af36482932a3befb7",
+  "runDigest": "sha256:69ad366019727beded5c2d82bb34ab4c5233e00226c0788382a28e16c2d70b9b",
+  "title": "Portable Caseflow Runtime",
+  "family": "technical_architecture",
+  "audience": "staff engineers and platform architects",
+  "decision": "approve the boundary between portable protocol and backend adapters",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide technical architecture review for staff engineers deciding whether to approve a portable caseflow runtime. Show the invariant lifecycle, adapter boundary, request sequence, benchmark evidence, code contract, failure handling, and decision. Include an editable architecture graph, an editable sequence flow, an editable benchmark chart, and a legible code excerpt. Avoid prose arrows and generic card grids.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "benchmark.csv",
+      "format": "csv",
+      "content": "adapter,p50_ms,p95_ms,receipt_bytes\nmemory,4,9,820\nconvex,38,92,1160\npostgres,31,77,1080"
+    },
+    {
+      "fileName": "caseflow.ts.txt",
+      "format": "txt",
+      "content": "export interface CaseflowAdapter { stage(input: StageInput): Promise<Proposal>; commit(input: CommitInput): Promise<Receipt>; restore(versionId: string): Promise<Receipt>; }"
+    }
+  ],
+  "requiredClaims": [
+    "memory",
+    "convex",
+    "postgres",
+    "stage",
+    "commit",
+    "restore"
+  ],
+  "requiredArtifacts": [
+    "chart",
+    "architecture",
+    "sequence",
+    "code"
+  ],
+  "forbiddenClaims": [
+    "production proven",
+    "zero latency"
+  ],
+  "referenceIds": [
+    "technical/layered-boundary",
+    "technical/sequence-proof",
+    "technical/code-and-runtime"
+  ],
+  "modelLabel": "Gemini 3.5 Flash",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvb6w1h_09a8097180ffea45dfdde1272be726fc",
+    "durationMs": 4881,
+    "completedAt": "2026-07-21T23:53:02.455Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · google/gemini-3.5-flash (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Gemini 3.5 Flash via OpenRouter route had no compatible provider endpoint. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 0 → 0 COST $0.0000 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 177303
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

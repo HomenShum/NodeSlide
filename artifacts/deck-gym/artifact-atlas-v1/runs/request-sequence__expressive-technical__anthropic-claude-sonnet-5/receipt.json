@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "request-sequence__expressive-technical__anthropic-claude-sonnet-5",
+  "candidateDigest": "sha256:6b82f15c387e4ef422c50c0bbee9937f4b553619973d247a4a17d2b92d6aa728",
+  "fixtureId": "request-sequence",
+  "directionId": "expressive-technical",
+  "artifactType": "sequence-diagram",
+  "slideArchetype": "request-sequence",
+  "narrativeJob": "Expose ordering, review custody, and failure boundaries across one request lifecycle.",
+  "model": "anthropic/claude-sonnet-5",
+  "modelRole": "story-framing-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "sequence-events"
+  ],
+  "sourceDigest": "sha256:b3dd747e7831857a1f3a8c77cfc90f723d2e8ce5d4d834f50330865b361d948f",
+  "referenceIds": [
+    "systems-sequence-lifelines"
+  ],
+  "artifactRequirementDigest": "sha256:e637b24f4fde88e1582f29a7732f3ff265a9c6106500de790840138032361cac",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 7885,
+    "inputTokens": 2,
+    "outputTokens": 523,
+    "costMicroUsd": 8974
+  },
+  "outputs": {
+    "browserRender": "runs/request-sequence__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+    "pptxRender": "runs/request-sequence__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/request-sequence__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+    "webPptxDifference": "Use editable lifelines and arrows; a static Mermaid image is not promotion-eligible."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:36:19.844Z",
+  "receiptDigest": "sha256:6c70fe660efd3b59858f9a6024152503fb8c52e3c9873c87f36ec9210a1bdc3d",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

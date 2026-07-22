@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "code-runtime-proof__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+  "candidateDigest": "sha256:4e2b4531887a3c71667323e57f5cf16a8a8a9e1ebd98c9402ec62150758ab52a",
+  "fixtureId": "code-runtime-proof",
+  "directionId": "evidence-editorial",
+  "artifactType": "code-runtime-proof",
+  "slideArchetype": "code-and-result",
+  "narrativeJob": "Pair a small API contract with measured runtime behavior so code and evidence reinforce each other.",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "modelRole": "zero-cost-bounded-generator-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "adapter-interface",
+    "adapter-benchmark"
+  ],
+  "sourceDigest": "sha256:dd9b0d254156af30e685054eef81a92546d8ac0e25f9a8c6e70a77bdf30d65f0",
+  "referenceIds": [
+    "technical-code-runtime-pair"
+  ],
+  "artifactRequirementDigest": "sha256:d73ee8df1636a77b07b789d23e6f5b5a68c24ce55d722e4d33fa4558fbfbdd0b",
+  "editability": {
+    "web": "native",
+    "pptx": "grouped-editable"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 11501,
+    "inputTokens": 1175,
+    "outputTokens": 391,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/code-runtime-proof__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+    "pptxRender": "runs/code-runtime-proof__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/code-runtime-proof__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+    "webPptxDifference": "Keep runtime numbers editable and export code as a syntax-highlighted SVG plus accessible source text."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:40:30.818Z",
+  "receiptDigest": "sha256:63f5564464b336f94df80a2724f4a21bd939362ad49b3fcea92c4d564e6309a8",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

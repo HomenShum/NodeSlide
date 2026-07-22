@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "executive-update__cinematic-minimal__google-gemini-3-5-flash",
+  "briefId": "executive-update",
+  "model": "google/gemini-3.5-flash",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:a40f1d0d690d639251559e095d11fb9a387e061149247accf51f7c3b60a3316c",
+  "runDigest": "sha256:49c1045baf2b42cf49e5d5c0c6b7c6ccffccd9c96b26248a89375b2a83265049",
+  "title": "Q2 Operating Review",
+  "family": "executive_update",
+  "audience": "company executives",
+  "decision": "choose the two operating interventions for Q3",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide Q2 operating review for executives choosing two interventions for Q3. Use the supplied KPI and risk data exactly. Open with the operating verdict, show KPI movement, explain the conversion bottleneck, rank risks, compare intervention options, and close with owners and checkpoints. Include an editable KPI scorecard, trend chart, risk matrix, and decision slide. Keep copy terse and executive-readable.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "q2-kpis.csv",
+      "format": "csv",
+      "content": "metric,q1,q2,target\nrevenue_musd,4.2,4.8,5.0\nnew_pipeline_musd,9.1,7.4,10.0\nwin_rate_percent,24,21,28\nimplementation_days,46,39,35\ngross_retention_percent,93,94,95"
+    },
+    {
+      "fileName": "q2-risks.json",
+      "format": "json",
+      "content": "[{\"risk\":\"pipeline coverage\",\"likelihood\":4,\"impact\":5},{\"risk\":\"implementation capacity\",\"likelihood\":3,\"impact\":4},{\"risk\":\"retention concentration\",\"likelihood\":2,\"impact\":5}]"
+    }
+  ],
+  "requiredClaims": [
+    "4.8",
+    "7.4",
+    "21",
+    "39",
+    "94"
+  ],
+  "requiredArtifacts": [
+    "scorecard",
+    "chart",
+    "matrix",
+    "comparison"
+  ],
+  "forbiddenClaims": [
+    "record quarter",
+    "on target"
+  ],
+  "referenceIds": [
+    "executive/verdict-first",
+    "executive/kpi-trend",
+    "executive/decision-gate"
+  ],
+  "modelLabel": "Gemini 3.5 Flash",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvb9hvr_3bc59fefc462a4517663a2d25deea0d3",
+    "durationMs": 4390,
+    "completedAt": "2026-07-21T23:55:04.198Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · google/gemini-3.5-flash (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Gemini 3.5 Flash via OpenRouter route had no compatible provider endpoint. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 0 → 0 COST $0.0000 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 178499
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

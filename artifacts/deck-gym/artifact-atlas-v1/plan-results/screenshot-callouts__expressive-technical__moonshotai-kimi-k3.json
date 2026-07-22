@@ -1,0 +1,56 @@
+{
+  "artifactType": "screenshot-callouts",
+  "candidateDigest": "sha256:b38ea2ff120f02e2e8f794b8a7ca1e26041db3e465ecd63bd67625e6cde5d409",
+  "candidateId": "screenshot-callouts__expressive-technical__moonshotai-kimi-k3",
+  "directionId": "expressive-technical",
+  "durationMs": 24680,
+  "fixtureId": "screenshot-callouts",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "The 16:9 media region is an explicit replacement-required placeholder: no product bitmap was supplied, so no interface is simulated. Numbered callouts are positioned to bind to the corresponding controls the moment authentic evidence replaces the placeholder.",
+    "artifactType": "screenshot-callouts",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "16:9 media region",
+        "operationId": "create-media-placeholder",
+        "sourceId": "screenshot-absence",
+        "value": "Large central placeholder marked 'Screenshot replacement required — no bitmap supplied'; no fabricated UI rendered inside."
+      },
+      {
+        "label": "Three numbered callouts",
+        "operationId": "create-numbered-callouts",
+        "sourceId": "screenshot-absence",
+        "value": "1) Model selection is visible · 2) Validation status is visible · 3) Trace inspection is available — editable callouts anchored around the media region."
+      },
+      {
+        "label": "Missing-evidence disclosure",
+        "operationId": "label-missing-evidence",
+        "sourceId": "screenshot-absence",
+        "value": "Placeholder caption states that the product screenshot is absent and must be replaced with a verified capture before distribution."
+      }
+    ],
+    "pptxFallback": "In PowerPoint the 16:9 placeholder and the three numbered callouts export as grouped-editable shapes, so teams can swap in a real screenshot and re-anchor callouts without rebuilding the slide; no product image is manufactured at any point.",
+    "sourceLabels": [
+      {
+        "label": "Evidence availability: no product screenshot bitmap included; verified surfaces are model selection, validation status, and the Trace inspector.",
+        "sourceId": "screenshot-absence"
+      }
+    ],
+    "takeaway": "Three verified controls — model selection, validation status, and the Trace inspector — anchor the reviewable-generation story once the real screenshot is dropped in.",
+    "title": "NodeSlide Reviewable Generation: Product Proof"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1429,
+    "inputTokens": 832,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 372,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

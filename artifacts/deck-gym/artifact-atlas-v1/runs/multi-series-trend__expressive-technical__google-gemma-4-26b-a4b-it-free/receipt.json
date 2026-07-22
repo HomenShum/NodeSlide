@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "multi-series-trend__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "candidateDigest": "sha256:e3f99634a09d19c0b44efed1fa85a6e351ab980e4f1b837f424d6cd8419aabf1",
+  "fixtureId": "multi-series-trend",
+  "directionId": "expressive-technical",
+  "artifactType": "multi-series-chart",
+  "slideArchetype": "annotated-trend",
+  "narrativeJob": "Reveal divergence between related series without inventing a cause for the observed pattern.",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "modelRole": "zero-cost-bounded-generator-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "ridership-series"
+  ],
+  "sourceDigest": "sha256:bdacbf8b8a8c911b694ca0bf97a55a7c50af8a28b77c37ad2fe0d879e94acd10",
+  "referenceIds": [
+    "data-direct-label-trend"
+  ],
+  "artifactRequirementDigest": "sha256:0058c93344089cc596ad9d02a9276accc26ccfa8f32e6629cbade4e6c411df6b",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 17567,
+    "inputTokens": 1146,
+    "outputTokens": 414,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/multi-series-trend__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+    "pptxRender": "runs/multi-series-trend__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/multi-series-trend__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+    "webPptxDifference": "Export editable lines and labels; omit animation before using a static chart image."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:34:11.298Z",
+  "receiptDigest": "sha256:daa477832cc6e1204aa4491e493c862f2929eeded49f86e6042dfb92a611a904",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line",
+    "polyline"
+  ]
+}

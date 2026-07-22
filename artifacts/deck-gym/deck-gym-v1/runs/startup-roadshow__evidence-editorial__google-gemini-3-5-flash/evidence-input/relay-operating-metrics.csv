@@ -1,0 +1,6 @@
+metric,value,unit,source
+paid_workspaces,84,workspaces,internal ledger
+monthly_active_operators,1260,operators,product telemetry
+weekly_workflows,18400,workflows,product telemetry
+net_revenue_retention,118,percent,billing export
+median_setup_time,19,minutes,onboarding telemetry

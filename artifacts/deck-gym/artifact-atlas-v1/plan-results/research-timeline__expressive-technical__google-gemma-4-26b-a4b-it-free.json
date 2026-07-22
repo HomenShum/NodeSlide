@@ -1,0 +1,56 @@
+{
+  "artifactType": "timeline",
+  "candidateDigest": "sha256:501f1c6a872c2cee618efd88e7a864804c7e0aff40f14433ad6ea25af1343628",
+  "candidateId": "research-timeline__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "directionId": "expressive-technical",
+  "durationMs": 18970,
+  "fixtureId": "research-timeline",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "Timeline spacing reflects actual elapsed days between milestones.",
+    "artifactType": "timeline",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Milestone Spacing",
+        "operationId": "place-time-proportional-milestones",
+        "sourceId": "research-dates",
+        "value": "Proportional to elapsed days"
+      },
+      {
+        "label": "Review Gate",
+        "operationId": "emphasize-review-gate",
+        "sourceId": "research-dates",
+        "value": "Blind Review Completed (July 9)"
+      },
+      {
+        "label": "Date Binding",
+        "operationId": "bind-dates",
+        "sourceId": "research-dates",
+        "value": "July 1 to July 11"
+      }
+    ],
+    "pptxFallback": "Use editable milestone shapes and a line; remove motion before rasterizing the entire timeline.",
+    "sourceLabels": [
+      {
+        "label": "Research ledger",
+        "sourceId": "research-dates"
+      }
+    ],
+    "takeaway": "A structured progression from initial question to approved harness update.",
+    "title": "Research Progression to Decision"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1115,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 314,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

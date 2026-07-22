@@ -1,0 +1,56 @@
+{
+  "artifactType": "architecture-diagram",
+  "candidateDigest": "sha256:e4c23540b805d2118228691cf5bb82e70a483baab70d447e054c3d8b8084fe93",
+  "candidateId": "system-architecture__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "directionId": "expressive-technical",
+  "durationMs": 17959,
+  "fixtureId": "system-architecture",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "Validation occurs strictly before the commit operation within the protocol lifecycle.",
+    "artifactType": "architecture-diagram",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Define core components",
+        "operationId": "create-editable-nodes",
+        "sourceId": "architecture-contract",
+        "value": "Client, Protocol, Validation, Adapter Boundary, Memory, Convex, Postgres"
+      },
+      {
+        "label": "Map protocol lifecycle",
+        "operationId": "create-typed-connectors",
+        "sourceId": "architecture-contract",
+        "value": "Initialize, Stage, Commit, Restore"
+      },
+      {
+        "label": "Isolate persistence layer",
+        "operationId": "mark-trust-boundary",
+        "sourceId": "architecture-contract",
+        "value": "Adapter Boundary"
+      }
+    ],
+    "pptxFallback": "A series of grouped editable rectangles and arrows representing the flow from Client to Adapters, maintaining semantic connectivity.",
+    "sourceLabels": [
+      {
+        "label": "Portable runtime contract",
+        "sourceId": "architecture-contract"
+      }
+    ],
+    "takeaway": "The portable protocol ensures consistent lifecycle management while adapters isolate backend-specific persistence logic.",
+    "title": "NodeSlide Protocol & Adapter Architecture"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1083,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 334,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

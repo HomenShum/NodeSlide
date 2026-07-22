@@ -1,0 +1,4 @@
+interface:
+  display_name: "Enforce Density Budget"
+  short_description: "Keep slide copy within rendered layout capacity"
+  default_prompt: "Use $enforce-density-budget to measure and repair excessive slide copy."

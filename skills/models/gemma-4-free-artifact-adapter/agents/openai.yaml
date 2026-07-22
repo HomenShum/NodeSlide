@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gemma 4 Free Artifact Adapter"
+  short_description: "Bound free-route work to proven artifact planning"
+  default_prompt: "Use $gemma-4-free-artifact-adapter to plan this artifact with source-bound operations and independent critics."

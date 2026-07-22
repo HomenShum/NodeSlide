@@ -1,0 +1,29 @@
+schema_version: nodeslide.model-routing-matrix/v1
+harness_version: deck-gym-v1
+policy: capability_before_brand
+routes:
+  full_deck_execution:
+    primary: moonshotai/kimi-k3
+    confidence: medium
+    requires: [no-generic-fallback, enforce-density-budget, require-visual-artifacts, repair-internal-overlap]
+    evidence: 9/11 live runs passed claim coverage
+  story_direction:
+    primary: anthropic/claude-sonnet-5
+    confidence: low
+    requires: [independent-executor, enforce-density-budget, source-every-claim]
+    evidence: artifact outputs only; story planning was not separately ablated
+  full_deck_gemini:
+    primary: blocked
+    confidence: high
+    requires: [verified-live-route]
+    evidence: 0/24 live routes
+  final_taste_judge:
+    primary: human_pairwise_review
+    confidence: high
+    requires: [deterministic-gates, model-blind-candidates]
+limits:
+  cognitive_behavior: unmeasured
+  detailed_tool_orchestration: unmeasured
+  sonnet_story_advantage: hypothesis_only
+  gemini_extraction_advantage: not_tested_in_deck_gym
+  claude_live_routes: 6

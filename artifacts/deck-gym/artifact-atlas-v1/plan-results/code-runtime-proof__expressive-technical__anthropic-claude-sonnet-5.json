@@ -1,0 +1,60 @@
+{
+  "artifactType": "code-runtime-proof",
+  "candidateDigest": "sha256:d54a0fd2b553770564931499accfb9e963d05da3440c6b10c22228e5195378ba",
+  "candidateId": "code-runtime-proof__expressive-technical__anthropic-claude-sonnet-5",
+  "directionId": "expressive-technical",
+  "durationMs": 8721,
+  "fixtureId": "code-runtime-proof",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Commit call maps directly to the receipt payload measured in the Convex benchmark; timings reflect this benchmark only.",
+    "artifactType": "code-runtime-proof",
+    "composition": "diagonal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Adapter contract",
+        "operationId": "render-code-block",
+        "sourceId": "adapter-interface",
+        "value": "stage returns Proposal; commit returns Receipt"
+      },
+      {
+        "label": "Measured latency",
+        "operationId": "render-runtime-result",
+        "sourceId": "adapter-benchmark",
+        "value": "p50 38 milliseconds / p95 92 milliseconds"
+      },
+      {
+        "label": "Commit to receipt",
+        "operationId": "connect-contract-to-measurement",
+        "sourceId": "adapter-benchmark",
+        "value": "receipt 1160 bytes"
+      }
+    ],
+    "pptxFallback": "Code excerpt exports as a syntax-highlighted image group with accessible source text alongside it; runtime numbers remain editable text boxes grouped and connected to the code block, matching but not exceeding the web contract's editability.",
+    "sourceLabels": [
+      {
+        "label": "TypeScript contract",
+        "sourceId": "adapter-interface"
+      },
+      {
+        "label": "Convex benchmark",
+        "sourceId": "adapter-benchmark"
+      }
+    ],
+    "takeaway": "The CaseflowAdapter contract holds under measured load: p50 38ms, p95 92ms, receipt 1160 bytes.",
+    "title": "Contract Meets Measured Runtime"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8964,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 493,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

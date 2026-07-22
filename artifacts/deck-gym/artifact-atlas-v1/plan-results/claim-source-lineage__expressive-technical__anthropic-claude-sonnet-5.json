@@ -1,0 +1,56 @@
+{
+  "artifactType": "claim-source-lineage",
+  "candidateDigest": "sha256:19f26007f916e4d08c650ad4eb15da7435c644c8577cf59b2161b4e17d6a0b36",
+  "candidateId": "claim-source-lineage__expressive-technical__anthropic-claude-sonnet-5",
+  "directionId": "expressive-technical",
+  "durationMs": 7628,
+  "fixtureId": "claim-source-lineage",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Reading left to right: source record → extracted fact → bounded claim → slide element → exported receipt, with the rejected branch shown apart from the validated path.",
+    "artifactType": "claim-source-lineage",
+    "composition": "diagonal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Lineage chain",
+        "operationId": "create-lineage-nodes",
+        "sourceId": "journey-receipt",
+        "value": "source record → extracted fact → bounded claim (human acceptance at 52 seconds) → slide element → exported receipt"
+      },
+      {
+        "label": "Source binding",
+        "operationId": "bind-source-id",
+        "sourceId": "journey-receipt",
+        "value": "human acceptance at 52 seconds bound to journey-receipt"
+      },
+      {
+        "label": "Rejected branch",
+        "operationId": "show-rejected-claim-branch",
+        "sourceId": "journey-receipt",
+        "value": "zero errors — rejected: no browser-error evidence present in journey-receipt"
+      }
+    ],
+    "pptxFallback": "Exports as native editable PowerPoint shapes and connectors: five sequential lineage nodes with a bound source-ID label, plus one visually separated rejected-branch node, all editable text boxes and lines with no flattened prose.",
+    "sourceLabels": [
+      {
+        "label": "Journey timing receipt",
+        "sourceId": "journey-receipt"
+      }
+    ],
+    "takeaway": "The claim 'human acceptance at 52 seconds' traces directly to journey-receipt; the unsupported 'zero errors' claim is rejected on a separate branch.",
+    "title": "Evidence Lineage: Human Acceptance Claim"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 9111,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 545,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

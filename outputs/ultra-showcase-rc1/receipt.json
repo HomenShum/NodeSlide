@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "nodeslide.ultra-showcase-receipt/v1",
+  "generatedAt": "2026-07-22T03:45:00.000Z",
+  "sourceCuration": "artifacts/deck-gym/artifact-atlas-v1/curation.json",
+  "slideCount": 12,
+  "eligibleCandidates": 82,
+  "failedCandidates": 2,
+  "coverageBalancedModels": {
+    "anthropic/claude-sonnet-5": 4,
+    "moonshotai/kimi-k3": 4,
+    "google/gemma-4-26b-a4b-it:free": 4
+  },
+  "pptx": "outputs/ultra-showcase-rc1/nodeslide-ultra-showcase-rc1.pptx",
+  "pptxBytes": 718408,
+  "pptxSha256": "e428445829cbfe97645185e9220ec6e38836d3c88bcb491e45601d3fcadcabcc",
+  "independentRenderPassed": true,
+  "overflowTestPassed": true,
+  "fullSizeSpotCheckPassed": true,
+  "publicReleaseApproved": false,
+  "humanPreferenceStatus": "pending"
+}

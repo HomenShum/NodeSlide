@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "candidateDigest": "sha256:523afff110b4fd8e1a525640a5d4ae8468286ef327bf480d05551db792c40c8b",
+  "fixtureId": "hero-thesis",
+  "directionId": "expressive-technical",
+  "artifactType": "hero-thesis",
+  "slideArchetype": "hero",
+  "narrativeJob": "Establish one memorable, evidence-bounded thesis before the detailed argument begins.",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "modelRole": "zero-cost-bounded-generator-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "hero-workflow"
+  ],
+  "sourceDigest": "sha256:a6ea5c3e252e44d56fceed8b702748b948eac61ab73adfa48f73a45467e572c2",
+  "referenceIds": [
+    "narrative-hero-focal"
+  ],
+  "artifactRequirementDigest": "sha256:c818625e6b1ffc1f6ffd9258bcbc106b27c00b8444903d96f1ab0a1669d92388",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 8915,
+    "inputTokens": 1073,
+    "outputTokens": 334,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+    "pptxRender": "runs/hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+    "webPptxDifference": "Keep the thesis and measured timing as editable text; remove decorative media before rasterizing evidence."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:32:27.152Z",
+  "receiptDigest": "sha256:f07c4e21a2d881f4c095452f26426e151324a36a7c8189f4037b452b4bd9662c",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

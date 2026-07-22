@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "multi-series-trend__expressive-technical__moonshotai-kimi-k3",
+  "candidateDigest": "sha256:73685ba9bb46dab91b2f7d10fcda50ba3c40b0a0bd56d23835b270d5d1e99ff3",
+  "fixtureId": "multi-series-trend",
+  "directionId": "expressive-technical",
+  "artifactType": "multi-series-chart",
+  "slideArchetype": "annotated-trend",
+  "narrativeJob": "Reveal divergence between related series without inventing a cause for the observed pattern.",
+  "model": "moonshotai/kimi-k3",
+  "modelRole": "structured-execution-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "ridership-series"
+  ],
+  "sourceDigest": "sha256:bdacbf8b8a8c911b694ca0bf97a55a7c50af8a28b77c37ad2fe0d879e94acd10",
+  "referenceIds": [
+    "data-direct-label-trend"
+  ],
+  "artifactRequirementDigest": "sha256:0058c93344089cc596ad9d02a9276accc26ccfa8f32e6629cbade4e6c411df6b",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 12831,
+    "inputTokens": 856,
+    "outputTokens": 285,
+    "costMicroUsd": 1226
+  },
+  "outputs": {
+    "browserRender": "runs/multi-series-trend__expressive-technical__moonshotai-kimi-k3/browser.png",
+    "pptxRender": "runs/multi-series-trend__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/multi-series-trend__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+    "webPptxDifference": "Export editable lines and labels; omit animation before using a static chart image."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:33:47.887Z",
+  "receiptDigest": "sha256:a750d641dc2372f12001cbcdcb04a8eb2cba0591f15775a4714be775691ac17e",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line",
+    "polyline"
+  ]
+}

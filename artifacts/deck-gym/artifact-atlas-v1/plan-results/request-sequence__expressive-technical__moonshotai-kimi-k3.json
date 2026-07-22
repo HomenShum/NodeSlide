@@ -1,0 +1,56 @@
+{
+  "artifactType": "sequence-diagram",
+  "candidateDigest": "sha256:186887ed0a1b3456c1ab20b8c8941bc65bf3b34227dc90bc343a4d7ad5804065",
+  "candidateId": "request-sequence__expressive-technical__moonshotai-kimi-k3",
+  "directionId": "expressive-technical",
+  "durationMs": 15806,
+  "fixtureId": "request-sequence",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Reading top-to-bottom: validation precedes review; acceptance precedes commit; the adapter returns a versioned receipt. The failed-validation path returns issues to the client instead of advancing.",
+    "artifactType": "sequence-diagram",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "Five lifelines",
+        "operationId": "create-lifelines",
+        "sourceId": "sequence-events",
+        "value": "User, NodeSlide client, planning model, validator, adapter"
+      },
+      {
+        "label": "Ordered flow",
+        "operationId": "create-ordered-messages",
+        "sourceId": "sequence-events",
+        "value": "Submit brief → bounded context → typed plan → validate → human review → commit → versioned receipt"
+      },
+      {
+        "label": "Failure return",
+        "operationId": "show-failure-return",
+        "sourceId": "sequence-events",
+        "value": "Validator returns issues to the client; the proposal does not advance to review or commit"
+      }
+    ],
+    "pptxFallback": "Lifelines and directional messages are exported as editable PowerPoint shapes and connectors per the supplied contract; a static Mermaid image is not promotion-eligible.",
+    "sourceLabels": [
+      {
+        "label": "Lifecycle events",
+        "sourceId": "sequence-events"
+      }
+    ],
+    "takeaway": "A proposal reaches human review only after validation passes, and only accepted proposals are committed by the adapter.",
+    "title": "Request Lifecycle: Validation Gate Before Review"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1189,
+    "inputTokens": 840,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 274,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

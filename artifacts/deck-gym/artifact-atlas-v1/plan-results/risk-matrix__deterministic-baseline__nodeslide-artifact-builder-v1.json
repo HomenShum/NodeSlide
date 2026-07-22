@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "risk-matrix__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:d57a8dabc73aefa6b3308200900598a6329d46abcd7305c097a94e35d3b026d6",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "risk-matrix",
+  "artifactType": "risk-matrix",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "risk-matrix",
+    "title": "pipeline coverage is highest priority",
+    "takeaway": "Prioritize operating risks by likelihood and impact instead of presenting an unlabeled list.",
+    "annotation": "implementation capacity is 3 by 4",
+    "composition": "focal",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "draw-labeled-axes",
+        "label": "Draw Labeled Axes",
+        "value": "pipeline coverage is highest priority",
+        "sourceId": "q2-risks"
+      },
+      {
+        "operationId": "place-editable-markers",
+        "label": "Place Editable Markers",
+        "value": "implementation capacity is 3 by 4",
+        "sourceId": "q2-risks"
+      },
+      {
+        "operationId": "encode-priority-zone",
+        "label": "Encode Priority Zone",
+        "value": "retention concentration is 2 by 5",
+        "sourceId": "q2-risks"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "q2-risks",
+        "label": "Q2 risk register"
+      }
+    ],
+    "pptxFallback": "Use editable axes, zones, and markers; a bar chart or linear stack fails artifact-type matching."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

@@ -1,0 +1,41 @@
+schema_version: nodeslide.model-capability-card/v1
+profile_version: 1
+model: google/gemini-3.5-flash
+label: Gemini 3.5 Flash
+evidence_window:
+  attempted_runs: 24
+  evaluated_runs: 24
+  completed_exports: 24
+  briefs: 12
+  directions: 2
+  harness_version: "deck-gym-v1"
+observed_metrics:
+  live_routes: 0
+  degraded_routes: 24
+  live_claim_passes: 0
+  mean_claim_coverage: 0.076389
+  mean_live_claim_coverage: 0
+  mean_qualified_score: 0.180127
+  mean_raw_score: 0.720509
+  estimated_text_overflows: 0
+  export_success_rate: 1
+failure_counts:
+  brief_miss: 24
+  generic_fallback: 24
+  text_density: 24
+  wrong_primitive: 24
+best_roles:
+  - "no full-deck role until a live-route ablation passes"
+avoid_roles:
+  - "full-deck generator"
+  - "fallback authority"
+  - "final taste judge"
+required_scaffolding:
+  - "no-generic-fallback"
+  - "independent route verification"
+confidence:
+  cognitive_behavior: "low — no plan or reasoning traces captured"
+  tool_execution: "low — only browser creation and export were observed"
+  artifact_quality: "high"
+  routing_recommendation: "low"
+status: "provisional — requires skill-on versus skill-off ablation"

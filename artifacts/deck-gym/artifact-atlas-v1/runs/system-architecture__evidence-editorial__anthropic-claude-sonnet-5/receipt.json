@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "system-architecture__evidence-editorial__anthropic-claude-sonnet-5",
+  "candidateDigest": "sha256:3a006adc7b4b39bdb5c3673424c78061cbf6b91e784795f684dd45345197770f",
+  "fixtureId": "system-architecture",
+  "directionId": "evidence-editorial",
+  "artifactType": "architecture-diagram",
+  "slideArchetype": "layered-architecture",
+  "narrativeJob": "Make the portable protocol boundary and backend-specific responsibilities immediately inspectable.",
+  "model": "anthropic/claude-sonnet-5",
+  "modelRole": "story-framing-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "architecture-contract"
+  ],
+  "sourceDigest": "sha256:5673b958b73b95f1cbc5bf66d019dc210bf6f0584857852773fdc7d293942530",
+  "referenceIds": [
+    "systems-layered-boundary"
+  ],
+  "artifactRequirementDigest": "sha256:f80295f537cb79365aa1114ea4a899d522f557d37f6b929559519820e5641c18",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 6979,
+    "inputTokens": 2,
+    "outputTokens": 495,
+    "costMicroUsd": 8709
+  },
+  "outputs": {
+    "browserRender": "runs/system-architecture__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+    "pptxRender": "runs/system-architecture__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/system-architecture__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+    "webPptxDifference": "Prefer grouped editable shapes and connectors; never replace the architecture with paragraph arrows."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:35:08.005Z",
+  "receiptDigest": "sha256:1410ec15f99b761a9b2a18cc2c6208627a122781f5ea71b5698a943272feddde",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

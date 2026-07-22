@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "uncertainty-range__evidence-editorial__anthropic-claude-sonnet-5",
+  "candidateDigest": "sha256:19b954b166166aeb966aa3e8392452ba79dd7f0ad80a89c34298790d8d27086e",
+  "fixtureId": "uncertainty-range",
+  "directionId": "evidence-editorial",
+  "artifactType": "uncertainty-range",
+  "slideArchetype": "forecast-range",
+  "narrativeJob": "Show a forecast and its uncertainty honestly instead of presenting one modeled value as certain.",
+  "model": "anthropic/claude-sonnet-5",
+  "modelRole": "story-framing-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "forecast-range-data"
+  ],
+  "sourceDigest": "sha256:2372dac53e28a061ed76013468ece742d76fcaf8c6da62fd50dcd4d2cd826787",
+  "referenceIds": [
+    "data-uncertainty-band"
+  ],
+  "artifactRequirementDigest": "sha256:f938548013f2b7e3ccd97be0ddd990046df630d8149423c70b79c814b8d8d783",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 9226,
+    "inputTokens": 2,
+    "outputTokens": 588,
+    "costMicroUsd": 9716
+  },
+  "outputs": {
+    "browserRender": "runs/uncertainty-range__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+    "pptxRender": "runs/uncertainty-range__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/uncertainty-range__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+    "webPptxDifference": "Use editable boundary lines plus a translucent shape when a native uncertainty band is unavailable."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:34:14.716Z",
+  "receiptDigest": "sha256:0d09bdb9c88c67fcda58c873c0387f8ee1ce94f9c44b08b7f51a549cfe36123a",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "polyline",
+    "line"
+  ]
+}

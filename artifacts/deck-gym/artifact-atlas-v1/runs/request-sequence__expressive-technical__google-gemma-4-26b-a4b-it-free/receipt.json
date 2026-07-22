@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "candidateDigest": "sha256:c3d328a11f83057493b09927ebd1906e545cd9f10022c72beaa744658b3094f9",
+  "fixtureId": "request-sequence",
+  "directionId": "expressive-technical",
+  "artifactType": "sequence-diagram",
+  "slideArchetype": "request-sequence",
+  "narrativeJob": "Expose ordering, review custody, and failure boundaries across one request lifecycle.",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "modelRole": "zero-cost-bounded-generator-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "sequence-events"
+  ],
+  "sourceDigest": "sha256:b3dd747e7831857a1f3a8c77cfc90f723d2e8ce5d4d834f50330865b361d948f",
+  "referenceIds": [
+    "systems-sequence-lifelines"
+  ],
+  "artifactRequirementDigest": "sha256:e637b24f4fde88e1582f29a7732f3ff265a9c6106500de790840138032361cac",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 18461,
+    "inputTokens": 1084,
+    "outputTokens": 323,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+    "pptxRender": "runs/request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+    "webPptxDifference": "Use editable lifelines and arrows; a static Mermaid image is not promotion-eligible."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:36:23.415Z",
+  "receiptDigest": "sha256:90fd7d933ba30047520b7da6370c8b30fc847486b97e47e40371d9296f72e9f1",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

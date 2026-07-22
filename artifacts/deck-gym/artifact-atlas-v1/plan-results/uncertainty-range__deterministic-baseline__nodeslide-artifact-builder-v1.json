@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "uncertainty-range__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:227715d919536072b1e6db9b5853f8014b6a7e6964116cb14e0219bfc83d3c1e",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "uncertainty-range",
+  "artifactType": "uncertainty-range",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "uncertainty-range",
+    "title": "base forecast reaches 11.4",
+    "takeaway": "Show a forecast and its uncertainty honestly instead of presenting one modeled value as certain.",
+    "annotation": "Q5 range is 9.0 to 13.8",
+    "composition": "focal",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "plot-observed-and-forecast",
+        "label": "Plot Observed And Forecast",
+        "value": "base forecast reaches 11.4",
+        "sourceId": "forecast-range-data"
+      },
+      {
+        "operationId": "draw-editable-range",
+        "label": "Draw Editable Range",
+        "value": "Q5 range is 9.0 to 13.8",
+        "sourceId": "forecast-range-data"
+      },
+      {
+        "operationId": "label-modeled-values",
+        "label": "Label Modeled Values",
+        "value": "uncertainty widens",
+        "sourceId": "forecast-range-data"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "forecast-range-data",
+        "label": "Forecast fixture"
+      }
+    ],
+    "pptxFallback": "Use editable boundary lines plus a translucent shape when a native uncertainty band is unavailable."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

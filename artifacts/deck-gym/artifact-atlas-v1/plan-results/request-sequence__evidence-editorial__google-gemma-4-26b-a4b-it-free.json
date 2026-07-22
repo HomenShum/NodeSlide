@@ -1,0 +1,56 @@
+{
+  "artifactType": "sequence-diagram",
+  "candidateDigest": "sha256:3ef1a5b6100937eae6c906ea415d7d24e6eb95911aca570d4eb2c95a92f70b56",
+  "candidateId": "request-sequence__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+  "directionId": "evidence-editorial",
+  "durationMs": 21840,
+  "fixtureId": "request-sequence",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "Sequence illustrates the flow from submission to receipt, highlighting the validation failure path.",
+    "artifactType": "sequence-diagram",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "Initialize Participants",
+        "operationId": "create-lifelines",
+        "sourceId": "sequence-events",
+        "value": "User, Client, Model, Validator, Reviewer, Adapter"
+      },
+      {
+        "label": "Standard Request Flow",
+        "operationId": "create-ordered-messages",
+        "sourceId": "sequence-events",
+        "value": "Submit -> Plan -> Validate -> Review -> Commit -> Receipt"
+      },
+      {
+        "label": "Validation Failure",
+        "operationId": "show-failure-return",
+        "sourceId": "sequence-events",
+        "value": "Validator returns issues to Client"
+      }
+    ],
+    "pptxFallback": "A sequence diagram using editable PowerPoint shapes (lines and text boxes) representing lifelines and messages.",
+    "sourceLabels": [
+      {
+        "label": "Lifecycle events",
+        "sourceId": "sequence-events"
+      }
+    ],
+    "takeaway": "Validation acts as a gatekeeper between the planning model and human review/adapter commit.",
+    "title": "Request Lifecycle & Validation Boundaries"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1082,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 334,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

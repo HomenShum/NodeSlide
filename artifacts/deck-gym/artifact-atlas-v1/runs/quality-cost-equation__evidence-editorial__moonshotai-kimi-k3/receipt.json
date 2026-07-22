@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "quality-cost-equation__evidence-editorial__moonshotai-kimi-k3",
+  "candidateDigest": "sha256:7e926dfe6135265eded6058caaa30709d4a21f3eb3b831d165bbb6e5b89948b3",
+  "fixtureId": "quality-cost-equation",
+  "directionId": "evidence-editorial",
+  "artifactType": "katex-equation",
+  "slideArchetype": "equation-explainer",
+  "narrativeJob": "Explain the cost-adjusted quality measure and connect every symbol to the supplied experiment table.",
+  "model": "moonshotai/kimi-k3",
+  "modelRole": "structured-execution-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "retrieval-result"
+  ],
+  "sourceDigest": "sha256:311d3206717b8f675cc96ffee37634aa223f6b8733fd8ccbc2b6f8a07a4462df",
+  "referenceIds": [
+    "technical-equation-annotated"
+  ],
+  "artifactRequirementDigest": "sha256:646bb86cd554201940fdcf11dbd7d178949d95a778ef6431f76f71bfd9bd7782",
+  "editability": {
+    "web": "native",
+    "pptx": "grouped-editable"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 15492,
+    "inputTokens": 838,
+    "outputTokens": 311,
+    "costMicroUsd": 1280
+  },
+  "outputs": {
+    "browserRender": "runs/quality-cost-equation__evidence-editorial__moonshotai-kimi-k3/browser.png",
+    "pptxRender": "runs/quality-cost-equation__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/quality-cost-equation__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+    "webPptxDifference": "Export the rendered equation as SVG with adjacent editable definitions; raw LaTeX text fails the gate."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:39:37.474Z",
+  "receiptDigest": "sha256:9c7723e5c8bdfc0c953656f289acbcc8867f940475bb95e4fcd5620f47d7699d",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "math",
+    "line"
+  ]
+}

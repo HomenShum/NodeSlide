@@ -1,0 +1,60 @@
+{
+  "artifactType": "code-runtime-proof",
+  "candidateDigest": "sha256:4e2b4531887a3c71667323e57f5cf16a8a8a9e1ebd98c9402ec62150758ab52a",
+  "candidateId": "code-runtime-proof__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+  "directionId": "evidence-editorial",
+  "durationMs": 11501,
+  "fixtureId": "code-runtime-proof",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "Performance metrics derived from benchmark suite.",
+    "artifactType": "code-runtime-proof",
+    "composition": "split",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Interface Definition",
+        "operationId": "render-code-block",
+        "sourceId": "adapter-interface",
+        "value": "interface CaseflowAdapter {\n  stage(input: StageInput): Promise<Proposal>;\n  commit(input: CommitInput): Promise<Receipt>;\n  restore(versionId: string): Promise<Receipt>;\n}"
+      },
+      {
+        "label": "Latency Metrics",
+        "operationId": "render-runtime-result",
+        "sourceId": "adapter-benchmark",
+        "value": "p50: 38ms | p95: 92ms"
+      },
+      {
+        "label": "Data Payload",
+        "operationId": "connect-contract-to-measurement",
+        "sourceId": "adapter-benchmark",
+        "value": "commit() -> 1160 bytes"
+      }
+    ],
+    "pptxFallback": "Grouped editable elements: syntax-highlighted SVG for code and editable text boxes for metrics.",
+    "sourceLabels": [
+      {
+        "label": "TypeScript contract",
+        "sourceId": "adapter-interface"
+      },
+      {
+        "label": "Convex benchmark",
+        "sourceId": "adapter-benchmark"
+      }
+    ],
+    "takeaway": "Measured latency for Convex adapter implementation.",
+    "title": "Adapter Performance Validation"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1175,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 391,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

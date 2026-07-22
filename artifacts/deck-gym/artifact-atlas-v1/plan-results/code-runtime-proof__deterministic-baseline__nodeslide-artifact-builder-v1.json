@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "code-runtime-proof__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:daf5c3be8ea80278d3967ff2beaad42f1075d5f1795d339e7d619e6791758298",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "code-runtime-proof",
+  "artifactType": "code-runtime-proof",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "code-runtime-proof",
+    "title": "stage returns Proposal",
+    "takeaway": "Pair a small API contract with measured runtime behavior so code and evidence reinforce each other.",
+    "annotation": "commit returns Receipt",
+    "composition": "focal",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "render-code-block",
+        "label": "Render Code Block",
+        "value": "stage returns Proposal",
+        "sourceId": "adapter-interface"
+      },
+      {
+        "operationId": "render-runtime-result",
+        "label": "Render Runtime Result",
+        "value": "commit returns Receipt",
+        "sourceId": "adapter-benchmark"
+      },
+      {
+        "operationId": "connect-contract-to-measurement",
+        "label": "Connect Contract To Measurement",
+        "value": "p50 38 milliseconds",
+        "sourceId": "adapter-interface"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "adapter-interface",
+        "label": "TypeScript contract"
+      },
+      {
+        "sourceId": "adapter-benchmark",
+        "label": "Convex benchmark"
+      }
+    ],
+    "pptxFallback": "Keep runtime numbers editable and export code as a syntax-highlighted SVG plus accessible source text."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

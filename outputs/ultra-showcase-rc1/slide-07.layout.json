@@ -1,0 +1,618 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/b0p871",
+    "id": "b0p871",
+    "slide": 7,
+    "layoutId": "c6146ff9-b47f-4f21-97ea-510a1679c91e",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "7e835401-1aba-4633-8025-f72140478094",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#F7F2E8",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": ["Arial"]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "c6146ff9-b47f-4f21-97ea-510a1679c91e",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "7e835401-1aba-4633-8025-f72140478094",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "7e835401-1aba-4633-8025-f72140478094",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wrq5c3m5",
+      "id": "1",
+      "bbox": [48, 34, 690, 28],
+      "geometry": "rect",
+      "text": "ATLAS 07  ·  TIMELINE",
+      "textPreview": "ATLAS 07  ·  TIMELINE",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 13,
+        "typeface": "Arial",
+        "color": "#C45538",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ATLAS 07  ·  TIMELINE"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ATLAS 07  ·  TIMELINE",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "typeface": "Arial",
+            "color": "#C45538",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ATLAS 07  ·  TIMELINE",
+              "fontSize": 13,
+              "typeface": "Arial",
+              "color": "#C45538",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vqhojylk",
+      "id": "2",
+      "bbox": [48, 72, 1160, 82],
+      "geometry": "rect",
+      "text": "Research Timeline: Question to Approved Update",
+      "textPreview": "Research Timeline: Question to Approved Update",
+      "resolvedFontSize": 34,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 34,
+        "typeface": "Arial",
+        "color": "#17241E",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Research Timeline: Question to Approved Update"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Research Timeline: Question to Approved Update",
+          "resolvedTextStyle": {
+            "fontSize": 34,
+            "typeface": "Arial",
+            "color": "#17241E",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Research Timeline: Question to Approved Update",
+              "fontSize": 34,
+              "typeface": "Arial",
+              "color": "#17241E",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/up8nad4z",
+      "id": "3",
+      "bbox": [518, 166, 722, 413],
+      "geometry": "roundRect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#D8D2C7",
+      "lineWidth": 1
+    },
+    {
+      "order": 4,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/4rqpgfud",
+      "id": "4",
+      "bbox": [526, 174, 706, 397],
+      "geometry": "roundRect",
+      "alt": "Verified Artifact Atlas browser render",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "imageMask": {
+        "geometry": "roundRect",
+        "adjustmentList": [
+          {
+            "name": "adj",
+            "formula": "val 2015"
+          }
+        ]
+      },
+      "asset": {
+        "assetId": "3a6a4a4f-0c84-464f-b2c6-05e7ff3c173f",
+        "contentType": "image/png",
+        "byteLength": 55895
+      }
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8nq583m9",
+      "id": "5",
+      "bbox": [48, 194, 420, 176],
+      "geometry": "rect",
+      "text": "Five milestones spaced by elapsed days show a deliberate path from framing to approval, with blind review as the gate before harness update.",
+      "textPreview": "Five milestones spaced by elapsed days show a deliberate path from framing to approval, with blind review as the gate before harness update.",
+      "resolvedFontSize": 28,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 28,
+        "typeface": "Arial",
+        "color": "#17241E",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 5,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Five milestones spaced by"
+          },
+          {
+            "index": 2,
+            "text": "elapsed days show a deliberate"
+          },
+          {
+            "index": 3,
+            "text": "path from framing to approval,"
+          },
+          {
+            "index": 4,
+            "text": "with blind review as the gate"
+          },
+          {
+            "index": 5,
+            "text": "before harness update."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Five milestones spaced by elapsed days show a deliberate path from framing to approval, with blind review as the gate before harness update.",
+          "resolvedTextStyle": {
+            "fontSize": 28,
+            "typeface": "Arial",
+            "color": "#17241E",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Five milestones spaced by elapsed days show a deliberate path from framing to approval, with blind review as the gate before harness update.",
+              "fontSize": 28,
+              "typeface": "Arial",
+              "color": "#17241E",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7mx4fylo",
+      "id": "6",
+      "bbox": [48, 444, 420, 158],
+      "geometry": "roundRect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#D8D2C7",
+      "lineWidth": 1
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/mlon6t43",
+      "id": "7",
+      "bbox": [66, 462, 384, 38],
+      "geometry": "rect",
+      "text": "Claude Sonnet 5",
+      "textPreview": "Claude Sonnet 5",
+      "resolvedFontSize": 19,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 19,
+        "typeface": "Arial",
+        "color": "#17241E",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Claude Sonnet 5"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Claude Sonnet 5",
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Arial",
+            "color": "#17241E",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Claude Sonnet 5",
+              "fontSize": 19,
+              "typeface": "Arial",
+              "color": "#17241E",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tkj6ts3y",
+      "id": "8",
+      "bbox": [66, 510, 384, 92],
+      "geometry": "rect",
+      "text": "evidence editorial\nnative web\nnative PPTX",
+      "textPreview": "evidence editorial | native web | native PPTX",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 14,
+        "typeface": "Arial",
+        "color": "#68716A",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "evidence editorial"
+          },
+          {
+            "index": 2,
+            "text": "native web"
+          },
+          {
+            "index": 3,
+            "text": "native PPTX"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "evidence editorial",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#68716A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "evidence editorial",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#68716A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "native web",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#68716A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "native web",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#68716A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "native PPTX",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#68716A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "native PPTX",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#68716A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sja5kn2d",
+      "id": "9",
+      "bbox": [48, 674, 1110, 22],
+      "geometry": "rect",
+      "text": "SOURCE · research-dates  |  machine provisional · human preference pending",
+      "textPreview": "SOURCE · research-dates  |  machine provisional · human preference pending",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 10,
+        "typeface": "Arial",
+        "color": "#68716A",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "SOURCE · research-dates  |  machine provisional · human preference pending"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "SOURCE · research-dates  |  machine provisional · human preference pending",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "typeface": "Arial",
+            "color": "#68716A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "SOURCE · research-dates  |  machine provisional · human preference pending",
+              "fontSize": 10,
+              "typeface": "Arial",
+              "color": "#68716A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/at83i5kn",
+      "id": "10",
+      "bbox": [1030, 674, 202, 22],
+      "geometry": "rect",
+      "text": "NodeSlide Ultra Showcase RC1",
+      "textPreview": "NodeSlide Ultra Showcase RC1",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 10,
+        "typeface": "Arial",
+        "color": "#68716A",
+        "alignment": "right",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "NodeSlide Ultra Showcase RC1"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "NodeSlide Ultra Showcase RC1",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "typeface": "Arial",
+            "color": "#68716A",
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "NodeSlide Ultra Showcase RC1",
+              "fontSize": 10,
+              "typeface": "Arial",
+              "color": "#68716A",
+              "alignment": "right"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

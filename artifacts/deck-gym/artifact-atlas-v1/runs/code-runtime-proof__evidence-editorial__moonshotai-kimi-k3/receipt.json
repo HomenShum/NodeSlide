@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "code-runtime-proof__evidence-editorial__moonshotai-kimi-k3",
+  "candidateDigest": "sha256:a6a98bb3f170e3af08b96adaeab5d46875d4702b58b1ba133e0e0cc6adb46292",
+  "fixtureId": "code-runtime-proof",
+  "directionId": "evidence-editorial",
+  "artifactType": "code-runtime-proof",
+  "slideArchetype": "code-and-result",
+  "narrativeJob": "Pair a small API contract with measured runtime behavior so code and evidence reinforce each other.",
+  "model": "moonshotai/kimi-k3",
+  "modelRole": "structured-execution-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "adapter-interface",
+    "adapter-benchmark"
+  ],
+  "sourceDigest": "sha256:dd9b0d254156af30e685054eef81a92546d8ac0e25f9a8c6e70a77bdf30d65f0",
+  "referenceIds": [
+    "technical-code-runtime-pair"
+  ],
+  "artifactRequirementDigest": "sha256:d73ee8df1636a77b07b789d23e6f5b5a68c24ce55d722e4d33fa4558fbfbdd0b",
+  "editability": {
+    "web": "native",
+    "pptx": "grouped-editable"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 15901,
+    "inputTokens": 874,
+    "outputTokens": 362,
+    "costMicroUsd": 1429
+  },
+  "outputs": {
+    "browserRender": "runs/code-runtime-proof__evidence-editorial__moonshotai-kimi-k3/browser.png",
+    "pptxRender": "runs/code-runtime-proof__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/code-runtime-proof__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+    "webPptxDifference": "Keep runtime numbers editable and export code as a syntax-highlighted SVG plus accessible source text."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:40:28.515Z",
+  "receiptDigest": "sha256:b2eece4e6b55d8ec1ea972c39033f2cfc7f6b8a0d4fcf0ff4519a7f0b8930088",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

@@ -1,0 +1,317 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-corpus/v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "negativeFixture": {
+    "id": "nodekit-editorial-monoculture",
+    "description": "Technically valid and editorially coherent, but dominated by a repeated headline-body-three-points silhouette with limited real visual evidence.",
+    "expectedFailures": [
+      "layout_repetition",
+      "insufficient_meaningful_visuals",
+      "weak_thumbnail_separability"
+    ]
+  },
+  "briefs": [
+    {
+      "id": "startup-roadshow",
+      "family": "startup_roadshow",
+      "title": "RelayOS Series A Roadshow",
+      "audience": "early-stage enterprise software investors",
+      "decision": "decide whether RelayOS has enough traction and technical defensibility for diligence",
+      "slideCount": 7,
+      "prompt": "Create an evidence-led seven-slide Series A roadshow for early-stage enterprise software investors deciding whether RelayOS merits diligence. Use only the attached operating metrics and product facts. Show the workflow problem, product transformation, traction, market wedge, defensible architecture, financing use, and a clear diligence decision. Include an editable traction chart, an editable system architecture diagram, a large honestly labeled product screenshot slot, and one restrained market comparison. Do not invent customers, market size, quotes, or growth rates.",
+      "attachments": [
+        {
+          "fileName": "relay-operating-metrics.csv",
+          "format": "csv",
+          "content": "metric,value,unit,source\npaid_workspaces,84,workspaces,internal ledger\nmonthly_active_operators,1260,operators,product telemetry\nweekly_workflows,18400,workflows,product telemetry\nnet_revenue_retention,118,percent,billing export\nmedian_setup_time,19,minutes,onboarding telemetry"
+        },
+        {
+          "fileName": "relay-product-facts.md",
+          "format": "md",
+          "content": "RelayOS coordinates approval-heavy operations. The product keeps proposals reviewable before mutation, records versioned receipts, and exposes adapters for CRM, ticketing, and document systems. No product screenshot was supplied to the benchmark."
+        }
+      ],
+      "requiredClaims": ["84 paid workspaces", "118 percent", "19 minutes"],
+      "requiredArtifacts": ["chart", "diagram", "screenshot", "comparison"],
+      "forbiddenClaims": ["named customer", "market size", "customer quote"],
+      "referenceIds": [
+        "startup/traction-proof",
+        "startup/product-transformation",
+        "startup/architecture-boundary"
+      ]
+    },
+    {
+      "id": "research-talk",
+      "family": "research_talk",
+      "title": "Adaptive Retrieval Under Cost Constraints",
+      "audience": "applied machine-learning researchers",
+      "decision": "understand whether the adaptive policy improves answer quality per dollar",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide research talk for applied machine-learning researchers evaluating adaptive retrieval under cost constraints. Explain the question, method, evaluation design, result, failure modes, and implications. Use the supplied experiment table exactly. Include an editable methods diagram, an editable result chart, the cost-adjusted quality formula Q divided by cost, and claim-adjacent source labels. Separate measured results from interpretation.",
+      "attachments": [
+        {
+          "fileName": "retrieval-results.csv",
+          "format": "csv",
+          "content": "policy,quality_score,cost_usd,latency_ms\nno_retrieval,0.61,0.010,640\nalways_retrieve,0.78,0.092,1810\nadaptive,0.75,0.038,1040"
+        },
+        {
+          "fileName": "method.md",
+          "format": "md",
+          "content": "The adaptive policy predicts whether a query requires retrieval, retrieves at most three passages, then answers with claim-linked citations. Reported values are means over the fixed benchmark fixture; no statistical-significance claim is authorized."
+        }
+      ],
+      "requiredClaims": ["0.75", "0.038", "1040"],
+      "requiredArtifacts": ["chart", "diagram", "formula", "citations"],
+      "forbiddenClaims": ["statistically significant", "state of the art"],
+      "referenceIds": [
+        "research/question-method-result",
+        "research/methods-flow",
+        "research/annotated-result"
+      ]
+    },
+    {
+      "id": "technical-architecture",
+      "family": "technical_architecture",
+      "title": "Portable Caseflow Runtime",
+      "audience": "staff engineers and platform architects",
+      "decision": "approve the boundary between portable protocol and backend adapters",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide technical architecture review for staff engineers deciding whether to approve a portable caseflow runtime. Show the invariant lifecycle, adapter boundary, request sequence, benchmark evidence, code contract, failure handling, and decision. Include an editable architecture graph, an editable sequence flow, an editable benchmark chart, and a legible code excerpt. Avoid prose arrows and generic card grids.",
+      "attachments": [
+        {
+          "fileName": "benchmark.csv",
+          "format": "csv",
+          "content": "adapter,p50_ms,p95_ms,receipt_bytes\nmemory,4,9,820\nconvex,38,92,1160\npostgres,31,77,1080"
+        },
+        {
+          "fileName": "caseflow.ts.txt",
+          "format": "txt",
+          "content": "export interface CaseflowAdapter { stage(input: StageInput): Promise<Proposal>; commit(input: CommitInput): Promise<Receipt>; restore(versionId: string): Promise<Receipt>; }"
+        }
+      ],
+      "requiredClaims": ["memory", "convex", "postgres", "stage", "commit", "restore"],
+      "requiredArtifacts": ["chart", "architecture", "sequence", "code"],
+      "forbiddenClaims": ["production proven", "zero latency"],
+      "referenceIds": [
+        "technical/layered-boundary",
+        "technical/sequence-proof",
+        "technical/code-and-runtime"
+      ]
+    },
+    {
+      "id": "product-demo",
+      "family": "product_demo",
+      "title": "NodeSlide Reviewable Creation Demo",
+      "audience": "product leaders evaluating an AI presentation workflow",
+      "decision": "decide whether reviewable generation is materially safer than one-shot deck creation",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide product demo for product leaders evaluating reviewable AI presentation generation. Show the initial brief, structured draft, validation, review-before-accept, trace receipt, editable export, and final decision. Use the supplied journey timestamps. Include a large screenshot or explicit screenshot placeholder with numbered callouts, a before/after comparison, an editable interaction flow, and a trace waterfall. Never claim a screenshot was captured when it was not supplied.",
+      "attachments": [
+        {
+          "fileName": "journey.csv",
+          "format": "csv",
+          "content": "stage,elapsed_seconds,status\nbrief_submitted,0,complete\nstructured_draft,31,complete\nvalidation,34,complete\nhuman_accept,52,complete\npptx_export,58,complete"
+        },
+        {
+          "fileName": "evidence-note.md",
+          "format": "md",
+          "content": "No browser screenshot is included in this frozen evidence pack. The deck must reserve and label the screenshot proof honestly rather than fabricating one."
+        }
+      ],
+      "requiredClaims": ["31", "34", "52", "58"],
+      "requiredArtifacts": ["screenshot", "comparison", "diagram", "timeline"],
+      "forbiddenClaims": ["captured screenshot", "zero errors"],
+      "referenceIds": ["demo/before-after", "demo/screenshot-callouts", "demo/trace-waterfall"]
+    },
+    {
+      "id": "executive-update",
+      "family": "executive_update",
+      "title": "Q2 Operating Review",
+      "audience": "company executives",
+      "decision": "choose the two operating interventions for Q3",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide Q2 operating review for executives choosing two interventions for Q3. Use the supplied KPI and risk data exactly. Open with the operating verdict, show KPI movement, explain the conversion bottleneck, rank risks, compare intervention options, and close with owners and checkpoints. Include an editable KPI scorecard, trend chart, risk matrix, and decision slide. Keep copy terse and executive-readable.",
+      "attachments": [
+        {
+          "fileName": "q2-kpis.csv",
+          "format": "csv",
+          "content": "metric,q1,q2,target\nrevenue_musd,4.2,4.8,5.0\nnew_pipeline_musd,9.1,7.4,10.0\nwin_rate_percent,24,21,28\nimplementation_days,46,39,35\ngross_retention_percent,93,94,95"
+        },
+        {
+          "fileName": "q2-risks.json",
+          "format": "json",
+          "content": "[{\"risk\":\"pipeline coverage\",\"likelihood\":4,\"impact\":5},{\"risk\":\"implementation capacity\",\"likelihood\":3,\"impact\":4},{\"risk\":\"retention concentration\",\"likelihood\":2,\"impact\":5}]"
+        }
+      ],
+      "requiredClaims": ["4.8", "7.4", "21", "39", "94"],
+      "requiredArtifacts": ["scorecard", "chart", "matrix", "comparison"],
+      "forbiddenClaims": ["record quarter", "on target"],
+      "referenceIds": ["executive/verdict-first", "executive/kpi-trend", "executive/decision-gate"]
+    },
+    {
+      "id": "finance-investment",
+      "family": "finance_investment",
+      "title": "Northstar Expansion Underwriting",
+      "audience": "investment committee members",
+      "decision": "approve, defer, or reject the expansion investment",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide investment-committee underwriting deck for a regional expansion. Show the thesis, unit economics, sources-and-uses waterfall, base/upside/downside scenarios, sensitivities, risks, and recommendation. Use only the supplied assumptions. Include an editable waterfall-style chart, assumptions table, scenario comparison, and return formula. Label every modeled value as an assumption rather than an observed outcome.",
+      "attachments": [
+        {
+          "fileName": "underwriting.csv",
+          "format": "csv",
+          "content": "item,base,upside,downside,unit\ninitial_investment,12,12,12,musd\nyear3_revenue,18,24,13,musd\nyear3_ebitda_margin,22,27,14,percent\nexit_multiple,8,9,6,x\nirr,19,31,7,percent"
+        }
+      ],
+      "requiredClaims": ["12", "19", "31", "7"],
+      "requiredArtifacts": ["waterfall", "table", "comparison", "formula"],
+      "forbiddenClaims": ["guaranteed return", "observed outcome"],
+      "referenceIds": [
+        "finance/sources-uses",
+        "finance/scenario-table",
+        "finance/sensitivity-decision"
+      ]
+    },
+    {
+      "id": "data-story",
+      "family": "data_story",
+      "title": "Transit Recovery Is Uneven",
+      "audience": "city mobility planners",
+      "decision": "prioritize which service patterns need intervention",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide data story for city mobility planners deciding where transit recovery needs intervention. Use the monthly ridership series exactly. Build a cumulative narrative from system recovery to route divergence, weekend weakness, service reliability, and two actions. Include multiple editable chart forms with annotations, one small-multiple comparison, and a clear final recommendation. Do not invent causes not supported by the data.",
+      "attachments": [
+        {
+          "fileName": "ridership.csv",
+          "format": "csv",
+          "content": "month,rapid_bus,local_bus,rail,on_time_percent\nJan,72,61,68,81\nFeb,74,62,70,82\nMar,79,63,73,80\nApr,83,65,76,78\nMay,87,66,79,79\nJun,91,67,82,77"
+        }
+      ],
+      "requiredClaims": ["91", "67", "82", "77"],
+      "requiredArtifacts": ["chart", "small_multiples", "annotations", "comparison"],
+      "forbiddenClaims": ["caused by", "commuter preference"],
+      "referenceIds": ["data/annotated-trend", "data/small-multiples", "data/decision-from-pattern"]
+    },
+    {
+      "id": "strategy-proposal",
+      "family": "strategy_proposal",
+      "title": "AI Support Entry Strategy",
+      "audience": "product and go-to-market leadership",
+      "decision": "select the initial market-entry wedge",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide strategy proposal for product and go-to-market leaders selecting an AI support market-entry wedge. Frame the market tension, compare three segments, show capability fit, sequence the roadmap, surface risks, and recommend one option. Use the supplied scoring table exactly. Include an editable landscape, aligned option comparison, roadmap timeline, and recommendation gate. Avoid generic two-by-two decoration without labeled axes.",
+      "attachments": [
+        {
+          "fileName": "segment-score.csv",
+          "format": "csv",
+          "content": "segment,urgency,ability_to_pay,data_readiness,sales_complexity\nmidmarket_saas,5,4,4,2\nconsumer_fintech,4,5,3,5\nhealthcare_admin,5,5,2,5"
+        }
+      ],
+      "requiredClaims": ["midmarket saas", "consumer fintech", "healthcare admin"],
+      "requiredArtifacts": ["landscape", "comparison", "timeline", "decision"],
+      "forbiddenClaims": ["largest market", "easiest sale"],
+      "referenceIds": [
+        "strategy/market-landscape",
+        "strategy/aligned-options",
+        "strategy/roadmap-gate"
+      ]
+    },
+    {
+      "id": "educational-explainer",
+      "family": "educational_explainer",
+      "title": "How Retrieval-Augmented Generation Works",
+      "audience": "non-specialist product managers",
+      "decision": "understand when retrieval improves an AI product and when it does not",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide educational explainer for non-specialist product managers learning when retrieval-augmented generation helps. Progress from the failure of memory-only answers through indexing, retrieval, grounded generation, evaluation, limitations, and a practical decision checklist. Include a progressive editable diagram, a simple timeline of one query, an analogy, and a final summary. Keep technical terms defined in plain language.",
+      "attachments": [
+        {
+          "fileName": "rag-facts.md",
+          "format": "md",
+          "content": "The benchmark definition is: index approved documents, retrieve passages relevant to a query, provide those passages to the generator, and evaluate whether claims are supported by the retrieved text. Retrieval does not guarantee truth and can return irrelevant evidence."
+        }
+      ],
+      "requiredClaims": ["index", "retrieve", "generator", "supported"],
+      "requiredArtifacts": ["diagram", "timeline", "analogy", "summary"],
+      "forbiddenClaims": ["guarantees truth", "eliminates hallucinations"],
+      "referenceIds": [
+        "education/progressive-mechanism",
+        "education/query-timeline",
+        "education/decision-checklist"
+      ]
+    },
+    {
+      "id": "policy-briefing",
+      "family": "policy_briefing",
+      "title": "Municipal Heat Resilience Options",
+      "audience": "city council members",
+      "decision": "choose a phased heat-resilience package",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide policy briefing for city council members choosing a phased heat-resilience package. Show the evidence baseline, affected stakeholders, intervention options, implementation timeline, trade-offs, funding sequence, and recommendation. Use the supplied program facts without claiming measured health outcomes. Include an editable evidence map, stakeholder map, timeline, and trade-off comparison.",
+      "attachments": [
+        {
+          "fileName": "heat-options.json",
+          "format": "json",
+          "content": "[{\"option\":\"cool_roofs\",\"annual_cost_musd\":6.2,\"implementation_years\":3,\"coverage_percent\":18},{\"option\":\"tree_canopy\",\"annual_cost_musd\":4.8,\"implementation_years\":8,\"coverage_percent\":11},{\"option\":\"resilience_centers\",\"annual_cost_musd\":3.1,\"implementation_years\":2,\"sites\":14}]"
+        }
+      ],
+      "requiredClaims": ["6.2", "4.8", "3.1", "14"],
+      "requiredArtifacts": ["evidence_map", "stakeholder_map", "timeline", "comparison"],
+      "forbiddenClaims": ["lives saved", "temperature reduction"],
+      "referenceIds": [
+        "policy/evidence-map",
+        "policy/stakeholder-system",
+        "policy/tradeoff-sequence"
+      ]
+    },
+    {
+      "id": "case-study",
+      "family": "case_study",
+      "title": "Claims Operations Intervention",
+      "audience": "operations executives",
+      "decision": "decide whether to replicate the intervention in two additional regions",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide case study for operations executives deciding whether to replicate a claims-processing intervention. Show the initial state, intervention, adoption path, measured before/after outcomes, operator evidence, limitations, and replication decision. Use the supplied data exactly. Include a before/after comparison, editable process diagram, outcome chart, and evidence panel. Do not imply causality beyond the observed before/after association.",
+      "attachments": [
+        {
+          "fileName": "claims-before-after.csv",
+          "format": "csv",
+          "content": "metric,before,after,unit\nmedian_cycle_time,8.4,5.9,days\nmanual_touches,6.1,3.8,touches\nrework_rate,14.2,9.6,percent\non_time_completion,71,84,percent"
+        },
+        {
+          "fileName": "intervention.md",
+          "format": "md",
+          "content": "The intervention introduced structured intake, one review checkpoint, and exception routing. The benchmark authorizes an observed before/after association only; it does not establish a causal effect."
+        }
+      ],
+      "requiredClaims": ["8.4", "5.9", "14.2", "9.6", "84"],
+      "requiredArtifacts": ["comparison", "diagram", "chart", "evidence"],
+      "forbiddenClaims": ["caused", "proven impact"],
+      "referenceIds": ["case/before-after", "case/intervention-mechanism", "case/replication-gate"]
+    },
+    {
+      "id": "scrollytelling",
+      "family": "scrollytelling_deck",
+      "title": "A Shipment's Risk Journey",
+      "audience": "supply-chain leaders",
+      "decision": "understand where intervention most reduces shipment risk",
+      "slideCount": 7,
+      "prompt": "Create a seven-slide scrollytelling-style deck for supply-chain leaders following one shipment from booking through delivery. Each slide should advance the same journey, reveal one new risk signal, and preserve a coherent static PowerPoint fallback. Use the supplied event sequence exactly. Include an editable progression timeline, cumulative risk chart, handoff diagram, exception evidence, and final intervention decision. Do not fabricate a live interaction or animation in the PPTX.",
+      "attachments": [
+        {
+          "fileName": "shipment-events.json",
+          "format": "json",
+          "content": "[{\"hour\":0,\"event\":\"booking\",\"risk\":8},{\"hour\":7,\"event\":\"carrier_acceptance\",\"risk\":12},{\"hour\":19,\"event\":\"port_arrival\",\"risk\":18},{\"hour\":31,\"event\":\"inspection_hold\",\"risk\":61},{\"hour\":44,\"event\":\"release\",\"risk\":39},{\"hour\":73,\"event\":\"delivery\",\"risk\":11}]"
+        }
+      ],
+      "requiredClaims": ["inspection hold", "61", "delivery", "11"],
+      "requiredArtifacts": ["timeline", "chart", "diagram", "evidence"],
+      "forbiddenClaims": ["interactive pptx", "live animation"],
+      "referenceIds": [
+        "scroll/progressive-reveal",
+        "scroll/cumulative-risk",
+        "scroll/static-fallback"
+      ]
+    }
+  ]
+}

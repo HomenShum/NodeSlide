@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "educational-explainer__evidence-editorial__anthropic-claude-sonnet-5",
+  "briefId": "educational-explainer",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:1ec888bc53532a962fe34b5cb9d490e8b56645664b5a523abb229fb33147829e",
+  "runDigest": "sha256:72ab7c3766fed85930cf435779a898107f3a9a4e7552c81e8b78a41ec2137983",
+  "title": "How Retrieval-Augmented Generation Works",
+  "family": "educational_explainer",
+  "audience": "non-specialist product managers",
+  "decision": "understand when retrieval improves an AI product and when it does not",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide educational explainer for non-specialist product managers learning when retrieval-augmented generation helps. Progress from the failure of memory-only answers through indexing, retrieval, grounded generation, evaluation, limitations, and a practical decision checklist. Include a progressive editable diagram, a simple timeline of one query, an analogy, and a final summary. Keep technical terms defined in plain language.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "rag-facts.md",
+      "format": "md",
+      "content": "The benchmark definition is: index approved documents, retrieve passages relevant to a query, provide those passages to the generator, and evaluate whether claims are supported by the retrieved text. Retrieval does not guarantee truth and can return irrelevant evidence."
+    }
+  ],
+  "requiredClaims": [
+    "index",
+    "retrieve",
+    "generator",
+    "supported"
+  ],
+  "requiredArtifacts": [
+    "diagram",
+    "timeline",
+    "analogy",
+    "summary"
+  ],
+  "forbiddenClaims": [
+    "guarantees truth",
+    "eliminates hallucinations"
+  ],
+  "referenceIds": [
+    "education/progressive-mechanism",
+    "education/query-timeline",
+    "education/decision-checklist"
+  ],
+  "modelLabel": "Claude Sonnet 5",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbemgq_d266ad8548284d283e9f0a3c32a59cb8",
+    "durationMs": 52088,
+    "completedAt": "2026-07-21T23:59:03.632Z",
+    "trace": {
+      "classification": "live",
+      "attribution": "openrouter · anthropic/claude-sonnet-5 · High effort",
+      "summary": "The user consented to send the full brief and 1 uploaded data source to OpenRouter. The named Claude Sonnet 5 model supplied the narrative plan through pi-ai; NodeSlide normalized, persisted, and validated the deck deterministically. Self-critique: 1 pass, clean.",
+      "metrics": "RUN TIME 1s TOKENS 2 → 4,676 COST $0.0518 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 187282
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

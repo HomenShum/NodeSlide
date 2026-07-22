@@ -1,0 +1,614 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/wt43y8",
+    "id": "wt43y8",
+    "slide": 1,
+    "layoutId": "c6146ff9-b47f-4f21-97ea-510a1679c91e",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "7e835401-1aba-4633-8025-f72140478094",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#F7F2E8",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": ["Arial"]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "c6146ff9-b47f-4f21-97ea-510a1679c91e",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "7e835401-1aba-4633-8025-f72140478094",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "7e835401-1aba-4633-8025-f72140478094",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/by90zadc",
+      "id": "1",
+      "bbox": [48, 34, 690, 28],
+      "geometry": "rect",
+      "text": "ATLAS 01  ·  HERO THESIS",
+      "textPreview": "ATLAS 01  ·  HERO THESIS",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 13,
+        "typeface": "Arial",
+        "color": "#C45538",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ATLAS 01  ·  HERO THESIS"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ATLAS 01  ·  HERO THESIS",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "typeface": "Arial",
+            "color": "#C45538",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ATLAS 01  ·  HERO THESIS",
+              "fontSize": 13,
+              "typeface": "Arial",
+              "color": "#C45538",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/czi1sfex",
+      "id": "2",
+      "bbox": [48, 72, 1160, 82],
+      "geometry": "rect",
+      "text": "Reviewable Generation Makes Presentation Automation Safer",
+      "textPreview": "Reviewable Generation Makes Presentation Automation Safer",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#17241E",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Reviewable Generation Makes Presentation Automation Safer"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Reviewable Generation Makes Presentation Automation Safer",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#17241E",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Reviewable Generation Makes Presentation Automation Safer",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#17241E",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/d0ri1kvi",
+      "id": "3",
+      "bbox": [518, 166, 722, 413],
+      "geometry": "roundRect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#D8D2C7",
+      "lineWidth": 1
+    },
+    {
+      "order": 4,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/jahsbut4",
+      "id": "4",
+      "bbox": [526, 174, 706, 397],
+      "geometry": "roundRect",
+      "alt": "Verified Artifact Atlas browser render",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "imageMask": {
+        "geometry": "roundRect",
+        "adjustmentList": [
+          {
+            "name": "adj",
+            "formula": "val 2015"
+          }
+        ]
+      },
+      "asset": {
+        "assetId": "33e5b015-5df4-4ad7-b224-e2b919267313",
+        "contentType": "image/png",
+        "byteLength": 84015
+      }
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3up0vadg",
+      "id": "5",
+      "bbox": [48, 194, 420, 176],
+      "geometry": "rect",
+      "text": "Review before acceptance turns automated drafting into a trustworthy workflow, not a blind one.",
+      "textPreview": "Review before acceptance turns automated drafting into a trustworthy workflow, not a blind one.",
+      "resolvedFontSize": 28,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 28,
+        "typeface": "Arial",
+        "color": "#17241E",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 4,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Review before acceptance"
+          },
+          {
+            "index": 2,
+            "text": "turns automated drafting into a"
+          },
+          {
+            "index": 3,
+            "text": "trustworthy workflow, not a"
+          },
+          {
+            "index": 4,
+            "text": "blind one."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Review before acceptance turns automated drafting into a trustworthy workflow, not a blind one.",
+          "resolvedTextStyle": {
+            "fontSize": 28,
+            "typeface": "Arial",
+            "color": "#17241E",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Review before acceptance turns automated drafting into a trustworthy workflow, not a blind one.",
+              "fontSize": 28,
+              "typeface": "Arial",
+              "color": "#17241E",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ovy1ofe1",
+      "id": "6",
+      "bbox": [48, 444, 420, 158],
+      "geometry": "roundRect",
+      "fillColor": "#FFFFFF",
+      "lineColor": "#D8D2C7",
+      "lineWidth": 1
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/pwrix0vm",
+      "id": "7",
+      "bbox": [66, 462, 384, 38],
+      "geometry": "rect",
+      "text": "Claude Sonnet 5",
+      "textPreview": "Claude Sonnet 5",
+      "resolvedFontSize": 19,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 19,
+        "typeface": "Arial",
+        "color": "#17241E",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Claude Sonnet 5"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Claude Sonnet 5",
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Arial",
+            "color": "#17241E",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Claude Sonnet 5",
+              "fontSize": 19,
+              "typeface": "Arial",
+              "color": "#17241E",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/e5gzilwz",
+      "id": "8",
+      "bbox": [66, 510, 384, 92],
+      "geometry": "rect",
+      "text": "evidence editorial\nnative web\nnative PPTX",
+      "textPreview": "evidence editorial | native web | native PPTX",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 14,
+        "typeface": "Arial",
+        "color": "#68716A",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "evidence editorial"
+          },
+          {
+            "index": 2,
+            "text": "native web"
+          },
+          {
+            "index": 3,
+            "text": "native PPTX"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "evidence editorial",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#68716A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "evidence editorial",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#68716A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "native web",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#68716A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "native web",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#68716A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "native PPTX",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#68716A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "native PPTX",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#68716A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/f6p0rqd4",
+      "id": "9",
+      "bbox": [48, 674, 1110, 22],
+      "geometry": "rect",
+      "text": "SOURCE · hero-workflow  |  machine provisional · human preference pending",
+      "textPreview": "SOURCE · hero-workflow  |  machine provisional · human preference pending",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 10,
+        "typeface": "Arial",
+        "color": "#68716A",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "SOURCE · hero-workflow  |  machine provisional · human preference pending"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "SOURCE · hero-workflow  |  machine provisional · human preference pending",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "typeface": "Arial",
+            "color": "#68716A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "SOURCE · hero-workflow  |  machine provisional · human preference pending",
+              "fontSize": 10,
+              "typeface": "Arial",
+              "color": "#68716A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jq10zihg",
+      "id": "10",
+      "bbox": [1030, 674, 202, 22],
+      "geometry": "rect",
+      "text": "NodeSlide Ultra Showcase RC1",
+      "textPreview": "NodeSlide Ultra Showcase RC1",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 10,
+        "typeface": "Arial",
+        "color": "#68716A",
+        "alignment": "right",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "NodeSlide Ultra Showcase RC1"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "NodeSlide Ultra Showcase RC1",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "typeface": "Arial",
+            "color": "#68716A",
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "NodeSlide Ultra Showcase RC1",
+              "fontSize": 10,
+              "typeface": "Arial",
+              "color": "#68716A",
+              "alignment": "right"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

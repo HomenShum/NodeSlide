@@ -1,0 +1,1 @@
+[{"hour":0,"event":"booking","risk":8},{"hour":7,"event":"carrier_acceptance","risk":12},{"hour":19,"event":"port_arrival","risk":18},{"hour":31,"event":"inspection_hold","risk":61},{"hour":44,"event":"release","risk":39},{"hour":73,"event":"delivery","risk":11}]

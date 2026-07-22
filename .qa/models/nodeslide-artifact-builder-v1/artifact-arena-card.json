@@ -1,0 +1,147 @@
+{
+  "schemaVersion": "nodeslide.artifact-capability-card/v1",
+  "model": "nodeslide-artifact-builder-v1",
+  "label": "Deterministic baseline",
+  "harnessVersion": "artifact-arena-v1",
+  "evidenceWindow": {
+    "candidateCount": 12,
+    "eligibleCount": 12,
+    "artifactTypes": 12,
+    "directions": 1
+  },
+  "observedMetrics": {
+    "eligibilityRate": 1,
+    "meanGenerationMs": 0,
+    "meanInputTokens": 0,
+    "meanOutputTokens": 0,
+    "totalCostMicroUsd": 0,
+    "freeRoute": false
+  },
+  "artifactCapabilities": [
+    {
+      "artifactType": "architecture-diagram",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "claim-source-lineage",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "code-runtime-proof",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "hero-thesis",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "katex-equation",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "kpi-strip",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "multi-series-chart",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "risk-matrix",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "screenshot-callouts",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "sequence-diagram",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "timeline",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "uncertainty-range",
+      "candidateCount": 1,
+      "eligibleCount": 1,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 0,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": false,
+      "failureClasses": []
+    }
+  ],
+  "preferredArtifactTypes": [],
+  "confidence": "low",
+  "status": "provisional",
+  "autoApply": false,
+  "limitation": "Observed artifact execution only. Human pairwise preference and skill-on/skill-off ablation remain separate gates."
+}

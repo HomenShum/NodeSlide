@@ -1,0 +1,6 @@
+item,base,upside,downside,unit
+initial_investment,12,12,12,musd
+year3_revenue,18,24,13,musd
+year3_ebitda_margin,22,27,14,percent
+exit_multiple,8,9,6,x
+irr,19,31,7,percent

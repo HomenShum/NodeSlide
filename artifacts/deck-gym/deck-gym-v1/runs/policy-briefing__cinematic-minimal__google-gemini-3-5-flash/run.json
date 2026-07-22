@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "policy-briefing__cinematic-minimal__google-gemini-3-5-flash",
+  "briefId": "policy-briefing",
+  "model": "google/gemini-3.5-flash",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:2298e98ec7a5fb884de7b2df911aaa19ac9b551c0d9ba519a8abfbb7c0cbfdfa",
+  "runDigest": "sha256:d6662aed84ffe8ce3688f3b51f4cd6f40a908321dec2419bb58aefa9b7a218bc",
+  "title": "Municipal Heat Resilience Options",
+  "family": "policy_briefing",
+  "audience": "city council members",
+  "decision": "choose a phased heat-resilience package",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide policy briefing for city council members choosing a phased heat-resilience package. Show the evidence baseline, affected stakeholders, intervention options, implementation timeline, trade-offs, funding sequence, and recommendation. Use the supplied program facts without claiming measured health outcomes. Include an editable evidence map, stakeholder map, timeline, and trade-off comparison.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "heat-options.json",
+      "format": "json",
+      "content": "[{\"option\":\"cool_roofs\",\"annual_cost_musd\":6.2,\"implementation_years\":3,\"coverage_percent\":18},{\"option\":\"tree_canopy\",\"annual_cost_musd\":4.8,\"implementation_years\":8,\"coverage_percent\":11},{\"option\":\"resilience_centers\",\"annual_cost_musd\":3.1,\"implementation_years\":2,\"sites\":14}]"
+    }
+  ],
+  "requiredClaims": [
+    "6.2",
+    "4.8",
+    "3.1",
+    "14"
+  ],
+  "requiredArtifacts": [
+    "evidence_map",
+    "stakeholder_map",
+    "timeline",
+    "comparison"
+  ],
+  "forbiddenClaims": [
+    "lives saved",
+    "temperature reduction"
+  ],
+  "referenceIds": [
+    "policy/evidence-map",
+    "policy/stakeholder-system",
+    "policy/tradeoff-sequence"
+  ],
+  "modelLabel": "Gemini 3.5 Flash",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbfv63_589aa49c203e9ab6a127d0eec73b501d",
+    "durationMs": 4958,
+    "completedAt": "2026-07-22T00:00:01.895Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · google/gemini-3.5-flash (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Gemini 3.5 Flash via OpenRouter route had no compatible provider endpoint. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 0 → 0 COST $0.0000 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 177380
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

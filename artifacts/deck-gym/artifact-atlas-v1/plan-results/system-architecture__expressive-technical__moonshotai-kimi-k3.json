@@ -1,0 +1,56 @@
+{
+  "artifactType": "architecture-diagram",
+  "candidateDigest": "sha256:4be15901819516583cbba971079075b3d81c38e92e05aa46c6495a2b5fcf8943",
+  "candidateId": "system-architecture__expressive-technical__moonshotai-kimi-k3",
+  "directionId": "expressive-technical",
+  "durationMs": 14905,
+  "fixtureId": "system-architecture",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Left-to-right flow: Client → Portable Protocol (initialize, stage, commit, restore) → Validation Engine (validation before commit) → Adapter Boundary → Memory, Convex, and Postgres adapters. The adapter boundary is the one marked trust boundary; everything right of it is backend-specific.",
+    "artifactType": "architecture-diagram",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Editable nodes",
+        "operationId": "create-editable-nodes",
+        "sourceId": "architecture-contract",
+        "value": "Client, Portable Protocol, Validation Engine, Adapter Boundary, Memory Adapter, Convex Adapter, Postgres Adapter — each a native editable shape"
+      },
+      {
+        "label": "Typed connectors",
+        "operationId": "create-typed-connectors",
+        "sourceId": "architecture-contract",
+        "value": "Labeled connectors: initialize, stage, commit, restore from Client through Protocol; 'validation before commit' gate into the adapter boundary; persistence links to each adapter"
+      },
+      {
+        "label": "Trust boundary",
+        "operationId": "mark-trust-boundary",
+        "sourceId": "architecture-contract",
+        "value": "Adapter Boundary rendered as one visibly distinct divider separating portable protocol from backend-specific adapters"
+      }
+    ],
+    "pptxFallback": "If native rendering is unavailable, the slide exports as grouped editable PowerPoint shapes and labeled connectors — never paragraph arrows — preserving node and connector editability per the fallback policy.",
+    "sourceLabels": [
+      {
+        "label": "Portable runtime contract",
+        "sourceId": "architecture-contract"
+      }
+    ],
+    "takeaway": "A single portable protocol carries client operations through validation to backend-specific adapters behind one trust boundary.",
+    "title": "NodeSlide Portable Protocol Architecture"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1296,
+    "inputTokens": 828,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 320,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

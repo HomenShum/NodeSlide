@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "scrollytelling__cinematic-minimal__anthropic-claude-sonnet-5",
+  "briefId": "scrollytelling",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:1f4efe140d6ccafcb31d802d8e166555c28dc027480aa503325078030f5823b5",
+  "runDigest": "sha256:4edd0348a5d78c99af04518b7e4cfe6745ef4a689b20197db96096e721e666cd",
+  "title": "A Shipment's Risk Journey",
+  "family": "scrollytelling_deck",
+  "audience": "supply-chain leaders",
+  "decision": "understand where intervention most reduces shipment risk",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide scrollytelling-style deck for supply-chain leaders following one shipment from booking through delivery. Each slide should advance the same journey, reveal one new risk signal, and preserve a coherent static PowerPoint fallback. Use the supplied event sequence exactly. Include an editable progression timeline, cumulative risk chart, handoff diagram, exception evidence, and final intervention decision. Do not fabricate a live interaction or animation in the PPTX.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "shipment-events.json",
+      "format": "json",
+      "content": "[{\"hour\":0,\"event\":\"booking\",\"risk\":8},{\"hour\":7,\"event\":\"carrier_acceptance\",\"risk\":12},{\"hour\":19,\"event\":\"port_arrival\",\"risk\":18},{\"hour\":31,\"event\":\"inspection_hold\",\"risk\":61},{\"hour\":44,\"event\":\"release\",\"risk\":39},{\"hour\":73,\"event\":\"delivery\",\"risk\":11}]"
+    }
+  ],
+  "requiredClaims": [
+    "inspection hold",
+    "61",
+    "delivery",
+    "11"
+  ],
+  "requiredArtifacts": [
+    "timeline",
+    "chart",
+    "diagram",
+    "evidence"
+  ],
+  "forbiddenClaims": [
+    "interactive pptx",
+    "live animation"
+  ],
+  "referenceIds": [
+    "scroll/progressive-reveal",
+    "scroll/cumulative-risk",
+    "scroll/static-fallback"
+  ],
+  "modelLabel": "Claude Sonnet 5",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbj3da_9658760889ee218e0bd5d61937c7cf34",
+    "durationMs": 56066,
+    "completedAt": "2026-07-22T00:02:31.827Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · anthropic/claude-sonnet-5 (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Claude Sonnet 5 via OpenRouter route returned invalid JSON after one repair attempt. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 2 → 5,000 COST $0.0554 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 178444
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

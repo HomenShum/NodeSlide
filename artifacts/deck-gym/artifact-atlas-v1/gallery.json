@@ -1,0 +1,223 @@
+{
+  "schemaVersion": "nodeslide.artifact-gallery/v1",
+  "atlasVersion": "artifact-atlas-v1",
+  "generatedAt": "2026-07-22T03:23:21.117Z",
+  "readyCount": 12,
+  "entries": [
+    {
+      "fixtureId": "hero-thesis",
+      "category": "narrative",
+      "artifactType": "hero-thesis",
+      "slideArchetype": "hero",
+      "narrativeJob": "Establish one memorable, evidence-bounded thesis before the detailed argument begins.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:0d62b390582d8f8b70b15f8e1577a6ad37df4193ae6429e4d8690c2901bc0faf",
+      "eligibleReceiptDigests": [
+        "sha256:0d62b390582d8f8b70b15f8e1577a6ad37df4193ae6429e4d8690c2901bc0faf",
+        "sha256:d981ca4910e3b9e77ed0a92f627071cf91508c9bec1101de453c7e2e7b5fd023",
+        "sha256:e87bfc54431856545d4c57fc59a525a537b0cbf3c76b568adccaf12ef18ab3fb",
+        "sha256:17aeedc6a50c13f32c1d3ddcf36cfb7ea4c5a3a646d31a282bf78cf517c0d186",
+        "sha256:210d5abf40194e43b1ca6ed2f30c99740619fff86e0201f5a7ddd510ba431675",
+        "sha256:144c2ff4bb1f8b46a5b365e48464119c4ab52be424e0250c6440339229ef5b8c",
+        "sha256:802150108f6837185146b5a546f68c12f1780257d128af67a0dbdd20a1f0fa0c"
+      ]
+    },
+    {
+      "fixtureId": "kpi-strip",
+      "category": "data",
+      "artifactType": "kpi-strip",
+      "slideArchetype": "operating-scorecard",
+      "narrativeJob": "Make the operating verdict scannable while preserving comparison context for every metric.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:49efd0c69adf2f6cfcffbcb0963deb76c266f5c1b79f970512639121d59698a0",
+      "eligibleReceiptDigests": [
+        "sha256:49efd0c69adf2f6cfcffbcb0963deb76c266f5c1b79f970512639121d59698a0",
+        "sha256:4cf24e0cb93cabafadcc8535b9fc3d55e7bb52d0a4d120613d74e09df308c9ea",
+        "sha256:6f6a7a4949f70f4f0e23fa1e8dbf99d544bb5e61e44e8059c7f1a72141581de3",
+        "sha256:9f6b42bf1b3b90b7d1427a287b4923db645261a2f7b495399e194d19b98b3328",
+        "sha256:2e010aafdcfb73741c6e76a65abcbda4528a86732fb5571bd7b498753b36aba1",
+        "sha256:767959dfc9cd2d5d0e156ca0387c59661f350d00bc77a2facdfeb975b2e59d22",
+        "sha256:249ff8de6ab04d9c2c560f74958bc297bf9b1ec73e151e78c42511d9a3b0b438"
+      ]
+    },
+    {
+      "fixtureId": "multi-series-trend",
+      "category": "data",
+      "artifactType": "multi-series-chart",
+      "slideArchetype": "annotated-trend",
+      "narrativeJob": "Reveal divergence between related series without inventing a cause for the observed pattern.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:6d5afdcfe4a1436a76424f9e2d71a9f169815031dc64af6c527ef9cb15461e22",
+      "eligibleReceiptDigests": [
+        "sha256:6d5afdcfe4a1436a76424f9e2d71a9f169815031dc64af6c527ef9cb15461e22",
+        "sha256:b8fc87ef7f88fe60a376bdfbcec986d31cd01692dfbb7f7b31019dcf922a07ec",
+        "sha256:ca27376e9b4782b6b3a1149157d03e97efe9863d3368fde95a4dffda76c19d30",
+        "sha256:3316e67342151366cb3b5d8044a3839595b0b87a095cec206105a6cd3aca7bd5",
+        "sha256:81e56bd55ddad25e6a0fd52022c4ca9507ec1543daa08aabddfdd96489f10eb1",
+        "sha256:554084becadf1ea3aa053cb10bee26034ca60c88068b0ebf46faf04db37577d3",
+        "sha256:a56192411ecd99434465f166e951149e7a119434c17eb44ca5a06a451003adfb"
+      ]
+    },
+    {
+      "fixtureId": "uncertainty-range",
+      "category": "data",
+      "artifactType": "uncertainty-range",
+      "slideArchetype": "forecast-range",
+      "narrativeJob": "Show a forecast and its uncertainty honestly instead of presenting one modeled value as certain.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:27ec58086059b4dab10c22be3d14da75ecc2d98c89107e62f7d5b3db9956bf3d",
+      "eligibleReceiptDigests": [
+        "sha256:27ec58086059b4dab10c22be3d14da75ecc2d98c89107e62f7d5b3db9956bf3d",
+        "sha256:3a435529541a8192887e5a6966c1f89b38fde51ed49123ad8f3b8467e7c8d9aa",
+        "sha256:b7fd984a45c25e90ee9d8a40fe47edab3f331aa7faa5b02e6659fc904f18f5f7",
+        "sha256:37ab9984a3383eb1fdf1e314312e40c958c3120ba4e95c2127adce391c61e138",
+        "sha256:77cde5d5c2f17be0964c6930dad8b1dfcc5b9470e8feef9be86de3df9be77df6",
+        "sha256:7ed40d6044ef2b2edd063acda2b0834e7f392c2aff62f2c643ea10d5d66cc537",
+        "sha256:739ab9f6a693e6ec8a5b0d699c053fc6c112bb2506010c2a8d7658df85d95208"
+      ]
+    },
+    {
+      "fixtureId": "system-architecture",
+      "category": "systems",
+      "artifactType": "architecture-diagram",
+      "slideArchetype": "layered-architecture",
+      "narrativeJob": "Make the portable protocol boundary and backend-specific responsibilities immediately inspectable.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:0ef40c3c4c082650b6a1872fef6a4c8aef34f4a9e5c52e2edc01ec6576451f56",
+      "eligibleReceiptDigests": [
+        "sha256:0ef40c3c4c082650b6a1872fef6a4c8aef34f4a9e5c52e2edc01ec6576451f56",
+        "sha256:61965facbf1c021fa8824a9dd6fad17b36c52053488e1cea6be3fc34bea7a73a",
+        "sha256:e2459304a17e1d5861cb3e2ec88ef0b025f6ce2ff7d5e7c27102950c9080d585",
+        "sha256:ec185676d9385b7efcebe4410e81d41d739b287d9fa675d05badbb347965d8ba",
+        "sha256:269991a6205d0dd3ed6c9ef5c5364253dc527fc666d674c5c1f8f4f3fe2b479f",
+        "sha256:8fc0955252009cf843fa8cf33a8dc3e11ebb4970e3604a04e62773b8bb6417a9",
+        "sha256:8859ebdae03fc6481b366492ef5554cca83239f34a9c98fe73a93ed102b9eeb3"
+      ]
+    },
+    {
+      "fixtureId": "request-sequence",
+      "category": "systems",
+      "artifactType": "sequence-diagram",
+      "slideArchetype": "request-sequence",
+      "narrativeJob": "Expose ordering, review custody, and failure boundaries across one request lifecycle.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:0b90500987e579293a3f3b58729608e30c553e4276f36bf6bedddb1c3dffa2dc",
+      "eligibleReceiptDigests": [
+        "sha256:0b90500987e579293a3f3b58729608e30c553e4276f36bf6bedddb1c3dffa2dc",
+        "sha256:2d9a5d7392ca80f814ee2631eee43036da2699a0d42979372b946cfa9b7af3ab",
+        "sha256:821402114ac13373a6409c2a1b470621ff3cc0553afd811c6dc1f2282d70b5be",
+        "sha256:5e9d88fe9474a328b76f65eaf5bf33b5170eb7c01396168e9194f203c54c781d",
+        "sha256:cba88a3dcac6821833d88d64fc22dd4ad26240c9abc05c5738402f3c8c255b51",
+        "sha256:2e7054457d29b078ab037651644fc44e9022613e15e2fd8df32ef720237b2ef2",
+        "sha256:cb0392562902bc8f65223b3894db9f042fdcdc37f90c1335e24393d90cb2c5fb"
+      ]
+    },
+    {
+      "fixtureId": "research-timeline",
+      "category": "time",
+      "artifactType": "timeline",
+      "slideArchetype": "milestone-timeline",
+      "narrativeJob": "Show the progression from research question to evidence-backed decision with honest stage timing.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:711988135ef5299e909388f792aed3b94a72ec11fbcaf3bfdd7fdc8f37e7d87a",
+      "eligibleReceiptDigests": [
+        "sha256:711988135ef5299e909388f792aed3b94a72ec11fbcaf3bfdd7fdc8f37e7d87a",
+        "sha256:8987c73f51111aafec47439ddf5c248ab7a3b98357d00ec1de23eb8ce44e1a1f",
+        "sha256:a404868b18752976d8fdc3d00080d0c9ea35eb4e374da613023d498a92f543fa",
+        "sha256:1c29affeaa282d3e403e189dba8972e5dda9b326197a21a6316a2ca763e92446",
+        "sha256:49a4766100234375bd49629080ffe1b0ac444d9c2c7ab8b50979bfe6bd1cd7c5",
+        "sha256:07e0e99971d027f6a0474118da45f8c79f33f21f731861ea71bfb24c02f709ae",
+        "sha256:52f4be8956eabdf69a630dccf718d32a6f571e8fd8ef7a583b993c18645aa438"
+      ]
+    },
+    {
+      "fixtureId": "screenshot-callouts",
+      "category": "product-proof",
+      "artifactType": "screenshot-callouts",
+      "slideArchetype": "product-evidence",
+      "narrativeJob": "Connect visible product controls to the claimed reviewable-generation workflow without fabricating UI evidence.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:01238e121dfcfd69aac19602fe2c71a469813c5e8a6a8000cfcf8ae0ec6fe36f",
+      "eligibleReceiptDigests": [
+        "sha256:01238e121dfcfd69aac19602fe2c71a469813c5e8a6a8000cfcf8ae0ec6fe36f",
+        "sha256:fc11ea489afc0055db202388a7388bf9a8dd8a34a19807125acc763077a17be0",
+        "sha256:30ba1fe0d721f22b0fcb021dddc8d03a77ef27fde1539e34a8808274568562cc",
+        "sha256:253b995e8fcc5b1030e2bd5cf9a805dd1c99e646fdce65072537d19a7a6d95f7",
+        "sha256:d66bd0ac48673930c5aedbed8494d8b99689b587e58f95a0cf662dcb2ab2d6b3"
+      ]
+    },
+    {
+      "fixtureId": "claim-source-lineage",
+      "category": "evidence",
+      "artifactType": "claim-source-lineage",
+      "slideArchetype": "evidence-lineage",
+      "narrativeJob": "Let a reviewer trace one headline claim through source, extraction, validation, and slide usage.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:03f2afdc84aba6e5965d0cb757b0ddbfd7a82f32902df88de44629efd347f19c",
+      "eligibleReceiptDigests": [
+        "sha256:03f2afdc84aba6e5965d0cb757b0ddbfd7a82f32902df88de44629efd347f19c",
+        "sha256:398116fc25adee4b04edc44605de16a829f5806e17f5a5f31ddb2ea80ef7245d",
+        "sha256:b4b7a5c050106c925f5398846d7ac57a3f44f94fff2458f194c0638764202029",
+        "sha256:144d4a5da15d0fb72da53de42f1789d5bcf2f5bd06d0886baec52b805e4923b8",
+        "sha256:ef31d3772065b63dda6b7e3513fc4a0cac20708eac5326e4dbf0d516f82a0d2b",
+        "sha256:ebf8e319dae911b216f504c4ed15441cb75a1f93d83ee2d8f0eeb4736240e18f",
+        "sha256:b0efbf24223c54a0df05faf48c5c32b7da2dc25e381d39dabc6e4a7854e5d741"
+      ]
+    },
+    {
+      "fixtureId": "quality-cost-equation",
+      "category": "technical",
+      "artifactType": "katex-equation",
+      "slideArchetype": "equation-explainer",
+      "narrativeJob": "Explain the cost-adjusted quality measure and connect every symbol to the supplied experiment table.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:565c73daad2903c53967004c64ad3403050fd20a21eafce045138a59f3a9465c",
+      "eligibleReceiptDigests": [
+        "sha256:565c73daad2903c53967004c64ad3403050fd20a21eafce045138a59f3a9465c",
+        "sha256:cd6cd989330c995139794ab76178f744980fada7348b80bfb4f9807bc37e5286",
+        "sha256:f68845dae660ac623619f670e905d90aea1fc2dc81969c8098fc0269807f541a",
+        "sha256:76a0112e4a28ef10be7bc60243ae3fe6066543d891af9bb290c92c440aa83b5d",
+        "sha256:537db9e8a1fcc5f5bd8d120ca6b8cde47b0fa0d9e6877f1496739041f6c084a3",
+        "sha256:4d826a68a4928bb265b780c81cba791fa7a301bd222f30b9e50d357ef6ac5b45",
+        "sha256:14329e9a6298df1f1e651f7121667b5089984e6aa78bd23fc96962bc35432421"
+      ]
+    },
+    {
+      "fixtureId": "code-runtime-proof",
+      "category": "technical",
+      "artifactType": "code-runtime-proof",
+      "slideArchetype": "code-and-result",
+      "narrativeJob": "Pair a small API contract with measured runtime behavior so code and evidence reinforce each other.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:704eff33bef9ef305f68be6c8ffa560e5605da9f09f340aa53a1590864de2db2",
+      "eligibleReceiptDigests": [
+        "sha256:704eff33bef9ef305f68be6c8ffa560e5605da9f09f340aa53a1590864de2db2",
+        "sha256:7bbef9b0173372b75aecce20e8bd9d03ed1999410a7f782e47fe9a5f8eac3092",
+        "sha256:a53b0ab21298812e08d2775488ccf35a2a525a8993cb294a8eabc71473ada7d8",
+        "sha256:54b4b4810ff9e496665f26846a52de7923e1be93eaf4e33a61839a15639aa848",
+        "sha256:103ad801ddca4b3747f9be38f7249c4ad26d475ec6155c09e5f81c638e8959aa",
+        "sha256:6b2a25f87210bd53b3333fc5de80acc410c437b487e7c86b84c911828bf06bb3",
+        "sha256:cb630a41f2952f64fdcee5eeaf7e30d5f159df9eb597ae289919c4fbd859aac9"
+      ]
+    },
+    {
+      "fixtureId": "risk-matrix",
+      "category": "decisions",
+      "artifactType": "risk-matrix",
+      "slideArchetype": "decision-risk-matrix",
+      "narrativeJob": "Prioritize operating risks by likelihood and impact instead of presenting an unlabeled list.",
+      "status": "ready",
+      "winnerReceiptDigest": "sha256:8591e23c47c9c7501a840d22599c8ec56a4379829707da957e8f6927e74fd6a3",
+      "eligibleReceiptDigests": [
+        "sha256:8591e23c47c9c7501a840d22599c8ec56a4379829707da957e8f6927e74fd6a3",
+        "sha256:ab80a5308f12cb18c991c58e22f17e365472e6e6943272a2509ae1a59e77f2c4",
+        "sha256:b4f1b2b21029ae6a4a095596cbdcdd410e6aa364e49564c85f638f1b3c6c2365",
+        "sha256:0cdb4a629c9d0921aad59ab850343dc5837de308cb44dd714eb5ee1325044bb3",
+        "sha256:699f4ebf3851b2d4cd7b37eb2429cf27efecc4cf0f84464087cbe1856d82144a",
+        "sha256:25be20f1a0339898d8becc3862496badb7edebd7899038ecb0452e2570d25fee",
+        "sha256:d8b206258943df4caf2b7f2970c67a3533c6a7766e69b0ab89a28e6074ab3217"
+      ]
+    }
+  ],
+  "galleryDigest": "sha256:b38d9eb3b5bc69f7754a016698a4f10c2f4d5927bd30a9ff252d08f3c8602434"
+}

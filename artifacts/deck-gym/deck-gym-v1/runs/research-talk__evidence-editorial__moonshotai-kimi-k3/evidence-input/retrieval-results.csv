@@ -1,0 +1,4 @@
+policy,quality_score,cost_usd,latency_ms
+no_retrieval,0.61,0.010,640
+always_retrieve,0.78,0.092,1810
+adaptive,0.75,0.038,1040

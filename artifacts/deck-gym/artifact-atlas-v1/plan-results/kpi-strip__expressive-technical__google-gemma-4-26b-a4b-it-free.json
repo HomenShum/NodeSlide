@@ -1,0 +1,56 @@
+{
+  "artifactType": "kpi-strip",
+  "candidateDigest": "sha256:f8847a392a2be1fb1b05e04cce8f0149466868c9ee0b95aa9c1075b3d9ee68db",
+  "candidateId": "kpi-strip__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "directionId": "expressive-technical",
+  "durationMs": 14064,
+  "fixtureId": "kpi-strip",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "All figures compared to Q1 and Q2 targets.",
+    "artifactType": "kpi-strip",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Revenue | Pipeline | Win Rate | Implementation | Retention",
+        "operationId": "bind-five-metrics",
+        "sourceId": "q2-kpis",
+        "value": "$4.8M | $7.4M | 21% | 39d | 94%"
+      },
+      {
+        "label": "Q1 vs Target Context",
+        "operationId": "encode-prior-and-target",
+        "sourceId": "q2-kpis",
+        "value": "Q1: 4.2/9.1/24/46/93 | Tgt: 5.0/10.0/28/35/95"
+      },
+      {
+        "label": "Material Variance Alert",
+        "operationId": "flag-material-variance",
+        "sourceId": "q2-kpis",
+        "value": "Pipeline & Win Rate Misses"
+      }
+    ],
+    "pptxFallback": "An editable table with conditional emphasis for material variances.",
+    "sourceLabels": [
+      {
+        "label": "Q2 KPI export",
+        "sourceId": "q2-kpis"
+      }
+    ],
+    "takeaway": "Revenue and retention show growth, while pipeline and win rate face significant headwinds against targets.",
+    "title": "Q2 Operating Performance"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1194,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 390,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

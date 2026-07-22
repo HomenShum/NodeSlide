@@ -1,0 +1,1 @@
+The intervention introduced structured intake, one review checkpoint, and exception routing. The benchmark authorizes an observed before/after association only; it does not establish a causal effect.

@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "case-study__cinematic-minimal__moonshotai-kimi-k3",
+  "briefId": "case-study",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:9fb33c568acfbc381ecde63159974cfc70d12b70f19f46d6a6838063fef6ef1a",
+  "runDigest": "sha256:9fc00d9888ba14c5da1e16c48617e4592360c4bdb310a6be19f6bd8c780eceb0",
+  "title": "Claims Operations Intervention",
+  "family": "case_study",
+  "audience": "operations executives",
+  "decision": "decide whether to replicate the intervention in two additional regions",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide case study for operations executives deciding whether to replicate a claims-processing intervention. Show the initial state, intervention, adoption path, measured before/after outcomes, operator evidence, limitations, and replication decision. Use the supplied data exactly. Include a before/after comparison, editable process diagram, outcome chart, and evidence panel. Do not imply causality beyond the observed before/after association.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "claims-before-after.csv",
+      "format": "csv",
+      "content": "metric,before,after,unit\nmedian_cycle_time,8.4,5.9,days\nmanual_touches,6.1,3.8,touches\nrework_rate,14.2,9.6,percent\non_time_completion,71,84,percent"
+    },
+    {
+      "fileName": "intervention.md",
+      "format": "md",
+      "content": "The intervention introduced structured intake, one review checkpoint, and exception routing. The benchmark authorizes an observed before/after association only; it does not establish a causal effect."
+    }
+  ],
+  "requiredClaims": [
+    "8.4",
+    "5.9",
+    "14.2",
+    "9.6",
+    "84"
+  ],
+  "requiredArtifacts": [
+    "comparison",
+    "diagram",
+    "chart",
+    "evidence"
+  ],
+  "forbiddenClaims": [
+    "caused",
+    "proven impact"
+  ],
+  "referenceIds": [
+    "case/before-after",
+    "case/intervention-mechanism",
+    "case/replication-gate"
+  ],
+  "modelLabel": "Kimi K3",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbhc3a_68ec6c8da736d2227c69782f2c65447a",
+    "durationMs": 40584,
+    "completedAt": "2026-07-22T00:01:09.830Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · moonshotai/kimi-k3 (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Kimi K3 via OpenRouter route returned invalid JSON after one repair attempt. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 2,149 → 1,596 COST $0.0053 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 178157
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

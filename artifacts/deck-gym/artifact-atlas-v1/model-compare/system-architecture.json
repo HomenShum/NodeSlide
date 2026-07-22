@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "system-architecture",
+  "generatedAt": "2026-07-22T03:23:21.963Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "system-architecture__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:e2459304a17e1d5861cb3e2ec88ef0b025f6ce2ff7d5e7c27102950c9080d585",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/system-architecture__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/system-architecture__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/system-architecture__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Prefer grouped editable shapes and connectors; never replace the architecture with paragraph arrows."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "system-architecture__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:8fc0955252009cf843fa8cf33a8dc3e11ebb4970e3604a04e62773b8bb6417a9",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/system-architecture__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/system-architecture__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/system-architecture__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Prefer grouped editable shapes and connectors; never replace the architecture with paragraph arrows."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 6979,
+        "inputTokens": 2,
+        "outputTokens": 495,
+        "costMicroUsd": 8709
+      }
+    },
+    {
+      "candidateId": "system-architecture__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:61965facbf1c021fa8824a9dd6fad17b36c52053488e1cea6be3fc34bea7a73a",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/system-architecture__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/system-architecture__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/system-architecture__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Prefer grouped editable shapes and connectors; never replace the architecture with paragraph arrows."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 12426,
+        "inputTokens": 1081,
+        "outputTokens": 358,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "system-architecture__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:269991a6205d0dd3ed6c9ef5c5364253dc527fc666d674c5c1f8f4f3fe2b479f",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/system-architecture__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/system-architecture__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/system-architecture__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Prefer grouped editable shapes and connectors; never replace the architecture with paragraph arrows."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 14910,
+        "inputTokens": 826,
+        "outputTokens": 349,
+        "costMicroUsd": 1368
+      }
+    },
+    {
+      "candidateId": "system-architecture__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:8859ebdae03fc6481b366492ef5554cca83239f34a9c98fe73a93ed102b9eeb3",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/system-architecture__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/system-architecture__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/system-architecture__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Prefer grouped editable shapes and connectors; never replace the architecture with paragraph arrows."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7296,
+        "inputTokens": 2,
+        "outputTokens": 502,
+        "costMicroUsd": 8791
+      }
+    },
+    {
+      "candidateId": "system-architecture__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:0ef40c3c4c082650b6a1872fef6a4c8aef34f4a9e5c52e2edc01ec6576451f56",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/system-architecture__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/system-architecture__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/system-architecture__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Prefer grouped editable shapes and connectors; never replace the architecture with paragraph arrows."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 17959,
+        "inputTokens": 1083,
+        "outputTokens": 334,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "system-architecture__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:ec185676d9385b7efcebe4410e81d41d739b287d9fa675d05badbb347965d8ba",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/system-architecture__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/system-architecture__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/system-architecture__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Prefer grouped editable shapes and connectors; never replace the architecture with paragraph arrows."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 14905,
+        "inputTokens": 828,
+        "outputTokens": 320,
+        "costMicroUsd": 1296
+      }
+    }
+  ]
+}

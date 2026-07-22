@@ -1,0 +1,4 @@
+interface:
+  display_name: "Gemini Flash Deck Adapter"
+  short_description: "Bound Gemini Flash deck work safely"
+  default_prompt: "Use $gemini-flash-deck-adapter to constrain this Gemini deck task to verified behavior."

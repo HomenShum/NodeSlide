@@ -1,0 +1,56 @@
+{
+  "artifactType": "katex-equation",
+  "candidateDigest": "sha256:7e926dfe6135265eded6058caaa30709d4a21f3eb3b831d165bbb6e5b89948b3",
+  "candidateId": "quality-cost-equation__evidence-editorial__moonshotai-kimi-k3",
+  "directionId": "evidence-editorial",
+  "durationMs": 15492,
+  "fixtureId": "quality-cost-equation",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Q equals 0.75; C equals 0.038; Q divided by C is approximately 19.74",
+    "artifactType": "katex-equation",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Equation",
+        "operationId": "render-katex",
+        "sourceId": "retrieval-result",
+        "value": "\\frac{Q}{C}"
+      },
+      {
+        "label": "Symbol definitions",
+        "operationId": "define-symbols",
+        "sourceId": "retrieval-result",
+        "value": "Q equals 0.75; C equals 0.038"
+      },
+      {
+        "label": "Adaptive policy value",
+        "operationId": "bind-calculation",
+        "sourceId": "retrieval-result",
+        "value": "Q divided by C is approximately 19.74"
+      }
+    ],
+    "pptxFallback": "PowerPoint receives the rendered equation as SVG with adjacent editable definitions, not a raw LaTeX string.",
+    "sourceLabels": [
+      {
+        "label": "Adaptive retrieval result",
+        "sourceId": "retrieval-result"
+      }
+    ],
+    "takeaway": "Q divided by C is approximately 19.74",
+    "title": "Cost-Adjusted Quality Measure"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1280,
+    "inputTokens": 838,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 311,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

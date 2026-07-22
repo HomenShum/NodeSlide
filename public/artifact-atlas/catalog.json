@@ -1,0 +1,3601 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-curation/v1",
+  "generatedAt": "2026-07-22T03:43:12.047Z",
+  "eligibleFixtureCount": 12,
+  "fixtureCount": 12,
+  "publicReleaseApproved": false,
+  "candidatePreviewCount": 82,
+  "candidates": [
+    {
+      "candidateId": "claim-source-lineage__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "claim-source-lineage",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "create-lineage-nodes",
+          "label": "Create Lineage Nodes",
+          "value": "human acceptance at 52 seconds",
+          "sourceId": "journey-receipt"
+        },
+        {
+          "operationId": "bind-source-id",
+          "label": "Bind Source Id",
+          "value": "source journey-receipt",
+          "sourceId": "journey-receipt"
+        },
+        {
+          "operationId": "show-rejected-claim-branch",
+          "label": "Show Rejected Claim Branch",
+          "value": "human acceptance at 52 seconds",
+          "sourceId": "journey-receipt"
+        }
+      ],
+      "receiptDigest": "sha256:24500092ef2332341d0278d481377c765ac2aef82a7caa0cda1fa694ada1507f"
+    },
+    {
+      "candidateId": "claim-source-lineage__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "claim-source-lineage",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7121,
+        "inputTokens": 2,
+        "outputTokens": 504,
+        "costMicroUsd": 8688
+      },
+      "operations": [
+        {
+          "label": "Lineage chain",
+          "operationId": "create-lineage-nodes",
+          "sourceId": "journey-receipt",
+          "value": "Source record -> Extracted fact -> Bounded claim -> Slide element -> Exported receipt"
+        },
+        {
+          "label": "Bound claim",
+          "operationId": "bind-source-id",
+          "sourceId": "journey-receipt",
+          "value": "human acceptance at 52 seconds -> source journey-receipt"
+        },
+        {
+          "label": "Rejected branch",
+          "operationId": "show-rejected-claim-branch",
+          "sourceId": "journey-receipt",
+          "value": "zero errors: no browser-error evidence present; excluded from claim chain"
+        }
+      ],
+      "receiptDigest": "sha256:af3f9f011b79cf1325796372b26e1fd22991b8ab82f5849634b84e04c4d37305"
+    },
+    {
+      "candidateId": "claim-source-lineage__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "claim-source-lineage",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15792,
+        "inputTokens": 1092,
+        "outputTokens": 352,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Lineage Path",
+          "operationId": "create-lineage-nodes",
+          "sourceId": "journey-receipt",
+          "value": "Source -> Fact -> Claim -> Slide -> Receipt"
+        },
+        {
+          "label": "Claim Binding",
+          "operationId": "bind-source-id",
+          "sourceId": "journey-receipt",
+          "value": "human acceptance at 52 seconds"
+        },
+        {
+          "label": "Rejected Claim",
+          "operationId": "show-rejected-claim-branch",
+          "sourceId": "journey-receipt",
+          "value": "zero errors"
+        }
+      ],
+      "receiptDigest": "sha256:661ebe58bd5bdfbb3534d37485ac69cb23dc04f23c2c06d0568f20971b9768cb"
+    },
+    {
+      "candidateId": "claim-source-lineage__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "claim-source-lineage",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 20831,
+        "inputTokens": 820,
+        "outputTokens": 338,
+        "costMicroUsd": 1337
+      },
+      "operations": [
+        {
+          "label": "Lineage chain",
+          "operationId": "create-lineage-nodes",
+          "sourceId": "journey-receipt",
+          "value": "Source record → extracted fact → bounded claim → slide element → exported receipt"
+        },
+        {
+          "label": "Bound claim",
+          "operationId": "bind-source-id",
+          "sourceId": "journey-receipt",
+          "value": "human acceptance at 52 seconds — bound to source journey-receipt"
+        },
+        {
+          "label": "Rejected branch",
+          "operationId": "show-rejected-claim-branch",
+          "sourceId": "journey-receipt",
+          "value": "'zero errors' rejected — unsupported; no browser-error evidence is present"
+        }
+      ],
+      "receiptDigest": "sha256:2cab0c1a98a775ace8b4435da4931297b28a2f391abdfc11a5f4329747e9dd1d"
+    },
+    {
+      "candidateId": "claim-source-lineage__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "claim-source-lineage",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7628,
+        "inputTokens": 2,
+        "outputTokens": 545,
+        "costMicroUsd": 9111
+      },
+      "operations": [
+        {
+          "label": "Lineage chain",
+          "operationId": "create-lineage-nodes",
+          "sourceId": "journey-receipt",
+          "value": "source record → extracted fact → bounded claim (human acceptance at 52 seconds) → slide element → exported receipt"
+        },
+        {
+          "label": "Source binding",
+          "operationId": "bind-source-id",
+          "sourceId": "journey-receipt",
+          "value": "human acceptance at 52 seconds bound to journey-receipt"
+        },
+        {
+          "label": "Rejected branch",
+          "operationId": "show-rejected-claim-branch",
+          "sourceId": "journey-receipt",
+          "value": "zero errors — rejected: no browser-error evidence present in journey-receipt"
+        }
+      ],
+      "receiptDigest": "sha256:32e912b1c6085b0b5776694e6c2170b710d045daf654753727821c6829786492"
+    },
+    {
+      "candidateId": "claim-source-lineage__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "claim-source-lineage",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 18075,
+        "inputTokens": 1094,
+        "outputTokens": 370,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Lineage Path",
+          "operationId": "create-lineage-nodes",
+          "sourceId": "journey-receipt",
+          "value": "Source -> Fact -> Claim -> Slide -> Receipt"
+        },
+        {
+          "label": "Claim Binding",
+          "operationId": "bind-source-id",
+          "sourceId": "journey-receipt",
+          "value": "human acceptance at 52 seconds"
+        },
+        {
+          "label": "Rejected Claim",
+          "operationId": "show-rejected-claim-branch",
+          "sourceId": "journey-receipt",
+          "value": "zero errors"
+        }
+      ],
+      "receiptDigest": "sha256:55a1ceafe9a815c206220b0186df46af66872f11d0831687af400b94cc8eb7b1"
+    },
+    {
+      "candidateId": "claim-source-lineage__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "claim-source-lineage",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 19389,
+        "inputTokens": 822,
+        "outputTokens": 402,
+        "costMicroUsd": 1498
+      },
+      "operations": [
+        {
+          "label": "Lineage Nodes",
+          "operationId": "create-lineage-nodes",
+          "sourceId": "journey-receipt",
+          "value": "Source record → Extracted fact → Bounded claim → Slide element → Exported receipt"
+        },
+        {
+          "label": "Bound Claim",
+          "operationId": "bind-source-id",
+          "sourceId": "journey-receipt",
+          "value": "human acceptance at 52 seconds"
+        },
+        {
+          "label": "Rejected Claim",
+          "operationId": "show-rejected-claim-branch",
+          "sourceId": "journey-receipt",
+          "value": "zero errors"
+        }
+      ],
+      "receiptDigest": "sha256:21e15fddce0cdbaee0ef775abfbb0ddc943413b03ae9ddaff275b2cbcfbc4da9"
+    },
+    {
+      "candidateId": "code-runtime-proof__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "code-runtime-proof",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "render-code-block",
+          "label": "Render Code Block",
+          "value": "stage returns Proposal",
+          "sourceId": "adapter-interface"
+        },
+        {
+          "operationId": "render-runtime-result",
+          "label": "Render Runtime Result",
+          "value": "commit returns Receipt",
+          "sourceId": "adapter-benchmark"
+        },
+        {
+          "operationId": "connect-contract-to-measurement",
+          "label": "Connect Contract To Measurement",
+          "value": "p50 38 milliseconds",
+          "sourceId": "adapter-interface"
+        }
+      ],
+      "receiptDigest": "sha256:575d9913583daa265af4533d5267ced87319868c0aba257162be60960c9ce7dc"
+    },
+    {
+      "candidateId": "code-runtime-proof__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "code-runtime-proof",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7870,
+        "inputTokens": 2,
+        "outputTokens": 499,
+        "costMicroUsd": 5315
+      },
+      "operations": [
+        {
+          "label": "TypeScript contract",
+          "operationId": "render-code-block",
+          "sourceId": "adapter-interface",
+          "value": "stage returns Proposal; commit returns Receipt"
+        },
+        {
+          "label": "Measured latency",
+          "operationId": "render-runtime-result",
+          "sourceId": "adapter-benchmark",
+          "value": "p50 38 milliseconds / p95 92 milliseconds"
+        },
+        {
+          "label": "Commit to receipt",
+          "operationId": "connect-contract-to-measurement",
+          "sourceId": "adapter-benchmark",
+          "value": "receipt 1160 bytes"
+        }
+      ],
+      "receiptDigest": "sha256:5149d4f4f4981285221413c6cae70d1fbb61da536a513b0a9c9b046a5cb596c0"
+    },
+    {
+      "candidateId": "code-runtime-proof__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "code-runtime-proof",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 11501,
+        "inputTokens": 1175,
+        "outputTokens": 391,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Interface Definition",
+          "operationId": "render-code-block",
+          "sourceId": "adapter-interface",
+          "value": "interface CaseflowAdapter {\n  stage(input: StageInput): Promise<Proposal>;\n  commit(input: CommitInput): Promise<Receipt>;\n  restore(versionId: string): Promise<Receipt>;\n}"
+        },
+        {
+          "label": "Latency Metrics",
+          "operationId": "render-runtime-result",
+          "sourceId": "adapter-benchmark",
+          "value": "p50: 38ms | p95: 92ms"
+        },
+        {
+          "label": "Data Payload",
+          "operationId": "connect-contract-to-measurement",
+          "sourceId": "adapter-benchmark",
+          "value": "commit() -> 1160 bytes"
+        }
+      ],
+      "receiptDigest": "sha256:63f5564464b336f94df80a2724f4a21bd939362ad49b3fcea92c4d564e6309a8"
+    },
+    {
+      "candidateId": "code-runtime-proof__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "code-runtime-proof",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15901,
+        "inputTokens": 874,
+        "outputTokens": 362,
+        "costMicroUsd": 1429
+      },
+      "operations": [
+        {
+          "label": "TypeScript contract",
+          "operationId": "render-code-block",
+          "sourceId": "adapter-interface",
+          "value": "interface CaseflowAdapter { stage(input: StageInput): Promise<Proposal>; commit(input: CommitInput): Promise<Receipt>; restore(versionId: string): Promise<Receipt>; }"
+        },
+        {
+          "label": "Convex adapter benchmark",
+          "operationId": "render-runtime-result",
+          "sourceId": "adapter-benchmark",
+          "value": "p50 38 milliseconds; p95 92 milliseconds; receipt 1160 bytes"
+        },
+        {
+          "label": "commit returns Receipt, measured",
+          "operationId": "connect-contract-to-measurement",
+          "sourceId": "adapter-benchmark",
+          "value": "commit(input: CommitInput): Promise<Receipt> corresponds to the measured Convex run: p50 38 milliseconds, p95 92 milliseconds, receipt 1160 bytes."
+        }
+      ],
+      "receiptDigest": "sha256:b2eece4e6b55d8ec1ea972c39033f2cfc7f6b8a0d4fcf0ff4519a7f0b8930088"
+    },
+    {
+      "candidateId": "code-runtime-proof__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "code-runtime-proof",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8721,
+        "inputTokens": 2,
+        "outputTokens": 493,
+        "costMicroUsd": 8964
+      },
+      "operations": [
+        {
+          "label": "Adapter contract",
+          "operationId": "render-code-block",
+          "sourceId": "adapter-interface",
+          "value": "stage returns Proposal; commit returns Receipt"
+        },
+        {
+          "label": "Measured latency",
+          "operationId": "render-runtime-result",
+          "sourceId": "adapter-benchmark",
+          "value": "p50 38 milliseconds / p95 92 milliseconds"
+        },
+        {
+          "label": "Commit to receipt",
+          "operationId": "connect-contract-to-measurement",
+          "sourceId": "adapter-benchmark",
+          "value": "receipt 1160 bytes"
+        }
+      ],
+      "receiptDigest": "sha256:880a5db00aeb0e96c64cea6f4640ac545646734d5fbde5728236654da2b356e5"
+    },
+    {
+      "candidateId": "code-runtime-proof__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "code-runtime-proof",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 22085,
+        "inputTokens": 1177,
+        "outputTokens": 390,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Interface Definition",
+          "operationId": "render-code-block",
+          "sourceId": "adapter-interface",
+          "value": "interface CaseflowAdapter {\n  stage(input: StageInput): Promise<Proposal>;\n  commit(input: CommitInput): Promise<Receipt>;\n  restore(versionId: string): Promise<Receipt>;\n}"
+        },
+        {
+          "label": "Latency Metrics",
+          "operationId": "render-runtime-result",
+          "sourceId": "adapter-benchmark",
+          "value": "p50: 38ms | p95: 92ms"
+        },
+        {
+          "label": "Data Payload",
+          "operationId": "connect-contract-to-measurement",
+          "sourceId": "adapter-benchmark",
+          "value": "Receipt: 1160 bytes"
+        }
+      ],
+      "receiptDigest": "sha256:2dd69d1f04d74e20ac9efee579a5eb70bf055118c42eeeea13257595c8e46f42"
+    },
+    {
+      "candidateId": "code-runtime-proof__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "code-runtime-proof",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 21057,
+        "inputTokens": 876,
+        "outputTokens": 309,
+        "costMicroUsd": 1298
+      },
+      "operations": [
+        {
+          "label": "TypeScript contract",
+          "operationId": "render-code-block",
+          "sourceId": "adapter-interface",
+          "value": "interface CaseflowAdapter { stage(input: StageInput): Promise<Proposal>; commit(input: CommitInput): Promise<Receipt>; restore(versionId: string): Promise<Receipt>; }"
+        },
+        {
+          "label": "Convex benchmark",
+          "operationId": "render-runtime-result",
+          "sourceId": "adapter-benchmark",
+          "value": "p50 38 milliseconds · p95 92 milliseconds · receipt 1160 bytes"
+        },
+        {
+          "label": "Commit to receipt bytes",
+          "operationId": "connect-contract-to-measurement",
+          "sourceId": "adapter-benchmark",
+          "value": "commit returns Receipt; measured receipt 1160 bytes at p50 38 milliseconds and p95 92 milliseconds"
+        }
+      ],
+      "receiptDigest": "sha256:94271bd47bdf696979c938bf6d973fbec114e07f0c5d28f75d2f8ac360ac6867"
+    },
+    {
+      "candidateId": "hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "hero-thesis",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "create-dominant-thesis",
+          "label": "Create Dominant Thesis",
+          "value": "review before acceptance",
+          "sourceId": "hero-workflow"
+        },
+        {
+          "operationId": "bind-source-label",
+          "label": "Bind Source Label",
+          "value": "52 seconds to human acceptance",
+          "sourceId": "hero-workflow"
+        },
+        {
+          "operationId": "preserve-negative-space",
+          "label": "Preserve Negative Space",
+          "value": "58 seconds to PowerPoint export",
+          "sourceId": "hero-workflow"
+        }
+      ],
+      "receiptDigest": "sha256:08647cd498faa0e7ec90183f5b96de8313f0740057c38852cf54e4377db507ed"
+    },
+    {
+      "candidateId": "hero-thesis__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "hero-thesis",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8338,
+        "inputTokens": 2,
+        "outputTokens": 482,
+        "costMicroUsd": 8504
+      },
+      "operations": [
+        {
+          "label": "Hero thesis statement",
+          "operationId": "create-dominant-thesis",
+          "sourceId": "hero-workflow",
+          "value": "Reviewable generation makes presentation automation safer"
+        },
+        {
+          "label": "Workflow receipt binding",
+          "operationId": "bind-source-label",
+          "sourceId": "hero-workflow",
+          "value": "52 seconds to human acceptance"
+        },
+        {
+          "label": "Single focal composition",
+          "operationId": "preserve-negative-space",
+          "sourceId": "hero-workflow",
+          "value": "One dominant visual center, no card grid"
+        }
+      ],
+      "receiptDigest": "sha256:1052a7ebc4325f66efeb7194ec8a856ab579326eb3c3b10fc06cc9d5b0bf327c"
+    },
+    {
+      "candidateId": "hero-thesis__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "hero-thesis",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 16610,
+        "inputTokens": 1071,
+        "outputTokens": 327,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Thesis Statement",
+          "operationId": "create-dominant-thesis",
+          "sourceId": "hero-workflow",
+          "value": "Reviewable generation makes presentation automation safer."
+        },
+        {
+          "label": "Workflow Provenance",
+          "operationId": "bind-source-label",
+          "sourceId": "hero-workflow",
+          "value": "52s to human acceptance | 58s to PowerPoint export"
+        },
+        {
+          "label": "Minimalist Layout",
+          "operationId": "preserve-negative-space",
+          "sourceId": "hero-workflow",
+          "value": "Single focal point with high contrast text"
+        }
+      ],
+      "receiptDigest": "sha256:a176d7eb3d07f58ef86a00d8603f7c526f2b089f6314cd000bae95ddfbc390f1"
+    },
+    {
+      "candidateId": "hero-thesis__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "hero-thesis",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15191,
+        "inputTokens": 819,
+        "outputTokens": 246,
+        "costMicroUsd": 1106
+      },
+      "operations": [
+        {
+          "label": "Dominant thesis",
+          "operationId": "create-dominant-thesis",
+          "sourceId": "hero-workflow",
+          "value": "Reviewable generation makes presentation automation safer"
+        },
+        {
+          "label": "Bound evidence",
+          "operationId": "bind-source-label",
+          "sourceId": "hero-workflow",
+          "value": "Workflow receipt: 52 seconds to human acceptance, 58 seconds to PowerPoint export"
+        },
+        {
+          "label": "Negative space",
+          "operationId": "preserve-negative-space",
+          "sourceId": "hero-workflow",
+          "value": "Single focal center with generous whitespace; no card grid"
+        }
+      ],
+      "receiptDigest": "sha256:86419285b5e4655bab02dde3f0c78ef611fb00f4ec2effa3f1e65e8de17c302d"
+    },
+    {
+      "candidateId": "hero-thesis__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "hero-thesis",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7910,
+        "inputTokens": 2,
+        "outputTokens": 493,
+        "costMicroUsd": 8626
+      },
+      "operations": [
+        {
+          "label": "Hero thesis statement",
+          "operationId": "create-dominant-thesis",
+          "sourceId": "hero-workflow",
+          "value": "Reviewable generation makes presentation automation safer"
+        },
+        {
+          "label": "Workflow timing citation",
+          "operationId": "bind-source-label",
+          "sourceId": "hero-workflow",
+          "value": "52 seconds to human acceptance; 58 seconds to PowerPoint export"
+        },
+        {
+          "label": "Single focal center, no grid",
+          "operationId": "preserve-negative-space",
+          "sourceId": "hero-workflow",
+          "value": "One dominant visual center with generous surrounding whitespace"
+        }
+      ],
+      "receiptDigest": "sha256:e26c9bb62816ac7a0c94574a3d6d20b7a2f3fa2c0a83d233517596f4d482d1a9"
+    },
+    {
+      "candidateId": "hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "hero-thesis",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8915,
+        "inputTokens": 1073,
+        "outputTokens": 334,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Thesis Statement",
+          "operationId": "create-dominant-thesis",
+          "sourceId": "hero-workflow",
+          "value": "Reviewable generation makes presentation automation safer."
+        },
+        {
+          "label": "Workflow Evidence",
+          "operationId": "bind-source-label",
+          "sourceId": "hero-workflow",
+          "value": "52s to human acceptance | 58s to PowerPoint export"
+        },
+        {
+          "label": "Spatial Layout",
+          "operationId": "preserve-negative-space",
+          "sourceId": "hero-workflow",
+          "value": "Centralized thesis with peripheral timing metrics"
+        }
+      ],
+      "receiptDigest": "sha256:f07c4e21a2d881f4c095452f26426e151324a36a7c8189f4037b452b4bd9662c"
+    },
+    {
+      "candidateId": "hero-thesis__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "hero-thesis",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 14258,
+        "inputTokens": 821,
+        "outputTokens": 234,
+        "costMicroUsd": 1077
+      },
+      "operations": [
+        {
+          "label": "Dominant thesis",
+          "operationId": "create-dominant-thesis",
+          "sourceId": "hero-workflow",
+          "value": "Reviewable generation makes presentation automation safer"
+        },
+        {
+          "label": "Workflow receipt",
+          "operationId": "bind-source-label",
+          "sourceId": "hero-workflow",
+          "value": "Structured draft 31s; validation 34s; human acceptance 52s; PowerPoint export 58s"
+        },
+        {
+          "label": "Negative space",
+          "operationId": "preserve-negative-space",
+          "sourceId": "hero-workflow",
+          "value": "Keep one dominant visual center with no card grid and at most two supporting text elements"
+        }
+      ],
+      "receiptDigest": "sha256:ccf47f37fd71bc1dc439ef35f8e38554c998aedb8fab701ec76a397229676fef"
+    },
+    {
+      "candidateId": "kpi-strip__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "kpi-strip",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "bind-five-metrics",
+          "label": "Bind Five Metrics",
+          "value": "revenue 4.8 million",
+          "sourceId": "q2-kpis"
+        },
+        {
+          "operationId": "encode-prior-and-target",
+          "label": "Encode Prior And Target",
+          "value": "pipeline 7.4 million",
+          "sourceId": "q2-kpis"
+        },
+        {
+          "operationId": "flag-material-variance",
+          "label": "Flag Material Variance",
+          "value": "win rate 21 percent",
+          "sourceId": "q2-kpis"
+        }
+      ],
+      "receiptDigest": "sha256:926dd9e2062f92c4dca888916d07c32cc74914cb5a7726a0bc7d8a6d2e86b3af"
+    },
+    {
+      "candidateId": "kpi-strip__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "kpi-strip",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8799,
+        "inputTokens": 2,
+        "outputTokens": 582,
+        "costMicroUsd": 9689
+      },
+      "operations": [
+        {
+          "label": "Metrics bound",
+          "operationId": "bind-five-metrics",
+          "sourceId": "q2-kpis",
+          "value": "Revenue, Pipeline, Win Rate, Implementation Days, Gross Retention"
+        },
+        {
+          "label": "Prior vs. Target context",
+          "operationId": "encode-prior-and-target",
+          "sourceId": "q2-kpis",
+          "value": "Q1 baseline and target markers encoded for all five metrics"
+        },
+        {
+          "label": "Material misses flagged",
+          "operationId": "flag-material-variance",
+          "sourceId": "q2-kpis",
+          "value": "Pipeline ($7.4M vs $10.0M), Win Rate (21% vs 28%), Implementation (39d vs 35d)"
+        }
+      ],
+      "receiptDigest": "sha256:894c8fde45c0ff8d5e6b1132690288cca70e2569c42b3d49cabb836cdc173489"
+    },
+    {
+      "candidateId": "kpi-strip__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "kpi-strip",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15433,
+        "inputTokens": 1192,
+        "outputTokens": 391,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Revenue | Pipeline | Win Rate | Implementation | Retention",
+          "operationId": "bind-five-metrics",
+          "sourceId": "q2-kpis",
+          "value": "4.8M | 7.4M | 21% | 39d | 94%"
+        },
+        {
+          "label": "Q1 vs Target Context",
+          "operationId": "encode-prior-and-target",
+          "sourceId": "q2-kpis",
+          "value": "4.2M/5.0M | 9.1M/10.0M | 24%/28% | 46d/35d | 93%/95%"
+        },
+        {
+          "label": "Material Variance Alert",
+          "operationId": "flag-material-variance",
+          "sourceId": "q2-kpis",
+          "value": "Pipeline & Win Rate"
+        }
+      ],
+      "receiptDigest": "sha256:8b05aecff18cae0e8812cd36a9a164110e28bbb5404542a943aee27f1454b9fe"
+    },
+    {
+      "candidateId": "kpi-strip__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "kpi-strip",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 22841,
+        "inputTokens": 900,
+        "outputTokens": 405,
+        "costMicroUsd": 1552
+      },
+      "operations": [
+        {
+          "label": "Five Q2 metrics bound",
+          "operationId": "bind-five-metrics",
+          "sourceId": "q2-kpis",
+          "value": "Revenue 4.8M; Pipeline 7.4M; Win rate 21%; Implementation 39 days; Retention 94%"
+        },
+        {
+          "label": "Prior-quarter and target context per metric",
+          "operationId": "encode-prior-and-target",
+          "sourceId": "q2-kpis",
+          "value": "Revenue Q1 4.2M vs target 5.0M; Pipeline Q1 9.1M vs target 10.0M; Win rate Q1 24% vs target 28%; Implementation Q1 46d vs target 35d; Retention Q1 93% vs target 95%"
+        },
+        {
+          "label": "Material misses flagged",
+          "operationId": "flag-material-variance",
+          "sourceId": "q2-kpis",
+          "value": "Flagged: pipeline 7.4M vs 10.0M target; win rate 21% vs 28% target. Not flagged: revenue, implementation time, retention."
+        }
+      ],
+      "receiptDigest": "sha256:6deaee2400501663047db0c623528d39eaa1ef765eb8b8439d7fd2362bd25d99"
+    },
+    {
+      "candidateId": "kpi-strip__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "kpi-strip",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8756,
+        "inputTokens": 2,
+        "outputTokens": 621,
+        "costMicroUsd": 10091
+      },
+      "operations": [
+        {
+          "label": "Core Q2 metrics",
+          "operationId": "bind-five-metrics",
+          "sourceId": "q2-kpis",
+          "value": "Revenue $4.8M · Pipeline $7.4M · Win rate 21% · Implementation 39 days · Retention 94%"
+        },
+        {
+          "label": "Prior vs target context",
+          "operationId": "encode-prior-and-target",
+          "sourceId": "q2-kpis",
+          "value": "Q1 4.2/9.1/24%/46d/93% → Target 5.0/10.0/28%/35d/95%"
+        },
+        {
+          "label": "Material misses flagged",
+          "operationId": "flag-material-variance",
+          "sourceId": "q2-kpis",
+          "value": "Pipeline -$2.6M, win rate -7pts, implementation +4 days vs target"
+        }
+      ],
+      "receiptDigest": "sha256:2c18866499014d4c6fb21031fdade753307c66e07e1e6458644b0e683f18c394"
+    },
+    {
+      "candidateId": "kpi-strip__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "kpi-strip",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 14064,
+        "inputTokens": 1194,
+        "outputTokens": 390,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Revenue | Pipeline | Win Rate | Implementation | Retention",
+          "operationId": "bind-five-metrics",
+          "sourceId": "q2-kpis",
+          "value": "$4.8M | $7.4M | 21% | 39d | 94%"
+        },
+        {
+          "label": "Q1 vs Target Context",
+          "operationId": "encode-prior-and-target",
+          "sourceId": "q2-kpis",
+          "value": "Q1: 4.2/9.1/24/46/93 | Tgt: 5.0/10.0/28/35/95"
+        },
+        {
+          "label": "Material Variance Alert",
+          "operationId": "flag-material-variance",
+          "sourceId": "q2-kpis",
+          "value": "Pipeline & Win Rate Misses"
+        }
+      ],
+      "receiptDigest": "sha256:1df80ecdaf209f3ea3a2f5ea606d728d26a944bf03afc27fe15ddafb1ec041c5"
+    },
+    {
+      "candidateId": "kpi-strip__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "kpi-strip",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 19670,
+        "inputTokens": 902,
+        "outputTokens": 267,
+        "costMicroUsd": 1208
+      },
+      "operations": [
+        {
+          "label": "Revenue",
+          "operationId": "bind-five-metrics",
+          "sourceId": "q2-kpis",
+          "value": "Q2 $4.8M vs Q1 $4.2M, target $5.0M"
+        },
+        {
+          "label": "Pipeline",
+          "operationId": "encode-prior-and-target",
+          "sourceId": "q2-kpis",
+          "value": "Q2 $7.4M vs Q1 $9.1M, target $10.0M"
+        },
+        {
+          "label": "Win Rate",
+          "operationId": "flag-material-variance",
+          "sourceId": "q2-kpis",
+          "value": "Q2 21% vs Q1 24%, target 28% — material miss"
+        }
+      ],
+      "receiptDigest": "sha256:72448a78bbc298c97e16732dcd136a21b39b16e06795c6938beb2cacd5129385"
+    },
+    {
+      "candidateId": "multi-series-trend__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "multi-series-trend",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "create-editable-series",
+          "label": "Create Editable Series",
+          "value": "rapid bus reached 91",
+          "sourceId": "ridership-series"
+        },
+        {
+          "operationId": "direct-label-endpoints",
+          "label": "Direct Label Endpoints",
+          "value": "local bus reached 67",
+          "sourceId": "ridership-series"
+        },
+        {
+          "operationId": "annotate-supported-pattern",
+          "label": "Annotate Supported Pattern",
+          "value": "rail reached 82",
+          "sourceId": "ridership-series"
+        }
+      ],
+      "receiptDigest": "sha256:e29598d3cd7d79f5cdf0f3be24b7c6bac3004a1c7f8132e755ae5da66ed65172"
+    },
+    {
+      "candidateId": "multi-series-trend__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "multi-series-trend",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8012,
+        "inputTokens": 2,
+        "outputTokens": 469,
+        "costMicroUsd": 8384
+      },
+      "operations": [
+        {
+          "label": "Plot three monthly ridership series",
+          "operationId": "create-editable-series",
+          "sourceId": "ridership-series",
+          "value": "Rapid bus, local bus, rail indexed January–June"
+        },
+        {
+          "label": "Label June endpoints",
+          "operationId": "direct-label-endpoints",
+          "sourceId": "ridership-series",
+          "value": "Rapid bus 91, rail 82, local bus 67"
+        },
+        {
+          "label": "Flag under-recovery pattern",
+          "operationId": "annotate-supported-pattern",
+          "sourceId": "ridership-series",
+          "value": "Local bus recovered least among the three series"
+        }
+      ],
+      "receiptDigest": "sha256:a444afecb7747401a6b80639fb3739ca4e1ee904b394f566630a63711cd3b8f1"
+    },
+    {
+      "candidateId": "multi-series-trend__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "multi-series-trend",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 9348,
+        "inputTokens": 1144,
+        "outputTokens": 397,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Rapid Bus, Local Bus, Rail",
+          "operationId": "create-editable-series",
+          "sourceId": "ridership-series",
+          "value": "Jan: 72,61,68; Feb: 74,62,70; Mar: 79,63,73; Apr: 83,65,76; May: 87,66,79; Jun: 91,67,82"
+        },
+        {
+          "label": "Endpoint Values",
+          "operationId": "direct-label-endpoints",
+          "sourceId": "ridership-series",
+          "value": "Rapid: 91, Local: 67, Rail: 82"
+        },
+        {
+          "label": "Divergence Trend",
+          "operationId": "annotate-supported-pattern",
+          "sourceId": "ridership-series",
+          "value": "Local bus recovered least"
+        }
+      ],
+      "receiptDigest": "sha256:f7cdfd1d6de7f7a6138efc18991f1468d5378d22e121c8382ebe7d71b1c7aa25"
+    },
+    {
+      "candidateId": "multi-series-trend__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "multi-series-trend",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 10320,
+        "inputTokens": 854,
+        "outputTokens": 273,
+        "costMicroUsd": 1194
+      },
+      "operations": [
+        {
+          "label": "Monthly ridership index, Jan–Jun",
+          "operationId": "create-editable-series",
+          "sourceId": "ridership-series",
+          "value": "rapid bus 72→91, local bus 61→67, rail 68→82"
+        },
+        {
+          "label": "June endpoints labeled directly",
+          "operationId": "direct-label-endpoints",
+          "sourceId": "ridership-series",
+          "value": "rapid bus 91; local bus 67; rail 82"
+        },
+        {
+          "label": "Under-recovery callout",
+          "operationId": "annotate-supported-pattern",
+          "sourceId": "ridership-series",
+          "value": "Local bus recovered least, ending at 67 versus 91 (rapid bus) and 82 (rail)."
+        }
+      ],
+      "receiptDigest": "sha256:a0d634ce5b73ab3706dfef3dd51687144338f66830c1f749d46b4ea05d079b5a"
+    },
+    {
+      "candidateId": "multi-series-trend__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "multi-series-trend",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8373,
+        "inputTokens": 2,
+        "outputTokens": 431,
+        "costMicroUsd": 8016
+      },
+      "operations": [
+        {
+          "label": "Plot three monthly series",
+          "operationId": "create-editable-series",
+          "sourceId": "ridership-series",
+          "value": "rapid bus, local bus, rail; Jan–Jun"
+        },
+        {
+          "label": "Label June endpoints",
+          "operationId": "direct-label-endpoints",
+          "sourceId": "ridership-series",
+          "value": "rapid bus 91, rail 82, local bus 67"
+        },
+        {
+          "label": "Flag under-recovery",
+          "operationId": "annotate-supported-pattern",
+          "sourceId": "ridership-series",
+          "value": "local bus recovered least"
+        }
+      ],
+      "receiptDigest": "sha256:b7809974aecd744e4fc8fb05932e11e98eefc31d75cb16855077d6129384de67"
+    },
+    {
+      "candidateId": "multi-series-trend__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "multi-series-trend",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 17567,
+        "inputTokens": 1146,
+        "outputTokens": 414,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Rapid Bus, Local Bus, Rail",
+          "operationId": "create-editable-series",
+          "sourceId": "ridership-series",
+          "value": "Jan: 72, 61, 68; Feb: 74, 62, 70; Mar: 79, 63, 73; Apr: 83, 65, 76; May: 87, 66, 79; Jun: 91, 67, 82"
+        },
+        {
+          "label": "End-of-period values",
+          "operationId": "direct-label-endpoints",
+          "sourceId": "ridership-series",
+          "value": "Rapid: 91, Local: 67, Rail: 82"
+        },
+        {
+          "label": "Divergence in growth",
+          "operationId": "annotate-supported-pattern",
+          "sourceId": "ridership-series",
+          "value": "Local bus recovered least"
+        }
+      ],
+      "receiptDigest": "sha256:daa477832cc6e1204aa4491e493c862f2929eeded49f86e6042dfb92a611a904"
+    },
+    {
+      "candidateId": "multi-series-trend__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "multi-series-trend",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 12831,
+        "inputTokens": 856,
+        "outputTokens": 285,
+        "costMicroUsd": 1226
+      },
+      "operations": [
+        {
+          "label": "Plot rapid bus, local bus, and rail as editable monthly series from January through June",
+          "operationId": "create-editable-series",
+          "sourceId": "ridership-series",
+          "value": "Jan–Jun: rapid bus 72→91, local bus 61→67, rail 68→82"
+        },
+        {
+          "label": "Label June end values directly on each line",
+          "operationId": "direct-label-endpoints",
+          "sourceId": "ridership-series",
+          "value": "Rapid bus 91; local bus 67; rail 82"
+        },
+        {
+          "label": "Annotate the divergence: local bus under-recovery",
+          "operationId": "annotate-supported-pattern",
+          "sourceId": "ridership-series",
+          "value": "Local bus recovered least across the period"
+        }
+      ],
+      "receiptDigest": "sha256:a750d641dc2372f12001cbcdcb04a8eb2cba0591f15775a4714be775691ac17e"
+    },
+    {
+      "candidateId": "quality-cost-equation__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "quality-cost-equation",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "render-katex",
+          "label": "Render Katex",
+          "value": "Q equals 0.75",
+          "sourceId": "retrieval-result"
+        },
+        {
+          "operationId": "define-symbols",
+          "label": "Define Symbols",
+          "value": "C equals 0.038",
+          "sourceId": "retrieval-result"
+        },
+        {
+          "operationId": "bind-calculation",
+          "label": "Bind Calculation",
+          "value": "Q divided by C is approximately 19.74",
+          "sourceId": "retrieval-result"
+        }
+      ],
+      "receiptDigest": "sha256:7f4f3b9e687094cc64e465eefbfc2d54688c63600a63a32a1ca73cd2d6e75fbc"
+    },
+    {
+      "candidateId": "quality-cost-equation__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "quality-cost-equation",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 10101,
+        "inputTokens": 2,
+        "outputTokens": 438,
+        "costMicroUsd": 8024
+      },
+      "operations": [
+        {
+          "label": "Render cost-adjusted quality equation",
+          "operationId": "render-katex",
+          "sourceId": "retrieval-result",
+          "value": "\\dfrac{Q}{C}"
+        },
+        {
+          "label": "Define Q and C",
+          "operationId": "define-symbols",
+          "sourceId": "retrieval-result",
+          "value": "Q = 0.75 (quality_score); C = 0.038 (cost_usd)"
+        },
+        {
+          "label": "Calculate adaptive policy value",
+          "operationId": "bind-calculation",
+          "sourceId": "retrieval-result",
+          "value": "0.75 / 0.038 \\approx 19.74"
+        }
+      ],
+      "receiptDigest": "sha256:266483458b83123d72f7ddd18f5ca02797a81c422a6ace070175bc343a6f6b40"
+    },
+    {
+      "candidateId": "quality-cost-equation__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "quality-cost-equation",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 28411,
+        "inputTokens": 1097,
+        "outputTokens": 345,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Equation Rendering",
+          "operationId": "render-katex",
+          "sourceId": "retrieval-result",
+          "value": "\\frac{Q}{C}"
+        },
+        {
+          "label": "Symbol Definitions",
+          "operationId": "define-symbols",
+          "sourceId": "retrieval-result",
+          "value": "Q = \\text{quality score}, C = \\text{cost (USD)}"
+        },
+        {
+          "label": "Adaptive Policy Value",
+          "operationId": "bind-calculation",
+          "sourceId": "retrieval-result",
+          "value": "\\frac{0.75}{0.038} \\approx 19.74"
+        }
+      ],
+      "receiptDigest": "sha256:5619029dd4ff5798d79a0ab9acc5b997ccc9ba34e82cb4ae81baf20fddb4bd63"
+    },
+    {
+      "candidateId": "quality-cost-equation__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "quality-cost-equation",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15492,
+        "inputTokens": 838,
+        "outputTokens": 311,
+        "costMicroUsd": 1280
+      },
+      "operations": [
+        {
+          "label": "Equation",
+          "operationId": "render-katex",
+          "sourceId": "retrieval-result",
+          "value": "\\frac{Q}{C}"
+        },
+        {
+          "label": "Symbol definitions",
+          "operationId": "define-symbols",
+          "sourceId": "retrieval-result",
+          "value": "Q equals 0.75; C equals 0.038"
+        },
+        {
+          "label": "Adaptive policy value",
+          "operationId": "bind-calculation",
+          "sourceId": "retrieval-result",
+          "value": "Q divided by C is approximately 19.74"
+        }
+      ],
+      "receiptDigest": "sha256:9c7723e5c8bdfc0c953656f289acbcc8867f940475bb95e4fcd5620f47d7699d"
+    },
+    {
+      "candidateId": "quality-cost-equation__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "quality-cost-equation",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 6804,
+        "inputTokens": 2,
+        "outputTokens": 482,
+        "costMicroUsd": 8476
+      },
+      "operations": [
+        {
+          "label": "Render cost-adjusted quality equation",
+          "operationId": "render-katex",
+          "sourceId": "retrieval-result",
+          "value": "\\dfrac{Q}{C} \\approx 19.74"
+        },
+        {
+          "label": "Define Q and C",
+          "operationId": "define-symbols",
+          "sourceId": "retrieval-result",
+          "value": "Q = quality_score = 0.75; C = cost_usd = 0.038"
+        },
+        {
+          "label": "Compute adaptive policy value",
+          "operationId": "bind-calculation",
+          "sourceId": "retrieval-result",
+          "value": "0.75 / 0.038 ≈ 19.74"
+        }
+      ],
+      "receiptDigest": "sha256:42f2917d64b41d3f77011de8ae80afa7b677accfe6f943549243b957b72fec6b"
+    },
+    {
+      "candidateId": "quality-cost-equation__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "quality-cost-equation",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 21041,
+        "inputTokens": 2591,
+        "outputTokens": 699,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Equation Rendering",
+          "operationId": "render-katex",
+          "sourceId": "retrieval-result",
+          "value": "\\frac{Q}{C}"
+        },
+        {
+          "label": "Symbol Definitions",
+          "operationId": "define-symbols",
+          "sourceId": "retrieval-result",
+          "value": "Q = 0.75, C = 0.038"
+        },
+        {
+          "label": "Adaptive Policy Value",
+          "operationId": "bind-calculation",
+          "sourceId": "retrieval-result",
+          "value": "\\frac{0.75}{0.038} \\approx 19.74"
+        }
+      ],
+      "receiptDigest": "sha256:b2fba8ec47bf8c37395bc0b5a30e4bcfaf218a05659278bd8e4c3b5f1cbc9b1c"
+    },
+    {
+      "candidateId": "quality-cost-equation__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "quality-cost-equation",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15564,
+        "inputTokens": 840,
+        "outputTokens": 341,
+        "costMicroUsd": 1356
+      },
+      "operations": [
+        {
+          "label": "Render Equation",
+          "operationId": "render-katex",
+          "sourceId": "retrieval-result",
+          "value": "\\frac{Q}{C}"
+        },
+        {
+          "label": "Define Variables",
+          "operationId": "define-symbols",
+          "sourceId": "retrieval-result",
+          "value": "Q = 0.75 (quality), C = 0.038 (cost)"
+        },
+        {
+          "label": "Calculate Value",
+          "operationId": "bind-calculation",
+          "sourceId": "retrieval-result",
+          "value": "\\frac{0.75}{0.038} \\approx 19.74"
+        }
+      ],
+      "receiptDigest": "sha256:5549585b704436d4ce06cbfc6731c8fb3e12f7366a70fd6e798b1e155b2ed7ef"
+    },
+    {
+      "candidateId": "request-sequence__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "request-sequence",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "create-lifelines",
+          "label": "Create Lifelines",
+          "value": "validation precedes review",
+          "sourceId": "sequence-events"
+        },
+        {
+          "operationId": "create-ordered-messages",
+          "label": "Create Ordered Messages",
+          "value": "acceptance precedes commit",
+          "sourceId": "sequence-events"
+        },
+        {
+          "operationId": "show-failure-return",
+          "label": "Show Failure Return",
+          "value": "adapter returns receipt",
+          "sourceId": "sequence-events"
+        }
+      ],
+      "receiptDigest": "sha256:eb486bc79e65b10fb3dfbca9ea126223fdb557c7de330eeb29fcf361b5dd00db"
+    },
+    {
+      "candidateId": "request-sequence__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "request-sequence",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8543,
+        "inputTokens": 2,
+        "outputTokens": 521,
+        "costMicroUsd": 8941
+      },
+      "operations": [
+        {
+          "label": "Participants",
+          "operationId": "create-lifelines",
+          "sourceId": "sequence-events",
+          "value": "User, NodeSlide client, planning model, validator, adapter"
+        },
+        {
+          "label": "Ordered flow",
+          "operationId": "create-ordered-messages",
+          "sourceId": "sequence-events",
+          "value": "Submit brief → send context → return plan → validate → review → commit → receipt"
+        },
+        {
+          "label": "Failure path",
+          "operationId": "show-failure-return",
+          "sourceId": "sequence-events",
+          "value": "Validator returns issues to client instead of advancing to review"
+        }
+      ],
+      "receiptDigest": "sha256:28d6655d55c38632ebaf1902bef2b785896266e1249c4f7a9e20325638557e57"
+    },
+    {
+      "candidateId": "request-sequence__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "request-sequence",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 21840,
+        "inputTokens": 1082,
+        "outputTokens": 334,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Initialize Participants",
+          "operationId": "create-lifelines",
+          "sourceId": "sequence-events",
+          "value": "User, Client, Model, Validator, Reviewer, Adapter"
+        },
+        {
+          "label": "Standard Request Flow",
+          "operationId": "create-ordered-messages",
+          "sourceId": "sequence-events",
+          "value": "Submit -> Plan -> Validate -> Review -> Commit -> Receipt"
+        },
+        {
+          "label": "Validation Failure",
+          "operationId": "show-failure-return",
+          "sourceId": "sequence-events",
+          "value": "Validator returns issues to Client"
+        }
+      ],
+      "receiptDigest": "sha256:434ba772c88e23283a4b660e228a4760da52eb9a60241dc95e87f6217501c601"
+    },
+    {
+      "candidateId": "request-sequence__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "request-sequence",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 16502,
+        "inputTokens": 838,
+        "outputTokens": 281,
+        "costMicroUsd": 1205
+      },
+      "operations": [
+        {
+          "label": "Five lifelines: User, NodeSlide client, Planning model, Validator, Adapter",
+          "operationId": "create-lifelines",
+          "sourceId": "sequence-events",
+          "value": "5 participants"
+        },
+        {
+          "label": "Ordered messages: submit brief, bounded context, typed plan, validate, human review, commit, versioned receipt",
+          "operationId": "create-ordered-messages",
+          "sourceId": "sequence-events",
+          "value": "7 messages in order"
+        },
+        {
+          "label": "Failed-validation return: validator sends issues back to the client, before review and commit",
+          "operationId": "show-failure-return",
+          "sourceId": "sequence-events",
+          "value": "1 return path"
+        }
+      ],
+      "receiptDigest": "sha256:2ccb13af699b6e85353d3d99bc97eb2db5bce2c4b6a9d7abc8775eb8584239e7"
+    },
+    {
+      "candidateId": "request-sequence__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "request-sequence",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7885,
+        "inputTokens": 2,
+        "outputTokens": 523,
+        "costMicroUsd": 8974
+      },
+      "operations": [
+        {
+          "label": "Participants",
+          "operationId": "create-lifelines",
+          "sourceId": "sequence-events",
+          "value": "User, NodeSlide Client, Planning Model, Validator, Adapter"
+        },
+        {
+          "label": "Primary Flow",
+          "operationId": "create-ordered-messages",
+          "sourceId": "sequence-events",
+          "value": "Submit brief → send context → return typed plan → validate → route to human review → commit accepted proposal → return versioned receipt"
+        },
+        {
+          "label": "Failure Path",
+          "operationId": "show-failure-return",
+          "sourceId": "sequence-events",
+          "value": "Validator returns issues directly to Client when validation fails, bypassing review and commit"
+        }
+      ],
+      "receiptDigest": "sha256:6c70fe660efd3b59858f9a6024152503fb8c52e3c9873c87f36ec9210a1bdc3d"
+    },
+    {
+      "candidateId": "request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "request-sequence",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 18461,
+        "inputTokens": 1084,
+        "outputTokens": 323,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Initialize Participants",
+          "operationId": "create-lifelines",
+          "sourceId": "sequence-events",
+          "value": "User, Client, Model, Validator, Reviewer, Adapter"
+        },
+        {
+          "label": "Standard Request Flow",
+          "operationId": "create-ordered-messages",
+          "sourceId": "sequence-events",
+          "value": "Submit -> Plan -> Validate -> Review -> Commit -> Receipt"
+        },
+        {
+          "label": "Validation Failure Path",
+          "operationId": "show-failure-return",
+          "sourceId": "sequence-events",
+          "value": "Validator returns issues to Client"
+        }
+      ],
+      "receiptDigest": "sha256:90fd7d933ba30047520b7da6370c8b30fc847486b97e47e40371d9296f72e9f1"
+    },
+    {
+      "candidateId": "request-sequence__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "request-sequence",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15806,
+        "inputTokens": 840,
+        "outputTokens": 274,
+        "costMicroUsd": 1189
+      },
+      "operations": [
+        {
+          "label": "Five lifelines",
+          "operationId": "create-lifelines",
+          "sourceId": "sequence-events",
+          "value": "User, NodeSlide client, planning model, validator, adapter"
+        },
+        {
+          "label": "Ordered flow",
+          "operationId": "create-ordered-messages",
+          "sourceId": "sequence-events",
+          "value": "Submit brief → bounded context → typed plan → validate → human review → commit → versioned receipt"
+        },
+        {
+          "label": "Failure return",
+          "operationId": "show-failure-return",
+          "sourceId": "sequence-events",
+          "value": "Validator returns issues to the client; the proposal does not advance to review or commit"
+        }
+      ],
+      "receiptDigest": "sha256:1395bcff67c572e1954b9ae3847face8f62028cf9e38c403fd8001b18d7da99e"
+    },
+    {
+      "candidateId": "research-timeline__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "research-timeline",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "place-time-proportional-milestones",
+          "label": "Place Time Proportional Milestones",
+          "value": "question frozen July 1",
+          "sourceId": "research-dates"
+        },
+        {
+          "operationId": "emphasize-review-gate",
+          "label": "Emphasize Review Gate",
+          "value": "blind review completed July 9",
+          "sourceId": "research-dates"
+        },
+        {
+          "operationId": "bind-dates",
+          "label": "Bind Dates",
+          "value": "update approved July 11",
+          "sourceId": "research-dates"
+        }
+      ],
+      "receiptDigest": "sha256:700efeb836f313d7f64c55a1f13259433b93bc62d6e0cdadde3acbb8e05f51dd"
+    },
+    {
+      "candidateId": "research-timeline__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "research-timeline",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 10822,
+        "inputTokens": 2,
+        "outputTokens": 544,
+        "costMicroUsd": 9049
+      },
+      "operations": [
+        {
+          "label": "Milestone spacing by elapsed days",
+          "operationId": "place-time-proportional-milestones",
+          "sourceId": "research-dates",
+          "value": "July 1 → July 3 → July 6 → July 9 → July 11"
+        },
+        {
+          "label": "Blind review gate highlighted",
+          "operationId": "emphasize-review-gate",
+          "sourceId": "research-dates",
+          "value": "blind_review_completed July 9"
+        },
+        {
+          "label": "Dates bound to milestone shapes",
+          "operationId": "bind-dates",
+          "sourceId": "research-dates",
+          "value": "question_frozen 2026-07-01; evidence_collected 2026-07-03; candidates_generated 2026-07-06; blind_review_completed 2026-07-09; harness_update_approved 2026-07-11"
+        }
+      ],
+      "receiptDigest": "sha256:daee94fa7a54db5b756648a9d3dacfccc296755c540a79afdf1f187df71053d9"
+    },
+    {
+      "candidateId": "research-timeline__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "research-timeline",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 11473,
+        "inputTokens": 1113,
+        "outputTokens": 356,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Proportional spacing based on elapsed days",
+          "operationId": "place-time-proportional-milestones",
+          "sourceId": "research-dates",
+          "value": "2026-07-01 to 2026-07-11"
+        },
+        {
+          "label": "Highlight blind review completion",
+          "operationId": "emphasize-review-gate",
+          "sourceId": "research-dates",
+          "value": "2026-07-09"
+        },
+        {
+          "label": "Attach specific dates to milestones",
+          "operationId": "bind-dates",
+          "sourceId": "research-dates",
+          "value": "July 1, 3, 6, 9, 11"
+        }
+      ],
+      "receiptDigest": "sha256:49262adef9f4f31160edf2ac04d26386e5036a2771f09bb92fc11531dd372191"
+    },
+    {
+      "candidateId": "research-timeline__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "research-timeline",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 19820,
+        "inputTokens": 837,
+        "outputTokens": 337,
+        "costMicroUsd": 1344
+      },
+      "operations": [
+        {
+          "label": "Time-Proportional Milestones",
+          "operationId": "place-time-proportional-milestones",
+          "sourceId": "research-dates",
+          "value": "Milestones spaced by elapsed days: Jul 1, Jul 3, Jul 6, Jul 9, Jul 11"
+        },
+        {
+          "label": "Emphasize Review Gate",
+          "operationId": "emphasize-review-gate",
+          "sourceId": "research-dates",
+          "value": "Blind review completed July 9 highlighted as decision gate"
+        },
+        {
+          "label": "Bind Dates",
+          "operationId": "bind-dates",
+          "sourceId": "research-dates",
+          "value": "Question frozen July 1; blind review completed July 9; update approved July 11"
+        }
+      ],
+      "receiptDigest": "sha256:178c22fe199be9520073e82289656528381da0460f8d1a59d9b0ecf43a662333"
+    },
+    {
+      "candidateId": "research-timeline__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "research-timeline",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8008,
+        "inputTokens": 2,
+        "outputTokens": 482,
+        "costMicroUsd": 8441
+      },
+      "operations": [
+        {
+          "label": "Time-proportional milestone placement",
+          "operationId": "place-time-proportional-milestones",
+          "sourceId": "research-dates",
+          "value": "July 1 - July 11 (10 days), spaced by elapsed days"
+        },
+        {
+          "label": "Blind review gate emphasis",
+          "operationId": "emphasize-review-gate",
+          "sourceId": "research-dates",
+          "value": "Blind review completed July 9"
+        },
+        {
+          "label": "Bound milestone dates",
+          "operationId": "bind-dates",
+          "sourceId": "research-dates",
+          "value": "question frozen July 1; blind review completed July 9; update approved July 11"
+        }
+      ],
+      "receiptDigest": "sha256:792a59481c42f39396031592ed725a1dd60767a9fc65830ce108d0933a820bd3"
+    },
+    {
+      "candidateId": "research-timeline__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "research-timeline",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 18970,
+        "inputTokens": 1115,
+        "outputTokens": 314,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Milestone Spacing",
+          "operationId": "place-time-proportional-milestones",
+          "sourceId": "research-dates",
+          "value": "Proportional to elapsed days"
+        },
+        {
+          "label": "Review Gate",
+          "operationId": "emphasize-review-gate",
+          "sourceId": "research-dates",
+          "value": "Blind Review Completed (July 9)"
+        },
+        {
+          "label": "Date Binding",
+          "operationId": "bind-dates",
+          "sourceId": "research-dates",
+          "value": "July 1 to July 11"
+        }
+      ],
+      "receiptDigest": "sha256:cd8896cdc9ed07bce49839de76d4e1dd0d018501d266c2ca5d6acae337eed212"
+    },
+    {
+      "candidateId": "research-timeline__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "research-timeline",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 16211,
+        "inputTokens": 839,
+        "outputTokens": 319,
+        "costMicroUsd": 1300
+      },
+      "operations": [
+        {
+          "label": "Time-proportional milestone placement",
+          "operationId": "place-time-proportional-milestones",
+          "sourceId": "research-dates",
+          "value": "Five milestones spaced by elapsed days: Jul 1, Jul 3, Jul 6, Jul 9, Jul 11"
+        },
+        {
+          "label": "Emphasize the blind review gate",
+          "operationId": "emphasize-review-gate",
+          "sourceId": "research-dates",
+          "value": "Blind review completed July 9 rendered as the largest, central gate milestone before approval"
+        },
+        {
+          "label": "Bind ledger dates to milestones",
+          "operationId": "bind-dates",
+          "sourceId": "research-dates",
+          "value": "Question frozen Jul 1; evidence collected Jul 3; candidates generated Jul 6; blind review completed Jul 9; harness update approved Jul 11"
+        }
+      ],
+      "receiptDigest": "sha256:845bc9c6bcf7a6bb23a09c2c543a7641dc770fa8ee10aee84c7fa87607ea4647"
+    },
+    {
+      "candidateId": "risk-matrix__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "risk-matrix",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "draw-labeled-axes",
+          "label": "Draw Labeled Axes",
+          "value": "pipeline coverage is highest priority",
+          "sourceId": "q2-risks"
+        },
+        {
+          "operationId": "place-editable-markers",
+          "label": "Place Editable Markers",
+          "value": "implementation capacity is 3 by 4",
+          "sourceId": "q2-risks"
+        },
+        {
+          "operationId": "encode-priority-zone",
+          "label": "Encode Priority Zone",
+          "value": "retention concentration is 2 by 5",
+          "sourceId": "q2-risks"
+        }
+      ],
+      "receiptDigest": "sha256:b8502f9cc38459689185e55a949a0068874bc1460b2cc3e64f7152f2760fe12c"
+    },
+    {
+      "candidateId": "risk-matrix__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "risk-matrix",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7424,
+        "inputTokens": 2,
+        "outputTokens": 471,
+        "costMicroUsd": 5010
+      },
+      "operations": [
+        {
+          "label": "Likelihood vs Impact (1-5 scale)",
+          "operationId": "draw-labeled-axes",
+          "sourceId": "q2-risks",
+          "value": "1-5"
+        },
+        {
+          "label": "Risk markers: pipeline coverage, implementation capacity, retention concentration",
+          "operationId": "place-editable-markers",
+          "sourceId": "q2-risks",
+          "value": "pipeline coverage (4,5); implementation capacity (3,4); retention concentration (2,5)"
+        },
+        {
+          "label": "High-priority zone highlighting top-right quadrant",
+          "operationId": "encode-priority-zone",
+          "sourceId": "q2-risks",
+          "value": "likelihood>=3 and impact>=4"
+        }
+      ],
+      "receiptDigest": "sha256:153ec3c045cde7f1009f70b5b44995af0ca7e4de641f03710122065d62267dad"
+    },
+    {
+      "candidateId": "risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "risk-matrix",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 31902,
+        "inputTokens": 1088,
+        "outputTokens": 352,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Likelihood (1-5) vs Impact (1-5)",
+          "operationId": "draw-labeled-axes",
+          "sourceId": "q2-risks",
+          "value": "X: Likelihood, Y: Impact"
+        },
+        {
+          "label": "Pipeline Coverage (4,5), Implementation Capacity (3,4), Retention Concentration (2,5)",
+          "operationId": "place-editable-markers",
+          "sourceId": "q2-risks",
+          "value": "Markers at specified coordinates"
+        },
+        {
+          "label": "High Priority Zone",
+          "operationId": "encode-priority-zone",
+          "sourceId": "q2-risks",
+          "value": "Top-right quadrant"
+        }
+      ],
+      "receiptDigest": "sha256:0346a96bda6782eeb229738d3f416d0a16c2b7f50694c633139f4cef1b6dba50"
+    },
+    {
+      "candidateId": "risk-matrix__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "risk-matrix",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 16696,
+        "inputTokens": 832,
+        "outputTokens": 305,
+        "costMicroUsd": 1261
+      },
+      "operations": [
+        {
+          "label": "Labeled likelihood and impact axes",
+          "operationId": "draw-labeled-axes",
+          "sourceId": "q2-risks",
+          "value": "Horizontal likelihood axis 1–5; vertical impact axis 1–5, consistent scales"
+        },
+        {
+          "label": "Three editable risk markers",
+          "operationId": "place-editable-markers",
+          "sourceId": "q2-risks",
+          "value": "Pipeline coverage (4,5); implementation capacity (3,4); retention concentration (2,5)"
+        },
+        {
+          "label": "Priority zone",
+          "operationId": "encode-priority-zone",
+          "sourceId": "q2-risks",
+          "value": "Upper-right high-likelihood/high-impact region shaded to flag priority risks"
+        }
+      ],
+      "receiptDigest": "sha256:de0a52e5a0f13fe1e1d133dc0ef68badb2e6ada15ab54d33ccbe4a3a4db1d470"
+    },
+    {
+      "candidateId": "risk-matrix__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "risk-matrix",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 6212,
+        "inputTokens": 2,
+        "outputTokens": 419,
+        "costMicroUsd": 7916
+      },
+      "operations": [
+        {
+          "label": "Likelihood and Impact axes",
+          "operationId": "draw-labeled-axes",
+          "sourceId": "q2-risks",
+          "value": "1-5 scale on both axes"
+        },
+        {
+          "label": "Three risk markers",
+          "operationId": "place-editable-markers",
+          "sourceId": "q2-risks",
+          "value": "pipeline coverage (4,5); implementation capacity (3,4); retention concentration (2,5)"
+        },
+        {
+          "label": "High-priority zone",
+          "operationId": "encode-priority-zone",
+          "sourceId": "q2-risks",
+          "value": "pipeline coverage is highest priority"
+        }
+      ],
+      "receiptDigest": "sha256:0de3f3be5721dc2a50a5ab3850cdeac452a10282b4379c7f2188ffb6d390454c"
+    },
+    {
+      "candidateId": "risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "risk-matrix",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 29194,
+        "inputTokens": 1090,
+        "outputTokens": 336,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Likelihood vs Impact Axes",
+          "operationId": "draw-labeled-axes",
+          "sourceId": "q2-risks",
+          "value": "1-5 Scale"
+        },
+        {
+          "label": "Risk Markers",
+          "operationId": "place-editable-markers",
+          "sourceId": "q2-risks",
+          "value": "Pipeline (4,5), Capacity (3,4), Retention (2,5)"
+        },
+        {
+          "label": "High Priority Zone",
+          "operationId": "encode-priority-zone",
+          "sourceId": "q2-risks",
+          "value": "Top-Right Quadrant"
+        }
+      ],
+      "receiptDigest": "sha256:0bd1d9e8f0881dfbc4c058051fc7cad360f4e81ceab8e956989799777bba695d"
+    },
+    {
+      "candidateId": "risk-matrix__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "risk-matrix",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 17943,
+        "inputTokens": 834,
+        "outputTokens": 261,
+        "costMicroUsd": 1152
+      },
+      "operations": [
+        {
+          "label": "Labeled 1–5 likelihood and impact axes",
+          "operationId": "draw-labeled-axes",
+          "sourceId": "q2-risks",
+          "value": "Likelihood 1–5 horizontal; impact 1–5 vertical"
+        },
+        {
+          "label": "Three editable risk markers",
+          "operationId": "place-editable-markers",
+          "sourceId": "q2-risks",
+          "value": "Pipeline coverage 4/5; implementation capacity 3/4; retention concentration 2/5"
+        },
+        {
+          "label": "Priority zone highlighting",
+          "operationId": "encode-priority-zone",
+          "sourceId": "q2-risks",
+          "value": "High likelihood–impact zone emphasizes pipeline coverage as highest priority"
+        }
+      ],
+      "receiptDigest": "sha256:7fe89b1b1753bf2c704e6dfaed7fda54faf901fedf85a43766dda87f9897c4b6"
+    },
+    {
+      "candidateId": "screenshot-callouts__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "screenshot-callouts",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "create-media-placeholder",
+          "label": "Create Media Placeholder",
+          "value": "model selection is visible",
+          "sourceId": "screenshot-absence"
+        },
+        {
+          "operationId": "create-numbered-callouts",
+          "label": "Create Numbered Callouts",
+          "value": "validation status is visible",
+          "sourceId": "screenshot-absence"
+        },
+        {
+          "operationId": "label-missing-evidence",
+          "label": "Label Missing Evidence",
+          "value": "trace inspection is available",
+          "sourceId": "screenshot-absence"
+        }
+      ],
+      "receiptDigest": "sha256:a68595c67a930967b1fd08f7dddb10471246a5551089c4af86aa58445fc55d5a"
+    },
+    {
+      "candidateId": "screenshot-callouts__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "screenshot-callouts",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8740,
+        "inputTokens": 2,
+        "outputTokens": 648,
+        "costMicroUsd": 10196
+      },
+      "operations": [
+        {
+          "label": "Screenshot placeholder",
+          "operationId": "create-media-placeholder",
+          "sourceId": "screenshot-absence",
+          "value": "16:9 region marked 'Replacement required — no bitmap supplied'"
+        },
+        {
+          "label": "Numbered UI callouts",
+          "operationId": "create-numbered-callouts",
+          "sourceId": "screenshot-absence",
+          "value": "1 Model selection is visible · 2 Validation status is visible · 3 Trace inspection is available"
+        },
+        {
+          "label": "Evidence gap label",
+          "operationId": "label-missing-evidence",
+          "sourceId": "screenshot-absence",
+          "value": "No product screenshot bitmap included; verified surfaces only"
+        }
+      ],
+      "receiptDigest": "sha256:0f67d711784b6bc84c20b7e4e48a60e958e4531b5870ab609910ddd8ab23dcca"
+    },
+    {
+      "candidateId": "screenshot-callouts__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "screenshot-callouts",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "failed",
+      "evaluation": {
+        "briefAdherence": false,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 9418,
+        "inputTokens": 1080,
+        "outputTokens": 332,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Product Interface Area",
+          "operationId": "create-media-placeholder",
+          "sourceId": "screenshot-absence",
+          "value": "[REPLACEMENT REQUIRED: Insert NodeSlide Editor Screenshot]"
+        },
+        {
+          "label": "1. Model Selection",
+          "operationId": "create-numbered-callouts",
+          "sourceId": "screenshot-absence",
+          "value": "Select generation parameters"
+        },
+        {
+          "label": "2. Validation Status",
+          "operationId": "create-numbered-callouts",
+          "sourceId": "screenshot-absence",
+          "value": "Real-time verification check"
+        }
+      ],
+      "receiptDigest": "sha256:de55f4f9ef7a77b695b6f8cf97275d64dfe4039bfbb41fc1c4d50f1171db257c"
+    },
+    {
+      "candidateId": "screenshot-callouts__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "screenshot-callouts",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 23062,
+        "inputTokens": 830,
+        "outputTokens": 332,
+        "costMicroUsd": 1328
+      },
+      "operations": [
+        {
+          "label": "16:9 media region",
+          "operationId": "create-media-placeholder",
+          "sourceId": "screenshot-absence",
+          "value": "Large focal placeholder marked 'Screenshot replacement required'; no interface is simulated."
+        },
+        {
+          "label": "Numbered callouts 1-3",
+          "operationId": "create-numbered-callouts",
+          "sourceId": "screenshot-absence",
+          "value": "1) Model selection is visible. 2) Validation status is visible. 3) Trace inspection is available."
+        },
+        {
+          "label": "Missing-evidence label",
+          "operationId": "label-missing-evidence",
+          "sourceId": "screenshot-absence",
+          "value": "Placeholder is labeled as replacement-required because no bitmap evidence was provided."
+        }
+      ],
+      "receiptDigest": "sha256:1f6686307e389a983ee84a035632f369690a9feb9440e109f4d2e5c195ccb5a8"
+    },
+    {
+      "candidateId": "screenshot-callouts__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "screenshot-callouts",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7338,
+        "inputTokens": 2,
+        "outputTokens": 524,
+        "costMicroUsd": 8969
+      },
+      "operations": [
+        {
+          "label": "Screenshot placeholder",
+          "operationId": "create-media-placeholder",
+          "sourceId": "screenshot-absence",
+          "value": "16:9 media region marked replacement-required"
+        },
+        {
+          "label": "Numbered callouts",
+          "operationId": "create-numbered-callouts",
+          "sourceId": "screenshot-absence",
+          "value": "1) Model selection is visible 2) Validation status is visible 3) Trace inspection is available"
+        },
+        {
+          "label": "Missing evidence label",
+          "operationId": "label-missing-evidence",
+          "sourceId": "screenshot-absence",
+          "value": "Screenshot replacement required — no bitmap supplied"
+        }
+      ],
+      "receiptDigest": "sha256:6727ce2a770d0580e4fb0fa5f47f26d6bdf940c0cf90f13eb941041f4a9cc8b7"
+    },
+    {
+      "candidateId": "screenshot-callouts__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "screenshot-callouts",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15152,
+        "inputTokens": 1082,
+        "outputTokens": 334,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Product Interface Area",
+          "operationId": "create-media-placeholder",
+          "sourceId": "screenshot-absence",
+          "value": "16:9 Media Placeholder"
+        },
+        {
+          "label": "Workflow Controls",
+          "operationId": "create-numbered-callouts",
+          "sourceId": "screenshot-absence",
+          "value": "1. Model Selection, 2. Validation Status, 3. Trace Inspection"
+        },
+        {
+          "label": "Evidence Status",
+          "operationId": "label-missing-evidence",
+          "sourceId": "screenshot-absence",
+          "value": "Screenshot replacement required"
+        }
+      ],
+      "receiptDigest": "sha256:7e4a9b40d814a0844a8a2502975583ebe6a321ec3ec0374afa4bb58491200b6b"
+    },
+    {
+      "candidateId": "screenshot-callouts__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "screenshot-callouts",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "failed",
+      "evaluation": {
+        "briefAdherence": false,
+        "visualPassed": true,
+        "evidencePassed": false,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 24680,
+        "inputTokens": 832,
+        "outputTokens": 372,
+        "costMicroUsd": 1429
+      },
+      "operations": [
+        {
+          "label": "16:9 media region",
+          "operationId": "create-media-placeholder",
+          "sourceId": "screenshot-absence",
+          "value": "Large central placeholder marked 'Screenshot replacement required — no bitmap supplied'; no fabricated UI rendered inside."
+        },
+        {
+          "label": "Three numbered callouts",
+          "operationId": "create-numbered-callouts",
+          "sourceId": "screenshot-absence",
+          "value": "1) Model selection is visible · 2) Validation status is visible · 3) Trace inspection is available — editable callouts anchored around the media region."
+        },
+        {
+          "label": "Missing-evidence disclosure",
+          "operationId": "label-missing-evidence",
+          "sourceId": "screenshot-absence",
+          "value": "Placeholder caption states that the product screenshot is absent and must be replaced with a verified capture before distribution."
+        }
+      ],
+      "receiptDigest": "sha256:504f9d66382260f1a2d9764ed29981b55c46800d2637fa695b26f2330b260dac"
+    },
+    {
+      "candidateId": "system-architecture__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "system-architecture",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "create-editable-nodes",
+          "label": "Create Editable Nodes",
+          "value": "validation before commit",
+          "sourceId": "architecture-contract"
+        },
+        {
+          "operationId": "create-typed-connectors",
+          "label": "Create Typed Connectors",
+          "value": "memory adapter",
+          "sourceId": "architecture-contract"
+        },
+        {
+          "operationId": "mark-trust-boundary",
+          "label": "Mark Trust Boundary",
+          "value": "Convex adapter",
+          "sourceId": "architecture-contract"
+        }
+      ],
+      "receiptDigest": "sha256:82961a68acf2270d14006aae4f3fb80af27fed7cdcc628d016072b8b687028a4"
+    },
+    {
+      "candidateId": "system-architecture__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "system-architecture",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 6979,
+        "inputTokens": 2,
+        "outputTokens": 495,
+        "costMicroUsd": 8709
+      },
+      "operations": [
+        {
+          "label": "Client, protocol, validation, and adapters",
+          "operationId": "create-editable-nodes",
+          "sourceId": "architecture-contract",
+          "value": "Client, portable NodeSlide protocol, validation engine, adapter boundary, memory adapter, Convex adapter, Postgres adapter"
+        },
+        {
+          "label": "Protocol calls and validation gate",
+          "operationId": "create-typed-connectors",
+          "sourceId": "architecture-contract",
+          "value": "initialize, stage, commit, restore; validation before commit"
+        },
+        {
+          "label": "Adapter boundary",
+          "operationId": "mark-trust-boundary",
+          "sourceId": "architecture-contract",
+          "value": "Adapter boundary separates portable protocol from backend-specific persistence"
+        }
+      ],
+      "receiptDigest": "sha256:1410ec15f99b761a9b2a18cc2c6208627a122781f5ea71b5698a943272feddde"
+    },
+    {
+      "candidateId": "system-architecture__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "system-architecture",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 12426,
+        "inputTokens": 1081,
+        "outputTokens": 358,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Define core components",
+          "operationId": "create-editable-nodes",
+          "sourceId": "architecture-contract",
+          "value": "Client, Portable Protocol, Validation Engine, Adapter Boundary, Memory, Convex, Postgres"
+        },
+        {
+          "label": "Map protocol flow",
+          "operationId": "create-typed-connectors",
+          "sourceId": "architecture-contract",
+          "value": "Client -> Protocol -> Validation -> Adapter Boundary -> Adapters"
+        },
+        {
+          "label": "Isolate persistence",
+          "operationId": "mark-trust-boundary",
+          "sourceId": "architecture-contract",
+          "value": "Boundary between Protocol/Validation and Backend Adapters"
+        }
+      ],
+      "receiptDigest": "sha256:fe305a65232dc829528cc7952148e43175d5cac0db5e7b180523251f552d7777"
+    },
+    {
+      "candidateId": "system-architecture__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "system-architecture",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 14910,
+        "inputTokens": 826,
+        "outputTokens": 349,
+        "costMicroUsd": 1368
+      },
+      "operations": [
+        {
+          "label": "Editable nodes: Client, Portable NodeSlide Protocol (initialize, stage, commit, restore), Validation Engine, Adapter Boundary, Memory Adapter, Convex Adapter, Postgres Adapter",
+          "operationId": "create-editable-nodes",
+          "sourceId": "architecture-contract",
+          "value": "7 native editable nodes in a single left-to-right reading direction"
+        },
+        {
+          "label": "Typed connectors: calls (Client to Protocol), validates-before-commit (Protocol to Validation Engine), persists (Validation Engine to each adapter via boundary)",
+          "operationId": "create-typed-connectors",
+          "sourceId": "architecture-contract",
+          "value": "Labeled typed connectors linking protocol, validation, and the three named adapters"
+        },
+        {
+          "label": "Trust boundary: visually distinct adapter boundary separating portable protocol and validation from backend-specific persistence adapters",
+          "operationId": "mark-trust-boundary",
+          "sourceId": "architecture-contract",
+          "value": "1 visibly distinct trust boundary around the adapter zone"
+        }
+      ],
+      "receiptDigest": "sha256:162dbf96a0b3ea8aba8a3b73f7ecbb24a36189bc5214b5febca2e0be5ef837ea"
+    },
+    {
+      "candidateId": "system-architecture__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "system-architecture",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7296,
+        "inputTokens": 2,
+        "outputTokens": 502,
+        "costMicroUsd": 8791
+      },
+      "operations": [
+        {
+          "label": "Core nodes",
+          "operationId": "create-editable-nodes",
+          "sourceId": "architecture-contract",
+          "value": "Client, NodeSlide protocol, validation engine, adapter boundary, memory adapter, Convex adapter, Postgres adapter"
+        },
+        {
+          "label": "Protocol flow",
+          "operationId": "create-typed-connectors",
+          "sourceId": "architecture-contract",
+          "value": "Client to protocol to validation before commit to adapter boundary to adapters"
+        },
+        {
+          "label": "Trust boundary",
+          "operationId": "mark-trust-boundary",
+          "sourceId": "architecture-contract",
+          "value": "Boundary separates portable protocol and validation from backend-specific adapters"
+        }
+      ],
+      "receiptDigest": "sha256:ea13f50fa3d08453328848fe377f24cff65040c80bf9aa33d656b73c42c9ff8d"
+    },
+    {
+      "candidateId": "system-architecture__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "system-architecture",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 17959,
+        "inputTokens": 1083,
+        "outputTokens": 334,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Define core components",
+          "operationId": "create-editable-nodes",
+          "sourceId": "architecture-contract",
+          "value": "Client, Protocol, Validation, Adapter Boundary, Memory, Convex, Postgres"
+        },
+        {
+          "label": "Map protocol lifecycle",
+          "operationId": "create-typed-connectors",
+          "sourceId": "architecture-contract",
+          "value": "Initialize, Stage, Commit, Restore"
+        },
+        {
+          "label": "Isolate persistence layer",
+          "operationId": "mark-trust-boundary",
+          "sourceId": "architecture-contract",
+          "value": "Adapter Boundary"
+        }
+      ],
+      "receiptDigest": "sha256:50e0b8bafdfa2d118a292311cc473f41ee68df9cd871f1c48194fb3d46586a9e"
+    },
+    {
+      "candidateId": "system-architecture__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "system-architecture",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 14905,
+        "inputTokens": 828,
+        "outputTokens": 320,
+        "costMicroUsd": 1296
+      },
+      "operations": [
+        {
+          "label": "Editable nodes",
+          "operationId": "create-editable-nodes",
+          "sourceId": "architecture-contract",
+          "value": "Client, Portable Protocol, Validation Engine, Adapter Boundary, Memory Adapter, Convex Adapter, Postgres Adapter — each a native editable shape"
+        },
+        {
+          "label": "Typed connectors",
+          "operationId": "create-typed-connectors",
+          "sourceId": "architecture-contract",
+          "value": "Labeled connectors: initialize, stage, commit, restore from Client through Protocol; 'validation before commit' gate into the adapter boundary; persistence links to each adapter"
+        },
+        {
+          "label": "Trust boundary",
+          "operationId": "mark-trust-boundary",
+          "sourceId": "architecture-contract",
+          "value": "Adapter Boundary rendered as one visibly distinct divider separating portable protocol from backend-specific adapters"
+        }
+      ],
+      "receiptDigest": "sha256:a7fa51a675c7df914090c781c01a458d84bd44d856bb1b854fb0fad9e211bf23"
+    },
+    {
+      "candidateId": "uncertainty-range__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "fixtureId": "uncertainty-range",
+      "model": "nodeslide-artifact-builder-v1",
+      "directionId": "deterministic-baseline",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "operationId": "plot-observed-and-forecast",
+          "label": "Plot Observed And Forecast",
+          "value": "base forecast reaches 11.4",
+          "sourceId": "forecast-range-data"
+        },
+        {
+          "operationId": "draw-editable-range",
+          "label": "Draw Editable Range",
+          "value": "Q5 range is 9.0 to 13.8",
+          "sourceId": "forecast-range-data"
+        },
+        {
+          "operationId": "label-modeled-values",
+          "label": "Label Modeled Values",
+          "value": "uncertainty widens",
+          "sourceId": "forecast-range-data"
+        }
+      ],
+      "receiptDigest": "sha256:03854b8a5746469a8cbb50bf7412d9cacab296b6924085d902409cb88cb52e40"
+    },
+    {
+      "candidateId": "uncertainty-range__evidence-editorial__anthropic-claude-sonnet-5",
+      "fixtureId": "uncertainty-range",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 9226,
+        "inputTokens": 2,
+        "outputTokens": 588,
+        "costMicroUsd": 9716
+      },
+      "operations": [
+        {
+          "label": "Observed and Base Forecast Line",
+          "operationId": "plot-observed-and-forecast",
+          "sourceId": "forecast-range-data",
+          "value": "Q1:8.2, Q2:9.0 (actual); Q3:9.7, Q4:10.5, Q5:11.4 (base forecast)"
+        },
+        {
+          "label": "Low-to-High Uncertainty Band",
+          "operationId": "draw-editable-range",
+          "sourceId": "forecast-range-data",
+          "value": "Q3:8.9–10.6; Q4:9.1–12.0; Q5:9.0–13.8"
+        },
+        {
+          "label": "Modeled Forecast Label",
+          "operationId": "label-modeled-values",
+          "sourceId": "forecast-range-data",
+          "value": "Base forecast reaches 11.4; Q5 range is 9.0 to 13.8; uncertainty widens"
+        }
+      ],
+      "receiptDigest": "sha256:0d09bdb9c88c67fcda58c873c0387f8ee1ce94f9c44b08b7f51a549cfe36123a"
+    },
+    {
+      "candidateId": "uncertainty-range__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "uncertainty-range",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15219,
+        "inputTokens": 1175,
+        "outputTokens": 400,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Observed & Base",
+          "operationId": "plot-observed-and-forecast",
+          "sourceId": "forecast-range-data",
+          "value": "Q1: 8.2, Q2: 9.0 | Base: Q3: 9.7, Q4: 10.5, Q5: 11.4"
+        },
+        {
+          "label": "Uncertainty Band",
+          "operationId": "draw-editable-range",
+          "sourceId": "forecast-range-data",
+          "value": "Q3: 8.9-10.6, Q4: 9.1-12.0, Q5: 9.0-13.8"
+        },
+        {
+          "label": "Modeled Range",
+          "operationId": "label-modeled-values",
+          "sourceId": "forecast-range-data",
+          "value": "Widening uncertainty"
+        }
+      ],
+      "receiptDigest": "sha256:1ab908ea742316fe01074d0c720993bccdeddd7fb944a3d490774f460dc11379"
+    },
+    {
+      "candidateId": "uncertainty-range__evidence-editorial__moonshotai-kimi-k3",
+      "fixtureId": "uncertainty-range",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 16722,
+        "inputTokens": 896,
+        "outputTokens": 350,
+        "costMicroUsd": 1412
+      },
+      "operations": [
+        {
+          "label": "Observed and base forecast",
+          "operationId": "plot-observed-and-forecast",
+          "sourceId": "forecast-range-data",
+          "value": "Actuals Q1 8.2, Q2 9.0; base forecast Q3 9.7, Q4 10.5, Q5 11.4"
+        },
+        {
+          "label": "Modeled low–high band",
+          "operationId": "draw-editable-range",
+          "sourceId": "forecast-range-data",
+          "value": "Q3 8.9–10.6; Q4 9.1–12.0; Q5 9.0–13.8, widening over time"
+        },
+        {
+          "label": "Direct labels",
+          "operationId": "label-modeled-values",
+          "sourceId": "forecast-range-data",
+          "value": "Label base forecast reaches 11.4 and Q5 range 9.0 to 13.8 as modeled values"
+        }
+      ],
+      "receiptDigest": "sha256:0a646a27a645b70ffc77f5ee90ccd8b3056d4f5d9a6dc3de5da91bfbce3a7455"
+    },
+    {
+      "candidateId": "uncertainty-range__expressive-technical__anthropic-claude-sonnet-5",
+      "fixtureId": "uncertainty-range",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 9717,
+        "inputTokens": 2,
+        "outputTokens": 642,
+        "costMicroUsd": 10269
+      },
+      "operations": [
+        {
+          "label": "Observed and Base Forecast Line",
+          "operationId": "plot-observed-and-forecast",
+          "sourceId": "forecast-range-data",
+          "value": "Q1:8.2, Q2:9.0 (actual); Q3:9.7, Q4:10.5, Q5:11.4 (base forecast)"
+        },
+        {
+          "label": "Modeled Low-High Uncertainty Band",
+          "operationId": "draw-editable-range",
+          "sourceId": "forecast-range-data",
+          "value": "Q3:8.9-10.6, Q4:9.1-12.0, Q5:9.0-13.8"
+        },
+        {
+          "label": "Modeled Range Label",
+          "operationId": "label-modeled-values",
+          "sourceId": "forecast-range-data",
+          "value": "Q5 range is 9.0 to 13.8"
+        }
+      ],
+      "receiptDigest": "sha256:796a9e233fe37da29cbf8c833b46a2afec110167edd7af3e3b351ac0d8f0a94a"
+    },
+    {
+      "candidateId": "uncertainty-range__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "fixtureId": "uncertainty-range",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 13650,
+        "inputTokens": 1177,
+        "outputTokens": 402,
+        "costMicroUsd": 0
+      },
+      "operations": [
+        {
+          "label": "Observed & Base Forecast",
+          "operationId": "plot-observed-and-forecast",
+          "sourceId": "forecast-range-data",
+          "value": "Q1: 8.2, Q2: 9.0, Q3: 9.7, Q4: 10.5, Q5: 11.4"
+        },
+        {
+          "label": "Uncertainty Band",
+          "operationId": "draw-editable-range",
+          "sourceId": "forecast-range-data",
+          "value": "Q3: [8.9, 10.6], Q4: [9.1, 12.0], Q5: [9.0, 13.8]"
+        },
+        {
+          "label": "Modeled Range",
+          "operationId": "label-modeled-values",
+          "sourceId": "forecast-range-data",
+          "value": "Widening uncertainty"
+        }
+      ],
+      "receiptDigest": "sha256:d1422dec2a16bb46b1e7edc8ed467bdc0cb99cb96eea2e93c75b0ae3ef7bd5d5"
+    },
+    {
+      "candidateId": "uncertainty-range__expressive-technical__moonshotai-kimi-k3",
+      "fixtureId": "uncertainty-range",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "status": "eligible",
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 22217,
+        "inputTokens": 898,
+        "outputTokens": 358,
+        "costMicroUsd": 1433
+      },
+      "operations": [
+        {
+          "label": "Observed Q1–Q2 and base forecast Q3–Q5",
+          "operationId": "plot-observed-and-forecast",
+          "sourceId": "forecast-range-data",
+          "value": "Actuals 8.2, 9.0; base 9.7, 10.5, 11.4"
+        },
+        {
+          "label": "Editable low–high band for Q3–Q5",
+          "operationId": "draw-editable-range",
+          "sourceId": "forecast-range-data",
+          "value": "Q3 8.9–10.6; Q4 9.1–12.0; Q5 9.0–13.8"
+        },
+        {
+          "label": "Modeled range labels",
+          "operationId": "label-modeled-values",
+          "sourceId": "forecast-range-data",
+          "value": "Base forecast reaches 11.4; Q5 range is 9.0 to 13.8; uncertainty widens"
+        }
+      ],
+      "receiptDigest": "sha256:b44da251469fadafcb7934c9b7ba176c64a8f086086639ce890c0c49ddbc2c31"
+    }
+  ],
+  "selectionPolicy": "Eligibility first; coverage-balance the three live models; alternate visual direction; then latency. Human model-blind preference remains required.",
+  "winners": [
+    {
+      "fixtureId": "hero-thesis",
+      "artifactType": "hero-thesis",
+      "candidateId": "hero-thesis__evidence-editorial__anthropic-claude-sonnet-5",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "browserRender": "artifact-atlas/hero-thesis.png",
+      "pptxFile": "runs/hero-thesis__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+      "receiptDigest": "sha256:1052a7ebc4325f66efeb7194ec8a856ab579326eb3c3b10fc06cc9d5b0bf327c",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    },
+    {
+      "fixtureId": "kpi-strip",
+      "artifactType": "kpi-strip",
+      "candidateId": "kpi-strip__expressive-technical__moonshotai-kimi-k3",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "expressive-technical",
+      "browserRender": "artifact-atlas/kpi-strip.png",
+      "pptxFile": "runs/kpi-strip__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+      "receiptDigest": "sha256:72448a78bbc298c97e16732dcd136a21b39b16e06795c6938beb2cacd5129385",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    },
+    {
+      "fixtureId": "multi-series-trend",
+      "artifactType": "multi-series-chart",
+      "candidateId": "multi-series-trend__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "browserRender": "artifact-atlas/multi-series-trend.png",
+      "pptxFile": "runs/multi-series-trend__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+      "receiptDigest": "sha256:f7cdfd1d6de7f7a6138efc18991f1468d5378d22e121c8382ebe7d71b1c7aa25",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    },
+    {
+      "fixtureId": "uncertainty-range",
+      "artifactType": "uncertainty-range",
+      "candidateId": "uncertainty-range__expressive-technical__anthropic-claude-sonnet-5",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "browserRender": "artifact-atlas/uncertainty-range.png",
+      "pptxFile": "runs/uncertainty-range__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+      "receiptDigest": "sha256:796a9e233fe37da29cbf8c833b46a2afec110167edd7af3e3b351ac0d8f0a94a",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    },
+    {
+      "fixtureId": "system-architecture",
+      "artifactType": "architecture-diagram",
+      "candidateId": "system-architecture__evidence-editorial__moonshotai-kimi-k3",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "browserRender": "artifact-atlas/system-architecture.png",
+      "pptxFile": "runs/system-architecture__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+      "receiptDigest": "sha256:162dbf96a0b3ea8aba8a3b73f7ecbb24a36189bc5214b5febca2e0be5ef837ea",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    },
+    {
+      "fixtureId": "request-sequence",
+      "artifactType": "sequence-diagram",
+      "candidateId": "request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "browserRender": "artifact-atlas/request-sequence.png",
+      "pptxFile": "runs/request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+      "receiptDigest": "sha256:90fd7d933ba30047520b7da6370c8b30fc847486b97e47e40371d9296f72e9f1",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    },
+    {
+      "fixtureId": "research-timeline",
+      "artifactType": "timeline",
+      "candidateId": "research-timeline__evidence-editorial__anthropic-claude-sonnet-5",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "evidence-editorial",
+      "browserRender": "artifact-atlas/research-timeline.png",
+      "pptxFile": "runs/research-timeline__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+      "receiptDigest": "sha256:daee94fa7a54db5b756648a9d3dacfccc296755c540a79afdf1f187df71053d9",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    },
+    {
+      "fixtureId": "screenshot-callouts",
+      "artifactType": "screenshot-callouts",
+      "candidateId": "screenshot-callouts__evidence-editorial__moonshotai-kimi-k3",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "browserRender": "artifact-atlas/screenshot-callouts.png",
+      "pptxFile": "runs/screenshot-callouts__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+      "receiptDigest": "sha256:1f6686307e389a983ee84a035632f369690a9feb9440e109f4d2e5c195ccb5a8",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    },
+    {
+      "fixtureId": "claim-source-lineage",
+      "artifactType": "claim-source-lineage",
+      "candidateId": "claim-source-lineage__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "evidence-editorial",
+      "browserRender": "artifact-atlas/claim-source-lineage.png",
+      "pptxFile": "runs/claim-source-lineage__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+      "receiptDigest": "sha256:661ebe58bd5bdfbb3534d37485ac69cb23dc04f23c2c06d0568f20971b9768cb",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    },
+    {
+      "fixtureId": "quality-cost-equation",
+      "artifactType": "katex-equation",
+      "candidateId": "quality-cost-equation__expressive-technical__anthropic-claude-sonnet-5",
+      "model": "anthropic/claude-sonnet-5",
+      "directionId": "expressive-technical",
+      "browserRender": "artifact-atlas/quality-cost-equation.png",
+      "pptxFile": "runs/quality-cost-equation__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+      "receiptDigest": "sha256:42f2917d64b41d3f77011de8ae80afa7b677accfe6f943549243b957b72fec6b",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    },
+    {
+      "fixtureId": "code-runtime-proof",
+      "artifactType": "code-runtime-proof",
+      "candidateId": "code-runtime-proof__evidence-editorial__moonshotai-kimi-k3",
+      "model": "moonshotai/kimi-k3",
+      "directionId": "evidence-editorial",
+      "browserRender": "artifact-atlas/code-runtime-proof.png",
+      "pptxFile": "runs/code-runtime-proof__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+      "receiptDigest": "sha256:b2eece4e6b55d8ec1ea972c39033f2cfc7f6b8a0d4fcf0ff4519a7f0b8930088",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    },
+    {
+      "fixtureId": "risk-matrix",
+      "artifactType": "risk-matrix",
+      "candidateId": "risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "directionId": "expressive-technical",
+      "browserRender": "artifact-atlas/risk-matrix.png",
+      "pptxFile": "runs/risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+      "receiptDigest": "sha256:0bd1d9e8f0881dfbc4c058051fc7cad360f4e81ceab8e956989799777bba695d",
+      "selection": "machine-provisional",
+      "humanPreference": "pending"
+    }
+  ]
+}

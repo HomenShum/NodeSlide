@@ -1,0 +1,45 @@
+schema_version: nodeslide.model-capability-card/v1
+profile_version: 1
+model: anthropic/claude-sonnet-5
+label: Claude Sonnet 5
+evidence_window:
+  attempted_runs: 24
+  evaluated_runs: 23
+  completed_exports: 23
+  briefs: 12
+  directions: 2
+  harness_version: "deck-gym-v1"
+observed_metrics:
+  live_routes: 6
+  degraded_routes: 17
+  live_claim_passes: 5
+  mean_claim_coverage: 0.289855
+  mean_live_claim_coverage: 0.916667
+  mean_qualified_score: 0.294912
+  mean_raw_score: 0.716691
+  estimated_text_overflows: 34
+  export_success_rate: 0.9583333333333334
+failure_counts:
+  brief_miss: 18
+  generic_fallback: 17
+  text_density: 23
+  wrong_primitive: 23
+  internal_overlap: 6
+  unsupported_claim: 2
+best_roles:
+  - "story-direction candidate"
+  - "independent deck critic candidate"
+avoid_roles:
+  - "unbounded direct slide compositor"
+  - "sole final taste judge"
+required_scaffolding:
+  - "enforce-density-budget"
+  - "require-visual-artifacts"
+  - "repair-internal-overlap"
+  - "source-every-claim"
+confidence:
+  cognitive_behavior: "low — no plan or reasoning traces captured"
+  tool_execution: "low — only browser creation and export were observed"
+  artifact_quality: "high"
+  routing_recommendation: "medium"
+status: "provisional — requires skill-on versus skill-off ablation"

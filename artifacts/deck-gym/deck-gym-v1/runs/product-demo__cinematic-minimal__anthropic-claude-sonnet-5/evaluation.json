@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-evaluation/v1",
+  "runId": "product-demo__cinematic-minimal__anthropic-claude-sonnet-5",
+  "runDigest": "sha256:e8a19bb76ea3f1d1010b9921914f93d58991a8e8b1536129a497831cadb9a1a0",
+  "harnessVersion": "deck-gym-v1",
+  "evaluationGatesDigest": "sha256:b8bbac5b2715a7bdffc997dafc99cd766a13ff35680cc82fa2a0a34aa98d8d2f",
+  "briefId": "product-demo",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "cinematic-minimal",
+  "routeClassification": "live",
+  "evaluatedAt": "2026-07-22T00:15:46.257Z",
+  "status": "failed",
+  "checks": {
+    "slideCount": true,
+    "claimCoverage": false,
+    "forbiddenClaims": false,
+    "distinctLayouts": true,
+    "layoutRepetition": true,
+    "adjacentSimilarity": true,
+    "textAreaRatio": false,
+    "meaningfulVisuals": true,
+    "internalCollisions": false,
+    "requiredArtifacts": false,
+    "liveModelTrace": true,
+    "renderedPptx": true
+  },
+  "dimensions": {
+    "factual": 0.25,
+    "visual": 0.6,
+    "narrative": 0.833333,
+    "rhythm": 0.939394,
+    "artifactIntegrity": 0.333333
+  },
+  "rawScore": 0.591212,
+  "score": 0.147803,
+  "evidence": {
+    "slideCount": 7,
+    "renderedSlideCount": 7,
+    "matchedClaims": [
+      "31",
+      "58"
+    ],
+    "requiredClaimCount": 4,
+    "claimCoverage": 0.5,
+    "forbiddenClaims": [
+      "captured screenshot"
+    ],
+    "distinctLayoutSignatures": 7,
+    "repeatedLayoutCount": 1,
+    "maximumAdjacentLayoutSimilarity": 0.181818,
+    "meaningfulVisualSlides": 7,
+    "maximumTextAreaRatio": 0.664553,
+    "geometryCollisionCount": 1,
+    "estimatedTextOverflowCount": 3,
+    "collisionCount": 4,
+    "missingArtifacts": [
+      "screenshot",
+      "diagram",
+      "timeline"
+    ],
+    "artifactPresence": {
+      "charts": 2,
+      "images": 0,
+      "connectors": 0,
+      "shapes": 18,
+      "diagrams": 0,
+      "formulas": 2,
+      "codeSlides": 5
+    },
+    "slideDigests": [
+      "sha256:bfd7017a314e37a9ce2db58debcd211951792fa5ba6a384b96df3ae2f4de7e8d",
+      "sha256:98e382851b1395677bf46017a78d7199748746aea592c27a6f5c561cc54be33b",
+      "sha256:96f3846c559c06d2e3b5dcad80a924754b8a604299d189d468ce15aca71b00a1",
+      "sha256:7344dfe1593199d008621fffc29dca89a51fafde6ff95ce92f0a3acd1dff8e44",
+      "sha256:9198fa4fd6b8ddb1fd53e0af483eb3a66d3002dbeb0ef8b632d11634811a5c77",
+      "sha256:3cc290ba7d0de54ebed4073574641c06a58dd89a705ba1b35a9875a9a6ee2dd5",
+      "sha256:60f5e88c933e91730afc21e03b0f24a8eadf2d1b015d2d5cac66541c8d672d25"
+    ],
+    "deckDigest": "sha256:22539621f69eb4deb0e577610f61316c81088e9da6dbddbe31cbab96fad634a6"
+  },
+  "evaluationDigest": "sha256:d7dbd40e02be619a15804a7ebf1e641c9b496d7a11298731e3b42aa58dc9ac5b"
+}

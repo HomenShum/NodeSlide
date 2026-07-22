@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-evaluation/v1",
+  "runId": "policy-briefing__cinematic-minimal__moonshotai-kimi-k3",
+  "runDigest": "sha256:4aab2ace2a6c1c3dae9a8f7c46abc09a72d5bf9d52f336f0f7b8e6f6c1a7879c",
+  "harnessVersion": "deck-gym-v1",
+  "evaluationGatesDigest": "sha256:b8bbac5b2715a7bdffc997dafc99cd766a13ff35680cc82fa2a0a34aa98d8d2f",
+  "briefId": "policy-briefing",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "cinematic-minimal",
+  "routeClassification": "live",
+  "evaluatedAt": "2026-07-22T00:15:46.240Z",
+  "status": "failed",
+  "checks": {
+    "slideCount": true,
+    "claimCoverage": true,
+    "forbiddenClaims": true,
+    "distinctLayouts": true,
+    "layoutRepetition": true,
+    "adjacentSimilarity": true,
+    "textAreaRatio": false,
+    "meaningfulVisuals": false,
+    "internalCollisions": false,
+    "requiredArtifacts": false,
+    "liveModelTrace": true,
+    "renderedPptx": true
+  },
+  "dimensions": {
+    "factual": 1,
+    "visual": 0.6,
+    "narrative": 1,
+    "rhythm": 0.866667,
+    "artifactIntegrity": 0.333333
+  },
+  "rawScore": 0.76,
+  "score": 0.76,
+  "evidence": {
+    "slideCount": 7,
+    "renderedSlideCount": 7,
+    "matchedClaims": [
+      "6.2",
+      "4.8",
+      "3.1",
+      "14"
+    ],
+    "requiredClaimCount": 4,
+    "claimCoverage": 1,
+    "forbiddenClaims": [],
+    "distinctLayoutSignatures": 7,
+    "repeatedLayoutCount": 1,
+    "maximumAdjacentLayoutSimilarity": 0.2,
+    "meaningfulVisualSlides": 4,
+    "maximumTextAreaRatio": 0.614389,
+    "geometryCollisionCount": 8,
+    "estimatedTextOverflowCount": 9,
+    "collisionCount": 17,
+    "missingArtifacts": [
+      "timeline"
+    ],
+    "artifactPresence": {
+      "charts": 1,
+      "images": 0,
+      "connectors": 0,
+      "shapes": 28,
+      "diagrams": 0,
+      "formulas": 3,
+      "codeSlides": 1
+    },
+    "slideDigests": [
+      "sha256:56912e975e1855c122e640a3875505e30d6a785b80b13551983fafd8efcb78c5",
+      "sha256:b104999bcba6f6603782037984e21d24bcbaf32fb3cacf0ac5ff5d2c0e60769a",
+      "sha256:cbece82a32203718e94243f7d4b8d3925e96cb364dd477555bdc5b5c26d2fd5d",
+      "sha256:85c0ec14bb224024b63a66b3ad364232822b4a529947323435456e58a7ae131b",
+      "sha256:4a5a988089d6a923067ccb346e78c1568da17fba3fbd6fc76b3e07961ae32d08",
+      "sha256:d45642a1d332d0a408dc61a573855903c915e9d56707537493befefd169a7e19",
+      "sha256:d74408b58da5ed9931d5982eba0ce9ebaf575fde8d5b9c2b9fe61aa81fc2fad6"
+    ],
+    "deckDigest": "sha256:23ebaf5c75aaba4ec8eae8292c0e88212897e049185f5261228d2cbbc5caa9df"
+  },
+  "evaluationDigest": "sha256:2653d521d380189abaa43574e3cd4cfef5348dabd1fb88b76a706841d3d3899d"
+}

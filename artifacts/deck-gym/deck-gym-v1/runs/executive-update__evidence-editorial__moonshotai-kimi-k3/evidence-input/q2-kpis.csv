@@ -1,0 +1,6 @@
+metric,q1,q2,target
+revenue_musd,4.2,4.8,5.0
+new_pipeline_musd,9.1,7.4,10.0
+win_rate_percent,24,21,28
+implementation_days,46,39,35
+gross_retention_percent,93,94,95

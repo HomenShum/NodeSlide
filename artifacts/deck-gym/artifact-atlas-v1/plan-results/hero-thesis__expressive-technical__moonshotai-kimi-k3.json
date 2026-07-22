@@ -1,0 +1,56 @@
+{
+  "artifactType": "hero-thesis",
+  "candidateDigest": "sha256:5015af6f3201c76fe90ccc657dda0274da930cf1de0e88ab231add9aa4109f99",
+  "candidateId": "hero-thesis__expressive-technical__moonshotai-kimi-k3",
+  "directionId": "expressive-technical",
+  "durationMs": 14258,
+  "fixtureId": "hero-thesis",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Measured workflow time is shown separately from the broader product claim.",
+    "artifactType": "hero-thesis",
+    "composition": "focal",
+    "density": "sparse",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Dominant thesis",
+        "operationId": "create-dominant-thesis",
+        "sourceId": "hero-workflow",
+        "value": "Reviewable generation makes presentation automation safer"
+      },
+      {
+        "label": "Workflow receipt",
+        "operationId": "bind-source-label",
+        "sourceId": "hero-workflow",
+        "value": "Structured draft 31s; validation 34s; human acceptance 52s; PowerPoint export 58s"
+      },
+      {
+        "label": "Negative space",
+        "operationId": "preserve-negative-space",
+        "sourceId": "hero-workflow",
+        "value": "Keep one dominant visual center with no card grid and at most two supporting text elements"
+      }
+    ],
+    "pptxFallback": "Keep the thesis and measured timing as editable text; remove decorative media before rasterizing evidence.",
+    "sourceLabels": [
+      {
+        "label": "Workflow receipt",
+        "sourceId": "hero-workflow"
+      }
+    ],
+    "takeaway": "Human acceptance at 52 seconds; PowerPoint export at 58 seconds.",
+    "title": "Reviewable generation makes presentation automation safer"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1077,
+    "inputTokens": 821,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 234,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

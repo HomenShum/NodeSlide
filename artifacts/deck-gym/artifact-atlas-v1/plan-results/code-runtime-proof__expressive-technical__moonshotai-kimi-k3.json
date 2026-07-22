@@ -1,0 +1,60 @@
+{
+  "artifactType": "code-runtime-proof",
+  "candidateDigest": "sha256:7bf87aee4b05b0d9e3653e5d283555d586981234fccd5a15a6dd444d60aef7df",
+  "candidateId": "code-runtime-proof__expressive-technical__moonshotai-kimi-k3",
+  "directionId": "expressive-technical",
+  "durationMs": 21057,
+  "fixtureId": "code-runtime-proof",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Measured Convex adapter run; receipt payload 1160 bytes. Latency is measured, not zero, and not production-proven.",
+    "artifactType": "code-runtime-proof",
+    "composition": "split",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "TypeScript contract",
+        "operationId": "render-code-block",
+        "sourceId": "adapter-interface",
+        "value": "interface CaseflowAdapter { stage(input: StageInput): Promise<Proposal>; commit(input: CommitInput): Promise<Receipt>; restore(versionId: string): Promise<Receipt>; }"
+      },
+      {
+        "label": "Convex benchmark",
+        "operationId": "render-runtime-result",
+        "sourceId": "adapter-benchmark",
+        "value": "p50 38 milliseconds · p95 92 milliseconds · receipt 1160 bytes"
+      },
+      {
+        "label": "Commit to receipt bytes",
+        "operationId": "connect-contract-to-measurement",
+        "sourceId": "adapter-benchmark",
+        "value": "commit returns Receipt; measured receipt 1160 bytes at p50 38 milliseconds and p95 92 milliseconds"
+      }
+    ],
+    "pptxFallback": "Runtime numbers stay editable as grouped text; the code excerpt exports as a syntax-highlighted SVG with accessible source text.",
+    "sourceLabels": [
+      {
+        "label": "TypeScript contract",
+        "sourceId": "adapter-interface"
+      },
+      {
+        "label": "Convex benchmark",
+        "sourceId": "adapter-benchmark"
+      }
+    ],
+    "takeaway": "The TypeScript contract returns a Receipt on commit, and the Convex adapter measured p50 38 milliseconds and p95 92 milliseconds.",
+    "title": "Caseflow Adapter: Contract Meets Measured Runtime"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1298,
+    "inputTokens": 876,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 309,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

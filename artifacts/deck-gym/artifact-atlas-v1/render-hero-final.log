@@ -1,0 +1,15 @@
+[artifact-arena:w1] RENDER hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1
+[artifact-arena:w2] RENDER hero-thesis__evidence-editorial__moonshotai-kimi-k3
+[artifact-arena:w3] RENDER hero-thesis__evidence-editorial__anthropic-claude-sonnet-5
+[artifact-arena:w4] RENDER hero-thesis__evidence-editorial__google-gemma-4-26b-a4b-it-free
+[artifact-arena:w2] ELIGIBLE hero-thesis__evidence-editorial__moonshotai-kimi-k3
+[artifact-arena:w2] RENDER hero-thesis__expressive-technical__moonshotai-kimi-k3
+[artifact-arena:w1] ELIGIBLE hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1
+[artifact-arena:w1] RENDER hero-thesis__expressive-technical__anthropic-claude-sonnet-5
+[artifact-arena:w4] ELIGIBLE hero-thesis__evidence-editorial__google-gemma-4-26b-a4b-it-free
+[artifact-arena:w4] RENDER hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free
+[artifact-arena:w3] ELIGIBLE hero-thesis__evidence-editorial__anthropic-claude-sonnet-5
+[artifact-arena:w2] ELIGIBLE hero-thesis__expressive-technical__moonshotai-kimi-k3
+[artifact-arena:w1] ELIGIBLE hero-thesis__expressive-technical__anthropic-claude-sonnet-5
+[artifact-arena:w4] ELIGIBLE hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free
+[artifact-arena] 82/84 artifacts eligible

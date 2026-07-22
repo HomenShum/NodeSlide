@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "finance-investment__evidence-editorial__moonshotai-kimi-k3",
+  "briefId": "finance-investment",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:770c3a54597a4e5079d284f0fdfce3cb8db8e6ddf5e4d957259d81c8df140770",
+  "runDigest": "sha256:4be013c040b3a6ac21b9ca20ddfc9ed5f44ea04e9509b1bec59029df1399fca4",
+  "title": "Northstar Expansion Underwriting",
+  "family": "finance_investment",
+  "audience": "investment committee members",
+  "decision": "approve, defer, or reject the expansion investment",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide investment-committee underwriting deck for a regional expansion. Show the thesis, unit economics, sources-and-uses waterfall, base/upside/downside scenarios, sensitivities, risks, and recommendation. Use only the supplied assumptions. Include an editable waterfall-style chart, assumptions table, scenario comparison, and return formula. Label every modeled value as an assumption rather than an observed outcome.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "underwriting.csv",
+      "format": "csv",
+      "content": "item,base,upside,downside,unit\ninitial_investment,12,12,12,musd\nyear3_revenue,18,24,13,musd\nyear3_ebitda_margin,22,27,14,percent\nexit_multiple,8,9,6,x\nirr,19,31,7,percent"
+    }
+  ],
+  "requiredClaims": [
+    "12",
+    "19",
+    "31",
+    "7"
+  ],
+  "requiredArtifacts": [
+    "waterfall",
+    "table",
+    "comparison",
+    "formula"
+  ],
+  "forbiddenClaims": [
+    "guaranteed return",
+    "observed outcome"
+  ],
+  "referenceIds": [
+    "finance/sources-uses",
+    "finance/scenario-table",
+    "finance/sensitivity-decision"
+  ],
+  "modelLabel": "Kimi K3",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbasf7_6a0a40bcfafcaf1117d1665cf10feae2",
+    "durationMs": 60199,
+    "completedAt": "2026-07-21T23:56:04.407Z",
+    "trace": {
+      "classification": "live",
+      "attribution": "openrouter · moonshotai/kimi-k3 · High effort",
+      "summary": "The user consented to send the full brief and 1 uploaded data source to OpenRouter. The named Kimi K3 model supplied the narrative plan through pi-ai; NodeSlide normalized, persisted, and validated the deck deterministically. Self-critique: 2 passes: revision did not improve on visual_archetype_variety/visual_composition_repeat visual-rhythm issues (2 -> 2 issues); kept pass 1.",
+      "metrics": "RUN TIME 1s TOKENS 3,854 → 2,802 COST $0.0095 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 215157
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "uncertainty-range",
+  "generatedAt": "2026-07-22T03:23:21.847Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "uncertainty-range__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:27ec58086059b4dab10c22be3d14da75ecc2d98c89107e62f7d5b3db9956bf3d",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/uncertainty-range__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/uncertainty-range__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/uncertainty-range__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Use editable boundary lines plus a translucent shape when a native uncertainty band is unavailable."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "uncertainty-range__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:7ed40d6044ef2b2edd063acda2b0834e7f392c2aff62f2c643ea10d5d66cc537",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/uncertainty-range__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/uncertainty-range__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/uncertainty-range__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Use editable boundary lines plus a translucent shape when a native uncertainty band is unavailable."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 9226,
+        "inputTokens": 2,
+        "outputTokens": 588,
+        "costMicroUsd": 9716
+      }
+    },
+    {
+      "candidateId": "uncertainty-range__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:b7fd984a45c25e90ee9d8a40fe47edab3f331aa7faa5b02e6659fc904f18f5f7",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/uncertainty-range__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/uncertainty-range__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/uncertainty-range__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Use editable boundary lines plus a translucent shape when a native uncertainty band is unavailable."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15219,
+        "inputTokens": 1175,
+        "outputTokens": 400,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "uncertainty-range__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:37ab9984a3383eb1fdf1e314312e40c958c3120ba4e95c2127adce391c61e138",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/uncertainty-range__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/uncertainty-range__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/uncertainty-range__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Use editable boundary lines plus a translucent shape when a native uncertainty band is unavailable."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 16722,
+        "inputTokens": 896,
+        "outputTokens": 350,
+        "costMicroUsd": 1412
+      }
+    },
+    {
+      "candidateId": "uncertainty-range__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:739ab9f6a693e6ec8a5b0d699c053fc6c112bb2506010c2a8d7658df85d95208",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/uncertainty-range__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/uncertainty-range__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/uncertainty-range__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Use editable boundary lines plus a translucent shape when a native uncertainty band is unavailable."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 9717,
+        "inputTokens": 2,
+        "outputTokens": 642,
+        "costMicroUsd": 10269
+      }
+    },
+    {
+      "candidateId": "uncertainty-range__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:3a435529541a8192887e5a6966c1f89b38fde51ed49123ad8f3b8467e7c8d9aa",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/uncertainty-range__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/uncertainty-range__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/uncertainty-range__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Use editable boundary lines plus a translucent shape when a native uncertainty band is unavailable."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 13650,
+        "inputTokens": 1177,
+        "outputTokens": 402,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "uncertainty-range__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:77cde5d5c2f17be0964c6930dad8b1dfcc5b9470e8feef9be86de3df9be77df6",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/uncertainty-range__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/uncertainty-range__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/uncertainty-range__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Use editable boundary lines plus a translucent shape when a native uncertainty band is unavailable."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 22217,
+        "inputTokens": 898,
+        "outputTokens": 358,
+        "costMicroUsd": 1433
+      }
+    }
+  ]
+}

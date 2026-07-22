@@ -1,0 +1,56 @@
+{
+  "artifactType": "hero-thesis",
+  "candidateDigest": "sha256:e82a3e140f5cd452aafedca5fce41460297ad83b333bd6c2ac43a2243f51a2fa",
+  "candidateId": "hero-thesis__evidence-editorial__anthropic-claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "durationMs": 8338,
+  "fixtureId": "hero-thesis",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Measured workflow time (52s to human acceptance, 58s to PowerPoint export) is distinct from the broader safety claim above.",
+    "artifactType": "hero-thesis",
+    "composition": "focal",
+    "density": "sparse",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Hero thesis statement",
+        "operationId": "create-dominant-thesis",
+        "sourceId": "hero-workflow",
+        "value": "Reviewable generation makes presentation automation safer"
+      },
+      {
+        "label": "Workflow receipt binding",
+        "operationId": "bind-source-label",
+        "sourceId": "hero-workflow",
+        "value": "52 seconds to human acceptance"
+      },
+      {
+        "label": "Single focal composition",
+        "operationId": "preserve-negative-space",
+        "sourceId": "hero-workflow",
+        "value": "One dominant visual center, no card grid"
+      }
+    ],
+    "pptxFallback": "Thesis headline and the measured timing (52 seconds to human acceptance, 58 seconds to PowerPoint export) remain as native editable text boxes; any decorative background or center-mark visual is flattened to a static image before export so no unsupported effects are implied.",
+    "sourceLabels": [
+      {
+        "label": "Workflow receipt",
+        "sourceId": "hero-workflow"
+      }
+    ],
+    "takeaway": "Review before acceptance turns automated drafting into a trustworthy workflow, not a blind one.",
+    "title": "Reviewable Generation Makes Presentation Automation Safer"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8504,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 482,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

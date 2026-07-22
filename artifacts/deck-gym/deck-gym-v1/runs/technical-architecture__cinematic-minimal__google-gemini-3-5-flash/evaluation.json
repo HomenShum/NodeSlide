@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-evaluation/v1",
+  "runId": "technical-architecture__cinematic-minimal__google-gemini-3-5-flash",
+  "runDigest": "sha256:69ad366019727beded5c2d82bb34ab4c5233e00226c0788382a28e16c2d70b9b",
+  "harnessVersion": "deck-gym-v1",
+  "evaluationGatesDigest": "sha256:b8bbac5b2715a7bdffc997dafc99cd766a13ff35680cc82fa2a0a34aa98d8d2f",
+  "briefId": "technical-architecture",
+  "model": "google/gemini-3.5-flash",
+  "directionId": "cinematic-minimal",
+  "routeClassification": "degraded",
+  "evaluatedAt": "2026-07-22T00:15:46.371Z",
+  "status": "failed",
+  "checks": {
+    "slideCount": true,
+    "claimCoverage": false,
+    "forbiddenClaims": true,
+    "distinctLayouts": true,
+    "layoutRepetition": true,
+    "adjacentSimilarity": true,
+    "textAreaRatio": false,
+    "meaningfulVisuals": false,
+    "internalCollisions": true,
+    "requiredArtifacts": false,
+    "liveModelTrace": false,
+    "renderedPptx": true
+  },
+  "dimensions": {
+    "factual": 0.583333,
+    "visual": 0.8,
+    "narrative": 0.722222,
+    "rhythm": 0.822222,
+    "artifactIntegrity": 0.666667
+  },
+  "rawScore": 0.718889,
+  "score": 0.17972225,
+  "evidence": {
+    "slideCount": 7,
+    "renderedSlideCount": 7,
+    "matchedClaims": [
+      "commit"
+    ],
+    "requiredClaimCount": 6,
+    "claimCoverage": 0.166667,
+    "forbiddenClaims": [],
+    "distinctLayoutSignatures": 6,
+    "repeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.333333,
+    "meaningfulVisualSlides": 4,
+    "maximumTextAreaRatio": 0.619544,
+    "geometryCollisionCount": 0,
+    "estimatedTextOverflowCount": 0,
+    "collisionCount": 0,
+    "missingArtifacts": [
+      "architecture",
+      "sequence"
+    ],
+    "artifactPresence": {
+      "charts": 1,
+      "images": 0,
+      "connectors": 0,
+      "shapes": 13,
+      "diagrams": 0,
+      "formulas": 1,
+      "codeSlides": 3
+    },
+    "slideDigests": [
+      "sha256:8369c9a1af2935e51576a58eeec72079963115b734eea6b5af480cb470c69c6e",
+      "sha256:37793055a1a60ccc320a2ba21a264e408daa4197a350bd9d35efdfd62a27267a",
+      "sha256:8d2d694a2d0c51ae2bda9f27eaa3ba49b7b8701a3706c1c18095c4c8b22d4f2c",
+      "sha256:d6ff18bdcfe96cd096366b45883b200fa49db5a2efde5e56885f430330e7e98e",
+      "sha256:43dce725b70dea31114b9e78f0828112d6872a6511c2945374cd038a88697b4f",
+      "sha256:451958c851932704e25378fb50d7fa36f3ce035b6b8d684e4944c1a4533dc2ac",
+      "sha256:9182d4532d4f9f59d7eddb294160ed595e08f2470481d0c8384c65434550fb3e"
+    ],
+    "deckDigest": "sha256:25202eb327bf9c2c5c672957c78a4a09ff2851ad42936a84b29f4ec2e20b84c9"
+  },
+  "evaluationDigest": "sha256:11c20df15ada79189a42b7ceae007444abd63f36d1e8c1f4d62e76406329632c"
+}

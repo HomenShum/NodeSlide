@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "system-architecture__evidence-editorial__moonshotai-kimi-k3",
+  "candidateDigest": "sha256:cc208f8d4bed95875c252dc0c0abe8c57303405ab0a3493ae9736e404033f8e7",
+  "fixtureId": "system-architecture",
+  "directionId": "evidence-editorial",
+  "artifactType": "architecture-diagram",
+  "slideArchetype": "layered-architecture",
+  "narrativeJob": "Make the portable protocol boundary and backend-specific responsibilities immediately inspectable.",
+  "model": "moonshotai/kimi-k3",
+  "modelRole": "structured-execution-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "architecture-contract"
+  ],
+  "sourceDigest": "sha256:5673b958b73b95f1cbc5bf66d019dc210bf6f0584857852773fdc7d293942530",
+  "referenceIds": [
+    "systems-layered-boundary"
+  ],
+  "artifactRequirementDigest": "sha256:f80295f537cb79365aa1114ea4a899d522f557d37f6b929559519820e5641c18",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 14910,
+    "inputTokens": 826,
+    "outputTokens": 349,
+    "costMicroUsd": 1368
+  },
+  "outputs": {
+    "browserRender": "runs/system-architecture__evidence-editorial__moonshotai-kimi-k3/browser.png",
+    "pptxRender": "runs/system-architecture__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/system-architecture__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+    "webPptxDifference": "Prefer grouped editable shapes and connectors; never replace the architecture with paragraph arrows."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:35:06.361Z",
+  "receiptDigest": "sha256:162dbf96a0b3ea8aba8a3b73f7ecbb24a36189bc5214b5febca2e0be5ef837ea",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

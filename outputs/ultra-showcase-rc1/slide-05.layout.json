@@ -1,0 +1,626 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/lsdehh",
+    "id": "lsdehh",
+    "slide": 5,
+    "layoutId": "c6146ff9-b47f-4f21-97ea-510a1679c91e",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "7e835401-1aba-4633-8025-f72140478094",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#101723",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": ["Arial"]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "c6146ff9-b47f-4f21-97ea-510a1679c91e",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "7e835401-1aba-4633-8025-f72140478094",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "7e835401-1aba-4633-8025-f72140478094",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gju9onux",
+      "id": "1",
+      "bbox": [48, 34, 690, 28],
+      "geometry": "rect",
+      "text": "ATLAS 05  ·  ARCHITECTURE DIAGRAM",
+      "textPreview": "ATLAS 05  ·  ARCHITECTURE DIAGRAM",
+      "resolvedFontSize": 13,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 13,
+        "typeface": "Arial",
+        "color": "#B6E36B",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ATLAS 05  ·  ARCHITECTURE DIAGRAM"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ATLAS 05  ·  ARCHITECTURE DIAGRAM",
+          "resolvedTextStyle": {
+            "fontSize": 13,
+            "typeface": "Arial",
+            "color": "#B6E36B",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ATLAS 05  ·  ARCHITECTURE DIAGRAM",
+              "fontSize": 13,
+              "typeface": "Arial",
+              "color": "#B6E36B",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/filsvitc",
+      "id": "2",
+      "bbox": [48, 72, 1160, 82],
+      "geometry": "rect",
+      "text": "Portable Protocol & Adapter Boundary",
+      "textPreview": "Portable Protocol & Adapter Boundary",
+      "resolvedFontSize": 34,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 34,
+        "typeface": "Arial",
+        "color": "#F8F3E8",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Portable Protocol & Adapter Boundary"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Portable Protocol & Adapter Boundary",
+          "resolvedTextStyle": {
+            "fontSize": 34,
+            "typeface": "Arial",
+            "color": "#F8F3E8",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Portable Protocol & Adapter Boundary",
+              "fontSize": 34,
+              "typeface": "Arial",
+              "color": "#F8F3E8",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/uhsrmdcr",
+      "id": "3",
+      "bbox": [40, 160, 836, 477],
+      "geometry": "roundRect",
+      "fillColor": "#172132",
+      "lineColor": "#334155",
+      "lineWidth": 1
+    },
+    {
+      "order": 4,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/wb2dc329",
+      "id": "4",
+      "bbox": [48, 168, 820, 461],
+      "geometry": "roundRect",
+      "alt": "Verified Artifact Atlas browser render",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "imageMask": {
+        "geometry": "roundRect",
+        "adjustmentList": [
+          {
+            "name": "adj",
+            "formula": "val 1735"
+          }
+        ]
+      },
+      "asset": {
+        "assetId": "c71f2852-e043-464b-a67d-a68d5d249b0a",
+        "contentType": "image/png",
+        "byteLength": 61433
+      }
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sfa9knul",
+      "id": "5",
+      "bbox": [906, 168, 326, 248],
+      "geometry": "roundRect",
+      "fillColor": "#172132",
+      "lineColor": "#334155",
+      "lineWidth": 1
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7u1sritg",
+      "id": "6",
+      "bbox": [924, 186, 290, 38],
+      "geometry": "rect",
+      "text": "Kimi K3",
+      "textPreview": "Kimi K3",
+      "resolvedFontSize": 19,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 19,
+        "typeface": "Arial",
+        "color": "#F8F3E8",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Kimi K3"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Kimi K3",
+          "resolvedTextStyle": {
+            "fontSize": 19,
+            "typeface": "Arial",
+            "color": "#F8F3E8",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Kimi K3",
+              "fontSize": 19,
+              "typeface": "Arial",
+              "color": "#F8F3E8",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6tsridcv",
+      "id": "7",
+      "bbox": [924, 234, 290, 92],
+      "geometry": "rect",
+      "text": "evidence editorial\nnative web\nnative PPTX",
+      "textPreview": "evidence editorial | native web | native PPTX",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 14,
+        "typeface": "Arial",
+        "color": "#A7B2C0",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "evidence editorial"
+          },
+          {
+            "index": 2,
+            "text": "native web"
+          },
+          {
+            "index": 3,
+            "text": "native PPTX"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "evidence editorial",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#A7B2C0",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "evidence editorial",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#A7B2C0",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "native web",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#A7B2C0",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "native web",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#A7B2C0",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "native PPTX",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#A7B2C0",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "native PPTX",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#A7B2C0",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/dcna5cbq",
+      "id": "8",
+      "bbox": [906, 452, 326, 142],
+      "geometry": "rect",
+      "text": "Client calls flow through a portable protocol and validation engine before commit, with memory, Convex, and Postgres adapters implementing persistence behind a distinct adapter trust boundary.",
+      "textPreview": "Client calls flow through a portable protocol and validation engine before commit, with memory, Convex, and Postgres adapters implementin...",
+      "resolvedFontSize": 19.5,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 22,
+        "typeface": "Arial",
+        "color": "#F8F3E8",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 0.89,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 7,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Client calls flow through a"
+          },
+          {
+            "index": 2,
+            "text": "portable protocol and validation"
+          },
+          {
+            "index": 3,
+            "text": "engine before commit, with"
+          },
+          {
+            "index": 4,
+            "text": "memory, Convex, and Postgres"
+          },
+          {
+            "index": 5,
+            "text": "adapters implementing"
+          },
+          {
+            "index": 6,
+            "text": "persistence behind a distinct"
+          },
+          {
+            "index": 7,
+            "text": "adapter trust boundary."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Client calls flow through a portable protocol and validation engine before commit, with memory, Convex, and Postgres adapters implementing persistence behind a distinct adapter trust boundary.",
+          "resolvedTextStyle": {
+            "fontSize": 22,
+            "typeface": "Arial",
+            "color": "#F8F3E8",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Client calls flow through a portable protocol and validation engine before commit, with memory, Convex, and Postgres adapters implementing persistence behind a distinct adapter trust boundary.",
+              "fontSize": 22,
+              "typeface": "Arial",
+              "color": "#F8F3E8",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cbetw7u5",
+      "id": "9",
+      "bbox": [48, 674, 1110, 22],
+      "geometry": "rect",
+      "text": "SOURCE · architecture-contract  |  machine provisional · human preference pending",
+      "textPreview": "SOURCE · architecture-contract  |  machine provisional · human preference pending",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 10,
+        "typeface": "Arial",
+        "color": "#A7B2C0",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "SOURCE · architecture-contract  |  machine provisional · human preference pending"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "SOURCE · architecture-contract  |  machine provisional · human preference pending",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "typeface": "Arial",
+            "color": "#A7B2C0",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "SOURCE · architecture-contract  |  machine provisional · human preference pending",
+              "fontSize": 10,
+              "typeface": "Arial",
+              "color": "#A7B2C0",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/610buhwn",
+      "id": "10",
+      "bbox": [1030, 674, 202, 22],
+      "geometry": "rect",
+      "text": "NodeSlide Ultra Showcase RC1",
+      "textPreview": "NodeSlide Ultra Showcase RC1",
+      "resolvedFontSize": 10,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 10,
+        "typeface": "Arial",
+        "color": "#A7B2C0",
+        "alignment": "right",
+        "verticalAlignment": "top",
+        "autoFit": "shrinkText",
+        "autoFitScale": 1,
+        "insets": {
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "NodeSlide Ultra Showcase RC1"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "NodeSlide Ultra Showcase RC1",
+          "resolvedTextStyle": {
+            "fontSize": 10,
+            "typeface": "Arial",
+            "color": "#A7B2C0",
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "NodeSlide Ultra Showcase RC1",
+              "fontSize": 10,
+              "typeface": "Arial",
+              "color": "#A7B2C0",
+              "alignment": "right"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

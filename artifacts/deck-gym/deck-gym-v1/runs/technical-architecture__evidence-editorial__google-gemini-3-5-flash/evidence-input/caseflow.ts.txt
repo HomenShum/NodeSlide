@@ -1,0 +1,1 @@
+export interface CaseflowAdapter { stage(input: StageInput): Promise<Proposal>; commit(input: CommitInput): Promise<Receipt>; restore(versionId: string): Promise<Receipt>; }

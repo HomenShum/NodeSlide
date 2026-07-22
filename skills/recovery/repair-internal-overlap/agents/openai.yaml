@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repair Internal Overlap"
+  short_description: "Detect and repair internal slide text collisions"
+  default_prompt: "Use $repair-internal-overlap to diagnose, repair, and rerender colliding slide content."

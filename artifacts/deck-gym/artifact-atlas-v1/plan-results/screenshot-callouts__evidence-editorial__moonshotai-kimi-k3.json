@@ -1,0 +1,56 @@
+{
+  "artifactType": "screenshot-callouts",
+  "candidateDigest": "sha256:081b41ebe7b91bac0a91cde194ced2390d6e48705cd7ca5d2d0be9046697d63e",
+  "candidateId": "screenshot-callouts__evidence-editorial__moonshotai-kimi-k3",
+  "directionId": "evidence-editorial",
+  "durationMs": 23062,
+  "fixtureId": "screenshot-callouts",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "No product screenshot bitmap was supplied. The 16:9 media region is an explicit replacement-required placeholder; the three numbered callouts map only to verified product surfaces.",
+    "artifactType": "screenshot-callouts",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "16:9 media region",
+        "operationId": "create-media-placeholder",
+        "sourceId": "screenshot-absence",
+        "value": "Large focal placeholder marked 'Screenshot replacement required'; no interface is simulated."
+      },
+      {
+        "label": "Numbered callouts 1-3",
+        "operationId": "create-numbered-callouts",
+        "sourceId": "screenshot-absence",
+        "value": "1) Model selection is visible. 2) Validation status is visible. 3) Trace inspection is available."
+      },
+      {
+        "label": "Missing-evidence label",
+        "operationId": "label-missing-evidence",
+        "sourceId": "screenshot-absence",
+        "value": "Placeholder is labeled as replacement-required because no bitmap evidence was provided."
+      }
+    ],
+    "pptxFallback": "In PowerPoint the 16:9 placeholder and the three numbered callouts export as grouped-editable shapes; the placeholder remains labeled 'Screenshot replacement required' and no product screenshot is manufactured.",
+    "sourceLabels": [
+      {
+        "label": "Evidence availability: no product screenshot bitmap included; verified surfaces are model selection, validation status, and the Trace inspector.",
+        "sourceId": "screenshot-absence"
+      }
+    ],
+    "takeaway": "Model selection, validation status, and trace inspection are the verified surfaces of the reviewable-generation workflow; the screenshot itself must be supplied before this slide is final.",
+    "title": "Reviewable Generation: Product Controls"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1328,
+    "inputTokens": 830,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 332,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

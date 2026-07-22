@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "educational-explainer__evidence-editorial__moonshotai-kimi-k3",
+  "briefId": "educational-explainer",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:1ec888bc53532a962fe34b5cb9d490e8b56645664b5a523abb229fb33147829e",
+  "runDigest": "sha256:7380fdc530d03ae245d240ba6618e65d1068e490666f1747257b451f03d53897",
+  "title": "How Retrieval-Augmented Generation Works",
+  "family": "educational_explainer",
+  "audience": "non-specialist product managers",
+  "decision": "understand when retrieval improves an AI product and when it does not",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide educational explainer for non-specialist product managers learning when retrieval-augmented generation helps. Progress from the failure of memory-only answers through indexing, retrieval, grounded generation, evaluation, limitations, and a practical decision checklist. Include a progressive editable diagram, a simple timeline of one query, an analogy, and a final summary. Keep technical terms defined in plain language.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "rag-facts.md",
+      "format": "md",
+      "content": "The benchmark definition is: index approved documents, retrieve passages relevant to a query, provide those passages to the generator, and evaluate whether claims are supported by the retrieved text. Retrieval does not guarantee truth and can return irrelevant evidence."
+    }
+  ],
+  "requiredClaims": [
+    "index",
+    "retrieve",
+    "generator",
+    "supported"
+  ],
+  "requiredArtifacts": [
+    "diagram",
+    "timeline",
+    "analogy",
+    "summary"
+  ],
+  "forbiddenClaims": [
+    "guarantees truth",
+    "eliminates hallucinations"
+  ],
+  "referenceIds": [
+    "education/progressive-mechanism",
+    "education/query-timeline",
+    "education/decision-checklist"
+  ],
+  "modelLabel": "Kimi K3",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbe9gl_70f5df60d355d196f2191320eaff3b2e",
+    "durationMs": 50512,
+    "completedAt": "2026-07-21T23:58:46.604Z",
+    "trace": {
+      "classification": "live",
+      "attribution": "openrouter · moonshotai/kimi-k3 · High effort",
+      "summary": "The user consented to send the full brief and 1 uploaded data source to OpenRouter. The named Kimi K3 model supplied the narrative plan through pi-ai; NodeSlide normalized, persisted, and validated the deck deterministically. Self-critique: 1 pass, clean.",
+      "metrics": "RUN TIME 1s TOKENS 1,269 → 2,002 COST $0.0059 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 193098
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

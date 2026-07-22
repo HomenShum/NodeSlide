@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kimi K3 Deck Adapter"
+  short_description: "Adapt deck work to observed Kimi K3 behavior"
+  default_prompt: "Use $kimi-k3-deck-adapter to execute this deck task with Kimi-specific safeguards."

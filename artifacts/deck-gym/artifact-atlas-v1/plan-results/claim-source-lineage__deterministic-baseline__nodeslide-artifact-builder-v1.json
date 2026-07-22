@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "claim-source-lineage__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:64afb0e650b0ad15e8bff0234b6238a4cd7affb21149b795ddd3d8e977b25627",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "claim-source-lineage",
+  "artifactType": "claim-source-lineage",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "claim-source-lineage",
+    "title": "human acceptance at 52 seconds",
+    "takeaway": "Let a reviewer trace one headline claim through source, extraction, validation, and slide usage.",
+    "annotation": "source journey-receipt",
+    "composition": "diagonal",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "create-lineage-nodes",
+        "label": "Create Lineage Nodes",
+        "value": "human acceptance at 52 seconds",
+        "sourceId": "journey-receipt"
+      },
+      {
+        "operationId": "bind-source-id",
+        "label": "Bind Source Id",
+        "value": "source journey-receipt",
+        "sourceId": "journey-receipt"
+      },
+      {
+        "operationId": "show-rejected-claim-branch",
+        "label": "Show Rejected Claim Branch",
+        "value": "human acceptance at 52 seconds",
+        "sourceId": "journey-receipt"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "journey-receipt",
+        "label": "Journey timing receipt"
+      }
+    ],
+    "pptxFallback": "Preserve editable nodes, connectors, source ID, and rejection state; never flatten the lineage into prose."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

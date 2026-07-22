@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "request-sequence",
+  "generatedAt": "2026-07-22T03:23:22.067Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "request-sequence__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:821402114ac13373a6409c2a1b470621ff3cc0553afd811c6dc1f2282d70b5be",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/request-sequence__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/request-sequence__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/request-sequence__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Use editable lifelines and arrows; a static Mermaid image is not promotion-eligible."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "request-sequence__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:2e7054457d29b078ab037651644fc44e9022613e15e2fd8df32ef720237b2ef2",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/request-sequence__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/request-sequence__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/request-sequence__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Use editable lifelines and arrows; a static Mermaid image is not promotion-eligible."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8543,
+        "inputTokens": 2,
+        "outputTokens": 521,
+        "costMicroUsd": 8941
+      }
+    },
+    {
+      "candidateId": "request-sequence__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:2d9a5d7392ca80f814ee2631eee43036da2699a0d42979372b946cfa9b7af3ab",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/request-sequence__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/request-sequence__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/request-sequence__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Use editable lifelines and arrows; a static Mermaid image is not promotion-eligible."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 21840,
+        "inputTokens": 1082,
+        "outputTokens": 334,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "request-sequence__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:cba88a3dcac6821833d88d64fc22dd4ad26240c9abc05c5738402f3c8c255b51",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/request-sequence__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/request-sequence__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/request-sequence__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Use editable lifelines and arrows; a static Mermaid image is not promotion-eligible."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 16502,
+        "inputTokens": 838,
+        "outputTokens": 281,
+        "costMicroUsd": 1205
+      }
+    },
+    {
+      "candidateId": "request-sequence__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:cb0392562902bc8f65223b3894db9f042fdcdc37f90c1335e24393d90cb2c5fb",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/request-sequence__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/request-sequence__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/request-sequence__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Use editable lifelines and arrows; a static Mermaid image is not promotion-eligible."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7885,
+        "inputTokens": 2,
+        "outputTokens": 523,
+        "costMicroUsd": 8974
+      }
+    },
+    {
+      "candidateId": "request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:0b90500987e579293a3f3b58729608e30c553e4276f36bf6bedddb1c3dffa2dc",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Use editable lifelines and arrows; a static Mermaid image is not promotion-eligible."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 18461,
+        "inputTokens": 1084,
+        "outputTokens": 323,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "request-sequence__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:5e9d88fe9474a328b76f65eaf5bf33b5170eb7c01396168e9194f203c54c781d",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/request-sequence__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/request-sequence__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/request-sequence__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Use editable lifelines and arrows; a static Mermaid image is not promotion-eligible."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15806,
+        "inputTokens": 840,
+        "outputTokens": 274,
+        "costMicroUsd": 1189
+      }
+    }
+  ]
+}

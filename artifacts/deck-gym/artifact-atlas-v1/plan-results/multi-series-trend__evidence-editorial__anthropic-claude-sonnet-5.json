@@ -1,0 +1,56 @@
+{
+  "artifactType": "multi-series-chart",
+  "candidateDigest": "sha256:c9daa2a0f707f73be86cc0498b3a505a36594713b338ecdc44c6809adee325ca",
+  "candidateId": "multi-series-trend__evidence-editorial__anthropic-claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "durationMs": 8012,
+  "fixtureId": "multi-series-trend",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Local bus trails both rapid bus and rail through June, ending at the lowest indexed value.",
+    "artifactType": "multi-series-chart",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Plot three monthly ridership series",
+        "operationId": "create-editable-series",
+        "sourceId": "ridership-series",
+        "value": "Rapid bus, local bus, rail indexed January–June"
+      },
+      {
+        "label": "Label June endpoints",
+        "operationId": "direct-label-endpoints",
+        "sourceId": "ridership-series",
+        "value": "Rapid bus 91, rail 82, local bus 67"
+      },
+      {
+        "label": "Flag under-recovery pattern",
+        "operationId": "annotate-supported-pattern",
+        "sourceId": "ridership-series",
+        "value": "Local bus recovered least among the three series"
+      }
+    ],
+    "pptxFallback": "Deliver as native editable PowerPoint chart with linked data table and direct end-of-line labels; if the platform cannot render live series, export a static high-resolution chart image with the same labels and no animation.",
+    "sourceLabels": [
+      {
+        "label": "Monthly ridership index",
+        "sourceId": "ridership-series"
+      }
+    ],
+    "takeaway": "Local bus recovered least, ending at 67 while rapid bus reached 91 and rail reached 82.",
+    "title": "Rapid Bus, Local Bus, and Rail: January–June"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8384,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 469,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

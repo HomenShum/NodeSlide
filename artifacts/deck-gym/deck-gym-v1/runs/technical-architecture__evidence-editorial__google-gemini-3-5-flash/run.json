@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "technical-architecture__evidence-editorial__google-gemini-3-5-flash",
+  "briefId": "technical-architecture",
+  "model": "google/gemini-3.5-flash",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:61af2aca42aa6d0481bd369cc5ff4b320f176c95f5a9465ab2971037d57b150d",
+  "runDigest": "sha256:bf97c39de389369a1056d9eb3e97205ad6a59563517d226e51471b077b93f043",
+  "title": "Portable Caseflow Runtime",
+  "family": "technical_architecture",
+  "audience": "staff engineers and platform architects",
+  "decision": "approve the boundary between portable protocol and backend adapters",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide technical architecture review for staff engineers deciding whether to approve a portable caseflow runtime. Show the invariant lifecycle, adapter boundary, request sequence, benchmark evidence, code contract, failure handling, and decision. Include an editable architecture graph, an editable sequence flow, an editable benchmark chart, and a legible code excerpt. Avoid prose arrows and generic card grids.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "benchmark.csv",
+      "format": "csv",
+      "content": "adapter,p50_ms,p95_ms,receipt_bytes\nmemory,4,9,820\nconvex,38,92,1160\npostgres,31,77,1080"
+    },
+    {
+      "fileName": "caseflow.ts.txt",
+      "format": "txt",
+      "content": "export interface CaseflowAdapter { stage(input: StageInput): Promise<Proposal>; commit(input: CommitInput): Promise<Receipt>; restore(versionId: string): Promise<Receipt>; }"
+    }
+  ],
+  "requiredClaims": [
+    "memory",
+    "convex",
+    "postgres",
+    "stage",
+    "commit",
+    "restore"
+  ],
+  "requiredArtifacts": [
+    "chart",
+    "architecture",
+    "sequence",
+    "code"
+  ],
+  "forbiddenClaims": [
+    "production proven",
+    "zero latency"
+  ],
+  "referenceIds": [
+    "technical/layered-boundary",
+    "technical/sequence-proof",
+    "technical/code-and-runtime"
+  ],
+  "modelLabel": "Gemini 3.5 Flash",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvb5mog_bae388d29ff6a0330ee638fe3780e138",
+    "durationMs": 4286,
+    "completedAt": "2026-07-21T23:52:03.926Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · google/gemini-3.5-flash (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Gemini 3.5 Flash via OpenRouter route had no compatible provider endpoint. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 0 → 0 COST $0.0000 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 177436
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

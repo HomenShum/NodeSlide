@@ -1,0 +1,56 @@
+{
+  "artifactType": "katex-equation",
+  "candidateDigest": "sha256:4177d47a7d7852d518863f20fb596cee8740166feaace046a0563f94d611f16b",
+  "candidateId": "quality-cost-equation__evidence-editorial__anthropic-claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "durationMs": 10101,
+  "fixtureId": "quality-cost-equation",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Q is the adaptive quality score and C is the cost in USD, taken from the adaptive retrieval result.",
+    "artifactType": "katex-equation",
+    "composition": "focal",
+    "density": "sparse",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Render cost-adjusted quality equation",
+        "operationId": "render-katex",
+        "sourceId": "retrieval-result",
+        "value": "\\dfrac{Q}{C}"
+      },
+      {
+        "label": "Define Q and C",
+        "operationId": "define-symbols",
+        "sourceId": "retrieval-result",
+        "value": "Q = 0.75 (quality_score); C = 0.038 (cost_usd)"
+      },
+      {
+        "label": "Calculate adaptive policy value",
+        "operationId": "bind-calculation",
+        "sourceId": "retrieval-result",
+        "value": "0.75 / 0.038 \\approx 19.74"
+      }
+    ],
+    "pptxFallback": "PowerPoint receives the equation rendered as a grouped SVG image with adjacent editable text boxes for the Q and C definitions and the calculated value; the LaTeX source itself is not exposed as raw text.",
+    "sourceLabels": [
+      {
+        "label": "Adaptive retrieval result",
+        "sourceId": "retrieval-result"
+      }
+    ],
+    "takeaway": "Q divided by C is approximately 19.74",
+    "title": "Cost-Adjusted Quality Measure"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8024,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 438,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

@@ -1,0 +1,56 @@
+{
+  "artifactType": "uncertainty-range",
+  "candidateDigest": "sha256:18bf8d67d22cdac2d0d9bb6d7ee119f861f0305959b9a1b6794cdf436538eda2",
+  "candidateId": "uncertainty-range__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+  "directionId": "evidence-editorial",
+  "durationMs": 15219,
+  "fixtureId": "uncertainty-range",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "Q5 range is 9.0 to 13.8",
+    "artifactType": "uncertainty-range",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Observed & Base",
+        "operationId": "plot-observed-and-forecast",
+        "sourceId": "forecast-range-data",
+        "value": "Q1: 8.2, Q2: 9.0 | Base: Q3: 9.7, Q4: 10.5, Q5: 11.4"
+      },
+      {
+        "label": "Uncertainty Band",
+        "operationId": "draw-editable-range",
+        "sourceId": "forecast-range-data",
+        "value": "Q3: 8.9-10.6, Q4: 9.1-12.0, Q5: 9.0-13.8"
+      },
+      {
+        "label": "Modeled Range",
+        "operationId": "label-modeled-values",
+        "sourceId": "forecast-range-data",
+        "value": "Widening uncertainty"
+      }
+    ],
+    "pptxFallback": "Editable boundary lines plus a translucent shape for the uncertainty band.",
+    "sourceLabels": [
+      {
+        "label": "Forecast fixture",
+        "sourceId": "forecast-range-data"
+      }
+    ],
+    "takeaway": "Base forecast reaches 11.4, with uncertainty widening through Q5.",
+    "title": "Investment Forecast vs. Observed Performance"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1175,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 400,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

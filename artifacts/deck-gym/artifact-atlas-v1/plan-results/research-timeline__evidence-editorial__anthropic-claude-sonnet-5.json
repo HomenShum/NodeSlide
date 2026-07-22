@@ -1,0 +1,56 @@
+{
+  "artifactType": "timeline",
+  "candidateDigest": "sha256:9526836026ca5f3654f7c7ec56e1c1376e0903173ed28e84a80191004d7c5481",
+  "candidateId": "research-timeline__evidence-editorial__anthropic-claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "durationMs": 10822,
+  "fixtureId": "research-timeline",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Spacing is time-proportional; the review gate is emphasized to show it precedes approval, not follows it.",
+    "artifactType": "timeline",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "Milestone spacing by elapsed days",
+        "operationId": "place-time-proportional-milestones",
+        "sourceId": "research-dates",
+        "value": "July 1 → July 3 → July 6 → July 9 → July 11"
+      },
+      {
+        "label": "Blind review gate highlighted",
+        "operationId": "emphasize-review-gate",
+        "sourceId": "research-dates",
+        "value": "blind_review_completed July 9"
+      },
+      {
+        "label": "Dates bound to milestone shapes",
+        "operationId": "bind-dates",
+        "sourceId": "research-dates",
+        "value": "question_frozen 2026-07-01; evidence_collected 2026-07-03; candidates_generated 2026-07-06; blind_review_completed 2026-07-09; harness_update_approved 2026-07-11"
+      }
+    ],
+    "pptxFallback": "Deliver as native PowerPoint shapes: a straight connector line with five editable milestone markers and text boxes positioned proportionally to elapsed days; the review-gate milestone uses a distinct fill/outline for emphasis. No motion or video is used, so no rasterization is required; all shapes and text remain natively editable.",
+    "sourceLabels": [
+      {
+        "label": "Research ledger",
+        "sourceId": "research-dates"
+      }
+    ],
+    "takeaway": "Five milestones spaced by elapsed days show a deliberate path from framing to approval, with blind review as the gate before harness update.",
+    "title": "Research Timeline: Question to Approved Update"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 9049,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 544,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

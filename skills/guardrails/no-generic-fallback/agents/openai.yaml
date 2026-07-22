@@ -1,0 +1,4 @@
+interface:
+  display_name: "No Generic Fallback"
+  short_description: "Fail closed on unrelated generic deck output"
+  default_prompt: "Use $no-generic-fallback to verify that this generated deck remains grounded in its brief."

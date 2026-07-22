@@ -1,0 +1,56 @@
+{
+  "artifactType": "claim-source-lineage",
+  "candidateDigest": "sha256:3b2fd034b44d141961714021352a8361f2739725d029d0d919a8f617d9ee5250",
+  "candidateId": "claim-source-lineage__evidence-editorial__anthropic-claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "durationMs": 7121,
+  "fixtureId": "claim-source-lineage",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Left-to-right lineage: source record, extracted fact, bounded claim, slide element, exported receipt. Rejected branch shown separately with no supporting evidence.",
+    "artifactType": "claim-source-lineage",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "Lineage chain",
+        "operationId": "create-lineage-nodes",
+        "sourceId": "journey-receipt",
+        "value": "Source record -> Extracted fact -> Bounded claim -> Slide element -> Exported receipt"
+      },
+      {
+        "label": "Bound claim",
+        "operationId": "bind-source-id",
+        "sourceId": "journey-receipt",
+        "value": "human acceptance at 52 seconds -> source journey-receipt"
+      },
+      {
+        "label": "Rejected branch",
+        "operationId": "show-rejected-claim-branch",
+        "sourceId": "journey-receipt",
+        "value": "zero errors: no browser-error evidence present; excluded from claim chain"
+      }
+    ],
+    "pptxFallback": "Exports as native PowerPoint shapes and connectors: five sequential nodes with a labeled rejection branch, editable text boxes, and preserved source ID binding; no flattening into prose or images.",
+    "sourceLabels": [
+      {
+        "label": "Journey timing receipt",
+        "sourceId": "journey-receipt"
+      }
+    ],
+    "takeaway": "Human acceptance at 52 seconds traces cleanly to journey-receipt; the unsupported zero-errors claim is rejected on a separate branch.",
+    "title": "Claim Lineage: Source to Slide"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8688,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 504,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

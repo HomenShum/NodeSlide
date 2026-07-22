@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "nodeslide.free-router-structured-probe/v1",
+  "generatedAt": "2026-07-22T00:44:14.770Z",
+  "durationMs": 10382,
+  "catalogModelCount": 4,
+  "probedModelCount": 4,
+  "failedModelCount": 1,
+  "passed": false,
+  "receipts": [
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "status": "passed",
+      "costMicroUsd": 0,
+      "inputTokens": 173,
+      "outputTokens": 11,
+      "latencyMs": 6180
+    },
+    {
+      "model": "google/gemma-4-31b-it:free",
+      "status": "failed",
+      "costMicroUsd": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "latencyMs": 110,
+      "failure": "No compatible provider endpoint."
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "status": "passed",
+      "costMicroUsd": 0,
+      "inputTokens": 83,
+      "outputTokens": 37,
+      "latencyMs": 631
+    },
+    {
+      "model": "openai/gpt-oss-20b:free",
+      "status": "passed",
+      "costMicroUsd": 0,
+      "inputTokens": 139,
+      "outputTokens": 33,
+      "latencyMs": 3461
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "artifactType": "uncertainty-range",
+  "candidateDigest": "sha256:b0c36a0a9b1a58ff0fe6e220f84692a9cb7db8c09edadb56336425948fd11c6d",
+  "candidateId": "uncertainty-range__evidence-editorial__moonshotai-kimi-k3",
+  "directionId": "evidence-editorial",
+  "durationMs": 16722,
+  "fixtureId": "uncertainty-range",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Observed Q1–Q2 actuals; Q3–Q5 base forecast with modeled low–high range. Range is modeled, not a confidence interval.",
+    "artifactType": "uncertainty-range",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Observed and base forecast",
+        "operationId": "plot-observed-and-forecast",
+        "sourceId": "forecast-range-data",
+        "value": "Actuals Q1 8.2, Q2 9.0; base forecast Q3 9.7, Q4 10.5, Q5 11.4"
+      },
+      {
+        "label": "Modeled low–high band",
+        "operationId": "draw-editable-range",
+        "sourceId": "forecast-range-data",
+        "value": "Q3 8.9–10.6; Q4 9.1–12.0; Q5 9.0–13.8, widening over time"
+      },
+      {
+        "label": "Direct labels",
+        "operationId": "label-modeled-values",
+        "sourceId": "forecast-range-data",
+        "value": "Label base forecast reaches 11.4 and Q5 range 9.0 to 13.8 as modeled values"
+      }
+    ],
+    "pptxFallback": "In PowerPoint, the band is a translucent editable shape bounded by editable low and high lines; the observed and base series remain editable lines, preserving native editability per the contract.",
+    "sourceLabels": [
+      {
+        "label": "Forecast fixture",
+        "sourceId": "forecast-range-data"
+      }
+    ],
+    "takeaway": "Base forecast reaches 11.4 by Q5, while the modeled range widens from 9.0 to 13.8.",
+    "title": "Forecast vs. Actual with Modeled Uncertainty"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1412,
+    "inputTokens": 896,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 350,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

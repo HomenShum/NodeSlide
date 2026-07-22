@@ -1,0 +1,56 @@
+{
+  "artifactType": "risk-matrix",
+  "candidateDigest": "sha256:aacde58cf4c4f17a3338c55c513f2d99e8915993ce621b19fe54f9fb4bf541e6",
+  "candidateId": "risk-matrix__expressive-technical__anthropic-claude-sonnet-5",
+  "directionId": "expressive-technical",
+  "durationMs": 6212,
+  "fixtureId": "risk-matrix",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Focus mitigation resources on the upper-right zone before addressing lower-priority risks.",
+    "artifactType": "risk-matrix",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Likelihood and Impact axes",
+        "operationId": "draw-labeled-axes",
+        "sourceId": "q2-risks",
+        "value": "1-5 scale on both axes"
+      },
+      {
+        "label": "Three risk markers",
+        "operationId": "place-editable-markers",
+        "sourceId": "q2-risks",
+        "value": "pipeline coverage (4,5); implementation capacity (3,4); retention concentration (2,5)"
+      },
+      {
+        "label": "High-priority zone",
+        "operationId": "encode-priority-zone",
+        "sourceId": "q2-risks",
+        "value": "pipeline coverage is highest priority"
+      }
+    ],
+    "pptxFallback": "Editable native PowerPoint shapes render the axes grid, zone shading, and three markers as separate objects; markers can be repositioned by dragging, matching web editability.",
+    "sourceLabels": [
+      {
+        "label": "Q2 risk register",
+        "sourceId": "q2-risks"
+      }
+    ],
+    "takeaway": "Pipeline coverage is the highest priority risk requiring immediate attention.",
+    "title": "Q2 Operating Risk Matrix"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 7916,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 419,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

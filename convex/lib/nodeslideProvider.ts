@@ -291,6 +291,11 @@ export function nodeSlideModelProbeProfile(modelId: NodeSlideAgentModelId): {
   maxTokens: number;
 } {
   switch (modelId) {
+    case 'google/gemma-4-26b-a4b-it:free':
+    case 'google/gemma-4-31b-it:free':
+    case 'nvidia/nemotron-3-super-120b-a12b:free':
+    case 'openai/gpt-oss-20b:free':
+      return { reasoningEffort: 'low', maxTokens: 512 };
     case 'z-ai/glm-5.2':
       return { reasoningEffort: 'high', maxTokens: 512 };
     case 'anthropic/claude-fable-5':

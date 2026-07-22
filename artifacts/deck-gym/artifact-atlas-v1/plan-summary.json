@@ -1,0 +1,516 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-summary/v1",
+  "matrixDigest": "sha256:9bc7e8ade92b74d30cf108a878ebce7a31c182de94d01ac75b689dcaf1deda4a",
+  "generatedAt": "2026-07-22T02:45:49.498Z",
+  "requestedCandidates": 84,
+  "passed": 84,
+  "failed": 0,
+  "modelCandidates": 72,
+  "deterministicBaselines": 12,
+  "receipts": [
+    {
+      "candidateId": "claim-source-lineage__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "claim-source-lineage__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 7121
+    },
+    {
+      "candidateId": "claim-source-lineage__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 15792
+    },
+    {
+      "candidateId": "claim-source-lineage__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 20831
+    },
+    {
+      "candidateId": "claim-source-lineage__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 7628
+    },
+    {
+      "candidateId": "claim-source-lineage__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 18075
+    },
+    {
+      "candidateId": "claim-source-lineage__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 19389
+    },
+    {
+      "candidateId": "code-runtime-proof__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "code-runtime-proof__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 7870
+    },
+    {
+      "candidateId": "code-runtime-proof__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 11501
+    },
+    {
+      "candidateId": "code-runtime-proof__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 15901
+    },
+    {
+      "candidateId": "code-runtime-proof__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 8721
+    },
+    {
+      "candidateId": "code-runtime-proof__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 22085
+    },
+    {
+      "candidateId": "code-runtime-proof__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 21057
+    },
+    {
+      "candidateId": "hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "hero-thesis__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 8338
+    },
+    {
+      "candidateId": "hero-thesis__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 16610
+    },
+    {
+      "candidateId": "hero-thesis__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 15191
+    },
+    {
+      "candidateId": "hero-thesis__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 7910
+    },
+    {
+      "candidateId": "hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 8915
+    },
+    {
+      "candidateId": "hero-thesis__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 14258
+    },
+    {
+      "candidateId": "kpi-strip__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "kpi-strip__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 8799
+    },
+    {
+      "candidateId": "kpi-strip__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 15433
+    },
+    {
+      "candidateId": "kpi-strip__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 22841
+    },
+    {
+      "candidateId": "kpi-strip__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 8756
+    },
+    {
+      "candidateId": "kpi-strip__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 14064
+    },
+    {
+      "candidateId": "kpi-strip__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 19670
+    },
+    {
+      "candidateId": "multi-series-trend__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "multi-series-trend__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 8012
+    },
+    {
+      "candidateId": "multi-series-trend__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 9348
+    },
+    {
+      "candidateId": "multi-series-trend__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 10320
+    },
+    {
+      "candidateId": "multi-series-trend__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 8373
+    },
+    {
+      "candidateId": "multi-series-trend__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 17567
+    },
+    {
+      "candidateId": "multi-series-trend__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 12831
+    },
+    {
+      "candidateId": "quality-cost-equation__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "quality-cost-equation__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 10101
+    },
+    {
+      "candidateId": "quality-cost-equation__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 28411
+    },
+    {
+      "candidateId": "quality-cost-equation__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 15492
+    },
+    {
+      "candidateId": "quality-cost-equation__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 6804
+    },
+    {
+      "candidateId": "quality-cost-equation__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 21041
+    },
+    {
+      "candidateId": "quality-cost-equation__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 15564
+    },
+    {
+      "candidateId": "request-sequence__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "request-sequence__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 8543
+    },
+    {
+      "candidateId": "request-sequence__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 21840
+    },
+    {
+      "candidateId": "request-sequence__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 16502
+    },
+    {
+      "candidateId": "request-sequence__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 7885
+    },
+    {
+      "candidateId": "request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 18461
+    },
+    {
+      "candidateId": "request-sequence__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 15806
+    },
+    {
+      "candidateId": "research-timeline__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "research-timeline__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 10822
+    },
+    {
+      "candidateId": "research-timeline__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 11473
+    },
+    {
+      "candidateId": "research-timeline__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 19820
+    },
+    {
+      "candidateId": "research-timeline__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 8008
+    },
+    {
+      "candidateId": "research-timeline__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 18970
+    },
+    {
+      "candidateId": "research-timeline__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 16211
+    },
+    {
+      "candidateId": "risk-matrix__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "risk-matrix__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 7424
+    },
+    {
+      "candidateId": "risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 31902
+    },
+    {
+      "candidateId": "risk-matrix__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 16696
+    },
+    {
+      "candidateId": "risk-matrix__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 6212
+    },
+    {
+      "candidateId": "risk-matrix__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 29194
+    },
+    {
+      "candidateId": "risk-matrix__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 17943
+    },
+    {
+      "candidateId": "screenshot-callouts__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "screenshot-callouts__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 8740
+    },
+    {
+      "candidateId": "screenshot-callouts__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 9418
+    },
+    {
+      "candidateId": "screenshot-callouts__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 23062
+    },
+    {
+      "candidateId": "screenshot-callouts__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 7338
+    },
+    {
+      "candidateId": "screenshot-callouts__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 15152
+    },
+    {
+      "candidateId": "screenshot-callouts__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 24680
+    },
+    {
+      "candidateId": "system-architecture__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "system-architecture__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 6979
+    },
+    {
+      "candidateId": "system-architecture__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 12426
+    },
+    {
+      "candidateId": "system-architecture__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 14910
+    },
+    {
+      "candidateId": "system-architecture__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 7296
+    },
+    {
+      "candidateId": "system-architecture__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 17959
+    },
+    {
+      "candidateId": "system-architecture__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 14905
+    },
+    {
+      "candidateId": "uncertainty-range__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "status": "passed",
+      "model": "nodeslide-artifact-builder-v1",
+      "durationMs": 0
+    },
+    {
+      "candidateId": "uncertainty-range__evidence-editorial__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 9226
+    },
+    {
+      "candidateId": "uncertainty-range__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 15219
+    },
+    {
+      "candidateId": "uncertainty-range__evidence-editorial__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 16722
+    },
+    {
+      "candidateId": "uncertainty-range__expressive-technical__anthropic-claude-sonnet-5",
+      "status": "passed",
+      "model": "anthropic/claude-sonnet-5",
+      "durationMs": 9717
+    },
+    {
+      "candidateId": "uncertainty-range__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "status": "passed",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "durationMs": 13650
+    },
+    {
+      "candidateId": "uncertainty-range__expressive-technical__moonshotai-kimi-k3",
+      "status": "passed",
+      "model": "moonshotai/kimi-k3",
+      "durationMs": 22217
+    }
+  ]
+}

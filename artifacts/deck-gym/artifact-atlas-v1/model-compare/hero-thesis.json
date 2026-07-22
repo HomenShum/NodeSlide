@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "hero-thesis",
+  "generatedAt": "2026-07-22T03:23:21.417Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:0d62b390582d8f8b70b15f8e1577a6ad37df4193ae6429e4d8690c2901bc0faf",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Keep the thesis and measured timing as editable text; remove decorative media before rasterizing evidence."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "hero-thesis__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:144c2ff4bb1f8b46a5b365e48464119c4ab52be424e0250c6440339229ef5b8c",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/hero-thesis__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/hero-thesis__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/hero-thesis__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Keep the thesis and measured timing as editable text; remove decorative media before rasterizing evidence."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8338,
+        "inputTokens": 2,
+        "outputTokens": 482,
+        "costMicroUsd": 8504
+      }
+    },
+    {
+      "candidateId": "hero-thesis__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:d981ca4910e3b9e77ed0a92f627071cf91508c9bec1101de453c7e2e7b5fd023",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/hero-thesis__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/hero-thesis__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/hero-thesis__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Keep the thesis and measured timing as editable text; remove decorative media before rasterizing evidence."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 16610,
+        "inputTokens": 1071,
+        "outputTokens": 327,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "hero-thesis__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:210d5abf40194e43b1ca6ed2f30c99740619fff86e0201f5a7ddd510ba431675",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/hero-thesis__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/hero-thesis__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/hero-thesis__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Keep the thesis and measured timing as editable text; remove decorative media before rasterizing evidence."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15191,
+        "inputTokens": 819,
+        "outputTokens": 246,
+        "costMicroUsd": 1106
+      }
+    },
+    {
+      "candidateId": "hero-thesis__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:802150108f6837185146b5a546f68c12f1780257d128af67a0dbdd20a1f0fa0c",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/hero-thesis__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/hero-thesis__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/hero-thesis__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Keep the thesis and measured timing as editable text; remove decorative media before rasterizing evidence."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7910,
+        "inputTokens": 2,
+        "outputTokens": 493,
+        "costMicroUsd": 8626
+      }
+    },
+    {
+      "candidateId": "hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:e87bfc54431856545d4c57fc59a525a537b0cbf3c76b568adccaf12ef18ab3fb",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/hero-thesis__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Keep the thesis and measured timing as editable text; remove decorative media before rasterizing evidence."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8915,
+        "inputTokens": 1073,
+        "outputTokens": 334,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "hero-thesis__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:17aeedc6a50c13f32c1d3ddcf36cfb7ea4c5a3a646d31a282bf78cf517c0d186",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/hero-thesis__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/hero-thesis__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/hero-thesis__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Keep the thesis and measured timing as editable text; remove decorative media before rasterizing evidence."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 14258,
+        "inputTokens": 821,
+        "outputTokens": 234,
+        "costMicroUsd": 1077
+      }
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-harness/v1",
+  "harnessVersion": "deck-gym-v1",
+  "expectedMatrixSize": 72,
+  "description": "Controlled multi-model deck benchmark. Generated results never self-promote.",
+  "models": [
+    {
+      "id": "moonshotai/kimi-k3",
+      "label": "Kimi K3",
+      "provider": "openrouter",
+      "reasoningEffort": "high",
+      "provisionalRole": "structured_generation_and_repair"
+    },
+    {
+      "id": "anthropic/claude-sonnet-5",
+      "label": "Claude Sonnet 5",
+      "provider": "openrouter",
+      "reasoningEffort": "high",
+      "provisionalRole": "story_direction_and_critique"
+    },
+    {
+      "id": "google/gemini-3.5-flash",
+      "label": "Gemini 3.5 Flash",
+      "provider": "openrouter",
+      "reasoningEffort": "high",
+      "provisionalRole": "extraction_and_classification_until_full_deck_gate_passes"
+    }
+  ],
+  "directions": [
+    {
+      "id": "evidence-editorial",
+      "label": "Evidence editorial",
+      "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+    },
+    {
+      "id": "cinematic-minimal",
+      "label": "Cinematic minimal",
+      "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+    }
+  ],
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireLiveModelTrace": true,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "promotion": {
+    "minimumMatchedCases": 12,
+    "minimumPreferenceWinRate": 0.6,
+    "minimumMeanScoreDelta": 0.03,
+    "maximumDimensionRegression": 0.02,
+    "requiresHumanReview": true,
+    "autoApply": false
+  }
+}

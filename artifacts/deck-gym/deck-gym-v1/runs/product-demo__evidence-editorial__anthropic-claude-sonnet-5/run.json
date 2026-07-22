@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "product-demo__evidence-editorial__anthropic-claude-sonnet-5",
+  "briefId": "product-demo",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:6bf8f6246c998e64c3086e3a75458969110141974c06ded73ce45cebe107c631",
+  "runDigest": "sha256:230c75acca1ad4acfd09e27ba90e0b02e0ec50454b55a5b79f034c989dc8d539",
+  "title": "NodeSlide Reviewable Creation Demo",
+  "family": "product_demo",
+  "audience": "product leaders evaluating an AI presentation workflow",
+  "decision": "decide whether reviewable generation is materially safer than one-shot deck creation",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide product demo for product leaders evaluating reviewable AI presentation generation. Show the initial brief, structured draft, validation, review-before-accept, trace receipt, editable export, and final decision. Use the supplied journey timestamps. Include a large screenshot or explicit screenshot placeholder with numbered callouts, a before/after comparison, an editable interaction flow, and a trace waterfall. Never claim a screenshot was captured when it was not supplied.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "journey.csv",
+      "format": "csv",
+      "content": "stage,elapsed_seconds,status\nbrief_submitted,0,complete\nstructured_draft,31,complete\nvalidation,34,complete\nhuman_accept,52,complete\npptx_export,58,complete"
+    },
+    {
+      "fileName": "evidence-note.md",
+      "format": "md",
+      "content": "No browser screenshot is included in this frozen evidence pack. The deck must reserve and label the screenshot proof honestly rather than fabricating one."
+    }
+  ],
+  "requiredClaims": [
+    "31",
+    "34",
+    "52",
+    "58"
+  ],
+  "requiredArtifacts": [
+    "screenshot",
+    "comparison",
+    "diagram",
+    "timeline"
+  ],
+  "forbiddenClaims": [
+    "captured screenshot",
+    "zero errors"
+  ],
+  "referenceIds": [
+    "demo/before-after",
+    "demo/screenshot-callouts",
+    "demo/trace-waterfall"
+  ],
+  "modelLabel": "Claude Sonnet 5",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvb873y_d9439a7e91d566d7b6fce8eabce25213",
+    "durationMs": 50783,
+    "completedAt": "2026-07-21T23:54:03.456Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · anthropic/claude-sonnet-5 (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Claude Sonnet 5 via OpenRouter route returned invalid JSON after one repair attempt. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 2 → 4,642 COST $0.0523 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 178150
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

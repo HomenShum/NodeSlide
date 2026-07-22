@@ -1,0 +1,19 @@
+schema_version: nodeslide.model-capability-card/v1
+model: openai/gpt-oss-20b:free
+evidence_window:
+  attempted_runs: 1
+  completed_decks: 1
+  completed_exports: 1
+  harness_version: deck-gym-free-router-v1
+observed_strengths:
+  - "preserved the supplied numeric comparison"
+  - "completed a zero-cost six-slide generation and PPTX export"
+observed_failures:
+  - "invented a 30 percent claim and unsupported business outcomes"
+  - "substituted a bar chart for the requested risk matrix"
+  - "exported raw LaTeX instead of a rendered formula"
+required_scaffolding:
+  - "source-every-claim"
+  - "require-visual-artifacts"
+  - "verify-formula-rendering"
+status: "provisional — block evidence-sensitive decks until grounding improves"

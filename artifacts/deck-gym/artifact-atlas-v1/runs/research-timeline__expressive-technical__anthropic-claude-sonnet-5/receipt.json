@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "research-timeline__expressive-technical__anthropic-claude-sonnet-5",
+  "candidateDigest": "sha256:89210bc2e0cd08eda8a5df191f74e018d81149c2da9cd84b9ec9a8f347f64133",
+  "fixtureId": "research-timeline",
+  "directionId": "expressive-technical",
+  "artifactType": "timeline",
+  "slideArchetype": "milestone-timeline",
+  "narrativeJob": "Show the progression from research question to evidence-backed decision with honest stage timing.",
+  "model": "anthropic/claude-sonnet-5",
+  "modelRole": "story-framing-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "research-dates"
+  ],
+  "sourceDigest": "sha256:ab861346fc0fba7be6f397e2015dd26d2980d4b1f147d88bccf200492b1e7982",
+  "referenceIds": [
+    "time-proportional-milestones"
+  ],
+  "artifactRequirementDigest": "sha256:877ed91dd762fc2f17f4ee91e9b70f46127e8bc92cd91788e5a39ad37f6364fd",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 8008,
+    "inputTokens": 2,
+    "outputTokens": 482,
+    "costMicroUsd": 8441
+  },
+  "outputs": {
+    "browserRender": "runs/research-timeline__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+    "pptxRender": "runs/research-timeline__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/research-timeline__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+    "webPptxDifference": "Use editable milestone shapes and a line; remove motion before rasterizing the entire timeline."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:37:53.427Z",
+  "receiptDigest": "sha256:792a59481c42f39396031592ed725a1dd60767a9fc65830ce108d0933a820bd3",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line",
+    "circle"
+  ]
+}

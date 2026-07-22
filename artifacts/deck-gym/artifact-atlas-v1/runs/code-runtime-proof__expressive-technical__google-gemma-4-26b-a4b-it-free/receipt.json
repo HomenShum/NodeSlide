@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "code-runtime-proof__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "candidateDigest": "sha256:2f9c09821f79c798feadcdf0d8aa1df6bdad356ccf955c12ca23ed767f950c02",
+  "fixtureId": "code-runtime-proof",
+  "directionId": "expressive-technical",
+  "artifactType": "code-runtime-proof",
+  "slideArchetype": "code-and-result",
+  "narrativeJob": "Pair a small API contract with measured runtime behavior so code and evidence reinforce each other.",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "modelRole": "zero-cost-bounded-generator-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "adapter-interface",
+    "adapter-benchmark"
+  ],
+  "sourceDigest": "sha256:dd9b0d254156af30e685054eef81a92546d8ac0e25f9a8c6e70a77bdf30d65f0",
+  "referenceIds": [
+    "technical-code-runtime-pair"
+  ],
+  "artifactRequirementDigest": "sha256:d73ee8df1636a77b07b789d23e6f5b5a68c24ce55d722e4d33fa4558fbfbdd0b",
+  "editability": {
+    "web": "native",
+    "pptx": "grouped-editable"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 22085,
+    "inputTokens": 1177,
+    "outputTokens": 390,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/code-runtime-proof__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+    "pptxRender": "runs/code-runtime-proof__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/code-runtime-proof__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+    "webPptxDifference": "Keep runtime numbers editable and export code as a syntax-highlighted SVG plus accessible source text."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:40:55.867Z",
+  "receiptDigest": "sha256:2dd69d1f04d74e20ac9efee579a5eb70bf055118c42eeeea13257595c8e46f42",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

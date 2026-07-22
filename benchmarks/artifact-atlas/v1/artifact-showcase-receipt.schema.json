@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "nodeslide.artifact-showcase-receipt/v1",
+  "title": "NodeSlide Artifact Showcase Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "candidateId",
+    "candidateDigest",
+    "fixtureId",
+    "directionId",
+    "artifactType",
+    "slideArchetype",
+    "narrativeJob",
+    "model",
+    "modelRole",
+    "candidateKind",
+    "harnessVersion",
+    "sourceIds",
+    "sourceDigest",
+    "referenceIds",
+    "artifactRequirementDigest",
+    "editability",
+    "tools",
+    "evaluation",
+    "outputs",
+    "status",
+    "generatedAt",
+    "receiptDigest"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "nodeslide.artifact-showcase-receipt/v1" },
+    "candidateId": { "type": "string", "minLength": 1 },
+    "candidateDigest": { "$ref": "#/$defs/digest" },
+    "fixtureId": { "type": "string", "minLength": 1 },
+    "directionId": { "type": "string", "minLength": 1 },
+    "artifactType": { "type": "string", "minLength": 1 },
+    "slideArchetype": { "type": "string", "minLength": 1 },
+    "narrativeJob": { "type": "string", "minLength": 1 },
+    "model": { "type": "string", "minLength": 1 },
+    "modelRole": { "type": "string", "minLength": 1 },
+    "candidateKind": { "enum": ["model", "deterministic-baseline"] },
+    "harnessVersion": { "type": "string", "minLength": 1 },
+    "sourceIds": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "sourceDigest": { "$ref": "#/$defs/digest" },
+    "referenceIds": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "artifactRequirementDigest": { "$ref": "#/$defs/digest" },
+    "editability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["web", "pptx"],
+      "properties": {
+        "web": { "$ref": "#/$defs/editability" },
+        "pptx": { "$ref": "#/$defs/editability" }
+      }
+    },
+    "tools": { "type": "array", "items": { "type": "string" } },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "briefAdherence",
+        "visualPassed",
+        "evidencePassed",
+        "exportPassed",
+        "artifactTypeMatched",
+        "editabilityPassed",
+        "repairCount",
+        "generationMs",
+        "inputTokens",
+        "outputTokens",
+        "costMicroUsd"
+      ],
+      "properties": {
+        "briefAdherence": { "type": "boolean" },
+        "visualPassed": { "type": "boolean" },
+        "evidencePassed": { "type": "boolean" },
+        "exportPassed": { "type": "boolean" },
+        "artifactTypeMatched": { "type": "boolean" },
+        "editabilityPassed": { "type": "boolean" },
+        "repairCount": { "type": "integer", "minimum": 0 },
+        "generationMs": { "type": ["number", "null"], "minimum": 0 },
+        "inputTokens": { "type": ["number", "null"], "minimum": 0 },
+        "outputTokens": { "type": ["number", "null"], "minimum": 0 },
+        "costMicroUsd": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["browserRender", "pptxRender", "pptxFile", "webPptxDifference"],
+      "properties": {
+        "browserRender": { "type": ["string", "null"] },
+        "pptxRender": { "type": ["string", "null"] },
+        "pptxFile": { "type": ["string", "null"] },
+        "webPptxDifference": { "type": ["string", "null"] }
+      }
+    },
+    "status": { "enum": ["eligible", "failed"] },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "receiptDigest": { "$ref": "#/$defs/digest" }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "editability": { "enum": ["native", "grouped-editable", "static-fallback"] }
+  }
+}

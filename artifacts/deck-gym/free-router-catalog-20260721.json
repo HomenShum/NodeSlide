@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "nodeslide.free-router-catalog/v1",
+  "capturedAt": "2026-07-21T17:37:08.0354208-07:00",
+  "source": "https://openrouter.ai/api/v1/models",
+  "selectionRule": "Explicit :free suffix, zero prompt and completion pricing, text output, at least 65536 context tokens, and response_format or structured_outputs support.",
+  "discoveredZeroPriceRouteCount": 14,
+  "selected": [
+    {
+      "id": "google/gemma-4-26b-a4b-it:free",
+      "contextLength": 262144,
+      "responseFormat": true,
+      "structuredOutputs": true
+    },
+    {
+      "id": "google/gemma-4-31b-it:free",
+      "contextLength": 262144,
+      "responseFormat": true,
+      "structuredOutputs": false
+    },
+    {
+      "id": "nvidia/nemotron-3-super-120b-a12b:free",
+      "contextLength": 262144,
+      "responseFormat": true,
+      "structuredOutputs": true
+    },
+    {
+      "id": "openai/gpt-oss-20b:free",
+      "contextLength": 131072,
+      "responseFormat": true,
+      "structuredOutputs": true
+    }
+  ]
+}

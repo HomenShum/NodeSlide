@@ -1,0 +1,56 @@
+{
+  "artifactType": "katex-equation",
+  "candidateDigest": "sha256:67ce3c92376248bebbc09c83f6ebc6837fbcdaf5886f1395fb33683bdebe89d5",
+  "candidateId": "quality-cost-equation__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "directionId": "expressive-technical",
+  "durationMs": 21041,
+  "fixtureId": "quality-cost-equation",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "Calculated from experimental retrieval results.",
+    "artifactType": "katex-equation",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Equation Rendering",
+        "operationId": "render-katex",
+        "sourceId": "retrieval-result",
+        "value": "\\frac{Q}{C}"
+      },
+      {
+        "label": "Symbol Definitions",
+        "operationId": "define-symbols",
+        "sourceId": "retrieval-result",
+        "value": "Q = 0.75, C = 0.038"
+      },
+      {
+        "label": "Adaptive Policy Value",
+        "operationId": "bind-calculation",
+        "sourceId": "retrieval-result",
+        "value": "\\frac{0.75}{0.038} \\approx 19.74"
+      }
+    ],
+    "pptxFallback": "A grouped object containing a high-resolution SVG of the equation and adjacent editable text boxes for definitions and the final calculation.",
+    "sourceLabels": [
+      {
+        "label": "Adaptive retrieval result",
+        "sourceId": "retrieval-result"
+      }
+    ],
+    "takeaway": "The adaptive policy value is approximately 19.74.",
+    "title": "Cost-Adjusted Quality Measure"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 2591,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 699,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

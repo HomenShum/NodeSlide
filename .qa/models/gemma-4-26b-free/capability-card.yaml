@@ -1,0 +1,17 @@
+schema_version: nodeslide.model-capability-card/v1
+model: google/gemma-4-26b-a4b-it:free
+evidence_window:
+  attempted_runs: 1
+  completed_decks: 1
+  completed_exports: 0
+  harness_version: deck-gym-free-router-v1
+observed_strengths:
+  - "preserved the supplied numeric comparison"
+  - "returned chart, diagram, formula, and honest placeholder primitives"
+observed_failures:
+  - "added unsupported causal and ROI language"
+  - "PPTX export emitted no file in two attempts"
+required_scaffolding:
+  - "source-every-claim"
+  - "instrument-pptx-export"
+status: "provisional — one brief is not enough for role specialization"

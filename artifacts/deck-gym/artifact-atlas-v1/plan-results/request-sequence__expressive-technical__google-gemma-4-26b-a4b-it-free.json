@@ -1,0 +1,56 @@
+{
+  "artifactType": "sequence-diagram",
+  "candidateDigest": "sha256:c3d328a11f83057493b09927ebd1906e545cd9f10022c72beaa744658b3094f9",
+  "candidateId": "request-sequence__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "directionId": "expressive-technical",
+  "durationMs": 18461,
+  "fixtureId": "request-sequence",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "Validation precedes review; acceptance precedes commit.",
+    "artifactType": "sequence-diagram",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Initialize Participants",
+        "operationId": "create-lifelines",
+        "sourceId": "sequence-events",
+        "value": "User, Client, Model, Validator, Reviewer, Adapter"
+      },
+      {
+        "label": "Standard Request Flow",
+        "operationId": "create-ordered-messages",
+        "sourceId": "sequence-events",
+        "value": "Submit -> Plan -> Validate -> Review -> Commit -> Receipt"
+      },
+      {
+        "label": "Validation Failure Path",
+        "operationId": "show-failure-return",
+        "sourceId": "sequence-events",
+        "value": "Validator returns issues to Client"
+      }
+    ],
+    "pptxFallback": "Editable vector lifelines and directional arrows representing the request flow and failure paths.",
+    "sourceLabels": [
+      {
+        "label": "Lifecycle events",
+        "sourceId": "sequence-events"
+      }
+    ],
+    "takeaway": "Validation acts as the critical gatekeeper between planning and human review/adapter commitment.",
+    "title": "Request Lifecycle & Validation Boundaries"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1084,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 323,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

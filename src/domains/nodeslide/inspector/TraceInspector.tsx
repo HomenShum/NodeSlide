@@ -1408,10 +1408,11 @@ export function isFallbackTrace(trace: AgentTrace): boolean {
   //    complete live receipt. Missing cost, token flow, or candidate binding is
   //    ambiguous and therefore degrades closed rather than wearing a live badge.
   const external = /openrouter/i.test(`${trace.provider ?? ''} ${trace.model ?? ''}`);
+  const patchReceiptMissing = Boolean(trace.patchId) && !trace.candidateDigest;
   if (
     external &&
     (trace.status === 'completed' || trace.status === 'awaiting_review') &&
-    (!hasProviderAttemptTelemetry(trace) || !trace.candidateDigest)
+    (!hasProviderAttemptTelemetry(trace) || patchReceiptMissing)
   ) {
     return true;
   }
@@ -1419,9 +1420,9 @@ export function isFallbackTrace(trace: AgentTrace): boolean {
 }
 
 function hasProviderAttemptTelemetry(trace: AgentTrace): boolean {
-  return (
-    (trace.costMicroUsd ?? 0) > 0 && (trace.inputTokens ?? 0) > 0 && (trace.outputTokens ?? 0) > 0
-  );
+  const hasTokenFlow = (trace.inputTokens ?? 0) > 0 && (trace.outputTokens ?? 0) > 0;
+  const explicitlyFree = /:free\b/i.test(trace.model ?? '');
+  return hasTokenFlow && (explicitlyFree || (trace.costMicroUsd ?? 0) > 0);
 }
 
 /** Session-persisted trace density; SSR/storage-safe (new users land on the timeline). */

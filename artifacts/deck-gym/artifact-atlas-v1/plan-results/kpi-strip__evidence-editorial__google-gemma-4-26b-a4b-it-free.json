@@ -1,0 +1,56 @@
+{
+  "artifactType": "kpi-strip",
+  "candidateDigest": "sha256:7374af32e6a4677b0204007265589c0e4ccaef0b3bcfc4f3f065bf1583ac0f11",
+  "candidateId": "kpi-strip__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+  "directionId": "evidence-editorial",
+  "durationMs": 15433,
+  "fixtureId": "kpi-strip",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "All figures compared to Q1 and Q2 targets.",
+    "artifactType": "kpi-strip",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Revenue | Pipeline | Win Rate | Implementation | Retention",
+        "operationId": "bind-five-metrics",
+        "sourceId": "q2-kpis",
+        "value": "4.8M | 7.4M | 21% | 39d | 94%"
+      },
+      {
+        "label": "Q1 vs Target Context",
+        "operationId": "encode-prior-and-target",
+        "sourceId": "q2-kpis",
+        "value": "4.2M/5.0M | 9.1M/10.0M | 24%/28% | 46d/35d | 93%/95%"
+      },
+      {
+        "label": "Material Variance Alert",
+        "operationId": "flag-material-variance",
+        "sourceId": "q2-kpis",
+        "value": "Pipeline & Win Rate"
+      }
+    ],
+    "pptxFallback": "An editable table with conditional emphasis for material variances.",
+    "sourceLabels": [
+      {
+        "label": "Q2 KPI export",
+        "sourceId": "q2-kpis"
+      }
+    ],
+    "takeaway": "Revenue and retention remain stable, but pipeline and win rate show significant downward variance against targets.",
+    "title": "Q2 Operating Performance"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1192,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 391,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

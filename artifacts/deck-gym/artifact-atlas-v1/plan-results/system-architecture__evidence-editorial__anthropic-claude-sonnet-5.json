@@ -1,0 +1,56 @@
+{
+  "artifactType": "architecture-diagram",
+  "candidateDigest": "sha256:3a006adc7b4b39bdb5c3673424c78061cbf6b91e784795f684dd45345197770f",
+  "candidateId": "system-architecture__evidence-editorial__anthropic-claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "durationMs": 6979,
+  "fixtureId": "system-architecture",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Left-to-right flow: client to protocol to validation to adapter boundary to backends.",
+    "artifactType": "architecture-diagram",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "Client, protocol, validation, and adapters",
+        "operationId": "create-editable-nodes",
+        "sourceId": "architecture-contract",
+        "value": "Client, portable NodeSlide protocol, validation engine, adapter boundary, memory adapter, Convex adapter, Postgres adapter"
+      },
+      {
+        "label": "Protocol calls and validation gate",
+        "operationId": "create-typed-connectors",
+        "sourceId": "architecture-contract",
+        "value": "initialize, stage, commit, restore; validation before commit"
+      },
+      {
+        "label": "Adapter boundary",
+        "operationId": "mark-trust-boundary",
+        "sourceId": "architecture-contract",
+        "value": "Adapter boundary separates portable protocol from backend-specific persistence"
+      }
+    ],
+    "pptxFallback": "Exports as grouped native PowerPoint shapes and connectors reflecting the same left-to-right layout, trust boundary, and labels; shapes and connectors remain fully editable, matching the web contract.",
+    "sourceLabels": [
+      {
+        "label": "Portable runtime contract",
+        "sourceId": "architecture-contract"
+      }
+    ],
+    "takeaway": "One portable protocol validates before commit, then hands off to backend-specific adapters behind a clear trust boundary.",
+    "title": "Portable Protocol Boundary and Backend Adapters"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8709,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 495,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

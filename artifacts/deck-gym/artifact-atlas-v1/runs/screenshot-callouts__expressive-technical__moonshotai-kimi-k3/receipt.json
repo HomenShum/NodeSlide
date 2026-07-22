@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "screenshot-callouts__expressive-technical__moonshotai-kimi-k3",
+  "candidateDigest": "sha256:b38ea2ff120f02e2e8f794b8a7ca1e26041db3e465ecd63bd67625e6cde5d409",
+  "fixtureId": "screenshot-callouts",
+  "directionId": "expressive-technical",
+  "artifactType": "screenshot-callouts",
+  "slideArchetype": "product-evidence",
+  "narrativeJob": "Connect visible product controls to the claimed reviewable-generation workflow without fabricating UI evidence.",
+  "model": "moonshotai/kimi-k3",
+  "modelRole": "structured-execution-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "screenshot-absence"
+  ],
+  "sourceDigest": "sha256:f98aa7a7bdfa719b9dfc5757715aebc2922b83d9521a12bd88de99689643a066",
+  "referenceIds": [
+    "product-large-screenshot-callouts"
+  ],
+  "artifactRequirementDigest": "sha256:21696a32873f0382a74a991368a7acf70c5ab3247c64444046323721e433a1d9",
+  "editability": {
+    "web": "native",
+    "pptx": "grouped-editable"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": false,
+    "visualPassed": true,
+    "evidencePassed": false,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 24680,
+    "inputTokens": 832,
+    "outputTokens": 372,
+    "costMicroUsd": 1429
+  },
+  "outputs": {
+    "browserRender": "runs/screenshot-callouts__expressive-technical__moonshotai-kimi-k3/browser.png",
+    "pptxRender": "runs/screenshot-callouts__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/screenshot-callouts__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+    "webPptxDifference": "Keep the placeholder and callouts editable; never manufacture a product screenshot."
+  },
+  "status": "failed",
+  "generatedAt": "2026-07-22T03:43:02.740Z",
+  "receiptDigest": "sha256:504f9d66382260f1a2d9764ed29981b55c46800d2637fa695b26f2330b260dac",
+  "claimCoverage": 1,
+  "forbiddenClaims": [
+    "real screenshot"
+  ],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "circle",
+    "line"
+  ]
+}

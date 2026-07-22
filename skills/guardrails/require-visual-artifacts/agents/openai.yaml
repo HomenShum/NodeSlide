@@ -1,0 +1,4 @@
+interface:
+  display_name: "Require Visual Artifacts"
+  short_description: "Require evidence-serving editable slide visuals"
+  default_prompt: "Use $require-visual-artifacts to replace prose-only proof with appropriate visual artifacts."

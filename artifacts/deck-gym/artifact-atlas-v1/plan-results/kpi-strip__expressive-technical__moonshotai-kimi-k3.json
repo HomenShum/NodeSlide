@@ -1,0 +1,56 @@
+{
+  "artifactType": "kpi-strip",
+  "candidateDigest": "sha256:b9eb294a738aeeb7dfa68d45e02935efb3df23269eef5b544ca784775f47b171",
+  "candidateId": "kpi-strip__expressive-technical__moonshotai-kimi-k3",
+  "directionId": "expressive-technical",
+  "durationMs": 19670,
+  "fixtureId": "kpi-strip",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Material variance flagged only where Q2 is meaningfully off target; prior-quarter and target context shown for every metric.",
+    "artifactType": "kpi-strip",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Revenue",
+        "operationId": "bind-five-metrics",
+        "sourceId": "q2-kpis",
+        "value": "Q2 $4.8M vs Q1 $4.2M, target $5.0M"
+      },
+      {
+        "label": "Pipeline",
+        "operationId": "encode-prior-and-target",
+        "sourceId": "q2-kpis",
+        "value": "Q2 $7.4M vs Q1 $9.1M, target $10.0M"
+      },
+      {
+        "label": "Win Rate",
+        "operationId": "flag-material-variance",
+        "sourceId": "q2-kpis",
+        "value": "Q2 21% vs Q1 24%, target 28% — material miss"
+      }
+    ],
+    "pptxFallback": "Use an editable table with conditional emphasis if the native KPI strip cannot export.",
+    "sourceLabels": [
+      {
+        "label": "Q2 KPI export",
+        "sourceId": "q2-kpis"
+      }
+    ],
+    "takeaway": "Q2 shows revenue and retention near target, but pipeline and win rate are material misses against plan.",
+    "title": "Q2 Operating Review: KPI Strip"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1208,
+    "inputTokens": 902,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 267,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

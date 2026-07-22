@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "product-demo__cinematic-minimal__anthropic-claude-sonnet-5",
+  "briefId": "product-demo",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:a8a4542b1b08ab8438a7e8146059d8ab214df3265d266bf4446e287493eb0b4c",
+  "runDigest": "sha256:e8a19bb76ea3f1d1010b9921914f93d58991a8e8b1536129a497831cadb9a1a0",
+  "title": "NodeSlide Reviewable Creation Demo",
+  "family": "product_demo",
+  "audience": "product leaders evaluating an AI presentation workflow",
+  "decision": "decide whether reviewable generation is materially safer than one-shot deck creation",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide product demo for product leaders evaluating reviewable AI presentation generation. Show the initial brief, structured draft, validation, review-before-accept, trace receipt, editable export, and final decision. Use the supplied journey timestamps. Include a large screenshot or explicit screenshot placeholder with numbered callouts, a before/after comparison, an editable interaction flow, and a trace waterfall. Never claim a screenshot was captured when it was not supplied.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "journey.csv",
+      "format": "csv",
+      "content": "stage,elapsed_seconds,status\nbrief_submitted,0,complete\nstructured_draft,31,complete\nvalidation,34,complete\nhuman_accept,52,complete\npptx_export,58,complete"
+    },
+    {
+      "fileName": "evidence-note.md",
+      "format": "md",
+      "content": "No browser screenshot is included in this frozen evidence pack. The deck must reserve and label the screenshot proof honestly rather than fabricating one."
+    }
+  ],
+  "requiredClaims": [
+    "31",
+    "34",
+    "52",
+    "58"
+  ],
+  "requiredArtifacts": [
+    "screenshot",
+    "comparison",
+    "diagram",
+    "timeline"
+  ],
+  "forbiddenClaims": [
+    "captured screenshot",
+    "zero errors"
+  ],
+  "referenceIds": [
+    "demo/before-after",
+    "demo/screenshot-callouts",
+    "demo/trace-waterfall"
+  ],
+  "modelLabel": "Claude Sonnet 5",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvb9ebw_08da3f8e170dc5aa63eddb0b1c7322c8",
+    "durationMs": 56330,
+    "completedAt": "2026-07-21T23:54:59.797Z",
+    "trace": {
+      "classification": "live",
+      "attribution": "openrouter · anthropic/claude-sonnet-5 · High effort",
+      "summary": "The user consented to send the full brief and 2 uploaded data sources to OpenRouter. The named Claude Sonnet 5 model supplied the narrative plan through pi-ai; NodeSlide normalized, persisted, and validated the deck deterministically. Self-critique: 1 pass, clean.",
+      "metrics": "RUN TIME 1s TOKENS 2 → 4,955 COST $0.0554 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 208683
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

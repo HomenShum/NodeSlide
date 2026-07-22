@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "screenshot-callouts__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:fb1efca203c08a68b2a5b8ab0026c9f8a1d56bd0446da14bb8da075d3c5281c6",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "screenshot-callouts",
+  "artifactType": "screenshot-callouts",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "screenshot-callouts",
+    "title": "model selection is visible",
+    "takeaway": "Connect visible product controls to the claimed reviewable-generation workflow without fabricating UI evidence.",
+    "annotation": "validation status is visible",
+    "composition": "focal",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "create-media-placeholder",
+        "label": "Create Media Placeholder",
+        "value": "model selection is visible",
+        "sourceId": "screenshot-absence"
+      },
+      {
+        "operationId": "create-numbered-callouts",
+        "label": "Create Numbered Callouts",
+        "value": "validation status is visible",
+        "sourceId": "screenshot-absence"
+      },
+      {
+        "operationId": "label-missing-evidence",
+        "label": "Label Missing Evidence",
+        "value": "trace inspection is available",
+        "sourceId": "screenshot-absence"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "screenshot-absence",
+        "label": "Evidence availability"
+      }
+    ],
+    "pptxFallback": "Keep the placeholder and callouts editable; never manufacture a product screenshot."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

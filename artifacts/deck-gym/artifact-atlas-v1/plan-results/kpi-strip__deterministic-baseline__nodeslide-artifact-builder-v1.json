@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "kpi-strip__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:2a350508cc34690722f85472c877c2850cae6362ca7195502f4b4a59f5e2d7a1",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "kpi-strip",
+  "artifactType": "kpi-strip",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "kpi-strip",
+    "title": "revenue 4.8 million",
+    "takeaway": "Make the operating verdict scannable while preserving comparison context for every metric.",
+    "annotation": "pipeline 7.4 million",
+    "composition": "focal",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "bind-five-metrics",
+        "label": "Bind Five Metrics",
+        "value": "revenue 4.8 million",
+        "sourceId": "q2-kpis"
+      },
+      {
+        "operationId": "encode-prior-and-target",
+        "label": "Encode Prior And Target",
+        "value": "pipeline 7.4 million",
+        "sourceId": "q2-kpis"
+      },
+      {
+        "operationId": "flag-material-variance",
+        "label": "Flag Material Variance",
+        "value": "win rate 21 percent",
+        "sourceId": "q2-kpis"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "q2-kpis",
+        "label": "Q2 KPI export"
+      }
+    ],
+    "pptxFallback": "Use an editable table with conditional emphasis if the native KPI strip cannot export."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

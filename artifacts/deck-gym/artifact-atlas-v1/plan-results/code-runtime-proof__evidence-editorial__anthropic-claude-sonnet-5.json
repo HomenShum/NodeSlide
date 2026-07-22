@@ -1,0 +1,60 @@
+{
+  "artifactType": "code-runtime-proof",
+  "candidateDigest": "sha256:3717bd732d6552a7b29319b98f6a01734f1f1be777c2311e95d1d04899532ce3",
+  "candidateId": "code-runtime-proof__evidence-editorial__anthropic-claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "durationMs": 7870,
+  "fixtureId": "code-runtime-proof",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Code contract and runtime measurement are drawn from the same adapter and connected directly; figures reflect benchmark conditions only.",
+    "artifactType": "code-runtime-proof",
+    "composition": "split",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "TypeScript contract",
+        "operationId": "render-code-block",
+        "sourceId": "adapter-interface",
+        "value": "stage returns Proposal; commit returns Receipt"
+      },
+      {
+        "label": "Measured latency",
+        "operationId": "render-runtime-result",
+        "sourceId": "adapter-benchmark",
+        "value": "p50 38 milliseconds / p95 92 milliseconds"
+      },
+      {
+        "label": "Commit to receipt",
+        "operationId": "connect-contract-to-measurement",
+        "sourceId": "adapter-benchmark",
+        "value": "receipt 1160 bytes"
+      }
+    ],
+    "pptxFallback": "Grouped, editable PowerPoint object: code excerpt exported as syntax-highlighted image with accessible source text alongside an editable runtime metrics text block; native code editing and live execution are not supported.",
+    "sourceLabels": [
+      {
+        "label": "TypeScript contract",
+        "sourceId": "adapter-interface"
+      },
+      {
+        "label": "Convex benchmark",
+        "sourceId": "adapter-benchmark"
+      }
+    ],
+    "takeaway": "The CaseflowAdapter contract is backed by measured Convex latency: p50 38ms, p95 92ms, receipt 1160 bytes.",
+    "title": "Contract to Receipt: Measured Adapter Latency"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 5315,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 499,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

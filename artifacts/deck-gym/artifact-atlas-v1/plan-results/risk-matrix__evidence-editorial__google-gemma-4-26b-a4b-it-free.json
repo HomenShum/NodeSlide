@@ -1,0 +1,56 @@
+{
+  "artifactType": "risk-matrix",
+  "candidateDigest": "sha256:a92a348bea8746ad65b5282387f96de6cb5f9aa5f124fbe8432a11c977549644",
+  "candidateId": "risk-matrix__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+  "directionId": "evidence-editorial",
+  "durationMs": 31902,
+  "fixtureId": "risk-matrix",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "Risks mapped by likelihood and impact scales.",
+    "artifactType": "risk-matrix",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "Likelihood (1-5) vs Impact (1-5)",
+        "operationId": "draw-labeled-axes",
+        "sourceId": "q2-risks",
+        "value": "X: Likelihood, Y: Impact"
+      },
+      {
+        "label": "Pipeline Coverage (4,5), Implementation Capacity (3,4), Retention Concentration (2,5)",
+        "operationId": "place-editable-markers",
+        "sourceId": "q2-risks",
+        "value": "Markers at specified coordinates"
+      },
+      {
+        "label": "High Priority Zone",
+        "operationId": "encode-priority-zone",
+        "sourceId": "q2-risks",
+        "value": "Top-right quadrant"
+      }
+    ],
+    "pptxFallback": "A static image of a 5x5 grid with labeled axes and three positioned markers; axes and markers are not natively editable.",
+    "sourceLabels": [
+      {
+        "label": "Q2 risk register",
+        "sourceId": "q2-risks"
+      }
+    ],
+    "takeaway": "Pipeline coverage is highest priority.",
+    "title": "Operating Risk Prioritization"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1088,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 352,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-configuration-validation/v1",
+  "generatedAt": "2026-07-22T00:15:43.596Z",
+  "ok": true,
+  "failures": [],
+  "briefCount": 12,
+  "familyCount": 12,
+  "modelCount": 3,
+  "directionCount": 2,
+  "matrixSize": 72,
+  "corpusDigest": "sha256:787f497760a31ea0e3b12a5adc1d1cc41b5e750cc6406c767ca930383829628b",
+  "harnessDigest": "sha256:d2b77d2755ac20d32bf90a9032a8e1e7a9b53e86a32d29fec6673480d57dc1e3"
+}

@@ -1,0 +1,56 @@
+{
+  "artifactType": "uncertainty-range",
+  "candidateDigest": "sha256:19b954b166166aeb966aa3e8392452ba79dd7f0ad80a89c34298790d8d27086e",
+  "candidateId": "uncertainty-range__evidence-editorial__anthropic-claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "durationMs": 9226,
+  "fixtureId": "uncertainty-range",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Q1–Q2 are observed actuals; Q3–Q5 are modeled forecasts with low-to-high ranges. Uncertainty widens materially as the horizon extends.",
+    "artifactType": "uncertainty-range",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Observed and Base Forecast Line",
+        "operationId": "plot-observed-and-forecast",
+        "sourceId": "forecast-range-data",
+        "value": "Q1:8.2, Q2:9.0 (actual); Q3:9.7, Q4:10.5, Q5:11.4 (base forecast)"
+      },
+      {
+        "label": "Low-to-High Uncertainty Band",
+        "operationId": "draw-editable-range",
+        "sourceId": "forecast-range-data",
+        "value": "Q3:8.9–10.6; Q4:9.1–12.0; Q5:9.0–13.8"
+      },
+      {
+        "label": "Modeled Forecast Label",
+        "operationId": "label-modeled-values",
+        "sourceId": "forecast-range-data",
+        "value": "Base forecast reaches 11.4; Q5 range is 9.0 to 13.8; uncertainty widens"
+      }
+    ],
+    "pptxFallback": "Render the base forecast and actuals as an editable connected line; render the low-to-high range as two editable boundary lines with a translucent fill shape between them, since PowerPoint has no native uncertainty-band primitive.",
+    "sourceLabels": [
+      {
+        "label": "Forecast fixture",
+        "sourceId": "forecast-range-data"
+      }
+    ],
+    "takeaway": "Base forecast reaches 11.4 by Q5, but the modeled range widens to 9.0–13.8, so no single value should be treated as certain.",
+    "title": "Forecast vs. Actual: Widening Uncertainty Ahead"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 9716,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 588,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:6b41097622f038b8b739ffda726934dcdc557715a660b160835c7132e2319d61",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "hero-thesis",
+  "artifactType": "hero-thesis",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "hero-thesis",
+    "title": "review before acceptance",
+    "takeaway": "Establish one memorable, evidence-bounded thesis before the detailed argument begins.",
+    "annotation": "52 seconds to human acceptance",
+    "composition": "focal",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "create-dominant-thesis",
+        "label": "Create Dominant Thesis",
+        "value": "review before acceptance",
+        "sourceId": "hero-workflow"
+      },
+      {
+        "operationId": "bind-source-label",
+        "label": "Bind Source Label",
+        "value": "52 seconds to human acceptance",
+        "sourceId": "hero-workflow"
+      },
+      {
+        "operationId": "preserve-negative-space",
+        "label": "Preserve Negative Space",
+        "value": "58 seconds to PowerPoint export",
+        "sourceId": "hero-workflow"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "hero-workflow",
+        "label": "Workflow receipt"
+      }
+    ],
+    "pptxFallback": "Keep the thesis and measured timing as editable text; remove decorative media before rasterizing evidence."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

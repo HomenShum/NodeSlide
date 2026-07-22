@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "case-study__cinematic-minimal__google-gemini-3-5-flash",
+  "briefId": "case-study",
+  "model": "google/gemini-3.5-flash",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:9fb33c568acfbc381ecde63159974cfc70d12b70f19f46d6a6838063fef6ef1a",
+  "runDigest": "sha256:3bff26249cd362c8b0fcd961135de89ea88a9a450e52f7a98ab302d3902ad460",
+  "title": "Claims Operations Intervention",
+  "family": "case_study",
+  "audience": "operations executives",
+  "decision": "decide whether to replicate the intervention in two additional regions",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide case study for operations executives deciding whether to replicate a claims-processing intervention. Show the initial state, intervention, adoption path, measured before/after outcomes, operator evidence, limitations, and replication decision. Use the supplied data exactly. Include a before/after comparison, editable process diagram, outcome chart, and evidence panel. Do not imply causality beyond the observed before/after association.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "claims-before-after.csv",
+      "format": "csv",
+      "content": "metric,before,after,unit\nmedian_cycle_time,8.4,5.9,days\nmanual_touches,6.1,3.8,touches\nrework_rate,14.2,9.6,percent\non_time_completion,71,84,percent"
+    },
+    {
+      "fileName": "intervention.md",
+      "format": "md",
+      "content": "The intervention introduced structured intake, one review checkpoint, and exception routing. The benchmark authorizes an observed before/after association only; it does not establish a causal effect."
+    }
+  ],
+  "requiredClaims": [
+    "8.4",
+    "5.9",
+    "14.2",
+    "9.6",
+    "84"
+  ],
+  "requiredArtifacts": [
+    "comparison",
+    "diagram",
+    "chart",
+    "evidence"
+  ],
+  "forbiddenClaims": [
+    "caused",
+    "proven impact"
+  ],
+  "referenceIds": [
+    "case/before-after",
+    "case/intervention-mechanism",
+    "case/replication-gate"
+  ],
+  "modelLabel": "Gemini 3.5 Flash",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbgxnj_5b6ac63560d242eaabadc420d1fd34e1",
+    "durationMs": 4304,
+    "completedAt": "2026-07-22T00:00:51.162Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · google/gemini-3.5-flash (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Gemini 3.5 Flash via OpenRouter route had no compatible provider endpoint. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 0 → 0 COST $0.0000 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 178157
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

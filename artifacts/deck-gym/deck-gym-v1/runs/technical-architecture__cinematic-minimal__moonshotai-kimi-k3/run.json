@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "technical-architecture__cinematic-minimal__moonshotai-kimi-k3",
+  "briefId": "technical-architecture",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:6fac8a7889cd87feda9227643ab8bf61445ea281d17f309af36482932a3befb7",
+  "runDigest": "sha256:cfc477056249074160100c7ab55d1e4a53658f151c2132c23367985164ba9626",
+  "title": "Portable Caseflow Runtime",
+  "family": "technical_architecture",
+  "audience": "staff engineers and platform architects",
+  "decision": "approve the boundary between portable protocol and backend adapters",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide technical architecture review for staff engineers deciding whether to approve a portable caseflow runtime. Show the invariant lifecycle, adapter boundary, request sequence, benchmark evidence, code contract, failure handling, and decision. Include an editable architecture graph, an editable sequence flow, an editable benchmark chart, and a legible code excerpt. Avoid prose arrows and generic card grids.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "benchmark.csv",
+      "format": "csv",
+      "content": "adapter,p50_ms,p95_ms,receipt_bytes\nmemory,4,9,820\nconvex,38,92,1160\npostgres,31,77,1080"
+    },
+    {
+      "fileName": "caseflow.ts.txt",
+      "format": "txt",
+      "content": "export interface CaseflowAdapter { stage(input: StageInput): Promise<Proposal>; commit(input: CommitInput): Promise<Receipt>; restore(versionId: string): Promise<Receipt>; }"
+    }
+  ],
+  "requiredClaims": [
+    "memory",
+    "convex",
+    "postgres",
+    "stage",
+    "commit",
+    "restore"
+  ],
+  "requiredArtifacts": [
+    "chart",
+    "architecture",
+    "sequence",
+    "code"
+  ],
+  "forbiddenClaims": [
+    "production proven",
+    "zero latency"
+  ],
+  "referenceIds": [
+    "technical/layered-boundary",
+    "technical/sequence-proof",
+    "technical/code-and-runtime"
+  ],
+  "modelLabel": "Kimi K3",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvb6sah_0b4f40a2dd36e8783226256ce4d752f2",
+    "durationMs": 53636,
+    "completedAt": "2026-07-21T23:52:57.569Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · moonshotai/kimi-k3 (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Kimi K3 via OpenRouter route returned invalid JSON after one repair attempt. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 1,352 → 2,290 COST $0.0067 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 177303
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

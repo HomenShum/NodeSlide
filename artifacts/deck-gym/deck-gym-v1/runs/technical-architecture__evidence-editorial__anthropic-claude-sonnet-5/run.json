@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "technical-architecture__evidence-editorial__anthropic-claude-sonnet-5",
+  "briefId": "technical-architecture",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:61af2aca42aa6d0481bd369cc5ff4b320f176c95f5a9465ab2971037d57b150d",
+  "runDigest": "sha256:261e90e83d5c0bcbebfd094fec101151ef3dd8f2f08ca12dfafe368439b5ae25",
+  "title": "Portable Caseflow Runtime",
+  "family": "technical_architecture",
+  "audience": "staff engineers and platform architects",
+  "decision": "approve the boundary between portable protocol and backend adapters",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide technical architecture review for staff engineers deciding whether to approve a portable caseflow runtime. Show the invariant lifecycle, adapter boundary, request sequence, benchmark evidence, code contract, failure handling, and decision. Include an editable architecture graph, an editable sequence flow, an editable benchmark chart, and a legible code excerpt. Avoid prose arrows and generic card grids.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "benchmark.csv",
+      "format": "csv",
+      "content": "adapter,p50_ms,p95_ms,receipt_bytes\nmemory,4,9,820\nconvex,38,92,1160\npostgres,31,77,1080"
+    },
+    {
+      "fileName": "caseflow.ts.txt",
+      "format": "txt",
+      "content": "export interface CaseflowAdapter { stage(input: StageInput): Promise<Proposal>; commit(input: CommitInput): Promise<Receipt>; restore(versionId: string): Promise<Receipt>; }"
+    }
+  ],
+  "requiredClaims": [
+    "memory",
+    "convex",
+    "postgres",
+    "stage",
+    "commit",
+    "restore"
+  ],
+  "requiredArtifacts": [
+    "chart",
+    "architecture",
+    "sequence",
+    "code"
+  ],
+  "forbiddenClaims": [
+    "production proven",
+    "zero latency"
+  ],
+  "referenceIds": [
+    "technical/layered-boundary",
+    "technical/sequence-proof",
+    "technical/code-and-runtime"
+  ],
+  "modelLabel": "Claude Sonnet 5",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "failed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "durationMs": 186762,
+    "completedAt": "2026-07-21T23:54:49.533Z",
+    "failure": "page.waitForEvent: Timeout 90000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================",
+    "runtimeErrors": []
+  }
+}

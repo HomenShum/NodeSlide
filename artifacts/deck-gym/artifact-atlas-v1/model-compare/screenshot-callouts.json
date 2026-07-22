@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "screenshot-callouts",
+  "generatedAt": "2026-07-22T03:23:22.292Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "screenshot-callouts__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:01238e121dfcfd69aac19602fe2c71a469813c5e8a6a8000cfcf8ae0ec6fe36f",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/screenshot-callouts__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/screenshot-callouts__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/screenshot-callouts__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Keep the placeholder and callouts editable; never manufacture a product screenshot."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "screenshot-callouts__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:d66bd0ac48673930c5aedbed8494d8b99689b587e58f95a0cf662dcb2ab2d6b3",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/screenshot-callouts__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/screenshot-callouts__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/screenshot-callouts__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Keep the placeholder and callouts editable; never manufacture a product screenshot."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8740,
+        "inputTokens": 2,
+        "outputTokens": 648,
+        "costMicroUsd": 10196
+      }
+    },
+    {
+      "candidateId": "screenshot-callouts__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:e5e9074e5f30aad9d2ca975ec08efeb86bcf94de606e2e02a9b57305835869dc",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "failed",
+      "outputs": {
+        "browserRender": "runs/screenshot-callouts__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/screenshot-callouts__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/screenshot-callouts__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Keep the placeholder and callouts editable; never manufacture a product screenshot."
+      },
+      "evaluation": {
+        "briefAdherence": false,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 9418,
+        "inputTokens": 1080,
+        "outputTokens": 332,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "screenshot-callouts__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:30ba1fe0d721f22b0fcb021dddc8d03a77ef27fde1539e34a8808274568562cc",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/screenshot-callouts__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/screenshot-callouts__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/screenshot-callouts__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Keep the placeholder and callouts editable; never manufacture a product screenshot."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 23062,
+        "inputTokens": 830,
+        "outputTokens": 332,
+        "costMicroUsd": 1328
+      }
+    },
+    {
+      "candidateId": "screenshot-callouts__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:253b995e8fcc5b1030e2bd5cf9a805dd1c99e646fdce65072537d19a7a6d95f7",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/screenshot-callouts__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/screenshot-callouts__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/screenshot-callouts__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Keep the placeholder and callouts editable; never manufacture a product screenshot."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7338,
+        "inputTokens": 2,
+        "outputTokens": 524,
+        "costMicroUsd": 8969
+      }
+    },
+    {
+      "candidateId": "screenshot-callouts__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:fc11ea489afc0055db202388a7388bf9a8dd8a34a19807125acc763077a17be0",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/screenshot-callouts__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/screenshot-callouts__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/screenshot-callouts__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Keep the placeholder and callouts editable; never manufacture a product screenshot."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15152,
+        "inputTokens": 1082,
+        "outputTokens": 334,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "screenshot-callouts__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:9b06831f405916cc50d707d3686e175c672c1fd6cf79b4a21a22a06336d05a49",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "failed",
+      "outputs": {
+        "browserRender": "runs/screenshot-callouts__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/screenshot-callouts__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/screenshot-callouts__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Keep the placeholder and callouts editable; never manufacture a product screenshot."
+      },
+      "evaluation": {
+        "briefAdherence": false,
+        "visualPassed": true,
+        "evidencePassed": false,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 24680,
+        "inputTokens": 832,
+        "outputTokens": 372,
+        "costMicroUsd": 1429
+      }
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "artifactType": "kpi-strip",
+  "candidateDigest": "sha256:622829f78d245adf18fbc6ff400615ece31ae9b1270b61e4494a842a3feaacd6",
+  "candidateId": "kpi-strip__evidence-editorial__moonshotai-kimi-k3",
+  "directionId": "evidence-editorial",
+  "durationMs": 22841,
+  "fixtureId": "kpi-strip",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "All figures from the Q2 KPI export; each metric shows Q2 value with prior-quarter and target context, and only material misses are flagged.",
+    "artifactType": "kpi-strip",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Five Q2 metrics bound",
+        "operationId": "bind-five-metrics",
+        "sourceId": "q2-kpis",
+        "value": "Revenue 4.8M; Pipeline 7.4M; Win rate 21%; Implementation 39 days; Retention 94%"
+      },
+      {
+        "label": "Prior-quarter and target context per metric",
+        "operationId": "encode-prior-and-target",
+        "sourceId": "q2-kpis",
+        "value": "Revenue Q1 4.2M vs target 5.0M; Pipeline Q1 9.1M vs target 10.0M; Win rate Q1 24% vs target 28%; Implementation Q1 46d vs target 35d; Retention Q1 93% vs target 95%"
+      },
+      {
+        "label": "Material misses flagged",
+        "operationId": "flag-material-variance",
+        "sourceId": "q2-kpis",
+        "value": "Flagged: pipeline 7.4M vs 10.0M target; win rate 21% vs 28% target. Not flagged: revenue, implementation time, retention."
+      }
+    ],
+    "pptxFallback": "If the native KPI strip cannot export, render an editable PowerPoint table with one row per metric (Q2, prior quarter, target) and conditional emphasis applied only to the flagged material misses, keeping every number as editable text.",
+    "sourceLabels": [
+      {
+        "label": "Q2 KPI export",
+        "sourceId": "q2-kpis"
+      }
+    ],
+    "takeaway": "Q2 delivered revenue 4.8 million and retention 94 percent, but pipeline 7.4 million and win rate 21 percent are material misses against target.",
+    "title": "Q2 Operating Review: KPI Verdict"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1552,
+    "inputTokens": 900,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 405,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

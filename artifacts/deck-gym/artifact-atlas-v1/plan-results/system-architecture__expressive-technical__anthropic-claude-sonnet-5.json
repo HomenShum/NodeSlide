@@ -1,0 +1,56 @@
+{
+  "artifactType": "architecture-diagram",
+  "candidateDigest": "sha256:b8890748666658c6388959e231bcf529620ce5393ff6c31ac2ab7fbbbdad0156",
+  "candidateId": "system-architecture__expressive-technical__anthropic-claude-sonnet-5",
+  "directionId": "expressive-technical",
+  "durationMs": 7296,
+  "fixtureId": "system-architecture",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Left-to-right flow: client, protocol, validation, adapter boundary, and three backend adapters, with the trust boundary marking where portable logic ends and backend-specific persistence begins.",
+    "artifactType": "architecture-diagram",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Core nodes",
+        "operationId": "create-editable-nodes",
+        "sourceId": "architecture-contract",
+        "value": "Client, NodeSlide protocol, validation engine, adapter boundary, memory adapter, Convex adapter, Postgres adapter"
+      },
+      {
+        "label": "Protocol flow",
+        "operationId": "create-typed-connectors",
+        "sourceId": "architecture-contract",
+        "value": "Client to protocol to validation before commit to adapter boundary to adapters"
+      },
+      {
+        "label": "Trust boundary",
+        "operationId": "mark-trust-boundary",
+        "sourceId": "architecture-contract",
+        "value": "Boundary separates portable protocol and validation from backend-specific adapters"
+      }
+    ],
+    "pptxFallback": "Exports as grouped, natively editable PowerPoint shapes and connectors reflecting the same left-to-right layout and trust boundary; no paragraph text replaces the diagram.",
+    "sourceLabels": [
+      {
+        "label": "Portable runtime contract",
+        "sourceId": "architecture-contract"
+      }
+    ],
+    "takeaway": "One portable protocol enforces validation before commit, then hands off to swappable backend adapters.",
+    "title": "Portable Protocol Boundary and Backend Adapters"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8791,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 502,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "multi-series-trend__expressive-technical__anthropic-claude-sonnet-5",
+  "candidateDigest": "sha256:0560dbf8b517fce9004ad59a25381c574f16519e2093341339299a25649d519b",
+  "fixtureId": "multi-series-trend",
+  "directionId": "expressive-technical",
+  "artifactType": "multi-series-chart",
+  "slideArchetype": "annotated-trend",
+  "narrativeJob": "Reveal divergence between related series without inventing a cause for the observed pattern.",
+  "model": "anthropic/claude-sonnet-5",
+  "modelRole": "story-framing-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "ridership-series"
+  ],
+  "sourceDigest": "sha256:bdacbf8b8a8c911b694ca0bf97a55a7c50af8a28b77c37ad2fe0d879e94acd10",
+  "referenceIds": [
+    "data-direct-label-trend"
+  ],
+  "artifactRequirementDigest": "sha256:0058c93344089cc596ad9d02a9276accc26ccfa8f32e6629cbade4e6c411df6b",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 8373,
+    "inputTokens": 2,
+    "outputTokens": 431,
+    "costMicroUsd": 8016
+  },
+  "outputs": {
+    "browserRender": "runs/multi-series-trend__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+    "pptxRender": "runs/multi-series-trend__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/multi-series-trend__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+    "webPptxDifference": "Export editable lines and labels; omit animation before using a static chart image."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:33:48.288Z",
+  "receiptDigest": "sha256:b7809974aecd744e4fc8fb05932e11e98eefc31d75cb16855077d6129384de67",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line",
+    "polyline"
+  ]
+}

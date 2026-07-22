@@ -1,0 +1,56 @@
+{
+  "artifactType": "katex-equation",
+  "candidateDigest": "sha256:030ea457dbd9232b454d3a7658ae377a4db0ba94f0fe249504469ce6e7a9291e",
+  "candidateId": "quality-cost-equation__expressive-technical__moonshotai-kimi-k3",
+  "directionId": "expressive-technical",
+  "durationMs": 15564,
+  "fixtureId": "quality-cost-equation",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Q represents the quality score (0.75) and C represents the cost in USD (0.038) from the adaptive retrieval experiment.",
+    "artifactType": "katex-equation",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Render Equation",
+        "operationId": "render-katex",
+        "sourceId": "retrieval-result",
+        "value": "\\frac{Q}{C}"
+      },
+      {
+        "label": "Define Variables",
+        "operationId": "define-symbols",
+        "sourceId": "retrieval-result",
+        "value": "Q = 0.75 (quality), C = 0.038 (cost)"
+      },
+      {
+        "label": "Calculate Value",
+        "operationId": "bind-calculation",
+        "sourceId": "retrieval-result",
+        "value": "\\frac{0.75}{0.038} \\approx 19.74"
+      }
+    ],
+    "pptxFallback": "The equation is exported as a rendered SVG image with adjacent editable text definitions for Q and C; raw LaTeX strings are not provided to PowerPoint.",
+    "sourceLabels": [
+      {
+        "label": "Adaptive retrieval result",
+        "sourceId": "retrieval-result"
+      }
+    ],
+    "takeaway": "The adaptive policy achieves a cost-adjusted quality value of approximately 19.74.",
+    "title": "Cost-Adjusted Quality Metric"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1356,
+    "inputTokens": 840,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 341,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

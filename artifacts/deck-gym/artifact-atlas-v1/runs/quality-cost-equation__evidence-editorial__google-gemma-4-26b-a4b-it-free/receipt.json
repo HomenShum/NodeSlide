@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "quality-cost-equation__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+  "candidateDigest": "sha256:a871f57ec952521c1a0d0191a28a4b0a0398fac0c1da453abe9c652284f13925",
+  "fixtureId": "quality-cost-equation",
+  "directionId": "evidence-editorial",
+  "artifactType": "katex-equation",
+  "slideArchetype": "equation-explainer",
+  "narrativeJob": "Explain the cost-adjusted quality measure and connect every symbol to the supplied experiment table.",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "modelRole": "zero-cost-bounded-generator-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "retrieval-result"
+  ],
+  "sourceDigest": "sha256:311d3206717b8f675cc96ffee37634aa223f6b8733fd8ccbc2b6f8a07a4462df",
+  "referenceIds": [
+    "technical-equation-annotated"
+  ],
+  "artifactRequirementDigest": "sha256:646bb86cd554201940fdcf11dbd7d178949d95a778ef6431f76f71bfd9bd7782",
+  "editability": {
+    "web": "native",
+    "pptx": "grouped-editable"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 28411,
+    "inputTokens": 1097,
+    "outputTokens": 345,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/quality-cost-equation__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+    "pptxRender": "runs/quality-cost-equation__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/quality-cost-equation__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+    "webPptxDifference": "Export the rendered equation as SVG with adjacent editable definitions; raw LaTeX text fails the gate."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:40:01.788Z",
+  "receiptDigest": "sha256:5619029dd4ff5798d79a0ab9acc5b997ccc9ba34e82cb4ae81baf20fddb4bd63",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "math",
+    "line"
+  ]
+}

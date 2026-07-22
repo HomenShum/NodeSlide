@@ -1,0 +1,5 @@
+metric,before,after,unit
+median_cycle_time,8.4,5.9,days
+manual_touches,6.1,3.8,touches
+rework_rate,14.2,9.6,percent
+on_time_completion,71,84,percent

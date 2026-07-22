@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "multi-series-trend__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:6a0b40254cb41955b9d93e0721b37c26e5e459c884e09389b7bcfca0461e9cfe",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "multi-series-trend",
+  "artifactType": "multi-series-chart",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "multi-series-chart",
+    "title": "rapid bus reached 91",
+    "takeaway": "Reveal divergence between related series without inventing a cause for the observed pattern.",
+    "annotation": "local bus reached 67",
+    "composition": "progressive",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "create-editable-series",
+        "label": "Create Editable Series",
+        "value": "rapid bus reached 91",
+        "sourceId": "ridership-series"
+      },
+      {
+        "operationId": "direct-label-endpoints",
+        "label": "Direct Label Endpoints",
+        "value": "local bus reached 67",
+        "sourceId": "ridership-series"
+      },
+      {
+        "operationId": "annotate-supported-pattern",
+        "label": "Annotate Supported Pattern",
+        "value": "rail reached 82",
+        "sourceId": "ridership-series"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "ridership-series",
+        "label": "Monthly ridership index"
+      }
+    ],
+    "pptxFallback": "Export editable lines and labels; omit animation before using a static chart image."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

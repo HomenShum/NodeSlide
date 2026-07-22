@@ -1,0 +1,56 @@
+{
+  "artifactType": "screenshot-callouts",
+  "candidateDigest": "sha256:808954ffcee69019990c12856adbd5609e0072b6508623dd09e201e7fff694ee",
+  "candidateId": "screenshot-callouts__evidence-editorial__anthropic-claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "durationMs": 8740,
+  "fixtureId": "screenshot-callouts",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Placeholder region marks where the real editor screenshot must be inserted before this slide ships; callouts point to confirmed controls only.",
+    "artifactType": "screenshot-callouts",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Screenshot placeholder",
+        "operationId": "create-media-placeholder",
+        "sourceId": "screenshot-absence",
+        "value": "16:9 region marked 'Replacement required — no bitmap supplied'"
+      },
+      {
+        "label": "Numbered UI callouts",
+        "operationId": "create-numbered-callouts",
+        "sourceId": "screenshot-absence",
+        "value": "1 Model selection is visible · 2 Validation status is visible · 3 Trace inspection is available"
+      },
+      {
+        "label": "Evidence gap label",
+        "operationId": "label-missing-evidence",
+        "sourceId": "screenshot-absence",
+        "value": "No product screenshot bitmap included; verified surfaces only"
+      }
+    ],
+    "pptxFallback": "Deliver as a grouped, editable PowerPoint object: a bordered 16:9 placeholder shape labeled 'Screenshot replacement required' plus three numbered callout text boxes (model selection, validation status, trace inspection) connected with leader lines. All shapes remain ungrouped-editable text and lines; no real screenshot image is embedded or implied.",
+    "sourceLabels": [
+      {
+        "label": "Evidence availability",
+        "sourceId": "screenshot-absence"
+      }
+    ],
+    "takeaway": "Model selection, validation status, and trace inspection are verified product surfaces; the interface bitmap itself is not yet supplied and must not be simulated.",
+    "title": "Reviewable-Generation Workflow: Verified Controls, Missing Screenshot"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 10196,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 648,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

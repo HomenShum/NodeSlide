@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-harness/v1",
+  "harnessVersion": "artifact-arena-v1",
+  "description": "Slide-level artifact benchmark with equal evidence, references, requirements, and budgets. Results never self-promote.",
+  "expectedCandidateCount": 84,
+  "models": [
+    {
+      "id": "moonshotai/kimi-k3",
+      "label": "Kimi K3",
+      "provider": "openrouter",
+      "reasoningEffort": "high",
+      "provisionalRole": "structured-execution-candidate"
+    },
+    {
+      "id": "anthropic/claude-sonnet-5",
+      "label": "Claude Sonnet 5",
+      "provider": "openrouter",
+      "reasoningEffort": "high",
+      "provisionalRole": "story-framing-candidate"
+    },
+    {
+      "id": "google/gemma-4-26b-a4b-it:free",
+      "label": "Gemma 4 26B Free",
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "provisionalRole": "zero-cost-bounded-generator-candidate"
+    }
+  ],
+  "deterministicBaseline": {
+    "id": "nodeslide-artifact-builder-v1",
+    "label": "NodeSlide deterministic builder",
+    "provider": "local",
+    "provisionalRole": "geometry-and-export-control",
+    "instruction": "Use the canonical artifact builder with no model-authored layout decisions. Bind only supplied evidence and preserve the required primitive type."
+  },
+  "directions": [
+    {
+      "id": "evidence-editorial",
+      "label": "Evidence editorial",
+      "instruction": "Use restrained evidence-led editorial composition, visible provenance, direct labels, and an inspectable visual argument. Avoid generic card grids."
+    },
+    {
+      "id": "expressive-technical",
+      "label": "Expressive technical",
+      "instruction": "Use a materially different technical composition with bolder scale changes, a clear visual center, and stronger spatial storytelling while keeping semantics editable and evidence honest."
+    }
+  ],
+  "budgets": {
+    "maxCandidates": 84,
+    "maxConcurrency": 2,
+    "maxAttemptsPerCandidate": 2,
+    "perCandidate": {
+      "maxGenerationMs": 180000,
+      "maxRepairCount": 2,
+      "maxInputTokens": 12000,
+      "maxOutputTokens": 5000,
+      "maxEstimatedCostMicroUsd": 100000
+    }
+  },
+  "gates": {
+    "requireArtifactTypeMatch": true,
+    "requireAllowedClaimCoverage": 0.8,
+    "requireNoForbiddenClaims": true,
+    "requireBrowserRender": true,
+    "requirePptxRender": true,
+    "requirePptxFile": true,
+    "requireZeroCollisions": true,
+    "requireDeclaredEditability": true,
+    "requireSourceLineage": true,
+    "requireHumanPreferenceForWinner": true
+  },
+  "promotion": {
+    "minimumPairedFixtures": 12,
+    "requiresBlindReview": true,
+    "requiresHumanReview": true,
+    "autoApply": false
+  }
+}

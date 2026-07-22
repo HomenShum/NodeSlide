@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "scrollytelling__cinematic-minimal__moonshotai-kimi-k3",
+  "briefId": "scrollytelling",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:1f4efe140d6ccafcb31d802d8e166555c28dc027480aa503325078030f5823b5",
+  "runDigest": "sha256:61d0f19197526495afafc43a5c01dc632f9c8e0058af97c854e4ea852c119769",
+  "title": "A Shipment's Risk Journey",
+  "family": "scrollytelling_deck",
+  "audience": "supply-chain leaders",
+  "decision": "understand where intervention most reduces shipment risk",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide scrollytelling-style deck for supply-chain leaders following one shipment from booking through delivery. Each slide should advance the same journey, reveal one new risk signal, and preserve a coherent static PowerPoint fallback. Use the supplied event sequence exactly. Include an editable progression timeline, cumulative risk chart, handoff diagram, exception evidence, and final intervention decision. Do not fabricate a live interaction or animation in the PPTX.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "shipment-events.json",
+      "format": "json",
+      "content": "[{\"hour\":0,\"event\":\"booking\",\"risk\":8},{\"hour\":7,\"event\":\"carrier_acceptance\",\"risk\":12},{\"hour\":19,\"event\":\"port_arrival\",\"risk\":18},{\"hour\":31,\"event\":\"inspection_hold\",\"risk\":61},{\"hour\":44,\"event\":\"release\",\"risk\":39},{\"hour\":73,\"event\":\"delivery\",\"risk\":11}]"
+    }
+  ],
+  "requiredClaims": [
+    "inspection hold",
+    "61",
+    "delivery",
+    "11"
+  ],
+  "requiredArtifacts": [
+    "timeline",
+    "chart",
+    "diagram",
+    "evidence"
+  ],
+  "forbiddenClaims": [
+    "interactive pptx",
+    "live animation"
+  ],
+  "referenceIds": [
+    "scroll/progressive-reveal",
+    "scroll/cumulative-risk",
+    "scroll/static-fallback"
+  ],
+  "modelLabel": "Kimi K3",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbiwqu_5a3beadb17cc518faef41357947e69d9",
+    "durationMs": 50081,
+    "completedAt": "2026-07-22T00:02:23.601Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · moonshotai/kimi-k3 (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Kimi K3 via OpenRouter route returned invalid JSON after one repair attempt. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 1,319 → 1,881 COST $0.0056 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 178444
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

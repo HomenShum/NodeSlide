@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "kpi-strip",
+  "generatedAt": "2026-07-22T03:23:21.573Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "kpi-strip__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:49efd0c69adf2f6cfcffbcb0963deb76c266f5c1b79f970512639121d59698a0",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/kpi-strip__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/kpi-strip__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/kpi-strip__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Use an editable table with conditional emphasis if the native KPI strip cannot export."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "kpi-strip__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:767959dfc9cd2d5d0e156ca0387c59661f350d00bc77a2facdfeb975b2e59d22",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/kpi-strip__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/kpi-strip__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/kpi-strip__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Use an editable table with conditional emphasis if the native KPI strip cannot export."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8799,
+        "inputTokens": 2,
+        "outputTokens": 582,
+        "costMicroUsd": 9689
+      }
+    },
+    {
+      "candidateId": "kpi-strip__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:6f6a7a4949f70f4f0e23fa1e8dbf99d544bb5e61e44e8059c7f1a72141581de3",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/kpi-strip__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/kpi-strip__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/kpi-strip__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Use an editable table with conditional emphasis if the native KPI strip cannot export."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15433,
+        "inputTokens": 1192,
+        "outputTokens": 391,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "kpi-strip__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:2e010aafdcfb73741c6e76a65abcbda4528a86732fb5571bd7b498753b36aba1",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/kpi-strip__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/kpi-strip__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/kpi-strip__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Use an editable table with conditional emphasis if the native KPI strip cannot export."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 22841,
+        "inputTokens": 900,
+        "outputTokens": 405,
+        "costMicroUsd": 1552
+      }
+    },
+    {
+      "candidateId": "kpi-strip__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:249ff8de6ab04d9c2c560f74958bc297bf9b1ec73e151e78c42511d9a3b0b438",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/kpi-strip__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/kpi-strip__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/kpi-strip__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Use an editable table with conditional emphasis if the native KPI strip cannot export."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8756,
+        "inputTokens": 2,
+        "outputTokens": 621,
+        "costMicroUsd": 10091
+      }
+    },
+    {
+      "candidateId": "kpi-strip__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:4cf24e0cb93cabafadcc8535b9fc3d55e7bb52d0a4d120613d74e09df308c9ea",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/kpi-strip__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/kpi-strip__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/kpi-strip__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Use an editable table with conditional emphasis if the native KPI strip cannot export."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 14064,
+        "inputTokens": 1194,
+        "outputTokens": 390,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "kpi-strip__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:9f6b42bf1b3b90b7d1427a287b4923db645261a2f7b495399e194d19b98b3328",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/kpi-strip__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/kpi-strip__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/kpi-strip__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Use an editable table with conditional emphasis if the native KPI strip cannot export."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 19670,
+        "inputTokens": 902,
+        "outputTokens": 267,
+        "costMicroUsd": 1208
+      }
+    }
+  ]
+}

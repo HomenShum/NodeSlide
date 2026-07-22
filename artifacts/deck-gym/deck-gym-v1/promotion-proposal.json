@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-promotion-proposal/v1",
+  "generatedAt": "2026-07-22T00:20:17.301Z",
+  "tournamentDigest": "sha256:9474d1816469b7bffb843e4f5cdc5681102d1139318dd77b1b48712b4ce07a38",
+  "reviewedMatches": 0,
+  "eligibleMatches": 0,
+  "reviewCoverage": 0,
+  "decision": "blocked",
+  "blockers": ["insufficient_eligible_matches", "human_review_incomplete"],
+  "autoApply": false,
+  "proposedChanges": [],
+  "rollbackRequired": true,
+  "proposalDigest": "sha256:d07b7233230c52c228e5da3e29245f346220a8659bfd6e208fccbe36e9b2a84f"
+}

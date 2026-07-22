@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "candidateId": "request-sequence__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:13b691aec728e6437ef30f0cb719f5619112b811a515fd009cb428f0ea95d496",
+  "candidateKind": "deterministic-baseline",
+  "fixtureId": "request-sequence",
+  "artifactType": "sequence-diagram",
+  "model": "nodeslide-artifact-builder-v1",
+  "directionId": "deterministic-baseline",
+  "durationMs": 0,
+  "status": "passed",
+  "plan": {
+    "artifactType": "sequence-diagram",
+    "title": "validation precedes review",
+    "takeaway": "Expose ordering, review custody, and failure boundaries across one request lifecycle.",
+    "annotation": "acceptance precedes commit",
+    "composition": "split",
+    "emphasis": "position",
+    "density": "balanced",
+    "operations": [
+      {
+        "operationId": "create-lifelines",
+        "label": "Create Lifelines",
+        "value": "validation precedes review",
+        "sourceId": "sequence-events"
+      },
+      {
+        "operationId": "create-ordered-messages",
+        "label": "Create Ordered Messages",
+        "value": "acceptance precedes commit",
+        "sourceId": "sequence-events"
+      },
+      {
+        "operationId": "show-failure-return",
+        "label": "Show Failure Return",
+        "value": "adapter returns receipt",
+        "sourceId": "sequence-events"
+      }
+    ],
+    "sourceLabels": [
+      {
+        "sourceId": "sequence-events",
+        "label": "Lifecycle events"
+      }
+    ],
+    "pptxFallback": "Use editable lifelines and arrows; a static Mermaid image is not promotion-eligible."
+  },
+  "telemetry": {
+    "provider": "deterministic",
+    "model": "nodeslide-artifact-builder-v1",
+    "reasoningEffort": "low",
+    "costMicroUsd": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+}

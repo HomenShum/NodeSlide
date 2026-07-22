@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-harness/v1",
+  "harnessVersion": "deck-gym-free-router-v1",
+  "expectedMatrixSize": 96,
+  "description": "Controlled zero-priced OpenRouter cohort. Routes must retain the :free suffix and generation results never self-promote.",
+  "models": [
+    {
+      "id": "google/gemma-4-26b-a4b-it:free",
+      "label": "Gemma 4 26B (Free)",
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "provisionalRole": "free_structured_generation_candidate"
+    },
+    {
+      "id": "google/gemma-4-31b-it:free",
+      "label": "Gemma 4 31B (Free)",
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "provisionalRole": "free_format_compatibility_control"
+    },
+    {
+      "id": "nvidia/nemotron-3-super-120b-a12b:free",
+      "label": "Nemotron 3 Super (Free)",
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "provisionalRole": "free_long_context_candidate"
+    },
+    {
+      "id": "openai/gpt-oss-20b:free",
+      "label": "GPT-OSS 20B (Free)",
+      "provider": "openrouter",
+      "reasoningEffort": "low",
+      "provisionalRole": "free_fast_iteration_candidate"
+    }
+  ],
+  "directions": [
+    {
+      "id": "evidence-editorial",
+      "label": "Evidence editorial",
+      "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+    },
+    {
+      "id": "cinematic-minimal",
+      "label": "Cinematic minimal",
+      "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+    }
+  ],
+  "budgets": {
+    "maxRuns": 96,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 1,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 0
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireLiveModelTrace": true,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "promotion": {
+    "minimumMatchedCases": 12,
+    "minimumPreferenceWinRate": 0.6,
+    "minimumMeanScoreDelta": 0.03,
+    "maximumDimensionRegression": 0.02,
+    "requiresHumanReview": true,
+    "autoApply": false
+  }
+}

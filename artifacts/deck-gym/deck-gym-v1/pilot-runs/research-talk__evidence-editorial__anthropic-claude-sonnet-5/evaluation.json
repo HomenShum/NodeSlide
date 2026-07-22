@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-evaluation/v1",
+  "runId": "research-talk__evidence-editorial__anthropic-claude-sonnet-5",
+  "runDigest": "sha256:dc74b065fbb50adcab4bb08e24c89e24ddd547fadb89ebfd3b335c7fc4db6085",
+  "harnessVersion": "deck-gym-v1",
+  "briefId": "research-talk",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "evaluatedAt": "2026-07-21T23:49:05.689Z",
+  "status": "failed",
+  "checks": {
+    "slideCount": true,
+    "claimCoverage": true,
+    "forbiddenClaims": true,
+    "distinctLayouts": true,
+    "layoutRepetition": true,
+    "adjacentSimilarity": true,
+    "textAreaRatio": false,
+    "meaningfulVisuals": true,
+    "internalCollisions": false,
+    "requiredArtifacts": false,
+    "renderedPptx": true
+  },
+  "dimensions": {
+    "factual": 1,
+    "visual": 0.6,
+    "narrative": 1,
+    "rhythm": 0.794872,
+    "artifactIntegrity": 0.333333
+  },
+  "score": 0.745641,
+  "evidence": {
+    "slideCount": 7,
+    "renderedSlideCount": 7,
+    "matchedClaims": ["0.75", "0.038", "1040"],
+    "requiredClaimCount": 3,
+    "claimCoverage": 1,
+    "forbiddenClaims": [],
+    "distinctLayoutSignatures": 7,
+    "repeatedLayoutCount": 1,
+    "maximumAdjacentLayoutSimilarity": 0.615385,
+    "meaningfulVisualSlides": 7,
+    "maximumTextAreaRatio": 0.619544,
+    "geometryCollisionCount": 0,
+    "estimatedTextOverflowCount": 5,
+    "collisionCount": 5,
+    "missingArtifacts": ["diagram"],
+    "artifactPresence": {
+      "charts": 1,
+      "images": 0,
+      "connectors": 0,
+      "shapes": 16,
+      "diagrams": 0,
+      "formulas": 7,
+      "codeSlides": 0
+    },
+    "slideDigests": [
+      "sha256:f3ae1c6aa9c87f32638662aa22977c9233d2233152f742b30f71989c422a4461",
+      "sha256:54d8c83e48ab59a4bfc1e2e058ab64873041ab3ea29131dff85714a315e6ff53",
+      "sha256:929bdedc28596ad1216bfa4fc481236300b91e6820baa6544fa98a93228ea1e7",
+      "sha256:3ba12b040700987204de5c4ebf1a42784081993f32e1da108fa43ec9211795b3",
+      "sha256:a526fe04e0852ce1dfc4dad0ffb5a8e2c5c79cc9c37fffa2a30a92ecdd9fb861",
+      "sha256:11f9aefe89dc435a9615d8c05cf93b89c862bdffd7605e0a969b5b03e0fb61dd",
+      "sha256:b4dee54df0784ae5fbee49b2149a7269a57964b82788d2e4dbf733c21209149e"
+    ]
+  },
+  "evaluationDigest": "sha256:424654318bad63e0d2ed89efb7030f9e2bcfdd409c1e84c883297898f5200d5d"
+}

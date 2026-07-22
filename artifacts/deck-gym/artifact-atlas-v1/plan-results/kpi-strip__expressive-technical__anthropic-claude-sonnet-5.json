@@ -1,0 +1,56 @@
+{
+  "artifactType": "kpi-strip",
+  "candidateDigest": "sha256:66579adef6cfafacb0c75fe0b4f7fb6c50254375816cf749249829c510921e13",
+  "candidateId": "kpi-strip__expressive-technical__anthropic-claude-sonnet-5",
+  "directionId": "expressive-technical",
+  "durationMs": 8756,
+  "fixtureId": "kpi-strip",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Bold central emphasis flags the two metrics with the widest gap to target while preserving prior-quarter context for all five.",
+    "artifactType": "kpi-strip",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Core Q2 metrics",
+        "operationId": "bind-five-metrics",
+        "sourceId": "q2-kpis",
+        "value": "Revenue $4.8M · Pipeline $7.4M · Win rate 21% · Implementation 39 days · Retention 94%"
+      },
+      {
+        "label": "Prior vs target context",
+        "operationId": "encode-prior-and-target",
+        "sourceId": "q2-kpis",
+        "value": "Q1 4.2/9.1/24%/46d/93% → Target 5.0/10.0/28%/35d/95%"
+      },
+      {
+        "label": "Material misses flagged",
+        "operationId": "flag-material-variance",
+        "sourceId": "q2-kpis",
+        "value": "Pipeline -$2.6M, win rate -7pts, implementation +4 days vs target"
+      }
+    ],
+    "pptxFallback": "If the native KPI strip cannot render, fall back to an editable PowerPoint table with five rows (Revenue, Pipeline, Win Rate, Implementation, Retention) and columns for Q1, Q2, and Target, using conditional cell shading to flag material misses; all values remain editable text.",
+    "sourceLabels": [
+      {
+        "label": "Q2 KPI export",
+        "sourceId": "q2-kpis"
+      }
+    ],
+    "takeaway": "Revenue and retention gained ground, but pipeline, win rate, and implementation time remain materially off target.",
+    "title": "Q2 Operating KPI Strip"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 10091,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 621,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

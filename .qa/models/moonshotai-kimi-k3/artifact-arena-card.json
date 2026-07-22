@@ -1,0 +1,159 @@
+{
+  "schemaVersion": "nodeslide.artifact-capability-card/v1",
+  "model": "moonshotai/kimi-k3",
+  "label": "Kimi K3",
+  "harnessVersion": "artifact-arena-v1",
+  "evidenceWindow": {
+    "candidateCount": 24,
+    "eligibleCount": 23,
+    "artifactTypes": 12,
+    "directions": 2
+  },
+  "observedMetrics": {
+    "eligibilityRate": 0.9583,
+    "meanGenerationMs": 17617.4583,
+    "meanInputTokens": 848,
+    "meanOutputTokens": 317.9583,
+    "totalCostMicroUsd": 31278,
+    "freeRoute": false
+  },
+  "artifactCapabilities": [
+    {
+      "artifactType": "architecture-diagram",
+      "candidateCount": 2,
+      "eligibleCount": 2,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 14907.5,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "claim-source-lineage",
+      "candidateCount": 2,
+      "eligibleCount": 2,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 20110,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "code-runtime-proof",
+      "candidateCount": 2,
+      "eligibleCount": 2,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 18479,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "hero-thesis",
+      "candidateCount": 2,
+      "eligibleCount": 2,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 14724.5,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "katex-equation",
+      "candidateCount": 2,
+      "eligibleCount": 2,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 15528,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "kpi-strip",
+      "candidateCount": 2,
+      "eligibleCount": 2,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 21255.5,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "multi-series-chart",
+      "candidateCount": 2,
+      "eligibleCount": 2,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 11575.5,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "risk-matrix",
+      "candidateCount": 2,
+      "eligibleCount": 2,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 17319.5,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "screenshot-callouts",
+      "candidateCount": 2,
+      "eligibleCount": 1,
+      "eligibilityRate": 0.5,
+      "meanGenerationMs": 23871,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": ["BRIEF_MISS", "EVIDENCE_FAILURE"]
+    },
+    {
+      "artifactType": "sequence-diagram",
+      "candidateCount": 2,
+      "eligibleCount": 2,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 16154,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "timeline",
+      "candidateCount": 2,
+      "eligibleCount": 2,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 18015.5,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": []
+    },
+    {
+      "artifactType": "uncertainty-range",
+      "candidateCount": 2,
+      "eligibleCount": 2,
+      "eligibilityRate": 1,
+      "meanGenerationMs": 19469.5,
+      "meanClaimCoverage": 1,
+      "repeatedEvidence": true,
+      "failureClasses": []
+    }
+  ],
+  "preferredArtifactTypes": [
+    "architecture-diagram",
+    "claim-source-lineage",
+    "code-runtime-proof",
+    "hero-thesis",
+    "katex-equation",
+    "kpi-strip",
+    "multi-series-chart",
+    "risk-matrix",
+    "sequence-diagram",
+    "timeline",
+    "uncertainty-range"
+  ],
+  "confidence": "medium",
+  "status": "provisional",
+  "autoApply": false,
+  "limitation": "Observed artifact execution only. Human pairwise preference and skill-on/skill-off ablation remain separate gates."
+}

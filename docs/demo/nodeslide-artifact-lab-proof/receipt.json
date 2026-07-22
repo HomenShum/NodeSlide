@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "nodeslide.artifact-lab-production-receipt/v1",
+  "capturedAt": "2026-07-22T03:53:53.058Z",
+  "canonicalUrl": "https://nodeslide.vercel.app/",
+  "immutableDeploymentUrl": "https://nodeslide-6qqeb31cy-hshum2018-gmailcoms-projects.vercel.app",
+  "gallery": {
+    "articles": 12,
+    "images": 12,
+    "loaded": 12,
+    "broken": []
+  },
+  "modelCompare": {
+    "cards": 4,
+    "loadedImages": 4,
+    "freeRouteVisible": true,
+    "retainedFailureModels": [
+      "Gemma 4 26B Free"
+    ]
+  },
+  "evidenceModes": {
+    "browser": true,
+    "powerPoint": true,
+    "operations": true,
+    "economics": true
+  },
+  "harnessCompare": {
+    "priorComparableReceipt": false,
+    "honestEmptyState": true
+  },
+  "usePattern": {
+    "buttonCount": 12,
+    "dialogClosed": true,
+    "briefValue": "Create a concise presentation that uses a hero thesis where it strengthens the argument. Keep it editable, evidence-bounded, and visually distinctive."
+  },
+  "browserErrors": [],
+  "screenshots": [
+    "docs/demo/nodeslide-artifact-lab-proof/gallery.png",
+    "docs/demo/nodeslide-artifact-lab-proof/model-compare-screenshot-callouts.png"
+  ]
+}

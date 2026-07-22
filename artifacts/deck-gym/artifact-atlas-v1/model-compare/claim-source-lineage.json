@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "claim-source-lineage",
+  "generatedAt": "2026-07-22T03:23:22.391Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "claim-source-lineage__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:398116fc25adee4b04edc44605de16a829f5806e17f5a5f31ddb2ea80ef7245d",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/claim-source-lineage__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/claim-source-lineage__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/claim-source-lineage__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Preserve editable nodes, connectors, source ID, and rejection state; never flatten the lineage into prose."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "claim-source-lineage__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:ebf8e319dae911b216f504c4ed15441cb75a1f93d83ee2d8f0eeb4736240e18f",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/claim-source-lineage__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/claim-source-lineage__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/claim-source-lineage__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Preserve editable nodes, connectors, source ID, and rejection state; never flatten the lineage into prose."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7121,
+        "inputTokens": 2,
+        "outputTokens": 504,
+        "costMicroUsd": 8688
+      }
+    },
+    {
+      "candidateId": "claim-source-lineage__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:b4b7a5c050106c925f5398846d7ac57a3f44f94fff2458f194c0638764202029",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/claim-source-lineage__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/claim-source-lineage__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/claim-source-lineage__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Preserve editable nodes, connectors, source ID, and rejection state; never flatten the lineage into prose."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15792,
+        "inputTokens": 1092,
+        "outputTokens": 352,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "claim-source-lineage__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:144d4a5da15d0fb72da53de42f1789d5bcf2f5bd06d0886baec52b805e4923b8",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/claim-source-lineage__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/claim-source-lineage__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/claim-source-lineage__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Preserve editable nodes, connectors, source ID, and rejection state; never flatten the lineage into prose."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 20831,
+        "inputTokens": 820,
+        "outputTokens": 338,
+        "costMicroUsd": 1337
+      }
+    },
+    {
+      "candidateId": "claim-source-lineage__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:b0efbf24223c54a0df05faf48c5c32b7da2dc25e381d39dabc6e4a7854e5d741",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/claim-source-lineage__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/claim-source-lineage__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/claim-source-lineage__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Preserve editable nodes, connectors, source ID, and rejection state; never flatten the lineage into prose."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7628,
+        "inputTokens": 2,
+        "outputTokens": 545,
+        "costMicroUsd": 9111
+      }
+    },
+    {
+      "candidateId": "claim-source-lineage__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:03f2afdc84aba6e5965d0cb757b0ddbfd7a82f32902df88de44629efd347f19c",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/claim-source-lineage__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/claim-source-lineage__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/claim-source-lineage__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Preserve editable nodes, connectors, source ID, and rejection state; never flatten the lineage into prose."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 18075,
+        "inputTokens": 1094,
+        "outputTokens": 370,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "claim-source-lineage__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:ef31d3772065b63dda6b7e3513fc4a0cac20708eac5326e4dbf0d516f82a0d2b",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/claim-source-lineage__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/claim-source-lineage__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/claim-source-lineage__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Preserve editable nodes, connectors, source ID, and rejection state; never flatten the lineage into prose."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 19389,
+        "inputTokens": 822,
+        "outputTokens": 402,
+        "costMicroUsd": 1498
+      }
+    }
+  ]
+}

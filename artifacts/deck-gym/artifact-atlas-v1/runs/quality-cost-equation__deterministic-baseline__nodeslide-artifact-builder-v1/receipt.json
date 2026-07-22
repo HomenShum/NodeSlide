@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "quality-cost-equation__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:f0750e69518e14414bd4a2d5194ecae828fdc627b71bacca927c902867ead448",
+  "fixtureId": "quality-cost-equation",
+  "directionId": "deterministic-baseline",
+  "artifactType": "katex-equation",
+  "slideArchetype": "equation-explainer",
+  "narrativeJob": "Explain the cost-adjusted quality measure and connect every symbol to the supplied experiment table.",
+  "model": "nodeslide-artifact-builder-v1",
+  "modelRole": "geometry-and-export-control",
+  "candidateKind": "deterministic-baseline",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "retrieval-result"
+  ],
+  "sourceDigest": "sha256:311d3206717b8f675cc96ffee37634aa223f6b8733fd8ccbc2b6f8a07a4462df",
+  "referenceIds": [
+    "technical-equation-annotated"
+  ],
+  "artifactRequirementDigest": "sha256:646bb86cd554201940fdcf11dbd7d178949d95a778ef6431f76f71bfd9bd7782",
+  "editability": {
+    "web": "native",
+    "pptx": "grouped-editable"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/quality-cost-equation__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+    "pptxRender": "runs/quality-cost-equation__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/quality-cost-equation__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+    "webPptxDifference": "Export the rendered equation as SVG with adjacent editable definitions; raw LaTeX text fails the gate."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:39:36.785Z",
+  "receiptDigest": "sha256:7f4f3b9e687094cc64e465eefbfc2d54688c63600a63a32a1ca73cd2d6e75fbc",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "math",
+    "line"
+  ]
+}

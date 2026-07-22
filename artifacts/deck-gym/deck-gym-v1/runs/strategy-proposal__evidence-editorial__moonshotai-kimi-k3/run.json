@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "strategy-proposal__evidence-editorial__moonshotai-kimi-k3",
+  "briefId": "strategy-proposal",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:25673222e6c94f358c8eda60ad9d4b13361d5f00832d64dc9a21b58468d518fe",
+  "runDigest": "sha256:363e71d180295e2da42e14540511a91f12f535974e5eaf83c7a23aa275ff36ab",
+  "title": "AI Support Entry Strategy",
+  "family": "strategy_proposal",
+  "audience": "product and go-to-market leadership",
+  "decision": "select the initial market-entry wedge",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide strategy proposal for product and go-to-market leaders selecting an AI support market-entry wedge. Frame the market tension, compare three segments, show capability fit, sequence the roadmap, surface risks, and recommend one option. Use the supplied scoring table exactly. Include an editable landscape, aligned option comparison, roadmap timeline, and recommendation gate. Avoid generic two-by-two decoration without labeled axes.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "segment-score.csv",
+      "format": "csv",
+      "content": "segment,urgency,ability_to_pay,data_readiness,sales_complexity\nmidmarket_saas,5,4,4,2\nconsumer_fintech,4,5,3,5\nhealthcare_admin,5,5,2,5"
+    }
+  ],
+  "requiredClaims": [
+    "midmarket saas",
+    "consumer fintech",
+    "healthcare admin"
+  ],
+  "requiredArtifacts": [
+    "landscape",
+    "comparison",
+    "timeline",
+    "decision"
+  ],
+  "forbiddenClaims": [
+    "largest market",
+    "easiest sale"
+  ],
+  "referenceIds": [
+    "strategy/market-landscape",
+    "strategy/aligned-options",
+    "strategy/roadmap-gate"
+  ],
+  "modelLabel": "Kimi K3",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbd3bu_c00a198f4155841481c4f452535bd6ef",
+    "durationMs": 51758,
+    "completedAt": "2026-07-21T23:57:51.825Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · moonshotai/kimi-k3 (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Kimi K3 via OpenRouter route returned invalid JSON after one repair attempt. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 1,277 → 2,169 COST $0.0063 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 175735
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

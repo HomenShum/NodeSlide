@@ -1,0 +1,56 @@
+{
+  "artifactType": "timeline",
+  "candidateDigest": "sha256:0ad1f04f7b63b31fddf95754f907d479f8bbf0ba3b56a6da202b2ac0c98b88f4",
+  "candidateId": "research-timeline__expressive-technical__moonshotai-kimi-k3",
+  "directionId": "expressive-technical",
+  "durationMs": 16211,
+  "fixtureId": "research-timeline",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Milestones are spaced by elapsed days; the blind review gate is emphasized as the approval checkpoint before the harness update.",
+    "artifactType": "timeline",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Time-proportional milestone placement",
+        "operationId": "place-time-proportional-milestones",
+        "sourceId": "research-dates",
+        "value": "Five milestones spaced by elapsed days: Jul 1, Jul 3, Jul 6, Jul 9, Jul 11"
+      },
+      {
+        "label": "Emphasize the blind review gate",
+        "operationId": "emphasize-review-gate",
+        "sourceId": "research-dates",
+        "value": "Blind review completed July 9 rendered as the largest, central gate milestone before approval"
+      },
+      {
+        "label": "Bind ledger dates to milestones",
+        "operationId": "bind-dates",
+        "sourceId": "research-dates",
+        "value": "Question frozen Jul 1; evidence collected Jul 3; candidates generated Jul 6; blind review completed Jul 9; harness update approved Jul 11"
+      }
+    ],
+    "pptxFallback": "In PowerPoint, the timeline is delivered as an editable line with five editable milestone shapes and bound date labels; any motion is removed before export so nothing is flattened into a single raster image.",
+    "sourceLabels": [
+      {
+        "label": "Research ledger",
+        "sourceId": "research-dates"
+      }
+    ],
+    "takeaway": "Research moved from a frozen question on July 1 to an approved harness update on July 11, with blind review as the decision gate.",
+    "title": "From Question to Approved Harness Update"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1300,
+    "inputTokens": 839,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 319,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

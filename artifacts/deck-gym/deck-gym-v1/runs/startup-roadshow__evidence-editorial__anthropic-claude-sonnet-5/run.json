@@ -1,0 +1,99 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "startup-roadshow__evidence-editorial__anthropic-claude-sonnet-5",
+  "briefId": "startup-roadshow",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:fee2c043b037205db4c9d647d44eb672193b42a5cbd3814a1f937bf50b0c0d03",
+  "runDigest": "sha256:d6c1c74bfaf19c49b2306d88ff1b4d4d8b93263c2ba31fd469aaf158ab8f0efc",
+  "title": "RelayOS Series A Roadshow",
+  "family": "startup_roadshow",
+  "audience": "early-stage enterprise software investors",
+  "decision": "decide whether RelayOS has enough traction and technical defensibility for diligence",
+  "slideCount": 7,
+  "prompt": "Create an evidence-led seven-slide Series A roadshow for early-stage enterprise software investors deciding whether RelayOS merits diligence. Use only the attached operating metrics and product facts. Show the workflow problem, product transformation, traction, market wedge, defensible architecture, financing use, and a clear diligence decision. Include an editable traction chart, an editable system architecture diagram, a large honestly labeled product screenshot slot, and one restrained market comparison. Do not invent customers, market size, quotes, or growth rates.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "relay-operating-metrics.csv",
+      "format": "csv",
+      "content": "metric,value,unit,source\npaid_workspaces,84,workspaces,internal ledger\nmonthly_active_operators,1260,operators,product telemetry\nweekly_workflows,18400,workflows,product telemetry\nnet_revenue_retention,118,percent,billing export\nmedian_setup_time,19,minutes,onboarding telemetry"
+    },
+    {
+      "fileName": "relay-product-facts.md",
+      "format": "md",
+      "content": "RelayOS coordinates approval-heavy operations. The product keeps proposals reviewable before mutation, records versioned receipts, and exposes adapters for CRM, ticketing, and document systems. No product screenshot was supplied to the benchmark."
+    }
+  ],
+  "requiredClaims": [
+    "84 paid workspaces",
+    "118 percent",
+    "19 minutes"
+  ],
+  "requiredArtifacts": [
+    "chart",
+    "diagram",
+    "screenshot",
+    "comparison"
+  ],
+  "forbiddenClaims": [
+    "named customer",
+    "market size",
+    "customer quote"
+  ],
+  "referenceIds": [
+    "startup/traction-proof",
+    "startup/product-transformation",
+    "startup/architecture-boundary"
+  ],
+  "modelLabel": "Claude Sonnet 5",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvb4oet_7100649773248f3d59cc7b2a98b16f07",
+    "durationMs": 64251,
+    "completedAt": "2026-07-21T23:51:19.576Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · anthropic/claude-sonnet-5 (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Claude Sonnet 5 via OpenRouter route returned invalid JSON after one repair attempt. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 2 → 5,000 COST $0.0601 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 202983
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

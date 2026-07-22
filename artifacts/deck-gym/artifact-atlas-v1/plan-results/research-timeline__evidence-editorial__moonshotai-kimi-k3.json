@@ -1,0 +1,56 @@
+{
+  "artifactType": "timeline",
+  "candidateDigest": "sha256:4a0bc2c38856368229a3a74eb2f428d3a2437e41839501660c345b0575469678",
+  "candidateId": "research-timeline__evidence-editorial__moonshotai-kimi-k3",
+  "directionId": "evidence-editorial",
+  "durationMs": 19820,
+  "fixtureId": "research-timeline",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Blind review gate emphasized; harness update occurs only after human approval.",
+    "artifactType": "timeline",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "Time-Proportional Milestones",
+        "operationId": "place-time-proportional-milestones",
+        "sourceId": "research-dates",
+        "value": "Milestones spaced by elapsed days: Jul 1, Jul 3, Jul 6, Jul 9, Jul 11"
+      },
+      {
+        "label": "Emphasize Review Gate",
+        "operationId": "emphasize-review-gate",
+        "sourceId": "research-dates",
+        "value": "Blind review completed July 9 highlighted as decision gate"
+      },
+      {
+        "label": "Bind Dates",
+        "operationId": "bind-dates",
+        "sourceId": "research-dates",
+        "value": "Question frozen July 1; blind review completed July 9; update approved July 11"
+      }
+    ],
+    "pptxFallback": "Editable milestone shapes and a line; motion removed before rasterizing.",
+    "sourceLabels": [
+      {
+        "label": "Research ledger",
+        "sourceId": "research-dates"
+      }
+    ],
+    "takeaway": "Progression from frozen question to approved harness update, with honest elapsed-day spacing.",
+    "title": "Research Timeline: Question to Decision"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1344,
+    "inputTokens": 837,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 337,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

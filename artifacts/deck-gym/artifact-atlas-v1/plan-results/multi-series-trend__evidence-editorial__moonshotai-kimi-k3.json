@@ -1,0 +1,56 @@
+{
+  "artifactType": "multi-series-chart",
+  "candidateDigest": "sha256:da875a8a40481e846d3bb422807cb7f0e32c83c066874d859b3a587e5e5fdb90",
+  "candidateId": "multi-series-trend__evidence-editorial__moonshotai-kimi-k3",
+  "directionId": "evidence-editorial",
+  "durationMs": 10320,
+  "fixtureId": "multi-series-trend",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Local bus ends at 67, the lowest June recovery across the three modes.",
+    "artifactType": "multi-series-chart",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Monthly ridership index, Jan–Jun",
+        "operationId": "create-editable-series",
+        "sourceId": "ridership-series",
+        "value": "rapid bus 72→91, local bus 61→67, rail 68→82"
+      },
+      {
+        "label": "June endpoints labeled directly",
+        "operationId": "direct-label-endpoints",
+        "sourceId": "ridership-series",
+        "value": "rapid bus 91; local bus 67; rail 82"
+      },
+      {
+        "label": "Under-recovery callout",
+        "operationId": "annotate-supported-pattern",
+        "sourceId": "ridership-series",
+        "value": "Local bus recovered least, ending at 67 versus 91 (rapid bus) and 82 (rail)."
+      }
+    ],
+    "pptxFallback": "Exports as editable PowerPoint lines and text labels with native series semantics; animation is omitted before any static chart image fallback.",
+    "sourceLabels": [
+      {
+        "label": "Monthly ridership index",
+        "sourceId": "ridership-series"
+      }
+    ],
+    "takeaway": "Local bus recovered least, reaching 67 by June while rapid bus reached 91 and rail reached 82.",
+    "title": "Ridership Recovery Diverges Across Modes"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1194,
+    "inputTokens": 854,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 273,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

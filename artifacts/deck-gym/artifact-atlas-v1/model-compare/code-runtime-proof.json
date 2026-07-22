@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "code-runtime-proof",
+  "generatedAt": "2026-07-22T03:23:22.596Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "code-runtime-proof__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:704eff33bef9ef305f68be6c8ffa560e5605da9f09f340aa53a1590864de2db2",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/code-runtime-proof__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/code-runtime-proof__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/code-runtime-proof__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Keep runtime numbers editable and export code as a syntax-highlighted SVG plus accessible source text."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "code-runtime-proof__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:6b2a25f87210bd53b3333fc5de80acc410c437b487e7c86b84c911828bf06bb3",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/code-runtime-proof__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/code-runtime-proof__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/code-runtime-proof__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Keep runtime numbers editable and export code as a syntax-highlighted SVG plus accessible source text."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 7870,
+        "inputTokens": 2,
+        "outputTokens": 499,
+        "costMicroUsd": 5315
+      }
+    },
+    {
+      "candidateId": "code-runtime-proof__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:a53b0ab21298812e08d2775488ccf35a2a525a8993cb294a8eabc71473ada7d8",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/code-runtime-proof__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/code-runtime-proof__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/code-runtime-proof__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Keep runtime numbers editable and export code as a syntax-highlighted SVG plus accessible source text."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 11501,
+        "inputTokens": 1175,
+        "outputTokens": 391,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "code-runtime-proof__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:103ad801ddca4b3747f9be38f7249c4ad26d475ec6155c09e5f81c638e8959aa",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/code-runtime-proof__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/code-runtime-proof__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/code-runtime-proof__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Keep runtime numbers editable and export code as a syntax-highlighted SVG plus accessible source text."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15901,
+        "inputTokens": 874,
+        "outputTokens": 362,
+        "costMicroUsd": 1429
+      }
+    },
+    {
+      "candidateId": "code-runtime-proof__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:cb630a41f2952f64fdcee5eeaf7e30d5f159df9eb597ae289919c4fbd859aac9",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/code-runtime-proof__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/code-runtime-proof__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/code-runtime-proof__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Keep runtime numbers editable and export code as a syntax-highlighted SVG plus accessible source text."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8721,
+        "inputTokens": 2,
+        "outputTokens": 493,
+        "costMicroUsd": 8964
+      }
+    },
+    {
+      "candidateId": "code-runtime-proof__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:7bbef9b0173372b75aecce20e8bd9d03ed1999410a7f782e47fe9a5f8eac3092",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/code-runtime-proof__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/code-runtime-proof__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/code-runtime-proof__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Keep runtime numbers editable and export code as a syntax-highlighted SVG plus accessible source text."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 22085,
+        "inputTokens": 1177,
+        "outputTokens": 390,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "code-runtime-proof__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:54b4b4810ff9e496665f26846a52de7923e1be93eaf4e33a61839a15639aa848",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/code-runtime-proof__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/code-runtime-proof__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/code-runtime-proof__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Keep runtime numbers editable and export code as a syntax-highlighted SVG plus accessible source text."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 21057,
+        "inputTokens": 876,
+        "outputTokens": 309,
+        "costMicroUsd": 1298
+      }
+    }
+  ]
+}

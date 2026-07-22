@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "quality-cost-equation",
+  "generatedAt": "2026-07-22T03:23:22.491Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "quality-cost-equation__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:f68845dae660ac623619f670e905d90aea1fc2dc81969c8098fc0269807f541a",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/quality-cost-equation__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/quality-cost-equation__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/quality-cost-equation__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Export the rendered equation as SVG with adjacent editable definitions; raw LaTeX text fails the gate."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "quality-cost-equation__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:4d826a68a4928bb265b780c81cba791fa7a301bd222f30b9e50d357ef6ac5b45",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/quality-cost-equation__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/quality-cost-equation__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/quality-cost-equation__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Export the rendered equation as SVG with adjacent editable definitions; raw LaTeX text fails the gate."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 10101,
+        "inputTokens": 2,
+        "outputTokens": 438,
+        "costMicroUsd": 8024
+      }
+    },
+    {
+      "candidateId": "quality-cost-equation__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:565c73daad2903c53967004c64ad3403050fd20a21eafce045138a59f3a9465c",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/quality-cost-equation__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/quality-cost-equation__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/quality-cost-equation__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Export the rendered equation as SVG with adjacent editable definitions; raw LaTeX text fails the gate."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 28411,
+        "inputTokens": 1097,
+        "outputTokens": 345,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "quality-cost-equation__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:76a0112e4a28ef10be7bc60243ae3fe6066543d891af9bb290c92c440aa83b5d",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/quality-cost-equation__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/quality-cost-equation__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/quality-cost-equation__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Export the rendered equation as SVG with adjacent editable definitions; raw LaTeX text fails the gate."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15492,
+        "inputTokens": 838,
+        "outputTokens": 311,
+        "costMicroUsd": 1280
+      }
+    },
+    {
+      "candidateId": "quality-cost-equation__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:14329e9a6298df1f1e651f7121667b5089984e6aa78bd23fc96962bc35432421",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/quality-cost-equation__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/quality-cost-equation__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/quality-cost-equation__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Export the rendered equation as SVG with adjacent editable definitions; raw LaTeX text fails the gate."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 6804,
+        "inputTokens": 2,
+        "outputTokens": 482,
+        "costMicroUsd": 8476
+      }
+    },
+    {
+      "candidateId": "quality-cost-equation__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:cd6cd989330c995139794ab76178f744980fada7348b80bfb4f9807bc37e5286",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/quality-cost-equation__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/quality-cost-equation__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/quality-cost-equation__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Export the rendered equation as SVG with adjacent editable definitions; raw LaTeX text fails the gate."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 21041,
+        "inputTokens": 2591,
+        "outputTokens": 699,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "quality-cost-equation__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:537db9e8a1fcc5f5bd8d120ca6b8cde47b0fa0d9e6877f1496739041f6c084a3",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/quality-cost-equation__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/quality-cost-equation__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/quality-cost-equation__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Export the rendered equation as SVG with adjacent editable definitions; raw LaTeX text fails the gate."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 15564,
+        "inputTokens": 840,
+        "outputTokens": 341,
+        "costMicroUsd": 1356
+      }
+    }
+  ]
+}

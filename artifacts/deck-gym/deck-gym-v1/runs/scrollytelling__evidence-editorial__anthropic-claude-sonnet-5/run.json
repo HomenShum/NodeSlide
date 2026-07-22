@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "scrollytelling__evidence-editorial__anthropic-claude-sonnet-5",
+  "briefId": "scrollytelling",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:773019445d2e6b621762f29c32e5b4ca26b0cf9091b36990fc1091c048ebb745",
+  "runDigest": "sha256:c02206590619e5a4f8f35e315da4e34f0920d8ef4ddb75e47684a894b1ce3587",
+  "title": "A Shipment's Risk Journey",
+  "family": "scrollytelling_deck",
+  "audience": "supply-chain leaders",
+  "decision": "understand where intervention most reduces shipment risk",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide scrollytelling-style deck for supply-chain leaders following one shipment from booking through delivery. Each slide should advance the same journey, reveal one new risk signal, and preserve a coherent static PowerPoint fallback. Use the supplied event sequence exactly. Include an editable progression timeline, cumulative risk chart, handoff diagram, exception evidence, and final intervention decision. Do not fabricate a live interaction or animation in the PPTX.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "shipment-events.json",
+      "format": "json",
+      "content": "[{\"hour\":0,\"event\":\"booking\",\"risk\":8},{\"hour\":7,\"event\":\"carrier_acceptance\",\"risk\":12},{\"hour\":19,\"event\":\"port_arrival\",\"risk\":18},{\"hour\":31,\"event\":\"inspection_hold\",\"risk\":61},{\"hour\":44,\"event\":\"release\",\"risk\":39},{\"hour\":73,\"event\":\"delivery\",\"risk\":11}]"
+    }
+  ],
+  "requiredClaims": [
+    "inspection hold",
+    "61",
+    "delivery",
+    "11"
+  ],
+  "requiredArtifacts": [
+    "timeline",
+    "chart",
+    "diagram",
+    "evidence"
+  ],
+  "forbiddenClaims": [
+    "interactive pptx",
+    "live animation"
+  ],
+  "referenceIds": [
+    "scroll/progressive-reveal",
+    "scroll/cumulative-risk",
+    "scroll/static-fallback"
+  ],
+  "modelLabel": "Claude Sonnet 5",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbid46_bbfd27a58b0c62812885b924a3563d63",
+    "durationMs": 47998,
+    "completedAt": "2026-07-22T00:01:57.833Z",
+    "trace": {
+      "classification": "live",
+      "attribution": "openrouter · anthropic/claude-sonnet-5 · High effort",
+      "summary": "The user consented to send the full brief and 1 uploaded data source to OpenRouter. The named Claude Sonnet 5 model supplied the narrative plan through pi-ai; NodeSlide normalized, persisted, and validated the deck deterministically. Self-critique: 1 pass, clean.",
+      "metrics": "RUN TIME 1s TOKENS 2 → 4,739 COST $0.0528 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 194433
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:6b41097622f038b8b739ffda726934dcdc557715a660b160835c7132e2319d61",
+  "fixtureId": "hero-thesis",
+  "directionId": "deterministic-baseline",
+  "artifactType": "hero-thesis",
+  "slideArchetype": "hero",
+  "narrativeJob": "Establish one memorable, evidence-bounded thesis before the detailed argument begins.",
+  "model": "nodeslide-artifact-builder-v1",
+  "modelRole": "geometry-and-export-control",
+  "candidateKind": "deterministic-baseline",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "hero-workflow"
+  ],
+  "sourceDigest": "sha256:a6ea5c3e252e44d56fceed8b702748b948eac61ab73adfa48f73a45467e572c2",
+  "referenceIds": [
+    "narrative-hero-focal"
+  ],
+  "artifactRequirementDigest": "sha256:c818625e6b1ffc1f6ffd9258bcbc106b27c00b8444903d96f1ab0a1669d92388",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+    "pptxRender": "runs/hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/hero-thesis__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+    "webPptxDifference": "Keep the thesis and measured timing as editable text; remove decorative media before rasterizing evidence."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:32:00.440Z",
+  "receiptDigest": "sha256:08647cd498faa0e7ec90183f5b96de8313f0740057c38852cf54e4377db507ed",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

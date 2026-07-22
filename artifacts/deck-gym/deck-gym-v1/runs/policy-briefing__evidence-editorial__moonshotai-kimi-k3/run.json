@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "policy-briefing__evidence-editorial__moonshotai-kimi-k3",
+  "briefId": "policy-briefing",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:bdd57cf97c06a88b948a1761e73377f69b83b22b211bdd9bfb7a0949cf9715e8",
+  "runDigest": "sha256:deed8c52a276e46ef7fd458297810c4ef7eaa6df0d066aa492cfa6e789302551",
+  "title": "Municipal Heat Resilience Options",
+  "family": "policy_briefing",
+  "audience": "city council members",
+  "decision": "choose a phased heat-resilience package",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide policy briefing for city council members choosing a phased heat-resilience package. Show the evidence baseline, affected stakeholders, intervention options, implementation timeline, trade-offs, funding sequence, and recommendation. Use the supplied program facts without claiming measured health outcomes. Include an editable evidence map, stakeholder map, timeline, and trade-off comparison.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "heat-options.json",
+      "format": "json",
+      "content": "[{\"option\":\"cool_roofs\",\"annual_cost_musd\":6.2,\"implementation_years\":3,\"coverage_percent\":18},{\"option\":\"tree_canopy\",\"annual_cost_musd\":4.8,\"implementation_years\":8,\"coverage_percent\":11},{\"option\":\"resilience_centers\",\"annual_cost_musd\":3.1,\"implementation_years\":2,\"sites\":14}]"
+    }
+  ],
+  "requiredClaims": [
+    "6.2",
+    "4.8",
+    "3.1",
+    "14"
+  ],
+  "requiredArtifacts": [
+    "evidence_map",
+    "stakeholder_map",
+    "timeline",
+    "comparison"
+  ],
+  "forbiddenClaims": [
+    "lives saved",
+    "temperature reduction"
+  ],
+  "referenceIds": [
+    "policy/evidence-map",
+    "policy/stakeholder-system",
+    "policy/tradeoff-sequence"
+  ],
+  "modelLabel": "Kimi K3",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbggko_5b5fc1d18553ca7a20a42185629f04f2",
+    "durationMs": 98165,
+    "completedAt": "2026-07-22T00:00:29.225Z",
+    "trace": {
+      "classification": "live",
+      "attribution": "openrouter · moonshotai/kimi-k3 · High effort",
+      "summary": "The user consented to send the full brief and 1 uploaded data source to OpenRouter. The named Kimi K3 model supplied the narrative plan through pi-ai; NodeSlide normalized, persisted, and validated the deck deterministically. Self-critique: 2 passes: revision call failed (The Kimi K3 via OpenRouter route returned invalid JSON after one repair attempt.); kept pass 1 with 2 known issues.",
+      "metrics": "RUN TIME 1s TOKENS 4,803 → 4,393 COST $0.0141 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 219319
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

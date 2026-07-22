@@ -1,0 +1,56 @@
+{
+  "artifactType": "sequence-diagram",
+  "candidateDigest": "sha256:63a8c1f5a50053b85b98e7865fa2ffd6a2691d5466942f1499305a134895d8f9",
+  "candidateId": "request-sequence__evidence-editorial__anthropic-claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "durationMs": 8543,
+  "fixtureId": "request-sequence",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Lifelines trace one bounded request from submission through validation, human review, and committed receipt, with the failed-validation path shown returning separately.",
+    "artifactType": "sequence-diagram",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "Participants",
+        "operationId": "create-lifelines",
+        "sourceId": "sequence-events",
+        "value": "User, NodeSlide client, planning model, validator, adapter"
+      },
+      {
+        "label": "Ordered flow",
+        "operationId": "create-ordered-messages",
+        "sourceId": "sequence-events",
+        "value": "Submit brief → send context → return plan → validate → review → commit → receipt"
+      },
+      {
+        "label": "Failure path",
+        "operationId": "show-failure-return",
+        "sourceId": "sequence-events",
+        "value": "Validator returns issues to client instead of advancing to review"
+      }
+    ],
+    "pptxFallback": "Exports as native PowerPoint shapes: lifelines as connected vertical lines with labeled participant headers, messages as directional straight connectors with text labels, and the failure branch as a distinct returning connector. All shapes remain fully editable (movable, resizable, restylable) in PowerPoint; no image flattening or embedded diagram object is used.",
+    "sourceLabels": [
+      {
+        "label": "Lifecycle events",
+        "sourceId": "sequence-events"
+      }
+    ],
+    "takeaway": "Validation precedes review, acceptance precedes commit, and the adapter returns a versioned receipt.",
+    "title": "Request Lifecycle: Submission to Receipt"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8941,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 521,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

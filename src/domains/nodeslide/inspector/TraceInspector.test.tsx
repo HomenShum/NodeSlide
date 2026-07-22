@@ -237,6 +237,34 @@ describe('isFallbackTrace — fails closed', () => {
       }),
     ).toBe(true);
   });
+
+  it('recognizes an explicit free route with positive token flow as live', () => {
+    const { candidateDigest: _candidateDigest, patchId: _patchId, ...creationTrace } = traceLive;
+    expect(
+      isFallbackTrace({
+        ...creationTrace,
+        status: 'completed',
+        model: 'google/gemma-4-26b-a4b-it:free',
+        costMicroUsd: 0,
+        inputTokens: 2424,
+        outputTokens: 1215,
+      }),
+    ).toBe(false);
+  });
+
+  it('still fails closed when a free route has no provider token flow', () => {
+    const { candidateDigest: _candidateDigest, patchId: _patchId, ...creationTrace } = traceLive;
+    expect(
+      isFallbackTrace({
+        ...creationTrace,
+        status: 'completed',
+        model: 'google/gemma-4-26b-a4b-it:free',
+        costMicroUsd: 0,
+        inputTokens: 0,
+        outputTokens: 0,
+      }),
+    ).toBe(true);
+  });
 });
 
 describe('CountersignSeal — state-honest matrix (spec §4a)', () => {

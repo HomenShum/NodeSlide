@@ -1,0 +1,20 @@
+schema_version: nodeslide.model-failure-taxonomy/v1
+classes:
+  BRIEF_MISS: explicit requirements or frozen claims are missing
+  GENERIC_FALLBACK: valid but unrelated default content substitutes for the request
+  OVERPLANNING: planning consumes the budget without execution
+  UNDERPLANNING: execution starts before slide jobs and constraints are identified
+  WRONG_PRIMITIVE: prose replaces the required visual artifact
+  LAYOUT_REPETITION: substantially identical compositions recur
+  TEXT_DENSITY: copy exceeds readable layout capacity
+  INTERNAL_OVERLAP: content collides inside the slide canvas
+  TOOL_AVOIDANCE: prose replaces a required available tool call
+  TOOL_MISUSE: tool selection is correct but arguments or order are invalid
+  NO_RESULT_INSPECTION: screenshots, traces, renders, or assertions are not inspected
+  FALSE_COMPLETION: success is declared despite missing artifacts or failed checks
+  WEAK_REPAIR: the correction does not pass the original failure gate
+  CONTEXT_DRIFT: earlier evidence or constraints are lost
+  ORCHESTRATION_FAILURE: delegated work is poorly scoped or unvalidated
+  UNSUPPORTED_CLAIM: content lacks source support
+  COST_INEFFICIENCY: expensive reasoning replaces deterministic execution
+  EXPORT_FAILURE: generation reaches the editor but cannot produce a usable artifact

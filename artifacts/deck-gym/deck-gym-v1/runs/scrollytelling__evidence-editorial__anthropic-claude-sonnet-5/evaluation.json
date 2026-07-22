@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-evaluation/v1",
+  "runId": "scrollytelling__evidence-editorial__anthropic-claude-sonnet-5",
+  "runDigest": "sha256:c02206590619e5a4f8f35e315da4e34f0920d8ef4ddb75e47684a894b1ce3587",
+  "harnessVersion": "deck-gym-v1",
+  "evaluationGatesDigest": "sha256:b8bbac5b2715a7bdffc997dafc99cd766a13ff35680cc82fa2a0a34aa98d8d2f",
+  "briefId": "scrollytelling",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "routeClassification": "live",
+  "evaluatedAt": "2026-07-22T00:15:46.315Z",
+  "status": "failed",
+  "checks": {
+    "slideCount": true,
+    "claimCoverage": true,
+    "forbiddenClaims": false,
+    "distinctLayouts": true,
+    "layoutRepetition": true,
+    "adjacentSimilarity": true,
+    "textAreaRatio": false,
+    "meaningfulVisuals": false,
+    "internalCollisions": false,
+    "requiredArtifacts": false,
+    "liveModelTrace": true,
+    "renderedPptx": true
+  },
+  "dimensions": {
+    "factual": 0.5,
+    "visual": 0.6,
+    "narrative": 1,
+    "rhythm": 0.585185,
+    "artifactIntegrity": 0.333333
+  },
+  "rawScore": 0.603704,
+  "score": 0.603704,
+  "evidence": {
+    "slideCount": 7,
+    "renderedSlideCount": 7,
+    "matchedClaims": [
+      "inspection hold",
+      "61",
+      "delivery",
+      "11"
+    ],
+    "requiredClaimCount": 4,
+    "claimCoverage": 1,
+    "forbiddenClaims": [
+      "live animation"
+    ],
+    "distinctLayoutSignatures": 7,
+    "repeatedLayoutCount": 1,
+    "maximumAdjacentLayoutSimilarity": 0.444444,
+    "meaningfulVisualSlides": 1,
+    "maximumTextAreaRatio": 0.614389,
+    "geometryCollisionCount": 0,
+    "estimatedTextOverflowCount": 6,
+    "collisionCount": 6,
+    "missingArtifacts": [
+      "timeline",
+      "diagram"
+    ],
+    "artifactPresence": {
+      "charts": 1,
+      "images": 0,
+      "connectors": 0,
+      "shapes": 28,
+      "diagrams": 0,
+      "formulas": 0,
+      "codeSlides": 0
+    },
+    "slideDigests": [
+      "sha256:096ab95fab4fb7ac8d26e9c1b884ab003363f0ae7069a78b95bd37ba692a229f",
+      "sha256:715f3159bac8310951167c9ab04a78172aa1d0e60fe32fb49f9977fc8a957461",
+      "sha256:a8ca61d633a1172b962e4ce2b1be657f914fb15548b79e71b6d10e058d448f06",
+      "sha256:1811d7254547db75519eab4450af5088392706cfd39d355eddbb576c240fb5a9",
+      "sha256:4d50da096a1ca0a5fa20e9766a927cf1a3255d40f50606c985850148e3033ab0",
+      "sha256:a074b17865556f8824ceb7ac0af6d9aa4a3ca5f08c46f35d5979bb4a2fdd75a9",
+      "sha256:36e7f3c213c4175c7dca063fd3c0e55093266ee34b85a668f59e6e28433a5ff8"
+    ],
+    "deckDigest": "sha256:11391db78faacb1bd323ca67a940950b32d4f4ebedda247ef074ea8aefb1d9e6"
+  },
+  "evaluationDigest": "sha256:c7d69e69d88d4670b6bce7643985b1804553e3c2d73e2046d7528d1ec0f8081f"
+}

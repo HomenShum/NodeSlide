@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "nodeslide.model-deck-comparison/v1",
+  "productionUrl": "https://nodeslide.vercel.app/",
+  "brief": "Create an evidence-led seven-slide executive briefing on the 2022 FIFA World Cup for sports-media leadership. Use only these supplied facts: France scored 16 goals, Argentina 15, England 13, and Portugal 12; Kylian Mbappe scored 8, Lionel Messi 7, Julian Alvarez 4, and Olivier Giroud 4; the tournament produced 172 goals in 64 matches, or 2.69 goals per match. Include an editable comparison chart, an editable process diagram explaining how group-stage momentum became knockout resilience, and an editable formula for goals per match. Conclude with three implications for audience engagement. Do not invent sources, images, quotes, or statistics; mark unsupported claims [source needed].",
+  "requestedSlideCount": 7,
+  "generatedAt": "2026-07-21T23:17:59.440Z",
+  "passed": true,
+  "receipts": [
+    {
+      "status": "passed",
+      "requestedModel": "moonshotai/kimi-k3",
+      "label": "Kimi K3",
+      "reasoningEffort": "high",
+      "attempt": 1,
+      "durationMs": 33901,
+      "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrv9wy9f_e32027ae0f1216074917568c597a271a",
+      "pptx": {
+        "path": "D:\\VSCode Projects\\nodeslide-finish-all\\outputs\\model-deck-comparison-20260721\\kimi-k3.pptx",
+        "bytes": 179529
+      }
+    },
+    {
+      "status": "passed",
+      "requestedModel": "google/gemini-3.5-flash",
+      "label": "Gemini 3.5 Flash",
+      "reasoningEffort": "high",
+      "attempt": 1,
+      "durationMs": 4123,
+      "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrv9x1sd_7ff3f357cab3f6daf5c97d6850887318",
+      "pptx": {
+        "path": "D:\\VSCode Projects\\nodeslide-finish-all\\outputs\\model-deck-comparison-20260721\\gemini-3-5-flash.pptx",
+        "bytes": 174922
+      }
+    },
+    {
+      "status": "passed",
+      "requestedModel": "anthropic/claude-sonnet-5",
+      "label": "Claude Sonnet 5",
+      "reasoningEffort": "high",
+      "attempt": 1,
+      "durationMs": 35074,
+      "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrv9xsqg_e66a2319270fb89f08f451329b438f84",
+      "pptx": {
+        "path": "D:\\VSCode Projects\\nodeslide-finish-all\\outputs\\model-deck-comparison-20260721\\claude-sonnet-5.pptx",
+        "bytes": 203742
+      }
+    }
+  ]
+}

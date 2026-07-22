@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v1",
+  "fixtureId": "multi-series-trend",
+  "generatedAt": "2026-07-22T03:23:21.718Z",
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "candidateId": "multi-series-trend__deterministic-baseline__nodeslide-artifact-builder-v1",
+      "receiptDigest": "sha256:6d5afdcfe4a1436a76424f9e2d71a9f169815031dc64af6c527ef9cb15461e22",
+      "model": "nodeslide-artifact-builder-v1",
+      "modelRole": "geometry-and-export-control",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/multi-series-trend__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+        "pptxRender": "runs/multi-series-trend__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/multi-series-trend__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+        "webPptxDifference": "Export editable lines and labels; omit animation before using a static chart image."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "multi-series-trend__evidence-editorial__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:a56192411ecd99434465f166e951149e7a119434c17eb44ca5a06a451003adfb",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/multi-series-trend__evidence-editorial__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/multi-series-trend__evidence-editorial__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/multi-series-trend__evidence-editorial__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Export editable lines and labels; omit animation before using a static chart image."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8012,
+        "inputTokens": 2,
+        "outputTokens": 469,
+        "costMicroUsd": 8384
+      }
+    },
+    {
+      "candidateId": "multi-series-trend__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:ca27376e9b4782b6b3a1149157d03e97efe9863d3368fde95a4dffda76c19d30",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/multi-series-trend__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/multi-series-trend__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/multi-series-trend__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Export editable lines and labels; omit animation before using a static chart image."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 9348,
+        "inputTokens": 1144,
+        "outputTokens": 397,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "multi-series-trend__evidence-editorial__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:3316e67342151366cb3b5d8044a3839595b0b87a095cec206105a6cd3aca7bd5",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/multi-series-trend__evidence-editorial__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/multi-series-trend__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/multi-series-trend__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Export editable lines and labels; omit animation before using a static chart image."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 10320,
+        "inputTokens": 854,
+        "outputTokens": 273,
+        "costMicroUsd": 1194
+      }
+    },
+    {
+      "candidateId": "multi-series-trend__expressive-technical__anthropic-claude-sonnet-5",
+      "receiptDigest": "sha256:554084becadf1ea3aa053cb10bee26034ca60c88068b0ebf46faf04db37577d3",
+      "model": "anthropic/claude-sonnet-5",
+      "modelRole": "story-framing-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/multi-series-trend__expressive-technical__anthropic-claude-sonnet-5/browser.png",
+        "pptxRender": "runs/multi-series-trend__expressive-technical__anthropic-claude-sonnet-5/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/multi-series-trend__expressive-technical__anthropic-claude-sonnet-5/artifact.pptx",
+        "webPptxDifference": "Export editable lines and labels; omit animation before using a static chart image."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 8373,
+        "inputTokens": 2,
+        "outputTokens": 431,
+        "costMicroUsd": 8016
+      }
+    },
+    {
+      "candidateId": "multi-series-trend__expressive-technical__google-gemma-4-26b-a4b-it-free",
+      "receiptDigest": "sha256:b8fc87ef7f88fe60a376bdfbcec986d31cd01692dfbb7f7b31019dcf922a07ec",
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "modelRole": "zero-cost-bounded-generator-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/multi-series-trend__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+        "pptxRender": "runs/multi-series-trend__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/multi-series-trend__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+        "webPptxDifference": "Export editable lines and labels; omit animation before using a static chart image."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 17567,
+        "inputTokens": 1146,
+        "outputTokens": 414,
+        "costMicroUsd": 0
+      }
+    },
+    {
+      "candidateId": "multi-series-trend__expressive-technical__moonshotai-kimi-k3",
+      "receiptDigest": "sha256:81e56bd55ddad25e6a0fd52022c4ca9507ec1543daa08aabddfdd96489f10eb1",
+      "model": "moonshotai/kimi-k3",
+      "modelRole": "structured-execution-candidate",
+      "status": "eligible",
+      "outputs": {
+        "browserRender": "runs/multi-series-trend__expressive-technical__moonshotai-kimi-k3/browser.png",
+        "pptxRender": "runs/multi-series-trend__expressive-technical__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+        "pptxFile": "runs/multi-series-trend__expressive-technical__moonshotai-kimi-k3/artifact.pptx",
+        "webPptxDifference": "Export editable lines and labels; omit animation before using a static chart image."
+      },
+      "evaluation": {
+        "briefAdherence": true,
+        "visualPassed": true,
+        "evidencePassed": true,
+        "exportPassed": true,
+        "artifactTypeMatched": true,
+        "editabilityPassed": true,
+        "repairCount": 0,
+        "generationMs": 12831,
+        "inputTokens": 856,
+        "outputTokens": 285,
+        "costMicroUsd": 1226
+      }
+    }
+  ]
+}

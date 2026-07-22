@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "research-timeline__evidence-editorial__moonshotai-kimi-k3",
+  "candidateDigest": "sha256:4a0bc2c38856368229a3a74eb2f428d3a2437e41839501660c345b0575469678",
+  "fixtureId": "research-timeline",
+  "directionId": "evidence-editorial",
+  "artifactType": "timeline",
+  "slideArchetype": "milestone-timeline",
+  "narrativeJob": "Show the progression from research question to evidence-backed decision with honest stage timing.",
+  "model": "moonshotai/kimi-k3",
+  "modelRole": "structured-execution-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "research-dates"
+  ],
+  "sourceDigest": "sha256:ab861346fc0fba7be6f397e2015dd26d2980d4b1f147d88bccf200492b1e7982",
+  "referenceIds": [
+    "time-proportional-milestones"
+  ],
+  "artifactRequirementDigest": "sha256:877ed91dd762fc2f17f4ee91e9b70f46127e8bc92cd91788e5a39ad37f6364fd",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 19820,
+    "inputTokens": 837,
+    "outputTokens": 337,
+    "costMicroUsd": 1344
+  },
+  "outputs": {
+    "browserRender": "runs/research-timeline__evidence-editorial__moonshotai-kimi-k3/browser.png",
+    "pptxRender": "runs/research-timeline__evidence-editorial__moonshotai-kimi-k3/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/research-timeline__evidence-editorial__moonshotai-kimi-k3/artifact.pptx",
+    "webPptxDifference": "Use editable milestone shapes and a line; remove motion before rasterizing the entire timeline."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:36:26.245Z",
+  "receiptDigest": "sha256:178c22fe199be9520073e82289656528381da0460f8d1a59d9b0ecf43a662333",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line",
+    "circle"
+  ]
+}

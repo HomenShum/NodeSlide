@@ -1,0 +1,151 @@
+{"kind":"deck","id":"pr/4iu48x","name":"Deck"}
+{"kind":"layout","layoutId":"7e835401-1aba-4633-8025-f72140478094","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"c6146ff9-b47f-4f21-97ea-510a1679c91e","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/wt43y8","slide":1,"title":"ATLAS 01  ·  HERO THESIS","textShapes":7}
+{"kind":"textbox","id":"sh/by90zadc","slide":1,"text":"ATLAS 01  ·  HERO THESIS","textPreview":"ATLAS 01  ·  HERO THESIS","textChars":24,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/czi1sfex","slide":1,"text":"Reviewable Generation Makes Presentation Automation Safer","textPreview":"Reviewable Generation Makes Presentation Automation Safer","textChars":57,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"shape","id":"sh/d0ri1kvi","slide":1,"bbox":[518,166,722,413]}
+{"kind":"textbox","id":"sh/3up0vadg","slide":1,"text":"Review before acceptance turns automated drafting into a trustworthy workflow, not a blind one.","textPreview":"Review before acceptance turns automated drafting into a trustworthy workflow, not a blind one.","textChars":95,"textLines":1,"bbox":[48,194,420,176]}
+{"kind":"shape","id":"sh/ovy1ofe1","slide":1,"bbox":[48,444,420,158]}
+{"kind":"textbox","id":"sh/pwrix0vm","slide":1,"text":"Claude Sonnet 5","textPreview":"Claude Sonnet 5","textChars":15,"textLines":1,"bbox":[66,462,384,38]}
+{"kind":"textbox","id":"sh/e5gzilwz","slide":1,"text":"evidence editorial\nnative web\nnative PPTX","textPreview":"evidence editorial | native web | native PPTX","textChars":41,"textLines":3,"bbox":[66,510,384,92]}
+{"kind":"textbox","id":"sh/f6p0rqd4","slide":1,"text":"SOURCE · hero-workflow  |  machine provisional · human preference pending","textPreview":"SOURCE · hero-workflow  |  machine provisional · human preference pending","textChars":73,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/jq10zihg","slide":1,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/jahsbut4","slide":1,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[526,174,706,397]}
+{"kind":"notes","id":"nt/wt43y8","slide":1,"text":""}
+{"kind":"slide","id":"sl/w63tmz","slide":2,"title":"ATLAS 02  ·  KPI STRIP","textShapes":7}
+{"kind":"textbox","id":"sh/1w32dkjy","slide":2,"text":"ATLAS 02  ·  KPI STRIP","textPreview":"ATLAS 02  ·  KPI STRIP","textChars":22,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/etsji5k7","slide":2,"text":"Q2 Operating Review: KPI Strip","textPreview":"Q2 Operating Review: KPI Strip","textChars":30,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"shape","id":"sh/fulkbals","slide":2,"bbox":[40,160,836,477]}
+{"kind":"shape","id":"sh/dsj29k3m","slide":2,"bbox":[906,168,326,248]}
+{"kind":"textbox","id":"sh/65sje5kb","slide":2,"text":"Kimi K3","textPreview":"Kimi K3","textChars":7,"textLines":1,"bbox":[924,186,290,38]}
+{"kind":"textbox","id":"sh/r61k7alw","slide":2,"text":"expressive technical\nnative web\nnative PPTX","textPreview":"expressive technical | native web | native PPTX","textChars":43,"textLines":3,"bbox":[924,234,290,92]}
+{"kind":"textbox","id":"sh/43a1cv25","slide":2,"text":"Q2 shows revenue and retention near target, but pipeline and win rate are material misses against plan.","textPreview":"Q2 shows revenue and retention near target, but pipeline and win rate are material misses against plan.","textChars":103,"textLines":1,"bbox":[906,452,326,142]}
+{"kind":"textbox","id":"sh/54j2503q","slide":2,"text":"SOURCE · q2-kpis  |  machine provisional · human preference pending","textPreview":"SOURCE · q2-kpis  |  machine provisional · human preference pending","textChars":67,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/pcbi90bu","slide":2,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/hgjilg3a","slide":2,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[48,168,820,461]}
+{"kind":"notes","id":"nt/w63tmz","slide":2,"text":""}
+{"kind":"slide","id":"sl/is1ntv","slide":3,"title":"ATLAS 03  ·  MULTI SERIES CHART","textShapes":8}
+{"kind":"textbox","id":"sh/xgje5gzy","slide":3,"text":"ATLAS 03  ·  MULTI SERIES CHART","textPreview":"ATLAS 03  ·  MULTI SERIES CHART","textChars":31,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/adsfal07","slide":3,"text":"City Mobility Ridership Trends","textPreview":"City Mobility Ridership Trends","textChars":30,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"textbox","id":"sh/be1w36hs","slide":3,"text":"Local bus ridership shows the lowest growth rate compared to rapid bus and rail.","textPreview":"Local bus ridership shows the lowest growth rate compared to rapid bus and rail.","textChars":80,"textLines":1,"bbox":[48,174,1120,78]}
+{"kind":"shape","id":"sh/k3uxgvi9","slide":3,"bbox":[198,270,884,342]}
+{"kind":"shape","id":"sh/yhsfel0j","slide":3,"bbox":[48,278,126,326]}
+{"kind":"textbox","id":"sh/jilw7qh4","slide":3,"text":"Gemma\n4\nFree","textPreview":"Gemma | 4 | Free","textChars":12,"textLines":3,"bbox":[66,296,90,124]}
+{"kind":"textbox","id":"sh/07qd4ri5","slide":3,"text":"evidence editorial\nnative web\nnative PPTX","textPreview":"evidence editorial | native web | native PPTX","textChars":41,"textLines":3,"bbox":[66,444,90,92]}
+{"kind":"textbox","id":"sh/18zexwzq","slide":3,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[1096,446,120,94]}
+{"kind":"textbox","id":"sh/psnm10zy","slide":3,"text":"SOURCE · ridership-series  |  machine provisional · human preference pending","textPreview":"SOURCE · ridership-series  |  machine provisional · human preference pending","textChars":76,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/orel8vit","slide":3,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/gve5cfqd","slide":3,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[206,278,868,326]}
+{"kind":"notes","id":"nt/is1ntv","slide":3,"text":""}
+{"kind":"slide","id":"sl/0wtep5","slide":4,"title":"ATLAS 04  ·  UNCERTAINTY RANGE","textShapes":7}
+{"kind":"textbox","id":"sh/lo7mxg7e","slide":4,"text":"ATLAS 04  ·  UNCERTAINTY RANGE","textPreview":"ATLAS 04  ·  UNCERTAINTY RANGE","textChars":30,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/y1wnm183","slide":4,"text":"Forecast vs. Actual: Widening Uncertainty Ahead","textPreview":"Forecast vs. Actual: Widening Uncertainty Ahead","textChars":47,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"shape","id":"sh/j2p4v6po","slide":4,"bbox":[518,166,722,413]}
+{"kind":"textbox","id":"sh/x0nmtw7i","slide":4,"text":"Base forecast reaches 11.4 by Q5, but the modeled range widens to 9.0–13.8, showing growing uncertainty rather than false precision.","textPreview":"Base forecast reaches 11.4 by Q5, but the modeled range widens to 9.0–13.8, showing growing uncertainty rather than false precision.","textChars":132,"textLines":1,"bbox":[48,194,420,176]}
+{"kind":"shape","id":"sh/axwni18r","slide":4,"bbox":[48,444,420,158]}
+{"kind":"textbox","id":"sh/by54r6pc","slide":4,"text":"Claude Sonnet 5","textPreview":"Claude Sonnet 5","textChars":15,"textLines":1,"bbox":[66,462,384,38]}
+{"kind":"textbox","id":"sh/ove5grq1","slide":4,"text":"expressive technical\nnative web\nnative PPTX","textPreview":"expressive technical | native web | native PPTX","textChars":43,"textLines":3,"bbox":[66,510,384,92]}
+{"kind":"textbox","id":"sh/9wnmpw76","slide":4,"text":"SOURCE · forecast-range-data  |  machine provisional · human preference pending","textPreview":"SOURCE · forecast-range-data  |  machine provisional · human preference pending","textChars":79,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/tcni18nq","slide":4,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/hsrupozi","slide":4,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[526,174,706,397]}
+{"kind":"notes","id":"nt/0wtep5","slide":4,"text":""}
+{"kind":"slide","id":"sl/lsdehh","slide":5,"title":"ATLAS 05  ·  ARCHITECTURE DIAGRAM","textShapes":7}
+{"kind":"textbox","id":"sh/gju9onux","slide":5,"text":"ATLAS 05  ·  ARCHITECTURE DIAGRAM","textPreview":"ATLAS 05  ·  ARCHITECTURE DIAGRAM","textChars":33,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/filsvitc","slide":5,"text":"Portable Protocol & Adapter Boundary","textPreview":"Portable Protocol & Adapter Boundary","textChars":36,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"shape","id":"sh/uhsrmdcr","slide":5,"bbox":[40,160,836,477]}
+{"kind":"shape","id":"sh/sfa9knul","slide":5,"bbox":[906,168,326,248]}
+{"kind":"textbox","id":"sh/7u1sritg","slide":5,"text":"Kimi K3","textPreview":"Kimi K3","textChars":7,"textLines":1,"bbox":[924,186,290,38]}
+{"kind":"textbox","id":"sh/6tsridcv","slide":5,"text":"evidence editorial\nnative web\nnative PPTX","textPreview":"evidence editorial | native web | native PPTX","textChars":41,"textLines":3,"bbox":[924,234,290,92]}
+{"kind":"textbox","id":"sh/dcna5cbq","slide":5,"text":"Client calls flow through a portable protocol and validation engine before commit, with memory, Convex, and Postgres adapters implementing persistence behind a distinct adapter trust boundary.","textPreview":"Client calls flow through a portable protocol and validation engine before commit, with memory, Convex, and Postgres adapters implementin...","textChars":192,"textLines":1,"bbox":[906,452,326,142]}
+{"kind":"textbox","id":"sh/cbetw7u5","slide":5,"text":"SOURCE · architecture-contract  |  machine provisional · human preference pending","textPreview":"SOURCE · architecture-contract  |  machine provisional · human preference pending","textChars":81,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/610buhwn","slide":5,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/wb2dc329","slide":5,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[48,168,820,461]}
+{"kind":"notes","id":"nt/lsdehh","slide":5,"text":""}
+{"kind":"slide","id":"sl/tzyugl","slide":6,"title":"ATLAS 06  ·  SEQUENCE DIAGRAM","textShapes":8}
+{"kind":"textbox","id":"sh/zeh4n6do","slide":6,"text":"ATLAS 06  ·  SEQUENCE DIAGRAM","textPreview":"ATLAS 06  ·  SEQUENCE DIAGRAM","textChars":29,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/0fqlgbe9","slide":6,"text":"Request Lifecycle & Validation Boundaries","textPreview":"Request Lifecycle & Validation Boundaries","textChars":41,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"textbox","id":"sh/lgzmpgve","slide":6,"text":"Validation acts as the critical gatekeeper between planning and human review/adapter commitment.","textPreview":"Validation acts as the critical gatekeeper between planning and human review/adapter commitment.","textChars":96,"textLines":1,"bbox":[48,174,1120,78]}
+{"kind":"shape","id":"sh/mh83i1wz","slide":6,"bbox":[198,270,884,342]}
+{"kind":"shape","id":"sh/83qlkbe5","slide":6,"bbox":[48,278,126,326]}
+{"kind":"textbox","id":"sh/94zmtgvq","slide":6,"text":"Gemma\n4\nFree","textPreview":"Gemma | 4 | Free","textChars":12,"textLines":3,"bbox":[66,296,90,124]}
+{"kind":"textbox","id":"sh/2l436hwv","slide":6,"text":"expressive technical\nnative web\nnative PPTX","textPreview":"expressive technical | native web | native PPTX","textChars":43,"textLines":3,"bbox":[66,444,90,92]}
+{"kind":"textbox","id":"sh/3mdkfmdg","slide":6,"text":"6","textPreview":"6","textChars":1,"textLines":1,"bbox":[1096,446,120,94]}
+{"kind":"textbox","id":"sh/vqxc3y5o","slide":6,"text":"SOURCE · sequence-events  |  machine provisional · human preference pending","textPreview":"SOURCE · sequence-events  |  machine provisional · human preference pending","textChars":75,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/upovat43","slide":6,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/qhwrytov","slide":6,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[206,278,868,326]}
+{"kind":"notes","id":"nt/tzyugl","slide":6,"text":""}
+{"kind":"slide","id":"sl/b0p871","slide":7,"title":"ATLAS 07  ·  TIMELINE","textShapes":7}
+{"kind":"textbox","id":"sh/wrq5c3m5","slide":7,"text":"ATLAS 07  ·  TIMELINE","textPreview":"ATLAS 07  ·  TIMELINE","textChars":21,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/vqhojylk","slide":7,"text":"Research Timeline: Question to Approved Update","textPreview":"Research Timeline: Question to Approved Update","textChars":46,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"shape","id":"sh/up8nad4z","slide":7,"bbox":[518,166,722,413]}
+{"kind":"textbox","id":"sh/8nq583m9","slide":7,"text":"Five milestones spaced by elapsed days show a deliberate path from framing to approval, with blind review as the gate before harness update.","textPreview":"Five milestones spaced by elapsed days show a deliberate path from framing to approval, with blind review as the gate before harness update.","textChars":140,"textLines":1,"bbox":[48,194,420,176]}
+{"kind":"shape","id":"sh/7mx4fylo","slide":7,"bbox":[48,444,420,158]}
+{"kind":"textbox","id":"sh/mlon6t43","slide":7,"text":"Claude Sonnet 5","textPreview":"Claude Sonnet 5","textChars":15,"textLines":1,"bbox":[66,462,384,38]}
+{"kind":"textbox","id":"sh/tkj6ts3y","slide":7,"text":"evidence editorial\nnative web\nnative PPTX","textPreview":"evidence editorial | native web | native PPTX","textChars":41,"textLines":3,"bbox":[66,510,384,92]}
+{"kind":"textbox","id":"sh/sja5kn2d","slide":7,"text":"SOURCE · research-dates  |  machine provisional · human preference pending","textPreview":"SOURCE · research-dates  |  machine provisional · human preference pending","textChars":74,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/at83i5kn","slide":7,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/4rqpgfud","slide":7,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[526,174,706,397]}
+{"kind":"notes","id":"nt/b0p871","slide":7,"text":""}
+{"kind":"slide","id":"sl/au59xl","slide":8,"title":"ATLAS 08  ·  SCREENSHOT CALLOUTS","textShapes":7}
+{"kind":"textbox","id":"sh/idw32x4n","slide":8,"text":"ATLAS 08  ·  SCREENSHOT CALLOUTS","textPreview":"ATLAS 08  ·  SCREENSHOT CALLOUTS","textChars":32,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/5gnmxc3e","slide":8,"text":"Reviewable Generation: Product Controls","textPreview":"Reviewable Generation: Product Controls","textChars":39,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"shape","id":"sh/kfel47mt","slide":8,"bbox":[40,160,836,477]}
+{"kind":"shape","id":"sh/6hwn6h4z","slide":8,"bbox":[906,168,326,248]}
+{"kind":"textbox","id":"sh/tk7m1c3a","slide":8,"text":"Kimi K3","textPreview":"Kimi K3","textChars":7,"textLines":1,"bbox":[924,186,290,38]}
+{"kind":"textbox","id":"sh/sjy58rmp","slide":8,"text":"evidence editorial\nnative web\ngrouped-editable PPTX","textPreview":"evidence editorial | native web | grouped-editable PPTX","textChars":51,"textLines":3,"bbox":[924,234,290,92]}
+{"kind":"textbox","id":"sh/nml4ni50","slide":8,"text":"Model selection, validation status, and trace inspection are the verified surfaces of the reviewable-generation workflow; the screenshot itself must be supplied before this slide is final.","textPreview":"Model selection, validation status, and trace inspection are the verified surfaces of the reviewable-generation workflow; the screenshot ...","textChars":188,"textLines":1,"bbox":[906,452,326,142]}
+{"kind":"textbox","id":"sh/mlc3ud4f","slide":8,"text":"SOURCE · screenshot-absence  |  machine provisional · human preference pending","textPreview":"SOURCE · screenshot-absence  |  machine provisional · human preference pending","textChars":78,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/wzedkzyh","slide":8,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/658fu9gb","slide":8,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[48,168,820,461]}
+{"kind":"notes","id":"nt/au59xl","slide":8,"text":""}
+{"kind":"slide","id":"sl/stbdcd","slide":9,"title":"ATLAS 09  ·  CLAIM SOURCE LINEAGE","textShapes":8}
+{"kind":"textbox","id":"sh/gjmhcnil","slide":9,"text":"ATLAS 09  ·  CLAIM SOURCE LINEAGE","textPreview":"ATLAS 09  ·  CLAIM SOURCE LINEAGE","textChars":33,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/fidg3i10","slide":9,"text":"Evidence Lineage: Human Acceptance Timing","textPreview":"Evidence Lineage: Human Acceptance Timing","textChars":41,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"textbox","id":"sh/ehkzad0f","slide":9,"text":"The claim of 52-second human acceptance is directly traced to the journey receipt, while the 'zero errors' claim is rejected due to lack of evidence.","textPreview":"The claim of 52-second human acceptance is directly traced to the journey receipt, while the 'zero errors' claim is rejected due to lack ...","textChars":149,"textLines":1,"bbox":[48,174,1120,78]}
+{"kind":"shape","id":"sh/p8vy9cz2","slide":9,"bbox":[198,270,884,342]}
+{"kind":"shape","id":"sh/36dg72hw","slide":9,"bbox":[48,278,126,326]}
+{"kind":"textbox","id":"sh/254zex0b","slide":9,"text":"Gemma\n4\nFree","textPreview":"Gemma | 4 | Free","textChars":12,"textLines":3,"bbox":[66,296,90,124]}
+{"kind":"textbox","id":"sh/dcfidczy","slide":9,"text":"evidence editorial\nnative web\nnative PPTX","textPreview":"evidence editorial | native web | native PPTX","textChars":41,"textLines":3,"bbox":[66,444,90,92]}
+{"kind":"textbox","id":"sh/cb6hk7id","slide":9,"text":"9","textPreview":"9","textChars":1,"textLines":1,"bbox":[1096,446,120,94]}
+{"kind":"textbox","id":"sh/2tczqps7","slide":9,"text":"SOURCE · journey-receipt  |  machine provisional · human preference pending","textPreview":"SOURCE · journey-receipt  |  machine provisional · human preference pending","textChars":75,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/nulgzuts","slide":9,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/1gj6tcfy","slide":9,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[206,278,868,326]}
+{"kind":"notes","id":"nt/stbdcd","slide":9,"text":""}
+{"kind":"slide","id":"sl/5jf0jo","slide":10,"title":"ATLAS 10  ·  KATEX EQUATION","textShapes":7}
+{"kind":"textbox","id":"sh/87yl4fyl","slide":10,"text":"ATLAS 10  ·  KATEX EQUATION","textPreview":"ATLAS 10  ·  KATEX EQUATION","textChars":27,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/76p4bah0","slide":10,"text":"Cost-Adjusted Quality Measure","textPreview":"Cost-Adjusted Quality Measure","textChars":29,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"shape","id":"sh/mlw325gf","slide":10,"bbox":[518,166,722,413]}
+{"kind":"textbox","id":"sh/kjel0fy9","slide":10,"text":"Q divided by C is approximately 19.74","textPreview":"Q divided by C is approximately 19.74","textChars":37,"textLines":1,"bbox":[48,194,420,176]}
+{"kind":"shape","id":"sh/zi5k7aho","slide":10,"bbox":[48,444,420,158]}
+{"kind":"textbox","id":"sh/yhw3y5g3","slide":10,"text":"Claude Sonnet 5","textPreview":"Claude Sonnet 5","textChars":15,"textLines":1,"bbox":[66,462,384,38]}
+{"kind":"textbox","id":"sh/xgn250zy","slide":10,"text":"expressive technical\nnative web\ngrouped-editable PPTX","textPreview":"expressive technical | native web | grouped-editable PPTX","textChars":53,"textLines":3,"bbox":[66,510,384,92]}
+{"kind":"textbox","id":"sh/cfelwvid","slide":10,"text":"SOURCE · retrieval-result  |  machine provisional · human preference pending","textPreview":"SOURCE · retrieval-result  |  machine provisional · human preference pending","textChars":76,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/650ni1sn","slide":10,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/4ri94nqh","slide":10,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[526,174,706,397]}
+{"kind":"notes","id":"nt/5jf0jo","slide":10,"text":""}
+{"kind":"slide","id":"sl/n32z0x","slide":11,"title":"ATLAS 11  ·  CODE RUNTIME PROOF","textShapes":7}
+{"kind":"textbox","id":"sh/nehonalg","slide":11,"text":"ATLAS 11  ·  CODE RUNTIME PROOF","textPreview":"ATLAS 11  ·  CODE RUNTIME PROOF","textChars":31,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/ofqpwfm1","slide":11,"text":"Caseflow Adapter: Contract Meets Measured Runtime","textPreview":"Caseflow Adapter: Contract Meets Measured Runtime","textChars":49,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"shape","id":"sh/pgz6pk3m","slide":11,"bbox":[40,160,836,477]}
+{"kind":"shape","id":"sh/faxojqlk","slide":11,"bbox":[906,168,326,248]}
+{"kind":"textbox","id":"sh/0b65svm5","slide":11,"text":"Kimi K3","textPreview":"Kimi K3","textChars":7,"textLines":1,"bbox":[924,186,290,38]}
+{"kind":"textbox","id":"sh/1cf6l03q","slide":11,"text":"evidence editorial\nnative web\ngrouped-editable PPTX","textPreview":"evidence editorial | native web | grouped-editable PPTX","textChars":51,"textLines":3,"bbox":[924,234,290,92]}
+{"kind":"textbox","id":"sh/y5872p43","slide":11,"text":"The TypeScript contract's commit path returns a Receipt, and the Convex adapter benchmark measures p50 at 38 milliseconds and p95 at 92 milliseconds for that path.","textPreview":"The TypeScript contract's commit path returns a Receipt, and the Convex adapter benchmark measures p50 at 38 milliseconds and p95 at 92 m...","textChars":163,"textLines":1,"bbox":[906,452,326,142]}
+{"kind":"textbox","id":"sh/z61ovulo","slide":11,"text":"SOURCE · adapter-interface · adapter-benchmark  |  machine provisional · human preference pending","textPreview":"SOURCE · adapter-interface · adapter-benchmark  |  machine provisional · human preference pending","textChars":97,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/ju9wni1c","slide":11,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/7ilkr6ls","slide":11,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[48,168,820,461]}
+{"kind":"notes","id":"nt/n32z0x","slide":11,"text":""}
+{"kind":"slide","id":"sl/yjvtio","slide":12,"title":"ATLAS 12  ·  RISK MATRIX","textShapes":8}
+{"kind":"textbox","id":"sh/h4n69cv2","slide":12,"text":"ATLAS 12  ·  RISK MATRIX","textPreview":"ATLAS 12  ·  RISK MATRIX","textChars":24,"textLines":1,"bbox":[48,34,690,28]}
+{"kind":"textbox","id":"sh/u1cnyhwr","slide":12,"text":"Operating Risk Prioritization","textPreview":"Operating Risk Prioritization","textChars":29,"textLines":1,"bbox":[48,72,1160,82]}
+{"kind":"textbox","id":"sh/v2lo72dc","slide":12,"text":"Pipeline coverage is highest priority.","textPreview":"Pipeline coverage is highest priority.","textChars":38,"textLines":1,"bbox":[48,174,1120,78]}
+{"kind":"shape","id":"sh/47e54rut","slide":12,"bbox":[198,270,884,342]}
+{"kind":"shape","id":"sh/i5wn2hwn","slide":12,"bbox":[48,278,126,326]}
+{"kind":"textbox","id":"sh/365obmd8","slide":12,"text":"Gemma\n4\nFree","textPreview":"Gemma | 4 | Free","textChars":12,"textLines":3,"bbox":[66,296,90,124]}
+{"kind":"textbox","id":"sh/kba5snep","slide":12,"text":"expressive technical\nnative web\nnative PPTX","textPreview":"expressive technical | native web | native PPTX","textChars":43,"textLines":3,"bbox":[66,444,90,92]}
+{"kind":"textbox","id":"sh/lc3m1svu","slide":12,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[1096,446,120,94]}
+{"kind":"textbox","id":"sh/l4zq9cna","slide":12,"text":"SOURCE · q2-risks  |  machine provisional · human preference pending","textPreview":"SOURCE · q2-risks  |  machine provisional · human preference pending","textChars":68,"textLines":1,"bbox":[48,674,1110,22]}
+{"kind":"textbox","id":"sh/03qpg7mp","slide":12,"text":"NodeSlide Ultra Showcase RC1","textPreview":"NodeSlide Ultra Showcase RC1","textChars":28,"textLines":1,"bbox":[1030,674,202,22]}
+{"kind":"image","id":"im/gb65wzml","slide":12,"name":"","geometry":"roundRect","alt":"Verified Artifact Atlas browser render","bbox":[206,278,868,326]}
+{"kind":"notes","id":"nt/yjvtio","slide":12,"text":""}

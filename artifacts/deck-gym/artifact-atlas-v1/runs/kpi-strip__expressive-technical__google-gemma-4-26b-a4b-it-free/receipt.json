@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "kpi-strip__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "candidateDigest": "sha256:f8847a392a2be1fb1b05e04cce8f0149466868c9ee0b95aa9c1075b3d9ee68db",
+  "fixtureId": "kpi-strip",
+  "directionId": "expressive-technical",
+  "artifactType": "kpi-strip",
+  "slideArchetype": "operating-scorecard",
+  "narrativeJob": "Make the operating verdict scannable while preserving comparison context for every metric.",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "modelRole": "zero-cost-bounded-generator-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "q2-kpis"
+  ],
+  "sourceDigest": "sha256:8e588a977c7fb10c48345cffc9e0b8e53d4e97d910f1a0b13064e180edb7437d",
+  "referenceIds": [
+    "data-kpi-verdict"
+  ],
+  "artifactRequirementDigest": "sha256:5fbd04f94db0e48d092fbb226725aca3c7b710312ef6b81262c7e9c992a7912a",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 14064,
+    "inputTokens": 1194,
+    "outputTokens": 390,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/kpi-strip__expressive-technical__google-gemma-4-26b-a4b-it-free/browser.png",
+    "pptxRender": "runs/kpi-strip__expressive-technical__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/kpi-strip__expressive-technical__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+    "webPptxDifference": "Use an editable table with conditional emphasis if the native KPI strip cannot export."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:33:20.432Z",
+  "receiptDigest": "sha256:1df80ecdaf209f3ea3a2f5ea606d728d26a944bf03afc27fe15ddafb1ec041c5",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

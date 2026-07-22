@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-evaluation/v1",
+  "runId": "executive-update__evidence-editorial__moonshotai-kimi-k3",
+  "runDigest": "sha256:1598c96b24cb8a937f975205b767b24854ef2bc725ff1d0c699ff868e69c33a3",
+  "harnessVersion": "deck-gym-v1",
+  "evaluationGatesDigest": "sha256:b8bbac5b2715a7bdffc997dafc99cd766a13ff35680cc82fa2a0a34aa98d8d2f",
+  "briefId": "executive-update",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "evidence-editorial",
+  "routeClassification": "live",
+  "evaluatedAt": "2026-07-22T00:15:46.203Z",
+  "status": "failed",
+  "checks": {
+    "slideCount": true,
+    "claimCoverage": false,
+    "forbiddenClaims": false,
+    "distinctLayouts": true,
+    "layoutRepetition": true,
+    "adjacentSimilarity": true,
+    "textAreaRatio": false,
+    "meaningfulVisuals": false,
+    "internalCollisions": false,
+    "requiredArtifacts": true,
+    "liveModelTrace": true,
+    "renderedPptx": true
+  },
+  "dimensions": {
+    "factual": 0.3,
+    "visual": 0.6,
+    "narrative": 0.866667,
+    "rhythm": 0.643137,
+    "artifactIntegrity": 0.666667
+  },
+  "rawScore": 0.615294,
+  "score": 0.1538235,
+  "evidence": {
+    "slideCount": 7,
+    "renderedSlideCount": 7,
+    "matchedClaims": [
+      "4.8",
+      "7.4",
+      "21"
+    ],
+    "requiredClaimCount": 5,
+    "claimCoverage": 0.6,
+    "forbiddenClaims": [
+      "on target"
+    ],
+    "distinctLayoutSignatures": 6,
+    "repeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.470588,
+    "meaningfulVisualSlides": 2,
+    "maximumTextAreaRatio": 0.614389,
+    "geometryCollisionCount": 1,
+    "estimatedTextOverflowCount": 7,
+    "collisionCount": 8,
+    "missingArtifacts": [],
+    "artifactPresence": {
+      "charts": 1,
+      "images": 0,
+      "connectors": 0,
+      "shapes": 18,
+      "diagrams": 0,
+      "formulas": 1,
+      "codeSlides": 0
+    },
+    "slideDigests": [
+      "sha256:9432d99410d23e8b4a02c8c32f788bb97d5e2d3a2f975b2b663493685a9e92a4",
+      "sha256:b2738dd108fdb9b70db3af7d2147f43ceec59e8b5e5daef1ef1ac26781cac156",
+      "sha256:340247dccfd27045a05d27310f425fc641fcefeb4ed1927498a81bb20fde63ba",
+      "sha256:e3d907796c79e884a524bee2cacd6d13566384d2366b9624aa9e1d072ef30bc4",
+      "sha256:b7ea4bfc3daf31f902604bbda7e1824320092dcb75452cdf2ee747537e01f611",
+      "sha256:00fbeb6e5c07137de0960fea94c3d03696bd3f7d0aeb0bf2d9a99dec4b8bd81f",
+      "sha256:34dbfb5e26fab005b0f6a2c0b79356aefc5123b4252f321f65025869d5c3a57b"
+    ],
+    "deckDigest": "sha256:2776a1152c8168ec817411f54e25b458185c6db8ce87113595ee63d5092065c6"
+  },
+  "evaluationDigest": "sha256:9619b282a797f3a03c16d85f9fedf25b4f78ff4d79afc4c9902c4f77cf6227f3"
+}

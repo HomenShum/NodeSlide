@@ -121,6 +121,35 @@ a green 160 × 96 px Chromium geometry/accessibility proof with its screenshot.
 Screenshots, component tests, captions, and CI summaries are not substitutes
 for the checklist's explicit camera/browser/human wording.
 
+## Artifact Atlas / Arena worktree milestone
+
+All six implementation phases in `docs/ARTIFACT_ATLAS_ARENA.md` are present in the
+local worktree:
+
+- twelve fixtures cover all eight Atlas categories, with 72 equal-input live-model
+  candidates plus twelve deterministic controls;
+- all 84 plans completed, and the browser/native-PPTX critic pass retained 82 as
+  eligible;
+- the two red receipts are intentional evidence, not missing work: Gemma duplicated a
+  screenshot callout operation while omitting the missing-evidence label, and Kimi used
+  the explicitly forbidden `real screenshot` claim;
+- capability cards and recommendations are advisory (`autoApply: false`), and the free
+  Gemma route completed 23/24 candidates at zero provider cost;
+- Artifact Gallery and Model Compare now use real pixels, operations, eligibility, and
+  economics; Harness Compare honestly reports that no comparable prior harness receipt
+  exists;
+- twelve coverage-balanced provisional winners are in the local gallery, and twelve
+  model-blind brackets await human preference. `publicReleaseApproved` remains `false`;
+- `outputs/ultra-showcase-rc1/nodeslide-ultra-showcase-rc1.pptx` is a 12-slide,
+  coverage-balanced release candidate. It passed independent rendering and
+  `slides_test.py`; human tournament approval is still required before calling it a
+  public winner deck.
+
+The renderer supports resumable `--only-failed` repair passes and rebuilds aggregates
+from per-candidate receipts, because a killed full run can leave `receipts.json` stale.
+Do not replace the two honest red model receipts with synthetic green results. The only
+remaining Atlas decision is human blind preference/public approval, not implementation.
+
 ## Useful gates
 
 ```bash

@@ -1,0 +1,56 @@
+{
+  "artifactType": "risk-matrix",
+  "candidateDigest": "sha256:bb91345e008c0edaa84761700799906d7553a3bf91c853ddc59702b01959f051",
+  "candidateId": "risk-matrix__evidence-editorial__anthropic-claude-sonnet-5",
+  "directionId": "evidence-editorial",
+  "durationMs": 7424,
+  "fixtureId": "risk-matrix",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Prioritize mitigation on pipeline coverage before addressing lower-likelihood, high-impact risks.",
+    "artifactType": "risk-matrix",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "Likelihood vs Impact (1-5 scale)",
+        "operationId": "draw-labeled-axes",
+        "sourceId": "q2-risks",
+        "value": "1-5"
+      },
+      {
+        "label": "Risk markers: pipeline coverage, implementation capacity, retention concentration",
+        "operationId": "place-editable-markers",
+        "sourceId": "q2-risks",
+        "value": "pipeline coverage (4,5); implementation capacity (3,4); retention concentration (2,5)"
+      },
+      {
+        "label": "High-priority zone highlighting top-right quadrant",
+        "operationId": "encode-priority-zone",
+        "sourceId": "q2-risks",
+        "value": "likelihood>=3 and impact>=4"
+      }
+    ],
+    "pptxFallback": "Editable PowerPoint shapes represent axes, zone, and three markers with native text and position editing; no bar chart or linear stack substitution.",
+    "sourceLabels": [
+      {
+        "label": "Q2 risk register",
+        "sourceId": "q2-risks"
+      }
+    ],
+    "takeaway": "Pipeline coverage is the highest-priority risk demanding immediate action.",
+    "title": "Q2 Operating Risk Matrix"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 5010,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 471,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

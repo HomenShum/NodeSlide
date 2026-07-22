@@ -1,0 +1,56 @@
+{
+  "artifactType": "timeline",
+  "candidateDigest": "sha256:89210bc2e0cd08eda8a5df191f74e018d81149c2da9cd84b9ec9a8f347f64133",
+  "candidateId": "research-timeline__expressive-technical__anthropic-claude-sonnet-5",
+  "directionId": "expressive-technical",
+  "durationMs": 8008,
+  "fixtureId": "research-timeline",
+  "model": "anthropic/claude-sonnet-5",
+  "plan": {
+    "annotation": "Milestone spacing reflects elapsed days; review gate emphasized to show human checkpoint before update approval.",
+    "artifactType": "timeline",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Time-proportional milestone placement",
+        "operationId": "place-time-proportional-milestones",
+        "sourceId": "research-dates",
+        "value": "July 1 - July 11 (10 days), spaced by elapsed days"
+      },
+      {
+        "label": "Blind review gate emphasis",
+        "operationId": "emphasize-review-gate",
+        "sourceId": "research-dates",
+        "value": "Blind review completed July 9"
+      },
+      {
+        "label": "Bound milestone dates",
+        "operationId": "bind-dates",
+        "sourceId": "research-dates",
+        "value": "question frozen July 1; blind review completed July 9; update approved July 11"
+      }
+    ],
+    "pptxFallback": "Deliver as native editable PowerPoint shapes: a horizontal line with five milestone markers positioned proportionally to elapsed days, editable text boxes for dates and labels, and a highlighted marker for the review gate. No motion or animation is used, so no rasterization is required.",
+    "sourceLabels": [
+      {
+        "label": "Research ledger",
+        "sourceId": "research-dates"
+      }
+    ],
+    "takeaway": "Evidence-backed decision reached in 10 days, with a clear human review gate before harness approval.",
+    "title": "Research Timeline: Question to Approval"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 8441,
+    "inputTokens": 2,
+    "model": "anthropic/claude-sonnet-5",
+    "outputTokens": 482,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

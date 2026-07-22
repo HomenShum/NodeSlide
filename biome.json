@@ -8,6 +8,7 @@
       ".tmp",
       ".vercel",
       "dist",
+      "artifacts/deck-gym/artifact-atlas-v1",
       "docs/dogfood",
       "docs/plans/assets",
       "convex/_generated",

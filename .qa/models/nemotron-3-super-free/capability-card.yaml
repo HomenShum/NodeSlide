@@ -1,0 +1,17 @@
+schema_version: nodeslide.model-capability-card/v1
+model: nvidia/nemotron-3-super-120b-a12b:free
+evidence_window:
+  attempted_runs: 1
+  completed_decks: 1
+  completed_exports: 1
+  harness_version: deck-gym-free-router-v1
+observed_strengths:
+  - "preserved the supplied numeric comparison"
+  - "produced valid editable chart, diagram, and formula primitives"
+observed_failures:
+  - "invented prompt-engineering and fine-tuning steps"
+  - "rendered a requested risk matrix as a linear stack"
+required_scaffolding:
+  - "source-every-claim"
+  - "require-visual-artifacts"
+status: "provisional — one brief is not enough for role specialization"

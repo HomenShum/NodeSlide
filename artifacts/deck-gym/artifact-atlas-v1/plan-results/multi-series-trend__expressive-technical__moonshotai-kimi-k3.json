@@ -1,0 +1,56 @@
+{
+  "artifactType": "multi-series-chart",
+  "candidateDigest": "sha256:73685ba9bb46dab91b2f7d10fcda50ba3c40b0a0bd56d23835b270d5d1e99ff3",
+  "candidateId": "multi-series-trend__expressive-technical__moonshotai-kimi-k3",
+  "directionId": "expressive-technical",
+  "durationMs": 12831,
+  "fixtureId": "multi-series-trend",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Local bus recovered least, ending at 67 in June versus 91 for rapid bus and 82 for rail.",
+    "artifactType": "multi-series-chart",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "contrast",
+    "operations": [
+      {
+        "label": "Plot rapid bus, local bus, and rail as editable monthly series from January through June",
+        "operationId": "create-editable-series",
+        "sourceId": "ridership-series",
+        "value": "Jan–Jun: rapid bus 72→91, local bus 61→67, rail 68→82"
+      },
+      {
+        "label": "Label June end values directly on each line",
+        "operationId": "direct-label-endpoints",
+        "sourceId": "ridership-series",
+        "value": "Rapid bus 91; local bus 67; rail 82"
+      },
+      {
+        "label": "Annotate the divergence: local bus under-recovery",
+        "operationId": "annotate-supported-pattern",
+        "sourceId": "ridership-series",
+        "value": "Local bus recovered least across the period"
+      }
+    ],
+    "pptxFallback": "Export editable lines and labels; omit animation before using a static chart image.",
+    "sourceLabels": [
+      {
+        "label": "Monthly ridership index",
+        "sourceId": "ridership-series"
+      }
+    ],
+    "takeaway": "Local bus recovered least by June, reaching 67 while rapid bus hit 91 and rail hit 82.",
+    "title": "Ridership Index Jan–Jun: Rapid Bus, Local Bus, Rail"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1226,
+    "inputTokens": 856,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 285,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

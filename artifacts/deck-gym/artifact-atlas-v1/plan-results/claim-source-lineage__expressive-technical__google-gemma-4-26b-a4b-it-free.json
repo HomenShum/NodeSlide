@@ -1,0 +1,56 @@
+{
+  "artifactType": "claim-source-lineage",
+  "candidateDigest": "sha256:a61e560dbdbc65d6e4d8609423fcfb2d37ba1734882b0307f5853a20ca323ef2",
+  "candidateId": "claim-source-lineage__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "directionId": "expressive-technical",
+  "durationMs": 18075,
+  "fixtureId": "claim-source-lineage",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "Trace the validated claim path versus the unsupported error claim.",
+    "artifactType": "claim-source-lineage",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Lineage Path",
+        "operationId": "create-lineage-nodes",
+        "sourceId": "journey-receipt",
+        "value": "Source -> Fact -> Claim -> Slide -> Receipt"
+      },
+      {
+        "label": "Claim Binding",
+        "operationId": "bind-source-id",
+        "sourceId": "journey-receipt",
+        "value": "human acceptance at 52 seconds"
+      },
+      {
+        "label": "Rejected Claim",
+        "operationId": "show-rejected-claim-branch",
+        "sourceId": "journey-receipt",
+        "value": "zero errors"
+      }
+    ],
+    "pptxFallback": "A series of connected text boxes and arrows. The primary path flows left-to-right from the source ID to the final claim. A separate, dashed line branches downward to the rejected 'zero errors' claim.",
+    "sourceLabels": [
+      {
+        "label": "Journey timing receipt",
+        "sourceId": "journey-receipt"
+      }
+    ],
+    "takeaway": "The claim of human acceptance at 52 seconds is directly linked to the journey receipt, while the 'zero errors' claim is rejected due to lack of evidence.",
+    "title": "Evidence Lineage: Human Acceptance Timing"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1094,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 370,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

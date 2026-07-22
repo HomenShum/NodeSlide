@@ -1,0 +1,1 @@
+The adaptive policy predicts whether a query requires retrieval, retrieves at most three passages, then answers with claim-linked citations. Reported values are means over the fixed benchmark fixture; no statistical-significance claim is authorized.

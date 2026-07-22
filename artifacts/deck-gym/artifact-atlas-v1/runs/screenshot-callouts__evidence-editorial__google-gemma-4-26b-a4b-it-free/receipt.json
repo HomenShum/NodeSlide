@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "screenshot-callouts__evidence-editorial__google-gemma-4-26b-a4b-it-free",
+  "candidateDigest": "sha256:27802d13a271c8e3540f2f5b502005200032b51814005ec680de905b0792b8ac",
+  "fixtureId": "screenshot-callouts",
+  "directionId": "evidence-editorial",
+  "artifactType": "screenshot-callouts",
+  "slideArchetype": "product-evidence",
+  "narrativeJob": "Connect visible product controls to the claimed reviewable-generation workflow without fabricating UI evidence.",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "modelRole": "zero-cost-bounded-generator-candidate",
+  "candidateKind": "model",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "screenshot-absence"
+  ],
+  "sourceDigest": "sha256:f98aa7a7bdfa719b9dfc5757715aebc2922b83d9521a12bd88de99689643a066",
+  "referenceIds": [
+    "product-large-screenshot-callouts"
+  ],
+  "artifactRequirementDigest": "sha256:21696a32873f0382a74a991368a7acf70c5ab3247c64444046323721e433a1d9",
+  "editability": {
+    "web": "native",
+    "pptx": "grouped-editable"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": false,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 9418,
+    "inputTokens": 1080,
+    "outputTokens": 332,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/screenshot-callouts__evidence-editorial__google-gemma-4-26b-a4b-it-free/browser.png",
+    "pptxRender": "runs/screenshot-callouts__evidence-editorial__google-gemma-4-26b-a4b-it-free/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/screenshot-callouts__evidence-editorial__google-gemma-4-26b-a4b-it-free/artifact.pptx",
+    "webPptxDifference": "Keep the placeholder and callouts editable; never manufacture a product screenshot."
+  },
+  "status": "failed",
+  "generatedAt": "2026-07-22T03:43:02.773Z",
+  "receiptDigest": "sha256:de55f4f9ef7a77b695b6f8cf97275d64dfe4039bfbb41fc1c4d50f1171db257c",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "circle",
+    "line"
+  ]
+}

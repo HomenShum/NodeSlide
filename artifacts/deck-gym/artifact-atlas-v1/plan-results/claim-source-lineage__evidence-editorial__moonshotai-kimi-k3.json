@@ -1,0 +1,56 @@
+{
+  "artifactType": "claim-source-lineage",
+  "candidateDigest": "sha256:cb231327b96a39d7752f6ccb37f91f2316941e90bd0eb76b2b23aea4805c4c15",
+  "candidateId": "claim-source-lineage__evidence-editorial__moonshotai-kimi-k3",
+  "directionId": "evidence-editorial",
+  "durationMs": 20831,
+  "fixtureId": "claim-source-lineage",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Reading left to right: source record (journey-receipt) → extracted fact (elapsed 52s, status complete) → bounded claim (human acceptance at 52 seconds) → slide element → exported receipt. A separate branch marks 'zero errors' as rejected: no browser-error evidence is present in the source.",
+    "artifactType": "claim-source-lineage",
+    "composition": "progressive",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "Lineage chain",
+        "operationId": "create-lineage-nodes",
+        "sourceId": "journey-receipt",
+        "value": "Source record → extracted fact → bounded claim → slide element → exported receipt"
+      },
+      {
+        "label": "Bound claim",
+        "operationId": "bind-source-id",
+        "sourceId": "journey-receipt",
+        "value": "human acceptance at 52 seconds — bound to source journey-receipt"
+      },
+      {
+        "label": "Rejected branch",
+        "operationId": "show-rejected-claim-branch",
+        "sourceId": "journey-receipt",
+        "value": "'zero errors' rejected — unsupported; no browser-error evidence is present"
+      }
+    ],
+    "pptxFallback": "In PowerPoint, the lineage renders as editable nodes and connectors preserving the left-to-right chain, the bound source ID journey-receipt, and the rejected 'zero errors' branch as a distinct editable node; the lineage is never flattened into prose.",
+    "sourceLabels": [
+      {
+        "label": "Journey timing receipt",
+        "sourceId": "journey-receipt"
+      }
+    ],
+    "takeaway": "The measured claim 'human acceptance at 52 seconds' traces directly to source journey-receipt; the unsupported 'zero errors' claim is rejected.",
+    "title": "Evidence Lineage: Human Acceptance at 52 Seconds"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1337,
+    "inputTokens": 820,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 338,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

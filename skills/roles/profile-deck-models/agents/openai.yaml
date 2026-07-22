@@ -1,0 +1,4 @@
+interface:
+  display_name: "Profile Deck Models"
+  short_description: "Turn benchmark evidence into model capability cards"
+  default_prompt: "Use $profile-deck-models to profile the tested presentation models from benchmark receipts."

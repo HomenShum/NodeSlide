@@ -1,0 +1,681 @@
+{
+  "schemaVersion": "nodeslide.artifact-blind-tournament/v1",
+  "generatedAt": "2026-07-22T03:43:16.857Z",
+  "fixtureCount": 12,
+  "bracketCount": 12,
+  "status": "awaiting-human-preference",
+  "blind": true,
+  "allowedPreferenceReasons": [
+    "clearer_story",
+    "stronger_visual_hierarchy",
+    "better_artifact_choice",
+    "less_repetition",
+    "better_evidence",
+    "better_data_fidelity",
+    "more_audience_appropriate",
+    "more_editable",
+    "better_export"
+  ],
+  "brackets": [
+    {
+      "fixtureId": "claim-source-lineage",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:ac771ed2acd990c61cbb626458e9e151ea723295c0759bb84e330d54dfffeed3",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:21e15fddce0cdbaee0ef775abfbb0ddc943413b03ae9ddaff275b2cbcfbc4da9",
+            "browserRender": "artifact-atlas/blind/21e15fddce0cdbaee0ef775abfbb0ddc943413b03ae9ddaff275b2cbcfbc4da9.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:24500092ef2332341d0278d481377c765ac2aef82a7caa0cda1fa694ada1507f",
+            "browserRender": "artifact-atlas/blind/24500092ef2332341d0278d481377c765ac2aef82a7caa0cda1fa694ada1507f.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:608e1ea95a7060a33feb0140ee609b49871db336ae395f0e58ea1a7c781f9d27",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:661ebe58bd5bdfbb3534d37485ac69cb23dc04f23c2c06d0568f20971b9768cb",
+            "browserRender": "artifact-atlas/blind/661ebe58bd5bdfbb3534d37485ac69cb23dc04f23c2c06d0568f20971b9768cb.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:af3f9f011b79cf1325796372b26e1fd22991b8ab82f5849634b84e04c4d37305",
+            "browserRender": "artifact-atlas/blind/af3f9f011b79cf1325796372b26e1fd22991b8ab82f5849634b84e04c4d37305.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    },
+    {
+      "fixtureId": "code-runtime-proof",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:149125dfea04ce9bc5c2756a2c9b307ad74a4bc95b5a94d151394c494492fb9e",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:5149d4f4f4981285221413c6cae70d1fbb61da536a513b0a9c9b046a5cb596c0",
+            "browserRender": "artifact-atlas/blind/5149d4f4f4981285221413c6cae70d1fbb61da536a513b0a9c9b046a5cb596c0.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:575d9913583daa265af4533d5267ced87319868c0aba257162be60960c9ce7dc",
+            "browserRender": "artifact-atlas/blind/575d9913583daa265af4533d5267ced87319868c0aba257162be60960c9ce7dc.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:641f6d8d06147edd70bec8af2b5a41506efc658103a33299a0942ad024a96510",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:63f5564464b336f94df80a2724f4a21bd939362ad49b3fcea92c4d564e6309a8",
+            "browserRender": "artifact-atlas/blind/63f5564464b336f94df80a2724f4a21bd939362ad49b3fcea92c4d564e6309a8.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:b2eece4e6b55d8ec1ea972c39033f2cfc7f6b8a0d4fcf0ff4519a7f0b8930088",
+            "browserRender": "artifact-atlas/blind/b2eece4e6b55d8ec1ea972c39033f2cfc7f6b8a0d4fcf0ff4519a7f0b8930088.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    },
+    {
+      "fixtureId": "hero-thesis",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:4f2effa23d699d3d44becc7e5daab4f85e21c551d2e7cac9fa978a093219840c",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:08647cd498faa0e7ec90183f5b96de8313f0740057c38852cf54e4377db507ed",
+            "browserRender": "artifact-atlas/blind/08647cd498faa0e7ec90183f5b96de8313f0740057c38852cf54e4377db507ed.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:ccf47f37fd71bc1dc439ef35f8e38554c998aedb8fab701ec76a397229676fef",
+            "browserRender": "artifact-atlas/blind/ccf47f37fd71bc1dc439ef35f8e38554c998aedb8fab701ec76a397229676fef.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:3e113c14f88f3aba9e47f606fff88551538ea6efb2d2afc27b34c141c90ab432",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:e26c9bb62816ac7a0c94574a3d6d20b7a2f3fa2c0a83d233517596f4d482d1a9",
+            "browserRender": "artifact-atlas/blind/e26c9bb62816ac7a0c94574a3d6d20b7a2f3fa2c0a83d233517596f4d482d1a9.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:f07c4e21a2d881f4c095452f26426e151324a36a7c8189f4037b452b4bd9662c",
+            "browserRender": "artifact-atlas/blind/f07c4e21a2d881f4c095452f26426e151324a36a7c8189f4037b452b4bd9662c.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    },
+    {
+      "fixtureId": "kpi-strip",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:d1383e3981d05c0b7ab01d41375aa1f695e5c50c81320c6a09880f4b5e6b732c",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:1df80ecdaf209f3ea3a2f5ea606d728d26a944bf03afc27fe15ddafb1ec041c5",
+            "browserRender": "artifact-atlas/blind/1df80ecdaf209f3ea3a2f5ea606d728d26a944bf03afc27fe15ddafb1ec041c5.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:2c18866499014d4c6fb21031fdade753307c66e07e1e6458644b0e683f18c394",
+            "browserRender": "artifact-atlas/blind/2c18866499014d4c6fb21031fdade753307c66e07e1e6458644b0e683f18c394.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:66496ff9f022fbf804305314adae7382cc5bf07c329bb376ef064d056b21f901",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:72448a78bbc298c97e16732dcd136a21b39b16e06795c6938beb2cacd5129385",
+            "browserRender": "artifact-atlas/blind/72448a78bbc298c97e16732dcd136a21b39b16e06795c6938beb2cacd5129385.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:926dd9e2062f92c4dca888916d07c32cc74914cb5a7726a0bc7d8a6d2e86b3af",
+            "browserRender": "artifact-atlas/blind/926dd9e2062f92c4dca888916d07c32cc74914cb5a7726a0bc7d8a6d2e86b3af.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    },
+    {
+      "fixtureId": "multi-series-trend",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:b3d72306384e6b4a858a592c9e2318415781940efcce53ad89ba5f8eb328f10c",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:a0d634ce5b73ab3706dfef3dd51687144338f66830c1f749d46b4ea05d079b5a",
+            "browserRender": "artifact-atlas/blind/a0d634ce5b73ab3706dfef3dd51687144338f66830c1f749d46b4ea05d079b5a.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:a444afecb7747401a6b80639fb3739ca4e1ee904b394f566630a63711cd3b8f1",
+            "browserRender": "artifact-atlas/blind/a444afecb7747401a6b80639fb3739ca4e1ee904b394f566630a63711cd3b8f1.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:8358a1ec9adeeb730ea6a998adc128e580b293ae41a29f001f280aa5ec9fe2cf",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:e29598d3cd7d79f5cdf0f3be24b7c6bac3004a1c7f8132e755ae5da66ed65172",
+            "browserRender": "artifact-atlas/blind/e29598d3cd7d79f5cdf0f3be24b7c6bac3004a1c7f8132e755ae5da66ed65172.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:f7cdfd1d6de7f7a6138efc18991f1468d5378d22e121c8382ebe7d71b1c7aa25",
+            "browserRender": "artifact-atlas/blind/f7cdfd1d6de7f7a6138efc18991f1468d5378d22e121c8382ebe7d71b1c7aa25.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    },
+    {
+      "fixtureId": "quality-cost-equation",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:251901184b9e269680a0a3072c6e93979ecd7e9cdd069dccf11e72b34a8f7885",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:42f2917d64b41d3f77011de8ae80afa7b677accfe6f943549243b957b72fec6b",
+            "browserRender": "artifact-atlas/blind/42f2917d64b41d3f77011de8ae80afa7b677accfe6f943549243b957b72fec6b.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:7f4f3b9e687094cc64e465eefbfc2d54688c63600a63a32a1ca73cd2d6e75fbc",
+            "browserRender": "artifact-atlas/blind/7f4f3b9e687094cc64e465eefbfc2d54688c63600a63a32a1ca73cd2d6e75fbc.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:af28a898d761efa1d9e303b273e9fefa1623b108eb9584e4c0cc865172083b2a",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:9c7723e5c8bdfc0c953656f289acbcc8867f940475bb95e4fcd5620f47d7699d",
+            "browserRender": "artifact-atlas/blind/9c7723e5c8bdfc0c953656f289acbcc8867f940475bb95e4fcd5620f47d7699d.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:b2fba8ec47bf8c37395bc0b5a30e4bcfaf218a05659278bd8e4c3b5f1cbc9b1c",
+            "browserRender": "artifact-atlas/blind/b2fba8ec47bf8c37395bc0b5a30e4bcfaf218a05659278bd8e4c3b5f1cbc9b1c.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    },
+    {
+      "fixtureId": "request-sequence",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:40e9b5be658e431c1f230e8ec8598ef38545f91cca2a5d50ff21294930764287",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:1395bcff67c572e1954b9ae3847face8f62028cf9e38c403fd8001b18d7da99e",
+            "browserRender": "artifact-atlas/blind/1395bcff67c572e1954b9ae3847face8f62028cf9e38c403fd8001b18d7da99e.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:6c70fe660efd3b59858f9a6024152503fb8c52e3c9873c87f36ec9210a1bdc3d",
+            "browserRender": "artifact-atlas/blind/6c70fe660efd3b59858f9a6024152503fb8c52e3c9873c87f36ec9210a1bdc3d.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:2f3895c537cf6f8fcd56bcbf9d0b9a352c456b2ed0626fff040da23d1813b2e2",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:90fd7d933ba30047520b7da6370c8b30fc847486b97e47e40371d9296f72e9f1",
+            "browserRender": "artifact-atlas/blind/90fd7d933ba30047520b7da6370c8b30fc847486b97e47e40371d9296f72e9f1.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:eb486bc79e65b10fb3dfbca9ea126223fdb557c7de330eeb29fcf361b5dd00db",
+            "browserRender": "artifact-atlas/blind/eb486bc79e65b10fb3dfbca9ea126223fdb557c7de330eeb29fcf361b5dd00db.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    },
+    {
+      "fixtureId": "research-timeline",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:66ba0e5ead55fbfbbc7fdaa747561cb197986f9ea098de90fa023e89666b8b80",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:49262adef9f4f31160edf2ac04d26386e5036a2771f09bb92fc11531dd372191",
+            "browserRender": "artifact-atlas/blind/49262adef9f4f31160edf2ac04d26386e5036a2771f09bb92fc11531dd372191.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:700efeb836f313d7f64c55a1f13259433b93bc62d6e0cdadde3acbb8e05f51dd",
+            "browserRender": "artifact-atlas/blind/700efeb836f313d7f64c55a1f13259433b93bc62d6e0cdadde3acbb8e05f51dd.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:6b20422c92792c56d2634ba9bd279db3ef71c4a44a2e83b3c96c61da3add7234",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:792a59481c42f39396031592ed725a1dd60767a9fc65830ce108d0933a820bd3",
+            "browserRender": "artifact-atlas/blind/792a59481c42f39396031592ed725a1dd60767a9fc65830ce108d0933a820bd3.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:845bc9c6bcf7a6bb23a09c2c543a7641dc770fa8ee10aee84c7fa87607ea4647",
+            "browserRender": "artifact-atlas/blind/845bc9c6bcf7a6bb23a09c2c543a7641dc770fa8ee10aee84c7fa87607ea4647.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    },
+    {
+      "fixtureId": "risk-matrix",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:d72334f49b0b2fec27080dace71799e8ed2b08de9c8717a0eb4aabc257a1f8ea",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:0bd1d9e8f0881dfbc4c058051fc7cad360f4e81ceab8e956989799777bba695d",
+            "browserRender": "artifact-atlas/blind/0bd1d9e8f0881dfbc4c058051fc7cad360f4e81ceab8e956989799777bba695d.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:0de3f3be5721dc2a50a5ab3850cdeac452a10282b4379c7f2188ffb6d390454c",
+            "browserRender": "artifact-atlas/blind/0de3f3be5721dc2a50a5ab3850cdeac452a10282b4379c7f2188ffb6d390454c.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:37409ce3459cc76c1c84c5d5c26e0072e84e3ace4ca35fff22a9cc41a5105584",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:b8502f9cc38459689185e55a949a0068874bc1460b2cc3e64f7152f2760fe12c",
+            "browserRender": "artifact-atlas/blind/b8502f9cc38459689185e55a949a0068874bc1460b2cc3e64f7152f2760fe12c.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:de0a52e5a0f13fe1e1d133dc0ef68badb2e6ada15ab54d33ccbe4a3a4db1d470",
+            "browserRender": "artifact-atlas/blind/de0a52e5a0f13fe1e1d133dc0ef68badb2e6ada15ab54d33ccbe4a3a4db1d470.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    },
+    {
+      "fixtureId": "screenshot-callouts",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:0bc60f99a86470b11542ee859b5896863c791d3cc6e8258724ae624f8f4d8075",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:1f6686307e389a983ee84a035632f369690a9feb9440e109f4d2e5c195ccb5a8",
+            "browserRender": "artifact-atlas/blind/1f6686307e389a983ee84a035632f369690a9feb9440e109f4d2e5c195ccb5a8.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:6727ce2a770d0580e4fb0fa5f47f26d6bdf940c0cf90f13eb941041f4a9cc8b7",
+            "browserRender": "artifact-atlas/blind/6727ce2a770d0580e4fb0fa5f47f26d6bdf940c0cf90f13eb941041f4a9cc8b7.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:fc9c7db76766b02e9974f89163040d93b1644755495f7d1e41849df3a853dabd",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:7e4a9b40d814a0844a8a2502975583ebe6a321ec3ec0374afa4bb58491200b6b",
+            "browserRender": "artifact-atlas/blind/7e4a9b40d814a0844a8a2502975583ebe6a321ec3ec0374afa4bb58491200b6b.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:a68595c67a930967b1fd08f7dddb10471246a5551089c4af86aa58445fc55d5a",
+            "browserRender": "artifact-atlas/blind/a68595c67a930967b1fd08f7dddb10471246a5551089c4af86aa58445fc55d5a.png",
+            "editability": {
+              "web": "native",
+              "pptx": "grouped-editable"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    },
+    {
+      "fixtureId": "system-architecture",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:eef8b7ffbfcb5a40ff2fcb3b3106b8f364236d40d348c02017d15f3cc05ecad6",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:1410ec15f99b761a9b2a18cc2c6208627a122781f5ea71b5698a943272feddde",
+            "browserRender": "artifact-atlas/blind/1410ec15f99b761a9b2a18cc2c6208627a122781f5ea71b5698a943272feddde.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:82961a68acf2270d14006aae4f3fb80af27fed7cdcc628d016072b8b687028a4",
+            "browserRender": "artifact-atlas/blind/82961a68acf2270d14006aae4f3fb80af27fed7cdcc628d016072b8b687028a4.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:ad85872fbfe0de8054306eb39ba11d6fba76f6eee00b585836739ddad3a76640",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:a7fa51a675c7df914090c781c01a458d84bd44d856bb1b854fb0fad9e211bf23",
+            "browserRender": "artifact-atlas/blind/a7fa51a675c7df914090c781c01a458d84bd44d856bb1b854fb0fad9e211bf23.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:fe305a65232dc829528cc7952148e43175d5cac0db5e7b180523251f552d7777",
+            "browserRender": "artifact-atlas/blind/fe305a65232dc829528cc7952148e43175d5cac0db5e7b180523251f552d7777.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    },
+    {
+      "fixtureId": "uncertainty-range",
+      "status": "awaiting-human-preference",
+      "rounds": [
+        {
+          "comparisonId": "sha256:2d00c68e7a1edf5e2f411ed96625afec44773f1be91e1cdfcdbf5166223f9831",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:03854b8a5746469a8cbb50bf7412d9cacab296b6924085d902409cb88cb52e40",
+            "browserRender": "artifact-atlas/blind/03854b8a5746469a8cbb50bf7412d9cacab296b6924085d902409cb88cb52e40.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:0a646a27a645b70ffc77f5ee90ccd8b3056d4f5d9a6dc3de5da91bfbce3a7455",
+            "browserRender": "artifact-atlas/blind/0a646a27a645b70ffc77f5ee90ccd8b3056d4f5d9a6dc3de5da91bfbce3a7455.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        },
+        {
+          "comparisonId": "sha256:37d8e8b5e8f914eb9dafedd01d542ea4f7eb660f8773df1c564727bd3c14c6eb",
+          "left": {
+            "label": "A",
+            "receiptDigest": "sha256:0d09bdb9c88c67fcda58c873c0387f8ee1ce94f9c44b08b7f51a549cfe36123a",
+            "browserRender": "artifact-atlas/blind/0d09bdb9c88c67fcda58c873c0387f8ee1ce94f9c44b08b7f51a549cfe36123a.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "right": {
+            "label": "B",
+            "receiptDigest": "sha256:d1422dec2a16bb46b1e7edc8ed467bdc0cb99cb96eea2e93c75b0ae3ef7bd5d5",
+            "browserRender": "artifact-atlas/blind/d1422dec2a16bb46b1e7edc8ed467bdc0cb99cb96eea2e93c75b0ae3ef7bd5d5.png",
+            "editability": {
+              "web": "native",
+              "pptx": "native"
+            }
+          },
+          "selected": null,
+          "reason": null
+        }
+      ],
+      "final": null,
+      "winnerReceiptDigest": null,
+      "preferenceReasons": []
+    }
+  ]
+}

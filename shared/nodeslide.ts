@@ -121,11 +121,71 @@ export const NODESLIDE_AGENT_MODELS = [
     supportsTemperature: false,
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
+  {
+    id: 'google/gemma-4-26b-a4b-it:free',
+    upstreamId: 'google/gemma-4-26b-a4b-it:free',
+    provider: 'openrouter',
+    vendor: 'Google',
+    label: 'Gemma 4 26B (Free)',
+    description: 'Zero-priced OpenRouter route with native structured-output support.',
+    costTier: 'free',
+    bestFor: 'Free structured deck experiments',
+    productionEnabled: true,
+    freeRouterCandidate: true,
+    supportsTemperature: true,
+    supportedEfforts: ['low', 'medium', 'high'],
+  },
+  {
+    id: 'google/gemma-4-31b-it:free',
+    upstreamId: 'google/gemma-4-31b-it:free',
+    provider: 'openrouter',
+    vendor: 'Google',
+    label: 'Gemma 4 31B (Free)',
+    description: 'Zero-priced OpenRouter route used as a JSON-format compatibility control.',
+    costTier: 'free',
+    bestFor: 'Free visual planning experiments',
+    productionEnabled: false,
+    freeRouterCandidate: true,
+    supportsTemperature: true,
+    supportedEfforts: ['low', 'medium', 'high'],
+  },
+  {
+    id: 'nvidia/nemotron-3-super-120b-a12b:free',
+    upstreamId: 'nvidia/nemotron-3-super-120b-a12b:free',
+    provider: 'openrouter',
+    vendor: 'NVIDIA',
+    label: 'Nemotron 3 Super (Free)',
+    description: 'Zero-priced long-context OpenRouter route with native structured output.',
+    costTier: 'free',
+    bestFor: 'Free long-context deck planning',
+    productionEnabled: true,
+    freeRouterCandidate: true,
+    supportsTemperature: true,
+    supportedEfforts: ['low', 'medium', 'high'],
+  },
+  {
+    id: 'openai/gpt-oss-20b:free',
+    upstreamId: 'openai/gpt-oss-20b:free',
+    provider: 'openrouter',
+    vendor: 'OpenAI',
+    label: 'GPT-OSS 20B (Free)',
+    description: 'Zero-priced OpenRouter route with native structured-output support.',
+    costTier: 'free',
+    bestFor: 'Free fast iteration and repair',
+    productionEnabled: true,
+    freeRouterCandidate: true,
+    supportsTemperature: true,
+    supportedEfforts: ['low', 'medium', 'high'],
+  },
 ] as const;
 export type NodeSlideAgentModelId = (typeof NODESLIDE_AGENT_MODELS)[number]['id'];
 /** Models actually offered by this production deployment. */
 export const NODESLIDE_OFFERED_AGENT_MODELS = NODESLIDE_AGENT_MODELS.filter(
   (model) => model.productionEnabled,
+);
+/** Zero-priced OpenRouter routes awaiting or undergoing bounded production qualification. */
+export const NODESLIDE_FREE_ROUTER_CANDIDATES = NODESLIDE_AGENT_MODELS.filter(
+  (model) => 'freeRouterCandidate' in model && model.freeRouterCandidate,
 );
 export type NodeSlideExternalProvider = (typeof NODESLIDE_AGENT_MODELS)[number]['provider'];
 export const NODESLIDE_DEFAULT_AGENT_MODEL: NodeSlideAgentModelId = 'moonshotai/kimi-k3';

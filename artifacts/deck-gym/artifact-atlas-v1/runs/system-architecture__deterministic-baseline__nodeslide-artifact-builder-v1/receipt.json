@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "nodeslide.artifact-showcase-receipt/v1",
+  "candidateId": "system-architecture__deterministic-baseline__nodeslide-artifact-builder-v1",
+  "candidateDigest": "sha256:b0f7284925e54a033144694d77b09a96c8a60bc2d5fd545b44873004d33cbad4",
+  "fixtureId": "system-architecture",
+  "directionId": "deterministic-baseline",
+  "artifactType": "architecture-diagram",
+  "slideArchetype": "layered-architecture",
+  "narrativeJob": "Make the portable protocol boundary and backend-specific responsibilities immediately inspectable.",
+  "model": "nodeslide-artifact-builder-v1",
+  "modelRole": "geometry-and-export-control",
+  "candidateKind": "deterministic-baseline",
+  "harnessVersion": "artifact-arena-v1",
+  "sourceIds": [
+    "architecture-contract"
+  ],
+  "sourceDigest": "sha256:5673b958b73b95f1cbc5bf66d019dc210bf6f0584857852773fdc7d293942530",
+  "referenceIds": [
+    "systems-layered-boundary"
+  ],
+  "artifactRequirementDigest": "sha256:f80295f537cb79365aa1114ea4a899d522f557d37f6b929559519820e5641c18",
+  "editability": {
+    "web": "native",
+    "pptx": "native"
+  },
+  "tools": [
+    "nodeslide-artifact-builder-v1",
+    "pptxgenjs",
+    "playwright"
+  ],
+  "evaluation": {
+    "briefAdherence": true,
+    "visualPassed": true,
+    "evidencePassed": true,
+    "exportPassed": true,
+    "artifactTypeMatched": true,
+    "editabilityPassed": true,
+    "repairCount": 0,
+    "generationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0
+  },
+  "outputs": {
+    "browserRender": "runs/system-architecture__deterministic-baseline__nodeslide-artifact-builder-v1/browser.png",
+    "pptxRender": "runs/system-architecture__deterministic-baseline__nodeslide-artifact-builder-v1/pptx-rendered/slide-1.png",
+    "pptxFile": "runs/system-architecture__deterministic-baseline__nodeslide-artifact-builder-v1/artifact.pptx",
+    "webPptxDifference": "Prefer grouped editable shapes and connectors; never replace the architecture with paragraph arrows."
+  },
+  "status": "eligible",
+  "generatedAt": "2026-07-22T03:35:03.370Z",
+  "receiptDigest": "sha256:82961a68acf2270d14006aae4f3fb80af27fed7cdcc628d016072b8b687028a4",
+  "claimCoverage": 1,
+  "forbiddenClaims": [],
+  "exportFailure": null,
+  "primitiveKinds": [
+    "rect",
+    "text",
+    "line"
+  ]
+}

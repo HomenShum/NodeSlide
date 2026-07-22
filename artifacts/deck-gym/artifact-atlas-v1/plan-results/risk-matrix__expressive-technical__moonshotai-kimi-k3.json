@@ -1,0 +1,56 @@
+{
+  "artifactType": "risk-matrix",
+  "candidateDigest": "sha256:f05f6084af31d52a716b3637ff8ca0d106af97b3a0f308e264d274f3ed04839d",
+  "candidateId": "risk-matrix__expressive-technical__moonshotai-kimi-k3",
+  "directionId": "expressive-technical",
+  "durationMs": 17943,
+  "fixtureId": "risk-matrix",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Markers placed on 1–5 likelihood and impact scales from the Q2 risk register.",
+    "artifactType": "risk-matrix",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Labeled 1–5 likelihood and impact axes",
+        "operationId": "draw-labeled-axes",
+        "sourceId": "q2-risks",
+        "value": "Likelihood 1–5 horizontal; impact 1–5 vertical"
+      },
+      {
+        "label": "Three editable risk markers",
+        "operationId": "place-editable-markers",
+        "sourceId": "q2-risks",
+        "value": "Pipeline coverage 4/5; implementation capacity 3/4; retention concentration 2/5"
+      },
+      {
+        "label": "Priority zone highlighting",
+        "operationId": "encode-priority-zone",
+        "sourceId": "q2-risks",
+        "value": "High likelihood–impact zone emphasizes pipeline coverage as highest priority"
+      }
+    ],
+    "pptxFallback": "PowerPoint fallback uses editable axes, zones, and markers; a bar chart or linear stack fails artifact-type matching.",
+    "sourceLabels": [
+      {
+        "label": "Q2 risk register",
+        "sourceId": "q2-risks"
+      }
+    ],
+    "takeaway": "Pipeline coverage is highest priority; retention concentration and implementation capacity follow.",
+    "title": "Q2 Operating Risk Matrix"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1152,
+    "inputTokens": 834,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 261,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

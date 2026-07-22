@@ -1,0 +1,4 @@
+interface:
+  display_name: "Claude Sonnet Deck Adapter"
+  short_description: "Adapt deck work to observed Sonnet behavior"
+  default_prompt: "Use $claude-sonnet-deck-adapter to direct this deck task with Sonnet-specific safeguards."

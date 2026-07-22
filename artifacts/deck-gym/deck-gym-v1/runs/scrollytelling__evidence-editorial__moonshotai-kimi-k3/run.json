@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "scrollytelling__evidence-editorial__moonshotai-kimi-k3",
+  "briefId": "scrollytelling",
+  "model": "moonshotai/kimi-k3",
+  "directionId": "evidence-editorial",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:773019445d2e6b621762f29c32e5b4ca26b0cf9091b36990fc1091c048ebb745",
+  "runDigest": "sha256:59ee0fbe4860e12aa37aec7d3cdd4babb8994f85ee448d9fefd6c6e85b1565a9",
+  "title": "A Shipment's Risk Journey",
+  "family": "scrollytelling_deck",
+  "audience": "supply-chain leaders",
+  "decision": "understand where intervention most reduces shipment risk",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide scrollytelling-style deck for supply-chain leaders following one shipment from booking through delivery. Each slide should advance the same journey, reveal one new risk signal, and preserve a coherent static PowerPoint fallback. Use the supplied event sequence exactly. Include an editable progression timeline, cumulative risk chart, handoff diagram, exception evidence, and final intervention decision. Do not fabricate a live interaction or animation in the PPTX.\n\nDesign direction: Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards.",
+  "attachments": [
+    {
+      "fileName": "shipment-events.json",
+      "format": "json",
+      "content": "[{\"hour\":0,\"event\":\"booking\",\"risk\":8},{\"hour\":7,\"event\":\"carrier_acceptance\",\"risk\":12},{\"hour\":19,\"event\":\"port_arrival\",\"risk\":18},{\"hour\":31,\"event\":\"inspection_hold\",\"risk\":61},{\"hour\":44,\"event\":\"release\",\"risk\":39},{\"hour\":73,\"event\":\"delivery\",\"risk\":11}]"
+    }
+  ],
+  "requiredClaims": [
+    "inspection hold",
+    "61",
+    "delivery",
+    "11"
+  ],
+  "requiredArtifacts": [
+    "timeline",
+    "chart",
+    "diagram",
+    "evidence"
+  ],
+  "forbiddenClaims": [
+    "interactive pptx",
+    "live animation"
+  ],
+  "referenceIds": [
+    "scroll/progressive-reveal",
+    "scroll/cumulative-risk",
+    "scroll/static-fallback"
+  ],
+  "modelLabel": "Kimi K3",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "evidence-editorial",
+    "label": "Evidence editorial",
+    "instruction": "Use an evidence-led editorial direction: restrained surface treatment, decisive hierarchy, visible provenance, and an inspectable visual argument on every proof slide. Avoid card grids and decorative dashboards."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbhud6_8cab506a2b791a24d2891439794a9008",
+    "durationMs": 42346,
+    "completedAt": "2026-07-22T00:01:33.513Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · moonshotai/kimi-k3 (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Kimi K3 via OpenRouter route returned invalid JSON after one repair attempt. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 2,089 → 1,569 COST $0.0052 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 178577
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

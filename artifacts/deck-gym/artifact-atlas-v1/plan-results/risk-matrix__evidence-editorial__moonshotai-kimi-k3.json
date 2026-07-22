@@ -1,0 +1,56 @@
+{
+  "artifactType": "risk-matrix",
+  "candidateDigest": "sha256:7640f8eaab52f1e9d5c2a0c479d1c184483c124ac820ad1e706eda64bc37c30b",
+  "candidateId": "risk-matrix__evidence-editorial__moonshotai-kimi-k3",
+  "directionId": "evidence-editorial",
+  "durationMs": 16696,
+  "fixtureId": "risk-matrix",
+  "model": "moonshotai/kimi-k3",
+  "plan": {
+    "annotation": "Likelihood and impact on consistent 1–5 scales; upper-right zone marks the priority region. Source: Q2 risk register.",
+    "artifactType": "risk-matrix",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "position",
+    "operations": [
+      {
+        "label": "Labeled likelihood and impact axes",
+        "operationId": "draw-labeled-axes",
+        "sourceId": "q2-risks",
+        "value": "Horizontal likelihood axis 1–5; vertical impact axis 1–5, consistent scales"
+      },
+      {
+        "label": "Three editable risk markers",
+        "operationId": "place-editable-markers",
+        "sourceId": "q2-risks",
+        "value": "Pipeline coverage (4,5); implementation capacity (3,4); retention concentration (2,5)"
+      },
+      {
+        "label": "Priority zone",
+        "operationId": "encode-priority-zone",
+        "sourceId": "q2-risks",
+        "value": "Upper-right high-likelihood/high-impact region shaded to flag priority risks"
+      }
+    ],
+    "pptxFallback": "PowerPoint fallback uses editable native shapes: labeled axis lines with 1–5 tick labels, a shaded priority-zone rectangle, and three movable marker shapes with direct text labels; no bar chart or linear stack is substituted.",
+    "sourceLabels": [
+      {
+        "label": "Q2 risk register",
+        "sourceId": "q2-risks"
+      }
+    ],
+    "takeaway": "Pipeline coverage is highest priority; implementation capacity is 3 by 4 and retention concentration is 2 by 5.",
+    "title": "Q2 Operating Risk Priorities"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 1261,
+    "inputTokens": 832,
+    "model": "moonshotai/kimi-k3",
+    "outputTokens": 305,
+    "provider": "openrouter",
+    "reasoningEffort": "high"
+  },
+  "candidateKind": "model"
+}

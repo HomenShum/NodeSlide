@@ -1,0 +1,56 @@
+{
+  "artifactType": "screenshot-callouts",
+  "candidateDigest": "sha256:f169737e21cc7f5092b67b68b9eb5f19fcc203cf6d77734466ce355759e1c812",
+  "candidateId": "screenshot-callouts__expressive-technical__google-gemma-4-26b-a4b-it-free",
+  "directionId": "expressive-technical",
+  "durationMs": 15152,
+  "fixtureId": "screenshot-callouts",
+  "model": "google/gemma-4-26b-a4b-it:free",
+  "plan": {
+    "annotation": "Callouts map to verified product surfaces within the editor interface.",
+    "artifactType": "screenshot-callouts",
+    "composition": "focal",
+    "density": "balanced",
+    "emphasis": "scale",
+    "operations": [
+      {
+        "label": "Product Interface Area",
+        "operationId": "create-media-placeholder",
+        "sourceId": "screenshot-absence",
+        "value": "16:9 Media Placeholder"
+      },
+      {
+        "label": "Workflow Controls",
+        "operationId": "create-numbered-callouts",
+        "sourceId": "screenshot-absence",
+        "value": "1. Model Selection, 2. Validation Status, 3. Trace Inspection"
+      },
+      {
+        "label": "Evidence Status",
+        "operationId": "label-missing-evidence",
+        "sourceId": "screenshot-absence",
+        "value": "Screenshot replacement required"
+      }
+    ],
+    "pptxFallback": "A single 16:9 rectangle placeholder with three grouped, editable text callouts positioned over the media region.",
+    "sourceLabels": [
+      {
+        "label": "Evidence availability",
+        "sourceId": "screenshot-absence"
+      }
+    ],
+    "takeaway": "The workflow integrates model selection, validation status, and trace inspection for verifiable output.",
+    "title": "Reviewable Generation Workflow"
+  },
+  "schemaVersion": "nodeslide.artifact-arena-plan-result/v1",
+  "status": "passed",
+  "telemetry": {
+    "costMicroUsd": 0,
+    "inputTokens": 1082,
+    "model": "google/gemma-4-26b-a4b-it:free",
+    "outputTokens": 334,
+    "provider": "openrouter",
+    "reasoningEffort": "low"
+  },
+  "candidateKind": "model"
+}

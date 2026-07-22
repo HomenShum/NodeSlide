@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "nodeslide.deck-gym-run/v1",
+  "runId": "data-story__cinematic-minimal__anthropic-claude-sonnet-5",
+  "briefId": "data-story",
+  "model": "anthropic/claude-sonnet-5",
+  "directionId": "cinematic-minimal",
+  "harnessVersion": "deck-gym-v1",
+  "corpusVersion": "deck-gym-corpus-v1",
+  "promptDigest": "sha256:51f148d30b34b0c910ffec2bca4a332ced17f459512bf711781785a9cd9bb0fb",
+  "runDigest": "sha256:c1871e91dd49d955ef62f7746d6eeb11ffb09d0972b6edc8068b6b84892391d6",
+  "title": "Transit Recovery Is Uneven",
+  "family": "data_story",
+  "audience": "city mobility planners",
+  "decision": "prioritize which service patterns need intervention",
+  "slideCount": 7,
+  "prompt": "Create a seven-slide data story for city mobility planners deciding where transit recovery needs intervention. Use the monthly ridership series exactly. Build a cumulative narrative from system recovery to route divergence, weekend weakness, service reliability, and two actions. Include multiple editable chart forms with annotations, one small-multiple comparison, and a clear final recommendation. Do not invent causes not supported by the data.\n\nDesign direction: Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable.",
+  "attachments": [
+    {
+      "fileName": "ridership.csv",
+      "format": "csv",
+      "content": "month,rapid_bus,local_bus,rail,on_time_percent\nJan,72,61,68,81\nFeb,74,62,70,82\nMar,79,63,73,80\nApr,83,65,76,78\nMay,87,66,79,79\nJun,91,67,82,77"
+    }
+  ],
+  "requiredClaims": [
+    "91",
+    "67",
+    "82",
+    "77"
+  ],
+  "requiredArtifacts": [
+    "chart",
+    "small_multiples",
+    "annotations",
+    "comparison"
+  ],
+  "forbiddenClaims": [
+    "caused by",
+    "commuter preference"
+  ],
+  "referenceIds": [
+    "data/annotated-trend",
+    "data/small-multiples",
+    "data/decision-from-pattern"
+  ],
+  "modelLabel": "Claude Sonnet 5",
+  "provider": "openrouter",
+  "reasoningEffort": "high",
+  "designDirection": {
+    "id": "cinematic-minimal",
+    "label": "Cinematic minimal",
+    "instruction": "Use a cinematic minimal direction: fewer words, larger visual centers, deliberate scale changes, one memorable visual climax, and quiet transition beats. Keep all evidence honest and editable."
+  },
+  "budgets": {
+    "maxRuns": 72,
+    "maxAttemptsPerRun": 1,
+    "maxConcurrency": 4,
+    "maxCreateMs": 300000,
+    "maxExportMs": 90000,
+    "maxSlides": 8,
+    "maxEstimatedCostMicroUsdPerRun": 200000
+  },
+  "gates": {
+    "minimumClaimCoverage": 0.75,
+    "minimumDistinctLayoutSignatures": 4,
+    "maximumRepeatedLayoutCount": 2,
+    "maximumAdjacentLayoutSimilarity": 0.82,
+    "maximumTextAreaRatio": 0.52,
+    "minimumMeaningfulVisualSlides": 5,
+    "maximumInternalCollisionCount": 0,
+    "requiredSlideCountTolerance": 0,
+    "requireEditableChartWhenRequested": true,
+    "requireEditableShapesWhenRequested": true,
+    "requireRenderedPptx": true
+  },
+  "execution": {
+    "status": "completed",
+    "productionOrigin": "https://nodeslide.vercel.app",
+    "editorUrl": "https://nodeslide.vercel.app/?deck=deck_mrvbcxth_6b55224f72254406dc02a588a3edec6e",
+    "durationMs": 59345,
+    "completedAt": "2026-07-21T23:57:44.710Z",
+    "trace": {
+      "classification": "degraded",
+      "attribution": "openrouter · anthropic/claude-sonnet-5 (deterministic fallback) · High effort",
+      "summary": "The user consented to send the full brief and uploaded data sources to OpenRouter. NodeSlide used its deterministic fallback because The Claude Sonnet 5 via OpenRouter route returned invalid JSON after one repair attempt. Self-critique: 1 pass (deterministic route; self-critique loop skipped).",
+      "metrics": "RUN TIME 1s TOKENS 2 → 5,000 COST $0.0547 VALIDATION Passed"
+    },
+    "runtimeErrors": [],
+    "pptx": {
+      "file": "deck.pptx",
+      "bytes": 175588
+    },
+    "editorScreenshot": "editor.png"
+  }
+}

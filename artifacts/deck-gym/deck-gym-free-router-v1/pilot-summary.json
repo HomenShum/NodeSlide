@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "nodeslide.free-router-pilot/v1",
+  "generatedAt": "2026-07-22T01:15:00.000Z",
+  "briefCount": 1,
+  "modelCount": 3,
+  "models": [
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "generation": "passed",
+      "validation": "passed",
+      "slides": 6,
+      "costMicroUsd": 0,
+      "pptxExport": "failed_after_two_attempts",
+      "observations": [
+        "Preserved all three supplied numeric comparisons.",
+        "Produced an editable chart, process diagram, formula, and honest image placeholder.",
+        "Added unsupported causal and ROI language that needs a claim allowlist."
+      ],
+      "screenshot": "screenshots/gemma-4-26b-overview.png"
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "generation": "passed",
+      "validation": "passed",
+      "slides": 6,
+      "costMicroUsd": 0,
+      "pptxExport": "passed",
+      "pptxBytes": 166343,
+      "pptxOverflowTest": "passed",
+      "observations": [
+        "Preserved all three supplied numeric comparisons.",
+        "Produced an editable chart, process diagram, formula, and honest image placeholder.",
+        "Invented prompt-engineering and model-fine-tuning process steps; the risk matrix became a linear stack."
+      ],
+      "screenshot": "screenshots/nemotron-3-super-overview.png",
+      "pptx": "pptx/nemotron-3-super.pptx",
+      "montage": "pptx/nemotron-montage.png"
+    },
+    {
+      "model": "openai/gpt-oss-20b:free",
+      "generation": "passed",
+      "validation": "passed",
+      "slides": 6,
+      "costMicroUsd": 0,
+      "pptxExport": "passed",
+      "pptxBytes": 178402,
+      "pptxOverflowTest": "passed",
+      "observations": [
+        "Preserved the supplied 62/74/86 quality and 20/95/130 second comparisons.",
+        "Invented a 30 percent claim and other unsupported benefits.",
+        "Substituted a bar chart for the requested risk matrix and exported raw LaTeX instead of a rendered formula."
+      ],
+      "screenshot": "screenshots/gpt-oss-20b-overview.png",
+      "pptx": "pptx/gpt-oss-20b.pptx",
+      "montage": "pptx/gpt-oss-montage.png"
+    }
+  ],
+  "sharedFindings": [
+    "All three routes use the same restrained editorial materializer; model diversity changed content plans more than visual language.",
+    "Repeated Context, Action, Outcome filler creates visible boilerplate and should be rejected before materialization.",
+    "The current canvas-bound overflow check passed both exported decks despite semantic and formula-rendering failures.",
+    "A zero-dollar live trace was incorrectly classified as fallback because route truth required positive cost instead of explicit :free identity plus positive token flow."
+  ],
+  "promotion": "blocked_pending_multi-brief_deck-gym_and_human_review"
+}

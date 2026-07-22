@@ -9,12 +9,16 @@
       ".vercel",
       "dist",
       "artifacts/deck-gym/artifact-atlas-v1",
+      "artifacts/deck-gym/artifact-atlas-v2",
+      "benchmarks/artifact-atlas/v2",
       "docs/dogfood",
       "docs/plans/assets",
       "convex/_generated",
       "packages/convex/component/_generated",
       "mcp/dist",
       "node_modules",
+      "outputs/artifact-atlas-v2",
+      "public/artifact-atlas-v2",
       "runs",
       "*.log",
       "*.tsbuildinfo"
@@ -48,6 +52,10 @@
     {
       "include": ["shared/workflowExecutionPort.ts"],
       "formatter": { "enabled": false }
+    },
+    {
+      "include": ["scripts/build-artifact-atlas-v2.mjs"],
+      "linter": { "rules": { "complexity": { "noForEach": "off" } } }
     }
   ]
 }

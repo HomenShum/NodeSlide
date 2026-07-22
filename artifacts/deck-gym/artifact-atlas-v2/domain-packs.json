@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "nodeslide.artifact-domain-packs/v2",
+  "atlasVersion": "artifact-atlas-v2",
+  "packs": [
+    {
+      "id": "founder-roadshow",
+      "existingPack": "startup-roadshow",
+      "arc": [
+        "problem",
+        "insight",
+        "product",
+        "architecture",
+        "proof",
+        "market",
+        "business-model",
+        "ask"
+      ],
+      "contactSheet": "artifacts/deck-gym/deck-gym-v1/contact-sheets/startup-roadshow__evidence-editorial.png",
+      "status": "generated-existing-deck-gym-evidence"
+    },
+    {
+      "id": "research-talk",
+      "existingPack": "research-talk",
+      "arc": [
+        "question",
+        "prior-work",
+        "method",
+        "equation",
+        "experiment",
+        "results",
+        "limitations",
+        "implications"
+      ],
+      "contactSheet": "artifacts/deck-gym/deck-gym-v1/contact-sheets/research-talk__evidence-editorial.png",
+      "status": "generated-existing-deck-gym-evidence"
+    },
+    {
+      "id": "board-operating-review",
+      "existingPack": "executive-update",
+      "arc": [
+        "summary",
+        "kpis",
+        "actual-v-plan",
+        "drivers",
+        "risks",
+        "decisions",
+        "outlook"
+      ],
+      "contactSheet": "artifacts/deck-gym/deck-gym-v1/contact-sheets/executive-update__evidence-editorial.png",
+      "status": "generated-existing-deck-gym-evidence"
+    },
+    {
+      "id": "technical-architecture-review",
+      "existingPack": "technical-architecture",
+      "arc": [
+        "requirements",
+        "context",
+        "architecture",
+        "sequence",
+        "data-model",
+        "concurrency",
+        "failures",
+        "benchmarks",
+        "decision"
+      ],
+      "contactSheet": "artifacts/deck-gym/deck-gym-v1/contact-sheets/technical-architecture__evidence-editorial.png",
+      "status": "generated-existing-deck-gym-evidence"
+    },
+    {
+      "id": "investment-finance",
+      "existingPack": "finance-investment",
+      "arc": [
+        "thesis",
+        "market",
+        "performance",
+        "unit-economics",
+        "scenarios",
+        "risks",
+        "valuation",
+        "recommendation"
+      ],
+      "contactSheet": "artifacts/deck-gym/deck-gym-v1/contact-sheets/finance-investment__evidence-editorial.png",
+      "status": "generated-existing-deck-gym-evidence"
+    },
+    {
+      "id": "product-launch",
+      "existingPack": "product-demo",
+      "arc": [
+        "tension",
+        "experience",
+        "demonstration",
+        "how-it-works",
+        "proof",
+        "rollout",
+        "call-to-action"
+      ],
+      "contactSheet": "artifacts/deck-gym/deck-gym-v1/contact-sheets/product-demo__evidence-editorial.png",
+      "status": "generated-existing-deck-gym-evidence"
+    }
+  ]
+}

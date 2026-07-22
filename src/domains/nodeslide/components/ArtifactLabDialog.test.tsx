@@ -24,10 +24,10 @@ describe('ArtifactLabDialog', () => {
   it('returns an evidence-bounded pattern prompt to the composer', () => {
     const onUsePattern = vi.fn();
     render(<ArtifactLabDialog open onClose={() => undefined} onUsePattern={onUsePattern} />);
-    const button = screen.getAllByRole('button', { name: 'Use this pattern' }).at(0);
+    const button = screen.getAllByRole('button', { name: 'Use slide' }).at(0);
     if (!button) throw new Error('Expected at least one reusable artifact pattern');
     fireEvent.click(button);
-    expect(onUsePattern).toHaveBeenCalledWith(expect.stringContaining('editable'));
+    expect(onUsePattern).toHaveBeenCalledWith(expect.stringContaining('editability'));
   });
 });
 // @vitest-environment jsdom

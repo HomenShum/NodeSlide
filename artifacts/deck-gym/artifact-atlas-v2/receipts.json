@@ -1,0 +1,3584 @@
+[
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "hero-thesis",
+    "artifactType": "hero-thesis",
+    "chapter": "narrative-foundations",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "hero",
+    "referenceSlidesUsed": [
+      "atlas-v2-hero",
+      "chapter-narrative-foundations"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 843,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 12,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/hero-thesis.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-1.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Reviewability turns generation into a product decision. One evidence-bounded thesis anchors the complete visual vocabulary.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.hero-thesis.v2",
+      "artifactType": "hero-thesis",
+      "narrativeJobs": [
+        "One evidence-bounded thesis anchors the complete visual vocabulary."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-hero",
+        "chapter-narrative-foundations"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-hero-thesis"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.943Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "section-opener",
+    "artifactType": "section-opener",
+    "chapter": "narrative-foundations",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "section",
+    "referenceSlidesUsed": [
+      "atlas-v2-section",
+      "chapter-narrative-foundations"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 197,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 27,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/section-opener.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-2.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "A museum needs chapters, not a wall of thumbnails. Six chapters organize artifacts by the job they perform for an audience.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.section-opener.v2",
+      "artifactType": "section-opener",
+      "narrativeJobs": [
+        "Six chapters organize artifacts by the job they perform for an audience."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-section",
+        "chapter-narrative-foundations"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-section-opener"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.943Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "big-metric",
+    "artifactType": "big-metric",
+    "chapter": "narrative-foundations",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "metric",
+    "referenceSlidesUsed": [
+      "atlas-v2-metric",
+      "chapter-narrative-foundations"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 202,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 20,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/big-metric.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-3.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "82 of 84 candidates cleared browser and PowerPoint proof. The headline metric stays tied to the frozen Arena receipt instead of becoming marketing shorthand.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.big-metric.v2",
+      "artifactType": "big-metric",
+      "narrativeJobs": [
+        "The headline metric stays tied to the frozen Arena receipt instead of becoming marketing shorthand."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-metric",
+        "chapter-narrative-foundations"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-big-metric"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.943Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "customer-voice",
+    "artifactType": "customer-voice",
+    "chapter": "narrative-foundations",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "quote",
+    "referenceSlidesUsed": [
+      "atlas-v2-quote",
+      "chapter-narrative-foundations"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 192,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 10,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/customer-voice.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-4.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "The useful promise is editable evidence, not instant polish. A customer-voice treatment demonstrates editorial rhythm without inventing a customer.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.customer-voice.v2",
+      "artifactType": "customer-voice",
+      "narrativeJobs": [
+        "A customer-voice treatment demonstrates editorial rhythm without inventing a customer."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-quote",
+        "chapter-narrative-foundations"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-customer-voice"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.943Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "before-after-story",
+    "artifactType": "before-after-story",
+    "chapter": "narrative-foundations",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "before-after",
+    "referenceSlidesUsed": [
+      "atlas-v2-before-after",
+      "chapter-narrative-foundations"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 178,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 23,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/before-after-story.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-5.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "The harness removes clutter before it adds decoration. Before and after states identify the exact components that changed and why.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.before-after-story.v2",
+      "artifactType": "before-after-story",
+      "narrativeJobs": [
+        "Before and after states identify the exact components that changed and why."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-before-after",
+        "chapter-narrative-foundations"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-before-after-story"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "kpi-strip",
+    "artifactType": "kpi-strip",
+    "chapter": "data",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "kpi",
+    "referenceSlidesUsed": [
+      "atlas-v2-kpi",
+      "chapter-data"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 170,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 27,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/kpi-strip.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-6.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "The operating verdict should scan in under five seconds. Five metrics preserve actual, prior, target, variance, and status context.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.kpi-strip.v2",
+      "artifactType": "kpi-strip",
+      "narrativeJobs": [
+        "Five metrics preserve actual, prior, target, variance, and status context."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-kpi",
+        "chapter-data"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-kpi-strip"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "multi-series-trend",
+    "artifactType": "multi-series-trend",
+    "chapter": "data",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "line",
+    "referenceSlidesUsed": [
+      "atlas-v2-line",
+      "chapter-data"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "chart-builder"
+    ],
+    "generationLatencyMs": 150,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 37,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/multi-series-trend.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-7.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Direct labels make divergence visible without inventing a cause. Three series share one scale and one evidence-bounded takeaway.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.multi-series-trend.v2",
+      "artifactType": "multi-series-trend",
+      "narrativeJobs": [
+        "Three series share one scale and one evidence-bounded takeaway."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "chart-builder"
+      ],
+      "referenceIds": [
+        "atlas-v2-line",
+        "chapter-data"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-multi-series-trend"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "uncertainty-range",
+    "artifactType": "uncertainty-range",
+    "chapter": "data",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "uncertainty",
+    "referenceSlidesUsed": [
+      "atlas-v2-uncertainty",
+      "chapter-data"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "chart-builder"
+    ],
+    "generationLatencyMs": 166,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 22,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/uncertainty-range.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-8.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "A forecast is more credible when its range is impossible to miss. Observed values, base case, and widening modeled bounds remain editable.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.uncertainty-range.v2",
+      "artifactType": "uncertainty-range",
+      "narrativeJobs": [
+        "Observed values, base case, and widening modeled bounds remain editable."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "chart-builder"
+      ],
+      "referenceIds": [
+        "atlas-v2-uncertainty",
+        "chapter-data"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-uncertainty-range"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "waterfall",
+    "artifactType": "waterfall",
+    "chapter": "data",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "waterfall",
+    "referenceSlidesUsed": [
+      "atlas-v2-waterfall",
+      "chapter-data"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "chart-builder"
+    ],
+    "generationLatencyMs": 150,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 28,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/waterfall.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-9.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Harness gains come from several small controls, not one magic prompt. A contribution bridge separates planning, tools, repair, and validation effects.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.waterfall.v2",
+      "artifactType": "waterfall",
+      "narrativeJobs": [
+        "A contribution bridge separates planning, tools, repair, and validation effects."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "chart-builder"
+      ],
+      "referenceIds": [
+        "atlas-v2-waterfall",
+        "chapter-data"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-waterfall"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "quality-cost-scatter",
+    "artifactType": "quality-cost-scatter",
+    "chapter": "data",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "scatter",
+    "referenceSlidesUsed": [
+      "atlas-v2-scatter",
+      "chapter-data"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "chart-builder"
+    ],
+    "generationLatencyMs": 169,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 26,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/quality-cost-scatter.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-10.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "The best route sits on a frontier, not at one universal optimum. Bubble size adds latency to the quality-versus-cost comparison.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.quality-cost-scatter.v2",
+      "artifactType": "quality-cost-scatter",
+      "narrativeJobs": [
+        "Bubble size adds latency to the quality-versus-cost comparison."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "chart-builder"
+      ],
+      "referenceIds": [
+        "atlas-v2-scatter",
+        "chapter-data"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-quality-cost-scatter"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "operating-table-sparklines",
+    "artifactType": "operating-table-sparklines",
+    "chapter": "data",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "table",
+    "referenceSlidesUsed": [
+      "atlas-v2-table",
+      "chapter-data"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 189,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 52,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/operating-table-sparklines.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-11.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Dense tables stay readable when hierarchy does the filtering. Actual, plan, variance, trend, and status share one executive artifact.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.operating-table-sparklines.v2",
+      "artifactType": "operating-table-sparklines",
+      "narrativeJobs": [
+        "Actual, plan, variance, trend, and status share one executive artifact."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-table",
+        "chapter-data"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics",
+        "controlled density",
+        "exception-first hierarchy"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-operating-table-sparklines"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "dense-dashboard-funnel",
+    "artifactType": "dense-dashboard-funnel",
+    "chapter": "data",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "dashboard",
+    "referenceSlidesUsed": [
+      "atlas-v2-dashboard",
+      "chapter-data"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 201,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 30,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/dense-dashboard-funnel.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-12.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "A dashboard can be dense without becoming a card graveyard. A funnel, trend, exceptions, and decision queue share one controlled surface.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.dense-dashboard-funnel.v2",
+      "artifactType": "dense-dashboard-funnel",
+      "narrativeJobs": [
+        "A funnel, trend, exceptions, and decision queue share one controlled surface."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-dashboard",
+        "chapter-data"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics",
+        "controlled density",
+        "exception-first hierarchy"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-dense-dashboard-funnel"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "system-architecture",
+    "artifactType": "system-architecture",
+    "chapter": "systems",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "architecture",
+    "referenceSlidesUsed": [
+      "atlas-v2-architecture",
+      "chapter-systems"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "diagram-builder"
+    ],
+    "generationLatencyMs": 177,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 27,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/system-architecture.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-13.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "The portable protocol keeps product logic above backend choice. Typed connectors and a visible trust boundary preserve system meaning.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.system-architecture.v2",
+      "artifactType": "system-architecture",
+      "narrativeJobs": [
+        "Typed connectors and a visible trust boundary preserve system meaning."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "diagram-builder"
+      ],
+      "referenceIds": [
+        "atlas-v2-architecture",
+        "chapter-systems"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-system-architecture"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "request-sequence",
+    "artifactType": "request-sequence",
+    "chapter": "systems",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "sequence",
+    "referenceSlidesUsed": [
+      "atlas-v2-sequence",
+      "chapter-systems"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "diagram-builder"
+    ],
+    "generationLatencyMs": 193,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 33,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/request-sequence.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-14.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Review custody is visible at every handoff. The happy path and failed-validation return path remain distinct.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.request-sequence.v2",
+      "artifactType": "request-sequence",
+      "narrativeJobs": [
+        "The happy path and failed-validation return path remain distinct."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "diagram-builder"
+      ],
+      "referenceIds": [
+        "atlas-v2-sequence",
+        "chapter-systems"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-request-sequence"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "causal-loop",
+    "artifactType": "causal-loop",
+    "chapter": "systems",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "causal",
+    "referenceSlidesUsed": [
+      "atlas-v2-causal",
+      "chapter-systems"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "diagram-builder"
+    ],
+    "generationLatencyMs": 178,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 28,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/causal-loop.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-15.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Better receipts reinforce trust; unchecked complexity pushes back. Reinforcing and balancing loops explain behavior that a flowchart cannot.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.causal-loop.v2",
+      "artifactType": "causal-loop",
+      "narrativeJobs": [
+        "Reinforcing and balancing loops explain behavior that a flowchart cannot."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "diagram-builder"
+      ],
+      "referenceIds": [
+        "atlas-v2-causal",
+        "chapter-systems"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-causal-loop"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "source-allocation-sankey",
+    "artifactType": "source-allocation-sankey",
+    "chapter": "systems",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "sankey",
+    "referenceSlidesUsed": [
+      "atlas-v2-sankey",
+      "chapter-systems"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "diagram-builder"
+    ],
+    "generationLatencyMs": 159,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 32,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/source-allocation-sankey.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-16.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Every visual can retain the path from source to slide. Allocation bands show evidence flowing through claims into visual forms.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.source-allocation-sankey.v2",
+      "artifactType": "source-allocation-sankey",
+      "narrativeJobs": [
+        "Allocation bands show evidence flowing through claims into visual forms."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "diagram-builder"
+      ],
+      "referenceIds": [
+        "atlas-v2-sankey",
+        "chapter-systems"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-source-allocation-sankey"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "routing-decision-tree",
+    "artifactType": "routing-decision-tree",
+    "chapter": "systems",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "decision-tree",
+    "referenceSlidesUsed": [
+      "atlas-v2-decision-tree",
+      "chapter-systems"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "diagram-builder"
+    ],
+    "generationLatencyMs": 146,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 20,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/routing-decision-tree.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-17.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Routing should spend capability only where the task needs it. A decision tree distinguishes deterministic, cheap-model, and orchestrator paths.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.routing-decision-tree.v2",
+      "artifactType": "routing-decision-tree",
+      "narrativeJobs": [
+        "A decision tree distinguishes deterministic, cheap-model, and orchestrator paths."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "diagram-builder"
+      ],
+      "referenceIds": [
+        "atlas-v2-decision-tree",
+        "chapter-systems"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-routing-decision-tree"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "ecosystem-geography",
+    "artifactType": "ecosystem-geography",
+    "chapter": "systems",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "ecosystem",
+    "referenceSlidesUsed": [
+      "atlas-v2-ecosystem",
+      "chapter-systems"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 150,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 29,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/ecosystem-geography.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-18.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "NodeKit connects the stack while NodeSlide proves the journey. An ecosystem landscape includes a geospatial deployment inset without confusing categories.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.ecosystem-geography.v2",
+      "artifactType": "ecosystem-geography",
+      "narrativeJobs": [
+        "An ecosystem landscape includes a geospatial deployment inset without confusing categories."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-ecosystem",
+        "chapter-systems"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-ecosystem-geography"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "research-timeline",
+    "artifactType": "research-timeline",
+    "chapter": "progression",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "timeline",
+    "referenceSlidesUsed": [
+      "atlas-v2-timeline",
+      "chapter-progression"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 130,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 23,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/research-timeline.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-19.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Human approval remains the gate between experiment and harness change. Time-proportional milestones make the review gate explicit.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.research-timeline.v2",
+      "artifactType": "research-timeline",
+      "narrativeJobs": [
+        "Time-proportional milestones make the review gate explicit."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-timeline",
+        "chapter-progression"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-research-timeline"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.944Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "roadmap-gantt",
+    "artifactType": "roadmap-gantt",
+    "chapter": "progression",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "gantt",
+    "referenceSlidesUsed": [
+      "atlas-v2-gantt",
+      "chapter-progression"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 132,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 32,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/roadmap-gantt.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-20.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "The next release sequence exposes dependencies and confidence. Workstreams, milestones, dependencies, status, and confidence share one roadmap.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.roadmap-gantt.v2",
+      "artifactType": "roadmap-gantt",
+      "narrativeJobs": [
+        "Workstreams, milestones, dependencies, status, and confidence share one roadmap."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-gantt",
+        "chapter-progression"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-roadmap-gantt"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.945Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "evidence-scrollytelling",
+    "artifactType": "evidence-scrollytelling",
+    "chapter": "progression",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "scrolly",
+    "referenceSlidesUsed": [
+      "atlas-v2-scrolly",
+      "chapter-progression"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 135,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 27,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/evidence-scrollytelling.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-21.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "PowerPoint uses the declared stepped final-state fallback instead of continuous web motion.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order. Supports step, scrub, or zoom controls.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": true
+    },
+    "accessibility": {
+      "altText": "Evidence becomes a decision through five inspectable states. The web version scrubs; PowerPoint shows the same numbered progression.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.evidence-scrollytelling.v2",
+      "artifactType": "evidence-scrollytelling",
+      "narrativeJobs": [
+        "The web version scrubs; PowerPoint shows the same numbered progression."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-scrolly",
+        "chapter-progression"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics",
+        "visible static fallback",
+        "reduced-motion final state"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-evidence-scrollytelling"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.945Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "animated-chart-progression",
+    "artifactType": "animated-chart-progression",
+    "chapter": "progression",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "chart-states",
+    "referenceSlidesUsed": [
+      "atlas-v2-chart-states",
+      "chapter-progression"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 136,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 38,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/animated-chart-progression.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-22.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "PowerPoint uses the declared stepped final-state fallback instead of continuous web motion.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order. Supports step, scrub, or zoom controls.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": true
+    },
+    "accessibility": {
+      "altText": "The trend means more when the audience sees the baseline move. Four chart states compare baseline, model, harness, and refreshed evidence.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.animated-chart-progression.v2",
+      "artifactType": "animated-chart-progression",
+      "narrativeJobs": [
+        "Four chart states compare baseline, model, harness, and refreshed evidence."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-chart-states",
+        "chapter-progression"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics",
+        "visible static fallback",
+        "reduced-motion final state"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-animated-chart-progression"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.945Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "full-bleed-editorial-image",
+    "artifactType": "full-bleed-editorial-image",
+    "chapter": "product-media",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "full-bleed",
+    "referenceSlidesUsed": [
+      "atlas-v2-full-bleed",
+      "chapter-product-media"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "media-frame"
+    ],
+    "generationLatencyMs": 713,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 7,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/full-bleed-editorial-image.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-23.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "A visual story can lead with atmosphere and still preserve proof. A generated rights-clearable image uses focal crop, credit, and an editable frame.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.full-bleed-editorial-image.v2",
+      "artifactType": "full-bleed-editorial-image",
+      "narrativeJobs": [
+        "A generated rights-clearable image uses focal crop, credit, and an editable frame."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "media-frame"
+      ],
+      "referenceIds": [
+        "atlas-v2-full-bleed",
+        "chapter-product-media"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-full-bleed-editorial-image"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.945Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "real-screenshot-callouts",
+    "artifactType": "real-screenshot-callouts",
+    "chapter": "product-media",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "screenshot",
+    "referenceSlidesUsed": [
+      "atlas-v2-screenshot",
+      "chapter-product-media"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "media-frame"
+    ],
+    "generationLatencyMs": 208,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 20,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/real-screenshot-callouts.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-24.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "The product proof is the interface people actually use. A real NodeSlide capture occupies most of the slide with three exact callouts.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.real-screenshot-callouts.v2",
+      "artifactType": "real-screenshot-callouts",
+      "narrativeJobs": [
+        "A real NodeSlide capture occupies most of the slide with three exact callouts."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "media-frame"
+      ],
+      "referenceIds": [
+        "atlas-v2-screenshot",
+        "chapter-product-media"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics",
+        "real capture only",
+        "callouts must bind to visible controls"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-real-screenshot-callouts"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.945Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "interaction-clip",
+    "artifactType": "interaction-clip",
+    "chapter": "product-media",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "interaction",
+    "referenceSlidesUsed": [
+      "atlas-v2-interaction",
+      "chapter-product-media"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "media-frame"
+    ],
+    "generationLatencyMs": 268,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 29,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/interaction-clip.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-25.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "PowerPoint uses the declared stepped final-state fallback instead of continuous web motion.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order. Supports step, scrub, or zoom controls.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": true
+    },
+    "accessibility": {
+      "altText": "One bounded interaction carries the story from selection to receipt. Five real product states form a playable web sequence and a stepped PowerPoint fallback.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.interaction-clip.v2",
+      "artifactType": "interaction-clip",
+      "narrativeJobs": [
+        "Five real product states form a playable web sequence and a stepped PowerPoint fallback."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "media-frame"
+      ],
+      "referenceIds": [
+        "atlas-v2-interaction",
+        "chapter-product-media"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics",
+        "visible static fallback",
+        "reduced-motion final state"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-interaction-clip"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.945Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "product-before-after",
+    "artifactType": "product-before-after",
+    "chapter": "product-media",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "product-compare",
+    "referenceSlidesUsed": [
+      "atlas-v2-product-compare",
+      "chapter-product-media"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "media-frame"
+    ],
+    "generationLatencyMs": 272,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 13,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/product-before-after.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-26.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Review transforms a rough generation into a governed workspace. Actual captures identify changed components and the measured workflow outcome.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.product-before-after.v2",
+      "artifactType": "product-before-after",
+      "narrativeJobs": [
+        "Actual captures identify changed components and the measured workflow outcome."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "media-frame"
+      ],
+      "referenceIds": [
+        "atlas-v2-product-compare",
+        "chapter-product-media"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics",
+        "real capture only",
+        "callouts must bind to visible controls"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-product-before-after"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.945Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "spatial-scene",
+    "artifactType": "spatial-scene",
+    "chapter": "product-media",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "spatial",
+    "referenceSlidesUsed": [
+      "atlas-v2-spatial",
+      "chapter-product-media"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 554,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 18,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/spatial-scene.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-27.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "PowerPoint uses the declared stepped final-state fallback instead of continuous web motion.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order. Supports step, scrub, or zoom controls.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": true
+    },
+    "accessibility": {
+      "altText": "The canvas can move from whole system to exact evidence. A spatial depth treatment previews zoom from system, to node, to trace, to source.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.spatial-scene.v2",
+      "artifactType": "spatial-scene",
+      "narrativeJobs": [
+        "A spatial depth treatment previews zoom from system, to node, to trace, to source."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-spatial",
+        "chapter-product-media"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics",
+        "visible static fallback",
+        "reduced-motion final state"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-spatial-scene"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "claim-source-lineage",
+    "artifactType": "claim-source-lineage",
+    "chapter": "evidence-technical-proof",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "lineage",
+    "referenceSlidesUsed": [
+      "atlas-v2-lineage",
+      "chapter-evidence-technical-proof"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "diagram-builder"
+    ],
+    "generationLatencyMs": 150,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 28,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/claim-source-lineage.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-28.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "A claim is trustworthy when its entire path remains inspectable. Source, extraction, bounded claim, slide element, and receipt stay connected.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.claim-source-lineage.v2",
+      "artifactType": "claim-source-lineage",
+      "narrativeJobs": [
+        "Source, extraction, bounded claim, slide element, and receipt stay connected."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "diagram-builder"
+      ],
+      "referenceIds": [
+        "atlas-v2-lineage",
+        "chapter-evidence-technical-proof"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-claim-source-lineage"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "pdf-evidence-region",
+    "artifactType": "pdf-evidence-region",
+    "chapter": "evidence-technical-proof",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "pdf",
+    "referenceSlidesUsed": [
+      "atlas-v2-pdf",
+      "chapter-evidence-technical-proof"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 179,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 13,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/pdf-evidence-region.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-29.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Citation quality depends on the exact source region. A PDF-region artifact binds highlighted evidence to the claim it supports.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.pdf-evidence-region.v2",
+      "artifactType": "pdf-evidence-region",
+      "narrativeJobs": [
+        "A PDF-region artifact binds highlighted evidence to the claim it supports."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-pdf",
+        "chapter-evidence-technical-proof"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-pdf-evidence-region"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "code-runtime-proof",
+    "artifactType": "code-runtime-proof",
+    "chapter": "evidence-technical-proof",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "code",
+    "referenceSlidesUsed": [
+      "atlas-v2-code",
+      "chapter-evidence-technical-proof"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 137,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 17,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/code-runtime-proof.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-30.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "The contract matters more when runtime evidence sits beside it. Editable code context and measured adapter latency reinforce each other.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.code-runtime-proof.v2",
+      "artifactType": "code-runtime-proof",
+      "narrativeJobs": [
+        "Editable code context and measured adapter latency reinforce each other."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-code",
+        "chapter-evidence-technical-proof"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-code-runtime-proof"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "otel-trace",
+    "artifactType": "otel-trace",
+    "chapter": "evidence-technical-proof",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "trace",
+    "referenceSlidesUsed": [
+      "atlas-v2-trace",
+      "chapter-evidence-technical-proof"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 130,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 22,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/otel-trace.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-31.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "A trace shows where orchestration time and repair actually went. Nested spans expose planning, tools, validation, repair, and export.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.otel-trace.v2",
+      "artifactType": "otel-trace",
+      "narrativeJobs": [
+        "Nested spans expose planning, tools, validation, repair, and export."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-trace",
+        "chapter-evidence-technical-proof"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-otel-trace"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "quality-cost-equation",
+    "artifactType": "quality-cost-equation",
+    "chapter": "evidence-technical-proof",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "equation",
+    "referenceSlidesUsed": [
+      "atlas-v2-equation",
+      "chapter-evidence-technical-proof"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "katex"
+    ],
+    "generationLatencyMs": 132,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 22,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/quality-cost-equation.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-32.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "The score is only useful when every symbol maps to evidence. Real mathematics, definitions, and a bound calculation share one frame.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.quality-cost-equation.v2",
+      "artifactType": "quality-cost-equation",
+      "narrativeJobs": [
+        "Real mathematics, definitions, and a bound calculation share one frame."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "katex"
+      ],
+      "referenceIds": [
+        "atlas-v2-equation",
+        "chapter-evidence-technical-proof"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-quality-cost-equation"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "deck-ci-receipt",
+    "artifactType": "deck-ci-receipt",
+    "chapter": "evidence-technical-proof",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "ci",
+    "referenceSlidesUsed": [
+      "atlas-v2-ci",
+      "chapter-evidence-technical-proof"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 118,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 36,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/deck-ci-receipt.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-33.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "A deck is not done until both pixels and semantics pass. The receipt exposes every check, browser proof, PowerPoint proof, and fidelity difference.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.deck-ci-receipt.v2",
+      "artifactType": "deck-ci-receipt",
+      "narrativeJobs": [
+        "The receipt exposes every check, browser proof, PowerPoint proof, and fidelity difference."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-ci",
+        "chapter-evidence-technical-proof"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-deck-ci-receipt"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "risk-matrix",
+    "artifactType": "risk-matrix",
+    "chapter": "decision-evaluation",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "risk",
+    "referenceSlidesUsed": [
+      "atlas-v2-risk",
+      "chapter-decision-evaluation"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 124,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 42,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/risk-matrix.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-34.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Pipeline coverage is the risk that deserves action first. Likelihood and impact preserve priority better than an unlabeled list.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.risk-matrix.v2",
+      "artifactType": "risk-matrix",
+      "narrativeJobs": [
+        "Likelihood and impact preserve priority better than an unlabeled list."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-risk",
+        "chapter-decision-evaluation"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-risk-matrix"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "cost-quality-frontier",
+    "artifactType": "cost-quality-frontier",
+    "chapter": "decision-evaluation",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "frontier",
+    "referenceSlidesUsed": [
+      "atlas-v2-frontier",
+      "chapter-decision-evaluation"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright",
+      "chart-builder"
+    ],
+    "generationLatencyMs": 133,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 30,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/cost-quality-frontier.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-35.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Routing improves when quality, cost, and latency are judged together. The observed routes stay separate from the not-yet-run ensemble.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.cost-quality-frontier.v2",
+      "artifactType": "cost-quality-frontier",
+      "narrativeJobs": [
+        "The observed routes stay separate from the not-yet-run ensemble."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright",
+        "chart-builder"
+      ],
+      "referenceIds": [
+        "atlas-v2-frontier",
+        "chapter-decision-evaluation"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-cost-quality-frontier"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "model-compare",
+    "artifactType": "model-compare",
+    "chapter": "decision-evaluation",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "model-compare",
+    "referenceSlidesUsed": [
+      "atlas-v2-model-compare",
+      "chapter-decision-evaluation"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 133,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 53,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/model-compare.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-36.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Different models fail differently under the same contract. Observed outputs compare adherence, primitive choice, repairs, latency, cost, and export truth.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.model-compare.v2",
+      "artifactType": "model-compare",
+      "narrativeJobs": [
+        "Observed outputs compare adherence, primitive choice, repairs, latency, cost, and export truth."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-model-compare",
+        "chapter-decision-evaluation"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-model-compare"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "harness-compare",
+    "artifactType": "harness-compare",
+    "chapter": "decision-evaluation",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "harness-compare",
+    "referenceSlidesUsed": [
+      "atlas-v2-harness-compare",
+      "chapter-decision-evaluation"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 130,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 21,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/harness-compare.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-37.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "V2 expands the harness without crediting the model. The same deterministic route isolates fixture, receipt, motion, theme, and accessibility gains.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.harness-compare.v2",
+      "artifactType": "harness-compare",
+      "narrativeJobs": [
+        "The same deterministic route isolates fixture, receipt, motion, theme, and accessibility gains."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-harness-compare",
+        "chapter-decision-evaluation"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-harness-compare"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  },
+  {
+    "schemaVersion": "nodeslide.artifact-showcase-receipt/v2",
+    "artifactId": "final-recommendation",
+    "artifactType": "final-recommendation",
+    "chapter": "decision-evaluation",
+    "harnessVersion": "artifact-atlas-v2",
+    "model": "nodeslide-artifact-builder-v2",
+    "modelRole": "deterministic geometry and export control",
+    "designPlanArchetype": "recommendation",
+    "referenceSlidesUsed": [
+      "atlas-v2-recommendation",
+      "chapter-decision-evaluation"
+    ],
+    "toolsCalled": [
+      "semantic-primitives",
+      "pptxgenjs",
+      "playwright"
+    ],
+    "generationLatencyMs": 176,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0,
+    "deckCi": {
+      "briefAdherence": true,
+      "artifactTypeMatched": true,
+      "evidencePassed": true,
+      "sourceLineage": true,
+      "browserRender": true,
+      "pptxQueued": false,
+      "semanticPrimitiveCount": 16,
+      "overlapCheck": "passed",
+      "pptxRender": true,
+      "visualInspection": "passed"
+    },
+    "browserScreenshot": "public/artifact-atlas-v2/final-recommendation.png",
+    "pptxScreenshot": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2/slide-38.png",
+    "humanPreferenceResult": "pending",
+    "knownFidelityDifferences": "Browser and PowerPoint use the same semantic plan; font metrics may differ slightly.",
+    "behavior": {
+      "web": "Native interactive composition with semantic reading order.",
+      "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+      "pdf": "Static high-resolution composition with visible source and receipt labels.",
+      "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+      "interactive": false
+    },
+    "accessibility": {
+      "altText": "Reuse the visual vocabulary, then adapt the communication contract. Researcher, investor, and plain-language Chinese versions share the same evidence.",
+      "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+      "highContrast": true,
+      "reducedMotion": true,
+      "mobile": "Single-column semantic stack with the visual before detail.",
+      "presenterNotes": true,
+      "sourceHover": true
+    },
+    "recipe": {
+      "recipeId": "nodeslide.recipe.final-recommendation.v2",
+      "artifactType": "final-recommendation",
+      "narrativeJobs": [
+        "Researcher, investor, and plain-language Chinese versions share the same evidence."
+      ],
+      "requiredInputs": [
+        "audience",
+        "bounded claim",
+        "source receipt"
+      ],
+      "supportedTools": [
+        "semantic-primitives",
+        "pptxgenjs",
+        "playwright"
+      ],
+      "referenceIds": [
+        "atlas-v2-recommendation",
+        "chapter-decision-evaluation"
+      ],
+      "designRules": [
+        "one primary claim",
+        "visible source",
+        "editable PowerPoint semantics"
+      ],
+      "exportCapabilities": [
+        "browser",
+        "pptx",
+        "pdf"
+      ]
+    },
+    "sourceIds": [
+      "atlas-v2-final-recommendation"
+    ],
+    "status": "eligible-builder-verified",
+    "verifiedAt": "2026-07-22T04:55:50.946Z"
+  }
+]

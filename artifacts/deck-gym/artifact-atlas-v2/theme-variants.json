@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "nodeslide.theme-variants/v2",
+  "variants": [
+    {
+      "artifactId": "hero-thesis",
+      "theme": "editorial-evidence",
+      "preview": "artifact-atlas-v2/theme-variants/hero-thesis__editorial-evidence.png"
+    },
+    {
+      "artifactId": "hero-thesis",
+      "theme": "technical-dark",
+      "preview": "artifact-atlas-v2/theme-variants/hero-thesis__technical-dark.png"
+    },
+    {
+      "artifactId": "hero-thesis",
+      "theme": "financial-institutional",
+      "preview": "artifact-atlas-v2/theme-variants/hero-thesis__financial-institutional.png"
+    },
+    {
+      "artifactId": "dense-dashboard-funnel",
+      "theme": "editorial-evidence",
+      "preview": "artifact-atlas-v2/theme-variants/dense-dashboard-funnel__editorial-evidence.png"
+    },
+    {
+      "artifactId": "dense-dashboard-funnel",
+      "theme": "technical-dark",
+      "preview": "artifact-atlas-v2/theme-variants/dense-dashboard-funnel__technical-dark.png"
+    },
+    {
+      "artifactId": "dense-dashboard-funnel",
+      "theme": "financial-institutional",
+      "preview": "artifact-atlas-v2/theme-variants/dense-dashboard-funnel__financial-institutional.png"
+    },
+    {
+      "artifactId": "system-architecture",
+      "theme": "editorial-evidence",
+      "preview": "artifact-atlas-v2/theme-variants/system-architecture__editorial-evidence.png"
+    },
+    {
+      "artifactId": "system-architecture",
+      "theme": "technical-dark",
+      "preview": "artifact-atlas-v2/theme-variants/system-architecture__technical-dark.png"
+    },
+    {
+      "artifactId": "system-architecture",
+      "theme": "financial-institutional",
+      "preview": "artifact-atlas-v2/theme-variants/system-architecture__financial-institutional.png"
+    },
+    {
+      "artifactId": "real-screenshot-callouts",
+      "theme": "editorial-evidence",
+      "preview": "artifact-atlas-v2/theme-variants/real-screenshot-callouts__editorial-evidence.png"
+    },
+    {
+      "artifactId": "real-screenshot-callouts",
+      "theme": "technical-dark",
+      "preview": "artifact-atlas-v2/theme-variants/real-screenshot-callouts__technical-dark.png"
+    },
+    {
+      "artifactId": "real-screenshot-callouts",
+      "theme": "financial-institutional",
+      "preview": "artifact-atlas-v2/theme-variants/real-screenshot-callouts__financial-institutional.png"
+    }
+  ]
+}

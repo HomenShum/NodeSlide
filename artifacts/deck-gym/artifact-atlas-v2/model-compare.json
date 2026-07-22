@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "nodeslide.model-compare/v2",
+  "evidencePolicy": "Observed receipts only; missing ensemble remains unrun.",
+  "routes": [
+    {
+      "model": "anthropic/claude-sonnet-5",
+      "eligible": 24,
+      "candidates": 24,
+      "averageGenerationMs": 8193,
+      "costMicroUsd": 206869,
+      "status": "observed"
+    },
+    {
+      "model": "moonshotai/kimi-k3",
+      "eligible": 23,
+      "candidates": 24,
+      "averageGenerationMs": 17617,
+      "costMicroUsd": 31278,
+      "status": "observed"
+    },
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "eligible": 23,
+      "candidates": 24,
+      "averageGenerationMs": 17271,
+      "costMicroUsd": 0,
+      "status": "observed"
+    },
+    {
+      "model": "nvidia/nemotron-3-super-120b-a12b:free",
+      "status": "pilot-observed-with-semantic-caveats",
+      "costMicroUsd": 0
+    },
+    {
+      "model": "openai/gpt-oss-20b:free",
+      "status": "pilot-observed-with-formula-and-claim-caveats",
+      "costMicroUsd": 0
+    },
+    {
+      "model": "nodeslide-artifact-builder-v1",
+      "eligible": 12,
+      "candidates": 12,
+      "costMicroUsd": 0,
+      "status": "control"
+    },
+    {
+      "model": "best-routed-ensemble",
+      "status": "not-run"
+    }
+  ],
+  "humanChoice": "pending"
+}

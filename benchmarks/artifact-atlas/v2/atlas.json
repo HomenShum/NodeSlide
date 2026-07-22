@@ -1,0 +1,3176 @@
+{
+  "schemaVersion": "nodeslide.artifact-atlas/v2",
+  "atlasVersion": "artifact-atlas-v2",
+  "generatedAt": "2026-07-22T04:54:43.193Z",
+  "communicationJob": "By the end, product and engineering leaders should understand the complete NodeSlide visual vocabulary, see proof that it survives browser and PowerPoint output, and know how to reuse each pattern.",
+  "canonicalArtifactCount": 38,
+  "publicShowcaseCount": 14,
+  "chapters": [
+    "narrative-foundations",
+    "data",
+    "systems",
+    "progression",
+    "product-media",
+    "evidence-technical-proof",
+    "decision-evaluation"
+  ],
+  "designLanguages": [
+    "editorial-evidence",
+    "executive-minimal",
+    "technical-dark",
+    "research-publication",
+    "financial-institutional",
+    "product-launch-cinematic",
+    "playful-consumer"
+  ],
+  "motionTemplates": [
+    "timeline-progression",
+    "architecture-walkthrough",
+    "evidence-to-decision"
+  ],
+  "fixtures": [
+    {
+      "number": "01",
+      "chapter": "narrative-foundations",
+      "id": "hero-thesis",
+      "artifactType": "hero-thesis",
+      "slideArchetype": "hero",
+      "family": "hero",
+      "title": "Reviewability turns generation into a product decision",
+      "takeaway": "One evidence-bounded thesis anchors the complete visual vocabulary.",
+      "theme": "editorial-evidence",
+      "narrativeJob": "One evidence-bounded thesis anchors the complete visual vocabulary.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-hero-thesis",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "1 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-hero",
+        "chapter-narrative-foundations"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.hero-thesis.v2",
+        "artifactType": "hero-thesis",
+        "narrativeJobs": [
+          "One evidence-bounded thesis anchors the complete visual vocabulary."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-hero",
+          "chapter-narrative-foundations"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Reviewability turns generation into a product decision. One evidence-bounded thesis anchors the complete visual vocabulary.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "02",
+      "chapter": "narrative-foundations",
+      "id": "section-opener",
+      "artifactType": "section-opener",
+      "slideArchetype": "section",
+      "family": "section",
+      "title": "A museum needs chapters, not a wall of thumbnails",
+      "takeaway": "Six chapters organize artifacts by the job they perform for an audience.",
+      "theme": "product-launch-cinematic",
+      "narrativeJob": "Six chapters organize artifacts by the job they perform for an audience.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-section-opener",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "2 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-section",
+        "chapter-narrative-foundations"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.section-opener.v2",
+        "artifactType": "section-opener",
+        "narrativeJobs": [
+          "Six chapters organize artifacts by the job they perform for an audience."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-section",
+          "chapter-narrative-foundations"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "A museum needs chapters, not a wall of thumbnails. Six chapters organize artifacts by the job they perform for an audience.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "03",
+      "chapter": "narrative-foundations",
+      "id": "big-metric",
+      "artifactType": "big-metric",
+      "slideArchetype": "metric",
+      "family": "metric",
+      "title": "82 of 84 candidates cleared browser and PowerPoint proof",
+      "takeaway": "The headline metric stays tied to the frozen Arena receipt instead of becoming marketing shorthand.",
+      "theme": "executive-minimal",
+      "narrativeJob": "The headline metric stays tied to the frozen Arena receipt instead of becoming marketing shorthand.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-big-metric",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "3 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "84 plans generated",
+        "82 browser and PowerPoint eligible artifacts"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-metric",
+        "chapter-narrative-foundations"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.big-metric.v2",
+        "artifactType": "big-metric",
+        "narrativeJobs": [
+          "The headline metric stays tied to the frozen Arena receipt instead of becoming marketing shorthand."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-metric",
+          "chapter-narrative-foundations"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "82 of 84 candidates cleared browser and PowerPoint proof. The headline metric stays tied to the frozen Arena receipt instead of becoming marketing shorthand.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "04",
+      "chapter": "narrative-foundations",
+      "id": "customer-voice",
+      "artifactType": "customer-voice",
+      "slideArchetype": "quote",
+      "family": "quote",
+      "title": "The useful promise is editable evidence, not instant polish",
+      "takeaway": "A customer-voice treatment demonstrates editorial rhythm without inventing a customer.",
+      "theme": "research-publication",
+      "narrativeJob": "A customer-voice treatment demonstrates editorial rhythm without inventing a customer.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-customer-voice",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "4 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-quote",
+        "chapter-narrative-foundations"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.customer-voice.v2",
+        "artifactType": "customer-voice",
+        "narrativeJobs": [
+          "A customer-voice treatment demonstrates editorial rhythm without inventing a customer."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-quote",
+          "chapter-narrative-foundations"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "The useful promise is editable evidence, not instant polish. A customer-voice treatment demonstrates editorial rhythm without inventing a customer.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "05",
+      "chapter": "narrative-foundations",
+      "id": "before-after-story",
+      "artifactType": "before-after-story",
+      "slideArchetype": "before-after",
+      "family": "before-after",
+      "title": "The harness removes clutter before it adds decoration",
+      "takeaway": "Before and after states identify the exact components that changed and why.",
+      "theme": "playful-consumer",
+      "narrativeJob": "Before and after states identify the exact components that changed and why.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-before-after-story",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "5 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-before-after",
+        "chapter-narrative-foundations"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.before-after-story.v2",
+        "artifactType": "before-after-story",
+        "narrativeJobs": [
+          "Before and after states identify the exact components that changed and why."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-before-after",
+          "chapter-narrative-foundations"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "The harness removes clutter before it adds decoration. Before and after states identify the exact components that changed and why.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "06",
+      "chapter": "data",
+      "id": "kpi-strip",
+      "artifactType": "kpi-strip",
+      "slideArchetype": "kpi",
+      "family": "kpi",
+      "title": "The operating verdict should scan in under five seconds",
+      "takeaway": "Five metrics preserve actual, prior, target, variance, and status context.",
+      "theme": "executive-minimal",
+      "narrativeJob": "Five metrics preserve actual, prior, target, variance, and status context.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-kpi-strip",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "6 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-kpi",
+        "chapter-data"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.kpi-strip.v2",
+        "artifactType": "kpi-strip",
+        "narrativeJobs": [
+          "Five metrics preserve actual, prior, target, variance, and status context."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-kpi",
+          "chapter-data"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "The operating verdict should scan in under five seconds. Five metrics preserve actual, prior, target, variance, and status context.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "07",
+      "chapter": "data",
+      "id": "multi-series-trend",
+      "artifactType": "multi-series-trend",
+      "slideArchetype": "line",
+      "family": "line",
+      "title": "Direct labels make divergence visible without inventing a cause",
+      "takeaway": "Three series share one scale and one evidence-bounded takeaway.",
+      "theme": "editorial-evidence",
+      "narrativeJob": "Three series share one scale and one evidence-bounded takeaway.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-multi-series-trend",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "7 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-line",
+        "chapter-data"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.multi-series-trend.v2",
+        "artifactType": "multi-series-trend",
+        "narrativeJobs": [
+          "Three series share one scale and one evidence-bounded takeaway."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "chart-builder"
+        ],
+        "referenceIds": [
+          "atlas-v2-line",
+          "chapter-data"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Direct labels make divergence visible without inventing a cause. Three series share one scale and one evidence-bounded takeaway.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "08",
+      "chapter": "data",
+      "id": "uncertainty-range",
+      "artifactType": "uncertainty-range",
+      "slideArchetype": "uncertainty",
+      "family": "uncertainty",
+      "title": "A forecast is more credible when its range is impossible to miss",
+      "takeaway": "Observed values, base case, and widening modeled bounds remain editable.",
+      "theme": "financial-institutional",
+      "narrativeJob": "Observed values, base case, and widening modeled bounds remain editable.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-uncertainty-range",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "8 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-uncertainty",
+        "chapter-data"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.uncertainty-range.v2",
+        "artifactType": "uncertainty-range",
+        "narrativeJobs": [
+          "Observed values, base case, and widening modeled bounds remain editable."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "chart-builder"
+        ],
+        "referenceIds": [
+          "atlas-v2-uncertainty",
+          "chapter-data"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "A forecast is more credible when its range is impossible to miss. Observed values, base case, and widening modeled bounds remain editable.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "09",
+      "chapter": "data",
+      "id": "waterfall",
+      "artifactType": "waterfall",
+      "slideArchetype": "waterfall",
+      "family": "waterfall",
+      "title": "Harness gains come from several small controls, not one magic prompt",
+      "takeaway": "A contribution bridge separates planning, tools, repair, and validation effects.",
+      "theme": "financial-institutional",
+      "narrativeJob": "A contribution bridge separates planning, tools, repair, and validation effects.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-waterfall",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "9 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-waterfall",
+        "chapter-data"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.waterfall.v2",
+        "artifactType": "waterfall",
+        "narrativeJobs": [
+          "A contribution bridge separates planning, tools, repair, and validation effects."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "chart-builder"
+        ],
+        "referenceIds": [
+          "atlas-v2-waterfall",
+          "chapter-data"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Harness gains come from several small controls, not one magic prompt. A contribution bridge separates planning, tools, repair, and validation effects.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "10",
+      "chapter": "data",
+      "id": "quality-cost-scatter",
+      "artifactType": "quality-cost-scatter",
+      "slideArchetype": "scatter",
+      "family": "scatter",
+      "title": "The best route sits on a frontier, not at one universal optimum",
+      "takeaway": "Bubble size adds latency to the quality-versus-cost comparison.",
+      "theme": "technical-dark",
+      "narrativeJob": "Bubble size adds latency to the quality-versus-cost comparison.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-quality-cost-scatter",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "10 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-scatter",
+        "chapter-data"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.quality-cost-scatter.v2",
+        "artifactType": "quality-cost-scatter",
+        "narrativeJobs": [
+          "Bubble size adds latency to the quality-versus-cost comparison."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "chart-builder"
+        ],
+        "referenceIds": [
+          "atlas-v2-scatter",
+          "chapter-data"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "The best route sits on a frontier, not at one universal optimum. Bubble size adds latency to the quality-versus-cost comparison.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "11",
+      "chapter": "data",
+      "id": "operating-table-sparklines",
+      "artifactType": "operating-table-sparklines",
+      "slideArchetype": "table",
+      "family": "table",
+      "title": "Dense tables stay readable when hierarchy does the filtering",
+      "takeaway": "Actual, plan, variance, trend, and status share one executive artifact.",
+      "theme": "executive-minimal",
+      "narrativeJob": "Actual, plan, variance, trend, and status share one executive artifact.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-operating-table-sparklines",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "11 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-table",
+        "chapter-data"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.operating-table-sparklines.v2",
+        "artifactType": "operating-table-sparklines",
+        "narrativeJobs": [
+          "Actual, plan, variance, trend, and status share one executive artifact."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-table",
+          "chapter-data"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics",
+          "controlled density",
+          "exception-first hierarchy"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Dense tables stay readable when hierarchy does the filtering. Actual, plan, variance, trend, and status share one executive artifact.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "12",
+      "chapter": "data",
+      "id": "dense-dashboard-funnel",
+      "artifactType": "dense-dashboard-funnel",
+      "slideArchetype": "dashboard",
+      "family": "dashboard",
+      "title": "A dashboard can be dense without becoming a card graveyard",
+      "takeaway": "A funnel, trend, exceptions, and decision queue share one controlled surface.",
+      "theme": "financial-institutional",
+      "narrativeJob": "A funnel, trend, exceptions, and decision queue share one controlled surface.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-dense-dashboard-funnel",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "12 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-dashboard",
+        "chapter-data"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.dense-dashboard-funnel.v2",
+        "artifactType": "dense-dashboard-funnel",
+        "narrativeJobs": [
+          "A funnel, trend, exceptions, and decision queue share one controlled surface."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-dashboard",
+          "chapter-data"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics",
+          "controlled density",
+          "exception-first hierarchy"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "A dashboard can be dense without becoming a card graveyard. A funnel, trend, exceptions, and decision queue share one controlled surface.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "13",
+      "chapter": "systems",
+      "id": "system-architecture",
+      "artifactType": "system-architecture",
+      "slideArchetype": "architecture",
+      "family": "architecture",
+      "title": "The portable protocol keeps product logic above backend choice",
+      "takeaway": "Typed connectors and a visible trust boundary preserve system meaning.",
+      "theme": "technical-dark",
+      "narrativeJob": "Typed connectors and a visible trust boundary preserve system meaning.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-system-architecture",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "13 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-architecture",
+        "chapter-systems"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.system-architecture.v2",
+        "artifactType": "system-architecture",
+        "narrativeJobs": [
+          "Typed connectors and a visible trust boundary preserve system meaning."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "diagram-builder"
+        ],
+        "referenceIds": [
+          "atlas-v2-architecture",
+          "chapter-systems"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "The portable protocol keeps product logic above backend choice. Typed connectors and a visible trust boundary preserve system meaning.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "14",
+      "chapter": "systems",
+      "id": "request-sequence",
+      "artifactType": "request-sequence",
+      "slideArchetype": "sequence",
+      "family": "sequence",
+      "title": "Review custody is visible at every handoff",
+      "takeaway": "The happy path and failed-validation return path remain distinct.",
+      "theme": "research-publication",
+      "narrativeJob": "The happy path and failed-validation return path remain distinct.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-request-sequence",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "14 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-sequence",
+        "chapter-systems"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.request-sequence.v2",
+        "artifactType": "request-sequence",
+        "narrativeJobs": [
+          "The happy path and failed-validation return path remain distinct."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "diagram-builder"
+        ],
+        "referenceIds": [
+          "atlas-v2-sequence",
+          "chapter-systems"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Review custody is visible at every handoff. The happy path and failed-validation return path remain distinct.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "15",
+      "chapter": "systems",
+      "id": "causal-loop",
+      "artifactType": "causal-loop",
+      "slideArchetype": "causal",
+      "family": "causal",
+      "title": "Better receipts reinforce trust; unchecked complexity pushes back",
+      "takeaway": "Reinforcing and balancing loops explain behavior that a flowchart cannot.",
+      "theme": "editorial-evidence",
+      "narrativeJob": "Reinforcing and balancing loops explain behavior that a flowchart cannot.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-causal-loop",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "15 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-causal",
+        "chapter-systems"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.causal-loop.v2",
+        "artifactType": "causal-loop",
+        "narrativeJobs": [
+          "Reinforcing and balancing loops explain behavior that a flowchart cannot."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "diagram-builder"
+        ],
+        "referenceIds": [
+          "atlas-v2-causal",
+          "chapter-systems"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Better receipts reinforce trust; unchecked complexity pushes back. Reinforcing and balancing loops explain behavior that a flowchart cannot.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "16",
+      "chapter": "systems",
+      "id": "source-allocation-sankey",
+      "artifactType": "source-allocation-sankey",
+      "slideArchetype": "sankey",
+      "family": "sankey",
+      "title": "Every visual can retain the path from source to slide",
+      "takeaway": "Allocation bands show evidence flowing through claims into visual forms.",
+      "theme": "technical-dark",
+      "narrativeJob": "Allocation bands show evidence flowing through claims into visual forms.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-source-allocation-sankey",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "16 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-sankey",
+        "chapter-systems"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.source-allocation-sankey.v2",
+        "artifactType": "source-allocation-sankey",
+        "narrativeJobs": [
+          "Allocation bands show evidence flowing through claims into visual forms."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "diagram-builder"
+        ],
+        "referenceIds": [
+          "atlas-v2-sankey",
+          "chapter-systems"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Every visual can retain the path from source to slide. Allocation bands show evidence flowing through claims into visual forms.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "17",
+      "chapter": "systems",
+      "id": "routing-decision-tree",
+      "artifactType": "routing-decision-tree",
+      "slideArchetype": "decision-tree",
+      "family": "decision-tree",
+      "title": "Routing should spend capability only where the task needs it",
+      "takeaway": "A decision tree distinguishes deterministic, cheap-model, and orchestrator paths.",
+      "theme": "executive-minimal",
+      "narrativeJob": "A decision tree distinguishes deterministic, cheap-model, and orchestrator paths.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-routing-decision-tree",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "17 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-decision-tree",
+        "chapter-systems"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.routing-decision-tree.v2",
+        "artifactType": "routing-decision-tree",
+        "narrativeJobs": [
+          "A decision tree distinguishes deterministic, cheap-model, and orchestrator paths."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "diagram-builder"
+        ],
+        "referenceIds": [
+          "atlas-v2-decision-tree",
+          "chapter-systems"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Routing should spend capability only where the task needs it. A decision tree distinguishes deterministic, cheap-model, and orchestrator paths.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "18",
+      "chapter": "systems",
+      "id": "ecosystem-geography",
+      "artifactType": "ecosystem-geography",
+      "slideArchetype": "ecosystem",
+      "family": "ecosystem",
+      "title": "NodeKit connects the stack while NodeSlide proves the journey",
+      "takeaway": "An ecosystem landscape includes a geospatial deployment inset without confusing categories.",
+      "theme": "playful-consumer",
+      "narrativeJob": "An ecosystem landscape includes a geospatial deployment inset without confusing categories.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-ecosystem-geography",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "18 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-ecosystem",
+        "chapter-systems"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.ecosystem-geography.v2",
+        "artifactType": "ecosystem-geography",
+        "narrativeJobs": [
+          "An ecosystem landscape includes a geospatial deployment inset without confusing categories."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-ecosystem",
+          "chapter-systems"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "NodeKit connects the stack while NodeSlide proves the journey. An ecosystem landscape includes a geospatial deployment inset without confusing categories.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "19",
+      "chapter": "progression",
+      "id": "research-timeline",
+      "artifactType": "research-timeline",
+      "slideArchetype": "timeline",
+      "family": "timeline",
+      "title": "Human approval remains the gate between experiment and harness change",
+      "takeaway": "Time-proportional milestones make the review gate explicit.",
+      "theme": "editorial-evidence",
+      "narrativeJob": "Time-proportional milestones make the review gate explicit.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-research-timeline",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "19 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-timeline",
+        "chapter-progression"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.research-timeline.v2",
+        "artifactType": "research-timeline",
+        "narrativeJobs": [
+          "Time-proportional milestones make the review gate explicit."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-timeline",
+          "chapter-progression"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Human approval remains the gate between experiment and harness change. Time-proportional milestones make the review gate explicit.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "20",
+      "chapter": "progression",
+      "id": "roadmap-gantt",
+      "artifactType": "roadmap-gantt",
+      "slideArchetype": "gantt",
+      "family": "gantt",
+      "title": "The next release sequence exposes dependencies and confidence",
+      "takeaway": "Workstreams, milestones, dependencies, status, and confidence share one roadmap.",
+      "theme": "executive-minimal",
+      "narrativeJob": "Workstreams, milestones, dependencies, status, and confidence share one roadmap.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-roadmap-gantt",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "20 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-gantt",
+        "chapter-progression"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.roadmap-gantt.v2",
+        "artifactType": "roadmap-gantt",
+        "narrativeJobs": [
+          "Workstreams, milestones, dependencies, status, and confidence share one roadmap."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-gantt",
+          "chapter-progression"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "The next release sequence exposes dependencies and confidence. Workstreams, milestones, dependencies, status, and confidence share one roadmap.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "21",
+      "chapter": "progression",
+      "id": "evidence-scrollytelling",
+      "artifactType": "evidence-scrollytelling",
+      "slideArchetype": "scrolly",
+      "family": "scrolly",
+      "title": "Evidence becomes a decision through five inspectable states",
+      "takeaway": "The web version scrubs; PowerPoint shows the same numbered progression.",
+      "theme": "product-launch-cinematic",
+      "narrativeJob": "The web version scrubs; PowerPoint shows the same numbered progression.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-evidence-scrollytelling",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "21 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-scrolly",
+        "chapter-progression"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.evidence-scrollytelling.v2",
+        "artifactType": "evidence-scrollytelling",
+        "narrativeJobs": [
+          "The web version scrubs; PowerPoint shows the same numbered progression."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-scrolly",
+          "chapter-progression"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics",
+          "visible static fallback",
+          "reduced-motion final state"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order. Supports step, scrub, or zoom controls.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": true
+      },
+      "accessibility": {
+        "altText": "Evidence becomes a decision through five inspectable states. The web version scrubs; PowerPoint shows the same numbered progression.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "22",
+      "chapter": "progression",
+      "id": "animated-chart-progression",
+      "artifactType": "animated-chart-progression",
+      "slideArchetype": "chart-states",
+      "family": "chart-states",
+      "title": "The trend means more when the audience sees the baseline move",
+      "takeaway": "Four chart states compare baseline, model, harness, and refreshed evidence.",
+      "theme": "technical-dark",
+      "narrativeJob": "Four chart states compare baseline, model, harness, and refreshed evidence.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-animated-chart-progression",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "22 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-chart-states",
+        "chapter-progression"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.animated-chart-progression.v2",
+        "artifactType": "animated-chart-progression",
+        "narrativeJobs": [
+          "Four chart states compare baseline, model, harness, and refreshed evidence."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-chart-states",
+          "chapter-progression"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics",
+          "visible static fallback",
+          "reduced-motion final state"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order. Supports step, scrub, or zoom controls.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": true
+      },
+      "accessibility": {
+        "altText": "The trend means more when the audience sees the baseline move. Four chart states compare baseline, model, harness, and refreshed evidence.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "23",
+      "chapter": "product-media",
+      "id": "full-bleed-editorial-image",
+      "artifactType": "full-bleed-editorial-image",
+      "slideArchetype": "full-bleed",
+      "family": "full-bleed",
+      "title": "A visual story can lead with atmosphere and still preserve proof",
+      "takeaway": "A generated rights-clearable image uses focal crop, credit, and an editable frame.",
+      "theme": "product-launch-cinematic",
+      "narrativeJob": "A generated rights-clearable image uses focal crop, credit, and an editable frame.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-full-bleed-editorial-image",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "23 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-full-bleed",
+        "chapter-product-media"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.full-bleed-editorial-image.v2",
+        "artifactType": "full-bleed-editorial-image",
+        "narrativeJobs": [
+          "A generated rights-clearable image uses focal crop, credit, and an editable frame."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "media-frame"
+        ],
+        "referenceIds": [
+          "atlas-v2-full-bleed",
+          "chapter-product-media"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "A visual story can lead with atmosphere and still preserve proof. A generated rights-clearable image uses focal crop, credit, and an editable frame.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "24",
+      "chapter": "product-media",
+      "id": "real-screenshot-callouts",
+      "artifactType": "real-screenshot-callouts",
+      "slideArchetype": "screenshot",
+      "family": "screenshot",
+      "title": "The product proof is the interface people actually use",
+      "takeaway": "A real NodeSlide capture occupies most of the slide with three exact callouts.",
+      "theme": "editorial-evidence",
+      "narrativeJob": "A real NodeSlide capture occupies most of the slide with three exact callouts.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-real-screenshot-callouts",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "24 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-screenshot",
+        "chapter-product-media"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.real-screenshot-callouts.v2",
+        "artifactType": "real-screenshot-callouts",
+        "narrativeJobs": [
+          "A real NodeSlide capture occupies most of the slide with three exact callouts."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "media-frame"
+        ],
+        "referenceIds": [
+          "atlas-v2-screenshot",
+          "chapter-product-media"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics",
+          "real capture only",
+          "callouts must bind to visible controls"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "The product proof is the interface people actually use. A real NodeSlide capture occupies most of the slide with three exact callouts.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "25",
+      "chapter": "product-media",
+      "id": "interaction-clip",
+      "artifactType": "interaction-clip",
+      "slideArchetype": "interaction",
+      "family": "interaction",
+      "title": "One bounded interaction carries the story from selection to receipt",
+      "takeaway": "Five real product states form a playable web sequence and a stepped PowerPoint fallback.",
+      "theme": "technical-dark",
+      "narrativeJob": "Five real product states form a playable web sequence and a stepped PowerPoint fallback.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-interaction-clip",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "25 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-interaction",
+        "chapter-product-media"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.interaction-clip.v2",
+        "artifactType": "interaction-clip",
+        "narrativeJobs": [
+          "Five real product states form a playable web sequence and a stepped PowerPoint fallback."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "media-frame"
+        ],
+        "referenceIds": [
+          "atlas-v2-interaction",
+          "chapter-product-media"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics",
+          "visible static fallback",
+          "reduced-motion final state"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order. Supports step, scrub, or zoom controls.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": true
+      },
+      "accessibility": {
+        "altText": "One bounded interaction carries the story from selection to receipt. Five real product states form a playable web sequence and a stepped PowerPoint fallback.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "26",
+      "chapter": "product-media",
+      "id": "product-before-after",
+      "artifactType": "product-before-after",
+      "slideArchetype": "product-compare",
+      "family": "product-compare",
+      "title": "Review transforms a rough generation into a governed workspace",
+      "takeaway": "Actual captures identify changed components and the measured workflow outcome.",
+      "theme": "playful-consumer",
+      "narrativeJob": "Actual captures identify changed components and the measured workflow outcome.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-product-before-after",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "26 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-product-compare",
+        "chapter-product-media"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.product-before-after.v2",
+        "artifactType": "product-before-after",
+        "narrativeJobs": [
+          "Actual captures identify changed components and the measured workflow outcome."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "media-frame"
+        ],
+        "referenceIds": [
+          "atlas-v2-product-compare",
+          "chapter-product-media"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics",
+          "real capture only",
+          "callouts must bind to visible controls"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Review transforms a rough generation into a governed workspace. Actual captures identify changed components and the measured workflow outcome.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "27",
+      "chapter": "product-media",
+      "id": "spatial-scene",
+      "artifactType": "spatial-scene",
+      "slideArchetype": "spatial",
+      "family": "spatial",
+      "title": "The canvas can move from whole system to exact evidence",
+      "takeaway": "A spatial depth treatment previews zoom from system, to node, to trace, to source.",
+      "theme": "product-launch-cinematic",
+      "narrativeJob": "A spatial depth treatment previews zoom from system, to node, to trace, to source.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-spatial-scene",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "27 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-spatial",
+        "chapter-product-media"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.spatial-scene.v2",
+        "artifactType": "spatial-scene",
+        "narrativeJobs": [
+          "A spatial depth treatment previews zoom from system, to node, to trace, to source."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-spatial",
+          "chapter-product-media"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics",
+          "visible static fallback",
+          "reduced-motion final state"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order. Supports step, scrub, or zoom controls.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": true
+      },
+      "accessibility": {
+        "altText": "The canvas can move from whole system to exact evidence. A spatial depth treatment previews zoom from system, to node, to trace, to source.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "28",
+      "chapter": "evidence-technical-proof",
+      "id": "claim-source-lineage",
+      "artifactType": "claim-source-lineage",
+      "slideArchetype": "lineage",
+      "family": "lineage",
+      "title": "A claim is trustworthy when its entire path remains inspectable",
+      "takeaway": "Source, extraction, bounded claim, slide element, and receipt stay connected.",
+      "theme": "research-publication",
+      "narrativeJob": "Source, extraction, bounded claim, slide element, and receipt stay connected.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-claim-source-lineage",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "28 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-lineage",
+        "chapter-evidence-technical-proof"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.claim-source-lineage.v2",
+        "artifactType": "claim-source-lineage",
+        "narrativeJobs": [
+          "Source, extraction, bounded claim, slide element, and receipt stay connected."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "diagram-builder"
+        ],
+        "referenceIds": [
+          "atlas-v2-lineage",
+          "chapter-evidence-technical-proof"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "A claim is trustworthy when its entire path remains inspectable. Source, extraction, bounded claim, slide element, and receipt stay connected.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "29",
+      "chapter": "evidence-technical-proof",
+      "id": "pdf-evidence-region",
+      "artifactType": "pdf-evidence-region",
+      "slideArchetype": "pdf",
+      "family": "pdf",
+      "title": "Citation quality depends on the exact source region",
+      "takeaway": "A PDF-region artifact binds highlighted evidence to the claim it supports.",
+      "theme": "research-publication",
+      "narrativeJob": "A PDF-region artifact binds highlighted evidence to the claim it supports.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-pdf-evidence-region",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "29 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-pdf",
+        "chapter-evidence-technical-proof"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.pdf-evidence-region.v2",
+        "artifactType": "pdf-evidence-region",
+        "narrativeJobs": [
+          "A PDF-region artifact binds highlighted evidence to the claim it supports."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-pdf",
+          "chapter-evidence-technical-proof"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Citation quality depends on the exact source region. A PDF-region artifact binds highlighted evidence to the claim it supports.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "30",
+      "chapter": "evidence-technical-proof",
+      "id": "code-runtime-proof",
+      "artifactType": "code-runtime-proof",
+      "slideArchetype": "code",
+      "family": "code",
+      "title": "The contract matters more when runtime evidence sits beside it",
+      "takeaway": "Editable code context and measured adapter latency reinforce each other.",
+      "theme": "technical-dark",
+      "narrativeJob": "Editable code context and measured adapter latency reinforce each other.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-code-runtime-proof",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "30 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-code",
+        "chapter-evidence-technical-proof"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.code-runtime-proof.v2",
+        "artifactType": "code-runtime-proof",
+        "narrativeJobs": [
+          "Editable code context and measured adapter latency reinforce each other."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-code",
+          "chapter-evidence-technical-proof"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "The contract matters more when runtime evidence sits beside it. Editable code context and measured adapter latency reinforce each other.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "31",
+      "chapter": "evidence-technical-proof",
+      "id": "otel-trace",
+      "artifactType": "otel-trace",
+      "slideArchetype": "trace",
+      "family": "trace",
+      "title": "A trace shows where orchestration time and repair actually went",
+      "takeaway": "Nested spans expose planning, tools, validation, repair, and export.",
+      "theme": "technical-dark",
+      "narrativeJob": "Nested spans expose planning, tools, validation, repair, and export.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-otel-trace",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "31 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-trace",
+        "chapter-evidence-technical-proof"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.otel-trace.v2",
+        "artifactType": "otel-trace",
+        "narrativeJobs": [
+          "Nested spans expose planning, tools, validation, repair, and export."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-trace",
+          "chapter-evidence-technical-proof"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "A trace shows where orchestration time and repair actually went. Nested spans expose planning, tools, validation, repair, and export.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "32",
+      "chapter": "evidence-technical-proof",
+      "id": "quality-cost-equation",
+      "artifactType": "quality-cost-equation",
+      "slideArchetype": "equation",
+      "family": "equation",
+      "title": "The score is only useful when every symbol maps to evidence",
+      "takeaway": "Real mathematics, definitions, and a bound calculation share one frame.",
+      "theme": "research-publication",
+      "narrativeJob": "Real mathematics, definitions, and a bound calculation share one frame.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-quality-cost-equation",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "32 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-equation",
+        "chapter-evidence-technical-proof"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.quality-cost-equation.v2",
+        "artifactType": "quality-cost-equation",
+        "narrativeJobs": [
+          "Real mathematics, definitions, and a bound calculation share one frame."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "katex"
+        ],
+        "referenceIds": [
+          "atlas-v2-equation",
+          "chapter-evidence-technical-proof"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "The score is only useful when every symbol maps to evidence. Real mathematics, definitions, and a bound calculation share one frame.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "33",
+      "chapter": "evidence-technical-proof",
+      "id": "deck-ci-receipt",
+      "artifactType": "deck-ci-receipt",
+      "slideArchetype": "ci",
+      "family": "ci",
+      "title": "A deck is not done until both pixels and semantics pass",
+      "takeaway": "The receipt exposes every check, browser proof, PowerPoint proof, and fidelity difference.",
+      "theme": "executive-minimal",
+      "narrativeJob": "The receipt exposes every check, browser proof, PowerPoint proof, and fidelity difference.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-deck-ci-receipt",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "33 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-ci",
+        "chapter-evidence-technical-proof"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.deck-ci-receipt.v2",
+        "artifactType": "deck-ci-receipt",
+        "narrativeJobs": [
+          "The receipt exposes every check, browser proof, PowerPoint proof, and fidelity difference."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-ci",
+          "chapter-evidence-technical-proof"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "A deck is not done until both pixels and semantics pass. The receipt exposes every check, browser proof, PowerPoint proof, and fidelity difference.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "34",
+      "chapter": "decision-evaluation",
+      "id": "risk-matrix",
+      "artifactType": "risk-matrix",
+      "slideArchetype": "risk",
+      "family": "risk",
+      "title": "Pipeline coverage is the risk that deserves action first",
+      "takeaway": "Likelihood and impact preserve priority better than an unlabeled list.",
+      "theme": "financial-institutional",
+      "narrativeJob": "Likelihood and impact preserve priority better than an unlabeled list.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-risk-matrix",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "34 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-risk",
+        "chapter-decision-evaluation"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.risk-matrix.v2",
+        "artifactType": "risk-matrix",
+        "narrativeJobs": [
+          "Likelihood and impact preserve priority better than an unlabeled list."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-risk",
+          "chapter-decision-evaluation"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Pipeline coverage is the risk that deserves action first. Likelihood and impact preserve priority better than an unlabeled list.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "35",
+      "chapter": "decision-evaluation",
+      "id": "cost-quality-frontier",
+      "artifactType": "cost-quality-frontier",
+      "slideArchetype": "frontier",
+      "family": "frontier",
+      "title": "Routing improves when quality, cost, and latency are judged together",
+      "takeaway": "The observed routes stay separate from the not-yet-run ensemble.",
+      "theme": "technical-dark",
+      "narrativeJob": "The observed routes stay separate from the not-yet-run ensemble.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-cost-quality-frontier",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "35 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-frontier",
+        "chapter-decision-evaluation"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.cost-quality-frontier.v2",
+        "artifactType": "cost-quality-frontier",
+        "narrativeJobs": [
+          "The observed routes stay separate from the not-yet-run ensemble."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright",
+          "chart-builder"
+        ],
+        "referenceIds": [
+          "atlas-v2-frontier",
+          "chapter-decision-evaluation"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Routing improves when quality, cost, and latency are judged together. The observed routes stay separate from the not-yet-run ensemble.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "36",
+      "chapter": "decision-evaluation",
+      "id": "model-compare",
+      "artifactType": "model-compare",
+      "slideArchetype": "model-compare",
+      "family": "model-compare",
+      "title": "Different models fail differently under the same contract",
+      "takeaway": "Observed outputs compare adherence, primitive choice, repairs, latency, cost, and export truth.",
+      "theme": "executive-minimal",
+      "narrativeJob": "Observed outputs compare adherence, primitive choice, repairs, latency, cost, and export truth.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-model-compare",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "36 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "Claude 24 of 24 eligible",
+        "Gemma 23 of 24 eligible",
+        "Kimi 23 of 24 eligible"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-model-compare",
+        "chapter-decision-evaluation"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.model-compare.v2",
+        "artifactType": "model-compare",
+        "narrativeJobs": [
+          "Observed outputs compare adherence, primitive choice, repairs, latency, cost, and export truth."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-model-compare",
+          "chapter-decision-evaluation"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Different models fail differently under the same contract. Observed outputs compare adherence, primitive choice, repairs, latency, cost, and export truth.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "37",
+      "chapter": "decision-evaluation",
+      "id": "harness-compare",
+      "artifactType": "harness-compare",
+      "slideArchetype": "harness-compare",
+      "family": "harness-compare",
+      "title": "V2 expands the harness without crediting the model",
+      "takeaway": "The same deterministic route isolates fixture, receipt, motion, theme, and accessibility gains.",
+      "theme": "editorial-evidence",
+      "narrativeJob": "The same deterministic route isolates fixture, receipt, motion, theme, and accessibility gains.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-harness-compare",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "37 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "12 fixtures in v1",
+        "38 canonical artifacts in v2"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-harness-compare",
+        "chapter-decision-evaluation"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.harness-compare.v2",
+        "artifactType": "harness-compare",
+        "narrativeJobs": [
+          "The same deterministic route isolates fixture, receipt, motion, theme, and accessibility gains."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-harness-compare",
+          "chapter-decision-evaluation"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "V2 expands the harness without crediting the model. The same deterministic route isolates fixture, receipt, motion, theme, and accessibility gains.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    },
+    {
+      "number": "38",
+      "chapter": "decision-evaluation",
+      "id": "final-recommendation",
+      "artifactType": "final-recommendation",
+      "slideArchetype": "recommendation",
+      "family": "recommendation",
+      "title": "Reuse the visual vocabulary, then adapt the communication contract",
+      "takeaway": "Researcher, investor, and plain-language Chinese versions share the same evidence.",
+      "theme": "product-launch-cinematic",
+      "narrativeJob": "Researcher, investor, and plain-language Chinese versions share the same evidence.",
+      "evidence": [
+        {
+          "sourceId": "atlas-v2-final-recommendation",
+          "label": "Frozen NodeSlide capability evidence",
+          "content": "38 of 38 canonical Atlas V2 artifacts. Browser and native PowerPoint outputs are generated from the same semantic primitive plan."
+        }
+      ],
+      "allowedClaims": [
+        "browser output",
+        "PowerPoint output",
+        "editable semantics",
+        "human preference pending"
+      ],
+      "forbiddenClaims": [
+        "fully autonomous",
+        "zero errors",
+        "automatic promotion"
+      ],
+      "referenceIds": [
+        "atlas-v2-recommendation",
+        "chapter-decision-evaluation"
+      ],
+      "recipe": {
+        "recipeId": "nodeslide.recipe.final-recommendation.v2",
+        "artifactType": "final-recommendation",
+        "narrativeJobs": [
+          "Researcher, investor, and plain-language Chinese versions share the same evidence."
+        ],
+        "requiredInputs": [
+          "audience",
+          "bounded claim",
+          "source receipt"
+        ],
+        "supportedTools": [
+          "semantic-primitives",
+          "pptxgenjs",
+          "playwright"
+        ],
+        "referenceIds": [
+          "atlas-v2-recommendation",
+          "chapter-decision-evaluation"
+        ],
+        "designRules": [
+          "one primary claim",
+          "visible source",
+          "editable PowerPoint semantics"
+        ],
+        "exportCapabilities": [
+          "browser",
+          "pptx",
+          "pdf"
+        ]
+      },
+      "behavior": {
+        "web": "Native interactive composition with semantic reading order.",
+        "pptx": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "powerpoint": "Editable text, shapes, charts, and image frames; stepped states replace motion.",
+        "pdf": "Static high-resolution composition with visible source and receipt labels.",
+        "reducedMotion": "Show the final state with numbered steps and no automatic movement.",
+        "interactive": false
+      },
+      "accessibility": {
+        "altText": "Reuse the visual vocabulary, then adapt the communication contract. Researcher, investor, and plain-language Chinese versions share the same evidence.",
+        "readingOrder": "title, primary visual, evidence annotation, source, receipt",
+        "highContrast": true,
+        "reducedMotion": true,
+        "mobile": "Single-column semantic stack with the visual before detail.",
+        "presenterNotes": true,
+        "sourceHover": true
+      }
+    }
+  ]
+}

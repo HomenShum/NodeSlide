@@ -121,7 +121,21 @@ a green 160 × 96 px Chromium geometry/accessibility proof with its screenshot.
 Screenshots, component tests, captions, and CI summaries are not substitutes
 for the checklist's explicit camera/browser/human wording.
 
-## Artifact Atlas / Arena worktree milestone
+## Artifact Atlas / Arena V2 milestone
+
+The expansion plan is implemented as Artifact Atlas V2. The source is
+`benchmarks/artifact-atlas/v2/atlas.json`; the newest deliverable is
+`outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2.pptx`. It contains 38
+canonical recipes, a 14-slide public showcase, seven design languages, twelve
+controlled theme variants, six domain packs, four motion/fallback contracts,
+real product/media proof, advanced data/system artifacts, accessibility
+contracts, free-router/model ledgers, and a same-control harness comparison.
+Both PowerPoint files were independently rendered and passed `slides_test.py`.
+The V2 finalizer records the observed visual gate in all receipts; human
+preference remains pending. See `docs/ARTIFACT_ATLAS_ARENA.md` for exact outputs
+and commands.
+
+## Artifact Atlas / Arena V1 history
 
 All six implementation phases in `docs/ARTIFACT_ATLAS_ARENA.md` are present in the
 local worktree:

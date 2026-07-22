@@ -74,6 +74,111 @@ type CatalogCandidate = {
   };
   operations: Array<{ operationId: string; label: string; sourceId: string }>;
 };
+type CatalogEntry = {
+  id: string;
+  number: number;
+  chapter: string;
+  title: string;
+  description: string;
+  preview: string;
+  recipe: {
+    recipeId: string;
+    requiredInputs: string[];
+    supportedTools: string[];
+  };
+  behavior: {
+    web: string;
+    powerpoint: string;
+    pdf: string;
+    reducedMotion: string;
+  };
+  accessibility: {
+    altText: string;
+    highContrast: boolean;
+    reducedMotion: boolean;
+  };
+  receipt: {
+    harnessVersion: string;
+    model: string;
+    generationLatencyMs: number;
+    costMicroUsd: number;
+    repairCount: number;
+    humanPreferenceResult: string;
+    knownFidelityDifferences: string;
+    deckCi: {
+      evidencePassed: boolean;
+      browserRender: boolean;
+      overlapCheck: string;
+    };
+  };
+};
+type ModelRoute = {
+  model: string;
+  status: string;
+  eligible?: number;
+  candidates?: number;
+  averageGenerationMs?: number;
+  costMicroUsd?: number;
+};
+type HarnessCompare = {
+  comparisonBasis: string;
+  previous: {
+    harness: string;
+    artifacts: number;
+    designDirections: number;
+    recipes: number;
+  };
+  current: {
+    harness: string;
+    artifacts: number;
+    designLanguages: number;
+    motionTemplates: number;
+    recipes: number;
+    domainPacks: number;
+  };
+  humanPreference: string;
+};
+
+const fallbackEntries: CatalogEntry[] = ARTIFACT_LAB_ENTRIES.map(
+  ([id, title, description], index) => ({
+    id,
+    number: index + 1,
+    chapter: 'artifact-baseline',
+    title,
+    description,
+    preview: `artifact-atlas/${id}.png`,
+    recipe: {
+      recipeId: `nodeslide.recipe.${id}.v1`,
+      requiredInputs: [],
+      supportedTools: [],
+    },
+    behavior: {
+      web: 'Static evidence preview.',
+      powerpoint: 'Editable final state.',
+      pdf: 'Static final state.',
+      reducedMotion: 'Static final state.',
+    },
+    accessibility: {
+      altText: `${title} benchmark preview`,
+      highContrast: true,
+      reducedMotion: true,
+    },
+    receipt: {
+      harnessVersion: 'artifact-atlas-v1',
+      model: 'nodeslide-artifact-builder-v1',
+      generationLatencyMs: 0,
+      costMicroUsd: 0,
+      repairCount: 0,
+      humanPreferenceResult: 'pending',
+      knownFidelityDifferences: 'Catalog V2 receipt loads with the deployed Atlas.',
+      deckCi: {
+        evidencePassed: true,
+        browserRender: true,
+        overlapCheck: 'v1-baseline',
+      },
+    },
+  }),
+);
 
 export function ArtifactLabDialog({
   open,
@@ -88,6 +193,9 @@ export function ArtifactLabDialog({
   const [comparisonFixture, setComparisonFixture] = useState('hero-thesis');
   const [compareView, setCompareView] = useState<CompareView>('rendered');
   const [catalogCandidates, setCatalogCandidates] = useState<CatalogCandidate[]>([]);
+  const [catalogEntries, setCatalogEntries] = useState<CatalogEntry[]>(fallbackEntries);
+  const [modelRoutes, setModelRoutes] = useState<ModelRoute[]>([]);
+  const [harnessCompare, setHarnessCompare] = useState<HarnessCompare | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const { dialogRef, handleBackdropMouseDown, handleCancel, handleKeyDown } = useModalDialog({
     open,
@@ -97,6 +205,16 @@ export function ArtifactLabDialog({
   useEffect(() => {
     if (!open) return;
     let active = true;
+    void fetch('/artifact-atlas-v2/catalog.json')
+      .then((response) => (response.ok ? response.json() : Promise.reject(new Error('catalog'))))
+      .then((catalog) => {
+        if (!active) return;
+        if (Array.isArray(catalog.entries)) setCatalogEntries(catalog.entries);
+        if (Array.isArray(catalog.modelCompare?.routes))
+          setModelRoutes(catalog.modelCompare.routes);
+        if (catalog.harnessCompare) setHarnessCompare(catalog.harnessCompare);
+      })
+      .catch(() => undefined);
     void fetch('/artifact-atlas/catalog.json')
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error('catalog'))))
       .then((catalog) => {
@@ -120,9 +238,9 @@ export function ArtifactLabDialog({
       <section className="ns-artifact-lab-shell">
         <header>
           <div>
-            <span className="ns-eyebrow">Deck Gym · Artifact Atlas v1</span>
+            <span className="ns-eyebrow">Deck Gym · Artifact Atlas V2</span>
             <h2 id="artifact-lab-title">Artifact Lab</h2>
-            <p>Compare visual primitives before asking a model to compose a whole deck.</p>
+            <p>Browse 38 evidence-bound recipes, compare routes, and inspect export receipts.</p>
           </div>
           <button ref={closeRef} type="button" aria-label="Close Artifact Lab" onClick={onClose}>
             <X size={18} />
@@ -143,28 +261,73 @@ export function ArtifactLabDialog({
 
         {mode === 'gallery' ? (
           <div className="ns-artifact-gallery" data-testid="artifact-gallery">
-            {ARTIFACT_LAB_ENTRIES.map(([id, title, description]) => (
-              <article key={id}>
+            {catalogEntries.map((entry) => (
+              <article key={entry.id}>
                 <div className="ns-artifact-preview">
-                  <img src={`/artifact-atlas/${id}.png`} alt={`${title} benchmark preview`} />
+                  <img src={`/${entry.preview}`} alt={entry.accessibility.altText} />
                   <span>
                     <CheckCircle2 size={12} /> Evidence-eligible
                   </span>
                 </div>
                 <div>
-                  <small>{id.replaceAll('-', ' ')}</small>
-                  <h3>{title}</h3>
-                  <p>{description}</p>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      onUsePattern(
-                        `Create a concise presentation that uses a ${title.toLowerCase()} where it strengthens the argument. Keep it editable, evidence-bounded, and visually distinctive.`,
-                      )
-                    }
-                  >
-                    Use this pattern
-                  </button>
+                  <small>
+                    {String(entry.number).padStart(2, '0')} · {entry.chapter.replaceAll('-', ' ')}
+                  </small>
+                  <h3>{entry.title}</h3>
+                  <p>{entry.description}</p>
+                  <div className="ns-artifact-actions">
+                    <button type="button" onClick={() => useArtifact(entry, 'slide', onUsePattern)}>
+                      Use slide
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => useArtifact(entry, 'recipe', onUsePattern)}
+                    >
+                      Use recipe
+                    </button>
+                    <button type="button" onClick={() => useArtifact(entry, 'data', onUsePattern)}>
+                      Generate with my data
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => useArtifact(entry, 'variants', onUsePattern)}
+                    >
+                      3 variants
+                    </button>
+                  </div>
+                  <details className="ns-artifact-receipt">
+                    <summary>Source JSON · trace · export receipt</summary>
+                    <dl>
+                      <div>
+                        <dt>Recipe</dt>
+                        <dd>{entry.recipe.recipeId}</dd>
+                      </div>
+                      <div>
+                        <dt>Harness</dt>
+                        <dd>{entry.receipt.harnessVersion}</dd>
+                      </div>
+                      <div>
+                        <dt>Builder</dt>
+                        <dd>{entry.receipt.model}</dd>
+                      </div>
+                      <div>
+                        <dt>Deck CI</dt>
+                        <dd>{entry.receipt.deckCi.overlapCheck}</dd>
+                      </div>
+                      <div>
+                        <dt>PPTX</dt>
+                        <dd>{entry.behavior.powerpoint}</dd>
+                      </div>
+                      <div>
+                        <dt>Human preference</dt>
+                        <dd>{entry.receipt.humanPreferenceResult}</dd>
+                      </div>
+                    </dl>
+                    <p>{entry.receipt.knownFidelityDifferences}</p>
+                    <a href="/artifact-atlas-v2/catalog.json" download>
+                      Download source JSON
+                    </a>
+                  </details>
                 </div>
               </article>
             ))}
@@ -174,9 +337,9 @@ export function ArtifactLabDialog({
         {mode === 'models' ? (
           <div className="ns-artifact-model-compare" data-testid="artifact-model-compare">
             <div className="ns-artifact-callout">
-              <strong>84 / 84 plans generated</strong>
+              <strong>38 canonical recipes · 7 routed model/control paths</strong>
               <span>
-                12 fixtures · 3 live models · deterministic control · two visual directions
+                Paid, free-router, deterministic, and ensemble status from observed receipts only
               </span>
             </div>
             <label className="ns-artifact-fixture-picker">
@@ -186,11 +349,13 @@ export function ArtifactLabDialog({
                 value={comparisonFixture}
                 onChange={(event) => setComparisonFixture(event.target.value)}
               >
-                {ARTIFACT_LAB_ENTRIES.map(([id, title]) => (
-                  <option key={id} value={id}>
-                    {title}
-                  </option>
-                ))}
+                {catalogEntries
+                  .filter((entry) => ARTIFACT_LAB_ENTRIES.some(([id]) => id === entry.id))
+                  .map((entry) => (
+                    <option key={entry.id} value={entry.id}>
+                      {entry.title}
+                    </option>
+                  ))}
               </select>
             </label>
             <div className="ns-artifact-view-switch" aria-label="Comparison evidence">
@@ -221,6 +386,20 @@ export function ArtifactLabDialog({
                 </article>
               ))}
             </div>
+            <div className="ns-artifact-route-ledger" aria-label="Observed route ledger">
+              {modelRoutes.map((route) => (
+                <article key={route.model}>
+                  <strong>{route.model}</strong>
+                  <span>{route.status.replaceAll('-', ' ')}</span>
+                  <small>
+                    {route.eligible === undefined
+                      ? 'Pilot / pending route'
+                      : `${route.eligible}/${route.candidates} eligible`}
+                    {route.costMicroUsd === 0 ? ' · free' : ''}
+                  </small>
+                </article>
+              ))}
+            </div>
             <p className="ns-artifact-caveat">
               Capability cards report observed execution only. Rankings remain provisional until a
               human completes model-blind pairwise preference review.
@@ -232,17 +411,21 @@ export function ArtifactLabDialog({
           <div className="ns-artifact-harness-compare" data-testid="artifact-harness-compare">
             <article>
               <span>Current</span>
-              <strong>Artifact Atlas v1</strong>
+              <strong>{harnessCompare?.current.harness ?? 'Artifact Atlas V2'}</strong>
               <p>
-                Semantic primitives, source-bound operations, browser/PPTX parity, export critics.
+                {harnessCompare
+                  ? `${harnessCompare.current.artifacts} artifacts · ${harnessCompare.current.designLanguages} design languages · ${harnessCompare.current.motionTemplates} motion contracts · ${harnessCompare.current.recipes} recipes · ${harnessCompare.current.domainPacks} domain packs.`
+                  : '38 recipes, source-bound operations, browser/PPTX parity, and export critics.'}
               </p>
             </article>
             <div aria-hidden="true">→</div>
-            <article data-empty="true">
-              <span>Prior comparable receipt</span>
-              <strong>Not available</strong>
+            <article>
+              <span>Prior baseline</span>
+              <strong>{harnessCompare?.previous.harness ?? 'Artifact Atlas V1'}</strong>
               <p>
-                The first honest paired harness comparison begins when v2 runs the same fixtures.
+                {harnessCompare
+                  ? `${harnessCompare.previous.artifacts} artifacts · ${harnessCompare.previous.designDirections} directions · ${harnessCompare.previous.recipes} reusable recipes. Human preference: ${harnessCompare.humanPreference}.`
+                  : '12 fixtures and two visual directions. Paired human preference remains pending.'}
               </p>
             </article>
           </div>
@@ -302,6 +485,21 @@ function CandidateEvidence({
       </small>
     </div>
   );
+}
+
+function useArtifact(
+  entry: CatalogEntry,
+  action: 'slide' | 'recipe' | 'data' | 'variants',
+  onUsePattern: (prompt: string) => void,
+) {
+  const shared = `Use the Artifact Atlas V2 recipe ${entry.recipe.recipeId} for a ${entry.title.toLowerCase()}. Preserve source lineage, editability, high contrast, and the declared PowerPoint fallback.`;
+  const prompts = {
+    slide: `${shared} Add one slide where this pattern materially strengthens the argument.`,
+    recipe: `${shared} Apply its inputs (${entry.recipe.requiredInputs.join(', ') || 'topic evidence'}) and tool contract (${entry.recipe.supportedTools.join(', ') || 'native slide primitives'}).`,
+    data: `${shared} Ask me for the minimum required data, then generate the artifact with my values without inventing missing evidence.`,
+    variants: `${shared} Generate three meaningfully different visual directions while keeping the same claims and evidence.`,
+  };
+  onUsePattern(prompts[action]);
 }
 
 function formatDuration(value: number | null | undefined) {

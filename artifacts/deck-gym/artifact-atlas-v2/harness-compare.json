@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "nodeslide.harness-compare/v2",
+  "comparisonBasis": "Same deterministic builder role; expanded fixture and contract coverage.",
+  "previous": {
+    "harness": "artifact-atlas-v1",
+    "artifacts": 12,
+    "designDirections": 2,
+    "interactiveContracts": 0,
+    "recipes": 0
+  },
+  "current": {
+    "harness": "artifact-atlas-v2",
+    "artifacts": 38,
+    "designLanguages": 7,
+    "interactiveContracts": 4,
+    "motionTemplates": 3,
+    "recipes": 38,
+    "domainPacks": 6
+  },
+  "modelCredit": false,
+  "humanPreference": "pending"
+}

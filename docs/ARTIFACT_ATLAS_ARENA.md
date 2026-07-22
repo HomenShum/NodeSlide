@@ -6,6 +6,42 @@ NodeSlide separates visual-vocabulary proof from full-deck generation:
 2. **Model Arena** gives the same artifact contract, evidence, references, and budget to representative models and a deterministic baseline.
 3. **Ultra Showcase** may later curate only winning, human-reviewed, export-safe Atlas artifacts. It is not a one-shot model output.
 
+## Artifact Atlas V2 — expanded capability museum
+
+V2 turns the baseline into a reusable visual system and benchmark surface:
+
+- **38 canonical artifacts** across narrative foundations, advanced data, systems, progression, product/media, evidence/technical proof, and decision/evaluation.
+- **14-slide public showcase** selected from the same recipes, not redrawn in a separate pipeline.
+- **7 design languages**, plus a controlled 12-render theme matrix covering four artifact types in three themes.
+- **6 evidence-backed domain packs**: founder roadshow, research talk, board/operating review, technical architecture review, investment/finance, and product launch.
+- **4 motion-aware artifact contracts** with explicit web, PowerPoint, PDF, and reduced-motion behavior.
+- **38 reusable recipes** with required inputs, supported tools, references, rules, exports, source lineage, accessibility, and per-artifact receipts.
+- Real NodeSlide screenshots, a real before/after repair journey, a bounded interaction sequence, and a commissioned rights-clearable editorial image.
+
+The comparison layer stays honest. Claude, Kimi, and Gemma use the frozen Arena receipts; Nemotron and GPT-OSS are identified as bounded free-router pilots with their semantic caveats; the deterministic builder remains a control; and the best-routed ensemble remains **not run**. Human preference is still pending and is never inferred from Deck CI.
+
+Artifact Lab now loads the V2 catalog and exposes four workflow actions per artifact: use the slide, use the recipe, generate with user data, and generate three variants. Its expandable receipt shows the recipe, harness, builder, Deck CI state, PowerPoint fallback, known fidelity difference, and human-preference state.
+
+### V2 outputs
+
+- `outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2.pptx` — 38-slide internal museum.
+- `outputs/artifact-atlas-v2/nodeslide-ultra-showcase-v2.pptx` — 14-slide public narrative.
+- `public/artifact-atlas-v2/catalog.json` — product-facing catalog and verified receipts.
+- `artifacts/deck-gym/artifact-atlas-v2/` — recipes, theme matrix, domain packs, route comparison, harness comparison, and receipt ledger.
+- `benchmarks/artifact-atlas/v2/atlas.json` — frozen V2 benchmark definition.
+
+### V2 commands
+
+```powershell
+npm run artifact-atlas:v2
+npm run artifact-atlas:v2:test
+
+# After rendering both PPTX files and completing visual inspection:
+npm run artifact-atlas:v2:finalize
+```
+
+The finalizer fails closed unless both PowerPoint files and all 38 rendered Atlas screenshots exist. It then records the observed browser render, PowerPoint render, overflow gate, visual inspection, and known fidelity differences while leaving human preference pending.
+
 ## Artifact Atlas v1
 
 The first milestone freezes twelve slide-level fixtures across all eight Atlas categories:

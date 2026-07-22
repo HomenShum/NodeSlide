@@ -4995,6 +4995,63 @@
   padding: 8px 11px;
 }
 
+.nodeslide-studio .ns-artifact-actions {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.nodeslide-studio .ns-artifact-actions button {
+  margin-top: 0;
+  text-align: center;
+}
+
+.nodeslide-studio .ns-artifact-actions button:nth-child(n + 3) {
+  background: #eef2ff;
+  color: #312e81;
+}
+
+.nodeslide-studio .ns-artifact-receipt {
+  border-top: 1px solid var(--ns-line-d);
+  margin-top: 12px;
+  padding-top: 10px;
+}
+
+.nodeslide-studio .ns-artifact-receipt summary {
+  color: #4338ca;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.nodeslide-studio .ns-artifact-receipt dl {
+  display: grid;
+  gap: 6px;
+  margin: 10px 0;
+}
+
+.nodeslide-studio .ns-artifact-receipt dl div {
+  display: grid;
+  font-size: 10px;
+  gap: 6px;
+  grid-template-columns: 72px 1fr;
+}
+
+.nodeslide-studio .ns-artifact-receipt dt {
+  color: var(--ns-muted);
+}
+
+.nodeslide-studio .ns-artifact-receipt dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.nodeslide-studio .ns-artifact-receipt a {
+  color: #4338ca;
+  font-size: 10px;
+  font-weight: 750;
+}
+
 .nodeslide-studio .ns-artifact-callout {
   align-items: baseline;
   background: #1e1b4b;
@@ -5058,6 +5115,34 @@
   gap: 12px;
   grid-template-columns: repeat(4, 1fr);
   margin: 14px 0;
+}
+
+.nodeslide-studio .ns-artifact-route-ledger {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 12px 0 16px;
+}
+
+.nodeslide-studio .ns-artifact-route-ledger article {
+  background: #f8fafc;
+  border: 1px solid var(--ns-line-d);
+  border-radius: 12px;
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px;
+}
+
+.nodeslide-studio .ns-artifact-route-ledger strong {
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
+.nodeslide-studio .ns-artifact-route-ledger span,
+.nodeslide-studio .ns-artifact-route-ledger small {
+  color: var(--ns-muted);
+  font-size: 9px;
 }
 
 .nodeslide-studio .ns-artifact-model-grid article,
@@ -5182,7 +5267,8 @@
 
 @media (max-width: 820px) {
   .nodeslide-studio .ns-artifact-gallery,
-  .nodeslide-studio .ns-artifact-model-grid {
+  .nodeslide-studio .ns-artifact-model-grid,
+  .nodeslide-studio .ns-artifact-route-ledger {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -5194,6 +5280,7 @@
 
   .nodeslide-studio .ns-artifact-gallery,
   .nodeslide-studio .ns-artifact-model-grid,
+  .nodeslide-studio .ns-artifact-route-ledger,
   .nodeslide-studio .ns-artifact-harness-compare {
     grid-template-columns: 1fr;
   }

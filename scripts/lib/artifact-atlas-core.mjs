@@ -327,6 +327,43 @@ export function buildModelCompare(receipts, fixtureId) {
   };
 }
 
+/**
+ * Raised when two receipts are compared along both the model and harness axes at once, so no
+ * clean attribution is possible. Per the Arena reconciliation council (2026-07-22), cross-axis
+ * comparison is made unrepresentable rather than reported as a `confounded` result category.
+ */
+export class InvalidArenaComparisonError extends Error {
+  constructor({ code, message }) {
+    super(message);
+    this.name = 'InvalidArenaComparisonError';
+    this.code = code;
+  }
+}
+
+/**
+ * Guard for any harness-vs-harness comparison: the two receipts must share the model (so the model
+ * is held constant) and must differ in harness version (so there is a harness change to attribute).
+ * Throws rather than returning a warning verdict — the word "confounded" appears only in the
+ * diagnostic message, never as stored state.
+ *
+ * compareHarnessReceipts already enforces same-model structurally by pairing on comparisonKey; this
+ * makes that invariant explicit and available to any future general comparator.
+ */
+export function assertHarnessComparable(previous, current) {
+  if (previous?.model !== current?.model) {
+    throw new InvalidArenaComparisonError({
+      code: 'cross_axis_comparison',
+      message: `Model and harness both changed (${previous?.model} vs ${current?.model}); causal attribution would be confounded.`,
+    });
+  }
+  if (previous?.harnessVersion === current?.harnessVersion) {
+    throw new InvalidArenaComparisonError({
+      code: 'no_harness_change',
+      message: `Both receipts are harness ${current?.harnessVersion}; there is no harness change to compare.`,
+    });
+  }
+}
+
 export function compareHarnessReceipts(previousReceipts, currentReceipts) {
   const previousByKey = new Map(
     previousReceipts.map((receipt) => [comparisonKey(receipt), receipt]),

@@ -340,4 +340,16 @@ describe('exact production deployment identity', () => {
       captureNodeSlideConvexBuildIdentity(staleQuery, sha, { attempts: 61, delayMs: 0 }),
     ).rejects.toThrow(/attempts must be between 1 and 60/i);
   });
+
+  it('covers the default public-edge propagation window with 31 bounded reads', async () => {
+    const staleQuery = vi.fn().mockResolvedValue({
+      schemaVersion: 'nodeslide.convex-build-identity/v1',
+      commitSha: 'b'.repeat(40),
+    });
+
+    await expect(
+      captureNodeSlideConvexBuildIdentity(staleQuery, sha, { delayMs: 0 }),
+    ).rejects.toThrow(/Convex build identity did not converge after 31 attempts/i);
+    expect(staleQuery).toHaveBeenCalledTimes(31);
+  });
 });

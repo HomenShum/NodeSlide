@@ -91,13 +91,13 @@ export async function captureNodeSlideConvexBuildIdentity(
   // Convex's public HTTP edge can converge after the deploy command and the
   // deployment-local identity check have already succeeded. Keep this window
   // bounded while covering the propagation lag observed in production.
-  { attempts = 10, delayMs = 2_000 } = {},
+  { attempts = 31, delayMs = 2_000 } = {},
 ) {
   if (typeof query !== 'function') {
     throw new Error('Production Convex build identity query must be callable.');
   }
-  if (!Number.isInteger(attempts) || attempts < 1 || attempts > 10) {
-    throw new Error('Production Convex build identity attempts must be between 1 and 10.');
+  if (!Number.isInteger(attempts) || attempts < 1 || attempts > 60) {
+    throw new Error('Production Convex build identity attempts must be between 1 and 60.');
   }
   if (!Number.isInteger(delayMs) || delayMs < 0 || delayMs > 5_000) {
     throw new Error('Production Convex build identity retry delay must be between 0 and 5000ms.');

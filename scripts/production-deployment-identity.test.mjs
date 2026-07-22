@@ -335,5 +335,9 @@ describe('exact production deployment identity', () => {
       captureNodeSlideConvexBuildIdentity(staleQuery, sha, { attempts: 3, delayMs: 0 }),
     ).rejects.toThrow(/Convex build identity did not converge after 3 attempts/i);
     expect(staleQuery).toHaveBeenCalledTimes(3);
+
+    await expect(
+      captureNodeSlideConvexBuildIdentity(staleQuery, sha, { attempts: 61, delayMs: 0 }),
+    ).rejects.toThrow(/attempts must be between 1 and 60/i);
   });
 });

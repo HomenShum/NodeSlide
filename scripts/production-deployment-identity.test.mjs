@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { renderConvexBuildIdentitySource } from './lib/convex-build-identity-source.mjs';
 import {
   assertNodeSlideProductionDeployKey,
+  captureNodeSlideConvexBuildIdentity,
   captureWebDeploymentIdentity,
   requiredExactMainSha,
   requiredNodeSlideProductionOrigin,
@@ -308,5 +309,31 @@ describe('exact production deployment identity', () => {
         sha,
       ),
     ).toThrow(/Convex build identity/i);
+  });
+
+  it('retries a transient Convex identity read but fails closed on a persistent mismatch', async () => {
+    const transientQuery = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('temporary identity read failure'))
+      .mockResolvedValue({
+        schemaVersion: 'nodeslide.convex-build-identity/v1',
+        commitSha: sha,
+      });
+    await expect(
+      captureNodeSlideConvexBuildIdentity(transientQuery, sha, { attempts: 2, delayMs: 0 }),
+    ).resolves.toEqual({
+      schemaVersion: 'nodeslide.convex-build-identity/v1',
+      commitSha: sha,
+    });
+    expect(transientQuery).toHaveBeenCalledTimes(2);
+
+    const staleQuery = vi.fn().mockResolvedValue({
+      schemaVersion: 'nodeslide.convex-build-identity/v1',
+      commitSha: 'b'.repeat(40),
+    });
+    await expect(
+      captureNodeSlideConvexBuildIdentity(staleQuery, sha, { attempts: 3, delayMs: 0 }),
+    ).rejects.toThrow(/Convex build identity/i);
+    expect(staleQuery).toHaveBeenCalledTimes(3);
   });
 });

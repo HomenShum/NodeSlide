@@ -19,11 +19,11 @@ import { chromium } from 'playwright';
 import { api } from '../convex/_generated/api.js';
 import { redactNodeGymDiagnostic } from './lib/node-gym-redaction-core.mjs';
 import {
+  captureNodeSlideConvexBuildIdentity,
   captureWebDeploymentIdentity,
   requiredExactMainSha,
   requiredNodeSlideProductionOrigin,
   requiredNodeSlideWorkflowRun,
-  validateNodeSlideConvexBuildIdentity,
   verifyNodeSlideDeploymentRun,
   verifyNodeSlideExactMainSource,
 } from './lib/production-deployment-identity.mjs';
@@ -105,8 +105,8 @@ try {
     report.exactMain = { ...report.exactMain, ...exactMainSource };
     report.deploymentIdentity = await captureWebDeploymentIdentity(baseUrl, expectedMainSha);
     const convex = new ConvexHttpClient(convexUrl.href);
-    report.convexDeploymentIdentity = validateNodeSlideConvexBuildIdentity(
-      await convex.query(api.nodeslideBuildIdentity.get, {}),
+    report.convexDeploymentIdentity = await captureNodeSlideConvexBuildIdentity(
+      () => convex.query(api.nodeslideBuildIdentity.get, {}),
       expectedMainSha,
     );
     return {

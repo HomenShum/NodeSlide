@@ -43,7 +43,6 @@ jobs:
                 source &&
                 source === context.sha &&
                 candidate.repository?.full_name === 'HomenShum/NodeSlide' &&
-                candidate.name === 'Deploy production' &&
                 candidate.path === '.github/workflows/deploy-production.yml' &&
                 ['workflow_run', 'workflow_dispatch'].includes(candidate.event) &&
                 candidate.head_branch === 'main' &&

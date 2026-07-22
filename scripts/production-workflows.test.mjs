@@ -150,6 +150,7 @@ describe('production GitHub workflow configuration', () => {
     expect(workflow).toContain('const title = /^Deploy production - ([0-9a-f]{40})$/;');
     expect(workflow).toContain('source === context.sha');
     expect(workflow).toContain("candidate.path === '.github/workflows/deploy-production.yml'");
+    expect(workflow).not.toContain("candidate.name === 'Deploy production'");
     expect(workflow).toContain('ref: ${{ steps.deployed.outputs.sha }}');
     expect(
       appearsBefore(workflow, 'id: deployed', 'Check out the exact deployed source commit'),

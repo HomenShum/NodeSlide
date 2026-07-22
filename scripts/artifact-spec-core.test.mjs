@@ -16,6 +16,13 @@ const artifact = {
 };
 
 describe('typed ArtifactSpec semantic gates', () => {
+  it('fails closed instead of throwing when an executor omits the spec', () => {
+    const validation = validateArtifactSpec(undefined);
+    expect(validation.ok).toBe(false);
+    expect(validation.specDigest).toBeNull();
+    expect(validation.issues.map((entry) => entry.code)).toContain('artifact_shape');
+  });
+
   it('evaluates the quality-cost expression rather than substituting Q/C', () => {
     const expression = {
       op: 'divide',

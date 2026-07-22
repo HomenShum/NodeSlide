@@ -225,6 +225,11 @@ export function applyDeckPatch(
     }
 
     if (operation.op === 'update_slide') {
+      for (const element of elements) {
+        if (element.slideId === operation.slideId) {
+          invalidateAuthoredArtifactBindingGroup(elements, element);
+        }
+      }
       Object.assign(slide, operation.properties);
       slide.version += 1;
       continue;
@@ -261,6 +266,7 @@ export function applyDeckPatch(
           throw new Error(`Element ${member.id} already belongs to group ${member.groupId}.`);
         }
       }
+      for (const member of members) invalidateAuthoredArtifactBindingGroup(elements, member);
       slide.elementOrder = compactGroupOrder(slide.elementOrder, operation.elementIds);
       for (const member of members) {
         member.groupId = operation.groupId;
@@ -290,6 +296,7 @@ export function applyDeckPatch(
           throw new Error(`Element ${member.id} is not in group ${operation.groupId}.`);
         }
       }
+      for (const member of members) invalidateAuthoredArtifactBindingGroup(elements, member);
       for (const member of members) {
         // biome-ignore lint/performance/noDelete: optional storage must omit legacy-compatible group metadata.
         delete member.groupId;
@@ -309,6 +316,11 @@ export function applyDeckPatch(
     if (!element) throw new Error(`Unknown element ${operation.elementId}.`);
     if (element.locked) throw new Error(`Element ${operation.elementId} is locked.`);
 
+    // Authored bindings attest to the exact compiler materialization. Any
+    // human/agent mutation of one member invalidates the whole authored group;
+    // retaining sibling bindings would let an edited render project stale Gym
+    // facts from the original spec. Source IDs remain available as provenance.
+    invalidateAuthoredArtifactBindingGroup(elements, element);
     affectedElementIds.add(operation.elementId);
     if (operation.op === 'remove_element') {
       if (element.groupId !== undefined) {
@@ -441,6 +453,24 @@ export function applyDeckPatch(
     affectedSlideIds: [...affectedSlideIds],
     affectedElementIds: [...affectedElementIds],
   };
+}
+
+function invalidateAuthoredArtifactBindingGroup(
+  elements: SlideElement[],
+  target: SlideElement,
+): void {
+  const binding = target.authoredArtifactBinding;
+  if (!binding) return;
+  for (const candidate of elements) {
+    const candidateBinding = candidate.authoredArtifactBinding;
+    if (
+      candidateBinding?.artifactId === binding.artifactId &&
+      candidateBinding.specDigest === binding.specDigest
+    ) {
+      // biome-ignore lint/performance/noDelete: optional provenance attestations must be absent once invalidated.
+      delete candidate.authoredArtifactBinding;
+    }
+  }
 }
 
 function synchronizePageNumbers(

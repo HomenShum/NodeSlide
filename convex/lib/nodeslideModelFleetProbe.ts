@@ -6,6 +6,7 @@ import {
 import {
   type NodeSlideModelProbeReceipt,
   callNodeSlideFreeJson,
+  isVerifiedNodeSlideRouteAttribution,
   probeNodeSlideModelOnce,
 } from './nodeslideProvider';
 
@@ -83,16 +84,41 @@ export async function runNodeSlideFreeRouterStructuredProbe() {
         },
       },
     });
+    const responseBytes = result.ok
+      ? new TextEncoder().encode(JSON.stringify(result.value)).length
+      : 0;
+    const actualProvider = result.telemetry?.actualProvider;
+    const actualModel = result.telemetry?.actualModel;
+    const attributionVerified = isVerifiedNodeSlideRouteAttribution(
+      route,
+      actualProvider,
+      actualModel,
+    );
+    const zeroCostVerified =
+      Number.isSafeInteger(result.telemetry?.costMicroUsd) && result.telemetry?.costMicroUsd === 0;
+    const qualified = result.ok && attributionVerified && zeroCostVerified;
+    const failure = !result.ok
+      ? result.reason
+      : !attributionVerified
+        ? 'The route did not return verifiable provider/model attribution.'
+        : !zeroCostVerified
+          ? 'The candidate route did not return exact zero-cost telemetry.'
+          : undefined;
     receipts.push({
       model: route.id,
       upstreamModel: route.upstreamId,
       provider: route.provider,
-      status: result.ok ? ('passed' as const) : ('failed' as const),
+      ...(result.telemetry?.actualProvider
+        ? { actualProvider: result.telemetry.actualProvider }
+        : {}),
+      ...(result.telemetry?.actualModel ? { actualModel: result.telemetry.actualModel } : {}),
+      status: qualified ? ('passed' as const) : ('failed' as const),
       latencyMs: Date.now() - routeStartedAt,
       costMicroUsd: result.telemetry?.costMicroUsd ?? 0,
       inputTokens: result.telemetry?.inputTokens ?? 0,
       outputTokens: result.telemetry?.outputTokens ?? 0,
-      ...(result.ok ? {} : { failure: result.reason }),
+      response: { present: result.ok, bytes: responseBytes },
+      ...(failure ? { failure } : {}),
     });
   }
   const failedModelCount = receipts.filter((receipt) => receipt.status === 'failed').length;
@@ -118,7 +144,21 @@ async function runFleet(
 ) {
   const startedAt = now();
   const receipts: NodeSlideModelProbeReceipt[] = [];
-  for (const route of routes) receipts.push(await probe(route.id));
+  for (const route of routes) {
+    const receipt = await probe(route.id);
+    const requiresZeroCost = schemaVersion === NODESLIDE_FREE_ROUTER_PROBE_SCHEMA;
+    receipts.push(
+      requiresZeroCost &&
+        receipt.status === 'passed' &&
+        (!Number.isSafeInteger(receipt.costMicroUsd) || receipt.costMicroUsd !== 0)
+        ? {
+            ...receipt,
+            status: 'failed',
+            failure: 'The candidate route did not return exact zero-cost telemetry.',
+          }
+        : receipt,
+    );
+  }
   const failedModelCount = receipts.filter((receipt) => receipt.status === 'failed').length;
   return {
     schemaVersion,

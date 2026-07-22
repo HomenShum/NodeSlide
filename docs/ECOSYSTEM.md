@@ -137,3 +137,46 @@ export interface NodeSlideAgentAdapter {
 - J1 ✅ audited · J2 ✅ decided (above) · J3 ✅ this file · J4 ✅ decided (tarball)
 - J5 ⏳ open: adapter must actually compile against noderoom's real types (with I2),
   and noderoom must cross-link this file.
+
+## Portable NodeGym core
+
+`@nodekit/gym-core` is owned in `packages/gym-core` until a separately governed
+NodeKit repository adopts the exact package. It is dependency-free and owns only
+product-neutral experiment plans, receipts, pairing, diagnosis, curriculum,
+advisory promotion, bounded training export, and user-invisible shadow-route
+selection. NodeSlide-specific artifact evaluators remain in NodeSlide; NodeRoom's
+consumer supplies its own NodeAgent frame-evidence evaluator.
+
+Distribution is an exact versioned `npm pack` tarball with SHA-256 and npm
+integrity pins. `scripts/node-gym-portability-proof.mjs` proves clean install,
+the `0.0.1 -> 0.1.0` upgrade, declaration consumption, run-plan compatibility,
+and byte-identical provenance across the NodeSlide and NodeRoom consumers. The
+NodeRoom side is a committed isolated consumer with its own NodeAgent
+frame-evidence evaluator, not a copied NodeSlide evaluator. An available
+NodeRoom checkout is fingerprinted and preserved, but a dirty checkout is not
+silently modified or claimed as integrated. The receipt is
+`artifacts/node-gym/node-gym-core-portability-proof.json`; CI reruns the proof
+while its NodeRoom sibling is available for identity/fingerprint binding. A
+separate clean NodeRoom integration worktree pinned exact
+`@nodekit/gym-core@0.1.0` bytes at SHA-256
+`b8c14013a54fc7419ebfda806553573c4b6e3d1dde2a17f11a61f5ddd88fc0c2`,
+implemented a real room-change-review consumer, and passed the package proof,
+both mandatory NodeAgent smokes, and the full repository floor. Direct adoption
+landed in [NodeRoom PR #242](https://github.com/HomenShum/NodeRoom/pull/242) at
+`c9b699f416a68dfe29298d62b6559690c7ccaa6a`; exact-main
+[CI](https://github.com/HomenShum/NodeRoom/actions/runs/29916176474),
+[conformance](https://github.com/HomenShum/NodeRoom/actions/runs/29916177044),
+and [ProofLoop](https://github.com/HomenShum/NodeRoom/actions/runs/29916176323)
+passed. Node 24 action hardening then landed in
+[NodeRoom PR #243](https://github.com/HomenShum/NodeRoom/pull/243), leaving
+current main at `83f9b7442065652208f3a641e65bfed2752d5d13` with green exact-main
+[CI](https://github.com/HomenShum/NodeRoom/actions/runs/29919737217),
+[conformance](https://github.com/HomenShum/NodeRoom/actions/runs/29919737570),
+and [ProofLoop](https://github.com/HomenShum/NodeRoom/actions/runs/29919737301).
+The reusable producer was fixed by
+[node-platform PR #8](https://github.com/HomenShum/node-platform/pull/8), merge
+`5c9aa6443ca8e61dc8886fbf0a0b4a7b72858e63`, whose exact-main
+[quality run](https://github.com/HomenShum/node-platform/actions/runs/29918399950)
+passed; the final NodeRoom main audit reports zero warnings and zero Node 20
+annotations. The user's unrelated dirty NodeRoom checkout remains untouched. No
+automatic routing or promotion mutation is exposed by this package.

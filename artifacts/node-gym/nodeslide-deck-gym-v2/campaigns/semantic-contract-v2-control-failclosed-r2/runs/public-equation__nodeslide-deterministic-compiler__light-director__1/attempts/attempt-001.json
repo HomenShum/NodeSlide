@@ -1,0 +1,78 @@
+{
+  "schemaVersion": "nodekit.gym-run-receipt/v2",
+  "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+  "comparisonKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::1::8000:300000:200000:2",
+  "harnessPairingKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::1::8000:300000:200000:2::nodeslide/deterministic-compiler",
+  "pairingKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::1::8000:300000:200000:2::nodeslide/deterministic-compiler",
+  "repetition": 1,
+  "planDigest": "sha256:4f4e3455a241ad82149db37ea10afc32640edc4e4277ba84d2a0018ae3fd9d62",
+  "executorResultDigest": "sha256:02cb930be7e8ae80454b6a556dce11b87b53d3ddb21ae355e3a863652d88b1be",
+  "semanticEvaluationDigest": "sha256:4676efe780a36e10c02e2119b95c34700e05b4b88a37878b3cb77e54b539353b",
+  "status": "artifact-failure",
+  "returnedModel": "nodeslide/deterministic-compiler",
+  "actualRoute": {
+    "requestedProvider": "local",
+    "requestedRoute": "nodeslide/deterministic-compiler",
+    "actualProvider": "local",
+    "actualModel": "nodeslide/deterministic-compiler",
+    "attributionId": "control-public-equation__nodeslide-deterministic-compiler__light-director__1",
+    "attributionIdKind": "nodeslide-trace"
+  },
+  "routeMode": "deterministic",
+  "automatedHardGatesPassed": false,
+  "promotionEligible": false,
+  "humanPreference": {
+    "status": "not_run"
+  },
+  "issueCodes": [
+    "cross_format_page_count_mismatch",
+    "generated_claims_missing",
+    "harness_behavior_not_observed",
+    "montage_artifact_missing",
+    "normalized_spec_claim_binding_invalid",
+    "normalized_spec_source_binding_invalid",
+    "per_slide_evidence_missing",
+    "required_fixture_claim_missing",
+    "semantic_hard_gate_failure",
+    "source_lineage_missing",
+    "source_run_digest_invalid",
+    "spec_required_fact_unbound"
+  ],
+  "usage": {
+    "latencyMs": 534,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0
+  },
+  "artifacts": {
+    "browser": {
+      "path": "control-browser.png",
+      "digest": "sha256:048a5f299f11037cd3c1ee484a53c95db3a6d352f53411acbde5b9079177c972",
+      "bytes": 79318,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pptx": {
+      "path": "control-deck.pptx",
+      "digest": "sha256:3f8afac5ce771bc5e4a98256e59de0496bd9d3584ac498442b908a2d19c3bd78",
+      "bytes": 5420862,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pdf": {
+      "path": "control-evidence.pdf",
+      "digest": "sha256:78473e2c158b02b34bac658288d893644307a63e96a83f736e8d12146265709c",
+      "bytes": 2697,
+      "validation": {
+        "status": "passed"
+      },
+      "fidelity": "deterministic-evidence-pdf"
+    }
+  },
+  "executor": "deterministic",
+  "attempt": 1,
+  "recordedAt": "2026-07-22T09:31:32.159Z"
+}

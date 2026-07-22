@@ -17,6 +17,10 @@ import {
   assertFullCommitSha,
   assertManifestReleaseId,
 } from './immutable-package-set.mjs';
+import {
+  assertStrictSemverIncrease,
+  runInstalledNodeSlideConsumerProbe,
+} from './lib/immutable-upgrade-consumer-core.mjs';
 
 const execFileAsync = promisify(execFile);
 const npmCli = process.env.npm_execpath;
@@ -58,6 +62,7 @@ try {
   await assertExactArtifactDirectory(fromDirectory, from.manifest, 'Baseline artifact set');
   await assertExactArtifactDirectory(toDirectory, to.manifest, 'Candidate artifact set');
   assert.notEqual(from.manifestSha256, to.manifestSha256, 'Upgrade manifests must be distinct.');
+  assertStrictSemverIncrease(from.manifest.releaseVersion, to.manifest.releaseVersion);
 
   let candidateRebuildMatchesPublicAssets = false;
   if (typeof rebuiltToDirectory === 'string') {
@@ -102,18 +107,30 @@ try {
     const installed = await receipt(consumer);
     assert.equal(installed.artifactSet?.manifestSha256, from.manifestSha256);
     await assertLockPins(consumer, installed.artifactSet);
+    await installConsumerProbeToolchain(consumer);
+    await assertLockPins(consumer, installed.artifactSet);
+    const baselineConsumerProbe = await runInstalledNodeSlideConsumerProbe({
+      consumerDirectory: consumer,
+      typeScriptBin: path.join(consumer, 'node_modules', 'typescript', 'bin', 'tsc'),
+      packageNames: NODESLIDE_IMMUTABLE_PACKAGE_NAMES,
+    });
 
     await runCli(controller, consumer, ['upgrade', '--artifacts', toDirectory, '--skip-checks']);
     const upgraded = await receipt(consumer);
     assert.equal(upgraded.artifactSet?.manifestSha256, to.manifestSha256);
     assert.equal(upgraded.artifactSet?.releaseVersion, to.manifest.releaseVersion);
     await assertLockPins(consumer, upgraded.artifactSet);
+    const upgradedConsumerProbe = await runInstalledNodeSlideConsumerProbe({
+      consumerDirectory: consumer,
+      typeScriptBin: path.join(consumer, 'node_modules', 'typescript', 'bin', 'tsc'),
+      packageNames: NODESLIDE_IMMUTABLE_PACKAGE_NAMES,
+    });
 
     await proveTamperRejection(proofRoot, toDirectory);
     await proveMixedReleaseRejection(proofRoot, toDirectory);
 
     const report = {
-      schemaVersion: 'nodeslide.immutable-install-upgrade-proof/v1',
+      schemaVersion: 'nodeslide.immutable-install-upgrade-proof/v2',
       passedAt: new Date().toISOString(),
       from: artifactEvidence(from, fromUrl),
       to: artifactEvidence(to, toUrl),
@@ -121,7 +138,10 @@ try {
       candidateCliController: true,
       exactVersionPins: true,
       lockfileIntegrityPins: true,
+      strictSemverIncrease: true,
+      baselineConsumerProbe,
       upgradeReceiptAdvanced: true,
+      upgradedConsumerProbe,
       tamperedArtifactRejected: true,
       mixedReleaseRejected: true,
       candidateRebuildMatchesPublicAssets,
@@ -159,6 +179,28 @@ async function installBootstrap(consumer, artifactSet) {
       '--no-fund',
       cli.absolutePath,
       registry.absolutePath,
+    ],
+    consumer,
+  );
+}
+
+async function installConsumerProbeToolchain(consumer) {
+  const lock = JSON.parse(await readFile(path.resolve('package-lock.json'), 'utf8'));
+  const names = ['typescript', '@types/node', '@types/react', '@types/react-dom'];
+  const specs = names.map((name) => {
+    const version = lock.packages?.[`node_modules/${name}`]?.version;
+    assert(typeof version === 'string' && version.length > 0, `Lockfile is missing ${name}.`);
+    return `${name}@${version}`;
+  });
+  await runNpm(
+    [
+      'install',
+      '--save-dev',
+      '--save-exact',
+      '--ignore-scripts',
+      '--no-audit',
+      '--no-fund',
+      ...specs,
     ],
     consumer,
   );

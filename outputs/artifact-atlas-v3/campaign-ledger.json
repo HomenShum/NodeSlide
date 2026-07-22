@@ -1,0 +1,426 @@
+{
+  "schemaVersion": "nodeslide.artifact-atlas-v3-campaign-ledger/v1",
+  "campaigns": [
+    {
+      "campaignId": "deterministic-proof-v1",
+      "selection": "deterministic",
+      "executor": "deterministic",
+      "campaignPlanDigest": "sha256:78dd425dccddc24b8f9630c2c29dec62da0f26f84a37901f7837283c67c39e42",
+      "summaryDigest": "sha256:2d954e7688d0ab6df6c6511e177abf1bc5e7c7ae22d5c982baf43bbecfa517d8",
+      "configurationCompatible": false,
+      "evidenceComplete": false,
+      "evidenceIssueCodes": [
+        "run_plan_matrix_binding_mismatch",
+        "receipt_binding_invalid"
+      ],
+      "pairedEvidenceComplete": false,
+      "pairedEvidenceIssueCodes": [
+        "paired_causal_claim_not_ready",
+        "paired_delta_report_binding_mismatch",
+        "paired_delta_report_incomplete"
+      ],
+      "pairedDeltaReportDigest": null,
+      "expectedPairCount": 1,
+      "fullMatrixExplicitlyConfirmed": false,
+      "selectedRunCount": 2,
+      "summarySelectedRunCount": 2,
+      "passed": 2,
+      "failed": 0,
+      "unrun": 0,
+      "spentCostMicroUsd": 0,
+      "stoppedBy": null,
+      "receiptCount": 2,
+      "runPlanCount": 2,
+      "runPlanDigests": [
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+          "digest": "sha256:5bd3440daf50b1a47a570298aa0dde2a9ba5632ae05a80d2ff79ae1a22ee72aa",
+          "matrixRunDigest": "sha256:1b6898e1dbe102dedaad526468ff93bfb4d4c621d2acd11d887f4895b8a23284",
+          "provider": "local",
+          "route": "nodeslide/deterministic-compiler",
+          "model": "nodeslide/deterministic-compiler"
+        },
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+          "digest": "sha256:4abde8920c35fd4af7082e2ecca66f192a6c460af077a2df5d419a533682ef51",
+          "matrixRunDigest": "sha256:6e126af57ac11ea31ff3f5fff6d951b6c9b067eb0906e89ca6fc3b392d1683d6",
+          "provider": "local",
+          "route": "nodeslide/deterministic-compiler",
+          "model": "nodeslide/deterministic-compiler"
+        }
+      ],
+      "receiptDigests": [
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+          "digest": "sha256:db71d135aac96ae01a999c9f8129dbcfe67f08a827163d966d1c88b098cccb73",
+          "status": "passed",
+          "returnedModel": "nodeslide/deterministic-compiler"
+        },
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+          "digest": "sha256:8b3079723c69fd64506a1f6b8d420ec3fb57e46cd6129d7079a76ebb86f4d984",
+          "status": "passed",
+          "returnedModel": "nodeslide/deterministic-compiler"
+        }
+      ],
+      "attributedLiveRuns": 0,
+      "validatedRuns": [],
+      "issueCodes": []
+    },
+    {
+      "campaignId": "gpt-oss-free-paired-smoke-v1",
+      "selection": "bounded",
+      "executor": "ui",
+      "campaignPlanDigest": "sha256:f68bd199b416eb4d49583dd7f4da3147194014bab6bbbc7829ef02636711e308",
+      "summaryDigest": "sha256:beefecaf5f78ed225732837ae9e3f693169b409a1f333e962fbb8f7a05572e78",
+      "configurationCompatible": false,
+      "evidenceComplete": false,
+      "evidenceIssueCodes": [
+        "run_plan_matrix_binding_mismatch",
+        "receipt_binding_invalid"
+      ],
+      "pairedEvidenceComplete": false,
+      "pairedEvidenceIssueCodes": [
+        "paired_causal_claim_not_ready",
+        "paired_delta_report_binding_mismatch",
+        "paired_delta_report_incomplete"
+      ],
+      "pairedDeltaReportDigest": null,
+      "expectedPairCount": 1,
+      "fullMatrixExplicitlyConfirmed": false,
+      "selectedRunCount": 2,
+      "summarySelectedRunCount": 2,
+      "passed": 0,
+      "failed": 2,
+      "unrun": 0,
+      "spentCostMicroUsd": 0,
+      "stoppedBy": null,
+      "receiptCount": 2,
+      "runPlanCount": 2,
+      "runPlanDigests": [
+        {
+          "runId": "public-equation__openai-gpt-oss-20b-free__light-director__1",
+          "digest": "sha256:3c89038820ac77f7635bcdbef1eac25ad3eb92eb25d1484691ed7cf978319735",
+          "matrixRunDigest": "sha256:31f6fbe702f5d42e745611807cd7340348d992fe5f5b08de4fcf77664a2e19d1",
+          "provider": "openrouter",
+          "route": "openai/gpt-oss-20b:free",
+          "model": "openai/gpt-oss-20b:free"
+        },
+        {
+          "runId": "public-equation__openai-gpt-oss-20b-free__structured-planner__1",
+          "digest": "sha256:23274e59f9653a14070e905138286ef41f9f0f923eb8117e371217ec9695d80d",
+          "matrixRunDigest": "sha256:fd0a358f5b791ba11e0c7ddcdecb73e3284d68ea40caffc73b13cde78e8fd57f",
+          "provider": "openrouter",
+          "route": "openai/gpt-oss-20b:free",
+          "model": "openai/gpt-oss-20b:free"
+        }
+      ],
+      "receiptDigests": [
+        {
+          "runId": "public-equation__openai-gpt-oss-20b-free__light-director__1",
+          "digest": "sha256:ce6799ebe5910b4c3be42c8339d0ae1f752d9a2a0341d1860c01e61de718a619",
+          "status": "artifact-failure",
+          "returnedModel": "openai/gpt-oss-20b:free"
+        },
+        {
+          "runId": "public-equation__openai-gpt-oss-20b-free__structured-planner__1",
+          "digest": "sha256:5e6ceb93cc237ea09840612dbfe26810b28aa45f26fb3f04cdfd16b6e2da2e59",
+          "status": "degraded",
+          "returnedModel": null
+        }
+      ],
+      "attributedLiveRuns": 0,
+      "validatedRuns": [],
+      "issueCodes": [
+        "degraded_route",
+        "returned_model_attribution_missing",
+        "typed_artifact_spec_not_observed"
+      ]
+    },
+    {
+      "campaignId": "pinned-free-artifact-recovery-v1",
+      "selection": "live-smoke",
+      "executor": "recovery",
+      "campaignPlanDigest": "sha256:9b25709e1af040e88a2d350c41d414a4d7dde6840f7c0248d602586c30be5026",
+      "summaryDigest": "sha256:ce3d3388809431c3e3c364b463e02848c4db107cf2b51880d91d91f56c7a3b24",
+      "configurationCompatible": false,
+      "evidenceComplete": false,
+      "evidenceIssueCodes": [
+        "run_plan_matrix_binding_mismatch",
+        "receipt_binding_invalid"
+      ],
+      "pairedEvidenceComplete": false,
+      "pairedEvidenceIssueCodes": [
+        "paired_causal_claim_not_ready",
+        "paired_delta_report_binding_mismatch",
+        "paired_delta_report_incomplete"
+      ],
+      "pairedDeltaReportDigest": null,
+      "expectedPairCount": 1,
+      "fullMatrixExplicitlyConfirmed": false,
+      "selectedRunCount": 2,
+      "summarySelectedRunCount": 2,
+      "passed": 0,
+      "failed": 2,
+      "unrun": 0,
+      "spentCostMicroUsd": 0,
+      "stoppedBy": null,
+      "receiptCount": 2,
+      "runPlanCount": 2,
+      "runPlanDigests": [
+        {
+          "runId": "public-equation__google-gemma-4-26b-a4b-it-free__light-director__1",
+          "digest": "sha256:5b3651ce80e6649803897ec79e7b6ce94a6856be4fc1231585691bb043ea4244",
+          "matrixRunDigest": "sha256:3540b73514aefd8b6e36afb45797a52211363030f8dd3c5b96306bf70c1cb48c",
+          "provider": "openrouter",
+          "route": "google/gemma-4-26b-a4b-it:free",
+          "model": "google/gemma-4-26b-a4b-it:free"
+        },
+        {
+          "runId": "public-equation__google-gemma-4-26b-a4b-it-free__structured-planner__1",
+          "digest": "sha256:5e129020979cacffdaf78642f831f0d802e63e6c14d51c9ae1f526307317cff8",
+          "matrixRunDigest": "sha256:eac2c025b0c7f2e26e968d620cf7a11f5276196fcf53b703155c6153f0dbf4c0",
+          "provider": "openrouter",
+          "route": "google/gemma-4-26b-a4b-it:free",
+          "model": "google/gemma-4-26b-a4b-it:free"
+        }
+      ],
+      "receiptDigests": [
+        {
+          "runId": "public-equation__google-gemma-4-26b-a4b-it-free__light-director__1",
+          "digest": "sha256:f664f887bf77caa802a2f07483e8710afe577df13432050a28b13e867c564e48",
+          "status": "degraded",
+          "returnedModel": null
+        },
+        {
+          "runId": "public-equation__google-gemma-4-26b-a4b-it-free__structured-planner__1",
+          "digest": "sha256:8abc4ed32d5f63832c68db835d0a5bcca713a6110265e3d1f3f1cfaf9cca56b5",
+          "status": "degraded",
+          "returnedModel": null
+        }
+      ],
+      "attributedLiveRuns": 0,
+      "validatedRuns": [],
+      "issueCodes": [
+        "degraded_route",
+        "metering_not_independently_recovered",
+        "returned_model_attribution_missing",
+        "typed_artifact_spec_not_observed"
+      ]
+    },
+    {
+      "campaignId": "pinned-free-paired-smoke-v1",
+      "selection": "live-smoke",
+      "executor": "ui",
+      "campaignPlanDigest": "sha256:c410596a13a0302d3b393e453fc1bf845843ab5a3457ef9abe93ab2041ef4cd5",
+      "summaryDigest": "sha256:95d563588b0a0af1cb31df69e1062b6e47f91ec6e029879281404a079275274e",
+      "configurationCompatible": false,
+      "evidenceComplete": false,
+      "evidenceIssueCodes": [
+        "run_plan_matrix_binding_mismatch",
+        "receipt_binding_invalid"
+      ],
+      "pairedEvidenceComplete": false,
+      "pairedEvidenceIssueCodes": [
+        "paired_causal_claim_not_ready",
+        "paired_delta_report_binding_mismatch",
+        "paired_delta_report_incomplete"
+      ],
+      "pairedDeltaReportDigest": null,
+      "expectedPairCount": 1,
+      "fullMatrixExplicitlyConfirmed": false,
+      "selectedRunCount": 2,
+      "summarySelectedRunCount": 2,
+      "passed": 0,
+      "failed": 2,
+      "unrun": 0,
+      "spentCostMicroUsd": 0,
+      "stoppedBy": null,
+      "receiptCount": 2,
+      "runPlanCount": 2,
+      "runPlanDigests": [
+        {
+          "runId": "public-equation__google-gemma-4-26b-a4b-it-free__light-director__1",
+          "digest": "sha256:5b3651ce80e6649803897ec79e7b6ce94a6856be4fc1231585691bb043ea4244",
+          "matrixRunDigest": "sha256:3540b73514aefd8b6e36afb45797a52211363030f8dd3c5b96306bf70c1cb48c",
+          "provider": "openrouter",
+          "route": "google/gemma-4-26b-a4b-it:free",
+          "model": "google/gemma-4-26b-a4b-it:free"
+        },
+        {
+          "runId": "public-equation__google-gemma-4-26b-a4b-it-free__structured-planner__1",
+          "digest": "sha256:5e129020979cacffdaf78642f831f0d802e63e6c14d51c9ae1f526307317cff8",
+          "matrixRunDigest": "sha256:eac2c025b0c7f2e26e968d620cf7a11f5276196fcf53b703155c6153f0dbf4c0",
+          "provider": "openrouter",
+          "route": "google/gemma-4-26b-a4b-it:free",
+          "model": "google/gemma-4-26b-a4b-it:free"
+        }
+      ],
+      "receiptDigests": [
+        {
+          "runId": "public-equation__google-gemma-4-26b-a4b-it-free__light-director__1",
+          "digest": "sha256:573f2c42c86befb3fa14548e91722be7d0b496d0ae2e02d3050b9ca341c4ff8a",
+          "status": "provider-error",
+          "returnedModel": null
+        },
+        {
+          "runId": "public-equation__google-gemma-4-26b-a4b-it-free__structured-planner__1",
+          "digest": "sha256:990efa9c7c4873639916aa25e1c63344c2a63d27b9c0baacefb5919635bd3574",
+          "status": "provider-error",
+          "returnedModel": null
+        }
+      ],
+      "attributedLiveRuns": 0,
+      "validatedRuns": [],
+      "issueCodes": [
+        "browser_artifact_missing",
+        "claim_audit_not_run",
+        "degraded_route",
+        "execution_failed",
+        "executor_diagnostic_unclassified",
+        "free_model_claim_unattributed",
+        "pdf_artifact_missing",
+        "pptx_artifact_missing",
+        "returned_model_attribution_missing",
+        "ui_executor_failed"
+      ]
+    },
+    {
+      "campaignId": "semantic-contract-v2-control-complete-r4",
+      "selection": "deterministic",
+      "executor": "deterministic",
+      "campaignPlanDigest": "sha256:e165c48b0df84655f1bc6114fba0069f05eb933fc830590368b9712dc475fa12",
+      "summaryDigest": "sha256:23424c08faa691f56c6457e282b648abef4cd2193f1ce7ab9aef49229636e02d",
+      "configurationCompatible": false,
+      "evidenceComplete": true,
+      "evidenceIssueCodes": [],
+      "pairedEvidenceComplete": true,
+      "pairedEvidenceIssueCodes": [],
+      "pairedDeltaReportDigest": "sha256:cd9e0cdd98e6235aa3a6dd9a33121bb6a95386168ccba103581b38f786a735a6",
+      "expectedPairCount": 1,
+      "fullMatrixExplicitlyConfirmed": false,
+      "selectedRunCount": 2,
+      "summarySelectedRunCount": 2,
+      "passed": 2,
+      "failed": 0,
+      "unrun": 0,
+      "spentCostMicroUsd": 0,
+      "stoppedBy": null,
+      "receiptCount": 2,
+      "runPlanCount": 2,
+      "runPlanDigests": [
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+          "digest": "sha256:5409cad4921a5914b8b8b6fd1d5de90686673e4abf4a683a1888e5a407dc7c65",
+          "matrixRunDigest": "sha256:1b6898e1dbe102dedaad526468ff93bfb4d4c621d2acd11d887f4895b8a23284",
+          "provider": "local",
+          "route": "nodeslide/deterministic-compiler",
+          "model": "nodeslide/deterministic-compiler"
+        },
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+          "digest": "sha256:36c3ca132ea1eb116947177d03e55d87907ab303f1c9e33986ef0c65be373a19",
+          "matrixRunDigest": "sha256:6e126af57ac11ea31ff3f5fff6d951b6c9b067eb0906e89ca6fc3b392d1683d6",
+          "provider": "local",
+          "route": "nodeslide/deterministic-compiler",
+          "model": "nodeslide/deterministic-compiler"
+        }
+      ],
+      "receiptDigests": [
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+          "digest": "sha256:60c746ea3360d4ad1646af4bbd407b8445731376a8bb9b65a0f1701dff4b2517",
+          "status": "passed",
+          "returnedModel": "nodeslide/deterministic-compiler"
+        },
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+          "digest": "sha256:7131042b0e0352a8eb04b0c25a8007d913bb87688fa9f5dfcd621ee215972260",
+          "status": "passed",
+          "returnedModel": "nodeslide/deterministic-compiler"
+        }
+      ],
+      "attributedLiveRuns": 0,
+      "validatedRuns": [],
+      "issueCodes": []
+    },
+    {
+      "campaignId": "semantic-contract-v2-control-failclosed-r2",
+      "selection": "deterministic",
+      "executor": "deterministic",
+      "campaignPlanDigest": "sha256:6f2f464143183ef07768e2b62c50475fca02e21d11079dc2ffc0237bd9502c3e",
+      "summaryDigest": "sha256:83f74dd85179d95437ae89709e12d08f16263e5b6b212321e771615916d77b6d",
+      "configurationCompatible": false,
+      "evidenceComplete": false,
+      "evidenceIssueCodes": [
+        "run_plan_matrix_binding_mismatch"
+      ],
+      "pairedEvidenceComplete": false,
+      "pairedEvidenceIssueCodes": [
+        "paired_causal_claim_not_ready",
+        "paired_delta_report_binding_mismatch",
+        "paired_delta_report_incomplete"
+      ],
+      "pairedDeltaReportDigest": "sha256:bb595dc109d68bd44d6872bb441d3767ed16334feb296c272274514bedd7ba1b",
+      "expectedPairCount": 1,
+      "fullMatrixExplicitlyConfirmed": false,
+      "selectedRunCount": 2,
+      "summarySelectedRunCount": 2,
+      "passed": 0,
+      "failed": 2,
+      "unrun": 0,
+      "spentCostMicroUsd": 0,
+      "stoppedBy": null,
+      "receiptCount": 2,
+      "runPlanCount": 2,
+      "runPlanDigests": [
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+          "digest": "sha256:4f4e3455a241ad82149db37ea10afc32640edc4e4277ba84d2a0018ae3fd9d62",
+          "matrixRunDigest": "sha256:1b6898e1dbe102dedaad526468ff93bfb4d4c621d2acd11d887f4895b8a23284",
+          "provider": "local",
+          "route": "nodeslide/deterministic-compiler",
+          "model": "nodeslide/deterministic-compiler"
+        },
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+          "digest": "sha256:d1288bb00906532c25e560896d8993a515e0281992fe2a24161016d8fc45b625",
+          "matrixRunDigest": "sha256:6e126af57ac11ea31ff3f5fff6d951b6c9b067eb0906e89ca6fc3b392d1683d6",
+          "provider": "local",
+          "route": "nodeslide/deterministic-compiler",
+          "model": "nodeslide/deterministic-compiler"
+        }
+      ],
+      "receiptDigests": [
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+          "digest": "sha256:9d228d14907f75fcd6aaa69a02cd7395aa0ec522c6f9fbc2e790291e4d7ed187",
+          "status": "artifact-failure",
+          "returnedModel": "nodeslide/deterministic-compiler"
+        },
+        {
+          "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+          "digest": "sha256:4640ab2345652d6e23fd00a1a70e8e16553ccafce3de50fcd595be722234736e",
+          "status": "artifact-failure",
+          "returnedModel": "nodeslide/deterministic-compiler"
+        }
+      ],
+      "attributedLiveRuns": 0,
+      "validatedRuns": [],
+      "issueCodes": [
+        "cross_format_page_count_mismatch",
+        "generated_claims_missing",
+        "harness_behavior_not_observed",
+        "montage_artifact_missing",
+        "normalized_spec_claim_binding_invalid",
+        "normalized_spec_source_binding_invalid",
+        "per_slide_evidence_missing",
+        "required_fixture_claim_missing",
+        "semantic_hard_gate_failure",
+        "source_lineage_missing",
+        "source_run_digest_invalid",
+        "spec_required_fact_unbound"
+      ]
+    }
+  ]
+}

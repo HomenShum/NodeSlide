@@ -11,6 +11,9 @@ describe('production Convex log observability gate', () => {
       "'logs', '--history', String(history), '--success', '--jsonl', '--prod'",
     );
     expect(source).toContain('const emptyHistory = !cliFailed && eventCount === 0');
+    expect(source).toContain('isRecognizedConvexExecutionRecord(parsed)');
+    expect(source).toContain('unknownJsonRecords: unknownJsonRecordCount');
+    expect(source).toContain('unparsedLines: unparsedLineCount');
     expect(source).toContain("'no-production-events'");
     expect(source).toContain('clearTimeout(fallbackTimer)');
     expect(source).toContain("'local-convex-session'");

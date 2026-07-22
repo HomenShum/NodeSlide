@@ -5,7 +5,9 @@ import type {
   ReactNode,
   PointerEvent as ReactPointerEvent,
 } from 'react';
+import { useState } from 'react';
 import type { ChartData, Slide, SlideElement, ThemeSpec } from '../../../../shared/nodeslide';
+import { isEmbeddedImageData } from '../slidelang/utils';
 import { typesetMathHtml } from './mathTypeset';
 
 interface SlideRendererProps {
@@ -99,7 +101,7 @@ export function SlideRenderer({
 
 function ElementContent({ element, theme }: { element: SlideElement; theme: ThemeSpec }) {
   if (element.kind === 'image') {
-    return element.imageUrl ? (
+    return isEmbeddedImageData(element.imageUrl) ? (
       <img
         className="ns-element-image"
         src={element.imageUrl}
@@ -175,31 +177,7 @@ function ElementContent({ element, theme }: { element: SlideElement; theme: Them
   }
 
   if (element.kind === 'video') {
-    const video = element.video;
-    return video?.url ? (
-      // biome-ignore lint/a11y/useMediaCaption: The structured captions track is rendered when the deck supplies one; silent and illustrative clips may omit it.
-      <video
-        className="ns-element-video"
-        src={mediaFragmentUrl(video.url, video.startAtSeconds, video.endAtSeconds)}
-        poster={video.posterUrl}
-        controls
-        preload="metadata"
-        aria-label={video.title ?? element.altText ?? element.name}
-      >
-        {video.captionsUrl ? (
-          <track
-            default
-            kind="captions"
-            src={video.captionsUrl}
-            srcLang={video.captionsLanguage ?? 'en'}
-          />
-        ) : null}
-      </video>
-    ) : (
-      <div className="ns-element-video-placeholder" role="img" aria-label={element.name}>
-        <span>Video unavailable</span>
-      </div>
-    );
+    return <ConsentBoundVideo element={element} />;
   }
 
   if (element.kind === 'connector') {
@@ -235,6 +213,67 @@ function ElementContent({ element, theme }: { element: SlideElement; theme: Them
   }
 
   return <span className="ns-element-copy">{element.content}</span>;
+}
+
+function ConsentBoundVideo({ element }: { element: SlideElement }) {
+  const [allowedMediaKey, setAllowedMediaKey] = useState<string | null>(null);
+  const video = element.video;
+  const label = video?.title ?? element.altText ?? element.name;
+  if (!video?.url) {
+    return (
+      <div className="ns-element-video-placeholder" role="img" aria-label={label}>
+        <span>Video unavailable</span>
+      </div>
+    );
+  }
+  const mediaKey = consentBoundMediaKey(video);
+  if (allowedMediaKey !== mediaKey) {
+    return (
+      <button
+        className="ns-element-video-placeholder"
+        type="button"
+        aria-label={`Load remote video: ${label}`}
+        onClick={(event) => {
+          event.stopPropagation();
+          setAllowedMediaKey(mediaKey);
+        }}
+      >
+        <strong>{label}</strong>
+        <span>Load remote video</span>
+      </button>
+    );
+  }
+  return (
+    // biome-ignore lint/a11y/useMediaCaption: The structured captions track is rendered when the deck supplies one; silent and illustrative clips may omit it.
+    <video
+      className="ns-element-video"
+      crossOrigin="anonymous"
+      src={mediaFragmentUrl(video.url, video.startAtSeconds, video.endAtSeconds)}
+      poster={video.posterUrl}
+      controls
+      preload="metadata"
+      aria-label={label}
+    >
+      {video.captionsUrl ? (
+        <track
+          default
+          kind="captions"
+          src={video.captionsUrl}
+          srcLang={video.captionsLanguage ?? 'en'}
+        />
+      ) : null}
+    </video>
+  );
+}
+
+function consentBoundMediaKey(video: NonNullable<SlideElement['video']>): string {
+  return JSON.stringify([
+    video.url,
+    video.posterUrl ?? '',
+    video.captionsUrl ?? '',
+    video.startAtSeconds ?? null,
+    video.endAtSeconds ?? null,
+  ]);
 }
 
 function mediaFragmentUrl(url: string, start?: number, end?: number): string {

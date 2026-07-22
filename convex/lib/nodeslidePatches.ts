@@ -6,6 +6,7 @@ import {
   type DeckSnapshot,
   NODESLIDE_ADD_SLIDE_ELEMENT_LIMIT,
   NODESLIDE_ELEMENT_SOURCE_LIMIT,
+  NODESLIDE_EMBEDDED_RASTER_IMAGE_MAX_LENGTH,
   NODESLIDE_GROUP_ID_LIMIT,
   NODESLIDE_GROUP_MEMBER_LIMIT,
   NODESLIDE_SCOPE_ELEMENT_LIMIT,
@@ -14,6 +15,7 @@ import {
   type PatchOperation,
   type PatchScope,
   type SlideElement,
+  isNodeSlideEmbeddedRasterDataUrl,
   operationElementIds,
 } from '../../shared/nodeslide';
 import { validatePatchScope } from '../../shared/nodeslidePatch';
@@ -28,22 +30,16 @@ const MAX_DECK_TITLE_LENGTH = 160;
  * text, styles, and structure. One max-size (700 KB) image fits; a second large one that
  * would overflow version storage is rejected at validation with an honest reason.
  */
-export const NODESLIDE_DECK_EMBEDDED_IMAGE_BUDGET = 700_000;
+export const NODESLIDE_DECK_EMBEDDED_IMAGE_BUDGET = NODESLIDE_EMBEDDED_RASTER_IMAGE_MAX_LENGTH;
 
 /**
- * Whether an added image URL is one of the two legitimate contracts: an embedded
- * data:image (<=700 KB, matching update_image) or a bounded https URL (<=2048 chars,
- * matching the agent planner's own limit). Everything else — javascript:, http:,
- * data:text/*, other schemes, or oversized strings — is rejected so an owner-authored
- * or AI-emitted add_element can never seed a published deck with a viewer-tracking/exfil
- * URL or a payload that overruns the downstream PPTX/Google sync serializer's cap.
+ * Added images must already be embedded bounded raster bytes. Accepting a remote
+ * URL here would let an owner-authored or AI-emitted patch make every viewer contact
+ * a third party. Search/import tools fetch with explicit user consent and embed the
+ * verified raster before they construct a patch.
  */
 export function isAllowedNodeSlideAddedImageUrl(imageUrl: string): boolean {
-  const embedded =
-    /^data:image\/(?:png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=\s]+$/iu.test(imageUrl) &&
-    imageUrl.length <= 700_000;
-  const remote = /^https:\/\/\S+$/iu.test(imageUrl) && imageUrl.length <= 2048;
-  return embedded || remote;
+  return isNodeSlideEmbeddedRasterDataUrl(imageUrl);
 }
 
 export interface NodeSlideCasResult {
@@ -470,18 +466,9 @@ export function validateNodeSlidePatch(
       } else {
         const imageUrl = operation.imageUrl.trim();
         const altText = operation.altText.replace(/\s+/gu, ' ').trim();
-        const isEmbeddedImage =
-          /^data:image\/(?:png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=\s]+$/iu.test(imageUrl);
-        const isUnchangedExistingRemote =
-          imageUrl === element.imageUrl &&
-          /^https:\/\/\S+$/iu.test(imageUrl) &&
-          imageUrl.length <= 2048;
-        const imageUrlAllowed =
-          (isEmbeddedImage && imageUrl.length <= 700_000) || isUnchangedExistingRemote;
+        const imageUrlAllowed = isNodeSlideEmbeddedRasterDataUrl(imageUrl);
         if (!imageUrlAllowed) {
-          errors.push(
-            "update_image requires an embedded PNG, JPEG, WebP, or GIF under 700 KB, or the element's unchanged HTTPS URL for reframing.",
-          );
+          errors.push('update_image requires an embedded PNG, JPEG, WebP, or GIF under 700 KB.');
         }
         if (!altText || altText.length > 320) {
           errors.push('update_image requires alt text between 1 and 320 characters.');
@@ -967,6 +954,11 @@ function validateAddedElement(
   sourceIds: ReadonlySet<string>,
   errors: string[],
 ): void {
+  if (element.authoredArtifactBinding !== undefined) {
+    errors.push(
+      `Added element ${element.id} cannot supply authoredArtifactBinding; canonical authorship is minted only by the server compiler.`,
+    );
+  }
   if (element.sourceIds.length > NODESLIDE_ELEMENT_SOURCE_LIMIT) {
     errors.push(`Added element ${element.id} exceeds the source-reference limit.`);
   }
@@ -990,7 +982,7 @@ function validateAddedElement(
   // the same — the guard must key on the field's presence, exactly as the serializer does.
   if (element.imageUrl && !isAllowedNodeSlideAddedImageUrl(element.imageUrl)) {
     errors.push(
-      `Added element ${element.id} carries an image URL that must be an embedded data:image URL under 700 KB or an https URL under 2048 characters.`,
+      `Added element ${element.id} carries an image URL that must be an embedded data:image URL under 700 KB.`,
     );
   }
 }

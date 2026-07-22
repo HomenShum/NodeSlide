@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "nodeslide.artifact-atlas-v3-release-gates/v1",
+  "atlasVersion": "artifact-atlas-v3",
+  "gates": {
+    "repositoryGates": {
+      "status": "passed",
+      "basis": "Current repository validation is green; exact-main deployment remains a separate gate."
+    },
+    "typedSpecCompiler": {
+      "status": "passed",
+      "basis": "Typed ArtifactSpec validation and deterministic compiler gates passed."
+    },
+    "portabilityPackage": {
+      "status": "passed",
+      "basis": "The immutable package install, upgrade, and mounted consumer journey passed."
+    },
+    "productionJourney": {
+      "status": "pending",
+      "basis": "Requires a post-deploy exact-main production journey receipt."
+    },
+    "fleetAvailability": {
+      "status": "pending",
+      "basis": "Pre-change fleet probes are baseline evidence only; rerun after exact-main deployment."
+    },
+    "atlasUiRenders": {
+      "status": "passed",
+      "basis": "All 43 Atlas frames and the UI/PPTX render set were inspected; the final receipt binds the rebuilt bytes."
+    },
+    "blindPreference": {
+      "status": "pending",
+      "basis": "Only independently identified human judgments may close this gate."
+    },
+    "routingPromotion": {
+      "status": "hold",
+      "basis": "No production routing mutation is authorized."
+    },
+    "fineTuningRun": {
+      "status": "not_authorized",
+      "basis": "Fine-tuning requires separate data, provider, privacy, and budget authorization."
+    }
+  },
+  "publicReleaseApproved": false,
+  "promotionEligible": false
+}

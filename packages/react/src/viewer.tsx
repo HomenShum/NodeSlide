@@ -1,6 +1,7 @@
 import type { ChartData, DeckSnapshot, Slide, SlideElement, ThemeSpec } from '@nodeslide/contracts';
+import { isNodeSlideEmbeddedRasterDataUrl } from '@nodeslide/contracts';
 import { useNodeSlideDeckNavigation } from '@nodeslide/react-headless';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 
 export interface NodeSlideSlideFrameProps {
@@ -177,7 +178,7 @@ export function NodeSlideDeckViewer({
 
 function NodeSlideElementContent({ element, theme }: { element: SlideElement; theme: ThemeSpec }) {
   if (element.kind === 'image') {
-    if (element.imageUrl) {
+    if (isNodeSlideEmbeddedRasterDataUrl(element.imageUrl)) {
       return (
         <img
           alt={element.altText ?? element.name}
@@ -199,32 +200,7 @@ function NodeSlideElementContent({ element, theme }: { element: SlideElement; th
   }
 
   if (element.kind === 'video') {
-    if (!element.video?.url)
-      return <span className="nsx-element-placeholder">Video unavailable</span>;
-    return (
-      // biome-ignore lint/a11y/useMediaCaption: a captions track is included whenever the deck declares one.
-      <video
-        aria-label={element.video.title ?? element.altText ?? element.name}
-        className="nsx-element-media"
-        controls
-        poster={element.video.posterUrl}
-        preload="metadata"
-        src={mediaFragmentUrl(
-          element.video.url,
-          element.video.startAtSeconds,
-          element.video.endAtSeconds,
-        )}
-      >
-        {element.video.captionsUrl ? (
-          <track
-            default
-            kind="captions"
-            src={element.video.captionsUrl}
-            srcLang={element.video.captionsLanguage ?? 'en'}
-          />
-        ) : null}
-      </video>
-    );
+    return <ConsentBoundVideo element={element} />;
   }
 
   if (element.kind === 'chart' && element.chart) {
@@ -252,6 +228,57 @@ function NodeSlideElementContent({ element, theme }: { element: SlideElement; th
   }
 
   return <span>{element.content}</span>;
+}
+
+function ConsentBoundVideo({ element }: { element: SlideElement }) {
+  const [allowedMediaKey, setAllowedMediaKey] = useState<string | null>(null);
+  const video = element.video;
+  const label = video?.title ?? element.altText ?? element.name;
+  if (!video?.url) return <span className="nsx-element-placeholder">Video unavailable</span>;
+  const mediaKey = consentBoundMediaKey(video);
+  if (allowedMediaKey !== mediaKey) {
+    return (
+      <button
+        aria-label={`Load remote video: ${label}`}
+        className="nsx-element-placeholder"
+        type="button"
+        onClick={() => setAllowedMediaKey(mediaKey)}
+      >
+        Load remote video
+      </button>
+    );
+  }
+  return (
+    // biome-ignore lint/a11y/useMediaCaption: a captions track is included whenever the deck declares one.
+    <video
+      aria-label={label}
+      className="nsx-element-media"
+      controls
+      crossOrigin="anonymous"
+      poster={video.posterUrl}
+      preload="metadata"
+      src={mediaFragmentUrl(video.url, video.startAtSeconds, video.endAtSeconds)}
+    >
+      {video.captionsUrl ? (
+        <track
+          default
+          kind="captions"
+          src={video.captionsUrl}
+          srcLang={video.captionsLanguage ?? 'en'}
+        />
+      ) : null}
+    </video>
+  );
+}
+
+function consentBoundMediaKey(video: NonNullable<SlideElement['video']>): string {
+  return JSON.stringify([
+    video.url,
+    video.posterUrl ?? '',
+    video.captionsUrl ?? '',
+    video.startAtSeconds ?? null,
+    video.endAtSeconds ?? null,
+  ]);
 }
 
 function NodeSlideChart({ chart, accent }: { chart: ChartData; accent: string }) {

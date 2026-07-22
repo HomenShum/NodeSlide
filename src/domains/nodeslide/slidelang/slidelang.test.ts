@@ -452,9 +452,15 @@ describe('local SlideLangAdapter', () => {
     expect(html).toContain('<math aria-label="Goals per match">');
     expect(html).toContain('172 ÷ 64 = 2.69');
     expect(html).toContain('data-element-kind="video"');
-    expect(html).toContain('https://example.com/walkthrough.mp4');
-    expect(html).toContain('kind="captions"');
-    expect(html).toContain('https://example.com/walkthrough.vtt');
+    expect(html).toContain('data-nodeslide-video-load');
+    expect(html).toContain('data-video-src="https://example.com/walkthrough.mp4"');
+    expect(html).toContain('data-video-captions="https://example.com/walkthrough.vtt"');
+    expect(html).not.toContain('<video');
+    expect(html).not.toContain('<track');
+    const deckHtml = adapter.renderDeckHtml(snapshot);
+    expect(deckHtml).toContain('target.dataset.videoSrc');
+    expect(deckHtml).toContain('target.dataset.videoCaptions');
+    expect(deckHtml).toContain("video.crossOrigin='anonymous'");
     expect(adapter.getElementCapability(math).pptx).toBe('native');
     expect(adapter.getElementCapability(video).pptx).toBe('static_fallback');
   });

@@ -1,0 +1,14 @@
+{
+  "name": "@nodekit/gym-core",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "Historical NodeGym core package used only for the deterministic upgrade proof.",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  }
+}

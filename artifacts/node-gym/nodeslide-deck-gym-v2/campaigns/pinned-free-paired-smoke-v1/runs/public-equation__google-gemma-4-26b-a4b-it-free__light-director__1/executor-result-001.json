@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "nodekit.gym-executor-result/v1",
+  "runId": "public-equation__google-gemma-4-26b-a4b-it-free__light-director__1",
+  "pairingKey": "sha256:e333810f3064203cd740c4c7966e27d0697e7a0664484ff909f2364151b71957::sha256:c023bbf580cee4b49726c24b280aad5bb067f0bf490aa6af86a77023be3669f2::sha256:f04608945726aa9fa562d1808fc965b11ce5f0736569c07adef8c19b52ce129d::google/gemma-4-26b-a4b-it:free::1::8000:300000:200000:2",
+  "status": "failed",
+  "route": {
+    "mode": "degraded"
+  },
+  "usage": {
+    "latencyMs": 53424,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0
+  },
+  "artifacts": {},
+  "diagnostics": {
+    "estimatedTextOverflowCount": 0,
+    "exportTimedOut": false,
+    "unsupportedClaimCount": 0,
+    "freeModelClaimUnattributed": true,
+    "claimAudit": {
+      "status": "not_run"
+    },
+    "browserRuntimeErrorCount": 0
+  },
+  "issueCodes": [
+    "ui_executor_failed",
+    "executor_diagnostic_unclassified"
+  ]
+}

@@ -59,6 +59,8 @@ describe('NodeSlide v3 visual contract', () => {
     );
     expect(phone).toMatch(/\.ns-toolbar-actions--v3 \.ns-export-menu[\s\S]*display: block/);
     expect(phone).toMatch(/\.ns-toolbar-actions--v3 \.ns-language-menu[\s\S]*display: none/);
+    expect(phone).toMatch(/\.ns-theme-toggle[\s\S]*display: inline-flex/);
+    expect(phone).not.toMatch(/\.ns-theme-toggle,[\s\S]*display: none/);
     expect(phone).toMatch(/\.ns-command-button[\s\S]*display: none/);
     expect(phone).toMatch(/\.ns-navigator,[\s\S]*max-width: none/);
     expect(phone).toMatch(/\.ns-inspector:not\(\.is-collapsed\)[\s\S]*position: fixed/);

@@ -8,7 +8,7 @@ import {
   NODESLIDE_IMAGE_SEARCH_CONSENT,
   type PatchOperation,
 } from '../../../../shared/nodeslide';
-import { DesignInspector, licensedImageCredit } from './DesignInspector';
+import { DesignInspector, licensedImageCredit, readBoundedImageResponse } from './DesignInspector';
 
 /*
  * Behavioural coverage for the license-aware image search in the Design
@@ -21,7 +21,7 @@ import { DesignInspector, licensedImageCredit } from './DesignInspector';
 const licensedResult: LicensedImageResult = {
   id: 'ov-123',
   title: 'Wind turbines at dusk',
-  thumbnailUrl: 'https://api.openverse.org/v1/images/ov-123/thumbnail/',
+  thumbnailUrl: 'https://api.openverse.org/v1/images/ov-123/thumb/',
   url: 'https://live.staticflickr.com/turbines.jpg',
   license: 'BY-SA 4.0',
   licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
@@ -42,6 +42,7 @@ beforeAll(() => {
 afterEach(() => {
   cleanup();
   window.sessionStorage.clear();
+  vi.mocked(fetch).mockClear();
 });
 
 function renderImageInspector(options: {
@@ -108,15 +109,18 @@ describe('Design inspector licensed image search', () => {
     const user = userEvent.setup();
     const onApplyPatch = vi.fn<(operations: PatchOperation[], summary: string) => void>();
     const onSearchImages = vi.fn().mockResolvedValue({ results: [licensedResult] });
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: true,
-      blob: async () => new Blob(['bounded-openverse-raster'], { type: 'image/webp' }),
-    } as Response);
+    vi.mocked(fetch).mockResolvedValueOnce(
+      new Response(new TextEncoder().encode('bounded-openverse-raster'), {
+        headers: { 'content-type': 'image/webp' },
+      }),
+    );
     renderImageInspector({ onApplyPatch, onSearchImages });
 
     await user.type(screen.getByTestId('licensed-image-query'), 'wind turbines');
     await user.click(screen.getByTestId('licensed-image-search-button'));
     expect(onSearchImages).toHaveBeenCalledWith('wind turbines', NODESLIDE_IMAGE_SEARCH_CONSENT);
+    expect(fetch).not.toHaveBeenCalled();
+    expect(screen.queryByRole('img', { name: 'Wind turbines at dusk' })).toBeNull();
 
     await user.click(await screen.findByTestId('licensed-image-ov-123'));
     await waitFor(() => expect(onApplyPatch).toHaveBeenCalledTimes(1));
@@ -129,8 +133,44 @@ describe('Design inspector licensed image search', () => {
     expect(update.credit).toBe(licensedImageCredit(licensedResult));
     expect(update.imageUrl).toMatch(/^data:image\/webp;base64,/u);
     expect(update.imageUrl.length).toBeLessThanOrEqual(680_000);
-    expect(fetch).toHaveBeenCalledWith(licensedResult.thumbnailUrl);
+    expect(fetch).toHaveBeenCalledWith(licensedResult.thumbnailUrl, {
+      credentials: 'omit',
+      redirect: 'error',
+      referrerPolicy: 'no-referrer',
+    });
     expect(summary).toContain('Openverse');
+  });
+
+  it('rejects a result whose thumbnail is outside the exact Openverse API allowlist', async () => {
+    const user = userEvent.setup();
+    const onApplyPatch = vi.fn<(operations: PatchOperation[], summary: string) => void>();
+    const hostileResult = {
+      ...licensedResult,
+      thumbnailUrl: 'https://tracker.example.test/thumbnail.webp',
+    };
+    renderImageInspector({
+      onApplyPatch,
+      onSearchImages: vi.fn().mockResolvedValue({ results: [hostileResult] }),
+    });
+
+    await user.type(screen.getByTestId('licensed-image-query'), 'wind turbines');
+    await user.click(screen.getByTestId('licensed-image-search-button'));
+    await user.click(await screen.findByTestId('licensed-image-ov-123'));
+
+    expect(await screen.findByText(/exact API allowlist/i)).toBeTruthy();
+    expect(fetch).not.toHaveBeenCalled();
+    expect(onApplyPatch).not.toHaveBeenCalled();
+  });
+
+  it('rejects an oversized allowlisted response before buffering its body', async () => {
+    const response = new Response(new Uint8Array([1]), {
+      headers: {
+        'content-length': '8000001',
+        'content-type': 'image/webp',
+      },
+    });
+    await expect(readBoundedImageResponse(response)).rejects.toThrow(/smaller than 8 MB/i);
+    expect(response.bodyUsed).toBe(false);
   });
 
   it('fails closed when the licensed raster cannot be embedded', async () => {

@@ -23,7 +23,7 @@ describe('NodeSlide provider consent authority', () => {
   });
 
   it('requires exact, non-interchangeable operation consent tokens', () => {
-    expect(
+    expect(() =>
       validateNodeSlideProviderChoice(
         'propose_edit',
         'nebius',
@@ -31,11 +31,7 @@ describe('NodeSlide provider consent authority', () => {
         'nebius/zai-org/GLM-5.2',
         'high',
       ),
-    ).toMatchObject({
-      providerMode: 'nebius',
-      providerModel: 'nebius/zai-org/GLM-5.2',
-      providerEffort: 'high',
-    });
+    ).toThrow(/not production-qualified/i);
     expect(
       validateNodeSlideProviderChoice(
         'propose_edit',
@@ -105,6 +101,15 @@ describe('NodeSlide provider consent authority', () => {
         'nebius/zai-org/GLM-5.2',
         'xhigh',
       ),
-    ).toThrow(/does not support the selected reasoning effort/);
+    ).toThrow(/not production-qualified/i);
+    expect(() =>
+      validateNodeSlideProviderChoice(
+        'propose_edit',
+        'openrouter_free',
+        NODESLIDE_OPENROUTER_EDIT_CONSENT,
+        'openrouter/free',
+        'low',
+      ),
+    ).toThrow(/not production-qualified/i);
   });
 });

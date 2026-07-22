@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "nodekit.gym-executor-result/v1",
+  "runId": "public-equation__openai-gpt-oss-20b-free__light-director__1",
+  "pairingKey": "sha256:e333810f3064203cd740c4c7966e27d0697e7a0664484ff909f2364151b71957::sha256:c023bbf580cee4b49726c24b280aad5bb067f0bf490aa6af86a77023be3669f2::sha256:f04608945726aa9fa562d1808fc965b11ce5f0736569c07adef8c19b52ce129d::openai/gpt-oss-20b:free::1::8000:300000:200000:2",
+  "status": "completed",
+  "route": {
+    "mode": "live",
+    "returnedModel": "openai/gpt-oss-20b:free",
+    "attribution": "openrouter · openai/gpt-oss-20b:free · Light effort"
+  },
+  "usage": {
+    "latencyMs": 91407,
+    "inputTokens": 1989,
+    "outputTokens": 934,
+    "costMicroUsd": 0,
+    "repairCount": 0
+  },
+  "artifacts": {
+    "browser": {
+      "path": "artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/gpt-oss-free-paired-smoke-v1/runs/public-equation__openai-gpt-oss-20b-free__light-director__1/editor.png",
+      "digest": "sha256:8875c1d72403c5066fbf666d378fa646e8666c309ce254a8d890129b62165d69",
+      "bytes": 136534,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pptx": {
+      "path": "artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/gpt-oss-free-paired-smoke-v1/runs/public-equation__openai-gpt-oss-20b-free__light-director__1/deck.pptx",
+      "digest": "sha256:2f20dced839f6e40be5bf89e0a94b8795313749358025fe44a5ff89947113d7c",
+      "bytes": 182489,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pdf": {
+      "path": "artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/gpt-oss-free-paired-smoke-v1/runs/public-equation__openai-gpt-oss-20b-free__light-director__1/deck.pdf",
+      "digest": "sha256:2ab6083e3cfff667a899d2890a20bb5bd39bb052d2662183ef0fa681dc431020",
+      "bytes": 409469,
+      "validation": {
+        "status": "passed"
+      },
+      "fidelity": "rasterized-static-fallback",
+      "validationMethod": "source-render-identity-and-pypdf-page-count"
+    }
+  },
+  "diagnostics": {
+    "traceClassification": "live",
+    "estimatedTextOverflowCount": 0,
+    "exportTimedOut": false,
+    "unsupportedClaimCount": 0,
+    "unsupportedClaims": [],
+    "freeModelClaimUnattributed": false,
+    "claimAudit": {
+      "status": "passed",
+      "method": "bounded-forbidden-claim-scan",
+      "unsupportedClaims": []
+    },
+    "browserRuntimeErrorCount": 0,
+    "renderedSlides": 6,
+    "pdfPages": 6
+  },
+  "issueCodes": [
+    "typed_artifact_spec_not_observed"
+  ]
+}

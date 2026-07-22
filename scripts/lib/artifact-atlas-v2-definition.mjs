@@ -813,7 +813,7 @@ function specPayloadFor(artifact) {
   if (artifact.family === 'screenshot')
     return {
       mimeType: 'image/png',
-      digest: 'nodeslide-artifact-lab-v1-gallery-capture',
+      digest: 'sha256:f91425413b65d3c9a7e0f2f457a4879907fd45769d17e6876674707ce4a02948',
       claimId: `${artifact.id}:claim:1`,
       captureVersion: 'artifact-atlas-v1',
       callouts: 3,
@@ -881,7 +881,7 @@ function specPayloadFor(artifact) {
   if (artifact.family === 'product-compare')
     return {
       mimeType: 'image/png',
-      digest: 'nodeslide-product-before-after',
+      digest: 'sha256:b8bae123c91bf1db95cd07c07f6757ddcd7d21966f13d831a86672bf27d1a253',
       claimId: `${artifact.id}:claim:1`,
       captureVersion: 'artifact-atlas-v2',
     };

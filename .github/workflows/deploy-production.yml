@@ -1,4 +1,5 @@
 name: Deploy production
+run-name: Deploy production - ${{ github.event.workflow_run.head_sha || github.sha }}
 
 on:
   workflow_run:
@@ -12,6 +13,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
+  actions: read
   contents: read
 
 jobs:
@@ -31,9 +33,11 @@ jobs:
       name: production
       url: ${{ steps.vercel_deploy.outputs.deployment_url }}
     env:
+      DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
       PROD_CONVEX_URL: https://agile-stoat-411.convex.cloud
       PROD_CONVEX_SITE_URL: https://agile-stoat-411.convex.site
       PROD_WEB_URL: https://nodeslide.vercel.app
+      VITE_GIT_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
     steps:
       - name: Check out the exact CI-tested main commit
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
@@ -45,6 +49,12 @@ jobs:
         with:
           node-version: 22
           package-manager-cache: false
+      - name: Require the current exact main commit and its successful trusted CI run
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$DEPLOY_SHA"
+          node scripts/verify-github-exact-main.mjs "$DEPLOY_SHA"
       - name: Verify production credentials are configured
         shell: bash
         env:
@@ -61,10 +71,7 @@ jobs:
             echo "::error::Missing production secret(s): ${missing[*]}"
             exit 1
           fi
-          if [[ "$CONVEX_DEPLOY_KEY" != prod:agile-stoat-411\|* ]]; then
-            echo "::error::CONVEX_DEPLOY_KEY is not scoped to agile-stoat-411 production."
-            exit 1
-          fi
+          node scripts/verify-production-secret-scopes.mjs
       - name: Install locked dependencies
         run: npm ci
       - name: Install Playwright Chromium
@@ -74,9 +81,11 @@ jobs:
         env:
           VITE_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
           VITE_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
+      - name: Verify the local frontend carries the exact source identity
+        run: node scripts/verify-built-web-identity.mjs dist/index.html "$DEPLOY_SHA"
       - name: Run the local built-bundle smoke gate
         run: node scripts/smoke.mjs
-      - name: Build the exact Vercel production artifact
+      - name: Pull and verify the protected Vercel production project binding
         shell: bash
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -89,15 +98,33 @@ jobs:
             --yes \
             --environment=production \
             --token="$VERCEL_TOKEN"
+          node scripts/verify-vercel-project-binding.mjs .vercel/project.json
+      - name: Build the exact Vercel production artifact
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VITE_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
+          VITE_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
+        run: |
           npx --yes vercel@56.3.2 build \
             --prod \
             --yes \
             --token="$VERCEL_TOKEN"
+          node scripts/verify-built-web-identity.mjs .vercel/output/static/index.html "$DEPLOY_SHA"
+      - name: Recheck exact main immediately before production mutation
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/verify-github-exact-main.mjs "$DEPLOY_SHA"
       - name: Deploy Convex functions to the pinned production deployment
         env:
           CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
-          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
-        run: npx convex deploy --typecheck enable --message "GitHub Actions ${DEPLOY_SHA}"
+        run: |
+          node scripts/write-convex-build-identity.mjs "$DEPLOY_SHA"
+          npx convex deploy --typecheck enable --message "GitHub Actions ${DEPLOY_SHA}"
+      - name: Verify the activated Convex backend carries the exact source identity
+        run: node scripts/verify-convex-build-identity.mjs "$DEPLOY_SHA"
       - name: Deploy the source commit to Vercel production
         id: vercel_deploy
         shell: bash
@@ -105,7 +132,6 @@ jobs:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
           deployment_log="$(mktemp)"
           trap 'rm -f "$deployment_log"' EXIT
@@ -139,7 +165,8 @@ jobs:
         shell: bash
         run: |
           immutable_html="$(mktemp)"
-          trap 'rm -f "$immutable_html"' EXIT
+          canonical_html="$(mktemp)"
+          trap 'rm -f "$immutable_html" "$canonical_html"' EXIT
           npx --yes vercel@56.3.2 curl / \
             --deployment "$DEPLOYMENT_URL" \
             --yes \
@@ -150,3 +177,13 @@ jobs:
             --output "$immutable_html"
           node scripts/verify-deployed-html.mjs .vercel/output/static/index.html "$immutable_html"
           node scripts/live-smoke.mjs "$PROD_WEB_URL"
+          curl \
+            --silent \
+            --show-error \
+            --fail \
+            --location \
+            --max-redirs 0 \
+            --output "$canonical_html" \
+            "$PROD_WEB_URL/"
+          node scripts/verify-deployed-html.mjs .vercel/output/static/index.html "$canonical_html"
+          node scripts/verify-live-web-identity.mjs "$DEPLOY_SHA" "$PROD_WEB_URL/"

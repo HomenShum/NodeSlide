@@ -4,6 +4,7 @@ import type {
   DeckSnapshot,
   ValidationResult,
 } from '../../shared/nodeslide';
+import { nodeSlideArtifactCompilationReceiptLineageMatches } from '../../shared/nodeslideArtifactSpec';
 import { applyDeckPatch } from '../../shared/nodeslidePatch';
 import { nodeslideContentDigest, nodeslideStableId } from './nodeslideIds';
 
@@ -54,6 +55,9 @@ export function candidateValidationReceipt(args: {
     issues: structuredClone(args.validation.issues),
     checkedAt: args.validation.checkedAt,
     toolchainVersion: args.validation.toolchainVersion,
+    ...(args.validation.artifactCompilation
+      ? { artifactCompilation: structuredClone(args.validation.artifactCompilation) }
+      : {}),
   };
 }
 
@@ -70,6 +74,9 @@ export function validationFromCandidateReceipt(
     issues: structuredClone(receipt.issues),
     checkedAt: receipt.checkedAt,
     toolchainVersion: receipt.toolchainVersion,
+    ...(receipt.artifactCompilation
+      ? { artifactCompilation: structuredClone(receipt.artifactCompilation) }
+      : {}),
   };
 }
 
@@ -89,6 +96,18 @@ export function candidateValidationBindingMatches(args: {
   ) {
     return false;
   }
+  if (
+    !nodeSlideArtifactCompilationReceiptLineageMatches(receipt.artifactCompilation, {
+      deckDigest: args.candidateDigest,
+      deckVersion: receipt.deckVersion,
+    }) ||
+    !nodeSlideArtifactCompilationReceiptLineageMatches(args.validation.artifactCompilation, {
+      deckDigest: args.candidateDigest,
+      deckVersion: args.validation.deckVersion,
+    })
+  ) {
+    return false;
+  }
   return validationSemanticDigest(args.validation) === validationSemanticDigest(receipt);
 }
 
@@ -105,6 +124,7 @@ function validationSemanticDigest(
       cleanOk: validation.cleanOk,
       issues: validation.issues,
       toolchainVersion: validation.toolchainVersion,
+      artifactCompilation: validation.artifactCompilation,
     }),
   );
 }

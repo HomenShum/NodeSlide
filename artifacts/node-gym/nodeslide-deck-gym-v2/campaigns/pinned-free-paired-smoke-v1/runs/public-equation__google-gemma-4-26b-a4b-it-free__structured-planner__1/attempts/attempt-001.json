@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "nodekit.gym-run-receipt/v2",
+  "runId": "public-equation__google-gemma-4-26b-a4b-it-free__structured-planner__1",
+  "pairingKey": "sha256:e333810f3064203cd740c4c7966e27d0697e7a0664484ff909f2364151b71957::sha256:c023bbf580cee4b49726c24b280aad5bb067f0bf490aa6af86a77023be3669f2::sha256:f04608945726aa9fa562d1808fc965b11ce5f0736569c07adef8c19b52ce129d::google/gemma-4-26b-a4b-it:free::1::8000:300000:200000:2",
+  "repetition": 1,
+  "planDigest": "sha256:5e129020979cacffdaf78642f831f0d802e63e6c14d51c9ae1f526307317cff8",
+  "executorResultDigest": "sha256:672b68bdddb5d96a2ddb76538c65cc65d2fa2d654cc3c6301369cc00130f4f63",
+  "status": "provider-error",
+  "returnedModel": null,
+  "routeMode": "degraded",
+  "automatedHardGatesPassed": false,
+  "promotionEligible": false,
+  "humanPreference": {
+    "status": "not_run"
+  },
+  "issueCodes": [
+    "browser_artifact_missing",
+    "claim_audit_not_run",
+    "degraded_route",
+    "execution_failed",
+    "free_model_claim_unattributed",
+    "pdf_artifact_missing",
+    "pptx_artifact_missing",
+    "returned_model_attribution_missing",
+    "executor_diagnostic_unclassified",
+    "ui_executor_failed"
+  ],
+  "usage": {
+    "latencyMs": 79109,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0
+  },
+  "artifacts": {},
+  "executor": "ui",
+  "attempt": 1,
+  "recordedAt": "2026-07-22T08:06:00.670Z"
+}

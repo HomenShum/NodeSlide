@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "nodekit.gym-campaign-summary/v1",
+  "campaignId": "pinned-free-artifact-recovery-v1",
+  "campaignPlanDigest": "sha256:9b25709e1af040e88a2d350c41d414a4d7dde6840f7c0248d602586c30be5026",
+  "generatedAt": "2026-07-22T08:11:33.574Z",
+  "selectedRunCount": 2,
+  "attemptedOrResumed": 2,
+  "passed": 0,
+  "failed": 2,
+  "unrun": [],
+  "spentCostMicroUsd": 0,
+  "stoppedBy": null,
+  "pairedCausalClaimReady": false,
+  "promotionEligible": false,
+  "humanPreference": {
+    "status": "not_run"
+  },
+  "runs": [
+    {
+      "runId": "public-equation__google-gemma-4-26b-a4b-it-free__light-director__1",
+      "status": "degraded",
+      "attempt": 1,
+      "issueCodes": [
+        "degraded_route",
+        "metering_not_independently_recovered",
+        "returned_model_attribution_missing",
+        "typed_artifact_spec_not_observed"
+      ]
+    },
+    {
+      "runId": "public-equation__google-gemma-4-26b-a4b-it-free__structured-planner__1",
+      "status": "degraded",
+      "attempt": 1,
+      "issueCodes": [
+        "degraded_route",
+        "metering_not_independently_recovered",
+        "returned_model_attribution_missing",
+        "typed_artifact_spec_not_observed"
+      ]
+    }
+  ]
+}

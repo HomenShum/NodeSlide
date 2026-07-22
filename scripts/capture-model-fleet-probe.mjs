@@ -3,17 +3,70 @@ import { spawn } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { ConvexHttpClient } from 'convex/browser';
+import { api } from '../convex/_generated/api.js';
+import { validateModelFleetReceipt } from './lib/model-fleet-receipt-core.mjs';
+import {
+  assertNodeSlideProductionDeployKey,
+  captureWebDeploymentIdentity,
+  requiredExactMainSha,
+  requiredNodeSlideProductionOrigin,
+  requiredNodeSlideWorkflowRun,
+  validateNodeSlideConvexBuildIdentity,
+  verifyNodeSlideDeploymentRun,
+  verifyNodeSlideExactMainSource,
+} from './lib/production-deployment-identity.mjs';
 
 const outputPath = path.resolve(
-  process.env.MODEL_FLEET_PROBE_OUTPUT ?? 'artifacts/model-fleet/model-fleet-probe.json',
+  option('output') ??
+    process.env.MODEL_FLEET_PROBE_OUTPUT ??
+    'artifacts/model-fleet/model-fleet-probe.json',
 );
+const probeFunction = option('function') ?? process.env.MODEL_FLEET_PROBE_FUNCTION ?? 'runFleet';
+const expectedSchema =
+  option('schema') ?? process.env.MODEL_FLEET_PROBE_SCHEMA ?? 'nodeslide.model-fleet-probe/v1';
+const allowedProbeFunctions = new Map([
+  ['runFleet', 'nodeslide.model-fleet-probe/v1'],
+  ['runFreeRouterFleet', 'nodeslide.free-router-fleet-probe/v1'],
+  ['runFreeRouterStructured', 'nodeslide.free-router-structured-probe/v1'],
+]);
+if (allowedProbeFunctions.get(probeFunction) !== expectedSchema) {
+  fail('Probe function and expected schema are not an allowed pair');
+}
+try {
+  assertNodeSlideProductionDeployKey(process.env.CONVEX_DEPLOY_KEY);
+} catch (error) {
+  fail(error instanceof Error ? error.message : 'Production deployment key scope is invalid');
+}
+const sourceCommit = requiredExactMainSha(
+  process.env.MODEL_FLEET_PROBE_COMMIT_SHA,
+  'MODEL_FLEET_PROBE_COMMIT_SHA',
+);
+const workflowRun = requiredNodeSlideWorkflowRun(
+  process.env.MODEL_FLEET_PROBE_WORKFLOW_RUN_URL,
+  'MODEL_FLEET_PROBE_WORKFLOW_RUN_URL',
+);
+const productionUrl = requiredNodeSlideProductionOrigin(
+  process.env.MODEL_FLEET_PROBE_URL ?? 'https://nodeslide.vercel.app/',
+  'MODEL_FLEET_PROBE_URL',
+);
+const convexClient = new ConvexHttpClient('https://agile-stoat-411.convex.cloud');
+const [verifiedWorkflowRun, exactMainSourceBefore, deploymentIdentity, convexDeploymentIdentity] =
+  await Promise.all([
+    verifyNodeSlideDeploymentRun(workflowRun, sourceCommit),
+    verifyNodeSlideExactMainSource(sourceCommit, process.env.GITHUB_TOKEN),
+    captureWebDeploymentIdentity(productionUrl, sourceCommit),
+    convexClient
+      .query(api.nodeslideBuildIdentity.get, {})
+      .then((identity) => validateNodeSlideConvexBuildIdentity(identity, sourceCommit)),
+  ]);
 const convexBin = path.join(process.cwd(), 'node_modules', 'convex', 'bin', 'main.js');
 const child = spawn(
   process.execPath,
   [
     convexBin,
     'run',
-    'nodeslideModelProbe:runFleet',
+    `nodeslideModelProbe:${probeFunction}`,
     '{}',
     '--prod',
     '--typecheck',
@@ -41,13 +94,27 @@ const exitCode = await new Promise((resolve, reject) => {
 if (exitCode !== 0) fail(`Convex fleet action failed (${safeDiagnostic(stderr)})`);
 
 const receipt = parseReceipt(stdout);
-validateReceipt(receipt);
+try {
+  validateModelFleetReceipt(receipt, expectedSchema);
+} catch (error) {
+  fail(error instanceof Error ? error.message : 'Convex fleet action returned an invalid receipt');
+}
+const exactMainSourceAfter = await verifyNodeSlideExactMainSource(
+  sourceCommit,
+  process.env.GITHUB_TOKEN,
+);
 const artifact = {
   ...receipt,
-  sourceCommit: process.env.GITHUB_SHA ?? null,
+  sourceCommit,
   productionDeployment: 'prod:agile-stoat-411',
+  deploymentIdentity,
+  convexDeploymentIdentity,
+  exactMainSource: {
+    before: exactMainSourceBefore,
+    after: exactMainSourceAfter,
+  },
   verification: {
-    workflowRun: process.env.GITHUB_RUN_ID ? Number(process.env.GITHUB_RUN_ID) : null,
+    workflowRun: verifiedWorkflowRun,
   },
 };
 await mkdir(path.dirname(outputPath), { recursive: true });
@@ -69,25 +136,6 @@ export function parseReceipt(output) {
   }
 }
 
-function validateReceipt(receipt) {
-  if (
-    !receipt ||
-    receipt.schemaVersion !== 'nodeslide.model-fleet-probe/v1' ||
-    !Number.isInteger(receipt.catalogModelCount) ||
-    !Number.isInteger(receipt.probedModelCount) ||
-    !Number.isInteger(receipt.failedModelCount) ||
-    !Array.isArray(receipt.receipts) ||
-    receipt.catalogModelCount !== receipt.probedModelCount ||
-    receipt.receipts.length !== receipt.probedModelCount
-  ) {
-    fail('Convex fleet action returned an invalid receipt shape');
-  }
-  const serialized = JSON.stringify(receipt);
-  if (/"(?:text|errorMessage|accumulatedText)"\s*:/.test(serialized)) {
-    fail('Convex fleet receipt contained a forbidden provider-content field');
-  }
-}
-
 function safeDiagnostic(value) {
   return String(value)
     .replace(/\bBearer\s+[^\s]+/gi, 'Bearer [REDACTED]')
@@ -95,6 +143,11 @@ function safeDiagnostic(value) {
     .replace(/\b[A-Za-z0-9_-]{64,}\b/g, '[REDACTED_LONG_VALUE]')
     .trim()
     .slice(0, 500);
+}
+
+function option(name) {
+  const index = process.argv.indexOf(`--${name}`);
+  return index >= 0 ? process.argv[index + 1] : undefined;
 }
 
 function fail(message) {

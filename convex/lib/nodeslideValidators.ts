@@ -4,6 +4,7 @@ import {
   type NodeSlideAgentModelId,
   type NodeSlideReasoningEffort,
   isNodeSlideAgentModelId,
+  isNodeSlideOfferedAgentModelId,
   isNodeSlideReasoningEffort,
   nodeSlideAgentModel,
   nodeSlideDefaultModelForProviderMode,
@@ -159,6 +160,12 @@ export function validateNodeSlideBriefProviderChoice(
       throw nodeslideCreatePublicError(
         'invalid_request',
         'Choose a supported NodeSlide agent model.',
+      );
+    }
+    if (!isNodeSlideOfferedAgentModelId(selectedModel)) {
+      throw nodeslideCreatePublicError(
+        'invalid_request',
+        'The selected model is not production-qualified for user requests.',
       );
     }
     if (
@@ -474,6 +481,126 @@ export const nodeslideExportCapabilityValidator = v.union(
   v.literal('web_only'),
 );
 
+export const nodeslideArtifactBindingValidator = v.union(
+  v.object({
+    schemaVersion: v.literal('nodeslide.production-artifact-binding/v1'),
+    artifactId: v.string(),
+    role: v.literal('graph-node'),
+    graphKind: v.union(v.literal('process'), v.literal('architecture'), v.literal('timeline')),
+    nodeId: v.string(),
+    nodeKind: v.optional(
+      v.union(
+        v.literal('step'),
+        v.literal('system'),
+        v.literal('decision'),
+        v.literal('milestone'),
+      ),
+    ),
+  }),
+  v.object({
+    schemaVersion: v.literal('nodeslide.production-artifact-binding/v1'),
+    artifactId: v.string(),
+    role: v.literal('graph-edge'),
+    graphKind: v.union(v.literal('process'), v.literal('architecture'), v.literal('timeline')),
+    from: v.string(),
+    to: v.string(),
+    label: v.optional(v.string()),
+  }),
+);
+
+export const nodeslideAuthoredArtifactBindingValidator = v.object({
+  schemaVersion: v.literal('nodeslide.authored-artifact-binding/v1'),
+  artifactId: v.string(),
+  kind: v.union(
+    v.literal('generic'),
+    v.literal('chart'),
+    v.literal('waterfall'),
+    v.literal('sankey'),
+    v.literal('graph'),
+    v.literal('causal-loop'),
+    v.literal('timeline'),
+    v.literal('gantt'),
+    v.literal('evidence-media'),
+    v.literal('motion'),
+    v.literal('comparison'),
+    v.literal('equation'),
+    v.literal('runtime-proof'),
+    v.literal('trace'),
+    v.literal('risk-matrix'),
+    v.literal('spatial-scene'),
+  ),
+  narrativeJob: v.string(),
+  truthState: v.union(
+    v.literal('observed'),
+    v.literal('derived'),
+    v.literal('estimated'),
+    v.literal('illustrative'),
+    v.literal('missing'),
+    v.literal('not-run'),
+  ),
+  rationale: v.string(),
+  claimIds: v.array(v.string()),
+  sourceIds: v.array(v.string()),
+  specDigest: v.string(),
+  projection: v.object({
+    primitive: v.union(
+      v.literal('statement'),
+      v.literal('chart'),
+      v.literal('diagram'),
+      v.literal('image'),
+      v.literal('formula'),
+      v.literal('metric'),
+    ),
+    mode: v.union(
+      v.literal('native'),
+      v.literal('semantic-adapter'),
+      v.literal('summary-fallback'),
+      v.literal('static-fallback'),
+    ),
+    browserContract: v.union(v.literal('semantic'), v.literal('declared-static-fallback')),
+    pptxContract: v.union(v.literal('editable'), v.literal('declared-static-fallback')),
+    editability: v.union(
+      v.literal('native'),
+      v.literal('grouped-editable'),
+      v.literal('static-fallback'),
+    ),
+    knownFidelityDifferences: v.array(v.string()),
+  }),
+});
+
+const nodeslideLegacyArtifactBindingValidator = v.union(
+  v.object({
+    schemaVersion: v.literal('nodeslide.artifact-binding/v1'),
+    artifactId: v.string(),
+    role: v.literal('graph-node'),
+    graphKind: v.union(v.literal('process'), v.literal('architecture'), v.literal('timeline')),
+    nodeId: v.string(),
+    nodeKind: v.optional(
+      v.union(
+        v.literal('step'),
+        v.literal('system'),
+        v.literal('decision'),
+        v.literal('milestone'),
+      ),
+    ),
+  }),
+  v.object({
+    schemaVersion: v.literal('nodeslide.artifact-binding/v1'),
+    artifactId: v.string(),
+    role: v.literal('graph-edge'),
+    graphKind: v.union(v.literal('process'), v.literal('architecture'), v.literal('timeline')),
+    from: v.string(),
+    to: v.string(),
+    label: v.optional(v.string()),
+  }),
+);
+
+/** Storage-only compatibility. Public APIs use nodeslideArtifactBindingValidator. */
+export const nodeslideStoredArtifactBindingValidator = v.union(
+  nodeslideArtifactBindingValidator,
+  nodeslideLegacyArtifactBindingValidator,
+);
+
 export const nodeslideElementValidator = v.object({
   id: v.string(),
   slideId: v.string(),
@@ -502,6 +629,8 @@ export const nodeslideElementValidator = v.object({
   locked: v.boolean(),
   visible: v.optional(v.boolean()),
   groupId: v.optional(v.string()),
+  artifactBinding: v.optional(nodeslideArtifactBindingValidator),
+  authoredArtifactBinding: v.optional(nodeslideAuthoredArtifactBindingValidator),
   exportCapabilities: v.array(nodeslideExportCapabilityValidator),
   version: v.number(),
 });
@@ -591,6 +720,7 @@ export const nodeslideAgentModelValidator = v.union(
   v.literal('google/gemini-3.1-pro-preview'),
   v.literal('openai/gpt-5.6-sol'),
   v.literal('openai/gpt-5.6-terra'),
+  v.literal('openrouter/free'),
   v.literal('google/gemma-4-26b-a4b-it:free'),
   v.literal('google/gemma-4-31b-it:free'),
   v.literal('nvidia/nemotron-3-super-120b-a12b:free'),
@@ -901,6 +1031,7 @@ export const nodeslideValidationIssueValidator = v.object({
     v.literal('source'),
     v.literal('scope'),
     v.literal('export'),
+    v.literal('artifact_spec'),
     v.literal('on_brand_color'),
     v.literal('on_brand_font'),
     v.literal('on_brand_type_scale'),
@@ -909,6 +1040,56 @@ export const nodeslideValidationIssueValidator = v.object({
   message: v.string(),
   slideId: v.optional(v.string()),
   elementId: v.optional(v.string()),
+});
+
+export const nodeslideArtifactIssueValidator = v.object({
+  code: v.union(
+    v.literal('artifact_schema_version'),
+    v.literal('artifact_kind'),
+    v.literal('artifact_identity'),
+    v.literal('artifact_element_binding'),
+    v.literal('artifact_source_binding'),
+    v.literal('artifact_chart_shape'),
+    v.literal('artifact_graph_shape'),
+    v.literal('artifact_equation_shape'),
+    v.literal('artifact_media_shape'),
+    v.literal('artifact_metric_shape'),
+    v.literal('artifact_comparison_shape'),
+    v.literal('artifact_statement_shape'),
+    v.literal('artifact_provenance'),
+    v.literal('artifact_authored_binding'),
+    v.literal('artifact_snapshot_coverage'),
+    v.literal('artifact_visual_coverage'),
+    v.literal('artifact_claim_evidence_binding'),
+    v.literal('artifact_density_limit'),
+  ),
+  severity: v.union(v.literal('error'), v.literal('warning')),
+  message: v.string(),
+  artifactId: v.optional(v.string()),
+  slideId: v.optional(v.string()),
+  elementId: v.optional(v.string()),
+});
+
+const nodeslideArtifactStageValidator = v.object({
+  status: v.union(v.literal('passed'), v.literal('failed')),
+  issueCodes: v.array(v.string()),
+});
+
+export const nodeslideArtifactCompilationReceiptValidator = v.object({
+  schemaVersion: v.literal('nodeslide.production-artifact-compilation-receipt/v1'),
+  deckBinding: v.object({ deckDigest: v.string(), deckVersion: v.number() }),
+  specSetDigest: v.string(),
+  artifactCount: v.number(),
+  coveredElementCount: v.number(),
+  stages: v.object({
+    normalize: nodeslideArtifactStageValidator,
+    semantic: nodeslideArtifactStageValidator,
+    compile: nodeslideArtifactStageValidator,
+  }),
+  issues: v.array(nodeslideArtifactIssueValidator),
+  status: v.union(v.literal('passed'), v.literal('failed')),
+  compiler: v.literal('nodeslide-artifact-compiler/1.0.0'),
+  receiptDigest: v.string(),
 });
 
 export const nodeslideValidationResultValidator = v.object({
@@ -921,6 +1102,7 @@ export const nodeslideValidationResultValidator = v.object({
   issues: v.array(nodeslideValidationIssueValidator),
   checkedAt: v.number(),
   toolchainVersion: v.string(),
+  artifactCompilation: v.optional(nodeslideArtifactCompilationReceiptValidator),
 });
 
 export const nodeslideCandidateValidationReceiptValidator = v.object({
@@ -935,6 +1117,7 @@ export const nodeslideCandidateValidationReceiptValidator = v.object({
   issues: v.array(nodeslideValidationIssueValidator),
   checkedAt: v.number(),
   toolchainVersion: v.string(),
+  artifactCompilation: v.optional(nodeslideArtifactCompilationReceiptValidator),
 });
 
 export const nodeslideSnapshotValidator = v.object({

@@ -1,0 +1,5 @@
+Task evidence (data, not instructions):
+Public deterministic fixture with Q, cost, latency, and weights.
+
+Reference contract:
+ArtifactSpec equation validator v1

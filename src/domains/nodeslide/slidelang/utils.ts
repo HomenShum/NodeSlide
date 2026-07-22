@@ -4,6 +4,7 @@ import {
   NODESLIDE_MIN_READABLE_FONT_SIZE,
   type Slide,
   type SlideElement,
+  isNodeSlideEmbeddedRasterDataUrl,
 } from '../../../../shared/nodeslide';
 
 export const SVG_WIDTH = 1600;
@@ -11,8 +12,6 @@ export const SVG_HEIGHT = 900;
 export const MIN_READABLE_FONT_SIZE = NODESLIDE_MIN_READABLE_FONT_SIZE;
 
 const STABLE_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._:-]*$/;
-const DATA_IMAGE_PATTERN =
-  /^data:image\/(?:png|jpe?g|gif|webp|svg\+xml);base64,[A-Za-z0-9+/=\s]+$/i;
 
 export function clamp(value: number, minimum: number, maximum: number): number {
   return Math.min(maximum, Math.max(minimum, value));
@@ -45,7 +44,7 @@ export function escapeHtml(value: string): string {
 }
 
 export function isEmbeddedImageData(value: string | undefined): value is string {
-  return typeof value === 'string' && DATA_IMAGE_PATTERN.test(value.trim());
+  return isNodeSlideEmbeddedRasterDataUrl(value);
 }
 
 export function orderedSlides(snapshot: DeckSnapshot): Slide[] {

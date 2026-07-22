@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "nodekit.gym-run-receipt/v2",
+  "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+  "pairingKey": "sha256:e333810f3064203cd740c4c7966e27d0697e7a0664484ff909f2364151b71957::sha256:c023bbf580cee4b49726c24b280aad5bb067f0bf490aa6af86a77023be3669f2::sha256:f04608945726aa9fa562d1808fc965b11ce5f0736569c07adef8c19b52ce129d::nodeslide/deterministic-compiler::1::8000:300000:200000:2",
+  "repetition": 1,
+  "planDigest": "sha256:4abde8920c35fd4af7082e2ecca66f192a6c460af077a2df5d419a533682ef51",
+  "executorResultDigest": "sha256:da6a9e0cbdd600983e2e29769bab50f4a5354b90bfcbb7df8638e55c524db6f8",
+  "status": "passed",
+  "returnedModel": "nodeslide/deterministic-compiler",
+  "routeMode": "deterministic",
+  "automatedHardGatesPassed": true,
+  "promotionEligible": false,
+  "humanPreference": {
+    "status": "not_run"
+  },
+  "issueCodes": [],
+  "usage": {
+    "latencyMs": 11,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0
+  },
+  "artifacts": {
+    "browser": {
+      "path": "public/artifact-atlas-v2/quality-cost-equation.png",
+      "digest": "sha256:048a5f299f11037cd3c1ee484a53c95db3a6d352f53411acbde5b9079177c972",
+      "bytes": 79318,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pptx": {
+      "path": "outputs/artifact-atlas-v2/nodeslide-artifact-atlas-v2.pptx",
+      "digest": "sha256:3f8afac5ce771bc5e4a98256e59de0496bd9d3584ac498442b908a2d19c3bd78",
+      "bytes": 5420862,
+      "validation": {
+        "status": "passed"
+      }
+    },
+    "pdf": {
+      "path": "output/pdf/atlas-v2-evidence-region.pdf",
+      "digest": "sha256:78473e2c158b02b34bac658288d893644307a63e96a83f736e8d12146265709c",
+      "bytes": 2697,
+      "validation": {
+        "status": "passed"
+      },
+      "fidelity": "deterministic-evidence-pdf"
+    }
+  },
+  "executor": "deterministic",
+  "attempt": 1,
+  "recordedAt": "2026-07-22T08:03:30.155Z"
+}

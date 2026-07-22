@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "nodekit.gym-campaign-summary/v1",
+  "campaignId": "gpt-oss-free-paired-smoke-v1",
+  "campaignPlanDigest": "sha256:f68bd199b416eb4d49583dd7f4da3147194014bab6bbbc7829ef02636711e308",
+  "generatedAt": "2026-07-22T08:20:38.548Z",
+  "selectedRunCount": 2,
+  "attemptedOrResumed": 2,
+  "passed": 0,
+  "failed": 2,
+  "unrun": [],
+  "spentCostMicroUsd": 0,
+  "stoppedBy": null,
+  "pairedCausalClaimReady": false,
+  "promotionEligible": false,
+  "humanPreference": {
+    "status": "not_run"
+  },
+  "runs": [
+    {
+      "runId": "public-equation__openai-gpt-oss-20b-free__light-director__1",
+      "status": "artifact-failure",
+      "attempt": 1,
+      "issueCodes": ["typed_artifact_spec_not_observed"]
+    },
+    {
+      "runId": "public-equation__openai-gpt-oss-20b-free__structured-planner__1",
+      "status": "degraded",
+      "attempt": 1,
+      "issueCodes": [
+        "degraded_route",
+        "returned_model_attribution_missing",
+        "typed_artifact_spec_not_observed"
+      ]
+    }
+  ]
+}

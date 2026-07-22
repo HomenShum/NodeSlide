@@ -1,10 +1,21 @@
 node_modules/
 dist/
+!scripts/fixtures/node-gym-core-v0.0.1/dist/
+!scripts/fixtures/node-gym-core-v0.0.1/dist/index.js
+!scripts/fixtures/node-gym-core-v0.0.1/dist/index.d.ts
 .env
 .env.*
 *.local
 .convex/
 .DS_Store
+__pycache__/
+*.py[cod]
+
+# Local release-candidate and superseded Gym evidence (final artifacts stay tracked).
+outputs/artifact-atlas-v3/*-rc1.pptx
+outputs/artifact-atlas-v3/*-rc1-montage.png
+outputs/artifact-atlas-v3/*-rc1-rendered/
+outputs/artifact-atlas-v3/*.inspect.ndjson
 
 # TypeScript incremental build cache
 *.tsbuildinfo

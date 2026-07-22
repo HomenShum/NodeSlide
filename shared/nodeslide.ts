@@ -1,7 +1,24 @@
 import type { NodeSlideDataAttachment } from './nodeslideAttachments';
 
+import type {
+  NodeSlideArtifactBinding,
+  NodeSlideArtifactCompilationReceipt,
+  NodeSlideAuthoredArtifactBinding,
+} from './nodeslideArtifactSpec';
+
 export const NODESLIDE_SCHEMA_VERSION = 'nodeslide.slidelang/v1' as const;
 export const NODESLIDE_TOOLCHAIN_VERSION = 'local-slidelang-adapter/1.1.0' as const;
+export const NODESLIDE_EMBEDDED_RASTER_IMAGE_MAX_LENGTH = 700_000;
+
+export function isNodeSlideEmbeddedRasterDataUrl(value: string | undefined): value is string {
+  if (typeof value !== 'string') return false;
+  const normalized = value.trim();
+  return (
+    normalized.length <= NODESLIDE_EMBEDDED_RASTER_IMAGE_MAX_LENGTH &&
+    /^data:image\/(?:png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=\s]+$/iu.test(normalized)
+  );
+}
+
 export const NODESLIDE_AGENT_MODELS = [
   {
     id: 'nebius/zai-org/GLM-5.2',
@@ -122,6 +139,21 @@ export const NODESLIDE_AGENT_MODELS = [
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
   {
+    id: 'openrouter/free',
+    upstreamId: 'openrouter/free',
+    provider: 'openrouter',
+    vendor: 'OpenRouter',
+    label: 'OpenRouter Free Router',
+    description:
+      'Zero-priced dynamic route; NodeSlide records the actual provider-returned model for every accepted run.',
+    costTier: 'free',
+    bestFor: 'Free router robustness and attribution experiments',
+    productionEnabled: false,
+    freeRouterCandidate: true,
+    supportsTemperature: true,
+    supportedEfforts: ['low', 'medium', 'high'],
+  },
+  {
     id: 'google/gemma-4-26b-a4b-it:free',
     upstreamId: 'google/gemma-4-26b-a4b-it:free',
     provider: 'openrouter',
@@ -130,7 +162,7 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Zero-priced OpenRouter route with native structured-output support.',
     costTier: 'free',
     bestFor: 'Free structured deck experiments',
-    productionEnabled: true,
+    productionEnabled: false,
     freeRouterCandidate: true,
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high'],
@@ -158,7 +190,7 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Zero-priced long-context OpenRouter route with native structured output.',
     costTier: 'free',
     bestFor: 'Free long-context deck planning',
-    productionEnabled: true,
+    productionEnabled: false,
     freeRouterCandidate: true,
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high'],
@@ -172,7 +204,7 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Zero-priced OpenRouter route with native structured-output support.',
     costTier: 'free',
     bestFor: 'Free fast iteration and repair',
-    productionEnabled: true,
+    productionEnabled: false,
     freeRouterCandidate: true,
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high'],
@@ -279,6 +311,32 @@ export const NODESLIDE_WEB_RESEARCH_CONSENT = 'nodeslide_web_research_v1' as con
 export const NODESLIDE_LOCAL_BYOK_EDIT_CONSENT = 'nodeslide_local_byok_edit_v1' as const;
 /** Exact consent for sending an image query to the Openverse licensed-media catalog. */
 export const NODESLIDE_IMAGE_SEARCH_CONSENT = 'nodeslide_image_search_v1' as const;
+export const NODESLIDE_OPENVERSE_API_HOST = 'api.openverse.org' as const;
+
+export function nodeSlideOpenverseThumbnailUrl(imageId: string): string | undefined {
+  const normalized = imageId.trim();
+  if (!/^[A-Za-z0-9_-]{1,160}$/u.test(normalized)) return undefined;
+  return `https://${NODESLIDE_OPENVERSE_API_HOST}/v1/images/${encodeURIComponent(normalized)}/thumb/`;
+}
+
+export function isNodeSlideOpenverseThumbnailUrl(value: string): boolean {
+  try {
+    const parsed = new URL(value);
+    const match = parsed.pathname.match(/^\/v1\/images\/([A-Za-z0-9_-]{1,160})\/thumb\/$/u);
+    return (
+      parsed.protocol === 'https:' &&
+      parsed.hostname === NODESLIDE_OPENVERSE_API_HOST &&
+      !parsed.username &&
+      !parsed.password &&
+      !parsed.search &&
+      !parsed.hash &&
+      match !== null &&
+      nodeSlideOpenverseThumbnailUrl(match[1] ?? '') === parsed.href
+    );
+  } catch {
+    return false;
+  }
+}
 
 /** One commercially licensed image candidate returned by the Openverse search action. */
 export interface LicensedImageResult {
@@ -489,6 +547,10 @@ export interface SlideElement {
   visible?: boolean;
   /** Flat group membership. An element can belong to at most one same-slide group. */
   groupId?: string;
+  /** Versioned semantic identity for multi-element artifacts such as directed diagrams. */
+  artifactBinding?: NodeSlideArtifactBinding;
+  /** Canonical pre-geometry intent retained through rendering and downstream projection. */
+  authoredArtifactBinding?: NodeSlideAuthoredArtifactBinding;
   exportCapabilities: ExportCapability[];
   version: number;
 }
@@ -902,6 +964,7 @@ export interface ValidationIssue {
     | 'source'
     | 'scope'
     | 'export'
+    | 'artifact_spec'
     | 'on_brand_color'
     | 'on_brand_font'
     | 'on_brand_type_scale'
@@ -921,6 +984,8 @@ export interface ValidationResult {
   issues: ValidationIssue[];
   checkedAt: number;
   toolchainVersion: string;
+  /** Optional only for rows persisted before ArtifactSpec production enforcement. */
+  artifactCompilation?: NodeSlideArtifactCompilationReceipt;
 }
 
 export interface DeckVersion {
@@ -1106,6 +1171,8 @@ export interface CandidateValidationReceipt {
   issues: ValidationIssue[];
   checkedAt: number;
   toolchainVersion: string;
+  /** Optional only for proposals persisted before ArtifactSpec production enforcement. */
+  artifactCompilation?: NodeSlideArtifactCompilationReceipt;
 }
 
 export interface NodeSlideEditorCapabilityRegistry {
@@ -1135,7 +1202,12 @@ export interface CreateDeckRequest {
   themeId: string;
   route: 'free' | 'balanced' | 'frontier';
   attachments?: NodeSlideDataAttachment[];
+  /** Synthetic production probes only: a one-use bearer retained solely as a digest for cleanup. */
+  productionProbeCleanupToken?: string;
 }
+
+export const NODESLIDE_PRODUCTION_PROBE_CLEANUP_STORAGE_KEY =
+  'nodeslide.productionProbeCleanupToken.v1' as const;
 
 export type { NodeSlideDataAttachment } from './nodeslideAttachments';
 

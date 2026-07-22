@@ -1,6 +1,12 @@
 'use node';
 
-import { type LicensedImageResult, NODESLIDE_IMAGE_SEARCH_CONSENT } from '../../shared/nodeslide';
+import {
+  type LicensedImageResult,
+  NODESLIDE_IMAGE_SEARCH_CONSENT,
+  NODESLIDE_OPENVERSE_API_HOST,
+  nodeSlideOpenverseThumbnailUrl,
+} from '../../shared/nodeslide';
+import { isSafeNodeSlideArtifactSourceUrl } from '../../shared/nodeslideArtifactRegistry.js';
 
 /**
  * License-aware image search against the Openverse catalog.
@@ -14,11 +20,12 @@ import { type LicensedImageResult, NODESLIDE_IMAGE_SEARCH_CONSENT } from '../../
  * - HONEST_STATUS: failures return `{ ok: false, reason }`; no fake successes.
  */
 
-export const OPENVERSE_ALLOWED_HOST = 'api.openverse.org' as const;
+export const OPENVERSE_ALLOWED_HOST = NODESLIDE_OPENVERSE_API_HOST;
 export const OPENVERSE_TIMEOUT_MS = 10_000;
 export const OPENVERSE_MAX_RESPONSE_BYTES = 1_000_000;
 export const OPENVERSE_MAX_RESULTS = 8;
 export const OPENVERSE_MAX_QUERY_LENGTH = 200;
+const OPENVERSE_COMMERCIAL_LICENSES = new Set(['by', 'by-sa', 'cc0', 'pdm']);
 
 export type OpenverseSearchOutcome =
   | { ok: true; results: LicensedImageResult[] }
@@ -62,7 +69,15 @@ export function assertAllowlistedOpenverseUrl(rawUrl: string): void {
   } catch {
     throw new Error('Refusing to fetch a malformed URL.');
   }
-  if (parsed.protocol !== 'https:' || parsed.hostname !== OPENVERSE_ALLOWED_HOST) {
+  if (
+    parsed.protocol !== 'https:' ||
+    parsed.hostname !== OPENVERSE_ALLOWED_HOST ||
+    parsed.port ||
+    parsed.username ||
+    parsed.password ||
+    parsed.pathname !== '/v1/images/' ||
+    parsed.hash
+  ) {
     throw new Error(`Refusing to fetch outside the ${OPENVERSE_ALLOWED_HOST} allowlist.`);
   }
 }
@@ -94,30 +109,43 @@ export function mapOpenverseResults(raw: unknown): LicensedImageResult[] {
   for (const row of rows) {
     if (typeof row !== 'object' || row === null) continue;
     const item = row as OpenverseRawResult;
+    const id = typeof item.id === 'string' ? item.id.trim() : '';
     const url = typeof item.url === 'string' ? item.url : '';
-    if (!url || url.length > 2_000) continue;
-    const license =
-      typeof item.license === 'string' && item.license
-        ? `${item.license.toUpperCase()}${item.license_version ? ` ${item.license_version}` : ''}`
-        : 'Unknown license';
+    const thumbnailUrl = nodeSlideOpenverseThumbnailUrl(id);
+    if (!thumbnailUrl || !isSafeNodeSlideArtifactSourceUrl(url)) continue;
+    const licenseId = typeof item.license === 'string' ? item.license.trim().toLowerCase() : '';
+    const licenseVersion =
+      typeof item.license_version === 'string' && /^\d+(?:\.\d+){0,2}$/u.test(item.license_version)
+        ? item.license_version
+        : '';
+    const licenseUrl = typeof item.license_url === 'string' ? item.license_url : '';
+    if (
+      !OPENVERSE_COMMERCIAL_LICENSES.has(licenseId) ||
+      !isSafeNodeSlideArtifactSourceUrl(licenseUrl)
+    ) {
+      continue;
+    }
+    const license = `${licenseId.toUpperCase()}${licenseVersion ? ` ${licenseVersion}` : ''}`;
+    const foreignLandingUrl =
+      typeof item.foreign_landing_url === 'string' &&
+      isSafeNodeSlideArtifactSourceUrl(item.foreign_landing_url)
+        ? item.foreign_landing_url.slice(0, 2_000)
+        : '';
     mapped.push({
-      id: typeof item.id === 'string' && item.id ? item.id : url,
+      id,
       title: (typeof item.title === 'string' && item.title ? item.title : 'Untitled image').slice(
         0,
         320,
       ),
-      thumbnailUrl: typeof item.thumbnail === 'string' ? item.thumbnail.slice(0, 2_000) : '',
+      thumbnailUrl,
       url,
       license,
-      licenseUrl: typeof item.license_url === 'string' ? item.license_url.slice(0, 2_000) : '',
+      licenseUrl: licenseUrl.slice(0, 2_000),
       creator: (typeof item.creator === 'string' && item.creator
         ? item.creator
         : 'Unknown creator'
       ).slice(0, 160),
-      foreignLandingUrl:
-        typeof item.foreign_landing_url === 'string'
-          ? item.foreign_landing_url.slice(0, 2_000)
-          : '',
+      foreignLandingUrl,
     });
     if (mapped.length >= OPENVERSE_MAX_RESULTS) break;
   }
@@ -140,6 +168,9 @@ export async function searchOpenverseImages(
   try {
     const response = await fetchImpl(searchUrl, {
       headers: { Accept: 'application/json' },
+      redirect: 'error',
+      credentials: 'omit',
+      referrerPolicy: 'no-referrer',
       signal: controller.signal,
     });
     if (!response.ok) {

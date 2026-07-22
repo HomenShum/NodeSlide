@@ -45,7 +45,29 @@ const heavy = {
   toolIds: ['build_waterfall'],
   repairPolicy: 'typed',
 };
-const budget = { maxTokens: 1000, maxLatencyMs: 60000, maxCostMicroUsd: 0, maxRepairs: 1 };
+const budget = {
+  maxTokens: 1000,
+  maxLatencyMs: 60000,
+  maxCostMicroUsd: 0,
+  maxRepairs: 1,
+};
+const trainingSourceDigest = `sha256:${'a'.repeat(64)}`;
+const trainingGovernance = {
+  consentScope: 'training-approved' as const,
+  trainingEligible: true as const,
+  containsPersonalData: false as const,
+  humanReviewComplete: true as const,
+  promotionReady: true as const,
+  sources: [
+    {
+      sourceId: 'public-source',
+      sourceDigest: trainingSourceDigest,
+      license: 'CC0-1.0',
+      consentScope: 'training-approved' as const,
+      trainingUseAllowed: true as const,
+    },
+  ],
+};
 
 function requirePlan(plans: NodeGymRunPlan[], index = 0): NodeGymRunPlan {
   const plan = plans[index];
@@ -56,11 +78,20 @@ function requirePlan(plans: NodeGymRunPlan[], index = 0): NodeGymRunPlan {
 }
 
 function receipt(
-  plan: { runId: string; pairingKey: string; repetition: number },
+  plan: NodeGymRunPlan,
   overrides: Partial<NodeGymRunReceipt> = {},
 ): NodeGymRunReceipt {
   return {
     runId: plan.runId,
+    taskId: plan.task.id,
+    taskClass: plan.task.taskClass,
+    curriculumLevel: plan.task.curriculumLevel,
+    modelId: plan.model.id,
+    harnessId: plan.harness.id,
+    harnessVersion: plan.harness.version,
+    role: plan.harness.role,
+    comparisonKey: plan.comparisonKey,
+    harnessPairingKey: plan.harnessPairingKey,
     pairingKey: plan.pairingKey,
     repetition: plan.repetition,
     status: 'passed',
@@ -101,6 +132,7 @@ describe('portable NodeGym core', () => {
     const fourth = requirePlan(plans, 3);
     assertPairedHarnessRuns(first, fourth);
     expect(first.pairingKey).toBe(fourth.pairingKey);
+    expect(first.harnessPairingKey).toBe(fourth.harnessPairingKey);
   });
 
   it('diagnoses failures and finds a curriculum boundary', () => {
@@ -117,7 +149,11 @@ describe('portable NodeGym core', () => {
       status: 'failed',
       hardGatesPassed: false,
       semanticIssueCodes: ['equation_evaluation_mismatch'],
-      scores: { ...receipt(plan).scores, factualAccuracy: 0.2, visualPreference: 0.4 },
+      scores: {
+        ...receipt(plan).scores,
+        factualAccuracy: 0.2,
+        visualPreference: 0.4,
+      },
     });
     expect(diagnoseNodeGymRun(plan, failed)).toEqual(
       expect.arrayContaining(['semantic-reasoning', 'visual-judgment']),
@@ -126,18 +162,30 @@ describe('portable NodeGym core', () => {
   });
 
   it('keeps promotion advisory and training/shadow outputs bounded', () => {
-    const plan = requirePlan(
-      buildNodeGymMatrix({
-        tasks: [task],
-        models: [model],
-        harnesses: [heavy],
-        budget,
-        repetitions: 1,
-      }),
-    );
+    const promotionPlans = buildNodeGymMatrix({
+      tasks: [task],
+      models: [
+        {
+          ...model,
+          id: 'champion/model:free',
+          route: 'champion/model:free',
+        },
+        model,
+      ],
+      harnesses: [heavy],
+      budget,
+      repetitions: 1,
+    });
+    const championPlan = requirePlan(promotionPlans);
+    const plan = requirePlan(promotionPlans, 1);
     const accepted = receipt(plan);
     const proposal = proposeNodeGymPromotion({
-      champion: [receipt(plan, { runId: 'champion', latencyMs: 10000 })],
+      champion: [
+        receipt(championPlan, {
+          latencyMs: 10000,
+          returnedModel: championPlan.model.route,
+        }),
+      ],
       challenger: [accepted],
       humanPreferencesComplete: true,
       challengerPreferenceWins: 1,
@@ -151,11 +199,15 @@ describe('portable NodeGym core', () => {
         autoApply: false,
       },
     });
-    expect(proposal).toMatchObject({ decision: 'recommend-promotion', autoApply: false });
+    expect(proposal).toMatchObject({
+      decision: 'recommend-promotion',
+      autoApply: false,
+    });
     expect(
       exportNodeGymTrainingEpisode({
         plan,
         receipt: accepted,
+        governance: trainingGovernance,
         taskState: {},
         boundedContext: {},
         toolCalls: [],
@@ -168,7 +220,12 @@ describe('portable NodeGym core', () => {
       selectNodeGymShadowRoute({
         taskClass: 'artifact-spec',
         champions: [
-          { taskClass: 'artifact-spec', model: 'small', harness: 'heavy', eligible: true },
+          {
+            taskClass: 'artifact-spec',
+            model: 'small',
+            harness: 'heavy',
+            eligible: true,
+          },
         ],
         fallback: { model: 'frontier', harness: 'light' },
       }),
@@ -186,7 +243,9 @@ describe('portable NodeGym core', () => {
       }),
     );
     const champion = receipt(plan);
-    const challenger = receipt(plan, { scores: { ...champion.scores, factualAccuracy: 0.7 } });
+    const challenger = receipt(plan, {
+      scores: { ...champion.scores, factualAccuracy: 0.7 },
+    });
     const proposal = proposeNodeGymPromotion({
       champion: [champion],
       challenger: [challenger],
@@ -206,11 +265,15 @@ describe('portable NodeGym core', () => {
       expect.arrayContaining(['insufficient_stable_repetitions', 'protected_dimension_regression']),
     );
 
-    const hiddenPlan = { ...plan, task: { ...plan.task, pool: 'hidden-validation' as const } };
+    const hiddenPlan = {
+      ...plan,
+      task: { ...plan.task, pool: 'hidden-validation' as const },
+    };
     expect(() =>
       exportNodeGymTrainingEpisode({
         plan: hiddenPlan,
         receipt: champion,
+        governance: trainingGovernance,
         taskState: {},
         boundedContext: {},
         toolCalls: [],
@@ -218,5 +281,50 @@ describe('portable NodeGym core', () => {
         repairs: [],
       }),
     ).toThrow('public development pool');
+
+    const episode = {
+      plan,
+      receipt: champion,
+      governance: trainingGovernance,
+      taskState: {},
+      boundedContext: {},
+      toolCalls: [],
+      validationFeedback: [],
+      repairs: [],
+    };
+    expect(() =>
+      exportNodeGymTrainingEpisode({
+        ...episode,
+        governance: {
+          ...trainingGovernance,
+          humanReviewComplete: false as never,
+        },
+      }),
+    ).toThrow('consent, privacy, and human-review gates');
+    expect(() =>
+      exportNodeGymTrainingEpisode({
+        ...episode,
+        taskState: { chainOfThought: 'private reasoning' },
+      }),
+    ).toThrow('hidden reasoning');
+    expect(() =>
+      exportNodeGymTrainingEpisode({
+        ...episode,
+        governance: {
+          ...trainingGovernance,
+          holdoutDigests: [trainingSourceDigest],
+        },
+      }),
+    ).toThrow('held-out digest');
+    const redacted = exportNodeGymTrainingEpisode({
+      ...episode,
+      taskState: { owner: 'owner@example.com', token: 'private-token-value' },
+      governance: {
+        ...trainingGovernance,
+        redactionTokens: ['private-token-value'],
+      },
+    });
+    expect(JSON.stringify(redacted)).not.toContain('owner@example.com');
+    expect(JSON.stringify(redacted)).not.toContain('private-token-value');
   });
 });

@@ -688,19 +688,159 @@ artifact.
 - [x] L0-L4 foundation. Restore receipt truth, repair the audited Atlas, add
       versioned typed artifact specifications, deterministic validation, semantic
       receipts, digest-bound evidence, and regression coverage for all 38 museum
-      artifacts.
-- [x] L5-L7 framework. Commit an immutable 360-run paired Deck Gym V2 matrix and
-      portable contracts for diagnosis, curriculum boundaries, advisory
-      champion/challenger proposals, safe training export, and shadow routing.
-- [ ] L5-L9 evidence campaign. Execute the live matrix, retain browser/PPTX/PDF
-      evidence, obtain blind preference judgments, and prove a stable challenger
-      before any route promotion or production shadow claim.
-- [ ] L10 portability. Prove the packed NodeGym core through install and upgrade
-      in a second consumer before extracting or versioning it as a shared package.
-- [ ] L11 production integration and release. Wire typed artifact compilation
-      through all production generation routes and release only after the
-      independent human gate. Optional fine-tuning remains separately gated.
+      artifacts. The historical repair audit is now a tested, machine-readable
+      23-entry issue-to-slide/artifact/validator/status map at
+      `docs/demo/nodeslide-artifact-semantics-v3/v2-issue-ledger.json`; it binds
+      the exact V2 PowerPoint and attributed visual-inspection digests.
+- [x] L5-L7 executable framework. The Gym configuration now covers curriculum
+      levels 1–8 across 8 tasks, 6 model/router cohorts, 5 executable harness
+      profiles, and 3 repetitions: a validated 720-plan matrix, not 720 completed
+      runs. It includes public-development plus
+      digest-sealed hidden/rotating/live-shadow pools, exact harness and model
+      comparison keys, bounded pair-safe selection, resumable immutable attempts,
+      exact raw-config digest + regenerated matrix-order validation, historical
+      receipt integrity checks, cumulative accounting of paid failed attempts,
+      route/budget/circuit-breaker checks, and one canonical runner-receipt
+      adapter. Labels such as “heavy harness” are not accepted unless they compile
+      to different prompt/context/tool/repair behavior.
+- [x] L5-L7 evidence and training contracts. Evidence-bound evaluation validates
+      normalized specs, numeric facts and claim/source bindings, actual upstream
+      route, per-slide/browser/PPTX/PDF/montage/source-lineage digests, paired
+      deltas with confidence intervals, capability cards, and anonymized blind
+      review packets. Training export is restricted to accepted public-development
+      episodes and fails closed on missing license/consent/provenance/deletion
+      lineage, secrets/PII, duplicate episodes, or holdout contamination.
+- [x] L5-L9 bounded runner and deterministic semantic control, with red history
+      preserved. The r2 light/structured control remains 0/2 because observable
+      harness behavior, normalized claim/fact bindings, per-slide evidence,
+      montage, and source lineage were absent. The corrected r4 control supplies
+      those fields and passes 2/2 at zero provider cost with one complete paired
+      report and `pairedCausalClaimReady: true`. It is still a deterministic
+      equation control—not a live-model result, a full-matrix result, a harness
+      winner, or promotion basis. `promotionEligible` is false and human
+      preference is `not_run`. The bounded Gemma and GPT-OSS failures also remain
+      retained. See `artifacts/node-gym/nodeslide-deck-gym-v2/campaigns/semantic-contract-v2-control-complete-r4/summary.json`
+      and the retained `semantic-contract-v2-control-failclosed-r2/summary.json`.
+- [x] L5-L9 evidence-complete UI executor and protected-fixture retention.
+      `nodekit.gym-ui-evidence-envelope/v1` requires real bytes/SHA-256 for the
+      editor, every browser/PPTX/PDF slide, montage, normalized specs,
+      claim/fact/source lineage, route/harness trace effects, and cleanup. A
+      Gym-created protected workspace is deleted by an owner-authenticated
+      transactional cascade; missing capability, malformed receipt, or non-zero
+      remaining deck/source rows fails the entire run. Focused tests and PDF
+      extraction smoke pass; post-deploy evidence is still required.
+- [ ] L5-L9 live evidence campaign. Execute the coverage-balanced live matrix on
+      authorized runtime fixtures and explicit cost limits, obtain at least three
+      matched repetitions where promotion evidence is required, complete blind
+      human preference judgments, and prove a stable challenger. No route promotion
+      or production adoption follows automatically; `autoApply` remains `false`.
+- [x] L10a portable package proof. Dependency-free `@nodekit/gym-core@0.1.0`
+      passed exact packed clean-install and `0.0.1 → 0.1.0` upgrade proofs in
+      isolated NodeSlide and NodeRoom-domain consumers, including SHA/integrity/
+      lock pins, declarations, runtime exports, and an independent NodeAgent-frame
+      evaluator. See `artifacts/node-gym/node-gym-core-portability-proof.json`.
+- [x] L10b direct NodeRoom repository adoption. The external NodeRoom checkout
+      with unrelated user changes remains untouched. A separate clean integration
+      worktree pinned exact `@nodekit/gym-core@0.1.0` bytes at SHA-256
+      `b8c14013a54fc7419ebfda806553573c4b6e3d1dde2a17f11a61f5ddd88fc0c2`,
+      implements a real room-change-review consumer, and passes exact candidate
+      staging, `npm ci`, direct `nodegym:consumer:proof`, consumer tests, both
+      mandatory NodeAgent smokes, and TypeScript. Release lock, stage receipt,
+      package lock, and consumer receipt agree on the exact bytes. NodeSlide and
+      NodeRoom CI definitions now exercise that staging/direct-proof path. The
+      six-run, three-pair journey remains HOLD with `autoApply: false`, no
+      user-visible fallback, and unchanged human state. Closed 2026-07-22 in
+      [NodeRoom PR #242](https://github.com/HomenShum/NodeRoom/pull/242), merge
+      `c9b699f416a68dfe29298d62b6559690c7ccaa6a`, with green exact-main
+      [CI 29916176474](https://github.com/HomenShum/NodeRoom/actions/runs/29916176474),
+      [conformance 29916177044](https://github.com/HomenShum/NodeRoom/actions/runs/29916177044),
+      and [ProofLoop 29916176323](https://github.com/HomenShum/NodeRoom/actions/runs/29916176323).
+      Follow-up [NodeRoom PR #243](https://github.com/HomenShum/NodeRoom/pull/243)
+      pinned every exercised JavaScript action to a verified Node 24 release and
+      left current main at `83f9b7442065652208f3a641e65bfed2752d5d13`; exact-main
+      [CI 29919737217](https://github.com/HomenShum/NodeRoom/actions/runs/29919737217),
+      [conformance 29919737570](https://github.com/HomenShum/NodeRoom/actions/runs/29919737570),
+      and [ProofLoop 29919737301](https://github.com/HomenShum/NodeRoom/actions/runs/29919737301)
+      passed with zero warning and zero Node 20 annotations. The reusable
+      producer fix is [node-platform PR #8](https://github.com/HomenShum/node-platform/pull/8),
+      merge `5c9aa6443ca8e61dc8886fbf0a0b4a7b72858e63`, exact-main
+      [quality 29918399950](https://github.com/HomenShum/node-platform/actions/runs/29918399950).
+- [x] L11a production semantic guardrail. Creation, candidate validation,
+      edit/repair/propagation, variation persistence, rendering, JSON download,
+      HTML, and PPTX compile the separately versioned eight-kind downstream
+      `nodeslide.production-artifact-spec/v1` projection and retain a digest-bound
+      receipt. Unknown versions/kinds and promoted provenance fail closed.
+      Read-only shadow endpoints never change user output or routing.
+- [x] L11b canonical model-spec-first production architecture. The shared
+      `nodeslide.artifact-spec/v1` runtime registry, TypeScript declarations, and
+      external JSON Schema cover all 16 kinds. Provider schemas select only the
+      brief-relevant slice; canonical specs validate and resolve server-owned
+      source refs before geometry; legacy four-shape input normalizes through an
+      explicit adapter; normalized intent, identity, claims, provenance, source
+      bindings, digest, and fidelity are persisted on primary elements; and each
+      kind compiles through a native primitive, semantic adapter, summary
+      fallback, or declared static fallback. The downstream projection remains
+      distinct and preserves authored intent when present. See
+      `docs/PRODUCTION_ARTIFACT_BOUNDARY.md`.
+- [x] L11c provenance-security and native-geometry closure. Server-owned evidence
+      classes prevent brief/criteria/unfetched links from claiming observation;
+      immutable source/runtime receipts, safe HTTPS URLs, exact source digests,
+      and SHA-256 spec/geometry/materialization/projection/render lineage fail
+      closed. Public/client copies reject model-authored receipts. Waterfall,
+      Sankey, Gantt, risk-matrix, trace, and spatial-scene compile before generic
+      fallback into source-bound grouped editable shapes/connectors/text; focused
+      HTML/PPTX proof verifies editable waterfall shape XML without chart fallback.
+- [x] L11d bounded training/checkpoint/routing contracts. Gym core now constructs
+      observable accepted/rejected pairs, replays a provider-neutral fake
+      checkpoint against disjoint holdouts with no route mutation, enforces
+      metadata freshness/budgets/circuits/exact approval receipts, and escalates
+      typed ambiguity/evidence/semantic/repeat failures. No corpus, external
+      training, challenger approval, or production routing change is claimed.
+- [x] L11e remote-media and model-admission privacy boundary. Browser, package,
+      HTML, and PPTX outputs accept only bounded embedded raster data; remote
+      images remain withheld and remote video/poster/caption URLs enter the DOM
+      only after an explicit click. Openverse metadata/thumbnail retrieval is
+      consented, license-bounded, redirect/size-limited, credential-free, and
+      private-host-safe. Production generation accepts only the eight
+      `productionEnabled` routes; the five free routes remain non-offered Gym
+      qualification candidates. Fleet receipts require provider-returned actual
+      provider/model attribution and never persist response/error text.
+- [x] L11f production cleanup lease and exact deployment identity. The production
+      journey binds a one-use cleanup token before submission, persists only its
+      digest + expiry, deletes by digest + client session if the create response
+      is lost, and has a bounded expiry sweeper. Release/probe scripts require a
+      canonical production origin, a successful exact-main deployment run, the
+      same 40-character SHA in live frontend metadata, and the same compiled
+      Convex build identity. This is implementation/focused-test closure, not a
+      post-deploy receipt.
+- [ ] L11g exact-commit production evidence. Merge the closure tree, pass exact
+      CI/deployment, then run the extended create/edit/reload/PPTX probe plus the
+      authenticated read-only ArtifactSpec/Gym shadow checks and verified
+      zero-retention cleanup, offered-fleet audit, free-candidate qualification,
+      and six-viewport UI QA. A local test or pre-deploy endpoint is not a
+      production-shadow or retention receipt. Record the final SHA/run URLs on
+      the merged closure PR or workflow artifacts: putting a purported final SHA
+      into the commit would create a different SHA and invalidate the evidence.
+- [x] L12 Artifact Atlas V3 release candidate. The 38-artifact typed museum,
+      source/spec/inspection lineage, campaign ledger, reproducible 43-slide
+      PowerPoint, 43 round-trip renders, contact sheet, build/PPTX/visual receipts,
+      and blind-review manifest exist under `outputs/artifact-atlas-v3/` and pass
+      artifact-specific receipt/static checks. Its gate ledger deliberately keeps
+      the exact-main production journey, offered/free fleet qualification, full
+      live matrix, and human preference pending/not-run where evidence is absent.
+      The r4 2/2 deterministic control is narrow control evidence and does not
+      close those gates.
+- [ ] L13 public Atlas release and routing decision. Complete eligible blind
+      comprehension/preference review and the separately approved production
+      routing decision. Automated hard gates establish eligibility, not taste;
+      `publicReleaseApproved` and `promotionEligible` remain `false`.
+- [ ] L14 optional fine-tuning. This is not required for NodeSlide release and
+      remains blocked until there is explicitly authorized licensed/consented
+      data, privacy and deletion controls, clean holdouts, contamination checks,
+      a budget, and a separately approved experiment.
 
-The exact implemented/open boundary and exit criteria are in
-`docs/ARTIFACT_SEMANTICS_MODEL_GYM_GOAL.md`. No item is complete merely because a
-deck rendered, a screenshot exists, or an experiment was planned.
+The original phase design and exit criteria are in
+`docs/ARTIFACT_SEMANTICS_MODEL_GYM_GOAL.md`; the checked/open ledger above is the
+current implementation boundary. No item is complete merely because a deck
+rendered, a screenshot exists, an endpoint exists locally, or an experiment was
+planned.

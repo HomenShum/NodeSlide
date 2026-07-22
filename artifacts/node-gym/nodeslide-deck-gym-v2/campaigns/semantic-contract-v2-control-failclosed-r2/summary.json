@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "nodekit.gym-campaign-summary/v1",
+  "campaignId": "semantic-contract-v2-control-failclosed-r2",
+  "campaignPlanDigest": "sha256:6f2f464143183ef07768e2b62c50475fca02e21d11079dc2ffc0237bd9502c3e",
+  "generatedAt": "2026-07-22T09:31:33.019Z",
+  "selectedRunCount": 2,
+  "attemptedOrResumed": 2,
+  "passed": 0,
+  "failed": 2,
+  "unrun": [],
+  "spentCostMicroUsd": 0,
+  "stoppedBy": null,
+  "pairedCausalClaimReady": false,
+  "pairedDeltaReport": {
+    "status": "incomplete",
+    "reportDigest": "sha256:bb595dc109d68bd44d6872bb441d3767ed16334feb296c272274514bedd7ba1b",
+    "pairCount": 0,
+    "expectedPairCount": 1
+  },
+  "promotionEligible": false,
+  "humanPreference": {
+    "status": "not_run"
+  },
+  "runs": [
+    {
+      "runId": "public-equation__nodeslide-deterministic-compiler__light-director__1",
+      "status": "artifact-failure",
+      "attempt": 1,
+      "issueCodes": [
+        "cross_format_page_count_mismatch",
+        "generated_claims_missing",
+        "harness_behavior_not_observed",
+        "montage_artifact_missing",
+        "normalized_spec_claim_binding_invalid",
+        "normalized_spec_source_binding_invalid",
+        "per_slide_evidence_missing",
+        "required_fixture_claim_missing",
+        "semantic_hard_gate_failure",
+        "source_lineage_missing",
+        "source_run_digest_invalid",
+        "spec_required_fact_unbound"
+      ],
+      "semanticEvaluationDigest": "sha256:4676efe780a36e10c02e2119b95c34700e05b4b88a37878b3cb77e54b539353b",
+      "harnessBehaviorObserved": false
+    },
+    {
+      "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+      "status": "artifact-failure",
+      "attempt": 1,
+      "issueCodes": [
+        "cross_format_page_count_mismatch",
+        "generated_claims_missing",
+        "harness_behavior_not_observed",
+        "montage_artifact_missing",
+        "normalized_spec_claim_binding_invalid",
+        "normalized_spec_source_binding_invalid",
+        "per_slide_evidence_missing",
+        "required_fixture_claim_missing",
+        "semantic_hard_gate_failure",
+        "source_lineage_missing",
+        "source_run_digest_invalid",
+        "spec_required_fact_unbound"
+      ],
+      "semanticEvaluationDigest": "sha256:c60088908d028166324f4043dbcd67cec2bf6c5100a2848e0d90fb5132881ff9",
+      "harnessBehaviorObserved": false
+    }
+  ]
+}

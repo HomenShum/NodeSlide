@@ -15,6 +15,87 @@ describe('NodeSlide durable assistant streaming', () => {
     expect(partialJsonStringField('{"operations":[]}', 'summary')).toBeUndefined();
   });
 
+  it('ignores nested, array, and JSON-looking summary fields', () => {
+    expect(
+      partialJsonStringField(
+        '{"operations":[{"summary":"raw operation text"}],"summary":"Visible top level',
+        'summary',
+      ),
+    ).toBe('Visible top level');
+    expect(
+      partialJsonStringField(
+        '{"operations":{"nested":{"summary":"raw nested text"}},"summary":"Safe prefix',
+        'summary',
+      ),
+    ).toBe('Safe prefix');
+    expect(
+      partialJsonStringField(
+        '{"operations":[{"value":"\\"summary\\":\\"string spoof\\""}]}',
+        'summary',
+      ),
+    ).toBeUndefined();
+    expect(
+      partialJsonStringField('{"operations":[{"summary":"raw operation text', 'summary'),
+    ).toBeUndefined();
+  });
+
+  it('decodes a real escaped top-level key without accepting escaped-key spoofs', () => {
+    expect(partialJsonStringField('{"sum\\u006dary":"Escaped key prefix', 'summary')).toBe(
+      'Escaped key prefix',
+    );
+    expect(
+      partialJsonStringField(
+        '{"not\\"summary":"spoof","summary":"Actual top-level prefix',
+        'summary',
+      ),
+    ).toBe('Actual top-level prefix');
+    expect(
+      partialJsonStringField('{"note":"\\"summary\\": spoof only"}', 'summary'),
+    ).toBeUndefined();
+  });
+
+  it('fails closed when a malformed earlier member precedes summary-looking bytes', () => {
+    expect(
+      partialJsonStringField('{"operations":[,],"summary":"must not stream', 'summary'),
+    ).toBeUndefined();
+    expect(partialJsonStringField('{"note":"bad\\q","summary":"must not stream', 'summary')).toBe(
+      undefined,
+    );
+    expect(partialJsonStringField('{"summary":"bad\\qprefix', 'summary')).toBeUndefined();
+  });
+
+  it('never persists a nested summary before the validated top-level field arrives', async () => {
+    const write = vi.fn(async () => undefined);
+    const projector = createNodeSlideAssistantStreamProjector({ write, minChunkChars: 8 });
+
+    await projector.observe({
+      delta: '',
+      accumulatedText: '{"operations":[{"summary":"raw operation prefix',
+      attempt: 1,
+      repairAttempt: false,
+    });
+    expect(write).not.toHaveBeenCalled();
+    expect(projector.hasStarted()).toBe(false);
+
+    await projector.observe({
+      delta: '',
+      accumulatedText:
+        '{"operations":[{"summary":"raw operation"}],"summary":"Safe assistant prefix',
+      attempt: 1,
+      repairAttempt: false,
+    });
+    expect(write).toHaveBeenCalledOnce();
+    expect(write).toHaveBeenLastCalledWith({
+      content: 'Safe assistant prefix',
+      state: 'streaming',
+    });
+    expect(await projector.complete('Safe assistant prefix completed')).toBe(true);
+    expect(write).toHaveBeenLastCalledWith({
+      content: 'Safe assistant prefix completed',
+      state: 'complete',
+    });
+  });
+
   it('persists bounded live prefixes and completes with the validated summary', async () => {
     const write = vi.fn(async () => undefined);
     const projector = createNodeSlideAssistantStreamProjector({ write, minChunkChars: 8 });
@@ -92,6 +173,25 @@ describe('NodeSlide durable assistant streaming', () => {
     expect(write).toHaveBeenCalledTimes(2);
     expect(write).toHaveBeenLastCalledWith({
       content: "The provider draft exceeded NodeSlide's safe streaming limit and was discarded.",
+      state: 'interrupted',
+    });
+  });
+
+  it('withholds a validated completion that rewrites the persisted prefix', async () => {
+    const write = vi.fn(async () => undefined);
+    const projector = createNodeSlideAssistantStreamProjector({ write, minChunkChars: 8 });
+    await projector.observe({
+      delta: '',
+      accumulatedText: '{"summary":"Visible provider prefix',
+      attempt: 1,
+      repairAttempt: false,
+    });
+
+    expect(await projector.complete('Different validated summary')).toBe(false);
+    expect(projector.wasInterrupted()).toBe(true);
+    expect(write).toHaveBeenLastCalledWith({
+      content:
+        'The validated assistant result did not extend the visible provider prefix and was withheld.',
       state: 'interrupted',
     });
   });

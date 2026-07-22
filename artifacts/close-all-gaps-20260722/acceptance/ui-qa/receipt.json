@@ -1,0 +1,198 @@
+{
+  "schemaVersion": "nodeslide.gap-closure-ui-qa/v1",
+  "productionOrigin": "https://nodeslide.vercel.app",
+  "capturedAt": "2026-07-22T08:54:09.058Z",
+  "status": "failed",
+  "mode": "authorized-production-disposable-sample",
+  "checks": [
+    "app-controlled light and dark themes",
+    "desktop, tablet, and mobile viewports",
+    "UTF-8 without mojibake",
+    "zero horizontal overflow",
+    "zero browser console/page errors",
+    "mobile theme, share, present, export, and inspector reachability",
+    "visible keyboard focus"
+  ],
+  "captures": [
+    {
+      "id": "workspace-desktop-light",
+      "status": "passed",
+      "screenshot": "artifacts/close-all-gaps-20260722/acceptance/ui-qa/workspace-desktop-light.png",
+      "inspection": {
+        "charset": "UTF-8",
+        "mojibakeCount": 0,
+        "horizontalOverflow": false,
+        "theme": "light",
+        "viewport": {
+          "width": 1512,
+          "height": 982
+        },
+        "visibleControls": {
+          "themeDark": true,
+          "themeLight": false,
+          "share": true,
+          "present": true,
+          "export": true,
+          "inspector": true
+        }
+      },
+      "focus": {
+        "tag": "button",
+        "label": "Create or open a NodeSlide deck",
+        "outline": "solid 2px"
+      },
+      "browserErrors": [],
+      "failures": []
+    },
+    {
+      "id": "workspace-desktop-dark",
+      "status": "passed",
+      "screenshot": "artifacts/close-all-gaps-20260722/acceptance/ui-qa/workspace-desktop-dark.png",
+      "inspection": {
+        "charset": "UTF-8",
+        "mojibakeCount": 0,
+        "horizontalOverflow": false,
+        "theme": "dark",
+        "viewport": {
+          "width": 1512,
+          "height": 982
+        },
+        "visibleControls": {
+          "themeDark": false,
+          "themeLight": true,
+          "share": true,
+          "present": true,
+          "export": true,
+          "inspector": true
+        }
+      },
+      "focus": {
+        "tag": "button",
+        "label": "Language and clarity: English",
+        "outline": "solid 2px"
+      },
+      "browserErrors": [],
+      "failures": []
+    },
+    {
+      "id": "workspace-tablet-light",
+      "status": "passed",
+      "screenshot": "artifacts/close-all-gaps-20260722/acceptance/ui-qa/workspace-tablet-light.png",
+      "inspection": {
+        "charset": "UTF-8",
+        "mojibakeCount": 0,
+        "horizontalOverflow": false,
+        "theme": "light",
+        "viewport": {
+          "width": 834,
+          "height": 1112
+        },
+        "visibleControls": {
+          "themeDark": true,
+          "themeLight": false,
+          "share": true,
+          "present": true,
+          "export": true,
+          "inspector": true
+        }
+      },
+      "focus": {
+        "tag": "button",
+        "label": "Create or open a NodeSlide deck",
+        "outline": "solid 2px"
+      },
+      "browserErrors": [],
+      "failures": []
+    },
+    {
+      "id": "workspace-tablet-dark",
+      "status": "passed",
+      "screenshot": "artifacts/close-all-gaps-20260722/acceptance/ui-qa/workspace-tablet-dark.png",
+      "inspection": {
+        "charset": "UTF-8",
+        "mojibakeCount": 0,
+        "horizontalOverflow": false,
+        "theme": "dark",
+        "viewport": {
+          "width": 834,
+          "height": 1112
+        },
+        "visibleControls": {
+          "themeDark": false,
+          "themeLight": true,
+          "share": true,
+          "present": true,
+          "export": true,
+          "inspector": true
+        }
+      },
+      "focus": {
+        "tag": "button",
+        "label": "Share deck",
+        "outline": "solid 2px"
+      },
+      "browserErrors": [],
+      "failures": []
+    },
+    {
+      "id": "workspace-mobile-light",
+      "status": "failed",
+      "screenshot": "artifacts/close-all-gaps-20260722/acceptance/ui-qa/workspace-mobile-light.png",
+      "inspection": {
+        "charset": "UTF-8",
+        "mojibakeCount": 0,
+        "horizontalOverflow": false,
+        "theme": "light",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "visibleControls": {
+          "themeDark": false,
+          "themeLight": false,
+          "share": true,
+          "present": true,
+          "export": true,
+          "inspector": true
+        }
+      },
+      "focus": {
+        "tag": "button",
+        "label": "Create or open a NodeSlide deck",
+        "outline": "solid 2px"
+      },
+      "browserErrors": [],
+      "failures": ["theme control unreachable"]
+    },
+    {
+      "id": "workspace-mobile-dark",
+      "status": "failed",
+      "screenshot": "artifacts/close-all-gaps-20260722/acceptance/ui-qa/workspace-mobile-dark.png",
+      "inspection": {
+        "charset": "UTF-8",
+        "mojibakeCount": 0,
+        "horizontalOverflow": false,
+        "theme": "dark",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "visibleControls": {
+          "themeDark": false,
+          "themeLight": false,
+          "share": true,
+          "present": true,
+          "export": true,
+          "inspector": true
+        }
+      },
+      "focus": {
+        "tag": "button",
+        "label": "Share deck",
+        "outline": "solid 2px"
+      },
+      "browserErrors": [],
+      "failures": ["theme control unreachable"]
+    }
+  ]
+}

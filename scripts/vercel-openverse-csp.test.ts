@@ -15,6 +15,7 @@ describe('production content security policy', () => {
     );
     expect(policy).toContain("script-src 'self'");
     expect(policy).toContain("object-src 'none'");
+    expect(policy).toContain("media-src 'self' data: blob: https:");
     expect(policy).not.toContain('connect-src *');
   });
 });

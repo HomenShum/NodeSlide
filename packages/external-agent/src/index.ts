@@ -1144,10 +1144,7 @@ function assertSlideElement(
   if (element['imageUrl'] !== undefined) {
     const imageUrl = requireString(element['imageUrl'], `${path}.imageUrl`, code);
     if (!isAllowedNodeSlideAddedImageUrl(imageUrl)) {
-      invalid(
-        code,
-        `${path}.imageUrl must be a bounded https URL or supported embedded data:image URL.`,
-      );
+      invalid(code, `${path}.imageUrl must be a supported embedded data:image URL under 700 KB.`);
     }
   }
   assertOptionalTypedString(element, 'altText', path, code, true);

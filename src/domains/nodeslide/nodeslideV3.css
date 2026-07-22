@@ -4549,7 +4549,6 @@
   .nodeslide-studio .ns-version-label,
   .nodeslide-studio .ns-control-group,
   .nodeslide-studio .ns-theme-button,
-  .nodeslide-studio .ns-theme-toggle,
   .nodeslide-studio .ns-language-control,
   .nodeslide-studio .ns-language-menu,
   .nodeslide-studio .ns-reset-view {
@@ -4564,6 +4563,13 @@
 
   .nodeslide-studio .ns-toolbar-actions--v3 {
     gap: 3px;
+  }
+
+  .nodeslide-studio .ns-theme-toggle {
+    display: inline-flex;
+    flex: 0 0 30px;
+    height: 30px;
+    width: 30px;
   }
 
   .nodeslide-studio .ns-toolbar-actions--v3 .ns-toolbar-labeled {

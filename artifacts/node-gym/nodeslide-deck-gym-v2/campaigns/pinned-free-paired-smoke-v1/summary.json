@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "nodekit.gym-campaign-summary/v1",
+  "campaignId": "pinned-free-paired-smoke-v1",
+  "campaignPlanDigest": "sha256:c410596a13a0302d3b393e453fc1bf845843ab5a3457ef9abe93ab2041ef4cd5",
+  "generatedAt": "2026-07-22T08:06:00.674Z",
+  "selectedRunCount": 2,
+  "attemptedOrResumed": 2,
+  "passed": 0,
+  "failed": 2,
+  "unrun": [],
+  "spentCostMicroUsd": 0,
+  "stoppedBy": null,
+  "pairedCausalClaimReady": false,
+  "promotionEligible": false,
+  "humanPreference": {
+    "status": "not_run"
+  },
+  "runs": [
+    {
+      "runId": "public-equation__google-gemma-4-26b-a4b-it-free__light-director__1",
+      "status": "provider-error",
+      "attempt": 1,
+      "issueCodes": [
+        "browser_artifact_missing",
+        "claim_audit_not_run",
+        "degraded_route",
+        "execution_failed",
+        "free_model_claim_unattributed",
+        "pdf_artifact_missing",
+        "pptx_artifact_missing",
+        "returned_model_attribution_missing",
+        "executor_diagnostic_unclassified",
+        "ui_executor_failed"
+      ]
+    },
+    {
+      "runId": "public-equation__google-gemma-4-26b-a4b-it-free__structured-planner__1",
+      "status": "provider-error",
+      "attempt": 1,
+      "issueCodes": [
+        "browser_artifact_missing",
+        "claim_audit_not_run",
+        "degraded_route",
+        "execution_failed",
+        "free_model_claim_unattributed",
+        "pdf_artifact_missing",
+        "pptx_artifact_missing",
+        "returned_model_attribution_missing",
+        "executor_diagnostic_unclassified",
+        "ui_executor_failed"
+      ]
+    }
+  ]
+}

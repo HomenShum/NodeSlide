@@ -9,8 +9,15 @@ import {
   type SlideElement,
   type SourceRecord,
   type ThemeSpec,
+  isNodeSlideEmbeddedRasterDataUrl,
 } from '../../shared/nodeslide';
 import { type SlideContentShape, chooseDeckArchetypes } from '../../shared/nodeslideArchetypes';
+import type { NodeSlideNativeArtifactGeometry } from '../../shared/nodeslideArtifactGeometry.js';
+import {
+  NODESLIDE_AUTHORED_ARTIFACT_BINDING_VERSION,
+  type NodeSlideAuthoredArtifactBinding,
+  nodeSlideArtifactDigest,
+} from '../../shared/nodeslideArtifactSpec';
 import {
   type NodeSlideDataAttachment,
   nodeSlideDataAttachmentShape,
@@ -20,6 +27,15 @@ import {
   resolveCollisions,
   stackBlocks,
 } from '../../shared/nodeslideLayoutMetrics';
+import {
+  type NodeSlideAuthoredArtifactReceipt,
+  type NodeSlideAuthoredArtifactSpec,
+  compileNodeSlideAuthoredArtifact,
+  nodeSlideAuthoredArtifactLinkedUrls,
+  nodeSlideAuthoredArtifactReceiptLineageMatches,
+  nodeSlideAuthoredArtifactSourceInventory,
+  nodeSlideAuthoredArtifactValidationOptions,
+} from './nodeslideAuthoredArtifact';
 import {
   type NodeSlideCompositionCandidateSummary,
   fanOutNodeSlideComposition,
@@ -104,6 +120,12 @@ export interface NodeSlidePlannedSlide {
   formula?: NodeSlidePlannedFormula;
   image?: NodeSlidePlannedImage;
   video?: NodeSlidePlannedVideo;
+  /** Present only when an additive model-authored typed artifact compiled successfully. */
+  authoredArtifactCompilation?: NodeSlideAuthoredArtifactReceipt;
+  /** Normalized model-authored spec retained in the persisted creation record. */
+  authoredArtifactSpec?: NodeSlideAuthoredArtifactSpec;
+  /** Canonical 100x100 native marks bound to the authored compiler receipt. */
+  authoredArtifactGeometry?: NodeSlideNativeArtifactGeometry;
 }
 
 export interface NodeSlideDeckSpec {
@@ -663,7 +685,6 @@ function applyDeterministicBriefPrimitives(slides: NodeSlidePlannedSlide[], prom
       description: 'Goals per match derived from the uploaded tournament totals.',
     };
   }
-
   const scorerRecords = ['top_scorer', 'runner_up'].flatMap((metric) => {
     const record = csvByMetric.get(metric);
     if (!record) return [];
@@ -808,8 +829,13 @@ export function coerceBriefSpec(
 ): NodeSlideDeckSpec {
   const fallback = deterministicBriefSpec(title, brief, attachments);
   if (!isRecord(rawSpec) || !Array.isArray(rawSpec.slides)) return fallback;
+  const artifactValidationOptions = nodeSlideAuthoredArtifactValidationOptions(
+    nodeSlideAuthoredArtifactSourceInventory(brief, attachments),
+  );
   const slides = rawSpec.slides
-    .map((value, index) => coercePlannedSlide(value, fallback.slides[index], index))
+    .map((value, index) =>
+      coercePlannedSlide(value, fallback.slides[index], index, artifactValidationOptions),
+    )
     .filter((slide): slide is NodeSlidePlannedSlide => slide !== null)
     .slice(0, 8);
   if (slides.length < 6) return fallback;
@@ -910,6 +936,12 @@ function buildNodeSlideDeck(input: {
     };
   });
   const linkedSourceIds = [...linkedSources, ...uploadedSources].map((source) => source.id);
+  const authoredSourceIdByRef = new Map<string, string>([
+    ['brief:prompt', sourceBriefId],
+    ['brief:success-criteria', sourceEvidenceId],
+    ...uploadedSources.map((source, index) => [`attachment:${index + 1}`, source.id] as const),
+    ...linkedSources.map((source, index) => [`link:${index + 1}`, source.id] as const),
+  ]);
   const sources: SourceRecord[] = [
     {
       id: sourceBriefId,
@@ -968,6 +1000,7 @@ function buildNodeSlideDeck(input: {
       sourceBriefId,
       sourceEvidenceId,
       linkedSourceIds,
+      authoredSourceIdByRef,
     });
     slides.push(built.slide);
     const designPlan = input.spec.designPlans?.[index];
@@ -1014,8 +1047,32 @@ function buildSlide(input: {
   sourceBriefId: string;
   sourceEvidenceId: string;
   linkedSourceIds: string[];
+  authoredSourceIdByRef: ReadonlyMap<string, string>;
 }): { slide: Slide; elements: SlideElement[] } {
   const { planned, theme } = input;
+  if (
+    planned.authoredArtifactSpec &&
+    planned.authoredArtifactCompilation &&
+    !nodeSlideAuthoredArtifactReceiptLineageMatches(
+      planned.authoredArtifactSpec,
+      planned.authoredArtifactCompilation,
+    )
+  ) {
+    throw new Error(
+      'NodeSlide authored ArtifactSpec failed [artifact_receipt_lineage]: receipt does not bind the exact normalized spec.',
+    );
+  }
+  if (
+    (planned.authoredArtifactCompilation?.geometryDigest === undefined) !==
+      (planned.authoredArtifactGeometry === undefined) ||
+    (planned.authoredArtifactGeometry &&
+      nodeSlideArtifactDigest(planned.authoredArtifactGeometry) !==
+        planned.authoredArtifactCompilation?.geometryDigest)
+  ) {
+    throw new Error(
+      'NodeSlide authored ArtifactSpec failed [artifact_geometry_lineage]: planned geometry does not match the compiler receipt.',
+    );
+  }
   const elements: SlideElement[] = [];
   const add = (element: SlideElement) => {
     elements.push(element);
@@ -1112,7 +1169,9 @@ function buildSlide(input: {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
+  const hasNativeArtifactGeometry = planned.authoredArtifactGeometry !== undefined;
   const hasPrimaryMedia =
+    hasNativeArtifactGeometry ||
     planned.formula !== undefined ||
     planned.image !== undefined ||
     planned.video !== undefined ||
@@ -1120,8 +1179,38 @@ function buildSlide(input: {
   const hasStructuredPrimitive = Boolean(planned.chart || hasPrimaryMedia);
   const hasVisual = hasStructuredPrimitive || planned.metric !== undefined;
   const claimSourceIds = [input.sourceBriefId, ...input.linkedSourceIds];
+  const authoredSourceIds = planned.authoredArtifactCompilation?.sourceRefs.map((sourceRef) => {
+    const sourceId = input.authoredSourceIdByRef.get(sourceRef);
+    if (!sourceId) {
+      throw new Error(
+        `NodeSlide authored ArtifactSpec failed [artifact_source_binding]: unresolved source reference ${sourceRef}.`,
+      );
+    }
+    return sourceId;
+  });
   const evidenceSourceIds =
-    input.linkedSourceIds.length > 0 ? input.linkedSourceIds : [input.sourceEvidenceId];
+    authoredSourceIds ??
+    (input.linkedSourceIds.length > 0 ? input.linkedSourceIds : [input.sourceEvidenceId]);
+  const authoredArtifactBinding: NodeSlideAuthoredArtifactBinding | undefined =
+    planned.authoredArtifactSpec && planned.authoredArtifactCompilation
+      ? {
+          schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_BINDING_VERSION,
+          artifactId: planned.authoredArtifactSpec.id,
+          kind: planned.authoredArtifactSpec.kind,
+          narrativeJob: planned.authoredArtifactSpec.narrativeJob,
+          truthState: planned.authoredArtifactSpec.provenance.truthState,
+          rationale: planned.authoredArtifactSpec.provenance.rationale,
+          claimIds: [...planned.authoredArtifactSpec.claimIds],
+          sourceIds: evidenceSourceIds,
+          specDigest: planned.authoredArtifactCompilation.authoredSpecDigest,
+          projection: {
+            ...planned.authoredArtifactCompilation.projection,
+            knownFidelityDifferences: [
+              ...planned.authoredArtifactCompilation.projection.knownFidelityDifferences,
+            ],
+          },
+        }
+      : undefined;
   const primaryEvidenceSourceId = evidenceSourceIds[0] ?? input.sourceEvidenceId;
   const bodyWidth = isComparison
     ? 0.79
@@ -1309,6 +1398,7 @@ function buildSlide(input: {
           radius: theme.defaultRadius,
         },
         sourceIds: evidenceSourceIds,
+        ...(authoredArtifactBinding ? { authoredArtifactBinding } : {}),
         locked: false,
         exportCapabilities: [...EDITABLE_CAPABILITIES],
       }),
@@ -1369,6 +1459,7 @@ function buildSlide(input: {
           sourceId: primaryEvidenceSourceId,
         },
         sourceIds: evidenceSourceIds,
+        ...(authoredArtifactBinding ? { authoredArtifactBinding } : {}),
         locked: false,
         exportCapabilities:
           planned.formula.syntax === 'latex'
@@ -1387,7 +1478,7 @@ function buildSlide(input: {
 
   if (planned.image) {
     const imageUrl = planned.image.imageUrl ?? planned.image.url;
-    const hasEmbeddedAsset = Boolean(imageUrl);
+    const hasEmbeddedAsset = isNodeSlideEmbeddedRasterDataUrl(imageUrl);
     const credit =
       planned.image.credit ??
       planned.image.caption ??
@@ -1412,9 +1503,10 @@ function buildSlide(input: {
           credit,
           sourceId: primaryEvidenceSourceId,
         },
-        ...(imageUrl ? { imageUrl } : {}),
+        ...(hasEmbeddedAsset ? { imageUrl } : {}),
         altText: planned.image.altText,
         sourceIds: evidenceSourceIds,
+        ...(authoredArtifactBinding ? { authoredArtifactBinding } : {}),
         locked: false,
         exportCapabilities: hasEmbeddedAsset
           ? ['web_native', 'pptx_static_fallback', 'google_importable']
@@ -1485,20 +1577,422 @@ function buildSlide(input: {
     );
   }
 
-  if (planned.diagram) {
+  if (planned.authoredArtifactGeometry && authoredArtifactBinding) {
+    const geometry = planned.authoredArtifactGeometry;
+    const stage = {
+      x: 0.455,
+      y: Math.max(0.43, headlineY + headlineHeight + 0.04),
+      width: 0.475,
+      height: Math.max(0.24, 0.87 - Math.max(0.43, headlineY + headlineHeight + 0.04)),
+    };
+    const nativeElements: SlideElement[] = [];
+    type NativeElementDraft = Omit<
+      SlideElement,
+      | 'id'
+      | 'slideId'
+      | 'version'
+      | 'sourceIds'
+      | 'locked'
+      | 'exportCapabilities'
+      | 'authoredArtifactBinding'
+      | 'groupId'
+    >;
+    const pushNative = (key: string, draft: NativeElementDraft) => {
+      nativeElements.push(
+        element(`native-${geometry.kind}-${key}`, {
+          ...draft,
+          sourceIds: evidenceSourceIds,
+          authoredArtifactBinding,
+          locked: false,
+          exportCapabilities: [...EDITABLE_CAPABILITIES],
+        }),
+      );
+    };
+    const mapX = (value: number) => stage.x + (value / 100) * stage.width;
+    const mapY = (value: number) => stage.y + (value / 100) * stage.height;
+    const mapWidth = (value: number) => (value / 100) * stage.width;
+    const mapHeight = (value: number) => (value / 100) * stage.height;
+    const boundedNativeBox = (x: number, y: number, width: number, height: number): BoundingBox => {
+      const boundedX = Math.max(stage.x, Math.min(stage.x + stage.width - 0.004, x));
+      const boundedY = Math.max(stage.y, Math.min(stage.y + stage.height - 0.004, y));
+      return box(
+        boundedX,
+        boundedY,
+        Math.max(0.004, Math.min(width, stage.x + stage.width - boundedX)),
+        Math.max(0.004, Math.min(height, stage.y + stage.height - boundedY)),
+      );
+    };
+    const pushConnector = (
+      key: string,
+      name: string,
+      role: string,
+      from: { x: number; y: number } | null,
+      to: { x: number; y: number } | null,
+      strokeWidth = 2,
+    ) => {
+      if (!from || !to) return;
+      const start = { x: mapX(from.x), y: mapY(from.y) };
+      const end = { x: mapX(to.x), y: mapY(to.y) };
+      const deltaX = end.x - start.x;
+      const deltaY = end.y - start.y;
+      const distance = Math.max(0.008, Math.hypot(deltaX, deltaY));
+      pushNative(key, {
+        name,
+        kind: 'connector',
+        role,
+        bbox: boundedNativeBox(
+          (start.x + end.x) / 2 - distance / 2,
+          (start.y + end.y) / 2 - 0.006,
+          distance,
+          0.012,
+        ),
+        rotation: (Math.atan2(deltaY, deltaX) * 180) / Math.PI,
+        style: {
+          color: theme.colors.trace,
+          strokeWidth: Math.max(1, Math.min(12, strokeWidth)),
+        },
+      });
+    };
+
+    if (geometry.kind === 'waterfall') {
+      geometry.marks.connectors.forEach((connector, index) =>
+        pushConnector(
+          `connector-${index + 1}`,
+          'Waterfall subtotal connector',
+          'artifact_waterfall_connector',
+          connector.from,
+          connector.to,
+        ),
+      );
+      geometry.marks.bars.forEach((bar, index) => {
+        pushNative(`bar-${index + 1}`, {
+          name: `Waterfall bar: ${bar.label}`,
+          kind: 'shape',
+          role: 'artifact_waterfall_bar',
+          bbox: boundedNativeBox(
+            mapX(bar.x),
+            mapY(bar.y),
+            mapWidth(bar.width),
+            mapHeight(bar.height),
+          ),
+          rotation: 0,
+          content: `${bar.label}\n${bar.value} ${bar.unit}`,
+          style: {
+            fill:
+              bar.id === 'baseline' || bar.id === 'final'
+                ? theme.colors.insight
+                : bar.value >= 0
+                  ? theme.colors.accentSoft
+                  : '#FADBD8',
+            stroke: theme.colors.border,
+            strokeWidth: 1,
+            color: theme.colors.ink,
+            fontFamily: theme.typography.data,
+            fontSize: 14,
+            fontWeight: 650,
+            padding: 6,
+            radius: 4,
+            textAlign: 'center',
+            verticalAlign: 'middle',
+          },
+        });
+      });
+    } else if (geometry.kind === 'sankey') {
+      geometry.marks.links.forEach((link, index) => {
+        pushConnector(
+          `link-${index + 1}`,
+          `Sankey flow: ${link.source} to ${link.target}`,
+          'artifact_sankey_link',
+          link.from,
+          link.to,
+          link.width * 1.15,
+        );
+        if (link.from && link.to) {
+          pushNative(`link-label-${index + 1}`, {
+            name: 'Sankey flow value',
+            kind: 'text',
+            role: 'artifact_sankey_value',
+            bbox: boundedNativeBox(
+              mapX((link.from.x + link.to.x) / 2) - 0.04,
+              mapY((link.from.y + link.to.y) / 2) - 0.018,
+              0.08,
+              0.036,
+            ),
+            rotation: 0,
+            content: `${link.value} ${geometry.marks.unit}`,
+            style: {
+              fill: theme.colors.canvas,
+              color: theme.colors.ink,
+              fontFamily: theme.typography.data,
+              fontSize: 14,
+              fontWeight: 650,
+              textAlign: 'center',
+              verticalAlign: 'middle',
+            },
+          });
+        }
+      });
+      geometry.marks.nodes.forEach((node, index) => {
+        pushNative(`node-${index + 1}`, {
+          name: `Sankey node: ${node.label}`,
+          kind: 'shape',
+          role: 'artifact_sankey_node',
+          bbox: boundedNativeBox(
+            mapX(node.x) - 0.018,
+            mapY(node.y),
+            Math.max(0.055, mapWidth(node.width) + 0.036),
+            mapHeight(node.height),
+          ),
+          rotation: 0,
+          content: node.label,
+          style: {
+            fill: theme.colors.insight,
+            stroke: theme.colors.accent,
+            strokeWidth: 1,
+            color: theme.colors.insightInk,
+            fontFamily: theme.typography.body,
+            fontSize: 14,
+            fontWeight: 650,
+            padding: 5,
+            radius: 6,
+            textAlign: 'center',
+            verticalAlign: 'middle',
+          },
+        });
+      });
+    } else if (geometry.kind === 'gantt') {
+      geometry.marks.dependencies.forEach((dependency, index) =>
+        pushConnector(
+          `dependency-${index + 1}`,
+          `Gantt dependency: ${dependency.dependencyId} to ${dependency.taskId}`,
+          'artifact_gantt_dependency',
+          dependency.from,
+          dependency.to,
+        ),
+      );
+      geometry.marks.tasks.forEach((task, index) => {
+        pushNative(`task-${index + 1}`, {
+          name: `Gantt task: ${task.label}`,
+          kind: 'shape',
+          role: 'artifact_gantt_task',
+          bbox: boundedNativeBox(
+            mapX(task.x),
+            mapY(task.y),
+            mapWidth(task.width),
+            mapHeight(task.height),
+          ),
+          rotation: 0,
+          content: `${task.label}\n${Math.round(task.confidence * 100)}% confidence`,
+          style: {
+            fill: theme.colors.accent,
+            opacity: task.opacity,
+            color: theme.colors.canvas,
+            fontFamily: theme.typography.body,
+            fontSize: 14,
+            fontWeight: 650,
+            padding: 6,
+            radius: 5,
+            verticalAlign: 'middle',
+          },
+        });
+      });
+      pushNative('domain', {
+        name: 'Gantt time domain',
+        kind: 'text',
+        role: 'artifact_gantt_domain',
+        bbox: box(stage.x, stage.y + stage.height + 0.004, stage.width, 0.03),
+        rotation: 0,
+        content: `${geometry.marks.domain.min}–${geometry.marks.domain.max} ${geometry.marks.domain.unit}`,
+        style: {
+          color: theme.colors.muted,
+          fontFamily: theme.typography.data,
+          fontSize: 14,
+          textAlign: 'center',
+        },
+      });
+    } else if (geometry.kind === 'risk-matrix') {
+      geometry.marks.risks.forEach((risk, index) => {
+        const radiusX = Math.max(0.018, mapWidth(risk.radius));
+        const radiusY = Math.max(0.018, mapHeight(risk.radius));
+        pushNative(`risk-${index + 1}`, {
+          name: `Risk marker: ${risk.label}`,
+          kind: 'shape',
+          role: 'artifact_risk_marker',
+          bbox: boundedNativeBox(
+            mapX(risk.x) - radiusX,
+            mapY(risk.y) - radiusY,
+            radiusX * 2,
+            radiusY * 2,
+          ),
+          rotation: 0,
+          style: {
+            fill: theme.colors.accent,
+            stroke: theme.colors.insightInk,
+            strokeWidth: 1,
+            radius: 999,
+          },
+          altText: `${risk.label}; likelihood ${risk.likelihood}; impact ${risk.impact}`,
+        });
+        pushNative(`risk-label-${index + 1}`, {
+          name: `Risk label: ${risk.label}`,
+          kind: 'text',
+          role: 'artifact_risk_label',
+          bbox: boundedNativeBox(mapX(risk.x) - 0.06, mapY(risk.y) + radiusY + 0.004, 0.12, 0.04),
+          rotation: 0,
+          content: risk.label,
+          style: {
+            color: theme.colors.ink,
+            fontFamily: theme.typography.body,
+            fontSize: 14,
+            fontWeight: 650,
+            textAlign: 'center',
+          },
+        });
+      });
+      const axis = geometry.marks;
+      const axisLabels: Array<[string, string, number, number]> = [
+        ['likelihood-low', axis.likelihoodAxis.low, stage.x, stage.y + stage.height - 0.03],
+        [
+          'likelihood-high',
+          axis.likelihoodAxis.high,
+          stage.x + stage.width - 0.12,
+          stage.y + stage.height - 0.03,
+        ],
+        ['impact-low', axis.impactAxis.low, stage.x, stage.y + stage.height - 0.065],
+        ['impact-high', axis.impactAxis.high, stage.x, stage.y],
+      ];
+      for (const [key, label, x, y] of axisLabels) {
+        pushNative(`axis-${key}`, {
+          name: `Risk axis: ${label}`,
+          kind: 'text',
+          role: 'artifact_risk_axis',
+          bbox: boundedNativeBox(x, y, 0.12, 0.035),
+          rotation: 0,
+          content: label,
+          style: {
+            color: theme.colors.muted,
+            fontFamily: theme.typography.data,
+            fontSize: 14,
+          },
+        });
+      }
+    } else if (geometry.kind === 'trace') {
+      geometry.marks.spans.forEach((span, index) => {
+        pushNative(`span-${index + 1}`, {
+          name: `Trace span: ${span.spanId}`,
+          kind: 'shape',
+          role: 'artifact_trace_span',
+          bbox: boundedNativeBox(
+            mapX(span.x),
+            mapY(span.y),
+            mapWidth(span.width),
+            mapHeight(span.height),
+          ),
+          rotation: 0,
+          content:
+            span.durationMs === null
+              ? `${span.spanId}\nTiming not supplied`
+              : `${span.spanId}\n${span.durationMs} ms`,
+          style: {
+            fill: span.parentSpanId ? theme.colors.accentSoft : theme.colors.insight,
+            stroke: theme.colors.trace,
+            strokeWidth: 1,
+            color: theme.colors.ink,
+            fontFamily: theme.typography.data,
+            fontSize: 14,
+            padding: 5,
+            radius: 4,
+            verticalAlign: 'middle',
+          },
+        });
+      });
+      pushNative('domain', {
+        name: 'Trace time domain',
+        kind: 'text',
+        role: 'artifact_trace_domain',
+        bbox: box(stage.x, stage.y + stage.height + 0.004, stage.width, 0.03),
+        rotation: 0,
+        content: `${geometry.marks.domain.min}–${geometry.marks.domain.max} ms`,
+        style: {
+          color: theme.colors.muted,
+          fontFamily: theme.typography.data,
+          fontSize: 14,
+          textAlign: 'center',
+        },
+      });
+    } else if (geometry.kind === 'spatial-scene') {
+      geometry.marks.viewports.forEach((viewport, index) => {
+        pushNative(`viewport-${index + 1}`, {
+          name: `Spatial viewport: ${viewport.id}`,
+          kind: 'shape',
+          role: 'artifact_spatial_viewport',
+          bbox: boundedNativeBox(
+            mapX(viewport.x),
+            mapY(viewport.y),
+            mapWidth(viewport.width),
+            mapHeight(viewport.height),
+          ),
+          rotation: 0,
+          content: `${viewport.id}${viewport.selectedNodeId ? `\nSelected: ${viewport.selectedNodeId}` : ''}`,
+          style: {
+            fill: index === 0 ? theme.colors.accentSoft : theme.colors.insight,
+            opacity: 0.25 + Math.min(0.6, index * 0.12),
+            stroke: theme.colors.trace,
+            strokeWidth: 2,
+            color: theme.colors.ink,
+            fontFamily: theme.typography.body,
+            fontSize: 14,
+            fontWeight: 650,
+            padding: 8,
+            radius: 6,
+          },
+        });
+      });
+      pushNative('legend', {
+        name: 'Spatial viewport legend',
+        kind: 'text',
+        role: 'artifact_spatial_legend',
+        bbox: box(stage.x, stage.y + stage.height + 0.004, stage.width, 0.03),
+        rotation: 0,
+        content: 'Nested viewport scale · editable native geometry',
+        style: {
+          color: theme.colors.muted,
+          fontFamily: theme.typography.data,
+          fontSize: 14,
+          textAlign: 'center',
+        },
+      });
+    }
+
+    if (nativeElements.length === 0 || nativeElements.length > 16) {
+      throw new Error(
+        `NodeSlide authored ArtifactSpec failed [artifact_native_mark_budget]: ${geometry.kind} materialized ${nativeElements.length} elements; expected 1-16.`,
+      );
+    }
+    const groupId = nodeslideStableId(
+      'group',
+      input.slideId,
+      authoredArtifactBinding.artifactId,
+      geometry.kind,
+    );
+    for (const nativeElement of nativeElements) {
+      nativeElement.groupId = groupId;
+      add(nativeElement);
+    }
+    rightColumnBottom = Math.max(rightColumnBottom ?? 0, stage.y + stage.height + 0.034);
+  }
+
+  if (planned.diagram && !hasNativeArtifactGeometry) {
+    const diagram = planned.diagram;
+    const diagramArtifactId =
+      authoredArtifactBinding?.artifactId ?? nodeslideStableId('artifact_graph', input.slideId);
     const diagramX = 0.42;
     const diagramY = Math.max(0.43, headlineY + headlineHeight + 0.04);
     const diagramWidth = 0.51;
     const diagramHeight = Math.max(0.24, 0.87 - diagramY);
-    const positions = layoutDiagramNodes(
-      planned.diagram,
-      diagramX,
-      diagramY,
-      diagramWidth,
-      diagramHeight,
-    );
+    const positions = layoutDiagramNodes(diagram, diagramX, diagramY, diagramWidth, diagramHeight);
     const positionsById = new Map(positions.map((position) => [position.id, position]));
-    planned.diagram.edges.forEach((edge, edgeIndex) => {
+    diagram.edges.forEach((edge, edgeIndex) => {
       const from = positionsById.get(edge.from);
       const to = positionsById.get(edge.to);
       if (!from || !to) return;
@@ -1533,14 +2027,24 @@ function buildSlide(input: {
           ),
           rotation: (Math.atan2(deltaY, deltaX) * 180) / Math.PI,
           style: { color: theme.colors.trace, strokeWidth: 2 },
+          artifactBinding: {
+            schemaVersion: 'nodeslide.production-artifact-binding/v1',
+            artifactId: diagramArtifactId,
+            role: 'graph-edge',
+            graphKind: diagram.kind,
+            from: edge.from,
+            to: edge.to,
+            ...(edge.label ? { label: edge.label } : {}),
+          },
           sourceIds: evidenceSourceIds,
+          ...(authoredArtifactBinding ? { authoredArtifactBinding } : {}),
           locked: false,
           exportCapabilities: [...EDITABLE_CAPABILITIES],
         }),
       );
     });
     positions.forEach((position, nodeIndex) => {
-      const node = planned.diagram?.nodes[nodeIndex];
+      const node = diagram.nodes[nodeIndex];
       if (!node) return;
       add(
         element(`diagram-node-${node.id}`, {
@@ -1567,7 +2071,16 @@ function buildSlide(input: {
             textAlign: 'center',
             verticalAlign: 'middle',
           },
-          sourceIds: claimSourceIds,
+          artifactBinding: {
+            schemaVersion: 'nodeslide.production-artifact-binding/v1',
+            artifactId: diagramArtifactId,
+            role: 'graph-node',
+            graphKind: diagram.kind,
+            nodeId: node.id,
+            ...(node.kind ? { nodeKind: node.kind } : {}),
+          },
+          sourceIds: evidenceSourceIds,
+          ...(authoredArtifactBinding ? { authoredArtifactBinding } : {}),
           locked: false,
           exportCapabilities: [...EDITABLE_CAPABILITIES],
         }),
@@ -1575,7 +2088,7 @@ function buildSlide(input: {
     });
   }
 
-  if (planned.chart) {
+  if (planned.chart && !hasNativeArtifactGeometry) {
     const labels = planned.chart.labels.slice(0, 8);
     const values = planned.chart.values.slice(0, labels.length);
     const chartAlone = !(hasPrimaryMedia || planned.metric);
@@ -1605,6 +2118,7 @@ function buildSlide(input: {
           sourceId: primaryEvidenceSourceId,
         },
         sourceIds: evidenceSourceIds,
+        ...(authoredArtifactBinding ? { authoredArtifactBinding } : {}),
         locked: false,
         exportCapabilities: [...EDITABLE_CAPABILITIES],
       }),
@@ -1743,6 +2257,7 @@ function coercePlannedSlide(
   value: unknown,
   fallback: NodeSlidePlannedSlide | undefined,
   index: number,
+  artifactValidationOptions: ReturnType<typeof nodeSlideAuthoredArtifactValidationOptions>,
 ): NodeSlidePlannedSlide | null {
   if (!isRecord(value)) return fallback ?? null;
   const title = cleanField(value.title, fallback?.title ?? `Slide ${index + 1}`, 80);
@@ -1756,15 +2271,31 @@ function coercePlannedSlide(
         .filter(Boolean)
         .slice(0, 3)
     : (fallback?.bullets ?? []);
+  const authoredArtifact =
+    value.artifactSpec === undefined
+      ? undefined
+      : compileNodeSlideAuthoredArtifact(value.artifactSpec, artifactValidationOptions);
   const metric =
-    typeof value.metric === 'string' ? nodeslideCleanText(value.metric, 24) : undefined;
+    authoredArtifact?.planned.metric ??
+    (typeof value.metric === 'string' ? nodeslideCleanText(value.metric, 24) : undefined);
   const metricLabel =
-    typeof value.metricLabel === 'string' ? nodeslideCleanText(value.metricLabel, 100) : undefined;
-  const explicitChart = coerceChart(value.chart);
-  const explicitDiagram = coerceDiagram(value['diagram']);
-  const explicitFormula = coerceFormula(value.formula ?? value.math);
-  const explicitImage = coerceImage(value.image);
-  const explicitVideo = coerceVideo(value.video);
+    authoredArtifact?.planned.metricLabel ??
+    (typeof value.metricLabel === 'string'
+      ? nodeslideCleanText(value.metricLabel, 100)
+      : undefined);
+  const explicitChart = authoredArtifact
+    ? authoredArtifact.planned.chart
+    : coerceChart(value.chart);
+  const explicitDiagram = authoredArtifact
+    ? authoredArtifact.planned.diagram
+    : coerceDiagram(value['diagram']);
+  const explicitFormula = authoredArtifact
+    ? authoredArtifact.planned.formula
+    : coerceFormula(value.formula ?? value.math);
+  const explicitImage = authoredArtifact
+    ? authoredArtifact.planned.image
+    : coerceImage(value.image);
+  const explicitVideo = authoredArtifact ? undefined : coerceVideo(value.video);
   // A valid provider slide must stand on the structured artifacts it actually
   // supplied. Borrowing a fallback artifact by slide index can make a prose-only
   // response look complete and prevents the creation critique from detecting
@@ -1791,6 +2322,9 @@ function coercePlannedSlide(
     ...(formula ? { formula } : {}),
     ...(image ? { image } : {}),
     ...(video ? { video } : {}),
+    ...(authoredArtifact ? { authoredArtifactCompilation: authoredArtifact.receipt } : {}),
+    ...(authoredArtifact ? { authoredArtifactSpec: authoredArtifact.spec } : {}),
+    ...(authoredArtifact?.geometry ? { authoredArtifactGeometry: authoredArtifact.geometry } : {}),
   };
 }
 
@@ -1943,8 +2477,9 @@ function safePlannedCaptionUrl(value: unknown): string | undefined {
 function safePlannedMediaUrl(value: unknown, kind: 'image' | 'video'): string | undefined {
   if (typeof value !== 'string') return undefined;
   const clean = value.trim().slice(0, 4_000);
+  if (kind === 'image') return isNodeSlideEmbeddedRasterDataUrl(clean) ? clean : undefined;
   const lower = clean.toLowerCase();
-  if (lower.startsWith('https://') || lower.startsWith(`data:${kind}/`)) return clean;
+  if (lower.startsWith('https://') || lower.startsWith('data:video/')) return clean;
   return undefined;
 }
 
@@ -1955,13 +2490,7 @@ function boundedMediaTime(value: unknown): number | undefined {
 }
 
 function linkedBriefSources(deckId: string, prompt: string, now: number): SourceRecord[] {
-  const urls = [
-    ...new Set(
-      (prompt.match(/https:\/\/[^\s<>()]+/g) ?? []).map((url) =>
-        url.replace(/[.,;:!?]+$/u, '').slice(0, 900),
-      ),
-    ),
-  ].slice(0, 8);
+  const urls = nodeSlideAuthoredArtifactLinkedUrls(prompt);
   return urls.map((url, index) => {
     let hostname = 'Linked source';
     try {
@@ -2024,6 +2553,7 @@ interface NodeSlideInputRecord extends Record<string, unknown> {
   captionsLanguage?: unknown;
   startAtSeconds?: unknown;
   endAtSeconds?: unknown;
+  artifactSpec?: unknown;
   labels?: unknown;
   values?: unknown;
   unit?: unknown;

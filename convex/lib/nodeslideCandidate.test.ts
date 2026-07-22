@@ -40,12 +40,19 @@ describe('NodeSlide candidate validation binding', () => {
       digest,
     );
     const patchId = 'patch-candidate-binding';
+    const laterCandidate = materializeNodeSlideCandidate(snapshot, patch, 20);
+    const laterValidation = validateNodeSlideSnapshot(
+      laterCandidate,
+      20,
+      nodeSlideCandidateValidationId(patchId, digest),
+    );
     const validation = validateNodeSlideSnapshot(
       candidate,
       10,
       nodeSlideCandidateValidationId(patchId, digest),
     );
     const receipt = candidateValidationReceipt({ patchId, candidateDigest: digest, validation });
+    expect(receipt.artifactCompilation?.status).toBe('passed');
     expect(
       candidateValidationBindingMatches({
         patchId,
@@ -55,6 +62,51 @@ describe('NodeSlide candidate validation binding', () => {
         validation: { ...validation, checkedAt: 20 },
       }),
     ).toBe(true);
+    expect(
+      candidateValidationBindingMatches({
+        patchId,
+        candidateDigest: digest,
+        persistedDigest: digest,
+        persistedReceipt: receipt,
+        validation: laterValidation,
+      }),
+    ).toBe(true);
+    const tamperedReceipt = structuredClone(receipt);
+    if (!tamperedReceipt.artifactCompilation) throw new Error('Artifact receipt unavailable.');
+    tamperedReceipt.artifactCompilation.specSetDigest = `sha256:${'0'.repeat(64)}`;
+    expect(
+      candidateValidationBindingMatches({
+        patchId,
+        candidateDigest: digest,
+        persistedDigest: digest,
+        persistedReceipt: tamperedReceipt,
+        validation,
+      }),
+    ).toBe(false);
+    const unboundCompilationReceipt = structuredClone(receipt);
+    if (!unboundCompilationReceipt.artifactCompilation) {
+      throw new Error('Artifact receipt unavailable.');
+    }
+    unboundCompilationReceipt.artifactCompilation.deckBinding.deckDigest = `sha256:${'f'.repeat(64)}`;
+    expect(
+      candidateValidationBindingMatches({
+        patchId,
+        candidateDigest: digest,
+        persistedDigest: digest,
+        persistedReceipt: unboundCompilationReceipt,
+        validation,
+      }),
+    ).toBe(false);
+    const { artifactCompilation: _artifactCompilation, ...receiptWithoutCompilation } = receipt;
+    expect(
+      candidateValidationBindingMatches({
+        patchId,
+        candidateDigest: digest,
+        persistedDigest: digest,
+        persistedReceipt: receiptWithoutCompilation,
+        validation,
+      }),
+    ).toBe(false);
 
     const changed = materializeNodeSlideCandidate(
       snapshot,

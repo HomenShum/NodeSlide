@@ -81,21 +81,39 @@ jobs:
           cache-dependency-path: |
             nodeslide/package-lock.json
             noderoom/package-lock.json
-      - name: Install producer and consumer dependencies
-        run: |
-          npm ci --prefix nodeslide
-          npm ci --prefix noderoom
+      - name: Install producer dependencies
+        run: npm ci --prefix nodeslide
       - name: Build and prove publish-shaped NodeSlide packages
         working-directory: nodeslide
         run: |
           npm run packages:build
           npm run packages:consumer:smoke
+          npm run proof:node-gym-portability -- --noderoom-root ../noderoom
           mkdir -p "$RUNNER_TEMP/nodeslide-packages"
+          mkdir -p "$RUNNER_TEMP/node-gym-packages"
+          npm pack --workspace @nodekit/gym-core --pack-destination "$RUNNER_TEMP/node-gym-packages"
           npm pack --workspace @nodeslide/contracts --pack-destination "$RUNNER_TEMP/nodeslide-packages"
           npm pack --workspace @nodeslide/engine --pack-destination "$RUNNER_TEMP/nodeslide-packages"
           npm pack --workspace @nodeslide/backend --pack-destination "$RUNNER_TEMP/nodeslide-packages"
           npm pack --workspace @nodeslide/testing --pack-destination "$RUNNER_TEMP/nodeslide-packages"
-      - name: Run NodeRoom's canonical NodeAgent journey
+      - name: Stage the exact candidate Gym tarball in NodeRoom
+        working-directory: noderoom
+        shell: bash
+        run: |
+          gym_tarballs=("$RUNNER_TEMP"/node-gym-packages/nodekit-gym-core-*.tgz)
+          if [ "${#gym_tarballs[@]}" -ne 1 ] || [ ! -f "${gym_tarballs[0]}" ]; then
+            echo "Expected exactly one packed @nodekit/gym-core candidate." >&2
+            exit 1
+          fi
+          node scripts/stage-node-gym-candidate.mjs \
+            --tarball "${gym_tarballs[0]}" \
+            --producer-package-json ../nodeslide/packages/gym-core/package.json \
+            --json-out "$RUNNER_TEMP/node-gym-candidate-stage.json"
+          npm ci --ignore-scripts
+      - name: Verify NodeRoom's exact Gym lock and direct consumer journey
+        working-directory: noderoom
+        run: npm run nodegym:consumer:proof
+      - name: Run NodeRoom's canonical NodeSlide / NodeAgent journey
         working-directory: noderoom
         env:
           NODESLIDE_PACKAGE_ARTIFACT: ${{ runner.temp }}/nodeslide-packages

@@ -1,10 +1,14 @@
 # NodeSlide semantic artifacts and Model Gym goal plan
 
-Status: **foundation implemented; live experiment, production-shadow, portability,
-and independent preference evidence remain open**
+Status: **technical foundation implemented; exact-main production proof, live
+paired experiments, independent preference, routing approval, and optional
+training remain separately gated**
 Goal ID: `NS-SEMANTIC-GYM-V3`
 Source: Artifact Atlas V2 visual/semantic audit and the non-frontier model
 co-optimization discussion on 2026-07-21.
+
+Current checked/open release ledger:
+[`GAP_CLOSURE_2026-07-22.md`](./GAP_CLOSURE_2026-07-22.md).
 
 ## Implementation snapshot — 2026-07-22
 
@@ -19,30 +23,69 @@ The repository now closes the audited false-green and foundation gaps:
 - the regenerated Atlas and Showcase pass independent PowerPoint rendering,
   overflow checks, and full-size inspection of every slide;
 - the PDF evidence region is deterministic and digest-bound to the receipt;
-- portable NodeGym contracts now cover paired plans, returned-route attribution,
-  differential diagnosis, curriculum boundaries, advisory promotion, safe
-  training export, and user-invisible shadow routing;
-- Deck Gym V2 validates a 360-run paired matrix across four task pools, six model
-  cohorts, five harness profiles, and three repetitions.
+- the shared production/provider boundary now accepts all 16 canonical artifact
+  kinds before geometry, resolves server-owned source references, persists
+  authored intent, and compiles each kind through a native primitive, semantic
+  adapter, summary fallback, or declared static fallback;
+- evidence-class policy prevents brief/criteria/unfetched-link text from becoming
+  observed evidence; immutable source/runtime receipt digests and safe HTTPS
+  bindings are recomputed server-side, and SHA-256 receipts bind authored spec,
+  native geometry, materialization, projection, and render lineage;
+- waterfall, Sankey, Gantt, risk-matrix, trace, and spatial-scene specs now
+  compile before generic fallback into source-bound grouped editable geometry;
+- portable NodeGym contracts cover paired plans, returned-route attribution,
+  evidence-bound evaluation, differential diagnosis, curriculum boundaries,
+  advisory promotion, safe training envelopes, typed accepted/rejected pairs,
+  provider-neutral fake-checkpoint replay, governed routing/escalation, and
+  user-invisible shadow routing;
+- Deck Gym V2 validates a 720-plan matrix across four task pools, six model/router
+  cohorts, five executable harness profiles, and three repetitions;
+- dependency-free `@nodekit/gym-core@0.1.0` has exact packed install and
+  `0.0.1 -> 0.1.0` upgrade proof in isolated NodeSlide and NodeRoom-domain
+  consumers;
+- the direct NodeRoom integration candidate stages the exact tarball and lock
+  identity, runs `npm ci`, direct `nodegym:consumer:proof`, consumer tests,
+  NodeAgent smokes, and TypeScript locally; merge and exact-main NodeRoom CI are
+  still open;
+- protected UI/probe creation now requires owner-authenticated transactional
+  cleanup and a sanitized zero-deck/zero-source retention receipt, while the UI
+  evidence envelope requires real browser/PPTX/PDF/montage bytes and lineage.
 
 The following are deliberately **not** claimed complete by this commit:
 
-1. The 360 live model executions and their browser/PPTX/PDF evaluation artifacts
+1. The 720 live model executions and their browser/PPTX/PDF evaluation artifacts
    have not been run; the committed matrix is an immutable experiment plan.
 2. No challenger has been promoted. Promotion still requires repeated paired
    evidence and blind human preference review.
-3. The shadow-routing contract is implemented, but it has not been exercised on
-   production traffic.
-4. The portable NodeGym core has not yet passed a packed install/upgrade test in
-   a second consumer.
-5. Typed artifact compilation is proven in the deterministic Atlas path, not yet
-   wired through every Convex-backed production generation route.
-6. Optional fine-tuning remains outside the acceptance path until approved data,
-   licensing, privacy, and holdout gates are satisfied.
+3. Shadow-routing primitives are implemented with `autoApply: false`, but no
+   challenger has an approved production routing receipt.
+4. The retained r2 deterministic control intentionally fails 0/2 when its
+   executor omits observable harness behavior, normalized claim/fact bindings,
+   per-slide evidence, montage, and source lineage. The corrected r4 control
+   passes 2/2 and completes one narrow deterministic harness pair at zero cost.
+   Neither receipt is a live-model quality, full-matrix, or promotion result.
+5. Direct adoption of the packed Gym core in the actual NodeRoom repository is a
+   separate cross-repository release gate. Local exact-byte staging and direct
+   consumer proof are green; commit, PR, merge, and exact-main CI are not.
+6. Exact-main CI, deployment, and post-deploy receipts for this closure tree must
+   be recorded before any production claim is advanced.
+7. Optional fine-tuning remains outside the acceptance path. The pair builder
+   and fake-checkpoint replay prove only the provider-neutral boundary; approved
+   data, licensing, privacy, holdouts, budget, and explicit provider authorization
+   are still required.
 
-Accordingly, `publicReleaseApproved` and automatic routing mutation remain
-`false`. These are external or downstream evidence gates, not missing green
-checkmarks to manufacture.
+Accordingly, `publicReleaseApproved`, `promotionEligible`, and automatic routing
+mutation remain `false`. These are external or downstream evidence gates, not
+missing green checkmarks to manufacture.
+
+### Artifact contract boundary correction
+
+The canonical authored schema and the production snapshot projection are
+separate contracts with separate versions. The exact pipeline, migration
+policy, compiler/fallback coverage, and fidelity boundaries are documented in
+[`PRODUCTION_ARTIFACT_BOUNDARY.md`](./PRODUCTION_ARTIFACT_BOUNDARY.md). In
+particular, an eight-kind downstream projection receipt must not be relabeled as
+model-authored intent, and a declared fallback must not be called native.
 
 ## Goal
 
@@ -113,18 +156,18 @@ The goal is complete only when all of the following are true:
 
 ## Phase 0 — restore receipt truth (P0)
 
-- [ ] Replace Atlas V2's catalog-wide `visualInspection: passed` status with
+- [x] Replace Atlas V2's catalog-wide `visualInspection: passed` status with
       explicit per-gate states: `not_run`, `passed`, `failed`, `provisional`,
       and `not_applicable`.
-- [ ] Remove the finalizer behavior that converts screenshot-file existence
+- [x] Remove the finalizer behavior that converts screenshot-file existence
       into visual approval or `eligible-builder-verified`.
-- [ ] Add a signed/attributed inspection record containing inspector type,
+- [x] Add a signed/attributed inspection record containing inspector type,
       inspected artifact digest, method, timestamp, findings, and disposition.
-- [ ] Preserve existing renders as historical evidence; do not rewrite them
+- [x] Preserve existing renders as historical evidence; do not rewrite them
       into green receipts.
 - [ ] Publish a machine-readable V2 audit ledger mapping every issue below to a
       slide, artifact recipe, severity, validator owner, and repair status.
-- [ ] Make Gallery, Model Compare, Harness Compare, and public catalog reject
+- [x] Make Gallery, Model Compare, Harness Compare, and public catalog reject
       receipts with an unknown, provisional, failed, or stale hard gate.
 
 Exit gate: rerunning the current finalizer on the uncorrected V2 output must
@@ -135,61 +178,75 @@ catalog.
 
 ### Hard correctness and evidence repairs
 
-- [ ] Slide 2: reconcile the displayed seven chapters with the footer count.
-- [ ] Slide 8: add units, scale ticks, period labels, and an uncertainty
+- [x] Slide 2: reconcile the displayed seven chapters with the footer count.
+- [x] Slide 8: add units, scale ticks, period labels, and an uncertainty
       encoding that does not imply unsupported discrete regime changes.
-- [ ] Slide 9: bind every waterfall label to its bar; separate baseline/plan;
+- [x] Slide 9: bind every waterfall label to its bar; separate baseline/plan;
       add a unit/scale; assert that deltas reconcile baseline to final.
-- [ ] Slide 15: add directed edges; use `+`/`-` for causal polarity and `R`/`B`
+- [x] Slide 15: add directed edges; use `+`/`-` for causal polarity and `R`/`B`
       for loop classification; make every cycle traceable without crossings.
-- [ ] Slide 16: replace the arrow illustration with a quantitative Sankey whose
+- [x] Slide 16: replace the arrow illustration with a quantitative Sankey whose
       widths, labels, totals, and conservation can be checked—or rename it
       honestly as a non-quantitative flow diagram.
-- [ ] Slide 20: add dependency connectors and confidence encoding, or remove
+- [x] Slide 20: add dependency connectors and confidence encoding, or remove
       those claims from the title and recipe.
-- [ ] Slide 22: constrain every series to its panel, give the panels a shared
+- [x] Slide 22: constrain every series to its panel, give the panels a shared
       scale, and reconcile the displayed harness version.
-- [ ] Slide 24: use a digest-bound V2 product capture for the V2 claim.
-- [ ] Slide 25: either show five inspectable captured product states or state
+- [x] Slide 24: use a digest-bound V2 product capture for the V2 claim.
+- [x] Slide 25: either show five inspectable captured product states or state
       honestly that three captures represent five workflow steps.
-- [ ] Slide 27: demonstrate actual zoom, selection, source binding, and spatial
+- [x] Slide 27: demonstrate actual zoom, selection, source binding, and spatial
       navigation states, or label the scene as an illustrative concept.
-- [ ] Slide 29: replace the web-inspector screenshot with a real PDF page/region
+- [x] Slide 29: replace the web-inspector screenshot with a real PDF page/region
       receipt, or change the artifact type and claim.
-- [ ] Slide 30: bind runtime statistics to raw repeated measurements, sample
+- [x] Slide 30: bind runtime statistics to raw repeated measurements, sample
       size, units, environment, and digest; otherwise label them illustrative.
-- [ ] Slide 31: bind the trace to real trace/span IDs and a sanitized raw
+- [x] Slide 31: bind the trace to real trace/span IDs and a sanitized raw
       receipt, or label it illustrative.
-- [ ] Slide 32: evaluate the displayed quality-cost equation from its actual AST
+- [x] Slide 32: evaluate the displayed quality-cost equation from its actual AST
       and show all substituted terms; add a regression for the exact formula.
-- [ ] Slide 35: derive point position and size from observed normalized metrics;
+- [x] Slide 35: derive point position and size from observed normalized metrics;
       represent missing quality/latency as missing; never plot pilots as a
       measured frontier.
-- [ ] Slide 36: separate observed, pilot, control, and unrun cohorts; normalize
+- [x] Slide 36: separate observed, pilot, control, and unrun cohorts; normalize
       cost/latency units and preserve `not-run` rather than converting it to
       `blocked`.
-- [ ] Slide 37: relabel the current breadth result as a coverage comparison and
+- [x] Slide 37: relabel the current breadth result as a coverage comparison and
       add a true paired harness A/B before claiming performance improvement.
 
 ### Readability and visual-grammar repairs
 
-- [ ] Slide 4: attach the customer voice to a real source/speaker or style it as
+- [x] Slide 4: attach the customer voice to a real source/speaker or style it as
       an explicit hypothetical prompt rather than an unattributed quotation.
-- [ ] Slide 12: bind funnel and winner values to receipts and reduce dashboard
+- [x] Slide 12: bind funnel and winner values to receipts and reduce dashboard
       density so the causal takeaway is readable at presentation distance.
-- [ ] Slide 17: label decision edges yes/no and remove branch semantics that
+- [x] Slide 17: label decision edges yes/no and remove branch semantics that
       must currently be inferred from node text.
-- [ ] Slide 18: add geographic labels/legend and a meaningful encoding, or
+- [x] Slide 18: add geographic labels/legend and a meaningful encoding, or
       remove the decorative map inset.
-- [ ] Slide 34: add likelihood/impact direction, ticks, or category anchors.
-- [ ] Run complete-deck rhythm review after individual repairs so correctness
+- [x] Slide 34: add likelihood/impact direction, ticks, or category anchors.
+- [x] Run complete-deck rhythm review after individual repairs so correctness
       does not regress the showcase into repetitive cards or dense diagnostics.
 
 Exit gate: all repaired slides pass semantic validators, browser and PowerPoint
 pixel inspection, editable-output checks, accessibility checks, and a fresh
 blind comprehension review. `slides_test.py` remains necessary but insufficient.
 
+Automated validation plus attributed full-size Codex presentation inspection are
+complete for the digest-bound V2 source. The independent blind comprehension
+portion of this exit gate remains open and is not implied by the checked repair
+items.
+
 ## Phase 2 — typed artifact intermediate representations (P0)
+
+Implementation status (2026-07-22): the shared 16-kind v1 discriminated union,
+runtime registry, external JSON Schema, task-scoped provider schemas, legacy
+adapter, and fail-closed production boundary are implemented. A checked family
+means its shipped v1 payload is typed and semantically validated; it does not
+claim every optional research-grade field in the original sketch. Versioned
+enrichment remains appropriate for uncertainty bands, crossing minimization,
+native risk thresholds, and similarly deeper fields. See
+`docs/PRODUCTION_ARTIFACT_BOUNDARY.md` for exact native and fallback coverage.
 
 Create a versioned discriminated union, tentatively
 `nodeslide.artifact-spec/v1`, with a common envelope:
@@ -202,41 +259,37 @@ Create a versioned discriminated union, tentatively
 
 Implement these initial spec families:
 
-- [ ] `ChartSpec`: axes, scale type/domain, series, values, labels, units,
-      annotations, uncertainty, and missing values.
-- [ ] `WaterfallSpec`: baseline, ordered deltas, final, reconciliation tolerance,
-      and label policy.
-- [ ] `SankeySpec`: nodes, source/target flows, values, units, layer/order hints,
-      and conservation tolerance.
-- [ ] `GraphSpec`: typed nodes, directed edges, labels, group/boundary regions,
-      and reading direction.
-- [ ] `CausalLoopSpec`: edge polarity, loop membership, loop type, delays, and
-      an explicit cycle list.
-- [ ] `TimelineSpec` and `GanttSpec`: temporal scale, tasks/events, milestones,
-      dependencies, status, and confidence.
-- [ ] `EvidenceMediaSpec`: MIME/type, immutable source digest, page/region or DOM
-      selector, capture version, highlight geometry, and claim binding.
-- [ ] `MotionSpec`: named states, transitions, controls, reduced-motion behavior,
-      and static PowerPoint/PDF keyframe selection.
-- [ ] `ComparisonSpec`: cohorts, metric definitions, denominator, units,
-      aggregation, status/missingness, and comparability constraints.
-- [ ] `EquationSpec`: expression AST, symbols, values/units, evaluation steps,
-      rounding policy, and rendered expression.
-- [ ] `RuntimeProofSpec` and `TraceSpec`: environment, sample size, raw receipt
-      digest, clock/units, trace/span identity, sanitization, and aggregation.
-- [ ] `RiskMatrixSpec`: axes, direction, categories, thresholds, risks, and
-      mitigation/source binding.
-- [ ] `SpatialSceneSpec`: nodes/regions, viewport states, selection, navigation,
-      source binding, and static fallback views.
+- [x] `ChartSpec`: labeled axes, finite scale domain, series values, and unit.
+- [x] `WaterfallSpec`: baseline, labeled ordered deltas, final, unit, and
+      reconciliation tolerance.
+- [x] `SankeySpec`: identified nodes, non-negative source/target links, unit,
+      layers, and conservation checks; the fallback does not claim band width.
+- [x] `GraphSpec`: identified nodes and typed/directed labeled edges.
+- [x] `CausalLoopSpec`: directed edges, polarity, loop class, and explicit cycle
+      membership.
+- [x] `TimelineSpec` and `GanttSpec`: finite event/task intervals, unit,
+      dependencies, precedence, and Gantt confidence.
+- [x] `EvidenceMediaSpec`: MIME/type, immutable digest, claim binding, and PDF
+      page/region requirements.
+- [x] `MotionSpec`: named states plus an explicit static fallback state.
+- [x] `ComparisonSpec`: metrics, cohorts, observed values, status/missingness,
+      and rejection of unobserved cohorts plotted as measured.
+- [x] `EquationSpec`: expression AST, input values, finite evaluated result, and
+      tolerance.
+- [x] `RuntimeProofSpec` and `TraceSpec`: sample size/unit/status/receipt binding
+      plus trace and span identity.
+- [x] `RiskMatrixSpec`: likelihood/impact anchors and finite risk coordinates.
+- [x] `SpatialSceneSpec`: viewport states, selection, and source binding with an
+      honest static fallback.
 
 For every family:
 
-- [ ] TypeScript type and runtime schema agree.
-- [ ] Convex validator and API boundary reject unknown or promoted provenance.
-- [ ] JSON Schema is checked in for external/tool consumers.
-- [ ] Version migration and unknown-version failure behavior are tested.
-- [ ] Positive, negative, adversarial, and missing-evidence fixtures exist.
-- [ ] The model receives only the relevant spec schema and examples for its
+- [x] TypeScript type and runtime schema agree for the shipped v1 payloads.
+- [x] Convex validator and API boundary reject unknown or promoted provenance.
+- [x] JSON Schema is checked in for external/tool consumers.
+- [x] Legacy migration and unknown-version failure behavior are tested.
+- [x] Positive, negative, adversarial, and missing-evidence fixtures exist.
+- [x] The model receives only the relevant spec schema and examples for its
       assigned task—not the entire artifact universe.
 
 Exit gate: each audited V2 artifact can be represented without untyped prose,
@@ -244,21 +297,33 @@ and an intentionally malformed fixture fails with a stable issue code.
 
 ## Phase 3 — deterministic artifact compiler and bounded tools (P0/P1)
 
-- [ ] Add an artifact compiler registry mapping each `ArtifactSpec.kind` to
+Implementation status (2026-07-22): all 16 kinds have a deterministic registry
+entry and compile before geometry to a native primitive, semantic adapter, or
+explicit fallback. Canonical intent is persisted in the creation record and a
+digest-bound element binding; the separate snapshot projection preserves that
+intent when present. Six advanced families now have native grouped-editable
+geometry. The authored compiler emits typed legacy recovery, a render handle,
+and exact immutable SHA-256 lineage; the UI executor extends that lineage across
+browser, PPTX, PDF, montage, claims/facts, sources, harness behavior, and cleanup.
+
+- [x] Add an artifact compiler registry mapping each `ArtifactSpec.kind` to
       browser SlideLang elements, editable PowerPoint primitives, accessibility
       text, and an honest fallback contract.
-- [ ] Move chart/diagram/equation/evidence construction behind typed tools such
+- [x] Move chart/diagram/equation/evidence construction behind the canonical
+      typed compiler adapter (the named-tool split remains optional), such
       as `build_chart`, `build_sankey`, `build_graph`, `build_timeline`,
       `bind_evidence`, and `evaluate_equation`.
-- [ ] Keep models responsible for narrative intent, selection, and spec values;
+- [x] Keep models responsible for narrative intent, selection, and spec values;
       keep deterministic code responsible for geometry, arithmetic, routing,
       labels, clipping, and native export construction.
-- [ ] Make every tool return the normalized spec, compiler receipt, semantic
-      issues, render handles, and recoverable typed repair operations.
-- [ ] Provide exact small-model recovery: schema error → field-level correction;
-      semantic error → bounded repair operation; renderer error → deterministic
-      fallback; unresolved ambiguity → stronger-model escalation.
-- [ ] Preserve base specs and candidate renders immutably through repair.
+- [x] Return normalized specs, digest-exact compiler receipts, native geometry,
+      render handles, and typed exact legacy-recovery operations from the
+      canonical authored compiler.
+- [x] Preserve immutable base/spec/materialization/projection/render lineage in
+      the compiler receipt and evidence-complete UI envelope.
+- [ ] Extend that return contract to every remaining artifact tool surface and
+      wire the implemented typed ambiguity/evidence/failure escalation policy to
+      an exact-main production router after separate routing approval.
 
 Exit gate: the same normalized spec generates browser and PPTX artifacts whose
 declared fidelity difference is machine-verifiable, with no model-authored
@@ -268,23 +333,32 @@ absolute geometry required for the core families.
 
 Add stable issue codes and family validators for:
 
-- [ ] equation AST/evaluation agreement and unit consistency;
-- [ ] waterfall reconciliation and label-to-mark binding;
-- [ ] Sankey non-negativity, width/value mapping, and conservation;
-- [ ] graph direction, reachable nodes, causal polarity, cycle, and crossing
-      constraints;
-- [ ] chart axis/unit/scale completeness and honest missingness;
-- [ ] timeline ordering, Gantt dependency visibility, and confidence encoding;
-- [ ] comparison cohort compatibility, denominators, normalized units, and
-      unobserved/pilot separation;
-- [ ] evidence MIME/type match, digest, capture freshness, page/region bounds,
-      OCR/DOM claim binding, and product-version consistency;
-- [ ] trace/runtime raw-receipt binding and sample-statistic reproducibility;
-- [ ] child geometry containment inside panels, plots, clips, and viewports;
-- [ ] accessibility reading order, contrast, labels, alt text, and non-color
-      encoding;
-- [ ] deck-level rhythm, repetition, density, narrative coverage, evidence
-      coverage, and unsupported-claim checks.
+- [x] equation AST/evaluation agreement with bounded numeric tolerance;
+- [ ] cross-symbol unit algebra and dimensional-consistency validation;
+- [x] waterfall reconciliation and label-to-delta binding;
+- [x] Sankey non-negativity and intermediate-node conservation;
+- [ ] native Sankey width/value mapping (the shipped adapter explicitly does not
+      claim proportional bands);
+- [x] graph reference/direction checks plus causal polarity, loop class, and
+      explicit cycle membership;
+- [ ] graph reachability and geometric crossing minimization;
+- [x] chart axis labels, unit, finite scale, and series/label alignment;
+- [ ] first-class chart missing values and uncertainty-band semantics;
+- [x] timeline interval ordering, Gantt dependency precedence, and confidence;
+- [x] comparison cohort status and rejection of unobserved values plotted as
+      measured;
+- [x] evidence MIME, digest, claim binding, and PDF page/region presence;
+- [ ] capture-freshness, DOM-selector bounds, OCR binding, and product-version
+      consistency in the canonical family validator;
+- [x] runtime sample-count/receipt binding and trace/span identity;
+- [ ] raw-sample statistic reproduction and trace aggregation verification;
+- [x] child geometry containment, text fit, and slide boundary validation through
+      the shared SlideLang validation gate;
+- [x] semantic reading order, contrast, labels, and alt-text coverage;
+- [ ] automated non-color encoding checks for every artifact family;
+- [x] density, visual-starvation, source coverage, and unsupported-claim gates;
+- [ ] automated whole-deck rhythm, repetition, and narrative-coverage issue codes
+      beyond the current digest-bound visual inspection.
 
 Replace the single green receipt with a versioned receipt containing:
 
@@ -300,6 +374,14 @@ inspection, while a deliberate human-only taste distinction remains pending
 rather than being falsely automated.
 
 ## Phase 5 — Deck Gym V2 causal experiment runner (P1)
+
+Implementation status (2026-07-22): the executable experiment system is
+implemented and validates a 720-plan matrix. Cohort checkmarks below mean the
+cohort is represented in the immutable plan, not that every live run completed.
+The retained r2 control is intentionally red because its executor did not supply
+the evidence required for a causal comparison. The corrected r4 deterministic
+control supplies that evidence and passes 2/2 for one matched harness pair; it
+does not convert the unrun live matrix into evidence.
 
 ### Independent variables
 
@@ -326,38 +408,39 @@ rather than being falsely automated.
 
 ### Required cohorts
 
-- [ ] frozen frontier reference with a light harness;
-- [ ] current production mid-tier models with role-appropriate harnesses;
-- [ ] smaller, cheaper, older/legacy models with structured/heavy harnesses;
-- [ ] pinned free models with exact returned route/provider recorded;
-- [ ] deterministic compiler control;
-- [ ] random free-router robustness cohort, excluded from model capability
+- [x] frozen frontier reference with a light harness;
+- [x] current production mid-tier models with role-appropriate harnesses;
+- [x] smaller, cheaper, older/legacy models with structured/heavy harnesses;
+- [x] pinned free models with exact returned route/provider required;
+- [x] deterministic compiler control, explicitly ineligible for harness-behavior
+      claims unless the executor emits the observable harness envelope;
+- [x] random free-router robustness cohort, excluded from model capability
       ranking unless its actual route can be attributed;
 - [ ] optional fine-tuned checkpoint cohort after Phase 8 prerequisites.
 
 ### Harness profiles
 
-- [ ] `light-director`: broad judgment, evidence, tools, and light constraints.
-- [ ] `structured-planner`: StorySpec, task graph, material inventory, reference
+- [x] `light-director`: broad judgment, evidence, tools, and light constraints.
+- [x] `structured-planner`: StorySpec, task graph, material inventory, reference
       retrieval, typed artifact choice, and validation feedback.
-- [ ] `bounded-executor`: one slide/artifact, exact schema, one skill, minimal
+- [x] `bounded-executor`: one slide/artifact, exact schema, one skill, minimal
       evidence window, one or two tools, examples, and recovery procedure.
-- [ ] `repair-specialist`: screenshot/issue input and typed repair operations.
-- [ ] `router-robustness`: capability negotiation, strict timeouts, unknown-model
+- [x] `repair-specialist`: screenshot/issue input and typed repair operations.
+- [x] `router-robustness`: capability negotiation, strict timeouts, unknown-model
       recovery, and returned-route attribution.
 
 ### Experimental controls
 
-- [ ] Maintain four distinct task pools: public development, hidden validation,
+- [x] Maintain four distinct task pools: public development, hidden validation,
       rotating challenge, and anonymized live shadow. Never train or tune against
       hidden, rotating, or live-shadow answers.
-- [ ] Freeze task/evidence/reference digests across paired comparisons.
-- [ ] Use at least three repetitions for stability before promotion evidence.
-- [ ] Separate generation, repair, and judge costs.
-- [ ] Compare a heavier and lighter harness on both frontier and weaker models;
+- [x] Freeze task/evidence/reference digests across paired comparisons.
+- [x] Use at least three repetitions for stability before promotion evidence.
+- [x] Separate generation, repair, and judge costs.
+- [x] Compare a heavier and lighter harness on both frontier and weaker models;
       do not assume more scaffolding always helps.
-- [ ] Store paired deltas and confidence intervals, not only aggregate ranks.
-- [ ] Make harness comparison refuse unmatched tasks, models, directions,
+- [x] Store paired deltas and confidence intervals, not only aggregate ranks.
+- [x] Make harness comparison refuse unmatched tasks, models, directions,
       evidence, budgets, or missing denominators.
 
 Exit gate: one command can reproduce a bounded paired matrix, resume failures,
@@ -365,6 +448,10 @@ rebuild aggregates from immutable run receipts, and generate no causal claim
 when pairing is incomplete.
 
 ## Phase 6 — curriculum and differential diagnosis (P1)
+
+Implementation status: curriculum, cohort, diagnosis, and capability-card
+contracts are implemented. The exit experiment—a held-out result showing that a
+targeted harness change moved a measured model boundary—has not been run.
 
 Implement progressive task levels:
 
@@ -377,14 +464,14 @@ Implement progressive task levels:
 7. generate a complete deck;
 8. orchestrate specialized workers.
 
-- [ ] Require repeated passing performance before advancing a model-harness pair.
-- [ ] Record the first unreliable level and issue distribution.
-- [ ] Diagnose failures as planning, missing/wrong context, tool selection,
+- [x] Require repeated passing performance before advancing a model-harness pair.
+- [x] Record the first unreliable level and issue distribution.
+- [x] Diagnose failures as planning, missing/wrong context, tool selection,
       tool-call/schema, semantic reasoning, visual judgment, repair, provider,
       budget, or genuine model ceiling.
-- [ ] Do not answer every loss by adding prompt text. Every proposed change must
+- [x] Do not answer every loss by adding prompt text. Every proposed change must
       target a diagnosed cause and run against held-out tasks.
-- [ ] Produce capability cards by `model × harness × role × task class`, never a
+- [x] Produce capability cards by `model × harness × role × task class`, never a
       single universal model ranking or `latest_harness` label.
 
 Exit gate: at least one model has a measured curriculum boundary and a held-out
@@ -392,19 +479,24 @@ experiment showing whether a targeted harness change moved that boundary.
 
 ## Phase 7 — self-improvement and champion/challenger loop (P1/P2)
 
+Implementation status: diagnosis-to-control suggestions, advisory utility,
+model/harness identity-safe pairing, repeat and hard-gate requirements, the
+human gate, and `autoApply: false` are implemented. No hidden/rotating promotion
+campaign has produced an eligible challenger.
+
 - [ ] Use frontier systems as reference-trajectory authors, critics, failure
       diagnosticians, and improvement proposers—not mandatory production workers.
-- [ ] Convert failures into typed candidates: skill change, tool change, context
+- [x] Convert failures into typed candidates: skill change, tool change, context
       change, schema change, deterministic worker, routing/escalation change, or
       training example.
 - [ ] Evaluate each candidate on a hidden validation pool before a rotating
       challenge pool; retain live anonymized shadow tasks separately.
 - [ ] Perturb wording, data, theme, audience, evidence availability, and domain
       to detect fixture/template overfitting.
-- [ ] Maintain task-class champions and challengers. Promotion requires hard
+- [x] Maintain task-class champions and challengers. Promotion requires hard
       correctness, held-out gain, stable repeats, no protected-dimension
       regression, lower cost or material quality gain, and completed human review.
-- [ ] Keep production adoption as a separately approved routing change.
+- [x] Keep production adoption as a separately approved routing change.
 
 Economic score must expose its weights and raw dimensions; it must never hide a
 hard-gate failure. Suggested starting utility:
@@ -419,17 +511,28 @@ receipts and stays advisory with `autoApply: false`.
 
 ## Phase 8 — training data and optional checkpoint adapters (P2)
 
-- [ ] Export observable training episodes only: task state, bounded context,
+Implementation status: the lawful export boundary, typed accepted/rejected pair
+builder, and provider-neutral fake-checkpoint replay are implemented and focused
+tests pass. No production corpus was populated, no external provider was called,
+and no fine-tuning is claimed.
+
+- [x] Export observable training episodes only: task state, bounded context,
       selected skill, tool choice/arguments/result, artifact spec, validation
       feedback, repair, accepted result, and preference.
-- [ ] Exclude hidden chain-of-thought, secrets, private raw evidence, unsupported
+- [x] Exclude hidden chain-of-thought, secrets, private raw evidence, unsupported
       synthetic claims, and failed episodes without a labeled correction.
-- [ ] Create accepted/rejected pairs, corrected tool calls, successful repairs,
-      and frontier-teacher trajectories that pass all hard gates.
-- [ ] Add dataset versioning, consent/provenance, deduplication, train/validation/
+- [x] Define `nodekit.gym-training-pair/v1`: accepted/rejected pairs require an
+      observable corrected tool call or typed repair and immutable episode/source
+      lineage.
+- [ ] Populate a licensed/consented accepted/rejected corpus and any frontier-
+      teacher trajectories only after all hard gates and explicit authorization.
+- [x] Add dataset versioning, consent/provenance, deduplication, train/validation/
       challenge separation, contamination checks, and deletion lineage.
-- [ ] Define provider-neutral checkpoint interfaces before adding a Tinker/
-      Inkling adapter or any other training provider.
+- [x] Define provider-neutral checkpoint train/sample interfaces and verify a
+      local fake adapter through `nodekit.gym-checkpoint-replay/v1`, exact
+      checkpoint identity, disjoint holdouts, and zero routing mutation.
+- [ ] Add or call a real Tinker/Inkling/other provider only after separate API,
+      data, privacy, budget, and training authorization.
 - [ ] Run four isolated comparisons when authorization, current API verification,
       data volume, and budget permit: base+old harness, base+new harness,
       tuned+same harness, and tuned+new harness.
@@ -440,16 +543,23 @@ required to complete the core NodeSlide semantic/gym milestone.
 
 ## Phase 9 — production shadow routing (P2)
 
-- [ ] Register the cheapest eligible model-harness champion per bounded task
-      class rather than selecting one universal deck model.
-- [ ] Shadow candidate decisions against the production path without changing
-      user output; record disagreement and would-have-escalated cases.
-- [ ] Escalate ambiguity, unsupported evidence, repeated semantic failures, or
-      out-of-distribution tasks to the stronger eligible route.
-- [ ] Enforce per-route budgets, circuit breakers, stale-model metadata checks,
-      sanitized provider errors, and rollback to the last pinned champion.
-- [ ] Require a separately approved routing receipt before any challenger serves
-      user-visible generation.
+Implementation status: portable selection, metadata freshness, budget, circuit,
+approval-receipt, fallback, and typed escalation policies exist and focused tests
+pass. This phase remains open because no champion is approved, no exact-main
+production route consumes the policy, and no production shadow receipt exists.
+
+- [x] Implement task-class champion selection rather than one universal model;
+      no production champion registry has been populated.
+- [x] Keep shadow selection user-invisible and return zero routing mutation;
+      the exact-main production shadow campaign remains unrun.
+- [x] Escalate typed ambiguity, unsupported/conflicting evidence, semantic
+      failures, and repeated failures without mutating routing.
+- [x] Enforce per-route cost caps, circuit state, metadata age/expiry, and safe
+      fallback in the portable policy.
+- [x] Require an exact current `nodekit.gym-routing-approval/v1` receipt before a
+      challenger can be selected in production mode.
+- [ ] Approve a real challenger and wire/run the policy in production with
+      disagreement, fallback, rollback, cost, and zero-unapproved-mutation proof.
 
 Exit gate: a shadow receipt demonstrates correct task-level routing, fallback,
 cost accounting, and zero user-visible behavior change.
@@ -458,6 +568,14 @@ cost accounting, and zero user-visible behavior change.
 
 Do not begin with a speculative platform rewrite. First stabilize the contracts
 through Phases 2–7 inside NodeSlide, then extract only code already used twice.
+
+Implementation status: the isolated portability receipt is green. A direct
+NodeRoom room-change-review consumer also passes exact candidate staging,
+`npm ci`, direct `nodegym:consumer:proof`, consumer tests, both required
+NodeAgent smokes, and TypeScript against exact package SHA-256
+`b8c14013a54fc7419ebfda806553573c4b6e3d1dde2a17f11a61f5ddd88fc0c2`;
+release lock, stage receipt, package lock, and consumer receipt agree. Commit,
+PR, merge, and exact-main NodeRoom CI remain before repository adoption closes.
 
 Target packages:
 
@@ -471,11 +589,17 @@ Target packages:
 - `@nodeslide/gym`: Artifact Atlas, StoryBench, TasteBench, Deck CI, and PPTX
   domain evaluators.
 
-- [ ] Keep NodeSlide schema/compiler/evaluators in the domain pack.
-- [ ] Prove a second small consumer with its own task/evaluator rather than a
+- [x] Keep NodeSlide schema/compiler/evaluators in the domain pack.
+- [x] Prove an isolated second small consumer with its own task/evaluator rather than a
       copied NodeSlide demo.
-- [ ] Add semver, migrations, packed-install proof, upgrade proof, bilateral CI,
-      and an immutable consumer receipt before advertising reuse.
+- [x] Add semver, migrations, packed-install proof, upgrade proof, and an
+      immutable isolated-consumer receipt. Direct repository bilateral CI is
+      tracked separately before advertising repository adoption.
+- [x] Add cross-repository candidate CI wiring that packs Gym core in NodeSlide,
+      stages byte-identical bytes into NodeRoom, verifies lock/tarball identity,
+      runs `npm ci`, and invokes direct `nodegym:consumer:proof`.
+- [ ] Merge that wiring and consumer into NodeRoom `main` and record exact-main
+      bilateral CI URLs and SHAs.
 - [ ] Record ownership and distribution in `docs/ECOSYSTEM.md` and the consuming
       NodeKit repository; do not silently fork contracts.
 
@@ -484,14 +608,23 @@ with domain-specific evaluators and byte-identical package provenance.
 
 ## Phase 11 — Artifact Atlas V3 and release proof (P1/P2)
 
-- [ ] Regenerate the 38-artifact museum from typed specs and the compiler
+Implementation status: an expanded candidate, campaign ledger, PowerPoint,
+rendered slides, montage, lineage, evidence-candidate receipt, and blind-review
+manifest exist under `outputs/artifact-atlas-v3/`. Candidate construction is not
+public release: the full live matrix, blind human judgments, exact-main proof,
+and release approval remain open.
+
+- [x] Regenerate the expanded candidate from typed specs and the compiler
       registry; do not patch the final PowerPoint independently.
 - [ ] Add genuinely new fixtures only where they exercise a missing semantic
       family or model curriculum level.
-- [ ] Produce browser, PPTX, montage, receipt, and source-lineage artifacts from
-      the same run digests.
-- [ ] Run the paired model/harness arena on a bounded coverage-balanced subset
-      before spending on the full matrix.
+- [x] Produce the candidate PowerPoint, rendered slides, montage, receipt, and
+      source/spec/inspection lineage under one V3 output tree.
+- [x] Run a bounded deterministic paired control before spending on the full
+      matrix. The retained r2 attempt proves refusal; r4 passes 2/2 for one
+      complete zero-cost control pair. Neither is a live-model quality result.
+- [ ] Run the authorized coverage-balanced live/full matrix with repeated matched
+      comparisons; the 720-plan configuration is not completed execution.
 - [ ] Complete blind comprehension and preference review for the public subset.
 - [ ] Release the showcase only when every included artifact is hard-gate clean,
       source-bound, editable or honestly degraded, and human-approved.

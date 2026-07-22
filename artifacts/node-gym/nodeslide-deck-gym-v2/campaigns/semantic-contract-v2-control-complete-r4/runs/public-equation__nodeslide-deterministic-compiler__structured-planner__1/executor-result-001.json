@@ -1,0 +1,288 @@
+{
+  "schemaVersion": "nodekit.gym-executor-result/v1",
+  "runId": "public-equation__nodeslide-deterministic-compiler__structured-planner__1",
+  "pairingKey": "sha256:4a6632421a95f3c9d4080fd77a585d09b6bfe2ebaedb6a4f933c3d8f53fc278a::sha256:f2e3c3c0b739aa24044154475b87a141c7a4b053e43602d42d0e2965750ad426::sha256:43651a9b6abdabf39fab13803d5293469d10aa1afadb7fd9158e2cfb3208b6d9::nodeslide/deterministic-compiler::1::8000:300000:200000:2",
+  "status": "completed",
+  "route": {
+    "mode": "deterministic",
+    "requestedRoute": "nodeslide/deterministic-compiler",
+    "actualProvider": "local",
+    "actualModel": "nodeslide/deterministic-compiler",
+    "traceId": "control-public-equation__nodeslide-deterministic-compiler__structured-planner__1"
+  },
+  "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848",
+  "expectedSlideCount": 1,
+  "normalizedSpec": {
+    "schemaVersion": "nodeslide.artifact-spec/v1",
+    "id": "nodegym-public-equation",
+    "kind": "equation",
+    "narrativeJob": "Evaluate the supplied quality-to-cost ratio from bound public facts.",
+    "claimIds": [
+      "equation-claim"
+    ],
+    "sourceIds": [
+      "public-equation-source"
+    ],
+    "provenance": {
+      "truthState": "derived",
+      "rationale": "Artifact is deterministically derived from its declared evidence.",
+      "sourceRefs": [
+        "public-equation-source"
+      ],
+      "status": "derived",
+      "sourceDigest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "assumptions": []
+    },
+    "browserContract": "semantic-and-visual",
+    "pptxContract": "editable-or-declared-fallback",
+    "accessibility": {
+      "altText": "Quality 0.8 divided by cost 0.4 equals a ratio of 2.",
+      "readingOrder": "title, inputs, equation, result, source"
+    },
+    "payload": {
+      "expression": {
+        "op": "divide",
+        "args": [
+          {
+            "op": "value",
+            "name": "Q"
+          },
+          {
+            "op": "value",
+            "name": "C"
+          }
+        ]
+      },
+      "values": {
+        "Q": 0.8,
+        "C": 0.4
+      },
+      "result": 2,
+      "tolerance": 0,
+      "variableUnits": {
+        "Q": "score",
+        "C": "index",
+        "result": "ratio"
+      }
+    },
+    "specDigest": "84990b5f7500f2e8caf7b882b85599981894f4f46843ef626434ab65c91cbac9"
+  },
+  "generatedClaims": [
+    {
+      "claimId": "equation-claim",
+      "text": "The quality-to-cost ratio is 2.",
+      "sourceIds": [
+        "public-equation-source"
+      ],
+      "numericFacts": [
+        {
+          "factId": "quality-value",
+          "value": 0.8,
+          "unit": "score"
+        },
+        {
+          "factId": "cost-value",
+          "value": 0.4,
+          "unit": "index"
+        },
+        {
+          "factId": "ratio-value",
+          "value": 2,
+          "unit": "ratio"
+        }
+      ]
+    }
+  ],
+  "specFactBindings": [
+    {
+      "factId": "quality-value",
+      "path": "/payload/values/Q",
+      "unit": "score"
+    },
+    {
+      "factId": "cost-value",
+      "path": "/payload/values/C",
+      "unit": "index"
+    },
+    {
+      "factId": "ratio-value",
+      "path": "/payload/result",
+      "unit": "ratio"
+    }
+  ],
+  "compiledHarness": {
+    "schemaVersion": "nodekit.gym-compiled-harness/v1",
+    "profileId": "structured-planner",
+    "profileVersion": "2.0.0",
+    "harnessDigest": "sha256:bc4c70fdc468660016411661c1d0f21f9c4ba052936d05f50d87e2e70ce02616",
+    "contextDigest": "sha256:3449f80d2a098a05ec73471a70bb8c667cef38168561232a24edc518908a971a",
+    "enabledTools": [
+      {
+        "id": "select_artifact",
+        "effect": "read-only-selection",
+        "input": [
+          "brief",
+          "claims",
+          "sources"
+        ]
+      },
+      {
+        "id": "validate_artifact_spec",
+        "effect": "read-only-validation",
+        "input": [
+          "artifactSpec"
+        ]
+      }
+    ],
+    "repairWorkflow": {
+      "policy": "one-typed-repair",
+      "maxAttempts": 1,
+      "steps": [
+        "validate_artifact_spec",
+        "repair_failed_fields_once"
+      ],
+      "onFailure": "fail-closed"
+    }
+  },
+  "harnessExecution": {
+    "observed": true,
+    "profileId": "structured-planner",
+    "profileVersion": "2.0.0",
+    "traceDigest": "sha256:6af4a4458a9af48145604902d45e1e45426451ce823f1630e116e68acc5ef4de",
+    "observedEffects": [
+      "context:sha256:3449f80d2a098a05ec73471a70bb8c667cef38168561232a24edc518908a971a",
+      "tool:select_artifact",
+      "tool:validate_artifact_spec",
+      "repair:undefined"
+    ]
+  },
+  "briefCoverage": [
+    "quality",
+    "cost",
+    "ratio"
+  ],
+  "story": {
+    "beats": [
+      {
+        "id": "inputs"
+      },
+      {
+        "id": "calculation"
+      },
+      {
+        "id": "result"
+      }
+    ]
+  },
+  "toolTrace": {
+    "calls": [
+      {
+        "toolId": "select_artifact",
+        "validation": {
+          "status": "passed"
+        }
+      },
+      {
+        "toolId": "validate_artifact_spec",
+        "validation": {
+          "status": "passed"
+        }
+      }
+    ]
+  },
+  "repairTrace": {
+    "attempts": []
+  },
+  "renderDiagnostics": {
+    "overflowCount": 0,
+    "overlapCount": 0,
+    "placeholderCount": 0,
+    "minimumContrastPassed": true,
+    "distinctVisualKinds": 1,
+    "pptxEditableObjectRatio": 1
+  },
+  "usage": {
+    "latencyMs": 1343,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "costMicroUsd": 0,
+    "repairCount": 0
+  },
+  "artifacts": {
+    "browser": {
+      "path": "control-browser.png",
+      "digest": "sha256:9bf489ba3aebe1ca1d4c01ade09b12f6bb869eac5e5d35c06dead43182743f51",
+      "bytes": 70818,
+      "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848",
+      "validation": {
+        "status": "passed"
+      },
+      "slideCount": 1
+    },
+    "pptx": {
+      "path": "control-deck.pptx",
+      "digest": "sha256:b28a343e4c00246fc43519e7818df61985fd29c1e35843b44421cc9900859450",
+      "bytes": 50301,
+      "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848",
+      "validation": {
+        "status": "passed"
+      },
+      "slideCount": 1
+    },
+    "pdf": {
+      "path": "control-deck.pdf",
+      "digest": "sha256:129e675bc9fb246ea533ac6dafe7fda8713c9b8584b6b479d9133f575d6db881",
+      "bytes": 45943,
+      "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848",
+      "validation": {
+        "status": "passed"
+      },
+      "pageCount": 1,
+      "fidelity": "deterministic-browser-identical-content"
+    },
+    "montage": {
+      "path": "control-montage.png",
+      "digest": "sha256:9bf489ba3aebe1ca1d4c01ade09b12f6bb869eac5e5d35c06dead43182743f51",
+      "bytes": 70818,
+      "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848",
+      "validation": {
+        "status": "passed"
+      },
+      "slideCount": 1
+    },
+    "slides": [
+      {
+        "path": "control-slide-1.png",
+        "digest": "sha256:9bf489ba3aebe1ca1d4c01ade09b12f6bb869eac5e5d35c06dead43182743f51",
+        "bytes": 70818,
+        "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848",
+        "validation": {
+          "status": "passed"
+        },
+        "slideIndex": 1,
+        "specDigest": "sha256:84990b5f7500f2e8caf7b882b85599981894f4f46843ef626434ab65c91cbac9"
+      }
+    ],
+    "sourceLineage": [
+      {
+        "claimId": "equation-claim",
+        "sourceId": "public-equation-source",
+        "slideIndex": 1,
+        "specDigest": "sha256:84990b5f7500f2e8caf7b882b85599981894f4f46843ef626434ab65c91cbac9",
+        "sourceRunDigest": "sha256:497f06f36a7f7bdd1b605ab135d463b004efc9434d984e60622acced72201848"
+      }
+    ]
+  },
+  "diagnostics": {
+    "semanticIssueCodes": [],
+    "estimatedTextOverflowCount": 0,
+    "exportTimedOut": false,
+    "unsupportedClaimCount": 0,
+    "freeModelClaimUnattributed": false,
+    "claimAudit": {
+      "status": "passed",
+      "method": "typed-artifact-spec-and-fixture-fact-binding"
+    }
+  },
+  "issueCodes": []
+}

@@ -7,12 +7,12 @@ import { chromium } from 'playwright';
 import { api } from '../convex/_generated/api.js';
 import { redactNodeGymDiagnostic } from './lib/node-gym-redaction-core.mjs';
 import {
+  captureNodeSlideConvexBuildIdentity,
   captureWebDeploymentIdentity,
   requiredExactMainSha,
   requiredNodeSlideProductionOrigin,
   requiredNodeSlideWorkflowRun,
   sha256,
-  validateNodeSlideConvexBuildIdentity,
   verifyNodeSlideDeploymentRun,
   verifyNodeSlideExactMainSource,
 } from './lib/production-deployment-identity.mjs';
@@ -45,9 +45,10 @@ const [verifiedWorkflowRun, exactMainSourceBefore, deploymentIdentity, convexDep
     verifyNodeSlideDeploymentRun(workflowRun, expectedMainSha),
     verifyNodeSlideExactMainSource(expectedMainSha, process.env.GITHUB_TOKEN),
     captureWebDeploymentIdentity(baseUrl, expectedMainSha),
-    convexClient
-      .query(api.nodeslideBuildIdentity.get, {})
-      .then((identity) => validateNodeSlideConvexBuildIdentity(identity, expectedMainSha)),
+    captureNodeSlideConvexBuildIdentity(
+      () => convexClient.query(api.nodeslideBuildIdentity.get, {}),
+      expectedMainSha,
+    ),
   ]);
 const browser = await chromium.launch({ headless: true });
 const captures = [];

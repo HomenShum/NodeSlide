@@ -44,7 +44,7 @@ export const NODESLIDE_AGENT_MODELS = [
     costTier: 'balanced',
     bestFor: 'Recommended agent route',
     productionEnabled: true,
-    supportsTemperature: true,
+    supportsTemperature: false,
     supportedEfforts: ['low', 'high', 'max'],
   },
   {

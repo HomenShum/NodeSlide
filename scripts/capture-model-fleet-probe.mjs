@@ -8,11 +8,11 @@ import { api } from '../convex/_generated/api.js';
 import { validateModelFleetReceipt } from './lib/model-fleet-receipt-core.mjs';
 import {
   assertNodeSlideProductionDeployKey,
+  captureNodeSlideConvexBuildIdentity,
   captureWebDeploymentIdentity,
   requiredExactMainSha,
   requiredNodeSlideProductionOrigin,
   requiredNodeSlideWorkflowRun,
-  validateNodeSlideConvexBuildIdentity,
   verifyNodeSlideDeploymentRun,
   verifyNodeSlideExactMainSource,
 } from './lib/production-deployment-identity.mjs';
@@ -56,9 +56,10 @@ const [verifiedWorkflowRun, exactMainSourceBefore, deploymentIdentity, convexDep
     verifyNodeSlideDeploymentRun(workflowRun, sourceCommit),
     verifyNodeSlideExactMainSource(sourceCommit, process.env.GITHUB_TOKEN),
     captureWebDeploymentIdentity(productionUrl, sourceCommit),
-    convexClient
-      .query(api.nodeslideBuildIdentity.get, {})
-      .then((identity) => validateNodeSlideConvexBuildIdentity(identity, sourceCommit)),
+    captureNodeSlideConvexBuildIdentity(
+      () => convexClient.query(api.nodeslideBuildIdentity.get, {}),
+      sourceCommit,
+    ),
   ]);
 const convexBin = path.join(process.cwd(), 'node_modules', 'convex', 'bin', 'main.js');
 const child = spawn(

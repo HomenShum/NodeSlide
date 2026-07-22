@@ -73,6 +73,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     expect(complete.mock.calls[0]?.[0]).toMatchObject({
       provider: NODESLIDE_EDIT_PROVIDER,
       model: defaultRoute.upstreamId,
+      supportsTemperature: false,
       reasoningEffort: 'high',
       maxTokens: 500,
       jsonSchema: request.jsonSchema,
@@ -128,18 +129,27 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     });
   });
 
-  it('pins only the optional-reasoning Kimi override', () => {
+  it('pins the current Kimi OpenRouter reasoning and pricing contract', () => {
     const provider = openrouterProviderWithOverrides();
     const models = provider.getModels();
     const overrideIds = NODESLIDE_OPENROUTER_MODEL_OVERRIDES.map((model) => model.id);
     expect(overrideIds).toEqual(['moonshotai/kimi-k3']);
     for (const override of NODESLIDE_OPENROUTER_MODEL_OVERRIDES) {
       const matches = models.filter((model) => model.id === override.id);
-      // Exactly one entry per id: our pinned definition wins over any bundled
-      // catalog entry that would re-enable reasoning and burn the JSON budget.
+      // Exactly one entry per id: our current definition wins over stale
+      // bundled metadata until pi-ai ships this route.
       expect(matches).toHaveLength(1);
-      expect(matches[0]).toMatchObject({ reasoning: false });
+      expect(matches[0]).toMatchObject({
+        reasoning: true,
+        cost: { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 0 },
+        contextWindow: 1_048_576,
+        compat: {
+          supportsReasoningEffort: true,
+          thinkingFormat: 'openrouter',
+        },
+      });
     }
+    expect(nodeSlideAgentModel('moonshotai/kimi-k3').supportsTemperature).toBe(false);
   });
 
   it('retains reasoning for mandatory OpenRouter routes', () => {
@@ -153,15 +163,20 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     }
   });
 
-  it('injects the schema while preserving pi-ai provider routing', () => {
+  it('injects Kimi low reasoning and a compatible structured-output provider route', () => {
     expect(
       nodeSlideStructuredOutputPayload(
-        { model: NODESLIDE_EDIT_MODEL, provider: { data_collection: 'deny' } },
+        {
+          model: NODESLIDE_EDIT_MODEL,
+          provider: { data_collection: 'deny' },
+          temperature: 0,
+        },
         request.jsonSchema,
       ),
     ).toEqual({
       model: NODESLIDE_EDIT_MODEL,
-      provider: { data_collection: 'deny' },
+      provider: { data_collection: 'deny', require_parameters: true },
+      reasoning: { effort: 'low' },
       response_format: {
         type: 'json_schema',
         json_schema: {
@@ -173,33 +188,38 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     });
   });
 
-  it('explicitly disables OpenRouter reasoning while preserving schema routing', () => {
+  it('keeps the prompt-only fallback free of native schema routing parameters', () => {
     expect(
       nodeSlideProviderPayload(
-        { model: 'moonshotai/kimi-k3', provider: { data_collection: 'deny' } },
-        request.jsonSchema,
-        true,
+        {
+          model: 'moonshotai/kimi-k3',
+          provider: { data_collection: 'deny' },
+          temperature: 0,
+        },
+        undefined,
+        {
+          provider: 'openrouter',
+          reasoningDisabled: false,
+          reasoningEffort: 'low',
+          supportsTemperature: false,
+        },
       ),
     ).toEqual({
       model: 'moonshotai/kimi-k3',
       provider: { data_collection: 'deny' },
-      reasoning: { enabled: false },
-      response_format: {
-        type: 'json_schema',
-        json_schema: {
-          name: request.jsonSchema.name,
-          strict: false,
-          schema: request.jsonSchema.schema,
-        },
-      },
+      reasoning: { effort: 'low' },
     });
   });
 
-  it('can disable OpenRouter reasoning without requiring a JSON schema', () => {
-    expect(nodeSlideProviderPayload({ model: 'moonshotai/kimi-k3' }, undefined, true)).toEqual({
-      model: 'moonshotai/kimi-k3',
-      reasoning: { enabled: false },
-    });
+  it('can still disable hidden reasoning for non-reasoning OpenRouter routes', () => {
+    expect(
+      nodeSlideProviderPayload({ model: 'openrouter/free' }, undefined, {
+        provider: 'openrouter',
+        reasoningDisabled: true,
+        reasoningEffort: 'low',
+        supportsTemperature: true,
+      }),
+    ).toEqual({ model: 'openrouter/free', reasoning: { enabled: false } });
   });
 
   it('makes exactly one repair completion after malformed JSON', async () => {
@@ -289,6 +309,43 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     );
   });
 
+  it('uses one prompt-only fallback when OpenRouter has no endpoint for requested parameters', async () => {
+    const complete = vi
+      .fn<NodeSlideCompletion>()
+      .mockResolvedValueOnce(
+        completion('', {
+          stopReason: 'error',
+          errorMessage: 'No endpoints found that support the requested parameters',
+        }),
+      )
+      .mockResolvedValueOnce(completion('{"operations":[{"op":"replace_text"}]}'));
+
+    const result = await callNodeSlideFreeJson(request, { complete });
+
+    expect(result.ok).toBe(true);
+    expect(complete).toHaveBeenCalledTimes(2);
+    expect(complete.mock.calls[0]?.[0]).toMatchObject({ jsonSchema: request.jsonSchema });
+    expect(complete.mock.calls[1]?.[0]).not.toHaveProperty('jsonSchema');
+  });
+
+  it('does not retry or mislabel an ordinary provider error as missing endpoints', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () =>
+      completion('', {
+        stopReason: 'error',
+        errorMessage: 'Provider handshake failed with internal trace secret-123',
+      }),
+    );
+
+    const result = await callNodeSlideFreeJson(request, { complete });
+
+    expect(result).toMatchObject({
+      ok: false,
+      reason: `The ${defaultRouteLabel} route returned an error.`,
+    });
+    expect(complete).toHaveBeenCalledTimes(1);
+    expect(JSON.stringify(result)).not.toContain('secret-123');
+  });
+
   it('falls back honestly when the schema compatibility retry also errors', async () => {
     const complete = vi.fn<NodeSlideCompletion>(async () =>
       completion('', {
@@ -301,7 +358,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
 
     expect(result).toMatchObject({
       ok: false,
-      reason: `The ${defaultRouteLabel} route rejected the structured-output schema.`,
+      reason: `The ${defaultRouteLabel} route returned an error.`,
     });
     expect(complete).toHaveBeenCalledTimes(2);
   });
@@ -387,7 +444,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
 
     expect(result).toMatchObject({
       model: NODESLIDE_EDIT_MODEL,
-      maxTokens: 64,
+      maxTokens: 256,
       status: 'passed',
       actualProvider: defaultRoute.provider,
       actualModel: defaultRoute.upstreamId,
@@ -397,8 +454,9 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     });
     expect(complete).toHaveBeenCalledTimes(1);
     expect(complete.mock.calls[0]?.[0]).toMatchObject({
-      maxTokens: 64,
+      maxTokens: 256,
       reasoningEffort: 'low',
+      supportsTemperature: false,
       repairAttempt: false,
     });
   });
@@ -436,6 +494,10 @@ describe('NodeSlide named pi-ai JSON provider', () => {
   });
 
   it('uses supported reasoning and bounded visible-output budgets for mandatory routes', () => {
+    expect(nodeSlideModelProbeProfile('moonshotai/kimi-k3')).toEqual({
+      reasoningEffort: 'low',
+      maxTokens: 256,
+    });
     expect(nodeSlideModelProbeProfile('z-ai/glm-5.2')).toEqual({
       reasoningEffort: 'high',
       maxTokens: 512,
@@ -464,7 +526,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
 
     expect(result).toMatchObject({
       model: NODESLIDE_EDIT_MODEL,
-      maxTokens: 64,
+      maxTokens: 256,
       status: 'failed',
       costMicroUsd: 0,
       inputTokens: 0,
@@ -482,8 +544,31 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     expect(result).toMatchObject({
       status: 'failed',
       response: { present: false, bytes: 0 },
-      failure: 'The Kimi K3 route returned no assistant text within 64 output tokens.',
+      failure: 'The Kimi K3 route returned no assistant text within 256 output tokens.',
     });
     expect(JSON.stringify(result)).not.toContain('errorMessage');
+  });
+
+  it('uses a sanitized provider category for an empty error response', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () =>
+      completion('', {
+        stopReason: 'error',
+        errorMessage: 'Upstream provider is overloaded; trace secret-456',
+        provider: defaultRoute.provider,
+        model: defaultRoute.upstreamId,
+        costMicroUsd: 0,
+        inputTokens: 0,
+        outputTokens: 0,
+      }),
+    );
+
+    const result = await probeNodeSlideModelOnce(NODESLIDE_EDIT_MODEL, { complete });
+
+    expect(result).toMatchObject({
+      status: 'failed',
+      response: { present: false, bytes: 0 },
+      failure: 'The Kimi K3 via OpenRouter route was temporarily unavailable.',
+    });
+    expect(JSON.stringify(result)).not.toContain('secret-456');
   });
 });

@@ -66,29 +66,32 @@ function nebiusProvider() {
   });
 }
 
-// Kimi K3 is newer than pi-ai's bundled OpenRouter catalog, so we register it
-// explicitly (shape mirrors the catalog's moonshotai/kimi-k2-thinking entry).
+// Kimi K3 is newer than pi-ai's bundled OpenRouter catalog, so we register the
+// current OpenRouter contract explicitly instead of inheriting Moonshot-direct
+// compatibility defaults.
 const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
   id: 'moonshotai/kimi-k3',
   name: 'MoonshotAI: Kimi K3',
   api: 'openai-completions',
   provider: 'openrouter',
   baseUrl: 'https://openrouter.ai/api/v1',
-  reasoning: false,
+  reasoning: true,
   input: ['text'],
-  cost: { input: 0.6, output: 2.5, cacheRead: 0.15, cacheWrite: 0 },
-  contextWindow: 262_144,
+  cost: { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 0 },
+  contextWindow: 1_048_576,
   maxTokens: 100_352,
   compat: {
     supportsDeveloperRole: false,
+    supportsReasoningEffort: true,
+    thinkingFormat: 'openrouter',
     maxTokensField: 'max_tokens',
   },
 };
 
 /**
- * Kimi permits reasoning to be disabled and is newer than the bundled catalog.
- * Mandatory-reasoning routes retain their bundled metadata and receive a
- * bounded supported effort instead of an invalid disabled-reasoning payload.
+ * Kimi is newer than the bundled catalog and OpenRouter exposes its reasoning
+ * effort through the normalized nested reasoning object. Other routes retain
+ * their bundled metadata and receive only efforts they advertise.
  */
 export const NODESLIDE_OPENROUTER_MODEL_OVERRIDES: readonly Model<'openai-completions'>[] = [
   NODESLIDE_KIMI_K3,
@@ -281,14 +284,16 @@ export async function probeNodeSlideModelOnce(
         ? {}
         : {
             failure:
-              hasOutput && !hasExactAttribution
-                ? `The ${route.label} route did not return verifiable provider/model attribution.`
-                : hasOutput
-                  ? providerErrorReason(
-                      result.errorMessage,
-                      `${route.label} via ${providerDisplayName(route.provider)}`,
-                    )
-                  : `The ${route.label} route returned no assistant text within ${probeProfile.maxTokens} output tokens.`,
+              result.stopReason === 'error'
+                ? providerErrorReason(
+                    result.errorMessage,
+                    `${route.label} via ${providerDisplayName(route.provider)}`,
+                  )
+                : result.stopReason === 'aborted'
+                  ? `The ${route.label} route timed out.`
+                  : hasOutput && !hasExactAttribution
+                    ? `The ${route.label} route did not return verifiable provider/model attribution.`
+                    : `The ${route.label} route returned no assistant text within ${probeProfile.maxTokens} output tokens.`,
           }),
     };
   } catch {
@@ -318,6 +323,8 @@ export function nodeSlideModelProbeProfile(modelId: NodeSlideAgentModelId): {
   maxTokens: number;
 } {
   switch (modelId) {
+    case 'moonshotai/kimi-k3':
+      return { reasoningEffort: 'low', maxTokens: 256 };
     case 'google/gemma-4-26b-a4b-it:free':
     case 'google/gemma-4-31b-it:free':
     case 'nvidia/nemotron-3-super-120b-a12b:free':
@@ -421,7 +428,11 @@ export async function callNodeSlideFreeJson(
           continue;
         }
         return providerFailure(
-          providerErrorReason(result.errorMessage, routeLabel),
+          providerErrorReason(
+            result.errorMessage,
+            routeLabel,
+            Boolean(args.jsonSchema && nativeSchemaEnabled),
+          ),
           telemetry,
           hasTelemetry,
         );
@@ -487,7 +498,12 @@ async function completeNodeSlideWithPiAi(
     ...(request.supportsTemperature ? { temperature: 0 } : {}),
     ...(request.provider === 'openrouter' ? { headers: OPENROUTER_ATTRIBUTION_HEADERS } : {}),
     onPayload: (payload: unknown) =>
-      nodeSlideProviderPayload(payload, request.jsonSchema, reasoningDisabled),
+      nodeSlideProviderPayload(payload, request.jsonSchema, {
+        provider: request.provider,
+        reasoningDisabled,
+        reasoningEffort: request.reasoningEffort,
+        supportsTemperature: request.supportsTemperature,
+      }),
   };
   let result: AssistantMessage;
   if (request.onTextDelta) {
@@ -534,20 +550,45 @@ export function nodeSlideStructuredOutputPayload(
   payload: unknown,
   jsonSchema: NodeSlideJsonSchema | undefined,
 ): unknown {
-  return nodeSlideProviderPayload(payload, jsonSchema, false);
+  return nodeSlideProviderPayload(payload, jsonSchema, {
+    provider: 'openrouter',
+    reasoningDisabled: false,
+    reasoningEffort: 'low',
+    supportsTemperature: false,
+  });
 }
 
 export function nodeSlideProviderPayload(
   payload: unknown,
   jsonSchema: NodeSlideJsonSchema | undefined,
-  reasoningDisabled: boolean,
+  options: {
+    provider: NodeSlideExternalProvider;
+    reasoningDisabled: boolean;
+    reasoningEffort: NodeSlideReasoningEffort;
+    supportsTemperature: boolean;
+  },
 ): unknown {
   if (!isPlainObject(payload)) return payload;
+  const nextPayload = options.supportsTemperature
+    ? { ...payload }
+    : Object.fromEntries(Object.entries(payload).filter(([key]) => key !== 'temperature'));
+  const openRouterProvider =
+    options.provider === 'openrouter' && jsonSchema
+      ? {
+          ...(isPlainObject(payload['provider']) ? payload['provider'] : {}),
+          require_parameters: true,
+        }
+      : payload['provider'];
   return {
-    ...payload,
-    // OpenRouter otherwise lets some models default to hidden reasoning even
-    // when pi-ai's pinned model metadata says reasoning:false.
-    ...(reasoningDisabled ? { reasoning: { enabled: false } } : {}),
+    ...nextPayload,
+    ...(options.provider === 'openrouter'
+      ? {
+          reasoning: options.reasoningDisabled
+            ? { enabled: false }
+            : { effort: options.reasoningEffort },
+        }
+      : {}),
+    ...(openRouterProvider === undefined ? {} : { provider: openRouterProvider }),
     ...(jsonSchema
       ? {
           response_format: {
@@ -563,26 +604,64 @@ export function nodeSlideProviderPayload(
   };
 }
 
-function providerErrorReason(errorMessage: string | undefined, routeLabel: string): string {
+function providerErrorReason(
+  errorMessage: string | undefined,
+  routeLabel: string,
+  structuredOutputRequested = false,
+): string {
   const normalized = errorMessage?.toLowerCase() ?? '';
-  if (isStructuredOutputRejection(errorMessage)) {
+  if (structuredOutputRequested && isStructuredOutputRejection(errorMessage)) {
     return `The ${routeLabel} route rejected the structured-output schema.`;
   }
-  if (normalized.includes('no endpoints') || normalized.includes('provider')) {
+  if (
+    normalized.includes('no endpoints') ||
+    normalized.includes('no compatible provider') ||
+    normalized.includes('no available provider') ||
+    normalized.includes('no provider endpoint')
+  ) {
     return `The ${routeLabel} route had no compatible provider endpoint.`;
   }
   if (normalized.includes('reasoning')) {
     return `The ${routeLabel} route rejected the requested reasoning mode.`;
   }
-  if (normalized.includes('rate') || normalized.includes('quota')) {
+  if (
+    normalized.includes('rate limit') ||
+    normalized.includes('rate-limit') ||
+    normalized.includes('too many requests') ||
+    normalized.includes('quota')
+  ) {
     return `The ${routeLabel} route was rate limited.`;
+  }
+  if (
+    normalized.includes('timed out') ||
+    normalized.includes('timeout') ||
+    normalized.includes('deadline exceeded')
+  ) {
+    return `The ${routeLabel} route timed out.`;
+  }
+  if (
+    normalized.includes('unavailable') ||
+    normalized.includes('overloaded') ||
+    normalized.includes('over capacity') ||
+    normalized.includes('service unavailable')
+  ) {
+    return `The ${routeLabel} route was temporarily unavailable.`;
   }
   return `The ${routeLabel} route returned an error.`;
 }
 
 function isStructuredOutputRejection(errorMessage: string | undefined): boolean {
   const normalized = errorMessage?.toLowerCase() ?? '';
-  return normalized.includes('schema') || normalized.includes('response_format');
+  return (
+    normalized.includes('response_format') ||
+    normalized.includes('response format') ||
+    normalized.includes('structured output') ||
+    normalized.includes('structured-output') ||
+    normalized.includes('json schema') ||
+    normalized.includes('json_schema') ||
+    normalized.includes('no endpoints support the requested parameters') ||
+    normalized.includes('no endpoints found that support the requested parameters')
+  );
 }
 
 function providerSystemPrompt(

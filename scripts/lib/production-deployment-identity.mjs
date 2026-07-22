@@ -85,6 +85,35 @@ export function validateNodeSlideConvexBuildIdentity(value, expectedCommitSha) {
   return { schemaVersion: value.schemaVersion, commitSha: value.commitSha };
 }
 
+export async function captureNodeSlideConvexBuildIdentity(
+  query,
+  expectedCommitSha,
+  { attempts = 4, delayMs = 1_000 } = {},
+) {
+  if (typeof query !== 'function') {
+    throw new Error('Production Convex build identity query must be callable.');
+  }
+  if (!Number.isInteger(attempts) || attempts < 1 || attempts > 10) {
+    throw new Error('Production Convex build identity attempts must be between 1 and 10.');
+  }
+  if (!Number.isInteger(delayMs) || delayMs < 0 || delayMs > 5_000) {
+    throw new Error('Production Convex build identity retry delay must be between 0 and 5000ms.');
+  }
+
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      return validateNodeSlideConvexBuildIdentity(await query(), expectedCommitSha);
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts && delayMs > 0) {
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+      }
+    }
+  }
+  throw lastError;
+}
+
 export async function verifyNodeSlideDeploymentRun(workflowRun, expectedCommitSha) {
   const response = await fetch(
     `https://api.github.com/repos/HomenShum/NodeSlide/actions/runs/${workflowRun.id}`,

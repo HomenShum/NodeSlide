@@ -115,6 +115,21 @@ describe('production GitHub workflow configuration', () => {
     expect(jobEnvironment).not.toContain('secrets.');
   });
 
+  it('keeps the Gym tarball out of the strict NodeSlide package directory', async () => {
+    const workflow = await readFile(path.join(workflowDirectory, 'ci.yml'), 'utf8');
+
+    expect(workflow).toContain(
+      'npm pack --workspace @nodekit/gym-core --pack-destination "$RUNNER_TEMP/node-gym-packages"',
+    );
+    expect(workflow).toContain(
+      'gym_tarballs=("$RUNNER_TEMP"/node-gym-packages/nodekit-gym-core-*.tgz)',
+    );
+    expect(workflow).toContain('NODESLIDE_PACKAGE_ARTIFACT: ${{ runner.temp }}/nodeslide-packages');
+    expect(workflow).not.toContain(
+      'npm pack --workspace @nodekit/gym-core --pack-destination "$RUNNER_TEMP/nodeslide-packages"',
+    );
+  });
+
   it('checks out deployed code and keeps the complete manual evidence matrix fail closed', async () => {
     const workflow = await readFile(
       path.join(workflowDirectory, 'nightly-production-probe.yml'),

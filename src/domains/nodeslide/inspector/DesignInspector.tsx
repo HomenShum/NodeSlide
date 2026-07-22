@@ -1551,8 +1551,12 @@ function TastePackPanel({
       </p>
       {onUploadSource ? (
         <label className="ns-signature-upload">
-          <strong>Upload a past deck</strong>
-          <span>NodeSlide extracts observed colors, type, and layout evidence from PPTX.</span>
+          <strong>Import design style from PPTX</strong>
+          <span>
+            Imports observed colors, type, and layout evidence only; it does not import slide
+            content. Typeset math stays semantic in NodeSlide but exports to PPTX as a labeled
+            static image.
+          </span>
           <input
             type="file"
             accept=".pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation"

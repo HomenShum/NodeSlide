@@ -51,7 +51,10 @@ describe('exact production deployment identity', () => {
           id: 123456,
           html_url: runUrl,
           repository: { full_name: 'HomenShum/NodeSlide' },
-          name: 'Deploy production',
+          // A top-level `run-name` replaces the API's `name` field too. The
+          // workflow path and exact SHA-bound display title are the stable
+          // workflow identity signals.
+          name: `Deploy production - ${sha}`,
           path: '.github/workflows/deploy-production.yml',
           display_title: `Deploy production - ${sha}`,
           event: 'workflow_run',
@@ -67,6 +70,7 @@ describe('exact production deployment identity', () => {
     await expect(
       verifyNodeSlideDeploymentRun(requiredNodeSlideWorkflowRun(runUrl, 'RUN'), sha),
     ).resolves.toMatchObject({
+      workflow: `Deploy production - ${sha}`,
       headSha: 'b'.repeat(40),
       sourceCommitSha: sha,
       status: 'completed',

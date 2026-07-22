@@ -60,6 +60,15 @@ jobs:
         with:
           ref: ${{ steps.deployed.outputs.sha }}
           persist-credentials: false
+      - name: Clear checkout-bundled evidence outputs
+        shell: bash
+        run: |
+          rm -f artifacts/prod-probe/report.json
+          rm -f artifacts/convex-logs/production.jsonl
+          rm -f artifacts/model-fleet/model-fleet-probe.json
+          rm -f artifacts/model-fleet/free-router-fleet-probe.json
+          rm -f artifacts/model-fleet/free-router-structured-probe.json
+          rm -rf artifacts/close-all-gaps-20260722/acceptance/ui-qa
       - name: Set up Node.js
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:

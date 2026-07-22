@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { buildArtifactArenaCoverage, scoreReceiptGates } from './artifact-atlas-coverage.mjs';
 
 export const ARTIFACT_ATLAS_SCHEMA_VERSION = 'nodeslide.artifact-atlas/v1';
 export const ARTIFACT_ARENA_HARNESS_SCHEMA_VERSION = 'nodeslide.artifact-arena-harness/v1';
@@ -207,6 +208,9 @@ export function buildArtifactArenaMatrix(atlas, harness, filters = {}) {
     harnessDigest: validation.harnessDigest,
     candidateCount: candidates.length,
     candidateDigests: candidates.map((candidate) => candidate.candidateDigest),
+    // Coverage against the FULL matrix, so a filtered run cannot read as exhaustive. Every
+    // combination the filters omitted is listed with a typed reason.
+    coverage: buildArtifactArenaCoverage(atlas, harness, filters),
     candidates,
   };
   return { ...partial, matrixDigest: digest(partial) };
@@ -253,6 +257,9 @@ export function createArtifactShowcaseReceipt({ candidate, evaluation, outputs, 
       outputTokens: finiteOrNull(evaluation?.outputTokens),
       costMicroUsd: finiteOrNull(evaluation?.costMicroUsd),
     },
+    // Honest tri-state gate scoring over the RAW evaluation: a gate passed with null/undefined is
+    // recorded as not-run, never as a pass or a fail. The booleans above stay for back-compat.
+    gateScore: scoreReceiptGates(evaluation),
     outputs: {
       browserRender: outputs?.browserRender ?? null,
       pptxRender: outputs?.pptxRender ?? null,
@@ -318,6 +325,43 @@ export function buildModelCompare(receipts, fixtureId) {
     candidateCount: candidates.length,
     candidates,
   };
+}
+
+/**
+ * Raised when two receipts are compared along both the model and harness axes at once, so no
+ * clean attribution is possible. Per the Arena reconciliation council (2026-07-22), cross-axis
+ * comparison is made unrepresentable rather than reported as a `confounded` result category.
+ */
+export class InvalidArenaComparisonError extends Error {
+  constructor({ code, message }) {
+    super(message);
+    this.name = 'InvalidArenaComparisonError';
+    this.code = code;
+  }
+}
+
+/**
+ * Guard for any harness-vs-harness comparison: the two receipts must share the model (so the model
+ * is held constant) and must differ in harness version (so there is a harness change to attribute).
+ * Throws rather than returning a warning verdict — the word "confounded" appears only in the
+ * diagnostic message, never as stored state.
+ *
+ * compareHarnessReceipts already enforces same-model structurally by pairing on comparisonKey; this
+ * makes that invariant explicit and available to any future general comparator.
+ */
+export function assertHarnessComparable(previous, current) {
+  if (previous?.model !== current?.model) {
+    throw new InvalidArenaComparisonError({
+      code: 'cross_axis_comparison',
+      message: `Model and harness both changed (${previous?.model} vs ${current?.model}); causal attribution would be confounded.`,
+    });
+  }
+  if (previous?.harnessVersion === current?.harnessVersion) {
+    throw new InvalidArenaComparisonError({
+      code: 'no_harness_change',
+      message: `Both receipts are harness ${current?.harnessVersion}; there is no harness change to compare.`,
+    });
+  }
 }
 
 export function compareHarnessReceipts(previousReceipts, currentReceipts) {

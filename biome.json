@@ -14,6 +14,7 @@
       "benchmarks/artifact-atlas/v2",
       "docs/dogfood",
       "docs/plans/assets",
+      "contracts",
       "convex/_generated",
       "packages/convex/component/_generated",
       "mcp/dist",

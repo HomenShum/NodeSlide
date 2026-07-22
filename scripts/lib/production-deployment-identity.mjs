@@ -88,7 +88,10 @@ export function validateNodeSlideConvexBuildIdentity(value, expectedCommitSha) {
 export async function captureNodeSlideConvexBuildIdentity(
   query,
   expectedCommitSha,
-  { attempts = 4, delayMs = 1_000 } = {},
+  // Convex's public HTTP edge can converge after the deploy command and the
+  // deployment-local identity check have already succeeded. Keep this window
+  // bounded while covering the propagation lag observed in production.
+  { attempts = 10, delayMs = 2_000 } = {},
 ) {
   if (typeof query !== 'function') {
     throw new Error('Production Convex build identity query must be callable.');
@@ -111,7 +114,9 @@ export async function captureNodeSlideConvexBuildIdentity(
       }
     }
   }
-  throw lastError;
+  throw new Error(`Production Convex build identity did not converge after ${attempts} attempts.`, {
+    cause: lastError,
+  });
 }
 
 export async function verifyNodeSlideDeploymentRun(workflowRun, expectedCommitSha) {

@@ -144,6 +144,16 @@ describe('production fixture retention', () => {
     ).rejects.toThrow(/does not bind the requested target and owner/i);
   });
 
+  it('accepts workspace receipts after wire serialization reorders every object key', () => {
+    const wireOrdered = reorderObjectKeys(PASSING_RECEIPT);
+
+    expect(Object.keys(wireOrdered)).not.toEqual(Object.keys(PASSING_RECEIPT));
+    expect(Object.keys(wireOrdered.deletedCounts)).not.toEqual(
+      Object.keys(PASSING_RECEIPT.deletedCounts),
+    );
+    expect(assertRetentionReceipt(wireOrdered, BINDINGS)).toEqual(wireOrdered);
+  });
+
   it('fails closed on retained rows, missing proof, or leaked credentials', async () => {
     expect(() =>
       productionFixtureCleanupDisposition({
@@ -219,12 +229,44 @@ describe('production fixture retention', () => {
       );
     }
   });
+
+  it('accepts probe receipts after wire serialization reorders every object key', () => {
+    const receipt = withReceiptDigest(PASSING_PROBE_RECEIPT_BODY);
+    const wireOrdered = reorderObjectKeys(receipt);
+
+    expect(Object.keys(wireOrdered)).not.toEqual(Object.keys(receipt));
+    expect(Object.keys(wireOrdered.deletedCounts)).not.toEqual(Object.keys(receipt.deletedCounts));
+    expect(assertProductionProbeRetentionReceipt(wireOrdered, PROBE_TOKEN)).toEqual(wireOrdered);
+  });
 });
 
 function withReceiptDigest(body) {
-  return { ...body, receiptDigest: digest(JSON.stringify(body)) };
+  return { ...body, receiptDigest: digest(canonicalJson(body)) };
 }
 
 function digest(value) {
   return `sha256:${createHash('sha256').update(value, 'utf8').digest('hex')}`;
+}
+
+function canonicalJson(value) {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  if (value && typeof value === 'object') {
+    return `{${Object.keys(value)
+      .filter((key) => value[key] !== undefined)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value);
+}
+
+function reorderObjectKeys(value) {
+  if (Array.isArray(value)) return value.map(reorderObjectKeys);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.keys(value)
+      .sort()
+      .reverse()
+      .map((key) => [key, reorderObjectKeys(value[key])]),
+  );
 }

@@ -140,6 +140,10 @@ describe('production GitHub workflow configuration', () => {
       'utf8',
     );
     const productionProbe = await readFile(path.join(root, 'scripts', 'prod-probe.mjs'), 'utf8');
+    const nodeGymUiExecutor = await readFile(
+      path.join(root, 'scripts', 'node-gym-ui-executor.mjs'),
+      'utf8',
+    );
     const fleetCapture = await readFile(
       path.join(root, 'scripts', 'capture-model-fleet-probe.mjs'),
       'utf8',
@@ -197,6 +201,11 @@ describe('production GitHub workflow configuration', () => {
       expect(workflow).toContain(artifact);
     }
     expect(workflow).toContain('At least one bounded production evidence matrix is incomplete.');
+    expect(occurrences(productionProbe, 'new ConvexHttpClient(convexUrl.origin)')).toBe(3);
+    expect(productionProbe).not.toContain('new ConvexHttpClient(convexUrl.href)');
+    expect(occurrences(nodeGymUiExecutor, 'new ConvexHttpClient(targetConvexUrl.origin)')).toBe(2);
+    expect(occurrences(nodeGymUiExecutor, 'new ConvexHttpClient(convexUrl.origin)')).toBe(1);
+    expect(nodeGymUiExecutor).not.toMatch(/new ConvexHttpClient\([^)]*\.href\)/u);
     for (const evidenceCollector of [productionProbe, fleetCapture, uiCapture]) {
       expect(occurrences(evidenceCollector, 'verifyNodeSlideExactMainSource(')).toBe(2);
     }

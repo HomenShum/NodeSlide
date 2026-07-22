@@ -619,7 +619,7 @@ function retentionReceipt(
   };
   return {
     ...body,
-    receiptDigest: nodeslideContentDigest(JSON.stringify(body)),
+    receiptDigest: nodeslideContentDigest(canonicalJson(body)),
   };
 }
 
@@ -640,5 +640,23 @@ function productionProbeReceipt(
     alreadyAbsent,
     cleanupBindingDigest,
   };
-  return { ...body, receiptDigest: nodeslideContentDigest(JSON.stringify(body)) };
+  return { ...body, receiptDigest: nodeslideContentDigest(canonicalJson(body)) };
+}
+
+/**
+ * Convex may serialize object keys in a different order than the server used
+ * when it constructed a receipt. Bind the digest to the value, not incidental
+ * insertion order, so every runtime verifies the same bytes.
+ */
+function canonicalJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    return `{${Object.keys(record)
+      .filter((key) => record[key] !== undefined)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${canonicalJson(record[key])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value);
 }

@@ -104,7 +104,10 @@ try {
     ]);
     report.exactMain = { ...report.exactMain, ...exactMainSource };
     report.deploymentIdentity = await captureWebDeploymentIdentity(baseUrl, expectedMainSha);
-    const convex = new ConvexHttpClient(convexUrl.href);
+    // ConvexHttpClient appends `/api/query` to its address. Passing URL.href
+    // here would retain the canonical trailing slash and produce
+    // `//api/query`, which Convex rejects with an empty non-2xx response.
+    const convex = new ConvexHttpClient(convexUrl.origin);
     report.convexDeploymentIdentity = await captureNodeSlideConvexBuildIdentity(
       () => convex.query(api.nodeslideBuildIdentity.get, {}),
       expectedMainSha,
@@ -266,7 +269,7 @@ try {
       createdDeckId && ownerAccessKey,
       'owned deck capability is unavailable for shadow proof',
     );
-    const convex = new ConvexHttpClient(convexUrl.href);
+    const convex = new ConvexHttpClient(convexUrl.origin);
     const [artifactReceipt, routeReceipt] = await Promise.all([
       convex.query(api.nodeslideArtifactSpec.shadowCompile, {
         deckId: createdDeckId,
@@ -415,7 +418,7 @@ async function retainNoOwnedFixture() {
       return;
     }
     assert(probeClientSessionId.length > 0, 'production probe cleanup session is unavailable');
-    const convex = new ConvexHttpClient(convexUrl.href);
+    const convex = new ConvexHttpClient(convexUrl.origin);
     const receipt = await cleanupNodeSlideProductionProbe({
       client: convex,
       mutation: api.nodeslideRetention.deleteProductionProbeWorkspace,

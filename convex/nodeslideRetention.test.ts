@@ -4,6 +4,7 @@ import { convexTest } from 'convex-test';
 import { describe, expect, it } from 'vitest';
 import type { MutationCtx } from './_generated/server';
 import { insertNodeSlideSnapshot } from './lib/nodeslideData';
+import { nodeslideContentDigest } from './lib/nodeslideIds';
 import { nodeSlideProductionProbeFields } from './lib/nodeslideProductionProbe';
 import { buildGoldenNodeSlide } from './lib/nodeslideSeed';
 import {
@@ -43,7 +44,12 @@ const deleteProbeHandler = (
     _handler: (
       ctx: MutationCtx,
       args: { clientSessionId: string; cleanupToken: string },
-    ) => Promise<{ retentionSafe: boolean; alreadyAbsent: boolean; deletedRowCount: number }>;
+    ) => Promise<{
+      retentionSafe: boolean;
+      alreadyAbsent: boolean;
+      deletedRowCount: number;
+      receiptDigest: string;
+    }>;
   }
 )._handler;
 const sweepProbeHandler = (
@@ -133,6 +139,7 @@ describe('NodeSlide owner-controlled workspace retention', () => {
     expect(receipt.deletedCounts.sources).toBeGreaterThan(0);
     expect(receipt).toMatchObject(nodeSlideRetentionBindings(deckId, OWNER_ACCESS_KEY));
     expect(receipt.receiptDigest).toMatch(/^sha256:[0-9a-f]{64}$/u);
+    expectCanonicalReceiptDigest(receipt);
     expect(JSON.stringify(receipt)).not.toContain(deckId);
     expect(JSON.stringify(receipt)).not.toContain(OWNER_ACCESS_KEY);
 
@@ -303,6 +310,7 @@ describe('NodeSlide owner-controlled workspace retention', () => {
     );
     expect(receipt).toMatchObject({ retentionSafe: true, alreadyAbsent: false });
     expect(receipt.deletedRowCount).toBeGreaterThan(2);
+    expectCanonicalReceiptDigest(receipt);
     await expect(
       t.run((ctx) =>
         deleteProbeHandler(ctx as MutationCtx, {
@@ -393,4 +401,24 @@ async function rejectionMessage(run: () => Promise<unknown>): Promise<string> {
     return error instanceof Error ? error.message : String(error);
   }
   throw new Error('Expected retention request to fail.');
+}
+
+function expectCanonicalReceiptDigest(
+  receipt: { receiptDigest: string } & Record<string, unknown>,
+) {
+  const { receiptDigest, ...unsigned } = receipt;
+  expect(receiptDigest).toBe(nodeslideContentDigest(canonicalJson(unsigned)));
+}
+
+function canonicalJson(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
+  if (value && typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    return `{${Object.keys(record)
+      .filter((key) => record[key] !== undefined)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${canonicalJson(record[key])}`)
+      .join(',')}}`;
+  }
+  return JSON.stringify(value);
 }

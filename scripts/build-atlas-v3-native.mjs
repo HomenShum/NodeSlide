@@ -37,6 +37,7 @@ import {
   buildDiagramNodes,
   buildEquationPlaceholder,
   buildTable,
+  dedupeMedia,
   injectConnectors,
   injectOmml,
 } from './build-atlas-native-pptx.mjs';
@@ -1106,8 +1107,10 @@ export async function buildV3NativeDeck(fixtures) {
   const withDates = await phase('inject.dateAxes', () =>
     injectDateAxes(withConnectors, timelineCharts),
   );
-  const buffer = await phase('inject.timing', () => injectTiming(withDates, motionSlides));
-  return { buffer, compiled, spans };
+  const withTiming = await phase('inject.timing', () => injectTiming(withDates, motionSlides));
+  // Last, so it collapses whatever the earlier passes left behind rather than racing them.
+  const deduped = await phase('dedupe.media', () => dedupeMedia(withTiming));
+  return { buffer: deduped.buffer, compiled, spans, mediaDedupe: deduped };
 }
 
 /** `--flag value`, or null when absent. */

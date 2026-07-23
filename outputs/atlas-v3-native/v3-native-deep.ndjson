@@ -96,14 +96,14 @@
 {"kind":"artifact","signal":"1 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":29}
 {"kind":"artifact","signal":"picture alt text names a capture: \"Screenshot of the parent/child trace waterfall region cited as evidence\"","artifactKind":"screenshot","slide":29}
 {"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":29}
-{"kind":"slide","slide":30,"title":"TECHNICAL.CODE-AND-RESULT","counts":{"textRuns":23,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":4,"pictures":0}}
-{"kind":"artifact","signal":"23 text runs","artifactKind":"text","slide":30}
+{"kind":"slide","slide":30,"title":"TECHNICAL.CODE-AND-RESULT","counts":{"textRuns":25,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"25 text runs","artifactKind":"text","slide":30}
 {"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":30}
 {"kind":"artifact","signal":"monospace faces: consolas","artifactKind":"code","slide":30}
-{"kind":"slide","slide":31,"title":"TECHNICAL.TRACE-WATERFALL","counts":{"textRuns":15,"equations":0,"tables":0,"graphicFrames":0,"connectors":4,"shapes":14,"pictures":0}}
-{"kind":"artifact","signal":"15 text runs","artifactKind":"text","slide":31}
+{"kind":"slide","slide":31,"title":"TECHNICAL.TRACE-WATERFALL","counts":{"textRuns":17,"equations":0,"tables":0,"graphicFrames":0,"connectors":5,"shapes":16,"pictures":0}}
+{"kind":"artifact","signal":"17 text runs","artifactKind":"text","slide":31}
 {"kind":"artifact","signal":"1 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":31}
-{"kind":"artifact","signal":"4 connectors joining 14 shapes","artifactKind":"diagram","slide":31}
+{"kind":"artifact","signal":"5 connectors joining 16 shapes","artifactKind":"diagram","slide":31}
 {"kind":"slide","slide":32,"title":"TECHNICAL.EQUATION","counts":{"textRuns":3,"equations":1,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
 {"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":32}
 {"kind":"artifact","signal":"1 OMML oMath elements","artifactKind":"equation","slide":32}

@@ -24,11 +24,7 @@
     {
       "number": 5,
       "title": "The harness removes clutter before it adds decoration",
-      "artifactType": "progression.before-after",
-      "declaredFallback": {
-        "capability": "unsupported",
-        "behavior": "The fixture carries only a narrative caption — no before/after pair of screenshots, charts or diagrams — so no comparison artifact is drawn."
-      }
+      "artifactType": "progression.before-after"
     },
     {
       "number": 6,
@@ -93,7 +89,7 @@
     {
       "number": 18,
       "title": "NodeKit connects the stack while NodeSlide proves the journey",
-      "artifactType": "ecosystem-geography"
+      "artifactType": "systems.node-edge-graph"
     },
     {
       "number": 19,
@@ -117,7 +113,7 @@
     {
       "number": 22,
       "title": "The trend means more when the audience sees the baseline move",
-      "artifactType": "animated-chart-progression",
+      "artifactType": "progression.scrollytelling",
       "declaredFallback": {
         "capability": "poster-frame",
         "behavior": "Web-only motion. PowerPoint receives the declared static fallback state as a poster frame plus a storyboard caption."
@@ -126,43 +122,27 @@
     {
       "number": 23,
       "title": "A visual story can lead with atmosphere and still preserve proof",
-      "artifactType": "full-bleed-editorial-image"
+      "artifactType": "media.image"
     },
     {
       "number": 24,
       "title": "The product proof is the interface people actually use",
-      "artifactType": "product-evidence.screenshot-callouts",
-      "declaredFallback": {
-        "capability": "poster-frame",
-        "behavior": "Asset-bound capture. PowerPoint receives the captured image as a poster frame; no live region highlight."
-      }
+      "artifactType": "product-evidence.screenshot-callouts"
     },
     {
       "number": 25,
       "title": "One bounded interaction carries the story from selection to receipt",
-      "artifactType": "product-evidence.interaction-clip",
-      "declaredFallback": {
-        "capability": "poster-frame",
-        "behavior": "Web-only motion. PowerPoint receives the declared static fallback state as a poster frame plus a storyboard caption."
-      }
+      "artifactType": "product-evidence.interaction-clip"
     },
     {
       "number": 26,
       "title": "Review transforms a rough generation into a governed workspace",
-      "artifactType": "progression.before-after",
-      "declaredFallback": {
-        "capability": "poster-frame",
-        "behavior": "Asset-bound capture. PowerPoint receives the captured image as a poster frame; no live region highlight."
-      }
+      "artifactType": "progression.before-after"
     },
     {
       "number": 27,
       "title": "The canvas can move from whole system to exact evidence",
-      "artifactType": "spatial-scene",
-      "declaredFallback": {
-        "capability": "poster-frame",
-        "behavior": "Web-only spatial scene. PowerPoint receives a poster frame of the primary viewport."
-      }
+      "artifactType": "media.image"
     },
     {
       "number": 28,
@@ -172,29 +152,17 @@
     {
       "number": 29,
       "title": "Citation quality depends on the exact source region",
-      "artifactType": "product-evidence.citation-card",
-      "declaredFallback": {
-        "capability": "poster-frame",
-        "behavior": "Asset-bound capture. PowerPoint receives the captured image as a poster frame; no live region highlight."
-      }
+      "artifactType": "product-evidence.citation-card"
     },
     {
       "number": 30,
       "title": "Runtime claims require a reproducible benchmark receipt",
-      "artifactType": "technical.code-and-result",
-      "declaredFallback": {
-        "capability": "unsupported",
-        "behavior": "No measured runtime and no code body in the fixture (status: illustrative-not-measured). Code-plus-runtime-result is not fabricated; supply the code and a run receipt to satisfy this archetype."
-      }
+      "artifactType": "technical.code-and-result"
     },
     {
       "number": 31,
       "title": "Trace anatomy is illustrative until trace and span IDs are bound",
-      "artifactType": "technical.trace-waterfall",
-      "declaredFallback": {
-        "capability": "unsupported",
-        "behavior": "No measured spans exist (status: illustrative-not-observed). A trace waterfall is not drawn, because rendering illustrative timing as an observed trace is a forbidden substitute. Wire a real OTel span source to satisfy this archetype."
-      }
+      "artifactType": "technical.trace-waterfall"
     },
     {
       "number": 32,

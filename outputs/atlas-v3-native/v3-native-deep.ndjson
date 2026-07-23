@@ -6,8 +6,10 @@
 {"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":3}
 {"kind":"slide","slide":4,"title":"NARRATIVE.QUOTE","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
 {"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":4}
-{"kind":"slide","slide":5,"title":"PROGRESSION.BEFORE-AFTER","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":0}}
+{"kind":"slide","slide":5,"title":"PROGRESSION.BEFORE-AFTER","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":2}}
 {"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":5}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Screenshot of the NodeSlide landing page in light theme (before)\"","artifactKind":"screenshot","slide":5}
+{"kind":"artifact","signal":"2 pictures","artifactKind":"media","slide":5}
 {"kind":"slide","slide":6,"title":"DATA.KPI-STRIP","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
 {"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":6}
 {"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":6}
@@ -44,43 +46,69 @@
 {"kind":"slide","slide":17,"title":"SYSTEMS.HIERARCHY","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":1,"shapes":7,"pictures":0}}
 {"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":17}
 {"kind":"artifact","signal":"1 connectors joining 7 shapes","artifactKind":"diagram","slide":17}
-{"kind":"slide","slide":18,"title":"ECOSYSTEM-GEOGRAPHY","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
-{"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":18}
+{"kind":"slide","slide":18,"title":"SYSTEMS.NODE-EDGE-GRAPH","counts":{"textRuns":8,"equations":0,"tables":0,"graphicFrames":0,"connectors":4,"shapes":13,"pictures":0}}
+{"kind":"artifact","signal":"8 text runs","artifactKind":"text","slide":18}
+{"kind":"artifact","signal":"4 connectors joining 13 shapes","artifactKind":"diagram","slide":18}
 {"kind":"slide","slide":19,"title":"PROGRESSION.TIMELINE","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
 {"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":19}
 {"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":19}
+{"kind":"artifact","signal":"chart part uses a real c:dateAx time axis with date-serial categories","artifactKind":"timeline","slide":19}
 {"kind":"slide","slide":20,"title":"PROGRESSION.ROADMAP","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
 {"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":20}
 {"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":20}
-{"kind":"slide","slide":21,"title":"PROGRESSION.SCROLLYTELLING","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":0}}
+{"kind":"artifact","signal":"chart part uses a real c:dateAx time axis with date-serial categories","artifactKind":"timeline","slide":20}
+{"kind":"slide","slide":21,"title":"PROGRESSION.SCROLLYTELLING","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":1}}
 {"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":21}
-{"kind":"slide","slide":22,"title":"ANIMATED-CHART-PROGRESSION","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":0}}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Poster frame — Full-bleed screenshot of the NodeSlide workspace, captured by the\"","artifactKind":"screenshot","slide":21}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":21}
+{"kind":"slide","slide":22,"title":"PROGRESSION.SCROLLYTELLING","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":1}}
 {"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":22}
-{"kind":"slide","slide":23,"title":"FULL-BLEED-EDITORIAL-IMAGE","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
-{"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":23}
-{"kind":"slide","slide":24,"title":"PRODUCT-EVIDENCE.SCREENSHOT-CALLOUTS","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":0}}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Poster frame — Full-bleed screenshot of the NodeSlide workspace, captured by the\"","artifactKind":"screenshot","slide":22}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":22}
+{"kind":"slide","slide":23,"title":"MEDIA.IMAGE","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":3,"pictures":1}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":23}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Full-bleed screenshot of the NodeSlide workspace, captured by the 2026-07-22 bas\"","artifactKind":"screenshot","slide":23}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":23}
+{"kind":"slide","slide":24,"title":"PRODUCT-EVIDENCE.SCREENSHOT-CALLOUTS","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":1}}
 {"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":24}
-{"kind":"slide","slide":25,"title":"PRODUCT-EVIDENCE.INTERACTION-CLIP","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":0}}
-{"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":25}
-{"kind":"slide","slide":26,"title":"PROGRESSION.BEFORE-AFTER","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":0}}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Screenshot of the NodeSlide export capability menu captured during the 2026-07-2\"","artifactKind":"screenshot","slide":24}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":24}
+{"kind":"slide","slide":25,"title":"PRODUCT-EVIDENCE.INTERACTION-CLIP","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":1}}
+{"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":25}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Poster frame screenshot of the blocked insert interaction\"","artifactKind":"screenshot","slide":25}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":25}
+{"kind":"slide","slide":26,"title":"PROGRESSION.BEFORE-AFTER","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":2}}
 {"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":26}
-{"kind":"slide","slide":27,"title":"SPATIAL-SCENE","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":0}}
-{"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":27}
-{"kind":"slide","slide":28,"title":"PRODUCT-EVIDENCE.CLAIM-LINEAGE","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":1,"shapes":7,"pictures":0}}
-{"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":28}
-{"kind":"artifact","signal":"1 connectors joining 7 shapes","artifactKind":"diagram","slide":28}
-{"kind":"slide","slide":29,"title":"PRODUCT-EVIDENCE.CITATION-CARD","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":0}}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Screenshot of the NodeSlide landing page in light theme (before)\"","artifactKind":"screenshot","slide":26}
+{"kind":"artifact","signal":"2 pictures","artifactKind":"media","slide":26}
+{"kind":"slide","slide":27,"title":"MEDIA.IMAGE","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":3,"pictures":1}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":27}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Full-bleed screenshot of the NodeSlide workspace, captured by the 2026-07-22 bas\"","artifactKind":"screenshot","slide":27}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":27}
+{"kind":"slide","slide":28,"title":"PRODUCT-EVIDENCE.CLAIM-LINEAGE","counts":{"textRuns":9,"equations":0,"tables":0,"graphicFrames":0,"connectors":1,"shapes":9,"pictures":0}}
+{"kind":"artifact","signal":"9 text runs","artifactKind":"text","slide":28}
+{"kind":"artifact","signal":"2 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":28}
+{"kind":"artifact","signal":"1 connectors joining 9 shapes","artifactKind":"diagram","slide":28}
+{"kind":"slide","slide":29,"title":"PRODUCT-EVIDENCE.CITATION-CARD","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":1}}
 {"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":29}
-{"kind":"slide","slide":30,"title":"TECHNICAL.CODE-AND-RESULT","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":0}}
-{"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":30}
-{"kind":"slide","slide":31,"title":"TECHNICAL.TRACE-WATERFALL","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":0}}
-{"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":31}
+{"kind":"artifact","signal":"1 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":29}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Screenshot of the parent/child trace waterfall region cited as evidence\"","artifactKind":"screenshot","slide":29}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":29}
+{"kind":"slide","slide":30,"title":"TECHNICAL.CODE-AND-RESULT","counts":{"textRuns":21,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"21 text runs","artifactKind":"text","slide":30}
+{"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":30}
+{"kind":"artifact","signal":"monospace faces: consolas","artifactKind":"code","slide":30}
+{"kind":"slide","slide":31,"title":"TECHNICAL.TRACE-WATERFALL","counts":{"textRuns":13,"equations":0,"tables":0,"graphicFrames":0,"connectors":3,"shapes":12,"pictures":0}}
+{"kind":"artifact","signal":"13 text runs","artifactKind":"text","slide":31}
+{"kind":"artifact","signal":"1 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":31}
+{"kind":"artifact","signal":"3 connectors joining 12 shapes","artifactKind":"diagram","slide":31}
 {"kind":"slide","slide":32,"title":"TECHNICAL.EQUATION","counts":{"textRuns":3,"equations":1,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
 {"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":32}
 {"kind":"artifact","signal":"1 OMML oMath elements","artifactKind":"equation","slide":32}
-{"kind":"slide","slide":33,"title":"PRODUCT-EVIDENCE.DECK-CI-RECEIPT","counts":{"textRuns":9,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
-{"kind":"artifact","signal":"9 text runs","artifactKind":"text","slide":33}
+{"kind":"slide","slide":33,"title":"PRODUCT-EVIDENCE.DECK-CI-RECEIPT","counts":{"textRuns":11,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"11 text runs","artifactKind":"text","slide":33}
 {"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":33}
+{"kind":"artifact","signal":"1 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":33}
 {"kind":"slide","slide":34,"title":"DECISION.RISK-MATRIX","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
 {"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":34}
 {"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":34}

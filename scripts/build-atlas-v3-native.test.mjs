@@ -6,7 +6,9 @@ import { describe, expect, it } from 'vitest';
 import {
   buildV3NativeDeck,
   compileArtifactSpec,
+  excelSerial,
   ommlFromExpression,
+  timelineDate,
 } from './build-atlas-v3-native.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -116,6 +118,65 @@ describe('v3 native compiler: artifactSpec -> native OOXML', () => {
     expect(tables).toBeGreaterThanOrEqual(4);
     expect(equations).toBe(1);
     expect(connectors).toBeGreaterThanOrEqual(20);
+  });
+
+  // The engineered primitives. Each existed nowhere in PowerPoint until it was built.
+  it('emits a REAL c:dateAx time axis, so progression.timeline is satisfiable at all', async () => {
+    const doc = await atlas();
+    const { buffer } = await buildV3NativeDeck(doc.fixtures);
+    const zip = await JSZip.loadAsync(buffer);
+    const dated = [];
+    for (const p of Object.keys(zip.files).filter((f) => /ppt\/charts\/chart\d+\.xml$/.test(f))) {
+      const xml = await zip.file(p).async('string');
+      if (!/<c:dateAx>/.test(xml)) continue;
+      dated.push(p);
+      // Spec-exact CT_DateAx: date-serial categories, a base time unit, and no CT_CatAx-only children.
+      expect(xml, `${p} numCache`).toMatch(/<c:numCache>/);
+      expect(xml, `${p} baseTimeUnit`).toMatch(/<c:baseTimeUnit val="days"\/>/);
+      expect(xml, `${p} lblAlgn is CatAx-only`).not.toMatch(/<c:lblAlgn/);
+      expect(xml, `${p} noMultiLvlLbl is CatAx-only`).not.toMatch(/<c:noMultiLvlLbl/);
+    }
+    // research-timeline + roadmap-gantt.
+    expect(dated).toHaveLength(2);
+  });
+
+  it('converts unit offsets into real calendar serials', () => {
+    const epochSerial = excelSerial(timelineDate(0, 'day'));
+    expect(excelSerial(timelineDate(1, 'day'))).toBe(epochSerial + 1);
+    expect(excelSerial(timelineDate(1, 'week'))).toBe(epochSerial + 7);
+  });
+
+  it('binds evidence claims to external source relationships, not decorative text', async () => {
+    const doc = await atlas();
+    const { buffer } = await buildV3NativeDeck(doc.fixtures);
+    const zip = await JSZip.loadAsync(buffer);
+    let linkedSlides = 0;
+    for (const p of Object.keys(zip.files).filter((f) => /ppt\/slides\/slide\d+\.xml$/.test(f))) {
+      const xml = await zip.file(p).async('string');
+      if (!/<a:hlinkClick/.test(xml)) continue;
+      const relsPath = p.replace(/slides\/(slide\d+)\.xml$/, 'slides/_rels/$1.xml.rels');
+      const rels = await zip.file(relsPath).async('string');
+      expect(rels, `${p} external target`).toMatch(/TargetMode="External"/);
+      linkedSlides += 1;
+    }
+    expect(linkedSlides).toBeGreaterThanOrEqual(4);
+  });
+
+  it('ships a real poster frame with every poster-frame fallback', async () => {
+    const doc = await atlas();
+    const specs = doc.fixtures.map(compileArtifactSpec).filter((s) => s?.kind === 'fallback');
+    expect(specs.length).toBeGreaterThan(0);
+    for (const spec of specs) {
+      if (spec.capability === 'poster-frame') {
+        // A fallback that only promises a poster frame is not one the gate can accept.
+        expect(spec.posterFrame?.path, spec.archetype).toBeTruthy();
+      } else {
+        // `unsupported` is a refusal, not a degradation: the evidence does not exist, so there is
+        // nothing to show. It must still say precisely what is missing.
+        expect(spec.capability, spec.archetype).toBe('unsupported');
+        expect(spec.fallbackBehavior, spec.archetype).toMatch(/not fabricated|no measured/i);
+      }
+    }
   });
 
   it('keeps every emitted slide part tag-balanced', async () => {

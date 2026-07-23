@@ -22,6 +22,7 @@
       "outputs/artifact-atlas-v2",
       "outputs/artifact-atlas-v3",
       "outputs/atlas-native",
+      "outputs/atlas-v3-native",
       "public/artifact-atlas-v2",
       "runs",
       "*.log",

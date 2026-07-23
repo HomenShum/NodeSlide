@@ -324,7 +324,9 @@ async function injectTiming(buffer, motionSlides) {
   for (const p of Object.keys(zip.files).filter((f) => /^ppt\/slides\/slide\d+\.xml$/.test(f))) {
     let xml = await zip.file(p).async('string');
     if (!/name="ns:motion:[^"]*:state-/.test(xml) || /<p:timing>/.test(xml)) continue;
-    const ids = [...xml.matchAll(/<p:cNvPr id="(\d+)" name="ns:motion:[^"]*:state-/g)].map((m) => m[1]);
+    const ids = [...xml.matchAll(/<p:cNvPr id="(\d+)" name="ns:motion:[^"]*:state-/g)].map(
+      (m) => m[1],
+    );
     const timing = buildTimingTree(ids);
     if (!timing) continue;
     // <p:timing> is the last child of <p:sld>, after the shape tree and colour map override.
@@ -871,17 +873,22 @@ export async function buildV3NativeDeck(fixtures) {
           line: { color: BRAND.accent, width: 1 },
           objectName: `ns:motion:${spec.sceneId}:${state.id}:${state.role}`,
         });
-        slide.addText(state.value === undefined ? `${i + 1}. ${state.label}` : `${i + 1}. ${state.label} — ${state.value}`, {
-          x: 6.0,
-          y: 1.35 + i * 0.62,
-          w: 3.5,
-          h: 0.5,
-          fontSize: 11,
-          color: BRAND.ink,
-          align: 'left',
-          valign: 'middle',
-          margin: 8,
-        });
+        slide.addText(
+          state.value === undefined
+            ? `${i + 1}. ${state.label}`
+            : `${i + 1}. ${state.label} — ${state.value}`,
+          {
+            x: 6.0,
+            y: 1.35 + i * 0.62,
+            w: 3.5,
+            h: 0.5,
+            fontSize: 11,
+            color: BRAND.ink,
+            align: 'left',
+            valign: 'middle',
+            margin: 8,
+          },
+        );
       });
       slide.addText(
         `${spec.states.length}-step build sequence (transition: ${spec.transition}) — each state reveals on advance over the pinned visual.`,

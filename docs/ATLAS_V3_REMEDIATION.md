@@ -80,6 +80,32 @@ Three primitives were built along the way, each of which did not exist before:
 **"Unsatisfiable by construction" was never a property of the format.** Every time that phrase was
 used in this work it turned out to mean "the primitive has not been built yet."
 
+### Playback is proven, not assumed (check H)
+
+`scripts/nodeslide-motion-canary.ps1` drives a **real PowerPoint runtime** (16.0, via COM): it
+starts the slideshow, captures the initial frame, advances once per declared transition, and
+captures each resulting frame. Every frame is reduced to a quantised grayscale signature.
+
+Observed on both scenes: **5 frames, 5 distinct signatures** — each advance genuinely changed the
+screen. That is what closes H:
+
+```
+topology         pass
+runtime playback pass
+overall          pass
+```
+
+Without a PowerPoint runtime the canary exits 2 and H stays `not-run` → the scene is reported
+`indeterminate-for-native-playback`. It **never** synthesizes captures: fabricating a frame would
+make the one check that proves playback the easiest one to fake. Identical frames are a *failure*,
+not a pass — if advancing changed nothing, the animation did not really run.
+
+Run it with:
+
+```bash
+npm run atlas:motion-canary -- --pptx <deck.pptx> --expect <motion-expectations.json>
+```
+
 ### But a step-build is not a scrub
 
 A design-council review (Slide AI Collaboration thread) caught the opposite error immediately after:

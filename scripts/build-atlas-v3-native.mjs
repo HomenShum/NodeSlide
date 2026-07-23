@@ -902,15 +902,19 @@ export async function buildV3NativeDeck(fixtures) {
     const sources = spec.archetype ? EVIDENCE_SOURCES[spec.archetype] : null;
     if (sources) {
       sources.forEach((src, i) => {
+        // The CLAIM is the anchor, not the word "source". Both were on the slide before — the
+        // claim as unlinked grey text and a bare "source" carrying the hyperlink — which reads
+        // fine to a human and is worthless to anything checking the claim->source edge: an
+        // inspector following a:hlinkClick found an anchor that named the link instead of stating
+        // what it supported. Anchoring the claim makes the edge mean what the slide implies.
         slide.addText(
           [
-            { text: `${src.claim} — `, options: { color: BRAND.muted } },
             {
-              text: 'source',
+              text: src.claim,
               options: {
                 color: BRAND.accent,
                 underline: true,
-                hyperlink: { url: src.url, tooltip: src.claim },
+                hyperlink: { url: src.url, tooltip: src.url },
               },
             },
           ],

@@ -1251,7 +1251,32 @@ async function main() {
 
   await writeFile(
     path.join(outDir, 'motion-expectations.json'),
-    `${JSON.stringify({ schemaVersion: 'nodeslide.motion-expectation/v1', scenes: motionExpectations }, null, 2)}\n`,
+    `${JSON.stringify(
+      {
+        schemaVersion: 'nodeslide.motion-expectation/v1',
+        scenes: motionExpectations,
+        // Canonical motion fixtures this build deliberately did NOT compile as motion scenes.
+        // Omitting them silently made them vanish from the motion gate entirely, which reads in a
+        // summary exactly like a scene that passed; the parity oracle now reconciles this manifest
+        // against benchmarks/artifact-atlas/v2/atlas.json and treats silence as a finding. A
+        // declaration is an answer, so the reason ships with it.
+        declaredFallbacks: compiled
+          .filter(
+            (c) =>
+              c.fixture?.artifactSpec?.kind === 'motion' &&
+              (c.spec?.capability === 'poster-frame' || c.spec?.kind === 'fallback'),
+          )
+          .map((c) => ({
+            sceneId: c.fixture.artifactType,
+            behavior:
+              c.spec.note ??
+              c.spec.fallbackBehavior ??
+              'Compiled as an explicitly declared poster frame rather than a motion scene.',
+          })),
+      },
+      null,
+      2,
+    )}\n`,
   );
 
   // Emit gate inputs so the deck is judged by the same instrument that failed v3.

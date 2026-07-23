@@ -231,5 +231,11 @@
         }
       ]
     }
+  ],
+  "declaredFallbacks": [
+    {
+      "sceneId": "interaction-clip",
+      "behavior": "Declared poster frame — a still is not an interaction clip."
+    }
   ]
 }

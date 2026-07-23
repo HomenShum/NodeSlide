@@ -1,0 +1,323 @@
+{
+  "_comment": "Declared artifact payloads for the live v3-native deck. Read by BOTH the builder and the parity fidelity gate, so the gate still compares emitted bytes against an independent declaration rather than against the compiler. Kept out of scripts/lib/artifact-atlas-v2-definition.mjs on purpose: that file is the frozen source for the V2/V3 museum decks, whose receipts pin its digest and whose visual inspections were human-attested.",
+  "schemaVersion": "nodeslide.atlas-payload-overrides/v1",
+  "overrides": {
+    "data.kpi-strip": {
+      "unit": "candidates",
+      "xAxis": {
+        "labels": ["Requested", "Passed gates", "Eligible", "Model-authored", "Human-preferred"]
+      },
+      "yAxis": {
+        "min": 0,
+        "max": 90
+      },
+      "series": [
+        {
+          "id": "this run",
+          "values": [84, 84, 82, 72, 0]
+        },
+        {
+          "id": "prior run",
+          "values": [38, 32, 30, 24, 0]
+        }
+      ]
+    },
+    "data.multi-series": {
+      "unit": "seconds to first artifact",
+      "xAxis": {
+        "labels": ["Plan", "Compile", "Emit", "Inspect", "Gate"]
+      },
+      "yAxis": {
+        "min": 0,
+        "max": 35
+      },
+      "series": [
+        {
+          "id": "kimi-k3",
+          "values": [6.2, 14.8, 21.1, 26.4, 31.9]
+        },
+        {
+          "id": "claude-sonnet-5",
+          "values": [7.1, 12.3, 16.9, 20.2, 23.6]
+        },
+        {
+          "id": "gemma-4-26b",
+          "values": [9.4, 19.7, 28.8, 30.1, 31.4]
+        }
+      ]
+    },
+    "data.table": {
+      "unit": "artifacts per archetype family",
+      "xAxis": {
+        "labels": ["Archetypes", "Distinct artifacts", "Native objects", "Declared fallback"]
+      },
+      "yAxis": {
+        "min": 0,
+        "max": 12
+      },
+      "series": [
+        {
+          "id": "Narrative",
+          "values": [4, 4, 4, 0]
+        },
+        {
+          "id": "Data",
+          "values": [9, 9, 9, 0]
+        },
+        {
+          "id": "Systems",
+          "values": [6, 6, 6, 0]
+        },
+        {
+          "id": "Progression",
+          "values": [5, 5, 3, 2]
+        },
+        {
+          "id": "Product evidence",
+          "values": [7, 7, 7, 0]
+        },
+        {
+          "id": "Technical",
+          "values": [4, 4, 4, 0]
+        },
+        {
+          "id": "Decision",
+          "values": [3, 3, 3, 0]
+        }
+      ]
+    },
+    "data.funnel": {
+      "unit": "candidates surviving each stage",
+      "xAxis": {
+        "labels": ["Requested", "Planned", "Compiled", "Exported", "Gate-clean", "Eligible"]
+      },
+      "yAxis": {
+        "min": 0,
+        "max": 90
+      },
+      "series": [
+        {
+          "id": "arena funnel",
+          "values": [84, 84, 84, 84, 84, 82]
+        }
+      ]
+    },
+    "data.distribution": {
+      "comparisonType": "latency-distribution",
+      "metrics": [
+        {
+          "id": "candidates",
+          "unit": "candidate count"
+        }
+      ],
+      "cohorts": [
+        {
+          "id": "0-8s",
+          "status": "observed",
+          "plotted": true,
+          "values": {
+            "candidates": 9
+          }
+        },
+        {
+          "id": "8-16s",
+          "status": "observed",
+          "plotted": true,
+          "values": {
+            "candidates": 27
+          }
+        },
+        {
+          "id": "16-24s",
+          "status": "observed",
+          "plotted": true,
+          "values": {
+            "candidates": 31
+          }
+        },
+        {
+          "id": "24-32s",
+          "status": "observed",
+          "plotted": true,
+          "values": {
+            "candidates": 15
+          }
+        },
+        {
+          "id": ">32s",
+          "status": "observed",
+          "plotted": true,
+          "values": {
+            "candidates": 2
+          }
+        }
+      ]
+    },
+    "systems.architecture": {
+      "directed": true,
+      "nodes": [
+        {
+          "id": "brief"
+        },
+        {
+          "id": "planner"
+        },
+        {
+          "id": "artifact-compiler"
+        },
+        {
+          "id": "ooxml-emitter"
+        },
+        {
+          "id": "deck-ci"
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge-1",
+          "from": "brief",
+          "to": "planner",
+          "directed": true
+        },
+        {
+          "id": "edge-2",
+          "from": "planner",
+          "to": "artifact-compiler",
+          "directed": true
+        },
+        {
+          "id": "edge-3",
+          "from": "artifact-compiler",
+          "to": "ooxml-emitter",
+          "directed": true
+        },
+        {
+          "id": "edge-4",
+          "from": "ooxml-emitter",
+          "to": "deck-ci",
+          "directed": true
+        }
+      ]
+    },
+    "systems.sequence": {
+      "directed": true,
+      "nodes": [
+        {
+          "id": "author"
+        },
+        {
+          "id": "agent"
+        },
+        {
+          "id": "reviewer"
+        },
+        {
+          "id": "countersign"
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge-1",
+          "from": "author",
+          "to": "agent",
+          "directed": true
+        },
+        {
+          "id": "edge-2",
+          "from": "agent",
+          "to": "reviewer",
+          "directed": true
+        },
+        {
+          "id": "edge-3",
+          "from": "reviewer",
+          "to": "countersign",
+          "directed": true
+        }
+      ]
+    },
+    "systems.hierarchy": {
+      "directed": true,
+      "nodes": [
+        {
+          "id": "routing-budget"
+        },
+        {
+          "id": "high-capability"
+        },
+        {
+          "id": "low-cost"
+        },
+        {
+          "id": "kimi-k3"
+        },
+        {
+          "id": "gemma-4"
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge-1",
+          "from": "routing-budget",
+          "to": "high-capability",
+          "directed": true
+        },
+        {
+          "id": "edge-2",
+          "from": "routing-budget",
+          "to": "low-cost",
+          "directed": true
+        },
+        {
+          "id": "edge-3",
+          "from": "high-capability",
+          "to": "kimi-k3",
+          "directed": true
+        },
+        {
+          "id": "edge-4",
+          "from": "low-cost",
+          "to": "gemma-4",
+          "directed": true
+        }
+      ]
+    },
+    "product-evidence.claim-lineage": {
+      "directed": true,
+      "nodes": [
+        {
+          "id": "capture"
+        },
+        {
+          "id": "extracted-fact"
+        },
+        {
+          "id": "claim"
+        },
+        {
+          "id": "slide-element"
+        }
+      ],
+      "edges": [
+        {
+          "id": "edge-1",
+          "from": "capture",
+          "to": "extracted-fact",
+          "directed": true
+        },
+        {
+          "id": "edge-2",
+          "from": "extracted-fact",
+          "to": "claim",
+          "directed": true
+        },
+        {
+          "id": "edge-3",
+          "from": "claim",
+          "to": "slide-element",
+          "directed": true
+        }
+      ]
+    }
+  }
+}

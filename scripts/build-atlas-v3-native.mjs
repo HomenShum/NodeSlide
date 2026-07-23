@@ -25,6 +25,7 @@
  */
 
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -215,6 +216,22 @@ const TABLE_ARCHETYPES = new Set([
   'product-evidence.deck-ci-receipt',
 ]);
 
+/**
+ * A cell as a reader should see it.
+ *
+ * `String(0.9583333333333334)` is the honest storage value and the wrong thing to print: sixteen
+ * significant figures of a rounding artefact reached a presented comparison matrix. Precision is a
+ * property of the number; this is a property of the slide.
+ */
+export function formatCell(value) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return String(value ?? '—');
+  if (Number.isInteger(value)) return String(value);
+  // Sub-unit values (costs, rates) keep three significant figures; everything else keeps two
+  // decimals, so a column of percentages lines up instead of ragging.
+  const formatted = Math.abs(value) < 1 ? value.toPrecision(3) : value.toFixed(2);
+  return String(Number(formatted));
+}
+
 /** Build table rows from whatever numeric payload the fixture carries. */
 function rowsFromPayload(payload, spec) {
   if (Array.isArray(payload.cohorts) && Array.isArray(payload.metrics)) {
@@ -223,7 +240,7 @@ function rowsFromPayload(payload, spec) {
       ['Cohort', ...metrics],
       ...payload.cohorts.map((c) => [
         String(c.id),
-        ...metrics.map((m) => String(c.values?.[m] ?? '—')),
+        ...metrics.map((m) => (m in (c.values ?? {}) ? formatCell(c.values[m]) : '—')),
       ]),
     ];
   }
@@ -231,7 +248,7 @@ function rowsFromPayload(payload, spec) {
     const labels = labelsFor((payload.series[0].values ?? []).length, payload);
     return [
       ['Series', ...labels],
-      ...payload.series.map((s) => [String(s.id), ...(s.values ?? []).map((v) => String(v))]),
+      ...payload.series.map((s) => [String(s.id), ...(s.values ?? []).map(formatCell)]),
     ];
   }
   return [
@@ -430,11 +447,40 @@ function labelsFor(count, payload) {
   return Array.from({ length: count }, (_, i) => `${i + 1}`);
 }
 
+/**
+ * Distinct payloads for archetypes whose Atlas fixture shares one stub with its neighbours.
+ *
+ * The Atlas definition gives four chart families one two-bar `series-1 / A, B / 62, 86` payload and
+ * four graph families one two-node `source -> output` payload, so DATA.KPI-STRIP, DATA.MULTI-SERIES
+ * and DATA.FUNNEL rendered pixel-identical below the title, as did ARCHITECTURE, SEQUENCE,
+ * HIERARCHY and CLAIM-LINEAGE.
+ *
+ * Two placement decisions, both deliberate.
+ *
+ * NOT in the Atlas definition: that file is the frozen source for the V2 and V3 museum decks, whose
+ * receipts pin its digest and whose visual inspections were attested by a human. Editing it
+ * invalidates attestations that cannot be honestly re-earned from this machine, since the V3 museum
+ * deck is built by an external exporter. The live deck carries its own content; the frozen record
+ * stays true to what was actually reviewed.
+ *
+ * NOT inline in this compiler either: the fidelity gate earns its keep by diffing emitted bytes
+ * against a declaration this compiler did not author. A payload hard-coded here would make the
+ * compiler both the author and the answer key, so the gate would only confirm itself. It lives in
+ * a committed JSON file that both the builder and the gate read.
+ *
+ * Numbers are the real 2026-07-22 arena run, so each slide is both distinct and true.
+ */
+const PAYLOAD_OVERRIDES_PATH = 'benchmarks/artifact-atlas/v3-native/payload-overrides.json';
+const PAYLOAD_OVERRIDES = JSON.parse(
+  readFileSync(path.join(repoRoot, PAYLOAD_OVERRIDES_PATH), 'utf8'),
+).overrides;
+
 /** Returns a native spec {kind, ...} the primitives understand, or null when unmappable. */
 export function compileArtifactSpec(fixture) {
   const spec = fixture.artifactSpec ?? {};
-  const payload = spec.payload ?? {};
-  const archetype = ARCHETYPE_BY_ARTIFACT_TYPE[fixture.artifactType] ?? null;
+  const archetypeId = ARCHETYPE_BY_ARTIFACT_TYPE[fixture.artifactType] ?? null;
+  const payload = PAYLOAD_OVERRIDES[archetypeId] ?? spec.payload ?? {};
+  const archetype = archetypeId;
   const base = { archetype, title: fixture.title, artifactType: fixture.artifactType };
 
   // Real captures beat any renderer. Where this repo already holds a genuine screenshot for the
@@ -602,11 +648,32 @@ export function compileArtifactSpec(fixture) {
       const metrics = (payload.metrics ?? []).map((m) => m.id);
       if (cohorts.length === 0 || metrics.length === 0) return null;
       // One series per metric, one category per cohort — an editable multi-series chart.
-      const series = metrics.map((metric) => ({
-        name: metric,
-        labels: cohorts.map((c) => c.id),
-        values: cohorts.map((c) => Number(c.values[metric] ?? 0)),
-      }));
+      //
+      // Two things this must not do. It must not coerce a missing metric to 0: `?? 0` drew three
+      // of six categories as absent bars, which reads as "measured zero" rather than "not
+      // measured". And it must not put incommensurable units on one linear axis: latency in
+      // seconds dominated a 0-20 scale until quality and cost were invisible hairlines. So each
+      // metric is plotted against its OWN maximum and says so in its name — the axis becomes
+      // dimensionless, which is the only honest way to draw three units in one frame.
+      const plotted = metrics
+        .map((metric) => {
+          const present = cohorts.filter((c) => typeof c.values[metric] === 'number');
+          return { metric, present };
+        })
+        .filter((entry) => entry.present.length > 0);
+      if (plotted.length === 0) return null;
+
+      const series = plotted.map(({ metric, present }) => {
+        const peak = Math.max(...present.map((c) => Math.abs(Number(c.values[metric]))));
+        const unit = (payload.metrics ?? []).find((m) => m.id === metric)?.unit;
+        return {
+          name: peak > 0 ? `${metric} (% of max${unit ? ` ${unit}` : ''})` : metric,
+          labels: present.map((c) => c.id),
+          values: present.map((c) =>
+            peak > 0 ? Number(((Number(c.values[metric]) / peak) * 100).toFixed(1)) : 0,
+          ),
+        };
+      });
       return { ...base, kind: 'bar', series };
     }
     // Timelines and roadmaps compile onto a REAL time axis: categories become calendar dates,
@@ -714,8 +781,15 @@ export function compileArtifactSpec(fixture) {
         ],
       };
     }
-    case 'generic':
-      return { ...base, kind: 'text', label: payload.label ?? fixture.takeaway ?? fixture.title };
+    case 'generic': {
+      // A label that merely restates the title is not a body. Five slides shipped with their own
+      // headline printed a second time as the entire content because `payload.label` won this
+      // chain unconditionally, and `fixture.title` backstopped it when the label was empty.
+      const title = String(fixture.title ?? '').trim();
+      const label = String(payload.label ?? '').trim();
+      const body = label && label !== title ? label : String(fixture.takeaway ?? '').trim();
+      return { ...base, kind: 'text', label: body || null };
+    }
     default:
       return null;
   }
@@ -831,6 +905,10 @@ export async function buildV3NativeDeck(fixtures) {
           y: 1.5,
           w,
           h: w * 0.56,
+          // The frame is 16:9; the captures are 3024x1964 (1.54). Forcing one into the other
+          // stretched every screenshot 16% horizontally. `contain` fits the bitmap inside the
+          // frame at its own aspect instead of distorting it to fill.
+          sizing: { type: 'contain', w, h: w * 0.56 },
           altText: img.alt,
         });
         if (img.caption) {
@@ -892,6 +970,7 @@ export async function buildV3NativeDeck(fixtures) {
         y: 1.35,
         w: 5.2,
         h: 2.92,
+        sizing: { type: 'contain', w: 5.2, h: 2.92 },
         altText: `Pinned scene visual — ${spec.posterFrame.alt}`,
         objectName: `ns:motion:${spec.sceneId}:pinned:${spec.pinnedRole}`,
       });
@@ -937,6 +1016,7 @@ export async function buildV3NativeDeck(fixtures) {
           y: 1.4,
           w: 4.2,
           h: 2.35,
+          sizing: { type: 'contain', w: 4.2, h: 2.35 },
           altText: `Poster frame — ${spec.posterFrame.alt}`,
         });
       }
@@ -958,8 +1038,10 @@ export async function buildV3NativeDeck(fixtures) {
         color: BRAND.muted,
         align: 'center',
       });
-    } else {
-      slide.addText(spec.label ?? spec.title, {
+    } else if (spec.label) {
+      // No `?? spec.title` fallback: a slide with no body stays sparse rather than echoing its own
+      // headline. Sparse is an honest failure a reviewer can see and fix; an echo reads as content.
+      slide.addText(spec.label, {
         x: 0.7,
         y: 2.1,
         w: 8.6,
@@ -1147,7 +1229,15 @@ async function main() {
   for (const p of Object.keys(zip.files).filter((f) => /ppt\/slides\/slide\d+\.xml$/.test(f))) {
     const xml = await zip.file(p).async('string');
     tables += (xml.match(/<a:tbl\b/g) ?? []).length;
-    equations += (xml.match(/<m:oMath\b/g) ?? []).length;
+    // Count PLACEMENT, not presence. Counting <m:oMath> is what let this deck ship green with an
+    // equation no renderer draws: the markup was there, in the one position where it does nothing.
+    equations += (xml.match(/<a14:m>\s*<m:oMath(?:Para)?\b/g) ?? []).length;
+    const orphanMath = xml.match(/<a:p>\s*<m:oMath/g) ?? [];
+    if (orphanMath.length > 0) {
+      throw new Error(
+        `${p}: ${orphanMath.length} <m:oMath> sit directly inside <a:p> with no <a14:m> wrapper. That markup is well-formed and invisible — LibreOffice deletes it outright.`,
+      );
+    }
     connectors += (xml.match(/<p:cxnSp>/g) ?? []).length;
   }
   const byKind = {};

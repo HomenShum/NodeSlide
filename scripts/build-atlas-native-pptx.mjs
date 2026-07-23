@@ -170,13 +170,23 @@ const EMU_PER_INCH = 914_400;
  */
 function buildDiagramNodes(slide, spec) {
   const count = spec.nodes.length;
-  const w = 1.5;
   const h = 0.9;
-  const gap = (10 - count * w) / (count + 1);
   const y = 2.4;
+  // Fixed gutter, derived width — not fixed width, derived gutter. The old formula was
+  // `gap = (10 - count * 1.5) / (count + 1)`, which goes NEGATIVE at seven nodes: an eight-node
+  // graph laid its boxes on top of each other and off both slide edges, with every connector
+  // struck through a label. Deriving the width instead means the row always fits, whatever the
+  // node count, and only the boxes get smaller.
+  const MARGIN = 0.5;
+  const GUTTER = 0.25;
+  const usable = 10 - MARGIN * 2;
+  const w = Math.min(1.5, (usable - (count - 1) * GUTTER) / count);
+  const x0 = (10 - (count * w + (count - 1) * GUTTER)) / 2;
+  // Type has to come down with the box or it wraps onto a dangling single character.
+  const fontSize = w >= 1.4 ? 14 : w >= 1.1 ? 12 : 10;
   const geometry = [];
   spec.nodes.forEach((node, index) => {
-    const x = gap + index * (w + gap);
+    const x = x0 + index * (w + GUTTER);
     // The shape name is how the post-processor finds this node's assigned cNvPr id.
     slide.addShape('roundRect', {
       x,
@@ -194,7 +204,7 @@ function buildDiagramNodes(slide, spec) {
       h,
       align: 'center',
       valign: 'middle',
-      fontSize: 14,
+      fontSize,
       color: '221F1C',
     });
     geometry.push({
@@ -239,15 +249,24 @@ async function injectOmml(buffer, equationSpecs) {
     const omml = equationSpecs[injected]?.ommlBody;
     if (!omml) continue;
     // Replace the whole <a:p>...[[OMML]]...</a:p> paragraph with one carrying the oMath.
+    //
+    // The <a14:m> wrapper is not decoration. A bare <m:oMath> sitting directly inside <a:p> is
+    // well-formed and passes a presence count, and no renderer draws it: PowerPoint showed the
+    // fraction only because it is lenient, and LibreOffice deleted all ten <m:t> runs outright,
+    // leaving a shape that still advertised an equation and rendered blank. a14:m is the element
+    // both PowerPoint and LibreOffice actually WRITE, and it is what makes the maths survive.
     xml = xml.replace(
       /<a:p>(?:(?!<a:p>).)*?\[\[OMML\]\](?:(?!<\/a:p>).)*?<\/a:p>/s,
-      `<a:p>${omml}</a:p>`,
+      `<a:p><a14:m>${omml}</a14:m><a:endParaRPr lang="en-US" dirty="0"/></a:p>`,
     );
-    // Declare the math namespace on the root if it is absent, so the part is well-formed.
+    // Declare the math namespaces on the root if absent, so the part is well-formed. mc:Ignorable
+    // lets a consumer that does not understand a14 skip the element instead of rejecting the file.
     if (!/xmlns:m=/.test(xml)) {
       xml = xml.replace(
         '<p:sld ',
-        '<p:sld xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" ',
+        '<p:sld xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" ' +
+          'xmlns:a14="http://schemas.microsoft.com/office/drawing/2010/main" ' +
+          'xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="a14" ',
       );
     }
     zip.file(slidePath, xml);

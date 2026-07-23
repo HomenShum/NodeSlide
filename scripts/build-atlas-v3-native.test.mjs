@@ -192,7 +192,9 @@ describe('v3 native compiler: artifactSpec -> native OOXML', () => {
       const targets = [
         ...xml.matchAll(/<p:cTn\b[^>]*nodeType="clickEffect"[\s\S]*?<p:spTgt spid="(\d+)"/g),
       ].map((m) => m[1]);
-      const stateIds = [...xml.matchAll(/<p:cNvPr id="(\d+)" name="state-/g)].map((m) => m[1]);
+      const stateIds = [...xml.matchAll(/<p:cNvPr id="(\d+)" name="ns:motion:[^"]*:state-/g)].map(
+        (m) => m[1],
+      );
       // A staged reveal: >=2 build steps, each bound to a DISTINCT real state shape.
       expect(new Set(targets).size, `${p} distinct targets`).toBeGreaterThanOrEqual(2);
       expect(new Set(targets).size, `${p} no duplicate targets`).toBe(targets.length);
@@ -209,7 +211,7 @@ describe('v3 native compiler: artifactSpec -> native OOXML', () => {
     for (const p of Object.keys(zip.files).filter((f) => /ppt\/slides\/slide\d+\.xml$/.test(f))) {
       const xml = await zip.file(p).async('string');
       if (!/<p:timing>/.test(xml)) continue;
-      const states = [...xml.matchAll(/name="state-/g)].length;
+      const states = [...xml.matchAll(/name="ns:motion:[^"]*:state-/g)].length;
       const transitions = (xml.match(/nodeType="clickEffect"/g) ?? []).length;
       // Animating all N would claim one more transition than the scene actually has.
       expect(transitions, `${p} N-1 transitions`).toBe(states - 1);

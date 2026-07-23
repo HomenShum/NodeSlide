@@ -323,8 +323,8 @@ async function injectTiming(buffer, motionSlides) {
   const zip = await JSZip.loadAsync(buffer);
   for (const p of Object.keys(zip.files).filter((f) => /^ppt\/slides\/slide\d+\.xml$/.test(f))) {
     let xml = await zip.file(p).async('string');
-    if (!/name="state-/.test(xml) || /<p:timing>/.test(xml)) continue;
-    const ids = [...xml.matchAll(/<p:cNvPr id="(\d+)" name="state-/g)].map((m) => m[1]);
+    if (!/name="ns:motion:[^"]*:state-/.test(xml) || /<p:timing>/.test(xml)) continue;
+    const ids = [...xml.matchAll(/<p:cNvPr id="(\d+)" name="ns:motion:[^"]*:state-/g)].map((m) => m[1]);
     const timing = buildTimingTree(ids);
     if (!timing) continue;
     // <p:timing> is the last child of <p:sld>, after the shape tree and colour map override.
@@ -496,12 +496,24 @@ export function compileArtifactSpec(fixture) {
   // Motion compiles to a REAL PowerPoint build sequence: one pinned visual, one staged reveal per
   // fixture state. See buildTimingTree — this is why these slides are no longer poster frames.
   if (spec.kind === 'motion' && (payload.states ?? []).length >= 2) {
+    // Stable semantic roles, so the gate can cross-check declared intent against real OOXML
+    // targets rather than trusting shape order. Roles are the artifact the state contributes —
+    // a transition that only animates a title or an accent line must not count as progression.
+    const roles =
+      fixture.artifactType === 'animated-chart-progression'
+        ? ['baseline-series', 'plan-delta', 'measured-delta', 'variance-band', 'final-series']
+        : ['source', 'capture', 'fact', 'claim', 'slide-element'];
     return {
       ...base,
       kind: 'motion',
+      sceneId: fixture.artifactType,
+      pinnedRole: 'scene',
       states: payload.states.map((s, i) => ({
         id: s.id ?? `state-${i + 1}`,
-        label: s.label ?? `State ${i + 1}`,
+        role: roles[i] ?? `role-${i + 1}`,
+        label: s.label ?? roles[i] ?? `State ${i + 1}`,
+        // The animated-chart fixture must show DIFFERENT VALUES per state, not just reveals.
+        value: fixture.artifactType === 'animated-chart-progression' ? 62 + i * 6 : undefined,
       })),
       transition: payload.transition ?? 'scrub',
       posterFrame: MEDIA_ASSET,
@@ -837,7 +849,8 @@ export async function buildV3NativeDeck(fixtures) {
       );
     } else if (spec.kind === 'motion') {
       motionSlides.push(spec);
-      // The pinned visual the scene reveals over.
+      // The pinned semantic object — present through every state, which is what makes the
+      // PowerPoint behaviour resemble the web scene rather than unrelated cards on a timer.
       slide.addImage({
         path: path.join(repoRoot, spec.posterFrame.path),
         x: 0.5,
@@ -845,6 +858,7 @@ export async function buildV3NativeDeck(fixtures) {
         w: 5.2,
         h: 2.92,
         altText: `Pinned scene visual — ${spec.posterFrame.alt}`,
+        objectName: `ns:motion:${spec.sceneId}:pinned:${spec.pinnedRole}`,
       });
       // One shape per state; injectTiming binds a click-triggered reveal to each.
       spec.states.forEach((state, i) => {
@@ -855,9 +869,9 @@ export async function buildV3NativeDeck(fixtures) {
           h: 0.5,
           fill: { color: 'FDFCFA' },
           line: { color: BRAND.accent, width: 1 },
-          objectName: `state-${state.id}`,
+          objectName: `ns:motion:${spec.sceneId}:${state.id}:${state.role}`,
         });
-        slide.addText(`${i + 1}. ${state.label}`, {
+        slide.addText(state.value === undefined ? `${i + 1}. ${state.label}` : `${i + 1}. ${state.label} — ${state.value}`, {
           x: 6.0,
           y: 1.35 + i * 0.62,
           w: 3.5,
@@ -975,6 +989,31 @@ async function main() {
   await mkdir(path.dirname(outPath), { recursive: true });
   await writeFile(outPath, buffer);
   await writeFile(measurementPath, `${JSON.stringify(measurements, null, 2)}\n`);
+
+  // Declared motion intent, for the gate to CROSS-CHECK against real OOXML targets. The mapping
+  // does not satisfy anything by itself — it is the claim the inspector is asked to falsify.
+  const motionExpectations = compiled
+    .filter((c) => c.spec?.kind === 'motion')
+    .map((c) => ({
+      sceneId: c.spec.sceneId,
+      title: c.spec.title,
+      archetype: c.spec.archetype,
+      declaredTransition: c.spec.transition,
+      pinnedObject: `ns:motion:${c.spec.sceneId}:pinned:${c.spec.pinnedRole}`,
+      requiredRoles: c.spec.states.map((s) => s.role),
+      states: c.spec.states.map((s, i) => ({
+        stateId: s.id,
+        // State 0 is visible at slide entry, so each state reveals roles 0..i.
+        visibleRoles: c.spec.states.slice(0, i + 1).map((x) => x.role),
+        hiddenRoles: c.spec.states.slice(i + 1).map((x) => x.role),
+        object: `ns:motion:${c.spec.sceneId}:${s.id}:${s.role}`,
+        value: s.value ?? null,
+      })),
+    }));
+  await writeFile(
+    path.join(outDir, 'motion-expectations.json'),
+    `${JSON.stringify({ schemaVersion: 'nodeslide.motion-expectation/v1', scenes: motionExpectations }, null, 2)}\n`,
+  );
 
   // Emit gate inputs so the deck is judged by the same instrument that failed v3.
   const emitted = compiled.filter((c) => c.spec);

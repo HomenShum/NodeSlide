@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import JSZip from 'jszip';
 import { describe, expect, it } from 'vitest';
 import {
+  buildTimingTree,
   buildV3NativeDeck,
   compileArtifactSpec,
   excelSerial,
@@ -177,6 +178,34 @@ describe('v3 native compiler: artifactSpec -> native OOXML', () => {
         expect(spec.fallbackBehavior, spec.archetype).toMatch(/not fabricated|no measured/i);
       }
     }
+  });
+
+  it('emits a REAL p:timing build sequence for motion, not a poster frame', async () => {
+    const doc = await atlas();
+    const { buffer } = await buildV3NativeDeck(doc.fixtures);
+    const zip = await JSZip.loadAsync(buffer);
+    let animated = 0;
+    for (const p of Object.keys(zip.files).filter((f) => /ppt\/slides\/slide\d+\.xml$/.test(f))) {
+      const xml = await zip.file(p).async('string');
+      if (!/<p:timing>/.test(xml)) continue;
+      animated += 1;
+      const targets = [
+        ...xml.matchAll(/<p:cTn\b[^>]*nodeType="clickEffect"[\s\S]*?<p:spTgt spid="(\d+)"/g),
+      ].map((m) => m[1]);
+      const stateIds = [...xml.matchAll(/<p:cNvPr id="(\d+)" name="state-/g)].map((m) => m[1]);
+      // A staged reveal: >=2 build steps, each bound to a DISTINCT real state shape.
+      expect(new Set(targets).size, `${p} distinct targets`).toBeGreaterThanOrEqual(2);
+      expect(new Set(targets).size, `${p} no duplicate targets`).toBe(targets.length);
+      for (const id of targets) expect(stateIds, `${p} target is a state shape`).toContain(id);
+    }
+    // evidence-scrollytelling + animated-chart-progression.
+    expect(animated).toBe(2);
+  });
+
+  it('will not call a single fade-in a scene', () => {
+    // The anti-gaming rule lives in the builder too: one state is not a staged reveal.
+    expect(buildTimingTree(['5'])).toBe('');
+    expect(buildTimingTree(['5', '7'])).toMatch(/nodeType="clickEffect"/);
   });
 
   it('keeps every emitted slide part tag-balanced', async () => {

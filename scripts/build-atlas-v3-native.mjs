@@ -277,6 +277,60 @@ export function engineerDateAxis(chartXml, serials, formatCode = 'yyyy-mm-dd') {
   return xml;
 }
 
+// ---------------------------------------------------------------------------------------------
+// The motion primitive
+// ---------------------------------------------------------------------------------------------
+
+/**
+ * Build a real PowerPoint animation sequence.
+ *
+ * I previously called scroll-driven motion "genuinely impossible in OOXML" and shipped a poster
+ * frame. That was wrong: OOXML has a complete animation model — <p:timing> carrying a <p:seq> of
+ * click-triggered build steps. Our v2 deck contains zero <p:timing> not because the format lacks
+ * it, but because the Walnut visual exporter never emitted any.
+ *
+ * A scrollytelling scene is one pinned visual revealed in stages. That is exactly a build
+ * sequence: N states, each appearing on advance, over a visual that never moves. So the honest
+ * native realization is a <p:timing> tree with one `clickEffect` per state, each targeting a
+ * distinct shape id.
+ *
+ * `shapeIds` must be the real cNvPr ids of the state shapes on the slide.
+ */
+export function buildTimingTree(shapeIds) {
+  if (shapeIds.length < 2) return '';
+  let id = 4; // 1..3 are the root / mainSeq / top-level par below.
+  const steps = shapeIds
+    .map((spid) => {
+      const parId = id++;
+      const setId = id++;
+      const behavior = `<p:cBhvr><p:cTn id="${setId}" dur="1" fill="hold"><p:stCondLst><p:cond delay="0"/></p:stCondLst></p:cTn><p:tgtEl><p:spTgt spid="${spid}"/></p:tgtEl><p:attrNameLst><p:attrName>style.visibility</p:attrName></p:attrNameLst></p:cBhvr>`;
+      return `<p:par><p:cTn id="${parId}" fill="hold" nodeType="clickEffect" presetID="1" presetClass="entr"><p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst><p:set>${behavior}<p:to><p:strVal val="visible"/></p:to></p:set></p:childTnLst></p:cTn></p:par>`;
+    })
+    .join('');
+
+  const mainSeq = `<p:cTn id="2" dur="indefinite" nodeType="mainSeq"><p:childTnLst><p:par><p:cTn id="3" fill="hold"><p:stCondLst><p:cond delay="indefinite"/></p:stCondLst><p:childTnLst>${steps}</p:childTnLst></p:cTn></p:par></p:childTnLst></p:cTn>`;
+  const advance = `<p:prevCondLst><p:cond evt="onPrev" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:prevCondLst><p:nextCondLst><p:cond evt="onNext" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:nextCondLst>`;
+  const root = `<p:cTn id="1" dur="indefinite" restart="never" nodeType="tmRoot"><p:childTnLst><p:seq concurrent="1" nextAc="seek">${mainSeq}${advance}</p:seq></p:childTnLst></p:cTn>`;
+  return `<p:timing><p:tnLst><p:par>${root}</p:par></p:tnLst></p:timing>`;
+}
+
+/** Attach the build sequence to every motion slide, bound to its real state-shape ids. */
+async function injectTiming(buffer, motionSlides) {
+  if (motionSlides.length === 0) return buffer;
+  const zip = await JSZip.loadAsync(buffer);
+  for (const p of Object.keys(zip.files).filter((f) => /^ppt\/slides\/slide\d+\.xml$/.test(f))) {
+    let xml = await zip.file(p).async('string');
+    if (!/name="state-/.test(xml) || /<p:timing>/.test(xml)) continue;
+    const ids = [...xml.matchAll(/<p:cNvPr id="(\d+)" name="state-/g)].map((m) => m[1]);
+    const timing = buildTimingTree(ids);
+    if (!timing) continue;
+    // <p:timing> is the last child of <p:sld>, after the shape tree and colour map override.
+    xml = xml.replace('</p:sld>', `${timing}</p:sld>`);
+    zip.file(p, xml);
+  }
+  return zip.generateAsync({ type: 'nodebuffer' });
+}
+
 /** Apply the date axis to every chart part belonging to a timeline slide. */
 async function injectDateAxes(buffer, timelineCharts) {
   if (timelineCharts.length === 0) return buffer;
@@ -434,6 +488,21 @@ export function compileArtifactSpec(fixture) {
       'unsupported',
       'The fixture carries only a narrative caption — no before/after pair of screenshots, charts or diagrams — so no comparison artifact is drawn.',
     );
+  }
+
+  // Motion compiles to a REAL PowerPoint build sequence: one pinned visual, one staged reveal per
+  // fixture state. See buildTimingTree — this is why these slides are no longer poster frames.
+  if (spec.kind === 'motion' && (payload.states ?? []).length >= 2) {
+    return {
+      ...base,
+      kind: 'motion',
+      states: payload.states.map((s, i) => ({
+        id: s.id ?? `state-${i + 1}`,
+        label: s.label ?? `State ${i + 1}`,
+      })),
+      transition: payload.transition ?? 'scrub',
+      posterFrame: MEDIA_ASSET,
+    };
   }
 
   if (DECLARED_FALLBACK_KINDS.has(spec.kind)) {
@@ -651,6 +720,7 @@ export async function buildV3NativeDeck(fixtures) {
   const diagrams = [];
   const compiled = [];
   const timelineCharts = [];
+  const motionSlides = [];
   let chartOrdinal = 0;
 
   fixtures.forEach((fixture, index) => {
@@ -757,6 +827,44 @@ export async function buildV3NativeDeck(fixtures) {
         { addTable: (rows, opts) => slide.addTable(rows, { ...opts, x: 5.4, w: 4.1 }) },
         spec,
       );
+    } else if (spec.kind === 'motion') {
+      motionSlides.push(spec);
+      // The pinned visual the scene reveals over.
+      slide.addImage({
+        path: path.join(repoRoot, spec.posterFrame.path),
+        x: 0.5,
+        y: 1.35,
+        w: 5.2,
+        h: 2.92,
+        altText: `Pinned scene visual — ${spec.posterFrame.alt}`,
+      });
+      // One shape per state; injectTiming binds a click-triggered reveal to each.
+      spec.states.forEach((state, i) => {
+        slide.addShape('roundRect', {
+          x: 6.0,
+          y: 1.35 + i * 0.62,
+          w: 3.5,
+          h: 0.5,
+          fill: { color: 'FDFCFA' },
+          line: { color: BRAND.accent, width: 1 },
+          objectName: `state-${state.id}`,
+        });
+        slide.addText(`${i + 1}. ${state.label}`, {
+          x: 6.0,
+          y: 1.35 + i * 0.62,
+          w: 3.5,
+          h: 0.5,
+          fontSize: 11,
+          color: BRAND.ink,
+          align: 'left',
+          valign: 'middle',
+          margin: 8,
+        });
+      });
+      slide.addText(
+        `${spec.states.length}-step build sequence (transition: ${spec.transition}) — each state reveals on advance over the pinned visual.`,
+        { x: 0.5, y: 4.55, w: 9, h: 0.4, fontSize: 10, color: BRAND.muted },
+      );
     } else if (spec.kind === 'fallback') {
       // A declared fallback is only honest if the deck actually SHIPS it, so attach the real
       // poster frame instead of a sentence promising one.
@@ -816,9 +924,10 @@ export async function buildV3NativeDeck(fixtures) {
   const withConnectors = await phase('inject.connectors', () =>
     injectConnectors(withOmml, diagrams),
   );
-  const buffer = await phase('inject.dateAxes', () =>
+  const withDates = await phase('inject.dateAxes', () =>
     injectDateAxes(withConnectors, timelineCharts),
   );
+  const buffer = await phase('inject.timing', () => injectTiming(withDates, motionSlides));
   return { buffer, compiled, spans };
 }
 

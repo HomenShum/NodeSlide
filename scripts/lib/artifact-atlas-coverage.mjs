@@ -138,7 +138,21 @@ export function buildArtifactArenaCoverage(atlas, harness, filters = {}, receipt
     omitted,
     failed,
     coverageRatio,
-    complete: omitted.length === 0 && failed.length === 0,
+    // Two different questions that used to share one field.
+    //
+    // `planComplete` — the PLAN covers the full matrix and nothing was filtered out.
+    // `complete`     — every cell of the full matrix actually produced a passing receipt.
+    //
+    // Collapsing them is how a run covering 12 of 84 cells reported `complete: true`: `omitted`
+    // only holds candidates that were planned and returned no receipt, so a cell excluded before
+    // planning never appeared there, and a null completedCount (no receipts supplied at all) read
+    // as nothing-went-wrong rather than nothing-ran.
+    planComplete: omitted.length === 0 && failed.length === 0,
+    complete:
+      fullMatrixCount > 0 &&
+      completedCount === fullMatrixCount &&
+      omitted.length === 0 &&
+      failed.length === 0,
   };
 }
 

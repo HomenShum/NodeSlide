@@ -14,8 +14,29 @@ describe('Arena coverage: a benchmark operator running a subset', () => {
     expect(coverage.fullMatrixCount).toBe(84);
     expect(coverage.plannedCount).toBe(84);
     expect(coverage.omitted).toHaveLength(0);
-    expect(coverage.complete).toBe(true);
+    expect(coverage.planComplete).toBe(true);
     expect(coverage.coverageRatio).toBe(1);
+    // Planned is not run. With no receipts supplied nothing has completed, and saying otherwise
+    // is how a 12-of-84 run once reported itself complete.
+    expect(coverage.complete).toBe(false);
+  });
+
+  it('separates a complete PLAN from a complete RUN', async () => {
+    const { atlas, harness } = await config();
+    const planned = buildArtifactArenaCoverage(atlas, harness, {});
+    const receipts = planned.plannedCount;
+    const everyCell = buildArtifactArenaCoverage(
+      atlas,
+      harness,
+      {},
+      Array.from({ length: receipts }, (_, i) => ({
+        candidateId: `candidate-${i}`,
+        status: 'eligible',
+      })),
+    );
+    // A run is only complete when the receipts account for the whole matrix.
+    expect(everyCell.planComplete).toBe(true);
+    expect(everyCell.complete).toBe(everyCell.completedCount === everyCell.fullMatrixCount);
   });
 
   it('accounts for every combination a fixture filter omits, with a typed reason', async () => {

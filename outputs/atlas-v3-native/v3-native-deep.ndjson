@@ -1,0 +1,127 @@
+{"kind":"slide","slide":1,"title":"NARRATIVE.HERO-THESIS","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":1}
+{"kind":"slide","slide":2,"title":"NARRATIVE.SECTION-OPENER","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":2}
+{"kind":"slide","slide":3,"title":"NARRATIVE.BIG-METRIC","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":3}
+{"kind":"slide","slide":4,"title":"NARRATIVE.QUOTE","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":4}
+{"kind":"slide","slide":5,"title":"PROGRESSION.BEFORE-AFTER","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":2}}
+{"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":5}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Screenshot of the NodeSlide workspace in light theme (before)\"","artifactKind":"screenshot","slide":5}
+{"kind":"artifact","signal":"2 pictures","artifactKind":"media","slide":5}
+{"kind":"slide","slide":6,"title":"DATA.KPI-STRIP","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":6}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":6}
+{"kind":"slide","slide":7,"title":"DATA.MULTI-SERIES","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":7}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":7}
+{"kind":"slide","slide":8,"title":"DATA.UNCERTAINTY-RANGE","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":8}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":8}
+{"kind":"slide","slide":9,"title":"DATA.WATERFALL","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":9}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":9}
+{"kind":"slide","slide":10,"title":"DATA.DISTRIBUTION","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":10}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":10}
+{"kind":"slide","slide":11,"title":"DATA.TABLE","counts":{"textRuns":43,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"43 text runs","artifactKind":"text","slide":11}
+{"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":11}
+{"kind":"slide","slide":12,"title":"DATA.FUNNEL","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":12}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":12}
+{"kind":"slide","slide":13,"title":"SYSTEMS.ARCHITECTURE","counts":{"textRuns":8,"equations":0,"tables":0,"graphicFrames":0,"connectors":4,"shapes":13,"pictures":0}}
+{"kind":"artifact","signal":"8 text runs","artifactKind":"text","slide":13}
+{"kind":"artifact","signal":"4 connectors joining 13 shapes","artifactKind":"diagram","slide":13}
+{"kind":"slide","slide":14,"title":"SYSTEMS.SEQUENCE","counts":{"textRuns":7,"equations":0,"tables":0,"graphicFrames":0,"connectors":3,"shapes":11,"pictures":0}}
+{"kind":"artifact","signal":"7 text runs","artifactKind":"text","slide":14}
+{"kind":"artifact","signal":"3 connectors joining 11 shapes","artifactKind":"diagram","slide":14}
+{"kind":"slide","slide":15,"title":"SYSTEMS.NODE-EDGE-GRAPH","counts":{"textRuns":8,"equations":0,"tables":0,"graphicFrames":0,"connectors":6,"shapes":13,"pictures":0}}
+{"kind":"artifact","signal":"8 text runs","artifactKind":"text","slide":15}
+{"kind":"artifact","signal":"6 connectors joining 13 shapes","artifactKind":"diagram","slide":15}
+{"kind":"slide","slide":16,"title":"SYSTEMS.NODE-EDGE-GRAPH","counts":{"textRuns":11,"equations":0,"tables":0,"graphicFrames":0,"connectors":10,"shapes":19,"pictures":0}}
+{"kind":"artifact","signal":"11 text runs","artifactKind":"text","slide":16}
+{"kind":"artifact","signal":"10 connectors joining 19 shapes","artifactKind":"diagram","slide":16}
+{"kind":"slide","slide":17,"title":"SYSTEMS.HIERARCHY","counts":{"textRuns":8,"equations":0,"tables":0,"graphicFrames":0,"connectors":4,"shapes":13,"pictures":0}}
+{"kind":"artifact","signal":"8 text runs","artifactKind":"text","slide":17}
+{"kind":"artifact","signal":"4 connectors joining 13 shapes","artifactKind":"diagram","slide":17}
+{"kind":"slide","slide":18,"title":"SYSTEMS.NODE-EDGE-GRAPH","counts":{"textRuns":8,"equations":0,"tables":0,"graphicFrames":0,"connectors":4,"shapes":13,"pictures":0}}
+{"kind":"artifact","signal":"8 text runs","artifactKind":"text","slide":18}
+{"kind":"artifact","signal":"4 connectors joining 13 shapes","artifactKind":"diagram","slide":18}
+{"kind":"slide","slide":19,"title":"PROGRESSION.TIMELINE","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":19}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":19}
+{"kind":"artifact","signal":"chart part uses a real c:dateAx time axis with date-serial categories","artifactKind":"timeline","slide":19}
+{"kind":"slide","slide":20,"title":"PROGRESSION.ROADMAP","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":20}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":20}
+{"kind":"artifact","signal":"chart part uses a real c:dateAx time axis with date-serial categories","artifactKind":"timeline","slide":20}
+{"kind":"slide","slide":21,"title":"PROGRESSION.SCROLLYTELLING","counts":{"textRuns":9,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":14,"pictures":1}}
+{"kind":"artifact","signal":"9 text runs","artifactKind":"text","slide":21}
+{"kind":"artifact","signal":"p:timing sequence: 4 user-advance transitions over 4 distinct shapes (5 observable states; first visible at slide entry)","artifactKind":"step-build","slide":21}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Pinned scene visual — Full-bleed screenshot of the NodeSlide workspace, captured\"","artifactKind":"screenshot","slide":21}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":21}
+{"kind":"slide","slide":22,"title":"PROGRESSION.SCROLLYTELLING","counts":{"textRuns":9,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":14,"pictures":1}}
+{"kind":"artifact","signal":"9 text runs","artifactKind":"text","slide":22}
+{"kind":"artifact","signal":"p:timing sequence: 4 user-advance transitions over 4 distinct shapes (5 observable states; first visible at slide entry)","artifactKind":"step-build","slide":22}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Pinned scene visual — Full-bleed screenshot of the NodeSlide workspace, captured\"","artifactKind":"screenshot","slide":22}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":22}
+{"kind":"slide","slide":23,"title":"MEDIA.IMAGE","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":3,"pictures":1}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":23}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Full-bleed screenshot of the NodeSlide workspace, captured by the 2026-07-22 bas\"","artifactKind":"screenshot","slide":23}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":23}
+{"kind":"slide","slide":24,"title":"PRODUCT-EVIDENCE.SCREENSHOT-CALLOUTS","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":1}}
+{"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":24}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Screenshot of the NodeSlide export capability menu captured during the 2026-07-2\"","artifactKind":"screenshot","slide":24}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":24}
+{"kind":"slide","slide":25,"title":"PRODUCT-EVIDENCE.INTERACTION-CLIP","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":1}}
+{"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":25}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Poster frame screenshot of the blocked insert interaction\"","artifactKind":"screenshot","slide":25}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":25}
+{"kind":"slide","slide":26,"title":"PROGRESSION.BEFORE-AFTER","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":2}}
+{"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":26}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Screenshot of the NodeSlide workspace in light theme (before)\"","artifactKind":"screenshot","slide":26}
+{"kind":"artifact","signal":"2 pictures","artifactKind":"media","slide":26}
+{"kind":"slide","slide":27,"title":"MEDIA.IMAGE","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":3,"pictures":1}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":27}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Full-bleed screenshot of the NodeSlide workspace, captured by the 2026-07-22 bas\"","artifactKind":"screenshot","slide":27}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":27}
+{"kind":"slide","slide":28,"title":"PRODUCT-EVIDENCE.CLAIM-LINEAGE","counts":{"textRuns":11,"equations":0,"tables":0,"graphicFrames":0,"connectors":3,"shapes":13,"pictures":0}}
+{"kind":"artifact","signal":"11 text runs","artifactKind":"text","slide":28}
+{"kind":"artifact","signal":"2 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":28}
+{"kind":"artifact","signal":"3 connectors joining 13 shapes","artifactKind":"diagram","slide":28}
+{"kind":"slide","slide":29,"title":"PRODUCT-EVIDENCE.CITATION-CARD","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":1}}
+{"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":29}
+{"kind":"artifact","signal":"1 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":29}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Screenshot of the parent/child trace waterfall region cited as evidence\"","artifactKind":"screenshot","slide":29}
+{"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":29}
+{"kind":"slide","slide":30,"title":"TECHNICAL.CODE-AND-RESULT","counts":{"textRuns":23,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"23 text runs","artifactKind":"text","slide":30}
+{"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":30}
+{"kind":"artifact","signal":"monospace faces: consolas","artifactKind":"code","slide":30}
+{"kind":"slide","slide":31,"title":"TECHNICAL.TRACE-WATERFALL","counts":{"textRuns":15,"equations":0,"tables":0,"graphicFrames":0,"connectors":4,"shapes":14,"pictures":0}}
+{"kind":"artifact","signal":"15 text runs","artifactKind":"text","slide":31}
+{"kind":"artifact","signal":"1 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":31}
+{"kind":"artifact","signal":"4 connectors joining 14 shapes","artifactKind":"diagram","slide":31}
+{"kind":"slide","slide":32,"title":"TECHNICAL.EQUATION","counts":{"textRuns":3,"equations":1,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":32}
+{"kind":"artifact","signal":"1 OMML oMath elements","artifactKind":"equation","slide":32}
+{"kind":"slide","slide":33,"title":"PRODUCT-EVIDENCE.DECK-CI-RECEIPT","counts":{"textRuns":11,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"11 text runs","artifactKind":"text","slide":33}
+{"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":33}
+{"kind":"artifact","signal":"1 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":33}
+{"kind":"slide","slide":34,"title":"DECISION.RISK-MATRIX","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":34}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":34}
+{"kind":"slide","slide":35,"title":"DECISION.COST-QUALITY","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":35}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":35}
+{"kind":"slide","slide":36,"title":"SYSTEMS.COMPARISON-MATRIX","counts":{"textRuns":31,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"31 text runs","artifactKind":"text","slide":36}
+{"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":36}
+{"kind":"slide","slide":37,"title":"SYSTEMS.COMPARISON-MATRIX","counts":{"textRuns":9,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"9 text runs","artifactKind":"text","slide":37}
+{"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":37}
+{"kind":"slide","slide":38,"title":"DECISION.RECOMMENDATION","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":38}

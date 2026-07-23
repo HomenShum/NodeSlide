@@ -1,0 +1,266 @@
+{
+    "evidence-scrollytelling":  [
+                                    {
+                                        "index":  0,
+                                        "signature":  "75f6544ed3dc8f35bed4de476fd2b3daad70e0aa3b79938b02eb380266f68e60",
+                                        "regions":  [
+                                                        {
+                                                            "stateIndex":  0,
+                                                            "ink":  0.0292
+                                                        },
+                                                        {
+                                                            "stateIndex":  1,
+                                                            "ink":  0.0274
+                                                        },
+                                                        {
+                                                            "stateIndex":  2,
+                                                            "ink":  0.0053
+                                                        },
+                                                        {
+                                                            "stateIndex":  3,
+                                                            "ink":  0.0067
+                                                        },
+                                                        {
+                                                            "stateIndex":  4,
+                                                            "ink":  0.0137
+                                                        }
+                                                    ]
+                                    },
+                                    {
+                                        "index":  1,
+                                        "signature":  "fb28673cc37d64f115d6ed8ba2811d0f2025ba0823e6e9828ca3d377d134be31",
+                                        "regions":  [
+                                                        {
+                                                            "stateIndex":  0,
+                                                            "ink":  0.0292
+                                                        },
+                                                        {
+                                                            "stateIndex":  1,
+                                                            "ink":  0.0503
+                                                        },
+                                                        {
+                                                            "stateIndex":  2,
+                                                            "ink":  0.0053
+                                                        },
+                                                        {
+                                                            "stateIndex":  3,
+                                                            "ink":  0.0067
+                                                        },
+                                                        {
+                                                            "stateIndex":  4,
+                                                            "ink":  0.0137
+                                                        }
+                                                    ]
+                                    },
+                                    {
+                                        "index":  2,
+                                        "signature":  "b1e2decaf02c0a6800b0356b5be164f6c9527b1e7053622ff4ee420fbb903bdd",
+                                        "regions":  [
+                                                        {
+                                                            "stateIndex":  0,
+                                                            "ink":  0.0292
+                                                        },
+                                                        {
+                                                            "stateIndex":  1,
+                                                            "ink":  0.0503
+                                                        },
+                                                        {
+                                                            "stateIndex":  2,
+                                                            "ink":  0.0285
+                                                        },
+                                                        {
+                                                            "stateIndex":  3,
+                                                            "ink":  0.0067
+                                                        },
+                                                        {
+                                                            "stateIndex":  4,
+                                                            "ink":  0.0137
+                                                        }
+                                                    ]
+                                    },
+                                    {
+                                        "index":  3,
+                                        "signature":  "05fdce90a65525a618c9434e26b8274881c0289c51f69c59f0effc22b4cb60d1",
+                                        "regions":  [
+                                                        {
+                                                            "stateIndex":  0,
+                                                            "ink":  0.0292
+                                                        },
+                                                        {
+                                                            "stateIndex":  1,
+                                                            "ink":  0.0503
+                                                        },
+                                                        {
+                                                            "stateIndex":  2,
+                                                            "ink":  0.0285
+                                                        },
+                                                        {
+                                                            "stateIndex":  3,
+                                                            "ink":  0.0298
+                                                        },
+                                                        {
+                                                            "stateIndex":  4,
+                                                            "ink":  0.0137
+                                                        }
+                                                    ]
+                                    },
+                                    {
+                                        "index":  4,
+                                        "signature":  "dcec474a51dade689066966dcec7862d768587fc09b36fbdab5a78036c49b270",
+                                        "regions":  [
+                                                        {
+                                                            "stateIndex":  0,
+                                                            "ink":  0.0292
+                                                        },
+                                                        {
+                                                            "stateIndex":  1,
+                                                            "ink":  0.0503
+                                                        },
+                                                        {
+                                                            "stateIndex":  2,
+                                                            "ink":  0.0285
+                                                        },
+                                                        {
+                                                            "stateIndex":  3,
+                                                            "ink":  0.0298
+                                                        },
+                                                        {
+                                                            "stateIndex":  4,
+                                                            "ink":  0.0563
+                                                        }
+                                                    ]
+                                    }
+                                ],
+    "animated-chart-progression":  [
+                                       {
+                                           "index":  0,
+                                           "signature":  "2c4929e6997abf2fdb313f60ff5e728544ccf3bd170f9e0009c4eafe7d9dfe7e",
+                                           "regions":  [
+                                                           {
+                                                               "stateIndex":  0,
+                                                               "ink":  0.0396
+                                                           },
+                                                           {
+                                                               "stateIndex":  1,
+                                                               "ink":  0.0339
+                                                           },
+                                                           {
+                                                               "stateIndex":  2,
+                                                               "ink":  0.0215
+                                                           },
+                                                           {
+                                                               "stateIndex":  3,
+                                                               "ink":  0.0182
+                                                           },
+                                                           {
+                                                               "stateIndex":  4,
+                                                               "ink":  0.015
+                                                           }
+                                                       ]
+                                       },
+                                       {
+                                           "index":  1,
+                                           "signature":  "4f5bc9080d197592c6741915b29aac50168d7524be7e50b2530c7742e0975db0",
+                                           "regions":  [
+                                                           {
+                                                               "stateIndex":  0,
+                                                               "ink":  0.0396
+                                                           },
+                                                           {
+                                                               "stateIndex":  1,
+                                                               "ink":  0.0568
+                                                           },
+                                                           {
+                                                               "stateIndex":  2,
+                                                               "ink":  0.0215
+                                                           },
+                                                           {
+                                                               "stateIndex":  3,
+                                                               "ink":  0.0182
+                                                           },
+                                                           {
+                                                               "stateIndex":  4,
+                                                               "ink":  0.015
+                                                           }
+                                                       ]
+                                       },
+                                       {
+                                           "index":  2,
+                                           "signature":  "efaa387f4fc12e55a276e4a04dfa6e514c247e58630f4b8dc8efa3f8a9269c2f",
+                                           "regions":  [
+                                                           {
+                                                               "stateIndex":  0,
+                                                               "ink":  0.0396
+                                                           },
+                                                           {
+                                                               "stateIndex":  1,
+                                                               "ink":  0.0568
+                                                           },
+                                                           {
+                                                               "stateIndex":  2,
+                                                               "ink":  0.0423
+                                                           },
+                                                           {
+                                                               "stateIndex":  3,
+                                                               "ink":  0.0182
+                                                           },
+                                                           {
+                                                               "stateIndex":  4,
+                                                               "ink":  0.015
+                                                           }
+                                                       ]
+                                       },
+                                       {
+                                           "index":  3,
+                                           "signature":  "bbcd9cae3aa4ec74979c3c9a2a97420083275d7bc891b7a2ef0e6b2fe154db13",
+                                           "regions":  [
+                                                           {
+                                                               "stateIndex":  0,
+                                                               "ink":  0.0396
+                                                           },
+                                                           {
+                                                               "stateIndex":  1,
+                                                               "ink":  0.0568
+                                                           },
+                                                           {
+                                                               "stateIndex":  2,
+                                                               "ink":  0.0423
+                                                           },
+                                                           {
+                                                               "stateIndex":  3,
+                                                               "ink":  0.0403
+                                                           },
+                                                           {
+                                                               "stateIndex":  4,
+                                                               "ink":  0.015
+                                                           }
+                                                       ]
+                                       },
+                                       {
+                                           "index":  4,
+                                           "signature":  "a96be4895d0f3cb7072c3610523e7e37137e7ac86208c8ec16c290e8f6a42c34",
+                                           "regions":  [
+                                                           {
+                                                               "stateIndex":  0,
+                                                               "ink":  0.0396
+                                                           },
+                                                           {
+                                                               "stateIndex":  1,
+                                                               "ink":  0.0568
+                                                           },
+                                                           {
+                                                               "stateIndex":  2,
+                                                               "ink":  0.0423
+                                                           },
+                                                           {
+                                                               "stateIndex":  3,
+                                                               "ink":  0.0403
+                                                           },
+                                                           {
+                                                               "stateIndex":  4,
+                                                               "ink":  0.0567
+                                                           }
+                                                       ]
+                                       }
+                                   ]
+}

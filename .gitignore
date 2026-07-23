@@ -24,3 +24,6 @@ outputs/artifact-atlas-v3/*.inspect.ndjson
 # Local proof runner streams; sanitized JSON receipts may be committed.
 artifacts/**/*.stdout.log
 artifacts/**/*.stderr.log
+
+# Playback canary screen captures — evidence is the signature JSON, not 34MB of PNGs.
+outputs/**/playback-frames/

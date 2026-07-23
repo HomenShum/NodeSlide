@@ -1,0 +1,235 @@
+{
+  "schemaVersion": "nodeslide.motion-expectation/v1",
+  "scenes": [
+    {
+      "sceneId": "evidence-scrollytelling",
+      "title": "Evidence becomes a decision through five inspectable states",
+      "archetype": "progression.scrollytelling",
+      "declaredTransition": "scrub",
+      "pinnedObject": "ns:motion:evidence-scrollytelling:pinned:scene",
+      "requiredRoles": [
+        "source",
+        "capture",
+        "fact",
+        "claim",
+        "slide-element"
+      ],
+      "states": [
+        {
+          "stateId": "state-1",
+          "visibleRoles": [
+            "source"
+          ],
+          "hiddenRoles": [
+            "capture",
+            "fact",
+            "claim",
+            "slide-element"
+          ],
+          "object": "ns:motion:evidence-scrollytelling:state-1:source",
+          "value": null,
+          "region": {
+            "x": 0.6,
+            "y": 0.23978685612788633,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
+        },
+        {
+          "stateId": "state-2",
+          "visibleRoles": [
+            "source",
+            "capture"
+          ],
+          "hiddenRoles": [
+            "fact",
+            "claim",
+            "slide-element"
+          ],
+          "object": "ns:motion:evidence-scrollytelling:state-2:capture",
+          "value": null,
+          "region": {
+            "x": 0.6,
+            "y": 0.349911190053286,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
+        },
+        {
+          "stateId": "state-3",
+          "visibleRoles": [
+            "source",
+            "capture",
+            "fact"
+          ],
+          "hiddenRoles": [
+            "claim",
+            "slide-element"
+          ],
+          "object": "ns:motion:evidence-scrollytelling:state-3:fact",
+          "value": null,
+          "region": {
+            "x": 0.6,
+            "y": 0.4600355239786856,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
+        },
+        {
+          "stateId": "state-4",
+          "visibleRoles": [
+            "source",
+            "capture",
+            "fact",
+            "claim"
+          ],
+          "hiddenRoles": [
+            "slide-element"
+          ],
+          "object": "ns:motion:evidence-scrollytelling:state-4:claim",
+          "value": null,
+          "region": {
+            "x": 0.6,
+            "y": 0.5701598579040853,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
+        },
+        {
+          "stateId": "state-5",
+          "visibleRoles": [
+            "source",
+            "capture",
+            "fact",
+            "claim",
+            "slide-element"
+          ],
+          "hiddenRoles": [],
+          "object": "ns:motion:evidence-scrollytelling:state-5:slide-element",
+          "value": null,
+          "region": {
+            "x": 0.6,
+            "y": 0.680284191829485,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
+        }
+      ]
+    },
+    {
+      "sceneId": "animated-chart-progression",
+      "title": "The trend means more when the audience sees the baseline move",
+      "archetype": "progression.scrollytelling",
+      "declaredTransition": "step",
+      "pinnedObject": "ns:motion:animated-chart-progression:pinned:scene",
+      "requiredRoles": [
+        "baseline-series",
+        "plan-delta",
+        "measured-delta",
+        "variance-band",
+        "final-series"
+      ],
+      "states": [
+        {
+          "stateId": "state-1",
+          "visibleRoles": [
+            "baseline-series"
+          ],
+          "hiddenRoles": [
+            "plan-delta",
+            "measured-delta",
+            "variance-band",
+            "final-series"
+          ],
+          "object": "ns:motion:animated-chart-progression:state-1:baseline-series",
+          "value": 62,
+          "region": {
+            "x": 0.6,
+            "y": 0.23978685612788633,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
+        },
+        {
+          "stateId": "state-2",
+          "visibleRoles": [
+            "baseline-series",
+            "plan-delta"
+          ],
+          "hiddenRoles": [
+            "measured-delta",
+            "variance-band",
+            "final-series"
+          ],
+          "object": "ns:motion:animated-chart-progression:state-2:plan-delta",
+          "value": 68,
+          "region": {
+            "x": 0.6,
+            "y": 0.349911190053286,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
+        },
+        {
+          "stateId": "state-3",
+          "visibleRoles": [
+            "baseline-series",
+            "plan-delta",
+            "measured-delta"
+          ],
+          "hiddenRoles": [
+            "variance-band",
+            "final-series"
+          ],
+          "object": "ns:motion:animated-chart-progression:state-3:measured-delta",
+          "value": 74,
+          "region": {
+            "x": 0.6,
+            "y": 0.4600355239786856,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
+        },
+        {
+          "stateId": "state-4",
+          "visibleRoles": [
+            "baseline-series",
+            "plan-delta",
+            "measured-delta",
+            "variance-band"
+          ],
+          "hiddenRoles": [
+            "final-series"
+          ],
+          "object": "ns:motion:animated-chart-progression:state-4:variance-band",
+          "value": 80,
+          "region": {
+            "x": 0.6,
+            "y": 0.5701598579040853,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
+        },
+        {
+          "stateId": "state-5",
+          "visibleRoles": [
+            "baseline-series",
+            "plan-delta",
+            "measured-delta",
+            "variance-band",
+            "final-series"
+          ],
+          "hiddenRoles": [],
+          "object": "ns:motion:animated-chart-progression:state-5:final-series",
+          "value": 86,
+          "region": {
+            "x": 0.6,
+            "y": 0.680284191829485,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
+        }
+      ]
+    }
+  ]
+}

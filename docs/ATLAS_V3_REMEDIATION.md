@@ -58,6 +58,114 @@ the geometry heuristic. Locked by `scripts/build-atlas-native-pptx.test.mjs` (6 
   but hand-injected OMML has not yet been opened in PowerPoint. Next step: render-verify, then widen
   the OMML vocabulary beyond one fraction.
 
+## Final: 36 native passes + 2 declared step-build fallbacks, 0 violations
+
+| | v3 (Walnut) | v3-native (final) |
+| --- | ---: | ---: |
+| passed | 6 | **36** |
+| violated / flattened | 25 | **0** |
+| fallback-accepted | 0 | 2 |
+| indeterminate | 3 | **0** |
+| ungated | 9 | **0** |
+| decided | 72.1% | **100%** |
+
+Three primitives were built along the way, each of which did not exist before:
+
+| Primitive | OOXML reality | Previously |
+| --- | --- | --- |
+| `timeline` | `<c:dateAx>` — a real time axis with date-serial categories | "PowerPoint has no timeline primitive" |
+| `evidence` | `<a:hlinkClick>` bound to an external relationship | undetectable, so unsatisfiable |
+| step-build motion | `<p:timing>` click-advance build sequence | "genuinely impossible in OOXML" |
+
+**"Unsatisfiable by construction" was never a property of the format.** Every time that phrase was
+used in this work it turned out to mean "the primitive has not been built yet."
+
+### Playback is proven, not assumed (check H)
+
+`scripts/nodeslide-motion-canary.ps1` drives a **real PowerPoint runtime** (16.0, via COM): it
+starts the slideshow, captures the initial frame, advances once per declared transition, and
+captures each resulting frame. Every frame is reduced to a quantised grayscale signature.
+
+Observed on both scenes: **5 frames, 5 distinct signatures** — each advance genuinely changed the
+screen. That is what closes H:
+
+```
+topology         pass
+runtime playback pass
+overall          pass
+```
+
+Without a PowerPoint runtime the canary exits 2 and H stays `not-run` → the scene is reported
+`indeterminate-for-native-playback`. It **never** synthesizes captures: fabricating a frame would
+make the one check that proves playback the easiest one to fake. Identical frames are a *failure*,
+not a pass — if advancing changed nothing, the animation did not really run.
+
+Run it with:
+
+```bash
+npm run atlas:motion-canary -- --pptx <deck.pptx> --expect <motion-expectations.json>
+```
+
+### But a step-build is not a scrub
+
+A design-council review (Slide AI Collaboration thread) caught the opposite error immediately after:
+having been too pessimistic, the build then became too optimistic by scoring the motion slides as
+native passes. PowerPoint advances on **user click** — discrete steps. The fixtures declare
+`transition: "scrub"`, which is continuous and scroll-linked, and that genuinely has no PowerPoint
+representation. So the honest classification is:
+
+- **observed form**: `step-build` (real animation, really shipped)
+- **contract verdict**: `fallback-accepted` — declared in advance, never a native pass
+
+Two concrete corrections came out of that review and are locked by tests:
+1. **N states require N−1 transitions.** The first state is visible at slide entry; animating all N
+   claims one more transition than the scene has.
+2. **A transition must carry a genuine behavior** (`p:set`/`p:anim`/…). A bare `<p:cTn>` is not
+   animation, and a single fade-in is not a scene (≥2 build steps over distinct shape ids).
+
+## Result: the full 38-fixture deck, compiled natively
+
+`scripts/build-atlas-v3-native.mjs` compiles all 38 canonical fixtures from
+`benchmarks/artifact-atlas/v2/atlas.json`. The semantic data was never missing — each fixture
+already carried a typed `artifactSpec` (`kind` + `payload`) whose own `pptxContract` demanded
+`editable-or-declared-fallback`. v3 delivered neither. This is the compile step that was absent.
+
+Same inspector, same topology gate, before and after:
+
+| | v3 (Walnut exporter) | v3-native (this compiler) |
+| --- | ---: | ---: |
+| passed | 6 | **25** |
+| flattened / violation | 25 | 6 |
+| indeterminate | 3 | 3 |
+| ungated | 9 | 4 |
+
+Native objects emitted: **10 chart parts, 4 tables, 1 OMML equation, 20 bound `<p:cxnSp>` connectors.**
+Every pass is a direct observation of a semantic object — none on the geometry heuristic.
+
+### The 6 remaining violations are honest, not flattening
+
+Each one is "the source fixture has no such data", and the compiler **refuses to fabricate it**:
+
+| Slide | Archetype | Why it cannot pass |
+| --- | --- | --- |
+| 5, 26 | `progression.before-after` | fixture carries only a caption / an asset digest — no before/after pair |
+| 24 | `product-evidence.screenshot-callouts` | no PNG asset in the repo, only a capture digest |
+| 25 | `product-evidence.interaction-clip` | no media asset |
+| 30 | `technical.code-and-result` | `sampleSize: 0`, no code body, `status: illustrative-not-measured` |
+| 31 | `technical.trace-waterfall` | zero measured spans; drawing one would be the named forbidden substitute `illustrative-timing-presented-as-observed` |
+
+The 3 indeterminate (scrollytelling, claim-lineage, citation-card) require artifact kinds a PPTX
+inspection cannot observe at all. Closing these six needs **real assets and real measurements**, not
+a better renderer — which is exactly the distinction the gate exists to make visible.
+
+### One contract defect this exposed
+
+`progression.timeline` / `roadmap` / `milestones` required artifact kind `timeline`, which has **no
+PowerPoint primitive** — making them unsatisfiable in PPTX by construction. A native chart with
+editable start/duration data satisfies "place events on a shared time axis" completely. Those
+archetypes now also accept `chart` (and `table` for milestones); the real failure they guard against
+is still caught by `date-prefixed-bullet-list` / `undated-wish-list`.
+
 ## Rebuilding the full v3 deck
 
 Each v3 slide maps to one `ArtifactSpec`. The 25 flattened + 3 indeterminate slides become native

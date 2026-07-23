@@ -58,6 +58,45 @@ the geometry heuristic. Locked by `scripts/build-atlas-native-pptx.test.mjs` (6 
   but hand-injected OMML has not yet been opened in PowerPoint. Next step: render-verify, then widen
   the OMML vocabulary beyond one fraction.
 
+## Final: 36 native passes + 2 declared step-build fallbacks, 0 violations
+
+| | v3 (Walnut) | v3-native (final) |
+| --- | ---: | ---: |
+| passed | 6 | **36** |
+| violated / flattened | 25 | **0** |
+| fallback-accepted | 0 | 2 |
+| indeterminate | 3 | **0** |
+| ungated | 9 | **0** |
+| decided | 72.1% | **100%** |
+
+Three primitives were built along the way, each of which did not exist before:
+
+| Primitive | OOXML reality | Previously |
+| --- | --- | --- |
+| `timeline` | `<c:dateAx>` — a real time axis with date-serial categories | "PowerPoint has no timeline primitive" |
+| `evidence` | `<a:hlinkClick>` bound to an external relationship | undetectable, so unsatisfiable |
+| step-build motion | `<p:timing>` click-advance build sequence | "genuinely impossible in OOXML" |
+
+**"Unsatisfiable by construction" was never a property of the format.** Every time that phrase was
+used in this work it turned out to mean "the primitive has not been built yet."
+
+### But a step-build is not a scrub
+
+A design-council review (Slide AI Collaboration thread) caught the opposite error immediately after:
+having been too pessimistic, the build then became too optimistic by scoring the motion slides as
+native passes. PowerPoint advances on **user click** — discrete steps. The fixtures declare
+`transition: "scrub"`, which is continuous and scroll-linked, and that genuinely has no PowerPoint
+representation. So the honest classification is:
+
+- **observed form**: `step-build` (real animation, really shipped)
+- **contract verdict**: `fallback-accepted` — declared in advance, never a native pass
+
+Two concrete corrections came out of that review and are locked by tests:
+1. **N states require N−1 transitions.** The first state is visible at slide entry; animating all N
+   claims one more transition than the scene has.
+2. **A transition must carry a genuine behavior** (`p:set`/`p:anim`/…). A bare `<p:cTn>` is not
+   animation, and a single fade-in is not a scene (≥2 build steps over distinct shape ids).
+
 ## Result: the full 38-fixture deck, compiled natively
 
 `scripts/build-atlas-v3-native.mjs` compiles all 38 canonical fixtures from

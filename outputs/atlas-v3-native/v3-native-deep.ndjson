@@ -57,13 +57,15 @@
 {"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":20}
 {"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":20}
 {"kind":"artifact","signal":"chart part uses a real c:dateAx time axis with date-serial categories","artifactKind":"timeline","slide":20}
-{"kind":"slide","slide":21,"title":"PROGRESSION.SCROLLYTELLING","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":1}}
-{"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":21}
-{"kind":"artifact","signal":"picture alt text names a capture: \"Poster frame — Full-bleed screenshot of the NodeSlide workspace, captured by the\"","artifactKind":"screenshot","slide":21}
+{"kind":"slide","slide":21,"title":"PROGRESSION.SCROLLYTELLING","counts":{"textRuns":9,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":14,"pictures":1}}
+{"kind":"artifact","signal":"9 text runs","artifactKind":"text","slide":21}
+{"kind":"artifact","signal":"p:timing sequence: 4 user-advance transitions over 4 distinct shapes (5 observable states; first visible at slide entry)","artifactKind":"step-build","slide":21}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Pinned scene visual — Full-bleed screenshot of the NodeSlide workspace, captured\"","artifactKind":"screenshot","slide":21}
 {"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":21}
-{"kind":"slide","slide":22,"title":"PROGRESSION.SCROLLYTELLING","counts":{"textRuns":5,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":5,"pictures":1}}
-{"kind":"artifact","signal":"5 text runs","artifactKind":"text","slide":22}
-{"kind":"artifact","signal":"picture alt text names a capture: \"Poster frame — Full-bleed screenshot of the NodeSlide workspace, captured by the\"","artifactKind":"screenshot","slide":22}
+{"kind":"slide","slide":22,"title":"PROGRESSION.SCROLLYTELLING","counts":{"textRuns":9,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":14,"pictures":1}}
+{"kind":"artifact","signal":"9 text runs","artifactKind":"text","slide":22}
+{"kind":"artifact","signal":"p:timing sequence: 4 user-advance transitions over 4 distinct shapes (5 observable states; first visible at slide entry)","artifactKind":"step-build","slide":22}
+{"kind":"artifact","signal":"picture alt text names a capture: \"Pinned scene visual — Full-bleed screenshot of the NodeSlide workspace, captured\"","artifactKind":"screenshot","slide":22}
 {"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":22}
 {"kind":"slide","slide":23,"title":"MEDIA.IMAGE","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":3,"pictures":1}}
 {"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":23}
@@ -94,14 +96,14 @@
 {"kind":"artifact","signal":"1 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":29}
 {"kind":"artifact","signal":"picture alt text names a capture: \"Screenshot of the parent/child trace waterfall region cited as evidence\"","artifactKind":"screenshot","slide":29}
 {"kind":"artifact","signal":"1 pictures","artifactKind":"media","slide":29}
-{"kind":"slide","slide":30,"title":"TECHNICAL.CODE-AND-RESULT","counts":{"textRuns":21,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":4,"pictures":0}}
-{"kind":"artifact","signal":"21 text runs","artifactKind":"text","slide":30}
+{"kind":"slide","slide":30,"title":"TECHNICAL.CODE-AND-RESULT","counts":{"textRuns":23,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"23 text runs","artifactKind":"text","slide":30}
 {"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":30}
 {"kind":"artifact","signal":"monospace faces: consolas","artifactKind":"code","slide":30}
-{"kind":"slide","slide":31,"title":"TECHNICAL.TRACE-WATERFALL","counts":{"textRuns":13,"equations":0,"tables":0,"graphicFrames":0,"connectors":3,"shapes":12,"pictures":0}}
-{"kind":"artifact","signal":"13 text runs","artifactKind":"text","slide":31}
+{"kind":"slide","slide":31,"title":"TECHNICAL.TRACE-WATERFALL","counts":{"textRuns":15,"equations":0,"tables":0,"graphicFrames":0,"connectors":4,"shapes":14,"pictures":0}}
+{"kind":"artifact","signal":"15 text runs","artifactKind":"text","slide":31}
 {"kind":"artifact","signal":"1 claim(s) hyperlinked to an external source relationship","artifactKind":"evidence","slide":31}
-{"kind":"artifact","signal":"3 connectors joining 12 shapes","artifactKind":"diagram","slide":31}
+{"kind":"artifact","signal":"4 connectors joining 14 shapes","artifactKind":"diagram","slide":31}
 {"kind":"slide","slide":32,"title":"TECHNICAL.EQUATION","counts":{"textRuns":3,"equations":1,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
 {"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":32}
 {"kind":"artifact","signal":"1 OMML oMath elements","artifactKind":"equation","slide":32}

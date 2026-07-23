@@ -202,6 +202,32 @@ describe('v3 native compiler: artifactSpec -> native OOXML', () => {
     expect(animated).toBe(2);
   });
 
+  it('emits N-1 transitions for N states — the first is visible at slide entry', async () => {
+    const doc = await atlas();
+    const { buffer } = await buildV3NativeDeck(doc.fixtures);
+    const zip = await JSZip.loadAsync(buffer);
+    for (const p of Object.keys(zip.files).filter((f) => /ppt\/slides\/slide\d+\.xml$/.test(f))) {
+      const xml = await zip.file(p).async('string');
+      if (!/<p:timing>/.test(xml)) continue;
+      const states = [...xml.matchAll(/name="state-/g)].length;
+      const transitions = (xml.match(/nodeType="clickEffect"/g) ?? []).length;
+      // Animating all N would claim one more transition than the scene actually has.
+      expect(transitions, `${p} N-1 transitions`).toBe(states - 1);
+    }
+  });
+
+  it('declares step-build as a FALLBACK against scrub — never a native pass', async () => {
+    const doc = await atlas();
+    const motion = doc.fixtures.map(compileArtifactSpec).filter((s) => s?.kind === 'motion');
+    expect(motion).toHaveLength(2);
+    for (const spec of motion) {
+      // PowerPoint advances on click: discrete. Calling that "scrub" would be an overclaim.
+      expect(spec.capability, spec.archetype).toBe('native-step-build');
+      expect(spec.fallbackBehavior, spec.archetype).toMatch(/not scrub/i);
+      expect(spec.fallbackBehavior, spec.archetype).toMatch(/discrete user-advance/i);
+    }
+  });
+
   it('will not call a single fade-in a scene', () => {
     // The anti-gaming rule lives in the builder too: one state is not a staged reveal.
     expect(buildTimingTree(['5'])).toBe('');

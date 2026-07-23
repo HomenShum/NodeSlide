@@ -299,7 +299,10 @@ export function engineerDateAxis(chartXml, serials, formatCode = 'yyyy-mm-dd') {
 export function buildTimingTree(shapeIds) {
   if (shapeIds.length < 2) return '';
   let id = 4; // 1..3 are the root / mainSeq / top-level par below.
+  // N states = N-1 user-advance transitions. The first state is visible at slide entry, so it is
+  // NOT animated; animating all N would claim one more transition than the scene actually has.
   const steps = shapeIds
+    .slice(1)
     .map((spid) => {
       const parId = id++;
       const setId = id++;
@@ -502,6 +505,11 @@ export function compileArtifactSpec(fixture) {
       })),
       transition: payload.transition ?? 'scrub',
       posterFrame: MEDIA_ASSET,
+      // PowerPoint delivers DISCRETE click-advance, not continuous scroll-linked scrubbing.
+      // Renaming step-build "scrub" would be the same overclaim as calling autoshapes a chart —
+      // so the recipe declares the degradation up front and the gate records fallback-accepted.
+      capability: 'native-step-build',
+      fallbackBehavior: `Declared ${payload.transition ?? 'scrub'} motion is continuous and scroll-linked; PowerPoint supports discrete user-advance only. Compiled to a native ${(payload.states ?? []).length}-state build sequence (${Math.max(0, (payload.states ?? []).length - 1)} click transitions over a pinned visual) — real animation, but step-build, not scrub.`,
     };
   }
 
@@ -979,7 +987,8 @@ async function main() {
       artifactType: c.spec.archetype ?? c.fixture.artifactType,
       // The gate resolves `fallback-accepted` only when the recipe declared the degradation up
       // front. Emitting it here is what makes the declaration auditable rather than implicit.
-      ...(c.spec.kind === 'fallback'
+      // Motion declares its degradation too: a step-build is real animation, but it is not scrub.
+      ...(c.spec.kind === 'fallback' || c.spec.kind === 'motion'
         ? {
             declaredFallback: {
               capability: c.spec.capability,

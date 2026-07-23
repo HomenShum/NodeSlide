@@ -106,8 +106,8 @@
       "title": "Evidence becomes a decision through five inspectable states",
       "artifactType": "progression.scrollytelling",
       "declaredFallback": {
-        "capability": "poster-frame",
-        "behavior": "Web-only motion. PowerPoint receives the declared static fallback state as a poster frame plus a storyboard caption."
+        "capability": "native-step-build",
+        "behavior": "Declared scrub motion is continuous and scroll-linked; PowerPoint supports discrete user-advance only. Compiled to a native 5-state build sequence (4 click transitions over a pinned visual) — real animation, but step-build, not scrub."
       }
     },
     {
@@ -115,8 +115,8 @@
       "title": "The trend means more when the audience sees the baseline move",
       "artifactType": "progression.scrollytelling",
       "declaredFallback": {
-        "capability": "poster-frame",
-        "behavior": "Web-only motion. PowerPoint receives the declared static fallback state as a poster frame plus a storyboard caption."
+        "capability": "native-step-build",
+        "behavior": "Declared step motion is continuous and scroll-linked; PowerPoint supports discrete user-advance only. Compiled to a native 5-state build sequence (4 click transitions over a pinned visual) — real animation, but step-build, not scrub."
       }
     },
     {

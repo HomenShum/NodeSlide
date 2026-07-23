@@ -94,7 +94,30 @@ const ARTIFACT_SPECS = [
   },
 ];
 
-const BRAND = { bg: 'FAF7F3', ink: '221F1C', accent: 'C76D54', muted: '6D635A' };
+// Default is the frozen museum palette (human-attested decks depend on these bytes; do not change
+// them). A deck may override via applyBrand — the properties are mutated in place so every
+// call-time BRAND.x reference across this module and its importers picks up the new value.
+const BRAND = { bg: 'FAF7F3', surface: 'FDFCFA', ink: '221F1C', accent: 'C76D54', muted: '6D635A' };
+
+/**
+ * Named brand palettes a non-museum deck may opt into. `evidence-grade` is the direction published
+ * this session: cool drafting-paper ground, one blueprint blue for structure — deliberately NOT the
+ * warm-cream/terracotta default, which is the AI-generated cluster the museum deck happens to sit in.
+ */
+export const BRAND_PALETTES = {
+  'evidence-grade': {
+    bg: 'F1F3F6',
+    surface: 'FBFCFE',
+    ink: '161A21',
+    accent: '2A4A8F',
+    muted: '545C69',
+  },
+};
+
+export function applyBrand(overrides) {
+  if (overrides) Object.assign(BRAND, overrides);
+  return BRAND;
+}
 
 function addHeader(slide, spec, index) {
   slide.background = { color: BRAND.bg };
@@ -194,8 +217,11 @@ function buildDiagramNodes(slide, spec) {
       y,
       w,
       h,
-      fill: { color: 'FDFCFA' },
-      line: { color: 'C76D54', width: 1.5 },
+      // Route through BRAND so a deck's palette actually reaches its diagram nodes. The museum
+      // default keeps its exact bytes (BRAND.surface = FDFCFA, BRAND.accent = C76D54); a rehearsal
+      // surfaced that these two were hardcoded and the published direction could not reach them.
+      fill: { color: BRAND.surface },
+      line: { color: BRAND.accent, width: 1.5 },
       objectName: `node-${node.id}`,
     });
     slide.addText(node.label, {
@@ -452,6 +478,8 @@ export async function dedupeMedia(buffer) {
     reclaimedBytes,
   };
 }
+
+// applyBrand / BRAND_PALETTES are declared with `export` at their definitions above.
 
 export {
   ARTIFACT_SPECS,

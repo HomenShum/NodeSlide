@@ -33,6 +33,8 @@ import JSZip from 'jszip';
 import Pptx from 'pptxgenjs';
 import {
   BRAND,
+  BRAND_PALETTES,
+  applyBrand,
   buildChart,
   buildDiagramNodes,
   buildEquationPlaceholder,
@@ -1147,6 +1149,24 @@ async function main() {
     setPayloadOverrides(JSON.parse(await readFile(path.resolve(overridesPath), 'utf8')).overrides);
   } else if (atlasPath !== ATLAS_PATH) {
     setPayloadOverrides({});
+  }
+
+  // --brand opts a NON-museum deck into a named palette. The museum deck never passes this, so its
+  // frozen bytes are untouched. Refuse to repaint the museum deck even if asked, so a rehearsal
+  // cannot accidentally invalidate a human-attested artifact.
+  const brandName = flag('brand');
+  if (brandName) {
+    if (atlasPath === ATLAS_PATH) {
+      throw new Error(
+        '--brand refuses to repaint the frozen museum deck; build a non-museum --atlas.',
+      );
+    }
+    const palette = BRAND_PALETTES[brandName];
+    if (!palette)
+      throw new Error(
+        `Unknown brand "${brandName}". Known: ${Object.keys(BRAND_PALETTES).join(', ')}.`,
+      );
+    applyBrand(palette);
   }
 
   // Pass 1 — build once and MEASURE it. These are real observed timings of a real run, which is

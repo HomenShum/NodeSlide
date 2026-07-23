@@ -45,7 +45,7 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'
 const ATLAS_PATH = path.join(repoRoot, 'benchmarks/artifact-atlas/v2/atlas.json');
 
 /** v2 deck vocabulary -> Atlas archetype id. Only unambiguous mappings; the rest stay ungated. */
-const ARCHETYPE_BY_ARTIFACT_TYPE = {
+export const ARCHETYPE_BY_ARTIFACT_TYPE = {
   'hero-thesis': 'narrative.hero-thesis',
   'section-opener': 'narrative.section-opener',
   'big-metric': 'narrative.big-metric',

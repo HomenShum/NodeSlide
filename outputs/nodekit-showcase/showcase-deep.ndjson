@@ -1,0 +1,28 @@
+{"kind":"slide","slide":1,"title":"NARRATIVE.HERO-THESIS","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":1}
+{"kind":"slide","slide":2,"title":"DATA.KPI-STRIP","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":2}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":2}
+{"kind":"slide","slide":3,"title":"DATA.MULTI-SERIES","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":3}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":3}
+{"kind":"slide","slide":4,"title":"DATA.FUNNEL","counts":{"textRuns":3,"equations":0,"tables":0,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":4}
+{"kind":"artifact","signal":"slide references a native chart part","artifactKind":"chart","slide":4}
+{"kind":"slide","slide":5,"title":"SYSTEMS.ARCHITECTURE","counts":{"textRuns":8,"equations":0,"tables":0,"graphicFrames":0,"connectors":4,"shapes":13,"pictures":0}}
+{"kind":"artifact","signal":"8 text runs","artifactKind":"text","slide":5}
+{"kind":"artifact","signal":"4 connectors joining 13 shapes","artifactKind":"diagram","slide":5}
+{"kind":"slide","slide":6,"title":"SYSTEMS.COMPARISON-MATRIX","counts":{"textRuns":21,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"21 text runs","artifactKind":"text","slide":6}
+{"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":6}
+{"kind":"slide","slide":7,"title":"TECHNICAL.EQUATION","counts":{"textRuns":3,"equations":1,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"3 text runs","artifactKind":"text","slide":7}
+{"kind":"artifact","signal":"1 OMML oMath elements","artifactKind":"equation","slide":7}
+{"kind":"slide","slide":8,"title":"DATA.TABLE","counts":{"textRuns":28,"equations":0,"tables":1,"graphicFrames":1,"connectors":0,"shapes":3,"pictures":0}}
+{"kind":"artifact","signal":"28 text runs","artifactKind":"text","slide":8}
+{"kind":"artifact","signal":"1 a:tbl grids","artifactKind":"table","slide":8}
+{"kind":"slide","slide":9,"title":"SYSTEMS.HIERARCHY","counts":{"textRuns":8,"equations":0,"tables":0,"graphicFrames":0,"connectors":4,"shapes":13,"pictures":0}}
+{"kind":"artifact","signal":"8 text runs","artifactKind":"text","slide":9}
+{"kind":"artifact","signal":"4 connectors joining 13 shapes","artifactKind":"diagram","slide":9}
+{"kind":"slide","slide":10,"title":"DECISION.RECOMMENDATION","counts":{"textRuns":4,"equations":0,"tables":0,"graphicFrames":0,"connectors":0,"shapes":4,"pictures":0}}
+{"kind":"artifact","signal":"4 text runs","artifactKind":"text","slide":10}

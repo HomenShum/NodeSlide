@@ -490,14 +490,30 @@ function imageSource(absolutePath) {
   if (!isJpeg || extension === '.jpg' || extension === '.jpeg') return { path: absolutePath };
   return { data: `image/jpeg;base64,${bytes.toString('base64')}` };
 }
-const PAYLOAD_OVERRIDES = JSON.parse(
+const ATLAS_PAYLOAD_OVERRIDES = JSON.parse(
   readFileSync(path.join(repoRoot, PAYLOAD_OVERRIDES_PATH), 'utf8'),
 ).overrides;
+
+/**
+ * Overrides belong to ONE deck. They exist because the Atlas museum fixtures share stub payloads
+ * between neighbouring archetypes; a different deck authored with its own real payloads must not
+ * have them silently replaced by another deck's corrections just because it reuses an archetype id.
+ */
+let PAYLOAD_OVERRIDES = ATLAS_PAYLOAD_OVERRIDES;
+export function setPayloadOverrides(overrides) {
+  PAYLOAD_OVERRIDES = overrides ?? {};
+}
 
 /** Returns a native spec {kind, ...} the primitives understand, or null when unmappable. */
 export function compileArtifactSpec(fixture) {
   const spec = fixture.artifactSpec ?? {};
-  const archetypeId = ARCHETYPE_BY_ARTIFACT_TYPE[fixture.artifactType] ?? null;
+  // The v2 deck names its slides in its own vocabulary and needs the map. A deck authored against
+  // the Atlas directly can just name the archetype, and an unmapped artifactType would otherwise
+  // compile to a null archetype — which the topology gate reports as `ungated`, an unjudged slide
+  // dressed as a clean one.
+  const archetypeId =
+    ARCHETYPE_BY_ARTIFACT_TYPE[fixture.artifactType] ??
+    (fixture.artifactType?.includes('.') ? fixture.artifactType : null);
   const payload = PAYLOAD_OVERRIDES[archetypeId] ?? spec.payload ?? {};
   const archetype = archetypeId;
   const base = { archetype, title: fixture.title, artifactType: fixture.artifactType };
@@ -1094,15 +1110,37 @@ export async function buildV3NativeDeck(fixtures) {
   return { buffer, compiled, spans };
 }
 
-async function main() {
-  const outIndex = process.argv.indexOf('--out');
-  const outDir = path.join(repoRoot, 'outputs/atlas-v3-native');
-  const outPath =
-    outIndex >= 0 && process.argv[outIndex + 1]
-      ? path.resolve(process.argv[outIndex + 1])
-      : path.join(outDir, 'nodeslide-artifact-atlas-v3-native.pptx');
+/** `--flag value`, or null when absent. */
+function flag(name) {
+  const index = process.argv.indexOf(`--${name}`);
+  return index >= 0 && process.argv[index + 1] ? process.argv[index + 1] : null;
+}
 
-  const atlas = JSON.parse(await readFile(ATLAS_PATH, 'utf8'));
+async function main() {
+  const defaultDir = path.join(repoRoot, 'outputs/atlas-v3-native');
+  const outPath = flag('out')
+    ? path.resolve(flag('out'))
+    : path.join(defaultDir, 'nodeslide-artifact-atlas-v3-native.pptx');
+  // Every sidecar follows the deck. Anchoring these to a fixed directory meant building a second
+  // deck silently overwrote the FIRST deck's gate inputs — its fixtures, map and motion
+  // expectations — so the gates would then grade the wrong deck and report a clean run.
+  const outDir = path.dirname(outPath);
+
+  // The compiler is not specific to the Atlas museum deck — any document of fixtures carrying a
+  // typed artifactSpec compiles the same way and is graded by the same gates. Keeping one compiler
+  // matters more than it sounds: a second builder for a second deck is a second set of behaviours
+  // to keep honest, and the gates would only be checking one of them.
+  const atlasPath = flag('atlas') ? path.resolve(flag('atlas')) : ATLAS_PATH;
+  const atlas = JSON.parse(await readFile(atlasPath, 'utf8'));
+
+  // Only the Atlas museum deck carries stub payloads needing correction. Any other deck keeps the
+  // payloads it was authored with unless it names its own override file.
+  const overridesPath = flag('overrides');
+  if (overridesPath) {
+    setPayloadOverrides(JSON.parse(await readFile(path.resolve(overridesPath), 'utf8')).overrides);
+  } else if (atlasPath !== ATLAS_PATH) {
+    setPayloadOverrides({});
+  }
 
   // Pass 1 — build once and MEASURE it. These are real observed timings of a real run, which is
   // what lets the trace and runtime-proof archetypes be satisfied honestly on pass 2.

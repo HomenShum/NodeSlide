@@ -219,12 +219,12 @@ async function main() {
   await mkdir(path.dirname(outputPath), { recursive: true });
   await writeFile(outputPath, serialized, 'utf8');
   const { totals } = projection;
+  const ungraded =
+    totals.unmappedArtifactTypes.length > 0
+      ? `\n  ungraded artifactTypes (no archetype mapping): ${totals.unmappedArtifactTypes.join(', ')}`
+      : '';
   process.stdout.write(
-    `Wrote ${path.relative(rootDirectory, outputPath)}: ${totals.receipts} receipts ` +
-      `(${totals.modelReceipts} model, ${totals.baselineReceipts} baseline) across ${totals.recipes} recipes.\n` +
-      (totals.unmappedArtifactTypes.length > 0
-        ? `  ungraded artifactTypes (no archetype mapping): ${totals.unmappedArtifactTypes.join(', ')}\n`
-        : ''),
+    `Wrote ${path.relative(rootDirectory, outputPath)}: ${totals.receipts} receipts (${totals.modelReceipts} model, ${totals.baselineReceipts} baseline) across ${totals.recipes} recipes.${ungraded}\n`,
   );
 }
 

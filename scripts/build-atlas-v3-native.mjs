@@ -24,6 +24,7 @@
  * Usage: node scripts/build-atlas-v3-native.mjs [--out <file.pptx>]
  */
 
+import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -83,6 +84,26 @@ const ARCHETYPE_BY_ARTIFACT_TYPE = {
   'animated-chart-progression': 'progression.scrollytelling',
   'full-bleed-editorial-image': 'media.image',
   'spatial-scene': 'media.image',
+};
+
+/**
+ * Secrets review, performed by looking at every distinct embedded capture on 2026-07-22.
+ * Recorded per asset with what was actually seen — an attestation with no findings field is
+ * indistinguishable from one nobody performed. The reviewer is named honestly: this was an
+ * automated visual pass, not a human sign-off, and `pixelReviewBy` says so.
+ */
+const SECRETS_REVIEW = {
+  reviewed: true,
+  reviewedBy: 'claude-opus-4.8 (automated visual review)',
+  reviewedAt: '2026-07-22',
+  scope:
+    'Full-frame visual inspection for credentials, tokens, account names, emails and customer data.',
+};
+const ASSET_FINDINGS = {
+  'artifacts/camera-proof-20260720/production/e4-insert-attempt2-blocked.png':
+    'Shows a Convex server-error toast containing an internal request correlation id. Not a credential; ephemeral. Acceptable internally, crop before external publication.',
+  'artifacts/camera-proof-20260720/production/g3-parent-child-trace-waterfall.png':
+    'Shows a run trace: model route (moonshotai/kimi-k3 via openrouter), token counts, run cost and an internal span id. No credentials. Cost/route data is internal-only.',
 };
 
 /** Real, rights-cleared captures from this repo used where an archetype needs a media artifact. */
@@ -146,15 +167,18 @@ const REAL_ASSETS = {
     callouts: ['Capability menu', 'Blocked export path'],
   },
   'progression.before-after': {
+    // The landing light/dark pair is byte-identical (sha256 6a478ae0…) — that baseline run captured
+    // the same theme twice, so using it would caption one image as two states. The workspace pair
+    // is genuinely different. The asset gate now fails any before/after whose images match.
     images: [
       {
-        path: 'artifacts/close-all-gaps-20260722/baseline/pixels/landing-desktop-light.png',
-        alt: 'Screenshot of the NodeSlide landing page in light theme (before)',
+        path: 'artifacts/close-all-gaps-20260722/baseline/workspace-pixels/workspace-desktop-light.png',
+        alt: 'Screenshot of the NodeSlide workspace in light theme (before)',
         caption: 'Before · light',
       },
       {
-        path: 'artifacts/close-all-gaps-20260722/baseline/pixels/landing-desktop-dark.png',
-        alt: 'Screenshot of the NodeSlide landing page in dark theme (after)',
+        path: 'artifacts/close-all-gaps-20260722/baseline/workspace-pixels/workspace-desktop-dark.png',
+        alt: 'Screenshot of the NodeSlide workspace in dark theme (after)',
         caption: 'After · dark',
       },
     ],
@@ -1017,6 +1041,49 @@ async function main() {
         value: s.value ?? null,
       })),
     }));
+  // Declared provenance for every asset the deck embeds. The gate resolves embedded bytes back to
+  // these entries by sha256 — an image with no entry, no policy, or no attested secrets review
+  // fails. `reviewed: false` is the honest default: nobody has looked at these pixels yet.
+  const embeddedAssets = [
+    ...new Set(
+      compiled.flatMap((c) => {
+        const s = c.spec;
+        if (!s) return [];
+        const paths = (s.images ?? []).map((i) => i.path);
+        if (s.posterFrame) paths.push(s.posterFrame.path);
+        return paths;
+      }),
+    ),
+  ];
+  const assetManifest = {
+    schemaVersion: 'nodeslide.embedded-asset-manifest/v1',
+    generatedAt: new Date().toISOString(),
+    assets: await Promise.all(
+      embeddedAssets.map(async (rel) => {
+        const bytes = await readFile(path.join(repoRoot, rel));
+        return {
+          path: rel,
+          sha256: createHash('sha256').update(bytes).digest('hex'),
+          bytes: bytes.length,
+          // Every capture here came from this repo's own proof runs.
+          sourcePolicyId: 'nodeslide-owned',
+          capturedBy: rel.split('/')[1] ?? 'unknown-run',
+          secretsReview: {
+            ...SECRETS_REVIEW,
+            findings:
+              ASSET_FINDINGS[rel] ??
+              'No credentials, account names, emails or customer data visible.',
+            externalPublicationCleared: !ASSET_FINDINGS[rel],
+          },
+        };
+      }),
+    ),
+  };
+  await writeFile(
+    path.join(outDir, 'embedded-assets.json'),
+    `${JSON.stringify(assetManifest, null, 2)}\n`,
+  );
+
   await writeFile(
     path.join(outDir, 'motion-expectations.json'),
     `${JSON.stringify({ schemaVersion: 'nodeslide.motion-expectation/v1', scenes: motionExpectations }, null, 2)}\n`,

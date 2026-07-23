@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "nodeslide.embedded-asset-manifest/v1",
+  "generatedAt": "2026-07-23T02:58:10.202Z",
+  "assets": [
+    {
+      "path": "artifacts/close-all-gaps-20260722/baseline/workspace-pixels/workspace-desktop-light.png",
+      "sha256": "eaa674f71cf7d33d216b2ba08eaf96fb47dc88a169f432d2a4e8b5330874ea7e",
+      "bytes": 385923,
+      "sourcePolicyId": "nodeslide-owned",
+      "capturedBy": "close-all-gaps-20260722",
+      "secretsReview": {
+        "reviewed": true,
+        "reviewedBy": "claude-opus-4.8 (automated visual review)",
+        "reviewedAt": "2026-07-22",
+        "scope": "Full-frame visual inspection for credentials, tokens, account names, emails and customer data.",
+        "findings": "No credentials, account names, emails or customer data visible.",
+        "externalPublicationCleared": true
+      }
+    },
+    {
+      "path": "artifacts/close-all-gaps-20260722/baseline/workspace-pixels/workspace-desktop-dark.png",
+      "sha256": "5b1555a61455f1c19fb42b98cc944e0d976d132217ddf16ec1723e461a53dc56",
+      "bytes": 339780,
+      "sourcePolicyId": "nodeslide-owned",
+      "capturedBy": "close-all-gaps-20260722",
+      "secretsReview": {
+        "reviewed": true,
+        "reviewedBy": "claude-opus-4.8 (automated visual review)",
+        "reviewedAt": "2026-07-22",
+        "scope": "Full-frame visual inspection for credentials, tokens, account names, emails and customer data.",
+        "findings": "No credentials, account names, emails or customer data visible.",
+        "externalPublicationCleared": true
+      }
+    },
+    {
+      "path": "artifacts/camera-proof-20260720/production/e4-export-capability-menu.png",
+      "sha256": "f30018ccd394fa849ea5e3f3d1984949b1021b4291d5494bb19ead652378f935",
+      "bytes": 227511,
+      "sourcePolicyId": "nodeslide-owned",
+      "capturedBy": "camera-proof-20260720",
+      "secretsReview": {
+        "reviewed": true,
+        "reviewedBy": "claude-opus-4.8 (automated visual review)",
+        "reviewedAt": "2026-07-22",
+        "scope": "Full-frame visual inspection for credentials, tokens, account names, emails and customer data.",
+        "findings": "No credentials, account names, emails or customer data visible.",
+        "externalPublicationCleared": true
+      }
+    },
+    {
+      "path": "artifacts/camera-proof-20260720/production/e4-insert-attempt2-blocked.png",
+      "sha256": "f879d4bc7ddbfae4e0fc750fb8cf902aa4318c6bee1828bb9b20ceeb3a549082",
+      "bytes": 229205,
+      "sourcePolicyId": "nodeslide-owned",
+      "capturedBy": "camera-proof-20260720",
+      "secretsReview": {
+        "reviewed": true,
+        "reviewedBy": "claude-opus-4.8 (automated visual review)",
+        "reviewedAt": "2026-07-22",
+        "scope": "Full-frame visual inspection for credentials, tokens, account names, emails and customer data.",
+        "findings": "Shows a Convex server-error toast containing an internal request correlation id. Not a credential; ephemeral. Acceptable internally, crop before external publication.",
+        "externalPublicationCleared": false
+      }
+    },
+    {
+      "path": "artifacts/camera-proof-20260720/production/g3-parent-child-trace-waterfall.png",
+      "sha256": "dbc5b72d1b061b5f264486fbeb923bd9fb549cfa9c1c89a5186388d00f654171",
+      "bytes": 241302,
+      "sourcePolicyId": "nodeslide-owned",
+      "capturedBy": "camera-proof-20260720",
+      "secretsReview": {
+        "reviewed": true,
+        "reviewedBy": "claude-opus-4.8 (automated visual review)",
+        "reviewedAt": "2026-07-22",
+        "scope": "Full-frame visual inspection for credentials, tokens, account names, emails and customer data.",
+        "findings": "Shows a run trace: model route (moonshotai/kimi-k3 via openrouter), token counts, run cost and an internal span id. No credentials. Cost/route data is internal-only.",
+        "externalPublicationCleared": false
+      }
+    }
+  ]
+}

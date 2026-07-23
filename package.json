@@ -58,7 +58,9 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "test": "vitest run && npm run test --workspaces --if-present",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "atlas:receipts": "node scripts/emit-atlas-receipts.mjs",
+    "atlas:receipts:check": "node scripts/emit-atlas-receipts.mjs --check"
   },
   "dependencies": {
     "@earendil-works/pi-ai": "0.80.6",

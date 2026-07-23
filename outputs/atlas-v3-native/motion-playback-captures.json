@@ -1,0 +1,46 @@
+{
+    "evidence-scrollytelling":  [
+                                    {
+                                        "index":  0,
+                                        "signature":  "04c2b56d511ac5864d58f7863ba78062d966fafce6ae8b5a046d1c485c017a5b"
+                                    },
+                                    {
+                                        "index":  1,
+                                        "signature":  "7f539bd052c67727180ab2da3fd9f1f250b2bb6c4deb918c855cf75358e5ca40"
+                                    },
+                                    {
+                                        "index":  2,
+                                        "signature":  "f5161793984605ff3ba2efc3c92761e5a1d206e9227478af5374e0b676116474"
+                                    },
+                                    {
+                                        "index":  3,
+                                        "signature":  "d78145095f744fe9a503c31b00cfd8727d580c5e7d308f4e9b4ae6ec5032a88d"
+                                    },
+                                    {
+                                        "index":  4,
+                                        "signature":  "fbcc1a422df833b44386b54b865ebebf55fee224b133e6cce941c3cb9d878fc0"
+                                    }
+                                ],
+    "animated-chart-progression":  [
+                                       {
+                                           "index":  0,
+                                           "signature":  "a8bc7864a834056318e5b0605688cb8786974d6bda747ef8db7ae19d3d288a7d"
+                                       },
+                                       {
+                                           "index":  1,
+                                           "signature":  "81d94a6488b680927ea678e4c88c7efd16659d8884cbba82f75c482082fd9d35"
+                                       },
+                                       {
+                                           "index":  2,
+                                           "signature":  "a677790ae992dd012cecfa78075ea7343131178d6b68e37e889d1da64c19c628"
+                                       },
+                                       {
+                                           "index":  3,
+                                           "signature":  "2ca149cfb3db555089fa85dd63317763b652a9fd4f329dee6e87a852c626b5a8"
+                                       },
+                                       {
+                                           "index":  4,
+                                           "signature":  "5a86dbbb5ae836d7553498fce3741650501233e3c13a6d6c4cacc95aad31d5a7"
+                                       }
+                                   ]
+}

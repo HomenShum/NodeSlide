@@ -34,6 +34,8 @@ import Pptx from 'pptxgenjs';
 import {
   BRAND,
   BRAND_PALETTES,
+  addCropMarks,
+  addPresentChip,
   applyBrand,
   buildChart,
   buildDiagramNodes,
@@ -845,7 +847,10 @@ function addSlideHeader(slide, spec, index) {
     w: 8.6,
     h: 0.3,
     fontSize: 10,
-    color: BRAND.muted,
+    // R3: monospace, letter-spaced caps in blueprint blue for a palette that opts in. The museum
+    // deck leaves fontMono/eyebrow unset, so this run stays grey and theme-fonted — byte-identical.
+    fontFace: BRAND.fontMono,
+    color: BRAND.eyebrow ?? BRAND.muted,
     charSpacing: 2,
   });
   slide.addText(spec.title, {
@@ -855,6 +860,9 @@ function addSlideHeader(slide, spec, index) {
     h: 0.72,
     fontSize: 22,
     bold: true,
+    // R8: pin a grotesque display face. Unset -> the theme minor font LibreOffice was substituting
+    // to serif/Calibri; a named palette makes the title read as authored.
+    fontFace: BRAND.fontDisplay,
     color: BRAND.ink,
   });
   slide.addText(`${index + 1}`, {
@@ -865,6 +873,17 @@ function addSlideHeader(slide, spec, index) {
     fontSize: 10,
     color: BRAND.muted,
   });
+  // R4: a hairline rule under the header band (ledger motif), drawn only when devices are enabled
+  // so the museum deck gains no shape.
+  if (BRAND.devices) {
+    slide.addShape('line', {
+      x: 0.5,
+      y: 1.34,
+      w: 9,
+      h: 0,
+      line: { color: BRAND.line, width: 0.75 },
+    });
+  }
 }
 
 /**
@@ -901,7 +920,16 @@ export async function buildV3NativeDeck(fixtures) {
 
     // Attach source links wherever the archetype demands evidence. Hyperlinked runs make the
     // claim->source edge machine-checkable; grey citation text would not.
-    const sources = spec.archetype ? EVIDENCE_SOURCES[spec.archetype] : null;
+    //
+    // A fixture may also declare its OWN sources, which win over the archetype default. This is how a
+    // slide carries a source line scoped to ITS claim without that claim leaking onto every deck that
+    // reuses the archetype: the showcase's "zero native chart parts became ten" is backed by the two
+    // PRs that turned 0 into 10, but `data.multi-series` is a generic archetype, so keying the source
+    // to the archetype would wrongly attach that specific claim to every multi-series chart anywhere.
+    // Reading it off the fixture keeps the edge honest AND lets the showcase stand on its own as an
+    // R6 evidence-voice proof (a mono, machine-checkable source line), not only mono presence chips.
+    // The frozen museum fixtures declare no `sources`, so their runs fall through unchanged.
+    const sources = fixture.sources ?? (spec.archetype ? EVIDENCE_SOURCES[spec.archetype] : null);
     if (sources) {
       sources.forEach((src, i) => {
         // The CLAIM is the anchor, not the word "source". Both were on the slide before — the
@@ -914,6 +942,10 @@ export async function buildV3NativeDeck(fixtures) {
             {
               text: src.claim,
               options: {
+                // R6: evidence voice is monospace. A source line is a verdict you can follow back;
+                // mono marks it as machine-checkable claim->source, not decorative prose. Unset in
+                // the museum palette, so its source runs are unchanged.
+                fontFace: BRAND.fontMono,
                 color: BRAND.accent,
                 underline: true,
                 hyperlink: { url: src.url, tooltip: src.url },
@@ -929,13 +961,36 @@ export async function buildV3NativeDeck(fixtures) {
       buildChart(pptx, slide, spec);
       if (spec.isTimeline) timelineCharts.push({ chartOrdinal, serials: spec.serials });
       chartOrdinal += 1;
+      // R5/R7: frame the chart region drawn by buildChart, and assert the native chart part.
+      if (BRAND.devices) {
+        addCropMarks(slide, { x: 0.5, y: 1.6, w: 9, h: 3.6 });
+        addPresentChip(slide, spec.isTimeline ? 'CHART · DATE AXIS' : 'CHART PART');
+      }
     } else if (spec.kind === 'table') {
-      buildTable(slide, spec);
+      // buildTable returns the region it actually occupies — height summed from the wrapped-line
+      // count of the real cell text, so the frame hugs the grid even when cells wrap to two lines
+      // (rowCount*constant undershot exactly those rows and overshot short tables).
+      const region = buildTable(slide, spec);
+      if (BRAND.devices) {
+        // margin lifts the top corners off the dark blueprint header band so the frame reads on a
+        // table the way it does on a chart, and seats the bottom corners just below the last row.
+        addCropMarks(slide, region, { margin: 0.06 });
+        addPresentChip(slide, 'TABLE GRID');
+      }
     } else if (spec.kind === 'equation') {
       buildEquationPlaceholder(slide, spec);
       equationSpecs.push(spec);
+      if (BRAND.devices) {
+        addCropMarks(slide, { x: 0.5, y: 2.2, w: 9, h: 1.4 });
+        addPresentChip(slide, 'OMML EQUATION');
+      }
     } else if (spec.kind === 'diagram') {
       diagrams.push(buildDiagramNodes(slide, spec));
+      if (BRAND.devices) {
+        // The node row sits at y:2.4 (h:0.9); frame it with a little margin.
+        addCropMarks(slide, { x: 0.5, y: 2.2, w: 9, h: 1.4 });
+        addPresentChip(slide, 'BOUND DIAGRAM');
+      }
     } else if (spec.kind === 'image') {
       const n = spec.images.length;
       spec.images.forEach((img, i) => {
@@ -985,15 +1040,28 @@ export async function buildV3NativeDeck(fixtures) {
           color: BRAND.muted,
         });
       }
+      // R5/R7: a genuinely embedded screenshot is a real artifact and gets framed + chipped. A
+      // declared poster frame (capability 'poster-frame') is explicitly NOT the artifact, so it
+      // never receives the presence device — that distinction is the whole point of the gate.
+      if (BRAND.devices && spec.capability !== 'poster-frame') {
+        const n = spec.images.length;
+        const iw = n > 1 ? 4.3 : 6.6;
+        const ix = n > 1 ? 0.5 : 1.7;
+        const totalW = n > 1 ? n * iw + (n - 1) * 0.4 : iw;
+        addCropMarks(slide, { x: ix, y: 1.5, w: totalW, h: iw * 0.56 });
+        addPresentChip(slide, 'EMBEDDED IMAGE');
+      }
     } else if (spec.kind === 'code') {
       // Monospace runs are what make this detectable as a `code` artifact rather than prose.
+      // R6: route the mono through BRAND.fontMono; the museum palette leaves it unset, so the
+      // `?? 'Consolas'` fallback reproduces this slide's existing typeface byte-for-byte.
       slide.addText(spec.code ?? '', {
         x: 0.5,
         y: 1.5,
         w: 4.6,
         h: 3.4,
         fontSize: 10,
-        fontFace: 'Consolas',
+        fontFace: BRAND.fontMono ?? 'Consolas',
         color: BRAND.ink,
         fill: { color: 'F4EFE9' },
         valign: 'top',
@@ -1002,6 +1070,12 @@ export async function buildV3NativeDeck(fixtures) {
         { addTable: (rows, opts) => slide.addTable(rows, { ...opts, x: 5.4, w: 4.1 }) },
         spec,
       );
+      // R5/R7: measured code+result is a real artifact (spec.measured is set only when the build
+      // measured itself). Frame both panels and assert the measured result.
+      if (BRAND.devices && spec.measured) {
+        addCropMarks(slide, { x: 0.5, y: 1.5, w: 9, h: 3.4 });
+        addPresentChip(slide, 'MEASURED RESULT');
+      }
     } else if (spec.kind === 'motion') {
       motionSlides.push(spec);
       // The pinned semantic object — present through every state, which is what makes the
@@ -1071,24 +1145,28 @@ export async function buildV3NativeDeck(fixtures) {
         color: BRAND.ink,
         align: 'center',
       });
+      // R6: the capability verdict is evidence voice -> monospace. Unset in the museum palette.
       slide.addText(`declared fallback · capability.pptx = ${spec.capability}`, {
         x: 0.7,
         y: 3.9,
         w: 8.6,
         h: 0.4,
         fontSize: 11,
+        fontFace: BRAND.fontMono,
         color: BRAND.muted,
         align: 'center',
       });
     } else if (spec.label) {
       // No `?? spec.title` fallback: a slide with no body stays sparse rather than echoing its own
       // headline. Sparse is an honest failure a reviewer can see and fix; an echo reads as content.
+      // Body copy routes through BRAND.fontBody (unset in the museum palette -> theme font).
       slide.addText(spec.label, {
         x: 0.7,
         y: 2.1,
         w: 8.6,
         h: 1.8,
         fontSize: 20,
+        fontFace: BRAND.fontBody,
         color: BRAND.ink,
         align: 'center',
       });

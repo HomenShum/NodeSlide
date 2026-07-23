@@ -471,6 +471,25 @@ function labelsFor(count, payload) {
  * Numbers are the real 2026-07-22 arena run, so each slide is both distinct and true.
  */
 const PAYLOAD_OVERRIDES_PATH = 'benchmarks/artifact-atlas/v3-native/payload-overrides.json';
+
+/**
+ * Hand PptxGenJS the format the FILE ACTUALLY IS, not the format its name claims.
+ *
+ * Three committed captures are JPEG bytes carrying a .png extension. PptxGenJS types media from
+ * the extension, so the package declared Default Extension="png" ContentType="image/png" over
+ * JPEG data — a lie in the manifest that LibreOffice quietly sniffed and corrected on import.
+ * Renaming the source files is not an option: they are bound by digest in the asset manifest and
+ * the provenance record, so the rename would break the evidence chain it is meant to protect.
+ * Passing a data URI keeps the bytes (and therefore the digests) identical while letting the
+ * emitted package declare the truth.
+ */
+function imageSource(absolutePath) {
+  const bytes = readFileSync(absolutePath);
+  const isJpeg = bytes[0] === 0xff && bytes[1] === 0xd8;
+  const extension = path.extname(absolutePath).toLowerCase();
+  if (!isJpeg || extension === '.jpg' || extension === '.jpeg') return { path: absolutePath };
+  return { data: `image/jpeg;base64,${bytes.toString('base64')}` };
+}
 const PAYLOAD_OVERRIDES = JSON.parse(
   readFileSync(path.join(repoRoot, PAYLOAD_OVERRIDES_PATH), 'utf8'),
 ).overrides;
@@ -900,7 +919,7 @@ export async function buildV3NativeDeck(fixtures) {
         const w = n > 1 ? 4.3 : 6.6;
         const x = n > 1 ? 0.5 + i * (w + 0.4) : 1.7;
         slide.addImage({
-          path: path.join(repoRoot, img.path),
+          ...imageSource(path.join(repoRoot, img.path)),
           x,
           y: 1.5,
           w,
@@ -965,7 +984,7 @@ export async function buildV3NativeDeck(fixtures) {
       // The pinned semantic object — present through every state, which is what makes the
       // PowerPoint behaviour resemble the web scene rather than unrelated cards on a timer.
       slide.addImage({
-        path: path.join(repoRoot, spec.posterFrame.path),
+        ...imageSource(path.join(repoRoot, spec.posterFrame.path)),
         x: 0.5,
         y: 1.35,
         w: 5.2,
@@ -1011,7 +1030,7 @@ export async function buildV3NativeDeck(fixtures) {
       // poster frame instead of a sentence promising one.
       if (spec.posterFrame) {
         slide.addImage({
-          path: path.join(repoRoot, spec.posterFrame.path),
+          ...imageSource(path.join(repoRoot, spec.posterFrame.path)),
           x: 2.9,
           y: 1.4,
           w: 4.2,

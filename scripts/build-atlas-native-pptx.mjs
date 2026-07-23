@@ -19,6 +19,7 @@
  *   node scripts/build-atlas-native-pptx.mjs [--out <file.pptx>]
  */
 
+import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -379,6 +380,77 @@ export async function buildNativeAtlasDeck(specs = ARTIFACT_SPECS) {
   const rawBuffer = await pptx.write('nodebuffer');
   const withOmml = await injectOmml(rawBuffer, equationSpecs);
   return injectConnectors(withOmml, diagrams);
+}
+
+/**
+ * Collapse byte-identical media parts to one copy and repoint every relationship at it.
+ *
+ * PptxGenJS mints a fresh `ppt/media/*` part per `addImage` call, keyed on the call rather than on
+ * the content, so a screenshot reused on six slides is stored six times. In the Atlas deck that is
+ * 11 parts holding 5 distinct images — about 2.0MB of the package is the same two PNGs repeated.
+ *
+ * This is deliberately a package post-process rather than a change at the call site: the builder
+ * legitimately wants the same capture on several slides, and the duplication is the writer's
+ * concern, not the deck author's.
+ *
+ * Two rules keep it safe. Parts are only merged when their bytes are identical, so this can never
+ * substitute a similar image for another. And merging is confined to one file extension, because
+ * the canonical part inherits the duplicates' `[Content_Types].xml` Default mapping — identical
+ * bytes always share a format, so the guard costs nothing and removes a whole class of corruption.
+ */
+export async function dedupeMedia(buffer) {
+  const zip = await JSZip.loadAsync(buffer);
+  const mediaPaths = Object.keys(zip.files).filter(
+    (name) => /^ppt\/media\//.test(name) && !zip.files[name].dir,
+  );
+
+  const canonicalByKey = new Map();
+  const replacement = new Map();
+  for (const mediaPath of mediaPaths.sort()) {
+    const bytes = await zip.file(mediaPath).async('nodebuffer');
+    const extension = path.extname(mediaPath).toLowerCase();
+    const key = `${extension}:${createHash('sha256').update(bytes).digest('hex')}`;
+    const canonical = canonicalByKey.get(key);
+    if (canonical === undefined) {
+      canonicalByKey.set(key, mediaPath);
+      continue;
+    }
+    replacement.set(mediaPath, canonical);
+  }
+  if (replacement.size === 0) return { buffer, removed: 0, reclaimedBytes: 0 };
+
+  let reclaimedBytes = 0;
+  for (const [duplicate, canonical] of replacement) {
+    reclaimedBytes += (await zip.file(duplicate).async('nodebuffer')).length;
+    const from = path.basename(duplicate);
+    const to = path.basename(canonical);
+    // Rewrite every relationship that points at the duplicate. Targets are relative
+    // ('../media/x.png'), so matching on the basename covers each form they are written in.
+    for (const relsPath of Object.keys(zip.files).filter((n) => /_rels\/.*\.rels$/.test(n))) {
+      const xml = await zip.file(relsPath).async('string');
+      if (!xml.includes(from)) continue;
+      zip.file(relsPath, xml.split(from).join(to));
+    }
+    // A part-specific Override would outlive the part it names and leave the package invalid.
+    const types = await zip.file('[Content_Types].xml').async('string');
+    zip.file(
+      '[Content_Types].xml',
+      types.replace(
+        new RegExp(
+          `<Override PartName="/${duplicate.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]*/>`,
+          'g',
+        ),
+        '',
+      ),
+    );
+    zip.remove(duplicate);
+  }
+
+  return {
+    buffer: await zip.generateAsync({ type: 'nodebuffer' }),
+    removed: replacement.size,
+    reclaimedBytes,
+  };
 }
 
 export {

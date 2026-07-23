@@ -67,12 +67,22 @@ function stableStringify(value) {
   return JSON.stringify(value ?? null);
 }
 
+/**
+ * The commit that last touched the RECEIPTS, not whatever HEAD happens to be.
+ *
+ * Reading HEAD makes the projection non-reproducible: every unrelated commit changes the emitted
+ * bytes, so `--check` fails on any commit that did not touch the source data, and two copies of
+ * the same projection disagree purely because they were generated at different times. The identity
+ * that matters is the data's, so this asks git when the data last changed.
+ */
 function sourceCommit() {
   try {
-    return execFileSync('git', ['rev-parse', 'HEAD'], {
-      cwd: rootDirectory,
-      encoding: 'utf8',
-    }).trim();
+    const commit = execFileSync(
+      'git',
+      ['log', '-1', '--format=%H', '--', path.relative(rootDirectory, receiptsPath)],
+      { cwd: rootDirectory, encoding: 'utf8' },
+    ).trim();
+    return commit.length > 0 ? commit : null;
   } catch {
     return null;
   }
@@ -190,9 +200,12 @@ async function buildProjection() {
 
 async function main() {
   const projection = await buildProjection();
-  // Hash the body, then attach — so the digest covers the data and not itself.
+  // Hash the DATA only — meta is excluded entirely, not just its own sha256 field. A digest that
+  // covered `meta` would fold provenance bookkeeping into the content identity, so two byte-equal
+  // projections could disagree about their own hash.
+  const { meta: _meta, ...body } = projection;
   projection.meta.sha256 = `sha256:${createHash('sha256')
-    .update(stableStringify({ ...projection, meta: { ...projection.meta, sha256: undefined } }))
+    .update(stableStringify(body))
     .digest('hex')}`;
   const serialized = `${JSON.stringify(projection, null, 2)}\n`;
 

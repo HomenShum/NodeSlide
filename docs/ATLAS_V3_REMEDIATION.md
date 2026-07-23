@@ -58,6 +58,49 @@ the geometry heuristic. Locked by `scripts/build-atlas-native-pptx.test.mjs` (6 
   but hand-injected OMML has not yet been opened in PowerPoint. Next step: render-verify, then widen
   the OMML vocabulary beyond one fraction.
 
+## Result: the full 38-fixture deck, compiled natively
+
+`scripts/build-atlas-v3-native.mjs` compiles all 38 canonical fixtures from
+`benchmarks/artifact-atlas/v2/atlas.json`. The semantic data was never missing — each fixture
+already carried a typed `artifactSpec` (`kind` + `payload`) whose own `pptxContract` demanded
+`editable-or-declared-fallback`. v3 delivered neither. This is the compile step that was absent.
+
+Same inspector, same topology gate, before and after:
+
+| | v3 (Walnut exporter) | v3-native (this compiler) |
+| --- | ---: | ---: |
+| passed | 6 | **25** |
+| flattened / violation | 25 | 6 |
+| indeterminate | 3 | 3 |
+| ungated | 9 | 4 |
+
+Native objects emitted: **10 chart parts, 4 tables, 1 OMML equation, 20 bound `<p:cxnSp>` connectors.**
+Every pass is a direct observation of a semantic object — none on the geometry heuristic.
+
+### The 6 remaining violations are honest, not flattening
+
+Each one is "the source fixture has no such data", and the compiler **refuses to fabricate it**:
+
+| Slide | Archetype | Why it cannot pass |
+| --- | --- | --- |
+| 5, 26 | `progression.before-after` | fixture carries only a caption / an asset digest — no before/after pair |
+| 24 | `product-evidence.screenshot-callouts` | no PNG asset in the repo, only a capture digest |
+| 25 | `product-evidence.interaction-clip` | no media asset |
+| 30 | `technical.code-and-result` | `sampleSize: 0`, no code body, `status: illustrative-not-measured` |
+| 31 | `technical.trace-waterfall` | zero measured spans; drawing one would be the named forbidden substitute `illustrative-timing-presented-as-observed` |
+
+The 3 indeterminate (scrollytelling, claim-lineage, citation-card) require artifact kinds a PPTX
+inspection cannot observe at all. Closing these six needs **real assets and real measurements**, not
+a better renderer — which is exactly the distinction the gate exists to make visible.
+
+### One contract defect this exposed
+
+`progression.timeline` / `roadmap` / `milestones` required artifact kind `timeline`, which has **no
+PowerPoint primitive** — making them unsatisfiable in PPTX by construction. A native chart with
+editable start/duration data satisfies "place events on a shared time axis" completely. Those
+archetypes now also accept `chart` (and `table` for milestones); the real failure they guard against
+is still caught by `date-prefixed-bullet-list` / `undated-wish-list`.
+
 ## Rebuilding the full v3 deck
 
 Each v3 slide maps to one `ArtifactSpec`. The 25 flattened + 3 indeterminate slides become native

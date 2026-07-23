@@ -348,7 +348,17 @@ export async function buildNativeAtlasDeck(specs = ARTIFACT_SPECS) {
   return injectConnectors(withOmml, diagrams);
 }
 
-export { ARTIFACT_SPECS };
+export {
+  ARTIFACT_SPECS,
+  addHeader,
+  buildChart,
+  buildTable,
+  buildDiagramNodes,
+  buildEquationPlaceholder,
+  injectOmml,
+  injectConnectors,
+  BRAND,
+};
 
 async function main() {
   const outFlagIndex = process.argv.indexOf('--out');

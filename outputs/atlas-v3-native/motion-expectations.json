@@ -27,7 +27,13 @@
             "slide-element"
           ],
           "object": "ns:motion:evidence-scrollytelling:state-1:source",
-          "value": null
+          "value": null,
+          "region": {
+            "x": 0.6,
+            "y": 0.23978685612788633,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
         },
         {
           "stateId": "state-2",
@@ -41,7 +47,13 @@
             "slide-element"
           ],
           "object": "ns:motion:evidence-scrollytelling:state-2:capture",
-          "value": null
+          "value": null,
+          "region": {
+            "x": 0.6,
+            "y": 0.349911190053286,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
         },
         {
           "stateId": "state-3",
@@ -55,7 +67,13 @@
             "slide-element"
           ],
           "object": "ns:motion:evidence-scrollytelling:state-3:fact",
-          "value": null
+          "value": null,
+          "region": {
+            "x": 0.6,
+            "y": 0.4600355239786856,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
         },
         {
           "stateId": "state-4",
@@ -69,7 +87,13 @@
             "slide-element"
           ],
           "object": "ns:motion:evidence-scrollytelling:state-4:claim",
-          "value": null
+          "value": null,
+          "region": {
+            "x": 0.6,
+            "y": 0.5701598579040853,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
         },
         {
           "stateId": "state-5",
@@ -82,7 +106,13 @@
           ],
           "hiddenRoles": [],
           "object": "ns:motion:evidence-scrollytelling:state-5:slide-element",
-          "value": null
+          "value": null,
+          "region": {
+            "x": 0.6,
+            "y": 0.680284191829485,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
         }
       ]
     },
@@ -112,7 +142,13 @@
             "final-series"
           ],
           "object": "ns:motion:animated-chart-progression:state-1:baseline-series",
-          "value": 62
+          "value": 62,
+          "region": {
+            "x": 0.6,
+            "y": 0.23978685612788633,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
         },
         {
           "stateId": "state-2",
@@ -126,7 +162,13 @@
             "final-series"
           ],
           "object": "ns:motion:animated-chart-progression:state-2:plan-delta",
-          "value": 68
+          "value": 68,
+          "region": {
+            "x": 0.6,
+            "y": 0.349911190053286,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
         },
         {
           "stateId": "state-3",
@@ -140,7 +182,13 @@
             "final-series"
           ],
           "object": "ns:motion:animated-chart-progression:state-3:measured-delta",
-          "value": 74
+          "value": 74,
+          "region": {
+            "x": 0.6,
+            "y": 0.4600355239786856,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
         },
         {
           "stateId": "state-4",
@@ -154,7 +202,13 @@
             "final-series"
           ],
           "object": "ns:motion:animated-chart-progression:state-4:variance-band",
-          "value": 80
+          "value": 80,
+          "region": {
+            "x": 0.6,
+            "y": 0.5701598579040853,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
         },
         {
           "stateId": "state-5",
@@ -167,7 +221,13 @@
           ],
           "hiddenRoles": [],
           "object": "ns:motion:animated-chart-progression:state-5:final-series",
-          "value": 86
+          "value": 86,
+          "region": {
+            "x": 0.6,
+            "y": 0.680284191829485,
+            "w": 0.35,
+            "h": 0.08880994671403197
+          }
         }
       ]
     }

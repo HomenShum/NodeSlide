@@ -1,30 +1,30 @@
 {
   "schemaVersion": "nodeslide.atlas-native-build-measurement/v1",
-  "measuredAt": "2026-07-23T02:58:09.919Z",
+  "measuredAt": "2026-07-23T03:11:19.847Z",
   "sampleSize": 1,
   "source": "scripts/build-atlas-v3-native.mjs buildV3NativeDeck (pass 1)",
   "spans": [
     {
       "name": "pptx.write",
-      "ms": 242.076
+      "ms": 499.962
     },
     {
       "name": "inject.omml",
-      "ms": 27.773
+      "ms": 70.888
     },
     {
       "name": "inject.connectors",
-      "ms": 26.329
+      "ms": 51.775
     },
     {
       "name": "inject.dateAxes",
-      "ms": 25.158
+      "ms": 51.165
     },
     {
       "name": "inject.timing",
-      "ms": 18.767
+      "ms": 55.754
     }
   ],
-  "totalMs": 340.103,
+  "totalMs": 729.544,
   "code": "const raw = await pptx.write(\"nodebuffer\");\nconst a   = await injectOmml(raw, equations);\nconst b   = await injectConnectors(a, diagrams);\nconst out = await injectDateAxes(b, timelines);"
 }

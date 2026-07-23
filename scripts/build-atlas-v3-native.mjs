@@ -330,12 +330,21 @@ export function buildTimingTree(shapeIds) {
     .map((spid) => {
       const parId = id++;
       const setId = id++;
+      const groupId = id++;
+      const innerId = id++;
       const behavior = `<p:cBhvr><p:cTn id="${setId}" dur="1" fill="hold"><p:stCondLst><p:cond delay="0"/></p:stCondLst></p:cTn><p:tgtEl><p:spTgt spid="${spid}"/></p:tgtEl><p:attrNameLst><p:attrName>style.visibility</p:attrName></p:attrNameLst></p:cBhvr>`;
-      return `<p:par><p:cTn id="${parId}" fill="hold" nodeType="clickEffect" presetID="1" presetClass="entr"><p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst><p:set>${behavior}<p:to><p:strVal val="visible"/></p:to></p:set></p:childTnLst></p:cTn></p:par>`;
+      const effect = `<p:par><p:cTn id="${parId}" presetID="1" presetClass="entr" presetSubtype="0" fill="hold" nodeType="clickEffect"><p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst><p:set>${behavior}<p:to><p:strVal val="visible"/></p:to></p:set></p:childTnLst></p:cTn></p:par>`;
+      const inner = `<p:par><p:cTn id="${innerId}" fill="hold"><p:stCondLst><p:cond delay="0"/></p:stCondLst><p:childTnLst>${effect}</p:childTnLst></p:cTn></p:par>`;
+      // The indefinite delay is what makes this group wait for its OWN click.
+      return `<p:par><p:cTn id="${groupId}" fill="hold"><p:stCondLst><p:cond delay="indefinite"/></p:stCondLst><p:childTnLst>${inner}</p:childTnLst></p:cTn></p:par>`;
     })
     .join('');
 
-  const mainSeq = `<p:cTn id="2" dur="indefinite" nodeType="mainSeq"><p:childTnLst><p:par><p:cTn id="3" fill="hold"><p:stCondLst><p:cond delay="indefinite"/></p:stCondLst><p:childTnLst>${steps}</p:childTnLst></p:cTn></p:par></p:childTnLst></p:cTn>`;
+  // Each USER CLICK is its own group. Putting every effect inside one indefinite-delay group made
+  // them all belong to a single click — PowerPoint then revealed every state at once, which the
+  // playback canary caught as "state 2 is showing before it was revealed". The correct shape is
+  // mainSeq > (one click group per transition) > (one effect par) > the effect.
+  const mainSeq = `<p:cTn id="2" dur="indefinite" nodeType="mainSeq"><p:childTnLst>${steps}</p:childTnLst></p:cTn>`;
   const advance = `<p:prevCondLst><p:cond evt="onPrev" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:prevCondLst><p:nextCondLst><p:cond evt="onNext" delay="0"><p:tgtEl><p:sldTgt/></p:tgtEl></p:cond></p:nextCondLst>`;
   const root = `<p:cTn id="1" dur="indefinite" restart="never" nodeType="tmRoot"><p:childTnLst><p:seq concurrent="1" nextAc="seek">${mainSeq}${advance}</p:seq></p:childTnLst></p:cTn>`;
   return `<p:timing><p:tnLst><p:par>${root}</p:par></p:tnLst></p:timing>`;
@@ -1039,6 +1048,16 @@ async function main() {
         hiddenRoles: c.spec.states.slice(i + 1).map((x) => x.role),
         object: `ns:motion:${c.spec.sceneId}:${s.id}:${s.role}`,
         value: s.value ?? null,
+        // Where this state's shape sits, normalised to the slide (0..1). The playback canary
+        // measures ink density inside this rectangle per captured frame, which is what lets the
+        // gate check that frame N shows states 0..N-1 and NOT the later ones. Without it, five
+        // distinct frames prove only that something changed, not that the right thing changed.
+        region: {
+          x: 6.0 / 10,
+          y: (1.35 + i * 0.62) / 5.63,
+          w: 3.5 / 10,
+          h: 0.5 / 5.63,
+        },
       })),
     }));
   // Declared provenance for every asset the deck embeds. The gate resolves embedded bytes back to

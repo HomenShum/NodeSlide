@@ -304,11 +304,25 @@ async function injectConnectors(buffer, diagrams) {
     diagramIndex += 1;
 
     // Map each node id -> its assigned cNvPr id, read straight from the emitted XML.
+    //
+    // Match to the end of the attribute, not to a slug character class. The old pattern was
+    // `name="node-([a-z0-9-]+)"`, so a node id containing a space, a capital or a dot matched only
+    // its first fragment: `node-model plan` resolved as `model`, every edge touching it silently
+    // produced no connector, and the slide then reported as vector-flattened with no clue why.
+    // Failing loudly beats emitting a diagram that quietly has no relationships in it.
     const idByNode = new Map();
-    for (const m of xml.matchAll(/<p:cNvPr id="(\d+)" name="node-([a-z0-9-]+)"/g)) {
+    for (const m of xml.matchAll(/<p:cNvPr id="(\d+)" name="node-([^"]+)"/g)) {
       idByNode.set(m[2], Number.parseInt(m[1], 10));
     }
     const geoById = new Map(diagram.geometry.map((g) => [g.id, g]));
+    const unresolved = diagram.edges
+      .flat()
+      .filter((node) => !idByNode.has(node) || !geoById.has(node));
+    if (unresolved.length > 0) {
+      throw new Error(
+        `${slidePath}: diagram edges reference nodes that were never emitted as shapes: ${[...new Set(unresolved)].join(', ')}. The slide would ship as a set of boxes with no bound connectors.`,
+      );
+    }
 
     let nextId =
       Math.max(

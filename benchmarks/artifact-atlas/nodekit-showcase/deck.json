@@ -1,0 +1,237 @@
+{
+  "_comment": "NodeKit showcase deck. Compiled by the SAME scripts/build-atlas-v3-native.mjs as the Atlas museum deck and graded by the same parity gates — a second builder would be a second set of behaviours to keep honest. Every payload below is a number or a name verified against a real file in this repo or in parity-studio during the 2026-07-23 session; nothing is illustrative. Slides a viewer would expect but that have no material behind them are recorded in refused.json rather than invented.",
+  "schemaVersion": "nodeslide.atlas/v1",
+  "atlasVersion": "nodekit-showcase-v1",
+  "communicationJob": "Show that a slide is finished only when the artifact it claims is actually present in the bytes — and that this deck was built and graded by that rule.",
+  "fixtures": [
+    {
+      "number": 1,
+      "artifactType": "narrative.hero-thesis",
+      "title": "Every slide here was gated by the rule it describes",
+      "takeaway": "53 archetypes, each naming the artifact that must exist on the slide and the near-misses that do not count.",
+      "artifactSpec": {
+        "kind": "generic",
+        "payload": {
+          "label": "53 archetypes, each naming the artifact that must exist on the slide and the near-misses that do not count."
+        }
+      }
+    },
+    {
+      "number": 2,
+      "artifactType": "data.kpi-strip",
+      "title": "Six artifact kinds are visible to a shallow reader, ten to a deep one",
+      "takeaway": "One kind — scrollytelling — can never be observed in PowerPoint at all.",
+      "artifactSpec": {
+        "kind": "chart",
+        "payload": {
+          "unit": "artifact kinds",
+          "xAxis": {
+            "labels": ["Shallow inspection", "Deep inspection", "Never observable"]
+          },
+          "yAxis": { "min": 0, "max": 12 },
+          "series": [{ "id": "artifact kinds", "values": [6, 10, 1] }]
+        }
+      }
+    },
+    {
+      "number": 3,
+      "_comment": "Deliberately NOT progression.before-after: that archetype is asset-routed in the compiler and would replace this chart with a workspace screenshot, which does not show the claim the title makes.",
+      "artifactType": "data.multi-series",
+      "title": "Zero native chart parts became ten",
+      "takeaway": "The v3 museum deck carried 1,303 shapes and not one native chart; the native rebuild carries ten real chart parts.",
+      "artifactSpec": {
+        "kind": "chart",
+        "payload": {
+          "unit": "native objects in the package",
+          "xAxis": {
+            "labels": ["Chart parts", "Data series", "Tables", "Bound connectors", "Equations"]
+          },
+          "yAxis": { "min": 0, "max": 40 },
+          "series": [
+            { "id": "Walnut v3 export", "values": [0, 0, 0, 0, 0] },
+            { "id": "Native rebuild", "values": [10, 18, 5, 38, 1] }
+          ]
+        }
+      }
+    },
+    {
+      "number": 4,
+      "artifactType": "data.funnel",
+      "title": "The gate decides every slide, or says it could not",
+      "takeaway": "36 passes, 2 declared fallbacks, zero unknowns — 100% of slides decided.",
+      "artifactSpec": {
+        "kind": "chart",
+        "payload": {
+          "unit": "slides",
+          "xAxis": {
+            "labels": ["Inspected", "Decided", "Passed", "Declared fallback", "Violated"]
+          },
+          "yAxis": { "min": 0, "max": 40 },
+          "series": [{ "id": "topology gate", "values": [38, 38, 36, 2, 0] }]
+        }
+      }
+    },
+    {
+      "number": 5,
+      "artifactType": "systems.architecture",
+      "title": "The model's authority ends at the plan",
+      "takeaway": "Everything after the plan is decided by reading the emitted bytes, never the model's own claim.",
+      "artifactSpec": {
+        "kind": "graph",
+        "payload": {
+          "directed": true,
+          "nodes": [
+            { "id": "brief" },
+            { "id": "model plan" },
+            { "id": "compiler" },
+            { "id": "emitted bytes" },
+            { "id": "gate verdict" }
+          ],
+          "edges": [
+            { "id": "edge-1", "from": "brief", "to": "model plan", "directed": true },
+            { "id": "edge-2", "from": "model plan", "to": "compiler", "directed": true },
+            { "id": "edge-3", "from": "compiler", "to": "emitted bytes", "directed": true },
+            { "id": "edge-4", "from": "emitted bytes", "to": "gate verdict", "directed": true }
+          ]
+        }
+      }
+    },
+    {
+      "number": 6,
+      "artifactType": "systems.comparison-matrix",
+      "title": "Portability is recorded per artifact kind, and measured twice",
+      "takeaway": "Charts, tables, diagrams and equations all survive LibreOffice; only the chart-to-workbook link does not.",
+      "artifactSpec": {
+        "kind": "comparison",
+        "payload": {
+          "comparisonType": "libreoffice-round-trip",
+          "metrics": [
+            { "id": "beforeRoundTrip", "unit": "objects" },
+            { "id": "afterRoundTrip", "unit": "objects" }
+          ],
+          "cohorts": [
+            {
+              "id": "chart parts",
+              "status": "observed",
+              "plotted": true,
+              "values": { "beforeRoundTrip": 10, "afterRoundTrip": 10 }
+            },
+            {
+              "id": "data series",
+              "status": "observed",
+              "plotted": true,
+              "values": { "beforeRoundTrip": 18, "afterRoundTrip": 18 }
+            },
+            {
+              "id": "connector bindings",
+              "status": "observed",
+              "plotted": true,
+              "values": { "beforeRoundTrip": 38, "afterRoundTrip": 38 }
+            },
+            {
+              "id": "equation runs",
+              "status": "observed",
+              "plotted": true,
+              "values": { "beforeRoundTrip": 10, "afterRoundTrip": 10 }
+            },
+            {
+              "id": "workbook links",
+              "status": "observed",
+              "plotted": true,
+              "values": { "beforeRoundTrip": 10, "afterRoundTrip": 0 }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "number": 7,
+      "artifactType": "technical.equation",
+      "title": "The equation is a real object, and it took a wrapper to make it travel",
+      "takeaway": "A bare m:oMath is well-formed, invisible, and deleted outright by LibreOffice.",
+      "artifactSpec": {
+        "kind": "equation",
+        "payload": {
+          "expression": {
+            "op": "divide",
+            "left": { "op": "value", "value": "Q" },
+            "right": {
+              "op": "add",
+              "left": { "op": "value", "value": "1" },
+              "right": {
+                "op": "add",
+                "left": {
+                  "op": "multiply",
+                  "left": { "op": "value", "value": "α" },
+                  "right": { "op": "value", "value": "C" }
+                },
+                "right": {
+                  "op": "multiply",
+                  "left": { "op": "value", "value": "β" },
+                  "right": { "op": "value", "value": "L" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "number": 8,
+      "artifactType": "data.table",
+      "title": "Eighty-two of eighty-four candidates cleared every gate",
+      "takeaway": "72 of those receipts came from real models with paid telemetry; 12 from the deterministic baseline.",
+      "artifactSpec": {
+        "kind": "chart",
+        "payload": {
+          "unit": "arena receipts",
+          "xAxis": { "labels": ["Requested", "Passed gates", "Eligible", "Human-preferred"] },
+          "yAxis": { "min": 0, "max": 90 },
+          "series": [
+            { "id": "claude-sonnet-5", "values": [24, 24, 24, 0] },
+            { "id": "moonshotai/kimi-k3", "values": [24, 24, 23, 0] },
+            { "id": "google/gemma-4-26b", "values": [24, 24, 23, 0] },
+            { "id": "deterministic baseline", "values": [12, 12, 12, 0] }
+          ]
+        }
+      }
+    },
+    {
+      "number": 9,
+      "artifactType": "systems.hierarchy",
+      "title": "Maturity is derived from receipts, never written beside them",
+      "takeaway": "Every recipe stops at proven, because the top rung needs a human and no human review has run.",
+      "artifactSpec": {
+        "kind": "graph",
+        "payload": {
+          "directed": true,
+          "nodes": [
+            { "id": "discovered" },
+            { "id": "extracted" },
+            { "id": "vetted" },
+            { "id": "proven" },
+            { "id": "certified" }
+          ],
+          "edges": [
+            { "id": "edge-1", "from": "discovered", "to": "extracted", "directed": true },
+            { "id": "edge-2", "from": "extracted", "to": "vetted", "directed": true },
+            { "id": "edge-3", "from": "vetted", "to": "proven", "directed": true },
+            { "id": "edge-4", "from": "proven", "to": "certified", "directed": true }
+          ]
+        }
+      }
+    },
+    {
+      "number": 10,
+      "artifactType": "decision.recommendation",
+      "title": "One gate is open, and no amount of compute can close it",
+      "takeaway": "Certified requires a human blind preference; humanPreferred is null on all 84 receipts.",
+      "artifactSpec": {
+        "kind": "generic",
+        "payload": {
+          "label": "Certified requires a human blind preference. humanPreferred is null on all 84 receipts, so the ladder stops at proven and says so on the surface."
+        }
+      }
+    }
+  ]
+}

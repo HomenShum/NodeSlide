@@ -2,6 +2,7 @@ import {
   Bot,
   Command,
   FilePlus2,
+  FlaskConical,
   MessageCircle,
   MonitorPlay,
   Search,
@@ -15,7 +16,7 @@ export interface StudioCommand {
   label: string;
   detail: string;
   group: 'Create' | 'Navigate' | 'Share';
-  icon: 'ai' | 'design' | 'comments' | 'present' | 'new';
+  icon: 'ai' | 'design' | 'comments' | 'present' | 'new' | 'lab';
   shortcut?: string;
   run: () => void;
 }
@@ -32,6 +33,7 @@ const icons = {
   comments: MessageCircle,
   present: MonitorPlay,
   new: FilePlus2,
+  lab: FlaskConical,
 };
 
 export function CommandPalette({ open, commands, onClose }: CommandPaletteProps) {

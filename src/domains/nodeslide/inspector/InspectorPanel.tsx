@@ -40,6 +40,7 @@ import {
   type AiAgentActivity,
   type AiCommentContext,
   type AiComposerCommand,
+  type AiComposerSeed,
   AiInspector,
   type AiProposalOptions,
   type AiReadReference,
@@ -73,6 +74,8 @@ export interface InspectorPanelProps<CommandId extends string = string> {
   activeTab: InspectorTab;
   collapsed: boolean;
   width: number;
+  /** Text handed to the AI composer from outside — today, a pattern chosen in the Artifact Lab. */
+  composerSeed?: AiComposerSeed;
   agentBusy: boolean;
   variations: readonly SlideVariation[];
   variationsLoading: boolean;
@@ -164,6 +167,7 @@ export function InspectorPanel<CommandId extends string = string>({
   activeTab,
   collapsed,
   width,
+  composerSeed,
   agentBusy,
   variations,
   variationsLoading,
@@ -380,6 +384,7 @@ export function InspectorPanel<CommandId extends string = string>({
         {activeTab === 'ai' ? (
           <AiInspector
             key={workspace.deck.id}
+            composerSeed={composerSeed}
             deck={workspace.deck}
             slide={slide}
             selectedElements={selectedElements}

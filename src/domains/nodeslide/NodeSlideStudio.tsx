@@ -55,6 +55,7 @@ import {
 import { generateSessionIllustrativeImage } from '../../lib/sessionImageGeneration';
 import { cloneNodeSlideElementWithoutAuthoredBinding } from './clientArtifactAuthorship';
 import { type ApproverReviewState, ApproverReviewView } from './components/ApproverReviewView';
+import { ArtifactLabDialog } from './components/ArtifactLabDialog';
 import { CommandPalette, type StudioCommand } from './components/CommandPalette';
 import {
   DeploymentUpdateBoundary,
@@ -104,6 +105,7 @@ import {
 import type {
   AiAgentActivity,
   AiCommentContext,
+  AiComposerSeed,
   AiProposalOptions,
   AiReadReference,
   AiVariationRequest,
@@ -538,6 +540,11 @@ function NodeSlideStudioContent() {
   const [projectsOpen, setProjectsOpen] = useState(false);
   const [sampleRequested, setSampleRequested] = useState(false);
   const [commandOpen, setCommandOpen] = useState(false);
+  const [artifactLabOpen, setArtifactLabOpen] = useState(false);
+  // The pattern chosen in the Artifact Lab, on its way to the AI composer. The nonce rises on every
+  // pick so that choosing the SAME recipe twice still seeds the composer the second time — without
+  // it, the repeat pick is a no-op and the button looks broken.
+  const [composerSeed, setComposerSeed] = useState<AiComposerSeed>({ text: '', nonce: 0 });
   const [shareOpen, setShareOpen] = useState(false);
   const [shareBusy, setShareBusy] = useState(false);
   const [agentBusy, setAgentBusy] = useState(false);
@@ -2819,6 +2826,14 @@ function NodeSlideStudioContent() {
       run: beginPresentation,
     },
     {
+      id: 'artifact-lab',
+      label: 'Open Artifact Lab',
+      detail: 'Browse reference artifacts and recipes without leaving the deck',
+      group: 'Create',
+      icon: 'lab',
+      run: () => setArtifactLabOpen(true),
+    },
+    {
       id: 'new',
       label: 'New deck',
       detail: 'Start from the prompt-first landing composer',
@@ -3221,6 +3236,7 @@ function NodeSlideStudioContent() {
           activeTab={activeInspectorTab}
           collapsed={inspectorCollapsed}
           width={inspectorWidth}
+          composerSeed={composerSeed}
           agentBusy={agentBusy}
           variations={activeVariations}
           variationsLoading={
@@ -3423,6 +3439,22 @@ function NodeSlideStudioContent() {
       </div>
 
       {projectsDialog}
+      {/*
+       * The Artifact Lab shipped on the landing page only, so the reference artifacts were reachable
+       * before you had a deck and never while you were working on one — which is when you actually
+       * want a reference. Same dialog, same registry; only the entry point and the destination of a
+       * chosen pattern differ. On the landing page a pattern seeds the deck-creation prompt; here it
+       * seeds the scoped edit composer, because a deck already exists.
+       */}
+      <ArtifactLabDialog
+        open={artifactLabOpen}
+        onClose={() => setArtifactLabOpen(false)}
+        onUsePattern={(pattern) => {
+          setComposerSeed((current) => ({ text: pattern, nonce: current.nonce + 1 }));
+          setArtifactLabOpen(false);
+          openInspector('ai');
+        }}
+      />
       <CommandPalette
         open={commandOpen}
         commands={commands}

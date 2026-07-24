@@ -130,6 +130,14 @@ interface ComposerTrigger {
   end: number;
 }
 
+/**
+ * Composer text handed in from another surface, with a nonce so the same text can be sent twice.
+ */
+export interface AiComposerSeed {
+  text: string;
+  nonce: number;
+}
+
 export interface AiInspectorProps<CommandId extends string = string> {
   deck: Deck;
   slide: Slide;
@@ -154,6 +162,11 @@ export interface AiInspectorProps<CommandId extends string = string> {
   agentActivity?: AiAgentActivity | null;
   commentContext?: AiCommentContext | null;
   initialInstruction?: string;
+  /**
+   * Composer text pushed in from outside after mount — today, a pattern chosen in the Artifact Lab.
+   * The nonce must rise on every push, including a repeat of the same text; see the effect below.
+   */
+  composerSeed?: AiComposerSeed | undefined;
   initialReadContext?: readonly AiReadReference[];
   initialProviderMode?: AiProviderMode;
   initialProviderModel?: NodeSlideAgentModelId;
@@ -211,6 +224,7 @@ export function AiInspector<CommandId extends string = string>({
   agentActivity,
   commentContext = null,
   initialInstruction = '',
+  composerSeed,
   initialReadContext = [],
   initialProviderMode = nodeSlideProviderModeForModel(NODESLIDE_DEFAULT_AGENT_MODEL),
   initialProviderModel = NODESLIDE_DEFAULT_AGENT_MODEL,
@@ -263,6 +277,23 @@ export function AiInspector<CommandId extends string = string>({
     useState<readonly AiReadReference[]>(initialReadContext);
   const [selectedCommand, setSelectedCommand] = useState<AiComposerCommand<CommandId> | null>(null);
   const [cursorPosition, setCursorPosition] = useState(initialInstruction.length);
+  // A pattern picked in the Artifact Lab arrives long after this component mounted, so `useState`'s
+  // initial value cannot carry it.
+  //
+  // The nonce is what makes this correct, and it is not decoration. Keying off the text alone means
+  // choosing the SAME recipe a second time changes nothing — the value is equal, the effect never
+  // runs, and the button looks broken. The nonce rises on every pick, so a repeat pick re-seeds.
+  //
+  // Re-seeding overwrites a draft in progress, deliberately: choosing "Use recipe" is an explicit
+  // act with one meaning, and it does the same on the landing composer. An empty text never seeds,
+  // so an absent prop cannot wipe someone's typing.
+  const appliedSeedNonce = useRef(composerSeed?.nonce ?? 0);
+  useEffect(() => {
+    if (!composerSeed?.text || composerSeed.nonce === appliedSeedNonce.current) return;
+    appliedSeedNonce.current = composerSeed.nonce;
+    setInstruction(composerSeed.text);
+    setCursorPosition(composerSeed.text.length);
+  }, [composerSeed]);
   const [dismissedMenuKey, setDismissedMenuKey] = useState<string | null>(null);
   const [menuIndex, setMenuIndex] = useState(0);
   const [optimisticAsk, setOptimisticAsk] = useState<string | null>(null);

@@ -120,7 +120,21 @@ describe('NodeSlide v3 visual contract', () => {
   });
 
   it('makes typing the primary composer action', () => {
-    expect(css).toMatch(/\.ns-ai-v3-composer-field[\s\S]*?order: 1;/);
+    // Primary means the composer sits at the BOTTOM of its column, where your hands already are and
+    // where every chat surface puts it. This asserted `order: 1`, which pinned the input to the top
+    // of the container and left the suggestion chips and policy line sitting underneath it — so the
+    // thing you type into was not the last thing in the panel. The order values below say the
+    // suggestions come first and the input comes last.
+    const orderOf = (selector: string) => {
+      const match = css.match(new RegExp(`\\${selector}\\b[\\s\\S]*?order: (\\d+);`));
+      return match ? Number(match[1]) : Number.NaN;
+    };
+    const composerOrder = orderOf('.ns-ai-v3-composer-field');
+    const suggestionsOrder = orderOf('.ns-ai-v3-suggested-actions');
+
+    expect(Number.isNaN(composerOrder)).toBe(false);
+    expect(Number.isNaN(suggestionsOrder)).toBe(false);
+    expect(composerOrder).toBeGreaterThan(suggestionsOrder);
     expect(css).toMatch(/\.ns-ai-v3-suggested-actions[\s\S]*?order: 3;/);
     expect(css).toMatch(/\.ns-composer-field:focus-within[\s\S]*?border-color:[\s\S]*?box-shadow:/);
     expect(css).toMatch(/\.ns-composer-field textarea[\s\S]*?min-height: 92px;/);

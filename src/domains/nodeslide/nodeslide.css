@@ -2819,41 +2819,48 @@
   width: 31px;
 }
 
+/* A command palette is a spotlight, not a panel bolted to a corner. `position: relative` with
+   `inset: auto; margin: 0` overrode the <dialog> default and pinned it to the top-left of the
+   viewport. Horizontally centred and dropped from the top edge is where the eye already is. */
 .ns-command-palette {
   background: white;
   border: 1px solid var(--ns-line);
-  border-radius: 13px;
+  border-radius: 14px;
   box-shadow: var(--ns-shadow-lg);
   color: inherit;
-  inset: auto;
-  margin: 0;
+  inset: 0;
+  margin: 11vh auto auto;
   overflow: hidden;
   padding: 0;
-  position: relative;
-  width: min(520px, 100%);
+  width: min(600px, 92vw);
+}
+.ns-command-palette::backdrop {
+  backdrop-filter: blur(2px);
+  background: rgb(28 30 26 / 28%);
 }
 .ns-command-search {
   align-items: center;
   border-bottom: 1px solid var(--ns-line);
   display: flex;
-  gap: 9px;
-  padding: 0 13px;
+  gap: 10px;
+  padding: 0 15px;
 }
 .ns-command-search input {
   border: 0;
-  font-size: 12px;
-  height: 48px;
+  font-size: 14px;
+  height: 50px;
   outline: 0;
   width: 100%;
 }
 .ns-command-search kbd {
   color: var(--ns-faint);
-  font-size: 8px;
+  font-size: 10px;
+  letter-spacing: 0.04em;
 }
 .ns-command-results {
-  max-height: 330px;
+  max-height: 360px;
   overflow-y: auto;
-  padding: 6px;
+  padding: 7px;
 }
 .ns-command-results > button {
   align-items: center;
@@ -2861,9 +2868,9 @@
   border: 0;
   border-radius: 8px;
   display: grid;
-  gap: 9px;
+  gap: 11px;
   grid-template-columns: auto 1fr auto;
-  padding: 8px;
+  padding: 8px 9px;
   text-align: left;
   width: 100%;
 }
@@ -2874,13 +2881,16 @@
 .ns-command-results small {
   display: block;
 }
+/* The command is the thing being chosen, so it is the largest text in its own row. */
 .ns-command-results strong {
-  font-size: 9px;
+  font-size: 13px;
+  font-weight: 550;
+  letter-spacing: -0.005em;
 }
 .ns-command-results small {
-  color: var(--ns-faint);
-  font-size: 8px;
-  margin-top: 2px;
+  color: var(--ns-muted);
+  font-size: 11.5px;
+  margin-top: 1px;
 }
 .ns-command-result-icon {
   align-items: center;
@@ -2888,17 +2898,24 @@
   border-radius: 7px;
   color: var(--ns-muted);
   display: flex;
-  height: 31px;
+  height: 27px;
   justify-content: center;
-  width: 31px;
+  width: 27px;
+}
+/* A quiet tag. It says which group a command belongs to; it is not itself a thing to read first. */
+.ns-command-result-group {
+  color: var(--ns-faint);
+  font-size: 9.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
 }
 .ns-command-palette > footer {
   border-top: 1px solid var(--ns-line-soft);
   color: var(--ns-faint);
   display: flex;
-  font-size: 7px;
-  gap: 12px;
-  padding: 7px 12px;
+  font-size: 10.5px;
+  gap: 14px;
+  padding: 8px 14px;
 }
 
 .ns-toast {
@@ -3581,13 +3598,14 @@
     .ns-open-project label > span,
     .ns-profile-grid small,
     .ns-project-form footer > span,
-    .ns-recent-decks small,
-    .ns-command-search kbd,
-    .ns-command-results small,
-    .ns-command-palette > footer
+    .ns-recent-decks small
   ) {
   font-size: var(--ns-chrome-min-font);
 }
+/* The palette's `small`, footer and search `kbd` used to sit in the clamp above, which forced
+   them to the 9px chrome floor and beat the palette's own rules on source order. The palette is a
+   focused overlay, not chrome squeezed into a toolbar — it sets its own scale deliberately, so it
+   opts out rather than fighting the clamp with specificity. */
 
 .ns-presenter :is(.ns-presenter-topbar button, .ns-presenter-controls span) {
   font-size: 9px;

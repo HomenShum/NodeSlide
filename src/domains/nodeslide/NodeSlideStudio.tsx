@@ -3270,6 +3270,7 @@ function NodeSlideStudioContent() {
           previewedPatchId={previewedPatchId}
           activeTastePackId={activeTastePackId}
           activeProfileId={workspace.deck.activeSignatureProfileId ?? null}
+          activeProfileDigest={workspace.deck.activeSignatureProfileDigest ?? null}
           previewProfileId={previewedSignatureProfile?.id ?? null}
           signatureProfiles={signatureProfiles}
           tasteProfile={tasteProfile ?? null}

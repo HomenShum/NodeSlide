@@ -1599,6 +1599,53 @@
   margin-top: 9px;
   width: 100%;
 }
+/* What governs this deck right now. Stated plainly, because a refusal with no visible cause reads
+   as a bug rather than as the rule working. */
+.ns-deck-direction-status {
+  background: var(--ns-panel);
+  border: 1px solid var(--ns-line-soft);
+  border-radius: 8px;
+  color: var(--ns-ink);
+  font-size: 11px;
+  line-height: 1.45;
+  margin: 0 0 9px;
+  padding: 7px 9px;
+}
+.ns-deck-direction-status code {
+  color: var(--ns-muted);
+  font-size: 10px;
+}
+/* An unresolved binding is not a softer version of a resolved one — the deck is governed by
+   something the panel cannot show, so it reads as a caution rather than as status. */
+/* Rendered as <output>, which is inline by default and would collapse the padding above. */
+.ns-deck-direction-status.is-unresolved {
+  background: #fdf6ec;
+  border-color: #e8d3b4;
+  color: var(--ns-warning);
+  display: block;
+}
+.ns-version-direction-change {
+  background: #fdf6ec;
+  border: 1px solid #e8d3b4;
+  border-radius: 8px;
+  display: grid;
+  gap: 7px;
+  margin-top: 8px;
+  padding: 8px 9px;
+}
+.ns-version-direction-change p {
+  align-items: flex-start;
+  color: var(--ns-warning);
+  display: flex;
+  font-size: 11px;
+  gap: 5px;
+  line-height: 1.45;
+  margin: 0;
+}
+.ns-version-direction-change p svg {
+  flex: none;
+  margin-top: 2px;
+}
 .ns-signature-upload {
   background: #f7f7f4;
   border: 1px dashed var(--ns-line);

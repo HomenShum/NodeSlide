@@ -76,6 +76,7 @@ function renderImageInspector(options: {
       theme={snapshot.deck.theme}
       activeTastePackId={null}
       activeProfileId={null}
+      activeProfileDigest={null}
       previewProfileId={null}
       profiles={[]}
       busy={false}

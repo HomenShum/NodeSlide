@@ -146,7 +146,13 @@ export function CommandPalette({ open, commands, onClose }: CommandPaletteProps)
                   <strong>{command.label}</strong>
                   <small>{command.detail}</small>
                 </span>
-                {command.shortcut ? <kbd>{command.shortcut}</kbd> : <span>{command.group}</span>}
+                {command.shortcut ? (
+                  <kbd>{command.shortcut}</kbd>
+                ) : (
+                  // Carried a bare <span>, so the group inherited body size and outranked the
+                  // command label beside it — the category read louder than the command.
+                  <span className="ns-command-result-group">{command.group}</span>
+                )}
               </button>
             );
           })}

@@ -2293,17 +2293,23 @@
   flex-wrap: wrap;
 }
 
+/* The composer belongs at the bottom edge, the way Cursor and every chat surface put it — you type
+   at the bottom and the conversation grows above. It was `order: 1`, which pinned the input to the
+   TOP of its own container and pushed the suggestions, policy line and disclosure underneath it, so
+   the thing you actually type into had 64px of chips sitting below it.
+   High numbers rather than a re-shuffle: the other rows keep their relative order (3, 4, 5) and only
+   the input and its token chips move to the end. */
 .nodeslide-studio .ns-ai-v3-suggested-actions {
   order: 3;
 }
 
 .nodeslide-studio .ns-ai-v3-composer > .ns-composer-tokens {
-  order: 2;
+  order: 19;
 }
 
 .nodeslide-studio .ns-ai-v3-composer-field {
   flex: none;
-  order: 1;
+  order: 20;
 }
 
 .nodeslide-studio .ns-ai-inline-consent {

@@ -1566,16 +1566,14 @@ function TastePackPanel({
           </span>
         ) : null}
       </div>
-      <p>
-        Independent NodeSlide defaults with source-backed rules. Applying one creates a normal,
-        reversible deck version.
-      </p>
+      <p>Pick a look for the whole deck. Applying one is a normal, reversible version.</p>
       {/* The commitment was always enforced and never stated. After a reload nothing named the
-          direction, so a refused edit arrived with no visible cause. */}
+          direction, so a refused edit arrived with no visible cause. One line, because a person
+          scanning this panel needs the name — the digest is for when they need to be exact. */}
       {direction.kind === 'governed' ? (
         <p className="ns-deck-direction-status" data-testid="deck-direction-status">
-          Edits to this deck are checked against <strong>{direction.name}</strong>{' '}
-          <code>{shortDigest(direction.digest)}</code>. An edit that conflicts with it is refused.
+          Edits are checked against <strong>{direction.name}</strong>{' '}
+          <code>{shortDigest(direction.digest)}</code>
         </p>
       ) : null}
       {/* <output> carries an implicit status role, so the message is announced when a binding stops
@@ -1591,10 +1589,14 @@ function TastePackPanel({
       {onUploadSource ? (
         <label className="ns-signature-upload">
           <strong>Import design style from PPTX</strong>
+          {/* Tightened, not trimmed. Both facts here are guarded by a test and both are honest
+              disclosures: what the import leaves behind, and where typeset math loses fidelity.
+              Cutting either to shorten the panel would be trading accuracy for word count. The math
+              caveat arguably belongs in the export flow rather than here — moving it is a separate
+              change, because dropping it from one place without adding it to the other loses it. */}
           <span>
-            Imports observed colors, type, and layout evidence only; it does not import slide
-            content. Typeset math stays semantic in NodeSlide but exports to PPTX as a labeled
-            static image.
+            Takes the colours, type, and layout — it does not import slide content. Typeset math
+            stays semantic here, but exports to PPTX as a labeled static image.
           </span>
           <input
             type="file"
@@ -1646,13 +1648,7 @@ function TastePackPanel({
                   : `Observed from ${profile.source.fileName ?? profile.source.kind}; review extraction evidence before applying.`}
               </span>
               <small>
-                {profile.confidence} confidence · {profile.warnings.length} warning
-                {profile.warnings.length === 1 ? '' : 's'} ·{' '}
-                {profile.source.kind === 'taste_pack' ? 'Sector pack' : 'Yours'}
-              </small>
-              <small>
-                {signatureFontLabel(profile.tokens.fontFamilies['display'], 'Display fallback')} +{' '}
-                {signatureFontLabel(profile.tokens.fontFamilies['body'], 'Body fallback')}
+                {signatureTypeLabel(profile)} · {signatureMetaLabel(profile)}
               </small>
               {profile.warnings.length > 0 ? (
                 <ul className="ns-signature-warnings">
@@ -1702,12 +1698,44 @@ function TastePackPanel({
   );
 }
 
+/**
+ * The typeface a person would name, not the CSS fallback stack.
+ *
+ * This printed the whole `$value` array, so a card read "Arial, Helvetica Neue, Helvetica,
+ * Liberation Sans, sans-serif + Arial, Helvetica Neue, Helvetica, Liberation Sans, sans-serif".
+ * Nobody choosing a look reads a fallback chain, and repeating it twice made the card look like a
+ * config dump. The remaining families still ship in the token; they are just not the label.
+ */
 function signatureFontLabel(
   token: SignatureProfile['tokens']['fontFamilies'][string] | undefined,
   fallback: string,
 ): string {
   if (!token) return fallback;
-  return Array.isArray(token.$value) ? token.$value.join(', ') : token.$value;
+  const value = Array.isArray(token.$value) ? token.$value[0] : token.$value;
+  return value ?? fallback;
+}
+
+/** "Aptos Display + Aptos", but just "Arial" when a profile sets one face for both roles. */
+function signatureTypeLabel(profile: SignatureProfile): string {
+  const display = signatureFontLabel(profile.tokens.fontFamilies['display'], 'Display fallback');
+  const body = signatureFontLabel(profile.tokens.fontFamilies['body'], 'Body fallback');
+  return display === body ? display : `${display} + ${body}`;
+}
+
+/**
+ * Provenance, plus anything that is actually wrong.
+ *
+ * Every card carried "high confidence · 0 warnings · Sector pack" — two thirds of which is the
+ * absence of a problem. Stating that a thing has no warnings on every row trains people to skip the
+ * row, which is exactly where a real warning would then be missed.
+ */
+function signatureMetaLabel(profile: SignatureProfile): string {
+  const parts = [profile.source.kind === 'taste_pack' ? 'Sector pack' : 'Yours'];
+  if (profile.confidence !== 'high') parts.push(`${profile.confidence} confidence`);
+  if (profile.warnings.length > 0) {
+    parts.push(`${profile.warnings.length} warning${profile.warnings.length === 1 ? '' : 's'}`);
+  }
+  return parts.join(' · ');
 }
 
 function clampPercent(value: number) {

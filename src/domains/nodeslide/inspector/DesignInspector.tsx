@@ -28,6 +28,11 @@ import {
   type ThemeSpec,
   isNodeSlideOpenverseThumbnailUrl,
 } from '../../../../shared/nodeslide';
+import {
+  describeDeckDirection,
+  isEnforcedProfile,
+  shortDigest,
+} from '../../../../shared/nodeslideDeckDirection';
 import type { TasteProfile } from '../../../../shared/nodeslidePreference';
 import type { SignatureProfile } from '../../../../shared/nodeslideSignature';
 import {
@@ -45,6 +50,7 @@ interface DesignInspectorProps {
   theme: ThemeSpec;
   activeTastePackId: NodeSlideTastePackId | null;
   activeProfileId: string | null;
+  activeProfileDigest: string | null;
   previewProfileId: string | null;
   profiles: readonly SignatureProfile[];
   busy: boolean;
@@ -111,6 +117,7 @@ export function DesignInspector({
   theme,
   activeTastePackId,
   activeProfileId,
+  activeProfileDigest,
   previewProfileId,
   profiles,
   busy,
@@ -170,6 +177,7 @@ export function DesignInspector({
           <TastePackPanel
             activeTastePackId={activeTastePackId}
             activeProfileId={activeProfileId}
+            activeProfileDigest={activeProfileDigest}
             previewProfileId={previewProfileId}
             profiles={profiles}
             busy={busy}
@@ -538,6 +546,7 @@ export function DesignInspector({
         <TastePackPanel
           activeTastePackId={activeTastePackId}
           activeProfileId={activeProfileId}
+          activeProfileDigest={activeProfileDigest}
           previewProfileId={previewProfileId}
           profiles={profiles}
           busy={busy}
@@ -1510,6 +1519,7 @@ const TASTE_PACK_DESCRIPTIONS: Record<NodeSlideTastePackId, string> = {
 function TastePackPanel({
   activeTastePackId,
   activeProfileId,
+  activeProfileDigest,
   previewProfileId,
   profiles,
   busy,
@@ -1521,6 +1531,7 @@ function TastePackPanel({
 }: {
   activeTastePackId: NodeSlideTastePackId | null;
   activeProfileId?: string | null;
+  activeProfileDigest?: string | null;
   previewProfileId?: string | null;
   profiles: readonly SignatureProfile[];
   busy: boolean;
@@ -1534,6 +1545,14 @@ function TastePackPanel({
     (profile, index, values) =>
       values.findIndex((candidate) => candidate.id === profile.id) === index,
   );
+  // Derived from the deck's own two fields on every render. Nothing is stored: a second copy of
+  // "what governs this deck" could drift from the deck row, and then the answer on screen would
+  // disagree with the answer the server enforces.
+  const direction = describeDeckDirection({
+    activeProfileId,
+    activeProfileDigest,
+    profiles: allProfiles,
+  });
   return (
     <section className="ns-inspector-section ns-taste-packs" data-testid="taste-pack-panel">
       <div className="ns-section-title-row">
@@ -1541,14 +1560,34 @@ function TastePackPanel({
           <span className="ns-eyebrow">Deck direction</span>
           <h2>Signatures</h2>
         </div>
-        {activeTastePackId || activeProfileId ? (
-          <span className="ns-kind-pill">Checks active</span>
+        {direction.kind === 'governed' ? (
+          <span className="ns-kind-pill" data-testid="deck-direction-pill">
+            Checks active
+          </span>
         ) : null}
       </div>
       <p>
         Independent NodeSlide defaults with source-backed rules. Applying one creates a normal,
         reversible deck version.
       </p>
+      {/* The commitment was always enforced and never stated. After a reload nothing named the
+          direction, so a refused edit arrived with no visible cause. */}
+      {direction.kind === 'governed' ? (
+        <p className="ns-deck-direction-status" data-testid="deck-direction-status">
+          Edits to this deck are checked against <strong>{direction.name}</strong>{' '}
+          <code>{shortDigest(direction.digest)}</code>. An edit that conflicts with it is refused.
+        </p>
+      ) : null}
+      {/* <output> carries an implicit status role, so the message is announced when a binding stops
+          resolving without hand-rolling a live region. */}
+      {direction.kind === 'unresolved' ? (
+        <output
+          className="ns-deck-direction-status is-unresolved"
+          data-testid="deck-direction-status"
+        >
+          {direction.reason}
+        </output>
+      ) : null}
       {onUploadSource ? (
         <label className="ns-signature-upload">
           <strong>Import design style from PPTX</strong>
@@ -1579,7 +1618,10 @@ function TastePackPanel({
             tastePackMetadata && typeof tastePackMetadata === 'object' && 'id' in tastePackMetadata
               ? (tastePackMetadata.id as NodeSlideTastePackId)
               : null;
-          const active = profile.id === activeProfileId || packId === activeTastePackId;
+          // Both id AND digest, because that is what the server resolves the active profile by —
+          // its storage key embeds the digest. Matching on id alone drew a profile as active while
+          // a different version of it was the thing actually being enforced.
+          const active = isEnforcedProfile(profile, direction) || packId === activeTastePackId;
           const previewing = profile.id === previewProfileId;
           const swatches = Object.values(profile.tokens.colors)
             .slice(0, 4)

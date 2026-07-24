@@ -100,6 +100,7 @@ export interface InspectorPanelProps<CommandId extends string = string> {
   activeTastePackId: NodeSlideTastePackId | null;
   tastePackBusy: boolean;
   activeProfileId?: string | null;
+  activeProfileDigest?: string | null;
   previewProfileId?: string | null;
   signatureProfiles?: readonly SignatureProfile[];
   tasteProfile?: TasteProfile | null;
@@ -192,6 +193,7 @@ export function InspectorPanel<CommandId extends string = string>({
   activeTastePackId,
   tastePackBusy,
   activeProfileId = null,
+  activeProfileDigest = null,
   previewProfileId = null,
   signatureProfiles = [],
   tasteProfile = null,
@@ -432,6 +434,7 @@ export function InspectorPanel<CommandId extends string = string>({
             theme={workspace.deck.theme}
             activeTastePackId={activeTastePackId}
             activeProfileId={activeProfileId}
+            activeProfileDigest={activeProfileDigest}
             previewProfileId={previewProfileId}
             profiles={signatureProfiles}
             busy={tastePackBusy}
@@ -469,6 +472,7 @@ export function InspectorPanel<CommandId extends string = string>({
             deck={workspace.deck}
             versions={workspace.versions}
             patches={workspace.patches}
+            profiles={signatureProfiles}
             onRestore={onRestoreVersion}
           />
         ) : null}

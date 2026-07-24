@@ -8,17 +8,48 @@ import {
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import type { Deck, DeckPatch, DeckSnapshot, DeckVersion } from '../../../../shared/nodeslide';
+import {
+  describeDeckDirection,
+  describeRestoreDirectionChange,
+} from '../../../../shared/nodeslideDeckDirection';
+import type { SignatureProfile } from '../../../../shared/nodeslideSignature';
 
 interface VersionsInspectorProps {
   deck: Deck;
   versions: readonly DeckVersion[];
   patches: readonly DeckPatch[];
+  profiles?: readonly SignatureProfile[];
   onRestore: (version: DeckVersion) => void;
 }
 
-export function VersionsInspector({ deck, versions, patches, onRestore }: VersionsInspectorProps) {
+export function VersionsInspector({
+  deck,
+  versions,
+  patches,
+  profiles = [],
+  onRestore,
+}: VersionsInspectorProps) {
   const sorted = useMemo(() => [...versions].sort((a, b) => b.createdAt - a.createdAt), [versions]);
   const [compareVersionId, setCompareVersionId] = useState<string | null>(null);
+  // Restore carries governance with content: the restored snapshot keeps the target version's
+  // binding, or its absence. That is the right semantic — keeping the current direction over
+  // restored content would be a hybrid state that never existed — but it happened in silence, so a
+  // user restoring a layout could drop the deck's direction without being told.
+  const [pendingRestoreId, setPendingRestoreId] = useState<string | null>(null);
+  const currentDirection = describeDeckDirection({
+    activeProfileId: deck.activeSignatureProfileId,
+    activeProfileDigest: deck.activeSignatureProfileDigest,
+    profiles,
+  });
+  const directionChangeFor = (version: DeckVersion) =>
+    describeRestoreDirectionChange({
+      current: currentDirection,
+      target: describeDeckDirection({
+        activeProfileId: version.snapshot.deck.activeSignatureProfileId,
+        activeProfileDigest: version.snapshot.deck.activeSignatureProfileDigest,
+        profiles,
+      }),
+    });
   const compareVersion = sorted.find((version) => version.id === compareVersionId);
   const stalePatches = patches
     .filter((patch) => patch.status === 'stale')
@@ -127,10 +158,48 @@ export function VersionsInspector({ deck, versions, patches, onRestore }: Versio
                     >
                       <GitCompareArrows size={13} /> Compare
                     </button>
-                    <button type="button" onClick={() => onRestore(version)} disabled={current}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        // No governance change means no friction. A confirmation shown on every
+                        // restore is a confirmation nobody reads.
+                        if (!directionChangeFor(version)) {
+                          onRestore(version);
+                          return;
+                        }
+                        setPendingRestoreId(version.id);
+                      }}
+                      disabled={current}
+                    >
                       <RotateCcw size={13} /> Restore
                     </button>
                   </div>
+                  {pendingRestoreId === version.id ? (
+                    <div
+                      className="ns-version-direction-change"
+                      role="alertdialog"
+                      aria-label="Restore changes the deck direction"
+                      data-testid={`restore-direction-change-${version.id}`}
+                    >
+                      <p>
+                        <TriangleAlert size={13} /> {directionChangeFor(version)}
+                      </p>
+                      <div className="ns-version-actions">
+                        <button type="button" onClick={() => setPendingRestoreId(null)}>
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPendingRestoreId(null);
+                            onRestore(version);
+                          }}
+                        >
+                          Restore anyway
+                        </button>
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               </article>
             );

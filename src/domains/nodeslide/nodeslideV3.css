@@ -6686,3 +6686,45 @@
   font-variant-numeric: tabular-nums;
   margin-left: auto;
 }
+
+/* Inspector type scale — four steps, and it has to live HERE to work.
+ *
+ * The Design tab was measured rendering eight distinct sizes between 8px and 19px inside a 344px
+ * column. Eight sizes is not a hierarchy; it is what accumulates when every addition brings its own
+ * font-size. Linear's Properties panel renders label and value at ONE size and distinguishes the
+ * label by colour — that is the rule adopted here.
+ *
+ * The first attempt put this block at line ~1620 of nodeslide.css, with a comment claiming it would
+ * win "on source order". It did not, and a production sweep proved it: the Design tab still reported
+ * eight sizes afterwards. Two things beat it, both later in the cascade at equal specificity —
+ * the `--ns-chrome-min-font` clamp lists at nodeslide.css:1963 and :3647, and this entire file,
+ * which NodeSlideStudio.tsx imports after nodeslide.css. Being "after the section rules" is not the
+ * same as being last.
+ *
+ * So it lives at the end of the last-loaded stylesheet. That is the honest place for a rule whose
+ * whole job is to be the final word on inspector text size.
+ */
+.nodeslide-studio .ns-inspector-scroll :is(h2, h3) {
+  font-size: var(--ns-font-title);
+  letter-spacing: -0.01em;
+}
+.nodeslide-studio
+  .ns-inspector-scroll
+  :is(p, label, li, td, th, input, select, textarea, button, strong) {
+  font-size: var(--ns-font-body);
+}
+/* `small` is the caption step, not a licence to go under the floor. */
+.nodeslide-studio .ns-inspector-scroll small {
+  font-size: var(--ns-font-caption);
+}
+/* Tags are uppercase and letter-spaced, so they read larger than their size. */
+.nodeslide-studio
+  .ns-inspector-scroll
+  :is(.ns-eyebrow, .ns-kind-pill, .ns-count-pill, .ns-route-pill) {
+  font-size: var(--ns-font-tag);
+}
+/* Anything still unclaimed inside the panel gets the floor rather than whatever it inherited.
+ * This is the line that removes the 8px and 9px stragglers the sweep found. */
+.nodeslide-studio .ns-inspector-scroll span:not([class]) {
+  font-size: var(--ns-font-tag);
+}

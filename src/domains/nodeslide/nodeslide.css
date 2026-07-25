@@ -1619,31 +1619,8 @@
 }
 /* What governs this deck right now. Stated plainly, because a refusal with no visible cause reads
    as a bug rather than as the rule working. */
-/* Inspector typography — four sizes, not eight.
- *
- * The Design tab was measured rendering eight distinct sizes between 8px and 19px inside a 344px
- * column. Eight sizes is not a hierarchy; it is what accumulates when every addition brings its own
- * font-size. Linear's Properties panel renders label and value at ONE size and distinguishes the
- * label by colour — that is the rule being adopted here.
- *
- * Placed after the section rules above so it wins on source order rather than by adding !important
- * or inflating selectors.
- */
-.ns-inspector-scroll :is(h2, h3) {
-  font-size: var(--ns-font-title);
-  letter-spacing: -0.01em;
-}
-.ns-inspector-scroll :is(p, label, li, td, th, input, select, textarea, button) {
-  font-size: var(--ns-font-body);
-}
-/* `small` is the caption step, not a licence to go smaller than the floor. */
-.ns-inspector-scroll small {
-  font-size: var(--ns-font-caption);
-}
-/* Eyebrows and pills are tags: uppercase and letter-spaced, so they read larger than their size. */
-.ns-inspector-scroll :is(.ns-eyebrow, .ns-kind-pill, .ns-count-pill, .ns-route-pill) {
-  font-size: var(--ns-font-tag);
-}
+/* The inspector type scale used to live here and did nothing. It is now at the end of
+ * nodeslideV3.css — see the note there for why this position could never have worked. */
 
 .ns-deck-direction-status {
   background: var(--ns-panel);

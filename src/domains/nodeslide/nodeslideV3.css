@@ -1933,6 +1933,36 @@
   font-weight: 600;
 }
 
+/* Two authoring tabs, then five review tabs.
+ *
+ * The seven were presented as peers, so the whole set was priced at the strip before any panel
+ * loaded. The divider states the real structure: AI and Design are what you use while making a
+ * slide; Comments, Versions, Evidence, JSON and Trace are what you open to check work that already
+ * exists. Nothing is hidden — see the note in InspectorPanel.tsx for why the reduction Figma makes
+ * is wrong for this product specifically.
+ *
+ * A hairline and a colour step, not a heading. The strip is 31px tall and holds seven labels in a
+ * 340px rail; anything louder would cost more attention than the grouping saves.
+ */
+.nodeslide-studio .ns-inspector-tabs__divider {
+  align-self: center;
+  background: var(--ns-line-b);
+  flex: none;
+  height: 11px;
+  width: 1px;
+}
+
+/* Review tabs sit back until they are the thing you want.
+ *
+ * `:not(.is-active)` rather than relying on source order. This rule sits AFTER the .is-active rule
+ * at equal specificity, so ordering alone would have made the selected Evidence or Trace tab render
+ * faint — the same cascade mistake that made the first type-scale attempt do nothing. Excluding the
+ * active tab in the selector is true regardless of where either rule lands.
+ */
+.nodeslide-studio .ns-inspector-tabs button.is-review:not(.is-active) {
+  color: var(--ns-faint);
+}
+
 .nodeslide-studio .ns-inspector-content {
   color: var(--ns-ink);
   overflow: hidden;

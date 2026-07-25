@@ -11,6 +11,7 @@ import {
   SlidersHorizontal,
 } from 'lucide-react';
 import {
+  Fragment,
   type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
   useEffect,
@@ -151,14 +152,32 @@ export interface InspectorPanelProps<CommandId extends string = string> {
   onRestoreVersion: (version: DeckVersion) => void;
 }
 
-const tabs: Array<{ id: InspectorTab; label: string; icon: typeof Bot }> = [
-  { id: 'ai', label: 'AI', icon: Bot },
-  { id: 'design', label: 'Design', icon: SlidersHorizontal },
-  { id: 'comments', label: 'Comments', icon: MessageCircle },
-  { id: 'versions', label: 'Versions', icon: History },
-  { id: 'data', label: 'Evidence', icon: Database },
-  { id: 'json', label: 'JSON', icon: Braces },
-  { id: 'trace', label: 'Trace', icon: Activity },
+/**
+ * The seven tabs are not seven peers.
+ *
+ * Two are authoring surfaces you use while making a slide. Five are review and audit surfaces you
+ * visit when checking work that already exists. Presented as equals, the whole set is priced at the
+ * tab strip — before any panel loads — which is why the column reads heavy before it is opened.
+ *
+ * Figma Slides gives its right-hand surface two tabs and puts review elsewhere. **We take the split
+ * and reject the reduction.** Figma has no Evidence or Trace tab because Figma does not claim its
+ * decks are verifiable; NodeSlide does, and hiding Evidence and Trace behind an overflow would bury
+ * the two surfaces that carry the product's actual argument. So all seven stay one click away, and
+ * the grouping does the work the reduction would otherwise have done.
+ */
+const tabs: Array<{
+  id: InspectorTab;
+  label: string;
+  icon: typeof Bot;
+  group: 'author' | 'review';
+}> = [
+  { id: 'ai', label: 'AI', icon: Bot, group: 'author' },
+  { id: 'design', label: 'Design', icon: SlidersHorizontal, group: 'author' },
+  { id: 'comments', label: 'Comments', icon: MessageCircle, group: 'review' },
+  { id: 'versions', label: 'Versions', icon: History, group: 'review' },
+  { id: 'data', label: 'Evidence', icon: Database, group: 'review' },
+  { id: 'json', label: 'JSON', icon: Braces, group: 'review' },
+  { id: 'trace', label: 'Trace', icon: Activity, group: 'review' },
 ];
 
 export function InspectorPanel<CommandId extends string = string>({
@@ -355,25 +374,32 @@ export function InspectorPanel<CommandId extends string = string>({
         </button>
       </div>
       <div className="ns-inspector-tabs" role="tablist" aria-label="Inspector views">
-        {tabs.map(({ id, label, icon: Icon }) => (
-          <button
-            type="button"
-            role="tab"
-            id={`ns-tab-${id}`}
-            aria-controls={`ns-tabpanel-${id}`}
-            aria-selected={activeTab === id}
-            className={activeTab === id ? 'is-active' : ''}
-            data-testid={`inspector-tab-${id}`}
-            key={id}
-            tabIndex={activeTab === id ? 0 : -1}
-            onClick={() => onTabChange(id)}
-            onKeyDown={(event) => handleInspectorTabKeyDown(event, id, onTabChange)}
-          >
-            <Icon size={14} />
-            <span>{label}</span>
-            {id === 'comments' && openComments > 0 ? <i>{openComments}</i> : null}
-            {id === 'ai' && (agentBusy || variationBusy) ? <i className="is-live" /> : null}
-          </button>
+        {tabs.map(({ id, label, icon: Icon, group }, index) => (
+          <Fragment key={id}>
+            {/* Decorative, and only between the two groups. It is not a tab, so it stays out of the
+                tablist's roving focus and out of the screen-reader tab count. */}
+            {index > 0 && tabs[index - 1]?.group !== group ? (
+              <span className="ns-inspector-tabs__divider" aria-hidden="true" />
+            ) : null}
+            <button
+              type="button"
+              role="tab"
+              id={`ns-tab-${id}`}
+              aria-controls={`ns-tabpanel-${id}`}
+              aria-selected={activeTab === id}
+              className={`is-${group}${activeTab === id ? ' is-active' : ''}`}
+              data-testid={`inspector-tab-${id}`}
+              data-group={group}
+              tabIndex={activeTab === id ? 0 : -1}
+              onClick={() => onTabChange(id)}
+              onKeyDown={(event) => handleInspectorTabKeyDown(event, id, onTabChange)}
+            >
+              <Icon size={14} />
+              <span>{label}</span>
+              {id === 'comments' && openComments > 0 ? <i>{openComments}</i> : null}
+              {id === 'ai' && (agentBusy || variationBusy) ? <i className="is-live" /> : null}
+            </button>
+          </Fragment>
         ))}
       </div>
 

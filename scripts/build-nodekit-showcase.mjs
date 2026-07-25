@@ -22,9 +22,9 @@
  * is the one failure a merge can hide — a slide that silently did not make it.
  */
 
-import { readFile, readdir, writeFile, mkdir } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { existsSync } from 'node:fs';
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import JSZip from 'jszip';
 
@@ -37,11 +37,9 @@ function flag(name, fallback = null) {
   return value && !value.startsWith('--') ? value : true;
 }
 
-const runsDir = String(
-  flag('runs', 'artifacts/deck-gym/artifact-atlas-v1/runs'),
-);
+const runsDir = String(flag('runs', 'artifacts/deck-gym/artifact-atlas-v1/runs'));
 const outFile = String(flag('out', 'outputs/nodekit-showcase/nodekit-showcase-full.pptx'));
-const limit = Number(flag('limit', 0)) || Infinity;
+const limit = Number(flag('limit', 0)) || Number.POSITIVE_INFINITY;
 
 /** Read every run that has both an artifact and a receipt. A run missing either is not evidence. */
 async function loadCandidates() {
@@ -180,8 +178,7 @@ for (let i = 0; i < candidates.length; i += 1) {
     candidateDigest: candidate.receipt.candidateDigest ?? null,
     artifactRequirementDigest: candidate.receipt.artifactRequirementDigest ?? null,
     sourceArtifactDigest: sha256(sourceBytes),
-    receiptDigest:
-      candidate.receipt.receiptDigest ?? sha256(await readFile(candidate.receiptPath)),
+    receiptDigest: candidate.receipt.receiptDigest ?? sha256(await readFile(candidate.receiptPath)),
     copiedPartDigest: sha256(await target.file(name).async('nodebuffer')),
     fixtureId: candidate.receipt.fixtureId ?? null,
     directionId: candidate.receipt.directionId ?? null,
@@ -271,8 +268,7 @@ await writeFile(
 
 if (lineage.length !== written) {
   process.stderr.write(
-    `Lineage describes ${lineage.length} slides but the deck contains ${written}. ` +
-      `A lineage that does not match the artifact is worse than none, because it is checkable and wrong.\n`,
+    `Lineage describes ${lineage.length} slides but the deck contains ${written}. A lineage that does not match the artifact is worse than none, because it is checkable and wrong.\n`,
   );
   process.exit(1);
 }
@@ -284,14 +280,19 @@ for (const c of candidates) {
 }
 
 process.stdout.write(
-  `NodeKit showcase assembled\n` +
-    `  out          ${outFile}\n` +
-    `  candidates   ${candidates.length}\n` +
-    `  slides in file ${written}\n` +
-    `  size         ${(buffer.length / 1024 / 1024).toFixed(2)} MB\n` +
-    `  artifact types ${byType.size}\n` +
-    `  directions   ${new Set(candidates.map((c) => c.receipt.directionId)).size}\n` +
-    `  models       ${new Set(candidates.map((c) => c.receipt.model)).size}\n`,
+  [
+    'NodeKit showcase assembled',
+    `  out            ${outFile}`,
+    `  lineage        ${lineageFile}`,
+    `  candidates     ${candidates.length}`,
+    `  slides in file ${written}`,
+    `  lineage entries ${lineage.length}`,
+    `  size           ${(buffer.length / 1024 / 1024).toFixed(2)} MB`,
+    `  artifact types ${byType.size}`,
+    `  directions     ${new Set(candidates.map((c) => c.receipt.directionId)).size}`,
+    `  models         ${new Set(candidates.map((c) => c.receipt.model)).size}`,
+    '',
+  ].join('\n'),
 );
 
 if (written !== candidates.length) {

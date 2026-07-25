@@ -1,0 +1,4 @@
+interface:
+  display_name: "ChangeLens"
+  short_description: "Require a before-and-after proof for every change"
+  default_prompt: "Use $changelens to capture the before state, make the change, capture the after by the same method, and state the delta as a measurement."

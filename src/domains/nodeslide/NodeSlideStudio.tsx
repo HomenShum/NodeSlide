@@ -3225,6 +3225,18 @@ function NodeSlideStudioContent() {
                 const next = orderedSlides[activeSlideIndex + 1];
                 if (next) studioShell.select({ slideId: next.id, elementIds: [] });
               }}
+              onUpdateNotes={(notes) => {
+                void applyOperations(
+                  [{ op: 'update_slide', slideId: activeSlide.id, properties: { notes } }],
+                  {
+                    kind: 'slide',
+                    deckId: workspace.deck.id,
+                    slideIds: [activeSlide.id],
+                    operationMode: 'unrestricted',
+                  },
+                  `Updated notes for ${activeSlide.title}`,
+                );
+              }}
             />
           }
         />

@@ -1,8 +1,11 @@
 /**
  * Assemble the NodeKit showcase deck from candidates that were already verified.
  *
- * The Arena ran the matrix the design thread specified — "15 artifact types x 3 models x 2
- * directions = 90 candidate slides" — and wrote every result to disk. 84 runs exist, each a
+ * The Arena ran the matrix the design thread specified. The header used to state that matrix as
+ * "15 artifact types x 3 models x 2 directions = 90"; the thread corrected it against the harness:
+ * 12 fixtures x (3 models x 2 directions + 1 deterministic baseline) = 12 x 7 = 84. The baseline is
+ * a seventh column, not a fourth model, which is why 84 is the real number rather than a shortfall
+ * against 90. 84 runs exist, each a
  * one-slide PPTX beside a `nodeslide.artifact-showcase-receipt/v1` and a browser render. What was
  * never built is the deck that puts them in one place, so the only NodeKit showcase on disk was a
  * 10-slide file and the work looked undone.
@@ -21,8 +24,11 @@
 
 import { readFile, readdir, writeFile, mkdir } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import JSZip from 'jszip';
+
+const sha256 = (buf) => `sha256:${createHash('sha256').update(buf).digest('hex')}`;
 
 function flag(name, fallback = null) {
   const index = process.argv.indexOf(`--${name}`);
@@ -48,7 +54,7 @@ async function loadCandidates() {
     const receiptPath = path.join(dir, 'receipt.json');
     if (!existsSync(pptx) || !existsSync(receiptPath)) continue;
     const receipt = JSON.parse(await readFile(receiptPath, 'utf8'));
-    out.push({ id: entry.name, pptx, receipt });
+    out.push({ id: entry.name, pptx, receiptPath, receipt });
   }
   // Group by artifact type, then direction, then model — so the deck reads as a matrix walk rather
   // than as directory order, which is alphabetical by accident.
@@ -153,11 +159,34 @@ for (const [name, file] of Object.entries(baseZip.files)) {
   target.file(name, await file.async('nodebuffer'));
 }
 
+// Lineage, built while the copy happens rather than reconstructed after.
+//
+// A showcase that cannot say which receipt qualified which slide is the same defect this deck was
+// built to answer: an artifact that asserts rather than binds. Reconstructing the mapping later
+// would mean re-deriving it from sort order, which is exactly the assumption a reordering breaks.
+const lineage = [];
 const slideNames = [];
 for (let i = 0; i < candidates.length; i += 1) {
-  const zip = i === 0 ? baseZip : await JSZip.loadAsync(await readFile(candidates[i].pptx));
+  const candidate = candidates[i];
+  const sourceBytes = await readFile(candidate.pptx);
+  const zip = i === 0 ? baseZip : await JSZip.loadAsync(sourceBytes);
   const name = await copySlide(target, zip, i, state);
-  if (name) slideNames.push(name);
+  if (!name) continue;
+  slideNames.push(name);
+  lineage.push({
+    slideNumber: slideNames.length,
+    partName: name,
+    candidateId: candidate.id,
+    candidateDigest: candidate.receipt.candidateDigest ?? null,
+    artifactRequirementDigest: candidate.receipt.artifactRequirementDigest ?? null,
+    sourceArtifactDigest: sha256(sourceBytes),
+    receiptDigest:
+      candidate.receipt.receiptDigest ?? sha256(await readFile(candidate.receiptPath)),
+    copiedPartDigest: sha256(await target.file(name).async('nodebuffer')),
+    fixtureId: candidate.receipt.fixtureId ?? null,
+    directionId: candidate.receipt.directionId ?? null,
+    model: candidate.receipt.model ?? null,
+  });
 }
 
 // presentation.xml.rels — one relationship per slide, plus whatever the base deck already had.
@@ -221,6 +250,32 @@ const verify = await JSZip.loadAsync(await readFile(outFile));
 const written = Object.keys(verify.files).filter((n) =>
   /^ppt\/slides\/slide\d+\.xml$/.test(n),
 ).length;
+
+// The lineage is written from the same file that was just read back, so a slide that silently did
+// not make it cannot be described by an entry claiming it did.
+const lineageFile = outFile.replace(/\.pptx$/, '.lineage.json');
+await writeFile(
+  lineageFile,
+  `${JSON.stringify(
+    {
+      schemaVersion: 'nodekit.showcase-lineage/v1',
+      deck: path.posix.basename(outFile),
+      deckDigest: sha256(buffer),
+      slideCount: written,
+      slides: lineage,
+    },
+    null,
+    2,
+  )}\n`,
+);
+
+if (lineage.length !== written) {
+  process.stderr.write(
+    `Lineage describes ${lineage.length} slides but the deck contains ${written}. ` +
+      `A lineage that does not match the artifact is worse than none, because it is checkable and wrong.\n`,
+  );
+  process.exit(1);
+}
 
 const byType = new Map();
 for (const c of candidates) {

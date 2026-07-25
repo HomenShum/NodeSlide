@@ -2,7 +2,25 @@
   --ns-ink: #20211f;
   --ns-muted: #62665f;
   --ns-faint: #686c65;
-  --ns-chrome-min-font: 9px;
+  /* Type scale.
+   *
+   * Measured before this existed: the landing page's dominant size was 10px used 181 times, the
+   * chrome floor was 9px, and the Design tab rendered eight distinct sizes between 8px and 19px in
+   * a 344px column. Linear and Figma Slides run 13-14px body and treat 12px as a caption, so every
+   * surface here sat three to four pixels under its reference — which is why no single component
+   * looked broken and the whole thing still read small.
+   *
+   * Four steps, and a floor. Anything that wants a fifth size is asking for a different question to
+   * be answered, not a smaller font.
+   */
+  --ns-font-title: 15px;
+  --ns-font-body: 13px;
+  --ns-font-caption: 12px;
+  --ns-font-tag: 11px;
+  /* The floor for dense chrome. Was 9px, which is below what the references use for anything at
+   * all. Raising it is the single highest-leverage line in this file: a long `:is(...)` list of
+   * chrome selectors reads it. */
+  --ns-chrome-min-font: 11px;
   --ns-line: #dedfd9;
   --ns-line-soft: #e9eae5;
   --ns-paper: #fbfbf9;
@@ -1601,6 +1619,32 @@
 }
 /* What governs this deck right now. Stated plainly, because a refusal with no visible cause reads
    as a bug rather than as the rule working. */
+/* Inspector typography — four sizes, not eight.
+ *
+ * The Design tab was measured rendering eight distinct sizes between 8px and 19px inside a 344px
+ * column. Eight sizes is not a hierarchy; it is what accumulates when every addition brings its own
+ * font-size. Linear's Properties panel renders label and value at ONE size and distinguishes the
+ * label by colour — that is the rule being adopted here.
+ *
+ * Placed after the section rules above so it wins on source order rather than by adding !important
+ * or inflating selectors.
+ */
+.ns-inspector-scroll :is(h2, h3) {
+  font-size: var(--ns-font-title);
+  letter-spacing: -0.01em;
+}
+.ns-inspector-scroll :is(p, label, li, td, th, input, select, textarea, button) {
+  font-size: var(--ns-font-body);
+}
+/* `small` is the caption step, not a licence to go smaller than the floor. */
+.ns-inspector-scroll small {
+  font-size: var(--ns-font-caption);
+}
+/* Eyebrows and pills are tags: uppercase and letter-spaced, so they read larger than their size. */
+.ns-inspector-scroll :is(.ns-eyebrow, .ns-kind-pill, .ns-count-pill, .ns-route-pill) {
+  font-size: var(--ns-font-tag);
+}
+
 .ns-deck-direction-status {
   background: var(--ns-panel);
   border: 1px solid var(--ns-line-soft);

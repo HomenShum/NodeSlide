@@ -6758,3 +6758,18 @@
 .nodeslide-studio .ns-inspector-scroll span:not([class]) {
   font-size: var(--ns-font-tag);
 }
+
+/* The panel HEADER, which is not inside .ns-inspector-scroll.
+ *
+ * A production sweep after the first fix reported six sizes where the harness had shown four. The
+ * harness was not wrong — it only contained the markup written into it, and the panel header was not
+ * in it. Scoping to `.ns-inspector-scroll` had left the header untouched by design, and the sweep
+ * measures the whole panel.
+ *
+ * The survivors, named by probing production rather than guessed: `.ns-eyebrow` at 10px, and the
+ * context chips `.is-slide` and `.is-empty` at 9px. Bringing them to the tag step is what takes the
+ * panel to four sizes end to end.
+ */
+.nodeslide-studio .ns-inspector :is(.ns-eyebrow, .ns-inspector-context-chips span) {
+  font-size: var(--ns-font-tag);
+}

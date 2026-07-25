@@ -10,6 +10,7 @@ import {
   Minus,
   Plus,
   Trash2,
+  Type,
 } from 'lucide-react';
 import {
   type CSSProperties,
@@ -76,6 +77,11 @@ interface SlideCanvasProps {
   onCursorChange?: (cursor: { x: number; y: number } | null) => void;
   onPreviousSlide: () => void;
   onNextSlide: () => void;
+  /**
+   * Save what the presenter will say. Kept as a plain string handler rather than a patch callback,
+   * because the canvas has no business knowing the patch vocabulary — it knows there are notes.
+   */
+  onUpdateNotes?: (notes: string) => void;
 }
 
 export function SlideCanvas({
@@ -102,6 +108,7 @@ export function SlideCanvas({
   onCursorChange,
   onPreviousSlide,
   onNextSlide,
+  onUpdateNotes,
 }: SlideCanvasProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const interactionRef = useRef<PointerInteraction | null>(null);
@@ -617,6 +624,14 @@ export function SlideCanvas({
         </button>
       </div>
 
+      {/* Presenter notes belong under the slide, not inside the panel about how the slide looks.
+          Figma Slides keeps them as a strip beneath the canvas and it is the obvious home: writing
+          what you will SAY should not require opening the appearance inspector. Collapsed by
+          default so it never permanently costs canvas height. */}
+      {onUpdateNotes && !readOnly ? (
+        <SlideNotesStrip key={slide.id} slide={slide} onUpdateNotes={onUpdateNotes} />
+      ) : null}
+
       <div className="ns-zoom-controls" aria-label="Canvas zoom and pan controls">
         <button
           type="button"
@@ -782,4 +797,59 @@ function stopStudioNavigationFromControls(event: ReactKeyboardEvent<HTMLElement>
   ) {
     event.stopPropagation();
   }
+}
+
+/**
+ * Presenter notes, under the slide they belong to.
+ *
+ * They used to live only inside Design → Content, which meant opening the panel about how a slide
+ * LOOKS in order to write what you will SAY. Figma Slides keeps them beneath the canvas, always one
+ * click away while authoring, and that is the arrangement adopted here.
+ *
+ * Collapsed until asked for. An always-open strip would take canvas height from every user to serve
+ * the ones writing notes right now, and the canvas is the thing people came for.
+ */
+function SlideNotesStrip({
+  slide,
+  onUpdateNotes,
+}: {
+  slide: Slide;
+  onUpdateNotes: (notes: string) => void;
+}) {
+  const notes = slide.notes ?? '';
+  const [open, setOpen] = useState(notes.length > 0);
+
+  return (
+    <div className="ns-notes-strip" data-testid="slide-notes-strip">
+      <button
+        type="button"
+        className="ns-notes-strip__toggle"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <Type size={13} />
+        <span>Presenter notes</span>
+        {/* A word count rather than a dot: it says whether there is anything here without
+            opening it, which is the question someone scanning actually has. */}
+        {notes.trim() ? (
+          <small>{notes.trim().split(/\s+/u).length} words</small>
+        ) : (
+          <small>none yet</small>
+        )}
+      </button>
+      {open ? (
+        <textarea
+          key={`${slide.id}-${slide.version}-notes`}
+          defaultValue={notes}
+          rows={3}
+          aria-label={`Presenter notes for ${slide.title}`}
+          placeholder="What will you say over this slide?"
+          onBlur={(event) => {
+            const next = event.currentTarget.value;
+            if (next !== notes) onUpdateNotes(next);
+          }}
+        />
+      ) : null}
+    </div>
+  );
 }

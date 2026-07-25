@@ -1622,6 +1622,42 @@
 /* The inspector type scale used to live here and did nothing. It is now at the end of
  * nodeslideV3.css — see the note there for why this position could never have worked. */
 
+/* Presenter notes, under the slide. Collapsed until asked for, so it costs a row of chrome rather
+ * than a permanent slice of canvas. */
+.ns-notes-strip {
+  border-top: 1px solid var(--ns-line-soft);
+  display: grid;
+  gap: 6px;
+  padding: 7px 12px 9px;
+}
+.ns-notes-strip__toggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--ns-muted);
+  cursor: pointer;
+  display: flex;
+  font-size: var(--ns-font-caption);
+  gap: 7px;
+  padding: 0;
+  width: 100%;
+}
+.ns-notes-strip__toggle small {
+  color: var(--ns-faint);
+  font-size: var(--ns-font-tag);
+  margin-left: auto;
+}
+.ns-notes-strip textarea {
+  border: 1px solid var(--ns-line);
+  border-radius: 8px;
+  font: inherit;
+  font-size: var(--ns-font-body);
+  line-height: 1.5;
+  padding: 8px 10px;
+  resize: vertical;
+  width: 100%;
+}
+
 .ns-deck-direction-status {
   background: var(--ns-panel);
   border: 1px solid var(--ns-line-soft);

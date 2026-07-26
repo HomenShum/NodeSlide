@@ -1,0 +1,27 @@
+schemaVersion: nodekit.frontend-route/v1
+role: frontend-architect
+status: unprofiled
+selection:
+  strategy: evidence_ranked
+  preferredRoute: null
+  fallbacks: []
+  evidenceRefs: []
+requiredCapabilities:
+  - repository-scale coding
+  - image input
+  - browser tool use
+  - responsive implementation
+  - screenshot-driven repair
+authority:
+  sourceWrite: proposal_workspace
+  proofGateWrite: prohibited
+  productionCredentials: prohibited
+  deployment: approval_required
+budget:
+  maximumCostUsd: 8
+  maximumRepairRounds: 2
+expiry:
+  profiledAt: null
+  reprofileAfterDays: 30
+  invalidateOnModelRevision: true
+  invalidateOnToolSurfaceChange: true

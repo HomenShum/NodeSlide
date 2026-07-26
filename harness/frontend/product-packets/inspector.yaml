@@ -1,0 +1,113 @@
+schemaVersion: nodekit.product-design-contract/v1
+contractId: nodeslide-inspector-2026-07
+
+# Authored 2026-07-26 to re-run, through the NodeKit pipeline, a change that was made by hand on
+# 2026-07-25. The type scale and the tab grouping shipped on my say-so: I generated the candidate,
+# judged it myself, repaired it myself, and verified it with a script I also wrote. Every step was
+# real work and none of it produced a receipt anyone else could check.
+#
+# The point of this contract is to find out whether the pipeline reaches the same conclusion, a
+# better one, or refuses the change outright. Any of the three is worth more than my say-so.
+
+product:
+  targetUser: >-
+    A solo founder preparing a deck whose numbers will be questioned in the room, working alongside
+    a coding agent that proposes edits.
+  primaryJob: >-
+    Review and accept or reject an agent's proposed change to a slide, and see what evidence backs
+    the claim on it.
+  primaryArtifact: >-
+    The slide itself, as a typed DeckSpec whose elements carry their sources.
+
+journey:
+  - Open a deck and see the slide, not the tooling.
+  - Ask the agent for a change in plain language.
+  - Read the proposal beside the current slide.
+  - Check what the claim is bound to before accepting it.
+  - Accept, and watch the deck version advance.
+  - Export, and know what survived the export and what did not.
+
+designIntent:
+  emotionalTarget:
+    - Calm enough to read a number carefully.
+    - Confident that nothing changed without being shown.
+    - Never busy for its own sake.
+  dominantSurface: The slide canvas.
+  dominantAction: Accepting or rejecting a proposed patch.
+  density: low
+
+interfaceHypothesis:
+  artifactDominance: >-
+    The slide holds the majority of the viewport. Measured on the deployed build, chrome is 44 per
+    cent of a 1440px window by default (300px navigator plus 340px inspector) — this contract treats
+    that as failing artifact dominance and expects the benchmark to say so independently.
+  agentPlacement: >-
+    The composer sits at the bottom edge of the inspector, the way every chat surface places it, and
+    remains reachable without scrolling. Suggested actions sit above it, never below.
+  reviewBoundary: >-
+    A proposal is visible beside the current state before it is accepted. Nothing an agent proposes
+    is written until a person accepts it, and the deck version is the visible proof that it was.
+  mobileTopology: >-
+    One surface at a time. The slide, the agent, and the review each own the full width rather than
+    competing in a narrowed three-column layout.
+
+requiredDesktopSurfaces:
+  - Slide canvas with the current deck version visible.
+  - Agent composer, bottom-anchored, with its scope stated.
+  - Proposal review showing current and proposed side by side.
+  - Evidence for the selected element, naming its sources.
+
+requiredMobileSurfaces:
+  - Slide, full width.
+  - Agent thread, full width.
+  - Proposal review, full width.
+
+# A fixed vocabulary, not free description. My first attempt wrote six prose sentences and the
+# planner named the nine it actually requires. Three of them I had not thought to include, and they
+# are the three that get skipped in practice: loading, conflict, and failed_safe. A surface is not
+# designed until its failure states are designed, and leaving them to prose is how they stay
+# undesigned.
+requiredStates:
+  - first_arrival   # deck open, nothing selected
+  - loading         # deck or proposal in flight
+  - populated       # element selected, evidence reachable
+  - exception       # a claim with no evidence bound to it
+  - proposal        # agent patch pending, shown beside current state
+  - conflict        # proposal based on a version that has since moved
+  - failed_safe     # model failed; fallback shown and labelled as a fallback
+  - completed       # proposal accepted, deck version advanced
+  - mobile          # one surface at a time, full width
+
+# The first five are required guardrails with fixed names. Reading them was uncomfortable: three
+# describe defects I spent 2026-07-25 discovering by hand and writing up as findings.
+#   decorative_chat              — an AI tab with its own model picker, for a user who already has
+#                                  a coding agent open
+#   all_workflow_states_expanded — seven inspector tabs as seven peers, 44% of the window as chrome
+#   hidden_data_freshness        — a board that says Todo for work that shipped, and a ranker that
+#                                  accepted a future timestamp
+# They were already named here. The findings were rediscovery, not discovery.
+avoid:
+  - generic_kpi_dashboard
+  - accounting_schema_as_interface
+  - decorative_chat
+  - all_workflow_states_expanded
+  - hidden_data_freshness
+  # Specific to this surface, beyond the required set.
+  - Explanatory prose in persistent chrome. It is read once and then occupies space forever.
+  - More than four type sizes in the inspector column.
+  - Distinguishing a label from a value by shrinking it rather than by colour.
+  - A composer that is not the last element before the panel footer.
+  - Any state that reports success without naming what was checked.
+
+# These name the AUTHORITY that owns each decision, not the decision itself. Every value is a
+# schema constant, so a contract cannot reassign ownership to whoever is writing it. My first
+# attempt filled these with prose describing what I thought each decision should be — which is
+# exactly the move the constants exist to refuse. The frontend planner rejected all seven.
+protectedDecisions:
+  primaryUser: nodekit
+  primaryJob: nodekit
+  canonicalWorkflow: nodekit
+  dataAuthority: nodekit
+  permissionBoundaries: nodekit
+  completionCriteria: nodeproof
+  finalVerdict: nodeproof

@@ -39,7 +39,7 @@ environment:
 
 proof:
   command: npm run proof
-  receiptSchema: null
+  receiptSchema: nodeslide.conformance/v1
 
 contractDeclarations:
   - concept: nodeslide.deck-patch

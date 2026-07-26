@@ -13,7 +13,7 @@
     "demo": "npm run dev:web",
     "doctor": "npm run typecheck",
     "check": "npm run lint && npm run typecheck && npm run test && npm run build",
-    "proof": "npm run test && npm run proof:external-agent",
+    "proof": "node scripts/nodeslide-conformance-proof.mjs",
     "proof:external-agent": "node scripts/smoke-external-agent-package.mjs",
     "probe:model-fleet:prod": "convex run nodeslideModelProbe:runFleet --prod",
     "probe:free-router:prod": "convex run nodeslideModelProbe:runFreeRouterFleet --prod",

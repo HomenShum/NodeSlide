@@ -215,6 +215,68 @@
   opacity: 0.7;
 }
 
+/*
+ * Binding coverage. How many claims the deck makes, how many carry a source, and
+ * how many do not — three values at one size, label muted and value full
+ * contrast, so nothing is made smaller to say "this matters less".
+ * A claim with no source is usually mid-work, so the unsourced control is dashed
+ * and accent-bordered, never an alarm colour, and it is inert while the count is
+ * zero rather than inviting a click into an empty list.
+ */
+.ns-evidence-coverage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.ns-evidence-coverage > span,
+.ns-evidence-unsourced-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 3px 8px;
+  border: 1px solid var(--ns-border, #ddd6cd);
+  border-radius: 8px;
+  background: transparent;
+  font: inherit;
+}
+
+.ns-evidence-coverage > span > span,
+.ns-evidence-unsourced-toggle > span {
+  color: var(--ns-muted, #6d665f);
+}
+
+.ns-evidence-coverage strong {
+  color: var(--ns-ink, #2b2620);
+  font-weight: 650;
+}
+
+.ns-evidence-unsourced-toggle:enabled {
+  border-style: dashed;
+  border-color: var(--ns-accent, #b7803a);
+  cursor: pointer;
+}
+
+.ns-evidence-unsourced-toggle:disabled {
+  cursor: default;
+}
+
+.ns-evidence-unsourced-toggle:disabled strong {
+  color: var(--ns-muted, #6d665f);
+}
+
+.ns-unsourced-claims {
+  padding: 13px 15px 0;
+}
+
+.ns-evidence-citing-element.is-unsourced {
+  border-style: dashed;
+  border-color: var(--ns-accent, #b7803a);
+}
+
 .ns-source-metadata {
   display: flex;
   flex-wrap: wrap;
@@ -6772,4 +6834,17 @@
  */
 .nodeslide-studio .ns-inspector :is(.ns-eyebrow, .ns-inspector-context-chips span) {
   font-size: var(--ns-font-tag);
+}
+
+/* The binding-coverage row, which reads `Claims 43 · Bound 43 · Unsourced 0`.
+ *
+ * Its labels are spans and its values are `strong`, so the two rules above split
+ * the row across the tag step and the body step: measured on a local build
+ * against production data, `Claims` came out 11px and `43` came out 13px. A row
+ * whose label is smaller than its value is the exact thing this block exists to
+ * stop, so both halves are pinned to the body step and the label is separated by
+ * colour instead. Last in the last-loaded stylesheet, for the reason above.
+ */
+.nodeslide-studio .ns-inspector-scroll .ns-evidence-coverage :is(span, strong) {
+  font-size: var(--ns-font-body);
 }

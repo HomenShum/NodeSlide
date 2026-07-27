@@ -1,7 +1,8 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const css = readFileSync(new URL('./nodeslideV3.css', import.meta.url), 'utf8');
+const editorCss = readFileSync(new URL('./nodeslide.css', import.meta.url), 'utf8');
 const studioSource = readFileSync(new URL('./NodeSlideStudio.tsx', import.meta.url), 'utf8');
 const aiInspectorSource = readFileSync(
   new URL('./inspector/AiInspector.tsx', import.meta.url),
@@ -80,7 +81,14 @@ describe('NodeSlide v3 visual contract', () => {
       /@media \(max-width: 699px\)[\s\S]*?\.ns-landing-main[\s\S]*?padding: 48px 15px 30px;/,
     );
     expect(studioSource).toContain('<NodeSlideLanding');
-    expect(studioSource).not.toContain('<FirstRunDialog');
+    // The landing surface replaced the first-run modal interstitial. The old
+    // guard here was `expect(studioSource).not.toContain('<FirstRunDialog')`,
+    // which held only because the component still existed and was unrendered.
+    // Deleting the component would have welded that assertion open — a string
+    // that can never appear cannot fail. These two sensors can: they fail the
+    // moment a first-run interstitial module or its styling is reintroduced.
+    expect(existsSync(new URL('./components/FirstRunDialog.tsx', import.meta.url))).toBe(false);
+    expect(editorCss).not.toContain('ns-first-run');
   });
 
   it('keeps secondary text at AA contrast in both themes', () => {

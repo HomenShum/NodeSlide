@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import type { ChartData, SlideElement } from './nodeslide';
 import {
+  boundSourceIds,
+  evidenceBindingCoverage,
   evidenceClaimTerms,
   highlightExcerpt,
   normalizeWebSourceExcerpt,
@@ -114,5 +117,87 @@ describe('highlightExcerpt', () => {
 
   it('returns an empty list for an empty excerpt (honest no-capture, nothing to fake)', () => {
     expect(highlightExcerpt('', ['term'])).toEqual([]);
+  });
+});
+
+/**
+ * Scenario: the sample deck on production has 71 elements, 28 of which carry no
+ * source — and all 28 are footers, page numbers, section labels and accent
+ * rails. Reporting "28 unsourced claims" on a deck whose 43 real claims are
+ * every one of them bound is the false alarm this classifier exists to prevent.
+ * The role vocabulary below is the one convex/lib/nodeslideSeed.ts emits.
+ */
+describe('evidenceBindingCoverage (the unsourced-claim count)', () => {
+  const element = (overrides: Partial<SlideElement> & { id: string }): SlideElement =>
+    ({
+      name: overrides.id,
+      kind: 'text',
+      slideId: 'slide-1',
+      bbox: { x: 0, y: 0, width: 10, height: 10 },
+      rotation: 0,
+      style: {},
+      sourceIds: [],
+      locked: false,
+      exportCapabilities: [],
+      version: 1,
+      ...overrides,
+    }) as SlideElement;
+
+  const furniture = [
+    element({ id: 'footer', role: 'footer', content: 'NODESLIDE · SOURCE-AWARE' }),
+    element({ id: 'page', role: 'page_number', content: '02' }),
+    element({ id: 'section', role: 'section', content: 'MARKET SHIFT' }),
+    element({ id: 'rail', role: 'decoration', kind: 'shape' }),
+  ];
+
+  it('excludes slide furniture, so a fully bound deck counts zero unsourced', () => {
+    const coverage = evidenceBindingCoverage([
+      element({ id: 'headline', role: 'headline', content: 'EV adoption', sourceIds: ['src-web'] }),
+      ...furniture,
+    ]);
+    expect(coverage).toEqual({ claims: 1, bound: 1, unsourced: [] });
+  });
+
+  it('counts an uncited text claim and keeps it in deck order', () => {
+    const coverage = evidenceBindingCoverage([
+      element({ id: 'bound', role: 'body', content: 'Cited', sourceIds: ['src-web'] }),
+      element({ id: 'draft', role: 'body', content: 'Not cited yet' }),
+      ...furniture,
+    ]);
+    expect(coverage.claims).toBe(2);
+    expect(coverage.bound).toBe(1);
+    expect(coverage.unsourced.map((claim) => claim.id)).toEqual(['draft']);
+  });
+
+  it('reads the primitive bindings, not only sourceIds', () => {
+    const bars = (): ChartData => ({
+      chartType: 'bar',
+      labels: ['Q1'],
+      series: [{ name: 'revenue', values: [1] }],
+    });
+    const chart = element({ id: 'chart', kind: 'chart', chart: bars() });
+    expect(evidenceBindingCoverage([chart]).unsourced.map((claim) => claim.id)).toEqual(['chart']);
+    const cited = element({
+      id: 'chart',
+      kind: 'chart',
+      chart: { ...bars(), sourceId: 'src-csv' },
+    });
+    expect(boundSourceIds(cited)).toEqual(['src-csv']);
+  });
+
+  it('does not count an empty text box or a bare connector as a claim', () => {
+    const coverage = evidenceBindingCoverage([
+      element({ id: 'empty', content: '   ' }),
+      element({ id: 'blank' }),
+      element({ id: 'edge', kind: 'connector', role: 'graph-edge' }),
+    ]);
+    expect(coverage).toEqual({ claims: 0, bound: 0, unsourced: [] });
+  });
+
+  it('counts an unattributed image placeholder — a replace-me slot is a real gap', () => {
+    const coverage = evidenceBindingCoverage([
+      element({ id: 'hero', kind: 'image', role: 'image', image: { placeholder: true } }),
+    ]);
+    expect(coverage.unsourced.map((claim) => claim.id)).toEqual(['hero']);
   });
 });

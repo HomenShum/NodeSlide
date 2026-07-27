@@ -1,5 +1,11 @@
-import type { BoundingBox, DeckSnapshot, Slide, SlideElement, ValidationIssue } from './nodeslide';
-import { overlapOfSmallerRatio } from './nodeslideLayoutMetrics';
+import type {
+  BoundingBox,
+  DeckSnapshot,
+  Slide,
+  SlideElement,
+  ValidationIssue,
+} from './nodeslide.js';
+import { overlapOfSmallerRatio } from './nodeslideLayoutMetrics.js';
 
 /**
  * Single-source geometry validation (collision + text overflow) shared by the

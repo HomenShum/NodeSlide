@@ -1,6 +1,10 @@
-import type { ChartData, Slide, SlideElement } from '../../../../shared/nodeslide';
-import { assertNodeSlideArtifactCompilation } from '../../../../shared/nodeslideArtifactSpec';
-import { type SlideSourceReference, elementSourceIds, slideSourceReferences } from './provenance';
+import type { ChartData, Slide, SlideElement } from '../../../../shared/nodeslide.js';
+import { assertNodeSlideArtifactCompilation } from '../../../../shared/nodeslideArtifactSpec.js';
+import {
+  type SlideSourceReference,
+  elementSourceIds,
+  slideSourceReferences,
+} from './provenance.js';
 import {
   type ExportableSnapshot,
   SVG_HEIGHT,
@@ -13,7 +17,7 @@ import {
   orderedExportElements,
   orderedSlides,
   stableDomId,
-} from './utils';
+} from './utils.js';
 
 interface SvgBox {
   x: number;

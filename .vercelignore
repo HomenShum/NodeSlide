@@ -1,4 +1,10 @@
 # Keep production uploads focused on the Vite web app.
+
+# Every file under api/ becomes a public serverless function. The route's own
+# tests are not routes: without this, `api/share.test.ts` and
+# `api/share.http.test.ts` deploy as /api/share.test and /api/share.http.test.
+api/*.test.ts
+
 node_modules/
 dist/
 .git/

@@ -1,10 +1,10 @@
-import type { NodeSlideDataAttachment } from './nodeslideAttachments';
+import type { NodeSlideDataAttachment } from './nodeslideAttachments.js';
 
 import type {
   NodeSlideArtifactBinding,
   NodeSlideArtifactCompilationReceipt,
   NodeSlideAuthoredArtifactBinding,
-} from './nodeslideArtifactSpec';
+} from './nodeslideArtifactSpec.js';
 
 export const NODESLIDE_SCHEMA_VERSION = 'nodeslide.slidelang/v1' as const;
 export const NODESLIDE_TOOLCHAIN_VERSION = 'local-slidelang-adapter/1.1.0' as const;
@@ -1234,7 +1234,7 @@ export interface CreateDeckRequest {
 export const NODESLIDE_PRODUCTION_PROBE_CLEANUP_STORAGE_KEY =
   'nodeslide.productionProbeCleanupToken.v1' as const;
 
-export type { NodeSlideDataAttachment } from './nodeslideAttachments';
+export type { NodeSlideDataAttachment } from './nodeslideAttachments.js';
 
 export function isElementOperation(
   operation: PatchOperation,

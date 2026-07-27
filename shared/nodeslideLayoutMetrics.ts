@@ -1,4 +1,4 @@
-import type { BoundingBox, SlideElement } from './nodeslide';
+import type { BoundingBox, SlideElement } from './nodeslide.js';
 
 /**
  * Pure text-measurement and geometry helpers for the deck materializer.

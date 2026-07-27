@@ -6,7 +6,7 @@ import {
   type Slide,
   type SlideElement,
   isNodeSlideEmbeddedRasterDataUrl,
-} from '../../../../shared/nodeslide';
+} from '../../../../shared/nodeslide.js';
 
 /**
  * The snapshot shape every SlideLang export path accepts. Re-exported under the
@@ -180,4 +180,4 @@ export {
   estimateTextFit,
   intersectionRatio,
   type TextFitEstimate,
-} from '../../../../shared/nodeslideGeometryChecks';
+} from '../../../../shared/nodeslideGeometryChecks.js';

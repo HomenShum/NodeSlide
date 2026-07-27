@@ -24,6 +24,10 @@ jobs:
         run: npm run lint
       - name: Typecheck (tsc)
         run: npm run typecheck
+      - name: Serverless function module graph (Node ESM resolution)
+        # Vitest and Vite both resolve extensionless relative specifiers; the
+        # deployed function is loaded by Node's ESM loader, which does not.
+        run: npm run verify:function-bundle
       - name: Test (vitest)
         run: npm test
       - name: Production build (packages + app)

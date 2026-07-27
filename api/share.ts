@@ -1,22 +1,26 @@
 import { ConvexHttpClient } from 'convex/browser';
-import type { DefaultFunctionArgs, FunctionReference } from 'convex/server';
-import { api } from '../convex/_generated/api';
-import type { PublishedNodeSlide } from '../shared/nodeslide';
-import { buildShareProjection } from '../src/domains/nodeslide/publicSurface/shareProjection';
+import { type DefaultFunctionArgs, makeFunctionReference } from 'convex/server';
+import type { PublishedNodeSlide } from '../shared/nodeslide.js';
+import { buildShareProjection } from '../src/domains/nodeslide/publicSurface/shareProjection.js';
 
 type ConvexArgs<Args> = Args & DefaultFunctionArgs;
-type PublicQuery<Args, Result> = FunctionReference<'query', 'public', ConvexArgs<Args>, Result>;
 
 /**
  * The one published query this route is allowed to call. Naming it here keeps
  * the public surface honest: a share link resolves through
  * `nodeslide.getPresenterSnapshot` and nothing else.
+ *
+ * It is named as a string reference rather than read off the generated `api`
+ * object on purpose. `convex/_generated/api.js` is only `export const api =
+ * anyApi`, so the object carries no type or route information this route did
+ * not already state here — but importing it dragged a generated module into
+ * the deployed function's module graph for no runtime benefit.
  */
-interface PresenterApi {
-  nodeslide: {
-    getPresenterSnapshot: PublicQuery<{ shareSlug: string }, PublishedNodeSlide | null>;
-  };
-}
+const getPresenterSnapshot = makeFunctionReference<
+  'query',
+  ConvexArgs<{ shareSlug: string }>,
+  PublishedNodeSlide | null
+>('nodeslide:getPresenterSnapshot');
 
 /** The request and response members this route uses, and no more. */
 interface ShareRouteRequest {
@@ -106,16 +110,14 @@ export default async function handler(
   }
 
   const backendUrl = convexUrl(environment());
-  const presenterApi = api as unknown as PresenterApi;
   const projection = await buildShareProjection({
     url: request.url ?? '/',
     origin: requestOrigin(request.headers),
     loadPublishedDeck: backendUrl
       ? (shareSlug) =>
-          new ConvexHttpClient(backendUrl, { fetch: boundedFetch }).query(
-            presenterApi.nodeslide.getPresenterSnapshot,
-            { shareSlug },
-          )
+          new ConvexHttpClient(backendUrl, { fetch: boundedFetch }).query(getPresenterSnapshot, {
+            shareSlug,
+          })
       : null,
   });
 

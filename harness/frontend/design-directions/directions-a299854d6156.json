@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "nodekit.frontend-direction-set/v1",
+  "directionSetId": "directions-a299854d6156",
+  "productContractHash": "b644a861163b2d2b1b936ef7c11de50046455c4d1d40ed591125bdc6850113b1",
+  "routeHash": "95c80af4ee17d46c29f5ac8af3c00df18584d93b2cf16a74a3c339aabf7ba88e",
+  "blind": true,
+  "requiredViews": [
+    "desktop-first-arrival",
+    "desktop-active-workflow",
+    "desktop-proposal-review",
+    "mobile-primary-artifact",
+    "mobile-agent",
+    "mobile-review"
+  ],
+  "candidates": [
+    {
+      "candidateId": "direction-a",
+      "archetype": "collaborative-workspace",
+      "status": "planned",
+      "viewEvidence": {}
+    },
+    {
+      "candidateId": "direction-b",
+      "archetype": "artifact-studio",
+      "status": "planned",
+      "viewEvidence": {}
+    },
+    {
+      "candidateId": "direction-c",
+      "archetype": "domain-native",
+      "status": "planned",
+      "viewEvidence": {}
+    }
+  ]
+}

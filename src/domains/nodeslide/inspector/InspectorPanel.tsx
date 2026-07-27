@@ -50,7 +50,7 @@ import {
   type AiVariationRequest,
 } from './AiInspector';
 import { CommentsInspector } from './CommentsInspector';
-import { DataInspector } from './DataInspector';
+import { DataInspector, type DataInspectorDataRights } from './DataInspector';
 import {
   DesignInspector,
   type DesignInspectorGenerateImageHandler,
@@ -106,6 +106,12 @@ export interface InspectorPanelProps<CommandId extends string = string> {
   signatureProfiles?: readonly SignatureProfile[];
   tasteProfile?: TasteProfile | null;
   tasteProfileLoading?: boolean;
+  /**
+   * Owner export/erase controls for the Evidence tab. They sit in the review
+   * group rather than the authoring group: exporting and deleting are things
+   * you do *to* a finished deck, not steps in making one.
+   */
+  dataRights?: DataInspectorDataRights;
   onTabChange: (tab: InspectorTab) => void;
   onToggleCollapsed: () => void;
   onWidthChange: (width: number) => void;
@@ -217,6 +223,7 @@ export function InspectorPanel<CommandId extends string = string>({
   signatureProfiles = [],
   tasteProfile = null,
   tasteProfileLoading = false,
+  dataRights,
   onTabChange,
   onToggleCollapsed,
   onWidthChange,
@@ -510,6 +517,7 @@ export function InspectorPanel<CommandId extends string = string>({
             slides={workspace.slides}
             {...(onSelectEvidenceElement ? { onSelectElement: onSelectEvidenceElement } : {})}
             {...(onDeleteAiDataSource ? { onDeleteSource: onDeleteAiDataSource } : {})}
+            {...(dataRights ? { dataRights } : {})}
           />
         ) : null}
         {activeTab === 'json' ? (

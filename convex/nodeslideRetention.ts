@@ -1,20 +1,42 @@
 import { v } from 'convex/values';
-import type { Doc, Id, TableNames } from './_generated/dataModel';
+import type { Doc } from './_generated/dataModel';
 import type { MutationCtx } from './_generated/server';
 import { internalMutation, mutation } from './_generated/server';
 import { isOwnerAccessKey, requireOwnerAccess } from './lib/nodeslideAccess';
 import { findDeckRow } from './lib/nodeslideData';
+import {
+  collectNodeSlideScopedRows,
+  nodeSlideScopeValue,
+  takeNodeSlideScopedRows,
+} from './lib/nodeslideDeckRows';
+import {
+  type NodeSlideErasureEntry,
+  type NodeSlideSchemaLike,
+  buildNodeSlideErasureContract,
+} from './lib/nodeslideErasureContract';
 import { nodeslideContentDigest } from './lib/nodeslideIds';
 import {
   isNodeSlideProductionProbeCleanupToken,
   nodeSlideProductionProbeFields,
 } from './lib/nodeslideProductionProbe';
+import schema from './schema';
+
+/**
+ * Built once, at module load, from `convex/schema.ts` itself. A schema that
+ * gained a table nobody classified fails here — at import time, in every test
+ * and every deploy — rather than after a user pressed "delete my deck" and got
+ * a green receipt over surviving rows.
+ */
+export const NODESLIDE_ERASURE_CONTRACT: readonly NodeSlideErasureEntry[] =
+  buildNodeSlideErasureContract(schema as unknown as NodeSlideSchemaLike);
 
 const RETENTION_RECEIPT_SCHEMA = 'nodeslide.workspace-retention-receipt/v1' as const;
 const RETENTION_TOMBSTONE_SCHEMA = 'nodeslide.retention-tombstone/v1' as const;
 const RETENTION_TARGET_BINDING_DOMAIN = 'nodeslide.retention-target/v1';
 const RETENTION_PRINCIPAL_BINDING_DOMAIN = 'nodeslide.retention-principal/v1';
 const RETENTION_TICKET_DOMAIN = 'nodeslide.retention-ticket/v1';
+/** ASCII unit separator: a byte that cannot occur in a deck id or access key. */
+const RETENTION_FIELD_SEPARATOR = String.fromCharCode(0x1f);
 
 type DeletedCounts = Record<string, number>;
 
@@ -164,6 +186,11 @@ export const deleteExpiredProductionProbeWorkspaces = internalMutation({
   },
 });
 
+/**
+ * Walks the derived contract. There is no table list in this function, and
+ * that is the point: the set of things erased is whatever `schema.ts` says
+ * hangs off a deck, resolved at runtime.
+ */
 async function deleteWorkspaceRows(
   ctx: MutationCtx,
   deck: Doc<'nodeslide_decks'>,
@@ -176,424 +203,63 @@ async function deleteWorkspaceRows(
   if (projectDecks.length !== 1 || projectDecks[0]?._id !== deck._id) {
     throw new Error('NodeSlide project retention scope is not one workspace.');
   }
-  await deleteRows(
-    ctx,
-    'slides',
-    await ctx.db
-      .query('nodeslide_slides')
-      .withIndex('by_deck', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
+
+  for (const entry of NODESLIDE_ERASURE_CONTRACT) {
+    if (entry.scope.kind === 'deck') {
+      await ctx.db.delete(deck._id);
+      counts[entry.label] = 1;
+      continue;
+    }
+    if (entry.scope.kind === 'project') {
+      await ctx.db.delete(deck.projectRowId);
+      counts[entry.label] = 1;
+      continue;
+    }
+    const value = nodeSlideScopeValue(entry, deck);
+    if (value === null) continue;
+    const rows = await collectNodeSlideScopedRows(ctx, entry, value);
+    for (const row of rows) await ctx.db.delete(row._id);
+    if (rows.length > 0) counts[entry.label] = rows.length;
+  }
+
+  // Tenant-scoped profile tables span decks by construction, so re-read them
+  // after the pass instead of trusting the delete loop's own arithmetic.
+  const retainedTenantRows = await Promise.all(
+    NODESLIDE_ERASURE_CONTRACT.filter((entry) => entry.scope.kind === 'tenantScoped').map((entry) =>
+      takeNodeSlideScopedRows(ctx, entry, deck.projectId, 1),
+    ),
   );
-  await deleteRows(
-    ctx,
-    'elements',
-    await ctx.db
-      .query('nodeslide_elements')
-      .withIndex('by_deck', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'patches',
-    await ctx.db
-      .query('nodeslide_patches')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'variationBatches',
-    await ctx.db
-      .query('nodeslide_variation_batches')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'variations',
-    await ctx.db
-      .query('nodeslide_variations')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'variationDecisions',
-    await ctx.db
-      .query('nodeslide_variation_decisions')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'comments',
-    await ctx.db
-      .query('nodeslide_comments')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'versions',
-    await ctx.db
-      .query('nodeslide_versions')
-      .withIndex('by_deck_version', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'packageReceipts',
-    await ctx.db
-      .query('nodeslide_package_receipts')
-      .withIndex('by_deck_recorded', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'packageSubmissions',
-    await ctx.db
-      .query('nodeslide_package_submissions')
-      .withIndex('by_deck_patch', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'packageAssets',
-    await ctx.db
-      .query('nodeslide_package_assets')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'sources',
-    await ctx.db
-      .query('nodeslide_sources')
-      .withIndex('by_deck', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'agentRuns',
-    await ctx.db
-      .query('nodeslide_agent_runs')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'agentMessages',
-    await ctx.db
-      .query('nodeslide_agent_messages')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'agentMemories',
-    await ctx.db
-      .query('nodeslide_agent_memories')
-      .withIndex('by_deck_updated', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'agentSpans',
-    await ctx.db
-      .query('nodeslide_agent_spans')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'agentEvents',
-    await ctx.db
-      .query('nodeslide_agent_events')
-      .withIndex('by_deck_timestamp', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'validations',
-    await ctx.db
-      .query('nodeslide_validations')
-      .withIndex('by_deck_checked', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'traces',
-    await ctx.db
-      .query('nodeslide_traces')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'executionTraces',
-    await ctx.db
-      .query('nodeslide_execution_traces')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'shadowComparisons',
-    await ctx.db
-      .query('nodeslide_shadow_comparisons')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'exports',
-    await ctx.db
-      .query('nodeslide_exports')
-      .withIndex('by_deck_created', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'publications',
-    await ctx.db
-      .query('nodeslide_publications')
-      .withIndex('by_deck_revision', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'publishApprovers',
-    await ctx.db
-      .query('nodeslide_publish_approvers')
-      .withIndex('by_deck', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'publishApprovals',
-    await ctx.db
-      .query('nodeslide_publish_approvals')
-      .withIndex('by_deck_version', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'preferenceEvents',
-    await ctx.db
-      .query('nodeslide_preference_events')
-      .withIndex('by_deck_recorded', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'presence',
-    await ctx.db
-      .query('nodeslide_presence')
-      .withIndex('by_deck_expiry', (index) => index.eq('deckId', deck.id))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'signatureProfiles',
-    await ctx.db
-      .query('nodeslide_signature_profiles')
-      .withIndex('by_tenant_updated', (index) => index.eq('tenantId', deck.projectId))
-      .collect(),
-    counts,
-  );
-  await deleteRows(
-    ctx,
-    'tasteProfiles',
-    await ctx.db
-      .query('nodeslide_taste_profiles')
-      .withIndex('by_tenant_actor', (index) => index.eq('tenantId', deck.projectId))
-      .collect(),
-    counts,
-  );
-  const retainedTenantRows = await Promise.all([
-    ctx.db
-      .query('nodeslide_signature_profiles')
-      .withIndex('by_tenant_updated', (index) => index.eq('tenantId', deck.projectId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_taste_profiles')
-      .withIndex('by_tenant_actor', (index) => index.eq('tenantId', deck.projectId))
-      .take(1),
-  ]);
   if (retainedTenantRows.some((rows) => rows.length !== 0)) {
     throw new Error('NodeSlide workspace retention left project-scoped profile rows.');
   }
-  await ctx.db.delete(deck._id);
-  counts['deck'] = 1;
-  await ctx.db.delete(deck.projectRowId);
-  counts['project'] = 1;
   return counts;
 }
 
-async function deleteRows<TableName extends TableNames>(
-  ctx: MutationCtx,
-  label: string,
-  rows: ReadonlyArray<{ _id: Id<TableName> }>,
-  counts: DeletedCounts,
-): Promise<void> {
-  for (const row of rows) await ctx.db.delete(row._id);
-  if (rows.length > 0) counts[label] = rows.length;
-}
-
+/**
+ * Counts every deck-scoped row still reachable by stable deck id, including
+ * the deck row itself. Tenant-scoped tables are verified separately in
+ * `deleteWorkspaceRows`, because a sibling deck may legitimately still own them.
+ */
 async function countDeckRows(ctx: MutationCtx, deckId: string): Promise<number> {
-  const rows = await Promise.all([
-    ctx.db
-      .query('nodeslide_decks')
-      .withIndex('by_stable_id', (q) => q.eq('id', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_slides')
-      .withIndex('by_deck', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_elements')
-      .withIndex('by_deck', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_patches')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_variation_batches')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_variations')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_variation_decisions')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_comments')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_versions')
-      .withIndex('by_deck_version', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_package_receipts')
-      .withIndex('by_deck_recorded', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_package_submissions')
-      .withIndex('by_deck_patch', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_package_assets')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_sources')
-      .withIndex('by_deck', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_agent_runs')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_agent_messages')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_agent_memories')
-      .withIndex('by_deck_updated', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_agent_spans')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_agent_events')
-      .withIndex('by_deck_timestamp', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_validations')
-      .withIndex('by_deck_checked', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_traces')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_execution_traces')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_shadow_comparisons')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_exports')
-      .withIndex('by_deck_created', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_publications')
-      .withIndex('by_deck_revision', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_publish_approvers')
-      .withIndex('by_deck', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_publish_approvals')
-      .withIndex('by_deck_version', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_preference_events')
-      .withIndex('by_deck_recorded', (q) => q.eq('deckId', deckId))
-      .take(1),
-    ctx.db
-      .query('nodeslide_presence')
-      .withIndex('by_deck_expiry', (q) => q.eq('deckId', deckId))
-      .take(1),
-  ]);
+  const rows = await Promise.all(
+    NODESLIDE_ERASURE_CONTRACT.filter(
+      (entry) => entry.scope.kind === 'deckScoped' || entry.scope.kind === 'deck',
+    ).map((entry) => takeNodeSlideScopedRows(ctx, entry, deckId, 1)),
+  );
   return rows.reduce((total, found) => total + found.length, 0);
 }
 
 export function nodeSlideRetentionBindings(deckId: string, ownerAccessKey: string) {
   const targetBindingDigest = nodeslideContentDigest(
-    [RETENTION_TARGET_BINDING_DOMAIN, deckId].join('\u001f'),
+    [RETENTION_TARGET_BINDING_DOMAIN, deckId].join(RETENTION_FIELD_SEPARATOR),
   );
   const principalBindingDigest = nodeslideContentDigest(
-    [RETENTION_PRINCIPAL_BINDING_DOMAIN, ownerAccessKey].join('\u001f'),
+    [RETENTION_PRINCIPAL_BINDING_DOMAIN, ownerAccessKey].join(RETENTION_FIELD_SEPARATOR),
   );
   const cleanupTicket = nodeslideContentDigest(
-    [RETENTION_TICKET_DOMAIN, targetBindingDigest, principalBindingDigest].join('\u001f'),
+    [RETENTION_TICKET_DOMAIN, targetBindingDigest, principalBindingDigest].join(
+      RETENTION_FIELD_SEPARATOR,
+    ),
   );
   return { targetBindingDigest, principalBindingDigest, cleanupTicket };
 }

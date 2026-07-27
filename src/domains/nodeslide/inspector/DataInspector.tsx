@@ -20,6 +20,19 @@ import {
   evidenceClaimTerms,
   highlightExcerpt,
 } from '../../../../shared/nodeslideEvidence';
+import { ExportMyDataAction } from './ExportMyDataAction';
+
+/**
+ * Data-rights wiring for the deck currently open. Absent for share-link and
+ * approver views, which hold no owner capability — the section is not rendered
+ * at all rather than rendered disabled.
+ */
+export interface DataInspectorDataRights {
+  deckId: string;
+  deckTitle: string;
+  ownerAccessKey: string;
+  onRequestDelete: () => void;
+}
 
 interface DataInspectorProps {
   sources: readonly SourceRecord[];
@@ -31,6 +44,8 @@ interface DataInspectorProps {
   /** Selects a citing element on its slide (canvas selection callback). */
   onSelectElement?: (slideId: string, elementId: string) => void;
   onDeleteSource?: (sourceId: string) => Promise<void>;
+  /** Owner-only export/erase controls. Omitted when there is no owner capability. */
+  dataRights?: DataInspectorDataRights;
 }
 
 function elementCitesSource(element: SlideElement, sourceId: string): boolean {
@@ -44,6 +59,7 @@ export function DataInspector({
   slides,
   onSelectElement,
   onDeleteSource,
+  dataRights,
 }: DataInspectorProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -416,6 +432,39 @@ export function DataInspector({
         )}
         {deleteError ? <output role="alert">{deleteError}</output> : null}
       </section>
+
+      {dataRights ? (
+        <section
+          className="ns-inspector-section ns-data-rights"
+          data-testid="deck-data-rights"
+          aria-label="Your data"
+        >
+          <div className="ns-section-title-row">
+            <div>
+              <span className="ns-eyebrow">Your data</span>
+              <h2>Export or erase this deck</h2>
+            </div>
+          </div>
+          <p>
+            The export hands back every record this deck owns, and names what it withholds in its
+            own manifest. Deletion removes exactly the same set, permanently, with no server copy
+            retained.
+          </p>
+          <ExportMyDataAction
+            deckId={dataRights.deckId}
+            deckTitle={dataRights.deckTitle}
+            ownerAccessKey={dataRights.ownerAccessKey}
+          />
+          <button
+            type="button"
+            className="ns-button ns-button--danger ns-delete-deck-trigger"
+            data-testid="delete-deck-open"
+            onClick={dataRights.onRequestDelete}
+          >
+            <Trash2 size={14} /> Delete this deck
+          </button>
+        </section>
+      ) : null}
     </div>
   );
 }

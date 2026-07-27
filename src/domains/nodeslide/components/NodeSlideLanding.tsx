@@ -392,7 +392,7 @@ export function NodeSlideLanding({
           ) : null}
         </form>
 
-        <p className="ns-landing-privacy" aria-live="polite">
+        <p className="ns-landing-privacy" aria-live="polite" data-testid="landing-privacy-cue">
           {providerMode === 'deterministic' ? (
             <>
               <ShieldCheck size={13} /> Private deterministic generation. No external model egress.
@@ -418,7 +418,12 @@ export function NodeSlideLanding({
           ))}
         </div>
 
-        <button className="ns-landing-sample" type="button" onClick={onExploreSample}>
+        <button
+          className="ns-landing-sample"
+          type="button"
+          data-testid="landing-explore-sample"
+          onClick={onExploreSample}
+        >
           <Layers3 size={15} /> Explore the editable sample workspace
         </button>
 

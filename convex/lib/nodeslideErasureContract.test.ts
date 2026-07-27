@@ -66,6 +66,11 @@ describe('erasure contract derivation', () => {
       'nodeslide_execution_traces',
       'nodeslide_shadow_comparisons',
       'nodeslide_exports',
+      // The Google Slides grant is deck-owned like everything else: an OAuth
+      // token is user data, so a deck erasure has to take it with the deck.
+      'nodeslide_oauth_sessions',
+      'nodeslide_oauth_credentials',
+      'nodeslide_google_sync_states',
       'nodeslide_publications',
       'nodeslide_publish_approvers',
       'nodeslide_publish_approvals',

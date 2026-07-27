@@ -46,6 +46,7 @@ import type { SignatureProfile } from '../../../shared/nodeslideSignature';
 import { planSignatureApplication } from '../../../shared/nodeslideSignatureApply';
 import type { SlideVariation, VariationBatch } from '../../../shared/nodeslideVariation';
 import {
+  forgetDeckOwnerAccessKey,
   getDeckOwnerAccessKey,
   getOrCreateSessionId,
   getStoredOwnerAccessKey,
@@ -57,6 +58,7 @@ import { cloneNodeSlideElementWithoutAuthoredBinding } from './clientArtifactAut
 import { type ApproverReviewState, ApproverReviewView } from './components/ApproverReviewView';
 import { ArtifactLabDialog } from './components/ArtifactLabDialog';
 import { CommandPalette, type StudioCommand } from './components/CommandPalette';
+import { DeleteDeckDialog } from './components/DeleteDeckDialog';
 import {
   DeploymentUpdateBoundary,
   useDeploymentActionMonitor,
@@ -434,6 +436,19 @@ interface NodeSlideGeneratedApi {
       ApproverReviewState | null
     >;
   };
+  nodeslideRetention: {
+    deleteOwnedWorkspace: PublicMutation<
+      { deckId: string; ownerAccessKey: string; cleanupTicket?: string },
+      {
+        status: 'passed';
+        retentionSafe: boolean;
+        deletedRowCount: number;
+        deletedCounts: Record<string, number>;
+        alreadyAbsent: boolean;
+        receiptDigest: string;
+      }
+    >;
+  };
 }
 
 const nodeslideApi = api as unknown as NodeSlideGeneratedApi;
@@ -497,6 +512,9 @@ function NodeSlideStudioContent() {
     requestedDeck ? (getDeckOwnerAccessKey(requestedDeck) ?? null) : null,
   );
   const [knownAccess, setKnownAccess] = useState(() => listStoredDeckAccess());
+  const [deleteDeckOpen, setDeleteDeckOpen] = useState(false);
+  const [deletingDeck, setDeletingDeck] = useState(false);
+  const [deleteDeckError, setDeleteDeckError] = useState<string | null>(null);
   const [ownerRecovery, setOwnerRecovery] = useState<OwnerCapabilityRecovery | null>(null);
   const [recoveryAccessInput, setRecoveryAccessInput] = useState('');
   const [recoveryAccessRequest, setRecoveryAccessRequest] = useState<string | null>(null);
@@ -639,6 +657,7 @@ function NodeSlideStudioContent() {
   );
   const touchPresence = useMutation(nodeslideApi.nodeslide.touchPresence);
   const deleteDataSource = useMutation(nodeslideApi.nodeslide.deleteDataSource);
+  const deleteOwnedWorkspace = useMutation(nodeslideApi.nodeslideRetention.deleteOwnedWorkspace);
   const cancelAgentRun = useMutation(nodeslideApi.nodeslide.cancelAgentRun);
   const createAgentMemory = useMutation(nodeslideApi.nodeslideMemory.create);
   const updateAgentMemory = useMutation(nodeslideApi.nodeslideMemory.update);
@@ -1724,6 +1743,49 @@ function NodeSlideStudioContent() {
       setToast({ kind: 'error', message });
     } finally {
       if (requestGate.isCurrent(requestToken)) setCreating(false);
+    }
+  };
+
+  /**
+   * Erases the open deck. The server refuses to certify a partial cleanup, so
+   * a resolved receipt is the only evidence accepted here; anything else keeps
+   * the deck open with the error visible rather than navigating away from a
+   * deletion that may not have happened.
+   */
+  const confirmDeleteDeck = async () => {
+    const deckId = activeDeckId;
+    const currentOwnerAccessKey = ownerAccessKey;
+    if (!deckId || !currentOwnerAccessKey || deletingDeck) return;
+    setDeletingDeck(true);
+    setDeleteDeckError(null);
+    try {
+      const receipt = await deleteOwnedWorkspace({
+        deckId,
+        ownerAccessKey: currentOwnerAccessKey,
+      });
+      if (!receipt.retentionSafe) {
+        throw new Error('NodeSlide did not certify the deletion. Nothing was reported erased.');
+      }
+      forgetDeckOwnerAccessKey(deckId);
+      setKnownAccess(listStoredDeckAccess());
+      editorRequestGateRef.current?.setActiveDeck(null);
+      activeDeckIdRef.current = null;
+      ownerAccessKeyRef.current = null;
+      workspaceRef.current = null;
+      workspaceReceiptMarkerRef.current = null;
+      setDeleteDeckOpen(false);
+      setLocalWorkspace(null);
+      setOwnerAccessKey(null);
+      setActiveDeckId(null);
+      setQueryParam('deck', null);
+      setToast({
+        kind: 'success',
+        message: `Deck deleted. ${receipt.deletedRowCount} records erased across ${Object.keys(receipt.deletedCounts).length} collections, with no copy kept.`,
+      });
+    } catch (error) {
+      setDeleteDeckError(errorMessage(error, 'The deck could not be deleted.'));
+    } finally {
+      setDeletingDeck(false);
     }
   };
 
@@ -3288,6 +3350,19 @@ function NodeSlideStudioContent() {
           tasteProfile={tasteProfile ?? null}
           tasteProfileLoading={tasteProfile === undefined}
           tastePackBusy={tastePackBusy}
+          {...(activeDeckId && ownerAccessKey
+            ? {
+                dataRights: {
+                  deckId: activeDeckId,
+                  deckTitle: workspace.deck.title,
+                  ownerAccessKey,
+                  onRequestDelete: () => {
+                    setDeleteDeckError(null);
+                    setDeleteDeckOpen(true);
+                  },
+                },
+              }
+            : {})}
           onTabChange={(tab) => {
             if (tab !== 'ai') setPreviewedVariation(null);
             if (tab !== 'design') setPreviewedSignatureProfile(null);
@@ -3452,6 +3527,17 @@ function NodeSlideStudioContent() {
       </div>
 
       {projectsDialog}
+      <DeleteDeckDialog
+        open={deleteDeckOpen}
+        deckTitle={workspace.deck.title}
+        deleting={deletingDeck}
+        error={deleteDeckError}
+        onCancel={() => {
+          setDeleteDeckOpen(false);
+          setDeleteDeckError(null);
+        }}
+        onConfirm={() => void confirmDeleteDeck()}
+      />
       {/*
        * The Artifact Lab shipped on the landing page only, so the reference artifacts were reachable
        * before you had a deck and never while you were working on one — which is when you actually

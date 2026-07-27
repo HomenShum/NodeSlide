@@ -5416,6 +5416,122 @@
 /* Durable deck memory stays behind one compact composer affordance. The
    manager uses the same progressive-disclosure surface as model connections
    while making retention and egress controls visible at the point of use. */
+/* ---- Data rights: export my data, delete this deck ---------------------- */
+
+.nodeslide-studio .ns-data-rights p {
+  margin: 0 0 10px;
+}
+
+.nodeslide-studio .ns-data-export-control {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.nodeslide-studio .ns-data-export-control output {
+  color: var(--ns-ink-soft, inherit);
+  font-size: var(--ns-font-small, 12px);
+  line-height: 1.45;
+}
+
+.nodeslide-studio .ns-data-export-control output[role="alert"] {
+  color: var(--ns-danger, #b42318);
+}
+
+.nodeslide-studio .ns-delete-deck-trigger {
+  width: 100%;
+}
+
+.nodeslide-studio .ns-delete-deck-dialog {
+  background: transparent;
+  border: 0;
+  color: var(--ns-ink);
+  margin: auto;
+  max-height: min(88dvh, 620px);
+  max-width: min(520px, calc(100vw - 28px));
+  padding: 0;
+  width: 100%;
+}
+
+.nodeslide-studio .ns-delete-deck-dialog::backdrop {
+  background: rgb(15 23 42 / 38%);
+  backdrop-filter: blur(6px);
+}
+
+.nodeslide-studio .ns-delete-deck-shell {
+  background: var(--ns-paper);
+  border: 1px solid color-mix(in srgb, var(--ns-line-d) 78%, transparent);
+  border-radius: 18px;
+  box-shadow: 0 28px 80px rgb(15 23 42 / 22%);
+  overflow: hidden;
+}
+
+.nodeslide-studio .ns-delete-deck-header {
+  align-items: center;
+  border-bottom: 1px solid var(--ns-line);
+  display: grid;
+  gap: 11px;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  padding: 17px 19px;
+}
+
+.nodeslide-studio .ns-delete-deck-header h1 {
+  font-family: "Fraunces Variable", Fraunces, Georgia, serif;
+  font-size: 21px;
+  font-weight: 560;
+  letter-spacing: -0.025em;
+  margin: 1px 0 0;
+}
+
+.nodeslide-studio .ns-delete-deck-mark {
+  align-items: center;
+  background: var(--ns-danger, #b42318);
+  border-radius: 10px;
+  color: var(--ns-paper);
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+
+.nodeslide-studio .ns-delete-deck-body {
+  display: grid;
+  gap: 12px;
+  padding: 17px 19px;
+}
+
+.nodeslide-studio .ns-delete-deck-body p {
+  margin: 0;
+}
+
+.nodeslide-studio .ns-delete-deck-confirm {
+  display: grid;
+  gap: 6px;
+}
+
+.nodeslide-studio .ns-delete-deck-confirm input {
+  border: 1px solid var(--ns-line-d);
+  border-radius: 9px;
+  padding: 8px 10px;
+  width: 100%;
+}
+
+.nodeslide-studio .ns-delete-deck-confirm input[aria-invalid="true"] {
+  border-color: var(--ns-danger, #b42318);
+}
+
+.nodeslide-studio .ns-delete-deck-body output[role="alert"] {
+  color: var(--ns-danger, #b42318);
+}
+
+.nodeslide-studio .ns-delete-deck-footer {
+  border-top: 1px solid var(--ns-line);
+  display: flex;
+  gap: 9px;
+  justify-content: flex-end;
+  padding: 14px 19px;
+}
+
 .nodeslide-studio .ns-memory-dialog {
   background: transparent;
   border: 0;

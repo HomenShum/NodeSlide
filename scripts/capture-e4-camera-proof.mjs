@@ -27,12 +27,7 @@ const shot = (name) => page.screenshot({ path: join(outputDir, `${name}.png`) })
 
 try {
   await page.goto(baseUrl, { waitUntil: 'networkidle', timeout: 60_000 });
-  const firstRunExplore = page.getByTestId('first-run-explore');
-  if (await firstRunExplore.isVisible().catch(() => false)) {
-    await firstRunExplore.click();
-  } else {
-    await page.getByRole('button', { name: 'Explore the editable sample workspace' }).click();
-  }
+  await page.getByTestId('landing-explore-sample').click();
   await page.getByTestId('nodeslide-studio').waitFor({ timeout: 30_000 });
   await pause();
   await shot('01-sample-workspace');

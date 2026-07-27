@@ -38,7 +38,15 @@ export default defineConfig({
     },
   },
   test: {
-    exclude: [...configDefaults.exclude, '**/.claude/**', 'packages/external-agent/**', 'mcp/**'],
+    exclude: [
+      ...configDefaults.exclude,
+      '**/.claude/**',
+      'packages/external-agent/**',
+      'mcp/**',
+      // Playwright specs, not vitest specs. `npm run nodeslide:bench:produce-live`
+      // owns tests/e2e; vitest collecting it fails on the playwright/test import.
+      'tests/e2e/**',
+    ],
   },
   server: {
     port: 5180,

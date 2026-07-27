@@ -65,17 +65,28 @@ function fail(message) {
   failures.push(message);
 }
 
-function relativeSpecifiers(file) {
+/**
+ * tsconfig `paths` are a compile-time convenience. `@vercel/node` emits the
+ * specifier verbatim and Node resolves it against node_modules, where no such
+ * package exists — the same failure as an extensionless relative import.
+ */
+const ALIAS_PREFIXES = ['@/', '~/', '#/'];
+
+function specifiers(file) {
   const source = readFileSync(file, 'utf8');
-  const found = [];
+  const relative = [];
+  const aliased = [];
   IMPORT_PATTERN.lastIndex = 0;
   let match = IMPORT_PATTERN.exec(source);
   while (match) {
     const specifier = match[1] ?? match[2];
-    if (specifier?.startsWith('.')) found.push(specifier);
+    if (specifier?.startsWith('.')) relative.push(specifier);
+    else if (specifier && ALIAS_PREFIXES.some((prefix) => specifier.startsWith(prefix))) {
+      aliased.push(specifier);
+    }
     match = IMPORT_PATTERN.exec(source);
   }
-  return found;
+  return { relative, aliased };
 }
 
 /** Resolve a fully specified `./x.js` back to the source file that emits it. */
@@ -111,8 +122,14 @@ function verifySourceGraph() {
     const file = queue.shift();
     if (visited.has(file)) continue;
     visited.add(file);
-    for (const specifier of relativeSpecifiers(file)) {
-      const shown = path.relative(repoRoot, file).replaceAll(path.sep, '/');
+    const shown = path.relative(repoRoot, file).replaceAll(path.sep, '/');
+    const { relative, aliased } = specifiers(file);
+    for (const specifier of aliased) {
+      fail(
+        `${shown}: specifier '${specifier}' is a tsconfig path alias. The deployed function resolves against node_modules, where it does not exist; use a relative path.`,
+      );
+    }
+    for (const specifier of relative) {
       if (!ESM_EXTENSIONS.some((extension) => specifier.endsWith(extension))) {
         fail(
           `${shown}: relative specifier '${specifier}' is not fully specified. Node's ESM loader will not resolve it in the deployed function; add the '.js' extension.`,

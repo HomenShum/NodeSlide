@@ -1,12 +1,12 @@
-import type { PublishedNodeSlide, Slide, SlideElement } from '../../../../shared/nodeslide';
-import { renderSlideHtml } from '../slidelang/html';
+import type { PublishedNodeSlide, Slide, SlideElement } from '../../../../shared/nodeslide.js';
+import { renderSlideHtml } from '../slidelang/html.js';
 import {
   type ExportableSnapshot,
   escapeHtml,
   isEmbeddedImageData,
   orderedExportElements,
   orderedSlides,
-} from '../slidelang/utils';
+} from '../slidelang/utils.js';
 
 /**
  * Mirrors `requireShareSlug` in convex/lib/nodeslideAccess.ts. The Convex query

@@ -1,5 +1,5 @@
-import type { Slide, SlideElement, SourceRecord } from '../../../../shared/nodeslide';
-import { type ExportableSnapshot, orderedExportElements } from './utils';
+import type { Slide, SlideElement, SourceRecord } from '../../../../shared/nodeslide.js';
+import { type ExportableSnapshot, orderedExportElements } from './utils.js';
 
 export interface SlideSourceReference {
   id: string;

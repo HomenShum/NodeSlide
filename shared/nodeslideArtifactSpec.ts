@@ -1,4 +1,9 @@
-import type { DeckSnapshot, ElementKind, ExportableDeckSnapshot, SlideElement } from './nodeslide';
+import type {
+  DeckSnapshot,
+  ElementKind,
+  ExportableDeckSnapshot,
+  SlideElement,
+} from './nodeslide.js';
 import {
   NODESLIDE_CANONICAL_ARTIFACT_KINDS,
   type NodeSlideArtifactCompilerDescriptor,

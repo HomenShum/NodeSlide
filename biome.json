@@ -19,6 +19,7 @@
       "convex/_generated",
       "packages/convex/component/_generated",
       "mcp/dist",
+      "mcp/src/generated",
       "node_modules",
       "outputs/artifact-atlas-v2",
       "outputs/artifact-atlas-v3",

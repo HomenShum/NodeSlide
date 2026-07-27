@@ -10,10 +10,16 @@ import {
   Sheet,
   StickyNote,
   Trash2,
+  Unlink,
 } from 'lucide-react';
 import { useState } from 'react';
 import type { Slide, SlideElement, SourceRecord } from '../../../../shared/nodeslide';
-import { evidenceClaimTerms, highlightExcerpt } from '../../../../shared/nodeslideEvidence';
+import {
+  boundSourceIds,
+  evidenceBindingCoverage,
+  evidenceClaimTerms,
+  highlightExcerpt,
+} from '../../../../shared/nodeslideEvidence';
 
 interface DataInspectorProps {
   sources: readonly SourceRecord[];
@@ -28,12 +34,7 @@ interface DataInspectorProps {
 }
 
 function elementCitesSource(element: SlideElement, sourceId: string): boolean {
-  return (
-    element.sourceIds.includes(sourceId) ||
-    element.chart?.sourceId === sourceId ||
-    element.math?.sourceId === sourceId ||
-    element.image?.sourceId === sourceId
-  );
+  return boundSourceIds(element).includes(sourceId);
 }
 
 export function DataInspector({
@@ -50,15 +51,11 @@ export function DataInspector({
     sourceId: string;
     elementId?: string;
   } | null>(null);
-  const dependencyIds = new Set(
-    selectedElements.flatMap((element) => [
-      ...element.sourceIds,
-      ...(element.chart?.sourceId ? [element.chart.sourceId] : []),
-      ...(element.math?.sourceId ? [element.math.sourceId] : []),
-      ...(element.image?.sourceId ? [element.image.sourceId] : []),
-    ]),
-  );
+  const [unsourcedCollapsed, setUnsourcedCollapsed] = useState(false);
+  const dependencyIds = new Set(selectedElements.flatMap(boundSourceIds));
   const dependencies = sources.filter((source) => dependencyIds.has(source.id));
+  const coverage = evidenceBindingCoverage(elements ?? []);
+  const unsourcedOpen = coverage.unsourced.length > 0 && !unsourcedCollapsed;
   const structuredElements = selectedElements.filter(
     (element) => element.kind === 'chart' || element.kind === 'math' || element.kind === 'image',
   );
@@ -77,7 +74,66 @@ export function DataInspector({
           Citations stay attached to canonical elements and travel with exported artifacts.
           NodeSlide checks attachment and disclosure; it does not independently verify facts.
         </p>
+        {elements ? (
+          <div className="ns-evidence-coverage" data-testid="evidence-coverage">
+            <span>
+              <span>Claims</span>
+              <strong>{coverage.claims}</strong>
+            </span>
+            <span>
+              <span>Bound</span>
+              <strong>{coverage.bound}</strong>
+            </span>
+            <button
+              type="button"
+              className="ns-evidence-unsourced-toggle"
+              data-testid="evidence-unsourced-toggle"
+              disabled={coverage.unsourced.length === 0}
+              aria-expanded={unsourcedOpen}
+              aria-controls="nodeslide-unsourced-claims"
+              aria-label={`${coverage.unsourced.length} unsourced ${coverage.unsourced.length === 1 ? 'claim' : 'claims'}`}
+              onClick={() => setUnsourcedCollapsed(unsourcedOpen)}
+            >
+              <span>Unsourced</span>
+              <strong data-testid="evidence-unsourced-count">{coverage.unsourced.length}</strong>
+            </button>
+          </div>
+        ) : null}
       </section>
+
+      {unsourcedOpen ? (
+        <section
+          className="ns-unsourced-claims"
+          id="nodeslide-unsourced-claims"
+          data-testid="evidence-unsourced-list"
+        >
+          <div className="ns-section-heading">
+            <span>Not yet bound to a source</span>
+            <small>{coverage.unsourced.length}</small>
+          </div>
+          <div className="ns-evidence-citing">
+            {coverage.unsourced.map((element) => {
+              const slideTitle = slides?.find(
+                (candidate) => candidate.id === element.slideId,
+              )?.title;
+              return (
+                <button
+                  type="button"
+                  key={element.id}
+                  className="ns-evidence-citing-element is-unsourced"
+                  data-testid="evidence-unsourced-element"
+                  disabled={!onSelectElement}
+                  onClick={() => onSelectElement?.(element.slideId, element.id)}
+                  aria-label={`Select unsourced claim ${element.name}${slideTitle ? ` on ${slideTitle}` : ''}`}
+                >
+                  <Unlink size={11} /> {element.name}
+                  {slideTitle ? <em> · {slideTitle}</em> : null}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
 
       {selectedElements.length > 0 ? (
         <section className="ns-dependency-card">

@@ -1057,6 +1057,31 @@ export interface DeckSnapshot {
 }
 
 /**
+ * The snapshot fields the SlideLang export paths and the ArtifactSpec compiler
+ * actually read. A published snapshot carries the same slides, elements, and
+ * sources but omits the owner-only deck context (project, brief, signature
+ * profile, share capability), so those paths accept this shape and both a full
+ * `DeckSnapshot` and a `PublishedDeckSnapshot` still satisfy it.
+ */
+export interface ExportableDeckSnapshot {
+  deck: Pick<
+    Deck,
+    | 'schemaVersion'
+    | 'toolchainVersion'
+    | 'id'
+    | 'title'
+    | 'theme'
+    | 'slideOrder'
+    | 'version'
+    | 'createdAt'
+    | 'updatedAt'
+  >;
+  slides: Slide[];
+  elements: SlideElement[];
+  sources: SourceRecord[];
+}
+
+/**
  * The deliberately narrow deck shape exposed by a public presentation link.
  * Owner-only creation context, signature configuration, and the mutable share
  * capability are not part of the published contract.

@@ -31,6 +31,6 @@
     "noPropertyAccessFromIndexSignature": true,
     "exactOptionalPropertyTypes": true
   },
-  "include": ["src", "shared", "packages"],
+  "include": ["src", "shared", "packages", "api"],
   "exclude": ["node_modules", "dist"]
 }

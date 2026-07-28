@@ -1102,6 +1102,19 @@ describe('owner data export', () => {
     expect(serialized).not.toContain('clientSessionId');
     // The deck id itself is the scope and must stay, or the bundle is unusable.
     expect(serialized).toContain(seeded.deckId);
+
+    // The Google grant is deck-owned, so it is in the export's scope — but the
+    // token material is not the owner's to receive back in plaintext, and an
+    // export bundle is a file that gets emailed around. The redaction rule is
+    // the `*Ciphertext` suffix, so this asserts the outcome rather than the rule.
+    expect(serialized).not.toContain('scenario-access-token-ciphertext');
+    expect(serialized).not.toContain('scenario-refresh-token-ciphertext');
+    expect(serialized).not.toContain('scenario-code-verifier-ciphertext');
+    // The row itself is still reported, so the owner learns the grant exists.
+    expect(bundle.data['oauthCredentials']).toHaveLength(1);
+    expect(JSON.stringify(bundle.data['oauthCredentials'])).toContain(
+      'https://www.googleapis.com/auth/drive.file',
+    );
   });
 
   it('exports what the erasure would destroy: the two lists agree by construction', async () => {

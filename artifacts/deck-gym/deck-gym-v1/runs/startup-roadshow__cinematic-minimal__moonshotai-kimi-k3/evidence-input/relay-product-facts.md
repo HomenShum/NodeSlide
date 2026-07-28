@@ -1,1 +1,0 @@
-RelayOS coordinates approval-heavy operations. The product keeps proposals reviewable before mutation, records versioned receipts, and exposes adapters for CRM, ticketing, and document systems. No product screenshot was supplied to the benchmark.

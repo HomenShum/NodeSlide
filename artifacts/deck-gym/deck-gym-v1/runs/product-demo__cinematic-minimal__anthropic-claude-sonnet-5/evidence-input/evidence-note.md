@@ -1,1 +1,0 @@
-No browser screenshot is included in this frozen evidence pack. The deck must reserve and label the screenshot proof honestly rather than fabricating one.

@@ -5,10 +5,7 @@
   "type": "module",
   "description": "NodeSlide — reviewable deck-as-code. Every AI edit is a scoped, validated, receipted proposal.",
   "license": "UNLICENSED",
-  "workspaces": [
-    "packages/*",
-    "mcp"
-  ],
+  "workspaces": ["packages/*", "mcp"],
   "scripts": {
     "dev": "concurrently -n vite,convex -c blue,magenta \"vite\" \"convex dev\"",
     "dev:web": "vite",

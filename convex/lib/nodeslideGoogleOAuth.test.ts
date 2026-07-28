@@ -50,9 +50,9 @@ describe('NodeSlide Google OAuth helpers', () => {
   });
 
   it('returns only a bounded status marker to the application', () => {
-    expect(
-      withGoogleOAuthResult('https://nodeslide.vercel.app/?deck=deck_1', 'connected'),
-    ).toBe('https://nodeslide.vercel.app/?deck=deck_1&nodeslideGoogle=connected');
+    expect(withGoogleOAuthResult('https://nodeslide.vercel.app/?deck=deck_1', 'connected')).toBe(
+      'https://nodeslide.vercel.app/?deck=deck_1&nodeslideGoogle=connected',
+    );
   });
 
   it('fails closed when deployment secrets or encryption material are missing', () => {

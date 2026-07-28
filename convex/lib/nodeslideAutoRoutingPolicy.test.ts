@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { NodeSlideAgentModelId, NodeSlideExternalProvider } from '../../shared/nodeslide';
 import {
+  type NodeSlideAutoRoutingDecision,
   type NodeSlideRouteAvailability,
   type NodeSlideRouteReference,
   type NodeSlideRoutingCapabilities,
-  type NodeSlideAutoRoutingDecision,
   type NodeSlideRoutingPolicyInput,
   decideNodeSlideAutoRoute,
 } from './nodeslideAutoRoutingPolicy';

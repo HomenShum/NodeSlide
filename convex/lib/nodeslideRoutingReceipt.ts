@@ -10,8 +10,8 @@ import {
 import { NODESLIDE_RUN_BUDGET_BOUNDS } from '../../shared/nodeslideRunBudget';
 import {
   type NODESLIDE_AUTO_ROUTING_POLICY_VERSION,
-  type NodeSlideRouteAvailability,
   type NodeSlideAutoRoutingDecision,
+  type NodeSlideRouteAvailability,
   decideNodeSlideAutoRoute,
 } from './nodeslideAutoRoutingPolicy';
 

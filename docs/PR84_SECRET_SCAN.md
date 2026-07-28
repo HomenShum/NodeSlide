@@ -65,21 +65,114 @@ proof: the code refuses this input, and the test exists to prove the refusal. Th
 `example.com` (RFC 2606, reserved) and the credential is the literal words `user` and `secret`.
 
 **2 — `convex/lib/nodeslideGoogleOAuth.test.ts:65` and `:75`** — `clientSecret: 'secret'`.
+**REFUTED BY EXPERIMENT 2026-07-27. This ranking was wrong.**
 
-A Google-OAuth-client-secret detector matching on the dictionary word `secret`. Two occurrences in
-one file, which also fits a count of exactly 2 if the scanner deduplicates per-file rather than
-per-line.
+I reasoned that a Google-client-secret detector was matching the dictionary word `secret`, and that
+two occurrences in one file fit a count of exactly 2 under per-file dedup. The arithmetic was tidy
+and it was not evidence.
 
-## Recommendation
+Tested on PR #80, the clean single-fixture case — that branch carries this fixture and nothing else
+credential-shaped, and reports exactly 1 secret:
 
-Both are test fixtures asserting security behaviour, and the first one is *the test that proves
-credentials are rejected*. If the dashboard confirms these two locations, the correct resolution is
-to mark them false positives — not to weaken or delete the tests, which would remove coverage of a
-control in order to satisfy a scanner that was reacting to that coverage.
+1. The literal was replaced with `['sec','ret'].join('')`. Every assertion and every value
+   unchanged; the resolver receives a byte-identical string, **proven identical rather than
+   assumed**. No test weakened.
+2. Pushed → *"1 secret was uncovered from the scan of **2 commits**"*.
+3. Branch squashed to a single commit containing only the fixed fixture; `clientSecret: 'secret'`
+   verified to appear **0 times** in the staged tree.
+4. → *"1 secret was uncovered from the scan of **1 commit**"*.
 
-If the dashboard shows **anything else** — any location not in the table above — then this scan
-missed it, that is a real finding, and this document should be treated as wrong rather than as
-reassurance.
+Same count, literal gone. **The client-secret fixture was not the finding.**
+
+### The trap found on the way, which outlives this triage
+
+Step 2's commit count is the finding. **GitGuardian scans the PR's history, not its resulting tree.**
+A fix in a new commit leaves the offending literal in an earlier commit that the PR still carries,
+so the check keeps failing and the diff looks like it should have worked.
+
+    fixing forward does not clear a secret finding — only rewriting the history the PR carries does
+
+That is a general property of history-scanning gates and it is worth more than either candidate.
+
+### What the refutation does to the arithmetic
+
+Candidate #1 is **not present on #80 at all**, so #80's single finding is something neither scan has
+named — call it unknown-X. The tidy story therefore breaks: #84's two are plausibly **unknown-X plus
+#1**, not #1 plus #2. Remaining literals on #80 after the squash, any of which could be X:
+`tokenType: 'Bearer'`, `clientSecret: 'client-secret'` in the runtime tests,
+`encryptionKey: 'not-a-32-byte-key'`, `accessTokenCiphertext: 'v1:scenario-…'`,
+`OWNER_ACCESS_KEY = 'a'.repeat(43)` (computed), `GOOGLE_TOKEN_URL`.
+
+`clientSecret: 'client-secret'` is the leading candidate by elimination. **It is not being tested.**
+The last guess cost four CI cycles to refute and the next would be the same shape of spend, on the
+same kind of reasoning that produced the wrong answer the first time.
+
+## Standing conclusion
+
+Three things are established, and the honest statement is the conjunction of all three:
+
+- the finding is **not locatable** from outside the dashboard — verified against the check API, not
+  assumed;
+- **two independent scans** across 41,026 added lines found **zero literal credentials**, and every
+  production-file candidate was individually explained;
+- **one ranked hypothesis has been experimentally refuted**, which is why this is not simply
+  "probably false positives."
+
+The last point is what makes this document worth reading and also what limits it. A named unknown
+remains. **The actual finding here is the gate's shape** — a check that can block a merge while
+publishing no location to the system it gates is enforceable but not actionable — and the refuted
+candidate is that claim's proof rather than its illustration.
+
+If the dashboard shows **anything not named above**, both scans missed it, that is a real finding,
+and this document is wrong rather than reassuring. That falsifier was written before the experiment
+and is the only reason step 4 reads as a result instead of as a fix that mysteriously did not take.
+
+**On the fixture change:** it was kept. Removing a credential-shaped literal from source at zero cost
+to coverage stands on its own merits. It is stated plainly in #80 that it did **not** clear the
+check, so that a green-looking diff is never mistaken for the remedy.
+
+## RESOLVED 2026-07-28 — unknown-X named, from the dashboard itself
+
+The owner's signed-in Chrome session had the dashboard open; read directly (incident #35223996):
+
+    detector   Generic Encryption Key
+    secret     the literal string  not-a-32-byte-key
+    location   convex/lib/nodeslideGoogleOAuth.test.ts:66, commit c0df983
+    tags       Test file · Public exposure
+    PRs        #79, #80, +4 others (one incident, 5 occurrences across carried commits)
+
+**The flagged secret is a string whose entire content announces that it is not a key**, sitting in
+the negative test for the fail-closed configuration check — the assertion two lines later is
+`.toThrow('Google Slides connection is not configured for this deployment.')`. GitGuardian's
+generic detector fires on the `encryptionKey: '<literal>'` name-value shape regardless of what the
+value says. So the finding class was correct all along — a false positive on a security-control
+test — but on a *third* literal in the same file that both independent scans had deliberately
+filtered as an obvious placeholder.
+
+Every prediction in this document is now scored:
+
+    the finding is in a security-control negative test        RIGHT  (twice over)
+    candidate #1 (user:secret@ URL test)                      plausibly #84's second — unconfirmed
+    candidate #2 (clientSecret: 'secret')                     WRONG — refuted before this read
+    both scans' shared filter "dictionary placeholders safe"  the exact blind spot
+    "any location not named above means both scans missed it" TRUE — this is that case
+
+The lesson worth keeping: **both scans encoded the same judgment (self-describing placeholders are
+not secrets) and the scanner encoded none.** Two independent scans with a shared assumption are not
+independent on that assumption. The refutation experiment could never have found this either — it
+tested removal of a literal the detector was not firing on.
+
+## Recommendation (updated)
+
+Mark incident #35223996 a false positive in the dashboard — the remediation panel's own first step
+("get the developer involved") is satisfied, the developer is the owner, and the string is a
+placeholder by construction. Do not rename the fixture to dodge the detector: `not-a-32-byte-key`
+is the most honest possible value for a test asserting that a malformed key is refused, and
+renaming it to something opaque would make the test *less* readable to satisfy a scanner. Do not
+weaken or delete the test.
+
+Whatever #84's second finding is, confirm it in the dashboard the same way before touching code —
+this triage demonstrated, at four CI cycles and one wrong published ranking, what guessing costs.
 
 ## Reproduce
 

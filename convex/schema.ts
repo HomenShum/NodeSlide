@@ -340,6 +340,38 @@ const nodeslideDurableJournalBindingValidator = v.object({
   attempt: v.number(),
 });
 
+const nodeslideEvidenceBoxValidator = v.object({
+  x: v.number(),
+  y: v.number(),
+  w: v.number(),
+  h: v.number(),
+  page: v.optional(v.number()),
+  pageCount: v.optional(v.number()),
+});
+
+const nodeslideEvidenceViewportValidator = v.object({
+  width: v.number(),
+  height: v.number(),
+});
+
+const nodeslideClaimEvidenceRegionValidator = v.object({
+  x: v.number(),
+  y: v.number(),
+  w: v.number(),
+  h: v.number(),
+  page: v.optional(v.number()),
+  pageCount: v.optional(v.number()),
+});
+
+const nodeslideSyncObjectLinkValidator = v.object({
+  kind: v.union(v.literal('deck'), v.literal('slide'), v.literal('element')),
+  localId: v.string(),
+  remoteId: v.string(),
+  semanticFingerprint: v.string(),
+  localSlideId: v.optional(v.string()),
+  remoteSlideId: v.optional(v.string()),
+});
+
 export default defineSchema({
   projects: defineTable({
     clientSessionId: v.optional(v.string()),
@@ -663,7 +695,14 @@ export default defineSchema({
     citation: v.string(),
     license: v.optional(v.string()),
     format: v.optional(
-      v.union(v.literal('csv'), v.literal('json'), v.literal('txt'), v.literal('web')),
+      v.union(
+        v.literal('csv'),
+        v.literal('json'),
+        v.literal('txt'),
+        v.literal('md'),
+        v.literal('pdf'),
+        v.literal('web'),
+      ),
     ),
     contentDigest: v.optional(v.string()),
     byteSize: v.optional(v.number()),
@@ -684,6 +723,275 @@ export default defineSchema({
   })
     .index('by_stable_id', ['id'])
     .index('by_deck', ['deckId']),
+
+  /**
+   * Append-only, content-addressed snapshots of exact source evidence.
+   *
+   * A `nodeslide_sources` row is mutable — its status and preview move as the
+   * source is refreshed — which makes it useless as the thing a historical
+   * citation points at. This table holds the immutable half, so a receipt
+   * written six months ago still resolves to the exact bytes it was written
+   * about. Deck-scoped: the revision carries the citation text itself.
+   */
+  nodeslide_source_revisions: defineTable({
+    id: v.string(),
+    schema: v.literal('nodeslide.source-revision/v1'),
+    revisionDigest: v.string(),
+    ownerDigest: v.string(),
+    deckId: v.string(),
+    sourceId: v.string(),
+    title: v.string(),
+    url: v.optional(v.string()),
+    sourceType: v.union(
+      v.literal('internal'),
+      v.literal('url'),
+      v.literal('document'),
+      v.literal('spreadsheet'),
+      v.literal('note'),
+    ),
+    retrievedAt: v.number(),
+    citation: v.string(),
+    license: v.optional(v.string()),
+    format: v.optional(
+      v.union(
+        v.literal('csv'),
+        v.literal('json'),
+        v.literal('txt'),
+        v.literal('md'),
+        v.literal('pdf'),
+        v.literal('web'),
+      ),
+    ),
+    contentDigest: v.string(),
+    byteSize: v.optional(v.number()),
+    rowCount: v.optional(v.number()),
+    columns: v.optional(v.array(v.string())),
+    provider: v.optional(v.string()),
+    retention: v.optional(v.union(v.literal('until_deleted'), v.literal('public_snapshot'))),
+    predecessorRevisionId: v.optional(v.string()),
+    predecessorRevisionDigest: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_created', ['deckId', 'createdAt'])
+    .index('by_owner_created', ['ownerDigest', 'createdAt'])
+    .index('by_source_created', ['sourceId', 'createdAt'])
+    .index('by_source_content_digest', ['sourceId', 'contentDigest']),
+
+  /** Opt-in polling state kept separate so unchanged checks never stale deck candidates. */
+  nodeslide_source_refresh_schedules: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    sourceId: v.string(),
+    ownerDigest: v.string(),
+    enabled: v.boolean(),
+    intervalMinutes: v.number(),
+    nextRunAt: v.number(),
+    status: v.union(
+      v.literal('ready'),
+      v.literal('checking'),
+      v.literal('backoff'),
+      v.literal('disabled'),
+    ),
+    lastSemanticDigest: v.string(),
+    leaseId: v.optional(v.string()),
+    leaseExpiresAt: v.optional(v.number()),
+    failureCount: v.number(),
+    checksInWindow: v.optional(v.number()),
+    windowStartedAt: v.optional(v.number()),
+    lastCheckedAt: v.optional(v.number()),
+    lastChangedAt: v.optional(v.number()),
+    lastError: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_source', ['deckId', 'sourceId'])
+    .index('by_due', ['enabled', 'nextRunAt'])
+    .index('by_deck_updated', ['deckId', 'updatedAt']),
+
+  /** Review work created by source monitoring; never an executable patch by itself. */
+  nodeslide_source_refresh_proposals: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    sourceId: v.string(),
+    ownerDigest: v.string(),
+    scheduleId: v.string(),
+    status: v.union(
+      v.literal('ready'),
+      v.literal('prepared'),
+      v.literal('dismissed'),
+      v.literal('converted'),
+      v.literal('stale'),
+    ),
+    baseDeckVersion: v.number(),
+    baseSnapshotDigest: v.string(),
+    beforeRevisionId: v.string(),
+    afterRevisionId: v.string(),
+    afterRevisionDigest: v.string(),
+    planDigest: v.string(),
+    planJson: v.string(),
+    deckCiDigest: v.string(),
+    affectedSlideIds: v.array(v.string()),
+    affectedElementIds: v.array(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_status_created', ['deckId', 'status', 'createdAt'])
+    .index('by_source_created', ['sourceId', 'createdAt']),
+
+  /**
+   * One web-evidence capture run: what URL was visited, for what goal, and the
+   * digest of what came back. Deck-scoped — the goal text is the user's own
+   * question and the capture is retained evidence about this deck's claims.
+   */
+  nodeslide_evidence_captures: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    runId: v.string(),
+    traceId: v.string(),
+    spanId: v.string(),
+    parentSpanId: v.string(),
+    sourceId: v.string(),
+    /** Optional only for rows created before immutable revision binding shipped. */
+    sourceRevisionId: v.optional(v.string()),
+    sourceRevisionDigest: v.optional(v.string()),
+    captureDigest: v.optional(v.string()),
+    url: v.string(),
+    goal: v.string(),
+    provider: v.string(),
+    status: v.union(v.literal('ready'), v.literal('failed'), v.literal('expired')),
+    error: v.optional(v.string()),
+    contentDigest: v.optional(v.string()),
+    stepCount: v.number(),
+    screenshotCount: v.number(),
+    pdfCount: v.number(),
+    createdAt: v.number(),
+    completedAt: v.optional(v.number()),
+    expiresAt: v.optional(v.number()),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_created', ['deckId', 'createdAt'])
+    .index('by_run_created', ['runId', 'createdAt'])
+    .index('by_trace_span', ['traceId', 'spanId'])
+    .index('by_source_created', ['sourceId', 'createdAt'])
+    .index('by_expiry', ['expiresAt']),
+
+  /**
+   * The individual steps of a capture, including the stored screenshot or PDF.
+   * Deck-scoped for the same reason as the capture, and additionally because
+   * the attachments are stored objects the erasure has to be able to find.
+   */
+  nodeslide_evidence_steps: defineTable({
+    id: v.string(),
+    captureId: v.string(),
+    deckId: v.string(),
+    runId: v.string(),
+    traceId: v.string(),
+    spanId: v.string(),
+    sequence: v.number(),
+    phase: v.string(),
+    label: v.string(),
+    status: v.union(v.literal('ok'), v.literal('warning'), v.literal('error')),
+    detail: v.optional(v.string()),
+    attachmentKind: v.optional(v.union(v.literal('screenshot'), v.literal('pdf'))),
+    screenshotStorageId: v.optional(v.id('_storage')),
+    pdfStorageId: v.optional(v.id('_storage')),
+    box: v.optional(nodeslideEvidenceBoxValidator),
+    /** Optional only for legacy rows. Missing scope is treated as source-level, never claim-level. */
+    regionScope: v.optional(v.union(v.literal('source'), v.literal('claim'))),
+    selector: v.optional(v.string()),
+    quote: v.optional(v.string()),
+    viewport: v.optional(nodeslideEvidenceViewportValidator),
+    contentDigest: v.optional(v.string()),
+    attachmentDigest: v.optional(v.string()),
+    evidenceStepDigest: v.optional(v.string()),
+    startedAt: v.number(),
+    completedAt: v.optional(v.number()),
+    createdAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_capture_sequence', ['captureId', 'sequence'])
+    .index('by_run_sequence', ['runId', 'sequence'])
+    .index('by_trace_span_sequence', ['traceId', 'spanId', 'sequence'])
+    .index('by_deck_created', ['deckId', 'createdAt']),
+
+  /** Append-only claim-to-region custody receipts. Ambiguous geometry is never stored here. */
+  nodeslide_claim_evidence_receipts: defineTable({
+    id: v.string(),
+    receiptId: v.string(),
+    schema: v.literal('nodeslide.claim-evidence-receipt/v1'),
+    receiptDigest: v.string(),
+    ownerDigest: v.string(),
+    deckId: v.string(),
+    patchId: v.string(),
+    traceId: v.optional(v.string()),
+    slideId: v.string(),
+    elementId: v.string(),
+    claimDigest: v.string(),
+    sourceRevisionId: v.string(),
+    sourceRevisionDigest: v.string(),
+    captureId: v.string(),
+    captureDigest: v.string(),
+    evidenceStepId: v.string(),
+    evidenceStepDigest: v.string(),
+    attachmentKind: v.union(v.literal('screenshot'), v.literal('pdf')),
+    attachmentDigest: v.string(),
+    region: nodeslideClaimEvidenceRegionValidator,
+    createdAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_created', ['deckId', 'createdAt'])
+    .index('by_owner_created', ['ownerDigest', 'createdAt'])
+    .index('by_patch_created', ['patchId', 'createdAt'])
+    .index('by_claim_created', ['claimDigest', 'createdAt'])
+    .index('by_source_revision_created', ['sourceRevisionId', 'createdAt']),
+
+  /**
+   * Owner-approved file uploads, quarantined until the owner releases them.
+   * Deck-scoped: the row carries the file name and the digest of its bytes,
+   * and `storageId` points at the stored object, so erasing the deck has to
+   * take the metadata with it (the blob itself is deleted by deleteUpload).
+   */
+  nodeslide_uploads: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    clientSessionId: v.string(),
+    fileName: v.string(),
+    format: v.union(
+      v.literal('csv'),
+      v.literal('json'),
+      v.literal('txt'),
+      v.literal('md'),
+      v.literal('pdf'),
+      v.literal('docx'),
+      v.literal('xlsx'),
+      v.literal('png'),
+      v.literal('jpeg'),
+      v.literal('webp'),
+      v.literal('gif'),
+      v.literal('pptx'),
+    ),
+    contentType: v.string(),
+    byteSize: v.number(),
+    contentDigest: v.string(),
+    idempotencyKey: v.string(),
+    requestFingerprint: v.string(),
+    storageId: v.optional(v.id('_storage')),
+    lifecycleStatus: v.union(v.literal('awaiting_upload'), v.literal('registered')),
+    securityStatus: v.union(v.literal('pending'), v.literal('approved'), v.literal('rejected')),
+    quarantineStatus: v.union(v.literal('quarantined'), v.literal('released')),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    registeredAt: v.optional(v.number()),
+    approvedAt: v.optional(v.number()),
+    rejectedAt: v.optional(v.number()),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_updated', ['deckId', 'updatedAt'])
+    .index('by_deck_idempotency', ['deckId', 'idempotencyKey'])
+    .index('by_storage', ['storageId']),
 
   nodeslide_agent_runs: defineTable({
     id: v.string(),
@@ -955,6 +1263,40 @@ export default defineSchema({
     .index('by_deck_status_created', ['deckId', 'status', 'createdAt']),
 
   /**
+   * The client-visible link between one deck and one remote presentation.
+   * Deck-scoped, so it dies with the deck: the object mapping names every local
+   * slide and element that was ever pushed, which is deck content by any
+   * reading. `lastMutationKey` / `lastMutationFingerprint` make the mutations
+   * idempotent without a second table.
+   */
+  nodeslide_sync_connections: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    provider: v.literal('google_slides'),
+    remotePresentationId: v.string(),
+    remoteRevision: v.string(),
+    lastSyncedDeckVersion: v.number(),
+    objectMapping: v.array(nodeslideSyncObjectLinkValidator),
+    status: v.union(
+      v.literal('active'),
+      v.literal('syncing'),
+      v.literal('conflict'),
+      v.literal('error'),
+      v.literal('disconnected'),
+    ),
+    connectionVersion: v.number(),
+    lastMutationKey: v.string(),
+    lastMutationFingerprint: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    lastSyncedAt: v.number(),
+    disconnectedAt: v.optional(v.number()),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_provider', ['deckId', 'provider'])
+    .index('by_provider_remote', ['provider', 'remotePresentationId']),
+
+  /**
    * One in-flight Google OAuth authorization per attempt. The row holds the
    * PKCE verifier as ciphertext and nothing else that identifies the user, and
    * it is consumed on the callback. `deckId` is required so the row is erased
@@ -1028,6 +1370,45 @@ export default defineSchema({
     .index('by_stable_id', ['id'])
     .index('by_deck', ['deckId'])
     .index('by_remote', ['remotePresentationId']),
+
+  /**
+   * Server-owned linked-PPTX baseline and review/finalization state. Deck-scoped
+   * because every JSON column here is a serialized view of the deck itself —
+   * the baseline, the pending plan, and the verified remote snapshot all carry
+   * slide and element content, so the link cannot outlive the deck.
+   */
+  nodeslide_pptx_sync_links: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    remoteArtifactId: v.string(),
+    status: v.union(
+      v.literal('active'),
+      v.literal('awaiting_review'),
+      v.literal('awaiting_outbound_verification'),
+      v.literal('ready_to_finalize'),
+      v.literal('conflict'),
+    ),
+    stateVersion: v.number(),
+    baselineJson: v.string(),
+    baselineDigest: v.string(),
+    baselineLocalDeckVersion: v.number(),
+    baselineRemotePackageDigest: v.string(),
+    pendingPlanJson: v.optional(v.string()),
+    pendingPlanDigest: v.optional(v.string()),
+    pendingLocalJson: v.optional(v.string()),
+    pendingLocalDigest: v.optional(v.string()),
+    pendingRemoteJson: v.optional(v.string()),
+    pendingRemoteDigest: v.optional(v.string()),
+    verifiedRemoteJson: v.optional(v.string()),
+    verifiedRemoteDigest: v.optional(v.string()),
+    verifiedRemotePackageDigest: v.optional(v.string()),
+    lastFinalizationDigest: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck', ['deckId'])
+    .index('by_remote_artifact', ['remoteArtifactId']),
 
   nodeslide_publications: defineTable({
     id: v.string(),

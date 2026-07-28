@@ -12,6 +12,16 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
 
+    /* Typecheck workspace packages from their source, exactly as the root
+     * tsconfig already does. Without this, `@nodeslide/*` resolves through
+     * node_modules to a prebuilt dist that is not rebuilt by this repo's
+     * typecheck, so a change to a `shared/` type would be graded against a
+     * stale copy of itself. The mapping is type-only: Convex's bundler still
+     * resolves the package at deploy time, and it resolves the same values. */
+    "paths": {
+      "@nodeslide/*": ["../packages/*/src/index.ts"]
+    },
+
     /* These compiler options are required by Convex */
     "target": "ESNext",
     "lib": ["ES2023", "dom"],

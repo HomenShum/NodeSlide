@@ -211,6 +211,98 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     });
   });
 
+  it('asks for strict JSON transport without the schema on the wire in json_object mode', () => {
+    expect(
+      nodeSlideStructuredOutputPayload(
+        { model: NODESLIDE_EDIT_MODEL, provider: { data_collection: 'deny' } },
+        undefined,
+        'json_object',
+      ),
+    ).toMatchObject({
+      model: NODESLIDE_EDIT_MODEL,
+      provider: { data_collection: 'deny', require_parameters: true },
+      response_format: { type: 'json_object' },
+    });
+  });
+
+  it('binds the OpenRouter endpoint price ceiling without losing routing or JSON mode', () => {
+    const maxPrice = { prompt: 1.4, completion: 4.4 };
+    expect(
+      nodeSlideStructuredOutputPayload(
+        { model: NODESLIDE_EDIT_MODEL, provider: { data_collection: 'deny' } },
+        request.jsonSchema,
+        'json_schema',
+        maxPrice,
+      ),
+    ).toMatchObject({
+      provider: { data_collection: 'deny', max_price: maxPrice, require_parameters: true },
+      response_format: { type: 'json_schema' },
+    });
+    // A prompt-only call still carries the ceiling: the bill does not care which
+    // JSON mode was negotiated.
+    expect(
+      nodeSlideStructuredOutputPayload(
+        { model: NODESLIDE_EDIT_MODEL, provider: { data_collection: 'deny' } },
+        undefined,
+        'prompt',
+        maxPrice,
+      ),
+    ).toMatchObject({
+      provider: { data_collection: 'deny', max_price: maxPrice },
+    });
+  });
+
+  it('lets a dispatch policy tighten output tokens and the deadline but never relax them', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () =>
+      completion('{"operations":[{"op":"replace_text"}]}'),
+    );
+
+    const result = await callNodeSlideFreeJson(
+      { ...request, maxTokens: 3_000 },
+      { complete, dispatchPolicy: { maxOutputTokens: 900, timeoutMs: 60_000 } },
+    );
+
+    expect(result.ok).toBe(true);
+    // Policy lowers 3_000 -> 900; it cannot raise the 30s default to 60s.
+    expect(complete.mock.calls[0]?.[0].maxTokens).toBe(900);
+  });
+
+  it('ignores a dispatch policy that would widen the caller-requested output ceiling', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () =>
+      completion('{"operations":[{"op":"replace_text"}]}'),
+    );
+
+    await callNodeSlideFreeJson(
+      { ...request, maxTokens: 800 },
+      { complete, dispatchPolicy: { maxOutputTokens: 9_000 } },
+    );
+
+    expect(complete.mock.calls[0]?.[0].maxTokens).toBe(800);
+  });
+
+  it('forwards a paired price ceiling to OpenRouter and drops a half-specified one', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () =>
+      completion('{"operations":[{"op":"replace_text"}]}'),
+    );
+
+    await callNodeSlideFreeJson(request, {
+      complete,
+      dispatchPolicy: {
+        maxInputMicroUsdPerMillionTokens: 1_400_000,
+        maxOutputMicroUsdPerMillionTokens: 4_400_000,
+      },
+    });
+    expect(complete.mock.calls[0]?.[0].providerMaxPrice).toEqual({ prompt: 1.4, completion: 4.4 });
+
+    // One half alone would let the other side of the bill run uncapped while the
+    // receipt claimed a ceiling was in force.
+    await callNodeSlideFreeJson(request, {
+      complete,
+      dispatchPolicy: { maxInputMicroUsdPerMillionTokens: 1_400_000 },
+    });
+    expect(complete.mock.calls[1]?.[0].providerMaxPrice).toBeUndefined();
+  });
+
   it('can still disable hidden reasoning for non-reasoning OpenRouter routes', () => {
     expect(
       nodeSlideProviderPayload({ model: 'openrouter/free' }, undefined, {
@@ -304,9 +396,11 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     expect(complete.mock.calls[1]?.[0]).not.toHaveProperty('jsonSchema');
     expect(complete.mock.calls[1]?.[0]).toMatchObject({ repairAttempt: true });
     expect(complete.mock.calls[1]?.[0].systemPrompt).toContain('JSON Schema');
-    expect(complete.mock.calls[1]?.[0].userText).toContain(
-      'provider rejected native structured-output mode',
-    );
+    expect(complete.mock.calls[1]?.[0].userText).toContain('provider rejected JSON Schema mode');
+    // A complaint that names the schema drops one rung to strict-JSON transport,
+    // not all the way to prompt-only.
+    expect(complete.mock.calls[0]?.[0].structuredOutputMode).toBe('json_schema');
+    expect(complete.mock.calls[1]?.[0].structuredOutputMode).toBe('json_object');
   });
 
   it('uses one prompt-only fallback when OpenRouter has no endpoint for requested parameters', async () => {
@@ -382,9 +476,26 @@ describe('NodeSlide named pi-ai JSON provider', () => {
 
     const result = await callNodeSlideFreeJson(request, { complete, timeoutMs: 10 });
 
-    expect(result).toEqual({
+    // A dispatched call whose outcome never arrived may still have been billed
+    // upstream, so it is reported as an ambiguous, unreconciled attempt rather
+    // than dropped from the run's accounting.
+    expect(result).toMatchObject({
       ok: false,
       reason: `The ${defaultRouteLabel} route timed out.`,
+      telemetry: {
+        costMicroUsd: 0,
+        inputTokens: 0,
+        outputTokens: 0,
+        attempts: [
+          expect.objectContaining({
+            attempt: 'initial',
+            attempted: true,
+            settled: false,
+            ambiguous: true,
+            unreconciled: true,
+          }),
+        ],
+      },
     });
     expect(complete).toHaveBeenCalledTimes(1);
     expect(complete.mock.calls[0]?.[0].signal.aborted).toBe(true);

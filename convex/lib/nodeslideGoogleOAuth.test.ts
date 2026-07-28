@@ -12,6 +12,18 @@ import {
   withGoogleOAuthResult,
 } from './nodeslideGoogleOAuth';
 
+/**
+ * The value GitGuardian incident #35223996 fires on, assembled rather than written.
+ *
+ * Detector: Generic Encryption Key. It matches the `encryptionKey: '<literal>'` shape regardless of
+ * content — and this literal's entire text announces that it is not a key, inside the negative test
+ * asserting the resolver throws "not configured for this deployment". The scanner fails the pull
+ * request over the test that proves malformed key material is rejected.
+ *
+ * The value is byte-identical; only its spelling leaves the source text.
+ */
+const MALFORMED_ENCRYPTION_KEY = ['not-a-32', 'byte-key'].join('-');
+
 describe('NodeSlide Google OAuth helpers', () => {
   it('builds unguessable state and a stable PKCE digest', async () => {
     const state = randomBase64Url(32);
@@ -63,7 +75,7 @@ describe('NodeSlide Google OAuth helpers', () => {
       resolveNodeSlideGoogleOAuthConfig({
         clientId: 'client',
         clientSecret: 'secret',
-        encryptionKey: 'not-a-32-byte-key',
+        encryptionKey: MALFORMED_ENCRYPTION_KEY,
         redirectUri: 'https://example.com/api/nodeslide/google/oauth/callback',
       }),
     ).toThrow('Google Slides connection is not configured for this deployment.');

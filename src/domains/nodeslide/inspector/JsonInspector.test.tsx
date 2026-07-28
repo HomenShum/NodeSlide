@@ -1,16 +1,34 @@
+// @vitest-environment jsdom
+
+import { readFileSync } from 'node:fs';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom/vitest';
+import { useState } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
   type DeckSnapshot,
   NODESLIDE_SCHEMA_VERSION,
   NODESLIDE_TOOLCHAIN_VERSION,
 } from '../../../../shared/nodeslide';
+import { applyDeckPatch } from '../../../../shared/nodeslidePatch';
 import {
   JsonInspector,
+  type JsonPatchProposalRequest,
   deckJsonView,
   serializeDeckJson,
   synthesizeElementOps,
 } from './JsonInspector';
+
+const inspectorSource = readFileSync('src/domains/nodeslide/inspector/JsonInspector.tsx', 'utf8');
+const inspectorPanelSource = readFileSync(
+  'src/domains/nodeslide/inspector/InspectorPanel.tsx',
+  'utf8',
+);
+const studioSource = readFileSync('src/domains/nodeslide/NodeSlideStudio.tsx', 'utf8');
+
+afterEach(cleanup);
 
 const now = 1_700_000_000_000;
 
@@ -240,8 +258,81 @@ describe('synthesizeElementOps', () => {
   });
 });
 
+function JsonProposalGateScenario() {
+  const [canonical, setCanonical] = useState<DeckSnapshot>(() => snapshot());
+  const [candidate, setCandidate] = useState<JsonPatchProposalRequest | null>(null);
+  const slide = canonical.slides[0];
+  const selectedElement = canonical.elements[0];
+  if (!slide || !selectedElement) throw new Error('scenario needs a selected slide element');
+
+  const acceptCandidate = () => {
+    if (!candidate) return;
+    setCanonical((current) => {
+      const currentElement = current.elements.find((element) => element.id === candidate.elementId);
+      if (!currentElement || currentElement.version !== candidate.baseElementVersion)
+        return current;
+      return applyDeckPatch(
+        current,
+        {
+          baseDeckVersion: current.deck.version,
+          operations: candidate.operations,
+          scope: {
+            kind: 'elements',
+            deckId: current.deck.id,
+            slideIds: [currentElement.slideId],
+            elementIds: [currentElement.id],
+            operationMode: 'unrestricted',
+          },
+        },
+        now + 1,
+      ).snapshot;
+    });
+    setCandidate(null);
+  };
+
+  return (
+    <>
+      <output aria-label="Canonical slide state">{selectedElement.content}</output>
+      <JsonInspector
+        snapshot={canonical}
+        slide={slide}
+        selectedElements={[selectedElement]}
+        patches={[]}
+        onProposePatch={(request) => {
+          setCandidate(request);
+          return true;
+        }}
+      />
+      {candidate ? (
+        <div aria-label="Candidate review">
+          <output aria-label="Candidate base element version">
+            {candidate.baseElementVersion}
+          </output>
+          <button type="button" onClick={acceptCandidate}>
+            Accept candidate
+          </button>
+          <button type="button" onClick={() => setCandidate(null)}>
+            Reject candidate
+          </button>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+async function proposeHeadlineChange(nextContent: string): Promise<void> {
+  const user = userEvent.setup();
+  await user.click(screen.getByRole('tab', { name: 'Selection' }));
+  const editor = screen.getByRole('textbox', { name: 'JSON for Headline' });
+  const edited = JSON.parse((editor as HTMLTextAreaElement).value) as Record<string, unknown>;
+  edited['content'] = nextContent;
+  fireEvent.change(editor, { target: { value: serializeDeckJson(edited) } });
+  await user.click(screen.getByRole('button', { name: 'Propose changes' }));
+  await screen.findByRole('button', { name: 'Accept candidate' });
+}
+
 describe('JsonInspector editing', () => {
-  it('advertises the validated edit path when onApplyPatch is provided', () => {
+  it('advertises an unapplied candidate and explicit review when editing is enabled', () => {
     const snap = snapshot();
     const [slide] = snap.slides;
     const [element] = snap.elements;
@@ -252,9 +343,102 @@ describe('JsonInspector editing', () => {
         slide={slide}
         selectedElements={[element]}
         patches={[]}
-        onApplyPatch={() => undefined}
+        onProposePatch={() => true}
       />,
     );
-    expect(html).toContain('flow through the validated');
+    expect(html).toContain('create a validated candidate');
+    expect(html).toContain('require Accept or Reject');
+    expect(inspectorSource).toContain("'Propose changes'");
+    expect(inspectorSource).toContain('The deck is unchanged; review Compare');
+    expect(inspectorSource).not.toContain("'Apply changes'");
+  });
+
+  /**
+   * Wiring guard: this is the test that fails if the JSON editor is reduced back to a
+   * copied component with no host. It reads the real call sites rather than a mock.
+   */
+  it('wires JSON edits only to proposePatch and opens the exact candidate in Compare', () => {
+    const start = studioSource.indexOf('const proposeJsonOperations');
+    const end = studioSource.indexOf('const applyFocusedOperations', start);
+    expect(start).toBeGreaterThanOrEqual(0);
+    expect(end).toBeGreaterThan(start);
+    const wiring = studioSource.slice(start, end);
+
+    expect(wiring).toContain('proposePatchMutation');
+    expect(wiring).not.toContain('applyPatchMutation');
+    expect(wiring).toContain("receipt.patch.status === 'stale'");
+    expect(wiring).toContain("setCanvasMode('compare')");
+    expect(wiring).toContain('setPreviewedPatchId(receipt.patch.id)');
+    expect(wiring).toContain('baseDeckVersion: currentWorkspace.deck.version');
+    expect(wiring).toContain('baseElementVersions: applyExpectedElementVersions');
+    expect(wiring).toContain('editorCandidateCanAccept');
+    expect(wiring).toContain('candidateSlideIdForPatch');
+    expect(studioSource).toContain('onProposeJsonPatch={proposeJsonOperations}');
+
+    const panelStart = inspectorPanelSource.indexOf('<JsonInspector');
+    const panelEnd = inspectorPanelSource.indexOf('/>', panelStart);
+    const panelWiring = inspectorPanelSource.slice(panelStart, panelEnd);
+    expect(panelWiring).toContain('onProposePatch');
+    expect(panelWiring).not.toContain('onApplyDesignPatch');
+    expect(panelWiring).not.toContain('onApplyPatch');
+  });
+
+  it('does not claim a candidate when the proposal lane fails closed', async () => {
+    const snap = snapshot();
+    const slide = snap.slides[0];
+    const element = snap.elements[0];
+    if (!slide || !element) throw new Error('fixture needs a slide and element');
+    const user = userEvent.setup();
+    render(
+      <JsonInspector
+        snapshot={snap}
+        slide={slide}
+        selectedElements={[element]}
+        patches={[]}
+        onProposePatch={() => false}
+      />,
+    );
+
+    await user.click(screen.getByRole('tab', { name: 'Selection' }));
+    const editor = screen.getByRole('textbox', { name: 'JSON for Headline' });
+    const edited = JSON.parse((editor as HTMLTextAreaElement).value) as Record<string, unknown>;
+    edited['content'] = 'Unconfirmed JSON copy';
+    fireEvent.change(editor, { target: { value: serializeDeckJson(edited) } });
+    await user.click(screen.getByRole('button', { name: 'Propose changes' }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'The JSON candidate was not created.',
+    );
+    expect(screen.queryByText(/The deck is unchanged; review Compare/)).not.toBeInTheDocument();
+    expect(snap.elements[0]?.content).toBe('Before');
+  });
+
+  it('keeps canonical slide state unchanged until the candidate is accepted', async () => {
+    const user = userEvent.setup();
+    render(<JsonProposalGateScenario />);
+
+    await proposeHeadlineChange('Accepted JSON copy');
+
+    expect(screen.getByLabelText('Canonical slide state')).toHaveTextContent('Before');
+    expect(screen.getByLabelText('Candidate base element version')).toHaveTextContent('1');
+    expect(screen.getByText(/The deck is unchanged; review Compare/)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Accept candidate' }));
+    await waitFor(() =>
+      expect(screen.getByLabelText('Canonical slide state')).toHaveTextContent(
+        'Accepted JSON copy',
+      ),
+    );
+  });
+
+  it('leaves canonical slide state unchanged when the candidate is rejected', async () => {
+    const user = userEvent.setup();
+    render(<JsonProposalGateScenario />);
+
+    await proposeHeadlineChange('Rejected JSON copy');
+    await user.click(screen.getByRole('button', { name: 'Reject candidate' }));
+
+    expect(screen.getByLabelText('Canonical slide state')).toHaveTextContent('Before');
+    expect(screen.queryByLabelText('Candidate review')).not.toBeInTheDocument();
   });
 });

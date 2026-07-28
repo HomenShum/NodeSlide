@@ -7,6 +7,7 @@ import type {
   SlideElement,
 } from '../../../../shared/nodeslide';
 import { downloadDeckJson } from '../slidelang/download';
+import { JSON_EDITOR_CHARACTER_LIMIT } from '../slidelang/jsonEdit';
 
 export type DeckJsonMode = 'deck' | 'slide' | 'selection' | 'patch';
 
@@ -196,20 +197,37 @@ const codeStyle: CSSProperties = {
   color: 'var(--ns-text, inherit)',
 };
 
+export interface JsonPatchProposalRequest {
+  operations: PatchOperation[];
+  summary: string;
+  elementId: string;
+  baseElementVersion: number;
+}
+
+/**
+ * Hands a JSON edit to the host's proposal lane. The callback may report
+ * success only after a server-validated candidate was opened; it never returns
+ * or fabricates a mutation receipt for the editor.
+ */
+export type JsonPatchProposalCallback = (
+  request: JsonPatchProposalRequest,
+) => boolean | Promise<boolean>;
+
 function ElementJsonEditor({
   element,
-  onApply,
+  onPropose,
 }: {
   element: SlideElement;
-  onApply: (operations: PatchOperation[], summary: string) => void;
+  onPropose: JsonPatchProposalCallback;
 }) {
   const original = useMemo(() => serializeDeckJson(element), [element]);
   const [text, setText] = useState(original);
   const [error, setError] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
+  const [proposing, setProposing] = useState(false);
   const dirty = text !== original;
 
-  const apply = () => {
+  const propose = async () => {
     setError(null);
     setNote(null);
     let parsed: unknown;
@@ -225,13 +243,35 @@ function ElementJsonEditor({
       return;
     }
     if (result.ops.length === 0) {
-      setNote('No changes to apply.');
+      setNote('No changes to propose.');
       return;
     }
-    onApply(result.ops, `Edit ${element.name || element.kind} via JSON`);
-    setNote(
-      `Sent ${result.ops.length} change${result.ops.length === 1 ? '' : 's'} through validation.`,
-    );
+    setProposing(true);
+    try {
+      const proposed = await onPropose({
+        operations: result.ops,
+        summary: `Edit ${element.name || element.kind} via JSON`,
+        elementId: element.id,
+        baseElementVersion: element.version,
+      });
+      if (!proposed) {
+        setError(
+          'The JSON candidate was not created. The element may have changed; review and retry.',
+        );
+        return;
+      }
+      setNote(
+        `Proposed ${result.ops.length} change${result.ops.length === 1 ? '' : 's'}. The deck is unchanged; review Compare and choose Accept or Reject.`,
+      );
+    } catch (proposalError) {
+      setError(
+        proposalError instanceof Error
+          ? proposalError.message
+          : 'The JSON edit could not be proposed.',
+      );
+    } finally {
+      setProposing(false);
+    }
   };
 
   return (
@@ -239,13 +279,19 @@ function ElementJsonEditor({
       <textarea
         value={text}
         onChange={(event) => setText(event.target.value)}
+        maxLength={JSON_EDITOR_CHARACTER_LIMIT}
         spellCheck={false}
         aria-label={`JSON for ${element.name || element.id}`}
         style={{ ...codeStyle, width: '100%', minHeight: 220, resize: 'vertical' }}
       />
       <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-        <button type="button" onClick={apply} disabled={!dirty} style={actionStyle}>
-          Apply changes
+        <button
+          type="button"
+          onClick={() => void propose()}
+          disabled={!dirty || proposing}
+          style={actionStyle}
+        >
+          {proposing ? 'Proposing…' : 'Propose changes'}
         </button>
         <button
           type="button"
@@ -277,7 +323,7 @@ export interface JsonInspectorProps {
   slide: Slide;
   selectedElements: readonly SlideElement[];
   patches: readonly DeckPatch[];
-  onApplyPatch?: (operations: PatchOperation[], summary: string) => void;
+  onProposePatch?: JsonPatchProposalCallback;
 }
 
 export function JsonInspector({
@@ -285,7 +331,7 @@ export function JsonInspector({
   slide,
   selectedElements,
   patches,
-  onApplyPatch,
+  onProposePatch,
 }: JsonInspectorProps) {
   const [mode, setMode] = useState<DeckJsonMode>('deck');
 
@@ -300,7 +346,7 @@ export function JsonInspector({
       : json;
 
   const selectedOne = selectedElements.length === 1 ? (selectedElements[0] ?? null) : null;
-  const editing = mode === 'selection' && onApplyPatch !== undefined && selectedOne !== null;
+  const editing = mode === 'selection' && onProposePatch !== undefined && selectedOne !== null;
 
   const copy = () => {
     if (json && typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -321,8 +367,8 @@ export function JsonInspector({
         <p>
           The canonical <code>nodeslide.slidelang/v1</code> DeckSpec — {snapshot.slides.length}{' '}
           slides · {snapshot.elements.length} elements.{' '}
-          {onApplyPatch
-            ? 'Select a single element and switch to Selection to edit its JSON; changes still flow through the validated propose → accept path.'
+          {onProposePatch
+            ? 'Select a single element and switch to Selection to edit its JSON; changes create a validated candidate, open Compare, and require Accept or Reject.'
             : 'Read-only view.'}
         </p>
       </section>
@@ -351,8 +397,12 @@ export function JsonInspector({
         </button>
       </div>
 
-      {editing && selectedOne && onApplyPatch ? (
-        <ElementJsonEditor key={selectedOne.id} element={selectedOne} onApply={onApplyPatch} />
+      {editing && selectedOne && onProposePatch ? (
+        <ElementJsonEditor
+          key={`${selectedOne.id}:${selectedOne.version}`}
+          element={selectedOne}
+          onPropose={onProposePatch}
+        />
       ) : json ? (
         <pre className="ns-json-view" style={{ ...codeStyle, margin: '0 12px 12px' }}>
           {shown}

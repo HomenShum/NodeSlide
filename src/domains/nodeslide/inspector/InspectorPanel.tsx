@@ -56,7 +56,7 @@ import {
   type DesignInspectorGenerateImageHandler,
   type DesignInspectorSearchImagesHandler,
 } from './DesignInspector';
-import { JsonInspector } from './JsonInspector';
+import { JsonInspector, type JsonPatchProposalCallback } from './JsonInspector';
 import { TraceInspector } from './TraceInspector';
 import { VersionsInspector } from './VersionsInspector';
 import type { InspectorTab } from './types';
@@ -72,6 +72,7 @@ export interface InspectorPanelProps<CommandId extends string = string> {
   workspace: NodeSlideWorkspace;
   slide: Slide;
   selectedElements: readonly SlideElement[];
+  selectedSlideIds?: readonly string[];
   activeTab: InspectorTab;
   collapsed: boolean;
   width: number;
@@ -149,6 +150,8 @@ export interface InspectorPanelProps<CommandId extends string = string> {
   onEvictTasteSignal?: (signalId: string) => void;
   onOpenPreferenceEvidence?: (eventId: string) => void;
   onApplyDesignPatch: (operations: PatchOperation[], summary: string) => void;
+  /** Routes a hand-written JSON element edit through the propose -> compare -> accept lane. */
+  onProposeJsonPatch?: JsonPatchProposalCallback;
   onSearchImages?: DesignInspectorSearchImagesHandler;
   onGenerateImage?: DesignInspectorGenerateImageHandler;
   onAddComment: (text: string, anchor: CommentAnchor) => void;
@@ -190,6 +193,7 @@ export function InspectorPanel<CommandId extends string = string>({
   workspace,
   slide,
   selectedElements,
+  selectedSlideIds = [],
   activeTab,
   collapsed,
   width,
@@ -253,6 +257,7 @@ export function InspectorPanel<CommandId extends string = string>({
   onEvictTasteSignal,
   onOpenPreferenceEvidence,
   onApplyDesignPatch,
+  onProposeJsonPatch,
   onSearchImages,
   onGenerateImage,
   onAddComment,
@@ -369,6 +374,11 @@ export function InspectorPanel<CommandId extends string = string>({
             <span className={selectedElements.length > 0 ? 'is-selection' : 'is-empty'}>
               Selection · {selectedElements.length > 0 ? selectedElements.length : 'none'}
             </span>
+            {selectedSlideIds.length >= 2 ? (
+              <span className="is-selection" data-testid="inspector-selected-slides">
+                Slides · {selectedSlideIds.length}
+              </span>
+            ) : null}
           </div>
         </div>
         <button
@@ -423,6 +433,7 @@ export function InspectorPanel<CommandId extends string = string>({
             deck={workspace.deck}
             slide={slide}
             selectedElements={selectedElements}
+            selectedSlideIds={selectedSlideIds}
             workspaceElements={workspace.elements}
             patches={workspace.patches}
             traces={workspace.traces}
@@ -531,7 +542,7 @@ export function InspectorPanel<CommandId extends string = string>({
             slide={slide}
             selectedElements={selectedElements}
             patches={workspace.patches}
-            onApplyPatch={onApplyDesignPatch}
+            {...(onProposeJsonPatch ? { onProposePatch: onProposeJsonPatch } : {})}
           />
         ) : null}
         {activeTab === 'trace' ? (

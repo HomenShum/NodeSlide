@@ -19,19 +19,21 @@ import {
   type DragEvent,
   type KeyboardEvent as ReactKeyboardEvent,
   type MouseEvent as ReactMouseEvent,
+  useEffect,
   useId,
   useMemo,
   useState,
 } from 'react';
-import type {
-  DeckComment,
-  DeckPatch,
-  Slide,
-  SlideElement,
-  SourceRecord,
-  ThemeSpec,
-  ValidationIssue,
-  ValidationResult,
+import {
+  type DeckComment,
+  type DeckPatch,
+  NODESLIDE_SCOPE_SLIDE_LIMIT,
+  type Slide,
+  type SlideElement,
+  type SourceRecord,
+  type ThemeSpec,
+  type ValidationIssue,
+  type ValidationResult,
 } from '../../../../shared/nodeslide';
 import './editorShell.css';
 import { SlideRenderer } from './SlideRenderer';
@@ -79,6 +81,12 @@ export interface SlideNavigatorProps {
   collapsedSections?: readonly string[];
   onToggleSection?: (section: string) => void;
   propagationSlideIds?: readonly string[];
+  /**
+   * Multi-slide selection, bounded by NODESLIDE_SCOPE_SLIDE_LIMIT. Ctrl/Cmd-click adds or
+   * removes a slide; a plain click still just navigates.
+   */
+  selectedSlideIds?: readonly string[];
+  onSelectedSlideIdsChange?: (slideIds: string[]) => void;
 
   selectedElementIds?: readonly string[];
   onSelectedElementIdsChange?: (elementIds: string[]) => void;
@@ -121,6 +129,8 @@ export function SlideNavigator({
   collapsedSections = [],
   onToggleSection,
   propagationSlideIds = [],
+  selectedSlideIds = [],
+  onSelectedSlideIdsChange,
   selectedElementIds = [],
   onSelectedElementIdsChange,
   elementVisibility = {},
@@ -159,6 +169,36 @@ export function SlideNavigator({
   );
   const collapsedSectionSet = useMemo(() => new Set(collapsedSections), [collapsedSections]);
   const propagationSet = useMemo(() => new Set(propagationSlideIds), [propagationSlideIds]);
+  const selectedSlideSet = useMemo(() => new Set(selectedSlideIds), [selectedSlideIds]);
+
+  useEffect(() => {
+    if (!onSelectedSlideIdsChange) return;
+    const normalized = normalizeSelectedSlideIds(
+      slides.map((slide) => slide.id),
+      selectedSlideIds,
+    );
+    if (!sameSelectedIds(normalized, selectedSlideIds)) onSelectedSlideIdsChange(normalized);
+  }, [onSelectedSlideIdsChange, selectedSlideIds, slides]);
+
+  const toggleSlideSelection = (slideId: string) => {
+    if (!onSelectedSlideIdsChange) return;
+    onSelectedSlideIdsChange(
+      toggleBoundedSlideSelection(
+        slides.map((slide) => slide.id),
+        selectedSlideIds,
+        slideId,
+      ),
+    );
+  };
+
+  const activateOrToggleSlide = (event: ReactMouseEvent<HTMLButtonElement>, slideId: string) => {
+    if ((event.metaKey || event.ctrlKey) && onSelectedSlideIdsChange) {
+      event.preventDefault();
+      toggleSlideSelection(slideId);
+      return;
+    }
+    onSelectSlide(slideId);
+  };
   const activeSlide = slides.find((slide) => slide.id === activeSlideId);
   const activeLayers = activeSlide
     ? activeSlide.elementOrder.flatMap((elementId) => {
@@ -306,7 +346,13 @@ export function SlideNavigator({
                               aria-current={active ? 'page' : undefined}
                               aria-label={`Slide ${slideIndex + 1}: ${slide.title}`}
                               data-testid={`slide-thumbnail-${slide.id}`}
-                              onClick={() => onSelectSlide(slide.id)}
+                              data-slide-selected={
+                                selectedSlideSet.has(slide.id) ? 'true' : undefined
+                              }
+                              aria-pressed={
+                                onSelectedSlideIdsChange ? selectedSlideSet.has(slide.id) : undefined
+                              }
+                              onClick={(event) => activateOrToggleSlide(event, slide.id)}
                               onDoubleClick={() => onRenameSlide?.(slide.id, slide.title)}
                               onKeyDown={(event) =>
                                 handleRenameKeyDown(event, slide, onRenameSlide)
@@ -908,6 +954,32 @@ function patchTouchesSlide(patch: DeckPatch, slideId: string) {
     if (operation.op === 'update_deck') return false;
     return operation.slideId === slideId;
   });
+}
+
+export function normalizeSelectedSlideIds(
+  slideOrder: readonly string[],
+  selectedSlideIds: readonly string[],
+): string[] {
+  const selected = new Set(selectedSlideIds);
+  return slideOrder
+    .filter((slideId) => selected.has(slideId))
+    .slice(0, NODESLIDE_SCOPE_SLIDE_LIMIT);
+}
+
+export function toggleBoundedSlideSelection(
+  slideOrder: readonly string[],
+  selectedSlideIds: readonly string[],
+  slideId: string,
+): string[] {
+  const normalized = normalizeSelectedSlideIds(slideOrder, selectedSlideIds);
+  if (!slideOrder.includes(slideId)) return normalized;
+  if (normalized.includes(slideId)) return normalized.filter((id) => id !== slideId);
+  if (normalized.length >= NODESLIDE_SCOPE_SLIDE_LIMIT) return normalized;
+  return normalizeSelectedSlideIds(slideOrder, [...normalized, slideId]);
+}
+
+function sameSelectedIds(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((id, index) => id === right[index]);
 }
 
 function commentSlideId(comment: DeckComment) {

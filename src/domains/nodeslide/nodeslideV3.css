@@ -2678,6 +2678,13 @@
   overflow-wrap: anywhere;
 }
 
+.nodeslide-studio .ns-trace-scope {
+  color: var(--ns-ink2);
+  display: block;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
+}
+
 .nodeslide-studio .ns-trace-attrib {
   align-self: stretch;
   border: 1px solid color-mix(in srgb, currentColor 15%, transparent);

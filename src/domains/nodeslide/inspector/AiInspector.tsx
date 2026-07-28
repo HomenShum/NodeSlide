@@ -54,6 +54,7 @@ import {
   NODESLIDE_DEFAULT_REASONING_EFFORT,
   NODESLIDE_OFFERED_AGENT_MODELS,
   NODESLIDE_REASONING_EFFORTS,
+  NODESLIDE_SCOPE_SLIDE_LIMIT,
   type NodeSlideAgentMemory,
   type NodeSlideAgentMemoryCategory,
   type NodeSlideAgentMessage,
@@ -96,6 +97,7 @@ import {
   NODESLIDE_OPENROUTER_VARIATIONS_CONSENT,
   NODESLIDE_WEB_RESEARCH_CONSENT,
 } from './reviewTypes';
+import { nodeSlideScopeLabel } from './scopePresentation';
 
 export {
   AI_DRAFTING_PHASE_MS,
@@ -121,7 +123,7 @@ export type {
   AiVariationRequest,
 } from './reviewTypes';
 
-type ScopeChoice = 'deck' | 'slide' | 'elements';
+type ScopeChoice = 'deck' | 'slide' | 'selected_slides' | 'elements';
 
 interface ComposerTrigger {
   kind: 'reference' | 'command';
@@ -142,6 +144,8 @@ export interface AiInspectorProps<CommandId extends string = string> {
   deck: Deck;
   slide: Slide;
   selectedElements: readonly SlideElement[];
+  /** Slides ctrl-clicked in the navigator. Two or more unlock the multi-slide write scope. */
+  selectedSlideIds?: readonly string[];
   workspaceElements?: readonly SlideElement[];
   patches: readonly AiReviewablePatch[];
   traces: readonly AgentTrace[];
@@ -204,6 +208,7 @@ export function AiInspector<CommandId extends string = string>({
   deck,
   slide,
   selectedElements,
+  selectedSlideIds = [],
   workspaceElements = [],
   patches,
   traces,
@@ -348,7 +353,8 @@ export function AiInspector<CommandId extends string = string>({
 
   useEffect(() => {
     if (scopeChoice === 'elements' && selectedElements.length === 0) setScopeChoice('slide');
-  }, [scopeChoice, selectedElements.length]);
+    if (scopeChoice === 'selected_slides' && selectedSlideIds.length < 2) setScopeChoice('slide');
+  }, [scopeChoice, selectedElements.length, selectedSlideIds.length]);
 
   const activeTrace = useMemo(
     () =>
@@ -603,7 +609,14 @@ export function AiInspector<CommandId extends string = string>({
     }
     const writeScope = commentContext
       ? createCommentScope(commentContext, operationMode, deck, workspaceElements)
-      : createScope(scopeChoice, operationMode, deck.id, slide.id, selectedElements);
+      : createScope(
+          scopeChoice,
+          operationMode,
+          deck.id,
+          slide.id,
+          selectedSlideIds,
+          selectedElements,
+        );
     const options: AiProposalOptions<CommandId> = {
       ...provider,
       readContext: requestedReadContext,
@@ -627,6 +640,8 @@ export function AiInspector<CommandId extends string = string>({
           }
         : {}),
     };
+    // Fail closed: an unrepresentable scope must not silently widen to the whole deck.
+    if (!writeScope) return;
     setOptimisticAsk(text);
     onPropose(text, writeScope, options);
     updateInstruction('');
@@ -1219,6 +1234,17 @@ export function AiInspector<CommandId extends string = string>({
                       >
                         This slide
                       </button>
+                      {selectedSlideIds.length >= 2 ? (
+                        <button
+                          type="button"
+                          className={scopeChoice === 'selected_slides' ? 'is-active' : ''}
+                          aria-pressed={scopeChoice === 'selected_slides'}
+                          data-testid="ai-scope-selected-slides"
+                          onClick={() => setScopeChoice('selected_slides')}
+                        >
+                          {`Selected slides · ${selectedSlideIds.length}`}
+                        </button>
+                      ) : null}
                       <button
                         type="button"
                         className={scopeChoice === 'elements' ? 'is-active' : ''}
@@ -1813,7 +1839,7 @@ function ProposalCard({
       <dl className="ns-proposal-evidence" aria-label="Proposal evidence">
         <div>
           <dt>Write scope</dt>
-          <dd>{scopeEvidence(patch.scope)}</dd>
+          <dd>{nodeSlideScopeLabel(patch.scope)}</dd>
         </div>
         <div>
           <dt>Base</dt>
@@ -2013,10 +2039,17 @@ function createScope(
   operationMode: OperationMode,
   deckId: string,
   slideId: string,
+  selectedSlideIds: readonly string[],
   selectedElements: readonly SlideElement[],
-): PatchScope {
+): PatchScope | null {
   if (choice === 'deck') return { kind: 'deck', deckId, operationMode };
+  if (choice === 'selected_slides') {
+    const exactSlideIds = [...new Set(selectedSlideIds)];
+    if (exactSlideIds.length < 2 || exactSlideIds.length > NODESLIDE_SCOPE_SLIDE_LIMIT) return null;
+    return { kind: 'slide', deckId, slideIds: exactSlideIds, operationMode };
+  }
   if (choice === 'elements') {
+    if (selectedElements.length === 0) return null;
     return {
       kind: 'elements',
       deckId,
@@ -2167,19 +2200,6 @@ function defaultSuggestedActions(
       instruction: 'Reduce visual and copy density while preserving the evidence.',
     },
   ];
-}
-
-function scopeEvidence(scope: PatchScope) {
-  if (scope.kind === 'deck') return 'Entire deck';
-  if (scope.kind === 'slide')
-    return `${scope.slideIds.length} slide${scope.slideIds.length === 1 ? '' : 's'}`;
-  if (scope.kind === 'elements') {
-    return `${scope.elementIds.length} element${scope.elementIds.length === 1 ? '' : 's'} on ${
-      scope.slideIds.length
-    } slide${scope.slideIds.length === 1 ? '' : 's'}`;
-  }
-  if (scope.kind === 'bounding_box') return `Bounding box on ${scope.slideIds.length} slide`;
-  return `Comment ${scope.commentId}`;
 }
 
 function baseEvidence(patch: DeckPatch) {

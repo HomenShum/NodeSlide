@@ -86,6 +86,7 @@ import {
   type LayerZOrderAction,
   SlideNavigator,
   type SlideNavigatorTab,
+  normalizeSelectedSlideIds,
 } from './components/SlideNavigator';
 import { StoryArcOverview } from './components/StoryArcOverview';
 import { type StudioThemeMode, StudioToolbar } from './components/StudioToolbar';
@@ -107,6 +108,7 @@ import {
   classifyEditorVersionAdvance,
   createEditorRequestGate,
   createSerializedEditorWriteQueue,
+  candidateSlideIdForPatch,
   editorCandidateCanAccept,
   editorCandidateReceiptForPatch,
   workspaceReceiptMarker,
@@ -121,7 +123,10 @@ import type {
   AiVariationRequest,
 } from './inspector/AiInspector';
 import { InspectorPanel } from './inspector/InspectorPanel';
+import type { JsonPatchProposalRequest } from './inspector/JsonInspector';
+import { nodeSlideScopeLabel } from './inspector/scopePresentation';
 import type { InspectorTab } from './inspector/types';
+import { nodeSlideUserErrorMessage } from './nodeslideUserError';
 import { AgentSessionProvider } from './session';
 import { extractPptxSignature } from './signature/index';
 import {
@@ -240,6 +245,7 @@ interface NodeSlideGeneratedApi {
       OwnerWorkspace
     >;
     applyPatch: PublicMutation<ApplyPatchArgs, PatchReceipt>;
+    proposePatch: PublicMutation<ApplyPatchArgs, PatchReceipt>;
     acceptPatch: PublicMutation<
       { deckId: string; ownerAccessKey: string; patchId: string },
       PatchReceipt
@@ -537,6 +543,7 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
   const [localWorkspace, setLocalWorkspace] = useState<NodeSlideWorkspace | null>(null);
   const [activeSlideId, setActiveSlideId] = useState<string | null>(null);
   const [selectedElementIds, setSelectedElementIds] = useState<string[]>([]);
+  const [selectedSlideIds, setSelectedSlideIds] = useState<string[]>([]);
   const [navigatorTab, setNavigatorTab] = useState<SlideNavigatorTab>('slides');
   const [collapsedNavigatorSections, setCollapsedNavigatorSections] = useState<string[]>([]);
   const [canvasMode, setCanvasMode] = useState<EditorCanvasMode>('edit');
@@ -627,6 +634,7 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
   const ensureWorkspace = useMutation(nodeslideApi.nodeslide.ensureWorkspace);
   const attachDataSource = useMutation(nodeslideApi.nodeslide.attachDataSource);
   const applyPatchMutation = useMutation(nodeslideApi.nodeslide.applyPatch);
+  const proposePatchMutation = useMutation(nodeslideApi.nodeslide.proposePatch);
   const acceptPatch = useMutation(nodeslideApi.nodeslide.acceptPatch);
   const rejectPatch = useMutation(nodeslideApi.nodeslide.rejectPatch);
   const proposePropagation = useMutation(nodeslideApi.nodeslide.proposePropagation);
@@ -954,6 +962,12 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
   useEffect(() => {
     if (!workspace) return;
     setLocalWorkspace(workspace);
+    // Slides can disappear under a live subscription; a selection that outlives its slides
+    // would submit a scope naming ids the deck no longer has.
+    setSelectedSlideIds((current) => {
+      const normalized = normalizeSelectedSlideIds(workspace.deck.slideOrder, current);
+      return sameSelectedSlideIds(current, normalized) ? current : normalized;
+    });
     setActiveSlideId((current) =>
       current && workspace.deck.slideOrder.includes(current)
         ? current
@@ -1483,6 +1497,101 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
       runPreferenceEtl,
       workspace,
     ],
+  );
+
+  /**
+   * The JSON tab's edit lane. A hand-written element edit is a proposal, not a write: it takes
+   * the propose mutation, and the boolean it resolves with is what the editor renders. The
+   * editor must never print a success note for an edit the server refused, so this returns
+   * false on every non-`ready` outcome rather than falling through to one.
+   */
+  const proposeJsonOperations = useCallback(
+    async ({ operations, summary, elementId, baseElementVersion }: JsonPatchProposalRequest) => {
+      if (!workspace || !ownerAccessKey || operations.length === 0) return false;
+      const requestedDeckId = workspace.deck.id;
+      return enqueueEditorWrite(
+        requestedDeckId,
+        false,
+        async ({
+          workspace: currentWorkspace,
+          ownerAccessKey: currentOwnerAccessKey,
+          requestToken,
+        }) => {
+          const requestGate = editorRequestGateRef.current;
+          const scope = scopeForOperations(currentWorkspace, operations, 'unrestricted');
+          const clocks = clocksForScope(currentWorkspace, scope, operations);
+          try {
+            const receipt = await proposePatchMutation({
+              deckId: requestedDeckId,
+              ownerAccessKey: currentOwnerAccessKey,
+              baseDeckVersion: currentWorkspace.deck.version,
+              baseSlideVersions: clocks.baseSlideVersions,
+              baseElementVersions: applyExpectedElementVersions(clocks.baseElementVersions, {
+                [elementId]: baseElementVersion,
+              }),
+              scope,
+              operations,
+              summary,
+            });
+            if (!requestGate.isCurrent(requestToken)) return false;
+            if (receipt.patch.status === 'stale') {
+              if (receipt.workspace) installWorkspace(receipt.workspace, currentOwnerAccessKey);
+              setPreviewedPatchId(null);
+              setCanvasMode('edit');
+              setActiveInspectorTab('versions');
+              setInspectorCollapsed(false);
+              setToast({
+                kind: 'error',
+                message:
+                  'The JSON candidate is stale. The deck stayed unchanged; review the current version and retry.',
+              });
+              return false;
+            }
+            if (
+              receipt.patch.status !== 'ready' ||
+              !receipt.workspace ||
+              !editorCandidateCanAccept(
+                editorCandidateReceiptForPatch(receipt.patch, receipt.workspace.deck),
+              )
+            ) {
+              throw new Error(
+                'The JSON edit did not produce an exact, validated candidate for review.',
+              );
+            }
+            const candidateDeck = receipt.workspace.deck;
+            installWorkspace(receipt.workspace, currentOwnerAccessKey);
+            setPreviewedVariation(null);
+            setPreviewedSignatureProfile(null);
+            setPreviewedPatchId(receipt.patch.id);
+            const firstAffectedSlideId =
+              'slideIds' in receipt.patch.scope ? receipt.patch.scope.slideIds[0] : undefined;
+            const candidateSlideId = candidateSlideIdForPatch(
+              receipt.patch,
+              firstAffectedSlideId ?? '',
+            );
+            if (candidateSlideId && candidateDeck.slideOrder.includes(candidateSlideId)) {
+              selectSlide(candidateSlideId, setActiveSlideId, setSelectedElementIds);
+            }
+            setCanvasMode('compare');
+            setActiveInspectorTab('ai');
+            setInspectorCollapsed(false);
+            setToast({
+              kind: 'success',
+              message: 'JSON candidate validated. Compare it, then choose Accept or Reject.',
+            });
+            return true;
+          } catch (error) {
+            if (!requestGate.isCurrent(requestToken)) return false;
+            setToast({
+              kind: 'error',
+              message: errorMessage(error, 'The JSON edit could not be proposed.'),
+            });
+            return false;
+          }
+        },
+      );
+    },
+    [enqueueEditorWrite, installWorkspace, ownerAccessKey, proposePatchMutation, workspace],
   );
 
   /**
@@ -2353,8 +2462,11 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
     }
     setPreviewedPatchId(patch.id);
     const firstAffectedSlideId = 'slideIds' in patch.scope ? patch.scope.slideIds[0] : undefined;
-    if (firstAffectedSlideId && currentWorkspace.deck.slideOrder.includes(firstAffectedSlideId)) {
-      selectSlide(firstAffectedSlideId, setActiveSlideId, setSelectedElementIds);
+    // A proposal that ADDS a slide names no existing slide in its scope, so scope alone would
+    // leave Compare parked on the old slide with the candidate off-screen.
+    const candidateSlideId = candidateSlideIdForPatch(patch, firstAffectedSlideId ?? '');
+    if (candidateSlideId && currentWorkspace.deck.slideOrder.includes(candidateSlideId)) {
+      selectSlide(candidateSlideId, setActiveSlideId, setSelectedElementIds);
     }
     setCanvasMode('compare');
     if (shouldRevealCandidateCanvas(window.innerWidth)) setInspectorCollapsed(true);
@@ -3035,6 +3147,8 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
           validations={workspace.validations}
           collapsedSections={collapsedNavigatorSections}
           propagationSlideIds={affectedSlideIds}
+          selectedSlideIds={selectedSlideIds}
+          onSelectedSlideIdsChange={setSelectedSlideIds}
           selectedElementIds={selectedElementIds}
           canAddSlide
           canDeleteSlide={orderedSlides.length > 1}
@@ -3223,6 +3337,9 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
           candidateSlide={compareCandidateSlide ?? null}
           candidateElements={compareCandidateElements}
           {...(compareCandidateLabel ? { candidateLabel: compareCandidateLabel } : {})}
+          {...(previewedPatch
+            ? { candidateScopeLabel: nodeSlideScopeLabel(previewedPatch.scope) }
+            : {})}
           compareOperations={compareOperations}
           candidateReceipt={compareCandidateReceipt}
           sliderPosition={compareSliderPosition}
@@ -3365,6 +3482,7 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
           workspace={workspace}
           slide={activeSlide}
           selectedElements={selectedElements}
+          selectedSlideIds={selectedSlideIds}
           activeTab={activeInspectorTab}
           collapsed={inspectorCollapsed}
           width={inspectorWidth}
@@ -3513,6 +3631,7 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
           onOpenPreferenceEvidence={() => {
             setActiveInspectorTab('trace');
           }}
+          onProposeJsonPatch={proposeJsonOperations}
           onApplyDesignPatch={(operations, summary) => {
             const currentWorkspace = workspaceRef.current ?? workspace;
             return applyFocusedOperations(
@@ -4279,14 +4398,12 @@ function RecoveryScreen({
   );
 }
 
+function sameSelectedSlideIds(left: readonly string[], right: readonly string[]): boolean {
+  return left.length === right.length && left.every((id, index) => id === right[index]);
+}
+
 function errorMessage(error: unknown, fallback: string) {
-  if (error && typeof error === 'object' && 'data' in error) {
-    const data = error.data;
-    if (data && typeof data === 'object' && 'message' in data && typeof data.message === 'string') {
-      return data.message;
-    }
-  }
-  return error instanceof Error ? error.message : fallback;
+  return nodeSlideUserErrorMessage(error, fallback);
 }
 
 function Toast({

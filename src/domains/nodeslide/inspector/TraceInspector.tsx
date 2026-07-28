@@ -37,6 +37,7 @@ import {
   nodeSlideReasoningEffort,
 } from '../../../../shared/nodeslide';
 import { TraceWaterfall } from './TraceWaterfall';
+import { nodeSlideScopeLabel } from './scopePresentation';
 
 /*
  * NodeSlide Trace tab — compact run activity with expandable evidence and receipts.
@@ -48,6 +49,31 @@ import { TraceWaterfall } from './TraceWaterfall';
  */
 
 export type TraceDensity = 'human' | 'pro' | 'tech';
+
+const DENSITY_ORDER: readonly TraceDensity[] = ['human', 'pro', 'tech'];
+
+/**
+ * Roving focus for the density tablist. A `role="tablist"` that only answers to clicks is
+ * a keyboard trap for the exact users who need the raw view; this is the pure half of the
+ * fix, kept exportable so the wrap-around and Home/End edges stay under test.
+ */
+export function traceDensityForKey(current: TraceDensity, key: string): TraceDensity | null {
+  const index = DENSITY_ORDER.indexOf(current);
+  if (key === 'Home') return DENSITY_ORDER[0] ?? current;
+  if (key === 'End') return DENSITY_ORDER.at(-1) ?? current;
+  if (key !== 'ArrowLeft' && key !== 'ArrowRight') return null;
+  const offset = key === 'ArrowRight' ? 1 : -1;
+  return DENSITY_ORDER[(index + offset + DENSITY_ORDER.length) % DENSITY_ORDER.length] ?? current;
+}
+
+/** The durable run whose telemetry produced this trace, or undefined when none is bound. */
+export function agentRunForTrace(
+  runs: readonly NodeSlideAgentRun[],
+  traceId: string,
+): NodeSlideAgentRun | undefined {
+  return runs.find((run) => run.traceId === traceId);
+}
+
 type TraceValidation = ValidationResult | CandidateValidationReceipt;
 type ToneName = 'agent' | 'success' | 'warning' | 'danger' | 'human' | 'neutral';
 export type TraceNodeId = 'consent' | 'read' | 'plan' | 'edits' | 'validate' | 'receipt';
@@ -118,7 +144,7 @@ export function TraceInspector({
 
   const selected = sorted.find((trace) => trace.id === selectedTraceId) ?? sorted[0];
   const selectedRun = selected
-    ? (agentRuns.find((run) => run.traceId === selected.id) ??
+    ? (agentRunForTrace(agentRuns, selected.id) ??
       (selected.id === sorted[0]?.id ? agentRuns[0] : undefined))
     : undefined;
   const telemetryRunId = agentTelemetryRunId ?? agentRuns[0]?.id;
@@ -149,18 +175,24 @@ export function TraceInspector({
           <div className="ns-trace-density" role="tablist" aria-label="Trace detail level">
             <DensityButton
               active={density === 'human'}
+              density="human"
+              onDensityKey={setDensity}
               icon={<Eye size={11} />}
               label="Summary"
               onClick={() => setDensity('human')}
             />
             <DensityButton
               active={density === 'pro'}
+              density="pro"
+              onDensityKey={setDensity}
               icon={<Gauge size={11} />}
               label="Timeline"
               onClick={() => setDensity('pro')}
             />
             <DensityButton
               active={density === 'tech'}
+              density="tech"
+              onDensityKey={setDensity}
               icon={<Braces size={11} />}
               label="Raw"
               onClick={() => setDensity('tech')}
@@ -202,7 +234,7 @@ export function TraceInspector({
                 setSelectedTraceId(traceId);
                 const nextTrace = sorted.find((trace) => trace.id === traceId);
                 const nextRun = nextTrace
-                  ? (agentRuns.find((run) => run.traceId === nextTrace.id) ??
+                  ? (agentRunForTrace(agentRuns, nextTrace.id) ??
                     (nextTrace.id === sorted[0]?.id ? agentRuns[0] : undefined))
                   : undefined;
                 if (nextRun) onSelectAgentRun?.(nextRun.id);
@@ -224,6 +256,7 @@ export function TraceInspector({
               <TraceBanner
                 trace={selected}
                 validation={traceValidation}
+                {...(patch ? { patch } : {})}
                 {...(selectedRun ? { run: selectedRun } : {})}
               />
               <div className="ns-trace-section-label">
@@ -356,22 +389,35 @@ function RunJournal({
 
 function DensityButton({
   active,
+  density,
   icon,
   label,
   onClick,
+  onDensityKey,
 }: {
   active: boolean;
+  density: TraceDensity;
   icon: ReactNode;
   label: string;
   onClick: () => void;
+  onDensityKey: (next: TraceDensity) => void;
 }) {
   return (
     <button
       className={active ? 'is-active' : ''}
       type="button"
       role="tab"
+      id={`ns-trace-density-${density}`}
       aria-selected={active}
+      tabIndex={active ? 0 : -1}
+      data-testid={`trace-density-${density}`}
       onClick={onClick}
+      onKeyDown={(event) => {
+        const next = traceDensityForKey(density, event.key);
+        if (!next || next === density) return;
+        event.preventDefault();
+        onDensityKey(next);
+      }}
     >
       {icon}
       {label}
@@ -386,10 +432,12 @@ function DensityButton({
 function TraceBanner({
   trace,
   validation,
+  patch,
   run,
 }: {
   trace: AgentTrace;
   validation: TraceValidation | null;
+  patch?: DeckPatch;
   run?: NodeSlideAgentRun;
 }) {
   const fallback = isFallbackTrace(trace);
@@ -413,6 +461,11 @@ function TraceBanner({
         Started {formatTimestamp(run?.createdAt ?? trace.createdAt)}
       </time>
       <h3 className="ns-trace-run-title">{trace.summary}</h3>
+      {patch ? (
+        <span className="ns-trace-scope" data-testid="trace-scope-label">
+          Write scope · {nodeSlideScopeLabel(patch.scope)}
+        </span>
+      ) : null}
       <div
         className={`ns-trace-attrib ${fallback ? 'is-fallback' : 'is-live'}`}
         title="provider · model · reasoning effort attribution"

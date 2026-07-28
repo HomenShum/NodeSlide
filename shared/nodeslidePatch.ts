@@ -1,3 +1,33 @@
+/**
+ * Deck patch scope validation and application.
+ *
+ * WITHHELD — one export: `validatedThemeUpdate`, and with it the
+ * `update_theme_v1` operation it exists to validate. NOT because the function
+ * is hard to copy (it is 35 lines of pure validation) and NOT for pricing.
+ *
+ * `validatedThemeUpdate` is only reachable through a `PatchOperation` variant
+ * that this repository's union does not have. Landing the function alone would
+ * be dead code; landing the variant is a cross-cutting change that does not fit
+ * inside this branch's ownership. Measured, not assumed — adding
+ * `{ op: 'update_theme_v1'; properties: {...} }` to `PatchOperation` in
+ * `shared/nodeslide.ts` produces 17 typecheck errors across three owners:
+ *
+ *   - convex/lib (12, mine): nodeslidePatches.ts narrowing sites and
+ *     nodeslidePropagation.ts, plus the Convex argument validator in
+ *     nodeslideValidators.ts, which enumerates every op as a v.literal and is
+ *     the real persistence boundary — a theme op that is valid TypeScript but
+ *     absent from that validator is rejected at the wire.
+ *   - convex/nodeslide.ts (1, another agent's file this branch may not touch).
+ *   - src/domains/** (4, a different session's): EditorCanvasModes.tsx,
+ *     SlideNavigator.tsx, AiInspector.tsx and NodeSlideStudio.tsx all narrow
+ *     `update_deck` explicitly and then fall through to `operation.slideId`.
+ *     A theme op has no slideId, so each would target `undefined`.
+ *
+ * That last group is the reason this is refused rather than partially done:
+ * those four sites have no exhaustiveness guard, so a version of this change
+ * that satisfied only the compilers I own would ship an operation the editor UI
+ * silently mis-targets. Landing it needs one change across all three owners.
+ */
 import {
   type DeckPatch,
   type DeckSnapshot,

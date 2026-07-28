@@ -360,3 +360,113 @@ expensive.
   `ENOTEMPTY: rmdir` errors, and the failing subset differs run to run in both
   trees. They are pre-existing Windows temp-directory flakes, not a regression
   from this work, but they were not fixed and they are not tracked anywhere.
+
+## The "22 missing tables" were not one decision. Measured on `port/tables`.
+
+The `convex/*` cluster outside `convex/lib/` was carried as blocked on "22
+missing tables — an owner decision". That framing was wrong, and it hid three
+genuinely different situations behind one label.
+
+**Decision D1 (`DECOUPLING_PLAN.md` §8) forbids the workspace layer**
+— workspace > project > deck. It says nothing about deck-scoped feature tables.
+Every table below whose rows carry a required `deckId` was therefore never
+blocked at all, and eleven of them have now landed with their consumers:
+
+| Table | Scope column | Module(s) |
+|---|---|---|
+| `nodeslide_sync_connections` | `deckId` | `convex/nodeslideSync.ts` |
+| `nodeslide_pptx_sync_links` | `deckId` | `convex/nodeslidePptxSync.ts` |
+| `nodeslide_source_revisions` | `deckId` | `convex/nodeslide.ts`, `convex/nodeslideSourceRefresh.ts` |
+| `nodeslide_source_refresh_schedules` | `deckId` | `convex/nodeslideSourceRefresh.ts` |
+| `nodeslide_source_refresh_proposals` | `deckId` | `convex/nodeslideSourceRefresh.ts` |
+| `nodeslide_claim_evidence_receipts` | `deckId` | `convex/nodeslideSourceRefresh.ts` |
+| `nodeslide_uploads` | `deckId` | `convex/nodeslideUploads.ts` |
+| `nodeslide_evidence_captures` | `deckId` | `convex/nodeslide.ts` |
+| `nodeslide_evidence_steps` | `deckId` | `convex/nodeslide.ts` |
+
+Each one acquired a data-erasure obligation the moment it entered
+`convex/schema.ts`, because `convex/lib/nodeslideErasureContract.ts` derives the
+contract from the schema rather than from a list. Each obligation was satisfied
+by seeding a real row in `convex/nodeslideDataRights.scenario.test.ts` and
+naming the table in the derived-contract test. None was satisfied by adding an
+entry to `NODESLIDE_ERASURE_EXCLUSIONS`.
+
+### Refused: the workspace layer
+
+`convex/nodeslideWorkspaceAccess.ts` (7 symbols: `createWorkspace`,
+`createProject`, `getProject`, `attachDeck`, `startEditProposal`,
+`NodeSlideWorkspaceSummary`, `NodeSlideWorkspaceProjectSummary`) is **refused,
+not deferred**. Its four tables — `nodeslide_workspaces`,
+`nodeslide_workspace_projects`, `nodeslide_access_grants`,
+`nodeslide_access_grant_events` — are scoped by `workspaceId` and `projectId`.
+Adding them would reintroduce exactly the layer D1 removes. The destination has
+already re-rooted this surface at the deck: `convex/nodeslideDeckGrants.ts` over
+`nodeslide_deck_grants` / `nodeslide_deck_grant_events`, and the port audit
+already matches parity's `issueGrant`, `listGrants` and `revokeGrant` there.
+These seven symbols should be marked DROPPED in the audit, not carried as
+missing work.
+
+`convex/nodeslideDelegation.ts#acceptValidatedProposalWithGrant` and the
+`commitDelegatedNodeSlideProposal` / `NodeSlideDelegatedCommitAuthority` pair in
+`convex/nodeslide.ts` are **not** refused, but they are not a copy either.
+Parity keeps `nodeslide_delegation_grants` beside `nodeslide_access_grants`;
+this repo collapsed both into `nodeslide_deck_grants`. Re-rooting the
+auto-commit path onto the deck grant (plus a deck-scoped
+`nodeslide_delegation_uses` audit table) is a rewrite with real design content
+and was left for a session that can own that decision rather than guess it.
+
+### Blocked on a data-rights decision, not on a table
+
+`nodeslide_agent_jobs`, `nodeslide_durable_sessions`,
+`nodeslide_durable_session_events`, `nodeslide_durable_job_journal_entries`,
+`nodeslide_durable_model_result_replays`, `nodeslide_run_budgets`,
+`nodeslide_billable_calls`, `nodeslide_budget_events` and
+`nodeslide_role_stages`' `agent_jobs` dependency carry **no `deckId`, and cannot
+honestly be given one**. A create-deck job is admitted before any deck exists;
+parity's own schema records `resultDeckId` as optional and fills it on
+completion. The same is true of a durable session and of a run budget, both of
+which precede the deck they will produce.
+
+The erasure contract offers exactly three placements — required `deckId`,
+required `tenantId`, or `NODESLIDE_ERASURE_EXCLUSIONS` with a reason — and none
+of them fits:
+
+- `deckId` is false at admission time. Declaring it required would make the
+  schema reject the row the job system must write first.
+- there is no tenant column. `clientSessionId` is the nearest thing and it is on
+  the export redactor's sensitive list; it is an identifier, not a retention
+  scope. A session can also own many decks, so erasing one deck must not take
+  another deck's job rows with it.
+- an exclusion would be a lie. These rows hold the user's prompt and the model's
+  outputs — precisely the data a "delete everything" request is about.
+
+So the ~44 symbols across `convex/nodeslideJobs.ts`, `nodeslideSessions.ts`,
+`nodeslideBudgets.ts`, `nodeslideJobControl.ts`, `nodeslideJobRunner.ts`,
+`nodeslideJobWorkflow.ts` and `nodeslideRoleStages.ts` are blocked on a real
+owner decision, and it is a narrower one than "22 tables": the erasure contract
+needs a fourth scope kind for rows whose deck binding is established later —
+either a nullable deck scope with a completion-time backfill, or an explicit
+job-lifetime retention window that stands on its own. Until that exists, no
+amount of table-adding unblocks this cluster.
+
+### Still blocked on another cluster's module
+
+- `convex/nodeslideUploadExtraction.ts#materializeApprovedPdfUpload` needs
+  `convex/lib/nodeslidePdfExtraction.ts`, which is absent. That file is
+  self-contained — no new packages, no transitive tail — and belongs to the
+  `convex/lib` cluster.
+- `convex/nodeslidePptxCreate.ts#importPptxAsNewDeck` needs
+  `convex/lib/nodeslideLiveRenderRepair.ts` and
+  `src/domains/nodeslide/slidelang/pptxImport`, neither of which this session
+  owned.
+
+### One verification finding worth keeping
+
+`npx tsc -p convex/tsconfig.json` was not reading this repo's `shared/` types.
+`convex/tsconfig.json` had no `paths` mapping, so `@nodeslide/*` resolved
+through `node_modules` — a junction into a shared install — to a **prebuilt
+`dist` belonging to a different worktree**. A widening of
+`SourceRecord['format']` in `shared/nodeslide.ts` was graded against another
+checkout's stale copy of that type. The mapping the root `tsconfig.json`
+already carries has been added to `convex/tsconfig.json`; rebuilding the dist
+was not an option, because its output directory is not in this worktree.

@@ -108,6 +108,154 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
   const validationId = 'validation_scenario';
   const approverId = 'approver_scenario';
 
+  // The immutable half of the deck's evidence. A revision outlives the mutable
+  // source row on purpose, which is exactly why the erasure has to reach it:
+  // it carries the citation text verbatim.
+  const seededSource = built.snapshot.sources[0];
+  if (!seededSource) throw new Error('Golden fixture must have a source.');
+  await ctx.db.insert('nodeslide_source_revisions', {
+    id: `source-revision:${DIGEST('e')}`,
+    schema: 'nodeslide.source-revision/v1',
+    revisionDigest: DIGEST('f'),
+    ownerDigest: `actor_${DIGEST('a')}`,
+    deckId,
+    sourceId: seededSource.id,
+    title: seededSource.title,
+    sourceType: seededSource.sourceType,
+    retrievedAt: seededSource.retrievedAt,
+    citation: seededSource.citation,
+    contentDigest: DIGEST('b'),
+    createdAt: NOW,
+  });
+
+  // Source monitoring the owner switched on, and the review item it produced.
+  // The proposal embeds the plan JSON, which describes the exact edits to this
+  // deck's slides — deck content in a table that looks like scheduler state.
+  await ctx.db.insert('nodeslide_source_refresh_schedules', {
+    id: 'refresh_schedule_scenario',
+    deckId,
+    sourceId: seededSource.id,
+    ownerDigest: `actor_${DIGEST('a')}`,
+    enabled: true,
+    intervalMinutes: 60,
+    nextRunAt: NOW + 3_600_000,
+    status: 'ready',
+    lastSemanticDigest: DIGEST('a'),
+    failureCount: 0,
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
+  await ctx.db.insert('nodeslide_source_refresh_proposals', {
+    id: 'refresh_proposal_scenario',
+    deckId,
+    sourceId: seededSource.id,
+    ownerDigest: `actor_${DIGEST('a')}`,
+    scheduleId: 'refresh_schedule_scenario',
+    status: 'ready',
+    baseDeckVersion: built.snapshot.deck.version,
+    baseSnapshotDigest: DIGEST('a'),
+    beforeRevisionId: `source-revision:${DIGEST('e')}`,
+    afterRevisionId: `source-revision:${DIGEST('f')}`,
+    afterRevisionDigest: DIGEST('f'),
+    planDigest: DIGEST('b'),
+    planJson: JSON.stringify({ operations: [{ slideId: slide.id, elementId: element.id }] }),
+    deckCiDigest: DIGEST('c'),
+    affectedSlideIds: [slide.id],
+    affectedElementIds: [element.id],
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
+  // A visual evidence capture and its step. The goal is the owner's own
+  // question and the step points at a stored screenshot, so both are deck-owned.
+  await ctx.db.insert('nodeslide_evidence_captures', {
+    id: 'capture_scenario',
+    deckId,
+    runId,
+    traceId,
+    spanId: 'span_capture_scenario',
+    parentSpanId: 'span_parent_scenario',
+    sourceId: seededSource.id,
+    sourceRevisionId: `source-revision:${DIGEST('e')}`,
+    sourceRevisionDigest: DIGEST('f'),
+    captureDigest: DIGEST('c'),
+    url: 'https://nodeslide.example/evidence',
+    goal: 'Confirm the figure quoted on slide one.',
+    provider: 'nodeslide-source-snapshot/v1',
+    status: 'ready',
+    stepCount: 1,
+    screenshotCount: 1,
+    pdfCount: 0,
+    createdAt: NOW,
+    completedAt: NOW,
+    expiresAt: NOW + 2_592_000_000,
+  });
+  await ctx.db.insert('nodeslide_evidence_steps', {
+    id: 'evidence_step_scenario',
+    captureId: 'capture_scenario',
+    deckId,
+    runId,
+    traceId,
+    spanId: 'span_capture_scenario',
+    sequence: 1,
+    phase: 'capture',
+    label: 'Captured the cited region.',
+    status: 'ok',
+    regionScope: 'claim',
+    box: { x: 0.1, y: 0.2, w: 0.3, h: 0.4 },
+    evidenceStepDigest: DIGEST('d'),
+    startedAt: NOW,
+    completedAt: NOW,
+    createdAt: NOW,
+  });
+  // The custody receipt binding one claim on one element to the exact region of
+  // the exact source revision it came from. Deleting the deck without this
+  // would leave a standing assertion about the deck's content behind.
+  await ctx.db.insert('nodeslide_claim_evidence_receipts', {
+    id: 'claim_receipt_scenario',
+    receiptId: 'claim_receipt_scenario',
+    schema: 'nodeslide.claim-evidence-receipt/v1',
+    receiptDigest: DIGEST('a'),
+    ownerDigest: `actor_${DIGEST('a')}`,
+    deckId,
+    patchId: 'patch_scenario',
+    slideId: slide.id,
+    elementId: element.id,
+    claimDigest: DIGEST('b'),
+    sourceRevisionId: `source-revision:${DIGEST('e')}`,
+    sourceRevisionDigest: DIGEST('f'),
+    captureId: 'capture_scenario',
+    captureDigest: DIGEST('c'),
+    evidenceStepId: 'evidence_step_scenario',
+    evidenceStepDigest: DIGEST('d'),
+    attachmentKind: 'screenshot',
+    attachmentDigest: DIGEST('e'),
+    region: { x: 0.1, y: 0.2, w: 0.3, h: 0.4 },
+    createdAt: NOW,
+  });
+
+  // An approved upload. Even after the blob is gone the row still names the
+  // file the owner attached and the digest of its contents, so the metadata is
+  // deck-owned in its own right.
+  await ctx.db.insert('nodeslide_uploads', {
+    id: 'upload_scenario',
+    deckId,
+    clientSessionId,
+    fileName: 'quarterly-figures.csv',
+    format: 'csv',
+    contentType: 'text/csv',
+    byteSize: 2_048,
+    contentDigest: DIGEST('c'),
+    idempotencyKey: 'upload-scenario-key',
+    requestFingerprint: DIGEST('d'),
+    lifecycleStatus: 'registered',
+    securityStatus: 'approved',
+    quarantineStatus: 'released',
+    createdAt: NOW,
+    updatedAt: NOW,
+    registeredAt: NOW,
+    approvedAt: NOW,
+  });
+
   await ctx.db.insert('nodeslide_patches', {
     id: patchId,
     deckId,
@@ -533,6 +681,57 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     baselineJson: '{"slides":[]}',
     baselineDigest: DIGEST('h'),
     baselineRemoteRevision: 'revision_scenario',
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
+  // The client-facing side of the same link. Its object mapping names every
+  // local slide and element that was pushed, so it is deck content and has to
+  // be in the erasure scenario, not merely in the schema.
+  await ctx.db.insert('nodeslide_sync_connections', {
+    id: 'sync_connection_scenario',
+    deckId,
+    provider: 'google_slides',
+    remotePresentationId: 'presentation_scenario',
+    remoteRevision: 'revision_scenario',
+    lastSyncedDeckVersion: built.snapshot.deck.version,
+    objectMapping: [
+      {
+        kind: 'deck',
+        localId: deckId,
+        remoteId: 'presentation_scenario',
+        semanticFingerprint: 'sync-semantic/v1:deckscenario',
+      },
+      {
+        kind: 'slide',
+        localId: slide.id,
+        remoteId: 'remote_slide_scenario',
+        semanticFingerprint: 'sync-semantic/v1:slidescenario',
+      },
+    ],
+    status: 'active',
+    connectionVersion: 1,
+    lastMutationKey: 'sync-connection-scenario-key',
+    lastMutationFingerprint: DIGEST('s'),
+    createdAt: NOW,
+    updatedAt: NOW,
+    lastSyncedAt: NOW,
+  });
+  // The linked-PPTX baseline. Its JSON columns are a serialized copy of the
+  // deck's own slides, so an erasure that left this behind would leave a full
+  // copy of the deck behind under another name.
+  await ctx.db.insert('nodeslide_pptx_sync_links', {
+    id: 'pptx_link_scenario',
+    deckId,
+    remoteArtifactId: 'pptx_artifact_scenario',
+    status: 'active',
+    stateVersion: 1,
+    baselineJson: JSON.stringify({
+      deckId,
+      entities: [{ id: slide.id, title: slide.title }],
+    }),
+    baselineDigest: DIGEST('p'),
+    baselineLocalDeckVersion: built.snapshot.deck.version,
+    baselineRemotePackageDigest: DIGEST('q'),
     createdAt: NOW,
     updatedAt: NOW,
   });

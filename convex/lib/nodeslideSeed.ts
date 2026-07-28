@@ -1,3 +1,20 @@
+/**
+ * Deterministic deck seeding.
+ *
+ * SUPERSEDED, not missing: parity's `NODESLIDE_LAYOUT_INTENTS` and
+ * `NodeSlideLayoutIntent`. In parity the model declares a layout per slide
+ * (`hero | comparison | contract | flow | split | evidence_board | decision`)
+ * on `NodeSlidePlannedSlide.layout`, and `nodeslideSeed` trusts that string
+ * after an `isNodeSlideLayoutIntent` guard.
+ *
+ * This repository derives layout instead of accepting it: `SlideContentShape` +
+ * `chooseDeckArchetypes` in `shared/nodeslideArchetypes.ts` (a module parity
+ * does not have at all) pick an archetype from what the slide actually
+ * contains, and the archetype drives the layout switches below. Landing the
+ * intent enum would add a second, model-supplied layout channel competing with
+ * the derived one — two sources of truth for the same decision, with the
+ * untrusted one winning.
+ */
 import {
   type BoundingBox,
   type DeckBrief,

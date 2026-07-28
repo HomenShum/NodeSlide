@@ -74,6 +74,9 @@ describe('erasure contract derivation', () => {
       'nodeslide_oauth_sessions',
       'nodeslide_oauth_credentials',
       'nodeslide_google_sync_states',
+      // The linked-PPTX baseline, pending plan, and verified remote snapshot
+      // are serialized deck content, so the link is erased with the deck.
+      'nodeslide_pptx_sync_links',
       'nodeslide_publications',
       'nodeslide_publish_approvers',
       'nodeslide_publish_approvals',

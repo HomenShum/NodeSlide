@@ -81,6 +81,7 @@ import type * as nodeslideImages from "../nodeslideImages.js";
 import type * as nodeslideMemory from "../nodeslideMemory.js";
 import type * as nodeslideModelProbe from "../nodeslideModelProbe.js";
 import type * as nodeslidePreferences from "../nodeslidePreferences.js";
+import type * as nodeslidePptxSync from "../nodeslidePptxSync.js";
 import type * as nodeslidePublishApproval from "../nodeslidePublishApproval.js";
 import type * as nodeslideRetention from "../nodeslideRetention.js";
 import type * as nodeslideSignatures from "../nodeslideSignatures.js";
@@ -170,6 +171,7 @@ declare const fullApi: ApiFromModules<{
   nodeslideMemory: typeof nodeslideMemory;
   nodeslideModelProbe: typeof nodeslideModelProbe;
   nodeslidePreferences: typeof nodeslidePreferences;
+  nodeslidePptxSync: typeof nodeslidePptxSync;
   nodeslidePublishApproval: typeof nodeslidePublishApproval;
   nodeslideRetention: typeof nodeslideRetention;
   nodeslideSignatures: typeof nodeslideSignatures;

@@ -946,6 +946,45 @@ export default defineSchema({
     .index('by_deck', ['deckId'])
     .index('by_remote', ['remotePresentationId']),
 
+  /**
+   * Server-owned linked-PPTX baseline and review/finalization state. Deck-scoped
+   * because every JSON column here is a serialized view of the deck itself —
+   * the baseline, the pending plan, and the verified remote snapshot all carry
+   * slide and element content, so the link cannot outlive the deck.
+   */
+  nodeslide_pptx_sync_links: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    remoteArtifactId: v.string(),
+    status: v.union(
+      v.literal('active'),
+      v.literal('awaiting_review'),
+      v.literal('awaiting_outbound_verification'),
+      v.literal('ready_to_finalize'),
+      v.literal('conflict'),
+    ),
+    stateVersion: v.number(),
+    baselineJson: v.string(),
+    baselineDigest: v.string(),
+    baselineLocalDeckVersion: v.number(),
+    baselineRemotePackageDigest: v.string(),
+    pendingPlanJson: v.optional(v.string()),
+    pendingPlanDigest: v.optional(v.string()),
+    pendingLocalJson: v.optional(v.string()),
+    pendingLocalDigest: v.optional(v.string()),
+    pendingRemoteJson: v.optional(v.string()),
+    pendingRemoteDigest: v.optional(v.string()),
+    verifiedRemoteJson: v.optional(v.string()),
+    verifiedRemoteDigest: v.optional(v.string()),
+    verifiedRemotePackageDigest: v.optional(v.string()),
+    lastFinalizationDigest: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck', ['deckId'])
+    .index('by_remote_artifact', ['remoteArtifactId']),
+
   nodeslide_publications: defineTable({
     id: v.string(),
     deckId: v.string(),

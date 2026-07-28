@@ -568,6 +568,25 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     updatedAt: NOW,
     lastSyncedAt: NOW,
   });
+  // The linked-PPTX baseline. Its JSON columns are a serialized copy of the
+  // deck's own slides, so an erasure that left this behind would leave a full
+  // copy of the deck behind under another name.
+  await ctx.db.insert('nodeslide_pptx_sync_links', {
+    id: 'pptx_link_scenario',
+    deckId,
+    remoteArtifactId: 'pptx_artifact_scenario',
+    status: 'active',
+    stateVersion: 1,
+    baselineJson: JSON.stringify({
+      deckId,
+      entities: [{ id: slide.id, title: slide.title }],
+    }),
+    baselineDigest: DIGEST('p'),
+    baselineLocalDeckVersion: built.snapshot.deck.version,
+    baselineRemotePackageDigest: DIGEST('q'),
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
 
   // A deck that handed an agent a delegated capability, and learned something
   // while that agent worked. Both are deck-owned: a live bearer token or a

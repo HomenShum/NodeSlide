@@ -40,6 +40,8 @@ import {
   type FormEvent,
   type KeyboardEvent,
   type Ref,
+  Suspense,
+  lazy,
   useEffect,
   useId,
   useMemo,
@@ -100,6 +102,22 @@ import {
   NODESLIDE_WEB_RESEARCH_CONSENT,
 } from './reviewTypes';
 import { nodeSlideScopeLabel } from './scopePresentation';
+
+/**
+ * The OpenUI lab is the only thing in this file that pulls a third-party DSL renderer
+ * (`@openuidev/react-lang` and its `@openuidev/lang-core`). It is opened from a composer button
+ * by a user who wants it, which is exactly the shape `lazy()` is for: the module — and the
+ * dependency behind it — stays out of the initial chunk for everyone who never opens it.
+ *
+ * `AiInspector.openUiWiring.test.tsx` reads this file as text and fails if either this lazy edge
+ * or the button that reaches it is deleted. A workbench nobody can open is a copy, not a port,
+ * and the file would still compile.
+ */
+const OpenUiMaterialWorkbench = lazy(() =>
+  import('../openui/OpenUiMaterialWorkbench').then((module) => ({
+    default: module.OpenUiMaterialWorkbench,
+  })),
+);
 
 export {
   AI_DRAFTING_PHASE_MS,
@@ -193,6 +211,11 @@ export interface AiInspectorProps<CommandId extends string = string> {
     options: AiProposalOptions<CommandId>,
   ) => void;
   onAttachDataFile?: (file: File) => Promise<AiReadReference>;
+  /**
+   * Opens the OpenUI visual-material lab. Optional on purpose: when the host does not supply it,
+   * the composer button is not rendered and the lazy chunk is never requested.
+   */
+  onProposeOpenUiMaterial?: (operations: PatchOperation[], summary: string) => Promise<void>;
   onCreateMemory?: (category: NodeSlideAgentMemoryCategory, content: string) => Promise<void>;
   onUpdateMemory?: (
     memoryId: string,
@@ -246,6 +269,7 @@ export function AiInspector<CommandId extends string = string>({
   previewedPatchId = null,
   onPropose,
   onAttachDataFile,
+  onProposeOpenUiMaterial,
   onCreateMemory,
   onUpdateMemory,
   onDeleteMemory,
@@ -316,8 +340,17 @@ export function AiInspector<CommandId extends string = string>({
   const [attachmentBusy, setAttachmentBusy] = useState(false);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
   const [connectionsOpen, setConnectionsOpen] = useState(false);
+  const [materialWorkbenchOpen, setMaterialWorkbenchOpen] = useState(false);
   const [memoryOpen, setMemoryOpen] = useState(false);
   const [memoryEnabled, setMemoryEnabled] = useState(false);
+  /*
+   * A proposal already waiting on a human is a reason to stop offering to make another one. The
+   * lab creates unapplied add-slide proposals; two of them stacked in the review lane is how a
+   * reviewer loses track of which one they are accepting.
+   */
+  const hasReviewableProposal = patches.some(
+    (patch) => patch.status === 'ready' || patch.status === 'validating',
+  );
   const activeMemoryCount = memories.filter((memory) => memory.status === 'active').length;
   const useMemoryForRun = memoryEnabled && activeMemoryCount > 0;
   const composerId = useId();
@@ -1057,6 +1090,31 @@ export function AiInspector<CommandId extends string = string>({
         />
       ) : null}
 
+      {materialWorkbenchOpen && onProposeOpenUiMaterial ? (
+        <section className="ns-ai-material-tool" data-testid="ai-material-workbench">
+          <header>
+            <span>
+              <Layers3 size={12} /> Visual material
+            </span>
+            <button
+              type="button"
+              onClick={() => setMaterialWorkbenchOpen(false)}
+              aria-label="Close visual material tool"
+            >
+              <X size={12} />
+            </button>
+          </header>
+          <Suspense fallback={<div className="ns-openui-loading">Loading visual lab…</div>}>
+            <OpenUiMaterialWorkbench
+              deck={deck}
+              slide={slide}
+              disabled={isSubmitting || hasReviewableProposal}
+              onPropose={onProposeOpenUiMaterial}
+            />
+          </Suspense>
+        </section>
+      ) : null}
+
       <div
         className={`ns-ai-composer ns-ai-v3-composer ${composerExpanded ? 'is-expanded' : ''}`}
         data-testid="ai-composer"
@@ -1529,6 +1587,18 @@ export function AiInspector<CommandId extends string = string>({
                   >
                     <Command size={14} />
                   </PromptInputButton>
+                  {onProposeOpenUiMaterial ? (
+                    <PromptInputButton
+                      variant={materialWorkbenchOpen ? 'default' : 'ghost'}
+                      aria-pressed={materialWorkbenchOpen}
+                      onClick={() => setMaterialWorkbenchOpen((open) => !open)}
+                      aria-label="Open the visual material tool"
+                      tooltip="Open the visual material lab"
+                      data-testid="ai-open-material-workbench"
+                    >
+                      <Layers3 size={14} />
+                    </PromptInputButton>
+                  ) : null}
                   {onAttachDataFile ? (
                     <>
                       <input

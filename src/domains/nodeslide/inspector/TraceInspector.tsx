@@ -461,7 +461,8 @@ function TraceBanner({
         Started {formatTimestamp(run?.createdAt ?? trace.createdAt)}
       </time>
       <h3 className="ns-trace-run-title">{trace.summary}</h3>
-      {patch ? (
+      {/* A durable row may predate the scope field; an absent scope is silence, not "deck". */}
+      {patch?.scope ? (
         <span className="ns-trace-scope" data-testid="trace-scope-label">
           Write scope · {nodeSlideScopeLabel(patch.scope)}
         </span>

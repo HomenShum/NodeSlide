@@ -386,6 +386,30 @@ const DERIVED_SWEEP_TABLES = [
 }
 
 /**
+ * The derived pass deletes rows by id and follows no storage pointers, because
+ * no table it sweeps has one. That is true today and nothing enforces it, which
+ * is the same shape of latent hole the erasure contract exists to prevent: the
+ * day a job or replay row gains a `v.id('_storage')` column, its blobs would
+ * outlive the deck with no row left pointing at them and the receipt would
+ * still read `retentionSafe: true`.
+ *
+ * So it is asserted at module load rather than trusted. Whoever adds that
+ * column gets a failure here, in every test and every deploy, and has to teach
+ * `collectJobDerivedRows` to carry the field list — the same treatment the
+ * schema-derived path already gets from `NODESLIDE_ERASURE_STORAGE_FIELDS`.
+ */
+{
+  const withBlobs = DERIVED_SWEEP_TABLES.filter(
+    (table) => nodeSlideStorageIdFields(schema as unknown as NodeSlideSchemaLike, table).length > 0,
+  );
+  if (withBlobs.length > 0) {
+    throw new Error(
+      `NodeSlide derived erasure sweep would strand stored files: ${withBlobs.join(', ')} now declare v.id('_storage') fields, and the derived pass deletes rows without following them. Carry the storage fields into collectJobDerivedRows before shipping this schema.`,
+    );
+  }
+}
+
+/**
  * The two-hop erasure the schema-derived scan cannot express.
  *
  * `nodeslide_agent_jobs` and everything hanging off it carry no `deckId`

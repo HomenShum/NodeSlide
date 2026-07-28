@@ -221,6 +221,10 @@ export function traceFromRow(row: Doc<'nodeslide_traces'>): AgentTrace {
     ...(row.shadowControlsDigest !== undefined
       ? { shadowControlsDigest: row.shadowControlsDigest }
       : {}),
+    // Hydrated unconditionally: a legacy row that predates claim binding must read as honestly
+    // unavailable rather than as an absent field a caller could mistake for "no claims".
+    sourceBindingStatus: row.sourceBindingStatus ?? 'legacy_unavailable',
+    claimSourceBindings: row.claimSourceBindings ?? [],
     ...(row.validation !== undefined ? { validation: row.validation } : {}),
     ...(row.candidateDigest !== undefined ? { candidateDigest: row.candidateDigest } : {}),
     ...(row.provider !== undefined ? { provider: row.provider } : {}),

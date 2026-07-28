@@ -1153,6 +1153,10 @@ export interface AgentTrace {
   costMicroUsd?: number;
   inputTokens?: number;
   outputTokens?: number;
+  /** Always hydrated for current API reads; absent only on older serialized clients. */
+  sourceBindingStatus?: NodeSlideSourceBindingStatus;
+  /** Empty for non-factual runs and honestly unavailable on legacy traces. */
+  claimSourceBindings?: NodeSlideClaimSourceBinding[];
   createdAt: number;
   completedAt?: number;
 }

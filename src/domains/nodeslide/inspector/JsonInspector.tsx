@@ -225,11 +225,20 @@ function ElementJsonEditor({
   const [error, setError] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
   const [proposing, setProposing] = useState(false);
+  const [proposed, setProposed] = useState(false);
   const dirty = text !== original;
+  /*
+   * trust-surfaces clause 1: since PR #99 this editor PROPOSES rather than writes, so it is a
+   * proposal surface and its posture belongs in the DOM. `undecided` is set only once a
+   * server-validated candidate actually exists — the callback returning false, or throwing,
+   * leaves it at `none`, because a decision nobody can take must not be advertised as pending.
+   */
+  const decision = proposed ? 'undecided' : 'none';
 
   const propose = async () => {
     setError(null);
     setNote(null);
+    setProposed(false);
     let parsed: unknown;
     try {
       parsed = JSON.parse(text);
@@ -260,6 +269,7 @@ function ElementJsonEditor({
         );
         return;
       }
+      setProposed(true);
       setNote(
         `Proposed ${result.ops.length} change${result.ops.length === 1 ? '' : 's'}. The deck is unchanged; review Compare and choose Accept or Reject.`,
       );
@@ -275,7 +285,12 @@ function ElementJsonEditor({
   };
 
   return (
-    <div style={{ padding: '0 12px 12px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <div
+      style={{ padding: '0 12px 12px', display: 'flex', flexDirection: 'column', gap: 8 }}
+      data-testid="json-element-editor"
+      data-trust-surface="proposal"
+      data-decision={decision}
+    >
       <textarea
         value={text}
         onChange={(event) => setText(event.target.value)}

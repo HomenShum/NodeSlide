@@ -237,3 +237,93 @@ function luminance(hex: string) {
   }
   return red * 0.2126 + green * 0.7152 + blue * 0.0722;
 }
+
+/*
+ * trust-surfaces clause 2 on the surfaces whose components are not exported.
+ *
+ * VariationCard, ProposalCard and CandidateReceipt are module-private, so there is no DOM
+ * harness to render them and exporting them purely to test them would widen the API for the
+ * gate's convenience. This repo's convention for that case is the source contract, and the
+ * facts pinned here are the exact two live violations found on these surfaces: an undecided
+ * card painted with the Accept button's fill, and a pending status inheriting the success
+ * colour because every state EXCEPT the pending one had an override.
+ */
+const editorShellCss = readFileSync(
+  new URL('./components/editorShell.css', import.meta.url),
+  'utf8',
+);
+const editorCanvasSource = readFileSync(
+  new URL('./components/EditorCanvasModes.tsx', import.meta.url),
+  'utf8',
+);
+
+describe('NodeSlide trust surfaces', () => {
+  it('does not paint a ready-to-review status dot in the accepted colour', () => {
+    // `ready` shared a rule with `accepted` and `completed`. A direction merely waiting for a
+    // human wore the exact green of one a human had already accepted.
+    expect(editorCss).not.toMatch(/\.ns-status-dot--ready,\s*\n\.ns-status-dot--accepted/);
+    expect(editorCss).toMatch(/\.ns-status-dot--ready \{\s*\n\s*background: var\(--ns-accent\);/);
+  });
+
+  it('does not animate the card that carries Accept and Reject', () => {
+    const rule = /\.ns-variation-card \{([^}]*)\}/.exec(editorCss);
+    expect(rule).not.toBeNull();
+    expect(rule?.[1]).not.toContain('transition');
+    expect(rule?.[1]).not.toContain('animation');
+  });
+
+  it('states the pending candidate status explicitly instead of letting it inherit success', () => {
+    // The base rule was `--ns-positive` and every status except `ready` overrode it, so the
+    // one state meaning "validated, waiting for you to press Accept" was the only state that
+    // fell through to the success colour.
+    expect(editorShellCss).toMatch(
+      /\.ns-candidate-status \{\s*\n\s*color: var\(--ns-muted\);\s*\n\s*\}/,
+    );
+    expect(editorShellCss).toContain(
+      '.nodeslide-studio .ns-candidate-receipt.is-ready .ns-candidate-status',
+    );
+  });
+
+  it('maps a stale direction to no decision rather than to a pending one', () => {
+    // A stale direction cannot be accepted or rejected — it has to be regenerated. Calling it
+    // `undecided` would advertise a choice its own buttons no longer offer.
+    expect(aiInspectorSource).toContain('data-trust-surface="diff-review"');
+    expect(aiInspectorSource).toMatch(
+      /variation\.status === 'ready'\s*\n?\s*\? 'undecided'[\s\S]{0,220}?: 'none'/,
+    );
+  });
+
+  it('ties the proposal card decision to the status that enables its Accept button', () => {
+    expect(aiInspectorSource).toContain('data-trust-surface="proposal"');
+    expect(aiInspectorSource).toMatch(/patch\.status === 'ready'\s*\n?\s*\? 'undecided'/);
+    expect(aiInspectorSource).toContain("disabled={patch.status !== 'ready'}");
+  });
+
+  it('derives the compare receipt decision from the same predicate that enables Accept', () => {
+    // One source of truth: the DOM posture and the affordance cannot drift apart if both read
+    // `editorCandidateCanAccept`.
+    expect(editorCanvasSource).toContain('data-trust-surface="diff-review"');
+    expect(editorCanvasSource).toContain("const decision = acceptEnabled ? 'undecided' : 'none';");
+    expect(editorCanvasSource).toContain('disabled={!acceptEnabled}');
+  });
+
+  it('publishes the publication sign-off posture without collapsing "not required" into "approved"', () => {
+    const publicationSource = readFileSync(
+      new URL('./components/PublicationDialog.tsx', import.meta.url),
+      'utf8',
+    );
+    expect(publicationSource).toContain('data-trust-surface="permission"');
+    expect(publicationSource).toMatch(
+      /!approval\.required \? 'none' : approvedForCurrent \? 'accepted' : 'undecided'/,
+    );
+  });
+
+  it('has no orphaned consent styling waiting to become a live violation', () => {
+    // `.ns-ai-inline-consent > label.is-ready` tinted a not-yet-given consent row with the
+    // success token. The markup had already been deleted; the rules had not. Comments are
+    // stripped first — the tombstone comment naming the class is the record of the deletion,
+    // not a surviving rule.
+    const rules = css.replace(/\/\*[\s\S]*?\*\//g, '');
+    expect(rules).not.toContain('ns-ai-inline-consent');
+  });
+});

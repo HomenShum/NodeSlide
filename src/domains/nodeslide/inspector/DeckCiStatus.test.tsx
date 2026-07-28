@@ -121,3 +121,58 @@ describe('Deck CI status wiring', () => {
     expect(studioSource).toContain('deckCiResult === undefined');
   });
 });
+
+/*
+ * trust-surfaces clause 1 on Deck CI.
+ *
+ * Persona: an agent asked to export a deck. Before it exports it wants to know whether the
+ * deck passed its checks — and the difference between "failed", "we could not check", and
+ * "still checking" decides whether it should stop, retry, or wait. All three have to be
+ * separable from the DOM alone, because the agent cannot read the copy's intent.
+ *
+ * This surface deliberately publishes `data-state` and NOT `data-decision`: nobody accepts
+ * or rejects a CI result, and inventing a decision attribute here would advertise an
+ * affordance that does not exist.
+ */
+describe('DeckCiStatus trust surface', () => {
+  const surface = () => screen.getByRole('status');
+
+  it('declares itself a failed-state surface in every state it can reach', () => {
+    const states: Array<[string, () => void]> = [
+      ['loading', () => render(<DeckCiStatus result={null} loading />)],
+      ['unavailable', () => render(<DeckCiStatus result={null} error={new Error('down')} />)],
+      ['pass', () => render(<DeckCiStatus result={ciResult('pass')} />)],
+      ['warn', () => render(<DeckCiStatus result={ciResult('warn', 0, 2)} />)],
+      ['fail', () => render(<DeckCiStatus result={ciResult('fail', 3, 1)} />)],
+    ];
+
+    for (const [expected, mount] of states) {
+      cleanup();
+      mount();
+      expect(surface()).toHaveAttribute('data-trust-surface', 'failed-state');
+      expect(surface()).toHaveAttribute('data-state', expected);
+      // A readout is not an affordance. Publishing `data-decision` here would tell an agent
+      // a decision is on offer when no control exists to take it.
+      expect(surface()).not.toHaveAttribute('data-decision');
+    }
+  });
+
+  it('keeps "could not check" distinct from "passed"', () => {
+    // The failure this prevents is the whole point of the surface: an unreachable check that
+    // renders as a pass lets an agent export a deck nothing ever verified.
+    render(<DeckCiStatus result={null} error={new Error('backend unreachable')} />);
+
+    expect(surface()).toHaveAttribute('data-state', 'unavailable');
+    expect(surface().className).not.toContain('is-pass');
+    expect(surface()).toHaveTextContent('Unavailable');
+  });
+
+  it('keeps "still checking" distinct from both', () => {
+    render(<DeckCiStatus result={ciResult('fail', 2)} loading />);
+
+    // Loading wins over a stale result: reporting the previous verdict during a re-check is
+    // a claim about the current deck that nothing has established.
+    expect(surface()).toHaveAttribute('data-state', 'loading');
+    expect(surface()).toHaveTextContent('Checking');
+  });
+});

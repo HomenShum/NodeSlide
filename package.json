@@ -60,6 +60,7 @@
     "proof:nodeslide:journey:gif": "node scripts/nodeslide-journey-gif.mjs",
     "nodeslide:authoring:meta": "node scripts/nodeslide-authoring-meta.mjs",
     "lint:nodeslide-agent-ui": "node scripts/nodeslide-agent-ui-linter.mjs",
+    "lint:nodeslide-trust-surfaces": "node scripts/nodeslide-trust-surface-census.mjs",
     "atlas:topology-gate": "node scripts/nodeslide-atlas-topology-gate.mjs --map scripts/lib/atlas-vocabulary-atlas-v2.json",
     "atlas:motion-gate": "node scripts/nodeslide-motion-gate.mjs",
     "atlas:motion-canary": "node scripts/nodeslide-motion-canary.mjs",

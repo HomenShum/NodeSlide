@@ -164,7 +164,22 @@ export function PublicationDialog({
           </span>
         </div>
         {governanceReady ? (
-          <section className="ns-share-approval" data-testid="publish-approval-section">
+          /*
+           * trust-surfaces clause 1: a sign-off ceremony is a trust surface — an approver
+           * pastes a capability and commits to a specific version. It was never enumerated
+           * because it uses `onApproveWithToken` rather than the accept/reject vocabulary the
+           * earlier hand census looked for; the derived sweep found it. `undecided` means
+           * "required and awaiting sign-off", `none` means approval is not required at all,
+           * and the two must not collapse: "nobody needs to approve" is not "approved".
+           */
+          <section
+            className="ns-share-approval"
+            data-testid="publish-approval-section"
+            data-trust-surface="permission"
+            data-decision={
+              !approval.required ? 'none' : approvedForCurrent ? 'accepted' : 'undecided'
+            }
+          >
             <label className="ns-share-approval-toggle">
               <input
                 type="checkbox"

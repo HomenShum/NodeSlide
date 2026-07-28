@@ -442,3 +442,107 @@ describe('JsonInspector editing', () => {
     expect(screen.queryByLabelText('Candidate review')).not.toBeInTheDocument();
   });
 });
+
+/*
+ * trust-surfaces clause 1 on the JSON proposal lane.
+ *
+ * Persona: an agent inspecting the page to decide whether anything is waiting on a human.
+ * It cannot see React state. Everything it knows about this editor it reads off the DOM, so
+ * `data-decision` has to track the real lane and not merely the fact that a button was
+ * pressed — the expensive version of this bug advertises `undecided` after a proposal that
+ * failed closed, and an agent then waits forever for a decision nobody was ever offered.
+ */
+describe('JsonInspector trust surface', () => {
+  const surface = () => screen.getByTestId('json-element-editor');
+
+  async function mountEditor(onProposePatch: (request: JsonPatchProposalRequest) => boolean) {
+    const snap = snapshot();
+    const slide = snap.slides[0];
+    const element = snap.elements[0];
+    if (!slide || !element) throw new Error('fixture needs a slide and element');
+    const user = userEvent.setup();
+    render(
+      <JsonInspector
+        snapshot={snap}
+        slide={slide}
+        selectedElements={[element]}
+        patches={[]}
+        onProposePatch={onProposePatch}
+      />,
+    );
+    await user.click(screen.getByRole('tab', { name: 'Selection' }));
+    return { user, snap };
+  }
+
+  async function editAndPropose(user: ReturnType<typeof userEvent.setup>, content: string) {
+    const editor = screen.getByRole('textbox', { name: 'JSON for Headline' });
+    const edited = JSON.parse((editor as HTMLTextAreaElement).value) as Record<string, unknown>;
+    edited['content'] = content;
+    fireEvent.change(editor, { target: { value: serializeDeckJson(edited) } });
+    await user.click(screen.getByRole('button', { name: 'Propose changes' }));
+  }
+
+  it('declares itself a proposal surface carrying no decision before anything is proposed', async () => {
+    await mountEditor(() => true);
+
+    expect(surface()).toHaveAttribute('data-trust-surface', 'proposal');
+    // `none`, not `undecided`: nothing has been offered, so there is nothing pending.
+    expect(surface()).toHaveAttribute('data-decision', 'none');
+  });
+
+  it('publishes undecided once a validated candidate exists', async () => {
+    const { user } = await mountEditor(() => true);
+    await editAndPropose(user, 'Proposed JSON copy');
+
+    await waitFor(() => expect(surface()).toHaveAttribute('data-decision', 'undecided'));
+    expect(screen.getByText(/The deck is unchanged; review Compare/)).toBeInTheDocument();
+  });
+
+  it('stays at none when the proposal lane fails closed', async () => {
+    const { user } = await mountEditor(() => false);
+    await editAndPropose(user, 'Unconfirmed JSON copy');
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'The JSON candidate was not created.',
+    );
+    // The decisive assertion: a refused proposal must not advertise a pending decision.
+    expect(surface()).toHaveAttribute('data-decision', 'none');
+  });
+
+  it('stays at none when the proposal lane throws', async () => {
+    const { user } = await mountEditor(() => {
+      throw new Error('the candidate service is down');
+    });
+    await editAndPropose(user, 'Thrown JSON copy');
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('the candidate service is down');
+    expect(surface()).toHaveAttribute('data-decision', 'none');
+  });
+
+  it('drops back to none when a second proposal fails after a first one succeeded', async () => {
+    // State accumulation: the surface must not stay `undecided` from a previous round. An
+    // agent re-reading the page after a failed retry would otherwise still see a live offer.
+    let allow = true;
+    const { user } = await mountEditor(() => allow);
+
+    await editAndPropose(user, 'First JSON copy');
+    await waitFor(() => expect(surface()).toHaveAttribute('data-decision', 'undecided'));
+
+    allow = false;
+    await editAndPropose(user, 'Second JSON copy');
+    await waitFor(() => expect(surface()).toHaveAttribute('data-decision', 'none'));
+  });
+
+  it('never advertises a decision on an edit that produced no operations', async () => {
+    const { user } = await mountEditor(() => true);
+    await user.click(screen.getByRole('button', { name: 'Reset' }));
+    const editor = screen.getByRole('textbox', { name: 'JSON for Headline' });
+    const raw = (editor as HTMLTextAreaElement).value;
+    // Reformat without changing meaning: dirty enough to enable the button, no ops to send.
+    fireEvent.change(editor, { target: { value: `${raw}\n` } });
+    await user.click(screen.getByRole('button', { name: 'Propose changes' }));
+
+    expect(screen.getByText('No changes to propose.')).toBeInTheDocument();
+    expect(surface()).toHaveAttribute('data-decision', 'none');
+  });
+});

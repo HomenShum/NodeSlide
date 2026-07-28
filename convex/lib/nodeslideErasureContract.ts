@@ -14,6 +14,28 @@
  * Nothing here reads or writes rows. It only decides *what* the deletion and
  * the export must cover; `nodeslideRetention.ts` and `nodeslideDataExport.ts`
  * do the work.
+ *
+ * This module plus `nodeslideDeckRows.ts` and `nodeslideRetention.ts`
+ * supersede parity's `convex/lib/nodeslideDeckDeletion.ts` in full, which is
+ * why a symbol audit reports four of its exports MISSING:
+ *
+ *   NODESLIDE_DECK_ERASURE_TABLES -> replaced by `buildNodeSlideErasureContract`
+ *     above. It is exactly the hand-written table list this file exists to
+ *     eliminate; landing it would restore the bug.
+ *   deleteNodeSlideDeckRows -> replaced by `deleteWorkspaceRows` in
+ *     `convex/nodeslideRetention.ts`, which walks the derived contract. It also
+ *     depends on parity schema fields this repo does not have (`workspaceId`,
+ *     `workspaceProjectId`, a `runs` table).
+ *
+ * NOT superseded, and worth someone's attention:
+ *   NODESLIDE_DECK_ERASURE_MAX_RECORDS / _MAX_BYTES. Parity measures the whole
+ *   deletion set against a 4_000-record / 4 MiB envelope and refuses the
+ *   deletion before the first write if it does not fit. `deleteWorkspaceRows`
+ *   here calls `collectNodeSlideScopedRows` with no limit, so the bound is
+ *   whatever Convex's own read limits happen to be. That fails loudly rather
+ *   than silently retaining rows, so it is not a data-retention hole — but it
+ *   is a weaker contract than parity's, and porting the two constants alone
+ *   would change nothing without editing `nodeslideRetention.ts`.
  */
 
 /** Structural view of `defineSchema(...)`, so a test can pass a fixture schema. */

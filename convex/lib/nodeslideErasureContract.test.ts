@@ -66,6 +66,9 @@ describe('erasure contract derivation', () => {
       'nodeslide_execution_traces',
       'nodeslide_shadow_comparisons',
       'nodeslide_exports',
+      // The remote-presentation link and its object mapping name local slide
+      // and element ids, so the connection is deck content, not plumbing.
+      'nodeslide_sync_connections',
       // The Google Slides grant is deck-owned like everything else: an OAuth
       // token is user data, so a deck erasure has to take it with the deck.
       'nodeslide_oauth_sessions',

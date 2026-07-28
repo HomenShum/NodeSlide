@@ -536,6 +536,38 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     createdAt: NOW,
     updatedAt: NOW,
   });
+  // The client-facing side of the same link. Its object mapping names every
+  // local slide and element that was pushed, so it is deck content and has to
+  // be in the erasure scenario, not merely in the schema.
+  await ctx.db.insert('nodeslide_sync_connections', {
+    id: 'sync_connection_scenario',
+    deckId,
+    provider: 'google_slides',
+    remotePresentationId: 'presentation_scenario',
+    remoteRevision: 'revision_scenario',
+    lastSyncedDeckVersion: built.snapshot.deck.version,
+    objectMapping: [
+      {
+        kind: 'deck',
+        localId: deckId,
+        remoteId: 'presentation_scenario',
+        semanticFingerprint: 'sync-semantic/v1:deckscenario',
+      },
+      {
+        kind: 'slide',
+        localId: slide.id,
+        remoteId: 'remote_slide_scenario',
+        semanticFingerprint: 'sync-semantic/v1:slidescenario',
+      },
+    ],
+    status: 'active',
+    connectionVersion: 1,
+    lastMutationKey: 'sync-connection-scenario-key',
+    lastMutationFingerprint: DIGEST('s'),
+    createdAt: NOW,
+    updatedAt: NOW,
+    lastSyncedAt: NOW,
+  });
 
   // A deck that handed an agent a delegated capability, and learned something
   // while that agent worked. Both are deck-owned: a live bearer token or a

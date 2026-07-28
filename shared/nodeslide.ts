@@ -309,6 +309,8 @@ export const NODESLIDE_NEBIUS_VARIATIONS_CONSENT =
 export const NODESLIDE_WEB_RESEARCH_CONSENT = 'nodeslide_web_research_v1' as const;
 /** Exact consent for a local MCP process to send scoped context to a user-selected BYOK model. */
 export const NODESLIDE_LOCAL_BYOK_EDIT_CONSENT = 'nodeslide_local_byok_edit_v1' as const;
+/** Exact consent for an external coding agent to submit already-authored operations for review. */
+export const NODESLIDE_EXTERNAL_AGENT_PATCH_CONSENT = 'nodeslide_external_agent_patch_v1' as const;
 /** Exact consent for sending an image query to the Openverse licensed-media catalog. */
 export const NODESLIDE_IMAGE_SEARCH_CONSENT = 'nodeslide_image_search_v1' as const;
 export const NODESLIDE_OPENVERSE_API_HOST = 'api.openverse.org' as const;
@@ -893,6 +895,136 @@ export interface NodeSlideAgentTelemetryPage {
   hasMore: boolean;
   totalRecorded: number;
 }
+
+export type NodeSlideEvidenceCaptureStatus = 'ready' | 'failed' | 'expired';
+export type NodeSlideEvidenceStepStatus = 'ok' | 'warning' | 'error';
+export type NodeSlideEvidenceAttachmentKind = 'screenshot' | 'pdf';
+export type NodeSlideEvidenceRegionScope = 'source' | 'claim';
+
+/** Normalized evidence region. Coordinates are 0..1 in the rendered screenshot or PDF page. */
+export interface NodeSlideEvidenceBox {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  page?: number;
+}
+
+export interface NodeSlideEvidenceViewport {
+  width: number;
+  height: number;
+}
+
+/** Lightweight capture row. It never contains storage IDs or signed attachment URLs. */
+export interface NodeSlideEvidenceCaptureSummary {
+  id: string;
+  deckId: string;
+  runId: string;
+  traceId: string;
+  spanId: string;
+  parentSpanId: string;
+  sourceId: string;
+  sourceTitle: string;
+  url: string;
+  goal: string;
+  provider: string;
+  status: NodeSlideEvidenceCaptureStatus;
+  error?: string;
+  contentDigest?: string;
+  stepCount: number;
+  screenshotCount: number;
+  pdfCount: number;
+  createdAt: number;
+  completedAt?: number;
+  expiresAt?: number;
+}
+
+export interface NodeSlideEvidenceStepSummary {
+  id: string;
+  captureId: string;
+  spanId: string;
+  sequence: number;
+  phase: string;
+  label: string;
+  status: NodeSlideEvidenceStepStatus;
+  detail?: string;
+  attachmentKind?: NodeSlideEvidenceAttachmentKind;
+  box?: NodeSlideEvidenceBox;
+  /** Missing on legacy rows and therefore treated as source-level, never claim-level. */
+  regionScope?: NodeSlideEvidenceRegionScope;
+  selector?: string;
+  quote?: string;
+  viewport?: NodeSlideEvidenceViewport;
+  contentDigest?: string;
+  createdAt: number;
+}
+
+export interface NodeSlideEvidenceAttachment {
+  kind: NodeSlideEvidenceAttachmentKind;
+  url: string;
+  box?: NodeSlideEvidenceBox;
+  page?: number;
+}
+
+export interface NodeSlideEvidenceStepDetail extends NodeSlideEvidenceStepSummary {
+  attachment?: NodeSlideEvidenceAttachment;
+}
+
+/** Owner-only detail resolved on demand for the single selected capture. */
+export interface NodeSlideEvidenceCaptureDetail extends NodeSlideEvidenceCaptureSummary {
+  steps: NodeSlideEvidenceStepDetail[];
+}
+
+export type NodeSlideAgentToolState =
+  | 'input-streaming'
+  | 'input-available'
+  | 'approval-requested'
+  | 'approval-responded'
+  | 'output-available'
+  | 'output-error'
+  | 'output-denied';
+
+/** Query-projected lifecycle backed only by durable run/span records. */
+export interface NodeSlideAgentToolActivity {
+  state: NodeSlideAgentToolState;
+  input?: unknown;
+  output?: unknown;
+  errorText?: string;
+}
+
+/** A source link is exposed to activity UI only after both fields resolve. */
+export interface NodeSlideAgentResolvedSource {
+  id: string;
+  title: string;
+  url: string;
+}
+
+export type NodeSlideSourceBindingStatus = 'bound' | 'not_applicable' | 'legacy_unavailable';
+
+/** Immutable element-level evidence binding for one factual candidate operation. */
+export interface NodeSlideClaimSourceBinding {
+  operationIndex: number;
+  operation: 'replace_text' | 'update_chart' | 'add_element';
+  slideId: string;
+  elementId: string;
+  sourceIds: string[];
+  claimDigest: string;
+}
+
+/**
+ * Durable presentation-workflow identity. Planner/executor/validator are retained so
+ * conversations written before the six-role workflow remain readable and valid.
+ */
+export type NodeSlideAgentRole =
+  | 'researcher'
+  | 'analyst'
+  | 'storyteller'
+  | 'designer'
+  | 'fact_checker'
+  | 'reviewer'
+  | 'planner'
+  | 'executor'
+  | 'validator';
 
 export interface NodeSlideAgentMessage {
   id: string;

@@ -282,6 +282,7 @@ function ThreadTurn({
           <div
             className="mt-1 flex items-center gap-2 rounded-md border border-border bg-muted/40 px-2 py-1.5"
             data-testid="agent-thread-patch"
+            data-trust-surface="proposal"
             data-decision="undecided"
             data-patch-status={patch.status}
             onMouseEnter={() => onPreviewPatch?.(patch)}
@@ -320,6 +321,7 @@ function ThreadTurn({
               patchAccepted ? 'text-muted-foreground' : 'text-destructive'
             }`}
             data-testid="agent-thread-patch-settled"
+            data-trust-surface="proposal"
             data-decision={patchAccepted ? 'accepted' : 'rejected'}
             data-patch-status={patch.status}
           >

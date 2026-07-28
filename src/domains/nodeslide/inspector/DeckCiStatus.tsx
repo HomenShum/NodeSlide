@@ -48,11 +48,19 @@ export function DeckCiStatus({ result, loading = false, error, onOpenTrace }: De
     .join(', ');
 
   return (
+    /*
+     * trust-surfaces clause 1: Deck CI is a failed-state surface — a person reads it and
+     * decides whether to trust the deck enough to export it. It carries no accept/reject, so
+     * its required attribute is `data-state`, not `data-decision`: publishing a decision here
+     * would invent one. `unavailable` is deliberately its own state and never collapses into
+     * `pass` — "we could not check" is not "it passed".
+     */
     <output
       className={`ns-deck-ci-status is-${state}`}
       aria-live="polite"
       aria-atomic="true"
       data-state={state}
+      data-trust-surface="failed-state"
     >
       {onOpenTrace ? (
         <button

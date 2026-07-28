@@ -162,6 +162,7 @@ export function OpenUiMaterialWorkbench({
       className="ns-openui-workbench"
       data-testid="openui-visual-workbench"
       data-verification={spec.verification}
+      data-trust-surface="proposal"
       data-decision={decision}
     >
       <CollapsibleTrigger>

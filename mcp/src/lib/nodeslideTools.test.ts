@@ -193,8 +193,13 @@ describe('NodeSlide MCP governance', () => {
   });
 
   it('orders the canonical snapshot and strips owner capabilities recursively', () => {
+    // Bound once with a real check rather than twice with `!`. The assertions this replaces said
+    // "trust me" about a fixture defined elsewhere in the file; if that fixture ever loses its
+    // elements, `!` would have produced an undefined spread and a confusing failure deep inside
+    // canonicalNodeSlideSnapshot. This fails at the fixture, naming the fixture.
     const [firstElement] = workspace.elements;
-    if (!firstElement) throw new Error('fixture workspace has no elements');
+    if (!firstElement) throw new Error('fixture workspace must define at least one element');
+
     const unordered = {
       ...workspace,
       deck: {

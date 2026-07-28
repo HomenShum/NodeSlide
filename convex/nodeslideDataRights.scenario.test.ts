@@ -491,6 +491,42 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     signals: [],
     updatedAt: NOW,
   });
+  // A deck that was connected to Google Slides: one abandoned authorization,
+  // one live grant, and the server-side sync baseline. These are the rows a
+  // "delete everything" request is most likely to be about, so the erasure
+  // scenario has to be seeded with them or it proves nothing about them.
+  await ctx.db.insert('nodeslide_oauth_sessions', {
+    stateDigest: DIGEST('g'),
+    deckId,
+    provider: 'google_slides',
+    codeVerifierCiphertext: 'v1:scenario-code-verifier-ciphertext',
+    returnTo: 'https://nodeslide.example/deck',
+    expiresAt: NOW + 600_000,
+    createdAt: NOW,
+  });
+  await ctx.db.insert('nodeslide_oauth_credentials', {
+    deckId,
+    provider: 'google_slides',
+    accessTokenCiphertext: 'v1:scenario-access-token-ciphertext',
+    refreshTokenCiphertext: 'v1:scenario-refresh-token-ciphertext',
+    accessTokenExpiresAt: NOW + 3_600_000,
+    scopes: ['https://www.googleapis.com/auth/drive.file'],
+    tokenType: 'Bearer',
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
+  await ctx.db.insert('nodeslide_google_sync_states', {
+    id: 'google_sync_scenario',
+    deckId,
+    remotePresentationId: 'presentation_scenario',
+    status: 'active',
+    stateVersion: 1,
+    baselineJson: '{"slides":[]}',
+    baselineDigest: DIGEST('h'),
+    baselineRemoteRevision: 'revision_scenario',
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
 
   return { deckId, projectId, projectRowId, deckTitle: built.snapshot.deck.title, built };
 }
@@ -753,6 +789,19 @@ describe('owner data export', () => {
     expect(serialized).not.toContain('clientSessionId');
     // The deck id itself is the scope and must stay, or the bundle is unusable.
     expect(serialized).toContain(seeded.deckId);
+
+    // The Google grant is deck-owned, so it is in the export's scope — but the
+    // token material is not the owner's to receive back in plaintext, and an
+    // export bundle is a file that gets emailed around. The redaction rule is
+    // the `*Ciphertext` suffix, so this asserts the outcome rather than the rule.
+    expect(serialized).not.toContain('scenario-access-token-ciphertext');
+    expect(serialized).not.toContain('scenario-refresh-token-ciphertext');
+    expect(serialized).not.toContain('scenario-code-verifier-ciphertext');
+    // The row itself is still reported, so the owner learns the grant exists.
+    expect(bundle.data['oauthCredentials']).toHaveLength(1);
+    expect(JSON.stringify(bundle.data['oauthCredentials'])).toContain(
+      'https://www.googleapis.com/auth/drive.file',
+    );
   });
 
   it('exports what the erasure would destroy: the two lists agree by construction', async () => {

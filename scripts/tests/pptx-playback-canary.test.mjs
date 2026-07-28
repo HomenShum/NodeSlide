@@ -326,21 +326,52 @@ describe('pptx playback canary — the OOXML reader is not welded', () => {
   });
 });
 
-describe('pptx playback canary — regression lock on a defect found in a shipped artefact', () => {
-  // roundtrip-ppt.pptx is tracked in this repo. Every one of its 38 slides carries a
-  // <p:transition spd="slow" p14:dur="2000"/> with no effect child: a transition that advances the
-  // slide and animates nothing. This test exists so that finding cannot silently disappear.
-  it('roundtrip-ppt.pptx fails A4 on all 38 slides with effect-less transitions', async () => {
+describe('pptx playback canary — regression lock on the round-trip artefact', () => {
+  // HISTORY, kept because the fix is only legible next to the defect it removed.
+  //
+  // Every one of roundtrip-ppt.pptx's 38 slides used to carry
+  //     <mc:AlternateContent>
+  //       <mc:Choice Requires="p14"><p:transition spd="slow" p14:dur="2000"/></mc:Choice>
+  //       <mc:Fallback><p:transition spd="slow"/></mc:Fallback>
+  //     </mc:AlternateContent>
+  // — a transition that advances the slide and animates nothing, so the file claimed a two-second
+  // transition where PowerPoint cuts instantly.
+  //
+  // It was never ours. `scripts/build-atlas-v3-native.mjs` emits zero <p:transition>; LibreOffice's
+  // PPTX filter injects that pair onto every slide it exports, and the artefact had no owned
+  // generator to notice. `scripts/build-atlas-roundtrip.mjs` is now that generator and strips them.
+  //
+  // This test therefore locks the FIX, not the defect. The knockout proving the canary can still
+  // catch an effect-less transition lives above ("A4 knockout"), so removing the defect from the
+  // artefact did not remove the sensor that found it.
+  it('roundtrip-ppt.pptx parses as a real deck before anything is claimed about it', async () => {
     const xmlBySlide = await loadSlideXml(ROUNDTRIP);
-    const result = decide(xmlBySlide);
-    expect(result.verdict).toBe('fail');
+    expect(xmlBySlide.size).toBe(38);
+    const shapes = [...xmlBySlide.values()].reduce(
+      (n, xml) => n + (xml.match(/<p:cNvPr\s/g) ?? []).length,
+      0,
+    );
+    expect(shapes).toBeGreaterThan(300);
+  });
+
+  it('carries no <p:transition> at all, and A4 is silent rather than green', async () => {
+    const result = decide(await loadSlideXml(ROUNDTRIP));
+    expect(result.verdict).toBe('pass');
     const a4 = assertionOf(result, 'A4');
-    expect(a4.status).toBe('fail');
-    expect(a4.subjects).toBe(38);
-    expect(a4.failures).toHaveLength(38);
-    // Its timing tree is intact, so the failure is isolated to transitions — not a broken read.
-    expect(assertionOf(result, 'A1').status).toBe('pass');
-    expect(assertionOf(result, 'A2').status).toBe('pass');
-    expect(assertionOf(result, 'A3').status).toBe('pass');
+    // Zero subjects is the honest report for a deck that declares no transitions. A4 must NOT
+    // claim to have checked something: "no broken transition" and "no transition" differ.
+    expect(a4.status).toBe('no-subject');
+    expect(a4.subjects).toBe(0);
+    expect(defects(result, 'transition-empty')).toHaveLength(0);
+  });
+
+  it('kept the step-build timing the round trip existed to measure', async () => {
+    const result = decide(await loadSlideXml(ROUNDTRIP));
+    // The fix removed a converter default, not our motion. If the normalizer had over-reached,
+    // these three would go silent and the suite above would still be green — so they are the guard.
+    expect(assertionOf(result, 'A1').subjects).toBe(2);
+    expect(assertionOf(result, 'A2').subjects).toBe(8);
+    expect(assertionOf(result, 'A3').subjects).toBe(2);
+    expect(result.timedSlides).toEqual([21, 22]);
   });
 });

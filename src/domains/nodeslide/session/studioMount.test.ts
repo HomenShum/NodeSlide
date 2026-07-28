@@ -26,7 +26,9 @@ const MOUNT_PATTERN =
 
 describe('NodeSlideStudio mounts the agent session', () => {
   it('imports the provider from the session barrel', () => {
-    expect(STUDIO_SOURCE).toMatch(/import \{ AgentSessionProvider \} from '\.\/session';/u);
+    // Co-imports are allowed (the UI contract publisher reads `useOptionalAgentSession`
+    // from the same barrel); dropping `AgentSessionProvider` is not.
+    expect(STUDIO_SOURCE).toMatch(/import \{ AgentSessionProvider[^}]*\} from '\.\/session';/u);
   });
 
   it('wraps the studio content in the provider', () => {

@@ -9,10 +9,17 @@ import {
   X,
 } from 'lucide-react';
 import { type ReactNode, useEffect, useState } from 'react';
+import type { NodeSlideUiContract } from '../../uiContract';
 
 /** After this long on one loading stage, offer an honest retry instead of spinning forever. */
 const LOADING_RETRY_AFTER_MS = 12_000;
 
+/**
+ * True once the realtime transport is actually up. Deliberately NOT exported:
+ * `connectionState()` constructs the sync client, which opens the websocket. Only a
+ * screen that is genuinely waiting on the transport may ask. The UI contract reads
+ * this screen's answer through `onLoadingState` instead of probing for its own.
+ */
 function useConvexConnectionReady(): boolean {
   const convex = useConvex();
   const [ready, setReady] = useState(() => convex.connectionState().isWebSocketConnected);
@@ -35,9 +42,17 @@ function useConvexConnectionReady(): boolean {
 export function LoadingScreen({
   title,
   kind = 'preparing_sample',
+  onLoadingState,
 }: {
   title: string;
   kind?: 'preparing_sample' | 'opening_deck';
+  /**
+   * Reports this screen's live stage to the one component that publishes the UI
+   * contract. The screen does not write contract attributes itself: a second
+   * writer on the same attribute names is the failure mode the contract exists to
+   * avoid. It reports; NodeSlideStudioContent publishes.
+   */
+  onLoadingState?: (state: NodeSlideUiContract['loading'] | null) => void;
 }) {
   const connected = useConvexConnectionReady();
   const [startedAt] = useState(() => Date.now());
@@ -49,6 +64,11 @@ export function LoadingScreen({
 
   const stage = connected ? kind : 'connecting';
   const retryVisible = elapsedMs >= LOADING_RETRY_AFTER_MS;
+
+  useEffect(() => {
+    onLoadingState?.({ stage, elapsedMs, retryVisible });
+    return () => onLoadingState?.(null);
+  }, [elapsedMs, onLoadingState, retryVisible, stage]);
   const stageTitle = connected ? title : 'Connecting to the workspace service…';
   const stageDetail = connected
     ? 'Loading canonical slides, sources, comments, and revision clocks.'

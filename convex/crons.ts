@@ -25,6 +25,20 @@ crons.interval(
 );
 
 crons.interval(
+  'prune expired NodeSlide visual evidence',
+  { hours: 1 },
+  internal.nodeslide.pruneExpiredEvidenceCapturesInternal,
+  {},
+);
+
+crons.interval(
+  'check opted-in NodeSlide web sources',
+  { minutes: 15 },
+  internal.nodeslideSourceRefresh.scanDueInternal,
+  {},
+);
+
+crons.interval(
   'delete expired NodeSlide production probe workspaces',
   { minutes: 30 },
   internal.nodeslideRetention.deleteExpiredProductionProbeWorkspaces,

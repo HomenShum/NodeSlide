@@ -9,9 +9,11 @@ import {
   clauseStateAgreement,
   clauseSuccessToken,
   evaluateSurface,
+  oklabDistance,
   planForCensus,
   successPaints,
   summarize,
+  transitionedProperties,
 } from '../nodeslide-trust-surface-runtime-probe.mjs';
 
 /*
@@ -209,9 +211,158 @@ describe('motion the source sweep cannot see', () => {
     expect(a.reason).toContain('article.ns-proposal-card');
   });
 
-  it('catches a computed transition inherited from a component three levels up', () => {
-    // The live finding: `transition-all` lives in the shadcn button base, not on the
-    // annotated tag, so the census's className scan reads a clean tag and passes.
+  it('still bans a named keyframe animation outright — the narrowing is about transitions only', () => {
+    const a = clauseAnimations(
+      observation({
+        motion: [
+          {
+            ...stillMotion('article.ns-proposal-card'),
+            animationName: 'ns-pulse',
+            animationDuration: '900ms',
+            animationIterationCount: 'infinite',
+          },
+        ],
+      }),
+      PLAN,
+    );
+    expect(a.verdict).toBe('failed');
+    expect(a.reason).toContain('ns-pulse');
+  });
+});
+
+/* ------------------------------------------------- clause A, narrowed: direction not presence */
+
+/*
+ * THE NARROWING, pinned.
+ *
+ * Clause A used to fail on the mere presence of a `transition:` declaration anywhere inside a
+ * trust surface. On production that fired exactly once — on the AI composer's web-research
+ * CONSENT toggle, for `transition: all 0.15s` inherited from the shadcn `buttonVariants` base
+ * three components above the annotated tag.
+ *
+ * That verdict was wrong, and the reason it was wrong is measurable rather than aesthetic. The
+ * toggle renders `variant="ghost"` (transparent) while web egress is OFF and `variant="default"`
+ * (`bg-primary`) while it is ON. The only paint it can reach WITHOUT its declared state changing
+ * is `:hover` -> `--color-surface-hover`, a near-achromatic near-white that sits 0.372 from
+ * `--primary` and 0.431 from `--color-success` in OKLab. It does not move toward looking
+ * granted; it moves toward looking hovered.
+ *
+ * So the clause now grades DIRECTION. The scenarios below are the boundary in both directions,
+ * and the first one is the one that matters: a background moving toward the accept hue on an
+ * undecided element is still RED, which is what stops this narrowing from being an allowlist
+ * with extra steps.
+ */
+describe('a transition is a lie only when it moves toward the accepted appearance', () => {
+  // Real production values. `--primary` is `--color-accent`, oklch(0.62 0.16 35); the ghost
+  // hover lands on `--color-surface-hover`, oklch(0.96 0.015 75).
+  const GRANTED = 'rgb(212, 91, 61)';
+  const HOVER_NEUTRAL = 'rgb(248, 241, 231)';
+  const ACCEPT = { '--ns-positive': POSITIVE, '--primary': GRANTED };
+
+  const endpoint = (property, value, pseudo = 'hover', restValue = 'rgba(0, 0, 0, 0)') => ({
+    pseudo,
+    property,
+    declared: 'var(--token)',
+    value,
+    restValue,
+    resolved: value !== null,
+  });
+
+  const transitioning = (
+    node,
+    { properties = 'all', duration = '0.15s', endpoints = [] } = {},
+  ) => ({
+    ...stillMotion(node),
+    transitionProperty: properties,
+    transitionDuration: duration,
+    sameStateEndpoints: endpoints,
+    sheetsRead: 4,
+    unreadableSheets: 0,
+  });
+
+  const withMotion = (motion, extra = {}) =>
+    observation({ motion, acceptAppearances: ACCEPT, ...extra });
+
+  it('STAYS RED: a background transitioning toward the accept hue on an undecided element', () => {
+    // The deception the rule was written for, and the fixture that proves the narrowed clause
+    // did not simply stop looking. Hovering an undecided thing shades it into the fill that
+    // means "committed" — it looks granted before anyone granted anything.
+    const a = clauseAnimations(
+      withMotion([
+        transitioning('button[data-testid=ai-web-research-toggle]', {
+          endpoints: [endpoint('background-color', GRANTED)],
+        }),
+      ]),
+      PLAN,
+    );
+    expect(a.verdict).toBe('failed');
+    expect(a.reason).toContain('--primary');
+    expect(a.reason).toContain('accepted appearance');
+    expect(a.observed.directional).toHaveLength(1);
+  });
+
+  it('STAYS RED on a near miss, not merely on an exact token match', () => {
+    // A slightly lighter shade of the accept hue is 0.032 away in OKLab — inside the 0.10
+    // threshold. A clause that only caught string equality would be trivial to slip past.
+    const a = clauseAnimations(
+      withMotion([
+        transitioning('button', { endpoints: [endpoint('background-color', 'rgb(223, 111, 79)')] }),
+      ]),
+      PLAN,
+    );
+    expect(a.verdict).toBe('failed');
+    expect(a.reason).toContain('--primary');
+  });
+
+  it('CLEARS the live finding: transition:all whose only same-state endpoint is a neutral', () => {
+    /*
+     * The actual production case. `transition: all 0.15s` DOES cover background-color, so a
+     * property-name test alone would still condemn it. Only the endpoint measurement clears
+     * it — and the verdict carries the distance that cleared it.
+     */
+    const a = clauseAnimations(
+      withMotion([
+        transitioning('button[data-testid=ai-web-research-toggle]', {
+          endpoints: [endpoint('background-color', HOVER_NEUTRAL)],
+        }),
+      ]),
+      PLAN,
+    );
+    expect(a.verdict).toBe('passed');
+    expect(a.reason).toContain(HOVER_NEUTRAL);
+    expect(a.reason).toContain('--primary');
+  });
+
+  it('catches opacity filling in toward settled on an undecided surface', () => {
+    const a = clauseAnimations(
+      withMotion([
+        transitioning('article.ns-proposal-card', {
+          properties: 'opacity',
+          endpoints: [endpoint('opacity', '1', 'hover', '0.6')],
+        }),
+      ]),
+      PLAN,
+    );
+    expect(a.verdict).toBe('failed');
+    expect(a.reason).toContain('toward fully settled');
+  });
+
+  it('ignores a transition that only moves neutral affordance properties', () => {
+    // A focus ring and a hover elevation carry no claim about the decision. This is the whole
+    // class the old clause was collapsing together with the deception above.
+    const a = clauseAnimations(
+      withMotion([
+        transitioning('button', { properties: 'box-shadow, outline-color, border-color' }),
+      ]),
+      PLAN,
+    );
+    expect(a.verdict).toBe('passed');
+    expect(a.reason).toContain('box-shadow');
+  });
+
+  it('reports not-run — never passed — when the endpoints were never measured', () => {
+    // The old fixture, rehomed. An observation with no endpoint measurement cannot support
+    // "this transition is neutral"; the absence of evidence is not evidence of neutrality.
     const a = clauseAnimations(
       observation({
         motion: [
@@ -224,8 +375,114 @@ describe('motion the source sweep cannot see', () => {
       }),
       PLAN,
     );
-    expect(a.verdict).toBe('failed');
-    expect(a.reason).toContain('0.15s');
+    expect(a.verdict).toBe('not-run');
+    expect(a.reason).toContain('unmeasured endpoint is not a neutral one');
+  });
+
+  it('reports not-run when a cross-origin stylesheet hid part of the endpoint set', () => {
+    const a = clauseAnimations(
+      withMotion([
+        {
+          ...transitioning('button', { endpoints: [endpoint('background-color', HOVER_NEUTRAL)] }),
+          unreadableSheets: 2,
+        },
+      ]),
+      PLAN,
+    );
+    expect(a.verdict).toBe('not-run');
+    expect(a.reason).toContain('cross-origin');
+  });
+
+  it('reports not-run when no accept appearance resolved — "toward accepted" needs a reference', () => {
+    const a = clauseAnimations(
+      observation({
+        acceptAppearances: {},
+        motion: [
+          transitioning('button', { endpoints: [endpoint('background-color', HOVER_NEUTRAL)] }),
+        ],
+      }),
+      PLAN,
+    );
+    expect(a.verdict).toBe('not-run');
+    expect(a.reason).toContain('no accept-appearance token resolved');
+  });
+
+  it('pairs transition-property with its own duration, not merely the first one', () => {
+    // `transition: opacity 0s, background-color 150ms` computes to a two-item property list
+    // with a two-item duration list. Reading the properties alone would invent a transition on
+    // `opacity` that does not run.
+    expect(
+      transitionedProperties({
+        transitionProperty: 'opacity, background-color',
+        transitionDuration: '0s, 0.15s',
+      }),
+    ).toEqual(['background-color']);
+    expect(transitionedProperties({ transitionProperty: 'all', transitionDuration: '0s' })).toEqual(
+      [],
+    );
+  });
+
+  it('compares oklch() endpoints, which is the form Chromium actually returns [probe regression]', () => {
+    /*
+     * The bug the FIRST live run of the narrowed clause committed against production.
+     * Chromium does not serialize a wide-gamut computed colour down to `rgb()` — `--primary`
+     * came back as the literal string `oklch(0.62 0.16 35)`. An rgb-only parser returned null
+     * for every comparison, so every distance was null, so nothing was ever "near" an accept
+     * hue, so the surface passed. The verdict was right by accident and its stated reason was
+     * false, which is worse than a red.
+     */
+    expect(oklabDistance('oklch(0.96 0.015 75)', 'oklch(0.62 0.16 35)')).toBeCloseTo(0.372, 2);
+    // The same two colours written in the two different syntaxes must measure the same.
+    expect(oklabDistance('oklch(0.62 0.16 35)', GRANTED)).toBeLessThan(0.02);
+
+    const a = clauseAnimations(
+      withMotion(
+        [
+          transitioning('button', {
+            endpoints: [endpoint('background-color', 'oklch(0.96 0.015 75)')],
+          }),
+        ],
+        { acceptAppearances: { '--primary': 'oklch(0.62 0.16 35)' } },
+      ),
+      PLAN,
+    );
+    expect(a.verdict).toBe('passed');
+    // And the mirror: an oklch endpoint that IS the accept hue still goes red.
+    const red = clauseAnimations(
+      withMotion(
+        [
+          transitioning('button', {
+            endpoints: [endpoint('background-color', 'oklch(0.63 0.155 36)')],
+          }),
+        ],
+        { acceptAppearances: { '--primary': 'oklch(0.62 0.16 35)' } },
+      ),
+      PLAN,
+    );
+    expect(red.verdict).toBe('failed');
+  });
+
+  it('reports not-run — never passed — for an endpoint it cannot place in OKLab', () => {
+    // The structural half of the same fix. An uncomparable colour must not be counted as a
+    // neutral one; "I could not read it" and "it was harmless" are different readings.
+    const a = clauseAnimations(
+      withMotion([
+        transitioning('button', {
+          endpoints: [endpoint('background-color', 'color(display-p3 0.8 0.2 0.1)')],
+        }),
+      ]),
+      PLAN,
+    );
+    expect(a.verdict).toBe('not-run');
+    expect(a.reason).toContain('not a colour this probe can place in OKLab');
+  });
+
+  it('measures perceptual distance, so the threshold means the same thing in every hue', () => {
+    expect(oklabDistance(HOVER_NEUTRAL, GRANTED)).toBeGreaterThan(0.3);
+    expect(oklabDistance(GRANTED, GRANTED)).toBe(0);
+    // Alpha-0 paint is not paint: a transparent rest value has no hue to move away from.
+    expect(oklabDistance('rgba(0, 0, 0, 0)', GRANTED)).toBeNull();
+    expect(oklabDistance('none', GRANTED)).toBeNull();
   });
 });
 

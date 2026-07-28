@@ -1081,7 +1081,7 @@ function ImageAssetEditor({
               const credit = String(formData.get('credit') ?? '').trim();
               setError(null);
               setBusy(true);
-              void imageBlobToEmbeddedRaster(file)
+              void imageFileToEmbeddedWebp(file)
                 .then((imageUrl) => {
                   onApplyPatch(
                     buildImageReplacementOperations({
@@ -1318,12 +1318,28 @@ export async function readBoundedImageResponse(response: Response): Promise<Blob
   return new Blob(chunks, { type: response.headers.get('content-type') ?? '' });
 }
 
+/**
+ * The user-chosen-file entry point. It differs from the Openverse path only in whose
+ * mistake the error describes: a person who picked a .svg needs to be told which formats
+ * to pick, not that a search provider returned something unsupported.
+ */
+export async function imageFileToEmbeddedWebp(file: File): Promise<string> {
+  if (file.size > 8_000_000) throw new Error('Choose an image smaller than 8 MB.');
+  if (!ACCEPTED_EMBEDDED_IMAGE_TYPE.test(file.type)) {
+    throw new Error('Choose a PNG, JPEG, WebP, or GIF image.');
+  }
+  return compressToEmbeddedRaster(file);
+}
+
 async function imageBlobToEmbeddedRaster(file: Blob): Promise<string> {
   if (file.size > 8_000_000) throw new Error('Choose an image smaller than 8 MB.');
   if (!ACCEPTED_EMBEDDED_IMAGE_TYPE.test(file.type)) {
     throw new Error('Openverse returned an unsupported image format.');
   }
+  return compressToEmbeddedRaster(file);
+}
 
+async function compressToEmbeddedRaster(file: Blob): Promise<string> {
   const original = await blobToDataUrl(file);
   if (original.length <= MAX_EMBEDDED_IMAGE_DATA_URL_CHARS) return original;
 

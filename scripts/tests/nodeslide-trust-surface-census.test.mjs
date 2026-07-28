@@ -3,8 +3,10 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
+  MOTION_DECEPTION_CORPUS,
   clauseRunMode,
   collectTrustSurfaceCensus,
+  motionDeceptionCoverage,
   trustSurfaceChecks,
 } from '../nodeslide-trust-surface-census.mjs';
 
@@ -194,6 +196,436 @@ describe('trust-surface census — clause 3, not styled to imply an outcome', ()
     const result = await census(dir);
 
     expect(result.cssRules.find((entry) => entry.selector === '.ns-ship-card').line).toBe(6);
+  });
+});
+
+/*
+ * ======================================================================================
+ * THE MOTION DECEPTION CORPUS
+ *
+ * Seven ways motion lies while passing a naive motion check. Each one is built here as a
+ * NodeSlide-shaped trust surface — an annotated proposal card with Accept and Reject, the
+ * exact shape of the cards in AgentThread and JsonInspector — and the REAL checks are run
+ * against it. The verdict recorded in MOTION_DECEPTION_CORPUS is then cross-checked against
+ * what the gate actually did.
+ *
+ * That cross-check is the point. A graded table maintained by hand drifts toward flattery:
+ * someone deletes a detector, the table still says "detected", and the coverage line goes on
+ * advertising a check that no longer runs. Here the table is the EXPECTATION and the fixture
+ * is the OBSERVATION, so the two cannot disagree without turning the suite red.
+ *
+ * The persona is the one who makes this deception real without meaning to: an engineer under
+ * deadline who wants the proposal card to feel responsive, reaches for whichever motion tool
+ * is nearest, and never learns that a card which drifts toward green is a card that answered
+ * the question before the human did.
+ * ======================================================================================
+ */
+
+/** The annotated proposal card every corpus fixture deceives. `extra` goes on the className. */
+const proposalCard = ({ extra = '', styleProp = '', tag = 'div', body = '' } = {}) => `
+export function ShipItCard({ onAccept, onReject, proposal }) {
+  return (
+    <${tag} className="ns-ship-card${extra}" data-trust-surface="proposal" data-decision="undecided"${styleProp}>
+      ${body}<p>{proposal.summary}</p>
+      <button type="button" onClick={() => onAccept(proposal)}>
+        Accept
+      </button>
+      <button type="button" onClick={() => onReject(proposal)}>
+        Reject
+      </button>
+    </${tag}>
+  );
+}
+`;
+
+/**
+ * Each corpus id maps to the fixtures that exhibit it. `red` is the assertion: true means
+ * this gate must go red on it, false means the deception survives a green run.
+ *
+ * `check` names the label fragment that must be the one to fire, so a fixture cannot be
+ * scored "caught" by an unrelated failure. The first grading run of this corpus reported all
+ * seven deceptions CAUGHT — every one of them by the same irrelevant stale-allowlist error,
+ * because the shipped allowlist names real repository paths and every entry is stale against
+ * a fixture tree. `allowlist: []` below is why the verdicts mean anything.
+ */
+const CORPUS_FIXTURES = {
+  1: [
+    {
+      name: 'annotated surface behind a false guard, never rendered',
+      red: false,
+      files: {
+        'ShipItCard.tsx': proposalCard(),
+        'Host.tsx': `
+import { ShipItCard } from './ShipItCard';
+export function Host({ proposal, onAccept, onReject }) {
+  const SHOW_PROPOSALS = false;
+  return <div>{SHOW_PROPOSALS && <ShipItCard proposal={proposal} onAccept={onAccept} onReject={onReject} />}</div>;
+}
+`,
+      },
+    },
+  ],
+  2: [
+    {
+      name: 'motion on an off-screen decoy, real surface untouched',
+      red: false,
+      files: {
+        'ShipItCard.tsx': proposalCard(),
+        'ship.css':
+          '.ns-ship-card {\n  border: 1px solid var(--ns-line);\n}\n\n.ns-approval-echo {\n  position: absolute;\n  left: -9999px;\n  animation: settle-to-approved 600ms ease forwards;\n}\n',
+      },
+    },
+  ],
+  3: [
+    {
+      name: 'live timestamp inside the trust surface',
+      red: false,
+      files: {
+        'ShipItCard.tsx': proposalCard({
+          body: '<time>{new Date().toLocaleTimeString()}</time>\n      ',
+        }),
+      },
+    },
+  ],
+  4: [
+    {
+      name: '4a approval motion declared in CSS',
+      red: true,
+      check: 'no CSS transition/animation on an enumerated decision surface',
+      files: {
+        'ShipItCard.tsx': proposalCard(),
+        'ship.css':
+          '.ns-ship-card {\n  animation: settle-to-approved 400ms ease forwards;\n  background: var(--ns-positive);\n}\n',
+      },
+    },
+    {
+      name: '4b approval motion as a utility class',
+      red: true,
+      check: 'no motion utility class on an enumerated decision surface',
+      files: { 'ShipItCard.tsx': proposalCard({ extra: ' transition-colors duration-500' }) },
+    },
+    {
+      name: '4c approval motion in an inline style prop',
+      red: true,
+      check: 'no inline style motion on an enumerated decision surface',
+      files: {
+        'ShipItCard.tsx': proposalCard({
+          styleProp:
+            " style={{ transition: 'background-color 400ms ease', background: 'var(--ns-positive)' }}",
+        }),
+      },
+    },
+    {
+      name: '4d approval motion via Framer Motion props',
+      red: true,
+      check: 'no Framer Motion animation prop on an enumerated decision surface',
+      files: {
+        'ShipItCard.tsx': `
+import { motion } from 'framer-motion';
+export function ShipItCard({ onAccept, onReject, proposal }) {
+  return (
+    <motion.div
+      className="ns-ship-card"
+      data-trust-surface="proposal"
+      data-decision="undecided"
+      initial={{ borderColor: 'var(--ns-line)' }}
+      animate={{ borderColor: 'var(--ns-positive)' }}
+      transition={{ duration: 0.4 }}
+    >
+      <p>{proposal.summary}</p>
+      <button type="button" onClick={() => onAccept(proposal)}>
+        Accept
+      </button>
+      <button type="button" onClick={() => onReject(proposal)}>
+        Reject
+      </button>
+    </motion.div>
+  );
+}
+`,
+      },
+    },
+    {
+      name: '4e approval motion via the Web Animations API',
+      red: true,
+      check: 'no Web Animations API call in a component owning a decision surface',
+      files: {
+        'ShipItCard.tsx': `
+import { useEffect, useRef } from 'react';
+export function ShipItCard({ onAccept, onReject, proposal }) {
+  const cardRef = useRef(null);
+  useEffect(() => {
+    cardRef.current?.animate(
+      [{ background: 'transparent' }, { background: 'var(--ns-positive)' }],
+      { duration: 400, fill: 'forwards' },
+    );
+  }, []);
+  return (
+    <div ref={cardRef} className="ns-ship-card" data-trust-surface="proposal" data-decision="undecided">
+      <p>{proposal.summary}</p>
+      <button type="button" onClick={() => onAccept(proposal)}>
+        Accept
+      </button>
+      <button type="button" onClick={() => onReject(proposal)}>
+        Reject
+      </button>
+    </div>
+  );
+}
+`,
+      },
+    },
+  ],
+  5: [
+    {
+      name: 'prefers-reduced-motion repaints the card in the approval colour',
+      red: false,
+      files: {
+        'ShipItCard.tsx': proposalCard(),
+        'ship.css':
+          '.ns-ship-card {\n  border: 1px solid var(--ns-line);\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .ns-ship-card {\n    border-color: var(--ns-positive);\n    background: var(--ns-positive);\n  }\n}\n',
+      },
+    },
+  ],
+  6: [
+    {
+      name: 'GSAP tween whose knockout path sets duration to zero',
+      red: false,
+      files: {
+        'ShipItCard.tsx': `
+import { useEffect } from 'react';
+import gsap from 'gsap';
+export function ShipItCard({ onAccept, onReject, proposal, prefersReduced }) {
+  useEffect(() => {
+    gsap.to('.ns-ship-card', {
+      backgroundColor: 'var(--ns-positive)',
+      duration: prefersReduced ? 0 : 0.6,
+    });
+  }, [prefersReduced]);
+  return (
+    <div className="ns-ship-card" data-trust-surface="proposal" data-decision="undecided">
+      <p>{proposal.summary}</p>
+      <button type="button" onClick={() => onAccept(proposal)}>
+        Accept
+      </button>
+      <button type="button" onClick={() => onReject(proposal)}>
+        Reject
+      </button>
+    </div>
+  );
+}
+`,
+      },
+    },
+  ],
+  7: [
+    {
+      name: 'compliant source; the motion exists only in the recording',
+      red: false,
+      files: {
+        'ShipItCard.tsx': proposalCard(),
+        'ship.css': '.ns-ship-card {\n  border: 1px solid var(--ns-line);\n}\n',
+      },
+    },
+  ],
+};
+
+/** Run the real checks against a fixture tree, with the repo allowlist out of the way. */
+async function gradeFixture(files) {
+  const dir = await fixture(files);
+  const { checks } = await trustSurfaceChecks({ srcDir: dir, relativeTo: dir, allowlist: [] });
+  return checks.filter(([, passed]) => !passed).map(([label, , detail]) => ({ label, detail }));
+}
+
+describe('motion deception corpus — graded, fixture by fixture', () => {
+  for (const entry of MOTION_DECEPTION_CORPUS) {
+    const fixtures = CORPUS_FIXTURES[entry.id] ?? [];
+
+    // An entry with no fixture cannot have been graded, only asserted.
+    it(`#${entry.id} ${entry.deception} — has at least one fixture`, () => {
+      expect(fixtures.length).toBeGreaterThan(0);
+    });
+
+    for (const scenario of fixtures) {
+      it(`#${entry.id} ${scenario.name} — is ${scenario.red ? 'CAUGHT' : 'MISSED'}`, async () => {
+        const failures = await gradeFixture(scenario.files);
+
+        if (scenario.red) {
+          expect(failures.length).toBeGreaterThan(0);
+          // Caught by the RIGHT check. A fixture that goes red for an unrelated reason is
+          // not coverage, it is a coincidence that will evaporate on the next refactor.
+          expect(failures.some((f) => f.label.includes(scenario.check))).toBe(true);
+        } else {
+          // The deception survives. This assertion is the honest half of the corpus: it
+          // pins a KNOWN HOLE so that closing it is a deliberate act that updates the table,
+          // rather than something that happens by accident and nobody notices.
+          expect(failures).toEqual([]);
+        }
+      });
+    }
+
+    // The bond between the table and the fixtures. `detected` must mean every fixture for
+    // that class goes red; `not-detected` must mean none of them do.
+    it(`#${entry.id} — the recorded verdict "${entry.verdict}" matches what the gate does`, async () => {
+      const results = await Promise.all(
+        fixtures.map(async (scenario) => (await gradeFixture(scenario.files)).length > 0),
+      );
+      const everyFixtureRed = results.every(Boolean);
+      const noFixtureRed = results.every((red) => !red);
+
+      if (entry.verdict === 'detected') {
+        expect(everyFixtureRed).toBe(true);
+        expect(entry.mode).toBe('STATIC');
+      } else {
+        expect(noFixtureRed).toBe(true);
+        // A miss must name the runner that would decide it, and that runner is PROBED.
+        expect(entry.mode).toBe('NOT-RUN');
+      }
+    });
+  }
+
+  it('records a verdict for all seven corpus classes, with no gaps', () => {
+    expect(MOTION_DECEPTION_CORPUS.map((entry) => entry.id).sort()).toEqual([1, 2, 3, 4, 5, 6, 7]);
+  });
+});
+
+describe('motion deception corpus — the three routes a CSS-only scan could not see', () => {
+  /*
+   * Knockouts for the checks added because of this corpus. All three are TRIPWIREs: src/ has
+   * no framer-motion dependency, no `.animate(` call and no inline style motion, so none of
+   * them can fail on the repository today. That is exactly why the knockout has to live here.
+   * A tripwire that has never been observed firing is indistinguishable from a broken regex,
+   * and the next reader is right to delete it.
+   *
+   * THESE KNOCKOUTS ARE CAUSAL, which is corpus fixture #6 applied to this file. Each pair is
+   * a tree in which the offending construct DOES NOT EXIST versus one in which it does — the
+   * cause is prevented from being constructed, and the check's verdict is observed to change.
+   * The tempting cheap version — keep the construct and neutralise it (`duration: 0`,
+   * `timeScale(0)`) — is exactly the deception #6 describes: the end state still arrives, so
+   * the comparison still differs and the knockout passes while proving nothing.
+   */
+  const cases = [
+    [
+      'inline style prop',
+      'no inline style motion on an enumerated decision surface',
+      proposalCard({ styleProp: " style={{ transition: 'background-color 400ms ease' }}" }),
+    ],
+    [
+      'Framer Motion animate prop',
+      'no Framer Motion animation prop on an enumerated decision surface',
+      proposalCard().replace(
+        'data-decision="undecided"',
+        'data-decision="undecided" animate={{ borderColor: green }}',
+      ),
+    ],
+    [
+      'bare <motion.div> with no props yet',
+      'no Framer Motion animation prop on an enumerated decision surface',
+      proposalCard({ tag: 'motion.div' }),
+    ],
+    [
+      'WAAPI .animate() from an effect',
+      'no Web Animations API call in a component owning a decision surface',
+      proposalCard().replace(
+        'return (',
+        'useEffect(() => { ref.current.animate(frames, 400); }, []);\n  return (',
+      ),
+    ],
+  ];
+
+  for (const [name, label, source] of cases) {
+    it(`goes red on ${name}`, async () => {
+      const failures = await gradeFixture({ 'ShipItCard.tsx': source });
+      expect(failures.map((f) => f.label).join(' | ')).toContain(label);
+    });
+  }
+
+  it('stays green on a decision surface with no motion at all', async () => {
+    // The other half of a knockout: the check must be silent on the compliant case, or it is
+    // not a detector, it is a permanent failure that will be suppressed rather than fixed.
+    expect(await gradeFixture({ 'ShipItCard.tsx': proposalCard() })).toEqual([]);
+  });
+
+  it('ignores motion on a failed-state surface, which is policed by a different rule', async () => {
+    // Scope check. `failed-state` is a readout, not an affordance; a loading pulse there is
+    // legitimate and is governed by "failure never looks like loading" instead.
+    const failures = await gradeFixture({
+      'Status.tsx': `
+export function DeckCiStatus({ onAccept, state }) {
+  return (
+    <div className="ns-ci" data-trust-surface="failed-state" data-state={state} style={{ transition: 'opacity 200ms' }}>
+      <button type="button" onClick={() => onAccept()}>Accept</button>
+    </div>
+  );
+}
+`,
+    });
+    expect(failures.map((f) => f.label).join(' | ')).not.toContain('inline style motion');
+  });
+});
+
+describe('motion deception corpus — the table cannot overstate itself', () => {
+  const graded = (corpus) =>
+    trustSurfaceChecks({ corpus }).then(({ checks }) =>
+      checks.filter(([, passed]) => !passed).map(([label]) => label),
+    );
+
+  it('fails when a corpus entry carries no verdict', async () => {
+    // THE central anti-drift claim, made falsifiable. Adding an eighth deception without
+    // grading it must be a red gate — an ungraded fixture is coverage overstated, the same
+    // error as reporting a not-run clause as passed.
+    const labels = await graded([
+      ...MOTION_DECEPTION_CORPUS,
+      { id: 8, deception: 'motion injected by a third-party widget', fixture: 'none', why: 'tbd' },
+    ]);
+    expect(labels.join(' | ')).toContain('every fixture carries a verdict');
+  });
+
+  it('fails when an entry claims a detector that does not exist', async () => {
+    const labels = await graded([
+      { ...MOTION_DECEPTION_CORPUS[3], detectors: ['clause 9: a check nobody ever wrote'] },
+    ]);
+    expect(labels.join(' | ')).toContain('names a check that actually exists');
+  });
+
+  it('fails when an entry claims "detected" but names no detector', async () => {
+    const labels = await graded([{ ...MOTION_DECEPTION_CORPUS[3], detectors: [] }]);
+    expect(labels.join(' | ')).toContain('names a check that actually exists');
+  });
+
+  it('fails when two entries share an id', async () => {
+    const labels = await graded([MOTION_DECEPTION_CORPUS[0], MOTION_DECEPTION_CORPUS[0]]);
+    expect(labels.join(' | ')).toContain('fixture ids are unique');
+  });
+});
+
+describe('motion deception corpus — the coverage the gate prints about itself', () => {
+  it('states a denominator, so a green run cannot read as "no deceptive motion exists"', async () => {
+    const text = (await motionDeceptionCoverage()).join('\n');
+
+    expect(text).toContain(`of ${MOTION_DECEPTION_CORPUS.length} known deception classes`);
+    expect(text).toContain('It is not evidence that no deceptive motion exists');
+  });
+
+  it('names every corpus class, detected or not, with its reason', async () => {
+    const text = (await motionDeceptionCoverage()).join('\n');
+
+    for (const entry of MOTION_DECEPTION_CORPUS) {
+      expect(text).toContain(entry.deception);
+      expect(text).toContain(entry.why);
+      expect(text).toContain(entry.verdict === 'detected' ? 'DETECTED' : 'NOT-DETECTED');
+    }
+  });
+
+  it('cites a PROBED runner for every not-detected class, never a bare command', async () => {
+    const text = (await motionDeceptionCoverage()).join('\n');
+    const misses = MOTION_DECEPTION_CORPUS.filter((entry) => entry.verdict !== 'detected');
+
+    expect(misses.length).toBeGreaterThan(0);
+    // Same rule as the not-run clauses: the command is probed, so the day the spec is written
+    // this text changes by itself. A gate that cites a runner which does not exist has told
+    // the reader the hole is one command from closed when nothing of the sort is true.
+    expect(text).toMatch(/NO RUNNER YET|npx playwright test/);
   });
 });
 

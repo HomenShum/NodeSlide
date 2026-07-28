@@ -436,43 +436,45 @@ export async function callNodeSlideFreeJson(
       let result: NodeSlideCompletionResult;
       try {
         result = await Promise.race([
-        complete({
-          provider: selectedRoute.provider,
-          model: selectedRoute.upstreamId,
-          supportsTemperature: selectedRoute.supportsTemperature,
-          reasoningEffort,
-          systemPrompt: providerSystemPrompt(args, repairAttempt),
-          userText: repairAttempt ? repairUserText(args.userText, invalidResponse) : args.userText,
-          maxTokens: dispatchPolicy.maxOutputTokens,
-          ...(args.jsonSchema && structuredOutputMode === 'json_schema'
-            ? { jsonSchema: args.jsonSchema }
-            : {}),
-          structuredOutputMode,
-          ...(selectedRoute.provider === 'openrouter' &&
-          dispatchPolicy.maxInputMicroUsdPerMillionTokens !== undefined &&
-          dispatchPolicy.maxOutputMicroUsdPerMillionTokens !== undefined
-            ? {
-                providerMaxPrice: {
-                  prompt: dispatchPolicy.maxInputMicroUsdPerMillionTokens / 1_000_000,
-                  completion: dispatchPolicy.maxOutputMicroUsdPerMillionTokens / 1_000_000,
-                },
-              }
-            : {}),
-          repairAttempt,
-          signal: controller.signal,
-          ...(onTextDelta
-            ? {
-                onTextDelta: (delta: string, accumulatedText: string) =>
-                  onTextDelta({
-                    delta,
-                    accumulatedText,
-                    attempt: attempt + 1,
-                    repairAttempt,
-                  }),
-              }
-            : {}),
-        }),
-        deadline,
+          complete({
+            provider: selectedRoute.provider,
+            model: selectedRoute.upstreamId,
+            supportsTemperature: selectedRoute.supportsTemperature,
+            reasoningEffort,
+            systemPrompt: providerSystemPrompt(args, repairAttempt),
+            userText: repairAttempt
+              ? repairUserText(args.userText, invalidResponse)
+              : args.userText,
+            maxTokens: dispatchPolicy.maxOutputTokens,
+            ...(args.jsonSchema && structuredOutputMode === 'json_schema'
+              ? { jsonSchema: args.jsonSchema }
+              : {}),
+            structuredOutputMode,
+            ...(selectedRoute.provider === 'openrouter' &&
+            dispatchPolicy.maxInputMicroUsdPerMillionTokens !== undefined &&
+            dispatchPolicy.maxOutputMicroUsdPerMillionTokens !== undefined
+              ? {
+                  providerMaxPrice: {
+                    prompt: dispatchPolicy.maxInputMicroUsdPerMillionTokens / 1_000_000,
+                    completion: dispatchPolicy.maxOutputMicroUsdPerMillionTokens / 1_000_000,
+                  },
+                }
+              : {}),
+            repairAttempt,
+            signal: controller.signal,
+            ...(onTextDelta
+              ? {
+                  onTextDelta: (delta: string, accumulatedText: string) =>
+                    onTextDelta({
+                      delta,
+                      accumulatedText,
+                      attempt: attempt + 1,
+                      repairAttempt,
+                    }),
+                }
+              : {}),
+          }),
+          deadline,
         ]);
       } catch (error) {
         // Dispatched, outcome unknown: the upstream may still have billed it.
@@ -802,7 +804,9 @@ export function nodeSlideProviderPayload(
     ? { ...payload }
     : Object.fromEntries(Object.entries(payload).filter(([key]) => key !== 'temperature'));
   const openRouterProviderOverrides = {
-    ...(options.provider === 'openrouter' && emitsResponseFormat ? { require_parameters: true } : {}),
+    ...(options.provider === 'openrouter' && emitsResponseFormat
+      ? { require_parameters: true }
+      : {}),
     ...(options.provider === 'openrouter' && options.providerMaxPrice
       ? { max_price: options.providerMaxPrice }
       : {}),

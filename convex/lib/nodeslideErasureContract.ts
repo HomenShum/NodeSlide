@@ -42,7 +42,7 @@
 export interface NodeSlideSchemaTableLike {
   validator: {
     kind: string;
-    fields?: Record<string, { kind: string; isOptional?: string }>;
+    fields?: Record<string, { kind: string; isOptional?: string; tableName?: string }>;
   };
   indexes: ReadonlyArray<{ indexDescriptor: string; fields: readonly string[] }>;
 }
@@ -69,7 +69,20 @@ export interface NodeSlideErasureEntry {
   readonly scope: NodeSlideErasureScope;
 }
 
-export type NodeSlideErasureExclusionReason = 'infrastructure_state' | 'erasure_receipt';
+/**
+ * `derived_scope` is the one reason that does NOT mean "survives the erasure".
+ * It means the opposite: the table is erased, but by a hand-written traversal
+ * rather than by the schema-derived index scan, because its link to a deck is
+ * two hops long and has no column the scan could read. Anything carrying this
+ * reason must appear in `NODESLIDE_DERIVED_ERASURE_TABLES` below, and
+ * `nodeslideRetention.ts` must sweep every table in that list. The pairing is
+ * asserted by a test, so this reason cannot decay into a quiet hole the way a
+ * plain omission would.
+ */
+export type NodeSlideErasureExclusionReason =
+  | 'infrastructure_state'
+  | 'erasure_receipt'
+  | 'derived_scope';
 
 export interface NodeSlideErasureExclusion {
   readonly table: string;
@@ -96,7 +109,77 @@ export const NODESLIDE_ERASURE_EXCLUSIONS: readonly NodeSlideErasureExclusion[] 
     detail:
       'Content-free digests that prove the erasure happened. They are what makes a repeated delete idempotent instead of unauthenticated; erasing them would erase the evidence of erasure.',
   },
+  {
+    table: 'nodeslide_agent_jobs',
+    reason: 'derived_scope',
+    detail:
+      'Holds user data (the failure text, the request digests, the result pointers) and IS erased. It has no required deckId because a create_deck job exists before its deck does; the only honest link is the optional resultDeckId, which the by_result_deck index makes scannable. Swept by the derived pass in nodeslideRetention.ts.',
+  },
+  {
+    table: 'nodeslide_durable_sessions',
+    reason: 'derived_scope',
+    detail:
+      'Session state for a job, keyed by a digest of the job id rather than by deck. Erased through job -> nodeslideStableId("nsession", job.id) -> by_stable_id in the derived pass, because no deckId column exists to scan.',
+  },
+  {
+    table: 'nodeslide_durable_session_events',
+    reason: 'derived_scope',
+    detail:
+      'Hash-chained transition log for a durable session. Reached by (sessionId, jobId) through by_session_job in the derived pass; a deckId column would have to be back-filled from a deck that may never have been created.',
+  },
+  {
+    table: 'nodeslide_durable_job_journal_entries',
+    reason: 'derived_scope',
+    detail:
+      'Per-attempt model and web receipts. Digest-only by construction, but still the author’s activity record, so it is erased through (sessionId, jobId) via by_binding_sequence in the derived pass.',
+  },
+  {
+    table: 'nodeslide_durable_model_result_replays',
+    reason: 'derived_scope',
+    detail:
+      'payloadJson is a stored provider result envelope — the most content-bearing row in this cluster. Erased through (sessionId, jobId) via by_exact_binding in the derived pass; excluding it from erasure rather than from the scan would be the worst possible outcome.',
+  },
+  {
+    table: 'nodeslide_run_budgets',
+    reason: 'derived_scope',
+    detail:
+      'Spend ledger for one job or run, addressed by nodeslide_agent_jobs.budgetId and nodeslide_agent_runs.budgetId. Erased through those pointers in the derived pass; it has no deck column of its own.',
+  },
+  {
+    table: 'nodeslide_billable_calls',
+    reason: 'derived_scope',
+    detail:
+      'Per-call reservations under a run budget. Erased by budgetId through by_budget_status once the owning job or run is resolved to its budget in the derived pass.',
+  },
+  {
+    table: 'nodeslide_budget_events',
+    reason: 'derived_scope',
+    detail:
+      'Immutable accounting chain under a run budget. Erased by budgetId through by_budget_sequence in the derived pass, for the same reason as the calls it explains.',
+  },
 ];
+
+/**
+ * The tables that the derived pass in `nodeslideRetention.ts` is required to
+ * sweep, in dependency order: jobs first (they resolve every other id), then
+ * session state, then the budget ledger.
+ *
+ * This list exists so the pairing can be checked mechanically. A table excluded
+ * with `derived_scope` and absent here is a hole; a table here and absent from
+ * the retention sweep is also a hole. Both are test failures, not review notes.
+ */
+export const NODESLIDE_DERIVED_ERASURE_TABLES = [
+  'nodeslide_agent_jobs',
+  'nodeslide_durable_sessions',
+  'nodeslide_durable_session_events',
+  'nodeslide_durable_job_journal_entries',
+  'nodeslide_durable_model_result_replays',
+  'nodeslide_run_budgets',
+  'nodeslide_billable_calls',
+  'nodeslide_budget_events',
+] as const;
+
+export type NodeSlideDerivedErasureTable = (typeof NODESLIDE_DERIVED_ERASURE_TABLES)[number];
 
 const EXCLUDED_TABLES = new Set(NODESLIDE_ERASURE_EXCLUSIONS.map((entry) => entry.table));
 
@@ -224,6 +307,24 @@ export function nodeSlideBinaryFields(
   const fields = schema.tables[table]?.validator.fields ?? {};
   return Object.entries(fields)
     .filter(([, spec]) => spec.kind === 'bytes')
+    .map(([field]) => field)
+    .sort();
+}
+
+/**
+ * Fields declared `v.id('_storage')`. Deleting such a row erases the pointer,
+ * not the bytes: the blob outlives the deck in file storage, unreachable and
+ * therefore undeletable by any later pass. Derived rather than listed for the
+ * same reason as `nodeSlideBinaryFields` — the day someone adds an upload-like
+ * table, its blobs join the erasure without anyone remembering to say so.
+ */
+export function nodeSlideStorageIdFields(
+  schema: NodeSlideSchemaLike,
+  table: string,
+): readonly string[] {
+  const fields = schema.tables[table]?.validator.fields ?? {};
+  return Object.entries(fields)
+    .filter(([, spec]) => spec.kind === 'id' && spec.tableName === '_storage')
     .map(([field]) => field)
     .sort();
 }

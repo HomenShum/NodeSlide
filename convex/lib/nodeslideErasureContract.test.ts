@@ -8,6 +8,7 @@ import {
   buildNodeSlideErasureContract,
   nodeSlideBinaryFields,
   nodeSlideErasureLabel,
+  nodeSlideStorageIdFields,
 } from './nodeslideErasureContract';
 
 const realSchema = schema as unknown as NodeSlideSchemaLike;
@@ -144,6 +145,30 @@ describe('erasure contract derivation', () => {
   it('finds byte-valued columns without being told where they are', () => {
     expect(nodeSlideBinaryFields(realSchema, 'nodeslide_package_assets')).toEqual(['bytes']);
     expect(nodeSlideBinaryFields(realSchema, 'nodeslide_slides')).toEqual([]);
+  });
+
+  it('finds file-storage pointers, which a row delete would strand rather than erase', () => {
+    expect(nodeSlideStorageIdFields(realSchema, 'nodeslide_uploads')).toEqual(['storageId']);
+    // Two per row, and both optional: a capture step may hold a screenshot, a
+    // PDF, or neither, and each one that exists is a file the erasure must take.
+    expect(nodeSlideStorageIdFields(realSchema, 'nodeslide_evidence_steps')).toEqual([
+      'pdfStorageId',
+      'screenshotStorageId',
+    ]);
+    // Inline bytes live in the row and go with it; they are not storage ids.
+    expect(nodeSlideStorageIdFields(realSchema, 'nodeslide_package_assets')).toEqual([]);
+    expect(nodeSlideStorageIdFields(realSchema, 'nodeslide_slides')).toEqual([]);
+
+    // Every table the schema declares with a `_storage` pointer must be one the
+    // erasure walks. A blob hanging off an unerased table is unreachable data.
+    const contractTables = new Set(
+      buildNodeSlideErasureContract(realSchema).map((entry) => entry.table),
+    );
+    const strandable = Object.keys(realSchema.tables).filter(
+      (table) =>
+        nodeSlideStorageIdFields(realSchema, table).length > 0 && !contractTables.has(table),
+    );
+    expect(strandable, 'a table holding storage ids must be inside the erasure').toEqual([]);
   });
 });
 

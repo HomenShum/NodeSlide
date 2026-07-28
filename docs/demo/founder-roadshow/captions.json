@@ -1,0 +1,95 @@
+{
+  "schema": "nodeslide-roadshow-captions/v1",
+  "style": {
+    "position": "bottom-center",
+    "maxLines": 2,
+    "safeBottomPx": 52
+  },
+  "captions": [
+    {
+      "sceneId": "fresh_landing",
+      "text": "A founder starts with a deadline and scattered evidence — not a finished presentation.",
+      "minimumDurationMs": 2600
+    },
+    {
+      "sceneId": "attach_evidence",
+      "text": "Product requirements, measured results, research notes, and visual direction arrive together as evidence.",
+      "minimumDurationMs": 3000
+    },
+    {
+      "sceneId": "consent_model_web",
+      "text": "The founder chooses the working model and approves each external request before evidence leaves the workspace.",
+      "minimumDurationMs": 3200
+    },
+    {
+      "sceneId": "create_six_slide_deck",
+      "text": "NodeSlide organizes the evidence into one six-slide investor argument, then compiles editable slides.",
+      "minimumDurationMs": 3200
+    },
+    {
+      "sceneId": "inspect_editable_primitives",
+      "text": "The story chooses the right visual form: diagram for mechanism, chart for evidence, and math for the north-star metric.",
+      "minimumDurationMs": 3400
+    },
+    {
+      "sceneId": "one_element_edit",
+      "text": "Feedback begins at the object that needs work: clarify one investor takeaway without rebuilding the deck.",
+      "minimumDurationMs": 2800
+    },
+    {
+      "sceneId": "compare_accept",
+      "text": "Before anything changes, the founder compares a validated candidate and decides whether it earns approval.",
+      "minimumDurationMs": 2800
+    },
+    {
+      "sceneId": "one_slide_edit",
+      "text": "Current research strengthens one claim, with separate web consent and a source bound to the result.",
+      "minimumDurationMs": 3200
+    },
+    {
+      "sceneId": "bounded_multi_slide_edit",
+      "text": "One editorial direction can align two chosen slides while every slide outside that set stays untouched.",
+      "minimumDurationMs": 3000
+    },
+    {
+      "sceneId": "chart_change",
+      "text": "They clarify the source-bound prototype chart while every uploaded numeric value remains unchanged.",
+      "minimumDurationMs": 3000
+    },
+    {
+      "sceneId": "math_change",
+      "text": "The north-star metric stays inspectable as a formula, not baked into pixels.",
+      "minimumDurationMs": 2600
+    },
+    {
+      "sceneId": "layout_change",
+      "text": "Visual polish remains structured too, so the founder can rebalance a slide without losing editability.",
+      "minimumDurationMs": 3000
+    },
+    {
+      "sceneId": "image_change",
+      "text": "A rights-cleared visual carries its alt text and credit into the same reviewed story.",
+      "minimumDurationMs": 3000
+    },
+    {
+      "sceneId": "trace_source_lineage",
+      "text": "At any point, the founder can see what the agent read, changed, validated, and sourced.",
+      "minimumDurationMs": 3400
+    },
+    {
+      "sceneId": "persistent_memory",
+      "text": "Long-running work remembers only the scoped editorial preference the founder deliberately saves.",
+      "minimumDurationMs": 3000
+    },
+    {
+      "sceneId": "present_share",
+      "text": "The reviewed deck is immediately ready for the meeting and for frozen sharing.",
+      "minimumDurationMs": 3000
+    },
+    {
+      "sceneId": "export_pptx_json",
+      "text": "The team keeps control after handoff: editable PowerPoint plus validated, inspectable deck JSON.",
+      "minimumDurationMs": 3400
+    }
+  ]
+}

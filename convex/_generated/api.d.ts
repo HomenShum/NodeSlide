@@ -41,6 +41,7 @@ import type * as lib_nodeslideImageSearch from "../lib/nodeslideImageSearch.js";
 import type * as lib_nodeslideInspirationSearch from "../lib/nodeslideInspirationSearch.js";
 import type * as lib_nodeslideManagedKernel from "../lib/nodeslideManagedKernel.js";
 import type * as lib_nodeslideModelFleetProbe from "../lib/nodeslideModelFleetProbe.js";
+import type * as lib_nodeslideMultiAgent from "../lib/nodeslideMultiAgent.js";
 import type * as lib_nodeslideOtlp from "../lib/nodeslideOtlp.js";
 import type * as lib_nodeslidePatches from "../lib/nodeslidePatches.js";
 import type * as lib_nodeslidePreferenceEtl from "../lib/nodeslidePreferenceEtl.js";
@@ -78,12 +79,14 @@ import type * as nodeslideGoogleAuth from "../nodeslideGoogleAuth.js";
 import type * as nodeslideGoogleSlidesRuntime from "../nodeslideGoogleSlidesRuntime.js";
 import type * as nodeslideGymShadow from "../nodeslideGymShadow.js";
 import type * as nodeslideImages from "../nodeslideImages.js";
+import type * as nodeslideJobs from "../nodeslideJobs.js";
 import type * as nodeslideMemory from "../nodeslideMemory.js";
 import type * as nodeslideModelProbe from "../nodeslideModelProbe.js";
 import type * as nodeslidePreferences from "../nodeslidePreferences.js";
 import type * as nodeslidePptxSync from "../nodeslidePptxSync.js";
 import type * as nodeslidePublishApproval from "../nodeslidePublishApproval.js";
 import type * as nodeslideRetention from "../nodeslideRetention.js";
+import type * as nodeslideSessions from "../nodeslideSessions.js";
 import type * as nodeslideSignatures from "../nodeslideSignatures.js";
 import type * as nodeslideSourceRefresh from "../nodeslideSourceRefresh.js";
 import type * as nodeslideSync from "../nodeslideSync.js";
@@ -133,6 +136,7 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslideInspirationSearch": typeof lib_nodeslideInspirationSearch;
   "lib/nodeslideManagedKernel": typeof lib_nodeslideManagedKernel;
   "lib/nodeslideModelFleetProbe": typeof lib_nodeslideModelFleetProbe;
+  "lib/nodeslideMultiAgent": typeof lib_nodeslideMultiAgent;
   "lib/nodeslideOtlp": typeof lib_nodeslideOtlp;
   "lib/nodeslidePatches": typeof lib_nodeslidePatches;
   "lib/nodeslidePreferenceEtl": typeof lib_nodeslidePreferenceEtl;
@@ -170,12 +174,14 @@ declare const fullApi: ApiFromModules<{
   nodeslideGoogleSlidesRuntime: typeof nodeslideGoogleSlidesRuntime;
   nodeslideGymShadow: typeof nodeslideGymShadow;
   nodeslideImages: typeof nodeslideImages;
+  nodeslideJobs: typeof nodeslideJobs;
   nodeslideMemory: typeof nodeslideMemory;
   nodeslideModelProbe: typeof nodeslideModelProbe;
   nodeslidePreferences: typeof nodeslidePreferences;
   nodeslidePptxSync: typeof nodeslidePptxSync;
   nodeslidePublishApproval: typeof nodeslidePublishApproval;
   nodeslideRetention: typeof nodeslideRetention;
+  nodeslideSessions: typeof nodeslideSessions;
   nodeslideSignatures: typeof nodeslideSignatures;
   nodeslideSourceRefresh: typeof nodeslideSourceRefresh;
   nodeslideSync: typeof nodeslideSync;
@@ -214,4 +220,5 @@ export declare const internal: FilterApi<
 
 export declare const components: {
   workflow: import("@convex-dev/workflow/_generated/component.js").ComponentApi<"workflow">;
+  persistentTextStreaming: import("@convex-dev/persistent-text-streaming/_generated/component.js").ComponentApi<"persistentTextStreaming">;
 };

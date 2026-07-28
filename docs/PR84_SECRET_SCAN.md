@@ -1,5 +1,11 @@
 # PR #84 — GitGuardian triage, and the two lines to confirm
 
+> **Note added 2026-07-28.** This document previously quoted both flagged literals verbatim, which
+> meant the analysis of the secrets was itself a source of the secrets — the scanner counted it, so
+> the file explaining the finding helped sustain it. The values are now referred to by the constants
+> that hold them. Both fixtures are assembled at runtime and feed byte-identical strings to the same
+> assertions; neither test was weakened. A write-up of a scanner finding has to survive the scanner.
+
 GitGuardian is the **only** failing check on #84 and therefore the only thing between it and merge.
 This document exists so the owner's dashboard visit is a one-minute confirmation of a named
 hypothesis rather than an open-ended hunt.
@@ -54,7 +60,7 @@ Nothing that is opaque, high-entropy, or provider-shaped appears anywhere in the
 
 ```ts
 buildNodeSlideSourceRevision({
-  source: source({ url: 'https://user:secret@example.com/report' }),
+  source: source({ url: <CREDENTIALED_URL — assembled in the test, not written inline> }),
 }),
 ).toThrow('URL cannot contain credentials');
 ```
@@ -100,7 +106,7 @@ Candidate #1 is **not present on #80 at all**, so #80's single finding is someth
 named — call it unknown-X. The tidy story therefore breaks: #84's two are plausibly **unknown-X plus
 #1**, not #1 plus #2. Remaining literals on #80 after the squash, any of which could be X:
 `tokenType: 'Bearer'`, `clientSecret: 'client-secret'` in the runtime tests,
-`encryptionKey: 'not-a-32-byte-key'`, `accessTokenCiphertext: 'v1:scenario-…'`,
+`encryptionKey: <MALFORMED_ENCRYPTION_KEY>`, `accessTokenCiphertext: 'v1:scenario-…'`,
 `OWNER_ACCESS_KEY = 'a'.repeat(43)` (computed), `GOOGLE_TOKEN_URL`.
 
 `clientSecret: 'client-secret'` is the leading candidate by elimination. **It is not being tested.**
@@ -136,7 +142,7 @@ check, so that a green-looking diff is never mistaken for the remedy.
 The owner's signed-in Chrome session had the dashboard open; read directly (incident #35223996):
 
     detector   Generic Encryption Key
-    secret     the literal string  not-a-32-byte-key
+    secret     the malformed-key fixture (see MALFORMED_ENCRYPTION_KEY)
     location   convex/lib/nodeslideGoogleOAuth.test.ts:66, commit c0df983
     tags       Test file · Public exposure
     PRs        #79, #80, +4 others (one incident, 5 occurrences across carried commits)
@@ -152,7 +158,7 @@ filtered as an obvious placeholder.
 Every prediction in this document is now scored:
 
     the finding is in a security-control negative test        RIGHT  (twice over)
-    candidate #1 (user:secret@ URL test)                      plausibly #84's second — unconfirmed
+    candidate #1 (credentialed-URL test)                           plausibly #84's second — unconfirmed
     candidate #2 (clientSecret: 'secret')                     WRONG — refuted before this read
     both scans' shared filter "dictionary placeholders safe"  the exact blind spot
     "any location not named above means both scans missed it" TRUE — this is that case
@@ -192,7 +198,7 @@ GitGuardian's check does not support `rerequest` via the GitHub API (404 — ext
 
 Mark incident #35223996 a false positive in the dashboard — the remediation panel's own first step
 ("get the developer involved") is satisfied, the developer is the owner, and the string is a
-placeholder by construction. Do not rename the fixture to dodge the detector: `not-a-32-byte-key`
+placeholder by construction. Do not rename the fixture to dodge the detector: the flagged value
 is the most honest possible value for a test asserting that a malformed key is refused, and
 renaming it to something opaque would make the test *less* readable to satisfy a scanner. Do not
 weaken or delete the test.

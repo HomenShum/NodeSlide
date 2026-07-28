@@ -32,7 +32,11 @@ import {
   nodeSlideDeckCapabilitiesForRole,
   normalizeNodeSlideDeckAccessPolicy,
 } from './lib/nodeslideDeckScopeAccess';
-import type { NodeSlideErasureEntry, NodeSlideSchemaLike } from './lib/nodeslideErasureContract';
+import {
+  NODESLIDE_ERASURE_EXCLUSIONS,
+  type NodeSlideErasureEntry,
+  type NodeSlideSchemaLike,
+} from './lib/nodeslideErasureContract';
 import { buildGoldenNodeSlide } from './lib/nodeslideSeed';
 import {
   NODESLIDE_ERASURE_CONTRACT,
@@ -189,6 +193,15 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     completedAt: NOW,
     expiresAt: NOW + 2_592_000_000,
   });
+  // A capture step that really has its screenshot and PDF in file storage. The
+  // row is not the evidence; the two blobs are, and a deletion that takes only
+  // the row leaves them behind with nothing left pointing at them.
+  const screenshotStorageId = await ctx.storage.store(
+    new Blob([new Uint8Array([0x89, 0x50, 0x4e, 0x47])], { type: 'image/png' }),
+  );
+  const pdfStorageId = await ctx.storage.store(
+    new Blob([new Uint8Array([0x25, 0x50, 0x44, 0x46])], { type: 'application/pdf' }),
+  );
   await ctx.db.insert('nodeslide_evidence_steps', {
     id: 'evidence_step_scenario',
     captureId: 'capture_scenario',
@@ -202,6 +215,8 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     status: 'ok',
     regionScope: 'claim',
     box: { x: 0.1, y: 0.2, w: 0.3, h: 0.4 },
+    screenshotStorageId,
+    pdfStorageId,
     evidenceStepDigest: DIGEST('d'),
     startedAt: NOW,
     completedAt: NOW,
@@ -236,6 +251,12 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
   // An approved upload. Even after the blob is gone the row still names the
   // file the owner attached and the digest of its contents, so the metadata is
   // deck-owned in its own right.
+  // The bytes are really stored and really pointed at. An upload row with no
+  // `storageId` makes the erasure assertion vacuous on the one field where the
+  // deletion has to reach outside the row it is deleting.
+  const uploadStorageId = await ctx.storage.store(
+    new Blob([new Uint8Array(2_048)], { type: 'text/csv' }),
+  );
   await ctx.db.insert('nodeslide_uploads', {
     id: 'upload_scenario',
     deckId,
@@ -247,6 +268,7 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     contentDigest: DIGEST('c'),
     idempotencyKey: 'upload-scenario-key',
     requestFingerprint: DIGEST('d'),
+    storageId: uploadStorageId,
     lifecycleStatus: 'registered',
     securityStatus: 'approved',
     quarantineStatus: 'released',
@@ -793,7 +815,16 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     }),
   );
 
-  return { deckId, projectId, projectRowId, deckTitle: built.snapshot.deck.title, built };
+  return {
+    deckId,
+    projectId,
+    projectRowId,
+    deckTitle: built.snapshot.deck.title,
+    built,
+    // Every blob this workspace owns, so the erasure can be checked against
+    // file storage and not only against rows.
+    storageIds: [uploadStorageId, screenshotStorageId, pdfStorageId],
+  };
 }
 
 async function scopedRowCounts(
@@ -855,6 +886,19 @@ describe('whole-deck erasure, seeded from a deck that was actually used', () => 
       .filter(([, count]) => count > 0)
       .map(([table]) => table);
     expect(survivors, 'no deck-owned row may survive the erasure').toEqual([]);
+
+    // Deleting the row that pointed at a stored file is not erasing the file.
+    // Once the row is gone nothing references the blob, so no later pass could
+    // ever find it: anything still readable here is user data that outlived the
+    // deletion the user asked for.
+    const survivingBlobs = await t.run(async (ctx) => {
+      const present: string[] = [];
+      for (const storageId of seeded.storageIds) {
+        if ((await ctx.storage.get(storageId)) !== null) present.push(storageId);
+      }
+      return present;
+    });
+    expect(survivingBlobs, 'no stored file may outlive the deck that owned it').toEqual([]);
 
     const afterTenant = await t.run((ctx) =>
       scopedRowCounts(ctx as QueryCtx, tenantScopedEntries, seeded.projectId),
@@ -1007,11 +1051,15 @@ describe('owner data export', () => {
 
     // Withheld tables are stated, not silently dropped.
     const withheld = bundle.manifest.omissions.collections.map((entry) => entry.name).sort();
+    // Derived from the exclusion list rather than spelled out, so a table
+    // excluded from the schema-derived collector in future is disclosed by this
+    // bundle on the same commit that excludes it — the failure mode this
+    // assertion previously had was going green after somebody added an exclusion
+    // and forgot the manifest.
     expect(withheld).toEqual(
       [
         ...tenantScopedEntries.map((entry) => entry.table),
-        'nodeslide_rate_limits',
-        'nodeslide_retention_tombstones',
+        ...NODESLIDE_ERASURE_EXCLUSIONS.map((exclusion) => exclusion.table),
       ].sort(),
     );
     for (const omission of bundle.manifest.omissions.collections) {

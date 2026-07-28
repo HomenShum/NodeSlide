@@ -1,3 +1,4 @@
+import { useAction, useQuery } from 'convex/react';
 import {
   Bot,
   Check,
@@ -6,12 +7,16 @@ import {
   ExternalLink,
   KeyRound,
   Laptop,
+  LoaderCircle,
+  Presentation,
   ServerCog,
   ShieldCheck,
   Trash2,
+  Unplug,
   X,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { api } from '../../../../convex/_generated/api';
 import {
   SESSION_BYOK_KEYS,
   clearSessionByok,
@@ -36,14 +41,31 @@ export const NODESLIDE_MCP_PACKAGE =
   'https://parity-studio.vercel.app/downloads/parity-studio-mcp-0.4.0.tgz';
 export const NODESLIDE_CONVEX_URL = 'https://blissful-pig-998.convex.cloud';
 
+/**
+ * The closed dialog mounts nothing. That was already true, and it now also
+ * means the Google Slides subscriptions below are never opened for a dialog
+ * nobody is looking at — a closed dialog must not hold a live query on a
+ * deck's OAuth status.
+ */
 export function NodeSlideConnectionsDialog({
   open,
   onClose,
   deckId,
 }: NodeSlideConnectionsDialogProps) {
+  if (!open) return null;
+  return <NodeSlideConnectionsDialogContent onClose={onClose} deckId={deckId} />;
+}
+
+function NodeSlideConnectionsDialogContent({
+  onClose,
+  deckId,
+}: {
+  onClose: () => void;
+  deckId: string | undefined;
+}) {
   const firstInputRef = useRef<HTMLInputElement>(null);
   const { dialogRef, handleBackdropMouseDown, handleCancel, handleKeyDown } = useModalDialog({
-    open,
+    open: true,
     onClose,
     initialFocusRef: firstInputRef,
   });
@@ -51,20 +73,47 @@ export function NodeSlideConnectionsDialog({
   const [routing, setRouting] = useState({ model: 'z-ai/glm-5.2', baseUrl: '' });
   const [client, setClient] = useState<ClientKind>('claude');
   const [notice, setNotice] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    setKeys(readSessionByok());
-    setRouting(readSessionByokRouting());
-    setNotice(null);
-  }, [open]);
+  const [googleBusy, setGoogleBusy] = useState<'connect' | 'disconnect' | null>(null);
+  const [googleSyncBusy, setGoogleSyncBusy] = useState<GoogleSyncAction | null>(null);
+  const [googlePresentation, setGooglePresentation] = useState('');
 
   const ownerAccessKey = listStoredDeckAccess().find(
     (entry) => entry.deckId === deckId,
   )?.ownerAccessKey;
-  const configuredCount = SESSION_BYOK_KEYS.filter((key) => keys[key.envVar]?.trim()).length;
 
-  if (!open) return null;
+  const googleStatus = useQuery(
+    api.nodeslideGoogleAuth.getStatus,
+    deckId && ownerAccessKey ? { deckId, ownerAccessKey } : 'skip',
+  );
+  const beginGoogleAuth = useAction(api.nodeslideGoogleAuth.begin);
+  const disconnectGoogleAuth = useAction(api.nodeslideGoogleAuth.disconnect);
+  const googleRuntime = useQuery(
+    api.nodeslideGoogleSlidesRuntime.getState,
+    deckId && ownerAccessKey && googleStatus?.connected ? { deckId, ownerAccessKey } : 'skip',
+  );
+  const createGooglePresentation = useAction(api.nodeslideGoogleSlidesRuntime.createPresentation);
+  const attachGooglePresentation = useAction(api.nodeslideGoogleSlidesRuntime.attachPresentation);
+  const planGooglePull = useAction(api.nodeslideGoogleSlidesRuntime.planPull);
+  const finalizeGooglePull = useAction(api.nodeslideGoogleSlidesRuntime.finalizePull);
+  const planGooglePush = useAction(api.nodeslideGoogleSlidesRuntime.planPush);
+  const executeGooglePush = useAction(api.nodeslideGoogleSlidesRuntime.executePush);
+  const cancelGooglePending = useAction(api.nodeslideGoogleSlidesRuntime.cancelPending);
+  const resetGoogleAttachment = useAction(api.nodeslideGoogleSlidesRuntime.resetAttachment);
+
+  useEffect(() => {
+    setKeys(readSessionByok());
+    setRouting(readSessionByokRouting());
+    setNotice(null);
+  }, []);
+
+  const configuredCount = SESSION_BYOK_KEYS.filter((key) => keys[key.envVar]?.trim()).length;
+  const googleCanPlan =
+    googleRuntime !== undefined &&
+    googleRuntime !== null &&
+    (googleRuntime.status === 'active' ||
+      googleRuntime.status === 'conflict' ||
+      googleRuntime.status === 'error') &&
+    googleRuntime.errorCode !== 'bootstrap_mismatch';
 
   const save = () => {
     writeSessionByok(keys);
@@ -79,6 +128,68 @@ export function NodeSlideConnectionsDialog({
     setKeys({});
     setRouting({ model: 'z-ai/glm-5.2', baseUrl: '' });
     setNotice('Local connection values revoked from this tab.');
+  };
+
+  const connectGoogleSlides = async () => {
+    if (!deckId || !ownerAccessKey) {
+      setNotice('Open a deck owned by this browser before connecting Google Slides.');
+      return;
+    }
+    setGoogleBusy('connect');
+    setNotice(null);
+    try {
+      const returnTo = new URL(window.location.href);
+      returnTo.searchParams.delete('nodeslideGoogle');
+      const receipt = await beginGoogleAuth({
+        deckId,
+        ownerAccessKey,
+        returnTo: returnTo.toString(),
+      });
+      window.location.assign(receipt.authorizationUrl);
+    } catch {
+      setNotice(
+        'Google Slides connection could not start. Check the deployment configuration and try again.',
+      );
+      setGoogleBusy(null);
+    }
+  };
+
+  const disconnectGoogleSlides = async () => {
+    if (!deckId || !ownerAccessKey) return;
+    setGoogleBusy('disconnect');
+    setNotice(null);
+    try {
+      const receipt = await disconnectGoogleAuth({ deckId, ownerAccessKey });
+      setNotice(
+        receipt.providerRevoked
+          ? 'Google Slides access was revoked for this deck.'
+          : 'Google Slides was disconnected locally. Google did not confirm remote revocation.',
+      );
+    } catch {
+      setNotice('Google Slides could not be disconnected. Try again.');
+    } finally {
+      setGoogleBusy(null);
+    }
+  };
+
+  const runGoogleSyncAction = async (
+    busy: GoogleSyncAction,
+    syncAction: () => Promise<GoogleSyncReceipt>,
+  ) => {
+    setGoogleSyncBusy(busy);
+    setNotice(null);
+    try {
+      setNotice(googleSyncNotice(busy, await syncAction()));
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : 'Google Slides sync could not complete.');
+    } finally {
+      setGoogleSyncBusy(null);
+    }
+  };
+
+  const requireOwnedDeck = () => {
+    if (!deckId || !ownerAccessKey) throw new Error('Open an owned deck.');
+    return { deckId, ownerAccessKey };
   };
 
   const copyConfig = async () => {
@@ -132,6 +243,287 @@ export function NodeSlideConnectionsDialog({
         </header>
 
         <div className="ns-connections-body">
+          <section
+            className="ns-connection-section ns-google-connection-section"
+            aria-labelledby="ns-google-slides-title"
+          >
+            <div className="ns-connection-heading">
+              <span>
+                <Presentation size={14} /> Google Slides
+              </span>
+              <small>
+                {!deckId || !ownerAccessKey
+                  ? 'Open an owned deck'
+                  : googleStatus?.connected
+                    ? 'OAuth authorized'
+                    : googleStatus === undefined
+                      ? 'Checking…'
+                      : 'Not connected'}
+              </small>
+            </div>
+            <h2 id="ns-google-slides-title">Authorize app-scoped Google Slides access</h2>
+            <p>
+              NodeSlide requests Google&apos;s <code>drive.file</code> scope. It covers
+              presentations NodeSlide creates or that are explicitly opened with this app; it does
+              not make an arbitrary pasted Drive ID readable. An existing target can link only when
+              it is already app-authorized and is an exact semantic match for this deck. NodeSlide
+              then stores the exact three-way baseline server-side. Conflicts stop before any write,
+              and every remote write is read back and verified.
+            </p>
+            <div className="ns-google-connection-card" data-testid="nodeslide-google-connection">
+              <div>
+                <strong>
+                  {googleStatus?.connected
+                    ? googleRuntime
+                      ? `Linked · ${googleRuntime.status.replaceAll('_', ' ')}`
+                      : 'OAuth authorized · create or link a compatible target'
+                    : 'Explicit Google consent'}
+                </strong>
+                <small>
+                  {googleStatus?.connected
+                    ? googleRuntime
+                      ? `Baseline revision ${googleRuntime.baselineRemoteRevision}`
+                      : 'Create an app-owned blank target, or link an exact app-authorized match.'
+                    : 'drive.file is not broad Drive access and does not authorize arbitrary files.'}
+                </small>
+              </div>
+              {googleStatus?.connected ? (
+                <button
+                  type="button"
+                  className="is-danger"
+                  disabled={googleBusy !== null}
+                  onClick={() => void disconnectGoogleSlides()}
+                >
+                  {googleBusy === 'disconnect' ? (
+                    <LoaderCircle className="ns-spin" size={13} />
+                  ) : (
+                    <Unplug size={13} />
+                  )}
+                  Disconnect
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  disabled={!deckId || !ownerAccessKey || googleBusy !== null}
+                  onClick={() => void connectGoogleSlides()}
+                >
+                  {googleBusy === 'connect' ? (
+                    <LoaderCircle className="ns-spin" size={13} />
+                  ) : (
+                    <ExternalLink size={13} />
+                  )}
+                  Continue to Google
+                </button>
+              )}
+            </div>
+            {googleStatus?.connected ? (
+              <div className="ns-google-sync-workbench">
+                {!googleRuntime ? (
+                  <>
+                    <div className="ns-google-sync-actions">
+                      <button
+                        type="button"
+                        className="is-primary"
+                        disabled={googleSyncBusy !== null}
+                        onClick={() =>
+                          void runGoogleSyncAction('create', async () =>
+                            createGooglePresentation(requireOwnedDeck()),
+                          )
+                        }
+                      >
+                        {googleSyncBusy === 'create' ? (
+                          <LoaderCircle className="ns-spin" size={13} />
+                        ) : (
+                          <Presentation size={13} />
+                        )}
+                        Create compatible target
+                      </button>
+                    </div>
+                    <label>
+                      <span>Or link an exact, already app-authorized presentation</span>
+                      <span>
+                        <input
+                          value={googlePresentation}
+                          placeholder="Google Slides URL or presentation ID"
+                          onChange={(event) => setGooglePresentation(event.target.value)}
+                        />
+                        <button
+                          type="button"
+                          disabled={!googlePresentation.trim() || googleSyncBusy !== null}
+                          onClick={() =>
+                            void runGoogleSyncAction('attach', async () => {
+                              await attachGooglePresentation({
+                                ...requireOwnedDeck(),
+                                presentationId: googlePresentationId(googlePresentation),
+                              });
+                              return {};
+                            })
+                          }
+                        >
+                          {googleSyncBusy === 'attach' ? (
+                            <LoaderCircle className="ns-spin" size={13} />
+                          ) : (
+                            <Presentation size={13} />
+                          )}
+                          Link exact match
+                        </button>
+                      </span>
+                      <small>
+                        A URL or ID identifies the file; it does not grant <code>drive.file</code>{' '}
+                        access or establish a baseline by itself.
+                      </small>
+                    </label>
+                  </>
+                ) : (
+                  <div className="ns-google-sync-actions">
+                    <button
+                      type="button"
+                      disabled={googleSyncBusy !== null || !googleCanPlan}
+                      onClick={() =>
+                        void runGoogleSyncAction('pull', async () =>
+                          planGooglePull(requireOwnedDeck()),
+                        )
+                      }
+                    >
+                      {googleRuntime.status === 'conflict' || googleRuntime.status === 'error'
+                        ? 'Re-plan Google pull'
+                        : 'Check Google changes'}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={googleSyncBusy !== null || !googleCanPlan}
+                      onClick={() =>
+                        void runGoogleSyncAction('plan-push', async () =>
+                          planGooglePush(requireOwnedDeck()),
+                        )
+                      }
+                    >
+                      {googleRuntime.status === 'conflict' || googleRuntime.status === 'error'
+                        ? 'Re-plan NodeSlide push'
+                        : 'Plan NodeSlide push'}
+                    </button>
+                    {googleRuntime.status === 'awaiting_pull_review' &&
+                    googleRuntime.pendingPlanDigest &&
+                    googleRuntime.pendingPatchStatus === 'accepted' ? (
+                      <button
+                        type="button"
+                        disabled={googleSyncBusy !== null}
+                        onClick={() =>
+                          void runGoogleSyncAction('finalize-pull', async () =>
+                            finalizeGooglePull({
+                              ...requireOwnedDeck(),
+                              planDigest: googleRuntime.pendingPlanDigest as string,
+                            }),
+                          )
+                        }
+                      >
+                        Verify accepted pull
+                      </button>
+                    ) : null}
+                    {googleRuntime.status === 'awaiting_pull_review' &&
+                    googleRuntime.pendingPatchStatus !== 'accepted' ? (
+                      <button
+                        type="button"
+                        disabled={googleSyncBusy !== null}
+                        onClick={() =>
+                          void runGoogleSyncAction('cancel', async () =>
+                            cancelGooglePending({
+                              ...requireOwnedDeck(),
+                              expectedStateVersion: googleRuntime.stateVersion,
+                            }),
+                          )
+                        }
+                      >
+                        {googleRuntime.pendingPatchStatus === 'rejected'
+                          ? 'Reset rejected pull'
+                          : googleRuntime.pendingPatchStatus === 'stale'
+                            ? 'Reset stale pull'
+                            : 'Cancel pull proposal'}
+                      </button>
+                    ) : null}
+                    {(googleRuntime.status === 'awaiting_push_review' ||
+                      googleRuntime.status === 'executing' ||
+                      googleRuntime.status === 'verifying' ||
+                      googleRuntime.status === 'error') &&
+                    googleRuntime.pendingPlanDigest ? (
+                      <button
+                        type="button"
+                        className="is-primary"
+                        disabled={googleSyncBusy !== null}
+                        onClick={() =>
+                          void runGoogleSyncAction('execute-push', async () =>
+                            executeGooglePush({
+                              ...requireOwnedDeck(),
+                              planDigest: googleRuntime.pendingPlanDigest as string,
+                            }),
+                          )
+                        }
+                      >
+                        {googleRuntime.status === 'awaiting_push_review'
+                          ? 'Push and verify'
+                          : 'Resume verification'}
+                      </button>
+                    ) : null}
+                    {googleRuntime.status === 'awaiting_push_review' ? (
+                      <button
+                        type="button"
+                        disabled={googleSyncBusy !== null}
+                        onClick={() =>
+                          void runGoogleSyncAction('cancel', async () =>
+                            cancelGooglePending({
+                              ...requireOwnedDeck(),
+                              expectedStateVersion: googleRuntime.stateVersion,
+                            }),
+                          )
+                        }
+                      >
+                        Cancel pending push
+                      </button>
+                    ) : null}
+                    {googleRuntime.status === 'conflict' || googleRuntime.status === 'error' ? (
+                      <button
+                        type="button"
+                        disabled={googleSyncBusy !== null}
+                        onClick={() =>
+                          void runGoogleSyncAction('reset', async () =>
+                            resetGoogleAttachment({
+                              ...requireOwnedDeck(),
+                              expectedStateVersion: googleRuntime.stateVersion,
+                            }),
+                          )
+                        }
+                      >
+                        Reset attachment
+                      </button>
+                    ) : null}
+                    <a
+                      href={`https://docs.google.com/presentation/d/${encodeURIComponent(googleRuntime.remotePresentationId)}/edit`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Open Google Slides <ExternalLink size={12} />
+                    </a>
+                    {googleRuntime.status === 'conflict' || googleRuntime.status === 'error' ? (
+                      <output role="alert">
+                        {googleRuntime.errorMessage ?? 'Re-plan required.'}
+                      </output>
+                    ) : null}
+                    {googleRuntime.status === 'awaiting_pull_review' &&
+                    googleRuntime.pendingPatchStatus !== 'accepted' ? (
+                      <output>
+                        {googleRuntime.pendingPatchStatus === 'rejected'
+                          ? 'The pull proposal was rejected. Reset it before planning again.'
+                          : googleRuntime.pendingPatchStatus === 'stale'
+                            ? 'The pull proposal became stale. Reset it before planning again.'
+                            : 'Review and accept the NodeSlide proposal before verification, or cancel it.'}
+                      </output>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+            ) : null}
+          </section>
+
           <section className="ns-connection-section" aria-labelledby="ns-byok-title">
             <div className="ns-connection-heading">
               <span>
@@ -277,6 +669,55 @@ export function NodeSlideConnectionsDialog({
       </div>
     </dialog>
   );
+}
+
+type GoogleSyncAction =
+  | 'create'
+  | 'attach'
+  | 'pull'
+  | 'finalize-pull'
+  | 'plan-push'
+  | 'execute-push'
+  | 'cancel'
+  | 'reset';
+
+interface GoogleSyncReceipt {
+  result?: string;
+  operationCount?: number;
+  verified?: boolean;
+  presentationUrl?: string;
+  cancelled?: boolean;
+  reset?: boolean;
+}
+
+export function googlePresentationId(value: string): string {
+  const trimmed = value.trim();
+  const match = trimmed.match(/\/presentation\/d\/([a-zA-Z0-9_-]+)/u);
+  return match?.[1] ?? trimmed;
+}
+
+/**
+ * Turns a sync receipt into one sentence. Every branch describes what the
+ * server reported, including the branches where nothing was written — a sync
+ * that changed nothing and a sync that hit a conflict must not read alike.
+ */
+export function googleSyncNotice(action: GoogleSyncAction, receipt: GoogleSyncReceipt): string {
+  if (action === 'create') {
+    return 'Created an app-authorized blank Google Slides target. Plan a NodeSlide push to review its first write.';
+  }
+  if (action === 'attach') {
+    return 'Linked the already authorized, exact-match presentation with an exact baseline.';
+  }
+  if (receipt.cancelled) return 'Cancelled the pending review. You can plan again.';
+  if (receipt.reset)
+    return 'Reset the Google Slides attachment. Create or link a compatible target.';
+  if (receipt.verified) return 'Synchronization verified against NodeSlide and Google Slides.';
+  if (receipt.result === 'no_change') return 'Both versions are already synchronized.';
+  if (receipt.result === 'conflict') return 'A conflict was detected. Nothing was written.';
+  if (action === 'pull') {
+    return `${receipt.operationCount ?? 0} Google change${receipt.operationCount === 1 ? '' : 's'} prepared in NodeSlide for review.`;
+  }
+  return `${receipt.operationCount ?? 0} NodeSlide change${receipt.operationCount === 1 ? '' : 's'} prepared for Google Slides.`;
 }
 
 export function buildNodeSlideMcpJson(env: Record<string, string>, command = 'npx'): string {

@@ -9,6 +9,7 @@
  */
 
 import type * as crons from "../crons.js";
+import type * as http from "../http.js";
 import type * as lib_nodeslideAccess from "../lib/nodeslideAccess.js";
 import type * as lib_nodeslideAgenticControls from "../lib/nodeslideAgenticControls.js";
 import type * as lib_nodeslideAgenticTelemetry from "../lib/nodeslideAgenticTelemetry.js";
@@ -31,6 +32,8 @@ import type * as lib_nodeslideEditShadowPlanner from "../lib/nodeslideEditShadow
 import type * as lib_nodeslideErasureContract from "../lib/nodeslideErasureContract.js";
 import type * as lib_nodeslideExecutionTrace from "../lib/nodeslideExecutionTrace.js";
 import type * as lib_nodeslideExecutionTraceValidator from "../lib/nodeslideExecutionTraceValidator.js";
+import type * as lib_nodeslideGoogleOAuth from "../lib/nodeslideGoogleOAuth.js";
+import type * as lib_nodeslideGoogleSlidesRuntime from "../lib/nodeslideGoogleSlidesRuntime.js";
 import type * as lib_nodeslideGymArtifactEvidence from "../lib/nodeslideGymArtifactEvidence.js";
 import type * as lib_nodeslideGymShadow from "../lib/nodeslideGymShadow.js";
 import type * as lib_nodeslideIds from "../lib/nodeslideIds.js";
@@ -69,6 +72,8 @@ import type * as nodeslideArtifactArena from "../nodeslideArtifactArena.js";
 import type * as nodeslideArtifactSpec from "../nodeslideArtifactSpec.js";
 import type * as nodeslideBuildIdentity from "../nodeslideBuildIdentity.js";
 import type * as nodeslideDataExport from "../nodeslideDataExport.js";
+import type * as nodeslideGoogleAuth from "../nodeslideGoogleAuth.js";
+import type * as nodeslideGoogleSlidesRuntime from "../nodeslideGoogleSlidesRuntime.js";
 import type * as nodeslideGymShadow from "../nodeslideGymShadow.js";
 import type * as nodeslideImages from "../nodeslideImages.js";
 import type * as nodeslideMemory from "../nodeslideMemory.js";
@@ -90,6 +95,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   crons: typeof crons;
+  http: typeof http;
   "lib/nodeslideAccess": typeof lib_nodeslideAccess;
   "lib/nodeslideAgenticControls": typeof lib_nodeslideAgenticControls;
   "lib/nodeslideAgenticTelemetry": typeof lib_nodeslideAgenticTelemetry;
@@ -112,6 +118,8 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslideErasureContract": typeof lib_nodeslideErasureContract;
   "lib/nodeslideExecutionTrace": typeof lib_nodeslideExecutionTrace;
   "lib/nodeslideExecutionTraceValidator": typeof lib_nodeslideExecutionTraceValidator;
+  "lib/nodeslideGoogleOAuth": typeof lib_nodeslideGoogleOAuth;
+  "lib/nodeslideGoogleSlidesRuntime": typeof lib_nodeslideGoogleSlidesRuntime;
   "lib/nodeslideGymArtifactEvidence": typeof lib_nodeslideGymArtifactEvidence;
   "lib/nodeslideGymShadow": typeof lib_nodeslideGymShadow;
   "lib/nodeslideIds": typeof lib_nodeslideIds;
@@ -150,6 +158,8 @@ declare const fullApi: ApiFromModules<{
   nodeslideArtifactSpec: typeof nodeslideArtifactSpec;
   nodeslideBuildIdentity: typeof nodeslideBuildIdentity;
   nodeslideDataExport: typeof nodeslideDataExport;
+  nodeslideGoogleAuth: typeof nodeslideGoogleAuth;
+  nodeslideGoogleSlidesRuntime: typeof nodeslideGoogleSlidesRuntime;
   nodeslideGymShadow: typeof nodeslideGymShadow;
   nodeslideImages: typeof nodeslideImages;
   nodeslideMemory: typeof nodeslideMemory;

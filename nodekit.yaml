@@ -8,6 +8,22 @@ commandProfile: application
 canonicalFor:
   - nodeslide.deck
   - nodeslide.deck-patch
+  # Two-way Google Slides sync. This was undeclared here while the code lived only in the
+  # development monorepo, which is why a board review concluded the capability did not exist.
+  # It is a real integration, not a label: convex/nodeslideGoogleAuth.ts runs the OAuth
+  # authorization-code + PKCE flow against accounts.google.com and oauth2.googleapis.com under
+  # the single narrow scope https://www.googleapis.com/auth/drive.file, and
+  # src/domains/nodeslide/integrations/googleSlides/adapter.ts calls
+  # https://slides.googleapis.com/v1/presentations to read and batchUpdate the remote deck.
+  # Every remote write is planned, reviewed, executed, then read back and verified against the
+  # stored three-way baseline; conflicts stop before any mutation.
+  # nodeslide.presentation-sync is NOT claimed here yet, deliberately.
+  #
+  # Concepts are registered in node-platform's ownership.yaml, and this one is not in it. Declaring
+  # canonicalFor over an unregistered concept fails the conformance gate — correctly, because a
+  # repository asserting ownership of a concept the registry has never heard of is how two repos end
+  # up both believing they own it. Registration is proposed to the node-platform session; the claim
+  # returns here once ownership.yaml carries the concept.
 
 consumes:
   - nodeplatform.repo-contract
@@ -46,5 +62,9 @@ contractDeclarations:
     signature: nodeslide-patch-operation
     path: shared/nodeslide.ts
     mode: canonical
+  # The nodeslide-presentation-sync-contract declaration is held back with the canonicalFor claim
+  # above, for the same reason: the gate reports it as a stale declaration against an unknown
+  # concept. The contract itself ships and is enforced in code at
+  # src/domains/nodeslide/integrations/syncContracts.ts — only the registry claim waits.
 
 architectureExceptions: []

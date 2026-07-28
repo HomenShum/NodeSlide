@@ -120,6 +120,69 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     createdAt: NOW,
   });
 
+  // Source monitoring the owner switched on, and the review item it produced.
+  // The proposal embeds the plan JSON, which describes the exact edits to this
+  // deck's slides — deck content in a table that looks like scheduler state.
+  await ctx.db.insert('nodeslide_source_refresh_schedules', {
+    id: 'refresh_schedule_scenario',
+    deckId,
+    sourceId: seededSource.id,
+    ownerDigest: `actor_${DIGEST('a')}`,
+    enabled: true,
+    intervalMinutes: 60,
+    nextRunAt: NOW + 3_600_000,
+    status: 'ready',
+    lastSemanticDigest: DIGEST('a'),
+    failureCount: 0,
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
+  await ctx.db.insert('nodeslide_source_refresh_proposals', {
+    id: 'refresh_proposal_scenario',
+    deckId,
+    sourceId: seededSource.id,
+    ownerDigest: `actor_${DIGEST('a')}`,
+    scheduleId: 'refresh_schedule_scenario',
+    status: 'ready',
+    baseDeckVersion: built.snapshot.deck.version,
+    baseSnapshotDigest: DIGEST('a'),
+    beforeRevisionId: `source-revision:${DIGEST('e')}`,
+    afterRevisionId: `source-revision:${DIGEST('f')}`,
+    afterRevisionDigest: DIGEST('f'),
+    planDigest: DIGEST('b'),
+    planJson: JSON.stringify({ operations: [{ slideId: slide.id, elementId: element.id }] }),
+    deckCiDigest: DIGEST('c'),
+    affectedSlideIds: [slide.id],
+    affectedElementIds: [element.id],
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
+  // The custody receipt binding one claim on one element to the exact region of
+  // the exact source revision it came from. Deleting the deck without this
+  // would leave a standing assertion about the deck's content behind.
+  await ctx.db.insert('nodeslide_claim_evidence_receipts', {
+    id: 'claim_receipt_scenario',
+    receiptId: 'claim_receipt_scenario',
+    schema: 'nodeslide.claim-evidence-receipt/v1',
+    receiptDigest: DIGEST('a'),
+    ownerDigest: `actor_${DIGEST('a')}`,
+    deckId,
+    patchId: 'patch_scenario',
+    slideId: slide.id,
+    elementId: element.id,
+    claimDigest: DIGEST('b'),
+    sourceRevisionId: `source-revision:${DIGEST('e')}`,
+    sourceRevisionDigest: DIGEST('f'),
+    captureId: 'capture_scenario',
+    captureDigest: DIGEST('c'),
+    evidenceStepId: 'evidence_step_scenario',
+    evidenceStepDigest: DIGEST('d'),
+    attachmentKind: 'screenshot',
+    attachmentDigest: DIGEST('e'),
+    region: { x: 0.1, y: 0.2, w: 0.3, h: 0.4 },
+    createdAt: NOW,
+  });
+
   // An approved upload. Even after the blob is gone the row still names the
   // file the owner attached and the digest of its contents, so the metadata is
   // deck-owned in its own right.

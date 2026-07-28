@@ -85,6 +85,7 @@ import type * as nodeslidePptxSync from "../nodeslidePptxSync.js";
 import type * as nodeslidePublishApproval from "../nodeslidePublishApproval.js";
 import type * as nodeslideRetention from "../nodeslideRetention.js";
 import type * as nodeslideSignatures from "../nodeslideSignatures.js";
+import type * as nodeslideSourceRefresh from "../nodeslideSourceRefresh.js";
 import type * as nodeslideSync from "../nodeslideSync.js";
 import type * as nodeslideTelemetry from "../nodeslideTelemetry.js";
 import type * as nodeslideUploads from "../nodeslideUploads.js";
@@ -176,6 +177,7 @@ declare const fullApi: ApiFromModules<{
   nodeslidePublishApproval: typeof nodeslidePublishApproval;
   nodeslideRetention: typeof nodeslideRetention;
   nodeslideSignatures: typeof nodeslideSignatures;
+  nodeslideSourceRefresh: typeof nodeslideSourceRefresh;
   nodeslideSync: typeof nodeslideSync;
   nodeslideTelemetry: typeof nodeslideTelemetry;
   nodeslideUploads: typeof nodeslideUploads;

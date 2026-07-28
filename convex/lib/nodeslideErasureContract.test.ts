@@ -59,6 +59,13 @@ describe('erasure contract derivation', () => {
       // Immutable source evidence. It outlives the mutable source row by
       // design, so nothing but the deck erasure will ever remove it.
       'nodeslide_source_revisions',
+      // Source monitoring state and the review items it produces. The proposal
+      // embeds the plan JSON, so it holds deck content, not just scheduling.
+      'nodeslide_source_refresh_schedules',
+      'nodeslide_source_refresh_proposals',
+      // A claim-to-region custody receipt is a standing assertion about this
+      // deck's content, so it cannot outlive the deck.
+      'nodeslide_claim_evidence_receipts',
       // Upload metadata survives the blob it describes, so it is erased here.
       'nodeslide_uploads',
       'nodeslide_agent_runs',

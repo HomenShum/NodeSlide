@@ -226,6 +226,15 @@ const nodeslidePublishedSnapshotValidator = v.object({
   sources: v.array(nodeslidePublishedSourceValidator),
 });
 
+const nodeslideClaimEvidenceRegionValidator = v.object({
+  x: v.number(),
+  y: v.number(),
+  w: v.number(),
+  h: v.number(),
+  page: v.optional(v.number()),
+  pageCount: v.optional(v.number()),
+});
+
 const nodeslideSyncObjectLinkValidator = v.object({
   kind: v.union(v.literal('deck'), v.literal('slide'), v.literal('element')),
   localId: v.string(),
@@ -634,6 +643,100 @@ export default defineSchema({
     .index('by_owner_created', ['ownerDigest', 'createdAt'])
     .index('by_source_created', ['sourceId', 'createdAt'])
     .index('by_source_content_digest', ['sourceId', 'contentDigest']),
+
+  /** Opt-in polling state kept separate so unchanged checks never stale deck candidates. */
+  nodeslide_source_refresh_schedules: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    sourceId: v.string(),
+    ownerDigest: v.string(),
+    enabled: v.boolean(),
+    intervalMinutes: v.number(),
+    nextRunAt: v.number(),
+    status: v.union(
+      v.literal('ready'),
+      v.literal('checking'),
+      v.literal('backoff'),
+      v.literal('disabled'),
+    ),
+    lastSemanticDigest: v.string(),
+    leaseId: v.optional(v.string()),
+    leaseExpiresAt: v.optional(v.number()),
+    failureCount: v.number(),
+    checksInWindow: v.optional(v.number()),
+    windowStartedAt: v.optional(v.number()),
+    lastCheckedAt: v.optional(v.number()),
+    lastChangedAt: v.optional(v.number()),
+    lastError: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_source', ['deckId', 'sourceId'])
+    .index('by_due', ['enabled', 'nextRunAt'])
+    .index('by_deck_updated', ['deckId', 'updatedAt']),
+
+  /** Review work created by source monitoring; never an executable patch by itself. */
+  nodeslide_source_refresh_proposals: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    sourceId: v.string(),
+    ownerDigest: v.string(),
+    scheduleId: v.string(),
+    status: v.union(
+      v.literal('ready'),
+      v.literal('prepared'),
+      v.literal('dismissed'),
+      v.literal('converted'),
+      v.literal('stale'),
+    ),
+    baseDeckVersion: v.number(),
+    baseSnapshotDigest: v.string(),
+    beforeRevisionId: v.string(),
+    afterRevisionId: v.string(),
+    afterRevisionDigest: v.string(),
+    planDigest: v.string(),
+    planJson: v.string(),
+    deckCiDigest: v.string(),
+    affectedSlideIds: v.array(v.string()),
+    affectedElementIds: v.array(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_status_created', ['deckId', 'status', 'createdAt'])
+    .index('by_source_created', ['sourceId', 'createdAt']),
+
+  /** Append-only claim-to-region custody receipts. Ambiguous geometry is never stored here. */
+  nodeslide_claim_evidence_receipts: defineTable({
+    id: v.string(),
+    receiptId: v.string(),
+    schema: v.literal('nodeslide.claim-evidence-receipt/v1'),
+    receiptDigest: v.string(),
+    ownerDigest: v.string(),
+    deckId: v.string(),
+    patchId: v.string(),
+    traceId: v.optional(v.string()),
+    slideId: v.string(),
+    elementId: v.string(),
+    claimDigest: v.string(),
+    sourceRevisionId: v.string(),
+    sourceRevisionDigest: v.string(),
+    captureId: v.string(),
+    captureDigest: v.string(),
+    evidenceStepId: v.string(),
+    evidenceStepDigest: v.string(),
+    attachmentKind: v.union(v.literal('screenshot'), v.literal('pdf')),
+    attachmentDigest: v.string(),
+    region: nodeslideClaimEvidenceRegionValidator,
+    createdAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_created', ['deckId', 'createdAt'])
+    .index('by_owner_created', ['ownerDigest', 'createdAt'])
+    .index('by_patch_created', ['patchId', 'createdAt'])
+    .index('by_claim_created', ['claimDigest', 'createdAt'])
+    .index('by_source_revision_created', ['sourceRevisionId', 'createdAt']),
 
   /**
    * Owner-approved file uploads, quarantined until the owner releases them.

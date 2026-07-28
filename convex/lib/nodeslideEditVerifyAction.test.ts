@@ -1,3 +1,4 @@
+import { nodeSlideBudgetLedgerStubResponse } from '@nodeslide/testing';
 import { describe, expect, it, vi } from 'vitest';
 import {
   NODESLIDE_OPENROUTER_EDIT_CONSENT,
@@ -64,6 +65,9 @@ function harness(current: NodeSlideWorkspace) {
     return current;
   });
   const runMutation = vi.fn(async (_reference: unknown, args: Record<string, unknown>) => {
+    // See nodeSlideBudgetLedgerStubResponse: the planner is budgeted now.
+    const budgetReply = nodeSlideBudgetLedgerStubResponse(args);
+    if (budgetReply !== undefined) return budgetReply;
     if ('buckets' in args) return { ok: true };
     if ('idempotencyKey' in args) return { created: true, run: { id: 'run-b4-test' } };
     if ('runId' in args) {
@@ -135,6 +139,16 @@ describe('proposeEdit B4 tool loop messages', () => {
           inputTokens: 10,
           outputTokens: 5,
           costMicroUsd: 1,
+          attempts: [
+            {
+              attempt: 'initial',
+              attempted: true,
+              settled: true,
+              ambiguous: false,
+              unreconciled: false,
+              elapsedMs: 1,
+            },
+          ],
         };
         if (request.jsonSchema?.name === 'nodeslide_edit_patch_repair') {
           return {
@@ -214,6 +228,16 @@ describe('proposeEdit B4 tool loop messages', () => {
         inputTokens: 10,
         outputTokens: 5,
         costMicroUsd: 1,
+        attempts: [
+          {
+            attempt: 'initial',
+            attempted: true,
+            settled: true,
+            ambiguous: false,
+            unreconciled: false,
+            elapsedMs: 1,
+          },
+        ],
       },
     });
 
@@ -252,6 +276,16 @@ describe('proposeEdit B4 tool loop messages', () => {
               inputTokens: 5,
               outputTokens: 3,
               costMicroUsd: 1,
+              attempts: [
+                {
+                  attempt: 'initial',
+                  attempted: true,
+                  settled: true,
+                  ambiguous: false,
+                  unreconciled: false,
+                  elapsedMs: 1,
+                },
+              ],
             },
           };
         }
@@ -277,6 +311,16 @@ describe('proposeEdit B4 tool loop messages', () => {
             inputTokens: 10,
             outputTokens: 5,
             costMicroUsd: 2,
+            attempts: [
+              {
+                attempt: 'initial',
+                attempted: true,
+                settled: true,
+                ambiguous: false,
+                unreconciled: false,
+                elapsedMs: 1,
+              },
+            ],
           },
         };
       },

@@ -21,8 +21,16 @@
  * calls `requireBudget`, which THROWS `budget_not_found` on a missing row. So
  * landing the workflow module without a writer would not have left the receipt
  * merely null — it would have made every provider-backed job fail on its
- * completion mutation, after the deck had already been written. The last
+ * completion mutation, after the deck had already been written. The third
  * describe block below pins exactly that.
+ *
+ * SINCE THE PRICE TABLE LANDED, this file carries a third job. `reserve` exists
+ * now, so `nodeSlideBudgetEnforcementPosture()` derives `'enforced'`, and the
+ * whole value of that word rests on `reserve` actually refusing calls. The last
+ * describe block exercises it directly against the real handler: a dynamic
+ * zero-priced route is refused rather than quoted at zero, a priced route is
+ * quoted at its worst case before dispatch, and a call that does not fit the
+ * remaining cap is refused with a distinct code.
  */
 import { getFunctionName } from 'convex/server';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -350,9 +358,15 @@ describe('getBudgetReceipt returns a real receipt instead of null', () => {
     // than declared, so it cannot drift.
     expect(receipt?.enforcement).toBe('hard');
     expect(receipt?.enforcementPosture).toBe('reserve' in budgets ? 'enforced' : 'accounting_only');
-    // Stated absolutely too, so this case fails loudly when `reserve` lands and
-    // whoever lands it has to come and confirm the flip is real.
-    expect(receipt?.enforcementPosture).toBe('accounting_only');
+    // THE FLIP, CONFIRMED. This line read 'accounting_only' for as long as the
+    // model price table was withheld, and it was written to go red the day
+    // `reserve` landed so that whoever landed it had to come here and state that
+    // the flip is real rather than incidental. It is real: `reserve` exists, it
+    // quotes every call through `preflightNodeSlideRunBudget` before dispatch,
+    // and `callNodeSlideBudgetedJson` — the only caller — is on the live edit
+    // dispatch path in `convex/nodeslideAgent.ts`. The line above is the one
+    // that must never be edited; it pins the derivation itself.
+    expect(receipt?.enforcementPosture).toBe('enforced');
   });
 
   it('refuses the receipt to a caller who is not the job owner', async () => {
@@ -403,18 +417,17 @@ describe('job completion cannot outrun its ledger', () => {
   });
 });
 
-describe('the pricing withholding is explicit, not accidental', () => {
-  it('exports no reserve, because no part of a reservation is price-free', () => {
-    // `reserve` quotes a call before dispatch. Every field it writes —
-    // quoteMicroUsd, pricingDigest, providerSafeOutputTokenCeiling,
-    // providerTimeoutMs — comes from the withheld price table. A stub that
-    // reserved zero would not be conservative, it would be unbounded.
-    expect(Object.keys(budgets)).not.toContain('reserve');
+describe('the price table landed, so the withholding is over', () => {
+  it('exports reserve, the mutation the whole posture derivation hangs on', () => {
+    // This case used to assert the opposite. `reserve` quotes a call before
+    // dispatch and every field it writes — quoteMicroUsd, pricingDigest,
+    // providerSafeOutputTokenCeiling, providerTimeoutMs — comes from the price
+    // table, so it could not land as a stub: a stub that reserved zero would not
+    // be conservative, it would be unbounded. It landed with real prices.
+    expect(Object.keys(budgets)).toContain('reserve');
   });
 
-  it('exports every ledger mutation that does not need a price', () => {
-    // Guards the other direction: withholding one mutation must not become an
-    // excuse for a thinner module than the port actually justified.
+  it('exports the complete ledger lifecycle and nothing beyond it', () => {
     expect(Object.keys(budgets).sort()).toEqual([
       'captureTimeout',
       'create',
@@ -422,7 +435,92 @@ describe('the pricing withholding is explicit, not accidental', () => {
       'finalizeForJob',
       'release',
       'replay',
+      'reserve',
       'settle',
     ]);
+  });
+
+  it('refuses a run whose route has no server-pinned price, instead of quoting it at zero', async () => {
+    const database = new MemoryDatabase();
+    const { ctx } = recordingContext(database);
+    await rawHandler(budgets.create)(ctx, {
+      budgetId: CREATE_BUDGET_ID,
+      budget: { maxCostUsd: 2 },
+    });
+    const opened = database.rows('nodeslide_run_budgets')[0] as Record<string, unknown>;
+
+    // `openrouter/free` reports "0" per token in the provider catalog. Scoring
+    // that as a price makes the worst case zero, which makes the reservation
+    // zero, which authorizes an UNBOUNDED call. The refusal below is the whole
+    // reason the dynamic kind exists.
+    await expect(
+      rawHandler(budgets.reserve)(ctx, {
+        budgetId: CREATE_BUDGET_ID,
+        callId: 'call-dynamic-route',
+        model: 'openrouter/free',
+        estimatedInputTokens: 1_000,
+        requestedMaxOutputTokens: 1_000,
+        expectedRevision: opened.revision,
+        expectedStateDigest: opened.stateDigest,
+      }),
+    ).rejects.toThrowError(expect.objectContaining({ code: 'pricing_unknown' }));
+
+    // Nothing was reserved and no billable call row exists: the denial is a
+    // refusal to spend, not a zero-cost authorization to spend.
+    expect(database.rows('nodeslide_billable_calls')).toEqual([]);
+    expect(database.rows('nodeslide_run_budgets')[0]).toMatchObject({ reservedMicroUsd: 0 });
+  });
+
+  it('quotes a priced route against the cap and holds the reservation', async () => {
+    const database = new MemoryDatabase();
+    const { ctx } = recordingContext(database);
+    await rawHandler(budgets.create)(ctx, {
+      budgetId: CREATE_BUDGET_ID,
+      budget: { maxCostUsd: 2 },
+    });
+    const opened = database.rows('nodeslide_run_budgets')[0] as Record<string, unknown>;
+
+    await rawHandler(budgets.reserve)(ctx, {
+      budgetId: CREATE_BUDGET_ID,
+      callId: 'call-priced-route',
+      model: 'moonshotai/kimi-k3',
+      estimatedInputTokens: 10_000,
+      requestedMaxOutputTokens: 2_000,
+      expectedRevision: opened.revision,
+      expectedStateDigest: opened.stateDigest,
+    });
+
+    const call = database.rows('nodeslide_billable_calls')[0] as Record<string, unknown>;
+    // 10_000 input tokens at $3/M = 30_000 micro-USD; 2_000 output at $15/M =
+    // 30_000. The quote is the WORST case, computed before dispatch.
+    expect(call).toMatchObject({ status: 'reserved', quoteMicroUsd: 60_000 });
+    expect(database.rows('nodeslide_run_budgets')[0]).toMatchObject({
+      reservedMicroUsd: 60_000,
+      actualMicroUsd: 0,
+    });
+  });
+
+  it('refuses a call whose worst case does not fit the remaining cap', async () => {
+    const database = new MemoryDatabase();
+    const { ctx } = recordingContext(database);
+    // One cent of headroom against the most expensive route in the catalog.
+    await rawHandler(budgets.create)(ctx, {
+      budgetId: CREATE_BUDGET_ID,
+      budget: { maxCostUsd: 0.01 },
+    });
+    const opened = database.rows('nodeslide_run_budgets')[0] as Record<string, unknown>;
+
+    await expect(
+      rawHandler(budgets.reserve)(ctx, {
+        budgetId: CREATE_BUDGET_ID,
+        callId: 'call-too-expensive',
+        model: 'anthropic/claude-fable-5',
+        estimatedInputTokens: 4_000_000,
+        requestedMaxOutputTokens: 2_000,
+        expectedRevision: opened.revision,
+        expectedStateDigest: opened.stateDigest,
+      }),
+    ).rejects.toThrowError(expect.objectContaining({ code: 'budget_exceeded' }));
+    expect(database.rows('nodeslide_billable_calls')).toEqual([]);
   });
 });

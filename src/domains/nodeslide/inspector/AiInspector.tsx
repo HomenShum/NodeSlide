@@ -46,6 +46,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import type { NodeSlideDeckCiResult } from '../../../../convex/lib/nodeslideDeckCi';
 import {
   type AgentTrace,
   type Deck,
@@ -76,6 +77,7 @@ import type { SlideVariation } from '../../../../shared/nodeslideVariation';
 import { NodeSlideConnectionsDialog } from '../components/NodeSlideConnectionsDialog';
 import { NodeSlideMemoryDialog } from '../components/NodeSlideMemoryDialog';
 import { AgentThread } from './AgentThread';
+import { DeckCiStatus } from './DeckCiStatus';
 import {
   AI_DRAFTING_PHASE_MS,
   type AiAgentActivity,
@@ -146,6 +148,10 @@ export interface AiInspectorProps<CommandId extends string = string> {
   selectedElements: readonly SlideElement[];
   /** Slides ctrl-clicked in the navigator. Two or more unlock the multi-slide write scope. */
   selectedSlideIds?: readonly string[];
+  /** Deck CI gate summary. `undefined` means the query has not been asked; `null` means no result. */
+  deckCiResult?: NodeSlideDeckCiResult | null;
+  deckCiLoading?: boolean;
+  onOpenDeckCiTrace?: () => void;
   workspaceElements?: readonly SlideElement[];
   patches: readonly AiReviewablePatch[];
   traces: readonly AgentTrace[];
@@ -209,6 +215,9 @@ export function AiInspector<CommandId extends string = string>({
   slide,
   selectedElements,
   selectedSlideIds = [],
+  deckCiResult,
+  deckCiLoading = false,
+  onOpenDeckCiTrace,
   workspaceElements = [],
   patches,
   traces,
@@ -1039,6 +1048,14 @@ export function AiInspector<CommandId extends string = string>({
           </section>
         ) : null}
       </div>
+
+      {deckCiResult !== undefined || deckCiLoading ? (
+        <DeckCiStatus
+          result={deckCiResult ?? null}
+          loading={deckCiLoading}
+          {...(onOpenDeckCiTrace ? { onOpenTrace: onOpenDeckCiTrace } : {})}
+        />
+      ) : null}
 
       <div
         className={`ns-ai-composer ns-ai-v3-composer ${composerExpanded ? 'is-expanded' : ''}`}

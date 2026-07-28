@@ -67,6 +67,8 @@ describe('NodeSlide user-facing errors', () => {
       'utf8',
     );
     expect(studio).toContain("from './nodeslideUserError'");
-    expect(studio).toMatch(/function errorMessage\([^)]*\)[^{]*\{\s*return nodeSlideUserErrorMessage\(/u);
+    expect(studio).toMatch(
+      /function errorMessage\([^)]*\)[^{]*\{\s*return nodeSlideUserErrorMessage\(/u,
+    );
   });
 });

@@ -9,6 +9,7 @@ const BRIEF_CONSENT = 'openrouter_full_brief_v1';
 const WEB_CONSENT = 'nodeslide_web_research_v1';
 const LOCAL_BYOK_CONSENT = 'nodeslide_local_byok_edit_v1';
 const DEFAULT_BYOK_MODEL = process.env.NODESLIDE_BYOK_MODEL ?? 'z-ai/glm-5.2';
+const NODE_SLIDE_EXTERNAL_OPERATION_MAX = 8;
 const NODE_SLIDE_PAGE_DEFAULT = 25;
 const NODE_SLIDE_PAGE_MAX = 100;
 
@@ -53,9 +54,271 @@ export interface NodeSlideWorkspace {
   validations: Array<Record<string, unknown>>;
 }
 
+/**
+ * The exact PatchOperation shape, as a schema rather than a promise.
+ *
+ * The local-BYOK planner asks a model for `{summary, operations}` and previously forwarded
+ * whatever came back to Convex after checking only `Array.isArray` and a length bound. Convex
+ * revalidates, so this is not the last line of defence — but an unparsed operations array is
+ * a shape the MCP layer cannot describe, cannot type, and cannot reject early, and `.strict()`
+ * here is what stops a hallucinated extra field from travelling any further.
+ */
+const finiteNumber = z.number().finite();
+const nonNegativeInteger = z.number().int().min(0);
+const boundingBoxSchema = z
+  .object({
+    x: finiteNumber,
+    y: finiteNumber,
+    width: finiteNumber,
+    height: finiteNumber,
+  })
+  .strict();
+const elementStyleSchema = z
+  .object({
+    fill: z.string().optional(),
+    stroke: z.string().optional(),
+    strokeWidth: finiteNumber.optional(),
+    color: z.string().optional(),
+    fontFamily: z.string().optional(),
+    fontSize: finiteNumber.optional(),
+    fontWeight: finiteNumber.optional(),
+    lineHeight: finiteNumber.optional(),
+    letterSpacing: finiteNumber.optional(),
+    textAlign: z.enum(['left', 'center', 'right']).optional(),
+    verticalAlign: z.enum(['top', 'middle', 'bottom']).optional(),
+    radius: finiteNumber.optional(),
+    opacity: finiteNumber.optional(),
+    padding: finiteNumber.optional(),
+    shadow: z.string().optional(),
+  })
+  .strict();
+const chartDataSchema = z
+  .object({
+    chartType: z.enum(['bar', 'line', 'area', 'donut']),
+    labels: z.array(z.string()),
+    series: z.array(
+      z
+        .object({
+          name: z.string(),
+          values: z.array(finiteNumber),
+          color: z.string().optional(),
+        })
+        .strict(),
+    ),
+    unit: z.string().optional(),
+    sourceId: z.string().optional(),
+  })
+  .strict();
+const mathDataSchema = z
+  .object({
+    expression: z.string(),
+    syntax: z.enum(['plain', 'latex']).optional(),
+    displayMode: z.enum(['inline', 'block']).optional(),
+    description: z.string().optional(),
+    display: z.string().optional(),
+    variables: z
+      .array(
+        z.object({ label: z.string(), value: finiteNumber, unit: z.string().optional() }).strict(),
+      )
+      .optional(),
+    sourceId: z.string().optional(),
+  })
+  .strict();
+const imageDataSchema = z
+  .object({
+    placeholder: z.boolean(),
+    credit: z.string().optional(),
+    sourceId: z.string().optional(),
+  })
+  .strict();
+const videoDataSchema = z
+  .object({
+    url: z.string(),
+    posterUrl: z.string().optional(),
+    title: z.string().optional(),
+    captionsUrl: z.string().optional(),
+    captionsLanguage: z.string().optional(),
+    startAtSeconds: finiteNumber.optional(),
+    endAtSeconds: finiteNumber.optional(),
+  })
+  .strict();
+const slideElementSchema = z
+  .object({
+    id: z.string(),
+    slideId: z.string(),
+    name: z.string(),
+    kind: z.enum(['text', 'shape', 'image', 'chart', 'math', 'video', 'connector']),
+    role: z.string().optional(),
+    bbox: boundingBoxSchema,
+    rotation: finiteNumber,
+    content: z.string().optional(),
+    style: elementStyleSchema,
+    chart: chartDataSchema.optional(),
+    math: mathDataSchema.optional(),
+    video: videoDataSchema.optional(),
+    image: imageDataSchema.optional(),
+    imageUrl: z.string().optional(),
+    altText: z.string().optional(),
+    sourceIds: z.array(z.string()).max(64),
+    locked: z.boolean(),
+    visible: z.boolean().optional(),
+    groupId: z.string().max(128).optional(),
+    exportCapabilities: z.array(
+      z.enum([
+        'web_native',
+        'pptx_editable',
+        'pptx_static_fallback',
+        'google_importable',
+        'web_only',
+      ]),
+    ),
+    version: nonNegativeInteger,
+  })
+  .strict();
+const slideSchema = z
+  .object({
+    id: z.string(),
+    deckId: z.string(),
+    title: z.string(),
+    section: z.string().optional(),
+    notes: z.string().optional(),
+    background: z.string(),
+    elementOrder: z.array(z.string()),
+    version: nonNegativeInteger,
+  })
+  .strict();
+
+export const nodeSlidePatchOperationSchema = z.discriminatedUnion('op', [
+  z
+    .object({
+      op: z.literal('move'),
+      slideId: z.string(),
+      elementId: z.string(),
+      x: finiteNumber,
+      y: finiteNumber,
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('resize'),
+      slideId: z.string(),
+      elementId: z.string(),
+      width: finiteNumber,
+      height: finiteNumber,
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('replace_text'),
+      slideId: z.string(),
+      elementId: z.string(),
+      text: z.string(),
+      sourceIds: z.array(z.string()).max(64).optional(),
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('update_style'),
+      slideId: z.string(),
+      elementId: z.string(),
+      properties: elementStyleSchema,
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('update_chart'),
+      slideId: z.string(),
+      elementId: z.string(),
+      chart: chartDataSchema,
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('update_image'),
+      slideId: z.string(),
+      elementId: z.string(),
+      imageUrl: z.string(),
+      altText: z.string(),
+      credit: z.string().optional(),
+      sourceIds: z.array(z.string()).max(64).optional(),
+    })
+    .strict(),
+  z
+    .object({ op: z.literal('add_element'), slideId: z.string(), element: slideElementSchema })
+    .strict(),
+  z
+    .object({ op: z.literal('remove_element'), slideId: z.string(), elementId: z.string() })
+    .strict(),
+  z
+    .object({
+      op: z.literal('set_visibility_v1'),
+      slideId: z.string(),
+      elementId: z.string(),
+      visible: z.boolean(),
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('group_elements_v1'),
+      slideId: z.string(),
+      elementIds: z.array(z.string()).min(2).max(64),
+      groupId: z.string().min(1).max(128),
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('ungroup_elements_v1'),
+      slideId: z.string(),
+      elementIds: z.array(z.string()).min(2).max(64),
+      groupId: z.string().min(1).max(128),
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('reorder_element_v1'),
+      slideId: z.string(),
+      elementId: z.string(),
+      index: nonNegativeInteger,
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('add_slide'),
+      slide: slideSchema,
+      elements: z.array(slideElementSchema).max(128),
+      index: nonNegativeInteger,
+    })
+    .strict(),
+  z.object({ op: z.literal('remove_slide'), slideId: z.string() }).strict(),
+  z
+    .object({ op: z.literal('reorder_slide'), slideId: z.string(), index: nonNegativeInteger })
+    .strict(),
+  z
+    .object({
+      op: z.literal('update_slide'),
+      slideId: z.string(),
+      properties: z
+        .object({
+          title: z.string().optional(),
+          notes: z.string().optional(),
+          background: z.string().optional(),
+        })
+        .strict(),
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('update_deck'),
+      properties: z.object({ title: z.string().optional() }).strict(),
+    })
+    .strict(),
+]);
+
+export type NodeSlidePatchOperation = z.infer<typeof nodeSlidePatchOperationSchema>;
+
 interface LocalPlannerResult {
   summary: string;
-  operations: unknown[];
+  operations: NodeSlidePatchOperation[];
   telemetry: Pick<
     CallResult,
     'provider' | 'modelUsed' | 'costUsd' | 'inputTokens' | 'outputTokens'
@@ -549,12 +812,17 @@ export async function planLocalByokEdit(args: {
   }
   const parsed = parseJsonObject(response.text);
   const summary = typeof parsed?.summary === 'string' ? parsed.summary.trim().slice(0, 500) : '';
-  const operations = Array.isArray(parsed?.operations) ? parsed.operations : [];
-  if (!summary || operations.length === 0 || operations.length > 8) {
+  const parsedOperations = z
+    .array(nodeSlidePatchOperationSchema)
+    .min(1)
+    .max(NODE_SLIDE_EXTERNAL_OPERATION_MAX)
+    .safeParse(parsed?.operations);
+  if (!summary || !parsedOperations.success) {
     throw new Error(
       'Local BYOK model returned an invalid bounded proposal. No proposal was saved.',
     );
   }
+  const operations = parsedOperations.data;
   return {
     summary,
     operations,

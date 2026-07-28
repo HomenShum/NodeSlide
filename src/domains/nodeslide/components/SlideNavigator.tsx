@@ -350,7 +350,9 @@ export function SlideNavigator({
                                 selectedSlideSet.has(slide.id) ? 'true' : undefined
                               }
                               aria-pressed={
-                                onSelectedSlideIdsChange ? selectedSlideSet.has(slide.id) : undefined
+                                onSelectedSlideIdsChange
+                                  ? selectedSlideSet.has(slide.id)
+                                  : undefined
                               }
                               onClick={(event) => activateOrToggleSlide(event, slide.id)}
                               onDoubleClick={() => onRenameSlide?.(slide.id, slide.title)}

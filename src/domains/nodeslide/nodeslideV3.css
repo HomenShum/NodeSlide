@@ -2030,6 +2030,65 @@
   overflow: hidden;
 }
 
+/* Visited-but-hidden panels stay mounted; only the active one occupies the box. */
+.nodeslide-studio .ns-inspector-tabpanel {
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.nodeslide-studio .ns-inspector-tabpanel[hidden] {
+  display: none;
+}
+
+/* Narrow rails move Versions and JSON into an overflow menu. The nav is the grid that
+ * keeps the tablist and that trigger on one row without letting either scroll away. */
+.nodeslide-studio .ns-inspector-nav {
+  align-items: stretch;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-width: 0;
+  position: relative;
+}
+
+.nodeslide-studio .ns-inspector-more {
+  align-items: stretch;
+  border-bottom: 1px solid var(--ns-line-b);
+  display: flex;
+  min-width: 0;
+  position: relative;
+}
+
+.nodeslide-studio .ns-inspector-more-trigger {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--ns-ink2);
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 550;
+  gap: 3px;
+  justify-content: center;
+  margin-left: 2px;
+  min-height: 39px;
+  min-width: 0;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+.nodeslide-studio .ns-inspector-more-trigger.is-active {
+  border-bottom-color: var(--ns-accent);
+  color: var(--ns-ink);
+  font-weight: 650;
+}
+
+.nodeslide-studio .ns-inspector-more-trigger:focus-visible {
+  border-radius: 6px;
+}
+
 /* The inspector is a containment boundary. Every scrollable lane owns only its
  * vertical axis; no descendant may widen or horizontally translate the rail. */
 .nodeslide-studio

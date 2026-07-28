@@ -10,8 +10,18 @@ import {
   ShieldAlert,
   X,
 } from 'lucide-react';
-import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  type ReactNode,
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { api } from '../../../convex/_generated/api';
+import type { NodeSlideDeckCiResult } from '../../../convex/lib/nodeslideDeckCi';
 import type {
   AgentEditRequest,
   CommentAnchor,
@@ -105,10 +115,10 @@ import {
   appendDistinctHistoryVersion,
   applyExpectedElementVersions,
   authoritativePredecessorVersion,
+  candidateSlideIdForPatch,
   classifyEditorVersionAdvance,
   createEditorRequestGate,
   createSerializedEditorWriteQueue,
-  candidateSlideIdForPatch,
   editorCandidateCanAccept,
   editorCandidateReceiptForPatch,
   workspaceReceiptMarker,
@@ -122,7 +132,6 @@ import type {
   AiReadReference,
   AiVariationRequest,
 } from './inspector/AiInspector';
-import { InspectorPanel } from './inspector/InspectorPanel';
 import type { JsonPatchProposalRequest } from './inspector/JsonInspector';
 import { nodeSlideScopeLabel } from './inspector/scopePresentation';
 import type { InspectorTab } from './inspector/types';
@@ -137,6 +146,8 @@ import {
 import { downloadDeckHtml, downloadPptx, validateSnapshot } from './slidelang/index';
 import './nodeslide.css';
 import './nodeslideV3.css';
+
+const InspectorPanel = lazy(() => import('./inspector/NodeSlideInspectorPanel'));
 
 type ConvexArgs<Args> = Args & DefaultFunctionArgs;
 type PublicQuery<Args, Result> = FunctionReference<'query', 'public', ConvexArgs<Args>, Result>;
@@ -346,6 +357,12 @@ interface NodeSlideGeneratedApi {
   nodeslideAgent: {
     createDeckFromBrief: PublicAction<CreateDeckAdmissionRequest, OwnerWorkspace>;
     proposeEdit: PublicAction<AgentEditRequest & { ownerAccessKey: string }, PatchReceipt>;
+  };
+  nodeslideDeckCi: {
+    evaluateLatest: PublicQuery<
+      { deckId: string; ownerAccessKey: string; changedSourceIds?: string[] },
+      NodeSlideDeckCiResult
+    >;
   };
   nodeslideImages: {
     searchImages: PublicAction<
@@ -707,6 +724,10 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
   const evictTasteSignal = useMutation(nodeslideApi.nodeslidePreferences.evictSignal);
   const queriedWorkspace = useQuery(
     nodeslideApi.nodeslide.getWorkspace,
+    activeDeckId && ownerAccessKey ? { deckId: activeDeckId, ownerAccessKey } : 'skip',
+  );
+  const deckCiResult = useQuery(
+    nodeslideApi.nodeslideDeckCi.evaluateLatest,
     activeDeckId && ownerAccessKey ? { deckId: activeDeckId, ownerAccessKey } : 'skip',
   );
   const editorCapabilities = useQuery(
@@ -3478,231 +3499,254 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
           }
         />
 
-        <InspectorPanel<NodeSlideEditorCommandId>
-          workspace={workspace}
-          slide={activeSlide}
-          selectedElements={selectedElements}
-          selectedSlideIds={selectedSlideIds}
-          activeTab={activeInspectorTab}
-          collapsed={inspectorCollapsed}
-          width={inspectorWidth}
-          composerSeed={composerSeed}
-          agentBusy={agentBusy}
-          variations={activeVariations}
-          variationsLoading={
-            Boolean(activeDeckId && ownerAccessKey && activeSlideId) && variationRows === undefined
+        <Suspense
+          fallback={
+            <aside
+              className={`ns-inspector ns-inspector-loading${inspectorCollapsed ? ' is-collapsed' : ''}`}
+              aria-busy="true"
+              aria-label="Loading inspector"
+            >
+              <LoaderCircle className="ns-spin" size={17} aria-hidden="true" />
+              {inspectorCollapsed ? null : <span>Opening workspace tools…</span>}
+            </aside>
           }
-          variationBusy={variationBusy}
-          variationGenerating={variationGenerating}
-          variationError={variationError}
-          previewedVariationId={previewMatchesActiveSlide ? (previewedVariation?.id ?? null) : null}
-          aiReferences={aiReferences}
-          aiCommands={aiCommands}
-          aiAgentActivity={aiAgentActivity}
-          agentRuns={agentRuns ?? []}
-          agentMessages={agentMessages ?? []}
-          memories={agentMemories ?? []}
-          memoriesLoading={Boolean(activeDeckId && ownerAccessKey) && agentMemories === undefined}
-          {...(selectedTelemetryRunId ? { agentTelemetryRunId: selectedTelemetryRunId } : {})}
-          agentTelemetryLoadingMore={telemetryLoadingRunId === selectedTelemetryRunId}
-          {...(telemetryLoadError ? { agentTelemetryLoadError: telemetryLoadError } : {})}
-          onSelectAgentRun={(runId) => {
-            setTraceTelemetryRunId(runId);
-            setTelemetryLoadError(null);
-          }}
-          onSelectEvidenceElement={(slideId, elementId) => {
-            setActiveSlideId(slideId);
-            setSelectedElementIds([elementId]);
-          }}
-          onLoadMoreAgentTelemetry={loadOlderAgentTelemetry}
-          {...(agentTelemetry ? { agentTelemetry } : {})}
-          aiCommentContext={aiCommentContext}
-          previewedPatchId={previewedPatchId}
-          activeTastePackId={activeTastePackId}
-          activeProfileId={workspace.deck.activeSignatureProfileId ?? null}
-          activeProfileDigest={workspace.deck.activeSignatureProfileDigest ?? null}
-          previewProfileId={previewedSignatureProfile?.id ?? null}
-          signatureProfiles={signatureProfiles}
-          tasteProfile={tasteProfile ?? null}
-          tasteProfileLoading={tasteProfile === undefined}
-          tastePackBusy={tastePackBusy}
-          {...(activeDeckId && ownerAccessKey
-            ? {
-                dataRights: {
-                  deckId: activeDeckId,
-                  deckTitle: workspace.deck.title,
-                  ownerAccessKey,
-                  onRequestDelete: () => {
-                    setDeleteDeckError(null);
-                    setDeleteDeckOpen(true);
+        >
+          <InspectorPanel
+            workspace={workspace}
+            slide={activeSlide}
+            selectedElements={selectedElements}
+            selectedSlideIds={selectedSlideIds}
+            deckCiResult={deckCiResult ?? null}
+            deckCiLoading={Boolean(activeDeckId && ownerAccessKey) && deckCiResult === undefined}
+            activeTab={activeInspectorTab}
+            collapsed={inspectorCollapsed}
+            width={inspectorWidth}
+            composerSeed={composerSeed}
+            agentBusy={agentBusy}
+            variations={activeVariations}
+            variationsLoading={
+              Boolean(activeDeckId && ownerAccessKey && activeSlideId) &&
+              variationRows === undefined
+            }
+            variationBusy={variationBusy}
+            variationGenerating={variationGenerating}
+            variationError={variationError}
+            previewedVariationId={
+              previewMatchesActiveSlide ? (previewedVariation?.id ?? null) : null
+            }
+            aiReferences={aiReferences}
+            aiCommands={aiCommands}
+            aiAgentActivity={aiAgentActivity}
+            agentRuns={agentRuns ?? []}
+            agentMessages={agentMessages ?? []}
+            memories={agentMemories ?? []}
+            memoriesLoading={Boolean(activeDeckId && ownerAccessKey) && agentMemories === undefined}
+            {...(selectedTelemetryRunId ? { agentTelemetryRunId: selectedTelemetryRunId } : {})}
+            agentTelemetryLoadingMore={telemetryLoadingRunId === selectedTelemetryRunId}
+            {...(telemetryLoadError ? { agentTelemetryLoadError: telemetryLoadError } : {})}
+            onSelectAgentRun={(runId) => {
+              setTraceTelemetryRunId(runId);
+              setTelemetryLoadError(null);
+            }}
+            onSelectEvidenceElement={(slideId, elementId) => {
+              setActiveSlideId(slideId);
+              setSelectedElementIds([elementId]);
+            }}
+            onLoadMoreAgentTelemetry={loadOlderAgentTelemetry}
+            {...(agentTelemetry ? { agentTelemetry } : {})}
+            aiCommentContext={aiCommentContext}
+            previewedPatchId={previewedPatchId}
+            activeTastePackId={activeTastePackId}
+            activeProfileId={workspace.deck.activeSignatureProfileId ?? null}
+            activeProfileDigest={workspace.deck.activeSignatureProfileDigest ?? null}
+            previewProfileId={previewedSignatureProfile?.id ?? null}
+            signatureProfiles={signatureProfiles}
+            tasteProfile={tasteProfile ?? null}
+            tasteProfileLoading={tasteProfile === undefined}
+            tastePackBusy={tastePackBusy}
+            {...(activeDeckId && ownerAccessKey
+              ? {
+                  dataRights: {
+                    deckId: activeDeckId,
+                    deckTitle: workspace.deck.title,
+                    ownerAccessKey,
+                    onRequestDelete: () => {
+                      setDeleteDeckError(null);
+                      setDeleteDeckOpen(true);
+                    },
                   },
-                },
+                }
+              : {})}
+            onTabChange={(tab) => {
+              if (tab !== 'ai') setPreviewedVariation(null);
+              if (tab !== 'design') setPreviewedSignatureProfile(null);
+              setActiveInspectorTab(tab);
+            }}
+            onToggleCollapsed={() => setInspectorCollapsed((value) => !value)}
+            onWidthChange={setInspectorWidth}
+            onProposeEdit={handleProposeEdit}
+            onAttachAiDataFile={attachAiDataFile}
+            onCreateAiMemory={async (category, content) => {
+              if (!activeDeckId || !ownerAccessKey) throw new Error('Open an owned deck first.');
+              await createAgentMemory({ deckId: activeDeckId, ownerAccessKey, category, content });
+            }}
+            onUpdateAiMemory={async (memoryId, update) => {
+              if (!activeDeckId || !ownerAccessKey) throw new Error('Open an owned deck first.');
+              await updateAgentMemory({
+                deckId: activeDeckId,
+                ownerAccessKey,
+                memoryId,
+                ...update,
+              });
+            }}
+            onDeleteAiMemory={async (memoryId) => {
+              if (!activeDeckId || !ownerAccessKey) throw new Error('Open an owned deck first.');
+              await removeAgentMemory({ deckId: activeDeckId, ownerAccessKey, memoryId });
+            }}
+            onDeleteAiDataSource={deleteAiDataSource}
+            onCancelAiRun={(runId) => void cancelAiRun(runId)}
+            onAcceptPatch={handleAcceptPatch}
+            onRejectPatch={handleRejectPatch}
+            onPreviewPatch={previewPatch}
+            onClearAiCommentContext={() => setAiCommentContext(null)}
+            onGenerateVariations={handleGenerateVariations}
+            onPreviewVariation={(variation) => {
+              if (
+                variation &&
+                (variation.status !== 'ready' ||
+                  !variation.validation.ok ||
+                  variation.validation.issues.some((issue) => issue.severity === 'error') ||
+                  variation.slideId !== activeSlide.id ||
+                  variation.baseSlideVersion !== activeSlide.version)
+              ) {
+                setVariationError(
+                  'This direction is based on an older slide and can no longer be previewed safely.',
+                );
+                return;
               }
-            : {})}
-          onTabChange={(tab) => {
-            if (tab !== 'ai') setPreviewedVariation(null);
-            if (tab !== 'design') setPreviewedSignatureProfile(null);
-            setActiveInspectorTab(tab);
-          }}
-          onToggleCollapsed={() => setInspectorCollapsed((value) => !value)}
-          onWidthChange={setInspectorWidth}
-          onProposeEdit={handleProposeEdit}
-          onAttachAiDataFile={attachAiDataFile}
-          onCreateAiMemory={async (category, content) => {
-            if (!activeDeckId || !ownerAccessKey) throw new Error('Open an owned deck first.');
-            await createAgentMemory({ deckId: activeDeckId, ownerAccessKey, category, content });
-          }}
-          onUpdateAiMemory={async (memoryId, update) => {
-            if (!activeDeckId || !ownerAccessKey) throw new Error('Open an owned deck first.');
-            await updateAgentMemory({
-              deckId: activeDeckId,
-              ownerAccessKey,
-              memoryId,
-              ...update,
-            });
-          }}
-          onDeleteAiMemory={async (memoryId) => {
-            if (!activeDeckId || !ownerAccessKey) throw new Error('Open an owned deck first.');
-            await removeAgentMemory({ deckId: activeDeckId, ownerAccessKey, memoryId });
-          }}
-          onDeleteAiDataSource={deleteAiDataSource}
-          onCancelAiRun={(runId) => void cancelAiRun(runId)}
-          onAcceptPatch={handleAcceptPatch}
-          onRejectPatch={handleRejectPatch}
-          onPreviewPatch={previewPatch}
-          onClearAiCommentContext={() => setAiCommentContext(null)}
-          onGenerateVariations={handleGenerateVariations}
-          onPreviewVariation={(variation) => {
-            if (
-              variation &&
-              (variation.status !== 'ready' ||
-                !variation.validation.ok ||
-                variation.validation.issues.some((issue) => issue.severity === 'error') ||
-                variation.slideId !== activeSlide.id ||
-                variation.baseSlideVersion !== activeSlide.version)
-            ) {
-              setVariationError(
-                'This direction is based on an older slide and can no longer be previewed safely.',
-              );
-              return;
-            }
-            if (variation) {
-              setSelectedElementIds([]);
+              if (variation) {
+                setSelectedElementIds([]);
+                setPreviewedPatchId(null);
+                setPreviewedSignatureProfile(null);
+                setCanvasMode('compare');
+                if (shouldRevealCandidateCanvas(window.innerWidth)) setInspectorCollapsed(true);
+              } else {
+                setCanvasMode('edit');
+              }
+              setPreviewedVariation(variation);
+            }}
+            onAcceptVariation={handleAcceptVariation}
+            onRejectVariation={handleRejectVariation}
+            onApplyTastePack={(packId) => {
+              applySignatureProfile(getNodeSlideTastePack(packId));
+            }}
+            onApplySignatureProfile={applySignatureProfile}
+            onPreviewSignatureProfile={(profile) => {
+              setPreviewedVariation(null);
               setPreviewedPatchId(null);
-              setPreviewedSignatureProfile(null);
-              setCanvasMode('compare');
-              if (shouldRevealCandidateCanvas(window.innerWidth)) setInspectorCollapsed(true);
-            } else {
-              setCanvasMode('edit');
+              setSelectedElementIds([]);
+              setPreviewedSignatureProfile(profile);
+              setCanvasMode(profile ? 'compare' : 'edit');
+              if (profile && shouldRevealCandidateCanvas(window.innerWidth)) {
+                setInspectorCollapsed(true);
+              }
+            }}
+            onUploadSignatureSource={uploadSignatureSource}
+            onClearTastePack={handleClearSignatureProfile}
+            onEvictTasteSignal={(signalId) => {
+              if (!ownerAccessKey) return;
+              void evictTasteSignal({
+                deckId: workspace.deck.id,
+                ownerAccessKey,
+                signalId,
+              }).catch((error: unknown) =>
+                setToast({
+                  kind: 'error',
+                  message: errorMessage(error, 'Taste signal could not be removed.'),
+                }),
+              );
+            }}
+            onOpenPreferenceEvidence={() => {
+              setActiveInspectorTab('trace');
+            }}
+            onProposeJsonPatch={proposeJsonOperations}
+            onApplyDesignPatch={(operations, summary) => {
+              const currentWorkspace = workspaceRef.current ?? workspace;
+              return applyFocusedOperations(
+                { slideId: activeSlide.id, elementIds: selectedElementIds },
+                operations,
+                scopeForOperations(currentWorkspace, operations, 'unrestricted'),
+                summary,
+              );
+            }}
+            onSearchImages={(query, consent) =>
+              monitorDeploymentAction(searchLicensedImages({ query, consent }))
             }
-            setPreviewedVariation(variation);
-          }}
-          onAcceptVariation={handleAcceptVariation}
-          onRejectVariation={handleRejectVariation}
-          onApplyTastePack={(packId) => {
-            applySignatureProfile(getNodeSlideTastePack(packId));
-          }}
-          onApplySignatureProfile={applySignatureProfile}
-          onPreviewSignatureProfile={(profile) => {
-            setPreviewedVariation(null);
-            setPreviewedPatchId(null);
-            setSelectedElementIds([]);
-            setPreviewedSignatureProfile(profile);
-            setCanvasMode(profile ? 'compare' : 'edit');
-            if (profile && shouldRevealCandidateCanvas(window.innerWidth)) {
-              setInspectorCollapsed(true);
+            onGenerateImage={(prompt, aspect) =>
+              generateSessionIllustrativeImage({ prompt, aspect })
             }
-          }}
-          onUploadSignatureSource={uploadSignatureSource}
-          onClearTastePack={handleClearSignatureProfile}
-          onEvictTasteSignal={(signalId) => {
-            if (!ownerAccessKey) return;
-            void evictTasteSignal({
-              deckId: workspace.deck.id,
-              ownerAccessKey,
-              signalId,
-            }).catch((error: unknown) =>
-              setToast({
-                kind: 'error',
-                message: errorMessage(error, 'Taste signal could not be removed.'),
-              }),
-            );
-          }}
-          onOpenPreferenceEvidence={() => {
-            setActiveInspectorTab('trace');
-          }}
-          onProposeJsonPatch={proposeJsonOperations}
-          onApplyDesignPatch={(operations, summary) => {
-            const currentWorkspace = workspaceRef.current ?? workspace;
-            return applyFocusedOperations(
-              { slideId: activeSlide.id, elementIds: selectedElementIds },
-              operations,
-              scopeForOperations(currentWorkspace, operations, 'unrestricted'),
-              summary,
-            );
-          }}
-          onSearchImages={(query, consent) =>
-            monitorDeploymentAction(searchLicensedImages({ query, consent }))
-          }
-          onGenerateImage={(prompt, aspect) => generateSessionIllustrativeImage({ prompt, aspect })}
-          onAddComment={(text, anchor) =>
-            ownerAccessKey
-              ? void addComment({
+            onAddComment={(text, anchor) =>
+              ownerAccessKey
+                ? void addComment({
+                    deckId: workspace.deck.id,
+                    ownerAccessKey,
+                    authorId: clientSessionId,
+                    authorName: 'You',
+                    text,
+                    anchor,
+                  }).catch((error: unknown) =>
+                    setToast({
+                      kind: 'error',
+                      message: errorMessage(error, 'Comment was not posted.'),
+                    }),
+                  )
+                : undefined
+            }
+            onReply={(parentId, text) => {
+              const parent = workspace.comments.find((comment) => comment.id === parentId);
+              if (parent && ownerAccessKey)
+                void replyComment({
                   deckId: workspace.deck.id,
                   ownerAccessKey,
+                  parentId,
                   authorId: clientSessionId,
                   authorName: 'You',
                   text,
-                  anchor,
                 }).catch((error: unknown) =>
                   setToast({
                     kind: 'error',
-                    message: errorMessage(error, 'Comment was not posted.'),
+                    message: errorMessage(error, 'Reply was not posted.'),
                   }),
-                )
-              : undefined
-          }
-          onReply={(parentId, text) => {
-            const parent = workspace.comments.find((comment) => comment.id === parentId);
-            if (parent && ownerAccessKey)
-              void replyComment({
-                deckId: workspace.deck.id,
-                ownerAccessKey,
-                parentId,
-                authorId: clientSessionId,
-                authorName: 'You',
-                text,
-              }).catch((error: unknown) =>
-                setToast({ kind: 'error', message: errorMessage(error, 'Reply was not posted.') }),
-              );
-          }}
-          onSetCommentStatus={(commentId, status) =>
-            ownerAccessKey
-              ? void (
-                  status === 'resolved'
-                    ? resolveComment({ deckId: workspace.deck.id, ownerAccessKey, commentId })
-                    : reopenComment({ deckId: workspace.deck.id, ownerAccessKey, commentId })
-                ).catch((error: unknown) =>
-                  setToast({
-                    kind: 'error',
-                    message: errorMessage(error, 'Comment status was not updated.'),
-                  }),
-                )
-              : undefined
-          }
-          onSendCommentToAi={(comment) => {
-            setAiCommentContext({
-              id: comment.id,
-              kind: 'comment',
-              label: `Comment by ${comment.authorName}`,
-              text: comment.text,
-              anchor: comment.anchor,
-            });
-            setActiveInspectorTab('ai');
-            setInspectorCollapsed(false);
-          }}
-          onRestoreVersion={handleRestoreVersion}
-        />
+                );
+            }}
+            onSetCommentStatus={(commentId, status) =>
+              ownerAccessKey
+                ? void (
+                    status === 'resolved'
+                      ? resolveComment({ deckId: workspace.deck.id, ownerAccessKey, commentId })
+                      : reopenComment({ deckId: workspace.deck.id, ownerAccessKey, commentId })
+                  ).catch((error: unknown) =>
+                    setToast({
+                      kind: 'error',
+                      message: errorMessage(error, 'Comment status was not updated.'),
+                    }),
+                  )
+                : undefined
+            }
+            onSendCommentToAi={(comment) => {
+              setAiCommentContext({
+                id: comment.id,
+                kind: 'comment',
+                label: `Comment by ${comment.authorName}`,
+                text: comment.text,
+                anchor: comment.anchor,
+              });
+              setActiveInspectorTab('ai');
+              setInspectorCollapsed(false);
+            }}
+            onRestoreVersion={handleRestoreVersion}
+          />
+        </Suspense>
       </div>
 
       {projectsDialog}

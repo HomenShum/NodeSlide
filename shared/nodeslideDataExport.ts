@@ -36,7 +36,15 @@ export type NodeSlideDataExportOmissionReason =
   | 'infrastructure_state'
   | 'erasure_receipt'
   | 'binary_blob_contents'
-  | 'secret_or_capability';
+  | 'secret_or_capability'
+  /**
+   * Reachable from a deck only through a two-hop derivation (deck -> job ->
+   * session/budget), so the schema-derived collector cannot read it. The row is
+   * still erased — see the derived sweep in `convex/nodeslideRetention.ts` — but
+   * it is not in this bundle, and a bundle that stayed silent about it would be
+   * claiming completeness it does not have.
+   */
+  | 'derived_scope';
 
 export interface NodeSlideDataExportOmission {
   /** Table name, or `table.field` when only one field is withheld. */

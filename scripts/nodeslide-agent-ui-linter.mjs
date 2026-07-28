@@ -40,7 +40,16 @@ const checks = [
   ],
   ['composer exposes model selection', contents.agent.includes('data-testid="ai-model-select"')],
   ['composer exposes file attachment', contents.agent.includes('data-testid="ai-data-file-input"')],
-  ['composer exposes web consent', contents.agent.includes('data-agent-web-consent="session"')],
+  // Re-pointed. This check arrived asserting `data-agent-web-consent="session"`, the attribute
+  // on the session-scoped consent checkbox. That checkbox was deliberately deleted by the
+  // zero-friction consent redesign — naming an external model and pressing send IS the consent
+  // now — so the check had been failing against a control the product removed on purpose, and
+  // reinstating the control to satisfy it would have been the wrong repair. Web egress is still
+  // opt-in per send through the research toggle, so that is what the DOM now advertises.
+  [
+    'composer exposes web consent posture',
+    contents.agent.includes('data-agent-web-consent="per-send"'),
+  ],
   ['composer exposes cancellation', contents.agent.includes('data-testid="ai-cancel-run"')],
   [
     'trace exposes durable journal',

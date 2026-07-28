@@ -1141,7 +1141,7 @@ describe('erasure size envelope', () => {
     expect(outcome.message).toContain(
       `exceeds the atomic limit of ${NODESLIDE_DECK_ERASURE_MAX_RECORDS} records`,
     );
-    expect(outcome.message).toContain('Nothing was deleted.');
+    expect(outcome.message).toContain('no records were deleted.');
     // Observed inside the refusing transaction: a refusal that had already
     // started deleting would show a smaller count here, a missing deck row,
     // or a missing blob.

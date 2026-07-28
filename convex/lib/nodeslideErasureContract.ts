@@ -17,8 +17,7 @@
  *
  * This module plus `nodeslideDeckRows.ts` and `nodeslideRetention.ts`
  * supersede parity's `convex/lib/nodeslideDeckDeletion.ts` in full, which is
- * why a symbol audit reports two of its four exports MISSING and finds the
- * other two under a different module:
+ * why a symbol audit reports four of its exports MISSING:
  *
  *   NODESLIDE_DECK_ERASURE_TABLES -> replaced by `buildNodeSlideErasureContract`
  *     above. It is exactly the hand-written table list this file exists to
@@ -27,25 +26,14 @@
  *     `convex/nodeslideRetention.ts`, which walks the derived contract. It also
  *     depends on parity schema fields this repo does not have (`workspaceId`,
  *     `workspaceProjectId`, a `runs` table).
- *   NODESLIDE_DECK_ERASURE_MAX_RECORDS / _MAX_BYTES -> ported, and now exported
- *     from `convex/nodeslideRetention.ts` beside the code that enforces them.
- *     `deleteWorkspaceRows` is split into a read-only plan phase that measures
- *     the complete deletion set against both ceilings and an apply phase that
- *     performs every write, so an oversized workspace is refused before the
- *     first delete rather than discovered partway through one. The envelope
- *     governs the derived job/session/budget traversal too, and the unbounded
- *     `collectNodeSlideScopedRows` helper is gone: every read on the erasure
- *     path now takes an explicit count.
  *
- * Still open, and worth someone's attention:
- *   A workspace larger than the envelope is refused, not erased. Erasing one
- *   needs a durable tombstone/batch workflow that can resume across
- *   transactions; the envelope is what makes its absence a stated refusal
- *   instead of an unnamed platform error. Relatedly,
- *   `deleteExpiredProductionProbeWorkspaces` sweeps up to ten probe decks in
- *   one transaction and applies the envelope per deck, so ten decks just inside
- *   it still exceed what one transaction can carry — and one oversized probe
- *   deck fails the whole batch, every run, until it is removed by hand.
+ *   NODESLIDE_DECK_ERASURE_MAX_RECORDS / _MAX_BYTES -> ported, and wired, into
+ *     `convex/nodeslideRetention.ts`. This entry previously read "NOT
+ *     superseded": `deleteWorkspaceRows` collected with no limit, so the bound
+ *     was whatever Convex's own read limits happened to be. It now measures the
+ *     whole erasure set against the same 4_000-record / 4 MiB envelope and
+ *     refuses before the first write, which is the part that could not be had
+ *     by copying the two constants alone.
  */
 
 /** Structural view of `defineSchema(...)`, so a test can pass a fixture schema. */

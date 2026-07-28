@@ -98,4 +98,39 @@ describe('nodeslide derived-scope erasure', () => {
     );
     expect(exportSource).toContain('NODESLIDE_ERASURE_EXCLUSIONS');
   });
+
+  it('reads the budget child tables against the envelope, not the incremental sweep cap', () => {
+    // `DERIVED_SWEEP_LIMIT` is sound for the job-anchored tables: a job that
+    // does not fit one transaction survives it, and the next call re-derives
+    // everything hanging off that surviving row. The budget tables have no
+    // anchor that survives — their id comes from `job.budgetId` and the job is
+    // deleted in the same pass — so a capped read strands rows behind an id
+    // nothing can produce again. `envelope.nextLimit()` returns one past the
+    // remaining budget, so an over-large ledger refuses the whole erasure
+    // instead. The behavioural half of this lives in `nodeslideRetention.test.ts`.
+    const budgetLoop = retentionSource.slice(retentionSource.indexOf('for (const budgetId of'));
+    const body = budgetLoop.slice(0, budgetLoop.indexOf('return { groups'));
+    expect(body, 'a budget child read still uses the incremental sweep cap').not.toContain(
+      'sweepLimit()',
+    );
+    expect(body).toContain('envelope.nextLimit()');
+  });
+
+  it('never leaves a storage pointer behind in the budget tables it sweeps', () => {
+    // The field list for blob deletion is derived from the schema, never hand
+    // written, because a hand list goes stale the moment somebody adds a
+    // column. This case states the current fact the derivation reports: no
+    // table in the budget cluster holds a `v.id('_storage')`, so the sweep has
+    // no blobs to delete ahead of its rows. If that ever changes, the schema
+    // grows a pointer and this expectation fails, which is the intended alarm.
+    const schemaSource = readFileSync(path.join(convexDirectory, 'schema.ts'), 'utf8');
+    for (const table of ['nodeslide_run_budgets', 'nodeslide_billable_calls'] as const) {
+      const start = schemaSource.indexOf(`${table}: defineTable({`);
+      expect(start, `${table} is not declared in schema.ts`).toBeGreaterThan(-1);
+      const body = schemaSource.slice(start, schemaSource.indexOf('defineTable({', start + 40));
+      expect(body, `${table} gained a storage pointer with no blob-first deletion`).not.toContain(
+        "v.id('_storage')",
+      );
+    }
+  });
 });

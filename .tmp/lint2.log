@@ -1,0 +1,53 @@
+
+> nodeslide@0.1.0 lint
+> biome check .
+
+.\benchmarks\artifact-atlas\evidence-voice\atlas.json format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     46  46 │                     {
+     47  47 │                       "op": "multiply",
+     48     │ - ····················"args":·[
+     49     │ - ······················{·"op":·"value",·"name":·"alpha"·},
+     50     │ - ······················{·"op":·"value",·"name":·"C"·}
+     51     │ - ····················]
+         48 │ + ····················"args":·[{·"op":·"value",·"name":·"alpha"·},·{·"op":·"value",·"name":·"C"·}]
+     52  49 │                     }
+     53  50 │                   ]
+    ······· │ 
+     66  63 │           "kind": "generic",
+     67  64 │           "payload": {
+     68     │ - ··········"metrics":·[
+     69     │ - ············{·"id":·"browser"·},
+     70     │ - ············{·"id":·"powerpoint"·},
+     71     │ - ············{·"id":·"fidelity"·}
+     72     │ - ··········],
+         65 │ + ··········"metrics":·[{·"id":·"browser"·},·{·"id":·"powerpoint"·},·{·"id":·"fidelity"·}],
+     73  66 │             "cohorts": [
+     74     │ - ············{·"id":·"topology·gate",·"values":·{·"browser":·"pass",·"powerpoint":·"pass",·"fidelity":·"pass"·}·},
+     75     │ - ············{·"id":·"citation·gate",·"values":·{·"browser":·"pass",·"powerpoint":·"pass",·"fidelity":·"pass"·}·},
+     76     │ - ············{·"id":·"motion·gate",·"values":·{·"browser":·"pass",·"powerpoint":·"pass",·"fidelity":·"pass"·}·}
+         67 │ + ············{
+         68 │ + ··············"id":·"topology·gate",
+         69 │ + ··············"values":·{·"browser":·"pass",·"powerpoint":·"pass",·"fidelity":·"pass"·}
+         70 │ + ············},
+         71 │ + ············{
+         72 │ + ··············"id":·"citation·gate",
+         73 │ + ··············"values":·{·"browser":·"pass",·"powerpoint":·"pass",·"fidelity":·"pass"·}
+         74 │ + ············},
+         75 │ + ············{
+         76 │ + ··············"id":·"motion·gate",
+         77 │ + ··············"values":·{·"browser":·"pass",·"powerpoint":·"pass",·"fidelity":·"pass"·}
+         78 │ + ············}
+     77  79 │             ]
+     78  80 │           }
+  
+
+Checked 757 files in 455ms. No fixes applied.
+Found 1 error.
+check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while running checks.
+  
+

@@ -1,0 +1,60 @@
+
+> nodeslide@0.1.0 typecheck
+> tsc -b && npm run typecheck --workspaces --if-present
+
+
+> @nodeslide/agent@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/backend@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/cli@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/client-http@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/contracts@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/convex@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/engine@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/external-agent@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodekit/gym-core@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/react@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/react-headless@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/registry@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/testing@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> nodeslide-mcp@0.2.2 typecheck
+> tsc --noEmit
+

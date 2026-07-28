@@ -201,6 +201,13 @@
       "artifactType": "systems.hierarchy",
       "title": "Maturity is derived from receipts, never written beside them",
       "takeaway": "Every recipe stops at proven, because the top rung needs a human and no human review has run.",
+      "_sourcesComment": "A fixture-scoped evidence source (compiler reads fixture.sources before the archetype default). This gives the showcase a real, mono, machine-checkable claim->source line so it proves R6 evidence-voice on its own, not only via the presence chips. The diagram artifact sits at y<=3.6, so the source run at y:4.62 clears it. The claim states exactly what the URL supports (the anchor gate's requirement): maturity here is derived from the 84 arena receipts that PR #53 projects for cross-repo grading.",
+      "sources": [
+        {
+          "claim": "Maturity is derived from the 84 projected arena receipts",
+          "url": "https://github.com/HomenShum/parity-studio/pull/53"
+        }
+      ],
       "artifactSpec": {
         "kind": "graph",
         "payload": {

@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "nodeslide-benchmark-gate-summary/v1",
+  "harness": {
+    "name": "nodeslide-benchmark-gate",
+    "version": "1.0.0"
+  },
+  "lane": "pr",
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "fixed-corpus",
+      "status": "PASS",
+      "message": "All 167 exact registry requests and 20 minimum-release fixtures are bound.",
+      "evidenceRefs": []
+    },
+    {
+      "id": "schemas",
+      "status": "PASS",
+      "message": "All benchmark evidence and automation schemas are valid and pinned.",
+      "evidenceRefs": []
+    },
+    {
+      "id": "runner-determinism",
+      "status": "PASS",
+      "message": "UXBench and TasteBench are deterministic and UNSCORED without evidence.",
+      "evidenceRefs": []
+    },
+    {
+      "id": "no-network-no-model",
+      "status": "PASS",
+      "message": "Benchmark runners contain no network, model invocation, or process execution path.",
+      "evidenceRefs": []
+    }
+  ],
+  "comparability": {
+    "corpusVersion": "2026-07-15",
+    "registryDigest": "sha256:b90db01f9acfd7395f40874dd18cc745a99b4f22bbd5fc108459a52192dd00ae",
+    "registrySourceSha256": "2254643bb268e2affd5a177e8b572818ed3c94b16f1f382354ebaa8a7462c862",
+    "requestCount": 167,
+    "fixtureCount": 20,
+    "fixtureIds": [
+      "C01",
+      "C05",
+      "C06",
+      "N04",
+      "E01",
+      "E06",
+      "E11",
+      "V01",
+      "V07",
+      "D01",
+      "D03",
+      "I02",
+      "M01",
+      "T09",
+      "R01",
+      "S07",
+      "Q01",
+      "P01",
+      "A03",
+      "F08"
+    ],
+    "fixtureDigests": {
+      "C01": "sha256:362db3c1749351928f3e944c0842594517ae86743f0f23d7e0fb087458bcf33c",
+      "C05": "sha256:fdb0092d379477fa9389886f428c6e96c0801b2dada03c4822afce72f9ba1c92",
+      "C06": "sha256:f89bc1e610d94b9aca0d3402fb9e8f09384a93142429ecdddd7dcf7f6b702fa9",
+      "N04": "sha256:af3384914dc509179cdf03fca6574c27a2673c02b97fec7ec0c497964238cc35",
+      "E01": "sha256:9ce29a2198c8efc016f525091ef6079fc25c06df496e2add92bd0c6079f9c16c",
+      "E06": "sha256:e09a3c9aafd125feec338c1967b834b5785fe7045bf3f7f0e00788b9f349b72b",
+      "E11": "sha256:93d4c9dfca89d8248e326446bb1d84d535cfd49515dfeef60072c5ecca7c8023",
+      "V01": "sha256:6a37abe8abcdad050d5f8278541e38abcf500745880d7df271d76b300ec26d88",
+      "V07": "sha256:91f9be9463c08c48399b508b949ff68f1787733262f109d100ac6ef592614bca",
+      "D01": "sha256:f8f83463e7eef6b0839258d039774bd783ca62749a4356c264bfa73ea003e456",
+      "D03": "sha256:d335531141f592f6f3164fd08307415f86164f43021af0979511f814983f4312",
+      "I02": "sha256:576ed0830bc0bf2406a39cded67b1dc8c0920392fd1d3d8df8a31ca7f8cfc46f",
+      "M01": "sha256:e47d3dc3bbef397d7385a474a81aba3c85a318454cbb854dcc0506765d98dafc",
+      "T09": "sha256:1562153b074ae7c345104b112f85c6f4cabd530539f6271f74926954ab98798a",
+      "R01": "sha256:2246bd00973f638ebb7c9d89d21d5ff5a3c3f906801e4547f4a81db274eb26f3",
+      "S07": "sha256:57c532be578412dd0af3b9a6cb4069a9aa9645a28eec936f28b0d1fc28758b39",
+      "Q01": "sha256:a348d2ae753dcb4d98453cc8d02367678f4d2968e98ae60f430916768e313310",
+      "P01": "sha256:75e299b70c8fb0bfb312b59b3a3385d12a7650ed25bec721f420ea50285226a7",
+      "A03": "sha256:1c9fcb986cce97b24a9b5f12a4969d04bdd86d45bef7208fafc57df4d5dfd034",
+      "F08": "sha256:7f17699cddcf02f7c44b0d0eedf969e7bac1188b3ccb1ca1c1a28b95f2b70431"
+    },
+    "tasteRulesDigest": "sha256:06806cd4f59ddf7fefb6b9607fee535c8265a008c1ef4daf34f7b9e3db75f560",
+    "schemaDigests": {
+      "fixture.schema.json": "sha256:7e3478f9c0cbe1bb15fa4aa679fa274e5127d761bce7deb468c42d8d44de35e8",
+      "run-artifact.schema.json": "sha256:2dc1819e448304327c4877111e4da58c44995563c88e36f1574d8223009eb9d3",
+      "run-record.schema.json": "sha256:b2fa104efbfe0c7cf1ed9c7fd585bce484465f04802408ed5e8cc6e61198ee27",
+      "taste-artifact.schema.json": "sha256:bc7fbac6d2babc6b840a11fecebe2d028c3a33f58956ca4a64c817d6986b9860",
+      "taste-judge.schema.json": "sha256:824e450e30510172ecbd01a091a85e1de917fe37cc42a69500a65cf8a2856517",
+      "automation.schema.json": "sha256:4b0896b85acfa7cc0e3d6be52c75affb87db4b9c79f447f02b5db87b2331b303"
+    }
+  },
+  "ux": {
+    "status": "UNSCORED",
+    "reportId": "sha256:7ce6310ab0528fd920c6db6e892ba731c6496567af01d7e4090db858c3dec5e8"
+  },
+  "taste": {
+    "status": "UNSCORED",
+    "reportId": "sha256:bad1dd5cda15bb434cea2cc95ed36bc8e1f7606cc470bab9cdabbf7bf0202ee4"
+  },
+  "artifacts": null,
+  "baseline": {
+    "provided": false
+  },
+  "summaryId": "sha256:7cc2cfb8b2a3bf94e3696b5e7cabdbce046baa0cbd89ca9a6620478de1627550"
+}

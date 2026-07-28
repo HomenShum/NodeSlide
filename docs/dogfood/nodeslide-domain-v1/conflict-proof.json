@@ -1,0 +1,31 @@
+{
+  "generatedAt": "2026-07-27T21:04:27.078Z",
+  "deckId": "deck_golden_1v886s3",
+  "sharedBaseDeckVersion": 1,
+  "finalDeckVersion": 3,
+  "clientA": {
+    "slideId": "slide_6dbfab4eb1bcc87ae65f5e53f10f6097",
+    "elementId": "element_dabcc568afd737ba7b380741d9f0298d",
+    "status": "accepted",
+    "rebased": false
+  },
+  "clientBNonOverlap": {
+    "slideId": "slide_4682a405443299bd6f657f291a537aa0",
+    "elementId": "element_5cfef9d92364290ee660a0ee3bde8e04",
+    "status": "accepted",
+    "rebased": true
+  },
+  "clientBOverlap": {
+    "slideId": "slide_6dbfab4eb1bcc87ae65f5e53f10f6097",
+    "elementId": "element_dabcc568afd737ba7b380741d9f0298d",
+    "status": "stale",
+    "staleReasons": [
+      "Slide slide_6dbfab4eb1bcc87ae65f5e53f10f6097 changed from v1 to v2.",
+      "Element element_dabcc568afd737ba7b380741d9f0298d changed from v1 to v2."
+    ]
+  },
+  "finalContentPreserved": {
+    "clientA": true,
+    "clientB": true
+  }
+}

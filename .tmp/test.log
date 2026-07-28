@@ -1,0 +1,290 @@
+
+> nodeslide@0.1.0 test
+> vitest run && npm run test --workspaces --if-present
+
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mD:/VSCode Projects/nodeslide[39m
+
+ [32m✓[39m scripts/tests/motion-gate.test.mjs [2m([22m[2m32 tests[22m[2m)[22m[90m 23[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslidePreferenceEtl.test.ts [2m([22m[2m20 tests[22m[2m)[22m[90m 82[2mms[22m[39m
+ [32m✓[39m packages/gym-core/src/index.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 16[2mms[22m[39m
+ [32m✓[39m shared/nodeslidePatch.test.ts [2m([22m[2m42 tests[22m[2m)[22m[90m 82[2mms[22m[39m
+ [32m✓[39m scripts/artifact-atlas-v3.test.mjs [2m([22m[2m22 tests[22m[2m)[22m[90m 59[2mms[22m[39m
+ [32m✓[39m scripts/node-gym-semantics.test.mjs [2m([22m[2m17 tests[22m[2m)[22m[90m 69[2mms[22m[39m
+ [32m✓[39m scripts/node-gym-runner-core.test.mjs [2m([22m[2m17 tests[22m[2m)[22m[90m 261[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideProvider.test.ts [2m([22m[2m26 tests[22m[2m)[22m[90m 56[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/inspector/TraceInspector.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[90m 240[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideAuthoredArtifact.test.ts [2m([22m[2m11 tests[22m[2m)[22m[33m 337[2mms[22m[39m
+ [32m✓[39m shared/nodeslideArtifactSpec.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 426[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/signature/packs/packs.test.ts [2m([22m[2m13 tests[22m[2m)[22m[90m 91[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideRenderRepairLoop.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 547[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideSeed.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 615[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideCreationCritique.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 671[2mms[22m[39m
+ [32m✓[39m scripts/tests/artifact-distinctness.test.mjs [2m([22m[2m27 tests[22m[2m)[22m[90m 22[2mms[22m[39m
+ [32m✓[39m shared/nodeslideSignatureApply.test.ts [2m([22m[2m16 tests[22m[2m)[22m[90m 198[2mms[22m[39m
+ [31m❯[39m tests/e2e/nodeslide-benchmark-producer.live.spec.ts [2m([22m[2m0 test[22m[2m)[22m
+ [32m✓[39m scripts/production-deployment-identity.test.mjs [2m([22m[2m13 tests[22m[2m)[22m[90m 75[2mms[22m[39m
+ [32m✓[39m scripts/tests/nodeslide-uxbench.test.mjs [2m([22m[2m10 tests[22m[2m)[22m[90m 231[2mms[22m[39m
+ [32m✓[39m shared/nodeslideClaimProof.test.ts [2m([22m[2m20 tests[22m[2m)[22m[90m 33[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/signature/signature.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 1252[2mms[22m[39m
+   [33m[2m✓[22m[39m NodeSlide PPTX signature extraction[2m > [22mprocesses 200 slides inside the default budget and rejects the declared 201st before slide scans [33m686[2mms[22m[39m
+ [32m✓[39m packages/testing/src/memoryRepository.test.ts [2m([22m[2m15 tests[22m[2m)[22m[90m 56[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideEditPlanner.test.ts [2m([22m[2m20 tests[22m[2m)[22m[90m 210[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/slidelang/slidelang.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 1457[2mms[22m[39m
+   [33m[2m✓[22m[39m local SlideLangAdapter[2m > [22mpreserves image fit and focal intent in web export and reports the static-export limit [33m785[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/nodeslideV3.test.ts [2m([22m[2m13 tests[22m[2m)[22m[90m 22[2mms[22m[39m
+ [32m✓[39m shared/nodeslideArchetypes.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 130[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideReadContext.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 109[2mms[22m[39m
+ [32m✓[39m packages/gym-core/src/routing.test.ts [2m([22m[2m8 tests[22m[2m)[22m[90m 32[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideEditorShellUi.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[90m 108[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideAnalysisKernel.test.ts [2m([22m[2m9 tests[22m[2m)[22m[90m 65[2mms[22m[39m
+ [32m✓[39m convex/nodeslideRetention.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 416[2mms[22m[39m
+ [31m❯[39m scripts/production-workflows.test.mjs [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[90m 67[2mms[22m[39m
+[31m   [31m×[31m production GitHub workflow configuration[2m > [22mpins every first-party JavaScript action to an approved Node 24 commit[90m 39[2mms[22m[31m[39m
+[31m     → nodeslide-bench.yml: actions/upload-artifact must use its approved Node 24 SHA: expected 'ea165f8d65b6e75b540449e92b4886f43607f…' to be '043fb46d1a93c77aae656e7c1c64a875d1fc6…' // Object.is equality[39m
+ [32m✓[39m convex/nodeslideSignatures.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 570[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/slidelang/pptxImport.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 648[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideStoryBench.test.ts [2m([22m[2m11 tests[22m[2m)[22m[90m 92[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideGymArtifactEvidence.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 195[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideDeckRepl.test.ts [2m([22m[2m9 tests[22m[2m)[22m[90m 256[2mms[22m[39m
+ [32m✓[39m shared/nodeslideArtifactRegistry.test.ts [2m([22m[2m8 tests[22m[2m)[22m[90m 34[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideVariationHarness.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 1345[2mms[22m[39m
+   [33m[2m✓[22m[39m NodeSlide variation proof safety[2m > [22mrequires disposable confirmation before any live proof work [33m309[2mms[22m[39m
+   [33m[2m✓[22m[39m NodeSlide variation proof safety[2m > [22mrefuses existing deck IDs even with disposable confirmation [33m341[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideManagedKernel.test.ts [2m([22m[2m10 tests[22m[2m)[22m[90m 95[2mms[22m[39m
+ [32m✓[39m scripts/production-fixture-retention.test.mjs [2m([22m[2m7 tests[22m[2m)[22m[90m 25[2mms[22m[39m
+ [32m✓[39m scripts/tests/nodeslide-tastebench.test.mjs [2m([22m[2m6 tests[22m[2m)[22m[33m 431[2mms[22m[39m
+ [32m✓[39m scripts/tests/nodeslide-benchmark-producer.test.mjs [2m([22m[2m6 tests[22m[2m)[22m[90m 136[2mms[22m[39m
+ [32m✓[39m shared/nodeslideEvidence.test.ts [2m([22m[2m18 tests[22m[2m)[22m[90m 25[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/editorStateIntegrity.test.ts [2m([22m[2m13 tests[22m[2m)[22m[90m 16[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideRoomReady.test.ts [2m([22m[2m17 tests[22m[2m)[22m[90m 16[2mms[22m[39m
+ [32m✓[39m shared/nodeslideGym.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 21[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/inspector/AgentThread.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[90m 42[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideAdmission.test.ts [2m([22m[2m28 tests[22m[2m)[22m[90m 283[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideRoutedEditPlanner.test.ts [2m([22m[2m7 tests[22m[2m)[22m[90m 104[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideEditShadowAction.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 318[2mms[22m[39m
+ [32m✓[39m packages/convex/component/repository.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 769[2mms[22m[39m
+   [33m[2m✓[22m[39m isolated NodeSlide Convex component[2m > [22mmounts isolated tables and runs initialize -> proposal -> accept -> reread [33m674[2mms[22m[39m
+ [32m✓[39m scripts/tests/asset-provenance.test.mjs [2m([22m[2m17 tests[22m[2m)[22m[90m 22[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideImageSearch.test.ts [2m([22m[2m12 tests[22m[2m)[22m[90m 43[2mms[22m[39m
+ [32m✓[39m scripts/tests/semantic-primacy.test.mjs [2m([22m[2m18 tests[22m[2m)[22m[90m 23[2mms[22m[39m
+ [32m✓[39m packages/convex/src/convexAdapter.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 22[2mms[22m[39m
+ [32m✓[39m scripts/tests/nodeslide-taste-judge.test.mjs [2m([22m[2m4 tests[22m[2m)[22m[33m 659[2mms[22m[39m
+ [32m✓[39m packages/cli/src/installer.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 2176[2mms[22m[39m
+   [33m[2m✓[22m[39m @nodeslide/cli installer[2m > [22mpins an immutable artifact set and advances it during upgrade [33m397[2mms[22m[39m
+   [33m[2m✓[22m[39m @nodeslide/cli installer[2m > [22mrejects tampered tarballs, mixed versions, and artifact downgrades [33m359[2mms[22m[39m
+   [33m[2m✓[22m[39m @nodeslide/cli installer[2m > [22muses canonical SemVer precedence across prerelease upgrades [33m490[2mms[22m[39m
+   [33m[2m✓[22m[39m @nodeslide/cli installer[2m > [22mrefuses to detach an artifact-pinned install from its immutable provenance [33m491[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/inspector/JsonInspector.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[90m 37[2mms[22m[39m
+[90mstdout[2m | api/share.http.test.ts[2m > [22m[2mthe share route over real HTTP[2m > [22m[2mreturns the published deck as HTML a reader can consume without JavaScript
+[22m[39m[share-projection] published: status=200 bytes=14930 visible-body-text-chars=2526
+
+[90mstdout[2m | api/share.http.test.ts[2m > [22m[2mthe share route over real HTTP[2m > [22m[2mrefuses a slug the publication query does not resolve
+[22m[39m[share-projection] revoked: status=404 bytes=2008 visible-body-text-chars=161
+
+ [32m✓[39m api/share.http.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 224[2mms[22m[39m
+ [32m✓[39m packages/backend/src/authorization.test.ts [2m([22m[2m7 tests[22m[2m)[22m[90m 16[2mms[22m[39m
+ [32m✓[39m scripts/nodeslide-conformance.test.mjs [2m([22m[2m15 tests[22m[2m)[22m[90m 22[2mms[22m[39m
+ [32m✓[39m scripts/tests/motion-oracle.test.mjs [2m([22m[2m14 tests[22m[2m)[22m[90m 15[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideShadowComparison.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 135[2mms[22m[39m
+ [32m✓[39m scripts/tests/nodeslide-atlas-topology-gate.test.mjs [2m([22m[2m21 tests[22m[2m)[22m[90m 21[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideEditVerifyAction.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 121[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideAssistantStream.test.ts [2m([22m[2m9 tests[22m[2m)[22m[90m 19[2mms[22m[39m
+ [32m✓[39m scripts/tests/playwright-trace.test.mjs [2m([22m[2m12 tests[22m[2m | [22m[33m5 skipped[39m[2m)[22m[90m 32[2mms[22m[39m
+ [32m✓[39m shared/nodeslideDeckDirection.test.ts [2m([22m[2m14 tests[22m[2m)[22m[90m 11[2mms[22m[39m
+ [32m✓[39m scripts/tests/dedupe-media.test.mjs [2m([22m[2m8 tests[22m[2m)[22m[90m 65[2mms[22m[39m
+ [32m✓[39m scripts/artifact-atlas-coverage.test.mjs [2m([22m[2m12 tests[22m[2m)[22m[90m 88[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslidePreferenceRetention.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 125[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideAgenticAction.test.ts [2m([22m[2m8 tests[22m[2m)[22m[90m 153[2mms[22m[39m
+ [32m✓[39m scripts/artifact-atlas.test.mjs [2m([22m[2m6 tests[22m[2m)[22m[90m 99[2mms[22m[39m
+ [32m✓[39m scripts/model-fleet-receipt-core.test.mjs [2m([22m[2m8 tests[22m[2m)[22m[90m 17[2mms[22m[39m
+ [32m✓[39m scripts/tests/trace-provenance.test.mjs [2m([22m[2m13 tests[22m[2m)[22m[90m 15[2mms[22m[39m
+ [32m✓[39m scripts/tests/claim-trace-binding.test.mjs [2m([22m[2m11 tests[22m[2m)[22m[90m 12[2mms[22m[39m
+ [32m✓[39m shared/nodeslideLayoutScenarios.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 259[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/slidelang/artifactSpecExport.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 590[2mms[22m[39m
+ [32m✓[39m scripts/tests/knockout-primacy.test.mjs [2m([22m[2m11 tests[22m[2m)[22m[90m 9[2mms[22m[39m
+ [32m✓[39m packages/client-http/src/httpAdapter.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 27[2mms[22m[39m
+ [32m✓[39m shared/nodeslideLayoutMetrics.test.ts [2m([22m[2m12 tests[22m[2m)[22m[90m 21[2mms[22m[39m
+ [32m✓[39m scripts/deck-gym.test.mjs [2m([22m[2m6 tests[22m[2m)[22m[90m 87[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/signature/signatureBounds.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 1163[2mms[22m[39m
+   [33m[2m✓[22m[39m NodeSlide signature extraction bounds[2m > [22mbounds token output to retained evidence under adversarial distinct-value input [33m884[2mms[22m[39m
+ [32m✓[39m scripts/tests/artifact-fidelity.test.mjs [2m([22m[2m13 tests[22m[2m)[22m[90m 18[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideExecutionTrace.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 148[2mms[22m[39m
+ [32m✓[39m scripts/tests/nodeslide-benchmark-gate.test.mjs [2m([22m[2m7 tests[22m[2m)[22m[33m 1350[2mms[22m[39m
+   [33m[2m✓[22m[39m NodeSlide benchmark automation gate[2m > [22mcan select a supplemental live case without changing the P0 fixture contract [33m441[2mms[22m[39m
+ [32m✓[39m convex/nodeslideAgentRecovery.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 308[2mms[22m[39m
+ [32m✓[39m scripts/tests/nodeslide-journey-proof.test.mjs [2m([22m[2m4 tests[22m[2m)[22m[90m 217[2mms[22m[39m
+ [32m✓[39m scripts/artifact-atlas-v3-pptx-receipt.test.mjs [2m([22m[2m11 tests[22m[2m)[22m[33m 2938[2mms[22m[39m
+   [33m[2m✓[22m[39m Artifact Atlas V3 final PPTX receipt[2m > [22mintegration-verifies the actual deck, candidate, recipe, composition, and embedded assets [33m446[2mms[22m[39m
+   [33m[2m✓[22m[39m Artifact Atlas V3 final PPTX receipt[2m > [22mrejects a foreign deck with a substituted required slide claim [33m358[2mms[22m[39m
+   [33m[2m✓[22m[39m Artifact Atlas V3 final PPTX receipt[2m > [22mrejects a tampered slide-42 embedded screenshot [33m402[2mms[22m[39m
+   [33m[2m✓[22m[39m Artifact Atlas V3 final PPTX receipt[2m > [22mrejects a slide-42 screenshot placement mutation [33m466[2mms[22m[39m
+   [33m[2m✓[22m[39m Artifact Atlas V3 final PPTX receipt[2m > [22mrejects release-gate tampering and stale V2 museum footers [33m455[2mms[22m[39m
+ [32m✓[39m scripts/tests/evidence-binding.test.mjs [2m([22m[2m17 tests[22m[2m)[22m[90m 14[2mms[22m[39m
+ [32m✓[39m shared/nodeslideSemanticIssues.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 18[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/inspector/TraceWaterfall.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[90m 204[2mms[22m[39m
+ [32m✓[39m packages/gym-core/src/checkpoint.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 16[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideWorkflowCandidate.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 17[2mms[22m[39m
+ [32m✓[39m shared/nodeslideArtifactGeometry.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 16[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/publicSurface/shareProjection.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 6265[2mms[22m[39m
+   [33m[2m✓[22m[39m the projection stays bounded and fails closed[2m > [22mstops after the projected slide budget and says how many are left [33m6108[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideConsentUi.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[90m 113[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideModelFleetProbe.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 18[2mms[22m[39m
+ [32m✓[39m scripts/node-gym-ui-evidence-core.test.mjs [2m([22m[2m4 tests[22m[2m)[22m[90m 13[2mms[22m[39m
+ [32m✓[39m shared/nodeslideLayers.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 58[2mms[22m[39m
+ [32m✓[39m shared/nodeslideGeometryChecks.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 312[2mms[22m[39m
+ [32m✓[39m convex/nodeslideArtifactSpec.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 219[2mms[22m[39m
+ [32m✓[39m scripts/build-atlas-v3-native.test.mjs [2m([22m[2m18 tests[22m[2m)[22m[33m 4024[2mms[22m[39m
+   [33m[2m✓[22m[39m v3 native compiler: artifactSpec -> native OOXML[2m > [22memits the native parts the deck claims [33m804[2mms[22m[39m
+   [33m[2m✓[22m[39m v3 native compiler: artifactSpec -> native OOXML[2m > [22memits a REAL c:dateAx time axis, so progression.timeline is satisfiable at all [33m696[2mms[22m[39m
+   [33m[2m✓[22m[39m v3 native compiler: artifactSpec -> native OOXML[2m > [22mbinds evidence claims to external source relationships, not decorative text [33m607[2mms[22m[39m
+   [33m[2m✓[22m[39m v3 native compiler: artifactSpec -> native OOXML[2m > [22memits a REAL p:timing build sequence for motion, not a poster frame [33m600[2mms[22m[39m
+   [33m[2m✓[22m[39m v3 native compiler: artifactSpec -> native OOXML[2m > [22memits N-1 transitions for N states — the first is visible at slide entry [33m614[2mms[22m[39m
+   [33m[2m✓[22m[39m v3 native compiler: artifactSpec -> native OOXML[2m > [22mkeeps every emitted slide part tag-balanced [33m639[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/inspector/DesignInspector.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[90m 33[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideAuthority.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 53[2mms[22m[39m
+ [32m✓[39m scripts/artifact-spec-core.test.mjs [2m([22m[2m4 tests[22m[2m)[22m[90m 17[2mms[22m[39m
+ [32m✓[39m scripts/tests/knockout-surgery.test.mjs [2m([22m[2m8 tests[22m[2m)[22m[90m 12[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideTraceUi.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[90m 153[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideRoutedProposeEdit.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 84[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideReleaseSecurity.test.ts [2m([22m[2m34 tests[22m[2m)[22m[33m 3683[2mms[22m[39m
+ [32m✓[39m packages/react-headless/src/proposalReview.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 16[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideEditShadowPlanner.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 108[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslidePublishApprovalPolicy.test.ts [2m([22m[2m8 tests[22m[2m)[22m[90m 12[2mms[22m[39m
+ [32m✓[39m scripts/artifact-atlas-attribution.test.mjs [2m([22m[2m6 tests[22m[2m)[22m[90m 36[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideProviderConsent.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 16[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideStoryContext.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 51[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideCandidate.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 221[2mms[22m[39m
+ [32m✓[39m scripts/immutable-package-set.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 125[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideCompositionFanout.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 353[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideAgenticControls.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 34[2mms[22m[39m
+ [32m✓[39m api/share.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 11[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideRoutingPolicy.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 11[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideArtifactArena.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 11[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideQuota.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m scripts/build-atlas-native-pptx.test.mjs [2m([22m[2m6 tests[22m[2m)[22m[90m 128[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideTasteMismatch.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 540[2mms[22m[39m
+ [32m✓[39m scripts/tests/nodeslide-competitive-benchmark.test.mjs [2m([22m[2m3 tests[22m[2m)[22m[90m 35[2mms[22m[39m
+ [32m✓[39m scripts/artifact-atlas-v2.test.mjs [2m([22m[2m5 tests[22m[2m)[22m[90m 41[2mms[22m[39m
+ [32m✓[39m scripts/tests/nodeslide-authoring-meta.test.mjs [2m([22m[2m3 tests[22m[2m)[22m[90m 100[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideSignatureProfiles.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 292[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideVariationUi.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 461[2mms[22m[39m
+ [32m✓[39m packages/convex/src/governance.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 9[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/inspector/TraceInspector.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 11[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideDesignPlan.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 40[2mms[22m[39m
+ [32m✓[39m scripts/artifact-atlas-v2-issue-ledger.test.mjs [2m([22m[2m2 tests[22m[2m)[22m[90m 33[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideAgenticTelemetry.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 148[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideGymShadow.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 207[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideOtlp.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32m✓[39m scripts/node-gym-redaction-core.test.mjs [2m([22m[2m3 tests[22m[2m)[22m[90m 9[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/clientArtifactAuthorship.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideMemory.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 11[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslidePropagation.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 31[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideAddedImageUrl.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 9[2mms[22m[39m
+ [32m✓[39m scripts/build-artifact-arena-capabilities.test.mjs [2m([22m[2m2 tests[22m[2m)[22m[90m 29[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/StudioToolbar.test.tsx [2m([22m[2m1 test[22m[2m)[22m[90m 37[2mms[22m[39m
+ [32m✓[39m scripts/model-capability-ledger.test.mjs [2m([22m[2m2 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideIds.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/NodeSlideConnectionsDialog.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 9[2mms[22m[39m
+ [32m✓[39m scripts/convex-log-capture-core.test.mjs [2m([22m[2m8 tests[22m[2m)[22m[90m 7[2mms[22m[39m
+ [32m✓[39m scripts/verify-deployed-html.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/NodeSlideMemoryDialog.test.tsx [2m([22m[2m1 test[22m[2m)[22m[90m 34[2mms[22m[39m
+ [32m✓[39m scripts/extract-vercel-deployment-url.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 8[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideData.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 6[2mms[22m[39m
+ [32m✓[39m packages/engine/src/migrations.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 10[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideDataAttachment.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 40[2mms[22m[39m
+ [32m✓[39m scripts/vercel-openverse-csp.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 5[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideProductionLogging.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 5[2mms[22m[39m
+ [32m✓[39m scripts/refresh-artifact-atlas-v2-specs.test.mjs [2m([22m[2m1 test[22m[2m)[22m[90m 32[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideAccess.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 9[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideMutationContract.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 4[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/PublicationDialog.test.tsx [2m([22m[2m1 test[22m[2m)[22m[90m 31[2mms[22m[39m
+ [32m✓[39m packages/react-headless/src/ssr.test.tsx [2m([22m[2m1 test[22m[2m)[22m[90m 16[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/OwnerCapabilityRecoveryDialog.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[90m 33[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideReviewUi.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 988[2mms[22m[39m
+ [32m✓[39m src/lib/sessionImageGeneration.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 23[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/DeploymentUpdateBoundary.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[90m 290[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/SlideRenderer.math.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[90m 180[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/inspector/VersionsInspector.directionChange.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 695[2mms[22m[39m
+   [33m[2m✓[22m[39m restoring across an activation is disclosed before it happens[2m > [22mwarns instead of restoring when the version predates the active direction [33m388[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/SlideRenderer.images.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 345[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/SlideRenderer.charts.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 357[2mms[22m[39m
+ [32m✓[39m scripts/immutable-upgrade-consumer-core.test.mjs [2m([22m[2m3 tests[22m[2m)[22m[33m 10357[2mms[22m[39m
+   [33m[2m✓[22m[39m immutable install and upgrade consumer gates[2m > [22mtypechecks and executes an isolated installed package [33m2528[2mms[22m[39m
+   [33m[2m✓[22m[39m immutable install and upgrade consumer gates[2m > [22mrejects a valid npm tarball whose declaration passes but runtime entry is broken [33m7805[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/inspector/DataInspector.evidence.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 956[2mms[22m[39m
+   [33m[2m✓[22m[39m DataInspector evidence lineage[2m > [22mlists citing elements per source and selects one on click (claim -> source -> element) [33m434[2mms[22m[39m
+ [32m✓[39m packages/react-headless/src/deckNavigation.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[90m 72[2mms[22m[39m
+ [32m✓[39m packages/react-headless/src/reactHeadless.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[90m 112[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/NodeSlideLanding.stagedWait.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 609[2mms[22m[39m
+   [33m[2m✓[22m[39m NodeSlide landing staged creation wait[2m > [22madvances honest stage copy on elapsed time with a visible timer [33m364[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/ArtifactLabDialog.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 873[2mms[22m[39m
+   [33m[2m✓[22m[39m ArtifactLabDialog[2m > [22mswitches among all three evidence modes [33m657[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/components/ApproverReviewView.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1483[2mms[22m[39m
+   [33m[2m✓[22m[39m NodeSlide approver review surface[2m > [22mgates on a pasted capability and never reads it from the URL [33m736[2mms[22m[39m
+ [32m✓[39m packages/react/src/reactSurface.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 1072[2mms[22m[39m
+   [33m[2m✓[22m[39m @nodeslide/react controlled surfaces[2m > [22mrenders only the host-selected slide and reports navigation intent [33m336[2mms[22m[39m
+ [32m✓[39m convex/lib/nodeslideModelPicker.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 717[2mms[22m[39m
+   [33m[2m✓[22m[39m NodeSlide AI composer — model picker render coverage[2m > [22mrenders every offered agent model plus the deterministic fallback when opened [33m715[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/inspector/AiInspector.advancedPopover.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1567[2mms[22m[39m
+   [33m[2m✓[22m[39m AI inspector advanced-controls popover[2m > [22mkeeps advanced controls out of the way until the footer trigger opens them [33m546[2mms[22m[39m
+   [33m[2m✓[22m[39m AI inspector advanced-controls popover[2m > [22mcontrols inside the popover still fire: policy selects and provider flip [33m675[2mms[22m[39m
+   [33m[2m✓[22m[39m AI inspector advanced-controls popover[2m > [22mcloses from the labelled close button and restores the trigger state [33m344[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/inspector/DesignInspectorImageSearch.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 2972[2mms[22m[39m
+   [33m[2m✓[22m[39m Design inspector licensed image search[2m > [22mrenders the consent-noted search section for image elements [33m301[2mms[22m[39m
+   [33m[2m✓[22m[39m Design inspector licensed image search[2m > [22msends the exact consent receipt and fills alt text plus credit on selection [33m550[2mms[22m[39m
+   [33m[2m✓[22m[39m Design inspector licensed image search[2m > [22mrejects a result whose thumbnail is outside the exact Openverse API allowlist [33m470[2mms[22m[39m
+   [33m[2m✓[22m[39m Design inspector licensed image search[2m > [22mfails closed when the licensed raster cannot be embedded [33m423[2mms[22m[39m
+   [33m[2m✓[22m[39m Design inspector licensed image search[2m > [22mlabels BYOK-generated assets as illustrative and non-evidentiary [33m711[2mms[22m[39m
+ [32m✓[39m src/domains/nodeslide/inspector/AiInspector.composerSeed.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 3588[2mms[22m[39m
+   [33m[2m✓[22m[39m the Artifact Lab hands a pattern to the workspace composer[2m > [22mseeds the composer when a pattern is chosen after mount [33m548[2mms[22m[39m
+   [33m[2m✓[22m[39m the Artifact Lab hands a pattern to the workspace composer[2m > [22mseeds again when the SAME pattern is chosen twice [33m1496[2mms[22m[39m
+   [33m[2m✓[22m[39m the Artifact Lab hands a pattern to the workspace composer[2m > [22mleaves a draft alone when no pattern is chosen [33m1009[2mms[22m[39m
+   [33m[2m✓[22m[39m the Artifact Lab hands a pattern to the workspace composer[2m > [22mnever clears a draft with an empty pattern [33m392[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[1m[7m Failed Suites 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/e2e/nodeslide-benchmark-producer.live.spec.ts[2m [ tests/e2e/nodeslide-benchmark-producer.live.spec.ts ][22m
+[31m[1mError[22m: Playwright Test did not expect test.use() to be called here.
+Most common reasons include:
+- You are calling test.use() in a configuration file.
+- You are calling test.use() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test.
+- You are calling test.use() from an async test.describe() block. Only sync ones are supported.[39m
+[90m [2m❯[22m _TestTypeImpl._currentSuite node_modules/playwright/lib/common/index.js:[2m2257:13[22m[39m
+[90m [2m❯[22m _TestTypeImpl._use node_modules/playwright/lib/common/index.js:[2m2419:24[22m[39m
+[90m [2m❯[22m Function.use node_modules/playwright/lib/common/index.js:[2m1220:12[22m[39m
+[36m [2m❯[22m tests/e2e/nodeslide-benchmark-producer.live.spec.ts:[2m128:6[22m[39m
+    [90m126| [39m}
+    [90m127| [39m
+    [90m128| [39mtest[33m.[39m[34muse[39m({
+    [90m   | [39m     [31m^[39m
+    [90m129| [39m  trace[33m:[39m [32m'off'[39m[33m,[39m
+    [90m130| [39m  video[33m:[39m [32m'off'[39m[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 1 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m scripts/production-workflows.test.mjs[2m > [22mproduction GitHub workflow configuration[2m > [22mpins every first-party JavaScript action to an approved Node 24 commit
+[31m[1mAssertionError[22m: nodeslide-bench.yml: actions/upload-artifact must use its approved Node 24 SHA: expected 'ea165f8d65b6e75b540449e92b4886f43607f…' to be '043fb46d1a93c77aae656e7c1c64a875d1fc6…' // Object.is equality[39m
+
+Expected: [32m"[7m043fb46d1a93c77aae[27m656e7[7mc1c64a875d1fc6[27ma0[7ma[27m"[39m
+Received: [31m"[7mea165f8d[27m65[7mb[27m6e7[7m5b540449e92b4886f43607f[27ma0[7m2[27m"[39m
+
+[36m [2m❯[22m scripts/production-workflows.test.mjs:[2m30:77[22m[39m
+    [90m 28| [39m      [35mfor[39m ([35mconst[39m [[33m,[39m action[33m,[39m pin] [35mof[39m uses) {
+    [90m 29| [39m        matchCount [33m+=[39m [34m1[39m[33m;[39m
+    [90m 30| [39m        [34mexpect[39m(pin[33m,[39m [32m`[39m[36m${[39mfile[36m}[39m[32m: [39m[36m${[39maction[36m}[39m[32m must use its approved Node 24 [39m…
+    [90m   | [39m                                                                            [31m^[39m
+    [90m 31| [39m          [33mNODE24_ACTION_PINS[39m[33m.[39m[35mget[39m(action)[33m,[39m
+    [90m 32| [39m        )[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m182 passed[39m[22m[90m (184)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1486 passed[39m[22m[2m | [22m[33m5 skipped[39m[90m (1492)[39m
+[2m   Start at [22m 14:07:33
+[2m   Duration [22m 22.06s[2m (transform 44.92s, setup 0ms, collect 170.52s, tests 70.86s, environment 74.73s, prepare 50.93s)[22m
+

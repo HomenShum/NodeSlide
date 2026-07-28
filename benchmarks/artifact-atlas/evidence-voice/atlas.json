@@ -1,0 +1,102 @@
+{
+  "_comment": "NON-museum proof atlas. Its only job is to exercise the evidence-voice slide kinds the nodekit-showcase deck does not contain — claim-lineage, citation-card, deck-ci-receipt, code-and-result, and a declared fallback — so a visual judge can confirm R6 (mono evidence voice) renders under --brand evidence-grade. Not a shipped deck; not the frozen v2 museum. Each fixture names an Atlas archetype directly (artifactType contains a dot), so no v2-vocabulary map is needed.",
+  "schemaVersion": "nodeslide.atlas/v2",
+  "atlasVersion": "evidence-voice-proof/1",
+  "fixtures": [
+    {
+      "id": "ev-claim-lineage",
+      "artifactType": "product-evidence.claim-lineage",
+      "title": "A claim is evidence only when its whole path survives",
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "kind": "graph",
+        "payload": {
+          "nodes": [
+            { "id": "source", "label": "Source" },
+            { "id": "extract", "label": "Extraction" },
+            { "id": "claim", "label": "Bounded claim" },
+            { "id": "slide", "label": "Slide element" },
+            { "id": "receipt", "label": "Receipt" }
+          ],
+          "edges": [
+            { "from": "source", "to": "extract" },
+            { "from": "extract", "to": "claim" },
+            { "from": "claim", "to": "slide" },
+            { "from": "slide", "to": "receipt" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ev-citation-card",
+      "artifactType": "product-evidence.citation-card",
+      "title": "The time axis is a real OOXML object, cited to the spec",
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "kind": "equation",
+        "payload": {
+          "expression": {
+            "op": "divide",
+            "args": [
+              { "op": "value", "name": "Q" },
+              {
+                "op": "add",
+                "args": [
+                  { "op": "value", "name": "one" },
+                  {
+                    "op": "multiply",
+                    "args": [
+                      { "op": "value", "name": "alpha" },
+                      { "op": "value", "name": "C" }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "ev-deck-ci-receipt",
+      "artifactType": "product-evidence.deck-ci-receipt",
+      "title": "A deck is done when pixels and semantics both pass",
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "kind": "generic",
+        "payload": {
+          "metrics": [
+            { "id": "browser" },
+            { "id": "powerpoint" },
+            { "id": "fidelity" }
+          ],
+          "cohorts": [
+            { "id": "topology gate", "values": { "browser": "pass", "powerpoint": "pass", "fidelity": "pass" } },
+            { "id": "citation gate", "values": { "browser": "pass", "powerpoint": "pass", "fidelity": "pass" } },
+            { "id": "motion gate", "values": { "browser": "pass", "powerpoint": "pass", "fidelity": "pass" } }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ev-code-runtime",
+      "artifactType": "technical.code-and-result",
+      "title": "Runtime claims ship with the code that produced them",
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "kind": "runtime-proof",
+        "payload": { "sampleSize": 0, "status": "illustrative" }
+      }
+    },
+    {
+      "id": "ev-fallback",
+      "artifactType": "technical.evidence-media",
+      "title": "When the artifact cannot ship, the deck says so in the bytes",
+      "artifactSpec": {
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "kind": "evidence-media",
+        "payload": {}
+      }
+    }
+  ]
+}

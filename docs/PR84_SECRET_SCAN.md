@@ -162,6 +162,32 @@ not secrets) and the scanner encoded none.** Two independent scans with a shared
 independent on that assumption. The refutation experiment could never have found this either — it
 tested removal of a literal the detector was not firing on.
 
+## CLOSED 2026-07-28 — ignored as false positive, and the count was one incident all along
+
+Owner authorized the dashboard action. Incident #35223996 marked **"This is not a secret (false
+positive)"** — the accurate reason of the four offered, because `not-a-32-byte-key` is not a
+credential at all; it is a string constructed to be rejected. Reversible: the incident carries a
+Reopen control. By then it had grown from 5 locations to **9**, still `Secret values: 1`.
+
+Result, measured immediately after:
+
+    PR #80   GitGuardian  PASS   <- released
+    PR #84   GitGuardian  fail, "2 secrets uncovered!"
+
+**There is no second incident.** The full dashboard list — filter cleared to all non-archived, 41
+results across every repository — contains exactly **one** NodeSlide entry, the one just ignored.
+So #84's "2" was never two findings; it is a count of occurrences within the PR's carried history,
+from a check that ran *before* the ignore. #80 passing on the same ignored incident is the control
+that proves it.
+
+This retires the "unknown-X" that two sessions spent the day hunting, one of them through four CI
+cycles and a bisect. **The number in the check summary was never an incident count**, and both of
+us read it as one — a unit error dressed as a mystery. It belongs with the day's other instances:
+*a value's presence is not its meaning*.
+
+GitGuardian's check does not support `rerequest` via the GitHub API (404 — external app check), so
+#84 clears on its next scan, triggered by this commit.
+
 ## Recommendation (updated)
 
 Mark incident #35223996 a false positive in the dashboard — the remediation panel's own first step

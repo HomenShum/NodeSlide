@@ -54,12 +54,18 @@ const deleteProbeHandler = (
     }>;
   }
 )._handler;
+interface SweepOutcome {
+  deletedWorkspaceCount: number;
+  deletedRowCount: number;
+  skippedWorkspaceCount: number;
+  skippedWorkspaces: Array<{ deckId: string; reason: string; detail: string }>;
+  deferredWorkspaceCount: number;
+  stopReason: 'drained' | 'deleteBudgetExhausted' | 'planBudgetExhausted';
+}
+
 const sweepProbeHandler = (
   deleteExpiredProductionProbeWorkspaces as unknown as {
-    _handler: (
-      ctx: MutationCtx,
-      args: Record<string, never>,
-    ) => Promise<{ deletedWorkspaceCount: number; deletedRowCount: number }>;
+    _handler: (ctx: MutationCtx, args: Record<string, never>) => Promise<SweepOutcome>;
   }
 )._handler;
 
@@ -721,6 +727,278 @@ describe('NodeSlide erasure refuses a deck that does not fit one transaction', (
     expect(survivors.budgets).toEqual([]);
   });
 });
+
+/**
+ * The expiry sweep is the one caller that erases many decks inside a single
+ * transaction, and until now the only bound it had was per deck with a fresh
+ * budget each time. These are the batch's own scenarios.
+ *
+ * Persona: the production probe runner. It creates a synthetic deck on a live
+ * deployment, works it, and deletes it in a `finally`. When the runner is killed
+ * mid-flight that `finally` never runs, so the cron below is the only thing that
+ * ever removes the deck — which is why a sweep that cannot make progress is a
+ * retention failure and not merely an operational annoyance.
+ *
+ * Every case here asserts on a transaction that COMMITS. That matters: the trap
+ * with `convex-test` is that `t.run` rolls its handler back when it throws, so
+ * "nothing was deleted", observed from outside a throwing run, measures the
+ * rollback and would pass against an implementation that deletes everything and
+ * only then notices. Here the sweep returns normally and its writes land, so a
+ * row that survived is positive evidence that no delete was ever issued for it —
+ * not evidence that one was issued and undone. The one case that needs to see
+ * inside the transaction says so at the point it looks.
+ */
+describe('NodeSlide expired-probe sweep bounds the batch, not just each deck', () => {
+  it('deletes an entire batch that fits, so the bound is a gate and not a wall', async () => {
+    const t = convexTest(schema, modules);
+    await t.run(async (ctx) => {
+      for (let index = 0; index < 4; index += 1) {
+        await seedExpiredProbe(ctx as MutationCtx, `probe-batch-fits-${index}`, index + 1, 2, 1024);
+      }
+    });
+    expect(await t.run((ctx) => ctx.db.query('nodeslide_decks').collect())).toHaveLength(4);
+
+    const outcome = await t.run((ctx) => sweepProbeHandler(ctx as MutationCtx, {}));
+    expect(outcome.deletedWorkspaceCount).toBe(4);
+    expect(outcome.skippedWorkspaceCount).toBe(0);
+    expect(outcome.deferredWorkspaceCount).toBe(0);
+    expect(outcome.stopReason).toBe('drained');
+    expect(outcome.deletedRowCount).toBeGreaterThan(0);
+
+    const survivors = await t.run(async (ctx) => ({
+      decks: await ctx.db.query('nodeslide_decks').collect(),
+      projects: await ctx.db.query('projects').collect(),
+      traces: await ctx.db.query('nodeslide_traces').collect(),
+    }));
+    expect(survivors.decks).toEqual([]);
+    expect(survivors.projects).toEqual([]);
+    expect(survivors.traces).toEqual([]);
+  });
+
+  it('stops a batch whose total exceeds the shared budget, coherently, and drains the rest next run', async () => {
+    const t = convexTest(schema, modules);
+    // Five decks at ~1 MiB each. Every one of them fits the 4 MiB per-deck
+    // envelope with room to spare — the per-deck refusal has nothing to say
+    // here — but together they are ~5 MiB in one transaction, which is what had
+    // no ceiling at all.
+    const deckIds = await t.run(async (ctx) => {
+      const ids: string[] = [];
+      for (let index = 0; index < 5; index += 1) {
+        ids.push(
+          await seedExpiredProbe(
+            ctx as MutationCtx,
+            `probe-batch-over-${index}`,
+            index + 1,
+            8,
+            128 * 1024,
+          ),
+        );
+      }
+      return ids;
+    });
+    // Arm the sensor: a "the batch stopped" assertion proves nothing over a
+    // fixture that was never big enough to need stopping.
+    expect(await t.run((ctx) => ctx.db.query('nodeslide_traces').collect())).toHaveLength(40);
+
+    const first = await t.run(async (ctx) => {
+      const result = await sweepProbeHandler(ctx as MutationCtx, {});
+      // Read INSIDE the transaction, on purpose. From out here the same query
+      // would be reading whatever the transaction settled on; in here it is
+      // reading what the handler itself left behind, at the moment it stopped.
+      const remainingDecks = await ctx.db.query('nodeslide_decks').collect();
+      return { result, remainingDeckIds: remainingDecks.map((deck) => deck.id).sort() };
+    });
+
+    // Bounded: it refused to carry all five decks in one transaction.
+    expect(first.result.stopReason).toBe('deleteBudgetExhausted');
+    expect(first.result.deletedWorkspaceCount).toBeGreaterThanOrEqual(1);
+    expect(first.result.deletedWorkspaceCount).toBeLessThan(5);
+    // Clean, not crashed: nothing was skipped, the stop is a deferral.
+    expect(first.result.skippedWorkspaceCount).toBe(0);
+    expect(first.result.deferredWorkspaceCount).toBe(5 - first.result.deletedWorkspaceCount);
+    expect(first.remainingDeckIds).toHaveLength(5 - first.result.deletedWorkspaceCount);
+
+    // Coherent: the sweep is expiry-ordered, so what it deleted is a prefix, and
+    // each deck is all-or-nothing. A deck row gone with its traces left behind —
+    // or the reverse — would be the half-erased state the envelope exists to
+    // prevent, just relocated from inside a deck to inside a batch.
+    const perDeck = await t.run(async (ctx) =>
+      Promise.all(
+        deckIds.map(async (deckId) => ({
+          deckId,
+          deck: await ctx.db
+            .query('nodeslide_decks')
+            .withIndex('by_stable_id', (index) => index.eq('id', deckId))
+            .first(),
+          traces: await ctx.db
+            .query('nodeslide_traces')
+            .withIndex('by_deck_created', (index) => index.eq('deckId', deckId))
+            .collect(),
+        })),
+      ),
+    );
+    for (const row of perDeck) {
+      if (row.deck === null) {
+        expect(row.traces, `${row.deckId} lost its deck row but kept trace rows`).toEqual([]);
+      } else {
+        expect(row.traces, `${row.deckId} survived but was partially erased`).toHaveLength(8);
+      }
+    }
+    const deletedPrefix = perDeck.findIndex((row) => row.deck !== null);
+    expect(
+      perDeck.slice(deletedPrefix).every((row) => row.deck !== null),
+      'the sweep deleted out of expiry order',
+    ).toBe(true);
+
+    // The remainder survives for the next run, and the next run takes it. A
+    // partial batch is only the right answer if the sweep actually drains.
+    let runs = 1;
+    let totalDeleted = first.result.deletedWorkspaceCount;
+    while (runs < 5) {
+      const next = await t.run((ctx) => sweepProbeHandler(ctx as MutationCtx, {}));
+      runs += 1;
+      totalDeleted += next.deletedWorkspaceCount;
+      if (next.stopReason === 'drained') break;
+    }
+    expect(runs).toBeGreaterThan(1);
+    expect(totalDeleted).toBe(5);
+    expect(await t.run((ctx) => ctx.db.query('nodeslide_decks').collect())).toEqual([]);
+    expect(await t.run((ctx) => ctx.db.query('projects').collect())).toEqual([]);
+  });
+
+  it('skips and records one oversized deck while the healthy decks around it are still erased', async () => {
+    const t = convexTest(schema, modules);
+    // The middle deck is ~6 MiB on its own: past the per-deck envelope, so no
+    // budget in any run will ever fit it. Under the old sweep it threw, the
+    // whole batch rolled back, and the next cron re-selected the same deck
+    // first — the sweep could never drain past it without manual removal.
+    const healthyBefore = await t.run(async (ctx) => {
+      const before = await seedExpiredProbe(ctx as MutationCtx, 'probe-skip-healthy-a', 1, 4, 1024);
+      await seedExpiredProbe(ctx as MutationCtx, 'probe-skip-oversized', 2, 48, 128 * 1024);
+      const after = await seedExpiredProbe(ctx as MutationCtx, 'probe-skip-healthy-b', 3, 4, 1024);
+      return { before, after };
+    });
+    const oversizedDeckId = await t.run(async (ctx) => {
+      const decks = await ctx.db.query('nodeslide_decks').collect();
+      const oversized = decks.find((deck) => deck.clientSessionId === 'probe-skip-oversized');
+      return oversized?.id ?? '';
+    });
+    expect(oversizedDeckId).not.toBe('');
+    expect(
+      await t.run((ctx) =>
+        ctx.db
+          .query('nodeslide_traces')
+          .withIndex('by_deck_created', (index) => index.eq('deckId', oversizedDeckId))
+          .collect(),
+      ),
+      'the skip proves nothing unless the oversized rows are really there',
+    ).toHaveLength(48);
+
+    const outcome = await t.run((ctx) => sweepProbeHandler(ctx as MutationCtx, {}));
+
+    // Not poisoned: the healthy deck AFTER the oversized one was still erased,
+    // which is the half a throw could never deliver.
+    expect(outcome.deletedWorkspaceCount).toBe(2);
+    expect(outcome.stopReason).toBe('drained');
+    expect(outcome.deferredWorkspaceCount).toBe(0);
+
+    // Recorded, not silently dropped. A skip nobody can see is a leak with
+    // better manners than a crash.
+    expect(outcome.skippedWorkspaceCount).toBe(1);
+    expect(outcome.skippedWorkspaces).toHaveLength(1);
+    expect(outcome.skippedWorkspaces[0]?.deckId).toBe(oversizedDeckId);
+    expect(outcome.skippedWorkspaces[0]?.reason).toBe('oversized');
+    expect(outcome.skippedWorkspaces[0]?.detail).toMatch(
+      /failed closed.*exceeds the atomic limit.*no records were deleted/is,
+    );
+
+    // The skip was decided in the read phase, so the oversized deck is untouched
+    // — not partly erased and rolled back. This transaction COMMITTED (the two
+    // healthy decks are really gone), so any delete issued against the oversized
+    // deck would have committed too. Its intact rows are therefore evidence
+    // about ordering, not about a rollback.
+    const state = await t.run(async (ctx) => ({
+      decks: await ctx.db.query('nodeslide_decks').collect(),
+      oversizedTraces: await ctx.db
+        .query('nodeslide_traces')
+        .withIndex('by_deck_created', (index) => index.eq('deckId', oversizedDeckId))
+        .collect(),
+      healthyBeforeDeck: await ctx.db
+        .query('nodeslide_decks')
+        .withIndex('by_stable_id', (index) => index.eq('id', healthyBefore.before))
+        .first(),
+      healthyAfterDeck: await ctx.db
+        .query('nodeslide_decks')
+        .withIndex('by_stable_id', (index) => index.eq('id', healthyBefore.after))
+        .first(),
+    }));
+    expect(state.healthyBeforeDeck).toBeNull();
+    expect(state.healthyAfterDeck).toBeNull();
+    expect(state.decks.map((deck) => deck.id)).toEqual([oversizedDeckId]);
+    expect(state.oversizedTraces).toHaveLength(48);
+
+    // And the sweep stays unwedged: a later run over nothing but the oversized
+    // deck still returns instead of throwing. Being honest about the residual —
+    // this deck is skipped, not erased. It needs an operator, and the record
+    // above is how they learn it exists.
+    const second = await t.run((ctx) => sweepProbeHandler(ctx as MutationCtx, {}));
+    expect(second.deletedWorkspaceCount).toBe(0);
+    expect(second.skippedWorkspaceCount).toBe(1);
+    expect(second.stopReason).toBe('drained');
+  });
+});
+
+/**
+ * One expired production probe deck, its own project shell, and `traces`
+ * trace rows of `fillerBytes` each — the knob the batch scenarios turn to make
+ * a deck cheap or ruinous without changing anything else about it.
+ */
+async function seedExpiredProbe(
+  ctx: MutationCtx,
+  clientSessionId: string,
+  expiresAt: number,
+  traces: number,
+  fillerBytes: number,
+): Promise<string> {
+  const built = buildGoldenNodeSlide(clientSessionId, NOW);
+  const deckId = built.snapshot.deck.id;
+  const projectRowId = await ctx.db.insert('projects', {
+    clientSessionId,
+    title: built.snapshot.deck.title,
+    domain: 'nodeslide',
+    brief: built.snapshot.deck.brief,
+    sourceType: 'prompt',
+    starred: false,
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
+  await insertNodeSlideSnapshot(ctx, {
+    snapshot: built.snapshot,
+    projectRowId,
+    clientSessionId,
+    ownerAccessKey: OWNER_ACCESS_KEY,
+    plan: built.plan,
+    spec: built.spec,
+    productionProbeCleanupDigest: `sha256:${nodeslideContentDigest(clientSessionId).slice(-64)}`,
+    productionProbeExpiresAt: expiresAt,
+  });
+  const filler = 'x'.repeat(fillerBytes);
+  for (let index = 0; index < traces; index += 1) {
+    await ctx.db.insert('nodeslide_traces', {
+      id: `${clientSessionId}-trace-${index}`,
+      deckId,
+      status: 'completed',
+      summary: 'Expired probe fixture trace',
+      plan: [],
+      context: [filler],
+      toolCalls: [],
+      guardrails: [],
+      createdAt: NOW,
+      completedAt: NOW,
+    });
+  }
+  return deckId;
+}
 
 async function seedRetentionProject(
   ctx: MutationCtx,

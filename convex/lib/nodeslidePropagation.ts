@@ -5,6 +5,7 @@ import {
   type PatchOperation,
   type PatchScope,
   type SlideElement,
+  unhandledPatchOperation,
 } from '../../shared/nodeslide';
 import { nodeslideContentDigest } from './nodeslideIds';
 import { clocksForNodeSlideOperations } from './nodeslidePatches';
@@ -32,9 +33,22 @@ export function planNodeSlidePropagation(
     throw new Error('Propagation proposals cannot recursively widen themselves.');
   }
   const sourceSlideIds = new Set(
-    parent.operations.flatMap((operation) =>
-      operation.op === 'update_deck' || operation.op === 'add_slide' ? [] : [operation.slideId],
-    ),
+    parent.operations.flatMap((operation) => {
+      if (
+        operation.op === 'update_deck' ||
+        operation.op === 'update_theme_v1' ||
+        operation.op === 'add_slide'
+      ) {
+        return [];
+      }
+      if (!('slideId' in operation)) {
+        // Exhaustiveness guard: a new deck-level operation must be listed above,
+        // not contribute `undefined` to the propagation source-slide set.
+        unhandledPatchOperation(operation);
+        return [];
+      }
+      return [operation.slideId];
+    }),
   );
   const sourceElements = new Map(snapshot.elements.map((element) => [element.id, element]));
   const slideRank = new Map(snapshot.deck.slideOrder.map((slideId, index) => [slideId, index]));

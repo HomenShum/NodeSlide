@@ -32,6 +32,7 @@ import type {
 import {
   NODESLIDE_PRODUCTION_PROBE_CLEANUP_STORAGE_KEY,
   operationElementIds,
+  unhandledPatchOperation,
 } from '../../../shared/nodeslide';
 import { applyDeckPatch } from '../../../shared/nodeslidePatch';
 import type { TasteProfile } from '../../../shared/nodeslidePreference';
@@ -4176,7 +4177,19 @@ function clocksForScope(
     }
   } else {
     for (const operation of operations) {
-      if (operation.op === 'update_deck' || operation.op === 'add_slide') continue;
+      if (
+        operation.op === 'update_deck' ||
+        operation.op === 'update_theme_v1' ||
+        operation.op === 'add_slide'
+      ) {
+        continue;
+      }
+      if (!('slideId' in operation)) {
+        // Exhaustiveness guard: a new deck-level operation must be listed above,
+        // not silently added to the touched-slide set as `undefined`.
+        unhandledPatchOperation(operation);
+        continue;
+      }
       slideIds.add(operation.slideId);
       if (operation.op === 'remove_slide') {
         for (const element of workspace.elements) {
@@ -4234,7 +4247,10 @@ function scopeForOperations(
       (operation) =>
         operation.op === 'add_slide' ||
         operation.op === 'remove_slide' ||
-        operation.op === 'update_deck',
+        operation.op === 'update_deck' ||
+        // A theme op carries no slideId; without this it would fall through to
+        // the slide-scope branch below and build a scope with no slides at all.
+        operation.op === 'update_theme_v1',
     )
   ) {
     return { kind: 'deck', deckId: workspace.deck.id, operationMode: 'unrestricted' };

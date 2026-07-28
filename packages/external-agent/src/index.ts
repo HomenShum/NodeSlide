@@ -3,10 +3,12 @@ import { createHash } from 'node:crypto';
 import type { NodeSlidePatchCommand } from '@nodeslide/backend';
 import {
   type DeckSnapshot,
+  NODESLIDE_PATCH_OPERATION_OPS,
   NODESLIDE_SCHEMA_VERSION,
   type PatchOperation,
   type PatchScope,
   operationElementIds,
+  unhandledPatchOperation,
 } from '@nodeslide/contracts';
 import {
   applyDeckPatch,
@@ -668,32 +670,17 @@ function parsePatchScope(value: unknown): PatchScope {
 function assertPatchOperation(value: unknown, index: number): asserts value is PatchOperation {
   const path = `patch.operations[${index}]`;
   const operation = requireRecord(value, path, 'invalid_patch');
+  // Derived from the canonical exhaustive table in shared/nodeslide.ts, so a new
+  // PatchOperation member can never typecheck everywhere and still be rejected
+  // here as an unrecognized op.
   const op = requireOneOf(
     operation['op'],
-    [
-      'move',
-      'resize',
-      'replace_text',
-      'update_style',
-      'update_chart',
-      'update_image',
-      'add_element',
-      'remove_element',
-      'set_visibility_v1',
-      'group_elements_v1',
-      'ungroup_elements_v1',
-      'reorder_element_v1',
-      'add_slide',
-      'remove_slide',
-      'reorder_slide',
-      'update_slide',
-      'update_deck',
-    ],
+    NODESLIDE_PATCH_OPERATION_OPS,
     `${path}.op`,
     'invalid_patch',
   );
   const keys = ['op'];
-  if (op !== 'add_slide' && op !== 'update_deck') {
+  if (op !== 'add_slide' && op !== 'update_deck' && op !== 'update_theme_v1') {
     keys.push('slideId');
     requireString(operation['slideId'], `${path}.slideId`, 'invalid_patch');
   }
@@ -876,6 +863,40 @@ function assertPatchOperation(value: unknown, index: number): asserts value is P
       requireString(properties['title'], `${path}.properties.title`, 'invalid_patch');
       break;
     }
+    case 'update_theme_v1': {
+      keys.push('properties');
+      const properties = requireRecord(
+        operation['properties'],
+        `${path}.properties`,
+        'invalid_patch',
+      );
+      rejectUnknownKeys(
+        properties,
+        ['mode', 'colors', 'typography'],
+        `${path}.properties`,
+        'invalid_patch',
+      );
+      if (properties['mode'] !== undefined) {
+        requireOneOf(
+          properties['mode'],
+          ['light', 'dark'],
+          `${path}.properties.mode`,
+          'invalid_patch',
+        );
+      }
+      for (const slot of ['colors', 'typography'] as const) {
+        if (properties[slot] === undefined) continue;
+        const record = requireRecord(
+          properties[slot],
+          `${path}.properties.${slot}`,
+          'invalid_patch',
+        );
+        for (const [key, entry] of Object.entries(record)) {
+          requireString(entry, `${path}.properties.${slot}.${key}`, 'invalid_patch');
+        }
+      }
+      break;
+    }
   }
   rejectUnknownKeys(operation, keys, path, 'invalid_patch');
 }
@@ -906,7 +927,16 @@ function assertPatchClocks(snapshot: DeckSnapshot, patch: NodeSlidePatchCommand)
   const targetedSlides = new Set<string>();
   const targetedElements = new Set<string>();
   for (const operation of patch.operations) {
-    if (operation.op !== 'add_slide' && operation.op !== 'update_deck') {
+    if (
+      operation.op !== 'add_slide' &&
+      operation.op !== 'update_deck' &&
+      operation.op !== 'update_theme_v1'
+    ) {
+      if (!('slideId' in operation)) {
+        // Exhaustiveness guard: a new deck-level operation must be excluded above
+        // rather than checked against an undefined slide id.
+        invalid('invalid_patch', `Unhandled operation ${unhandledPatchOperation(operation)}.`);
+      }
       if (!slides.has(operation.slideId)) {
         invalid(
           'invalid_patch',

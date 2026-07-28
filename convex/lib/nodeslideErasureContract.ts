@@ -37,6 +37,34 @@
  */
 
 /** Structural view of `defineSchema(...)`, so a test can pass a fixture schema. */
+/**
+ * STILL OPEN — the envelope is per-deck, and one caller is per-batch.
+ *
+ * Re-recorded 2026-07-28 after a merge dropped it. The paragraph was written against a parallel
+ * implementation of the envelope; that implementation lost to main's, and the caveat went with it
+ * even though the limitation it describes is a property of main's code too. **A note attached to
+ * the losing side of a merge is deleted by the merge**, and nothing reports it — the tree compiles,
+ * the tests pass, and only the knowledge is gone.
+ *
+ * Verified against the merged tree before re-adding, rather than restored on faith:
+ * `deleteExpiredProductionProbeWorkspaces` takes up to **10** expired probe decks
+ * (`.take(10)`) and loops, calling `deleteWorkspaceRows` once per deck. The envelope's ceilings —
+ * `NODESLIDE_DECK_ERASURE_MAX_RECORDS` / `_MAX_BYTES` in `convex/nodeslideRetention.ts` — are
+ * therefore applied **per deck with a fresh budget**, while the transaction is shared by all ten.
+ *
+ * Two consequences, neither currently tested:
+ *
+ *   1. Ten decks each sitting just inside the envelope total ten times the per-deck ceiling in one
+ *      transaction. The per-deck refusal is honest; the batch has no ceiling at all.
+ *   2. A single oversized probe deck throws, so the whole sweep fails — and it fails again on every
+ *      subsequent run, because the sweep re-selects the same deck. It cannot drain past it without
+ *      manual removal.
+ *
+ * The honest framing, same as the envelope's own: this is not a data-retention hole. It is an
+ * unbounded batch behind a bounded unit, and a permanently-wedged sweep with no failing test.
+ * Closing it needs a batch-level budget the per-deck envelope cannot express, or per-deck
+ * transactions.
+ */
 export interface NodeSlideSchemaTableLike {
   validator: {
     kind: string;

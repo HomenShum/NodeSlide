@@ -17,8 +17,9 @@ import {
   type SlideElement,
   isNodeSlideEmbeddedRasterDataUrl,
   operationElementIds,
+  unhandledPatchOperation,
 } from '../../shared/nodeslide';
-import { validatePatchScope } from '../../shared/nodeslidePatch';
+import { validatePatchScope, validatedThemeUpdate } from '../../shared/nodeslidePatch';
 import { nodeslideCleanText } from './nodeslideIds';
 import { boundingBoxesIntersect, isNormalizedBoundingBox } from './nodeslideValidation';
 
@@ -96,6 +97,7 @@ export function validateNodeSlidePatch(
   );
   const slideOrder = [...snapshot.deck.slideOrder];
   let deckTitle = snapshot.deck.title;
+  let deckTheme = structuredClone(snapshot.deck.theme);
   const sources = new Set(snapshot.sources.map((source) => source.id));
   const addedSlideIds = new Set<string>();
   const addedElementSlideIds = new Map<string, string>();
@@ -178,6 +180,15 @@ export function validateNodeSlidePatch(
       continue;
     }
 
+    if (operation.op === 'update_theme_v1') {
+      try {
+        deckTheme = validatedThemeUpdate(deckTheme, operation.properties);
+      } catch (error) {
+        errors.push(error instanceof Error ? error.message : 'update_theme_v1 was invalid.');
+      }
+      continue;
+    }
+
     if (operation.op === 'add_slide') {
       const slideId = operation.slide.id;
       const validIndex =
@@ -219,6 +230,13 @@ export function validateNodeSlidePatch(
       for (const element of operation.elements) {
         if (!elements.has(element.id)) elements.set(element.id, structuredClone(element));
       }
+      continue;
+    }
+
+    if (!('slideId' in operation)) {
+      // Exhaustiveness guard: deck-level operations must be handled above, never
+      // fall through to the slide lookup with an undefined slideId.
+      errors.push(`Unhandled deck-level operation ${unhandledPatchOperation(operation)}.`);
       continue;
     }
 
@@ -648,7 +666,8 @@ export function evaluateNodeSlideCas(
     (operation) =>
       operation.op === 'add_slide' ||
       operation.op === 'remove_slide' ||
-      operation.op === 'update_deck',
+      operation.op === 'update_deck' ||
+      operation.op === 'update_theme_v1',
   );
   if (requiresExactDeckVersion && patch.baseDeckVersion !== snapshot.deck.version) {
     reasons.push(
@@ -694,7 +713,19 @@ export function touchedNodeSlideIds(
   const elementIds = new Set<string>();
   const existingIds = new Set(snapshot.elements.map((element) => element.id));
   for (const operation of operations) {
-    if (operation.op === 'update_deck' || operation.op === 'add_slide') continue;
+    if (
+      operation.op === 'update_deck' ||
+      operation.op === 'update_theme_v1' ||
+      operation.op === 'add_slide'
+    ) {
+      continue;
+    }
+    if (!('slideId' in operation)) {
+      // Exhaustiveness guard: a new deck-level operation must be listed above,
+      // not silently added to the touched-slide set as `undefined`.
+      unhandledPatchOperation(operation);
+      continue;
+    }
     slideIds.add(operation.slideId);
     if (operation.op === 'remove_slide') {
       for (const element of snapshot.elements) {
@@ -902,7 +933,13 @@ export function summarizePatchOperations(
   }
   const labels = operations.map((operation) => {
     if (operation.op === 'update_deck') return 'update deck title';
+    if (operation.op === 'update_theme_v1') return 'update deck theme';
     if (operation.op === 'add_slide') return `add slide ${operation.slide.title}`;
+    if (!('slideId' in operation)) {
+      // Exhaustiveness guard: a new deck-level operation must get its own label
+      // above rather than being summarized against an undefined slide.
+      return unhandledPatchOperation(operation).replaceAll('_', ' ');
+    }
     const slideLabel =
       snapshot?.slides.find((slide) => slide.id === operation.slideId)?.title ?? operation.slideId;
     if (operation.op === 'remove_slide') return `remove slide ${slideLabel}`;

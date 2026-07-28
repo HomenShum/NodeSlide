@@ -3563,6 +3563,87 @@ export const duplicateDeck = mutation({
   },
 });
 
+/**
+ * Persists a server-imported PPTX snapshot as a brand-new deck.
+ *
+ * Same shape of argument as `duplicateDeck` above and for the same reason:
+ * `importPptxSnapshot` has lived in `src/domains/nodeslide/slidelang/pptxImport.ts`
+ * since the decoupling landed, and the only in-repo path that reached it was
+ * `createPptxImportCandidate`, which imports INTO an existing deck through
+ * applyPatch/CAS. There was no path that imported into a NEW one, so a user
+ * holding a .pptx and no deck had nothing to start from. This mutation, and its
+ * only caller `nodeslidePptxCreate.importPptxAsNewDeck`, are that path.
+ *
+ * It goes through `createWorkspaceRows`, so an imported deck gets the same
+ * artifact-compilation gate, validation row, project row, initial version and
+ * creation trace as a brief-created deck. An import that skipped that path would
+ * be the one deck in the deployment whose snapshot was never validated.
+ *
+ * Parity passes `layoutBlockerPolicy: 'persist_with_findings'` here. That
+ * parameter has no equivalent in this repo and none is added: parity's
+ * `createWorkspaceRows` REJECTS a first draft carrying collision/overflow
+ * errors unless the import path opts out, whereas this repo's already persists
+ * with its findings visible for every caller. Passing a flag that only restates
+ * the existing behaviour would imply a choice the code does not make.
+ *
+ * The fidelity notes are the honest part of the receipt. An import that lost a
+ * feature says so in the creation trace instead of presenting a lossy deck as a
+ * clean one, and an import that lost nothing says that explicitly rather than
+ * leaving the reader to infer it from an empty list.
+ */
+export const createImportedDeckInternal = internalMutation({
+  args: {
+    clientSessionId: v.string(),
+    ownerAccessKey: v.string(),
+    snapshot: v.any(),
+    fileName: v.string(),
+    fidelityNotes: v.array(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const snapshot = structuredClone(args.snapshot) as DeckSnapshot;
+    const existing = await findDeckRow(ctx, snapshot.deck.id);
+    if (existing) {
+      // The deck id is derived from the caller's idempotency key, so a retry
+      // lands here. Re-authorize before reporting the reuse: an unauthorized
+      // caller must not learn that a deck with this id exists.
+      await requireOwnerAccess(ctx, snapshot.deck.id, args.ownerAccessKey);
+      return { deckId: snapshot.deck.id, reused: true };
+    }
+    await createWorkspaceRows(ctx, {
+      clientSessionId: args.clientSessionId,
+      ownerAccessKey: args.ownerAccessKey,
+      built: {
+        snapshot,
+        plan: [
+          `Imported ${args.fileName}`,
+          'Parsed slides, text, and native objects inside bounded import limits',
+          'Validated the imported structure before persisting',
+        ],
+        spec: {
+          title: snapshot.deck.title,
+          narrative: [`Imported from PowerPoint: ${args.fileName}`],
+          slides: [],
+        },
+      },
+      trace: {
+        summary: `Imported ${args.fileName} as a new editable deck.`,
+        context: [
+          `Source file: ${args.fileName}`,
+          ...(args.fidelityNotes.length
+            ? args.fidelityNotes.map((note) => `Fidelity: ${note}`)
+            : ['Fidelity: full import, no recorded loss']),
+        ],
+        toolCalls: [
+          'Parsed PPTX archive server-side within hostile-input bounds',
+          'Imported slides and elements into the canonical snapshot',
+          'Validated snapshot',
+        ],
+      },
+    });
+    return { deckId: snapshot.deck.id, reused: false };
+  },
+});
+
 export const createFromBriefInternal = internalMutation({
   args: {
     deckId: v.string(),

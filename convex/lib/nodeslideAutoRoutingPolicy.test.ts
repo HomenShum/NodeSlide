@@ -7,7 +7,7 @@ import {
   type NodeSlideAutoRoutingDecision,
   type NodeSlideRoutingPolicyInput,
   decideNodeSlideAutoRoute,
-} from './nodeslideRoutingPolicy';
+} from './nodeslideAutoRoutingPolicy';
 
 const OPENROUTER_GLM = {
   provider: 'openrouter',

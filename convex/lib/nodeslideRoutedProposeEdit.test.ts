@@ -1,3 +1,4 @@
+import { nodeSlideBudgetLedgerStubResponse } from '@nodeslide/testing';
 import { describe, expect, it, vi } from 'vitest';
 import { NODESLIDE_OPENROUTER_EDIT_CONSENT, type NodeSlideWorkspace } from '../../shared/nodeslide';
 import { proposeEdit } from '../nodeslideAgent';
@@ -19,6 +20,16 @@ vi.mock('./nodeslideProvider', async (importOriginal) => {
             costMicroUsd: 1,
             inputTokens: 40,
             outputTokens: 20,
+            attempts: [
+              {
+                attempt: 'initial',
+                attempted: true,
+                settled: true,
+                ambiguous: false,
+                unreconciled: false,
+                elapsedMs: 1,
+              },
+            ],
           },
         };
       }
@@ -31,6 +42,16 @@ vi.mock('./nodeslideProvider', async (importOriginal) => {
           costMicroUsd: 20,
           inputTokens: 200,
           outputTokens: 80,
+          attempts: [
+            {
+              attempt: 'initial',
+              attempted: true,
+              settled: true,
+              ambiguous: false,
+              unreconciled: false,
+              elapsedMs: 1,
+            },
+          ],
         },
       };
     }),
@@ -99,6 +120,9 @@ describe('proposeEdit routed attribution (B2)', () => {
     const mutations: Record<string, unknown>[] = [];
     const runMutation = vi.fn(async (_reference: unknown, args: Record<string, unknown>) => {
       mutations.push(args);
+      // See nodeSlideBudgetLedgerStubResponse: the planner is budgeted now.
+      const budgetReply = nodeSlideBudgetLedgerStubResponse(args);
+      if (budgetReply !== undefined) return budgetReply;
       if ('buckets' in args) return undefined;
       if ('idempotencyKey' in args && 'provider' in args) {
         return {

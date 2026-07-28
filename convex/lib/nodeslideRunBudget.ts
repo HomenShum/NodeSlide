@@ -1,35 +1,40 @@
 /**
- * Server-side run-budget accounting — PRICE-INDEPENDENT SUBSET.
+ * Server-side run-budget accounting — COMPLETE.
  *
- * Copied verbatim from parity's `convex/lib/nodeslideRunBudget.ts` with one
- * function withheld: `preflightNodeSlideRunBudget`, which is the only member
- * that calls `nodeSlideModelPricing` / `scoreNodeSlideWorstCaseCost` and so
- * cannot exist until the model price table lands. See the header of
- * `shared/nodeslideRunBudget.ts` for why that table is refused rather than
- * guessed. Its private helpers (`maximumAffordableOutputTokens`,
- * `validatePreflightInput`, `denyPreflight`, `canonicalPricingTuple`) are
- * withheld with it; nothing else references them.
+ * `preflightNodeSlideRunBudget` was withheld while the model price table was,
+ * because it is the only member that turns tokens into a currency figure. The
+ * table landed; so did this. It is the ONLY place a provider call is authorized
+ * against a cap, and it FAILS CLOSED in every branch: a state it cannot
+ * validate, an input it cannot parse, a route it cannot price, a context window
+ * it would overrun, or a worst case that does not fit all return
+ * `{ ok: false, reason }` with a coded reason. There is no branch that returns
+ * `ok: true` with an uncomputed cost, and there is no branch that treats an
+ * unpriceable route as free.
  *
- * The result types for preflight (`NodeSlideRunBudgetPreflightResult` and its
- * denial reasons) DO land, via the re-export below — they are structure, and
- * downstream modules pattern-match on them without ever computing a price.
- *
- * Postflight (`accountNodeSlideRunBudgetReceipt`) is here in full: it accumulates
- * a cost the provider already reported, it never derives one.
+ * Postflight (`accountNodeSlideRunBudgetReceipt`) accumulates a cost the
+ * provider already reported; it never derives one.
  */
 import {
   NODESLIDE_MICRO_USD_PER_USD,
   NODESLIDE_PRIVATE_DETERMINISTIC_MODEL,
+  NODESLIDE_RUN_BUDGET_BOUNDS,
   NODESLIDE_RUN_BUDGET_RECEIPT_VERSION,
   NODESLIDE_RUN_BUDGET_STATE_VERSION,
+  NODESLIDE_TOKENS_PER_PRICING_UNIT,
   type NodeSlideRunBudget,
   type NodeSlideRunBudgetAccumulated,
   type NodeSlideRunBudgetPostflightResult,
+  type NodeSlideRunBudgetPreflightDenialReason,
+  type NodeSlideRunBudgetPreflightResult,
   type NodeSlideRunBudgetReceipt,
   type NodeSlideRunBudgetRemaining,
   type NodeSlideRunBudgetState,
   type NodeSlideRunBudgetTerminalReason,
+  type NodeSlideScoredModelMetadata,
+  isNodeSlideScoredPricing,
+  nodeSlideModelPricing,
   normalizeNodeSlideRunBudget,
+  scoreNodeSlideWorstCaseCost,
 } from '../../shared/nodeslideRunBudget';
 import { nodeslideContentDigest } from './nodeslideIds';
 
@@ -179,6 +184,197 @@ export function nodeSlideRunBudgetTerminalReason(
   return null;
 }
 
+/**
+ * Pure server preflight. The caller must pass providerSafeOutputTokenCeiling as
+ * the provider's output limit and providerTimeoutMs as its deadline.
+ */
+export function preflightNodeSlideRunBudget(args: {
+  state: NodeSlideRunBudgetState;
+  model: string;
+  estimatedInputTokens: number;
+  requestedMaxOutputTokens: number;
+}): NodeSlideRunBudgetPreflightResult {
+  const stateIssue = validateState(args.state);
+  const remainingBudget = nodeSlideRunBudgetRemaining(args.state);
+  if (stateIssue) {
+    return denyPreflight(
+      stateIssue.code === 'state_digest_mismatch'
+        ? stateIssue
+        : {
+            code: 'invalid_preflight',
+            field: stateIssue.field,
+            message: stateIssue.message,
+          },
+      remainingBudget,
+      args.state.digest,
+    );
+  }
+
+  const inputIssue = validatePreflightInput(args);
+  if (inputIssue) {
+    return denyPreflight(inputIssue, remainingBudget, args.state.digest);
+  }
+
+  const terminalReason = nodeSlideRunBudgetTerminalReason(args.state);
+  if (terminalReason) {
+    return denyPreflight(terminalReason, remainingBudget, args.state.digest);
+  }
+  if (args.estimatedInputTokens > remainingBudget.inputTokens) {
+    return denyPreflight(
+      {
+        code: 'estimated_input_exceeds_remaining',
+        estimatedInputTokens: args.estimatedInputTokens,
+        remainingInputTokens: remainingBudget.inputTokens,
+      },
+      remainingBudget,
+      args.state.digest,
+    );
+  }
+
+  // The fail-closed hinge. `unknown` and `dynamic` both land here, and neither
+  // is ever converted into a zero-cost quote: a route this deployment cannot
+  // price is a route it will not dispatch.
+  const pricing = nodeSlideModelPricing(args.model);
+  if (!isNodeSlideScoredPricing(pricing)) {
+    return denyPreflight(
+      { code: 'pricing_unknown', model: args.model, pricing },
+      remainingBudget,
+      args.state.digest,
+    );
+  }
+  if (
+    pricing.kind === 'priced' &&
+    args.estimatedInputTokens >= pricing.providerContextWindowTokens
+  ) {
+    return denyPreflight(
+      {
+        code: 'model_context_exceeded',
+        estimatedInputTokens: args.estimatedInputTokens,
+        providerContextWindowTokens: pricing.providerContextWindowTokens,
+      },
+      remainingBudget,
+      args.state.digest,
+    );
+  }
+
+  const inputCost = scoreNodeSlideWorstCaseCost({
+    model: args.model,
+    inputTokens: args.estimatedInputTokens,
+    outputTokens: 0,
+  });
+  if (inputCost.kind !== 'scored') {
+    return denyPreflight(
+      { code: 'pricing_unknown', model: args.model, pricing: inputCost.pricing },
+      remainingBudget,
+      args.state.digest,
+    );
+  }
+
+  const minimumOutputCost = scoreNodeSlideWorstCaseCost({
+    model: args.model,
+    inputTokens: 0,
+    outputTokens: 1,
+  });
+  if (minimumOutputCost.kind !== 'scored') {
+    return denyPreflight(
+      { code: 'pricing_unknown', model: args.model, pricing: minimumOutputCost.pricing },
+      remainingBudget,
+      args.state.digest,
+    );
+  }
+  if (
+    inputCost.totalCostMicroUsd + minimumOutputCost.totalCostMicroUsd >
+    remainingBudget.costMicroUsd
+  ) {
+    return denyPreflight(
+      {
+        code: 'cost_budget_exceeded',
+        remainingCostMicroUsd: remainingBudget.costMicroUsd,
+        inputCostMicroUsd: inputCost.totalCostMicroUsd,
+        minimumOutputCostMicroUsd: minimumOutputCost.totalCostMicroUsd,
+      },
+      remainingBudget,
+      args.state.digest,
+    );
+  }
+
+  const requestedAndProviderBounded = Math.min(
+    args.requestedMaxOutputTokens,
+    remainingBudget.outputTokens,
+    pricing.providerMaxOutputTokens,
+    pricing.kind === 'priced'
+      ? pricing.providerContextWindowTokens - args.estimatedInputTokens
+      : Number.MAX_SAFE_INTEGER,
+  );
+  const affordableOutputTokens = maximumAffordableOutputTokens(
+    remainingBudget.costMicroUsd - inputCost.totalCostMicroUsd,
+    pricing,
+  );
+  const providerSafeOutputTokenCeiling = Math.min(
+    requestedAndProviderBounded,
+    affordableOutputTokens,
+  );
+  if (providerSafeOutputTokenCeiling < 1) {
+    return denyPreflight(
+      {
+        code: 'cost_budget_exceeded',
+        remainingCostMicroUsd: remainingBudget.costMicroUsd,
+        inputCostMicroUsd: inputCost.totalCostMicroUsd,
+        minimumOutputCostMicroUsd: minimumOutputCost.totalCostMicroUsd,
+      },
+      remainingBudget,
+      args.state.digest,
+    );
+  }
+
+  const worstCaseCost = scoreNodeSlideWorstCaseCost({
+    model: args.model,
+    inputTokens: args.estimatedInputTokens,
+    outputTokens: providerSafeOutputTokenCeiling,
+  });
+  if (
+    worstCaseCost.kind !== 'scored' ||
+    worstCaseCost.totalCostMicroUsd > remainingBudget.costMicroUsd
+  ) {
+    return denyPreflight(
+      {
+        code: 'cost_budget_exceeded',
+        remainingCostMicroUsd: remainingBudget.costMicroUsd,
+        inputCostMicroUsd: inputCost.totalCostMicroUsd,
+        minimumOutputCostMicroUsd: minimumOutputCost.totalCostMicroUsd,
+      },
+      remainingBudget,
+      args.state.digest,
+    );
+  }
+
+  const providerTimeoutMs = remainingBudget.durationMs;
+  const decisionDigest = nodeslideContentDigest(
+    JSON.stringify([
+      'nodeslide.run-budget-preflight-digest/v1',
+      args.state.digest,
+      args.model,
+      args.estimatedInputTokens,
+      args.requestedMaxOutputTokens,
+      canonicalPricingTuple(pricing),
+      providerSafeOutputTokenCeiling,
+      providerTimeoutMs,
+      worstCaseCost.totalCostMicroUsd,
+    ]),
+  );
+  return {
+    ok: true,
+    model: args.model,
+    pricing,
+    providerSafeOutputTokenCeiling,
+    providerTimeoutMs,
+    worstCaseCostMicroUsd: worstCaseCost.totalCostMicroUsd,
+    remainingBeforeCall: remainingBudget,
+    stateDigest: args.state.digest,
+    decisionDigest,
+  };
+}
+
 /** Applies a provider receipt once; matching replays are successful no-ops. */
 export function accountNodeSlideRunBudgetReceipt(args: {
   state: NodeSlideRunBudgetState;
@@ -254,6 +450,89 @@ export function accountNodeSlideRunBudgetReceipt(args: {
     digest: nodeSlideRunBudgetStateDigest(nextWithoutDigest),
   };
   return postflightSuccess(nextState, receivedDigest, true);
+}
+
+/**
+ * How many output tokens the remaining cost can still pay for. A zero output
+ * price here can only come from the deterministic zero_cost route, which issues
+ * no provider request — the dynamic zero-priced routes never reach this function
+ * because they are not `NodeSlideScoredModelMetadata`.
+ */
+function maximumAffordableOutputTokens(
+  remainingCostMicroUsd: number,
+  pricing: NodeSlideScoredModelMetadata,
+): number {
+  if (pricing.outputMicroUsdPerMillionTokens === 0) return Number.MAX_SAFE_INTEGER;
+  const tokens =
+    (BigInt(remainingCostMicroUsd) * BigInt(NODESLIDE_TOKENS_PER_PRICING_UNIT)) /
+    BigInt(pricing.outputMicroUsdPerMillionTokens);
+  const result = Number(tokens);
+  return Number.isSafeInteger(result) ? result : Number.MAX_SAFE_INTEGER;
+}
+
+function validatePreflightInput(args: {
+  model: string;
+  estimatedInputTokens: number;
+  requestedMaxOutputTokens: number;
+}): Extract<NodeSlideRunBudgetPreflightDenialReason, { code: 'invalid_preflight' }> | null {
+  if (
+    typeof args.model !== 'string' ||
+    args.model.length < 1 ||
+    args.model.length > 256 ||
+    args.model.trim() !== args.model
+  ) {
+    return {
+      code: 'invalid_preflight',
+      field: 'model',
+      message: 'expected a trimmed model identifier of 1 through 256 characters',
+    };
+  }
+  if (
+    !Number.isSafeInteger(args.estimatedInputTokens) ||
+    args.estimatedInputTokens < 0 ||
+    args.estimatedInputTokens > NODESLIDE_RUN_BUDGET_BOUNDS.maxInputTokens.max
+  ) {
+    return {
+      code: 'invalid_preflight',
+      field: 'estimatedInputTokens',
+      message: `expected an integer from 0 through ${NODESLIDE_RUN_BUDGET_BOUNDS.maxInputTokens.max}`,
+    };
+  }
+  if (
+    !Number.isSafeInteger(args.requestedMaxOutputTokens) ||
+    args.requestedMaxOutputTokens < 1 ||
+    args.requestedMaxOutputTokens > NODESLIDE_RUN_BUDGET_BOUNDS.maxOutputTokens.max
+  ) {
+    return {
+      code: 'invalid_preflight',
+      field: 'requestedMaxOutputTokens',
+      message: `expected an integer from 1 through ${NODESLIDE_RUN_BUDGET_BOUNDS.maxOutputTokens.max}`,
+    };
+  }
+  return null;
+}
+
+function denyPreflight(
+  reason: NodeSlideRunBudgetPreflightDenialReason,
+  remainingBudget: NodeSlideRunBudgetRemaining,
+  stateDigest: string,
+): NodeSlideRunBudgetPreflightResult {
+  return { ok: false, reason, remaining: remainingBudget, stateDigest };
+}
+
+function canonicalPricingTuple(pricing: NodeSlideScoredModelMetadata): readonly unknown[] {
+  return pricing.kind === 'priced'
+    ? [
+        pricing.version,
+        pricing.kind,
+        pricing.modelId,
+        pricing.inputMicroUsdPerMillionTokens,
+        pricing.outputMicroUsdPerMillionTokens,
+        pricing.providerContextWindowTokens,
+        pricing.providerMaxOutputTokens,
+        pricing.source,
+      ]
+    : [pricing.version, pricing.kind, pricing.modelId, pricing.source];
 }
 
 type StateIssue =

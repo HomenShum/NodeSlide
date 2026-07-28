@@ -35,10 +35,12 @@ import {
   archive,
   create,
   createScopedMemoryRecord,
+  markUsedForOwnerInternal,
   mergeNodeSlideScopedAndLegacyMemories,
   nodeSlideScopedMemoryScope,
   nodeSlideScopedMemoryScopes,
   retrieve,
+  retrieveForOwnerInternal,
   selectNodeSlideScopedMemories,
 } from './nodeslideScopedMemory';
 import schema from './schema';
@@ -86,6 +88,20 @@ const retrieveMemories = handlerOf<
   { deckId: string; ownerAccessKey?: string; token?: string; limit?: number },
   NodeSlideScopedMemoryItem[]
 >(retrieve);
+
+const retrieveForOwner = handlerOf<
+  { deckId: string; ownerAccessKey: string; limit?: number },
+  NodeSlideScopedMemoryItem[]
+>(retrieveForOwnerInternal);
+
+const markUsed = handlerOf<
+  {
+    deckId: string;
+    ownerAccessKey: string;
+    bindings: Array<{ memoryId: string; contentDigest: string; bindingDigest: string }>;
+  },
+  { updated: number }
+>(markUsedForOwnerInternal);
 
 const issue = handlerOf<
   {
@@ -416,6 +432,90 @@ describe('NodeSlide scoped memory — deck > session, rooted at the deck', () =>
         t.run((ctx) => retrieveMemories(ctx as MutationCtx, { deckId, token: reader.token })),
       ),
     ).toMatch(/scoped memory access denied/i);
+  });
+
+  it('serves durable jobs on the owner key and counts a use only for an exact binding', async () => {
+    const t = convexTest(schema, modules);
+    const sessionId = 'priya-session';
+    const deckId = await seedDeck(t, sessionId, OWNER_KEY);
+
+    const seeded = await t.run((ctx) =>
+      createMemory(ctx as MutationCtx, {
+        deckId,
+        ownerAccessKey: OWNER_KEY,
+        scopeKind: 'session',
+        category: 'instruction',
+        content: 'Keep the closing slide to one number.',
+      }),
+    );
+
+    // The internal path is the one a durable job uses: it is already holding
+    // the owner key, so it never presents a grant token.
+    expect(
+      await rejection(() =>
+        t.run((ctx) =>
+          retrieveForOwner(ctx as MutationCtx, { deckId, ownerAccessKey: OTHER_OWNER_KEY }),
+        ),
+      ),
+    ).toMatch(/owner access denied/i);
+
+    const retrieved = await t.run((ctx) =>
+      retrieveForOwner(ctx as MutationCtx, { deckId, ownerAccessKey: OWNER_KEY }),
+    );
+    expect(retrieved).toHaveLength(1);
+    const binding = (retrieved[0] as NodeSlideScopedMemoryItem).binding;
+    expect(retrieved[0]?.useCount).toBe(0);
+
+    // A binding whose digest does not match is skipped silently rather than
+    // throwing — a job must not die because one remembered fact went stale —
+    // but it must not be counted as used either.
+    const skipped = await t.run((ctx) =>
+      markUsed(ctx as MutationCtx, {
+        deckId,
+        ownerAccessKey: OWNER_KEY,
+        bindings: [
+          {
+            memoryId: binding.memoryId,
+            contentDigest: binding.contentDigest,
+            bindingDigest: `${binding.bindingDigest}0`,
+          },
+        ],
+      }),
+    );
+    expect(skipped.updated).toBe(0);
+
+    const counted = await t.run((ctx) =>
+      markUsed(ctx as MutationCtx, {
+        deckId,
+        ownerAccessKey: OWNER_KEY,
+        bindings: [
+          {
+            memoryId: binding.memoryId,
+            contentDigest: binding.contentDigest,
+            bindingDigest: binding.bindingDigest,
+          },
+        ],
+      }),
+    );
+    expect(counted.updated).toBe(1);
+
+    const after = await t.run((ctx) =>
+      retrieveForOwner(ctx as MutationCtx, { deckId, ownerAccessKey: OWNER_KEY }),
+    );
+    expect(after[0]?.useCount).toBe(1);
+    expect(after[0]?.lastUsedAt).toBeGreaterThan(0);
+    expect(after[0]?.id).toBe(seeded.memory.id);
+
+    // The retrieval limit is clamped, not trusted: an absurd request cannot
+    // widen the ceiling a job budget was written against.
+    const clamped = await t.run((ctx) =>
+      retrieveForOwner(ctx as MutationCtx, {
+        deckId,
+        ownerAccessKey: OWNER_KEY,
+        limit: 10_000,
+      }),
+    );
+    expect(clamped.length).toBeLessThanOrEqual(NODESLIDE_SCOPED_MEMORY_RETRIEVAL_LIMIT);
   });
 
   it('rejects forged bindings and enforces both the six-item and UTF-8 byte ceilings', () => {

@@ -552,7 +552,14 @@ export default defineSchema({
     citation: v.string(),
     license: v.optional(v.string()),
     format: v.optional(
-      v.union(v.literal('csv'), v.literal('json'), v.literal('txt'), v.literal('web')),
+      v.union(
+        v.literal('csv'),
+        v.literal('json'),
+        v.literal('txt'),
+        v.literal('md'),
+        v.literal('pdf'),
+        v.literal('web'),
+      ),
     ),
     contentDigest: v.optional(v.string()),
     byteSize: v.optional(v.number()),
@@ -573,6 +580,60 @@ export default defineSchema({
   })
     .index('by_stable_id', ['id'])
     .index('by_deck', ['deckId']),
+
+  /**
+   * Append-only, content-addressed snapshots of exact source evidence.
+   *
+   * A `nodeslide_sources` row is mutable — its status and preview move as the
+   * source is refreshed — which makes it useless as the thing a historical
+   * citation points at. This table holds the immutable half, so a receipt
+   * written six months ago still resolves to the exact bytes it was written
+   * about. Deck-scoped: the revision carries the citation text itself.
+   */
+  nodeslide_source_revisions: defineTable({
+    id: v.string(),
+    schema: v.literal('nodeslide.source-revision/v1'),
+    revisionDigest: v.string(),
+    ownerDigest: v.string(),
+    deckId: v.string(),
+    sourceId: v.string(),
+    title: v.string(),
+    url: v.optional(v.string()),
+    sourceType: v.union(
+      v.literal('internal'),
+      v.literal('url'),
+      v.literal('document'),
+      v.literal('spreadsheet'),
+      v.literal('note'),
+    ),
+    retrievedAt: v.number(),
+    citation: v.string(),
+    license: v.optional(v.string()),
+    format: v.optional(
+      v.union(
+        v.literal('csv'),
+        v.literal('json'),
+        v.literal('txt'),
+        v.literal('md'),
+        v.literal('pdf'),
+        v.literal('web'),
+      ),
+    ),
+    contentDigest: v.string(),
+    byteSize: v.optional(v.number()),
+    rowCount: v.optional(v.number()),
+    columns: v.optional(v.array(v.string())),
+    provider: v.optional(v.string()),
+    retention: v.optional(v.union(v.literal('until_deleted'), v.literal('public_snapshot'))),
+    predecessorRevisionId: v.optional(v.string()),
+    predecessorRevisionDigest: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_created', ['deckId', 'createdAt'])
+    .index('by_owner_created', ['ownerDigest', 'createdAt'])
+    .index('by_source_created', ['sourceId', 'createdAt'])
+    .index('by_source_content_digest', ['sourceId', 'contentDigest']),
 
   nodeslide_agent_runs: defineTable({
     id: v.string(),

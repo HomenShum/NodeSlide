@@ -24,6 +24,7 @@ import {
   type PatchOperation,
   type PatchScope,
   type PatchSource,
+  type SourceRecord,
   type ValidationResult,
   clampNormalized,
 } from '../shared/nodeslide';
@@ -123,6 +124,7 @@ import {
   requireDeckSignatureProfile,
   requireSignatureProfile,
 } from './lib/nodeslideSignatureProfiles';
+import { buildNodeSlideSourceRevision } from './lib/nodeslideSourceRevision';
 import { isNormalizedBoundingBox, validateNodeSlideSnapshot } from './lib/nodeslideValidation';
 import {
   nodeslideBriefAttachmentValidator,
@@ -257,6 +259,159 @@ type PackageJsonValue =
   | null
   | PackageJsonValue[]
   | { [key: string]: PackageJsonValue };
+
+/**
+ * The actor a revision is attributed to, without retaining the capability that
+ * proves it. A revision outlives the key that created it, so storing the key
+ * would turn an append-only evidence table into an append-only secret store.
+ */
+function nodeSlideEvidenceOwnerDigest(ownerAccessKey: string): string {
+  return `actor_${nodeslideContentDigest(ownerAccessKey)}`;
+}
+
+function sourceRecordForRevision(
+  source: Pick<
+    Doc<'nodeslide_sources'>,
+    | 'id'
+    | 'deckId'
+    | 'title'
+    | 'url'
+    | 'sourceType'
+    | 'retrievedAt'
+    | 'citation'
+    | 'license'
+    | 'format'
+    | 'contentDigest'
+    | 'byteSize'
+    | 'rowCount'
+    | 'columns'
+    | 'provider'
+    | 'retention'
+    | 'status'
+    | 'lastRefreshedAt'
+  >,
+  contentDigest: string,
+): SourceRecord {
+  return {
+    id: source.id,
+    deckId: source.deckId,
+    title: source.title,
+    ...(source.url ? { url: source.url } : {}),
+    sourceType: source.sourceType,
+    retrievedAt: source.retrievedAt,
+    citation: source.citation,
+    ...(source.license ? { license: source.license } : {}),
+    ...(source.format ? { format: source.format } : {}),
+    contentDigest,
+    ...(source.byteSize !== undefined ? { byteSize: source.byteSize } : {}),
+    ...(source.rowCount !== undefined ? { rowCount: source.rowCount } : {}),
+    ...(source.columns ? { columns: source.columns } : {}),
+    ...(source.provider ? { provider: source.provider } : {}),
+    ...(source.retention ? { retention: source.retention } : {}),
+    ...(source.status ? { status: source.status } : {}),
+    ...(source.lastRefreshedAt !== undefined ? { lastRefreshedAt: source.lastRefreshedAt } : {}),
+  };
+}
+
+/**
+ * Records the immutable revision for a source, or returns the existing one when
+ * the exact content has already been captured. Content-addressed by
+ * (sourceId, contentDigest), so re-attaching identical bytes is a read.
+ */
+async function ensureNodeSlideSourceRevision(
+  ctx: Pick<MutationCtx, 'db'>,
+  args: {
+    source: Doc<'nodeslide_sources'> | Omit<Doc<'nodeslide_sources'>, '_id' | '_creationTime'>;
+    ownerAccessKey: string;
+    contentDigest?: string;
+    createdAt?: number;
+  },
+): Promise<{
+  id: string;
+  revisionDigest: string;
+  ownerDigest: string;
+  deckId: string;
+  sourceId: string;
+  contentDigest: string;
+  title: string;
+}> {
+  const contentDigest =
+    args.contentDigest ?? args.source.contentDigest ?? nodeslideContentDigest(args.source.citation);
+  const ownerDigest = nodeSlideEvidenceOwnerDigest(args.ownerAccessKey);
+  const matches = await ctx.db
+    .query('nodeslide_source_revisions')
+    .withIndex('by_source_content_digest', (query) =>
+      query.eq('sourceId', args.source.id).eq('contentDigest', contentDigest),
+    )
+    .take(2);
+  if (matches.length > 1) {
+    throw new Error('Immutable source revision identity is ambiguous.');
+  }
+  const existing = matches[0];
+  if (existing) {
+    if (existing.deckId !== args.source.deckId || existing.ownerDigest !== ownerDigest) {
+      throw new Error('Immutable source revision crossed its owner or deck boundary.');
+    }
+    return existing;
+  }
+
+  const predecessor = await ctx.db
+    .query('nodeslide_source_revisions')
+    .withIndex('by_source_created', (query) => query.eq('sourceId', args.source.id))
+    .order('desc')
+    .first();
+  if (predecessor && predecessor.deckId !== args.source.deckId) {
+    throw new Error('Immutable source revision predecessor crossed its deck boundary.');
+  }
+  const revision = buildNodeSlideSourceRevision({
+    source: sourceRecordForRevision(args.source, contentDigest),
+    ...(predecessor
+      ? {
+          predecessor: {
+            revisionId: predecessor.id,
+            revisionDigest: predecessor.revisionDigest,
+          },
+        }
+      : {}),
+  });
+  await ctx.db.insert('nodeslide_source_revisions', {
+    id: revision.revisionId,
+    schema: revision.schema,
+    revisionDigest: revision.revisionDigest,
+    ownerDigest,
+    deckId: revision.deckId,
+    sourceId: revision.sourceId,
+    title: revision.title,
+    ...(revision.url ? { url: revision.url } : {}),
+    sourceType: revision.sourceType,
+    retrievedAt: revision.retrievedAt,
+    citation: revision.citation,
+    ...(revision.license ? { license: revision.license } : {}),
+    ...(revision.format ? { format: revision.format } : {}),
+    contentDigest: revision.contentDigest,
+    ...(revision.byteSize !== undefined ? { byteSize: revision.byteSize } : {}),
+    ...(revision.rowCount !== undefined ? { rowCount: revision.rowCount } : {}),
+    ...(revision.columns ? { columns: [...revision.columns] } : {}),
+    ...(revision.provider ? { provider: revision.provider } : {}),
+    ...(revision.retention ? { retention: revision.retention } : {}),
+    ...(revision.predecessor
+      ? {
+          predecessorRevisionId: revision.predecessor.revisionId,
+          predecessorRevisionDigest: revision.predecessor.revisionDigest,
+        }
+      : {}),
+    createdAt: args.createdAt ?? Date.now(),
+  });
+  return {
+    id: revision.revisionId,
+    revisionDigest: revision.revisionDigest,
+    ownerDigest,
+    deckId: revision.deckId,
+    sourceId: revision.sourceId,
+    contentDigest: revision.contentDigest,
+    title: revision.title,
+  };
+}
 
 export const ensureWorkspace = mutation({
   args: { clientSessionId: v.string(), ownerAccessKey: v.optional(v.string()) },
@@ -412,6 +567,105 @@ export const attachDataSource = mutation({
       if (sourceCount >= 64) throw new Error('This deck has reached its source attachment limit.');
       await ctx.db.insert('nodeslide_sources', source);
     }
+    await ensureNodeSlideSourceRevision(ctx, {
+      source,
+      ownerAccessKey: args.ownerAccessKey,
+      contentDigest: source.contentDigest,
+      createdAt: source.lastRefreshedAt,
+    });
+    return { id, kind: 'source' as const, label: `Source: ${title}` };
+  },
+});
+
+/** Server-only sink for approved storage-backed text uploads. */
+export const attachStoredDataSourceInternal = internalMutation({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    title: v.string(),
+    format: v.union(
+      v.literal('csv'),
+      v.literal('json'),
+      v.literal('txt'),
+      v.literal('md'),
+      v.literal('pdf'),
+    ),
+    preview: v.string(),
+    previewTruncated: v.boolean(),
+    contentDigest: v.string(),
+    byteSize: v.number(),
+    rowCount: v.optional(v.number()),
+    columns: v.optional(v.array(v.string())),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const title = requiredText(args.title, 'data file name', 180);
+    const preview = args.preview
+      .replace(/^\u{FEFF}/u, '')
+      .replace(/\r\n?/g, '\n')
+      .trim();
+    if (!preview || preview.length > 7_200 || preview.includes('\x00')) {
+      throw new Error('Stored data preview is invalid.');
+    }
+    if (!Number.isSafeInteger(args.byteSize) || args.byteSize <= 0) {
+      throw new Error('Stored data byte size is invalid.');
+    }
+    if (
+      args.rowCount !== undefined &&
+      (!Number.isSafeInteger(args.rowCount) || args.rowCount < 0)
+    ) {
+      throw new Error('Stored data row count is invalid.');
+    }
+    const columns = args.columns?.map((column) => requiredText(column, 'column', 240)).slice(0, 64);
+    const sourceType =
+      args.format === 'csv'
+        ? 'spreadsheet'
+        : args.format === 'txt' || args.format === 'md'
+          ? 'note'
+          : 'document';
+    const id = nodeslideStableId('source', args.deckId, sourceType, title, args.contentDigest);
+    const existing = await ctx.db
+      .query('nodeslide_sources')
+      .withIndex('by_stable_id', (query) => query.eq('id', id))
+      .unique();
+    const now = Date.now();
+    const previewLabel = args.previewTruncated
+      ? 'Bounded model preview; exact full-file digest retained'
+      : 'Complete model-readable content';
+    const source = {
+      id,
+      deckId: args.deckId,
+      title,
+      sourceType,
+      retrievedAt: existing?.retrievedAt ?? now,
+      citation: `Uploaded file: ${title}\n${previewLabel}\n${preview}`,
+      license: 'User supplied',
+      format: args.format,
+      contentDigest: args.contentDigest,
+      byteSize: args.byteSize,
+      ...(args.rowCount !== undefined ? { rowCount: args.rowCount } : {}),
+      ...(columns?.length ? { columns } : {}),
+      retention: 'until_deleted' as const,
+      status: 'ready' as const,
+      lastRefreshedAt: now,
+    } as const;
+    if (existing) await ctx.db.patch(existing._id, source);
+    else {
+      const sourceCount = (
+        await ctx.db
+          .query('nodeslide_sources')
+          .withIndex('by_deck', (query) => query.eq('deckId', args.deckId))
+          .collect()
+      ).length;
+      if (sourceCount >= 64) throw new Error('This deck has reached its source attachment limit.');
+      await ctx.db.insert('nodeslide_sources', source);
+    }
+    await ensureNodeSlideSourceRevision(ctx, {
+      source,
+      ownerAccessKey: args.ownerAccessKey,
+      contentDigest: source.contentDigest,
+      createdAt: source.lastRefreshedAt,
+    });
     return { id, kind: 'source' as const, label: `Source: ${title}` };
   },
 });

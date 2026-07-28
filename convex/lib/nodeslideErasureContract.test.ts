@@ -56,6 +56,9 @@ describe('erasure contract derivation', () => {
       'nodeslide_package_submissions',
       'nodeslide_package_assets',
       'nodeslide_sources',
+      // Immutable source evidence. It outlives the mutable source row by
+      // design, so nothing but the deck erasure will ever remove it.
+      'nodeslide_source_revisions',
       'nodeslide_agent_runs',
       'nodeslide_agent_messages',
       'nodeslide_agent_memories',

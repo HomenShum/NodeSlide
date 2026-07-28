@@ -100,6 +100,26 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     spec: built.spec,
   });
 
+  // The immutable half of the deck's evidence. A revision outlives the mutable
+  // source row on purpose, which is exactly why the erasure has to reach it:
+  // it carries the citation text verbatim.
+  const seededSource = built.snapshot.sources[0];
+  if (!seededSource) throw new Error('Golden fixture must have a source.');
+  await ctx.db.insert('nodeslide_source_revisions', {
+    id: `source-revision:${DIGEST('e')}`,
+    schema: 'nodeslide.source-revision/v1',
+    revisionDigest: DIGEST('f'),
+    ownerDigest: `actor_${DIGEST('a')}`,
+    deckId,
+    sourceId: seededSource.id,
+    title: seededSource.title,
+    sourceType: seededSource.sourceType,
+    retrievedAt: seededSource.retrievedAt,
+    citation: seededSource.citation,
+    contentDigest: DIGEST('b'),
+    createdAt: NOW,
+  });
+
   const patchId = 'patch_scenario';
   const runId = 'run_scenario';
   const traceId = 'trace_scenario';

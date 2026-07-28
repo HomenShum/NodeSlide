@@ -574,6 +574,30 @@ export function InspectorPanel<CommandId extends string = string>({
                 ? { onClearCommentContext: onClearAiCommentContext }
                 : {})}
               onPropose={onProposeEdit}
+              {...(onProposeJsonPatch
+                ? {
+                    /*
+                     * The OpenUI lab rides the JSON proposal lane rather than opening a second
+                     * one. It compiles a deck-level add_slide, so there is no element to clock
+                     * against: the synthetic elementId names the lane it came from and the base
+                     * version is 0. The host is still the only thing that can create a patch —
+                     * if it declines, the lab is told, and it says so instead of claiming a
+                     * proposal that does not exist.
+                     */
+                    onProposeOpenUiMaterial: async (
+                      operations: PatchOperation[],
+                      summary: string,
+                    ) => {
+                      const proposed = await onProposeJsonPatch({
+                        operations,
+                        summary,
+                        elementId: '__openui_visual_material__',
+                        baseElementVersion: 0,
+                      });
+                      if (!proposed) throw new Error('The visual proposal was not created.');
+                    },
+                  }
+                : {})}
               {...(onAttachAiDataFile ? { onAttachDataFile: onAttachAiDataFile } : {})}
               {...(onCreateAiMemory ? { onCreateMemory: onCreateAiMemory } : {})}
               {...(onUpdateAiMemory ? { onUpdateMemory: onUpdateAiMemory } : {})}

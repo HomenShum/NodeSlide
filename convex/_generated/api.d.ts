@@ -69,9 +69,11 @@ import type * as lib_nodeslideWorkflowCandidate from "../lib/nodeslideWorkflowCa
 import type * as nodeslide from "../nodeslide.js";
 import type * as nodeslideAgent from "../nodeslideAgent.js";
 import type * as nodeslideArtifactArena from "../nodeslideArtifactArena.js";
+import type * as nodeslideAuthoringQuality from "../nodeslideAuthoringQuality.js";
 import type * as nodeslideArtifactSpec from "../nodeslideArtifactSpec.js";
 import type * as nodeslideBuildIdentity from "../nodeslideBuildIdentity.js";
 import type * as nodeslideDataExport from "../nodeslideDataExport.js";
+import type * as nodeslideDeckCi from "../nodeslideDeckCi.js";
 import type * as nodeslideGoogleAuth from "../nodeslideGoogleAuth.js";
 import type * as nodeslideGoogleSlidesRuntime from "../nodeslideGoogleSlidesRuntime.js";
 import type * as nodeslideGymShadow from "../nodeslideGymShadow.js";
@@ -155,9 +157,11 @@ declare const fullApi: ApiFromModules<{
   nodeslide: typeof nodeslide;
   nodeslideAgent: typeof nodeslideAgent;
   nodeslideArtifactArena: typeof nodeslideArtifactArena;
+  nodeslideAuthoringQuality: typeof nodeslideAuthoringQuality;
   nodeslideArtifactSpec: typeof nodeslideArtifactSpec;
   nodeslideBuildIdentity: typeof nodeslideBuildIdentity;
   nodeslideDataExport: typeof nodeslideDataExport;
+  nodeslideDeckCi: typeof nodeslideDeckCi;
   nodeslideGoogleAuth: typeof nodeslideGoogleAuth;
   nodeslideGoogleSlidesRuntime: typeof nodeslideGoogleSlidesRuntime;
   nodeslideGymShadow: typeof nodeslideGymShadow;

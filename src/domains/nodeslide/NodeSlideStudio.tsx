@@ -114,6 +114,7 @@ import type {
 } from './inspector/AiInspector';
 import { InspectorPanel } from './inspector/InspectorPanel';
 import type { InspectorTab } from './inspector/types';
+import { AgentSessionProvider } from './session';
 import { extractPptxSignature } from './signature/index';
 import {
   NODESLIDE_TASTE_PACKS,
@@ -482,17 +483,23 @@ function mergeAgentTelemetryPages(
 }
 
 export function NodeSlideStudio() {
+  // The session id is hoisted out of the content component so the agent-session
+  // provider and the content it wraps agree on one identity for the tab. The
+  // provider keys its persisted state on this id; deriving it twice would let a
+  // future refactor hand them different values without failing a test.
+  const clientSessionId = useMemo(() => getOrCreateSessionId(), []);
   return (
     <DeploymentUpdateBoundary>
-      <NodeSlideStudioContent />
+      <AgentSessionProvider clientSessionId={clientSessionId}>
+        <NodeSlideStudioContent clientSessionId={clientSessionId} />
+      </AgentSessionProvider>
     </DeploymentUpdateBoundary>
   );
 }
 
-function NodeSlideStudioContent() {
+function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }) {
   const convex = useConvex();
   const monitorDeploymentAction = useDeploymentActionMonitor();
-  const clientSessionId = useMemo(() => getOrCreateSessionId(), []);
   const requestedDeck = useMemo(() => new URLSearchParams(window.location.search).get('deck'), []);
   const requestedShare = useMemo(
     () => new URLSearchParams(window.location.search).get('share'),

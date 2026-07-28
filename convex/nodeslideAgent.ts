@@ -62,6 +62,7 @@ import {
   configuredSearchProviders,
   searchExternalReferences,
 } from './lib/nodeslideInspirationSearch';
+import { nodeSlideMemoryUse } from './lib/nodeslideMemoryPolicy';
 import { nodeSlideProductionProbeFields } from './lib/nodeslideProductionProbe';
 import { NODESLIDE_EDIT_MODEL, callNodeSlideFreeJson } from './lib/nodeslideProvider';
 import {
@@ -98,6 +99,7 @@ import {
   validateNodeSlideCreateDeckFields,
   validateNodeSlidePreviewAdmission,
 } from './lib/nodeslideValidators';
+import type { NodeSlideScopedMemoryItem } from './nodeslideScopedMemory';
 
 // Convex's generated API creates a TypeScript self-reference when this action module invokes
 // functions whose declarations also include this module. Runtime arguments still cross explicit
@@ -106,6 +108,99 @@ import {
 const nodeslideInternal: any = (internal as any).nodeslide;
 // biome-ignore lint/suspicious/noExplicitAny: breaks generated Convex action self-reference recursion
 const nodeslideMemoryInternal: any = (internal as any).nodeslideMemory;
+// biome-ignore lint/suspicious/noExplicitAny: generated Convex self-reference described above
+const nodeslideScopedMemoryInternal: any = (internal as any).nodeslideScopedMemory;
+
+interface NodeSlideWebSourceInput {
+  title: string;
+  url: string;
+  snippet: string;
+  provider: string;
+}
+
+export interface NodeSlideStoredWebSource extends NodeSlideWebSourceInput {
+  sourceId: string;
+}
+
+/**
+ * Rejoins mutation results to inputs by the same stable URL identity used by
+ * `attachWebSourcesInternal`. Invalid inputs can therefore be skipped without
+ * shifting every later source binding.
+ */
+export function pairNodeSlideStoredWebSources(args: {
+  deckId: string;
+  inputs: readonly NodeSlideWebSourceInput[];
+  references: readonly { id: string }[];
+}): NodeSlideStoredWebSource[] {
+  const inputsBySourceId = new Map<string, NodeSlideStoredWebSource>();
+  for (const input of args.inputs) {
+    const url = normalizedStoredNodeSlideWebSourceUrl(input.url);
+    if (!url) continue;
+    const sourceId = nodeslideStableId('source_web', args.deckId, url);
+    inputsBySourceId.set(sourceId, { ...input, sourceId, url });
+  }
+  return args.references.flatMap((reference) => {
+    const source = inputsBySourceId.get(reference.id);
+    return source ? [source] : [];
+  });
+}
+
+function normalizedStoredNodeSlideWebSourceUrl(value: string): string | undefined {
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return undefined;
+    return parsed.toString().slice(0, 900);
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * The deduplicated, byte-bounded union of the scoped memory store and the legacy
+ * agent-memory store, in that priority order.
+ *
+ * Scoped memories go first because they are the author's explicit standing
+ * instructions; the legacy rows are agent-written recall. The 6-item and
+ * 4,800-byte caps are the prompt budget: without them a deck that accumulated
+ * memories over months would grow the planner prompt without limit, which is a
+ * cost and latency regression that only shows up on long-lived decks.
+ */
+export function mergeAgentJobMemories(
+  deckId: string,
+  scoped: readonly NodeSlideScopedMemoryItem[],
+  legacy: readonly NodeSlideAgentMemory[],
+): NodeSlideAgentMemory[] {
+  const selected: NodeSlideAgentMemory[] = [];
+  const contentDigests = new Set<string>();
+  let bytes = 0;
+  for (const memory of [
+    ...scoped.map((item) => ({
+      id: item.id,
+      deckId,
+      category: item.category,
+      content: item.content,
+      status: item.status,
+      source: item.source,
+      ...(item.sourceRunId ? { sourceRunId: item.sourceRunId } : {}),
+      contentDigest: item.contentDigest,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
+      ...(item.lastUsedAt ? { lastUsedAt: item.lastUsedAt } : {}),
+      useCount: item.useCount,
+    })),
+    ...legacy,
+  ]) {
+    if (selected.length >= 6) break;
+    if (memory.status !== 'active') continue;
+    if (contentDigests.has(memory.contentDigest)) continue;
+    const memoryBytes = new TextEncoder().encode(memory.content).byteLength;
+    if (bytes + memoryBytes > 4_800) continue;
+    selected.push(memory);
+    contentDigests.add(memory.contentDigest);
+    bytes += memoryBytes;
+  }
+  return selected;
+}
 
 const NODESLIDE_PREVIEW_ACCESS_CODE_ENV = 'NODESLIDE_PREVIEW_ACCESS_CODE';
 const NODESLIDE_PREVIEW_ADMISSION_SUBJECT_ENV = 'NODESLIDE_PREVIEW_ADMISSION_SUBJECT';
@@ -265,6 +360,8 @@ export const proposeEdit = action({
 
     try {
       let webSourceIds: string[] = [];
+      // Search inputs rejoined to their stored source rows by stable URL identity.
+      let storedWebSources: NodeSlideStoredWebSource[] = [];
       let webProvidersUsed: string[] = [];
       if (args.webResearch) {
         await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
@@ -285,20 +382,32 @@ export const proposeEdit = action({
         }
         const search = await searchExternalReferences(instruction, 'mixed');
         webProvidersUsed = search.providers;
+        const webSourceInputs = search.references
+          .filter((reference) => reference.mediaType === 'website')
+          .slice(0, 10)
+          .map((reference) => ({
+            title: reference.title,
+            url: reference.sourceUrl,
+            snippet: reference.snippet || `Search result from ${reference.provider}.`,
+            provider: reference.provider,
+          }));
         const webRefs = await ctx.runMutation(nodeslideInternal.attachWebSourcesInternal, {
           deckId: args.deckId,
           ownerAccessKey: args.ownerAccessKey,
-          sources: search.references
-            .filter((reference) => reference.mediaType === 'website')
-            .slice(0, 10)
-            .map((reference) => ({
-              title: reference.title,
-              url: reference.sourceUrl,
-              snippet: reference.snippet || `Search result from ${reference.provider}.`,
-              provider: reference.provider,
-            })),
+          sources: webSourceInputs,
         });
         webSourceIds = webRefs.map((reference: { id: string }) => reference.id);
+        // `attachWebSourcesInternal` drops inputs whose URL will not parse, so the
+        // returned references are NOT positionally aligned with `webSourceInputs`.
+        // Zipping them by index — the obvious thing — silently attributes source
+        // B's title and snippet to source A's row the moment one URL is bad.
+        // `pairNodeSlideStoredWebSources` rejoins on the same stable URL identity
+        // the mutation used, so a skipped input shifts nothing.
+        storedWebSources = pairNodeSlideStoredWebSources({
+          deckId: args.deckId,
+          inputs: webSourceInputs,
+          references: webRefs,
+        });
         if (webSourceIds.length === 0) {
           throw publicAgentError(
             'fallback_unavailable',
@@ -310,7 +419,7 @@ export const proposeEdit = action({
           ownerAccessKey: args.ownerAccessKey,
           runId,
           status: 'planning',
-          message: `Retained ${webSourceIds.length} web sources from ${webProvidersUsed.join(', ') || configured.join(', ')}.`,
+          message: `Retained ${webSourceIds.length} web sources from ${webProvidersUsed.join(', ') || configured.join(', ')}${storedWebSources.length > 0 ? `: ${storedWebSources.map((source) => source.title).join('; ')}` : ''}.`,
           role: 'tool',
           toolName: 'source_snapshot',
           sourceIds: webSourceIds,
@@ -327,7 +436,14 @@ export const proposeEdit = action({
           status: 'planning',
         });
       }
-      const memories: NodeSlideAgentMemory[] =
+      // Two memory stores exist in this repo and only one of them was reaching
+      // the planner. `nodeslide_scoped_memories` is where an author's explicit
+      // standing instructions land ("always use our brand blue"); the legacy
+      // `nodeslide_agent_memories` table holds agent-written recall. Reading only
+      // the legacy table meant a user could save a standing instruction, see it
+      // stored, and watch every subsequent edit ignore it. `mergeAgentJobMemories`
+      // is the deduplicating, byte-bounded union of the two.
+      const legacyMemories: NodeSlideAgentMemory[] =
         args.memoryMode === 'relevant'
           ? ((await ctx.runQuery(nodeslideMemoryInternal.retrieveRelevantInternal, {
               deckId: args.deckId,
@@ -335,24 +451,60 @@ export const proposeEdit = action({
               instruction,
             })) as NodeSlideAgentMemory[])
           : [];
+      const scopedMemories: NodeSlideScopedMemoryItem[] =
+        args.memoryMode === 'relevant'
+          ? ((await ctx.runQuery(nodeslideScopedMemoryInternal.retrieveForOwnerInternal, {
+              deckId: args.deckId,
+              ownerAccessKey: args.ownerAccessKey,
+            })) as NodeSlideScopedMemoryItem[])
+          : [];
+      const memories = mergeAgentJobMemories(args.deckId, scopedMemories, legacyMemories);
       if (memories.length > 0) {
+        const standingInstructionCount = memories.filter(
+          (memory) => nodeSlideMemoryUse(memory) === 'standing_instruction',
+        ).length;
+        const retrievedMemoryCount = memories.length - standingInstructionCount;
         await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
           deckId: args.deckId,
           ownerAccessKey: args.ownerAccessKey,
           runId,
           status: 'planning',
           activity: 'memory_retrieval',
-          message: `Retrieved ${memories.length} relevant deck memor${memories.length === 1 ? 'y' : 'ies'} for this run.`,
+          message: `Loaded ${standingInstructionCount} explicit standing instruction${standingInstructionCount === 1 ? '' : 's'} and ${retrievedMemoryCount} relevant retrieved memor${retrievedMemoryCount === 1 ? 'y' : 'ies'} for this run.`,
           role: 'tool',
           toolName: 'memory_retrieval',
           memoryIds: memories.map((memory) => memory.id),
           memoryDigests: memories.map((memory) => memory.contentDigest),
         });
-        await ctx.runMutation(nodeslideMemoryInternal.markUsedInternal, {
-          deckId: args.deckId,
-          ownerAccessKey: args.ownerAccessKey,
-          memoryIds: memories.map((memory) => memory.id),
-        });
+        // Mark used per store, and only for the rows that actually survived the
+        // merge. Marking the whole retrieval would inflate `useCount` for
+        // memories the planner never saw, which is the signal the ranker reads.
+        const legacyMemoryIds = new Set(legacyMemories.map((memory) => memory.id));
+        const usedLegacyMemoryIds = memories
+          .filter((memory) => legacyMemoryIds.has(memory.id))
+          .map((memory) => memory.id);
+        if (usedLegacyMemoryIds.length > 0) {
+          await ctx.runMutation(nodeslideMemoryInternal.markUsedInternal, {
+            deckId: args.deckId,
+            ownerAccessKey: args.ownerAccessKey,
+            memoryIds: usedLegacyMemoryIds,
+          });
+        }
+        const usedMemoryIds = new Set(memories.map((memory) => memory.id));
+        const scopedBindings = scopedMemories
+          .filter((memory) => usedMemoryIds.has(memory.id))
+          .map((memory) => ({
+            memoryId: memory.id,
+            contentDigest: memory.contentDigest,
+            bindingDigest: memory.binding.bindingDigest,
+          }));
+        if (scopedBindings.length > 0) {
+          await ctx.runMutation(nodeslideScopedMemoryInternal.markUsedForOwnerInternal, {
+            deckId: args.deckId,
+            ownerAccessKey: args.ownerAccessKey,
+            bindings: scopedBindings,
+          });
+        }
       }
       const scopedCommentId = args.scope.kind === 'comment' ? args.scope.commentId : undefined;
       const snapshot = snapshotOf(workspace);

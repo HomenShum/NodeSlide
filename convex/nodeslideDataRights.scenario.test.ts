@@ -32,7 +32,11 @@ import {
   nodeSlideDeckCapabilitiesForRole,
   normalizeNodeSlideDeckAccessPolicy,
 } from './lib/nodeslideDeckScopeAccess';
-import type { NodeSlideErasureEntry, NodeSlideSchemaLike } from './lib/nodeslideErasureContract';
+import {
+  NODESLIDE_ERASURE_EXCLUSIONS,
+  type NodeSlideErasureEntry,
+  type NodeSlideSchemaLike,
+} from './lib/nodeslideErasureContract';
 import { buildGoldenNodeSlide } from './lib/nodeslideSeed';
 import {
   NODESLIDE_ERASURE_CONTRACT,
@@ -808,11 +812,15 @@ describe('owner data export', () => {
 
     // Withheld tables are stated, not silently dropped.
     const withheld = bundle.manifest.omissions.collections.map((entry) => entry.name).sort();
+    // Derived from the exclusion list rather than spelled out, so a table
+    // excluded from the schema-derived collector in future is disclosed by this
+    // bundle on the same commit that excludes it — the failure mode this
+    // assertion previously had was going green after somebody added an exclusion
+    // and forgot the manifest.
     expect(withheld).toEqual(
       [
         ...tenantScopedEntries.map((entry) => entry.table),
-        'nodeslide_rate_limits',
-        'nodeslide_retention_tombstones',
+        ...NODESLIDE_ERASURE_EXCLUSIONS.map((exclusion) => exclusion.table),
       ].sort(),
     );
     for (const omission of bundle.manifest.omissions.collections) {

@@ -227,3 +227,136 @@ than parity's. The missing exports:
 - **Suggested order.** `shared/**` and `convex/lib/**` first — they gate 11
   items with no schema cost. The 117 table-blocked items need an owner decision
   on the schema before any of them can move.
+
+## The unassigned areas: `shared/**` non-nodeslide, and `convex/workflows.ts` (2026-07-27)
+
+Two areas were in nobody's cluster. Both are now closed, one of them by
+measurement rather than by porting.
+
+### `shared/**` files not named `shared/nodeslide*` — the set is empty
+
+There are none. `find shared -type f` in parity returns 46 `shared/nodeslide*`
+modules plus `shared/generated/nodeslide-arena-contracts.json` and
+`shared/generated/nodeslide-atlas-receipts.json`, and nothing else. The area
+was unassigned because it does not exist, not because it was overlooked.
+
+This also means no `shared/**` work by this agent could have unblocked the six
+modules below. Every `shared/` import in them resolves to a `shared/nodeslide*`
+file, which is the other cluster's scope. `scripts/port-audit.mjs` never
+emitted these paths either — its source roots are `shared/nodeslide*`,
+`convex/nodeslide*`, `mcp/src/nodeslide*`, `src/domains/nodeslide/**` and
+`scripts/nodeslide-*`, so a non-nodeslide `shared/` file would have been
+invisible to it regardless.
+
+### `convex/workflows.ts` — PORT the manager, MERGE parity-studio's pipeline
+
+Landed at `f55f79b`. `convex/workflows.ts` is also outside the audit's source
+roots, so the audit's before/after counts are identical (843 missing, verdict
+FAIL, 0 closed, 0 newly missing). That number is not a measurement of this
+work; the compiler below is.
+
+Parity's file holds two unrelated things. The `WorkflowManager` singleton is
+repo-agnostic durable orchestration and is what NodeSlide imports. The other
+three exports — `iterateWithCommentsWorkflow`, `verifyImportedKit`,
+`parityStudioWorkflow` — are parity-studio's screenshot-to-UI-kit pipeline.
+
+Copying the file verbatim and running `tsc --noEmit -p convex/tsconfig.json`
+produced **35 errors, all in that one file**:
+
+| Code | Count | Cause |
+|---|---|---|
+| `TS2339` | 30 | `Property '<x>' does not exist` for `runs`, `artifacts`, `uiKits`, `comments`, `parityReports`, `generation` on `internal` |
+| `TS2307` | 1 | `Cannot find module '@convex-dev/workflow'` |
+| `TS7006` / `TS7031` | 4 | `step` / `args` implicitly `any`, cascading off the untyped `workflow.define` |
+
+None of those six modules or their tables exist here, so the three definitions
+are MERGE and stay in parity. No table was added to `convex/schema.ts`.
+
+That refusal also **removes two blockers the table above listed**:
+`convex/lib/qualityGate.ts` and its `convex/lib/parityChecker.ts` were reachable
+from `nodeslideJobWorkflow` only through the parity-studio definitions. Both
+compile clean in this tree, and both were still backed out — they model a
+`ParityReport` that has no consumer here, and dead product code from another
+repo is not a port.
+
+Two pieces of infrastructure came with it:
+
+- `convex/convex.config.ts` is new; this repo had no component registration at
+  all, and `components.workflow` is what the manager wraps. It registers
+  `@convex-dev/workflow` only. Parity also registers
+  `@convex-dev/persistent-text-streaming`; nothing here imports it, so it is
+  still deferred. `convex/nodeslideJobs.ts` is the file that will need it.
+- The `components` declaration in `convex/_generated/api.d.ts` is normally
+  codegen output, but `npx convex codegen` requires a live `CONVEX_DEPLOYMENT`
+  and fails offline (`InvalidDeploymentName`). The three lines were written by
+  hand. They are a mechanical reflection of `app.use(workflow)` with no
+  deployment-specific content, and `convex/_generated/api.js` is already
+  byte-identical to parity's because `componentsGeneric()` resolves components
+  at runtime. **Anyone with deployment credentials should run `npm run codegen`
+  once to confirm it regenerates the same text.** That is the one claim here
+  that was reasoned rather than executed.
+
+Parity ships no test for `workflows.ts`. `convex/workflows.test.ts` is new.
+
+### The six modules blocked only on modules, re-measured at `f55f79b`
+
+Each of the six was copied into this tree and compiled; the errors are the
+compiler's. **`nodeslideJobWorkflow` is down from three blockers to one**, and
+`./workflows`, `workflow.define` and `@convex-dev/workflow` no longer error in
+any of `nodeslideJobWorkflow`, `nodeslideJobs` or `nodeslideJobControl`.
+
+| File | Errors | Remaining direct blockers |
+|---|---|---|
+| `convex/nodeslideDeckCi.ts` | 1 | `convex/lib/nodeslideDeckCi.ts` |
+| `convex/nodeslideJobWorkflow.ts` | 1 | `convex/lib/nodeslideJobValidators.ts` |
+| `convex/nodeslidePptxCreate.ts` | 2 | `convex/lib/nodeslideLiveRenderRepair.ts` (+1 `TS7006` cascade) |
+| `convex/nodeslideAuthoringQuality.ts` | 3 | `shared/nodeslideAuthoringQuality.ts`, `shared/nodeslideJourneyProof.ts` |
+| `convex/nodeslideUploadExtraction.ts` | 3 | `convex/lib/nodeslidePdfExtraction.ts`, `internal.nodeslideUploads`, `internal.nodeslide.attachStoredDataSourceInternal` |
+| `convex/nodeslideJobRunner.ts` | 4 | `convex/lib/nodeslideCreationTelemetry.ts`, `convex/lib/nodeslideJobValidators.ts`, `convex/lib/nodeslideLiveRenderRepair.ts` (+1 `TS2322` cascade) |
+
+**The direct blocker list understates the work.** `TS2307` only names the first
+hop. Walking the relative-import closure of each of the six against this tree
+gives the real absent set — 14 modules, none of them in the areas this agent
+owned:
+
+| File | Direct | Transitive absent |
+|---|---|---|
+| `convex/nodeslideUploadExtraction.ts` | 1 | 1 |
+| `convex/nodeslideAuthoringQuality.ts` | 2 | 4 |
+| `convex/nodeslideJobWorkflow.ts` | 1 | 3 |
+| `convex/nodeslideDeckCi.ts` | 1 | 7 |
+| `convex/nodeslidePptxCreate.ts` | 1 | 8 |
+| `convex/nodeslideJobRunner.ts` | 3 | 11 |
+
+Union across the six: 5 in `shared/nodeslide*`
+(`nodeslideAuthoringPolicy`, `nodeslideAuthoringQuality`, `nodeslideDelegation`,
+`nodeslideJourneyProof`, `nodeslideSlideCount`) and 7 in `convex/lib/nodeslide*`
+(`nodeslideArtifactPresence`, `nodeslideCreationTelemetry`, `nodeslideDeckCi`,
+`nodeslideJobValidators`, `nodeslideLiveRenderRepair`, `nodeslidePdfExtraction`,
+`nodeslideSemanticEvaluation`). Zero in `src/domains/nodeslide/**` — that layer
+is already complete here for these six.
+
+`convex/nodeslideUploadExtraction.ts` is the cheapest of the six: one absent
+module, no transitive tail. `convex/nodeslideJobRunner.ts` is the most
+expensive.
+
+### Not established
+
+- Whether the six modules **pass their tests** once they compile. Only
+  compilation was measured; their suites were never run, because none of the
+  fourteen dependency modules has landed.
+- Whether `npm run codegen` against a real deployment reproduces the
+  hand-written `components` block byte for byte.
+- The runtime behaviour of the workflow component. `convex/workflows.test.ts`
+  proves the manager is constructed against a registered component with the
+  ported retry and concurrency policy, and that `.define()` returns an internal
+  registered mutation. It does not start, replay, or cancel a real durable run
+  — that needs a deployment.
+- Six vitest files were failing in this worktree before and after this change
+  (`scripts/tests/nodeslide-benchmark-*`, `-taste-judge`, `-tastebench`,
+  `-uxbench`, `packages/cli/src/installer.test.ts`). Running the same six files
+  in the `nodeslide` main checkout at `79ae98f` fails the same tests with the
+  same `Test timed out in 5000ms` / `Hook timed out in 10000ms` /
+  `ENOTEMPTY: rmdir` errors, and the failing subset differs run to run in both
+  trees. They are pre-existing Windows temp-directory flakes, not a regression
+  from this work, but they were not fixed and they are not tracked anywhere.

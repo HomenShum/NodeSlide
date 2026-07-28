@@ -20,10 +20,18 @@
 
 import { convexTest } from 'convex-test';
 import { describe, expect, it } from 'vitest';
+import {
+  nodeSlideMemoryScopeKey,
+  normalizeNodeSlideAccessPolicy,
+} from '../shared/nodeslideAccessPolicy';
 import type { MutationCtx, QueryCtx } from './_generated/server';
 import { insertNodeSlideSnapshot } from './lib/nodeslideData';
 import { collectNodeSlideOwnerDataExport } from './lib/nodeslideDataExport';
 import { takeNodeSlideScopedRows } from './lib/nodeslideDeckRows';
+import {
+  nodeSlideDeckCapabilitiesForRole,
+  normalizeNodeSlideDeckAccessPolicy,
+} from './lib/nodeslideDeckScopeAccess';
 import type { NodeSlideErasureEntry, NodeSlideSchemaLike } from './lib/nodeslideErasureContract';
 import { buildGoldenNodeSlide } from './lib/nodeslideSeed';
 import {
@@ -31,6 +39,7 @@ import {
   deleteOwnedWorkspace,
   nodeSlideRetentionBindings,
 } from './nodeslideRetention';
+import { createScopedMemoryRecord, nodeSlideScopedMemoryScope } from './nodeslideScopedMemory';
 import schema from './schema';
 
 const modules = import.meta.glob('./**/*.ts');
@@ -527,6 +536,63 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     createdAt: NOW,
     updatedAt: NOW,
   });
+
+  // A deck that handed an agent a delegated capability, and learned something
+  // while that agent worked. Both are deck-owned: a live bearer token or a
+  // remembered instruction that outlived the deck would be a data-rights bug,
+  // so the erasure scenario has to be seeded with them or it proves nothing
+  // about them.
+  const grantPolicy = normalizeNodeSlideDeckAccessPolicy({
+    deckId,
+    role: 'editor',
+    capabilities: nodeSlideDeckCapabilitiesForRole('editor'),
+    agentPolicy: normalizeNodeSlideAccessPolicy({
+      role: 'planner',
+      capabilities: ['deck:read', 'source:read', 'memory:read', 'proposal:create'],
+      scopes: {
+        deckIds: [deckId],
+        sourceIds: [],
+        providerIds: [],
+        modelIds: [],
+        toolIds: [],
+        memoryScopeKeys: [nodeSlideMemoryScopeKey({ kind: 'deck', deckId })],
+      },
+      budget: {
+        maxCostMicroUsd: 1_000_000,
+        maxInputTokens: 50_000,
+        maxOutputTokens: 10_000,
+        maxDurationMs: 120_000,
+        maxIterations: 4,
+        maxToolCalls: 8,
+      },
+    }),
+  });
+  await ctx.db.insert('nodeslide_deck_grants', {
+    id: 'deck_grant_scenario',
+    deckId,
+    role: 'editor',
+    tokenDigest: DIGEST('i'),
+    policy: grantPolicy,
+    expiresAt: NOW + 60 * 60 * 1_000,
+    createdAt: NOW,
+  });
+  await ctx.db.insert('nodeslide_deck_grant_events', {
+    id: 'deck_grant_event_scenario',
+    deckId,
+    grantId: 'deck_grant_scenario',
+    kind: 'issued',
+    occurredAt: NOW,
+  });
+  await ctx.db.insert(
+    'nodeslide_scoped_memories',
+    createScopedMemoryRecord({
+      scope: nodeSlideScopedMemoryScope({ id: deckId, clientSessionId }, 'deck'),
+      category: 'preference',
+      content: 'Owner prefers a single headline per slide.',
+      source: 'user',
+      now: NOW,
+    }),
+  );
 
   return { deckId, projectId, projectRowId, deckTitle: built.snapshot.deck.title, built };
 }

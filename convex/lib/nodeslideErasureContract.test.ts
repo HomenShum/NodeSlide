@@ -78,6 +78,13 @@ describe('erasure contract derivation', () => {
       'nodeslide_signature_profiles',
       'nodeslide_taste_profiles',
       'nodeslide_presence',
+      // Deck-scoped delegation: a live bearer capability must not outlive the
+      // deck it authorizes, and its audit trail goes with it.
+      'nodeslide_deck_grants',
+      'nodeslide_deck_grant_events',
+      // Deck > session > run agent memory. Every row carries deckId, so a
+      // run-scoped memory cannot survive the deck it was learned on.
+      'nodeslide_scoped_memories',
       'nodeslide_decks',
       'projects',
     ]);

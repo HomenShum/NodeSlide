@@ -4,6 +4,8 @@ import { localByokStatus } from './byok.js';
 import { registerNodeSlideLocalTools } from './localDeckTools.js';
 import {
   type NodeSlideWorkspace,
+  canonicalNodeSlideSnapshot,
+  paginateNodeSlideItems,
   planLocalByokEdit,
   registerNodeSlideTools,
   requireExplicitConsent,
@@ -188,5 +190,92 @@ describe('NodeSlide MCP governance', () => {
         3,
       ),
     ).toThrow('Governance violation');
+  });
+
+  it('orders the canonical snapshot and strips owner capabilities recursively', () => {
+    const unordered = {
+      ...workspace,
+      deck: {
+        ...workspace.deck,
+        slideOrder: ['slide_2', 'slide_1'],
+        ownerAccessKey: 'owner-secret',
+      },
+      slides: [
+        { id: 'slide_1', title: 'One', version: 1, elementOrder: ['element_1'] },
+        { id: 'slide_2', title: 'Two', version: 1, elementOrder: ['element_2'] },
+      ],
+      elements: [
+        workspace.elements[0]!,
+        { ...workspace.elements[0]!, id: 'element_2', slideId: 'slide_2' },
+      ],
+    } as unknown as NodeSlideWorkspace;
+    const snapshot = canonicalNodeSlideSnapshot(unordered);
+    expect(snapshot.slides.map((slide) => slide.id)).toEqual(['slide_2', 'slide_1']);
+    expect(snapshot.elements.map((element) => element.id)).toEqual(['element_2', 'element_1']);
+    expect(JSON.stringify(snapshot)).not.toContain('owner-secret');
+    expect(JSON.stringify(snapshot)).not.toContain('ownerAccessKey');
+  });
+
+  it('removes nested capability secrets from open server payloads, not just the top level', () => {
+    // `patches` and `traces` are Record<string, unknown> straight off the server:
+    // the leak surface is a nested token, not the destructured top-level key.
+    const leaky = {
+      ...workspace,
+      sources: [
+        {
+          id: 'source_1',
+          title: 'Deck',
+          sourceType: 'upload',
+          googleRefreshToken: 'refresh-secret',
+          nested: { grantTokenDigest: 'digest-secret', keep: 'visible' },
+        },
+      ],
+    } as unknown as NodeSlideWorkspace;
+    const serialized = JSON.stringify(canonicalNodeSlideSnapshot(leaky));
+    expect(serialized).not.toContain('refresh-secret');
+    expect(serialized).not.toContain('digest-secret');
+    expect(serialized).toContain('visible');
+  });
+
+  it('binds pagination cursors to the deck version, collection, and filter', () => {
+    const first = paginateNodeSlideItems(['a', 'b', 'c'], {
+      deckId: 'deck_1',
+      deckVersion: 3,
+      collection: 'elements',
+      filter: 'slide_1',
+      limit: 2,
+    });
+    expect(first).toMatchObject({ items: ['a', 'b'], hasMore: true, total: 3, limit: 2 });
+    const second = paginateNodeSlideItems(['a', 'b', 'c'], {
+      deckId: 'deck_1',
+      deckVersion: 3,
+      collection: 'elements',
+      filter: 'slide_1',
+      cursor: first.nextCursor ?? undefined,
+      limit: 2,
+    });
+    expect(second).toMatchObject({ items: ['c'], hasMore: false, nextCursor: null });
+    // A cursor minted against deck version 3 must not silently resume into v4.
+    expect(() =>
+      paginateNodeSlideItems(['a', 'b', 'c'], {
+        deckId: 'deck_1',
+        deckVersion: 4,
+        collection: 'elements',
+        filter: 'slide_1',
+        cursor: first.nextCursor ?? undefined,
+      }),
+    ).toThrow('invalid or stale');
+  });
+
+  it('caps a caller-requested page size at the module maximum', () => {
+    const page = paginateNodeSlideItems(Array.from({ length: 500 }, (_, index) => index), {
+      deckId: 'deck_1',
+      deckVersion: 3,
+      collection: 'slides',
+      limit: 10_000,
+    });
+    expect(page.limit).toBe(100);
+    expect(page.items).toHaveLength(100);
+    expect(page.hasMore).toBe(true);
   });
 });

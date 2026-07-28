@@ -10,6 +10,21 @@
  * `agentPolicy.scopes.memoryScopeKeys`, which `nodeSlideMemoryScopeKey` already
  * canonicalizes for `deck`, `session`, and `run` scopes.
  *
+ * Audit note — the port manifest records ten of these WORKSPACE -> DECK renames
+ * but not the last six, so a symbol audit reports them MISSING. They are the
+ * same D1 rewrite, one-for-one:
+ *
+ *   NODESLIDE_WORKSPACE_ACCESS_POLICY_VERSION  -> NODESLIDE_DECK_ACCESS_POLICY_VERSION
+ *   NODESLIDE_WORKSPACE_ROLES                  -> NODESLIDE_DECK_ROLES
+ *   NODESLIDE_WORKSPACE_CAPABILITIES           -> NODESLIDE_DECK_CAPABILITIES
+ *   NODESLIDE_WORKSPACE_ROLE_CAPABILITY_MATRIX -> NODESLIDE_DECK_ROLE_CAPABILITY_MATRIX
+ *   NodeSlideWorkspaceAccessPolicyError        -> NodeSlideDeckAccessPolicyError
+ *
+ * The sixth, `NodeSlideWorkspaceProjectScope`, has no counterpart on purpose:
+ * it is parity's sub-deck narrowing inside a project, and this repo expresses
+ * that with `agentPolicy.scopes.memoryScopeKeys` as described above. Adding it
+ * back would reintroduce the project tier the flat rewrite removed.
+ *
  * What this module is for: the deck owner holds a bearer key that can do
  * everything. Handing that key to an agent is the whole risk. A grant carries a
  * policy that can only ever *narrow* — never elevate a role, never cross to

@@ -1,20 +1,23 @@
 /**
  * Ported from parity's `convex/lib/nodeslideBudgetedProvider.test.ts`, minus the
  * eleven cases that drive `callNodeSlideBudgetedJson` — the withheld dispatch
- * engine. See the module header for why it is withheld (pricing, plus a diverged
- * `nodeslideProvider` dispatch contract).
+ * engine. See the module header for why it is withheld (pricing).
  *
- * What is here covers the whole landed surface: the reservation predicate and
- * the deterministic durable IDs, which are what callers outside the dispatch
- * loop actually consume.
+ * What is here covers the whole landed surface: the reservation predicate, the
+ * deterministic durable IDs, and — since `NodeSlideDispatchPolicy` now has real
+ * enforcement behind it — proof that a `NodeSlideBudgetedProviderCall` written
+ * over `callNodeSlideFreeJson` actually delivers its ceiling to the wire.
  */
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import type { NodeSlideBudgetedProviderCall } from './nodeslideBudgetedProvider';
 import {
   estimateNodeSlideProviderInputTokens,
   nodeSlideBudgetHasActiveReservation,
   nodeSlideProviderBudgetId,
   nodeSlideProviderCallId,
 } from './nodeslideBudgetedProvider';
+import type { NodeSlideCompletion } from './nodeslideProvider';
+import { callNodeSlideFreeJson } from './nodeslideProvider';
 
 const providerRequest = {
   systemPrompt: 'Return a bounded NodeSlide patch.',
@@ -126,5 +129,39 @@ describe('NodeSlide budgeted provider adapter', () => {
     });
     expect(large - small).toBeGreaterThanOrEqual(20_000);
     expect(small).toBeGreaterThan(providerRequest.systemPrompt.length * 2);
+  });
+
+  it('delivers a budget-derived ceiling to the wire through the provider-call seam', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () => ({
+      text: '{"operations":[]}',
+      stopReason: 'stop',
+      costMicroUsd: 0,
+      inputTokens: 10,
+      outputTokens: 5,
+    }));
+
+    // Exactly the seam `callNodeSlideBudgetedJson` would use once pricing lands.
+    const dispatch: NodeSlideBudgetedProviderCall = (request, dependencies) =>
+      callNodeSlideFreeJson(request, { complete, dispatchPolicy: dependencies.dispatchPolicy });
+
+    const result = await dispatch(
+      { ...providerRequest, maxTokens: 500 },
+      {
+        dispatchPolicy: {
+          maxOutputTokens: 120,
+          timeoutMs: 5_000,
+          maxInputMicroUsdPerMillionTokens: 900_000,
+          maxOutputMicroUsdPerMillionTokens: 2_500_000,
+        },
+      },
+    );
+
+    expect(result.ok).toBe(true);
+    // The ceiling is not merely typed — it reaches the completion request.
+    expect(complete.mock.calls[0]?.[0].maxTokens).toBe(120);
+    expect(complete.mock.calls[0]?.[0].providerMaxPrice).toEqual({
+      prompt: 0.9,
+      completion: 2.5,
+    });
   });
 });

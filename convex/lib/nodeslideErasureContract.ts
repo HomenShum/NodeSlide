@@ -42,7 +42,7 @@
 export interface NodeSlideSchemaTableLike {
   validator: {
     kind: string;
-    fields?: Record<string, { kind: string; isOptional?: string }>;
+    fields?: Record<string, { kind: string; isOptional?: string; tableName?: string }>;
   };
   indexes: ReadonlyArray<{ indexDescriptor: string; fields: readonly string[] }>;
 }
@@ -224,6 +224,24 @@ export function nodeSlideBinaryFields(
   const fields = schema.tables[table]?.validator.fields ?? {};
   return Object.entries(fields)
     .filter(([, spec]) => spec.kind === 'bytes')
+    .map(([field]) => field)
+    .sort();
+}
+
+/**
+ * Fields declared `v.id('_storage')`. Deleting such a row erases the pointer,
+ * not the bytes: the blob outlives the deck in file storage, unreachable and
+ * therefore undeletable by any later pass. Derived rather than listed for the
+ * same reason as `nodeSlideBinaryFields` — the day someone adds an upload-like
+ * table, its blobs join the erasure without anyone remembering to say so.
+ */
+export function nodeSlideStorageIdFields(
+  schema: NodeSlideSchemaLike,
+  table: string,
+): readonly string[] {
+  const fields = schema.tables[table]?.validator.fields ?? {};
+  return Object.entries(fields)
+    .filter(([, spec]) => spec.kind === 'id' && spec.tableName === '_storage')
     .map(([field]) => field)
     .sort();
 }

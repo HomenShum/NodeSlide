@@ -13,7 +13,7 @@ import { requireOwnerAccess } from './lib/nodeslideAccess';
 import { nodeSlideCandidateDigest } from './lib/nodeslideCandidate';
 import { loadNodeSlideSnapshot, sourceFromRow } from './lib/nodeslideData';
 import { evaluateNodeSlideDeckCi } from './lib/nodeslideDeckCi';
-import { captureNodeSlideWebEvidence } from './lib/nodeslideEvidenceCapture';
+import { captureNodeSlideWebEvidence, safePublicCaptureUrl } from './lib/nodeslideEvidenceCapture';
 import { nodeslideContentDigest, nodeslideStableId } from './lib/nodeslideIds';
 import { planNodeSlideSourceRefresh } from './lib/nodeslideSourceRefresh';
 import { buildNodeSlideSourceRevision } from './lib/nodeslideSourceRevision';
@@ -706,11 +706,26 @@ function cleanTitle(value: string, fallback: string): string {
   return value.replace(/\s+/gu, ' ').trim().slice(0, 180) || fallback;
 }
 
+/**
+ * Gate for every URL this module will hand to the capture provider.
+ *
+ * HTTPS-only and credential-free is the ported behaviour. The private-range
+ * check is added here: the capture layer already applies it at fetch time, but
+ * this function also runs at `configure` time — before any capture — and a
+ * schedule that stores `https://10.0.0.1/` only to fail every fifteen minutes
+ * forever is a worse outcome than refusing it once, when the owner asks.
+ *
+ * What it does not do: resolve DNS. A public name that resolves to a private
+ * address passes. The fetch is made by the third-party provider from the
+ * provider's own network, not from this deployment, so that residual is a
+ * provider-side concern rather than SSRF against NodeSlide infrastructure.
+ */
 function requireMonitorableUrl(value: string): string {
   const parsed = new URL(value);
   if (parsed.protocol !== 'https:' || parsed.username || parsed.password) {
     throw new Error('Monitored sources must use a credential-free HTTPS URL.');
   }
+  safePublicCaptureUrl(parsed.toString());
   parsed.hash = '';
   return parsed.toString();
 }

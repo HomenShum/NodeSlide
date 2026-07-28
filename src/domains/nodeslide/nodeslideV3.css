@@ -6031,6 +6031,109 @@
   color: var(--ns-paper);
 }
 
+/* Google Slides connection + sync workbench. The section spans both columns
+   because its review states are a sequence of decisions, not a sidebar. */
+.nodeslide-studio .ns-google-connection-section {
+  grid-column: 1 / -1;
+}
+
+.nodeslide-studio .ns-google-connection-card {
+  align-items: center;
+  background: var(--ns-paper);
+  border: 1px solid var(--ns-line);
+  border-radius: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.nodeslide-studio .ns-google-connection-card > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nodeslide-studio .ns-google-connection-card small {
+  color: var(--ns-faint);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.nodeslide-studio .ns-google-connection-card button,
+.nodeslide-studio .ns-google-sync-workbench button,
+.nodeslide-studio .ns-connection-section > .ns-google-sync-actions > button {
+  align-items: center;
+  background: var(--ns-paper);
+  border: 1px solid var(--ns-line-d);
+  border-radius: 8px;
+  color: var(--ns-muted);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 650;
+  gap: 5px;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 10px;
+}
+
+.nodeslide-studio .ns-google-connection-card button.is-danger {
+  color: var(--ns-danger);
+}
+
+.nodeslide-studio .ns-google-sync-workbench {
+  background: color-mix(in srgb, var(--ns-paper) 80%, transparent);
+  border: 1px solid var(--ns-line);
+  border-radius: 10px;
+  margin-top: 8px;
+  padding: 10px;
+}
+
+.nodeslide-studio .ns-google-sync-workbench label {
+  display: grid;
+  font-size: 10px;
+  font-weight: 650;
+  gap: 6px;
+}
+
+.nodeslide-studio .ns-google-sync-workbench label > span:last-child {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.nodeslide-studio .ns-google-sync-workbench input {
+  background: var(--ns-paper);
+  border: 1px solid var(--ns-line-d);
+  border-radius: 8px;
+  color: var(--ns-ink);
+  font: inherit;
+  min-width: 0;
+  padding: 8px 9px;
+}
+
+.nodeslide-studio .ns-google-sync-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.nodeslide-studio .ns-google-sync-workbench button.is-primary {
+  background: var(--ns-ink);
+  border-color: var(--ns-ink);
+  color: var(--ns-paper);
+}
+
+/* Conflict and error text is the point of the workbench, so it is not muted. */
+.nodeslide-studio .ns-google-sync-workbench output {
+  color: var(--ns-danger);
+  flex-basis: 100%;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
 .nodeslide-studio .ns-agent-connect-card {
   align-items: center;
   background: var(--ns-paper);

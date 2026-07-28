@@ -824,6 +824,81 @@ export default defineSchema({
     .index('by_deck_created', ['deckId', 'createdAt'])
     .index('by_deck_status_created', ['deckId', 'status', 'createdAt']),
 
+  /**
+   * One in-flight Google OAuth authorization per attempt. The row holds the
+   * PKCE verifier as ciphertext and nothing else that identifies the user, and
+   * it is consumed on the callback. `deckId` is required so the row is erased
+   * with the deck: an abandoned authorization is still a record that a
+   * particular deck was pointed at Google.
+   */
+  nodeslide_oauth_sessions: defineTable({
+    stateDigest: v.string(),
+    deckId: v.string(),
+    provider: v.literal('google_slides'),
+    codeVerifierCiphertext: v.string(),
+    returnTo: v.string(),
+    expiresAt: v.number(),
+    createdAt: v.number(),
+    consumedAt: v.optional(v.number()),
+  })
+    .index('by_state_digest', ['stateDigest'])
+    .index('by_deck_created', ['deckId', 'createdAt']),
+
+  /**
+   * The stored Google grant for one deck: access and refresh tokens as
+   * ciphertext, plus the scopes Google actually returned. Deck-scoped on
+   * purpose — tokens are user data, so erasing the deck must erase the grant.
+   * The `*Ciphertext` field names also make the export layer withhold them.
+   */
+  nodeslide_oauth_credentials: defineTable({
+    deckId: v.string(),
+    provider: v.literal('google_slides'),
+    accessTokenCiphertext: v.string(),
+    refreshTokenCiphertext: v.optional(v.string()),
+    accessTokenExpiresAt: v.number(),
+    scopes: v.array(v.string()),
+    tokenType: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    revokedAt: v.optional(v.number()),
+  })
+    .index('by_deck_provider', ['deckId', 'provider'])
+    .index('by_updated', ['updatedAt']),
+
+  /** Server-only Google Slides baseline, review, execution, and verification state. */
+  nodeslide_google_sync_states: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    remotePresentationId: v.string(),
+    status: v.union(
+      v.literal('active'),
+      v.literal('planning'),
+      v.literal('awaiting_pull_review'),
+      v.literal('awaiting_push_review'),
+      v.literal('executing'),
+      v.literal('verifying'),
+      v.literal('conflict'),
+      v.literal('error'),
+    ),
+    stateVersion: v.number(),
+    baselineJson: v.string(),
+    baselineDigest: v.string(),
+    baselineRemoteRevision: v.string(),
+    pendingDirection: v.optional(v.union(v.literal('inbound'), v.literal('outbound'))),
+    pendingPlanJson: v.optional(v.string()),
+    pendingPlanDigest: v.optional(v.string()),
+    pendingPatchId: v.optional(v.string()),
+    lastReceiptJson: v.optional(v.string()),
+    lastReceiptDigest: v.optional(v.string()),
+    errorCode: v.optional(v.string()),
+    errorMessage: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck', ['deckId'])
+    .index('by_remote', ['remotePresentationId']),
+
   nodeslide_publications: defineTable({
     id: v.string(),
     deckId: v.string(),

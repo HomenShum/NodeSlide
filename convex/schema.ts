@@ -1031,4 +1031,85 @@ export default defineSchema({
     .index('by_stable_id', ['id'])
     .index('by_deck_session', ['deckId', 'sessionId'])
     .index('by_deck_expiry', ['deckId', 'expiresAt']),
+
+  /**
+   * Delegated, expiring capabilities over ONE deck. The deck owner key is the
+   * root of trust; a grant is how an agent gets a narrowed slice of it without
+   * ever seeing `nodeslide_decks.ownerAccessKey`.
+   *
+   * `deckId` is required, not optional, and that is the point: it makes the
+   * row deck-owned, so the derived erasure contract takes it with the deck. A
+   * grant that outlived its deck would be a live bearer capability pointing at
+   * nothing — or worse, at a recycled id.
+   */
+  nodeslide_deck_grants: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    role: v.union(v.literal('owner'), v.literal('editor'), v.literal('viewer')),
+    /** Only the digest is stored; the bearer token never lands in a row. */
+    tokenDigest: v.string(),
+    policy: v.any(),
+    parentGrantId: v.optional(v.string()),
+    expiresAt: v.number(),
+    createdAt: v.number(),
+    revokedAt: v.optional(v.number()),
+  })
+    .index('by_deck_created', ['deckId', 'createdAt'])
+    .index('by_stable_id', ['id'])
+    .index('by_token_digest', ['tokenDigest']),
+
+  /** Append-only issue/revoke trail for deck grants. Deck-owned, so erasable. */
+  nodeslide_deck_grant_events: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    grantId: v.string(),
+    actorGrantId: v.optional(v.string()),
+    kind: v.union(v.literal('issued'), v.literal('revoked')),
+    occurredAt: v.number(),
+  })
+    .index('by_deck_occurred', ['deckId', 'occurredAt'])
+    .index('by_stable_id', ['id'])
+    .index('by_grant', ['grantId']),
+
+  /**
+   * Agent memory partitioned below the deck: `deck` > `session`. This is the
+   * flat-model replacement for parity-studio's workspace > project > deck
+   * memory hierarchy — rooted at the deck instead of at a tenant, and using
+   * the `deck`/`session` scope keys that `nodeSlideMemoryScopeKey` already
+   * canonicalizes.
+   *
+   * `deckId` is required on every row regardless of scope kind, so a
+   * session-scoped memory cannot survive the deck it was learned on. Both
+   * scope identifiers are derived from the authoritative deck row
+   * (`id`, `clientSessionId`) and never from caller input.
+   */
+  nodeslide_scoped_memories: defineTable({
+    id: v.string(),
+    schemaVersion: v.literal('nodeslide.scoped-memory/v1'),
+    scopeKind: v.union(v.literal('deck'), v.literal('session')),
+    scopeKey: v.string(),
+    deckId: v.string(),
+    sessionId: v.optional(v.string()),
+    category: v.union(
+      v.literal('preference'),
+      v.literal('fact'),
+      v.literal('decision'),
+      v.literal('instruction'),
+      v.literal('context'),
+    ),
+    content: v.string(),
+    contentDigest: v.string(),
+    bindingDigest: v.string(),
+    status: v.union(v.literal('active'), v.literal('archived')),
+    source: v.union(v.literal('user'), v.literal('agent')),
+    sourceRunId: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    lastUsedAt: v.optional(v.number()),
+    useCount: v.number(),
+  })
+    .index('by_deck_updated', ['deckId', 'updatedAt'])
+    .index('by_stable_id', ['id'])
+    .index('by_scope_digest', ['scopeKey', 'contentDigest'])
+    .index('by_scope_status_updated', ['scopeKey', 'status', 'updatedAt']),
 });

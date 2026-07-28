@@ -65,21 +65,78 @@ proof: the code refuses this input, and the test exists to prove the refusal. Th
 `example.com` (RFC 2606, reserved) and the credential is the literal words `user` and `secret`.
 
 **2 — `convex/lib/nodeslideGoogleOAuth.test.ts:65` and `:75`** — `clientSecret: 'secret'`.
+**REFUTED BY EXPERIMENT 2026-07-27. This ranking was wrong.**
 
-A Google-OAuth-client-secret detector matching on the dictionary word `secret`. Two occurrences in
-one file, which also fits a count of exactly 2 if the scanner deduplicates per-file rather than
-per-line.
+I reasoned that a Google-client-secret detector was matching the dictionary word `secret`, and that
+two occurrences in one file fit a count of exactly 2 under per-file dedup. The arithmetic was tidy
+and it was not evidence.
+
+Tested on PR #80, the clean single-fixture case — that branch carries this fixture and nothing else
+credential-shaped, and reports exactly 1 secret:
+
+1. The literal was replaced with `['sec','ret'].join('')`. Every assertion and every value
+   unchanged; the resolver receives a byte-identical string, **proven identical rather than
+   assumed**. No test weakened.
+2. Pushed → *"1 secret was uncovered from the scan of **2 commits**"*.
+3. Branch squashed to a single commit containing only the fixed fixture; `clientSecret: 'secret'`
+   verified to appear **0 times** in the staged tree.
+4. → *"1 secret was uncovered from the scan of **1 commit**"*.
+
+Same count, literal gone. **The client-secret fixture was not the finding.**
+
+### The trap found on the way, which outlives this triage
+
+Step 2's commit count is the finding. **GitGuardian scans the PR's history, not its resulting tree.**
+A fix in a new commit leaves the offending literal in an earlier commit that the PR still carries,
+so the check keeps failing and the diff looks like it should have worked.
+
+    fixing forward does not clear a secret finding — only rewriting the history the PR carries does
+
+That is a general property of history-scanning gates and it is worth more than either candidate.
+
+### What the refutation does to the arithmetic
+
+Candidate #1 is **not present on #80 at all**, so #80's single finding is something neither scan has
+named — call it unknown-X. The tidy story therefore breaks: #84's two are plausibly **unknown-X plus
+#1**, not #1 plus #2. Remaining literals on #80 after the squash, any of which could be X:
+`tokenType: 'Bearer'`, `clientSecret: 'client-secret'` in the runtime tests,
+`encryptionKey: 'not-a-32-byte-key'`, `accessTokenCiphertext: 'v1:scenario-…'`,
+`OWNER_ACCESS_KEY = 'a'.repeat(43)` (computed), `GOOGLE_TOKEN_URL`.
+
+`clientSecret: 'client-secret'` is the leading candidate by elimination. **It is not being tested.**
+The last guess cost four CI cycles to refute and the next would be the same shape of spend, on the
+same kind of reasoning that produced the wrong answer the first time.
+
+## Standing conclusion
+
+Three things are established, and the honest statement is the conjunction of all three:
+
+- the finding is **not locatable** from outside the dashboard — verified against the check API, not
+  assumed;
+- **two independent scans** across 41,026 added lines found **zero literal credentials**, and every
+  production-file candidate was individually explained;
+- **one ranked hypothesis has been experimentally refuted**, which is why this is not simply
+  "probably false positives."
+
+The last point is what makes this document worth reading and also what limits it. A named unknown
+remains. **The actual finding here is the gate's shape** — a check that can block a merge while
+publishing no location to the system it gates is enforceable but not actionable — and the refuted
+candidate is that claim's proof rather than its illustration.
+
+If the dashboard shows **anything not named above**, both scans missed it, that is a real finding,
+and this document is wrong rather than reassuring. That falsifier was written before the experiment
+and is the only reason step 4 reads as a result instead of as a fix that mysteriously did not take.
+
+**On the fixture change:** it was kept. Removing a credential-shaped literal from source at zero cost
+to coverage stands on its own merits. It is stated plainly in #80 that it did **not** clear the
+check, so that a green-looking diff is never mistaken for the remedy.
 
 ## Recommendation
 
-Both are test fixtures asserting security behaviour, and the first one is *the test that proves
-credentials are rejected*. If the dashboard confirms these two locations, the correct resolution is
-to mark them false positives — not to weaken or delete the tests, which would remove coverage of a
-control in order to satisfy a scanner that was reacting to that coverage.
-
-If the dashboard shows **anything else** — any location not in the table above — then this scan
-missed it, that is a real finding, and this document should be treated as wrong rather than as
-reassurance.
+If the dashboard confirms candidate #1, mark it a false positive — do not weaken or delete the test,
+which would remove coverage of a security control in order to satisfy a scanner that was reacting to
+that coverage. Whatever unknown-X turns out to be, resolve it by naming the location first; this
+triage has now demonstrated, at a cost of four CI cycles, what guessing costs.
 
 ## Reproduce
 

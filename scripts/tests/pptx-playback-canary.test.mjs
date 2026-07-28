@@ -17,6 +17,7 @@ import { fileURLToPath } from 'node:url';
 import JSZip from 'jszip';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { analyzeSlide, decidePlayback } from '../lib/pptx-playback-structure.mjs';
+import { readDeckSlides } from '../nodeslide-pptx-playback-canary.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const DECK = path.join(
@@ -281,6 +282,47 @@ describe('pptx playback canary — the sensor refuses to grade what it cannot se
       '<!-- <p:timing><p:tnLst><p:set/></p:tnLst></p:timing> --></p:sld>';
     const result = decidePlayback([analyzeSlide(xml, 1)], { deck: 'commented' });
     expect(result.verdict).toBe('not-run');
+  });
+});
+
+/**
+ * The reader itself must be armed.
+ *
+ * A tool that looks real and returns a pass over nothing is the same defect as an empty
+ * <p:tnLst>: well-formed, and inert. If readDeckSlides could return a plausible-looking empty
+ * result for any input, every assertion above would be grading a fiction. These tests prove the
+ * reader actually opened the archive and actually read those bytes.
+ */
+describe('pptx playback canary — the OOXML reader is not welded', () => {
+  it('reads different decks as genuinely different, not as a constant', async () => {
+    const a = await readDeckSlides(await readFile(DECK));
+    const b = await readDeckSlides(
+      await readFile(
+        path.join(repoRoot, 'outputs', 'nodekit-showcase', 'nodekit-showcase-full.pptx'),
+      ),
+    );
+    // If the reader were returning a fixed or fabricated result, these would match.
+    expect(a.length).toBe(38);
+    expect(b.length).toBe(84);
+    expect(a.reduce((n, s) => n + s.shapes.length, 0)).not.toBe(
+      b.reduce((n, s) => n + s.shapes.length, 0),
+    );
+    // And it must have read real shape names out of the XML, not invented placeholders.
+    expect(a.flatMap((s) => s.shapes.map((x) => x.name))).toContain(
+      'ns:motion:evidence-scrollytelling:pinned:scene',
+    );
+  });
+
+  it('a valid ZIP that is not a PPTX yields no slides, and the canary says not-run', async () => {
+    const zip = new JSZip();
+    zip.file('hello.txt', 'this is a zip, but it is not a presentation');
+    const slides = await readDeckSlides(await zip.generateAsync({ type: 'nodebuffer' }));
+    expect(slides).toHaveLength(0);
+    expect(decidePlayback(slides, { deck: 'not-a-deck' }).verdict).toBe('not-run');
+  });
+
+  it('a buffer that is not a ZIP at all throws rather than reporting an empty pass', async () => {
+    await expect(readDeckSlides(Buffer.from('not a zip archive'))).rejects.toThrow();
   });
 });
 

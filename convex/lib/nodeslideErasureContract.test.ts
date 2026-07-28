@@ -63,6 +63,10 @@ describe('erasure contract derivation', () => {
       // embeds the plan JSON, so it holds deck content, not just scheduling.
       'nodeslide_source_refresh_schedules',
       'nodeslide_source_refresh_proposals',
+      // Web-evidence captures and their steps. The goal text is the owner's own
+      // question and the steps hold stored screenshots and PDFs.
+      'nodeslide_evidence_captures',
+      'nodeslide_evidence_steps',
       // A claim-to-region custody receipt is a standing assertion about this
       // deck's content, so it cannot outlive the deck.
       'nodeslide_claim_evidence_receipts',

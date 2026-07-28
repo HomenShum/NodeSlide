@@ -100,6 +100,14 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     spec: built.spec,
   });
 
+  const patchId = 'patch_scenario';
+  const runId = 'run_scenario';
+  const traceId = 'trace_scenario';
+  const batchId = 'batch_scenario';
+  const variationId = 'variation_scenario';
+  const validationId = 'validation_scenario';
+  const approverId = 'approver_scenario';
+
   // The immutable half of the deck's evidence. A revision outlives the mutable
   // source row on purpose, which is exactly why the erasure has to reach it:
   // it carries the citation text verbatim.
@@ -157,6 +165,48 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     createdAt: NOW,
     updatedAt: NOW,
   });
+  // A visual evidence capture and its step. The goal is the owner's own
+  // question and the step points at a stored screenshot, so both are deck-owned.
+  await ctx.db.insert('nodeslide_evidence_captures', {
+    id: 'capture_scenario',
+    deckId,
+    runId,
+    traceId,
+    spanId: 'span_capture_scenario',
+    parentSpanId: 'span_parent_scenario',
+    sourceId: seededSource.id,
+    sourceRevisionId: `source-revision:${DIGEST('e')}`,
+    sourceRevisionDigest: DIGEST('f'),
+    captureDigest: DIGEST('c'),
+    url: 'https://nodeslide.example/evidence',
+    goal: 'Confirm the figure quoted on slide one.',
+    provider: 'nodeslide-source-snapshot/v1',
+    status: 'ready',
+    stepCount: 1,
+    screenshotCount: 1,
+    pdfCount: 0,
+    createdAt: NOW,
+    completedAt: NOW,
+    expiresAt: NOW + 2_592_000_000,
+  });
+  await ctx.db.insert('nodeslide_evidence_steps', {
+    id: 'evidence_step_scenario',
+    captureId: 'capture_scenario',
+    deckId,
+    runId,
+    traceId,
+    spanId: 'span_capture_scenario',
+    sequence: 1,
+    phase: 'capture',
+    label: 'Captured the cited region.',
+    status: 'ok',
+    regionScope: 'claim',
+    box: { x: 0.1, y: 0.2, w: 0.3, h: 0.4 },
+    evidenceStepDigest: DIGEST('d'),
+    startedAt: NOW,
+    completedAt: NOW,
+    createdAt: NOW,
+  });
   // The custody receipt binding one claim on one element to the exact region of
   // the exact source revision it came from. Deleting the deck without this
   // would leave a standing assertion about the deck's content behind.
@@ -205,14 +255,6 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     registeredAt: NOW,
     approvedAt: NOW,
   });
-
-  const patchId = 'patch_scenario';
-  const runId = 'run_scenario';
-  const traceId = 'trace_scenario';
-  const batchId = 'batch_scenario';
-  const variationId = 'variation_scenario';
-  const validationId = 'validation_scenario';
-  const approverId = 'approver_scenario';
 
   await ctx.db.insert('nodeslide_patches', {
     id: patchId,

@@ -131,12 +131,48 @@ and is the only reason step 4 reads as a result instead of as a fix that mysteri
 to coverage stands on its own merits. It is stated plainly in #80 that it did **not** clear the
 check, so that a green-looking diff is never mistaken for the remedy.
 
-## Recommendation
+## RESOLVED 2026-07-28 — unknown-X named, from the dashboard itself
 
-If the dashboard confirms candidate #1, mark it a false positive — do not weaken or delete the test,
-which would remove coverage of a security control in order to satisfy a scanner that was reacting to
-that coverage. Whatever unknown-X turns out to be, resolve it by naming the location first; this
-triage has now demonstrated, at a cost of four CI cycles, what guessing costs.
+The owner's signed-in Chrome session had the dashboard open; read directly (incident #35223996):
+
+    detector   Generic Encryption Key
+    secret     the literal string  not-a-32-byte-key
+    location   convex/lib/nodeslideGoogleOAuth.test.ts:66, commit c0df983
+    tags       Test file · Public exposure
+    PRs        #79, #80, +4 others (one incident, 5 occurrences across carried commits)
+
+**The flagged secret is a string whose entire content announces that it is not a key**, sitting in
+the negative test for the fail-closed configuration check — the assertion two lines later is
+`.toThrow('Google Slides connection is not configured for this deployment.')`. GitGuardian's
+generic detector fires on the `encryptionKey: '<literal>'` name-value shape regardless of what the
+value says. So the finding class was correct all along — a false positive on a security-control
+test — but on a *third* literal in the same file that both independent scans had deliberately
+filtered as an obvious placeholder.
+
+Every prediction in this document is now scored:
+
+    the finding is in a security-control negative test        RIGHT  (twice over)
+    candidate #1 (user:secret@ URL test)                      plausibly #84's second — unconfirmed
+    candidate #2 (clientSecret: 'secret')                     WRONG — refuted before this read
+    both scans' shared filter "dictionary placeholders safe"  the exact blind spot
+    "any location not named above means both scans missed it" TRUE — this is that case
+
+The lesson worth keeping: **both scans encoded the same judgment (self-describing placeholders are
+not secrets) and the scanner encoded none.** Two independent scans with a shared assumption are not
+independent on that assumption. The refutation experiment could never have found this either — it
+tested removal of a literal the detector was not firing on.
+
+## Recommendation (updated)
+
+Mark incident #35223996 a false positive in the dashboard — the remediation panel's own first step
+("get the developer involved") is satisfied, the developer is the owner, and the string is a
+placeholder by construction. Do not rename the fixture to dodge the detector: `not-a-32-byte-key`
+is the most honest possible value for a test asserting that a malformed key is refused, and
+renaming it to something opaque would make the test *less* readable to satisfy a scanner. Do not
+weaken or delete the test.
+
+Whatever #84's second finding is, confirm it in the dashboard the same way before touching code —
+this triage demonstrated, at four CI cycles and one wrong published ranking, what guessing costs.
 
 ## Reproduce
 

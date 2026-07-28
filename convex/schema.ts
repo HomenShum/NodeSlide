@@ -635,6 +635,51 @@ export default defineSchema({
     .index('by_source_created', ['sourceId', 'createdAt'])
     .index('by_source_content_digest', ['sourceId', 'contentDigest']),
 
+  /**
+   * Owner-approved file uploads, quarantined until the owner releases them.
+   * Deck-scoped: the row carries the file name and the digest of its bytes,
+   * and `storageId` points at the stored object, so erasing the deck has to
+   * take the metadata with it (the blob itself is deleted by deleteUpload).
+   */
+  nodeslide_uploads: defineTable({
+    id: v.string(),
+    deckId: v.string(),
+    clientSessionId: v.string(),
+    fileName: v.string(),
+    format: v.union(
+      v.literal('csv'),
+      v.literal('json'),
+      v.literal('txt'),
+      v.literal('md'),
+      v.literal('pdf'),
+      v.literal('docx'),
+      v.literal('xlsx'),
+      v.literal('png'),
+      v.literal('jpeg'),
+      v.literal('webp'),
+      v.literal('gif'),
+      v.literal('pptx'),
+    ),
+    contentType: v.string(),
+    byteSize: v.number(),
+    contentDigest: v.string(),
+    idempotencyKey: v.string(),
+    requestFingerprint: v.string(),
+    storageId: v.optional(v.id('_storage')),
+    lifecycleStatus: v.union(v.literal('awaiting_upload'), v.literal('registered')),
+    securityStatus: v.union(v.literal('pending'), v.literal('approved'), v.literal('rejected')),
+    quarantineStatus: v.union(v.literal('quarantined'), v.literal('released')),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    registeredAt: v.optional(v.number()),
+    approvedAt: v.optional(v.number()),
+    rejectedAt: v.optional(v.number()),
+  })
+    .index('by_stable_id', ['id'])
+    .index('by_deck_updated', ['deckId', 'updatedAt'])
+    .index('by_deck_idempotency', ['deckId', 'idempotencyKey'])
+    .index('by_storage', ['storageId']),
+
   nodeslide_agent_runs: defineTable({
     id: v.string(),
     deckId: v.string(),

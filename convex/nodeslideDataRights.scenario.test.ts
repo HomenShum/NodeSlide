@@ -120,6 +120,29 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     createdAt: NOW,
   });
 
+  // An approved upload. Even after the blob is gone the row still names the
+  // file the owner attached and the digest of its contents, so the metadata is
+  // deck-owned in its own right.
+  await ctx.db.insert('nodeslide_uploads', {
+    id: 'upload_scenario',
+    deckId,
+    clientSessionId,
+    fileName: 'quarterly-figures.csv',
+    format: 'csv',
+    contentType: 'text/csv',
+    byteSize: 2_048,
+    contentDigest: DIGEST('c'),
+    idempotencyKey: 'upload-scenario-key',
+    requestFingerprint: DIGEST('d'),
+    lifecycleStatus: 'registered',
+    securityStatus: 'approved',
+    quarantineStatus: 'released',
+    createdAt: NOW,
+    updatedAt: NOW,
+    registeredAt: NOW,
+    approvedAt: NOW,
+  });
+
   const patchId = 'patch_scenario';
   const runId = 'run_scenario';
   const traceId = 'trace_scenario';

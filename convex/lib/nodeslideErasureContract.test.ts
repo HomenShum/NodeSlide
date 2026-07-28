@@ -59,6 +59,8 @@ describe('erasure contract derivation', () => {
       // Immutable source evidence. It outlives the mutable source row by
       // design, so nothing but the deck erasure will ever remove it.
       'nodeslide_source_revisions',
+      // Upload metadata survives the blob it describes, so it is erased here.
+      'nodeslide_uploads',
       'nodeslide_agent_runs',
       'nodeslide_agent_messages',
       'nodeslide_agent_memories',

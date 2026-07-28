@@ -8,6 +8,7 @@ import { nodeslideContentDigest } from './lib/nodeslideIds';
 import { nodeSlideProductionProbeFields } from './lib/nodeslideProductionProbe';
 import { buildGoldenNodeSlide } from './lib/nodeslideSeed';
 import {
+  NODESLIDE_DECK_ERASURE_MAX_RECORDS,
   deleteExpiredProductionProbeWorkspaces,
   deleteOwnedWorkspace,
   deleteProductionProbeWorkspace,
@@ -393,6 +394,200 @@ describe('NodeSlide owner-controlled workspace retention', () => {
     expect(await t.run((ctx) => ctx.db.query('nodeslide_decks').collect())).toHaveLength(2);
   });
 });
+
+/**
+ * The atomic envelope, ported from parity with its fail-closed semantics.
+ *
+ * Both tests below arm the sensor before they assert anything: they count the
+ * oversized rows and require the count to be non-zero, because "the deck was
+ * not erased" is exactly what an empty fixture would also report. The refusal
+ * only means something over rows that were really there.
+ */
+describe('NodeSlide erasure refuses a deck that does not fit one transaction', () => {
+  it('refuses on the byte envelope and writes nothing', async () => {
+    const t = convexTest(schema, modules);
+    const built = buildGoldenNodeSlide('retention-oversize-bytes', NOW);
+    const deckId = built.snapshot.deck.id;
+    // 48 x 128 KiB of trace context comfortably clears the 4 MiB envelope while
+    // staying far under the record limit, so this test can only fail on bytes.
+    const filler = 'x'.repeat(128 * 1024);
+    const projectRowId = await t.run(async (ctx) => {
+      const projectId = await seedRetentionProject(ctx as MutationCtx, built, 'oversize-bytes');
+      for (let index = 0; index < 48; index += 1) {
+        await ctx.db.insert('nodeslide_traces', {
+          id: `oversize-trace-${index}`,
+          deckId,
+          status: 'completed',
+          summary: 'Oversized fixture trace',
+          plan: [],
+          context: [filler],
+          toolCalls: [],
+          guardrails: [],
+          createdAt: NOW,
+          completedAt: NOW,
+        });
+      }
+      return projectId;
+    });
+
+    const seededTraces = await t.run((ctx) =>
+      ctx.db
+        .query('nodeslide_traces')
+        .withIndex('by_deck_created', (index) => index.eq('deckId', deckId))
+        .collect(),
+    );
+    expect(
+      seededTraces.length,
+      'the refusal proves nothing unless the oversized rows are really there',
+    ).toBe(48);
+
+    await expect(
+      t.run((ctx) =>
+        deleteHandler(ctx as MutationCtx, { deckId, ownerAccessKey: OWNER_ACCESS_KEY }),
+      ),
+    ).rejects.toThrow(/failed closed.*exceeds the atomic limit.*bytes; no records were deleted/is);
+
+    // Fail-closed: a refusal that had already deleted the deck row would be the
+    // worst of both outcomes — a destroyed deck and an error the caller retries.
+    const survivors = await t.run(async (ctx) => ({
+      deck: await ctx.db
+        .query('nodeslide_decks')
+        .withIndex('by_stable_id', (index) => index.eq('id', deckId))
+        .first(),
+      project: await ctx.db.get(projectRowId),
+      traces: await ctx.db
+        .query('nodeslide_traces')
+        .withIndex('by_deck_created', (index) => index.eq('deckId', deckId))
+        .collect(),
+    }));
+    expect(survivors.deck).not.toBeNull();
+    expect(survivors.project).not.toBeNull();
+    expect(survivors.traces).toHaveLength(48);
+  });
+
+  it('refuses on the record envelope and writes nothing', async () => {
+    const t = convexTest(schema, modules);
+    const built = buildGoldenNodeSlide('retention-oversize-records', NOW);
+    const deckId = built.snapshot.deck.id;
+    // One row past the limit, with payloads small enough that the byte envelope
+    // cannot be what trips: this test can only fail on the record count.
+    const overflow = NODESLIDE_DECK_ERASURE_MAX_RECORDS + 1;
+    const projectRowId = await t.run(async (ctx) => {
+      const projectId = await seedRetentionProject(ctx as MutationCtx, built, 'oversize-records');
+      for (let index = 0; index < overflow; index += 1) {
+        await ctx.db.insert('nodeslide_traces', {
+          id: `record-trace-${index}`,
+          deckId,
+          status: 'completed',
+          summary: 'r',
+          plan: [],
+          context: [],
+          toolCalls: [],
+          guardrails: [],
+          createdAt: NOW,
+          completedAt: NOW,
+        });
+      }
+      return projectId;
+    });
+
+    const seededCount = await t.run(async (ctx) => {
+      const rows = await ctx.db
+        .query('nodeslide_traces')
+        .withIndex('by_deck_created', (index) => index.eq('deckId', deckId))
+        .collect();
+      return rows.length;
+    });
+    expect(seededCount).toBe(overflow);
+
+    await expect(
+      t.run((ctx) =>
+        deleteHandler(ctx as MutationCtx, { deckId, ownerAccessKey: OWNER_ACCESS_KEY }),
+      ),
+    ).rejects.toThrow(
+      new RegExp(
+        `failed closed.*exceeds the atomic limit of ${NODESLIDE_DECK_ERASURE_MAX_RECORDS} records; no records were deleted`,
+        'is',
+      ),
+    );
+
+    const survivors = await t.run(async (ctx) => ({
+      deck: await ctx.db
+        .query('nodeslide_decks')
+        .withIndex('by_stable_id', (index) => index.eq('id', deckId))
+        .first(),
+      project: await ctx.db.get(projectRowId),
+    }));
+    expect(survivors.deck).not.toBeNull();
+    expect(survivors.project).not.toBeNull();
+  });
+
+  it('erases a deck that sits just inside the record envelope', async () => {
+    const t = convexTest(schema, modules);
+    const built = buildGoldenNodeSlide('retention-inside-envelope', NOW);
+    const deckId = built.snapshot.deck.id;
+    await t.run(async (ctx) => {
+      await seedRetentionProject(ctx as MutationCtx, built, 'inside-envelope');
+      for (let index = 0; index < 64; index += 1) {
+        await ctx.db.insert('nodeslide_traces', {
+          id: `inside-trace-${index}`,
+          deckId,
+          status: 'completed',
+          summary: 'i',
+          plan: [],
+          context: [],
+          toolCalls: [],
+          guardrails: [],
+          createdAt: NOW,
+          completedAt: NOW,
+        });
+      }
+    });
+
+    // The envelope must bound the erasure without shrinking it. A `take` that
+    // silently capped the read at the budget instead of one past it would erase
+    // most of the deck and still certify success.
+    const receipt = await t.run((ctx) =>
+      deleteHandler(ctx as MutationCtx, { deckId, ownerAccessKey: OWNER_ACCESS_KEY }),
+    );
+    expect(receipt.retentionSafe).toBe(true);
+    expect(receipt.deletedCounts.traces).toBe(64);
+    expect(
+      await t.run((ctx) =>
+        ctx.db
+          .query('nodeslide_traces')
+          .withIndex('by_deck_created', (index) => index.eq('deckId', deckId))
+          .collect(),
+      ),
+    ).toEqual([]);
+  });
+});
+
+async function seedRetentionProject(
+  ctx: MutationCtx,
+  built: ReturnType<typeof buildGoldenNodeSlide>,
+  clientSessionId: string,
+) {
+  const projectRowId = await ctx.db.insert('projects', {
+    clientSessionId,
+    title: built.snapshot.deck.title,
+    domain: 'nodeslide',
+    brief: built.snapshot.deck.brief,
+    sourceType: 'prompt',
+    starred: false,
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
+  await insertNodeSlideSnapshot(ctx, {
+    snapshot: built.snapshot,
+    projectRowId,
+    clientSessionId,
+    ownerAccessKey: OWNER_ACCESS_KEY,
+    plan: built.plan,
+    spec: built.spec,
+  });
+  return projectRowId;
+}
 
 async function rejectionMessage(run: () => Promise<unknown>): Promise<string> {
   try {

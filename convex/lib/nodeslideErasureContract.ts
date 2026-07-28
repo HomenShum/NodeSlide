@@ -27,15 +27,13 @@
  *     depends on parity schema fields this repo does not have (`workspaceId`,
  *     `workspaceProjectId`, a `runs` table).
  *
- * NOT superseded, and worth someone's attention:
- *   NODESLIDE_DECK_ERASURE_MAX_RECORDS / _MAX_BYTES. Parity measures the whole
- *   deletion set against a 4_000-record / 4 MiB envelope and refuses the
- *   deletion before the first write if it does not fit. `deleteWorkspaceRows`
- *   here calls `collectNodeSlideScopedRows` with no limit, so the bound is
- *   whatever Convex's own read limits happen to be. That fails loudly rather
- *   than silently retaining rows, so it is not a data-retention hole — but it
- *   is a weaker contract than parity's, and porting the two constants alone
- *   would change nothing without editing `nodeslideRetention.ts`.
+ *   NODESLIDE_DECK_ERASURE_MAX_RECORDS / _MAX_BYTES -> ported, and wired, into
+ *     `convex/nodeslideRetention.ts`. This entry previously read "NOT
+ *     superseded": `deleteWorkspaceRows` collected with no limit, so the bound
+ *     was whatever Convex's own read limits happened to be. It now measures the
+ *     whole erasure set against the same 4_000-record / 4 MiB envelope and
+ *     refuses before the first write, which is the part that could not be had
+ *     by copying the two constants alone.
  */
 
 /** Structural view of `defineSchema(...)`, so a test can pass a fixture schema. */

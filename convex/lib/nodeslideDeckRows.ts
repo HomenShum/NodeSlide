@@ -22,7 +22,6 @@ export interface NodeSlideStoredRow {
 }
 
 interface ScopedQuery {
-  collect: () => Promise<NodeSlideStoredRow[]>;
   take: (count: number) => Promise<NodeSlideStoredRow[]>;
 }
 
@@ -62,15 +61,12 @@ export function nodeSlideScopeValue(
   }
 }
 
-export async function collectNodeSlideScopedRows(
-  ctx: Pick<QueryCtx, 'db'>,
-  entry: NodeSlideErasureEntry,
-  value: string,
-): Promise<NodeSlideStoredRow[]> {
-  if (entry.scope.index === null) return [];
-  return await scopedQuery(ctx, entry.table, entry.scope.index, entry.scope.field, value).collect();
-}
-
+/**
+ * Every read on this path is bounded by an explicit count. There is no
+ * `collect()` helper here on purpose: an unbounded read is how a caller ends up
+ * with a deletion set nobody sized, and the erasure envelope in
+ * `nodeslideRetention.ts` can only refuse what it was allowed to measure first.
+ */
 export async function takeNodeSlideScopedRows(
   ctx: Pick<QueryCtx, 'db'>,
   entry: NodeSlideErasureEntry,

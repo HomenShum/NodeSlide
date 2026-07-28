@@ -1,11 +1,11 @@
-import { v } from 'convex/values';
-import type { Doc, Id } from './_generated/dataModel';
+import { type Value, getConvexSize, v } from 'convex/values';
+import type { Doc, Id, TableNames } from './_generated/dataModel';
 import type { MutationCtx } from './_generated/server';
 import { internalMutation, mutation } from './_generated/server';
 import { isOwnerAccessKey, requireOwnerAccess } from './lib/nodeslideAccess';
 import { findDeckRow } from './lib/nodeslideData';
 import {
-  collectNodeSlideScopedRows,
+  type NodeSlideStoredRow,
   nodeSlideScopeValue,
   takeNodeSlideScopedRows,
 } from './lib/nodeslideDeckRows';
@@ -42,6 +42,26 @@ export const NODESLIDE_ERASURE_STORAGE_FIELDS: ReadonlyMap<string, readonly stri
     nodeSlideStorageIdFields(schema as unknown as NodeSlideSchemaLike, entry.table),
   ]).filter(([, fields]) => fields.length > 0),
 );
+
+/**
+ * The size envelope for one whole-workspace erasure.
+ *
+ * Without it the ceiling is whatever Convex's own transaction limits happen to
+ * be: real, but unnamed, untested, and reported to the caller as a platform
+ * error about documents scanned rather than as a product rule. These two
+ * numbers make the cliff a stated one — measured before the first write, so a
+ * workspace that does not fit is refused whole instead of attempted and undone.
+ *
+ * The values match the export envelope's intent at half its size
+ * (`NODESLIDE_DATA_EXPORT_MAX_RECORDS` is 8_000 / 8 MiB): an export pays only
+ * read bandwidth, while an erasure pays read *and* write bandwidth for every
+ * row plus the file-storage deletes hanging off it, so it gets the tighter
+ * half of the same budget. A workspace larger than this needs a durable
+ * tombstone/batch workflow that can resume across transactions; until that
+ * exists, refusing is the honest answer.
+ */
+export const NODESLIDE_DECK_ERASURE_MAX_RECORDS = 4_000;
+export const NODESLIDE_DECK_ERASURE_MAX_BYTES = 4 * 1024 * 1024;
 
 const RETENTION_RECEIPT_SCHEMA = 'nodeslide.workspace-retention-receipt/v1' as const;
 const RETENTION_TOMBSTONE_SCHEMA = 'nodeslide.retention-tombstone/v1' as const;
@@ -200,15 +220,144 @@ export const deleteExpiredProductionProbeWorkspaces = internalMutation({
 });
 
 /**
- * Walks the derived contract. There is no table list in this function, and
- * that is the point: the set of things erased is whatever `schema.ts` says
- * hangs off a deck, resolved at runtime.
+ * One unit of the plan: either a group of rows read from a table, or one of the
+ * two anchors, which are addressed by row id rather than by a scan.
+ */
+type ErasureStep =
+  | {
+      readonly kind: 'rows';
+      readonly label: string;
+      readonly rows: readonly NodeSlideStoredRow[];
+      readonly storageFields: readonly string[];
+    }
+  | { readonly kind: 'anchor'; readonly label: string; readonly rowId: Id<TableNames> };
+
+/**
+ * The complete deletion set, measured. Producing one of these performs reads
+ * only; nothing in the plan phase may write, which is what lets the envelope be
+ * enforced before anything is destroyed.
+ */
+interface WorkspaceErasurePlan {
+  readonly steps: readonly ErasureStep[];
+  readonly records: number;
+  readonly bytes: number;
+}
+
+/** Mutable accumulator threaded through the plan phase. */
+interface ErasureBudget {
+  records: number;
+  bytes: number;
+}
+
+/**
+ * How many rows the next read is allowed to return: the remaining headroom plus
+ * one. The extra row is deliberate — it is how an over-limit table is *seen*
+ * without reading past the envelope to find out.
+ */
+function nextErasureLimit(budget: ErasureBudget): number {
+  return Math.max(1, NODESLIDE_DECK_ERASURE_MAX_RECORDS - budget.records + 1);
+}
+
+/**
+ * Charges one group of rows against both ceilings. Throws on either, which in
+ * the plan phase means the whole erasure is refused with nothing written.
+ */
+function chargeErasureRows(budget: ErasureBudget, rows: readonly NodeSlideStoredRow[]): void {
+  if (rows.length > NODESLIDE_DECK_ERASURE_MAX_RECORDS - budget.records) {
+    throw new Error(
+      `NodeSlide workspace erasure refused: the complete erasure set exceeds the atomic limit of ${NODESLIDE_DECK_ERASURE_MAX_RECORDS} records. Nothing was deleted.`,
+    );
+  }
+  budget.records += rows.length;
+  for (const row of rows) budget.bytes += getConvexSize(row as unknown as Value);
+  if (budget.bytes > NODESLIDE_DECK_ERASURE_MAX_BYTES) {
+    throw new Error(
+      `NodeSlide workspace erasure refused: the complete erasure set exceeds the atomic limit of ${NODESLIDE_DECK_ERASURE_MAX_BYTES} bytes. Nothing was deleted.`,
+    );
+  }
+}
+
+/**
+ * Walks the derived contract and measures what it finds. There is no table list
+ * in this function, and that is the point: the set of things erased is whatever
+ * `schema.ts` says hangs off a deck, resolved at runtime.
+ *
+ * Reads only. Every `take` is bounded by the remaining envelope, so the read
+ * set of a refused erasure is bounded by the envelope too — a workspace ten
+ * times too large costs the same one over-limit read as one row too large.
+ */
+async function planWorkspaceErasure(
+  ctx: MutationCtx,
+  deck: Doc<'nodeslide_decks'>,
+): Promise<WorkspaceErasurePlan> {
+  const budget: ErasureBudget = { records: 0, bytes: 0 };
+  const steps: ErasureStep[] = [];
+
+  for (const entry of NODESLIDE_ERASURE_CONTRACT) {
+    if (entry.scope.kind === 'deck') {
+      chargeErasureRows(budget, [deck as unknown as NodeSlideStoredRow]);
+      steps.push({ kind: 'anchor', label: entry.label, rowId: deck._id });
+      continue;
+    }
+    if (entry.scope.kind === 'project') {
+      const project = await ctx.db.get(deck.projectRowId);
+      chargeErasureRows(budget, project ? [project as unknown as NodeSlideStoredRow] : []);
+      steps.push({ kind: 'anchor', label: entry.label, rowId: deck.projectRowId });
+      continue;
+    }
+    const value = nodeSlideScopeValue(entry, deck);
+    if (value === null) continue;
+    const rows = await takeNodeSlideScopedRows(ctx, entry, value, nextErasureLimit(budget));
+    chargeErasureRows(budget, rows);
+    steps.push({
+      kind: 'rows',
+      label: entry.label,
+      rows,
+      storageFields: NODESLIDE_ERASURE_STORAGE_FIELDS.get(entry.table) ?? [],
+    });
+  }
+
+  await planJobDerivedRows(ctx, deck.id, budget, steps);
+
+  return { steps, records: budget.records, bytes: budget.bytes };
+}
+
+/**
+ * Applies a measured plan. Everything this function touches was already read
+ * and counted, so there is no discovery left to do and therefore no way to
+ * learn halfway through that the workspace was too large.
+ */
+async function applyWorkspaceErasure(
+  ctx: MutationCtx,
+  plan: WorkspaceErasurePlan,
+): Promise<DeletedCounts> {
+  const counts: DeletedCounts = {};
+  for (const step of plan.steps) {
+    if (step.kind === 'anchor') {
+      await ctx.db.delete(step.rowId);
+      counts[step.label] = (counts[step.label] ?? 0) + 1;
+      continue;
+    }
+    for (const row of step.rows) {
+      // Blobs first. If the row went first and the storage delete then threw,
+      // the bytes would survive with nothing left pointing at them.
+      await deleteRowStorageObjects(ctx, row, step.storageFields);
+      await ctx.db.delete(row._id);
+    }
+    if (step.rows.length > 0) counts[step.label] = (counts[step.label] ?? 0) + step.rows.length;
+  }
+  return counts;
+}
+
+/**
+ * Measures the workspace, refuses it if it does not fit, and only then deletes.
+ * The two phases are separate functions so the ordering is structural rather
+ * than a comment: `planWorkspaceErasure` has no write in it to get wrong.
  */
 async function deleteWorkspaceRows(
   ctx: MutationCtx,
   deck: Doc<'nodeslide_decks'>,
 ): Promise<DeletedCounts> {
-  const counts: DeletedCounts = {};
   const projectDecks = await ctx.db
     .query('nodeslide_decks')
     .withIndex('by_project_row', (index) => index.eq('projectRowId', deck.projectRowId))
@@ -217,34 +366,7 @@ async function deleteWorkspaceRows(
     throw new Error('NodeSlide project retention scope is not one workspace.');
   }
 
-  for (const entry of NODESLIDE_ERASURE_CONTRACT) {
-    if (entry.scope.kind === 'deck') {
-      await ctx.db.delete(deck._id);
-      counts[entry.label] = 1;
-      continue;
-    }
-    if (entry.scope.kind === 'project') {
-      await ctx.db.delete(deck.projectRowId);
-      counts[entry.label] = 1;
-      continue;
-    }
-    const value = nodeSlideScopeValue(entry, deck);
-    if (value === null) continue;
-    const rows = await collectNodeSlideScopedRows(ctx, entry, value);
-    const storageFields = NODESLIDE_ERASURE_STORAGE_FIELDS.get(entry.table) ?? [];
-    for (const row of rows) {
-      // Blobs first. If the row went first and the storage delete then threw,
-      // the bytes would survive with nothing left pointing at them.
-      await deleteRowStorageObjects(ctx, row, storageFields);
-      await ctx.db.delete(row._id);
-    }
-    if (rows.length > 0) counts[entry.label] = rows.length;
-  }
-
-  const derivedCounts = await deleteJobDerivedRows(ctx, deck.id);
-  for (const [label, count] of Object.entries(derivedCounts)) {
-    if (count > 0) counts[label] = (counts[label] ?? 0) + count;
-  }
+  const counts = await applyWorkspaceErasure(ctx, await planWorkspaceErasure(ctx, deck));
 
   // Tenant-scoped profile tables span decks by construction, so re-read them
   // after the pass instead of trusting the delete loop's own arithmetic.
@@ -258,11 +380,6 @@ async function deleteWorkspaceRows(
   }
   return counts;
 }
-
-/** Bounds one derived sweep. A deck with more jobs than this is swept in full
- * anyway — the cap only bounds a single transaction's read set, and
- * `countJobDerivedRows` is what decides whether the receipt may claim success. */
-const DERIVED_SWEEP_LIMIT = 512;
 
 /**
  * The tables `deleteJobDerivedRows` below actually deletes from. Written by hand
@@ -309,26 +426,37 @@ const DERIVED_SWEEP_TABLES = [
  * Every step uses a leading index. There is no table scan here for the same
  * reason the schema-derived path refuses one: a scan either misses rows under
  * pagination or reads the whole deployment, and both make the receipt a lie.
+ *
+ * This runs in the plan phase, which is also what makes the run lookup below
+ * correct: while this was a delete-as-you-go sweep it ran *after* the
+ * schema-derived pass had already deleted every run on the deck, so the read
+ * returned nothing and a budget owned only by a run was never erased. Reading
+ * before any write is what the comment there always claimed and now describes.
  */
-async function deleteJobDerivedRows(ctx: MutationCtx, deckId: string): Promise<DeletedCounts> {
-  const counts: DeletedCounts = {};
-  const bump = (label: string, amount: number) => {
-    if (amount > 0) counts[label] = (counts[label] ?? 0) + amount;
+async function planJobDerivedRows(
+  ctx: MutationCtx,
+  deckId: string,
+  budget: ErasureBudget,
+  steps: ErasureStep[],
+): Promise<void> {
+  // No `storageFields` on any derived table: none of them declares a
+  // `v.id('_storage')` column, and the contract is what would say otherwise.
+  const push = (label: string, rows: readonly NodeSlideStoredRow[]) => {
+    chargeErasureRows(budget, rows);
+    if (rows.length > 0) steps.push({ kind: 'rows', label, rows, storageFields: [] });
   };
 
   const jobs = await ctx.db
     .query('nodeslide_agent_jobs')
     .withIndex('by_result_deck', (index) => index.eq('resultDeckId', deckId))
-    .take(DERIVED_SWEEP_LIMIT);
+    .take(nextErasureLimit(budget));
 
-  // Runs are deck-scoped and already deleted by the schema-derived pass, but
-  // their budget ids must be collected *before* that pass runs. They are read
-  // here rather than trusted from the loop above because a run can own a budget
-  // no job ever referenced.
+  // Read here rather than trusted from the schema-derived pass because a run
+  // can own a budget no job ever referenced.
   const runs = await ctx.db
     .query('nodeslide_agent_runs')
     .withIndex('by_deck_created', (index) => index.eq('deckId', deckId))
-    .take(DERIVED_SWEEP_LIMIT);
+    .take(nextErasureLimit(budget));
 
   const budgetIds = new Set<string>();
   for (const job of jobs) if (job.budgetId) budgetIds.add(job.budgetId);
@@ -337,66 +465,66 @@ async function deleteJobDerivedRows(ctx: MutationCtx, deckId: string): Promise<D
   for (const job of jobs) {
     const sessionId = nodeslideStableId('nsession', job.id);
 
-    const events = await ctx.db
-      .query('nodeslide_durable_session_events')
-      .withIndex('by_session_job', (index) => index.eq('sessionId', sessionId).eq('jobId', job.id))
-      .take(DERIVED_SWEEP_LIMIT);
-    for (const row of events) await ctx.db.delete(row._id);
-    bump('durableSessionEvents', events.length);
-
-    const journal = await ctx.db
-      .query('nodeslide_durable_job_journal_entries')
-      .withIndex('by_binding_sequence', (index) =>
-        index.eq('sessionId', sessionId).eq('jobId', job.id),
-      )
-      .take(DERIVED_SWEEP_LIMIT);
-    for (const row of journal) await ctx.db.delete(row._id);
-    bump('durableJobJournalEntries', journal.length);
-
-    const replays = await ctx.db
-      .query('nodeslide_durable_model_result_replays')
-      .withIndex('by_exact_binding', (index) =>
-        index.eq('sessionId', sessionId).eq('jobId', job.id),
-      )
-      .take(DERIVED_SWEEP_LIMIT);
-    for (const row of replays) await ctx.db.delete(row._id);
-    bump('durableModelResultReplays', replays.length);
-
-    const sessions = await ctx.db
-      .query('nodeslide_durable_sessions')
-      .withIndex('by_stable_id', (index) => index.eq('id', sessionId))
-      .take(2);
-    for (const row of sessions) await ctx.db.delete(row._id);
-    bump('durableSessions', sessions.length);
-
-    await ctx.db.delete(job._id);
-    bump('agentJobs', 1);
+    push(
+      'durableSessionEvents',
+      await ctx.db
+        .query('nodeslide_durable_session_events')
+        .withIndex('by_session_job', (index) =>
+          index.eq('sessionId', sessionId).eq('jobId', job.id),
+        )
+        .take(nextErasureLimit(budget)),
+    );
+    push(
+      'durableJobJournalEntries',
+      await ctx.db
+        .query('nodeslide_durable_job_journal_entries')
+        .withIndex('by_binding_sequence', (index) =>
+          index.eq('sessionId', sessionId).eq('jobId', job.id),
+        )
+        .take(nextErasureLimit(budget)),
+    );
+    push(
+      'durableModelResultReplays',
+      await ctx.db
+        .query('nodeslide_durable_model_result_replays')
+        .withIndex('by_exact_binding', (index) =>
+          index.eq('sessionId', sessionId).eq('jobId', job.id),
+        )
+        .take(nextErasureLimit(budget)),
+    );
+    push(
+      'durableSessions',
+      await ctx.db
+        .query('nodeslide_durable_sessions')
+        .withIndex('by_stable_id', (index) => index.eq('id', sessionId))
+        .take(2),
+    );
+    push('agentJobs', [job as unknown as NodeSlideStoredRow]);
   }
 
   for (const budgetId of budgetIds) {
-    const calls = await ctx.db
-      .query('nodeslide_billable_calls')
-      .withIndex('by_budget_call', (index) => index.eq('budgetId', budgetId))
-      .take(DERIVED_SWEEP_LIMIT);
-    for (const row of calls) await ctx.db.delete(row._id);
-    bump('billableCalls', calls.length);
-
-    const budgetEvents = await ctx.db
-      .query('nodeslide_budget_events')
-      .withIndex('by_budget_sequence', (index) => index.eq('budgetId', budgetId))
-      .take(DERIVED_SWEEP_LIMIT);
-    for (const row of budgetEvents) await ctx.db.delete(row._id);
-    bump('budgetEvents', budgetEvents.length);
-
-    const budgets = await ctx.db
-      .query('nodeslide_run_budgets')
-      .withIndex('by_stable_id', (index) => index.eq('id', budgetId))
-      .take(2);
-    for (const row of budgets) await ctx.db.delete(row._id);
-    bump('runBudgets', budgets.length);
+    push(
+      'billableCalls',
+      await ctx.db
+        .query('nodeslide_billable_calls')
+        .withIndex('by_budget_call', (index) => index.eq('budgetId', budgetId))
+        .take(nextErasureLimit(budget)),
+    );
+    push(
+      'budgetEvents',
+      await ctx.db
+        .query('nodeslide_budget_events')
+        .withIndex('by_budget_sequence', (index) => index.eq('budgetId', budgetId))
+        .take(nextErasureLimit(budget)),
+    );
+    push(
+      'runBudgets',
+      await ctx.db
+        .query('nodeslide_run_budgets')
+        .withIndex('by_stable_id', (index) => index.eq('id', budgetId))
+        .take(2),
+    );
   }
-
-  return counts;
 }
 
 /**

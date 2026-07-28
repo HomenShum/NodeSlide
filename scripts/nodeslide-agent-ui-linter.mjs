@@ -5,7 +5,11 @@ import { fileURLToPath } from 'node:url';
 // The trust-surface census lives in a sibling module because it walks the whole src tree
 // rather than a fixed file list, but it is NOT a second gate: its checks are appended to
 // this list and share this exit code. Two gates over the same rule drift; one does not.
-import { clauseRunMode, trustSurfaceChecks } from './nodeslide-trust-surface-census.mjs';
+import {
+  clauseRunMode,
+  motionDeceptionCoverage,
+  trustSurfaceChecks,
+} from './nodeslide-trust-surface-census.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // The AI-Elements composer rewrite split the agent surface across two files: the tab
@@ -135,6 +139,15 @@ console.log(
   `\nTrust-surface census: ${census.annotated.length} enumerated, ` +
     `${census.notRun.length} not-run, ${census.byComponent.size} components swept`,
 );
+
+/*
+ * And say what the gate CANNOT see. The clause list above reports which clauses ran; this
+ * reports which real-world deceptions those clauses would actually catch, graded fixture by
+ * fixture against the Motion Deception Corpus. Without it the final score reads as "no
+ * deceptive motion exists", which is a claim no static gate is entitled to make.
+ */
+console.log('');
+for (const line of await motionDeceptionCoverage()) console.log(line);
 console.log(
   `\nNodeSlide agent-operability checks: ${checks.length - failures.length}/${checks.length}`,
 );

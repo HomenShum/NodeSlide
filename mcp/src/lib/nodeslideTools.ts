@@ -9,6 +9,8 @@ const BRIEF_CONSENT = 'openrouter_full_brief_v1';
 const WEB_CONSENT = 'nodeslide_web_research_v1';
 const LOCAL_BYOK_CONSENT = 'nodeslide_local_byok_edit_v1';
 const DEFAULT_BYOK_MODEL = process.env.NODESLIDE_BYOK_MODEL ?? 'z-ai/glm-5.2';
+const NODE_SLIDE_PAGE_DEFAULT = 25;
+const NODE_SLIDE_PAGE_MAX = 100;
 
 type ConvexCall = (
   kind: 'query' | 'mutation' | 'action',
@@ -83,6 +85,8 @@ interface NodeSlideMcpToolArguments {
   ownerAccessKey?: string;
   traceId?: string;
   limit: number;
+  /** Opaque, deck-version-bound page cursor. See paginateNodeSlideItems. */
+  cursor?: string;
   instruction: string;
   scope: 'deck' | 'slide' | 'elements';
   slideId?: string;
@@ -162,15 +166,16 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
     },
     async (args) => {
       const workspace = await getWorkspace(convexCall, args.deckId, args.ownerAccessKey);
+      const canonical = canonicalNodeSlideSnapshot(workspace);
       return textResult({
-        deck: workspace.deck,
+        deck: canonical.deck,
         counts: {
           slides: workspace.slides.length,
           elements: workspace.elements.length,
           sources: workspace.sources.length,
           pendingProposals: workspace.patches.filter((patch) => patch.status === 'ready').length,
         },
-        validation: workspace.validations.at(-1) ?? null,
+        validation: stripCapabilitySecrets(workspace.validations.at(-1) ?? null),
         receipt: readReceipt('nodeslide.get_deck', workspace),
       });
     },
@@ -181,17 +186,30 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
     'nodeslide.list_slides',
     {
       title: 'List structured NodeSlide slides',
-      description: 'Owner-gated, read-only list of slides and their version clocks.',
-      inputSchema: ownerArgs,
+      description:
+        'Owner-gated, read-only list of slides and their version clocks. Bounded and cursor-paginated; cursors are deck-version-bound, so a deck that changed must be read again from the first page.',
+      inputSchema: {
+        ...ownerArgs,
+        cursor: z.string().max(512).optional(),
+        limit: z.number().int().min(1).max(NODE_SLIDE_PAGE_MAX).default(NODE_SLIDE_PAGE_DEFAULT),
+      },
       annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     },
     async (args) => {
       const workspace = await getWorkspace(convexCall, args.deckId, args.ownerAccessKey);
+      const canonical = canonicalNodeSlideSnapshot(workspace);
+      const ranked = canonical.slides.map((slide, index) => ({ index: index + 1, ...slide }));
+      const page = paginateNodeSlideItems(ranked, {
+        deckId: workspace.deck.id,
+        deckVersion: workspace.deck.version,
+        collection: 'slides',
+        cursor: args.cursor,
+        limit: args.limit,
+      });
+      const { items: slides, ...pagination } = page;
       return textResult({
-        slides: workspace.deck.slideOrder.map((id, index) => {
-          const slide = workspace.slides.find((candidate) => candidate.id === id);
-          return { index: index + 1, ...slide };
-        }),
+        slides,
+        pagination,
         receipt: readReceipt('nodeslide.list_slides', workspace),
       });
     },
@@ -217,7 +235,10 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
         .sort((left, right) => right.createdAt - left.createdAt)
         .filter((trace) => !args.traceId || trace.id === args.traceId)
         .slice(0, args.limit);
-      return textResult({ traces, receipt: readReceipt('nodeslide.get_trace', workspace) });
+      return textResult({
+        traces: stripCapabilitySecrets(traces),
+        receipt: readReceipt('nodeslide.get_trace', workspace),
+      });
     },
   );
 
@@ -236,7 +257,10 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
         .sort((left, right) => right.version - left.version || right.createdAt - left.createdAt)
         .slice(0, args.limit)
         .map(({ snapshot: _snapshot, ...version }) => version);
-      return textResult({ versions, receipt: readReceipt('nodeslide.list_versions', workspace) });
+      return textResult({
+        versions: stripCapabilitySecrets(versions),
+        receipt: readReceipt('nodeslide.list_versions', workspace),
+      });
     },
   );
 
@@ -629,6 +653,168 @@ function clocksForScope(workspace: NodeSlideWorkspace, scope: NodeSlideScope) {
         .map((element) => [element.id, element.version]),
     ),
   };
+}
+
+/**
+ * Deterministic read order plus recursive capability-secret removal.
+ *
+ * Ordering matters because an agent that re-reads a deck and sees the same rows
+ * in a different order cannot tell a reordering from an edit. Rows are ranked by
+ * the deck's own `slideOrder` / `elementOrder`, with the id as the tiebreak for
+ * anything the order arrays do not mention.
+ *
+ * The secret filter is the load-bearing half. `getWorkspace` destructures a
+ * top-level `ownerAccessKey` away, but `patches`, `traces` and `versions` are
+ * open `Record<string, unknown>` server payloads, so any nested `*AccessToken`,
+ * `*RefreshToken`, `*GrantToken`, `*TokenDigest` or `*AccessKey` field would
+ * otherwise be serialized straight into a tool result and into the calling
+ * model's context.
+ */
+export function canonicalNodeSlideSnapshot(workspace: NodeSlideWorkspace) {
+  const slideRank = new Map(workspace.deck.slideOrder.map((id, index) => [id, index]));
+  const slides = [...workspace.slides].sort((left, right) => {
+    const leftRank = slideRank.get(left.id) ?? Number.MAX_SAFE_INTEGER;
+    const rightRank = slideRank.get(right.id) ?? Number.MAX_SAFE_INTEGER;
+    return leftRank - rightRank || left.id.localeCompare(right.id);
+  });
+  const elementRank = new Map(
+    slides.map((slide) => [
+      slide.id,
+      new Map(
+        ((slide as { elementOrder?: string[] }).elementOrder ?? []).map((id, index) => [id, index]),
+      ),
+    ]),
+  );
+  const elements = [...workspace.elements].sort((left, right) => {
+    const slideDifference =
+      (slideRank.get(left.slideId) ?? Number.MAX_SAFE_INTEGER) -
+      (slideRank.get(right.slideId) ?? Number.MAX_SAFE_INTEGER);
+    if (slideDifference !== 0) return slideDifference;
+    const order = elementRank.get(left.slideId);
+    const elementDifference =
+      (order?.get(left.id) ?? Number.MAX_SAFE_INTEGER) -
+      (order?.get(right.id) ?? Number.MAX_SAFE_INTEGER);
+    return elementDifference || left.id.localeCompare(right.id);
+  });
+  const sources = [...workspace.sources].sort((left, right) => left.id.localeCompare(right.id));
+  return stripCapabilitySecrets({
+    deck: workspace.deck,
+    slides,
+    elements,
+    sources,
+  });
+}
+
+/**
+ * Offset pagination whose cursor is bound to the deck version, the collection
+ * and the filter. An agent holding a cursor across an edit cannot silently
+ * resume into a shifted list — the cursor is rejected and it must read again
+ * from the first page.
+ */
+export function paginateNodeSlideItems<T>(
+  items: readonly T[],
+  args: {
+    deckId: string;
+    deckVersion: number;
+    collection: 'slides' | 'elements';
+    filter?: string;
+    cursor?: string;
+    limit?: number;
+  },
+): {
+  items: T[];
+  nextCursor: string | null;
+  hasMore: boolean;
+  total: number;
+  limit: number;
+} {
+  const limit = Math.min(
+    NODE_SLIDE_PAGE_MAX,
+    Math.max(1, Math.trunc(args.limit ?? NODE_SLIDE_PAGE_DEFAULT)),
+  );
+  const cursorContext = {
+    deckId: args.deckId,
+    deckVersion: args.deckVersion,
+    collection: args.collection,
+    filter: args.filter ?? '*',
+  };
+  const offset = args.cursor ? decodeNodeSlideCursor(args.cursor, cursorContext) : 0;
+  if (offset > items.length) {
+    throw new Error('NodeSlide cursor is outside the current collection. Start again without it.');
+  }
+  const pageItems = items.slice(offset, offset + limit);
+  const nextOffset = offset + pageItems.length;
+  const hasMore = nextOffset < items.length;
+  return {
+    items: pageItems,
+    nextCursor: hasMore
+      ? Buffer.from(JSON.stringify({ ...cursorContext, offset: nextOffset }), 'utf8').toString(
+          'base64url',
+        )
+      : null,
+    hasMore,
+    total: items.length,
+    limit,
+  };
+}
+
+function decodeNodeSlideCursor(
+  cursor: string,
+  expected: {
+    deckId: string;
+    deckVersion: number;
+    collection: 'slides' | 'elements';
+    filter: string;
+  },
+): number {
+  try {
+    const parsed = JSON.parse(Buffer.from(cursor, 'base64url').toString('utf8')) as Record<
+      string,
+      unknown
+    >;
+    if (
+      parsed.deckId !== expected.deckId ||
+      parsed.deckVersion !== expected.deckVersion ||
+      parsed.collection !== expected.collection ||
+      parsed.filter !== expected.filter ||
+      !Number.isInteger(parsed.offset) ||
+      (parsed.offset as number) < 0
+    ) {
+      throw new Error('context mismatch');
+    }
+    return parsed.offset as number;
+  } catch {
+    throw new Error(
+      'NodeSlide cursor is invalid or stale for this deck version, collection, or filter. Start again without it.',
+    );
+  }
+}
+
+function stripCapabilitySecrets<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((item) => stripCapabilitySecrets(item)) as T;
+  }
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.entries(value as Record<string, unknown>)
+      .filter(([key]) => !isCapabilitySecretField(key))
+      .map(([key, item]) => [key, stripCapabilitySecrets(item)]),
+  ) as T;
+}
+
+function isCapabilitySecretField(key: string): boolean {
+  const normalized = key.replace(/[^a-z0-9]/giu, '').toLowerCase();
+  return (
+    normalized === 'token' ||
+    normalized.endsWith('accesstoken') ||
+    normalized.endsWith('refreshtoken') ||
+    normalized.endsWith('bearertoken') ||
+    normalized.endsWith('delegationtoken') ||
+    normalized.endsWith('granttoken') ||
+    normalized.endsWith('capabilitytoken') ||
+    normalized.endsWith('tokendigest') ||
+    normalized.endsWith('accesskey')
+  );
 }
 
 function readReceipt(tool: string, workspace: NodeSlideWorkspace) {

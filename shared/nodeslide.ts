@@ -1131,7 +1131,6 @@ export interface DeckVersion {
   createdAt: number;
 }
 
-export interface AgentTrace {
   id: string;
   deckId: string;
   patchId?: string;

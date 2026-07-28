@@ -80,6 +80,7 @@ import {
   nodeSlideDataAttachmentShape,
   normalizeNodeSlideDataAttachment,
 } from './lib/nodeslideDataAttachment';
+import { forkNodeSlideSnapshot } from './lib/nodeslideDeckFork';
 import {
   NODESLIDE_EXECUTION_TRACE_LIMIT_PER_DECK,
   type NodeSlideExecutionTrace,
@@ -3493,6 +3494,72 @@ export const getAgentContextInternal = internalQuery({
   handler: async (ctx, { deckId, ownerAccessKey }) => {
     await requireOwnerAccess(ctx, deckId, ownerAccessKey);
     return await loadNodeSlideWorkspace(ctx, deckId, Date.now());
+  },
+});
+
+/**
+ * Duplicates a deck into a brand-new identity owned by a different access key.
+ *
+ * `forkNodeSlideSnapshot` has lived in `lib/nodeslideDeckFork.ts` since the
+ * decoupling landed, but nothing outside its own unit test called it: the
+ * library was copied and its only caller was not. This mutation is that caller.
+ * It reuses `createWorkspaceRows`, so a duplicate is persisted through the same
+ * validation, project row, initial version and creation trace as any other new
+ * deck — a fork that skipped that path would be the one deck in the deployment
+ * whose snapshot was never validated.
+ *
+ * Share links, publications and signature bindings are deliberately NOT copied;
+ * they name rows owned by the source deck, and duplicating the pointer would
+ * hand the copy's owner a capability over the original.
+ */
+export const duplicateDeck = mutation({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    newOwnerAccessKey: v.string(),
+    clientSessionId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    if (!isOwnerAccessKey(args.newOwnerAccessKey)) {
+      throw new Error('Invalid NodeSlide owner access key for the duplicate.');
+    }
+    const source = await requireSnapshot(ctx, args.deckId);
+    const now = Date.now();
+    const forkDigest = nodeslideContentDigest(`${args.deckId}:${now}:${args.clientSessionId}`);
+    const deckId = nodeslideStableId('deck_fork', forkDigest);
+    const projectId = nodeslideStableId('project_fork', forkDigest);
+    const forked = forkNodeSlideSnapshot(source, { deckId, projectId, now });
+    await createWorkspaceRows(ctx, {
+      clientSessionId: args.clientSessionId,
+      ownerAccessKey: args.newOwnerAccessKey,
+      built: {
+        snapshot: forked,
+        plan: [
+          `Duplicated from "${source.deck.title}"`,
+          'Re-identified every slide, element, and source',
+          'Validated the duplicate before persisting',
+        ],
+        spec: {
+          title: forked.deck.title,
+          narrative: [`Duplicated from deck ${source.deck.id} at v${source.deck.version}`],
+          slides: [],
+        },
+      },
+      trace: {
+        summary: `Duplicated "${source.deck.title}" as a new editable deck.`,
+        context: [
+          `Source deck: ${source.deck.id} at v${source.deck.version}`,
+          'Share links, publications, and signature bindings were not copied.',
+        ],
+        toolCalls: [
+          'Forked the canonical snapshot with fresh identities',
+          'Reset version clocks to v1',
+          'Validated snapshot',
+        ],
+      },
+    });
+    return { deckId, title: forked.deck.title };
   },
 });
 

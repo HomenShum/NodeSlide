@@ -99,21 +99,21 @@ describe('nodeslide derived-scope erasure', () => {
     expect(exportSource).toContain('NODESLIDE_ERASURE_EXCLUSIONS');
   });
 
-  it('verifies each swept budget id before the id becomes unreachable', () => {
-    // `countJobDerivedRows` re-derives budget ids from SURVIVING job and run
-    // rows. Once those are deleted, a stranded ledger row cannot be reached by
-    // any deck-anchored query, so the post-sweep residue count cannot see it and
-    // the receipt would say `remainingDeckRows: 0` over real surviving spend
-    // data. The sweep therefore re-reads each budget id in the same loop that
-    // deleted it, which is the last moment that id is known.
-    //
-    // Before the budget-ledger port nothing wrote these rows, so this was
-    // unreachable in practice. The job start mutations now open one per
-    // provider-backed job, so it is a live path.
-    expect(retentionSource).toContain('NodeSlide erasure left a');
-    for (const table of ['nodeslide_run_budgets', 'nodeslide_billable_calls']) {
-      expect(retentionSource, `${table} is deleted but never re-read`).toContain(table);
-    }
+  it('reads the budget child tables against the envelope, not the incremental sweep cap', () => {
+    // `DERIVED_SWEEP_LIMIT` is sound for the job-anchored tables: a job that
+    // does not fit one transaction survives it, and the next call re-derives
+    // everything hanging off that surviving row. The budget tables have no
+    // anchor that survives — their id comes from `job.budgetId` and the job is
+    // deleted in the same pass — so a capped read strands rows behind an id
+    // nothing can produce again. `envelope.nextLimit()` returns one past the
+    // remaining budget, so an over-large ledger refuses the whole erasure
+    // instead. The behavioural half of this lives in `nodeslideRetention.test.ts`.
+    const budgetLoop = retentionSource.slice(retentionSource.indexOf('for (const budgetId of'));
+    const body = budgetLoop.slice(0, budgetLoop.indexOf('return { groups'));
+    expect(body, 'a budget child read still uses the incremental sweep cap').not.toContain(
+      'sweepLimit()',
+    );
+    expect(body).toContain('envelope.nextLimit()');
   });
 
   it('never leaves a storage pointer behind in the budget tables it sweeps', () => {

@@ -193,6 +193,8 @@ describe('NodeSlide MCP governance', () => {
   });
 
   it('orders the canonical snapshot and strips owner capabilities recursively', () => {
+    const [firstElement] = workspace.elements;
+    if (!firstElement) throw new Error('fixture workspace has no elements');
     const unordered = {
       ...workspace,
       deck: {
@@ -204,10 +206,7 @@ describe('NodeSlide MCP governance', () => {
         { id: 'slide_1', title: 'One', version: 1, elementOrder: ['element_1'] },
         { id: 'slide_2', title: 'Two', version: 1, elementOrder: ['element_2'] },
       ],
-      elements: [
-        workspace.elements[0]!,
-        { ...workspace.elements[0]!, id: 'element_2', slideId: 'slide_2' },
-      ],
+      elements: [firstElement, { ...firstElement, id: 'element_2', slideId: 'slide_2' }],
     } as unknown as NodeSlideWorkspace;
     const snapshot = canonicalNodeSlideSnapshot(unordered);
     expect(snapshot.slides.map((slide) => slide.id)).toEqual(['slide_2', 'slide_1']);
@@ -268,12 +267,15 @@ describe('NodeSlide MCP governance', () => {
   });
 
   it('caps a caller-requested page size at the module maximum', () => {
-    const page = paginateNodeSlideItems(Array.from({ length: 500 }, (_, index) => index), {
-      deckId: 'deck_1',
-      deckVersion: 3,
-      collection: 'slides',
-      limit: 10_000,
-    });
+    const page = paginateNodeSlideItems(
+      Array.from({ length: 500 }, (_, index) => index),
+      {
+        deckId: 'deck_1',
+        deckVersion: 3,
+        collection: 'slides',
+        limit: 10_000,
+      },
+    );
     expect(page.limit).toBe(100);
     expect(page.items).toHaveLength(100);
     expect(page.hasMore).toBe(true);

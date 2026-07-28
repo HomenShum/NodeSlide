@@ -11,7 +11,7 @@ import {
   nodeSlideAgentModel,
 } from '../shared/nodeslide';
 import { internal } from './_generated/api';
-import { action } from './_generated/server';
+import { type ActionCtx, action } from './_generated/server';
 import { createOwnerAccessKey, isOwnerAccessKey } from './lib/nodeslideAccess';
 import {
   authorizeNodeSlideAgenticOperation,
@@ -56,6 +56,10 @@ import {
   NODESLIDE_EDIT_SHADOW_ADAPTER_VERSION,
   planNodeSlideEditShadow,
 } from './lib/nodeslideEditShadowPlanner';
+import {
+  captureNodeSlideWebEvidence,
+  createNodeSlideSourceSnapshotPdf,
+} from './lib/nodeslideEvidenceCapture';
 import { executionTraceFromDeckRepl } from './lib/nodeslideExecutionTrace';
 import { nodeslideContentDigest, nodeslideEventId, nodeslideStableId } from './lib/nodeslideIds';
 import {
@@ -152,6 +156,167 @@ function normalizedStoredNodeSlideWebSourceUrl(value: string): string | undefine
     return parsed.toString().slice(0, 900);
   } catch {
     return undefined;
+  }
+}
+
+export function nodeSlideEvidenceAttachmentDigest(bytes: Uint8Array): string {
+  return nodeslideContentDigest(bytes);
+}
+
+/** Deletes a just-stored attachment if its custody record cannot be committed, then rethrows. */
+export async function finalizeNodeSlideEvidenceRecord<TStorageId, TResult>(args: {
+  storageId: TStorageId;
+  deleteStorage: (storageId: TStorageId) => Promise<void>;
+  record: () => Promise<TResult>;
+}): Promise<TResult> {
+  try {
+    return await args.record();
+  } catch (recordError) {
+    try {
+      await args.deleteStorage(args.storageId);
+    } catch (cleanupError) {
+      throw new AggregateError(
+        [recordError, cleanupError],
+        'Evidence custody recording failed and the orphaned attachment could not be deleted.',
+      );
+    }
+    throw recordError;
+  }
+}
+
+export async function captureWebSourcesBestEffort(
+  ctx: ActionCtx,
+  args: {
+    deckId: string;
+    ownerAccessKey: string;
+    runId: string;
+    parentSpanId: string;
+    sources: NodeSlideStoredWebSource[];
+  },
+): Promise<void> {
+  const apiKey = process.env['FIRECRAWL_API_KEY']?.trim();
+  const targets = args.sources.slice(0, 3);
+  const captures = await Promise.allSettled(
+    targets.map(async (source) => ({
+      source,
+      capture: apiKey ? await captureNodeSlideWebEvidence({ url: source.url, apiKey }) : null,
+    })),
+  );
+  for (const result of captures) {
+    if (result.status === 'rejected') continue;
+    const { source, capture } = result.value;
+    const retrievedAt = Date.now();
+    const snapshotPdf = createNodeSlideSourceSnapshotPdf({
+      title: source.title,
+      url: source.url,
+      excerpt: source.snippet,
+      provider: source.provider,
+      retrievedAt,
+    });
+    let storedAttachment:
+      | {
+          storageId: Awaited<ReturnType<ActionCtx['storage']['store']>>;
+          kind: 'screenshot' | 'pdf';
+          digest: string;
+        }
+      | undefined;
+    if (capture?.screenshot) {
+      const bytes = Uint8Array.from(capture.screenshot.bytes);
+      try {
+        storedAttachment = {
+          storageId: await ctx.storage.store(
+            new Blob([bytes.buffer], { type: capture.screenshot.mimeType }),
+          ),
+          kind: 'screenshot',
+          digest: nodeSlideEvidenceAttachmentDigest(bytes),
+        };
+      } catch {
+        storedAttachment = undefined;
+      }
+    }
+    if (!storedAttachment) {
+      const bytes = Uint8Array.from(snapshotPdf.bytes);
+      try {
+        storedAttachment = {
+          storageId: await ctx.storage.store(new Blob([bytes.buffer], { type: 'application/pdf' })),
+          kind: 'pdf',
+          digest: nodeSlideEvidenceAttachmentDigest(bytes),
+        };
+      } catch {
+        // Evidence remains additive when no attachment was stored; retained citations still work.
+        continue;
+      }
+    }
+    const contentDigest = storedAttachment.digest;
+    const captureId = nodeslideStableId(
+      'evidence_capture',
+      args.runId,
+      source.sourceId,
+      contentDigest,
+    );
+    const screenshotStorageId =
+      storedAttachment.kind === 'screenshot' ? storedAttachment.storageId : undefined;
+    const pdfStorageId = storedAttachment.kind === 'pdf' ? storedAttachment.storageId : undefined;
+    const screenshotViewport = screenshotStorageId ? capture?.screenshot?.viewport : undefined;
+    const screenshotBox = screenshotViewport ? { x: 0, y: 0, w: 1, h: 1 } : undefined;
+    await finalizeNodeSlideEvidenceRecord({
+      storageId: storedAttachment.storageId,
+      deleteStorage: (storageId) => ctx.storage.delete(storageId),
+      record: () =>
+        ctx.runMutation(nodeslideInternal.recordEvidenceCaptureInternal, {
+          id: captureId,
+          deckId: args.deckId,
+          ownerAccessKey: args.ownerAccessKey,
+          runId: args.runId,
+          parentSpanId: args.parentSpanId,
+          sourceId: source.sourceId,
+          url: source.url,
+          goal: `Preserve evidence for ${source.title}`,
+          provider: screenshotStorageId
+            ? (capture?.provider ?? 'firecrawl')
+            : 'nodeslide-source-snapshot/v1',
+          status: 'ready',
+          contentDigest,
+          startedAt: capture?.startedAt ?? retrievedAt,
+          completedAt: capture?.completedAt ?? retrievedAt,
+          steps: [
+            {
+              phase: 'observe',
+              label: screenshotStorageId
+                ? `Captured webpage evidence for ${source.title}`
+                : `Preserved search-provider snapshot for ${source.title}`,
+              status: screenshotStorageId && screenshotViewport ? 'ok' : 'warning',
+              ...(screenshotStorageId && !screenshotViewport
+                ? {
+                    detail:
+                      'Stored the exact screenshot bytes, but the encoded image dimensions could not be verified. No region geometry was recorded.',
+                  }
+                : !screenshotStorageId
+                  ? {
+                      detail: capture?.error
+                        ? `${capture.error} Stored an exact title, URL, and excerpt snapshot instead; it is not a webpage screenshot.`
+                        : 'Stored the exact search-provider title, URL, and excerpt as a PDF; it is not a webpage screenshot.',
+                    }
+                  : {}),
+              ...(screenshotStorageId
+                ? {
+                    screenshotStorageId,
+                    ...(screenshotBox ? { box: screenshotBox } : {}),
+                    ...(screenshotViewport ? { viewport: screenshotViewport } : {}),
+                  }
+                : {}),
+              ...(pdfStorageId
+                ? { pdfStorageId, box: snapshotPdf.box, viewport: snapshotPdf.viewport }
+                : {}),
+              regionScope: 'source',
+              quote: source.snippet.slice(0, 1000),
+              contentDigest,
+              startedAt: capture?.startedAt ?? retrievedAt,
+              completedAt: capture?.completedAt ?? retrievedAt,
+            },
+          ],
+        }),
+    });
   }
 }
 
@@ -414,16 +579,35 @@ export const proposeEdit = action({
             'The web search returned no usable sources. No proposal was created.',
           );
         }
-        await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
-          deckId: args.deckId,
-          ownerAccessKey: args.ownerAccessKey,
-          runId,
-          status: 'planning',
-          message: `Retained ${webSourceIds.length} web sources from ${webProvidersUsed.join(', ') || configured.join(', ')}${storedWebSources.length > 0 ? `: ${storedWebSources.map((source) => source.title).join('; ')}` : ''}.`,
-          role: 'tool',
-          toolName: 'source_snapshot',
-          sourceIds: webSourceIds,
-        });
+        const sourceSnapshotReceipt = await ctx.runMutation(
+          nodeslideInternal.advanceAgentRunInternal,
+          {
+            deckId: args.deckId,
+            ownerAccessKey: args.ownerAccessKey,
+            runId,
+            status: 'planning',
+            message: `Retained ${webSourceIds.length} web sources from ${webProvidersUsed.join(', ') || configured.join(', ')}${storedWebSources.length > 0 ? `: ${storedWebSources.map((source) => source.title).join('; ')}` : ''}.`,
+            role: 'tool',
+            toolName: 'source_snapshot',
+            sourceIds: webSourceIds,
+          },
+        );
+        // A retained citation is a URL and a snippet the search provider handed
+        // us. It proves nothing on its own: the page can change or vanish, and
+        // the reader has no way to check what was actually there when the deck
+        // was written. Capturing the page — or, when no capture provider is
+        // configured, an exact title/URL/excerpt snapshot PDF — is what turns the
+        // citation into evidence. Best-effort by design: a capture failure must
+        // never cost the author their proposal.
+        if (sourceSnapshotReceipt?.spanId && storedWebSources.length > 0) {
+          await captureWebSourcesBestEffort(ctx, {
+            deckId: args.deckId,
+            ownerAccessKey: args.ownerAccessKey,
+            runId,
+            parentSpanId: sourceSnapshotReceipt.spanId,
+            sources: storedWebSources,
+          });
+        }
         workspace = (await ctx.runQuery(nodeslideInternal.getAgentContextInternal, {
           deckId: args.deckId,
           ownerAccessKey: args.ownerAccessKey,

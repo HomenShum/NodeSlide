@@ -2,24 +2,43 @@ import { readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+import * as budgetsModule from './nodeslideBudgets';
+import * as jobControlModule from './nodeslideJobControl';
+import * as jobRunnerModule from './nodeslideJobRunner';
+import * as jobWorkflowModule from './nodeslideJobWorkflow';
+import * as jobsModule from './nodeslideJobs';
 import { NODESLIDE_JOB_SIBLING_MODULES, startCreateDeck, startEditProposal } from './nodeslideJobs';
 
 /**
- * Scenario: an author clicks "Generate deck". The mutation writes a job row,
- * returns `{ status: 'queued' }`, the UI starts polling — and nothing ever
- * moves, because the workflow module that would pick the job up is not deployed
- * in this repo.
+ * Scenario: an author clicks "Generate deck". Until this port, the mutation
+ * refused before writing anything, because the workflow module that would pick
+ * the job up was not deployed here.
  *
- * That is not a hypothetical. `internal` in `convex/_generated/api.js` is
- * `anyApi`, a proxy that returns a plausible function reference for any path.
+ * The hazard the refusal guarded against is still real, and is why the guard
+ * stays: `internal` in `convex/_generated/api.js` is `anyApi`, a proxy that
+ * returns a plausible function reference for any path.
  * `internal.nodeslideJobWorkflow.createDeckJobWorkflow` therefore type-checks,
  * constructs cleanly, and fails only at dispatch — after the row is written and
  * after the caller has been told the job was accepted. The author's only signal
- * is a spinner that never resolves.
+ * would be a spinner that never resolves.
  *
- * `nodeslideJobs.ts` refuses up front instead. These tests pin both halves of
- * that refusal: the declared dependency table has to match what is actually on
- * disk, and the start mutations have to fail before touching the database.
+ * WHAT CHANGED. `nodeslideJobWorkflow`, `nodeslideJobRunner`, `nodeslideJobControl`
+ * and `nodeslideBudgets` have landed, so `NODESLIDE_JOB_SIBLING_MODULES` now
+ * declares every sibling present and `requireJobOrchestrator` no longer throws.
+ * A refusal test that only asserted "it refuses" would, at that point, silently
+ * assert nothing — the `absent.length === 0` early return would make it green
+ * and empty. So the three refusal cases have been replaced by the path they
+ * were standing in for:
+ *
+ *   1. The start mutations proceed past the guard and reach the database. Their
+ *      first act is real work, not a throw.
+ *   2. Every internal function the orchestrator dispatches to BY NAME resolves
+ *      to a real export on a real module. `anyApi` cannot tell you this; a
+ *      missing name here is exactly the dispatch failure the guard existed to
+ *      prevent, and the only way to catch it before production is to look.
+ *
+ * The declared-vs-on-disk case is unchanged and still checked in both
+ * directions, so deleting a sibling module puts the refusal back honestly.
  */
 
 const convexDirectory = path.dirname(fileURLToPath(import.meta.url));
@@ -58,15 +77,29 @@ function rawHandler(fn: unknown): JobHandler {
   return (fn as { _handler: JobHandler })._handler;
 }
 
+/**
+ * 43 URL-safe base64 characters, the shape `isOwnerAccessKey` accepts.
+ *
+ * These fixtures previously used an `nsk_`-prefixed placeholder that the owner
+ * validator rejects. That was invisible while the orchestrator guard threw
+ * first: nothing downstream of it ever ran. Now that the guard is retired the
+ * fixture has to be a key the mutation would actually accept, or the test
+ * measures the argument validator instead of the dispatch path.
+ */
+const OWNER_ACCESS_KEY = 'A'.repeat(43);
+
 const CREATE_ARGS = {
   clientSessionId: 'client-session-jobs-runtime',
+  title: 'Quarterly board review',
   brief: {
-    topic: 'Quarterly board review',
+    prompt: 'Draft a board review of the hiring plan.',
     audience: 'Board of directors',
-    goal: 'Approve the hiring plan',
-    tone: 'executive',
+    purpose: 'Approve the hiring plan',
+    successCriteria: ['The board approves the plan'],
   },
-  ownerAccessKey: 'nsk_00000000000000000000000000000000',
+  themeId: 'aurora',
+  route: 'free',
+  ownerAccessKey: OWNER_ACCESS_KEY,
   idempotencyKey: 'idem-create-jobs-runtime',
 } as Record<string, unknown>;
 
@@ -74,8 +107,13 @@ const EDIT_ARGS = {
   clientSessionId: 'client-session-jobs-runtime',
   deckId: 'deck_jobs_runtime',
   instruction: 'Tighten the closing slide.',
-  scope: { kind: 'deck' as const },
-  ownerAccessKey: 'nsk_00000000000000000000000000000000',
+  // The scope must name the same deck as the request, or validation rejects it
+  // before the mutation reaches any dispatch at all.
+  scope: { kind: 'deck' as const, deckId: 'deck_jobs_runtime' },
+  baseDeckVersion: 1,
+  baseSlideVersions: {},
+  baseElementVersions: {},
+  ownerAccessKey: OWNER_ACCESS_KEY,
   idempotencyKey: 'idem-edit-jobs-runtime',
 } as Record<string, unknown>;
 
@@ -103,40 +141,98 @@ describe('nodeslide durable job runtime dependencies', () => {
     },
   );
 
-  it('refuses startCreateDeck before writing anything while the orchestrator is absent', async () => {
-    const absent = Object.entries(NODESLIDE_JOB_SIBLING_MODULES).filter(([, present]) => !present);
-    if (absent.length === 0) {
-      // The guard has been retired because every sibling landed. Nothing to
-      // assert here; the "records the real on-disk state" case above is what
-      // keeps that honest.
-      return;
-    }
-    await expect(rawHandler(startCreateDeck)(forbiddenCtx(), CREATE_ARGS)).rejects.toThrow(
-      /durable jobs are unavailable/i,
-    );
-  });
+  const absentSiblings = Object.entries(NODESLIDE_JOB_SIBLING_MODULES)
+    .filter(([, present]) => !present)
+    .map(([name]) => name);
 
-  it('refuses startEditProposal the same way, so no half-created proposal exists', async () => {
-    const absent = Object.entries(NODESLIDE_JOB_SIBLING_MODULES).filter(([, present]) => !present);
-    if (absent.length === 0) return;
-    await expect(rawHandler(startEditProposal)(forbiddenCtx(), EDIT_ARGS)).rejects.toThrow(
-      /No job was created/i,
-    );
-  });
+  it.runIf(absentSiblings.length > 0)(
+    'refuses both start mutations before writing anything while a sibling is absent',
+    async () => {
+      // Only reachable if somebody deletes a sibling module and updates the
+      // table to match. Kept so the refusal is still specified, not deleted.
+      await expect(rawHandler(startCreateDeck)(forbiddenCtx(), CREATE_ARGS)).rejects.toThrow(
+        /durable jobs are unavailable/i,
+      );
+      await expect(rawHandler(startEditProposal)(forbiddenCtx(), EDIT_ARGS)).rejects.toThrow(
+        /No job was created/i,
+      );
+      // A generic "service unavailable" would send an on-call engineer into the
+      // workpool internals. The message has to say which module is missing.
+      const error = await rawHandler(startCreateDeck)(forbiddenCtx(), CREATE_ARGS).catch(
+        (thrown: unknown) => thrown,
+      );
+      for (const name of absentSiblings) {
+        expect((error as Error).message).toContain(name);
+      }
+    },
+  );
 
-  it('names the missing module in the refusal, so the operator is not left guessing', async () => {
-    const absent = Object.entries(NODESLIDE_JOB_SIBLING_MODULES)
-      .filter(([, present]) => !present)
-      .map(([name]) => name);
-    if (absent.length === 0) return;
-    // A generic "service unavailable" here would send an on-call engineer into
-    // the workpool internals. The message has to say which module is missing.
-    const error = await rawHandler(startCreateDeck)(forbiddenCtx(), CREATE_ARGS)
-      .then(() => null)
-      .catch((thrown: unknown) => thrown);
-    expect(error).toBeInstanceOf(Error);
-    for (const name of absent) {
-      expect((error as Error).message).toContain(name);
-    }
-  });
+  it.runIf(absentSiblings.length === 0)(
+    'starts real work instead of refusing, now that every sibling is on disk',
+    async () => {
+      // The forbidden ctx explodes on the FIRST database call. Before the port
+      // that call never happened — the guard threw first. Now it does, and the
+      // error proves the start mutation is doing work rather than declining it.
+      // This is the positive half of the refusal: it is exactly the assertion
+      // that would go quietly green if it were written as `if (absent) return`.
+      for (const [name, start, args] of [
+        ['startCreateDeck', startCreateDeck, CREATE_ARGS],
+        ['startEditProposal', startEditProposal, EDIT_ARGS],
+      ] as const) {
+        const error = await rawHandler(start)(forbiddenCtx(), args).catch(
+          (thrown: unknown) => thrown,
+        );
+        expect(error, `${name} resolved without a ctx that can satisfy it`).toBeInstanceOf(Error);
+        expect((error as Error).message, name).toMatch(/touched the database/i);
+        expect((error as Error).message, name).not.toMatch(/durable jobs are unavailable/i);
+      }
+    },
+  );
+
+  /**
+   * Every `internal.<module>.<function>` the durable job path dispatches to by
+   * name, and the module that must export it.
+   *
+   * `anyApi` makes all of these resolve at construction time whether or not
+   * they exist, so nothing else in the type system or the test suite checks
+   * them. A typo, a rename, or a half-landed port shows up here and nowhere
+   * else before production.
+   */
+  const ORCHESTRATOR_DISPATCH_TABLE: ReadonlyArray<
+    readonly [string, Record<string, unknown>, readonly string[]]
+  > = [
+    [
+      'nodeslideJobWorkflow',
+      jobWorkflowModule,
+      ['createDeckJobWorkflow', 'editProposalJobWorkflow'],
+    ],
+    [
+      'nodeslideJobRunner',
+      jobRunnerModule,
+      ['executeCreateDeckInternal', 'executeEditProposalInternal'],
+    ],
+    ['nodeslideJobControl', jobControlModule, ['heartbeatInternal']],
+    [
+      'nodeslideJobs',
+      jobsModule,
+      [
+        'checkpointInternal',
+        'claimAttemptInternal',
+        'completeCreateDeckInternal',
+        'completeEditProposalInternal',
+        'onWorkflowComplete',
+        'recordRenderRepairInternal',
+      ],
+    ],
+    ['nodeslideBudgets', budgetsModule, ['create', 'finalizeForJob']],
+  ];
+
+  it.each(ORCHESTRATOR_DISPATCH_TABLE)(
+    'resolves every internal function the orchestrator dispatches to on %s',
+    (moduleName, loaded, exportNames) => {
+      for (const exportName of exportNames) {
+        expect(loaded[exportName], `${moduleName}.${exportName}`).toBeDefined();
+      }
+    },
+  );
 });

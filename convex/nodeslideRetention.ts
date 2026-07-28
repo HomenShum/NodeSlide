@@ -305,7 +305,7 @@ async function deleteWorkspaceRows(
     }
   }
 
-  const derived = await collectJobDerivedRows(ctx, deck.id, envelope);
+  const { groups: derived, budgetIds } = await collectJobDerivedRows(ctx, deck.id, envelope);
 
   // ---- Phase 2: write. The set is known to fit; every refusal already threw. ----
   for (const group of groups) {
@@ -338,6 +338,8 @@ async function deleteWorkspaceRows(
       counts[entry.label] = 1;
     }
   }
+
+  await assertNoStrandedBudgetRows(ctx, budgetIds);
 
   // Tenant-scoped profile tables span decks by construction, so re-read them
   // after the pass instead of trusting the delete loop's own arithmetic.
@@ -431,12 +433,17 @@ const DERIVED_SWEEP_TABLES = [
  * so that a derived table breaching the envelope refuses the whole erasure
  * before the schema-derived rows have been written — the derived pass runs last
  * and would otherwise be the one place a partial delete could still occur.
+ *
+ * It also hands back the budget ids it resolved. They are the one thing in this
+ * traversal that cannot be recomputed after the write phase, because they come
+ * from `job.budgetId` and the jobs are deleted in that phase. See
+ * `assertNoStrandedBudgetRows`.
  */
 async function collectJobDerivedRows(
   ctx: MutationCtx,
   deckId: string,
   envelope: NodeSlideErasureEnvelope,
-): Promise<NodeSlideErasureGroup[]> {
+): Promise<{ groups: NodeSlideErasureGroup[]; budgetIds: ReadonlySet<string> }> {
   const groups: NodeSlideErasureGroup[] = [];
   const admit = (label: string, rows: readonly { _id: Id<TableNames> }[]) => {
     envelope.admit(rows);
@@ -447,19 +454,29 @@ async function collectJobDerivedRows(
   /** Never read more than the envelope can still afford to delete. */
   const sweepLimit = () => Math.min(DERIVED_SWEEP_LIMIT, envelope.nextLimit());
 
+  // Jobs keep `sweepLimit()`. An uncollected job is not deleted by anything —
+  // `admit('agentJobs', [job])` below is its only deleter — so it survives the
+  // transaction, `countJobDerivedRows` finds it by `by_result_deck`, and the
+  // receipt refuses to claim success. Incremental is safe precisely because
+  // the residue stays reachable.
   const jobs = await ctx.db
     .query('nodeslide_agent_jobs')
     .withIndex('by_result_deck', (index) => index.eq('resultDeckId', deckId))
     .take(sweepLimit());
 
-  // Runs are deck-scoped and already deleted by the schema-derived pass, but
-  // their budget ids must be collected *before* that pass runs. They are read
-  // here rather than trusted from the loop above because a run can own a budget
-  // no job ever referenced.
+  // Runs do NOT keep it, for the same reason the budget child tables below do
+  // not. Runs are deck-scoped, so the schema-derived pass deletes ALL of them
+  // against the envelope; this read only harvests their budget ids. Capping it
+  // at `DERIVED_SWEEP_LIMIT` while the deleter is uncapped means run 513's
+  // budget id is never collected, its run row is deleted anyway, and — if no
+  // job referenced that budget — the ledger is stranded behind an id nothing
+  // can produce again, under `remainingDeckRows: 0`. Reading against the
+  // envelope makes the two passes agree: either both see the whole set, or
+  // `admit` refuses the erasure with nothing written.
   const runs = await ctx.db
     .query('nodeslide_agent_runs')
     .withIndex('by_deck_created', (index) => index.eq('deckId', deckId))
-    .take(sweepLimit());
+    .take(envelope.nextLimit());
 
   const budgetIds = new Set<string>();
   for (const job of jobs) if (job.budgetId) budgetIds.add(job.budgetId);
@@ -509,13 +526,29 @@ async function collectJobDerivedRows(
     admit('agentJobs', [job]);
   }
 
+  // The budget child tables are read against the ENVELOPE, not `sweepLimit()`.
+  //
+  // `DERIVED_SWEEP_LIMIT` is sound for the job-anchored tables because a job
+  // that does not fit one transaction survives it, and the next call re-derives
+  // everything hanging off that surviving row. The budget tables have no such
+  // anchor: their id comes from `job.budgetId`, and the job is deleted in this
+  // same pass. A `take(512)` that came back full would therefore strand rows
+  // 513+ behind an id nothing can produce again — permanently invisible to
+  // `countJobDerivedRows`, under a receipt reporting `remainingDeckRows: 0` and
+  // `retentionSafe: true`.
+  //
+  // `envelope.nextLimit()` returns one more than the remaining budget, so an
+  // over-large ledger comes back full, breaches `admit`, and refuses the whole
+  // erasure with zero rows written. That is the same failure this module already
+  // chose for an over-large deck, reached from the one direction where an
+  // incremental sweep cannot be made correct.
   for (const budgetId of budgetIds) {
     admit(
       'billableCalls',
       await ctx.db
         .query('nodeslide_billable_calls')
         .withIndex('by_budget_call', (index) => index.eq('budgetId', budgetId))
-        .take(sweepLimit()),
+        .take(envelope.nextLimit()),
     );
 
     admit(
@@ -523,7 +556,7 @@ async function collectJobDerivedRows(
       await ctx.db
         .query('nodeslide_budget_events')
         .withIndex('by_budget_sequence', (index) => index.eq('budgetId', budgetId))
-        .take(sweepLimit()),
+        .take(envelope.nextLimit()),
     );
 
     admit(
@@ -535,13 +568,17 @@ async function collectJobDerivedRows(
     );
   }
 
-  return groups;
+  return { groups, budgetIds };
 }
 
 /**
  * Re-reads the derived tables after the sweep. The delete loop's own arithmetic
  * is not evidence: it counts what it decided to visit, which is exactly the
  * quantity a traversal bug gets wrong.
+ *
+ * It anchors on the job row, which is what every other derived table hangs off,
+ * and that is sufficient for all of them BUT the budget cluster — see
+ * `assertNoStrandedBudgetRows` for the one case this cannot see.
  */
 async function countJobDerivedRows(ctx: MutationCtx, deckId: string): Promise<number> {
   const jobs = await ctx.db
@@ -549,6 +586,67 @@ async function countJobDerivedRows(ctx: MutationCtx, deckId: string): Promise<nu
     .withIndex('by_result_deck', (index) => index.eq('resultDeckId', deckId))
     .take(1);
   return jobs.length;
+}
+
+/**
+ * The blind spot in the function above, closed at the only moment it can be.
+ *
+ * `countJobDerivedRows` re-derives a deck's derived rows through
+ * `by_result_deck` on `nodeslide_agent_jobs`. Every derived table is reachable
+ * that way except the budget cluster: a run budget has no `deckId` and no
+ * `jobId`: it is addressed only by the id stored in `job.budgetId`, and the
+ * write phase deletes the job. Once that row is gone the id cannot be produced
+ * by any deck-anchored query, so a surviving `nodeslide_run_budgets`,
+ * `nodeslide_billable_calls` or `nodeslide_budget_events` row is not merely
+ * uncounted — it is unreachable, and the receipt says `remainingDeckRows: 0`
+ * and `retentionSafe: true` over real user spend data.
+ *
+ * So the ids are carried out of the collection phase and checked here, after
+ * the writes and while they still exist. Being inside the same mutation, a
+ * throw rolls the whole erasure back, which is the same fail-closed posture the
+ * envelope takes: nothing deleted beats something deleted and mis-certified.
+ *
+ * HONEST STATUS: this has no reachable trigger today, and deleting it does not
+ * turn any test red. Both known strand paths were closed at their source
+ * instead — the run read and the budget child reads now use the envelope rather
+ * than `DERIVED_SWEEP_LIMIT`, so the collection and deletion passes cannot
+ * disagree. It is kept because every other derived table has
+ * `countJobDerivedRows` as its backstop and the budget cluster structurally
+ * cannot: its id dies with the job. Without this, a future traversal change
+ * that reintroduces a gap produces a green receipt over surviving spend data
+ * and no failing test. With it, that change rolls back and says so. The cost is
+ * one indexed `.first()` per table per budget id, and the count of budget ids
+ * is itself bounded by the envelope.
+ *
+ * Until the budget ledger had a writer, nothing ever inserted these rows and
+ * none of this was reachable. `nodeslideJobs.startCreateDeck` /
+ * `startEditProposal` now open a ledger row for every provider-backed job.
+ */
+async function assertNoStrandedBudgetRows(
+  ctx: MutationCtx,
+  budgetIds: ReadonlySet<string>,
+): Promise<void> {
+  for (const budgetId of budgetIds) {
+    const survivors = await Promise.all([
+      ctx.db
+        .query('nodeslide_run_budgets')
+        .withIndex('by_stable_id', (index) => index.eq('id', budgetId))
+        .first(),
+      ctx.db
+        .query('nodeslide_billable_calls')
+        .withIndex('by_budget_call', (index) => index.eq('budgetId', budgetId))
+        .first(),
+      ctx.db
+        .query('nodeslide_budget_events')
+        .withIndex('by_budget_sequence', (index) => index.eq('budgetId', budgetId))
+        .first(),
+    ]);
+    if (survivors.some((row) => row !== null)) {
+      throw new Error(
+        'NodeSlide deck deletion failed closed: the erasure left run-budget rows that no deck-anchored query can reach; no records were deleted.',
+      );
+    }
+  }
 }
 
 /**

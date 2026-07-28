@@ -68,6 +68,10 @@ import {
   validateNodeSlideCreateDeckFields,
   validateNodeSlidePreviewAdmission,
 } from './lib/nodeslideValidators';
+// Imported for its export list, not to call it: `nodeSlideBudgetEnforcementPosture`
+// derives the receipt's posture from whether `reserve` exists. Dispatch still
+// goes through the generated `internal.nodeslideBudgets` reference below.
+import * as nodeslideBudgetsModule from './nodeslideBudgets';
 import { workflow } from './workflows';
 
 const streaming = new PersistentTextStreaming(components.persistentTextStreaming);
@@ -103,21 +107,21 @@ const nodeslideBudgetsInternal: any = (internal as any).nodeslideBudgets;
  * author then watches a job that will never move.
  *
  * `nodeslideJobWorkflow` (the two `workflow.define` bodies) and
- * `nodeslideBudgets` (the spend ledger's mutations) are not ported yet. Their
- * tables and their pure-logic libraries are here; the Convex modules are not.
- * Until they land, `startCreateDeck` and `startEditProposal` refuse *before*
- * writing anything, which is the difference between an unavailable feature and
- * a silently broken one.
+ * `nodeslideBudgets` (the spend ledger's mutations) have now landed, so every
+ * entry below is `true` and `requireJobOrchestrator` is a no-op. The table stays
+ * because it is the thing that keeps the claim honest: deleting a sibling module
+ * turns this into a red test rather than a runtime dispatch failure.
  *
  * `convex/nodeslideJobRuntime.test.ts` reads this table against the directory
  * and fails when it drifts, in either direction — so porting the workflow module
- * without deleting this guard is a red test, not a forgotten branch.
+ * without updating this table is a red test, not a forgotten branch, and so is
+ * declaring a module present that is not on disk.
  */
 export const NODESLIDE_JOB_SIBLING_MODULES = {
   nodeslide: true,
   nodeslideSessions: true,
-  nodeslideJobWorkflow: false,
-  nodeslideBudgets: false,
+  nodeslideJobWorkflow: true,
+  nodeslideBudgets: true,
 } as const satisfies Record<string, boolean>;
 
 const NODESLIDE_ABSENT_JOB_SIBLINGS = Object.entries(NODESLIDE_JOB_SIBLING_MODULES)
@@ -265,6 +269,11 @@ export const startCreateDeck = mutation({
       idempotencyKey,
     );
     const budgetId = nodeslideStableId('nsbudget', jobId);
+    const budgetedRun = Boolean(request.providerMode && request.providerMode !== 'deterministic');
+    // A create brief carries no spend ceiling field, so the ledger opens on the
+    // normalized default bounds. See `openNodeSlideJobBudget` for why this runs
+    // here rather than lazily at first provider dispatch.
+    if (budgetedRun) await openNodeSlideJobBudget(ctx, budgetId, {});
     await enqueueNodeSlideDurableSession(ctx, {
       jobId,
       request,
@@ -299,7 +308,7 @@ export const startCreateDeck = mutation({
       streamId,
       memoryIds: [],
       memoryDigests: [],
-      ...(request.providerMode && request.providerMode !== 'deterministic' ? { budgetId } : {}),
+      ...(budgetedRun ? { budgetId } : {}),
       routingReceipt,
       createdAt: now,
       updatedAt: now,
@@ -379,6 +388,18 @@ export const startEditProposal = mutation({
       idempotencyKey,
     );
     const budgetId = nodeslideStableId('nsbudget', jobId);
+    const budgetedRun = Boolean(request.providerMode && request.providerMode !== 'deterministic');
+    // An edit request DOES carry a caller spend ceiling, so it is the canonical
+    // config the ledger row is bound to. `create` rejects a second start that
+    // reuses this budget id under a different ceiling rather than silently
+    // re-capping an open ledger.
+    if (budgetedRun) {
+      await openNodeSlideJobBudget(
+        ctx,
+        budgetId,
+        request.maxCostUsd === undefined ? {} : { maxCostUsd: request.maxCostUsd },
+      );
+    }
     await enqueueNodeSlideDurableSession(ctx, {
       jobId,
       request,
@@ -420,7 +441,7 @@ export const startEditProposal = mutation({
       memoryIds: [],
       memoryDigests: [],
       resultDeckId: request.deckId,
-      ...(request.providerMode && request.providerMode !== 'deterministic' ? { budgetId } : {}),
+      ...(budgetedRun ? { budgetId } : {}),
       createdAt: now,
       updatedAt: now,
     });
@@ -1039,6 +1060,36 @@ function benchmarkErrorCode(
   return `nodeslide_job_${status}_${phase}`;
 }
 
+/**
+ * Open the durable ledger row for a job at the moment its `budgetId` is minted.
+ *
+ * This pairs with `finalizeNodeSlideJobBudget` below, and the pairing is the
+ * whole point: `finalizeForJob` calls `requireBudget`, which THROWS on a missing
+ * row. Every terminal transition in this file — create complete, edit complete,
+ * review resolve — calls it without a try/catch. So "the job row carries a
+ * budgetId" and "the ledger row exists" cannot be allowed to disagree, or a
+ * non-deterministic job runs to success and then fails on its completion
+ * mutation, after the deck has already been written.
+ *
+ * Parity establishes that invariant lazily, inside `callNodeSlideBudgetedJson`,
+ * which creates the budget BEFORE it looks up a price precisely so a denied
+ * provider route still owns a durable zero-usage budget. That function is
+ * withheld here pending the model price table (see `nodeslideBudgets.ts`), so
+ * the invariant is established eagerly instead, at the only other place that
+ * knows the `budgetId`. Same invariant, earlier, and strictly stronger: the row
+ * exists even for a job that never reaches a provider at all.
+ *
+ * `create` is idempotent on `(budgetId, canonical config)`, so a retried start
+ * replays the same row rather than conflicting.
+ */
+async function openNodeSlideJobBudget(
+  ctx: Pick<MutationCtx, 'runMutation'>,
+  budgetId: string,
+  budget: { maxCostUsd?: number },
+): Promise<void> {
+  await ctx.runMutation(nodeslideBudgetsInternal.create, { budgetId, budget });
+}
+
 async function finalizeNodeSlideJobBudget(
   ctx: Pick<MutationCtx, 'runMutation'>,
   budgetId?: string,
@@ -1058,6 +1109,25 @@ async function finalizeNodeSlideJobBudgetBestEffort(
     // Cancellation still fences the worker/session. The unresolved ledger remains
     // explicitly open for reconciliation instead of claiming a fabricated close.
   }
+}
+
+/**
+ * Whether this deployment can actually hold a run to its cap.
+ *
+ * `budget.enforcement` is the literal `'hard'` for every normalized budget — it
+ * is a property of the contract, not of the deployment. Enforcement happens in
+ * exactly one place, `nodeslideBudgets.reserve`, which quotes a call against the
+ * cap before dispatch and refuses it if the worst case does not fit. That
+ * mutation is withheld here pending the model price table, so a receipt that
+ * reported `enforcement: 'hard'` and nothing else would be claiming a ceiling
+ * that no code path is currently able to apply.
+ *
+ * This is DERIVED from the ledger module's own exports rather than declared, so
+ * it flips to `'enforced'` the moment `reserve` lands and nobody has to remember
+ * to update a flag. `nodeslideBudgetWiring.test.ts` pins both directions.
+ */
+function nodeSlideBudgetEnforcementPosture(): 'enforced' | 'accounting_only' {
+  return 'reserve' in nodeslideBudgetsModule ? 'enforced' : 'accounting_only';
 }
 
 async function loadPublicBudgetReceipt(ctx: ReadCtx, job: Doc<'nodeslide_agent_jobs'>) {
@@ -1082,6 +1152,8 @@ async function loadPublicBudgetReceipt(ctx: ReadCtx, job: Doc<'nodeslide_agent_j
     budgetId: budget.id,
     status: budget.status,
     enforcement: budget.budget.enforcement,
+    // The contract says 'hard'; this says whether this deployment can apply it.
+    enforcementPosture: nodeSlideBudgetEnforcementPosture(),
     cap: {
       maxCostMicroUsd: budget.budget.maxCostMicroUsd,
       maxInputTokens: budget.budget.maxInputTokens,

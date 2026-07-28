@@ -1,0 +1,475 @@
+{
+  "schema": "nodeslide.trust-surface-runtime-probe/v1",
+  "generatedAt": "2026-07-28T22:25:09.053Z",
+  "baseUrl": "https://nodeslide.vercel.app",
+  "buildSha": "2772cab4507d8c379e8321b698fddac5fd8f5db7",
+  "knockout": {
+    "injected": false
+  },
+  "censusSurfaces": 10,
+  "stalePlan": [],
+  "stages": [
+    {
+      "stage": "landing",
+      "reached": true
+    },
+    {
+      "stage": "sample-deck",
+      "reached": true
+    },
+    {
+      "stage": "element-selected",
+      "reached": true
+    },
+    {
+      "stage": "ai-tab",
+      "reached": true
+    },
+    {
+      "stage": "openui-workbench",
+      "reached": true
+    },
+    {
+      "stage": "json-tab",
+      "reached": true
+    },
+    {
+      "stage": "compare-mode",
+      "reached": true
+    },
+    {
+      "stage": "publish-dialog",
+      "reached": true
+    }
+  ],
+  "surfaces": [
+    {
+      "key": "src/domains/nodeslide/inspector/AiInspector.tsx::AiInspector",
+      "selector": "[data-testid=\"ai-web-research-toggle\"]",
+      "kind": "consent",
+      "requires": "the AI inspector tab on an open deck",
+      "reached": true,
+      "reachedAtStage": "sample-deck",
+      "declaredState": "per-send",
+      "clauses": {
+        "A_noAnimationOnDecisionAffordance": {
+          "clause": "A",
+          "verdict": "failed",
+          "reason": "computed motion: button.shrink-0.justify-center.rounded-md[data-testid=ai-web-research-toggle] transition:all/0.15s animation:none/0s ;; (declared state data-agent-web-consent=\"per-send\")",
+          "observed": {
+            "state": "per-send",
+            "running": [],
+            "declared": [
+              {
+                "node": "button.shrink-0.justify-center.rounded-md[data-testid=ai-web-research-toggle]",
+                "transitionProperty": "all",
+                "transitionDuration": "0.15s",
+                "animationName": "none",
+                "animationDuration": "0s",
+                "animationIterationCount": "1"
+              }
+            ]
+          }
+        },
+        "B_noSuccessTokenOnPending": {
+          "clause": "B",
+          "verdict": "not-applicable",
+          "reason": "surface reached in data-agent-web-consent=\"per-send\", not a pending state; the pending-paint clause had nothing pending to read",
+          "observed": {
+            "state": "per-send",
+            "resolvedTokens": {
+              "--ns-positive": "rgb(4, 120, 87)"
+            }
+          }
+        },
+        "C_declaredStateMatchesRendered": {
+          "clause": "C",
+          "verdict": "passed",
+          "reason": "declared data-agent-web-consent=\"per-send\"; paint, copy all agree",
+          "observed": {
+            "state": "per-send",
+            "statusChecked": null,
+            "text": ""
+          }
+        },
+        "D_reducedMotionCollapsesToFinalState": {
+          "clause": "D",
+          "verdict": "passed",
+          "reason": "identical declared state, paint and copy under reduce; no animation running or declared (1 nodes compared)",
+          "observed": {
+            "state": "per-send",
+            "reducedState": "per-send"
+          }
+        }
+      }
+    },
+    {
+      "key": "src/domains/nodeslide/inspector/DeckCiStatus.tsx::DeckCiStatus",
+      "selector": "[data-trust-surface=\"failed-state\"]",
+      "kind": "failed-state",
+      "requires": "a deck CI result (or an in-flight check) on the AI tab; the readout is not mounted at all until `deckCiResult !== undefined || deckCiLoading`",
+      "reached": true,
+      "reachedAtStage": "sample-deck",
+      "declaredState": "loading",
+      "clauses": {
+        "A_noAnimationOnDecisionAffordance": {
+          "clause": "A",
+          "verdict": "not-applicable",
+          "reason": "failed-state surface observed in data-state=\"loading\"; the motion ban applies to its failure states",
+          "observed": {
+            "state": "loading"
+          }
+        },
+        "B_noSuccessTokenOnPending": {
+          "clause": "B",
+          "verdict": "not-applicable",
+          "reason": "surface reached in data-state=\"loading\", not a pending state; the pending-paint clause had nothing pending to read",
+          "observed": {
+            "state": "loading",
+            "resolvedTokens": {
+              "--ns-positive": "rgb(4, 120, 87)"
+            }
+          }
+        },
+        "C_declaredStateMatchesRendered": {
+          "clause": "C",
+          "verdict": "passed",
+          "reason": "declared data-state=\"loading\"; paint, copy all agree",
+          "observed": {
+            "state": "loading",
+            "statusChecked": null,
+            "text": "Deck CIChecking"
+          }
+        },
+        "D_reducedMotionCollapsesToFinalState": {
+          "clause": "D",
+          "verdict": "not-run",
+          "reason": "surface was still settling: data-state read \"loading\" before the reduced-motion window and \"pass\" after it, with motion allowed both times. Any difference observed under reduce would be the passage of time, not the preference.",
+          "observed": {
+            "before": "loading",
+            "afterState": "pass"
+          }
+        }
+      }
+    },
+    {
+      "key": "src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx::OpenUiMaterialWorkbench",
+      "selector": "[data-testid=\"openui-visual-workbench\"]",
+      "kind": "proposal",
+      "requires": "the visual material tool opened from the AI composer, which is lazy-loaded and only mounts when the host supplies onProposeOpenUiMaterial",
+      "reached": true,
+      "reachedAtStage": "openui-workbench",
+      "declaredState": "none",
+      "clauses": {
+        "A_noAnimationOnDecisionAffordance": {
+          "clause": "A",
+          "verdict": "passed",
+          "reason": "3 node(s) inspected: no running animation, no non-zero transition or named animation in the computed cascade",
+          "observed": {
+            "state": "none",
+            "nodesInspected": 3
+          }
+        },
+        "B_noSuccessTokenOnPending": {
+          "clause": "B",
+          "verdict": "not-applicable",
+          "reason": "surface reached in data-decision=\"none\", not a pending state; the pending-paint clause had nothing pending to read",
+          "observed": {
+            "state": "none",
+            "resolvedTokens": {
+              "--ns-positive": "rgb(4, 120, 87)"
+            }
+          }
+        },
+        "C_declaredStateMatchesRendered": {
+          "clause": "C",
+          "verdict": "passed",
+          "reason": "declared data-decision=\"none\"; paint, copy all agree",
+          "observed": {
+            "state": "none",
+            "statusChecked": null,
+            "text": "Visual material labOpenUI · deterministic Phase 0Unit-safe"
+          }
+        },
+        "D_reducedMotionCollapsesToFinalState": {
+          "clause": "D",
+          "verdict": "passed",
+          "reason": "identical declared state, paint and copy under reduce; no animation running or declared (3 nodes compared)",
+          "observed": {
+            "state": "none",
+            "reducedState": "none"
+          }
+        }
+      }
+    },
+    {
+      "key": "src/domains/nodeslide/inspector/JsonInspector.tsx::ElementJsonEditor",
+      "selector": "[data-testid=\"json-element-editor\"]",
+      "kind": "proposal",
+      "requires": "the JSON tab with a single element selected on the canvas",
+      "reached": true,
+      "reachedAtStage": "json-tab",
+      "declaredState": "none",
+      "clauses": {
+        "A_noAnimationOnDecisionAffordance": {
+          "clause": "A",
+          "verdict": "passed",
+          "reason": "3 node(s) inspected: no running animation, no non-zero transition or named animation in the computed cascade",
+          "observed": {
+            "state": "none",
+            "nodesInspected": 3
+          }
+        },
+        "B_noSuccessTokenOnPending": {
+          "clause": "B",
+          "verdict": "not-applicable",
+          "reason": "surface reached in data-decision=\"none\", not a pending state; the pending-paint clause had nothing pending to read",
+          "observed": {
+            "state": "none",
+            "resolvedTokens": {
+              "--ns-positive": "rgb(4, 120, 87)"
+            }
+          }
+        },
+        "C_declaredStateMatchesRendered": {
+          "clause": "C",
+          "verdict": "passed",
+          "reason": "declared data-decision=\"none\"; paint, copy all agree",
+          "observed": {
+            "state": "none",
+            "statusChecked": null,
+            "text": "{ \"bbox\": { \"height\": 0.83, \"width\": 0.008, \"x\": 0.035, \"y\": 0.065 }, \"exportCapabilities\": [ \"web_native\", \"pptx_editable\", \"google_importable\" ], \"id\": \"element_30ec0f872e638f4bf249d064d1a6856c\", \"kind\": \"shape\", \"locked\": true, \"name\": \"Accent rail\", \"role\": \"decoration\", \"rotation\": 0, \"slideId\": \"slide_b8982ae36d96b33259340b6c71a2aef6\", \"sourceIds\": [], \"style\": { \"fill\": \"#B44A2D\", \"radius\":"
+          }
+        },
+        "D_reducedMotionCollapsesToFinalState": {
+          "clause": "D",
+          "verdict": "passed",
+          "reason": "identical declared state, paint and copy under reduce; no animation running or declared (3 nodes compared)",
+          "observed": {
+            "state": "none",
+            "reducedState": "none"
+          }
+        }
+      }
+    },
+    {
+      "key": "src/domains/nodeslide/components/EditorCanvasModes.tsx::CandidateReceipt",
+      "selector": "[data-testid=\"candidate-receipt\"]",
+      "kind": "diff-review",
+      "requires": "Compare mode holding a candidate deck — which only exists after an AI edit produced one. The probe does not spend a model call to manufacture it.",
+      "reached": false,
+      "reachedAtStage": null,
+      "declaredState": null,
+      "clauses": {
+        "A_noAnimationOnDecisionAffordance": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires Compare mode holding a candidate deck — which only exists after an AI edit produced one. The probe does not spend a model call to manufacture it.",
+          "clause": "A"
+        },
+        "B_noSuccessTokenOnPending": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires Compare mode holding a candidate deck — which only exists after an AI edit produced one. The probe does not spend a model call to manufacture it.",
+          "clause": "B"
+        },
+        "C_declaredStateMatchesRendered": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires Compare mode holding a candidate deck — which only exists after an AI edit produced one. The probe does not spend a model call to manufacture it.",
+          "clause": "C"
+        },
+        "D_reducedMotionCollapsesToFinalState": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires Compare mode holding a candidate deck — which only exists after an AI edit produced one. The probe does not spend a model call to manufacture it.",
+          "clause": "D"
+        }
+      }
+    },
+    {
+      "key": "src/domains/nodeslide/inspector/AiInspector.tsx::VariationCard",
+      "selector": "[data-testid=\"variation-card\"]",
+      "kind": "diff-review",
+      "requires": "a completed three-direction variation run. Generating one costs a live model call against production; the probe refuses to bill the owner to produce its own fixture.",
+      "reached": false,
+      "reachedAtStage": null,
+      "declaredState": null,
+      "clauses": {
+        "A_noAnimationOnDecisionAffordance": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires a completed three-direction variation run. Generating one costs a live model call against production; the probe refuses to bill the owner to produce its own fixture.",
+          "clause": "A"
+        },
+        "B_noSuccessTokenOnPending": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires a completed three-direction variation run. Generating one costs a live model call against production; the probe refuses to bill the owner to produce its own fixture.",
+          "clause": "B"
+        },
+        "C_declaredStateMatchesRendered": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires a completed three-direction variation run. Generating one costs a live model call against production; the probe refuses to bill the owner to produce its own fixture.",
+          "clause": "C"
+        },
+        "D_reducedMotionCollapsesToFinalState": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires a completed three-direction variation run. Generating one costs a live model call against production; the probe refuses to bill the owner to produce its own fixture.",
+          "clause": "D"
+        }
+      }
+    },
+    {
+      "key": "src/domains/nodeslide/inspector/AiInspector.tsx::ProposalCard",
+      "selector": "[data-testid=\"proposal-card\"]",
+      "kind": "proposal",
+      "requires": "a pending AI patch proposal, i.e. a completed model run on production. Same refusal as VariationCard.",
+      "reached": false,
+      "reachedAtStage": null,
+      "declaredState": null,
+      "clauses": {
+        "A_noAnimationOnDecisionAffordance": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires a pending AI patch proposal, i.e. a completed model run on production. Same refusal as VariationCard.",
+          "clause": "A"
+        },
+        "B_noSuccessTokenOnPending": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires a pending AI patch proposal, i.e. a completed model run on production. Same refusal as VariationCard.",
+          "clause": "B"
+        },
+        "C_declaredStateMatchesRendered": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires a pending AI patch proposal, i.e. a completed model run on production. Same refusal as VariationCard.",
+          "clause": "C"
+        },
+        "D_reducedMotionCollapsesToFinalState": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires a pending AI patch proposal, i.e. a completed model run on production. Same refusal as VariationCard.",
+          "clause": "D"
+        }
+      }
+    },
+    {
+      "key": "src/domains/nodeslide/inspector/AgentThread.tsx::ThreadTurn",
+      "selector": "[data-testid=\"agent-thread-patch\"]",
+      "kind": "proposal",
+      "requires": "an agent thread turn carrying a patch. Requires a live agent run; the thread is empty on a freshly opened sample deck.",
+      "reached": false,
+      "reachedAtStage": null,
+      "declaredState": null,
+      "clauses": {
+        "A_noAnimationOnDecisionAffordance": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires an agent thread turn carrying a patch. Requires a live agent run; the thread is empty on a freshly opened sample deck.",
+          "clause": "A"
+        },
+        "B_noSuccessTokenOnPending": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires an agent thread turn carrying a patch. Requires a live agent run; the thread is empty on a freshly opened sample deck.",
+          "clause": "B"
+        },
+        "C_declaredStateMatchesRendered": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires an agent thread turn carrying a patch. Requires a live agent run; the thread is empty on a freshly opened sample deck.",
+          "clause": "C"
+        },
+        "D_reducedMotionCollapsesToFinalState": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires an agent thread turn carrying a patch. Requires a live agent run; the thread is empty on a freshly opened sample deck.",
+          "clause": "D"
+        }
+      }
+    },
+    {
+      "key": "src/domains/nodeslide/inspector/AgentThread.tsx::ThreadTurn",
+      "selector": "[data-testid=\"agent-thread-patch-settled\"]",
+      "kind": "proposal",
+      "requires": "an agent thread turn carrying a patch. Requires a live agent run; the thread is empty on a freshly opened sample deck.",
+      "reached": false,
+      "reachedAtStage": null,
+      "declaredState": null,
+      "clauses": {
+        "A_noAnimationOnDecisionAffordance": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires an agent thread turn carrying a patch. Requires a live agent run; the thread is empty on a freshly opened sample deck.",
+          "clause": "A"
+        },
+        "B_noSuccessTokenOnPending": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires an agent thread turn carrying a patch. Requires a live agent run; the thread is empty on a freshly opened sample deck.",
+          "clause": "B"
+        },
+        "C_declaredStateMatchesRendered": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires an agent thread turn carrying a patch. Requires a live agent run; the thread is empty on a freshly opened sample deck.",
+          "clause": "C"
+        },
+        "D_reducedMotionCollapsesToFinalState": {
+          "verdict": "not-run",
+          "reason": "surface never rendered; requires an agent thread turn carrying a patch. Requires a live agent run; the thread is empty on a freshly opened sample deck.",
+          "clause": "D"
+        }
+      }
+    },
+    {
+      "key": "src/domains/nodeslide/components/PublicationDialog.tsx::PublicationDialog",
+      "selector": "[data-testid=\"publish-approval-section\"]",
+      "kind": "permission",
+      "requires": "the Share/Publish dialog opened from the studio toolbar",
+      "reached": true,
+      "reachedAtStage": "publish-dialog",
+      "declaredState": "none",
+      "clauses": {
+        "A_noAnimationOnDecisionAffordance": {
+          "clause": "A",
+          "verdict": "passed",
+          "reason": "2 node(s) inspected: no running animation, no non-zero transition or named animation in the computed cascade",
+          "observed": {
+            "state": "none",
+            "nodesInspected": 2
+          }
+        },
+        "B_noSuccessTokenOnPending": {
+          "clause": "B",
+          "verdict": "not-applicable",
+          "reason": "surface reached in data-decision=\"none\", not a pending state; the pending-paint clause had nothing pending to read",
+          "observed": {
+            "state": "none",
+            "resolvedTokens": {
+              "--ns-positive": "rgb(4, 120, 87)"
+            }
+          }
+        },
+        "C_declaredStateMatchesRendered": {
+          "clause": "C",
+          "verdict": "passed",
+          "reason": "declared data-decision=\"none\"; paint, copy all agree",
+          "observed": {
+            "state": "none",
+            "statusChecked": null,
+            "text": "Require approver sign-offWhen on, publishing v1 needs a sign-off from an approver capability — a separate role the server checks on every publish."
+          }
+        },
+        "D_reducedMotionCollapsesToFinalState": {
+          "clause": "D",
+          "verdict": "passed",
+          "reason": "identical declared state, paint and copy under reduce; no animation running or declared (2 nodes compared)",
+          "observed": {
+            "state": "none",
+            "reducedState": "none"
+          }
+        }
+      }
+    }
+  ],
+  "summary": {
+    "tally": {
+      "passed": 12,
+      "failed": 1,
+      "not-run": 21,
+      "not-applicable": 6
+    },
+    "failures": [
+      "[data-testid=\"ai-web-research-toggle\"] A_noAnimationOnDecisionAffordance: computed motion: button.shrink-0.justify-center.rounded-md[data-testid=ai-web-research-toggle] transition:all/0.15s animation:none/0s ;; (declared state data-agent-web-consent=\"per-send\")"
+    ],
+    "red": true
+  },
+  "red": true,
+  "scope": "Web surfaces only. This probe observes a browser; it proves nothing about whether a PPTX export carries an active timing structure."
+}

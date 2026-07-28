@@ -159,6 +159,48 @@ const MOTION_DECLARATION =
 /** Tailwind motion utilities, for surfaces styled by class rather than by stylesheet. */
 const MOTION_UTILITY = /\b(transition(-[a-z]+)?|animate-[a-z-]+|duration-\d+)\b/;
 
+/*
+ * ---------------------------------------------------------------------------------------
+ * THE THREE ROUTES A CSS-ONLY SCAN CANNOT SEE
+ *
+ * Clause 3 above reads stylesheets and className strings. Graded against the Motion
+ * Deception Corpus, that catches an approval animation declared in CSS or as a utility
+ * class — and nothing else. The same animation, on the same card, expressed any of the
+ * three ways below sailed through a 35/35 green run. All three are plain source text; the
+ * only reason they were invisible is that nobody looked at them.
+ * ---------------------------------------------------------------------------------------
+ */
+
+/**
+ * Motion in a React inline `style` prop. Matched on the CAMELCASE property names React
+ * requires (`transitionProperty`), plus the shorthands, because `style={{ transition: ... }}`
+ * and a stylesheet's `transition:` are the same instruction routed around the same check.
+ */
+const INLINE_STYLE_MOTION =
+  /\b(transition|transitionProperty|transitionDuration|transitionDelay|transitionTimingFunction|animation|animationName|animationDuration|animationDelay|WebkitTransition|WebkitAnimation)\s*:/;
+
+/**
+ * Framer Motion's declarative props. `animate` and `whileHover` are the two that matter for
+ * this rule — a card that animates toward an approval colour, or that grows under the cursor
+ * as if inviting the click — but the whole family is matched because they compose: `initial`
+ * plus `animate` IS the approach-to-approval, and neither half is motion on its own.
+ *
+ * `<motion.` is matched separately: a motion component with no props today is a motion
+ * component someone adds `animate` to tomorrow, on a surface where that is forbidden.
+ */
+const FRAMER_MOTION_PROP =
+  /\s(animate|initial|exit|whileHover|whileTap|whileFocus|whileInView|whileDrag|layoutId|drag)\s*=\s*[{"]|\slayout(\s|=|>)/;
+const FRAMER_MOTION_TAG = /<(motion|m)\.[a-zA-Z]/;
+
+/**
+ * The Web Animations API, applied imperatively. Scoped to the component that owns the
+ * annotated surface rather than to the tag, because the call site is an effect and the
+ * target is a ref. Deliberately NOT scoped to a particular ref name: `cardRef.current.animate`,
+ * `node.animate`, and `e.currentTarget.animate` are the same act, and a name list here is the
+ * hand-maintained census this whole gate exists to replace.
+ */
+const WAAPI_ANIMATE = /\.animate\s*\(/;
+
 /* ------------------------------------------------------------------- the allowlist */
 
 /**
@@ -190,6 +232,116 @@ const REVIEWED_NON_SURFACES = [
     component: 'JsonInspector',
     reason:
       'JSON tab shell. Decides whether the element editor is mountable (line 364) and passes onProposePatch to it; ElementJsonEditor is the enumerated proposal surface. The shell renders view-mode chips, Copy and Download — none of which commit anything.',
+  },
+];
+
+/* ------------------------------------------------------ the motion deception corpus */
+
+/**
+ * THE MOTION DECEPTION CORPUS — seven ways motion lies while passing a naive motion check,
+ * and this gate's HONEST verdict on each.
+ *
+ * Why this table is in the source and not in a document: a README saying "we catch 4 of 7"
+ * drifts the moment someone adds a check, and drifts silently in the direction of claiming
+ * more than is true. This table is READ BY THE GATE. It prints the coverage line from it,
+ * and `corpusChecks()` fails the run if an entry carries no verdict, carries a verdict from
+ * outside the vocabulary, or claims a detector whose check does not exist. Adding an eighth
+ * fixture to the corpus therefore FORCES a verdict — a new entry with no `verdict` is a red
+ * gate, the same shape as `not-run` beating `passed`.
+ *
+ * Every verdict below was produced by building the deception as a NodeSlide-shaped trust
+ * surface (an annotated proposal card with Accept/Reject) and running these checks against
+ * it. The fixture named by each entry is in scripts/tests/nodeslide-trust-surface-census.test.mjs
+ * and asserts that verdict, so a `detected` that stops detecting turns the suite red.
+ *
+ * `verdict`   'detected'      this gate's static checks go red on the fixture.
+ *             'not-detected'  this gate passes the fixture. The deception survives.
+ * `mode`      'STATIC'        decided from source text.
+ *             'NOT-RUN'       needs a rendered page; the probed command is printed with it.
+ */
+export const CORPUS_VERDICTS = new Set(['detected', 'not-detected']);
+export const CORPUS_MODES = new Set(['STATIC', 'NOT-RUN']);
+
+export const MOTION_DECEPTION_CORPUS = [
+  {
+    id: 1,
+    deception: 'exists but never mounts',
+    verdict: 'not-detected',
+    mode: 'NOT-RUN',
+    fixture: 'corpus 1 — annotated surface behind a false guard',
+    why: 'The annotation is in the source, so the census enumerates the surface and every clause passes. Whether the element was ever put on the page is not a property of the text. A surface that never mounts is indistinguishable from a compliant one until something renders it.',
+  },
+  {
+    id: 2,
+    deception: 'animation targets an off-screen decoy',
+    verdict: 'not-detected',
+    mode: 'NOT-RUN',
+    fixture: 'corpus 2 — motion on a decoy class, real surface untouched',
+    why: 'Clause 3 derives the classes it polices off the annotated tags, so a sibling element that is not annotated is never checked — which is correct for a real sibling and useless against a deliberate clone. A decoy sharing a class PREFIX with a real surface (.ns-ship-card-ghost vs .ns-ship-card) trips the selector substring match by accident, so the catch cannot be relied on: rename the decoy and it is gone. Deciding what is a decoy needs geometry — same rendered box, different element.',
+  },
+  {
+    id: 3,
+    deception: 'screenshots differ only because of a clock',
+    verdict: 'not-detected',
+    mode: 'NOT-RUN',
+    fixture: 'corpus 3 — live timestamp inside the trust surface',
+    why: 'This is clause 4 (screenshot state vs DOM state), which is already not-run. Detecting a clock IN the surface from source would be cheap and was deliberately NOT added: the timestamp that moves the pixels can sit anywhere in the captured frame — a status bar, a log line, a cursor — so a source check would refuse some honest surfaces while still passing the dishonest capture. A check that cannot see the artifact it is judging should say so rather than approximate.',
+  },
+  {
+    id: 4,
+    deception: 'trust surface animates toward apparent approval',
+    verdict: 'detected',
+    mode: 'STATIC',
+    fixture: 'corpus 4a-4e — approval motion via five declaration routes',
+    detectors: [
+      'clause 3: no CSS transition/animation on an enumerated decision surface',
+      'clause 3: no motion utility class on an enumerated decision surface',
+      'clause 3 [TRIPWIRE]: no inline style motion on an enumerated decision surface',
+      'clause 3 [TRIPWIRE]: no Framer Motion animation prop on an enumerated decision surface',
+      'clause 3 [TRIPWIRE]: no Web Animations API call in a component owning a decision surface',
+    ],
+    why: 'Detected at the DECLARATION SITE, in all five routes source can express. Not proof of absence: motion injected at runtime (a class added by script, a stylesheet fetched at runtime, a third-party widget) is still invisible here, and the cascade half of clause 3 stays not-run.',
+    /*
+     * The shipped-product exemplar of the rule this class violates. Recorded as a link and a
+     * sentence, never a stored image: Mobbin's terms are download:false / cache:false, so an
+     * observation may be cited and a screenshot may not be kept.
+     *
+     * PROVENANCE IS PART OF THE RECORD. This was reported to me as a live Mobbin observation;
+     * it was NOT re-verified during this run, because the Mobbin connector was unauthenticated
+     * in this session. It is cited as supporting evidence for a rule that stands on its own
+     * reasoning, not as a measurement this gate took.
+     */
+    reference: {
+      url: 'https://mobbin.com/screens/b727d76e-6475-4a20-a8bd-d0ad05569b30',
+      observation:
+        'Grammarly web suggestion card: the Accept BUTTON carries the green fill while the undecided CARD stays neutral. The affordance is coloured; the pending container is not. That split is the whole rule — colour the thing you may press, never the thing awaiting your decision.',
+      verified: false,
+      note: 'reported live-product observation; not independently re-verified in this run (Mobbin connector unauthenticated). Link and observation only — no image stored.',
+    },
+  },
+  {
+    id: 5,
+    deception: 'reduced-motion renders a different design',
+    verdict: 'not-detected',
+    mode: 'NOT-RUN',
+    fixture: 'corpus 5 — prefers-reduced-motion block repaints the card',
+    why: 'The CSS reader flattens at-rules: rules inside @media (prefers-reduced-motion: reduce) are parsed with their at-rule context dropped, so the gate cannot tell "this applies only under reduced motion" from "this always applies". It therefore cannot compare the two designs, which is the whole deception. The same flattening makes `transition: none` inside a reduced-motion block read as motion — a false positive the corpus fixture pins so the next reader meets it as a known limit, not a mystery.',
+  },
+  {
+    id: 6,
+    deception: 'GSAP knockout jumps to the end and falsely passes',
+    verdict: 'not-detected',
+    mode: 'NOT-RUN',
+    fixture: 'corpus 6 — GSAP tween with a zero-duration knockout path',
+    why: 'This is a defect in a KNOCKOUT PROCEDURE, not a property of source text. A tween knocked out with timeScale(0) or duration:0 still APPLIES ITS END STATE, and the end state is exactly what the un-knocked-out run produces — so the before/after comparison still differs and the knockout reports success while proving nothing. The correct knockout is causal: prevent the timeline from being CONSTRUCTED at all, then assert the end state never arrives. Fast-forwarding is not a knockout, it is the same run with the middle deleted. This gate runs no knockout of rendered motion, so it has nothing to be fooled by and nothing to offer; the rule is recorded here so that whoever writes the browser spec does not rediscover it the expensive way.',
+  },
+  {
+    id: 7,
+    deception: 'video shows motion the live application does not contain',
+    verdict: 'not-detected',
+    mode: 'NOT-RUN',
+    fixture: 'corpus 7 — clean source, motion present only in the recording',
+    why: 'The deception lives entirely in an artifact this gate never opens. Source can be perfectly clean — the fixture is a compliant surface and passes, correctly — while the recording shows an animation that was staged, sped up, or recorded from a branch that never shipped. Reconciling a video against a live page is the far side of clause 4.',
   },
 ];
 
@@ -278,8 +430,18 @@ function classTokens(tagText) {
  *   a check that has never been red is not a check, and a knockout run by hand once is a
  *   knockout the next reader has to take on faith. Production callers pass nothing.
  * @param options.relativeTo  base for the reported paths, so fixture output is readable.
+ * @param options.allowlist  the reviewed-non-surface table. Overridable with the srcDir for
+ *   one reason: the shipped allowlist names real repository paths, so against a fixture tree
+ *   EVERY entry is stale and the stale-allowlist check goes red on all of them. That red
+ *   drowns the finding a fixture exists to produce — the corpus grading first ran with a
+ *   hardcoded allowlist and reported all seven deceptions "CAUGHT", every one of them by the
+ *   same irrelevant staleness error. A fixture must be able to fail for its own reason.
  */
-export async function collectTrustSurfaceCensus({ srcDir = SRC, relativeTo = root } = {}) {
+export async function collectTrustSurfaceCensus({
+  srcDir = SRC,
+  relativeTo = root,
+  allowlist = REVIEWED_NON_SURFACES,
+} = {}) {
   const rel = (absolute) => path.relative(relativeTo, absolute).split(path.sep).join('/');
   const files = (await walk(srcDir)).filter((f) => /\.(tsx|ts|css)$/.test(f));
   const tsxFiles = files.filter((f) => f.endsWith('.tsx') && !/\.test\.tsx$/.test(f));
@@ -305,13 +467,19 @@ export async function collectTrustSurfaceCensus({ srcDir = SRC, relativeTo = roo
     for (const match of source.matchAll(annotationPattern)) {
       const lineIndex = source.slice(0, match.index).split('\n').length - 1;
       const tagText = openingTagAround(source, match.index);
+      const owner = componentAt(components, lineIndex);
       annotated.push({
         file: rel(file),
         line: lineIndex + 1,
-        component: componentAt(components, lineIndex).name,
+        component: owner.name,
         kind: match[1],
         tagText,
         classes: classTokens(tagText),
+        // The whole declaration body, not just the opening tag. Imperative motion is applied
+        // from a ref in an effect — `cardRef.current.animate(...)` — which is nowhere near the
+        // tag it animates. A tag-only scan cannot see it, and that is exactly the blind spot
+        // the WAAPI check below exists to close.
+        componentText: lines.slice(owner.startLine, owner.endLine + 1).join('\n'),
       });
     }
 
@@ -364,25 +532,32 @@ export async function collectTrustSurfaceCensus({ srcDir = SRC, relativeTo = roo
     byComponent.get(key).hits.push(hit);
   }
   const annotatedKeys = new Set(annotated.map((a) => `${a.file}::${a.component}`));
-  const allowKeys = new Set(REVIEWED_NON_SURFACES.map((a) => `${a.file}::${a.component}`));
+  const allowKeys = new Set(allowlist.map((a) => `${a.file}::${a.component}`));
 
   const notRun = [...byComponent.values()].filter(
     (entry) =>
       !annotatedKeys.has(`${entry.file}::${entry.component}`) &&
       !allowKeys.has(`${entry.file}::${entry.component}`),
   );
-  const staleAllowlist = REVIEWED_NON_SURFACES.filter(
+  const staleAllowlist = allowlist.filter(
     (entry) => !byComponent.has(`${entry.file}::${entry.component}`),
   );
 
-  return { annotated, sweepHits, byComponent, notRun, staleAllowlist, cssRules };
+  return { annotated, sweepHits, byComponent, notRun, staleAllowlist, cssRules, allowlist };
 }
 
 /* ------------------------------------------------------------------------ the checks */
 
-export async function trustSurfaceChecks() {
-  const census = await collectTrustSurfaceCensus();
-  const { annotated, notRun, staleAllowlist, cssRules, byComponent } = census;
+/**
+ * @param options  forwarded verbatim to collectTrustSurfaceCensus. Overridable ONLY so the
+ *   test suite can run the REAL checks against a fixture tree. Asserting on the collector's
+ *   raw findings proves the sweep sees a thing; it does not prove the check built on top of
+ *   that finding goes red. Those are different claims, and the corpus grading needs the
+ *   second one. Production callers pass nothing.
+ */
+export async function trustSurfaceChecks({ corpus = MOTION_DECEPTION_CORPUS, ...options } = {}) {
+  const census = await collectTrustSurfaceCensus(options);
+  const { annotated, notRun, staleAllowlist, cssRules, byComponent, allowlist } = census;
   const checks = [];
   const add = (label, passed, detail) => checks.push([label, passed, detail]);
 
@@ -403,7 +578,7 @@ export async function trustSurfaceChecks() {
     'trust-surfaces clause 1: no stale entry in the reviewed-non-surface allowlist',
     staleAllowlist.length === 0,
     staleAllowlist.length === 0
-      ? `${REVIEWED_NON_SURFACES.length} reviewed non-surfaces, all still matched by the sweep`
+      ? `${allowlist.length} reviewed non-surfaces, all still matched by the sweep`
       : `stale: ${staleAllowlist.map((e) => `${e.file}::${e.component}`).join(', ')}`,
   );
 
@@ -504,6 +679,60 @@ export async function trustSurfaceChecks() {
       : `motion: ${motionInline.map((a) => `${a.file}:${a.line}`).join(', ')}`,
   );
 
+  /* --- CLAUSE 3, the three routes a CSS-only scan cannot see ------------------
+   *
+   * All three are TRIPWIREs by the declared doctrine: they cannot fail on this codebase
+   * today, because src/ contains no framer-motion dependency, no `.animate(` call, and no
+   * inline style carrying a transition. That is precisely why they are worth their lines —
+   * each one guards a specific FUTURE change, named in its own comment. Each was proven red
+   * against a corpus fixture before being committed; do not delete them as dead.
+   */
+
+  const decisionSurfaces = annotated.filter((a) => decisionKinds.has(a.kind));
+
+  // TRIPWIRE — guards the day someone reaches for `style={{ transition: ... }}` to make a
+  // proposal card settle, having read the CSS rule and correctly concluded that the
+  // stylesheet is watched. The inline prop is the first place that instinct goes.
+  const inlineStyleMotion = decisionSurfaces.filter((a) => {
+    const style = /style=\{\{([\s\S]*?)\}\}/.exec(a.tagText);
+    return style ? INLINE_STYLE_MOTION.test(style[1]) : false;
+  });
+  add(
+    'trust-surfaces clause 3 [TRIPWIRE]: no inline style motion on an enumerated decision surface',
+    inlineStyleMotion.length === 0,
+    inlineStyleMotion.length === 0
+      ? `${decisionSurfaces.length} decision surfaces checked for style={{ transition|animation }}`
+      : `inline motion: ${inlineStyleMotion.map((a) => `${a.file}:${a.line} ${a.component}`).join(', ')}`,
+  );
+
+  // TRIPWIRE — guards the arrival of Framer Motion. It is not a dependency today; the day it
+  // is, `<motion.div animate={...}>` on a proposal card is one import and one prop away, and
+  // no stylesheet ever mentions it. Matching the tag as well as the props means a bare
+  // `<motion.div>` on a decision surface is refused before the props get added.
+  const framerMotion = decisionSurfaces.filter(
+    (a) => FRAMER_MOTION_PROP.test(a.tagText) || FRAMER_MOTION_TAG.test(a.tagText),
+  );
+  add(
+    'trust-surfaces clause 3 [TRIPWIRE]: no Framer Motion animation prop on an enumerated decision surface',
+    framerMotion.length === 0,
+    framerMotion.length === 0
+      ? `${decisionSurfaces.length} decision surfaces checked for animate/initial/whileHover/<motion.>`
+      : `framer motion: ${framerMotion.map((a) => `${a.file}:${a.line} ${a.component}`).join(', ')}`,
+  );
+
+  // TRIPWIRE — guards imperative motion from an effect. This is the route that survives every
+  // style-based check by construction: the animation exists only as a JS call at runtime, the
+  // stylesheet is clean, and the tag is clean. Scoped to the whole component body because the
+  // call site is never the tag.
+  const waapiMotion = decisionSurfaces.filter((a) => WAAPI_ANIMATE.test(a.componentText ?? ''));
+  add(
+    'trust-surfaces clause 3 [TRIPWIRE]: no Web Animations API call in a component owning a decision surface',
+    waapiMotion.length === 0,
+    waapiMotion.length === 0
+      ? `${decisionSurfaces.length} decision-surface components checked for .animate(`
+      : `waapi: ${waapiMotion.map((a) => `${a.file}:${a.line} ${a.component}`).join(', ')}`,
+  );
+
   // GATE. Was red when written, twice: `.ns-status-dot--ready` and the `is-ready` candidate
   // receipt both resolved to `--ns-positive`, so a direction merely READY TO REVIEW wore the
   // exact green of one that had been ACCEPTED.
@@ -560,7 +789,106 @@ export async function trustSurfaceChecks() {
       : `failure animates: ${spinningFailure.map((r) => `${r.file}:${r.line} ${r.selector}`).join(' | ')}`,
   );
 
+  /* --- CORPUS INTEGRITY: the graded table cannot quietly overstate coverage --- */
+
+  // GATE. This is what makes the corpus table a gate rather than a comment. Add an eighth
+  // deception with no verdict and the run goes red — an ungraded fixture is treated exactly
+  // like a not-run clause reported as passed, because it is the same error wearing a table.
+  const ungraded = corpus.filter(
+    (entry) =>
+      !CORPUS_VERDICTS.has(entry.verdict) ||
+      !CORPUS_MODES.has(entry.mode) ||
+      !entry.deception ||
+      !entry.fixture ||
+      !entry.why,
+  );
+  add(
+    'motion-deception corpus: every fixture carries a verdict, a mode, a fixture name and a reason',
+    ungraded.length === 0,
+    ungraded.length === 0
+      ? `${corpus.length} corpus fixtures, all graded`
+      : `ungraded: ${ungraded.map((e) => `#${e.id} ${e.deception ?? '(unnamed)'} verdict=${e.verdict ?? 'MISSING'}`).join(', ')}`,
+  );
+
+  // GATE. A `detected` claim must point at a check that exists. This is the anti-drift bond:
+  // delete or rename a detector check and the table's claim to catch #4 fails immediately,
+  // rather than the coverage line going on advertising a check that no longer runs.
+  const checkLabels = checks.map(([label]) => label);
+  const brokenClaims = [];
+  for (const entry of corpus) {
+    if (entry.verdict !== 'detected') continue;
+    if (entry.mode !== 'STATIC') {
+      brokenClaims.push(`#${entry.id} claims detected but mode is ${entry.mode}`);
+      continue;
+    }
+    for (const detector of entry.detectors ?? []) {
+      if (!checkLabels.some((label) => label.includes(detector))) {
+        brokenClaims.push(`#${entry.id} names a detector with no matching check: "${detector}"`);
+      }
+    }
+    if ((entry.detectors ?? []).length === 0) {
+      brokenClaims.push(`#${entry.id} claims detected but names no detector`);
+    }
+  }
+  add(
+    'motion-deception corpus: every "detected" verdict names a check that actually exists',
+    brokenClaims.length === 0,
+    brokenClaims.length === 0
+      ? `${corpus.filter((e) => e.verdict === 'detected').length} detected class(es), all bound to live checks`
+      : brokenClaims.join(' | '),
+  );
+
+  // GATE. Two entries claiming the same id would let one silently shadow the other in the
+  // coverage line, which is how a table starts lying while still looking complete.
+  const ids = corpus.map((entry) => entry.id);
+  const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+  add(
+    'motion-deception corpus: fixture ids are unique',
+    duplicateIds.length === 0,
+    duplicateIds.length === 0
+      ? `ids ${ids.join(',')}`
+      : `duplicate ids: ${[...new Set(duplicateIds)].join(', ')}`,
+  );
+
   return { checks, census };
+}
+
+/**
+ * The coverage declaration, derived from MOTION_DECEPTION_CORPUS. Printed by the census and
+ * by the linter so that a green run states its own limits in the same breath as its score.
+ *
+ * The reason this exists: `35/35 PASS` reads as "no deceptive motion exists". It does not
+ * mean that and never could — it means the static checks found nothing, on the one deception
+ * class of seven that source text can decide. A gate that prints a score without printing
+ * its denominator is inviting the reader to supply the wrong one.
+ */
+export async function motionDeceptionCoverage() {
+  const command = await probedBrowserCommand();
+  const detected = MOTION_DECEPTION_CORPUS.filter((entry) => entry.verdict === 'detected');
+  const lines = [];
+  lines.push(
+    `Motion-deception coverage: ${detected.length} of ${MOTION_DECEPTION_CORPUS.length} known deception classes are detected by this gate.`,
+  );
+  lines.push(
+    'A green run means THESE CHECKS FOUND NOTHING. It is not evidence that no deceptive motion exists.',
+  );
+  for (const entry of MOTION_DECEPTION_CORPUS) {
+    const tag = entry.verdict === 'detected' ? 'DETECTED    ' : 'NOT-DETECTED';
+    lines.push(`  [${tag}] #${entry.id} ${entry.deception}  (${entry.mode})`);
+    for (const detector of entry.detectors ?? []) lines.push(`       via ${detector}`);
+    lines.push(`       ${entry.why}`);
+    if (entry.reference) {
+      // Printed WITH its verification status. A reference quoted without saying whether this
+      // run confirmed it is how a borrowed observation hardens into a claimed measurement.
+      lines.push(
+        `       ref [${entry.reference.verified ? 'verified' : 'UNVERIFIED HERE'}] ${entry.reference.url}`,
+      );
+      lines.push(`           ${entry.reference.observation}`);
+      lines.push(`           ${entry.reference.note}`);
+    }
+    if (entry.mode === 'NOT-RUN') lines.push(`       would be run by: ${command}`);
+  }
+  return lines;
 }
 
 /**
@@ -570,13 +898,17 @@ export async function trustSurfaceChecks() {
  */
 const BROWSER_SPEC = 'tests/e2e/nodeslide-trust-surfaces.spec.ts';
 
-export async function clauseRunMode() {
-  /*
-   * The command is PROBED, not asserted. Printing "run `npm run test:e2e`" when no such spec
-   * exists would make a not-run look one command away from being run, which is its own quiet
-   * lie — the same species as a success colour on a pending state. The message changes by
-   * itself the day someone writes the file.
-   */
+/*
+ * The command is PROBED, not asserted. Printing "run `npm run test:e2e`" when no such spec
+ * exists would make a not-run look one command away from being run, which is its own quiet
+ * lie — the same species as a success colour on a pending state. The message changes by
+ * itself the day someone writes the file.
+ *
+ * Shared by clauseRunMode() and motionDeceptionCoverage() so the two can never cite different
+ * runners for the same missing capability — five of the seven corpus classes and both not-run
+ * clauses are waiting on this one spec.
+ */
+export async function probedBrowserCommand() {
   let specExists = false;
   try {
     await fs.access(path.join(root, BROWSER_SPEC));
@@ -584,9 +916,13 @@ export async function clauseRunMode() {
   } catch {
     specExists = false;
   }
-  const command = specExists
+  return specExists
     ? `npx playwright test ${BROWSER_SPEC}`
-    : `NO RUNNER YET — ${BROWSER_SPEC} does not exist; writing it is what would make this clause runnable`;
+    : `NO RUNNER YET — ${BROWSER_SPEC} does not exist; writing it is what would make this runnable`;
+}
+
+export async function clauseRunMode() {
+  const command = await probedBrowserCommand();
 
   return [
     [
@@ -649,6 +985,8 @@ if (process.argv[1]?.endsWith('nodeslide-trust-surface-census.mjs')) {
   for (const [clause, mode, note] of await clauseRunMode()) {
     console.log(`  [${mode}] ${clause}\n      ${note}`);
   }
+  console.log('\n=== MOTION-DECEPTION COVERAGE ===');
+  for (const line of await motionDeceptionCoverage()) console.log(`  ${line}`);
   console.log('\n=== CHECKS ===');
   for (const [label, passed, detail] of checks) {
     console.log(`${passed ? 'PASS' : 'FAIL'} ${label}\n      ${detail}`);

@@ -16,7 +16,31 @@ const files = {
   ],
   trace: ['src/domains/nodeslide/inspector/TraceInspector.tsx'],
   data: ['src/domains/nodeslide/inspector/DataInspector.tsx'],
+  contract: ['src/domains/nodeslide/uiContract.ts'],
 };
+
+/**
+ * The contract attributes an agent is entitled to find. A missing attribute is a
+ * silent capability loss — nothing else in the repo fails when the app simply stops
+ * publishing one — so presence is asserted here by name, not by value.
+ * `data-ns-routing` is intentionally NOT in this list: the client-side job handle
+ * does not retain the admission routing receipt, so nothing can publish it yet, and
+ * a gate on an attribute with no producer is a gate that can only be satisfied by a
+ * lie. `data-ns-theme` is intentionally NOT here either — the studio root owns it.
+ */
+const contractAttributes = [
+  'data-ns-contract',
+  'data-ns-phase',
+  'data-ns-connection',
+  'data-ns-loading-stage',
+  'data-ns-loading-elapsed-ms',
+  'data-ns-loading-retry',
+  'data-ns-deck-id',
+  'data-ns-deck-version',
+  'data-ns-slide-count',
+  'data-ns-job-status',
+  'data-ns-job-phase',
+];
 
 const contents = Object.fromEntries(
   await Promise.all(
@@ -56,6 +80,31 @@ const checks = [
     contents.trace.includes('aria-label="Durable agent run journal"'),
   ],
   ['data exposes deletion lifecycle', contents.data.includes('Delete private source')],
+  // The UI contract. A byte-identical copy of this module once sat on an abandoned
+  // branch with zero callers; a gate on the module alone would have passed there.
+  // So the wiring is asserted too: the publisher must be CALLED from the component
+  // that decides which shell renders.
+  [
+    'ui contract is published, not merely defined',
+    contents.studio.includes('publishNodeSlideUiContract('),
+  ],
+  [
+    'ui contract publishes its version level',
+    contents.contract.includes("setAttribute('data-ns-contract'"),
+  ],
+  [
+    'ui contract leaves data-ns-theme to the studio root',
+    !contents.contract.includes("setAttribute('data-ns-theme'") &&
+      contents.studio.includes('data-ns-theme={studioTheme}'),
+  ],
+  [
+    'failed shells publish no loading stage',
+    contents.contract.includes("removeAttribute('data-ns-loading-stage')"),
+  ],
+  ...contractAttributes.map((attribute) => [
+    `ui contract publishes ${attribute}`,
+    contents.contract.includes(`setAttribute('${attribute}'`),
+  ]),
 ];
 
 const failures = checks.filter(([, passed]) => !passed);

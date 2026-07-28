@@ -9,11 +9,17 @@ import {
   X,
 } from 'lucide-react';
 import { type ReactNode, useEffect, useState } from 'react';
+import type { NodeSlideUiContract } from '../../uiContract';
 
 /** After this long on one loading stage, offer an honest retry instead of spinning forever. */
 const LOADING_RETRY_AFTER_MS = 12_000;
 
-function useConvexConnectionReady(): boolean {
+/**
+ * True once the realtime transport is actually up. Exported so the UI contract
+ * publisher reports the same connection fact this screen renders, instead of a
+ * second, independently-derived guess.
+ */
+export function useConvexConnectionReady(): boolean {
   const convex = useConvex();
   const [ready, setReady] = useState(() => convex.connectionState().isWebSocketConnected);
   useEffect(() => {
@@ -35,9 +41,17 @@ function useConvexConnectionReady(): boolean {
 export function LoadingScreen({
   title,
   kind = 'preparing_sample',
+  onLoadingState,
 }: {
   title: string;
   kind?: 'preparing_sample' | 'opening_deck';
+  /**
+   * Reports this screen's live stage to the one component that publishes the UI
+   * contract. The screen does not write contract attributes itself: a second
+   * writer on the same attribute names is the failure mode the contract exists to
+   * avoid. It reports; NodeSlideStudioContent publishes.
+   */
+  onLoadingState?: (state: NodeSlideUiContract['loading'] | null) => void;
 }) {
   const connected = useConvexConnectionReady();
   const [startedAt] = useState(() => Date.now());
@@ -49,6 +63,11 @@ export function LoadingScreen({
 
   const stage = connected ? kind : 'connecting';
   const retryVisible = elapsedMs >= LOADING_RETRY_AFTER_MS;
+
+  useEffect(() => {
+    onLoadingState?.({ stage, elapsedMs, retryVisible });
+    return () => onLoadingState?.(null);
+  }, [elapsedMs, onLoadingState, retryVisible, stage]);
   const stageTitle = connected ? title : 'Connecting to the workspace service…';
   const stageDetail = connected
     ? 'Loading canonical slides, sources, comments, and revision clocks.'

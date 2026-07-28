@@ -90,6 +90,7 @@ import {
   RecoveryScreen,
   type StudioToast,
   Toast,
+  useConvexConnectionReady,
 } from './components/shell/EditorFeedback';
 import {
   type EditorMutationFocus,
@@ -126,7 +127,7 @@ import type { JsonPatchProposalRequest } from './inspector/JsonInspector';
 import { nodeSlideScopeLabel } from './inspector/scopePresentation';
 import type { InspectorTab } from './inspector/types';
 import { nodeSlideUserErrorMessage } from './nodeslideUserError';
-import { AgentSessionProvider } from './session';
+import { AgentSessionProvider, useOptionalAgentSession } from './session';
 import { extractPptxSignature } from './signature/index';
 import {
   NODESLIDE_TASTE_PACKS,
@@ -134,6 +135,12 @@ import {
   getNodeSlideTastePack,
 } from './signature/packs/index';
 import { downloadDeckHtml, downloadPptx, validateSnapshot } from './slidelang/index';
+import {
+  type NodeSlideUiContract,
+  type NodeSlideUiPhase,
+  publishNodeSlideUiContract,
+  resolveNodeSlideInitialTheme,
+} from './uiContract';
 import './nodeslide.css';
 import './nodeslideV3.css';
 
@@ -520,6 +527,9 @@ export function NodeSlideStudio() {
 
 function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }) {
   const convex = useConvex();
+  // Optional so a test can render the content without the provider; the durable-job
+  // block of the UI contract is simply absent when the session is not mounted.
+  const agentSession = useOptionalAgentSession();
   const monitorDeploymentAction = useDeploymentActionMonitor();
   const requestedDeck = useMemo(() => new URLSearchParams(window.location.search).get('deck'), []);
   const requestedShare = useMemo(
@@ -568,9 +578,11 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
   const [telemetryLoadingRunId, setTelemetryLoadingRunId] = useState<string | null>(null);
   const [telemetryLoadError, setTelemetryLoadError] = useState<string | null>(null);
   const [activeInspectorTab, setActiveInspectorTab] = useState<InspectorTab>('ai');
-  const [studioTheme, setStudioTheme] = useState<StudioThemeMode>(() =>
-    readStudioPreference('theme') === 'dark' ? 'dark' : 'light',
-  );
+  // One resolver, shared with the UI contract: stored studio preference (the same
+  // `nodeslide.v3.theme` key `writeStudioPreference` writes), then the OS preference,
+  // then light. The studio root renders this value as `data-ns-theme` and remains
+  // that attribute's only writer.
+  const [studioTheme, setStudioTheme] = useState<StudioThemeMode>(resolveNodeSlideInitialTheme);
   const [navigatorCollapsed, setNavigatorCollapsed] = useState(
     () => window.innerWidth >= 700 && window.innerWidth < 1100,
   );
@@ -595,6 +607,8 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
   const [shareOpen, setShareOpen] = useState(false);
   const [shareBusy, setShareBusy] = useState(false);
   const [agentBusy, setAgentBusy] = useState(false);
+  // Lifted out of LoadingScreen so the UI contract has exactly one publisher.
+  const [uiLoadingState, setUiLoadingState] = useState<NodeSlideUiContract['loading'] | null>(null);
   const [variationGenerating, setVariationGenerating] = useState(false);
   const [variationDecisionBusy, setVariationDecisionBusy] = useState(false);
   const [tastePackBusy, setTastePackBusy] = useState(false);
@@ -1961,6 +1975,94 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
     }
   };
 
+  // ---------------------------------------------------------------------------
+  // The agent-readable UI contract. ONE publisher, published from here, because
+  // this is the component that decides which shell renders. The chain below MUST
+  // mirror the early returns that follow it — they are deliberately adjacent so a
+  // new branch cannot be added to one without the other being on screen.
+  // ---------------------------------------------------------------------------
+  const uiPhase = useMemo<NodeSlideUiPhase>(() => {
+    if (requestedApprove) return 'approve';
+    if (requestedShare) {
+      if (sharedSnapshot === undefined) return 'loading';
+      if (!sharedSnapshot) return 'recovery';
+      return 'present';
+    }
+    if (requestedDeck && !ownerAccessKey) return 'recovery';
+    if (
+      !requestedDeck &&
+      !requestedShare &&
+      !activeDeckId &&
+      !workspace &&
+      !sampleRequested &&
+      !bootstrapError
+    ) {
+      return 'landing';
+    }
+    if (activeDeckId && ownerAccessKey && queriedWorkspace === null && !localWorkspace)
+      return 'recovery';
+    if (bootstrapError && !workspace) return 'recovery';
+    if (!workspace || !activeSlide) return 'loading';
+    if (presentMode) {
+      // A deck that fails publish validation renders the recovery screen, not the
+      // presenter. Reporting 'present' there would be the app describing what it
+      // wanted to do instead of what it is doing.
+      return validateSnapshot({
+        deck: workspace.deck,
+        slides: workspace.slides,
+        elements: workspace.elements,
+        sources: workspace.sources,
+      }).publishOk
+        ? 'present'
+        : 'recovery';
+    }
+    return 'workspace';
+  }, [
+    activeDeckId,
+    activeSlide,
+    bootstrapError,
+    localWorkspace,
+    ownerAccessKey,
+    presentMode,
+    queriedWorkspace,
+    requestedApprove,
+    requestedDeck,
+    requestedShare,
+    sampleRequested,
+    sharedSnapshot,
+    workspace,
+  ]);
+  const convexConnected = useConvexConnectionReady();
+  const activeAgentJob = agentSession?.state.activeJob ?? null;
+  useEffect(() => {
+    publishNodeSlideUiContract({
+      phase: uiPhase,
+      connection: convexConnected ? 'ready' : 'connecting',
+      theme: studioTheme,
+      // Only a shell that is actually loading reports a loading stage. A recovery
+      // shell publishes none, so a failure can never be read as a load in flight.
+      ...(uiPhase === 'loading' && uiLoadingState ? { loading: uiLoadingState } : {}),
+      ...(workspace
+        ? {
+            deck: {
+              id: workspace.deck.id,
+              version: workspace.deck.version,
+              slideCount: workspace.slides.length,
+            },
+          }
+        : {}),
+      ...(activeAgentJob
+        ? {
+            job: {
+              ...(activeAgentJob.jobId ? { id: activeAgentJob.jobId } : {}),
+              status: activeAgentJob.status,
+              phase: activeAgentJob.phase,
+            },
+          }
+        : {}),
+    });
+  }, [activeAgentJob, convexConnected, studioTheme, uiLoadingState, uiPhase, workspace]);
+
   const projectsDialog = (
     <ProjectDialog
       open={projectsOpen}
@@ -2017,7 +2119,8 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
   }
 
   if (requestedShare) {
-    if (sharedSnapshot === undefined) return <LoadingScreen title="Opening presentation…" />;
+    if (sharedSnapshot === undefined)
+      return <LoadingScreen title="Opening presentation…" onLoadingState={setUiLoadingState} />;
     if (!sharedSnapshot) {
       return (
         <RecoveryScreen
@@ -2154,6 +2257,7 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
       <LoadingScreen
         title={requestedDeck ? 'Opening your deck…' : 'Preparing the sample…'}
         kind={requestedDeck ? 'opening_deck' : 'preparing_sample'}
+        onLoadingState={setUiLoadingState}
       />
     );
   }
@@ -4374,14 +4478,6 @@ function editorValidationStatus(
   if (!validation.ok || !validation.publishOk) return 'classification_issue';
   if (!validation.cleanOk || validation.issues.length > 0) return 'needs_review';
   return 'verified';
-}
-
-function readStudioPreference(key: 'theme'): string | null {
-  try {
-    return window.localStorage.getItem(`nodeslide.v3.${key}`);
-  } catch {
-    return null;
-  }
 }
 
 function writeStudioPreference(key: 'theme', value: string) {

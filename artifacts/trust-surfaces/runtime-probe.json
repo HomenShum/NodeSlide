@@ -1,6 +1,6 @@
 {
   "schema": "nodeslide.trust-surface-runtime-probe/v1",
-  "generatedAt": "2026-07-28T22:10:05.704Z",
+  "generatedAt": "2026-07-28T22:25:09.053Z",
   "baseUrl": "https://nodeslide.vercel.app",
   "buildSha": "2772cab4507d8c379e8321b698fddac5fd8f5db7",
   "knockout": {
@@ -49,7 +49,7 @@
       "kind": "consent",
       "requires": "the AI inspector tab on an open deck",
       "reached": true,
-      "reachedAtStage": "ai-tab",
+      "reachedAtStage": "sample-deck",
       "declaredState": "per-send",
       "clauses": {
         "A_noAnimationOnDecisionAffordance": {
@@ -109,23 +109,23 @@
       "kind": "failed-state",
       "requires": "a deck CI result (or an in-flight check) on the AI tab; the readout is not mounted at all until `deckCiResult !== undefined || deckCiLoading`",
       "reached": true,
-      "reachedAtStage": "ai-tab",
-      "declaredState": "pass",
+      "reachedAtStage": "sample-deck",
+      "declaredState": "loading",
       "clauses": {
         "A_noAnimationOnDecisionAffordance": {
           "clause": "A",
           "verdict": "not-applicable",
-          "reason": "failed-state surface observed in data-state=\"pass\"; the motion ban applies to its failure states",
+          "reason": "failed-state surface observed in data-state=\"loading\"; the motion ban applies to its failure states",
           "observed": {
-            "state": "pass"
+            "state": "loading"
           }
         },
         "B_noSuccessTokenOnPending": {
           "clause": "B",
           "verdict": "not-applicable",
-          "reason": "surface reached in data-state=\"pass\", not a pending state; the pending-paint clause had nothing pending to read",
+          "reason": "surface reached in data-state=\"loading\", not a pending state; the pending-paint clause had nothing pending to read",
           "observed": {
-            "state": "pass",
+            "state": "loading",
             "resolvedTokens": {
               "--ns-positive": "rgb(4, 120, 87)"
             }
@@ -134,20 +134,20 @@
         "C_declaredStateMatchesRendered": {
           "clause": "C",
           "verdict": "passed",
-          "reason": "declared data-state=\"pass\"; paint, copy all agree",
+          "reason": "declared data-state=\"loading\"; paint, copy all agree",
           "observed": {
-            "state": "pass",
+            "state": "loading",
             "statusChecked": null,
-            "text": "Deck CIPassed0 blockers · 0 warnings"
+            "text": "Deck CIChecking"
           }
         },
         "D_reducedMotionCollapsesToFinalState": {
           "clause": "D",
-          "verdict": "passed",
-          "reason": "identical declared state, paint and copy under reduce; no animation running or declared (5 nodes compared)",
+          "verdict": "not-run",
+          "reason": "surface was still settling: data-state read \"loading\" before the reduced-motion window and \"pass\" after it, with motion allowed both times. Any difference observed under reduce would be the passage of time, not the preference.",
           "observed": {
-            "state": "pass",
-            "reducedState": "pass"
+            "before": "loading",
+            "afterState": "pass"
           }
         }
       }
@@ -238,7 +238,7 @@
           "observed": {
             "state": "none",
             "statusChecked": null,
-            "text": "{ \"bbox\": { \"height\": 0.83, \"width\": 0.008, \"x\": 0.035, \"y\": 0.065 }, \"exportCapabilities\": [ \"web_native\", \"pptx_editable\", \"google_importable\" ], \"id\": \"element_3453b013c762fd7fef64eb970dae7f61\", \"kind\": \"shape\", \"locked\": true, \"name\": \"Accent rail\", \"role\": \"decoration\", \"rotation\": 0, \"slideId\": \"slide_f68b921c63c98131cb9f020c918bf1e0\", \"sourceIds\": [], \"style\": { \"fill\": \"#B44A2D\", \"radius\":"
+            "text": "{ \"bbox\": { \"height\": 0.83, \"width\": 0.008, \"x\": 0.035, \"y\": 0.065 }, \"exportCapabilities\": [ \"web_native\", \"pptx_editable\", \"google_importable\" ], \"id\": \"element_30ec0f872e638f4bf249d064d1a6856c\", \"kind\": \"shape\", \"locked\": true, \"name\": \"Accent rail\", \"role\": \"decoration\", \"rotation\": 0, \"slideId\": \"slide_b8982ae36d96b33259340b6c71a2aef6\", \"sourceIds\": [], \"style\": { \"fill\": \"#B44A2D\", \"radius\":"
           }
         },
         "D_reducedMotionCollapsesToFinalState": {
@@ -460,9 +460,9 @@
   ],
   "summary": {
     "tally": {
-      "passed": 13,
+      "passed": 12,
       "failed": 1,
-      "not-run": 20,
+      "not-run": 21,
       "not-applicable": 6
     },
     "failures": [

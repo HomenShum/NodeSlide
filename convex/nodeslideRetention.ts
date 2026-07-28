@@ -1,5 +1,5 @@
 import { v } from 'convex/values';
-import type { Doc } from './_generated/dataModel';
+import type { Doc, Id } from './_generated/dataModel';
 import type { MutationCtx } from './_generated/server';
 import { internalMutation, mutation } from './_generated/server';
 import { isOwnerAccessKey, requireOwnerAccess } from './lib/nodeslideAccess';
@@ -13,6 +13,7 @@ import {
   type NodeSlideErasureEntry,
   type NodeSlideSchemaLike,
   buildNodeSlideErasureContract,
+  nodeSlideStorageIdFields,
 } from './lib/nodeslideErasureContract';
 import { nodeslideContentDigest } from './lib/nodeslideIds';
 import {
@@ -29,6 +30,17 @@ import schema from './schema';
  */
 export const NODESLIDE_ERASURE_CONTRACT: readonly NodeSlideErasureEntry[] =
   buildNodeSlideErasureContract(schema as unknown as NodeSlideSchemaLike);
+
+/**
+ * Per-table `v.id('_storage')` fields, resolved once alongside the contract.
+ * A row delete only removes the pointer; the erasure has to follow it.
+ */
+export const NODESLIDE_ERASURE_STORAGE_FIELDS: ReadonlyMap<string, readonly string[]> = new Map(
+  NODESLIDE_ERASURE_CONTRACT.map((entry): [string, readonly string[]] => [
+    entry.table,
+    nodeSlideStorageIdFields(schema as unknown as NodeSlideSchemaLike, entry.table),
+  ]).filter(([, fields]) => fields.length > 0),
+);
 
 const RETENTION_RECEIPT_SCHEMA = 'nodeslide.workspace-retention-receipt/v1' as const;
 const RETENTION_TOMBSTONE_SCHEMA = 'nodeslide.retention-tombstone/v1' as const;
@@ -218,7 +230,13 @@ async function deleteWorkspaceRows(
     const value = nodeSlideScopeValue(entry, deck);
     if (value === null) continue;
     const rows = await collectNodeSlideScopedRows(ctx, entry, value);
-    for (const row of rows) await ctx.db.delete(row._id);
+    const storageFields = NODESLIDE_ERASURE_STORAGE_FIELDS.get(entry.table) ?? [];
+    for (const row of rows) {
+      // Blobs first. If the row went first and the storage delete then threw,
+      // the bytes would survive with nothing left pointing at them.
+      await deleteRowStorageObjects(ctx, row, storageFields);
+      await ctx.db.delete(row._id);
+    }
     if (rows.length > 0) counts[entry.label] = rows.length;
   }
 
@@ -233,6 +251,27 @@ async function deleteWorkspaceRows(
     throw new Error('NodeSlide workspace retention left project-scoped profile rows.');
   }
   return counts;
+}
+
+/**
+ * Deletes the file-storage objects a row points at. A missing or already
+ * deleted blob is not an error: erasure has to be idempotent, and a second
+ * delete request must not fail because the first one succeeded.
+ */
+async function deleteRowStorageObjects(
+  ctx: MutationCtx,
+  row: Record<string, unknown>,
+  storageFields: readonly string[],
+): Promise<void> {
+  for (const field of storageFields) {
+    const storageId = row[field];
+    if (typeof storageId !== 'string' || storageId.length === 0) continue;
+    try {
+      await ctx.storage.delete(storageId as Id<'_storage'>);
+    } catch {
+      // Already gone. The row delete below still has to happen.
+    }
+  }
 }
 
 /**

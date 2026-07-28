@@ -46,8 +46,8 @@
     "artifact-arena:curate": "node scripts/curate-artifact-arena.mjs",
     "artifact-arena:tournament": "node scripts/build-artifact-arena-tournament.mjs",
     "diagnostics:convex-logs:prod": "node scripts/capture-convex-logs.mjs",
-
     "proof:nodeslide": "node scripts/nodeslide-proof.mjs",
+    "proof:nodeslide:w1": "node scripts/nodeslide-signature-proof.mjs",
     "proof:nodeslide:w2": "node scripts/nodeslide-signature-apply-proof.mjs",
     "proof:nodeslide:w3": "node scripts/nodeslide-variation-proof.mjs",
     "proof:nodeslide:w4": "node scripts/nodeslide-preference-proof.mjs",
@@ -75,7 +75,6 @@
     "nodeslide:bench:taste-judge": "node scripts/nodeslide-taste-judge.mjs",
     "nodeslide:bench:competitive": "node scripts/nodeslide-competitive-benchmark.mjs",
     "test:nodeslide-gates": "vitest run scripts/tests",
-
     "artifacts:build": "npm run packages:build && node scripts/build-immutable-package-set.mjs",
     "proof:install-upgrade": "node scripts/immutable-install-upgrade-proof.mjs",
     "codegen": "convex codegen",
@@ -98,6 +97,8 @@
   "dependencies": {
     "@assistant-ui/react-o11y": "0.0.25",
     "@assistant-ui/store": "0.2.19",
+    "@convex-dev/persistent-text-streaming": "^0.3.3",
+    "@convex-dev/workflow": "^0.3.0",
     "@earendil-works/pi-ai": "0.80.6",
     "@fontsource-variable/fraunces": "^5.2.9",
     "@fontsource-variable/geist": "^5.2.8",

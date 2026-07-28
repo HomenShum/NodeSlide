@@ -137,12 +137,50 @@ export interface NodeSlideProviderTelemetry {
   costMicroUsd: number;
   inputTokens: number;
   outputTokens: number;
+  /** Current calls always emit this; optional keeps persisted v1 telemetry and fixtures readable. */
+  attempts?: NodeSlideProviderAttemptTelemetry[];
+}
+
+/**
+ * One row per model call actually issued. `ambiguous` is the load-bearing field:
+ * a call that was dispatched but whose outcome never came back (deadline, thrown
+ * transport) may still have been billed upstream, so it is recorded as
+ * unreconciled rather than silently dropped from the run's accounting.
+ */
+export interface NodeSlideProviderAttemptTelemetry {
+  attempt: 'initial' | 'repair';
+  attempted: true;
+  settled: boolean;
+  ambiguous: boolean;
+  unreconciled: boolean;
+  elapsedMs: number;
+}
+
+/**
+ * Optional per-call limits. Values may tighten the provider limits but can never relax them.
+ */
+export interface NodeSlideDispatchPolicy {
+  maxOutputTokens?: number;
+  timeoutMs?: number;
+  /** Provider-routing ceiling in integer micro-USD per million input tokens. */
+  maxInputMicroUsdPerMillionTokens?: number;
+  /** Provider-routing ceiling in integer micro-USD per million output tokens. */
+  maxOutputMicroUsdPerMillionTokens?: number;
 }
 
 export interface NodeSlideJsonSchema {
   name: string;
   schema: Record<string, unknown>;
 }
+
+/**
+ * How the JSON contract reaches the provider. `json_schema` sends the schema in
+ * `response_format`; `json_object` asks only for strict JSON and relies on the
+ * schema carried in the system prompt; `prompt` sends neither. All three are
+ * validated locally against the same schema, so the mode changes transport only,
+ * never the accepted NodeSlide contract.
+ */
+export type NodeSlideStructuredOutputMode = 'json_schema' | 'json_object' | 'prompt';
 
 export type NodeSlideProviderResult =
   | { ok: true; value: unknown; telemetry: NodeSlideProviderTelemetry }
@@ -161,6 +199,9 @@ export interface NodeSlideCompletionRequest {
   userText: string;
   maxTokens: number;
   jsonSchema?: NodeSlideJsonSchema;
+  structuredOutputMode: NodeSlideStructuredOutputMode;
+  /** OpenRouter price ceiling in USD per million tokens. */
+  providerMaxPrice?: { prompt: number; completion: number };
   repairAttempt: boolean;
   signal: AbortSignal;
   onTextDelta?: (delta: string, accumulatedText: string) => void | Promise<void>;
@@ -184,7 +225,9 @@ export type NodeSlideCompletion = (
 
 interface NodeSlideProviderDependencies {
   complete?: NodeSlideCompletion;
+  /** @deprecated Use dispatchPolicy.timeoutMs for new callers. */
   timeoutMs?: number;
+  dispatchPolicy?: NodeSlideDispatchPolicy;
   onTextDelta?: (event: NodeSlideProviderTextDelta) => void | Promise<void>;
 }
 
@@ -248,6 +291,7 @@ export async function probeNodeSlideModelOnce(
         systemPrompt: 'Reply with one character.',
         userText: '1',
         maxTokens: probeProfile.maxTokens,
+        structuredOutputMode: 'prompt',
         repairAttempt: false,
         signal: controller.signal,
       }),
@@ -369,49 +413,77 @@ export async function callNodeSlideFreeJson(
   const selectedRoute = nodeSlideAgentModel(selectedModel);
   const routeLabel = `${selectedRoute.label} via ${providerDisplayName(selectedRoute.provider)}`;
   const controller = new AbortController();
+  const dispatchPolicy = resolveDispatchPolicy(args.maxTokens, dependencies);
   let timeout: ReturnType<typeof setTimeout> | undefined;
   const deadline = new Promise<never>((_, reject) => {
     timeout = setTimeout(() => {
       controller.abort();
       reject(new Error('nodeslide_provider_timeout'));
-    }, dependencies.timeoutMs ?? MODEL_TIMEOUT_MS);
+    }, dispatchPolicy.timeoutMs);
   });
   let telemetry = emptyTelemetry(selectedModel, reasoningEffort);
   let hasTelemetry = false;
   let invalidResponse = '';
-  let nativeSchemaEnabled = Boolean(args.jsonSchema);
+  let structuredOutputMode = preferredStructuredOutputMode(selectedModel, args.jsonSchema);
   const onTextDelta = dependencies.onTextDelta ?? args.onTextDelta;
 
   try {
     // Exactly two model calls are possible: the initial completion and one JSON-repair completion.
     for (let attempt = 0; attempt < 2; attempt += 1) {
       const repairAttempt = attempt === 1;
-      const result = await Promise.race([
-        complete({
-          provider: selectedRoute.provider,
-          model: selectedRoute.upstreamId,
-          supportsTemperature: selectedRoute.supportsTemperature,
-          reasoningEffort,
-          systemPrompt: providerSystemPrompt(args, repairAttempt),
-          userText: repairAttempt ? repairUserText(args.userText, invalidResponse) : args.userText,
-          maxTokens: args.maxTokens,
-          ...(args.jsonSchema && nativeSchemaEnabled ? { jsonSchema: args.jsonSchema } : {}),
-          repairAttempt,
-          signal: controller.signal,
-          ...(onTextDelta
-            ? {
-                onTextDelta: (delta: string, accumulatedText: string) =>
-                  onTextDelta({
-                    delta,
-                    accumulatedText,
-                    attempt: attempt + 1,
-                    repairAttempt,
-                  }),
-              }
-            : {}),
-        }),
-        deadline,
-      ]);
+      const attemptTelemetry = startAttemptTelemetry(repairAttempt);
+      telemetry.attempts?.push(attemptTelemetry);
+      let result: NodeSlideCompletionResult;
+      try {
+        result = await Promise.race([
+          complete({
+            provider: selectedRoute.provider,
+            model: selectedRoute.upstreamId,
+            supportsTemperature: selectedRoute.supportsTemperature,
+            reasoningEffort,
+            systemPrompt: providerSystemPrompt(args, repairAttempt),
+            userText: repairAttempt
+              ? repairUserText(args.userText, invalidResponse)
+              : args.userText,
+            maxTokens: dispatchPolicy.maxOutputTokens,
+            ...(args.jsonSchema && structuredOutputMode === 'json_schema'
+              ? { jsonSchema: args.jsonSchema }
+              : {}),
+            structuredOutputMode,
+            ...(selectedRoute.provider === 'openrouter' &&
+            dispatchPolicy.maxInputMicroUsdPerMillionTokens !== undefined &&
+            dispatchPolicy.maxOutputMicroUsdPerMillionTokens !== undefined
+              ? {
+                  providerMaxPrice: {
+                    prompt: dispatchPolicy.maxInputMicroUsdPerMillionTokens / 1_000_000,
+                    completion: dispatchPolicy.maxOutputMicroUsdPerMillionTokens / 1_000_000,
+                  },
+                }
+              : {}),
+            repairAttempt,
+            signal: controller.signal,
+            ...(onTextDelta
+              ? {
+                  onTextDelta: (delta: string, accumulatedText: string) =>
+                    onTextDelta({
+                      delta,
+                      accumulatedText,
+                      attempt: attempt + 1,
+                      repairAttempt,
+                    }),
+                }
+              : {}),
+          }),
+          deadline,
+        ]);
+      } catch (error) {
+        // Dispatched, outcome unknown: the upstream may still have billed it.
+        finishAttemptTelemetry(attemptTelemetry, true);
+        hasTelemetry = true;
+        throw error;
+      }
+      const timedOut = controller.signal.aborted || result.stopReason === 'aborted';
+      finishAttemptTelemetry(attemptTelemetry, timedOut);
       telemetry = addTelemetry(telemetry, result);
       hasTelemetry = true;
 
@@ -419,25 +491,25 @@ export async function callNodeSlideFreeJson(
         if (
           attempt === 0 &&
           args.jsonSchema &&
-          nativeSchemaEnabled &&
-          isStructuredOutputRejection(result.errorMessage)
+          structuredOutputMode === 'json_schema' &&
+          shouldRetryStructuredOutputCompatibility(result)
         ) {
-          nativeSchemaEnabled = false;
+          structuredOutputMode = structuredOutputFallbackMode(result.errorMessage);
           invalidResponse =
-            '[The provider rejected native structured-output mode. Return contract-valid JSON using the schema in the system prompt.]';
+            '[The provider rejected JSON Schema mode. Return contract-valid JSON using the schema in the system prompt and the compatible JSON mode selected for this repair.]';
           continue;
         }
         return providerFailure(
           providerErrorReason(
             result.errorMessage,
             routeLabel,
-            Boolean(args.jsonSchema && nativeSchemaEnabled),
+            Boolean(args.jsonSchema && structuredOutputMode === 'json_schema'),
           ),
           telemetry,
           hasTelemetry,
         );
       }
-      if (result.stopReason === 'aborted' || controller.signal.aborted) {
+      if (timedOut) {
         return providerFailure(`The ${routeLabel} route timed out.`, telemetry, hasTelemetry);
       }
       if (responseBytes(result.text) > MAX_RESPONSE_BYTES) {
@@ -472,6 +544,149 @@ export async function callNodeSlideFreeJson(
   }
 }
 
+/**
+ * Applies the caller's dispatch policy as a one-way tightening of the limits
+ * this repository already enforces.
+ *
+ * Deliberately NOT ported from parity: parity clamps every call against a
+ * repo-wide `MAX_OUTPUT_TOKENS = 2_200`. This repository has no such ceiling —
+ * its edit planner asks for 3_000 and `nodeslideAgent` for 5_000 — so importing
+ * parity's constant would silently truncate two live callers while still
+ * compiling. The ceiling here is therefore whatever the caller asked for, and
+ * the policy can only lower it.
+ */
+function resolveDispatchPolicy(
+  requestedMaxTokens: number,
+  dependencies: NodeSlideProviderDependencies,
+): Required<Pick<NodeSlideDispatchPolicy, 'maxOutputTokens' | 'timeoutMs'>> &
+  Pick<
+    NodeSlideDispatchPolicy,
+    'maxInputMicroUsdPerMillionTokens' | 'maxOutputMicroUsdPerMillionTokens'
+  > {
+  return {
+    maxOutputTokens: tightenedPositiveInteger(
+      requestedMaxTokens,
+      dependencies.dispatchPolicy?.maxOutputTokens,
+    ),
+    timeoutMs: tightenedPositiveInteger(
+      dependencies.timeoutMs ?? MODEL_TIMEOUT_MS,
+      dependencies.dispatchPolicy?.timeoutMs,
+    ),
+    ...pairedPriceCeiling(dependencies.dispatchPolicy),
+  };
+}
+
+/**
+ * A routing price ceiling is only forwarded when BOTH halves are present and
+ * valid. A half-specified ceiling would let one side of the bill run uncapped
+ * while the receipt claimed a cap was in force.
+ */
+function pairedPriceCeiling(
+  policy: NodeSlideDispatchPolicy | undefined,
+): Pick<
+  NodeSlideDispatchPolicy,
+  'maxInputMicroUsdPerMillionTokens' | 'maxOutputMicroUsdPerMillionTokens'
+> {
+  const input = positiveSafeInteger(policy?.maxInputMicroUsdPerMillionTokens);
+  const output = positiveSafeInteger(policy?.maxOutputMicroUsdPerMillionTokens);
+  return input !== undefined && output !== undefined
+    ? {
+        maxInputMicroUsdPerMillionTokens: input,
+        maxOutputMicroUsdPerMillionTokens: output,
+      }
+    : {};
+}
+
+function positiveSafeInteger(value: number | undefined): number | undefined {
+  if (typeof value !== 'number' || !Number.isSafeInteger(value) || value < 1) return undefined;
+  return value;
+}
+
+function tightenedPositiveInteger(baseline: number, policyLimit: number | undefined): number {
+  const base = positiveIntegerOr(baseline, 1);
+  const cap = positiveIntegerOr(policyLimit, base);
+  return Math.min(base, cap);
+}
+
+function positiveIntegerOr(value: number | undefined, fallback: number): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return fallback;
+  return Math.max(1, Math.floor(value));
+}
+
+function startAttemptTelemetry(repairAttempt: boolean): NodeSlideProviderAttemptTelemetry {
+  return {
+    attempt: repairAttempt ? 'repair' : 'initial',
+    attempted: true,
+    settled: false,
+    ambiguous: false,
+    unreconciled: false,
+    elapsedMs: Date.now(),
+  };
+}
+
+function finishAttemptTelemetry(
+  attempt: NodeSlideProviderAttemptTelemetry,
+  ambiguous: boolean,
+): void {
+  attempt.elapsedMs = Math.max(0, Date.now() - attempt.elapsedMs);
+  attempt.settled = !ambiguous;
+  attempt.ambiguous = ambiguous;
+  attempt.unreconciled = ambiguous;
+}
+
+function preferredStructuredOutputMode(
+  model: NodeSlideAgentModelId,
+  jsonSchema: NodeSlideJsonSchema | undefined,
+): NodeSlideStructuredOutputMode {
+  if (!jsonSchema) return 'prompt';
+  // OpenRouter's Gemini route accepts ordinary JSON schemas, but the edit planner's
+  // dynamically scoped union is large enough to be rejected before token generation.
+  // Keep the exact schema in the prompt and validate it locally; json_object only
+  // changes provider transport, never the accepted NodeSlide contract.
+  if (model === 'google/gemini-3.5-flash' && jsonSchema.name === 'nodeslide_edit_patch') {
+    return 'json_object';
+  }
+  return 'json_schema';
+}
+
+/**
+ * Decides whether the single compatibility retry is worth spending. A rejection
+ * that names the schema or response format is unambiguous. Everything else must
+ * additionally have cost nothing: a billed or partially generated failure is
+ * terminal, because retrying it would spend real money on the same failure.
+ */
+function shouldRetryStructuredOutputCompatibility(result: NodeSlideCompletionResult): boolean {
+  if (isStructuredOutputRejection(result.errorMessage)) return true;
+  const normalized = result.errorMessage?.toLowerCase() ?? '';
+  if (
+    normalized.includes('rate') ||
+    normalized.includes('quota') ||
+    normalized.includes('auth') ||
+    normalized.includes('credit') ||
+    normalized.includes('timeout')
+  ) {
+    return false;
+  }
+  // Some OpenAI-compatible streaming endpoints collapse a preflight schema
+  // rejection to a generic error. A zero-usage failure is safe to spend the sole
+  // compatibility retry on; any billed/partially generated failure remains terminal.
+  return result.inputTokens === 0 && result.outputTokens === 0 && result.costMicroUsd === 0;
+}
+
+/**
+ * The rung below `json_schema`. A complaint that names the schema keeps strict
+ * JSON transport; anything else drops all the way to prompt-only, because the
+ * provider may not support `response_format` at all.
+ */
+function structuredOutputFallbackMode(
+  errorMessage: string | undefined,
+): Exclude<NodeSlideStructuredOutputMode, 'json_schema'> {
+  const normalized = errorMessage?.toLowerCase() ?? '';
+  return normalized.includes('schema') || normalized.includes('json_schema')
+    ? 'json_object'
+    : 'prompt';
+}
+
 async function completeNodeSlideWithPiAi(
   request: NodeSlideCompletionRequest,
 ): Promise<NodeSlideCompletionResult> {
@@ -503,6 +718,8 @@ async function completeNodeSlideWithPiAi(
         reasoningDisabled,
         reasoningEffort: request.reasoningEffort,
         supportsTemperature: request.supportsTemperature,
+        structuredOutputMode: request.structuredOutputMode,
+        ...(request.providerMaxPrice ? { providerMaxPrice: request.providerMaxPrice } : {}),
       }),
   };
   let result: AssistantMessage;
@@ -549,12 +766,16 @@ function completionResult(result: AssistantMessage): NodeSlideCompletionResult {
 export function nodeSlideStructuredOutputPayload(
   payload: unknown,
   jsonSchema: NodeSlideJsonSchema | undefined,
+  mode: NodeSlideStructuredOutputMode = jsonSchema ? 'json_schema' : 'prompt',
+  providerMaxPrice?: { prompt: number; completion: number },
 ): unknown {
   return nodeSlideProviderPayload(payload, jsonSchema, {
     provider: 'openrouter',
     reasoningDisabled: false,
     reasoningEffort: 'low',
     supportsTemperature: false,
+    structuredOutputMode: mode,
+    ...(providerMaxPrice ? { providerMaxPrice } : {}),
   });
 }
 
@@ -566,17 +787,35 @@ export function nodeSlideProviderPayload(
     reasoningDisabled: boolean;
     reasoningEffort: NodeSlideReasoningEffort;
     supportsTemperature: boolean;
+    /** Defaults to the pre-existing behaviour: a schema means JSON Schema mode. */
+    structuredOutputMode?: NodeSlideStructuredOutputMode;
+    /** OpenRouter routing price ceiling in USD per million tokens. */
+    providerMaxPrice?: { prompt: number; completion: number };
   },
 ): unknown {
   if (!isPlainObject(payload)) return payload;
+  const mode: NodeSlideStructuredOutputMode =
+    options.structuredOutputMode ?? (jsonSchema ? 'json_schema' : 'prompt');
+  // JSON Schema mode is the only rung that needs the schema on the wire; the
+  // json_object rung relies on the schema already carried in the system prompt.
+  const schemaOnWire = mode === 'json_schema' ? jsonSchema : undefined;
+  const emitsResponseFormat = Boolean(schemaOnWire) || mode === 'json_object';
   const nextPayload = options.supportsTemperature
     ? { ...payload }
     : Object.fromEntries(Object.entries(payload).filter(([key]) => key !== 'temperature'));
+  const openRouterProviderOverrides = {
+    ...(options.provider === 'openrouter' && emitsResponseFormat
+      ? { require_parameters: true }
+      : {}),
+    ...(options.provider === 'openrouter' && options.providerMaxPrice
+      ? { max_price: options.providerMaxPrice }
+      : {}),
+  };
   const openRouterProvider =
-    options.provider === 'openrouter' && jsonSchema
+    Object.keys(openRouterProviderOverrides).length > 0
       ? {
           ...(isPlainObject(payload['provider']) ? payload['provider'] : {}),
-          require_parameters: true,
+          ...openRouterProviderOverrides,
         }
       : payload['provider'];
   return {
@@ -589,18 +828,20 @@ export function nodeSlideProviderPayload(
         }
       : {}),
     ...(openRouterProvider === undefined ? {} : { provider: openRouterProvider }),
-    ...(jsonSchema
+    ...(schemaOnWire
       ? {
           response_format: {
             type: 'json_schema',
             json_schema: {
-              name: jsonSchema.name,
+              name: schemaOnWire.name,
               strict: false,
-              schema: jsonSchema.schema,
+              schema: schemaOnWire.schema,
             },
           },
         }
-      : {}),
+      : mode === 'json_object'
+        ? { response_format: { type: 'json_object' } }
+        : {}),
   };
 }
 
@@ -705,6 +946,7 @@ function emptyTelemetry(
     costMicroUsd: 0,
     inputTokens: 0,
     outputTokens: 0,
+    attempts: [],
   };
 }
 
@@ -735,6 +977,7 @@ function addTelemetry(
     costMicroUsd: telemetry.costMicroUsd + Math.max(0, result.costMicroUsd),
     inputTokens: telemetry.inputTokens + Math.max(0, result.inputTokens),
     outputTokens: telemetry.outputTokens + Math.max(0, result.outputTokens),
+    ...(telemetry.attempts ? { attempts: telemetry.attempts } : {}),
   };
 }
 

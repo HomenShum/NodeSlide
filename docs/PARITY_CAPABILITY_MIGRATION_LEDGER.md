@@ -126,3 +126,347 @@ consumer.
 6. Move UI surfaces (P38-P42) last, one controlled surface at a time.
 7. Run NodeRoom consumer proof and update each row with commit, test, and
    package version. A row is complete only when both hosts pass.
+
+## Top-level `convex/nodeslide*.ts` port verdicts (2026-07-27)
+
+File-level verdicts for the top-level `convex/nodeslide*.ts` cluster only.
+`convex/lib/**` is audited separately. Measured with
+`scripts/port-audit.mjs --destination <this repo>` at `79ae98f`: **144 items
+missing** in this cluster. Every one of them is **MERGE**, not PORT. Each was
+tested by copying the parity file into this tree and running
+`tsc --noEmit -p convex/tsconfig.json`; the errors below are the compiler's,
+not a reading of the code.
+
+No table was added to `convex/schema.ts` to make a port fit. A schema migration
+is an owner decision, and every row in the first table needs one.
+
+### Blocked on tables this repo's schema does not define
+
+`ctx.db.query('<table>')` fails `TS2345 / TS2344: not assignable to
+TableNamesInDataModel`. Each rejected table also cascades: the query result
+degrades to the first table's document type, so a single missing table produces
+dozens of `TS2339 Property 'x' does not exist` and `TS18046 'row' is of type
+'unknown'` follow-on errors. The table name is the root cause; the rest is noise.
+
+| File | Items | Missing tables |
+|---|---|---|
+| `convex/nodeslideScopedMemory.ts` | 19 | `nodeslide_scoped_memories`, `nodeslide_access_grants` |
+| `convex/nodeslideJobs.ts` | 17 | `nodeslide_agent_jobs`, `nodeslide_durable_sessions`, `nodeslide_durable_session_events`, `nodeslide_durable_job_journal_entries`, `nodeslide_run_budgets`, `nodeslide_billable_calls`, `nodeslide_budget_events` |
+| `convex/nodeslideWorkspaceAccess.ts` | 15 | `nodeslide_workspaces`, `nodeslide_workspace_projects`, `nodeslide_access_grants`, `nodeslide_access_grant_events` |
+| `convex/nodeslideSourceRefresh.ts` | 12 | `nodeslide_source_refresh_schedules`, `nodeslide_source_refresh_proposals`, `nodeslide_source_revisions`, `nodeslide_claim_evidence_receipts` |
+| `convex/nodeslideUploads.ts` | 12 | `nodeslide_uploads` |
+| `convex/nodeslidePptxSync.ts` | 10 | `nodeslide_pptx_sync_links` |
+| `convex/nodeslideSessions.ts` | 9 | `nodeslide_durable_sessions`, `nodeslide_durable_session_events`, `nodeslide_durable_job_journal_entries`, `nodeslide_durable_model_result_replays` |
+| `convex/nodeslideBudgets.ts` | 7 | `nodeslide_run_budgets`, `nodeslide_billable_calls`, `nodeslide_budget_events` |
+| `convex/nodeslideSync.ts` | 5 | `nodeslide_sync_connections` |
+| `convex/nodeslideDelegation.ts` | 4 | `nodeslide_delegation_grants`, `nodeslide_delegation_uses` |
+| `convex/nodeslideJobControl.ts` | 4 | `nodeslide_agent_jobs` |
+| `convex/nodeslideRoleStages.ts` | 3 | `nodeslide_agent_jobs`, `nodeslide_role_stages` |
+
+`nodeslideWorkspaceAccess.ts` additionally fails
+`TS2339: Property 'workspaceId' does not exist on type '{ _id: Id<"nodeslide_decks">; ... }'`
+— this repo's `nodeslide_decks` has no workspace dimension at all, so the
+workspace layer is not a table addition but a reshape of an existing table.
+
+`nodeslideSync.ts` is the cheapest unblock in the cluster: one table, zero
+missing module dependencies.
+
+### Blocked only on modules outside this cluster
+
+No schema change needed. These become portable the moment the named
+`convex/lib/**`, `shared/**`, or `convex/workflows.ts` modules land. Failure is
+`TS2307: Cannot find module`.
+
+| File | Items | Missing modules |
+|---|---|---|
+| `convex/nodeslideDeckCi.ts` | 4 | `convex/lib/nodeslideDeckCi.ts` |
+| `convex/nodeslideJobRunner.ts` | 2 | `convex/lib/nodeslideCreationTelemetry.ts`, `convex/lib/nodeslideJobValidators.ts`, `convex/lib/nodeslideLiveRenderRepair.ts` |
+| `convex/nodeslideJobWorkflow.ts` | 2 | `convex/workflows.ts`, `convex/lib/nodeslideJobValidators.ts`, npm `@convex-dev/workflow` |
+| `convex/nodeslideAuthoringQuality.ts` | 1 | `shared/nodeslideAuthoringQuality.ts`, `shared/nodeslideJourneyProof.ts` |
+| `convex/nodeslidePptxCreate.ts` | 1 | `convex/lib/nodeslideLiveRenderRepair.ts` |
+| `convex/nodeslideUploadExtraction.ts` | 1 | `convex/lib/nodeslidePdfExtraction.ts`; also calls `internal.nodeslideUploads` and `internal.nodeslide.attachStoredDataSourceInternal`, both still missing |
+
+### Symbol-level merges into files that already exist here
+
+`convex/nodeslide.ts` and `convex/nodeslideAgent.ts` are present but shorter
+than parity's. The missing exports:
+
+| Symbol | File | Blocker |
+|---|---|---|
+| `recordEvidenceCaptureInternal`, `pruneExpiredEvidenceCapturesInternal`, `listEvidenceCaptureSummaries`, `getEvidenceCaptureDetail` | `nodeslide.ts` | `nodeslide_evidence_captures`, `nodeslide_evidence_steps`, `nodeslide_source_revisions` |
+| `attachStoredDataSourceInternal` | `nodeslide.ts` | its own body is clean, but it calls the private `ensureNodeSlideSourceRevision`, which writes `nodeslide_source_revisions` and imports `convex/lib/nodeslideSourceRevision.ts` |
+| `createImportedDeckInternal` | `nodeslide.ts` | `nodeslide_agent_jobs`, `convex/lib/nodeslideJobState.ts` |
+| `deleteDeck` | `nodeslide.ts` | `convex/lib/nodeslideDeckDeletion.ts` |
+| `duplicateDeck` | `nodeslide.ts` | `convex/lib/nodeslideDeckFork.ts` |
+| `NodeSlideDelegatedCommitAuthority`, `commitDelegatedNodeSlideProposal` | `nodeslide.ts` | `shared/nodeslideDelegation.ts` |
+| `captureWebSourcesBestEffort` | `nodeslideAgent.ts` | `TS2304: Cannot find name 'captureNodeSlideWebEvidence'` / `'createNodeSlideSourceSnapshotPdf'` from `convex/lib/nodeslideEvidenceCapture.ts` |
+| `mergeAgentJobMemories` | `nodeslideAgent.ts` | `TS2304: Cannot find name 'NodeSlideScopedMemoryItem'` from `convex/nodeslideScopedMemory.ts` |
+| `NodeSlideStoredWebSource`, `pairNodeSlideStoredWebSources`, `nodeSlideEvidenceAttachmentDigest`, `finalizeNodeSlideEvidenceRecord` | `nodeslideAgent.ts` | compile clean on their own — held back by their **test**. Their only coverage is `convex/lib/nodeslideAgentEvidenceCapture.test.ts`, and 3 of its 4 cases import `captureWebSourcesBestEffort`. Landing the four helpers alone would put untested exports in this repo. Port the whole evidence block with the test once `convex/lib/nodeslideEvidenceCapture.ts` arrives. |
+
+### Notes for whoever picks this up
+
+- **Deferred npm dependencies.** `convex/nodeslideJobs.ts` needs
+  `@convex-dev/persistent-text-streaming` and `convex/nodeslideJobs.ts`,
+  `nodeslideJobControl.ts`, `workflows.ts` need `@convex-dev/workflow`. Parity
+  pins `^0.3.3` and `^0.3.0`. Not added here: no file that landed needs them,
+  and unused runtime dependencies do not belong in a product repo.
+- **No dangling runtime references.** Convex entry points are resolved by name
+  at runtime (`internal.nodeslideScopedMemory`, `(internal as any).X`), so
+  absence is invisible to a symbol grep. Grepping the bare module names for all
+  eighteen un-ported modules across `convex/**` in this repo returns zero hits.
+  Nothing here is currently calling a function that does not exist.
+- **Correction to the intake brief.** It states that this repo's
+  `NodeSlideStudio.tsx` already binds
+  `nodeslideDelegation.issueGrant/revokeGrant/listGrants` and
+  `nodeslideJobs.startEditProposal`, making a workspace port ambiguous. At
+  `79ae98f` that is not true: `src/domains/nodeslide/NodeSlideStudio.tsx` has
+  zero references to `nodeslideDelegation` or `nodeslideJobs`, and
+  `issueGrant`/`revokeGrant` appear nowhere under `src/`. Those bindings exist
+  in **parity's** copy of the file. The workspace layer is still MERGE, but on
+  the schema evidence above, not on a name collision.
+- **Suggested order.** `shared/**` and `convex/lib/**` first — they gate 11
+  items with no schema cost. The 117 table-blocked items need an owner decision
+  on the schema before any of them can move.
+
+## The unassigned areas: `shared/**` non-nodeslide, and `convex/workflows.ts` (2026-07-27)
+
+Two areas were in nobody's cluster. Both are now closed, one of them by
+measurement rather than by porting.
+
+### `shared/**` files not named `shared/nodeslide*` — the set is empty
+
+There are none. `find shared -type f` in parity returns 46 `shared/nodeslide*`
+modules plus `shared/generated/nodeslide-arena-contracts.json` and
+`shared/generated/nodeslide-atlas-receipts.json`, and nothing else. The area
+was unassigned because it does not exist, not because it was overlooked.
+
+This also means no `shared/**` work by this agent could have unblocked the six
+modules below. Every `shared/` import in them resolves to a `shared/nodeslide*`
+file, which is the other cluster's scope. `scripts/port-audit.mjs` never
+emitted these paths either — its source roots are `shared/nodeslide*`,
+`convex/nodeslide*`, `mcp/src/nodeslide*`, `src/domains/nodeslide/**` and
+`scripts/nodeslide-*`, so a non-nodeslide `shared/` file would have been
+invisible to it regardless.
+
+### `convex/workflows.ts` — PORT the manager, MERGE parity-studio's pipeline
+
+Landed at `f55f79b`. `convex/workflows.ts` is also outside the audit's source
+roots, so the audit's before/after counts are identical (843 missing, verdict
+FAIL, 0 closed, 0 newly missing). That number is not a measurement of this
+work; the compiler below is.
+
+Parity's file holds two unrelated things. The `WorkflowManager` singleton is
+repo-agnostic durable orchestration and is what NodeSlide imports. The other
+three exports — `iterateWithCommentsWorkflow`, `verifyImportedKit`,
+`parityStudioWorkflow` — are parity-studio's screenshot-to-UI-kit pipeline.
+
+Copying the file verbatim and running `tsc --noEmit -p convex/tsconfig.json`
+produced **35 errors, all in that one file**:
+
+| Code | Count | Cause |
+|---|---|---|
+| `TS2339` | 30 | `Property '<x>' does not exist` for `runs`, `artifacts`, `uiKits`, `comments`, `parityReports`, `generation` on `internal` |
+| `TS2307` | 1 | `Cannot find module '@convex-dev/workflow'` |
+| `TS7006` / `TS7031` | 4 | `step` / `args` implicitly `any`, cascading off the untyped `workflow.define` |
+
+None of those six modules or their tables exist here, so the three definitions
+are MERGE and stay in parity. No table was added to `convex/schema.ts`.
+
+That refusal also **removes two blockers the table above listed**:
+`convex/lib/qualityGate.ts` and its `convex/lib/parityChecker.ts` were reachable
+from `nodeslideJobWorkflow` only through the parity-studio definitions. Both
+compile clean in this tree, and both were still backed out — they model a
+`ParityReport` that has no consumer here, and dead product code from another
+repo is not a port.
+
+Two pieces of infrastructure came with it:
+
+- `convex/convex.config.ts` is new; this repo had no component registration at
+  all, and `components.workflow` is what the manager wraps. It registers
+  `@convex-dev/workflow` only. Parity also registers
+  `@convex-dev/persistent-text-streaming`; nothing here imports it, so it is
+  still deferred. `convex/nodeslideJobs.ts` is the file that will need it.
+- The `components` declaration in `convex/_generated/api.d.ts` is normally
+  codegen output, but `npx convex codegen` requires a live `CONVEX_DEPLOYMENT`
+  and fails offline (`InvalidDeploymentName`). The three lines were written by
+  hand. They are a mechanical reflection of `app.use(workflow)` with no
+  deployment-specific content, and `convex/_generated/api.js` is already
+  byte-identical to parity's because `componentsGeneric()` resolves components
+  at runtime. **Anyone with deployment credentials should run `npm run codegen`
+  once to confirm it regenerates the same text.** That is the one claim here
+  that was reasoned rather than executed.
+
+Parity ships no test for `workflows.ts`. `convex/workflows.test.ts` is new.
+
+### The six modules blocked only on modules, re-measured at `f55f79b`
+
+Each of the six was copied into this tree and compiled; the errors are the
+compiler's. **`nodeslideJobWorkflow` is down from three blockers to one**, and
+`./workflows`, `workflow.define` and `@convex-dev/workflow` no longer error in
+any of `nodeslideJobWorkflow`, `nodeslideJobs` or `nodeslideJobControl`.
+
+| File | Errors | Remaining direct blockers |
+|---|---|---|
+| `convex/nodeslideDeckCi.ts` | 1 | `convex/lib/nodeslideDeckCi.ts` |
+| `convex/nodeslideJobWorkflow.ts` | 1 | `convex/lib/nodeslideJobValidators.ts` |
+| `convex/nodeslidePptxCreate.ts` | 2 | `convex/lib/nodeslideLiveRenderRepair.ts` (+1 `TS7006` cascade) |
+| `convex/nodeslideAuthoringQuality.ts` | 3 | `shared/nodeslideAuthoringQuality.ts`, `shared/nodeslideJourneyProof.ts` |
+| `convex/nodeslideUploadExtraction.ts` | 3 | `convex/lib/nodeslidePdfExtraction.ts`, `internal.nodeslideUploads`, `internal.nodeslide.attachStoredDataSourceInternal` |
+| `convex/nodeslideJobRunner.ts` | 4 | `convex/lib/nodeslideCreationTelemetry.ts`, `convex/lib/nodeslideJobValidators.ts`, `convex/lib/nodeslideLiveRenderRepair.ts` (+1 `TS2322` cascade) |
+
+**The direct blocker list understates the work.** `TS2307` only names the first
+hop. Walking the relative-import closure of each of the six against this tree
+gives the real absent set — 14 modules, none of them in the areas this agent
+owned:
+
+| File | Direct | Transitive absent |
+|---|---|---|
+| `convex/nodeslideUploadExtraction.ts` | 1 | 1 |
+| `convex/nodeslideAuthoringQuality.ts` | 2 | 4 |
+| `convex/nodeslideJobWorkflow.ts` | 1 | 3 |
+| `convex/nodeslideDeckCi.ts` | 1 | 7 |
+| `convex/nodeslidePptxCreate.ts` | 1 | 8 |
+| `convex/nodeslideJobRunner.ts` | 3 | 11 |
+
+Union across the six: 5 in `shared/nodeslide*`
+(`nodeslideAuthoringPolicy`, `nodeslideAuthoringQuality`, `nodeslideDelegation`,
+`nodeslideJourneyProof`, `nodeslideSlideCount`) and 7 in `convex/lib/nodeslide*`
+(`nodeslideArtifactPresence`, `nodeslideCreationTelemetry`, `nodeslideDeckCi`,
+`nodeslideJobValidators`, `nodeslideLiveRenderRepair`, `nodeslidePdfExtraction`,
+`nodeslideSemanticEvaluation`). Zero in `src/domains/nodeslide/**` — that layer
+is already complete here for these six.
+
+`convex/nodeslideUploadExtraction.ts` is the cheapest of the six: one absent
+module, no transitive tail. `convex/nodeslideJobRunner.ts` is the most
+expensive.
+
+### Not established
+
+- Whether the six modules **pass their tests** once they compile. Only
+  compilation was measured; their suites were never run, because none of the
+  fourteen dependency modules has landed.
+- Whether `npm run codegen` against a real deployment reproduces the
+  hand-written `components` block byte for byte.
+- The runtime behaviour of the workflow component. `convex/workflows.test.ts`
+  proves the manager is constructed against a registered component with the
+  ported retry and concurrency policy, and that `.define()` returns an internal
+  registered mutation. It does not start, replay, or cancel a real durable run
+  — that needs a deployment.
+- Six vitest files were failing in this worktree before and after this change
+  (`scripts/tests/nodeslide-benchmark-*`, `-taste-judge`, `-tastebench`,
+  `-uxbench`, `packages/cli/src/installer.test.ts`). Running the same six files
+  in the `nodeslide` main checkout at `79ae98f` fails the same tests with the
+  same `Test timed out in 5000ms` / `Hook timed out in 10000ms` /
+  `ENOTEMPTY: rmdir` errors, and the failing subset differs run to run in both
+  trees. They are pre-existing Windows temp-directory flakes, not a regression
+  from this work, but they were not fixed and they are not tracked anywhere.
+
+## The "22 missing tables" were not one decision. Measured on `port/tables`.
+
+The `convex/*` cluster outside `convex/lib/` was carried as blocked on "22
+missing tables — an owner decision". That framing was wrong, and it hid three
+genuinely different situations behind one label.
+
+**Decision D1 (`DECOUPLING_PLAN.md` §8) forbids the workspace layer**
+— workspace > project > deck. It says nothing about deck-scoped feature tables.
+Every table below whose rows carry a required `deckId` was therefore never
+blocked at all, and eleven of them have now landed with their consumers:
+
+| Table | Scope column | Module(s) |
+|---|---|---|
+| `nodeslide_sync_connections` | `deckId` | `convex/nodeslideSync.ts` |
+| `nodeslide_pptx_sync_links` | `deckId` | `convex/nodeslidePptxSync.ts` |
+| `nodeslide_source_revisions` | `deckId` | `convex/nodeslide.ts`, `convex/nodeslideSourceRefresh.ts` |
+| `nodeslide_source_refresh_schedules` | `deckId` | `convex/nodeslideSourceRefresh.ts` |
+| `nodeslide_source_refresh_proposals` | `deckId` | `convex/nodeslideSourceRefresh.ts` |
+| `nodeslide_claim_evidence_receipts` | `deckId` | `convex/nodeslideSourceRefresh.ts` |
+| `nodeslide_uploads` | `deckId` | `convex/nodeslideUploads.ts` |
+| `nodeslide_evidence_captures` | `deckId` | `convex/nodeslide.ts` |
+| `nodeslide_evidence_steps` | `deckId` | `convex/nodeslide.ts` |
+
+Each one acquired a data-erasure obligation the moment it entered
+`convex/schema.ts`, because `convex/lib/nodeslideErasureContract.ts` derives the
+contract from the schema rather than from a list. Each obligation was satisfied
+by seeding a real row in `convex/nodeslideDataRights.scenario.test.ts` and
+naming the table in the derived-contract test. None was satisfied by adding an
+entry to `NODESLIDE_ERASURE_EXCLUSIONS`.
+
+### Refused: the workspace layer
+
+`convex/nodeslideWorkspaceAccess.ts` (7 symbols: `createWorkspace`,
+`createProject`, `getProject`, `attachDeck`, `startEditProposal`,
+`NodeSlideWorkspaceSummary`, `NodeSlideWorkspaceProjectSummary`) is **refused,
+not deferred**. Its four tables — `nodeslide_workspaces`,
+`nodeslide_workspace_projects`, `nodeslide_access_grants`,
+`nodeslide_access_grant_events` — are scoped by `workspaceId` and `projectId`.
+Adding them would reintroduce exactly the layer D1 removes. The destination has
+already re-rooted this surface at the deck: `convex/nodeslideDeckGrants.ts` over
+`nodeslide_deck_grants` / `nodeslide_deck_grant_events`, and the port audit
+already matches parity's `issueGrant`, `listGrants` and `revokeGrant` there.
+These seven symbols should be marked DROPPED in the audit, not carried as
+missing work.
+
+`convex/nodeslideDelegation.ts#acceptValidatedProposalWithGrant` and the
+`commitDelegatedNodeSlideProposal` / `NodeSlideDelegatedCommitAuthority` pair in
+`convex/nodeslide.ts` are **not** refused, but they are not a copy either.
+Parity keeps `nodeslide_delegation_grants` beside `nodeslide_access_grants`;
+this repo collapsed both into `nodeslide_deck_grants`. Re-rooting the
+auto-commit path onto the deck grant (plus a deck-scoped
+`nodeslide_delegation_uses` audit table) is a rewrite with real design content
+and was left for a session that can own that decision rather than guess it.
+
+### Blocked on a data-rights decision, not on a table
+
+`nodeslide_agent_jobs`, `nodeslide_durable_sessions`,
+`nodeslide_durable_session_events`, `nodeslide_durable_job_journal_entries`,
+`nodeslide_durable_model_result_replays`, `nodeslide_run_budgets`,
+`nodeslide_billable_calls`, `nodeslide_budget_events` and
+`nodeslide_role_stages`' `agent_jobs` dependency carry **no `deckId`, and cannot
+honestly be given one**. A create-deck job is admitted before any deck exists;
+parity's own schema records `resultDeckId` as optional and fills it on
+completion. The same is true of a durable session and of a run budget, both of
+which precede the deck they will produce.
+
+The erasure contract offers exactly three placements — required `deckId`,
+required `tenantId`, or `NODESLIDE_ERASURE_EXCLUSIONS` with a reason — and none
+of them fits:
+
+- `deckId` is false at admission time. Declaring it required would make the
+  schema reject the row the job system must write first.
+- there is no tenant column. `clientSessionId` is the nearest thing and it is on
+  the export redactor's sensitive list; it is an identifier, not a retention
+  scope. A session can also own many decks, so erasing one deck must not take
+  another deck's job rows with it.
+- an exclusion would be a lie. These rows hold the user's prompt and the model's
+  outputs — precisely the data a "delete everything" request is about.
+
+So the ~44 symbols across `convex/nodeslideJobs.ts`, `nodeslideSessions.ts`,
+`nodeslideBudgets.ts`, `nodeslideJobControl.ts`, `nodeslideJobRunner.ts`,
+`nodeslideJobWorkflow.ts` and `nodeslideRoleStages.ts` are blocked on a real
+owner decision, and it is a narrower one than "22 tables": the erasure contract
+needs a fourth scope kind for rows whose deck binding is established later —
+either a nullable deck scope with a completion-time backfill, or an explicit
+job-lifetime retention window that stands on its own. Until that exists, no
+amount of table-adding unblocks this cluster.
+
+### Still blocked on another cluster's module
+
+- `convex/nodeslideUploadExtraction.ts#materializeApprovedPdfUpload` needs
+  `convex/lib/nodeslidePdfExtraction.ts`, which is absent. That file is
+  self-contained — no new packages, no transitive tail — and belongs to the
+  `convex/lib` cluster.
+- `convex/nodeslidePptxCreate.ts#importPptxAsNewDeck` needs
+  `convex/lib/nodeslideLiveRenderRepair.ts` and
+  `src/domains/nodeslide/slidelang/pptxImport`, neither of which this session
+  owned.
+
+### One verification finding worth keeping
+
+`npx tsc -p convex/tsconfig.json` was not reading this repo's `shared/` types.
+`convex/tsconfig.json` had no `paths` mapping, so `@nodeslide/*` resolved
+through `node_modules` — a junction into a shared install — to a **prebuilt
+`dist` belonging to a different worktree**. A widening of
+`SourceRecord['format']` in `shared/nodeslide.ts` was graded against another
+checkout's stale copy of that type. The mapping the root `tsconfig.json`
+already carries has been added to `convex/tsconfig.json`; rebuilding the dist
+was not an option, because its output directory is not in this worktree.

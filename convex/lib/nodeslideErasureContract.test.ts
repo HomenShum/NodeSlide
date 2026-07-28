@@ -8,6 +8,7 @@ import {
   buildNodeSlideErasureContract,
   nodeSlideBinaryFields,
   nodeSlideErasureLabel,
+  nodeSlideStorageIdFields,
 } from './nodeslideErasureContract';
 
 const realSchema = schema as unknown as NodeSlideSchemaLike;
@@ -56,6 +57,22 @@ describe('erasure contract derivation', () => {
       'nodeslide_package_submissions',
       'nodeslide_package_assets',
       'nodeslide_sources',
+      // Immutable source evidence. It outlives the mutable source row by
+      // design, so nothing but the deck erasure will ever remove it.
+      'nodeslide_source_revisions',
+      // Source monitoring state and the review items it produces. The proposal
+      // embeds the plan JSON, so it holds deck content, not just scheduling.
+      'nodeslide_source_refresh_schedules',
+      'nodeslide_source_refresh_proposals',
+      // Web-evidence captures and their steps. The goal text is the owner's own
+      // question and the steps hold stored screenshots and PDFs.
+      'nodeslide_evidence_captures',
+      'nodeslide_evidence_steps',
+      // A claim-to-region custody receipt is a standing assertion about this
+      // deck's content, so it cannot outlive the deck.
+      'nodeslide_claim_evidence_receipts',
+      // Upload metadata survives the blob it describes, so it is erased here.
+      'nodeslide_uploads',
       'nodeslide_agent_runs',
       'nodeslide_agent_messages',
       'nodeslide_agent_memories',
@@ -66,11 +83,17 @@ describe('erasure contract derivation', () => {
       'nodeslide_execution_traces',
       'nodeslide_shadow_comparisons',
       'nodeslide_exports',
+      // The remote-presentation link and its object mapping name local slide
+      // and element ids, so the connection is deck content, not plumbing.
+      'nodeslide_sync_connections',
       // The Google Slides grant is deck-owned like everything else: an OAuth
       // token is user data, so a deck erasure has to take it with the deck.
       'nodeslide_oauth_sessions',
       'nodeslide_oauth_credentials',
       'nodeslide_google_sync_states',
+      // The linked-PPTX baseline, pending plan, and verified remote snapshot
+      // are serialized deck content, so the link is erased with the deck.
+      'nodeslide_pptx_sync_links',
       'nodeslide_publications',
       'nodeslide_publish_approvers',
       'nodeslide_publish_approvals',
@@ -78,6 +101,13 @@ describe('erasure contract derivation', () => {
       'nodeslide_signature_profiles',
       'nodeslide_taste_profiles',
       'nodeslide_presence',
+      // Deck-scoped delegation: a live bearer capability must not outlive the
+      // deck it authorizes, and its audit trail goes with it.
+      'nodeslide_deck_grants',
+      'nodeslide_deck_grant_events',
+      // Deck > session > run agent memory. Every row carries deckId, so a
+      // run-scoped memory cannot survive the deck it was learned on.
+      'nodeslide_scoped_memories',
       'nodeslide_decks',
       'projects',
     ]);
@@ -115,6 +145,30 @@ describe('erasure contract derivation', () => {
   it('finds byte-valued columns without being told where they are', () => {
     expect(nodeSlideBinaryFields(realSchema, 'nodeslide_package_assets')).toEqual(['bytes']);
     expect(nodeSlideBinaryFields(realSchema, 'nodeslide_slides')).toEqual([]);
+  });
+
+  it('finds file-storage pointers, which a row delete would strand rather than erase', () => {
+    expect(nodeSlideStorageIdFields(realSchema, 'nodeslide_uploads')).toEqual(['storageId']);
+    // Two per row, and both optional: a capture step may hold a screenshot, a
+    // PDF, or neither, and each one that exists is a file the erasure must take.
+    expect(nodeSlideStorageIdFields(realSchema, 'nodeslide_evidence_steps')).toEqual([
+      'pdfStorageId',
+      'screenshotStorageId',
+    ]);
+    // Inline bytes live in the row and go with it; they are not storage ids.
+    expect(nodeSlideStorageIdFields(realSchema, 'nodeslide_package_assets')).toEqual([]);
+    expect(nodeSlideStorageIdFields(realSchema, 'nodeslide_slides')).toEqual([]);
+
+    // Every table the schema declares with a `_storage` pointer must be one the
+    // erasure walks. A blob hanging off an unerased table is unreachable data.
+    const contractTables = new Set(
+      buildNodeSlideErasureContract(realSchema).map((entry) => entry.table),
+    );
+    const strandable = Object.keys(realSchema.tables).filter(
+      (table) =>
+        nodeSlideStorageIdFields(realSchema, table).length > 0 && !contractTables.has(table),
+    );
+    expect(strandable, 'a table holding storage ids must be inside the erasure').toEqual([]);
   });
 });
 

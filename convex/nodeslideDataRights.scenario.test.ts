@@ -20,17 +20,30 @@
 
 import { convexTest } from 'convex-test';
 import { describe, expect, it } from 'vitest';
+import {
+  nodeSlideMemoryScopeKey,
+  normalizeNodeSlideAccessPolicy,
+} from '../shared/nodeslideAccessPolicy';
 import type { MutationCtx, QueryCtx } from './_generated/server';
 import { insertNodeSlideSnapshot } from './lib/nodeslideData';
 import { collectNodeSlideOwnerDataExport } from './lib/nodeslideDataExport';
 import { takeNodeSlideScopedRows } from './lib/nodeslideDeckRows';
-import type { NodeSlideErasureEntry, NodeSlideSchemaLike } from './lib/nodeslideErasureContract';
+import {
+  nodeSlideDeckCapabilitiesForRole,
+  normalizeNodeSlideDeckAccessPolicy,
+} from './lib/nodeslideDeckScopeAccess';
+import {
+  NODESLIDE_ERASURE_EXCLUSIONS,
+  type NodeSlideErasureEntry,
+  type NodeSlideSchemaLike,
+} from './lib/nodeslideErasureContract';
 import { buildGoldenNodeSlide } from './lib/nodeslideSeed';
 import {
   NODESLIDE_ERASURE_CONTRACT,
   deleteOwnedWorkspace,
   nodeSlideRetentionBindings,
 } from './nodeslideRetention';
+import { createScopedMemoryRecord, nodeSlideScopedMemoryScope } from './nodeslideScopedMemory';
 import schema from './schema';
 
 const modules = import.meta.glob('./**/*.ts');
@@ -98,6 +111,172 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
   const variationId = 'variation_scenario';
   const validationId = 'validation_scenario';
   const approverId = 'approver_scenario';
+
+  // The immutable half of the deck's evidence. A revision outlives the mutable
+  // source row on purpose, which is exactly why the erasure has to reach it:
+  // it carries the citation text verbatim.
+  const seededSource = built.snapshot.sources[0];
+  if (!seededSource) throw new Error('Golden fixture must have a source.');
+  await ctx.db.insert('nodeslide_source_revisions', {
+    id: `source-revision:${DIGEST('e')}`,
+    schema: 'nodeslide.source-revision/v1',
+    revisionDigest: DIGEST('f'),
+    ownerDigest: `actor_${DIGEST('a')}`,
+    deckId,
+    sourceId: seededSource.id,
+    title: seededSource.title,
+    sourceType: seededSource.sourceType,
+    retrievedAt: seededSource.retrievedAt,
+    citation: seededSource.citation,
+    contentDigest: DIGEST('b'),
+    createdAt: NOW,
+  });
+
+  // Source monitoring the owner switched on, and the review item it produced.
+  // The proposal embeds the plan JSON, which describes the exact edits to this
+  // deck's slides — deck content in a table that looks like scheduler state.
+  await ctx.db.insert('nodeslide_source_refresh_schedules', {
+    id: 'refresh_schedule_scenario',
+    deckId,
+    sourceId: seededSource.id,
+    ownerDigest: `actor_${DIGEST('a')}`,
+    enabled: true,
+    intervalMinutes: 60,
+    nextRunAt: NOW + 3_600_000,
+    status: 'ready',
+    lastSemanticDigest: DIGEST('a'),
+    failureCount: 0,
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
+  await ctx.db.insert('nodeslide_source_refresh_proposals', {
+    id: 'refresh_proposal_scenario',
+    deckId,
+    sourceId: seededSource.id,
+    ownerDigest: `actor_${DIGEST('a')}`,
+    scheduleId: 'refresh_schedule_scenario',
+    status: 'ready',
+    baseDeckVersion: built.snapshot.deck.version,
+    baseSnapshotDigest: DIGEST('a'),
+    beforeRevisionId: `source-revision:${DIGEST('e')}`,
+    afterRevisionId: `source-revision:${DIGEST('f')}`,
+    afterRevisionDigest: DIGEST('f'),
+    planDigest: DIGEST('b'),
+    planJson: JSON.stringify({ operations: [{ slideId: slide.id, elementId: element.id }] }),
+    deckCiDigest: DIGEST('c'),
+    affectedSlideIds: [slide.id],
+    affectedElementIds: [element.id],
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
+  // A visual evidence capture and its step. The goal is the owner's own
+  // question and the step points at a stored screenshot, so both are deck-owned.
+  await ctx.db.insert('nodeslide_evidence_captures', {
+    id: 'capture_scenario',
+    deckId,
+    runId,
+    traceId,
+    spanId: 'span_capture_scenario',
+    parentSpanId: 'span_parent_scenario',
+    sourceId: seededSource.id,
+    sourceRevisionId: `source-revision:${DIGEST('e')}`,
+    sourceRevisionDigest: DIGEST('f'),
+    captureDigest: DIGEST('c'),
+    url: 'https://nodeslide.example/evidence',
+    goal: 'Confirm the figure quoted on slide one.',
+    provider: 'nodeslide-source-snapshot/v1',
+    status: 'ready',
+    stepCount: 1,
+    screenshotCount: 1,
+    pdfCount: 0,
+    createdAt: NOW,
+    completedAt: NOW,
+    expiresAt: NOW + 2_592_000_000,
+  });
+  // A capture step that really has its screenshot and PDF in file storage. The
+  // row is not the evidence; the two blobs are, and a deletion that takes only
+  // the row leaves them behind with nothing left pointing at them.
+  const screenshotStorageId = await ctx.storage.store(
+    new Blob([new Uint8Array([0x89, 0x50, 0x4e, 0x47])], { type: 'image/png' }),
+  );
+  const pdfStorageId = await ctx.storage.store(
+    new Blob([new Uint8Array([0x25, 0x50, 0x44, 0x46])], { type: 'application/pdf' }),
+  );
+  await ctx.db.insert('nodeslide_evidence_steps', {
+    id: 'evidence_step_scenario',
+    captureId: 'capture_scenario',
+    deckId,
+    runId,
+    traceId,
+    spanId: 'span_capture_scenario',
+    sequence: 1,
+    phase: 'capture',
+    label: 'Captured the cited region.',
+    status: 'ok',
+    regionScope: 'claim',
+    box: { x: 0.1, y: 0.2, w: 0.3, h: 0.4 },
+    screenshotStorageId,
+    pdfStorageId,
+    evidenceStepDigest: DIGEST('d'),
+    startedAt: NOW,
+    completedAt: NOW,
+    createdAt: NOW,
+  });
+  // The custody receipt binding one claim on one element to the exact region of
+  // the exact source revision it came from. Deleting the deck without this
+  // would leave a standing assertion about the deck's content behind.
+  await ctx.db.insert('nodeslide_claim_evidence_receipts', {
+    id: 'claim_receipt_scenario',
+    receiptId: 'claim_receipt_scenario',
+    schema: 'nodeslide.claim-evidence-receipt/v1',
+    receiptDigest: DIGEST('a'),
+    ownerDigest: `actor_${DIGEST('a')}`,
+    deckId,
+    patchId: 'patch_scenario',
+    slideId: slide.id,
+    elementId: element.id,
+    claimDigest: DIGEST('b'),
+    sourceRevisionId: `source-revision:${DIGEST('e')}`,
+    sourceRevisionDigest: DIGEST('f'),
+    captureId: 'capture_scenario',
+    captureDigest: DIGEST('c'),
+    evidenceStepId: 'evidence_step_scenario',
+    evidenceStepDigest: DIGEST('d'),
+    attachmentKind: 'screenshot',
+    attachmentDigest: DIGEST('e'),
+    region: { x: 0.1, y: 0.2, w: 0.3, h: 0.4 },
+    createdAt: NOW,
+  });
+
+  // An approved upload. Even after the blob is gone the row still names the
+  // file the owner attached and the digest of its contents, so the metadata is
+  // deck-owned in its own right.
+  // The bytes are really stored and really pointed at. An upload row with no
+  // `storageId` makes the erasure assertion vacuous on the one field where the
+  // deletion has to reach outside the row it is deleting.
+  const uploadStorageId = await ctx.storage.store(
+    new Blob([new Uint8Array(2_048)], { type: 'text/csv' }),
+  );
+  await ctx.db.insert('nodeslide_uploads', {
+    id: 'upload_scenario',
+    deckId,
+    clientSessionId,
+    fileName: 'quarterly-figures.csv',
+    format: 'csv',
+    contentType: 'text/csv',
+    byteSize: 2_048,
+    contentDigest: DIGEST('c'),
+    idempotencyKey: 'upload-scenario-key',
+    requestFingerprint: DIGEST('d'),
+    storageId: uploadStorageId,
+    lifecycleStatus: 'registered',
+    securityStatus: 'approved',
+    quarantineStatus: 'released',
+    createdAt: NOW,
+    updatedAt: NOW,
+    registeredAt: NOW,
+    approvedAt: NOW,
+  });
 
   await ctx.db.insert('nodeslide_patches', {
     id: patchId,
@@ -527,8 +706,125 @@ async function seedUsedWorkspace(ctx: MutationCtx, clientSessionId: string) {
     createdAt: NOW,
     updatedAt: NOW,
   });
+  // The client-facing side of the same link. Its object mapping names every
+  // local slide and element that was pushed, so it is deck content and has to
+  // be in the erasure scenario, not merely in the schema.
+  await ctx.db.insert('nodeslide_sync_connections', {
+    id: 'sync_connection_scenario',
+    deckId,
+    provider: 'google_slides',
+    remotePresentationId: 'presentation_scenario',
+    remoteRevision: 'revision_scenario',
+    lastSyncedDeckVersion: built.snapshot.deck.version,
+    objectMapping: [
+      {
+        kind: 'deck',
+        localId: deckId,
+        remoteId: 'presentation_scenario',
+        semanticFingerprint: 'sync-semantic/v1:deckscenario',
+      },
+      {
+        kind: 'slide',
+        localId: slide.id,
+        remoteId: 'remote_slide_scenario',
+        semanticFingerprint: 'sync-semantic/v1:slidescenario',
+      },
+    ],
+    status: 'active',
+    connectionVersion: 1,
+    lastMutationKey: 'sync-connection-scenario-key',
+    lastMutationFingerprint: DIGEST('s'),
+    createdAt: NOW,
+    updatedAt: NOW,
+    lastSyncedAt: NOW,
+  });
+  // The linked-PPTX baseline. Its JSON columns are a serialized copy of the
+  // deck's own slides, so an erasure that left this behind would leave a full
+  // copy of the deck behind under another name.
+  await ctx.db.insert('nodeslide_pptx_sync_links', {
+    id: 'pptx_link_scenario',
+    deckId,
+    remoteArtifactId: 'pptx_artifact_scenario',
+    status: 'active',
+    stateVersion: 1,
+    baselineJson: JSON.stringify({
+      deckId,
+      entities: [{ id: slide.id, title: slide.title }],
+    }),
+    baselineDigest: DIGEST('p'),
+    baselineLocalDeckVersion: built.snapshot.deck.version,
+    baselineRemotePackageDigest: DIGEST('q'),
+    createdAt: NOW,
+    updatedAt: NOW,
+  });
 
-  return { deckId, projectId, projectRowId, deckTitle: built.snapshot.deck.title, built };
+  // A deck that handed an agent a delegated capability, and learned something
+  // while that agent worked. Both are deck-owned: a live bearer token or a
+  // remembered instruction that outlived the deck would be a data-rights bug,
+  // so the erasure scenario has to be seeded with them or it proves nothing
+  // about them.
+  const grantPolicy = normalizeNodeSlideDeckAccessPolicy({
+    deckId,
+    role: 'editor',
+    capabilities: nodeSlideDeckCapabilitiesForRole('editor'),
+    agentPolicy: normalizeNodeSlideAccessPolicy({
+      role: 'planner',
+      capabilities: ['deck:read', 'source:read', 'memory:read', 'proposal:create'],
+      scopes: {
+        deckIds: [deckId],
+        sourceIds: [],
+        providerIds: [],
+        modelIds: [],
+        toolIds: [],
+        memoryScopeKeys: [nodeSlideMemoryScopeKey({ kind: 'deck', deckId })],
+      },
+      budget: {
+        maxCostMicroUsd: 1_000_000,
+        maxInputTokens: 50_000,
+        maxOutputTokens: 10_000,
+        maxDurationMs: 120_000,
+        maxIterations: 4,
+        maxToolCalls: 8,
+      },
+    }),
+  });
+  await ctx.db.insert('nodeslide_deck_grants', {
+    id: 'deck_grant_scenario',
+    deckId,
+    role: 'editor',
+    tokenDigest: DIGEST('i'),
+    policy: grantPolicy,
+    expiresAt: NOW + 60 * 60 * 1_000,
+    createdAt: NOW,
+  });
+  await ctx.db.insert('nodeslide_deck_grant_events', {
+    id: 'deck_grant_event_scenario',
+    deckId,
+    grantId: 'deck_grant_scenario',
+    kind: 'issued',
+    occurredAt: NOW,
+  });
+  await ctx.db.insert(
+    'nodeslide_scoped_memories',
+    createScopedMemoryRecord({
+      scope: nodeSlideScopedMemoryScope({ id: deckId, clientSessionId }, 'deck'),
+      category: 'preference',
+      content: 'Owner prefers a single headline per slide.',
+      source: 'user',
+      now: NOW,
+    }),
+  );
+
+  return {
+    deckId,
+    projectId,
+    projectRowId,
+    deckTitle: built.snapshot.deck.title,
+    built,
+    // Every blob this workspace owns, so the erasure can be checked against
+    // file storage and not only against rows.
+    storageIds: [uploadStorageId, screenshotStorageId, pdfStorageId],
+  };
 }
 
 async function scopedRowCounts(
@@ -590,6 +886,19 @@ describe('whole-deck erasure, seeded from a deck that was actually used', () => 
       .filter(([, count]) => count > 0)
       .map(([table]) => table);
     expect(survivors, 'no deck-owned row may survive the erasure').toEqual([]);
+
+    // Deleting the row that pointed at a stored file is not erasing the file.
+    // Once the row is gone nothing references the blob, so no later pass could
+    // ever find it: anything still readable here is user data that outlived the
+    // deletion the user asked for.
+    const survivingBlobs = await t.run(async (ctx) => {
+      const present: string[] = [];
+      for (const storageId of seeded.storageIds) {
+        if ((await ctx.storage.get(storageId)) !== null) present.push(storageId);
+      }
+      return present;
+    });
+    expect(survivingBlobs, 'no stored file may outlive the deck that owned it').toEqual([]);
 
     const afterTenant = await t.run((ctx) =>
       scopedRowCounts(ctx as QueryCtx, tenantScopedEntries, seeded.projectId),
@@ -742,11 +1051,15 @@ describe('owner data export', () => {
 
     // Withheld tables are stated, not silently dropped.
     const withheld = bundle.manifest.omissions.collections.map((entry) => entry.name).sort();
+    // Derived from the exclusion list rather than spelled out, so a table
+    // excluded from the schema-derived collector in future is disclosed by this
+    // bundle on the same commit that excludes it — the failure mode this
+    // assertion previously had was going green after somebody added an exclusion
+    // and forgot the manifest.
     expect(withheld).toEqual(
       [
         ...tenantScopedEntries.map((entry) => entry.table),
-        'nodeslide_rate_limits',
-        'nodeslide_retention_tombstones',
+        ...NODESLIDE_ERASURE_EXCLUSIONS.map((exclusion) => exclusion.table),
       ].sort(),
     );
     for (const omission of bundle.manifest.omissions.collections) {

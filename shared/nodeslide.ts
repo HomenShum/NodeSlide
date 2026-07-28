@@ -309,6 +309,8 @@ export const NODESLIDE_NEBIUS_VARIATIONS_CONSENT =
 export const NODESLIDE_WEB_RESEARCH_CONSENT = 'nodeslide_web_research_v1' as const;
 /** Exact consent for a local MCP process to send scoped context to a user-selected BYOK model. */
 export const NODESLIDE_LOCAL_BYOK_EDIT_CONSENT = 'nodeslide_local_byok_edit_v1' as const;
+/** Exact consent for an external coding agent to submit already-authored operations for review. */
+export const NODESLIDE_EXTERNAL_AGENT_PATCH_CONSENT = 'nodeslide_external_agent_patch_v1' as const;
 /** Exact consent for sending an image query to the Openverse licensed-media catalog. */
 export const NODESLIDE_IMAGE_SEARCH_CONSENT = 'nodeslide_image_search_v1' as const;
 export const NODESLIDE_OPENVERSE_API_HOST = 'api.openverse.org' as const;
@@ -774,7 +776,7 @@ export interface SourceRecord {
   citation: string;
   license?: string;
   /** Typed ingestion metadata. Optional for rows created before source-metadata v1. */
-  format?: 'csv' | 'json' | 'txt' | 'web';
+  format?: 'csv' | 'json' | 'txt' | 'md' | 'pdf' | 'web';
   contentDigest?: string;
   byteSize?: number;
   rowCount?: number;
@@ -973,6 +975,57 @@ export interface NodeSlideEvidenceCaptureDetail extends NodeSlideEvidenceCapture
   steps: NodeSlideEvidenceStepDetail[];
 }
 
+export type NodeSlideAgentToolState =
+  | 'input-streaming'
+  | 'input-available'
+  | 'approval-requested'
+  | 'approval-responded'
+  | 'output-available'
+  | 'output-error'
+  | 'output-denied';
+
+/** Query-projected lifecycle backed only by durable run/span records. */
+export interface NodeSlideAgentToolActivity {
+  state: NodeSlideAgentToolState;
+  input?: unknown;
+  output?: unknown;
+  errorText?: string;
+}
+
+/** A source link is exposed to activity UI only after both fields resolve. */
+export interface NodeSlideAgentResolvedSource {
+  id: string;
+  title: string;
+  url: string;
+}
+
+export type NodeSlideSourceBindingStatus = 'bound' | 'not_applicable' | 'legacy_unavailable';
+
+/** Immutable element-level evidence binding for one factual candidate operation. */
+export interface NodeSlideClaimSourceBinding {
+  operationIndex: number;
+  operation: 'replace_text' | 'update_chart' | 'add_element';
+  slideId: string;
+  elementId: string;
+  sourceIds: string[];
+  claimDigest: string;
+}
+
+/**
+ * Durable presentation-workflow identity. Planner/executor/validator are retained so
+ * conversations written before the six-role workflow remain readable and valid.
+ */
+export type NodeSlideAgentRole =
+  | 'researcher'
+  | 'analyst'
+  | 'storyteller'
+  | 'designer'
+  | 'fact_checker'
+  | 'reviewer'
+  | 'planner'
+  | 'executor'
+  | 'validator';
+
 export interface NodeSlideAgentMessage {
   id: string;
   deckId: string;
@@ -1076,18 +1129,6 @@ export interface DeckVersion {
   patchId?: string;
   snapshot: DeckSnapshot;
   createdAt: number;
-}
-
-export type NodeSlideSourceBindingStatus = 'bound' | 'not_applicable' | 'legacy_unavailable';
-
-/** Immutable element-level evidence binding for one factual candidate operation. */
-export interface NodeSlideClaimSourceBinding {
-  operationIndex: number;
-  operation: 'replace_text' | 'update_chart' | 'add_element';
-  slideId: string;
-  elementId: string;
-  sourceIds: string[];
-  claimDigest: string;
 }
 
 export interface AgentTrace {

@@ -91,6 +91,14 @@ import { StoryArcOverview } from './components/StoryArcOverview';
 import { type StudioThemeMode, StudioToolbar } from './components/StudioToolbar';
 import { shouldRevealCandidateCanvas } from './components/editorShellResponsive';
 import {
+  type EditorMutationFocus,
+  createBlankSlide,
+  duplicateSlide,
+  elementScope,
+  runFocusedEditorMutation,
+  uniqueClientId,
+} from './components/shell/editorActions';
+import {
   type EditorRequestToken,
   type WorkspaceReceiptMarker,
   appendDistinctHistoryVersion,
@@ -1475,6 +1483,43 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
       runPreferenceEtl,
       workspace,
     ],
+  );
+
+  /**
+   * Applies a direct editor mutation while holding the caret's slide and element selection.
+   *
+   * `applyOperations` resolves after the server receipt, and installing that receipt re-renders
+   * from the subscription. A direct text edit therefore lost the user's selection mid-typing:
+   * the element they were editing was deselected by a render they did not cause. Holding the
+   * focus before the await and reconciling it against the final workspace afterwards is what
+   * `runFocusedEditorMutation` does, and it never invents a fallback slide — if the edited slide
+   * is gone, navigation is left to the normal workspace installer.
+   */
+  const applyFocusedOperations = useCallback(
+    (
+      focus: EditorMutationFocus,
+      operations: PatchOperation[],
+      scope: PatchScope,
+      summary: string,
+      expectedElementVersions?: Readonly<Record<string, number>>,
+    ) =>
+      runFocusedEditorMutation({
+        focus,
+        readWorkspace: () => workspaceRef.current,
+        restoreFocus: (resolved) => {
+          setActiveSlideId(resolved.slideId);
+          setSelectedElementIds(resolved.elementIds);
+        },
+        mutate: () =>
+          applyOperations(operations, scope, summary, undefined, expectedElementVersions),
+        onUnexpectedFailure: (error) => {
+          setToast({
+            kind: 'error',
+            message: errorMessage(error, 'The text edit could not be applied.'),
+          });
+        },
+      }),
+    [applyOperations],
   );
 
   const restoreHistory = useCallback(
@@ -3272,13 +3317,19 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
                 )
               }
               onReplaceText={(elementId, text, baseElementVersion) => {
-                const element = workspace.elements.find((candidate) => candidate.id === elementId);
+                const currentWorkspace = workspaceRef.current ?? workspace;
+                const element = currentWorkspace.elements.find(
+                  (candidate) => candidate.id === elementId,
+                );
                 if (!element || element.locked) return;
-                void applyOperations(
+                const focusElementIds = selectedElementIds.includes(elementId)
+                  ? selectedElementIds
+                  : [elementId];
+                void applyFocusedOperations(
+                  { slideId: element.slideId, elementIds: focusElementIds },
                   [{ op: 'replace_text', slideId: element.slideId, elementId, text }],
-                  elementScope(workspace.deck.id, [element]),
+                  elementScope(currentWorkspace.deck.id, [element]),
                   `Updated ${element.name}`,
-                  undefined,
                   { [elementId]: baseElementVersion },
                 );
               }}
@@ -3462,13 +3513,15 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
           onOpenPreferenceEvidence={() => {
             setActiveInspectorTab('trace');
           }}
-          onApplyDesignPatch={(operations, summary) =>
-            void applyOperations(
+          onApplyDesignPatch={(operations, summary) => {
+            const currentWorkspace = workspaceRef.current ?? workspace;
+            return applyFocusedOperations(
+              { slideId: activeSlide.id, elementIds: selectedElementIds },
               operations,
-              scopeForOperations(workspace, operations, 'unrestricted'),
+              scopeForOperations(currentWorkspace, operations, 'unrestricted'),
               summary,
-            )
-          }
+            );
+          }}
           onSearchImages={(query, consent) =>
             monitorDeploymentAction(searchLicensedImages({ query, consent }))
           }
@@ -4046,16 +4099,6 @@ function scopeForOperations(
     : { kind: 'slide', deckId: workspace.deck.id, slideIds, operationMode };
 }
 
-function elementScope(deckId: string, elements: readonly SlideElement[]): PatchScope {
-  return {
-    kind: 'elements',
-    deckId,
-    slideIds: [...new Set(elements.map((element) => element.slideId))],
-    elementIds: elements.map((element) => element.id),
-    operationMode: 'unrestricted',
-  };
-}
-
 function duplicateElement(element: SlideElement, index: number): SlideElement {
   const suffix = `${Date.now().toString(36)}-${index}`;
   return {
@@ -4074,120 +4117,6 @@ function duplicateElement(element: SlideElement, index: number): SlideElement {
 function pasteElement(element: SlideElement, slideId: string, index: number): SlideElement {
   const copy = duplicateElement(element, index);
   return { ...copy, slideId };
-}
-
-function createBlankSlide(
-  workspace: NodeSlideWorkspace,
-  requestedIndex: number,
-): { slide: Slide; elements: SlideElement[]; index: number } {
-  const index = Math.max(0, Math.min(requestedIndex, workspace.deck.slideOrder.length));
-  const slideId = uniqueClientId('slide');
-  const titleId = uniqueClientId('element-title');
-  const bodyId = uniqueClientId('element-body');
-  const capabilities: SlideElement['exportCapabilities'] = [
-    'web_native',
-    'pptx_editable',
-    'google_importable',
-  ];
-  const elements: SlideElement[] = [
-    {
-      id: titleId,
-      slideId,
-      name: 'Slide title',
-      kind: 'text',
-      role: 'headline',
-      bbox: { x: 0.08, y: 0.1, width: 0.84, height: 0.16 },
-      rotation: 0,
-      content: 'Untitled slide',
-      style: {
-        color: workspace.deck.theme.colors.ink,
-        fontFamily: workspace.deck.theme.typography.display,
-        fontSize: 40,
-        fontWeight: 700,
-        lineHeight: 1.08,
-      },
-      sourceIds: [],
-      locked: false,
-      exportCapabilities: [...capabilities],
-      version: 1,
-    },
-    {
-      id: bodyId,
-      slideId,
-      name: 'Body copy',
-      kind: 'text',
-      role: 'body',
-      bbox: { x: 0.08, y: 0.33, width: 0.72, height: 0.3 },
-      rotation: 0,
-      content: 'Add the point this slide needs to make.',
-      style: {
-        color: workspace.deck.theme.colors.muted,
-        fontFamily: workspace.deck.theme.typography.body,
-        fontSize: 24,
-        fontWeight: 450,
-        lineHeight: 1.35,
-      },
-      sourceIds: [],
-      locked: false,
-      exportCapabilities: [...capabilities],
-      version: 1,
-    },
-  ];
-  return {
-    index,
-    slide: {
-      id: slideId,
-      deckId: workspace.deck.id,
-      title: 'Untitled slide',
-      section: 'Deck',
-      notes: '',
-      background: workspace.deck.theme.colors.canvas,
-      elementOrder: elements.map((element) => element.id),
-      version: 1,
-    },
-    elements,
-  };
-}
-
-function duplicateSlide(
-  workspace: NodeSlideWorkspace,
-  sourceSlideId: string,
-): { slide: Slide; elements: SlideElement[]; index: number } | null {
-  const source = workspace.slides.find((slide) => slide.id === sourceSlideId);
-  const sourceIndex = workspace.deck.slideOrder.indexOf(sourceSlideId);
-  if (!source || sourceIndex < 0) return null;
-  const slideId = uniqueClientId('slide');
-  const sourceElements = source.elementOrder
-    .map((elementId) => workspace.elements.find((element) => element.id === elementId))
-    .filter((element): element is SlideElement => element !== undefined);
-  const elementIds = new Map(
-    sourceElements.map((element) => [element.id, uniqueClientId('element')]),
-  );
-  const elements = sourceElements.map((element) => ({
-    ...structuredClone(element),
-    id: elementIds.get(element.id) as string,
-    slideId,
-    version: 1,
-  }));
-  return {
-    index: sourceIndex + 1,
-    slide: {
-      ...structuredClone(source),
-      id: slideId,
-      title: `${source.title} copy`,
-      elementOrder: source.elementOrder.map((id) => elementIds.get(id) as string),
-      version: 1,
-    },
-    elements,
-  };
-}
-
-function uniqueClientId(prefix: string) {
-  const random =
-    typeof crypto !== 'undefined' && 'randomUUID' in crypto
-      ? crypto.randomUUID()
-      : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
-  return `${prefix}_${random}`;
 }
 
 function currentVersion(workspace: NodeSlideWorkspace): DeckVersion | undefined {

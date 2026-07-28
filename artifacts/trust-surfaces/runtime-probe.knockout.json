@@ -1,0 +1,222 @@
+{
+  "schema": "nodeslide.trust-surface-runtime-probe.knockout/v1",
+  "generatedAt": "2026-07-28T22:10:57.114Z",
+  "baseUrl": "https://nodeslide.vercel.app",
+  "buildSha": "2772cab4507d8c379e8321b698fddac5fd8f5db7",
+  "target": "[data-testid=\"openui-visual-workbench\"]",
+  "reachedBoth": true,
+  "flipped": [
+    {
+      "clause": "A_noAnimationOnDecisionAffordance",
+      "before": "passed",
+      "after": "failed",
+      "reason": "running: div.ns-openui-workbench[data-testid=openui-visual-workbench] CSSAnimation(ns-knockout-pulse) running ;; computed motion: div.ns-openui-workbench[data-testid=openui-visual-workbench] transition:background-color, color/0.4s, 0.4s animation:ns-knockout-pulse/0.9s ;; (declared state data-decision=\"undecided\")"
+    },
+    {
+      "clause": "B_noSuccessTokenOnPending",
+      "before": "not-applicable",
+      "after": "failed",
+      "reason": "success token painted on a pending surface: div.ns-openui-workbench[data-testid=openui-visual-workbench] color=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench[data-testid=openui-visual-workbench] borderLeftColor=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench[data-testid=openui-visual-workbench] outlineColor=rgb(4, 120, 87) (--ns-positive) | button color=rgb(4, 120, 87) (--ns-positive) | button borderTopColor=rgb(4, 120, 87) (--ns-positive) | button borderLeftColor=rgb(4, 120, 87) (--ns-positive) | button outlineColor=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench-body color=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench-body borderTopColor=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench-body borderLeftColor=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench-body outlineColor=rgb(4, 120, 87) (--ns-positive)"
+    },
+    {
+      "clause": "C_declaredStateMatchesRendered",
+      "before": "passed",
+      "after": "failed",
+      "reason": "declared \"undecided\" but div.ns-openui-workbench[data-testid=openui-visual-workbench] paints color=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench[data-testid=openui-visual-workbench] paints borderLeftColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench[data-testid=openui-visual-workbench] paints outlineColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but button paints color=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but button paints borderTopColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but button paints borderLeftColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but button paints outlineColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench-body paints color=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench-body paints borderTopColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench-body paints borderLeftColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench-body paints outlineColor=rgb(4, 120, 87) (--ns-positive)"
+    },
+    {
+      "clause": "D_reducedMotionCollapsesToFinalState",
+      "before": "passed",
+      "after": "failed",
+      "reason": "still animating under reduce: div.ns-openui-workbench[data-testid=openui-visual-workbench] CSSAnimation(ns-knockout-pulse) | computed motion survives reduce: div.ns-openui-workbench[data-testid=openui-visual-workbench] 0.4s, 0.4s/ns-knockout-pulse"
+    }
+  ],
+  "knockoutProved": true,
+  "cleanRow": {
+    "key": "src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx::OpenUiMaterialWorkbench",
+    "selector": "[data-testid=\"openui-visual-workbench\"]",
+    "kind": "proposal",
+    "requires": "the visual material tool opened from the AI composer, which is lazy-loaded and only mounts when the host supplies onProposeOpenUiMaterial",
+    "reached": true,
+    "reachedAtStage": "openui-workbench",
+    "declaredState": "none",
+    "clauses": {
+      "A_noAnimationOnDecisionAffordance": {
+        "clause": "A",
+        "verdict": "passed",
+        "reason": "3 node(s) inspected: no running animation, no non-zero transition or named animation in the computed cascade",
+        "observed": {
+          "state": "none",
+          "nodesInspected": 3
+        }
+      },
+      "B_noSuccessTokenOnPending": {
+        "clause": "B",
+        "verdict": "not-applicable",
+        "reason": "surface reached in data-decision=\"none\", not a pending state; the pending-paint clause had nothing pending to read",
+        "observed": {
+          "state": "none",
+          "resolvedTokens": {
+            "--ns-positive": "rgb(4, 120, 87)"
+          }
+        }
+      },
+      "C_declaredStateMatchesRendered": {
+        "clause": "C",
+        "verdict": "passed",
+        "reason": "declared data-decision=\"none\"; paint, copy all agree",
+        "observed": {
+          "state": "none",
+          "statusChecked": null,
+          "text": "Visual material labOpenUI · deterministic Phase 0Unit-safe"
+        }
+      },
+      "D_reducedMotionCollapsesToFinalState": {
+        "clause": "D",
+        "verdict": "passed",
+        "reason": "identical declared state, paint and copy under reduce; no animation running or declared (3 nodes compared)",
+        "observed": {
+          "state": "none",
+          "reducedState": "none"
+        }
+      }
+    }
+  },
+  "poisonedRow": {
+    "key": "src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx::OpenUiMaterialWorkbench",
+    "selector": "[data-testid=\"openui-visual-workbench\"]",
+    "kind": "proposal",
+    "requires": "the visual material tool opened from the AI composer, which is lazy-loaded and only mounts when the host supplies onProposeOpenUiMaterial",
+    "reached": true,
+    "reachedAtStage": "openui-workbench",
+    "declaredState": "undecided",
+    "clauses": {
+      "A_noAnimationOnDecisionAffordance": {
+        "clause": "A",
+        "verdict": "failed",
+        "reason": "running: div.ns-openui-workbench[data-testid=openui-visual-workbench] CSSAnimation(ns-knockout-pulse) running ;; computed motion: div.ns-openui-workbench[data-testid=openui-visual-workbench] transition:background-color, color/0.4s, 0.4s animation:ns-knockout-pulse/0.9s ;; (declared state data-decision=\"undecided\")",
+        "observed": {
+          "state": "undecided",
+          "running": [
+            {
+              "node": "div.ns-openui-workbench[data-testid=openui-visual-workbench]",
+              "playState": "running",
+              "type": "CSSAnimation",
+              "name": "ns-knockout-pulse",
+              "duration": 900,
+              "iterations": null
+            }
+          ],
+          "declared": [
+            {
+              "node": "div.ns-openui-workbench[data-testid=openui-visual-workbench]",
+              "transitionProperty": "background-color, color",
+              "transitionDuration": "0.4s, 0.4s",
+              "animationName": "ns-knockout-pulse",
+              "animationDuration": "0.9s",
+              "animationIterationCount": "infinite"
+            }
+          ]
+        }
+      },
+      "B_noSuccessTokenOnPending": {
+        "clause": "B",
+        "verdict": "failed",
+        "reason": "success token painted on a pending surface: div.ns-openui-workbench[data-testid=openui-visual-workbench] color=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench[data-testid=openui-visual-workbench] borderLeftColor=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench[data-testid=openui-visual-workbench] outlineColor=rgb(4, 120, 87) (--ns-positive) | button color=rgb(4, 120, 87) (--ns-positive) | button borderTopColor=rgb(4, 120, 87) (--ns-positive) | button borderLeftColor=rgb(4, 120, 87) (--ns-positive) | button outlineColor=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench-body color=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench-body borderTopColor=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench-body borderLeftColor=rgb(4, 120, 87) (--ns-positive) | div.ns-openui-workbench-body outlineColor=rgb(4, 120, 87) (--ns-positive)",
+        "observed": {
+          "state": "undecided",
+          "resolvedTokens": {
+            "--ns-positive": "rgb(4, 120, 87)"
+          },
+          "hits": [
+            {
+              "node": "div.ns-openui-workbench[data-testid=openui-visual-workbench]",
+              "property": "color",
+              "value": "rgb(4, 120, 87)",
+              "token": "--ns-positive"
+            },
+            {
+              "node": "div.ns-openui-workbench[data-testid=openui-visual-workbench]",
+              "property": "borderLeftColor",
+              "value": "rgb(4, 120, 87)",
+              "token": "--ns-positive"
+            },
+            {
+              "node": "div.ns-openui-workbench[data-testid=openui-visual-workbench]",
+              "property": "outlineColor",
+              "value": "rgb(4, 120, 87)",
+              "token": "--ns-positive"
+            },
+            {
+              "node": "button",
+              "property": "color",
+              "value": "rgb(4, 120, 87)",
+              "token": "--ns-positive"
+            },
+            {
+              "node": "button",
+              "property": "borderTopColor",
+              "value": "rgb(4, 120, 87)",
+              "token": "--ns-positive"
+            },
+            {
+              "node": "button",
+              "property": "borderLeftColor",
+              "value": "rgb(4, 120, 87)",
+              "token": "--ns-positive"
+            },
+            {
+              "node": "button",
+              "property": "outlineColor",
+              "value": "rgb(4, 120, 87)",
+              "token": "--ns-positive"
+            },
+            {
+              "node": "div.ns-openui-workbench-body",
+              "property": "color",
+              "value": "rgb(4, 120, 87)",
+              "token": "--ns-positive"
+            },
+            {
+              "node": "div.ns-openui-workbench-body",
+              "property": "borderTopColor",
+              "value": "rgb(4, 120, 87)",
+              "token": "--ns-positive"
+            },
+            {
+              "node": "div.ns-openui-workbench-body",
+              "property": "borderLeftColor",
+              "value": "rgb(4, 120, 87)",
+              "token": "--ns-positive"
+            },
+            {
+              "node": "div.ns-openui-workbench-body",
+              "property": "outlineColor",
+              "value": "rgb(4, 120, 87)",
+              "token": "--ns-positive"
+            }
+          ]
+        }
+      },
+      "C_declaredStateMatchesRendered": {
+        "clause": "C",
+        "verdict": "failed",
+        "reason": "declared \"undecided\" but div.ns-openui-workbench[data-testid=openui-visual-workbench] paints color=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench[data-testid=openui-visual-workbench] paints borderLeftColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench[data-testid=openui-visual-workbench] paints outlineColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but button paints color=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but button paints borderTopColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but button paints borderLeftColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but button paints outlineColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench-body paints color=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench-body paints borderTopColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench-body paints borderLeftColor=rgb(4, 120, 87) (--ns-positive) | declared \"undecided\" but div.ns-openui-workbench-body paints outlineColor=rgb(4, 120, 87) (--ns-positive)",
+        "observed": {
+          "state": "undecided",
+          "statusChecked": null,
+          "text": "Visual material labOpenUI · deterministic Phase 0Unit-safe"
+        }
+      },
+      "D_reducedMotionCollapsesToFinalState": {
+        "clause": "D",
+        "verdict": "failed",
+        "reason": "still animating under reduce: div.ns-openui-workbench[data-testid=openui-visual-workbench] CSSAnimation(ns-knockout-pulse) | computed motion survives reduce: div.ns-openui-workbench[data-testid=openui-visual-workbench] 0.4s, 0.4s/ns-knockout-pulse",
+        "observed": {
+          "state": "undecided",
+          "reducedState": "undecided"
+        }
+      }
+    }
+  }
+}

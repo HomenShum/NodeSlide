@@ -10,6 +10,12 @@ import {
   type PatchOperation,
   nodeSlideAgentModel,
 } from '../shared/nodeslide';
+import {
+  NODESLIDE_MICRO_USD_PER_USD,
+  NODESLIDE_RUN_BUDGET_BOUNDS,
+  type NodeSlideRunBudgetInput,
+  parseNodeSlideSpendConstraint,
+} from '../shared/nodeslideRunBudget';
 import { internal } from './_generated/api';
 import { type ActionCtx, action } from './_generated/server';
 import { createOwnerAccessKey, isOwnerAccessKey } from './lib/nodeslideAccess';
@@ -25,6 +31,11 @@ import {
   nodeSlideAuthoredArtifactSourceInventory,
 } from './lib/nodeslideAuthoredArtifact';
 import { authorizeBeforeConsumingQuota, nodeSlideActorQuotaKey } from './lib/nodeslideAuthority';
+import {
+  type NodeSlideBudgetLedgerClient,
+  bindNodeSlideBudgetLedgerClient,
+  createNodeSlideBudgetedEditDispatch,
+} from './lib/nodeslideBudgetedProvider';
 import {
   injectNodeSlideSyntheticCreationFault,
   nodeSlideCreationCritiquePromptReport,
@@ -114,6 +125,30 @@ const nodeslideInternal: any = (internal as any).nodeslide;
 const nodeslideMemoryInternal: any = (internal as any).nodeslideMemory;
 // biome-ignore lint/suspicious/noExplicitAny: generated Convex self-reference described above
 const nodeslideScopedMemoryInternal: any = (internal as any).nodeslideScopedMemory;
+// biome-ignore lint/suspicious/noExplicitAny: generated Convex self-reference described above
+const nodeslideBudgetsInternal: any = (internal as any).nodeslideBudgets;
+
+/** Binds the durable ledger mutations, `reserve` included. See the lib module. */
+function nodeSlideBudgetLedgerClient(
+  ctx: Pick<ActionCtx, 'runMutation' | 'runQuery'>,
+): NodeSlideBudgetLedgerClient {
+  return bindNodeSlideBudgetLedgerClient(ctx, nodeslideBudgetsInternal);
+}
+
+/**
+ * The hard cap for one edit run. Defaults come from
+ * `NODESLIDE_RUN_BUDGET_BOUNDS`; an explicit ceiling in the author's own
+ * instruction ("spend no more than $0.20 on this run") TIGHTENS it and can never
+ * raise it. A malformed ceiling is not silently ignored — the parser throws a
+ * validation error, and refusing the run is the correct response to an
+ * instruction whose spend limit could not be understood.
+ */
+function nodeSlideEditRunBudget(instruction: string): NodeSlideRunBudgetInput {
+  const constraint = parseNodeSlideSpendConstraint(instruction);
+  if (!constraint) return {};
+  const requestedUsd = constraint.maxCostMicroUsd / NODESLIDE_MICRO_USD_PER_USD;
+  return { maxCostUsd: Math.min(NODESLIDE_RUN_BUDGET_BOUNDS.maxCostUsd.default, requestedUsd) };
+}
 
 interface NodeSlideWebSourceInput {
   title: string;
@@ -753,13 +788,40 @@ export const proposeEdit = action({
       // failure mode on the same graceful deterministic fallback, keeping attribution honest.
       let baseline: Awaited<ReturnType<typeof planNodeSlideEditRouted>>;
       let providerErrored = false;
-      const callStreamingPlanner: NodeSlideEditProvider = (providerArgs) =>
-        callNodeSlideFreeJson({
-          ...providerArgs,
-          ...(providerArgs.jsonSchema?.name === 'nodeslide_edit_patch'
-            ? { onTextDelta: (event) => assistantStream.observe(event) }
-            : {}),
-        });
+      // THE ENFORCEMENT SEAM. Every metered planner dispatch in this run goes
+      // through `callNodeSlideBudgetedJson`, which reserves the worst case
+      // against this run's hard cap BEFORE the request reaches the wire and
+      // settles the receipt against that reservation afterwards. This is the
+      // only caller of `nodeslideBudgets.reserve`, and it is what makes
+      // `nodeSlideBudgetEnforcementPosture()` report 'enforced' truthfully.
+      //
+      // A denial is not an error path here: the budgeted call returns a coded
+      // `{ ok: false }`, the router treats it as an unusable provider response,
+      // and the run degrades to the deterministic planner. A run that cannot be
+      // priced or cannot be afforded therefore produces a deck without spending,
+      // rather than spending without a ceiling.
+      //
+      // The deterministic route is dispatched unbudgeted on purpose: it issues
+      // no provider request, so there is nothing to reserve and a reservation
+      // would be accounting theatre.
+      const callStreamingPlanner: NodeSlideEditProvider = createNodeSlideBudgetedEditDispatch({
+        runId,
+        budget: nodeSlideEditRunBudget(instruction),
+        metered: providerChoice.providerMode !== 'deterministic',
+        ledger: nodeSlideBudgetLedgerClient(ctx),
+        dispatch: (request, dependencies) =>
+          callNodeSlideFreeJson(
+            {
+              ...request,
+              ...(request.jsonSchema?.name === 'nodeslide_edit_patch'
+                ? { onTextDelta: (event) => assistantStream.observe(event) }
+                : {}),
+            },
+            ...(dependencies?.dispatchPolicy
+              ? [{ dispatchPolicy: dependencies.dispatchPolicy }]
+              : []),
+          ),
+      });
       try {
         baseline = await planNodeSlideEditRouted(
           { snapshot, scopedComment, readContext, request },

@@ -1,3 +1,4 @@
+import { nodeSlideBudgetLedgerStubResponse } from '@nodeslide/testing';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   NODESLIDE_DEFAULT_OPENROUTER_AGENT_MODEL,
@@ -115,6 +116,16 @@ function providerSuccess(target: { id: string; slideId: string }) {
       costMicroUsd: 0,
       inputTokens: 100,
       outputTokens: 20,
+      attempts: [
+        {
+          attempt: 'initial',
+          attempted: true,
+          settled: true,
+          ambiguous: false,
+          unreconciled: false,
+          elapsedMs: 1,
+        },
+      ],
     },
   });
 }
@@ -126,6 +137,11 @@ function harness(workspace: NodeSlideWorkspace) {
   };
   const calls: Record<string, unknown>[] = [];
   const runMutation = vi.fn(async (_reference: unknown, args: Record<string, unknown>) => {
+    // The edit planner reserves against its run budget before dispatching, so
+    // this ctx must answer the ledger or the adapter fails closed and the run
+    // silently degrades to the deterministic fallback.
+    const budgetReply = nodeSlideBudgetLedgerStubResponse(args);
+    if (budgetReply !== undefined) return budgetReply;
     if ('idempotencyKey' in args) {
       return {
         created: true,
@@ -254,14 +270,27 @@ describe('NodeSlide same-turn edit shadow comparison isolation', () => {
         costMicroUsd: 2_400,
         inputTokens: 180,
         outputTokens: 44,
+        attempts: [
+          {
+            attempt: 'initial',
+            attempted: true,
+            settled: true,
+            ambiguous: false,
+            unreconciled: false,
+            elapsedMs: 1,
+          },
+        ],
       },
     });
     const test = harness(workspace);
 
     await proposeHandler(test.context, args);
 
+    // The second argument is the budget-derived dispatch policy the budgeted
+    // adapter now attaches to every metered planner call.
     expect(providerMock).toHaveBeenCalledWith(
       expect.objectContaining({ model: args.providerModel }),
+      expect.objectContaining({ dispatchPolicy: expect.any(Object) }),
     );
     const proposalArgs = test.calls.find((call) => 'operations' in call);
     expect(proposalArgs).toMatchObject({
@@ -305,6 +334,16 @@ describe('NodeSlide same-turn edit shadow comparison isolation', () => {
       costMicroUsd: 0,
       inputTokens: 100,
       outputTokens: 20,
+      attempts: [
+        {
+          attempt: 'initial',
+          attempted: true,
+          settled: true,
+          ambiguous: false,
+          unreconciled: false,
+          elapsedMs: 1,
+        },
+      ],
     };
     providerMock.mockResolvedValue({
       ok: false,

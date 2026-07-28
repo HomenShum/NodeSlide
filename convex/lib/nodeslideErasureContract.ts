@@ -38,32 +38,49 @@
 
 /** Structural view of `defineSchema(...)`, so a test can pass a fixture schema. */
 /**
- * STILL OPEN — the envelope is per-deck, and one caller is per-batch.
+ * CLOSED — the envelope is now per-batch as well as per-deck, with one residual stated below.
  *
- * Re-recorded 2026-07-28 after a merge dropped it. The paragraph was written against a parallel
- * implementation of the envelope; that implementation lost to main's, and the caveat went with it
- * even though the limitation it describes is a property of main's code too. **A note attached to
- * the losing side of a merge is deleted by the merge**, and nothing reports it — the tree compiles,
- * the tests pass, and only the knowledge is gone.
+ * History, kept because it is the reason this paragraph is load-bearing: the note was first written
+ * against a parallel implementation of the envelope, that implementation lost to main's, and the
+ * caveat went with it even though the limitation it described was a property of main's code too.
+ * **A note attached to the losing side of a merge is deleted by the merge**, and nothing reports
+ * it — the tree compiles, the tests pass, and only the knowledge is gone. It was re-recorded
+ * 2026-07-28 against the merged tree, and is now being retired by a fix rather than by another
+ * merge.
  *
- * Verified against the merged tree before re-adding, rather than restored on faith:
- * `deleteExpiredProductionProbeWorkspaces` takes up to **10** expired probe decks
- * (`.take(10)`) and loops, calling `deleteWorkspaceRows` once per deck. The envelope's ceilings —
- * `NODESLIDE_DECK_ERASURE_MAX_RECORDS` / `_MAX_BYTES` in `convex/nodeslideRetention.ts` — are
- * therefore applied **per deck with a fresh budget**, while the transaction is shared by all ten.
+ * What was open: `deleteExpiredProductionProbeWorkspaces` took up to 10 expired probe decks and
+ * called `deleteWorkspaceRows` once per deck inside one `internalMutation` — one transaction. The
+ * ceilings `NODESLIDE_DECK_ERASURE_MAX_RECORDS` / `_MAX_BYTES` were applied per deck with a fresh
+ * budget, so ten decks each just inside the envelope totalled ten times it, and one oversized deck
+ * threw, rolled the batch back, and was re-selected first by every subsequent run.
  *
- * Two consequences, neither currently tested:
+ * Both halves are closed in `convex/nodeslideRetention.ts`:
  *
- *   1. Ten decks each sitting just inside the envelope total ten times the per-deck ceiling in one
- *      transaction. The per-deck refusal is honest; the batch has no ceiling at all.
- *   2. A single oversized probe deck throws, so the whole sweep fails — and it fails again on every
- *      subsequent run, because the sweep re-selects the same deck. It cannot drain past it without
- *      manual removal.
+ *   1. Bounded. `NODESLIDE_PROBE_SWEEP_MAX_DELETED_RECORDS` / `_BYTES` is a single budget shared by
+ *      the whole batch and charged only for decks the sweep actually applies, so the write set of
+ *      the transaction is capped at one envelope rather than ten. A batch whose total does not fit
+ *      stops cleanly, keeps what it deleted, and leaves the rest for the next run.
+ *      `NODESLIDE_PROBE_SWEEP_MAX_PLANNED_RECORDS` / `_BYTES` separately caps the read set, charged
+ *      for every deck planned including refused ones, so discovering an oversized deck cannot make
+ *      the read side unbounded again.
+ *   2. Unwedged. `deleteWorkspaceRows` is split into `readWorkspaceErasureSet` (plan, measure,
+ *      never write) and `writeWorkspaceErasureSet`. The read phase returns a refusal as a VALUE, so
+ *      an oversized deck is skipped and recorded in the sweep's return before a single
+ *      `ctx.db.delete` for it is issued. This is the only place the decision can be made: a Convex
+ *      mutation is one transaction, and a try/catch around the write phase would be catching an
+ *      error that had already doomed it.
  *
- * The honest framing, same as the envelope's own: this is not a data-retention hole. It is an
- * unbounded batch behind a bounded unit, and a permanently-wedged sweep with no failing test.
- * Closing it needs a batch-level budget the per-deck envelope cannot express, or per-deck
- * transactions.
+ * Both are covered by scenario tests in `convex/nodeslideRetention.test.ts` — a batch over the
+ * shared budget, an oversized deck among healthy ones, and a full batch under budget that must
+ * still delete everything.
+ *
+ * STILL OPEN, precisely: a skipped deck is skipped, not erased. The sweep drains past it forever
+ * instead of dying on it, and it is named in `skippedWorkspaces` on every run, but nothing erases
+ * it — that needs an operator, or per-deck transactions the cron does not have. Also unchanged: an
+ * integrity failure (project scope is not one workspace, a stranded budget row, a non-zero residue)
+ * still throws and still rolls the whole batch back. That is deliberate. Those say the erasure
+ * model is wrong about this data, and continuing past one would mean erasing the next deck under an
+ * assumption this one just falsified.
  */
 export interface NodeSlideSchemaTableLike {
   validator: {

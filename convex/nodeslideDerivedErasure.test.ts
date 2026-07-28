@@ -105,15 +105,21 @@ describe('nodeslide derived-scope erasure', () => {
     // everything hanging off that surviving row. The budget tables have no
     // anchor that survives — their id comes from `job.budgetId` and the job is
     // deleted in the same pass — so a capped read strands rows behind an id
-    // nothing can produce again. `envelope.nextLimit()` returns one past the
+    // nothing can produce again. `meter.nextLimit()` returns one past the
     // remaining budget, so an over-large ledger refuses the whole erasure
     // instead. The behavioural half of this lives in `nodeslideRetention.test.ts`.
+    //
+    // The envelope is now reached through `NodeSlideErasureMeter`, which measures
+    // the deck against its own ceiling and the batch's shared plan budget at
+    // once. `nextLimit()` is the tighter of the two, so this read is bounded by
+    // the batch as well as by the deck — a strictly stronger version of what this
+    // case has always asserted.
     const budgetLoop = retentionSource.slice(retentionSource.indexOf('for (const budgetId of'));
     const body = budgetLoop.slice(0, budgetLoop.indexOf('return { groups'));
     expect(body, 'a budget child read still uses the incremental sweep cap').not.toContain(
       'sweepLimit()',
     );
-    expect(body).toContain('envelope.nextLimit()');
+    expect(body).toContain('meter.nextLimit()');
   });
 
   it('never leaves a storage pointer behind in the budget tables it sweeps', () => {

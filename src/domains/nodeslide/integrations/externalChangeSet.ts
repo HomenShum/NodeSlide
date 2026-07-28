@@ -1,4 +1,5 @@
 import type { PatchOperation, PatchScope } from '../../../../shared/nodeslide';
+import { NODESLIDE_PATCH_OPERATION_OPS } from '../../../../shared/nodeslide';
 import { nodeSlideDurableDigest } from '../../../../shared/nodeslideDurableSession';
 
 export const EXTERNAL_CHANGE_SET_V1_SCHEMA = 'nodeslide.external-change-set/v1' as const;
@@ -117,25 +118,13 @@ export interface ExternalChangeSetBaselineBindingV1 {
   localBase: ExternalLocalBaseV1;
 }
 
-const PATCH_OPERATION_KINDS = new Set<PatchOperation['op']>([
-  'move',
-  'resize',
-  'replace_text',
-  'update_style',
-  'update_chart',
-  'update_image',
-  'add_element',
-  'remove_element',
-  'set_visibility_v1',
-  'group_elements_v1',
-  'ungroup_elements_v1',
-  'reorder_element_v1',
-  'add_slide',
-  'remove_slide',
-  'reorder_slide',
-  'update_slide',
-  'update_deck',
-]);
+/**
+ * Derived from the canonical exhaustive table in shared/nodeslide.ts. Previously a
+ * hand-written `new Set<PatchOperation['op']>([...])`, which accepts a short list
+ * silently — a newly-typed operation would typecheck everywhere and still be
+ * rejected at this wire boundary as "not a recognized PatchOperation".
+ */
+const PATCH_OPERATION_KINDS = new Set<PatchOperation['op']>(NODESLIDE_PATCH_OPERATION_OPS);
 
 /**
  * Produces the single canonical envelope used by file importers and connected providers. Patch

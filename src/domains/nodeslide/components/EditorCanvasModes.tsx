@@ -7,6 +7,7 @@ import {
   useMemo,
 } from 'react';
 import type { PatchOperation, Slide, SlideElement, ThemeSpec } from '../../../../shared/nodeslide';
+import { unhandledPatchOperation } from '../../../../shared/nodeslide';
 import {
   type EditorCandidateReceipt,
   type EditorCandidateStatus,
@@ -583,9 +584,12 @@ function operationTarget(operation: PatchOperation) {
   if (operation.op === 'add_element') return operation.element.id;
   if (operation.op === 'group_elements_v1' || operation.op === 'ungroup_elements_v1')
     return operation.groupId;
-  if (operation.op === 'update_deck') return 'deck';
+  if (operation.op === 'update_deck' || operation.op === 'update_theme_v1') return 'deck';
   if ('elementId' in operation) return operation.elementId;
-  return operation.slideId;
+  if ('slideId' in operation) return operation.slideId;
+  // Exhaustiveness guard: a new deck-level operation must be given a target
+  // above instead of falling through to an undefined slideId.
+  return unhandledPatchOperation(operation);
 }
 
 function candidateStatusLabel(status: EditorCandidateStatus) {

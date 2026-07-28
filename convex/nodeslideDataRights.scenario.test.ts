@@ -24,6 +24,7 @@ import {
   nodeSlideMemoryScopeKey,
   normalizeNodeSlideAccessPolicy,
 } from '../shared/nodeslideAccessPolicy';
+import type { Id } from './_generated/dataModel';
 import type { MutationCtx, QueryCtx } from './_generated/server';
 import { insertNodeSlideSnapshot } from './lib/nodeslideData';
 import { collectNodeSlideOwnerDataExport } from './lib/nodeslideDataExport';
@@ -39,6 +40,8 @@ import {
 } from './lib/nodeslideErasureContract';
 import { buildGoldenNodeSlide } from './lib/nodeslideSeed';
 import {
+  NODESLIDE_DECK_ERASURE_MAX_BYTES,
+  NODESLIDE_DECK_ERASURE_MAX_RECORDS,
   NODESLIDE_ERASURE_CONTRACT,
   deleteOwnedWorkspace,
   nodeSlideRetentionBindings,
@@ -1006,6 +1009,229 @@ describe('whole-deck erasure, seeded from a deck that was actually used', () => 
     expect(Object.keys(receipt.deletedCounts).sort()).toEqual(['deck', 'project']);
     expect(await t.run((ctx) => ctx.db.get(projectRowId))).toBeNull();
   });
+});
+
+/**
+ * Counts every record the erasure envelope charges for: both anchors, every
+ * deck-scoped row, and every tenant-scoped row. Deliberately the same arithmetic
+ * `planWorkspaceErasure` performs, so a test can sit a workspace exactly on the
+ * boundary rather than somewhere vaguely near it.
+ */
+async function workspaceRecordCount(
+  ctx: QueryCtx,
+  deckId: string,
+  projectId: string,
+): Promise<number> {
+  const ceiling = NODESLIDE_DECK_ERASURE_MAX_RECORDS + 2;
+  const deckRow = await ctx.db
+    .query('nodeslide_decks')
+    .withIndex('by_stable_id', (index) => index.eq('id', deckId))
+    .first();
+  const project = deckRow ? await ctx.db.get(deckRow.projectRowId) : null;
+  let total = (deckRow ? 1 : 0) + (project ? 1 : 0);
+  for (const entry of deckScopedEntries) {
+    total += (await takeNodeSlideScopedRows(ctx, entry, deckId, ceiling)).length;
+  }
+  for (const entry of tenantScopedEntries) {
+    total += (await takeNodeSlideScopedRows(ctx, entry, projectId, ceiling)).length;
+  }
+  return total;
+}
+
+/**
+ * Grows the deck's agent transcript by `count` rows. A long conversation is the
+ * realistic way a real workspace gets large: nobody creates 4,000 publications,
+ * but an owner who kept one deck open for a quarter has 4,000 messages.
+ */
+async function seedTranscript(
+  ctx: MutationCtx,
+  deckId: string,
+  count: number,
+  contentBytes = 1,
+): Promise<void> {
+  const content = 'm'.repeat(contentBytes);
+  for (let index = 0; index < count; index += 1) {
+    await ctx.db.insert('nodeslide_agent_messages', {
+      id: `bulk_message_${index}`,
+      deckId,
+      runId: 'run_scenario',
+      role: 'assistant',
+      content,
+      createdAt: NOW + index,
+    });
+  }
+}
+
+/**
+ * Runs the erasure and swallows the refusal *inside* the transaction, then
+ * reports what survived from within that same transaction.
+ *
+ * This is the load-bearing shape of these tests. `t.run` rolls its database
+ * writes back when its handler throws, so a "nothing was deleted" assertion made
+ * after the throw escapes would pass against an implementation that deleted
+ * everything and only then noticed the limit — it would be measuring
+ * convex-test's rollback, not the ordering of the code under test. Catching the
+ * error here keeps the transaction alive, so anything the erasure destroyed
+ * before refusing is still destroyed when the assertions read it.
+ */
+async function refusedErasure(
+  ctx: MutationCtx,
+  deckId: string,
+  projectId: string,
+  storageIds: readonly Id<'_storage'>[],
+) {
+  let refused = false;
+  let message = '';
+  try {
+    await deleteHandler(ctx, { deckId, ownerAccessKey: OWNER_ACCESS_KEY });
+  } catch (error) {
+    refused = true;
+    message = error instanceof Error ? error.message : String(error);
+  }
+  const survivingBlobs: Id<'_storage'>[] = [];
+  for (const storageId of storageIds) {
+    if ((await ctx.storage.get(storageId)) !== null) survivingBlobs.push(storageId);
+  }
+  return {
+    refused,
+    message,
+    records: await workspaceRecordCount(ctx as QueryCtx, deckId, projectId),
+    deck: await ctx.db
+      .query('nodeslide_decks')
+      .withIndex('by_stable_id', (index) => index.eq('id', deckId))
+      .first(),
+    survivingBlobs,
+    tombstones: await ctx.db.query('nodeslide_retention_tombstones').collect(),
+  };
+}
+
+/**
+ * The erasure size envelope.
+ *
+ * The persona is the same owner, later: the deck is still one deck, but the
+ * agent transcript has grown past what a single transaction can carry. Before
+ * the envelope existed the ceiling was still real — Convex's own read limits —
+ * but it was unnamed, unmeasured, and reported as a platform error about
+ * documents scanned. These tests pin where the cliff is from both sides.
+ */
+describe('erasure size envelope', () => {
+  it('refuses a workspace one record over the ceiling, and deletes nothing', async () => {
+    const t = convexTest(schema, modules);
+    const seeded = await t.run((ctx) => seedUsedWorkspace(ctx as MutationCtx, 'oversized-owner'));
+    const baseline = await t.run((ctx) =>
+      workspaceRecordCount(ctx as QueryCtx, seeded.deckId, seeded.projectId),
+    );
+    // Exactly one row past the line. A test that overshoots by thousands
+    // proves the check exists; one that overshoots by one proves where it is.
+    const overshoot = NODESLIDE_DECK_ERASURE_MAX_RECORDS + 1 - baseline;
+    expect(overshoot).toBeGreaterThan(0);
+    await t.run((ctx) => seedTranscript(ctx as MutationCtx, seeded.deckId, overshoot));
+
+    const before = await t.run((ctx) =>
+      workspaceRecordCount(ctx as QueryCtx, seeded.deckId, seeded.projectId),
+    );
+    expect(before).toBe(NODESLIDE_DECK_ERASURE_MAX_RECORDS + 1);
+
+    const outcome = await t.run((ctx) =>
+      refusedErasure(ctx as MutationCtx, seeded.deckId, seeded.projectId, seeded.storageIds),
+    );
+
+    expect(outcome.refused).toBe(true);
+    // The error names the product rule and the number, not a Convex internal.
+    expect(outcome.message).toContain(
+      `exceeds the atomic limit of ${NODESLIDE_DECK_ERASURE_MAX_RECORDS} records`,
+    );
+    expect(outcome.message).toContain('no records were deleted.');
+    // Observed inside the refusing transaction: a refusal that had already
+    // started deleting would show a smaller count here, a missing deck row,
+    // or a missing blob.
+    expect(outcome.records, 'a refused erasure must not delete a single row').toBe(before);
+    expect(outcome.deck).not.toBeNull();
+    expect(outcome.survivingBlobs, 'a refused erasure must not delete a stored file').toEqual(
+      seeded.storageIds,
+    );
+    expect(outcome.tombstones).toEqual([]);
+
+    // And from outside, the workspace the owner still owns is intact.
+    const after = await t.run((ctx) =>
+      workspaceRecordCount(ctx as QueryCtx, seeded.deckId, seeded.projectId),
+    );
+    expect(after).toBe(before);
+    expect(await t.run((ctx) => ctx.db.get(seeded.projectRowId))).not.toBeNull();
+  }, 120_000);
+
+  it('refuses a workspace over the byte ceiling while well under the record ceiling', async () => {
+    const t = convexTest(schema, modules);
+    const seeded = await t.run((ctx) => seedUsedWorkspace(ctx as MutationCtx, 'heavy-owner'));
+    // 48 x 96 KiB of transcript: 4.5 MiB in fewer than a hundred rows, so the
+    // record ceiling cannot be what fires. The two limits are independent and
+    // this is the one that catches a deck of embedded images and long traces.
+    await t.run((ctx) => seedTranscript(ctx as MutationCtx, seeded.deckId, 48, 96 * 1024));
+
+    const before = await t.run((ctx) =>
+      workspaceRecordCount(ctx as QueryCtx, seeded.deckId, seeded.projectId),
+    );
+    expect(before).toBeLessThan(NODESLIDE_DECK_ERASURE_MAX_RECORDS);
+
+    const outcome = await t.run((ctx) =>
+      refusedErasure(ctx as MutationCtx, seeded.deckId, seeded.projectId, seeded.storageIds),
+    );
+
+    expect(outcome.refused).toBe(true);
+    expect(outcome.message).toContain(
+      `exceeds the atomic limit of ${NODESLIDE_DECK_ERASURE_MAX_BYTES} bytes`,
+    );
+    expect(outcome.records, 'a refused erasure must not delete a single row').toBe(before);
+    expect(outcome.deck).not.toBeNull();
+    expect(outcome.survivingBlobs).toEqual(seeded.storageIds);
+    expect(outcome.tombstones).toEqual([]);
+  }, 120_000);
+
+  it('erases a workspace sitting exactly on the record ceiling, completely', async () => {
+    const t = convexTest(schema, modules);
+    const seeded = await t.run((ctx) => seedUsedWorkspace(ctx as MutationCtx, 'atlimit-owner'));
+    const baseline = await t.run((ctx) =>
+      workspaceRecordCount(ctx as QueryCtx, seeded.deckId, seeded.projectId),
+    );
+    await t.run((ctx) =>
+      seedTranscript(
+        ctx as MutationCtx,
+        seeded.deckId,
+        NODESLIDE_DECK_ERASURE_MAX_RECORDS - baseline,
+      ),
+    );
+    const before = await t.run((ctx) =>
+      workspaceRecordCount(ctx as QueryCtx, seeded.deckId, seeded.projectId),
+    );
+    // The other side of the same boundary as the refusal test above. A gate
+    // that only ever refuses is not a gate, it is an outage.
+    expect(before).toBe(NODESLIDE_DECK_ERASURE_MAX_RECORDS);
+
+    const receipt = await t.run((ctx) =>
+      deleteHandler(ctx as MutationCtx, {
+        deckId: seeded.deckId,
+        ownerAccessKey: OWNER_ACCESS_KEY,
+      }),
+    );
+
+    expect(receipt.retentionSafe).toBe(true);
+    // Every record the envelope charged for is a record the receipt claims.
+    expect(receipt.deletedRowCount).toBe(NODESLIDE_DECK_ERASURE_MAX_RECORDS);
+
+    const after = await t.run((ctx) =>
+      workspaceRecordCount(ctx as QueryCtx, seeded.deckId, seeded.projectId),
+    );
+    expect(after, 'an accepted erasure must leave nothing behind').toBe(0);
+    expect(await t.run((ctx) => ctx.db.get(seeded.projectRowId))).toBeNull();
+    const survivingBlobs = await t.run(async (ctx) => {
+      const present: string[] = [];
+      for (const storageId of seeded.storageIds) {
+        if ((await ctx.storage.get(storageId)) !== null) present.push(storageId);
+      }
+      return present;
+    });
+    expect(survivingBlobs).toEqual([]);
+  }, 120_000);
 });
 
 describe('owner data export', () => {

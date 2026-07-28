@@ -47,6 +47,7 @@
     "artifact-arena:tournament": "node scripts/build-artifact-arena-tournament.mjs",
     "diagnostics:convex-logs:prod": "node scripts/capture-convex-logs.mjs",
     "proof:nodeslide": "node scripts/nodeslide-proof.mjs",
+    "proof:nodeslide:w1": "node scripts/nodeslide-signature-proof.mjs",
     "proof:nodeslide:w2": "node scripts/nodeslide-signature-apply-proof.mjs",
     "proof:nodeslide:w3": "node scripts/nodeslide-variation-proof.mjs",
     "proof:nodeslide:w4": "node scripts/nodeslide-preference-proof.mjs",

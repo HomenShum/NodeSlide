@@ -111,6 +111,7 @@
     "katex": "^0.18.1",
     "lucide-react": "^1.12.0",
     "nanoid": "^6.0.0",
+    "pdfjs-dist": "^6.1.200",
     "pptxgenjs": "^4.0.1",
     "radix-ui": "^1.6.2",
     "react": "^19.0.0",

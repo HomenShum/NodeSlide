@@ -1,18 +1,23 @@
 /**
- * Ported from parity's `convex/nodeslideBudgetLedger.test.ts`. The pure-ledger
- * describe block came across whole; the second block, 'NodeSlide trusted job
- * budget finalization', did not.
+ * Ported from parity's `convex/nodeslideBudgetLedger.test.ts`.
  *
- * That block drives `create/reserve/captureTimeout/release/finalize/finalizeForJob`
- * from `convex/nodeslideBudgets.ts`, a Convex module that is blocked twice over
- * here: it imports the withheld `preflightNodeSlideRunBudget`, and it reads and
- * writes three tables (`nodeslide_run_budgets`, `nodeslide_billable_calls`,
- * `nodeslide_budget_events`) that this repository's `convex/schema.ts` does not
- * declare. Neither is a pricing question, but neither is in this cluster.
+ * The pure-ledger describe block below came across whole and needs no model
+ * price. Parity's second block, 'NodeSlide trusted job budget finalization',
+ * drives `create/reserve/captureTimeout/release/finalize/finalizeForJob` against
+ * `convex/nodeslideBudgets.ts`.
  *
- * Everything the ledger library itself does — the cost invariant, the four cost
- * transitions, digest chaining, stale-state binding, and held-cost exposure — is
- * covered below and needs no model price.
+ * TWO OF THE THREE REASONS THAT BLOCK WAS HELD BACK ARE NOW GONE. The three
+ * tables (`nodeslide_run_budgets`, `nodeslide_billable_calls`,
+ * `nodeslide_budget_events`) ARE declared in `convex/schema.ts`, and
+ * `convex/nodeslideBudgets.ts` is now ported. The remaining reason is real and
+ * unchanged: every case in that block opens with a `reserve` call, and `reserve`
+ * is the one mutation withheld pending the model price table, because a
+ * reservation is a quote and there is no price to quote from.
+ *
+ * The finalization behaviour that does NOT depend on a reservation is covered
+ * in `convex/nodeslideBudgetWiring.test.ts`: a missing budget is not fabricated,
+ * an opened budget finalizes to zero unreconciled exposure, and a repeated
+ * finalize replays rather than double-writing.
  */
 import { describe, expect, it } from 'vitest';
 import { normalizeNodeSlideRunBudget } from '../shared/nodeslideRunBudget';

@@ -394,6 +394,34 @@ async function deleteJobDerivedRows(ctx: MutationCtx, deckId: string): Promise<D
       .take(2);
     for (const row of budgets) await ctx.db.delete(row._id);
     bump('runBudgets', budgets.length);
+
+    // Re-read, do not trust the loop. `countJobDerivedRows` below can only
+    // re-derive a budget id from a SURVIVING job or run row, so once those are
+    // deleted a stranded ledger row becomes unreachable by any deck-anchored
+    // query — it would sit there forever while the receipt reported
+    // `remainingDeckRows: 0` and `retentionSafe: true`. This is the last moment
+    // the id is known, so it is the only honest place to verify it.
+    //
+    // Until this port nothing ever wrote these rows, so the gap was theoretical.
+    // `nodeslideJobs.startCreateDeck` / `startEditProposal` now open a ledger
+    // row for every provider-backed job, which makes it real.
+    for (const table of ['nodeslide_run_budgets', 'nodeslide_billable_calls'] as const) {
+      const survivor =
+        table === 'nodeslide_run_budgets'
+          ? await ctx.db
+              .query(table)
+              .withIndex('by_stable_id', (index) => index.eq('id', budgetId))
+              .first()
+          : await ctx.db
+              .query(table)
+              .withIndex('by_budget_call', (index) => index.eq('budgetId', budgetId))
+              .first();
+      if (survivor) {
+        throw new Error(
+          `NodeSlide erasure left a ${table} row for budget ${budgetId}. The receipt was not written.`,
+        );
+      }
+    }
   }
 
   return counts;

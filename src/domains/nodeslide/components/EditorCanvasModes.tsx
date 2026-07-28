@@ -50,6 +50,11 @@ export interface EditorCanvasModesProps {
   candidateSlide?: Slide | null;
   candidateElements?: readonly SlideElement[];
   candidateLabel?: string;
+  /**
+   * The write scope of the pending proposal, rendered next to "pending review" so the
+   * blast radius is legible before acceptance rather than only after opening the AI tab.
+   */
+  candidateScopeLabel?: string;
   compareOperations?: readonly (PatchOperation | EditorCompareOperation)[];
   candidateReceipt?: EditorCandidateReceipt | null;
 
@@ -88,6 +93,7 @@ export function EditorCanvasModes({
   candidateSlide,
   candidateElements,
   candidateLabel,
+  candidateScopeLabel,
   compareOperations = [],
   candidateReceipt,
   sliderPosition = 50,
@@ -212,7 +218,12 @@ export function EditorCanvasModes({
               </button>
             ))}
           </div>
-          <span>{hasCandidate ? 'proposal · pending review' : 'no proposal pending'}</span>
+          <span>
+            {hasCandidate ? 'proposal · pending review' : 'no proposal pending'}
+            {hasCandidate && candidateScopeLabel ? (
+              <span data-testid="compare-scope-label"> · {candidateScopeLabel}</span>
+            ) : null}
+          </span>
           {narrativeBanner ? <span className="ns-sr-only">{narrativeBanner}</span> : null}
         </div>
       ) : null}

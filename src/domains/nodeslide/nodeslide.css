@@ -3999,3 +3999,15 @@
   font-size: 12.5px;
   margin-bottom: 8px;
 }
+
+/* Lazy-inspector fallback: it reserves the rail's width so the canvas does not reflow
+   when the chunk lands. */
+.ns-inspector-loading {
+  align-items: center;
+  color: var(--ns-muted);
+  display: flex;
+  font-size: 11px;
+  gap: 8px;
+  justify-content: center;
+  min-width: var(--ns-inspector-width);
+}

@@ -109,9 +109,7 @@ describe('NodeSlide claim-level source lineage', () => {
     // The claim digest must fingerprint the partial payload rather than collapse to a constant.
     // A binding only materializes when a source is bound, so carry the partial fields on an
     // operation that also has a full `chart`, and vary only the partial half between the two runs.
-    const carrier = (
-      partialSeries: number[],
-    ): Extract<PatchOperation, { op: 'update_chart' }> => ({
+    const carrier = (partialSeries: number[]): Extract<PatchOperation, { op: 'update_chart' }> => ({
       op: 'update_chart',
       slideId: 'slide-2',
       elementId: 'chart-1',

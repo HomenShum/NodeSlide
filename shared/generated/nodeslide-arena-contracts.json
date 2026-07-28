@@ -28,27 +28,14 @@
     "unsupported_capability",
     "not_scheduled"
   ],
-  "gateStates": [
-    "pass",
-    "fail",
-    "not-run"
-  ],
-  "receiptStatuses": [
-    "eligible",
-    "failed"
-  ],
+  "gateStates": ["pass", "fail", "not-run"],
+  "receiptStatuses": ["eligible", "failed"],
   "crossAxisPolicy": {
     "representable": false,
     "errorName": "InvalidArenaComparisonError",
-    "codes": [
-      "cross_axis_comparison",
-      "no_harness_change"
-    ]
+    "codes": ["cross_axis_comparison", "no_harness_change"]
   },
-  "sourceFiles": [
-    "scripts/lib/artifact-atlas-core.mjs",
-    "scripts/lib/artifact-atlas-coverage.mjs"
-  ],
+  "sourceFiles": ["scripts/lib/artifact-atlas-core.mjs", "scripts/lib/artifact-atlas-coverage.mjs"],
   "meta": {
     "sourceCommit": "d7bde65af9dd915d97ade18a3fcc655839d23191",
     "sha256": "sha256:91d99792f481bfb3ff44af163e8307d80ee97a335953ee31d0f16a4e025fc637"

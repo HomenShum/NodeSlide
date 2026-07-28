@@ -15,11 +15,12 @@ import type { NodeSlideUiContract } from '../../uiContract';
 const LOADING_RETRY_AFTER_MS = 12_000;
 
 /**
- * True once the realtime transport is actually up. Exported so the UI contract
- * publisher reports the same connection fact this screen renders, instead of a
- * second, independently-derived guess.
+ * True once the realtime transport is actually up. Deliberately NOT exported:
+ * `connectionState()` constructs the sync client, which opens the websocket. Only a
+ * screen that is genuinely waiting on the transport may ask. The UI contract reads
+ * this screen's answer through `onLoadingState` instead of probing for its own.
  */
-export function useConvexConnectionReady(): boolean {
+function useConvexConnectionReady(): boolean {
   const convex = useConvex();
   const [ready, setReady] = useState(() => convex.connectionState().isWebSocketConnected);
   useEffect(() => {

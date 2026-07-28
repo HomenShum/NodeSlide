@@ -14,6 +14,10 @@ import {
 // Repo-relative: under `@vitest-environment jsdom`, `import.meta.url` is an http URL.
 const studioSource = readFileSync('src/domains/nodeslide/NodeSlideStudio.tsx', 'utf8');
 const contractSource = readFileSync('src/domains/nodeslide/uiContract.ts', 'utf8');
+const feedbackSource = readFileSync(
+  'src/domains/nodeslide/components/shell/EditorFeedback.tsx',
+  'utf8',
+);
 
 function clearContract() {
   for (const attribute of NODESLIDE_UI_CONTRACT_ATTRIBUTES) {
@@ -116,6 +120,21 @@ describe('publishNodeSlideUiContract', () => {
     expect(studioSource).toContain("from './uiContract'");
     expect(studioSource).toContain('publishNodeSlideUiContract(');
     expect(studioSource).toContain('resolveNodeSlideInitialTheme');
+  });
+
+  /**
+   * Regression, caught by the CI runtime smoke. Reading `connection` from
+   * `ConvexReactClient.connectionState()` lazily CONSTRUCTS the sync client, which
+   * opens the websocket. Every query on the landing shell is 'skip', so the probe made
+   * the app dial a deployment it had decided not to dial — fatal against the CI
+   * placeholder URL, and a real behaviour change in production. The contract reports
+   * connection state; it must not cause it.
+   */
+  it('does not probe the realtime transport to describe it', () => {
+    // A call, not the prose explaining why there is no call.
+    expect(studioSource).not.toMatch(/\bconvex\.connectionState\(/u);
+    expect(studioSource).not.toMatch(/\buseConvexConnectionReady\(/u);
+    expect(feedbackSource).not.toContain('export function useConvexConnectionReady');
   });
 });
 

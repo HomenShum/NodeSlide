@@ -90,7 +90,6 @@ import {
   RecoveryScreen,
   type StudioToast,
   Toast,
-  useConvexConnectionReady,
 } from './components/shell/EditorFeedback';
 import {
   type EditorMutationFocus,
@@ -136,6 +135,7 @@ import {
 } from './signature/packs/index';
 import { downloadDeckHtml, downloadPptx, validateSnapshot } from './slidelang/index';
 import {
+  type NodeSlideUiConnection,
   type NodeSlideUiContract,
   type NodeSlideUiPhase,
   publishNodeSlideUiContract,
@@ -2032,12 +2032,25 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
     sharedSnapshot,
     workspace,
   ]);
-  const convexConnected = useConvexConnectionReady();
+  // Derived, never probed. `ConvexReactClient.connectionState()` lazily CONSTRUCTS the
+  // sync client, which opens the websocket. Every query on the landing shell is 'skip',
+  // so asking the client how it is doing would be the contract opening a connection the
+  // app had decided not to open — a sensor that changes the system it measures. So this
+  // reads facts already in hand: the loading screen's own probe (it is genuinely waiting
+  // on the transport), otherwise a workspace, whose data can only have arrived over it.
+  // With no evidence either way the answer is 'connecting', never an unearned 'ready'.
+  const uiConnection: NodeSlideUiConnection = uiLoadingState
+    ? uiLoadingState.stage === 'connecting'
+      ? 'connecting'
+      : 'ready'
+    : workspace
+      ? 'ready'
+      : 'connecting';
   const activeAgentJob = agentSession?.state.activeJob ?? null;
   useEffect(() => {
     publishNodeSlideUiContract({
       phase: uiPhase,
-      connection: convexConnected ? 'ready' : 'connecting',
+      connection: uiConnection,
       theme: studioTheme,
       // Only a shell that is actually loading reports a loading stage. A recovery
       // shell publishes none, so a failure can never be read as a load in flight.
@@ -2061,7 +2074,7 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
           }
         : {}),
     });
-  }, [activeAgentJob, convexConnected, studioTheme, uiLoadingState, uiPhase, workspace]);
+  }, [activeAgentJob, studioTheme, uiConnection, uiLoadingState, uiPhase, workspace]);
 
   const projectsDialog = (
     <ProjectDialog

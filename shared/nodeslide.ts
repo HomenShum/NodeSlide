@@ -894,6 +894,85 @@ export interface NodeSlideAgentTelemetryPage {
   totalRecorded: number;
 }
 
+export type NodeSlideEvidenceCaptureStatus = 'ready' | 'failed' | 'expired';
+export type NodeSlideEvidenceStepStatus = 'ok' | 'warning' | 'error';
+export type NodeSlideEvidenceAttachmentKind = 'screenshot' | 'pdf';
+export type NodeSlideEvidenceRegionScope = 'source' | 'claim';
+
+/** Normalized evidence region. Coordinates are 0..1 in the rendered screenshot or PDF page. */
+export interface NodeSlideEvidenceBox {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  page?: number;
+}
+
+export interface NodeSlideEvidenceViewport {
+  width: number;
+  height: number;
+}
+
+/** Lightweight capture row. It never contains storage IDs or signed attachment URLs. */
+export interface NodeSlideEvidenceCaptureSummary {
+  id: string;
+  deckId: string;
+  runId: string;
+  traceId: string;
+  spanId: string;
+  parentSpanId: string;
+  sourceId: string;
+  sourceTitle: string;
+  url: string;
+  goal: string;
+  provider: string;
+  status: NodeSlideEvidenceCaptureStatus;
+  error?: string;
+  contentDigest?: string;
+  stepCount: number;
+  screenshotCount: number;
+  pdfCount: number;
+  createdAt: number;
+  completedAt?: number;
+  expiresAt?: number;
+}
+
+export interface NodeSlideEvidenceStepSummary {
+  id: string;
+  captureId: string;
+  spanId: string;
+  sequence: number;
+  phase: string;
+  label: string;
+  status: NodeSlideEvidenceStepStatus;
+  detail?: string;
+  attachmentKind?: NodeSlideEvidenceAttachmentKind;
+  box?: NodeSlideEvidenceBox;
+  /** Missing on legacy rows and therefore treated as source-level, never claim-level. */
+  regionScope?: NodeSlideEvidenceRegionScope;
+  selector?: string;
+  quote?: string;
+  viewport?: NodeSlideEvidenceViewport;
+  contentDigest?: string;
+  createdAt: number;
+}
+
+export interface NodeSlideEvidenceAttachment {
+  kind: NodeSlideEvidenceAttachmentKind;
+  url: string;
+  box?: NodeSlideEvidenceBox;
+  page?: number;
+}
+
+export interface NodeSlideEvidenceStepDetail extends NodeSlideEvidenceStepSummary {
+  attachment?: NodeSlideEvidenceAttachment;
+}
+
+/** Owner-only detail resolved on demand for the single selected capture. */
+export interface NodeSlideEvidenceCaptureDetail extends NodeSlideEvidenceCaptureSummary {
+  steps: NodeSlideEvidenceStepDetail[];
+}
+
 export interface NodeSlideAgentMessage {
   id: string;
   deckId: string;
@@ -999,6 +1078,18 @@ export interface DeckVersion {
   createdAt: number;
 }
 
+export type NodeSlideSourceBindingStatus = 'bound' | 'not_applicable' | 'legacy_unavailable';
+
+/** Immutable element-level evidence binding for one factual candidate operation. */
+export interface NodeSlideClaimSourceBinding {
+  operationIndex: number;
+  operation: 'replace_text' | 'update_chart' | 'add_element';
+  slideId: string;
+  elementId: string;
+  sourceIds: string[];
+  claimDigest: string;
+}
+
 export interface AgentTrace {
   id: string;
   deckId: string;
@@ -1021,6 +1112,10 @@ export interface AgentTrace {
   costMicroUsd?: number;
   inputTokens?: number;
   outputTokens?: number;
+  /** Always hydrated for current API reads; absent only on older serialized clients. */
+  sourceBindingStatus?: NodeSlideSourceBindingStatus;
+  /** Empty for non-factual runs and honestly unavailable on legacy traces. */
+  claimSourceBindings?: NodeSlideClaimSourceBinding[];
   createdAt: number;
   completedAt?: number;
 }

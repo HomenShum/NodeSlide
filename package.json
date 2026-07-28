@@ -97,6 +97,7 @@
     "atlas:receipts:check": "node scripts/emit-atlas-receipts.mjs --check"
   },
   "dependencies": {
+    "@convex-dev/workflow": "^0.3.0",
     "@earendil-works/pi-ai": "0.80.6",
     "@fontsource-variable/fraunces": "^5.2.9",
     "@fontsource-variable/geist": "^5.2.8",

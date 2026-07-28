@@ -1,40 +1,26 @@
 /**
- * NodeSlide run budget — PRICE-INDEPENDENT SUPERSET. This is still not the whole
- * module, but the withheld surface is now exactly three symbols, not thirty.
+ * NodeSlide run budget — COMPLETE. The three symbols this module used to
+ * withhold (`NODESLIDE_MODEL_PRICING`, `nodeSlideModelPricing`,
+ * `scoreNodeSlideWorstCaseCost`) are at the bottom of this file, and every route
+ * in `shared/nodeslide.ts` now has a row.
  *
- * Everything below is copied verbatim from parity's
- * `shared/nodeslideRunBudget.ts`: contract versions, the bounds table, budget
- * normalization and its validation error, the spend-constraint parser, the
- * micro-USD decimal parser, the pricing-metadata SHAPES, and the whole
- * state/receipt/preflight/postflight type surface. None of it names a model id
- * or carries a number that is a price.
+ * The prior refusal was correct and its reasoning still governs the table: a
+ * wrong price does not fail loudly, it silently mis-bills or wrongly admits a
+ * run past its cost cap, so a price is only allowed here if it was read from the
+ * provider's own machine catalog on a recorded date. The table's own docstring
+ * carries that date and that URL. Nothing in it was guessed, and the two shapes
+ * that could have been used to dodge the problem — a zero price for a dynamic
+ * route, and a `Record<string, …>` that would let an unpriced route through —
+ * are both still closed: dynamic routes have their own non-scorable kind, and
+ * the record is still `satisfies Record<NodeSlideAgentModelId, …>`.
  *
- * WITHHELD, still pending an owner pricing decision — exactly three exports:
- *   - `NODESLIDE_MODEL_PRICING`     — the model -> price record itself.
- *   - `nodeSlideModelPricing()`     — the lookup into that record.
- *   - `scoreNodeSlideWorstCaseCost()` — the only function that turns tokens into
- *     a currency figure; it is a pure consumer of the two above.
- *
- * WHY those three and nothing more: parity's record is declared
- * `satisfies Record<NodeSlideAgentModelId, ...>`, i.e. exhaustive over ITS
- * catalog, and the two catalogs diverge in BOTH directions. Parity prices
- * 'openai/gpt-5.6-luna', which this repo does not sell; this repo sells six
- * models parity does not price at all (moonshotai/kimi-k3, openrouter/free,
- * google/gemma-4-26b-a4b-it:free, google/gemma-4-31b-it:free,
- * nvidia/nemotron-3-super-120b-a12b:free, openai/gpt-oss-20b:free). Landing the
- * record here means writing real per-million-token input and output prices for
- * those six live routes. That is a product decision, not a merge decision, and a
- * wrong price does not fail loudly — it silently mis-bills, or wrongly admits a
- * run past its cost cap. Weakening the `satisfies` clause to `Record<string, …>`
- * to dodge the error would delete the exhaustiveness guarantee that makes adding
- * an unpriced model impossible, so that is not an option either.
- *
- * Note what this costs and what it does not: the shapes below
- * (`NodeSlidePricedModelMetadata`, `NodeSlideScoredModelMetadata`,
- * `NodeSlideUnknownModelPricing`) are structure, not prices, so every downstream
- * consumer that only hashes, forwards, or pattern-matches pricing metadata —
- * the whole budget ledger, for one — compiles and runs today.
+ * One route is deliberately unpriced and DENIES: `nebius/zai-org/GLM-5.2` is not
+ * an OpenRouter route, its price lives behind a private endpoint, and carrying
+ * over a figure verified on a different day would be exactly the stale-paste
+ * defect the table exists to prevent.
  */
+
+import type { NodeSlideAgentModelId } from './nodeslide';
 
 export const NODESLIDE_RUN_BUDGET_VERSION = 'nodeslide.run-budget/v1' as const;
 export const NODESLIDE_RUN_BUDGET_STATE_VERSION = 'nodeslide.run-budget-state/v1' as const;
@@ -274,15 +260,9 @@ export interface NodeSlidePricedModelMetadata {
   readonly outputMicroUsdPerMillionTokens: number;
   readonly providerContextWindowTokens: number;
   readonly providerMaxOutputTokens: number;
-  readonly source:
-    | 'nebius_token_factory_model_catalog'
-    | 'openrouter_request_price_ceiling'
-    | 'openrouter_model_catalog';
-  readonly sourceUrl:
-    | 'https://tokenfactory.nebius.com/proxy/inference/private/v1/models_info'
-    | 'https://openrouter.ai/docs/guides/routing/provider-selection'
-    | 'https://openrouter.ai/google/gemini-3.5-flash/pricing';
-  readonly verifiedAt: '2026-07-16T01:22:40Z' | '2026-07-16T20:30:00Z' | '2026-07-16T23:55:00Z';
+  readonly source: 'openrouter_model_catalog_api';
+  readonly sourceUrl: typeof NODESLIDE_MODEL_PRICING_SOURCE_URL;
+  readonly verifiedAt: typeof NODESLIDE_MODEL_PRICING_VERIFIED_AT;
 }
 
 export interface NodeSlideZeroCostModelMetadata {
@@ -297,20 +277,50 @@ export interface NodeSlideZeroCostModelMetadata {
   readonly source: 'private_deterministic_route';
 }
 
+/**
+ * A route whose per-token price is not a property of the route.
+ *
+ * `openrouter/free` resolves to an arbitrary upstream model per request, and the
+ * `:free` variants are promotional tiers the provider re-prices or withdraws
+ * without a contract change. The catalog API reports `"0"` for all of them, and
+ * that string is the single most dangerous number in this file: scoring it as a
+ * price makes the worst case zero, which makes the reservation zero, which is an
+ * UNBOUNDED authorization wearing a conservative-looking value. So a dynamic
+ * route is a distinct kind rather than a priced row with zeros in it, and it is
+ * deliberately NOT a member of `NodeSlideScoredModelMetadata` — the type system,
+ * not a reviewer, is what stops it from reaching `scoreNodeSlideWorstCaseCost`
+ * as if it were scorable.
+ */
+export interface NodeSlideDynamicModelPricing {
+  readonly version: typeof NODESLIDE_MODEL_PRICING_VERSION;
+  readonly kind: 'dynamic';
+  readonly modelId: string;
+  readonly reason: 'provider_pricing_dynamic';
+  /** Stated in the denial a caller sees; never a number, because there is none. */
+  readonly statedReason: string;
+  readonly source: 'openrouter_zero_priced_dynamic_route';
+  readonly sourceUrl: typeof NODESLIDE_MODEL_PRICING_SOURCE_URL;
+  readonly verifiedAt: typeof NODESLIDE_MODEL_PRICING_VERIFIED_AT;
+}
+
 export interface NodeSlideUnknownModelPricing {
   readonly version: typeof NODESLIDE_MODEL_PRICING_VERSION;
   readonly kind: 'unknown';
   readonly modelId: string;
   readonly reason: NodeSlidePricingUnknownReason;
-  readonly source: 'openrouter_dynamic_catalog' | 'unrecognized_model';
+  readonly source: 'openrouter_dynamic_catalog' | 'nebius_private_catalog' | 'unrecognized_model';
 }
 
 export type NodeSlideScoredModelMetadata =
   | NodeSlidePricedModelMetadata
   | NodeSlideZeroCostModelMetadata;
+/** Everything a reservation cannot be computed from. Every member denies. */
+export type NodeSlideUnscoredModelPricing =
+  | NodeSlideUnknownModelPricing
+  | NodeSlideDynamicModelPricing;
 export type NodeSlideModelPricingMetadata =
   | NodeSlideScoredModelMetadata
-  | NodeSlideUnknownModelPricing;
+  | NodeSlideUnscoredModelPricing;
 
 export type NodeSlideWorstCaseCostScore =
   | {
@@ -325,7 +335,7 @@ export type NodeSlideWorstCaseCostScore =
       readonly kind: 'unscored';
       readonly model: string;
       readonly reason: 'pricing_unknown';
-      readonly pricing: NodeSlideUnknownModelPricing;
+      readonly pricing: NodeSlideUnscoredModelPricing;
       readonly inputCostMicroUsd: null;
       readonly outputCostMicroUsd: null;
       readonly totalCostMicroUsd: null;
@@ -389,7 +399,7 @@ export type NodeSlideRunBudgetPreflightDenialReason =
   | {
       readonly code: 'pricing_unknown';
       readonly model: string;
-      readonly pricing: NodeSlideUnknownModelPricing;
+      readonly pricing: NodeSlideUnscoredModelPricing;
     }
   | {
       readonly code: 'estimated_input_exceeds_remaining';
@@ -458,3 +468,302 @@ export type NodeSlideRunBudgetPostflightResult =
       readonly remaining: NodeSlideRunBudgetRemaining;
       readonly terminalReason: NodeSlideRunBudgetTerminalReason | null;
     };
+
+/**
+ * WHERE THESE NUMBERS CAME FROM, and how to check them.
+ *
+ * SOURCE:   https://openrouter.ai/api/v1/models — the provider's own machine
+ *           catalog, not a docs page, not a pricing page, not a paste from a
+ *           conversation. Every row below was read out of one response body.
+ * FETCHED:  2026-07-28T00:00:00Z (see NODESLIDE_MODEL_PRICING_VERIFIED_AT).
+ * UNIT:     `pricing.prompt` / `pricing.completion` are USD per single token.
+ *           This table stores integer micro-USD per MILLION tokens, so every
+ *           value is the catalog string multiplied by 1e12. Integers only: the
+ *           whole ledger accounts in micro-USD and a float here would round a
+ *           reservation, which is the one place rounding down is a loan.
+ * WINDOWS:  `providerContextWindowTokens` is `context_length`;
+ *           `providerMaxOutputTokens` is `top_provider.max_completion_tokens`.
+ *           Where the catalog reports `null` for the completion cap — currently
+ *           `moonshotai/kimi-k3` only — the context window is the binding
+ *           provider limit and is recorded as such. That is read from the same
+ *           response, not assumed.
+ *
+ * TO RE-VERIFY: fetch the URL, and for each row assert
+ *   `pricing.prompt * 1e12 === inputMicroUsdPerMillionTokens` and the same for
+ *   completion. `nodeslideRunBudget.test.ts` states the expected catalog values
+ *   independently so a careless edit to this table fails rather than silently
+ *   re-prices production. Prices change; a stale table is a silent overcharge
+ *   in one direction and a silent under-reservation in the other.
+ *
+ * NOT IN THIS TABLE, deliberately:
+ *   - `nodeslide/private-deterministic`. It issues no provider request, so a
+ *     per-token price for it would be fiction. It is a separate `zero_cost`
+ *     constant whose zero is a fact about the route, not a price.
+ *   - The five zero-priced dynamic routes. See `NodeSlideDynamicModelPricing`.
+ *   - `nebius/zai-org/GLM-5.2`. It is not an OpenRouter route and its price
+ *     lives behind a private Nebius endpoint this table's fetch cannot read, so
+ *     it is `unknown` and DENIES. Porting the previously recorded Nebius figure
+ *     would have been landing a number nobody re-verified today, which is the
+ *     exact defect this docstring exists to prevent. The route is
+ *     `productionEnabled: false`; a denial degrades it to the deterministic
+ *     fallback rather than billing against an unchecked price.
+ */
+export const NODESLIDE_MODEL_PRICING_SOURCE_URL = 'https://openrouter.ai/api/v1/models' as const;
+export const NODESLIDE_MODEL_PRICING_VERIFIED_AT = '2026-07-28T00:00:00Z' as const;
+
+type NodeSlideCatalogPricingMetadata =
+  | NodeSlidePricedModelMetadata
+  | NodeSlideDynamicModelPricing
+  | NodeSlideUnknownModelPricing;
+
+function pricedRoute(args: {
+  modelId: NodeSlideAgentModelId;
+  inputMicroUsdPerMillionTokens: number;
+  outputMicroUsdPerMillionTokens: number;
+  providerContextWindowTokens: number;
+  providerMaxOutputTokens: number;
+}): NodeSlidePricedModelMetadata {
+  return {
+    version: NODESLIDE_MODEL_PRICING_VERSION,
+    kind: 'priced',
+    currency: 'USD',
+    billingUnit: 'million_tokens',
+    source: 'openrouter_model_catalog_api',
+    sourceUrl: NODESLIDE_MODEL_PRICING_SOURCE_URL,
+    verifiedAt: NODESLIDE_MODEL_PRICING_VERIFIED_AT,
+    ...args,
+  };
+}
+
+function dynamicRoute(
+  modelId: NodeSlideAgentModelId,
+  statedReason: string,
+): NodeSlideDynamicModelPricing {
+  return {
+    version: NODESLIDE_MODEL_PRICING_VERSION,
+    kind: 'dynamic',
+    modelId,
+    reason: 'provider_pricing_dynamic',
+    statedReason,
+    source: 'openrouter_zero_priced_dynamic_route',
+    sourceUrl: NODESLIDE_MODEL_PRICING_SOURCE_URL,
+    verifiedAt: NODESLIDE_MODEL_PRICING_VERIFIED_AT,
+  };
+}
+
+/**
+ * Exhaustive over `NodeSlideAgentModelId` by construction. Adding a route to
+ * `shared/nodeslide.ts` without a row here is a type error, and the only rows
+ * that can be written are priced, dynamic, or unknown — there is no shape for
+ * "cataloged and free".
+ */
+export const NODESLIDE_MODEL_PRICING = {
+  'nebius/zai-org/GLM-5.2': {
+    version: NODESLIDE_MODEL_PRICING_VERSION,
+    kind: 'unknown',
+    modelId: 'nebius/zai-org/GLM-5.2',
+    reason: 'provider_pricing_not_pinned',
+    source: 'nebius_private_catalog',
+  },
+  'moonshotai/kimi-k3': pricedRoute({
+    modelId: 'moonshotai/kimi-k3',
+    inputMicroUsdPerMillionTokens: 3_000_000,
+    outputMicroUsdPerMillionTokens: 15_000_000,
+    providerContextWindowTokens: 1_048_576,
+    // The catalog reports `top_provider.max_completion_tokens: null` for this
+    // route, so the context window is the provider's binding output limit.
+    providerMaxOutputTokens: 1_048_576,
+  }),
+  'z-ai/glm-5.2': pricedRoute({
+    modelId: 'z-ai/glm-5.2',
+    inputMicroUsdPerMillionTokens: 768_600,
+    outputMicroUsdPerMillionTokens: 2_415_600,
+    providerContextWindowTokens: 1_048_576,
+    providerMaxOutputTokens: 131_072,
+  }),
+  'anthropic/claude-sonnet-5': pricedRoute({
+    modelId: 'anthropic/claude-sonnet-5',
+    inputMicroUsdPerMillionTokens: 2_000_000,
+    outputMicroUsdPerMillionTokens: 10_000_000,
+    providerContextWindowTokens: 1_000_000,
+    providerMaxOutputTokens: 128_000,
+  }),
+  'anthropic/claude-fable-5': pricedRoute({
+    modelId: 'anthropic/claude-fable-5',
+    inputMicroUsdPerMillionTokens: 10_000_000,
+    outputMicroUsdPerMillionTokens: 50_000_000,
+    providerContextWindowTokens: 1_000_000,
+    providerMaxOutputTokens: 128_000,
+  }),
+  'google/gemini-3.5-flash': pricedRoute({
+    modelId: 'google/gemini-3.5-flash',
+    inputMicroUsdPerMillionTokens: 1_500_000,
+    outputMicroUsdPerMillionTokens: 9_000_000,
+    providerContextWindowTokens: 1_048_576,
+    providerMaxOutputTokens: 65_536,
+  }),
+  'google/gemini-3.1-pro-preview': pricedRoute({
+    modelId: 'google/gemini-3.1-pro-preview',
+    inputMicroUsdPerMillionTokens: 2_000_000,
+    outputMicroUsdPerMillionTokens: 12_000_000,
+    providerContextWindowTokens: 1_048_576,
+    providerMaxOutputTokens: 65_536,
+  }),
+  'openai/gpt-5.6-sol': pricedRoute({
+    modelId: 'openai/gpt-5.6-sol',
+    inputMicroUsdPerMillionTokens: 5_000_000,
+    outputMicroUsdPerMillionTokens: 30_000_000,
+    providerContextWindowTokens: 1_050_000,
+    providerMaxOutputTokens: 128_000,
+  }),
+  'openai/gpt-5.6-terra': pricedRoute({
+    modelId: 'openai/gpt-5.6-terra',
+    inputMicroUsdPerMillionTokens: 1_250_000,
+    outputMicroUsdPerMillionTokens: 7_500_000,
+    providerContextWindowTokens: 1_050_000,
+    providerMaxOutputTokens: 128_000,
+  }),
+  'openrouter/free': dynamicRoute(
+    'openrouter/free',
+    'The free router selects an upstream model per request, so no per-token price can be quoted before dispatch.',
+  ),
+  'google/gemma-4-26b-a4b-it:free': dynamicRoute(
+    'google/gemma-4-26b-a4b-it:free',
+    'This is a promotional zero-priced tier, not a contracted price; it is denied rather than reserved at zero.',
+  ),
+  'google/gemma-4-31b-it:free': dynamicRoute(
+    'google/gemma-4-31b-it:free',
+    'This is a promotional zero-priced tier, not a contracted price; it is denied rather than reserved at zero.',
+  ),
+  'nvidia/nemotron-3-super-120b-a12b:free': dynamicRoute(
+    'nvidia/nemotron-3-super-120b-a12b:free',
+    'This is a promotional zero-priced tier, not a contracted price; it is denied rather than reserved at zero.',
+  ),
+  'openai/gpt-oss-20b:free': dynamicRoute(
+    'openai/gpt-oss-20b:free',
+    'This is a promotional zero-priced tier, not a contracted price; it is denied rather than reserved at zero.',
+  ),
+} as const satisfies Record<NodeSlideAgentModelId, NodeSlideCatalogPricingMetadata>;
+
+/**
+ * The one route whose zero is a fact rather than a price: it issues no provider
+ * request at all, so there is nothing to meter and nothing to reserve.
+ */
+const PRIVATE_DETERMINISTIC_PRICING: NodeSlideZeroCostModelMetadata = {
+  version: NODESLIDE_MODEL_PRICING_VERSION,
+  kind: 'zero_cost',
+  modelId: NODESLIDE_PRIVATE_DETERMINISTIC_MODEL,
+  currency: 'USD',
+  billingUnit: 'none',
+  inputMicroUsdPerMillionTokens: 0,
+  outputMicroUsdPerMillionTokens: 0,
+  providerMaxOutputTokens: NODESLIDE_RUN_BUDGET_BOUNDS.maxOutputTokens.max,
+  source: 'private_deterministic_route',
+};
+
+export function nodeSlideModelPricing(model: string): NodeSlideModelPricingMetadata {
+  if (model === NODESLIDE_PRIVATE_DETERMINISTIC_MODEL) {
+    return PRIVATE_DETERMINISTIC_PRICING;
+  }
+  if (Object.prototype.hasOwnProperty.call(NODESLIDE_MODEL_PRICING, model)) {
+    return NODESLIDE_MODEL_PRICING[
+      model as NodeSlideAgentModelId
+    ] as NodeSlideCatalogPricingMetadata;
+  }
+  return {
+    version: NODESLIDE_MODEL_PRICING_VERSION,
+    kind: 'unknown',
+    modelId: model,
+    reason: 'model_not_cataloged',
+    source: 'unrecognized_model',
+  };
+}
+
+/** True only for pricing a reservation can actually be computed from. */
+export function isNodeSlideScoredPricing(
+  pricing: NodeSlideModelPricingMetadata,
+): pricing is NodeSlideScoredModelMetadata {
+  return pricing.kind === 'priced' || pricing.kind === 'zero_cost';
+}
+
+/**
+ * The refusal a caller reads. Every unscorable route states WHY it cannot be
+ * reserved; none of them is ever reported as free.
+ */
+export function nodeSlidePricingRefusalReason(pricing: NodeSlideUnscoredModelPricing): string {
+  if (pricing.kind === 'dynamic') return pricing.statedReason;
+  return pricing.reason === 'model_not_cataloged'
+    ? `The model ${pricing.modelId} is not in this deployment's route catalog, so no reservation can be computed.`
+    : `The route ${pricing.modelId} has no server-pinned price in this deployment, so no reservation can be computed.`;
+}
+
+export function scoreNodeSlideWorstCaseCost(args: {
+  model: string;
+  inputTokens: number;
+  outputTokens: number;
+}): NodeSlideWorstCaseCostScore {
+  assertPricingModel(args.model);
+  assertAccountingInteger('inputTokens', args.inputTokens);
+  assertAccountingInteger('outputTokens', args.outputTokens);
+  const pricing = nodeSlideModelPricing(args.model);
+  if (!isNodeSlideScoredPricing(pricing)) {
+    return {
+      kind: 'unscored',
+      model: args.model,
+      reason: 'pricing_unknown',
+      pricing,
+      inputCostMicroUsd: null,
+      outputCostMicroUsd: null,
+      totalCostMicroUsd: null,
+    };
+  }
+  const inputCostMicroUsd = conservativeTokenCost(
+    args.inputTokens,
+    pricing.inputMicroUsdPerMillionTokens,
+  );
+  const outputCostMicroUsd = conservativeTokenCost(
+    args.outputTokens,
+    pricing.outputMicroUsdPerMillionTokens,
+  );
+  return {
+    kind: 'scored',
+    model: args.model,
+    pricing,
+    inputCostMicroUsd,
+    outputCostMicroUsd,
+    totalCostMicroUsd: inputCostMicroUsd + outputCostMicroUsd,
+  };
+}
+
+/** Rounds UP. A reservation that rounds down is a loan the ledger never books. */
+function conservativeTokenCost(tokens: number, microUsdPerMillionTokens: number): number {
+  if (tokens === 0 || microUsdPerMillionTokens === 0) return 0;
+  const numerator = BigInt(tokens) * BigInt(microUsdPerMillionTokens);
+  const denominator = BigInt(NODESLIDE_TOKENS_PER_PRICING_UNIT);
+  const cost = (numerator + denominator - 1n) / denominator;
+  const result = Number(cost);
+  if (!Number.isSafeInteger(result)) {
+    throw new NodeSlideRunBudgetValidationError('cost', 'calculation exceeds safe range');
+  }
+  return result;
+}
+
+function assertPricingModel(model: string): void {
+  if (
+    typeof model !== 'string' ||
+    model.length < 1 ||
+    model.length > 256 ||
+    model.trim() !== model
+  ) {
+    throw new NodeSlideRunBudgetValidationError(
+      'model',
+      'expected a trimmed model identifier of 1 through 256 characters',
+    );
+  }
+}
+
+function assertAccountingInteger(field: string, value: number): void {
+  if (!Number.isSafeInteger(value) || value < 0) {
+    throw new NodeSlideRunBudgetValidationError(field, 'expected a non-negative safe integer');
+  }
+}

@@ -1,41 +1,32 @@
 /**
- * Durable hard-budget ledger — PRICE-INDEPENDENT SUBSET.
+ * Durable hard-budget ledger — COMPLETE.
  *
- * Copied verbatim from parity's `convex/nodeslideBudgets.ts` with exactly one
- * mutation withheld: `reserve`.
+ * `reserve` was the one withheld mutation, because it is the only member that
+ * quotes a call before dispatch and therefore the only one that needs a price.
+ * The price table landed (`shared/nodeslideRunBudget.ts`), so `reserve` is here,
+ * and with it the ledger has a full lifecycle: reserve -> settle | captureTimeout
+ * | release -> finalize.
  *
- * WHY `reserve` and nothing else. It is the only member that quotes a call
- * before dispatch, so it is the only one that calls
- * `preflightNodeSlideRunBudget` -> `nodeSlideModelPricing` /
- * `scoreNodeSlideWorstCaseCost`. Those three are withheld from
- * `shared/nodeslideRunBudget.ts` and `convex/lib/nodeslideRunBudget.ts` pending
- * an owner pricing decision for the six live routes this repo sells and parity
- * never priced; see the header of `shared/nodeslideRunBudget.ts` for the full
- * reasoning. Nothing here invents a price, and nothing here weakens the
- * reservation to a zero quote so it would compile — a reservation that quotes
- * zero is not a conservative reservation, it is an unbounded one.
+ * The two shortcuts the earlier refusal named are still refused. Nothing here
+ * invents a price, and nothing quotes zero to make a dispatch compile — a
+ * reservation that quotes zero is not a conservative reservation, it is an
+ * unbounded one, which is why the zero-priced dynamic routes are denied by
+ * `preflightNodeSlideRunBudget` rather than reserved for nothing.
  *
- * WHAT THIS COSTS, precisely: no call can be reserved, therefore no call can be
- * settled, released, or timeout-captured, therefore the ledger accumulates no
- * spend. It does NOT cost the budget row itself. `create` is deliberately
- * price-free upstream too — parity's `callNodeSlideBudgetedJson` creates the
- * budget BEFORE it looks a price up, on the stated principle that "even a denied
- * provider route owns a durable zero-usage budget", so job completion can
- * finalize an accounting record instead of failing after the deterministic
- * fallback has already been persisted.
- *
- * That principle is what this repo now relies on. `convex/nodeslideJobs.ts`
- * stamps a `budgetId` on every non-deterministic job row and calls
- * `finalizeForJob` on every terminal transition; `finalizeForJob` requires the
- * row to exist. With the lazy creator withheld, the only honest place left to
- * establish that invariant is the job start mutation, which is where the
- * `budgetId` is minted. See `openNodeSlideJobBudget` in `nodeslideJobs.ts`.
+ * `create` stays price-free and eager. `convex/nodeslideJobs.ts` stamps a
+ * `budgetId` on every non-deterministic job row and calls `finalizeForJob` on
+ * every terminal transition; `finalizeForJob` requires the row to exist, so the
+ * row is opened at job start (`openNodeSlideJobBudget`) rather than lazily at
+ * first dispatch. A run whose every dispatch is denied still owns a durable
+ * zero-usage budget it can finalize.
  */
 import { v } from 'convex/values';
 import {
   NODESLIDE_RUN_BUDGET_RECEIPT_VERSION,
   type NodeSlideRunBudget,
+  type NodeSlideRunBudgetPreflightDenialReason,
   type NodeSlideRunBudgetReceipt,
+  nodeSlidePricingRefusalReason,
   normalizeNodeSlideRunBudget,
 } from '../shared/nodeslideRunBudget';
 import type { Doc } from './_generated/dataModel';
@@ -46,6 +37,7 @@ import {
   internalQuery,
 } from './_generated/server';
 import {
+  NODESLIDE_BILLABLE_CALL_VERSION,
   NODESLIDE_BUDGET_EVENT_VERSION,
   NODESLIDE_BUDGET_LEDGER_VERSION,
   type NodeSlideBudgetEventKind,
@@ -58,20 +50,25 @@ import {
   costLedgerFromState,
   nodeSlideAccountingStateFromLedger,
   nodeSlideBillableCallReleaseDigest,
+  nodeSlideBillableCallReservationDigest,
   nodeSlideBillableCallSettlementDigest,
   nodeSlideBillableCallTimeoutDigest,
   nodeSlideBudgetConfigDigest,
   nodeSlideBudgetEventDigest,
   nodeSlideBudgetFinalizeDigest,
+  nodeSlideBudgetPricingDigest,
   nodeSlideBudgetStateCoreDigest,
   nodeSlideBudgetStateDigest,
+  nodeSlidePreflightStateFromLedger,
   releaseNodeSlideBudgetCost,
+  reserveNodeSlideBudgetCost,
   settleNodeSlideBudgetCost,
 } from './lib/nodeslideBudgetLedger';
 import {
   accountNodeSlideRunBudgetReceipt,
   nodeSlideRunBudgetReceiptDigest,
   nodeSlideRunBudgetStateDigest,
+  preflightNodeSlideRunBudget,
 } from './lib/nodeslideRunBudget';
 
 const budgetInputValidator = v.object({
@@ -155,18 +152,125 @@ export const create = internalMutation({
 });
 
 /**
- * WITHHELD: `reserve`.
+ * Quotes a call against the hard cap BEFORE dispatch, and refuses it if the
+ * worst case does not fit. This is the one mutation that makes
+ * `budget.enforcement: 'hard'` mean anything, and it is what
+ * `nodeSlideBudgetEnforcementPosture()` in `convex/nodeslideJobs.ts` derives
+ * `'enforced'` from.
  *
- * Parity'''s body is a preflight quote (`preflightNodeSlideRunBudget`) followed by
- * an insert into `nodeslide_billable_calls` carrying `quoteMicroUsd`,
- * `pricingDigest`, `providerSafeOutputTokenCeiling` and `providerTimeoutMs` —
- * every one of those four fields is a number the price table produces. There is
- * no subset of this mutation that is price-free, so there is no partial version
- * to land. It returns when `NODESLIDE_MODEL_PRICING` does.
- *
- * `convex/nodeslideBudgetWiring.test.ts` asserts this module exports no
- * `reserve`, so a future price landing cannot quietly re-add a half-quoted one.
+ * Every refusal is a coded `NodeSlideBudgetLedgerError` carrying the preflight's
+ * own reason code and a sentence a human can read — never a bare throw, and
+ * never a silent zero-cost reservation. `pricing_unknown` is kept distinct from
+ * `budget_exceeded` because they are different facts about the run: one says the
+ * route cannot be priced at all, the other says it can and does not fit.
  */
+export const reserve = internalMutation({
+  args: {
+    budgetId: v.string(),
+    callId: v.string(),
+    model: v.string(),
+    estimatedInputTokens: v.number(),
+    requestedMaxOutputTokens: v.number(),
+    ...expectedStateValidator,
+  },
+  handler: async (ctx, args) => {
+    assertNodeSlideLedgerKey('budgetId', args.budgetId);
+    assertNodeSlideLedgerKey('callId', args.callId);
+    const operationDigest = nodeSlideBillableCallReservationDigest(args);
+    const existingCall = await findCall(ctx, args.budgetId, args.callId);
+    if (existingCall) {
+      if (existingCall.reservationDigest !== operationDigest) {
+        throw new NodeSlideBudgetLedgerError(
+          'call_idempotency_conflict',
+          'call id is already bound to a different reservation',
+        );
+      }
+      const budget = await requireBudget(ctx, args.budgetId);
+      return present(budget, existingCall);
+    }
+
+    const row = await requireBudget(ctx, args.budgetId);
+    const state = stateFromRow(row);
+    assertOpenAndExpected(state, args.expectedRevision, args.expectedStateDigest);
+    const decision = preflightNodeSlideRunBudget({
+      state: nodeSlidePreflightStateFromLedger(state),
+      model: args.model,
+      estimatedInputTokens: args.estimatedInputTokens,
+      requestedMaxOutputTokens: args.requestedMaxOutputTokens,
+    });
+    if (!decision.ok) {
+      throw new NodeSlideBudgetLedgerError(
+        decision.reason.code === 'pricing_unknown' ? 'pricing_unknown' : 'budget_exceeded',
+        nodeSlideReservationRefusal(args.model, decision.reason),
+      );
+    }
+
+    const nextCost = reserveNodeSlideBudgetCost(
+      costLedgerFromState(state),
+      decision.worstCaseCostMicroUsd,
+    );
+    const transition = advanceBudget(state, {
+      kind: 'reserved',
+      operationDigest,
+      deltas: {
+        actualDeltaMicroUsd: 0,
+        reservedDeltaMicroUsd: decision.worstCaseCostMicroUsd,
+        unreconciledDeltaMicroUsd: 0,
+      },
+      cost: nextCost,
+    });
+    const now = Date.now();
+    await ctx.db.insert('nodeslide_billable_calls', {
+      budgetId: args.budgetId,
+      callId: args.callId,
+      version: NODESLIDE_BILLABLE_CALL_VERSION,
+      status: 'reserved',
+      model: args.model,
+      pricingDigest: nodeSlideBudgetPricingDigest(decision.pricing),
+      quoteMicroUsd: decision.worstCaseCostMicroUsd,
+      estimatedInputTokens: args.estimatedInputTokens,
+      requestedMaxOutputTokens: args.requestedMaxOutputTokens,
+      providerSafeOutputTokenCeiling: decision.providerSafeOutputTokenCeiling,
+      providerTimeoutMs: decision.providerTimeoutMs,
+      reservationDigest: operationDigest,
+      createdAt: now,
+      updatedAt: now,
+    });
+    await persistTransition(ctx, row, transition, now);
+    return present(
+      await requireBudget(ctx, args.budgetId),
+      await requireCall(ctx, args.budgetId, args.callId),
+    );
+  },
+});
+
+/**
+ * A refusal a caller can act on. The reason code is always present so callers
+ * can branch on it, and the sentence after it names the specific limit or the
+ * specific route, so an operator reading a log does not have to reverse-engineer
+ * which ceiling refused the run.
+ */
+function nodeSlideReservationRefusal(
+  model: string,
+  reason: NodeSlideRunBudgetPreflightDenialReason,
+): string {
+  switch (reason.code) {
+    case 'pricing_unknown':
+      return `reservation refused: pricing_unknown — ${nodeSlidePricingRefusalReason(reason.pricing)}`;
+    case 'cost_budget_exceeded':
+      return `reservation refused: cost_budget_exceeded — ${model} needs at least ${reason.inputCostMicroUsd + reason.minimumOutputCostMicroUsd} micro-USD and only ${reason.remainingCostMicroUsd} remains in this run's cap.`;
+    case 'model_context_exceeded':
+      return `reservation refused: model_context_exceeded — the request estimates ${reason.estimatedInputTokens} input tokens and ${model} accepts ${reason.providerContextWindowTokens}.`;
+    case 'estimated_input_exceeds_remaining':
+      return `reservation refused: estimated_input_exceeds_remaining — the request estimates ${reason.estimatedInputTokens} input tokens and ${reason.remainingInputTokens} remain in this run's cap.`;
+    case 'invalid_preflight':
+      return `reservation refused: invalid_preflight — ${reason.field} ${reason.message}.`;
+    case 'state_digest_mismatch':
+      return 'reservation refused: state_digest_mismatch — the budget changed between read and reserve; retry against the current state.';
+    default:
+      return `reservation refused: ${reason.code} — this run has reached one of its hard limits (${reason.used} of ${reason.limit}).`;
+  }
+}
 
 /** Records a provider receipt exactly once, but only within its reservation. */
 export const settle = internalMutation({

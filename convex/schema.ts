@@ -21,7 +21,9 @@ import {
   nodeslidePatchSourceValidator,
   nodeslidePatchStatusValidator,
   nodeslideSlideArchetypeValidator,
+  nodeslideClaimSourceBindingValidator,
   nodeslideSnapshotValidator,
+  nodeslideSourceBindingStatusValidator,
   nodeslideStoredArtifactBindingValidator,
   nodeslideThemeValidator,
   nodeslideValidationIssueValidator,
@@ -780,6 +782,8 @@ export default defineSchema({
     costMicroUsd: v.optional(v.number()),
     inputTokens: v.optional(v.number()),
     outputTokens: v.optional(v.number()),
+    sourceBindingStatus: v.optional(nodeslideSourceBindingStatusValidator),
+    claimSourceBindings: v.optional(v.array(nodeslideClaimSourceBindingValidator)),
     createdAt: v.number(),
     completedAt: v.optional(v.number()),
   })

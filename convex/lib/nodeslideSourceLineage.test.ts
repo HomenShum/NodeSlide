@@ -257,13 +257,7 @@ describe('NodeSlide claim-level source lineage', () => {
     ).toEqual([]);
   });
 
-  // MERGE-BLOCKED (not ported): this asserts on `traceFromRow`, not on this module.
-  // Actual failure when run:
-  //   AssertionError: expected undefined to be 'legacy_unavailable'
-  // This repo's `Trace` type and `nodeslide_traces` table carry no `sourceBindingStatus` /
-  // `claimSourceBindings` fields, so `traceFromRow` has nothing to hydrate. Closing it means a
-  // schema migration on a shipped table plus a shared-type change — an owner decision, not a port.
-  it.skip('hydrates legacy trace evidence as unavailable instead of fabricating a binding', () => {
+  it('hydrates legacy trace evidence as unavailable instead of fabricating a binding', () => {
     const trace = traceFromRow({
       id: 'trace-legacy',
       deckId: 'deck-1',

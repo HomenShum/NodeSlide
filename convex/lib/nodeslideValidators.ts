@@ -1217,3 +1217,22 @@ export const nodeslideVariationDecisionEventValidator = v.union(
   v.literal('variation_selected'),
   v.literal('variation_rejected'),
 );
+
+export const nodeslideSourceBindingStatusValidator = v.union(
+  v.literal('bound'),
+  v.literal('not_applicable'),
+  v.literal('legacy_unavailable'),
+);
+
+export const nodeslideClaimSourceBindingValidator = v.object({
+  operationIndex: v.number(),
+  operation: v.union(
+    v.literal('replace_text'),
+    v.literal('update_chart'),
+    v.literal('add_element'),
+  ),
+  slideId: v.string(),
+  elementId: v.string(),
+  sourceIds: v.array(v.string()),
+  claimDigest: v.string(),
+});

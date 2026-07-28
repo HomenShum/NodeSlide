@@ -7,35 +7,41 @@
  * input-token estimator, the structural ledger-client interface, and the whole
  * request/result/accounting type surface. None of it needs a model price.
  *
- * WITHHELD — three exports, for TWO independent reasons:
+ * WITHHELD — exactly one export, for exactly one reason:
  *
- *   1. `callNodeSlideBudgetedJson` — PRICING. It is the reserve-before-dispatch
- *      engine: it calls `nodeSlideModelPricing()` to quote the reservation and
- *      `scoreNodeSlideWorstCaseCost()` to check the settled receipt against that
- *      quote. Both are withheld from `shared/nodeslideRunBudget.ts` pending an
- *      owner pricing decision; see that file's header.
+ *   `callNodeSlideBudgetedJson` — PRICING. It is the reserve-before-dispatch
+ *   engine: it calls `nodeSlideModelPricing()` to quote the reservation and
+ *   `scoreNodeSlideWorstCaseCost()` to check the settled receipt against that
+ *   quote. Both are withheld from `shared/nodeslideRunBudget.ts` pending an
+ *   owner pricing decision; see that file's header. Nothing here invents a
+ *   price to route around that.
  *
- *   2. `NodeSlideBudgetedProviderCall` and `NodeSlideBudgetedProviderDependencies`
- *      — MODULE DIVERGENCE, not pricing. Both are typed in terms of
- *      `NodeSlideDispatchPolicy`, which this repository's `./nodeslideProvider`
- *      does not export (TS2305). That type could be copied across in one
- *      additive block with no name collision — and doing so would be a lie.
- *      `NodeSlideDispatchPolicy` is not a payload, it is the enforcement channel:
- *      parity's `callNodeSlideFreeJson` reads `dependencies.dispatchPolicy` and
- *      clamps `maxOutputTokens` and `timeoutMs` with it, which is precisely how a
- *      budget-derived ceiling reaches the wire. This repository's
- *      `NodeSlideProviderDependencies` has no `dispatchPolicy` member at all — it
- *      honours a bare `timeoutMs`. Landing the type alone would compile, run, and
- *      silently drop every budget-derived output and timeout ceiling on the
- *      floor: the same failure class as an invented price, reached from the other
- *      direction. Making it true means teaching this repository's 862-line
- *      `callNodeSlideFreeJson` a new dispatch contract, i.e. editing a
- *      destination module to accept parity's shape. Refused on both counts.
+ * PREVIOUSLY WITHHELD, now landed: `NodeSlideBudgetedProviderCall` and
+ * `NodeSlideBudgetedProviderDependencies`. Both are typed in terms of
+ * `NodeSlideDispatchPolicy`, which `./nodeslideProvider` did not export. The
+ * earlier refusal was correct at the time and for the right reason: the type is
+ * not a payload, it is the enforcement channel, and landing the shape while
+ * `callNodeSlideFreeJson` ignored it would have silently dropped every
+ * budget-derived output and timeout ceiling on the floor — the same failure
+ * class as an invented price, reached from the other direction. That is no
+ * longer the situation. `./nodeslideProvider` now exports
+ * `NodeSlideDispatchPolicy`, accepts `dependencies.dispatchPolicy`, and clamps
+ * `maxOutputTokens`, `timeoutMs`, and the paired OpenRouter price ceiling with
+ * it, under test. The shape is therefore backed by the enforcement it names.
+ *
+ * These two types have no in-repo caller yet — their only consumer is the
+ * withheld `callNodeSlideBudgetedJson`. They are landed because a budget-derived
+ * ceiling can now actually reach the wire, not because something needed them to
+ * compile.
  */
 import { NODESLIDE_DEFAULT_AGENT_MODEL } from '../../shared/nodeslide';
 import type { NodeSlideRunBudgetInput } from '../../shared/nodeslideRunBudget';
 import { nodeslideStableId } from './nodeslideIds';
-import type { NodeSlideProviderResult, callNodeSlideFreeJson } from './nodeslideProvider';
+import type {
+  NodeSlideDispatchPolicy,
+  NodeSlideProviderResult,
+  callNodeSlideFreeJson,
+} from './nodeslideProvider';
 
 const MAX_PROVIDER_ATTEMPTS = 2;
 const MAX_REPAIR_CONTEXT_UTF8_BYTES = 24_000 * 4;
@@ -115,6 +121,28 @@ export interface NodeSlideBudgetLedgerClient {
     budgetId: string;
     callId?: string;
   }): Promise<NodeSlideBudgetLedgerView | null>;
+}
+
+/**
+ * The dispatch seam a budgeted call hands to the provider. The policy is
+ * required, not optional: a budgeted dispatch that forgot to carry its ceiling
+ * would be indistinguishable from an unbudgeted one at the call site.
+ */
+export type NodeSlideBudgetedProviderCall = (
+  request: NodeSlideBudgetedJsonRequest,
+  dependencies: {
+    dispatchPolicy: Required<Pick<NodeSlideDispatchPolicy, 'maxOutputTokens' | 'timeoutMs'>> &
+      Pick<
+        NodeSlideDispatchPolicy,
+        'maxInputMicroUsdPerMillionTokens' | 'maxOutputMicroUsdPerMillionTokens'
+      >;
+  },
+) => Promise<NodeSlideProviderResult>;
+
+export interface NodeSlideBudgetedProviderDependencies {
+  ledger: NodeSlideBudgetLedgerClient;
+  provider?: NodeSlideBudgetedProviderCall;
+  now?: () => number;
 }
 
 export interface NodeSlideBudgetedProviderRequest {

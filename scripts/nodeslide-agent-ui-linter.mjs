@@ -2,6 +2,10 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+// The trust-surface census lives in a sibling module because it walks the whole src tree
+// rather than a fixed file list, but it is NOT a second gate: its checks are appended to
+// this list and share this exit code. Two gates over the same rule drift; one does not.
+import { clauseRunMode, trustSurfaceChecks } from './nodeslide-trust-surface-census.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // The AI-Elements composer rewrite split the agent surface across two files: the tab
@@ -107,8 +111,30 @@ const checks = [
   ]),
 ];
 
+const { checks: trustChecks, census } = await trustSurfaceChecks();
+checks.push(...trustChecks);
+
 const failures = checks.filter(([, passed]) => !passed);
-for (const [label, passed] of checks) console.log(`${passed ? 'PASS' : 'FAIL'} ${label}`);
+for (const [label, passed, detail] of checks) {
+  console.log(`${passed ? 'PASS' : 'FAIL'} ${label}`);
+  if (detail && !passed) console.log(`     ${detail}`);
+}
+
+/*
+ * Say what ran and what did not. A gate that prints only PASS lines invites the reader to
+ * believe it covered the whole rule; two of the trust-surface clauses need a real browser and
+ * are reported not-run here rather than being quietly counted as passes. `npm run
+ * lint:nodeslide-trust-surfaces` prints the full census with every enumerated surface.
+ */
+console.log('\nTrust-surface clause coverage:');
+for (const [clause, mode, note] of await clauseRunMode()) {
+  console.log(`  [${mode}] ${clause}`);
+  if (mode === 'NOT-RUN') console.log(`      not-run — ${note}`);
+}
+console.log(
+  `\nTrust-surface census: ${census.annotated.length} enumerated, ` +
+    `${census.notRun.length} not-run, ${census.byComponent.size} components swept`,
+);
 console.log(
   `\nNodeSlide agent-operability checks: ${checks.length - failures.length}/${checks.length}`,
 );

@@ -2144,10 +2144,18 @@
   height: 6px;
   width: 6px;
 }
-.ns-status-dot--ready,
 .ns-status-dot--accepted,
 .ns-status-dot--completed {
   background: var(--ns-positive);
+}
+/*
+ * trust-surfaces clause 2: `ready` used to share this rule with `accepted` and `completed`,
+ * so a proposal that was merely READY TO REVIEW wore the exact success green of one a human
+ * had already accepted — an undecided thing painted in the colour of one outcome. `ready`
+ * gets the attention token instead: it has arrived and it is waiting, which is what it is.
+ */
+.ns-status-dot--ready {
+  background: var(--ns-accent);
 }
 .ns-status-dot--stale,
 .ns-status-dot--failed {
@@ -2309,12 +2317,17 @@
   margin: 0;
   padding: 0;
 }
+/*
+ * trust-surfaces clause 2 / motion-ladder: no transition. This card holds Accept and Reject
+ * on a generated direction; easing its border and shadow animated the surface a human is
+ * deciding at, which is the forbidden-surface rule, not a polish preference. The previewed
+ * and rejected states still change instantly — they just no longer glide into place.
+ */
 .ns-variation-card {
   background: white;
   border: 1px solid var(--ns-line);
   border-radius: 10px;
   padding: 11px;
-  transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 .ns-variation-card.is-previewed {
   border-color: var(--ns-accent);

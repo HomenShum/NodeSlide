@@ -2797,49 +2797,14 @@
   order: 20;
 }
 
-.nodeslide-studio .ns-ai-inline-consent {
-  display: grid;
-  gap: 5px;
-  border-top: 1px solid var(--ns-line-b);
-  margin-top: 0;
-  padding: 5px 7px 7px;
-}
-
-.nodeslide-studio .ns-ai-inline-consent > label {
-  align-items: center;
-  background: transparent;
-  border: 0;
-  border-radius: 6px;
-  color: var(--ns-ink2);
-  cursor: pointer;
-  display: grid;
-  font-size: 10px;
-  gap: 6px;
-  grid-template-columns: auto minmax(0, 1fr);
-  line-height: 1.3;
-  padding: 3px 4px;
-}
-
-.nodeslide-studio .ns-ai-inline-consent > label.is-ready {
-  background: color-mix(in srgb, var(--ns-positive) 7%, var(--ns-raised));
-  border-color: color-mix(in srgb, var(--ns-positive) 28%, var(--ns-line-c));
-}
-
-.nodeslide-studio .ns-ai-inline-consent input {
-  accent-color: var(--ns-accent);
-  margin: 2px 0 0;
-}
-
-.nodeslide-studio .ns-ai-inline-consent span,
-.nodeslide-studio .ns-ai-inline-consent small {
-  display: block;
-}
-
-.nodeslide-studio .ns-ai-inline-consent small {
-  color: var(--ns-faint);
-  font-size: 9px;
-  margin-top: 1px;
-}
+/*
+ * `.ns-ai-inline-consent` was deleted here. It styled the session-scoped consent checkbox that
+ * the zero-friction consent redesign removed; nodeslideV3.test.ts already asserts the class is
+ * never rendered, so these rules had no producer. They are removed rather than recoloured
+ * because the census flagged `> label.is-ready` painting a success tint on a consent row that
+ * had not been given yet — dead code that would have become a live trust-surface violation the
+ * moment anyone reinstated the markup it was waiting for.
+ */
 
 .nodeslide-studio .ns-ai-v3-composer > .ns-ai-attachment-error {
   order: 5;
@@ -4841,10 +4806,6 @@
   }
 
   .nodeslide-studio .ns-ai-v3-policy-summary span:not(.is-scope) {
-    display: none;
-  }
-
-  .nodeslide-studio .ns-ai-inline-consent small {
     display: none;
   }
 }

@@ -512,6 +512,13 @@ function CandidateReceipt({
 }) {
   const status = receipt?.status ?? 'unavailable';
   const acceptEnabled = editorCandidateCanAccept(receipt);
+  /*
+   * trust-surfaces clause 1: the Compare footer is the diff-review surface — Accept here
+   * commits the candidate. `undecided` is derived from `editorCandidateCanAccept`, the same
+   * predicate that enables the button, so the DOM posture and the affordance cannot disagree:
+   * a receipt with no matching digest binding offers no decision, and says `none`.
+   */
+  const decision = acceptEnabled ? 'undecided' : 'none';
   return (
     <footer
       className={`ns-candidate-receipt is-${status}`}
@@ -519,6 +526,8 @@ function CandidateReceipt({
       aria-label="Candidate receipt"
       data-candidate-status={status}
       data-testid="candidate-receipt"
+      data-trust-surface="diff-review"
+      data-decision={decision}
     >
       <span>
         Compare · {baselineLabel} → {candidateLabel}

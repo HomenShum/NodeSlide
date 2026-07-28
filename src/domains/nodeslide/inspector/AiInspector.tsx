@@ -1555,6 +1555,11 @@ export function AiInspector<CommandId extends string = string>({
                     // it decides whether NODESLIDE_WEB_RESEARCH_CONSENT rides along on the next
                     // send, and `aria-pressed` carries the current answer.
                     data-agent-web-consent="per-send"
+                    // trust-surfaces clause 1: this is the composer's consent surface, so it is
+                    // enumerated as one. The census requires a `consent` surface to publish
+                    // `data-agent-web-consent`; annotating the same node keeps one writer and
+                    // one owning node for the posture.
+                    data-trust-surface="consent"
                   >
                     <Globe2 size={14} />
                   </PromptInputButton>
@@ -1765,6 +1770,21 @@ function VariationCard({
     !variation.validation.issues.some((issue) => issue.severity === 'error');
   const reviewable = variation.status === 'ready' && validationClean;
   const previewable = variation.status === 'ready' && validationClean;
+  /*
+   * trust-surfaces clause 1: this card carries Preview / Accept / Reject on a generated
+   * direction, so the decision it holds belongs in the DOM and not only in the variation
+   * store. `stale` maps to `none` rather than to a decision: a stale direction cannot be
+   * accepted or rejected any more, it has to be regenerated, and calling that "undecided"
+   * would advertise a choice the buttons no longer offer.
+   */
+  const decision =
+    variation.status === 'ready'
+      ? 'undecided'
+      : variation.status === 'accepted'
+        ? 'accepted'
+        : variation.status === 'rejected'
+          ? 'rejected'
+          : 'none';
   return (
     <li
       ref={focusRef}
@@ -1772,6 +1792,8 @@ function VariationCard({
       className={`ns-variation-card is-${variation.status} ${previewed ? 'is-previewed' : ''}`}
       data-testid="variation-card"
       data-variation-id={variation.id}
+      data-trust-surface="diff-review"
+      data-decision={decision}
     >
       <div className="ns-variation-card-topline">
         <span className={`ns-status-dot ns-status-dot--${variation.status}`} />
@@ -1906,11 +1928,27 @@ function ProposalCard({
   const candidateValidation =
     patch.candidateValidation?.patchId === patch.id ? patch.candidateValidation : undefined;
   const previewAvailable = patch.status === 'ready' && Boolean(onPreview);
+  /*
+   * trust-surfaces clause 1: the Accept button is enabled on exactly `ready`, so `undecided`
+   * is derived from the same condition rather than restated — the attribute and the affordance
+   * cannot drift apart. `draft` / `validating` / `stale` are `none`: nothing is offered to
+   * decide yet, or the offer has expired.
+   */
+  const decision =
+    patch.status === 'ready'
+      ? 'undecided'
+      : patch.status === 'accepted'
+        ? 'accepted'
+        : patch.status === 'rejected'
+          ? 'rejected'
+          : 'none';
   return (
     <article
       className={`ns-proposal-card ${stale ? 'is-stale' : ''} ${previewed ? 'is-previewed' : ''}`}
       data-testid="proposal-card"
       data-proposal-id={patch.id}
+      data-trust-surface="proposal"
+      data-decision={decision}
     >
       <div className="ns-proposal-topline">
         <span className={`ns-status-dot ns-status-dot--${patch.status}`} />

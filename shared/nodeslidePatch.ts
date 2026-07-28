@@ -1,32 +1,5 @@
 /**
  * Deck patch scope validation and application.
- *
- * WITHHELD — one export: `validatedThemeUpdate`, and with it the
- * `update_theme_v1` operation it exists to validate. NOT because the function
- * is hard to copy (it is 35 lines of pure validation) and NOT for pricing.
- *
- * `validatedThemeUpdate` is only reachable through a `PatchOperation` variant
- * that this repository's union does not have. Landing the function alone would
- * be dead code; landing the variant is a cross-cutting change that does not fit
- * inside this branch's ownership. Measured, not assumed — adding
- * `{ op: 'update_theme_v1'; properties: {...} }` to `PatchOperation` in
- * `shared/nodeslide.ts` produces 17 typecheck errors across three owners:
- *
- *   - convex/lib (12, mine): nodeslidePatches.ts narrowing sites and
- *     nodeslidePropagation.ts, plus the Convex argument validator in
- *     nodeslideValidators.ts, which enumerates every op as a v.literal and is
- *     the real persistence boundary — a theme op that is valid TypeScript but
- *     absent from that validator is rejected at the wire.
- *   - convex/nodeslide.ts (1, another agent's file this branch may not touch).
- *   - src/domains/** (4, a different session's): EditorCanvasModes.tsx,
- *     SlideNavigator.tsx, AiInspector.tsx and NodeSlideStudio.tsx all narrow
- *     `update_deck` explicitly and then fall through to `operation.slideId`.
- *     A theme op has no slideId, so each would target `undefined`.
- *
- * That last group is the reason this is refused rather than partially done:
- * those four sites have no exhaustiveness guard, so a version of this change
- * that satisfied only the compilers I own would ship an operation the editor UI
- * silently mis-targets. Landing it needs one change across all three owners.
  */
 import {
   type DeckPatch,
@@ -40,8 +13,10 @@ import {
   type PatchScope,
   type Slide,
   type SlideElement,
+  type ThemeSpec,
   clampNormalized,
   operationElementIds,
+  unhandledPatchOperation,
 } from './nodeslide';
 
 const MAX_DECK_TITLE_LENGTH = 160;
@@ -73,7 +48,7 @@ export function validatePatchScope(
     const targetSlideId =
       operation.op === 'add_slide'
         ? operation.slide.id
-        : operation.op === 'update_deck'
+        : operation.op === 'update_deck' || operation.op === 'update_theme_v1'
           ? null
           : operation.slideId;
     if (allowedSlides && targetSlideId !== null && !allowedSlides.has(targetSlideId)) {
@@ -104,6 +79,13 @@ export function validatePatchScope(
     ) {
       errors.push('update_deck requires deck scope with unrestricted mode.');
     }
+    if (
+      operation.op === 'update_theme_v1' &&
+      (scope.kind !== 'deck' ||
+        (scope.operationMode !== 'unrestricted' && scope.operationMode !== 'style'))
+    ) {
+      errors.push('update_theme_v1 requires deck scope in unrestricted or style mode.');
+    }
 
     if (scope.operationMode === 'copy' && operation.op !== 'replace_text') {
       errors.push(`Copy-only scope does not permit ${operation.op}.`);
@@ -111,7 +93,8 @@ export function validatePatchScope(
     if (
       scope.operationMode === 'style' &&
       operation.op !== 'update_style' &&
-      operation.op !== 'set_visibility_v1'
+      operation.op !== 'set_visibility_v1' &&
+      operation.op !== 'update_theme_v1'
     ) {
       errors.push(`Style-only scope does not permit ${operation.op}.`);
     }
@@ -170,6 +153,11 @@ export function applyDeckPatch(
       continue;
     }
 
+    if (operation.op === 'update_theme_v1') {
+      deck.theme = validatedThemeUpdate(deck.theme, operation.properties);
+      continue;
+    }
+
     if (operation.op === 'add_slide') {
       if (operation.elements.length > NODESLIDE_ADD_SLIDE_ELEMENT_LIMIT) {
         throw new Error(
@@ -217,6 +205,11 @@ export function applyDeckPatch(
       affectedSlideIds.add(addedSlide.id);
       for (const element of addedElements) affectedElementIds.add(element.id);
       continue;
+    }
+
+    if (!('slideId' in operation)) {
+      // Exhaustiveness guard: every deck-level operation must be handled above.
+      throw new Error(`Unhandled deck-level operation ${unhandledPatchOperation(operation)}.`);
     }
 
     affectedSlideIds.add(operation.slideId);
@@ -627,6 +620,49 @@ function validatedDeckTitle(value: string | undefined): string {
     throw new Error(`Deck title cannot exceed ${MAX_DECK_TITLE_LENGTH} characters.`);
   }
   return title;
+}
+
+const THEME_HEX_COLOR = /^#[0-9a-f]{6}$/i;
+const MAX_THEME_FONT_LENGTH = 80;
+
+export function validatedThemeUpdate(
+  theme: ThemeSpec,
+  properties: Extract<PatchOperation, { op: 'update_theme_v1' }>['properties'],
+): ThemeSpec {
+  const colorEntries = Object.entries(properties.colors ?? {});
+  const typographyEntries = Object.entries(properties.typography ?? {});
+  if (
+    properties.mode === undefined &&
+    colorEntries.length === 0 &&
+    typographyEntries.length === 0
+  ) {
+    throw new Error('update_theme_v1 requires at least one mode, color, or typography change.');
+  }
+  for (const [key, value] of colorEntries) {
+    if (!(key in theme.colors)) throw new Error(`Unknown theme color "${key}".`);
+    if (typeof value !== 'string' || !THEME_HEX_COLOR.test(value)) {
+      throw new Error(`Theme color "${key}" must be a #rrggbb hex value.`);
+    }
+  }
+  for (const [key, value] of typographyEntries) {
+    if (!(key in theme.typography)) throw new Error(`Unknown theme typography slot "${key}".`);
+    if (typeof value !== 'string' || !value.trim() || value.length > MAX_THEME_FONT_LENGTH) {
+      throw new Error(`Theme typography "${key}" must be 1-${MAX_THEME_FONT_LENGTH} characters.`);
+    }
+  }
+  if (properties.mode !== undefined && properties.mode !== 'light' && properties.mode !== 'dark') {
+    throw new Error('Theme mode must be "light" or "dark".');
+  }
+  const next: ThemeSpec = {
+    ...theme,
+    ...(properties.mode !== undefined ? { mode: properties.mode } : {}),
+    colors: { ...theme.colors, ...(properties.colors ?? {}) },
+    typography: { ...theme.typography, ...(properties.typography ?? {}) },
+  };
+  if (JSON.stringify(next) === JSON.stringify(theme)) {
+    throw new Error('update_theme_v1 must change the theme.');
+  }
+  return next;
 }
 
 function normalizeBox(bbox: SlideElement['bbox']): SlideElement['bbox'] {

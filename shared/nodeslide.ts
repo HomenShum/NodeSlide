@@ -729,7 +729,15 @@ export type PatchOperation =
       slideId: string;
       properties: Partial<Pick<Slide, 'title' | 'notes' | 'background'>>;
     }
-  | { op: 'update_deck'; properties: { title?: string } };
+  | { op: 'update_deck'; properties: { title?: string } }
+  | {
+      op: 'update_theme_v1';
+      properties: {
+        mode?: ThemeSpec['mode'];
+        colors?: Partial<ThemeSpec['colors']>;
+        typography?: Partial<ThemeSpec['typography']>;
+      };
+    };
 
 export interface DeckPatch {
   id: string;
@@ -1381,6 +1389,7 @@ export function isElementOperation(
   | { op: 'reorder_slide' }
   | { op: 'update_slide' }
   | { op: 'update_deck' }
+  | { op: 'update_theme_v1' }
   | { op: 'group_elements_v1' }
   | { op: 'ungroup_elements_v1' }
 > {
@@ -1390,9 +1399,67 @@ export function isElementOperation(
     operation.op !== 'reorder_slide' &&
     operation.op !== 'update_slide' &&
     operation.op !== 'update_deck' &&
+    operation.op !== 'update_theme_v1' &&
     operation.op !== 'group_elements_v1' &&
     operation.op !== 'ungroup_elements_v1'
   );
+}
+
+/**
+ * Compile-time exhaustiveness guard for `PatchOperation` narrowing chains.
+ *
+ * Every site that narrows the deck-level operations away and then reads
+ * `operation.slideId` must dead-end in a call to this. Adding a member to
+ * `PatchOperation` that the site does not handle makes the argument stop being
+ * assignable to `never`, so the call fails to compile *at that site*, naming the
+ * unhandled member — instead of the site quietly targeting `undefined` (or, at
+ * best, producing a "Property 'slideId' does not exist" error several lines away
+ * from the decision that actually needs revisiting).
+ *
+ * It never throws, so it is safe on a React render path: if unvalidated data
+ * ever carries an op this build does not know about, callers get the raw op name
+ * back and degrade visibly rather than crashing or silently showing nothing.
+ */
+/**
+ * The canonical runtime enumeration of `PatchOperation['op']`.
+ *
+ * `satisfies Record<PatchOperation['op'], true>` makes it compile-time exhaustive:
+ * adding a member to the `PatchOperation` union fails to compile here until the
+ * op is listed. Wire boundaries that must enumerate ops at runtime (the external
+ * agent's argument validator, the external change-set normalizer) derive their
+ * allowlists from this instead of keeping a hand-maintained copy that can silently
+ * fall behind the type. The Convex argument validator cannot import it — Convex
+ * validators are built from `v.literal` objects, not a list — so it is checked
+ * against this table by test instead.
+ */
+const NODESLIDE_PATCH_OPERATION_OP_TABLE = {
+  move: true,
+  resize: true,
+  replace_text: true,
+  update_style: true,
+  update_chart: true,
+  update_image: true,
+  add_element: true,
+  remove_element: true,
+  set_visibility_v1: true,
+  group_elements_v1: true,
+  ungroup_elements_v1: true,
+  reorder_element_v1: true,
+  add_slide: true,
+  remove_slide: true,
+  reorder_slide: true,
+  update_slide: true,
+  update_deck: true,
+  update_theme_v1: true,
+} satisfies Record<PatchOperation['op'], true>;
+
+export const NODESLIDE_PATCH_OPERATION_OPS = Object.keys(
+  NODESLIDE_PATCH_OPERATION_OP_TABLE,
+) as PatchOperation['op'][];
+
+export function unhandledPatchOperation(operation: never): string {
+  const op: unknown = (operation as { op?: unknown } | null | undefined)?.op;
+  return typeof op === 'string' && op ? op : 'unknown_operation';
 }
 
 export function operationElementIds(operation: PatchOperation): string[] {

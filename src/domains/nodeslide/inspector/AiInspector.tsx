@@ -1445,6 +1445,14 @@ export function AiInspector<CommandId extends string = string>({
                     tooltip="Search the web and persist source snapshots before planning"
                     aria-label="Toggle web research"
                     data-testid="ai-web-research-toggle"
+                    // Machine-readable consent posture. Zero-friction consent removed the
+                    // session-scoped checkbox (see `providerConsent` above), which also removed
+                    // the only DOM signal telling an agent HOW egress is authorized here — the
+                    // posture became invisible even though the product still enforces it. The
+                    // value is "per-send", not "session": this toggle grants nothing durable,
+                    // it decides whether NODESLIDE_WEB_RESEARCH_CONSENT rides along on the next
+                    // send, and `aria-pressed` carries the current answer.
+                    data-agent-web-consent="per-send"
                   >
                     <Globe2 size={14} />
                   </PromptInputButton>

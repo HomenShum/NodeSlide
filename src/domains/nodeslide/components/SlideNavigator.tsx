@@ -33,6 +33,7 @@ import type {
   ValidationIssue,
   ValidationResult,
 } from '../../../../shared/nodeslide';
+import { unhandledPatchOperation } from '../../../../shared/nodeslide';
 import './editorShell.css';
 import { SlideRenderer } from './SlideRenderer';
 
@@ -905,8 +906,12 @@ function patchTouchesSlide(patch: DeckPatch, slideId: string) {
   if ('slideIds' in patch.scope && patch.scope.slideIds.includes(slideId)) return true;
   return patch.operations.some((operation) => {
     if (operation.op === 'add_slide') return operation.slide.id === slideId;
-    if (operation.op === 'update_deck') return false;
-    return operation.slideId === slideId;
+    if (operation.op === 'update_deck' || operation.op === 'update_theme_v1') return false;
+    if ('slideId' in operation) return operation.slideId === slideId;
+    // Exhaustiveness guard: a new deck-level operation must decide above whether
+    // it touches a slide, rather than comparing an undefined slideId.
+    unhandledPatchOperation(operation);
+    return false;
   });
 }
 

@@ -70,6 +70,7 @@ import {
   nodeSlideDefaultModelForProviderMode,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
+  unhandledPatchOperation,
 } from '../../../../shared/nodeslide';
 import type { SlideVariation } from '../../../../shared/nodeslideVariation';
 import { NodeSlideConnectionsDialog } from '../components/NodeSlideConnectionsDialog';
@@ -2324,7 +2325,11 @@ function describeOperation(operation: PatchOperation) {
     return `Add ${operation.element.kind} “${operation.element.name}”`;
   if (operation.op === 'remove_element') return `Remove ${operation.elementId}`;
   if (operation.op === 'reorder_slide') return `Move slide to position ${operation.index + 1}`;
-  return `Update slide ${operation.slideId}`;
+  if (operation.op === 'update_theme_v1') return 'Update deck theme';
+  if ('slideId' in operation) return `Update slide ${operation.slideId}`;
+  // Exhaustiveness guard: a new deck-level operation must get its own sentence
+  // above rather than being described against an undefined slide.
+  return `Update ${unhandledPatchOperation(operation).replaceAll('_', ' ')}`;
 }
 
 function truncateOperationText(value: string) {

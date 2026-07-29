@@ -1,8 +1,8 @@
 {
   "schema": "nodeslide.trust-surface-runtime-probe/v1",
-  "generatedAt": "2026-07-28T22:25:09.053Z",
+  "generatedAt": "2026-07-28T23:48:25.680Z",
   "baseUrl": "https://nodeslide.vercel.app",
-  "buildSha": "2772cab4507d8c379e8321b698fddac5fd8f5db7",
+  "buildSha": "7eb1490187128619261faa7ccd6703ad0b09e066",
   "knockout": {
     "injected": false
   },
@@ -49,24 +49,38 @@
       "kind": "consent",
       "requires": "the AI inspector tab on an open deck",
       "reached": true,
-      "reachedAtStage": "sample-deck",
+      "reachedAtStage": "ai-tab",
       "declaredState": "per-send",
       "clauses": {
         "A_noAnimationOnDecisionAffordance": {
           "clause": "A",
-          "verdict": "failed",
-          "reason": "computed motion: button.shrink-0.justify-center.rounded-md[data-testid=ai-web-research-toggle] transition:all/0.15s animation:none/0s ;; (declared state data-agent-web-consent=\"per-send\")",
+          "verdict": "passed",
+          "reason": "1 node(s) inspected; 1 carry a transition on a decision-implying property, and every endpoint reachable without a state change is neutral: button.shrink-0.justify-center.rounded-md[data-testid=ai-web-research-toggle] :hover background-color=oklch(0.96 0.015 75) | button.shrink-0.justify-center.rounded-md[data-testid=ai-web-research-toggle] :hover color=oklch(0.22 0.025 50). Accept appearances compared against: --ns-positive=rgb(4, 120, 87) --primary=oklch(0.62 0.16 35) --color-accent=oklch(0.62 0.16 35)",
           "observed": {
             "state": "per-send",
-            "running": [],
-            "declared": [
+            "neutralEndpoints": [
               {
                 "node": "button.shrink-0.justify-center.rounded-md[data-testid=ai-web-research-toggle]",
-                "transitionProperty": "all",
-                "transitionDuration": "0.15s",
-                "animationName": "none",
-                "animationDuration": "0s",
-                "animationIterationCount": "1"
+                "pseudo": "hover",
+                "property": "background-color",
+                "value": "oklch(0.96 0.015 75)"
+              },
+              {
+                "node": "button.shrink-0.justify-center.rounded-md[data-testid=ai-web-research-toggle]",
+                "pseudo": "hover",
+                "property": "color",
+                "value": "oklch(0.22 0.025 50)"
+              }
+            ],
+            "acceptAppearances": {
+              "--ns-positive": "rgb(4, 120, 87)",
+              "--primary": "oklch(0.62 0.16 35)",
+              "--color-accent": "oklch(0.62 0.16 35)"
+            },
+            "decisionTransitions": [
+              {
+                "node": "button.shrink-0.justify-center.rounded-md[data-testid=ai-web-research-toggle]",
+                "transitions": "background background-color color fill opacity transform"
               }
             ]
           }
@@ -109,23 +123,23 @@
       "kind": "failed-state",
       "requires": "a deck CI result (or an in-flight check) on the AI tab; the readout is not mounted at all until `deckCiResult !== undefined || deckCiLoading`",
       "reached": true,
-      "reachedAtStage": "sample-deck",
-      "declaredState": "loading",
+      "reachedAtStage": "ai-tab",
+      "declaredState": "pass",
       "clauses": {
         "A_noAnimationOnDecisionAffordance": {
           "clause": "A",
           "verdict": "not-applicable",
-          "reason": "failed-state surface observed in data-state=\"loading\"; the motion ban applies to its failure states",
+          "reason": "failed-state surface observed in data-state=\"pass\"; the motion ban applies to its failure states",
           "observed": {
-            "state": "loading"
+            "state": "pass"
           }
         },
         "B_noSuccessTokenOnPending": {
           "clause": "B",
           "verdict": "not-applicable",
-          "reason": "surface reached in data-state=\"loading\", not a pending state; the pending-paint clause had nothing pending to read",
+          "reason": "surface reached in data-state=\"pass\", not a pending state; the pending-paint clause had nothing pending to read",
           "observed": {
-            "state": "loading",
+            "state": "pass",
             "resolvedTokens": {
               "--ns-positive": "rgb(4, 120, 87)"
             }
@@ -134,20 +148,20 @@
         "C_declaredStateMatchesRendered": {
           "clause": "C",
           "verdict": "passed",
-          "reason": "declared data-state=\"loading\"; paint, copy all agree",
+          "reason": "declared data-state=\"pass\"; paint, copy all agree",
           "observed": {
-            "state": "loading",
+            "state": "pass",
             "statusChecked": null,
-            "text": "Deck CIChecking"
+            "text": "Deck CIPassed0 blockers · 0 warnings"
           }
         },
         "D_reducedMotionCollapsesToFinalState": {
           "clause": "D",
-          "verdict": "not-run",
-          "reason": "surface was still settling: data-state read \"loading\" before the reduced-motion window and \"pass\" after it, with motion allowed both times. Any difference observed under reduce would be the passage of time, not the preference.",
+          "verdict": "passed",
+          "reason": "identical declared state, paint and copy under reduce; no animation running or declared (5 nodes compared)",
           "observed": {
-            "before": "loading",
-            "afterState": "pass"
+            "state": "pass",
+            "reducedState": "pass"
           }
         }
       }
@@ -164,10 +178,11 @@
         "A_noAnimationOnDecisionAffordance": {
           "clause": "A",
           "verdict": "passed",
-          "reason": "3 node(s) inspected: no running animation, no non-zero transition or named animation in the computed cascade",
+          "reason": "3 node(s) inspected: no animation, and no transition on a decision-implying property",
           "observed": {
             "state": "none",
-            "nodesInspected": 3
+            "nodesInspected": 3,
+            "neutralTransitions": []
           }
         },
         "B_noSuccessTokenOnPending": {
@@ -214,10 +229,11 @@
         "A_noAnimationOnDecisionAffordance": {
           "clause": "A",
           "verdict": "passed",
-          "reason": "3 node(s) inspected: no running animation, no non-zero transition or named animation in the computed cascade",
+          "reason": "3 node(s) inspected: no animation, and no transition on a decision-implying property",
           "observed": {
             "state": "none",
-            "nodesInspected": 3
+            "nodesInspected": 3,
+            "neutralTransitions": []
           }
         },
         "B_noSuccessTokenOnPending": {
@@ -238,7 +254,7 @@
           "observed": {
             "state": "none",
             "statusChecked": null,
-            "text": "{ \"bbox\": { \"height\": 0.83, \"width\": 0.008, \"x\": 0.035, \"y\": 0.065 }, \"exportCapabilities\": [ \"web_native\", \"pptx_editable\", \"google_importable\" ], \"id\": \"element_30ec0f872e638f4bf249d064d1a6856c\", \"kind\": \"shape\", \"locked\": true, \"name\": \"Accent rail\", \"role\": \"decoration\", \"rotation\": 0, \"slideId\": \"slide_b8982ae36d96b33259340b6c71a2aef6\", \"sourceIds\": [], \"style\": { \"fill\": \"#B44A2D\", \"radius\":"
+            "text": "{ \"bbox\": { \"height\": 0.83, \"width\": 0.008, \"x\": 0.035, \"y\": 0.065 }, \"exportCapabilities\": [ \"web_native\", \"pptx_editable\", \"google_importable\" ], \"id\": \"element_67a4c39f4cddd1b2fb3160aa9169b23e\", \"kind\": \"shape\", \"locked\": true, \"name\": \"Accent rail\", \"role\": \"decoration\", \"rotation\": 0, \"slideId\": \"slide_74f4c37afa1d36f0bc02ccea7a683995\", \"sourceIds\": [], \"style\": { \"fill\": \"#B44A2D\", \"radius\":"
           }
         },
         "D_reducedMotionCollapsesToFinalState": {
@@ -419,10 +435,11 @@
         "A_noAnimationOnDecisionAffordance": {
           "clause": "A",
           "verdict": "passed",
-          "reason": "2 node(s) inspected: no running animation, no non-zero transition or named animation in the computed cascade",
+          "reason": "2 node(s) inspected: no animation, and no transition on a decision-implying property",
           "observed": {
             "state": "none",
-            "nodesInspected": 2
+            "nodesInspected": 2,
+            "neutralTransitions": []
           }
         },
         "B_noSuccessTokenOnPending": {
@@ -460,16 +477,14 @@
   ],
   "summary": {
     "tally": {
-      "passed": 12,
-      "failed": 1,
-      "not-run": 21,
+      "passed": 14,
+      "failed": 0,
+      "not-run": 20,
       "not-applicable": 6
     },
-    "failures": [
-      "[data-testid=\"ai-web-research-toggle\"] A_noAnimationOnDecisionAffordance: computed motion: button.shrink-0.justify-center.rounded-md[data-testid=ai-web-research-toggle] transition:all/0.15s animation:none/0s ;; (declared state data-agent-web-consent=\"per-send\")"
-    ],
-    "red": true
+    "failures": [],
+    "red": false
   },
-  "red": true,
+  "red": false,
   "scope": "Web surfaces only. This probe observes a browser; it proves nothing about whether a PPTX export carries an active timing structure."
 }

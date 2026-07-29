@@ -30,6 +30,7 @@ import {
 } from './_generated/server';
 import { requireOwnerAccess } from './lib/nodeslideAccess';
 import { loadNodeSlideSnapshot } from './lib/nodeslideData';
+import { redactNodeSlideErrorText } from './lib/nodeslideErrorRedaction';
 import { resolveNodeSlideGoogleOAuthConfig } from './lib/nodeslideGoogleOAuth';
 import {
   NodeSlideGoogleRuntimeError,
@@ -753,8 +754,8 @@ export const attachState = internalMutation({
       baselineJson: args.baselineJson,
       baselineDigest: args.baselineDigest,
       baselineRemoteRevision: args.baselineRemoteRevision,
-      ...(args.errorCode ? { errorCode: args.errorCode } : {}),
-      ...(args.errorMessage ? { errorMessage: args.errorMessage } : {}),
+      ...(args.errorCode ? { errorCode: boundedError(args.errorCode) } : {}),
+      ...(args.errorMessage ? { errorMessage: boundedError(args.errorMessage) } : {}),
       updatedAt: now,
     };
     if (existing) {
@@ -766,8 +767,8 @@ export const attachState = internalMutation({
         pendingPatchId: undefined,
         lastReceiptJson: undefined,
         lastReceiptDigest: undefined,
-        errorCode: args.errorCode,
-        errorMessage: args.errorMessage,
+        errorCode: boundedErrorOrUndefined(args.errorCode),
+        errorMessage: boundedErrorOrUndefined(args.errorMessage),
       });
       const updated = await ctx.db.get(existing._id);
       if (!updated) throw new Error('Google Slides runtime state is unavailable.');
@@ -861,8 +862,8 @@ export const recordPlan = internalMutation({
       pendingPlanJson: args.planJson,
       pendingPlanDigest: args.planDigest,
       pendingPatchId: args.patchId,
-      errorCode: args.errorCode,
-      errorMessage: args.errorMessage,
+      errorCode: boundedErrorOrUndefined(args.errorCode),
+      errorMessage: boundedErrorOrUndefined(args.errorMessage),
       updatedAt: Date.now(),
     };
     await ctx.db.patch(state._id, patch);
@@ -971,7 +972,7 @@ export const recordFailure = internalMutation({
     const patch = {
       status,
       stateVersion: state.stateVersion + 1,
-      errorCode: args.errorCode,
+      errorCode: boundedError(args.errorCode),
       errorMessage: boundedError(args.errorMessage),
       updatedAt: Date.now(),
     };
@@ -1384,6 +1385,17 @@ function conflictCode(code: string): boolean {
   );
 }
 
+/**
+ * The Google runtime is the highest-value sink after the job row: the caller
+ * holds an OAuth access token and googleapis errors quote request context. The
+ * scrub runs before the bound for the same reason it does on the job row — a
+ * bound decides how much of a credential survives, not whether it does.
+ */
 function boundedError(message: string): string {
-  return message.replace(/\s+/gu, ' ').trim().slice(0, 320) || 'Google Slides operation failed.';
+  return redactNodeSlideErrorText(message, 320, 'Google Slides operation failed.');
+}
+
+/** Same scrub for the optional writers, which must be able to clear the field. */
+function boundedErrorOrUndefined(message: string | undefined): string | undefined {
+  return message === undefined ? undefined : boundedError(message);
 }

@@ -82,6 +82,7 @@ import {
   normalizeNodeSlideDataAttachment,
 } from './lib/nodeslideDataAttachment';
 import { forkNodeSlideSnapshot } from './lib/nodeslideDeckFork';
+import { redactNodeSlideErrorText } from './lib/nodeslideErrorRedaction';
 import {
   NODESLIDE_EXECUTION_TRACE_LIMIT_PER_DECK,
   type NodeSlideExecutionTrace,
@@ -2590,7 +2591,10 @@ export const markAgentTelemetryExportInternal = internalMutation({
       otelExportedAt: Date.now(),
       ...(args.error
         ? {
-            otelExportError: requiredText(args.error, 'OTLP export error', 300),
+            // The exporter's caught error is an HTTP client failure; those
+            // quote the request, and the request carries an Authorization
+            // header. Scrub before the bound, never the other way round.
+            otelExportError: redactNodeSlideErrorText(args.error, 300, 'The OTLP export failed.'),
           }
         : {}),
     });
@@ -2934,7 +2938,15 @@ export const recordEvidenceCaptureInternal = internalMutation({
         phase: step.phase,
         label: step.label,
         status: step.status,
-        ...(step.detail ? { detail: requiredText(step.detail, 'evidence detail', 1000) } : {}),
+        // Not name-derivable as an error field, but it carries the provider's
+        // failure reason whenever step.status is 'error' — the same text as
+        // nodeslide_evidence_captures.error under a name the contract's rule
+        // cannot see. Declared by hand in NODESLIDE_PERSISTED_ERROR_FIELDS.
+        ...(step.detail
+          ? {
+              detail: redactNodeSlideErrorText(step.detail, 1_000, 'No detail was recorded.'),
+            }
+          : {}),
         ...(step.screenshotStorageId
           ? { screenshotStorageId: step.screenshotStorageId, attachmentKind: 'screenshot' as const }
           : {}),
@@ -2995,7 +3007,11 @@ export const recordEvidenceCaptureInternal = internalMutation({
       goal: requiredText(args.goal, 'evidence goal', 500),
       provider: requiredText(args.provider, 'evidence provider', 80),
       status: args.status,
-      ...(args.error ? { error: requiredText(args.error, 'evidence error', 500) } : {}),
+      ...(args.error
+        ? {
+            error: redactNodeSlideErrorText(args.error, 500, 'The evidence capture failed.'),
+          }
+        : {}),
       ...(args.contentDigest ? { contentDigest: args.contentDigest.slice(0, 180) } : {}),
       stepCount: preparedSteps.length,
       screenshotCount,
@@ -3281,7 +3297,9 @@ export const advanceAgentRunInternal = internalMutation({
       ...(terminal ? { completedAt: now } : {}),
       ...(args.patchId ? { patchId: args.patchId } : {}),
       ...(args.traceId ? { traceId: args.traceId } : {}),
-      ...(args.error ? { error: requiredText(args.error, 'run error', 600) } : {}),
+      ...(args.error
+        ? { error: redactNodeSlideErrorText(args.error, 600, 'The agent run failed.') }
+        : {}),
     });
     if (args.status === 'awaiting_review' || terminal) {
       await interruptOpenAssistantStreams(ctx, args.runId, now);

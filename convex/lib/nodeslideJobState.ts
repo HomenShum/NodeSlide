@@ -1,3 +1,4 @@
+import { redactNodeSlideErrorText } from './nodeslideErrorRedaction';
 import { nodeslideContentDigest } from './nodeslideIds';
 import type { NodeSlideJobRenderRepairSummary } from './nodeslideLiveRenderRepair';
 import type { NodeSlideJobRoutingReceipt } from './nodeslideRoutingReceipt';
@@ -293,7 +294,11 @@ export function advanceNodeSlideJob(
         ? { memoryDigests: job.memoryDigests }
         : {}),
     ...(update.workflowId ? { workflowId: boundedText(update.workflowId, 256) } : {}),
-    ...(update.error ? { error: boundedText(update.error, 600) } : {}),
+    // Every writer funnels through here — failNodeSlideJob, checkpointInternal,
+    // and the control-plane transitions — so the scrub cannot be skipped by a
+    // caller that forgot it. `boundedText` used to guard this field, which both
+    // left the text unscrubbed and threw on anything over the bound.
+    ...(update.error ? { error: boundedError(update.error) } : {}),
     updatedAt: now,
     ...(terminal ? { completedAt: now } : {}),
   };
@@ -553,9 +558,17 @@ function boundedText(value: string, max: number): string {
   return clean;
 }
 
+/**
+ * The single scrub-and-bound for anything that lands in `nodeslide_agent_jobs.error`.
+ *
+ * The bound used to be the whole of it. That is what made the 2026-07-28 leak
+ * look handled: a Convex `ArgumentValidationError` echoes the rejected argument
+ * object, the object carried `ownerAccessKey`/`executionAccessKey`, and 600
+ * characters was plenty of room for both. The scrub now runs first, so the
+ * slice can only ever cut already-redacted text.
+ */
 function boundedError(value: string): string {
-  const clean = value.replace(/\s+/gu, ' ').trim();
-  return (clean || 'The durable NodeSlide job failed safely.').slice(0, 600);
+  return redactNodeSlideErrorText(value, 600, 'The durable NodeSlide job failed safely.');
 }
 
 function uniqueBounded(values: readonly string[], limit: number): string[] {

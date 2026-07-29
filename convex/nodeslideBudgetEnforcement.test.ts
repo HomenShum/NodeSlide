@@ -22,6 +22,7 @@ import {
   type NodeSlideBudgetLedgerClient,
   bindNodeSlideBudgetLedgerClient,
   callNodeSlideBudgetedJson,
+  createNodeSlideBudgetedCreateDispatch,
   createNodeSlideBudgetedEditDispatch,
   nodeSlideProviderBudgetId,
 } from './lib/nodeslideBudgetedProvider';
@@ -540,5 +541,198 @@ describe('the chain from the live dispatch path down to reserve', () => {
     expect(seam).toContain("metered: providerChoice.providerMode !== 'deterministic'");
     expect(seam).not.toContain('metered: false');
     expect(seam).not.toContain('metered: true');
+  });
+});
+
+/**
+ * The create path, which until now was the unmetered half of an `enforced`
+ * posture. `createDeckFromBrief` called the provider directly while only the
+ * edit path reserved, so every create receipt claimed a ceiling that no code
+ * path applied to it.
+ */
+describe('deck creation is reserved before it is issued', () => {
+  const CREATE_REQUEST = {
+    systemPrompt: 'Return a full NodeSlide deck spec.',
+    userText: '{"title":"Q4 review","brief":{"prompt":"Summarise the quarter"}}',
+    // The real create path asks for 5k output tokens; a full deck needs them.
+    maxTokens: 5_000,
+    model: 'moonshotai/kimi-k3',
+    jsonSchema: {
+      name: 'nodeslide_enforcement_deck',
+      schema: {
+        type: 'object',
+        required: ['slides'],
+        properties: { slides: { type: 'array' } },
+      },
+    },
+  } as const;
+
+  function deckCompletionStub() {
+    return vi.fn<NodeSlideCompletion>(async () => ({
+      text: '{"slides":[]}',
+      stopReason: 'stop',
+      costMicroUsd: 4_200,
+      inputTokens: 900,
+      outputTokens: 120,
+    }));
+  }
+
+  it('reserves every metered brief dispatch, with a distinct call key per invocation', async () => {
+    const database = new MemoryDatabase();
+    const ledger = realLedgerClient(database);
+    const complete = deckCompletionStub();
+    const briefDispatch = createNodeSlideBudgetedCreateDispatch({
+      runId: 'run-create-seam-1',
+      budget: {},
+      metered: true,
+      ledger,
+      dispatch: async (request, dependencies) => {
+        const { callNodeSlideFreeJson } = await import('./lib/nodeslideProvider');
+        return await callNodeSlideFreeJson(request, {
+          complete,
+          ...(dependencies?.dispatchPolicy ? { dispatchPolicy: dependencies.dispatchPolicy } : {}),
+        });
+      },
+    });
+
+    // Create dispatches twice when the bounded self-critique runs a revision
+    // pass. Both are reserved, and neither collides on the ledger.
+    await briefDispatch(CREATE_REQUEST);
+    await briefDispatch({ ...CREATE_REQUEST, userText: '{"revision":"fix the chart"}' });
+
+    const calls = database.rows('nodeslide_billable_calls');
+    expect(
+      calls,
+      'the create path must reserve each brief dispatch before it reaches the wire',
+    ).toHaveLength(2);
+    expect(calls.every((call) => call.status === 'settled')).toBe(true);
+    expect(new Set(calls.map((call) => call.callId)).size).toBe(2);
+    expect((database.rows('nodeslide_run_budgets')[0]?.actualMicroUsd as number) > 0).toBe(true);
+  });
+
+  /**
+   * THE REGRESSION THIS SEAM WAS NEARLY SHIPPED WITH.
+   *
+   * `resolveDispatchPolicy` TIGHTENS — it takes the min of the caller's value
+   * and the policy's. Routing create through the edit path's wire ceilings would
+   * therefore have cut a full-deck completion from 5_000 tokens to 2_200 and its
+   * deadline from 240s to 30s, guaranteeing a truncated spec and a deterministic
+   * fallback on every provider-backed create. Metering a call must not disable
+   * it, so the create seam carries its own ceilings and this pins them.
+   */
+  it('dispatches the deck under create-shaped ceilings, not the edit path’s', async () => {
+    const database = new MemoryDatabase();
+    const ledger = realLedgerClient(database);
+    const observed: Array<{ maxOutputTokens: number; timeoutMs: number }> = [];
+    const briefDispatch = createNodeSlideBudgetedCreateDispatch({
+      runId: 'run-create-ceilings-1',
+      budget: {},
+      metered: true,
+      ledger,
+      dispatch: async (request, dependencies) => {
+        observed.push({
+          maxOutputTokens: dependencies?.dispatchPolicy?.maxOutputTokens as number,
+          timeoutMs: dependencies?.dispatchPolicy?.timeoutMs as number,
+        });
+        return {
+          ok: true as const,
+          value: { slides: [] },
+          telemetry: {
+            provider: 'openrouter',
+            model: 'moonshotai/kimi-k3',
+            costMicroUsd: 4_200,
+            inputTokens: 900,
+            outputTokens: 120,
+            attempts: [
+              {
+                attempt: 'initial' as const,
+                attempted: true as const,
+                settled: true,
+                ambiguous: false,
+                unreconciled: false,
+                elapsedMs: 10,
+              },
+            ],
+          },
+        };
+      },
+    });
+
+    await briefDispatch(CREATE_REQUEST);
+
+    expect(observed).toHaveLength(1);
+    // 2_200 here means the deck was silently halved by the edit path's ceiling.
+    expect(
+      observed[0]?.maxOutputTokens,
+      'a full deck must keep its 5k-token completion under metering',
+    ).toBe(5_000);
+    // 30_000 here means every provider-backed create would time out.
+    expect(observed[0]?.timeoutMs, 'a full deck must keep its 240s deadline under metering').toBe(
+      240_000,
+    );
+  });
+
+  it('does not open a reservation for a deterministic create, which issues no request', async () => {
+    const database = new MemoryDatabase();
+    const ledger = realLedgerClient(database);
+    const dispatch = vi.fn(async () => ({
+      ok: true as const,
+      value: { slides: [] },
+      telemetry: {
+        provider: 'deterministic',
+        model: 'brief-to-deck/v1',
+        costMicroUsd: 0,
+        inputTokens: 0,
+        outputTokens: 0,
+      },
+    }));
+    const briefDispatch = createNodeSlideBudgetedCreateDispatch({
+      runId: 'run-create-deterministic',
+      budget: {},
+      metered: false,
+      ledger,
+      dispatch,
+    });
+
+    await briefDispatch(CREATE_REQUEST);
+
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(database.rows('nodeslide_run_budgets')).toEqual([]);
+    expect(database.rows('nodeslide_billable_calls')).toEqual([]);
+  });
+
+  /**
+   * The last link for create, read from source for the same reason the edit
+   * equivalent is: the action builds its dispatcher inside a closure no
+   * in-process ctx can reach. Deleting the create-path reserve — reverting
+   * `briefDispatch` to a direct `callNodeSlideFreeJson` — turns this red.
+   */
+  it('builds the live brief provider from the budgeted create seam and nothing else', async () => {
+    const { readFileSync } = await import('node:fs');
+    const source = readFileSync(new URL('./nodeslideAgent.ts', import.meta.url), 'utf8');
+    const seam = source.slice(
+      source.indexOf('const briefDispatch'),
+      source.indexOf('const provider = await invokeNodeSlideBriefProvider'),
+    );
+
+    expect(
+      seam.length,
+      'createDeckFromBrief must build its provider through a named budgeted seam',
+    ).toBeGreaterThan(0);
+    expect(seam).toContain('const briefDispatch = createNodeSlideBudgetedCreateDispatch({');
+    expect(seam).toContain('ledger: nodeSlideBudgetLedgerClient(ctx)');
+    // Derived from the route, never a literal: a hardcoded `false` would
+    // silently unmeter every create.
+    expect(seam).toContain("metered: providerChoice.providerMode !== 'deterministic'");
+    expect(seam).not.toContain('metered: false');
+    expect(seam).not.toContain('metered: true');
+    // The brief call itself must go THROUGH the seam. A `briefDispatch` that is
+    // built and then bypassed is the exact knockout the edit seam already pins.
+    const briefCall = source.slice(
+      source.indexOf('const callBriefProvider'),
+      source.indexOf('const provider = await invokeNodeSlideBriefProvider'),
+    );
+    expect(briefCall).toContain('briefDispatch({');
+    expect(briefCall).not.toContain('callNodeSlideFreeJson(');
   });
 });

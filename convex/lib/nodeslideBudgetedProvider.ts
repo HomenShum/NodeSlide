@@ -51,6 +51,41 @@ import {
 const MAX_PROVIDER_ATTEMPTS = 2;
 const PROVIDER_HARD_MAX_OUTPUT_TOKENS = 2_200;
 const PROVIDER_HARD_TIMEOUT_MS = 30_000;
+
+/**
+ * The per-attempt hard ceilings a budgeted dispatch imposes on the wire.
+ *
+ * These are workload shape, not policy: they bound ONE provider attempt so a
+ * runaway completion cannot outrun its reservation. They are deliberately NOT
+ * the run budget — the cap on spend is `NodeSlideRunBudgetInput`, and these
+ * ceilings only ever tighten what a single attempt may ask for.
+ *
+ * They are parameterized because the two metered paths have genuinely different
+ * shapes, and a single set of numbers silently broke one of them. An edit patch
+ * is a small JSON delta that finishes inside 30s; a full deck is a ~5k-token
+ * completion that the create path already gives 240s. Feeding create the edit
+ * ceilings does not "enforce a budget" on it — `resolveDispatchPolicy` TIGHTENS
+ * (takes the min), so it would have silently cut create's completion to 2_200
+ * tokens and its deadline to 30s, guaranteeing a truncated spec and a
+ * deterministic fallback on every provider-backed create. A budget wire that
+ * disables the feature it meters is not enforcement, it is an outage.
+ */
+export interface NodeSlideProviderHardCeilings {
+  readonly maxOutputTokensPerAttempt: number;
+  readonly timeoutMs: number;
+}
+
+/** The historical ceilings. Every existing caller keeps exactly these. */
+export const NODESLIDE_EDIT_PROVIDER_CEILINGS: NodeSlideProviderHardCeilings = {
+  maxOutputTokensPerAttempt: PROVIDER_HARD_MAX_OUTPUT_TOKENS,
+  timeoutMs: PROVIDER_HARD_TIMEOUT_MS,
+};
+
+/** Matches the unbudgeted create call this seam replaced: 5k tokens, 240s. */
+export const NODESLIDE_CREATE_PROVIDER_CEILINGS: NodeSlideProviderHardCeilings = {
+  maxOutputTokensPerAttempt: 5_000,
+  timeoutMs: 240_000,
+};
 const MAX_REPAIR_CONTEXT_UTF8_BYTES = 24_000 * 4;
 const PROVIDER_MESSAGE_OVERHEAD_TOKENS_PER_ATTEMPT = 4_096;
 const MAX_STATE_RETRIES = 2;
@@ -200,6 +235,8 @@ export interface NodeSlideBudgetedProviderRequest {
   callKey: string;
   budget?: NodeSlideRunBudgetInput;
   providerRequest: NodeSlideBudgetedJsonRequest;
+  /** Per-attempt wire ceilings. Defaults to the edit path's historical values. */
+  ceilings?: NodeSlideProviderHardCeilings;
 }
 
 export type NodeSlideBudgetDisposition =
@@ -343,8 +380,12 @@ export async function callNodeSlideBudgetedJson(
     return recoverPriorCall(prior, dependencies.ledger, baseAccounting);
   }
 
+  const ceilings = args.ceilings ?? NODESLIDE_EDIT_PROVIDER_CEILINGS;
   const estimatedInputTokens = estimateNodeSlideProviderInputTokens(args.providerRequest);
-  const perAttemptRequestedOutput = providerRequestedOutputTokens(args.providerRequest.maxTokens);
+  const perAttemptRequestedOutput = providerRequestedOutputTokens(
+    args.providerRequest.maxTokens,
+    ceilings.maxOutputTokensPerAttempt,
+  );
   const requestedMaxOutputTokens = perAttemptRequestedOutput * MAX_PROVIDER_ATTEMPTS;
   let reservation: NodeSlideBudgetLedgerView;
   try {
@@ -388,7 +429,7 @@ export async function callNodeSlideBudgetedJson(
       {
         dispatchPolicy: {
           maxOutputTokens: perAttemptOutputCeiling,
-          timeoutMs: Math.min(reservedCall.providerTimeoutMs, PROVIDER_HARD_TIMEOUT_MS),
+          timeoutMs: Math.min(reservedCall.providerTimeoutMs, ceilings.timeoutMs),
           ...(nodeSlideAgentModel(selectedModel as NodeSlideAgentModelId).provider === 'openrouter'
             ? {
                 maxInputMicroUsdPerMillionTokens: pricing.inputMicroUsdPerMillionTokens,
@@ -518,7 +559,7 @@ function defaultProviderCall(
  * than once per run (initial plan, then a repair) and two calls sharing a key
  * would collide on the ledger's idempotency check.
  */
-export function createNodeSlideBudgetedEditDispatch(args: {
+export interface NodeSlideBudgetedDispatchArgs {
   runId: string;
   budget: NodeSlideRunBudgetInput;
   metered: boolean;
@@ -527,7 +568,12 @@ export function createNodeSlideBudgetedEditDispatch(args: {
     request: NodeSlideBudgetedJsonRequest,
     dependencies?: { dispatchPolicy?: NodeSlideDispatchPolicy },
   ) => Promise<NodeSlideProviderResult>;
-}): (request: NodeSlideBudgetedJsonRequest) => Promise<NodeSlideProviderResult> {
+}
+
+function createNodeSlideBudgetedDispatch(
+  args: NodeSlideBudgetedDispatchArgs,
+  seam: { callKeyPrefix: string; ceilings: NodeSlideProviderHardCeilings },
+): (request: NodeSlideBudgetedJsonRequest) => Promise<NodeSlideProviderResult> {
   let ordinal = 0;
   return async (request) => {
     if (!args.metered) return await args.dispatch(request);
@@ -535,9 +581,10 @@ export function createNodeSlideBudgetedEditDispatch(args: {
     return await callNodeSlideBudgetedJson(
       {
         runId: args.runId,
-        callKey: `edit-planner-${ordinal}`,
+        callKey: `${seam.callKeyPrefix}-${ordinal}`,
         budget: args.budget,
         providerRequest: request,
+        ceilings: seam.ceilings,
       },
       {
         ledger: args.ledger,
@@ -546,6 +593,42 @@ export function createNodeSlideBudgetedEditDispatch(args: {
       },
     );
   };
+}
+
+export function createNodeSlideBudgetedEditDispatch(
+  args: NodeSlideBudgetedDispatchArgs,
+): (request: NodeSlideBudgetedJsonRequest) => Promise<NodeSlideProviderResult> {
+  return createNodeSlideBudgetedDispatch(args, {
+    callKeyPrefix: 'edit-planner',
+    ceilings: NODESLIDE_EDIT_PROVIDER_CEILINGS,
+  });
+}
+
+/**
+ * The create seam, and the reason `enforcementPosture` may say 'enforced' about
+ * a create receipt.
+ *
+ * Deck creation was the last unmetered provider call in the product: the edit
+ * path reserved before dispatch while `createDeckFromBrief` called the provider
+ * directly, so a global `enforced` posture was describing a half-metered system.
+ * This is the same reserve -> call -> settle discipline the edit path uses, and
+ * it fails closed the same way — a reservation that cannot be computed or
+ * afforded returns a coded `{ ok: false }`, the create router treats it as an
+ * unusable provider response, and the run produces a deterministic deck without
+ * spending rather than spending without a ceiling.
+ *
+ * It is a separate exported symbol from the edit seam ON PURPOSE.
+ * `nodeSlideBudgetEnforcementPosture` in `convex/nodeslideJobs.ts` derives a
+ * PER-PATH posture from the presence of these two names, so deleting this one
+ * cannot leave create receipts still claiming a ceiling nothing applies.
+ */
+export function createNodeSlideBudgetedCreateDispatch(
+  args: NodeSlideBudgetedDispatchArgs,
+): (request: NodeSlideBudgetedJsonRequest) => Promise<NodeSlideProviderResult> {
+  return createNodeSlideBudgetedDispatch(args, {
+    callKeyPrefix: 'brief-to-deck',
+    ceilings: NODESLIDE_CREATE_PROVIDER_CEILINGS,
+  });
 }
 
 /**
@@ -574,9 +657,12 @@ function providerRequestIdentity(request: NodeSlideBudgetedJsonRequest) {
   };
 }
 
-function providerRequestedOutputTokens(value: number): number {
-  if (!Number.isFinite(value)) return PROVIDER_HARD_MAX_OUTPUT_TOKENS;
-  return Math.min(PROVIDER_HARD_MAX_OUTPUT_TOKENS, Math.max(1, Math.floor(value)));
+function providerRequestedOutputTokens(value: number, ceiling: number): number {
+  const hardCeiling = Number.isFinite(ceiling)
+    ? Math.max(1, Math.floor(ceiling))
+    : PROVIDER_HARD_MAX_OUTPUT_TOKENS;
+  if (!Number.isFinite(value)) return hardCeiling;
+  return Math.min(hardCeiling, Math.max(1, Math.floor(value)));
 }
 
 function budgetInput(budget: NodeSlideRunBudget): NodeSlideRunBudgetInput {

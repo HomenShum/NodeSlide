@@ -1,0 +1,14 @@
+{
+  "_comment": "KNOCKOUT FIXTURE. A scene-level declaration: the deck is expected to animate, but one named scene on one named slide was examined and consciously left still. The canary must find the matching ns:motion:<scene>:declared-static marker on that exact slide.",
+  "schemaVersion": "nodeslide.motion-intent/v1",
+  "deck": "scene-fixture.pptx",
+  "recipe": "scripts/tests/fixtures/motion-intent/scene-declared.motion-intent.json",
+  "intent": "motion",
+  "declaredStaticScenes": [
+    {
+      "scene": "poster-only",
+      "slide": 2,
+      "reason": "Only one capture exists for this scene. Compiling the three declared states out of one frame would fabricate two frames nobody captured."
+    }
+  ]
+}

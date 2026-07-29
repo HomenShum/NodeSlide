@@ -551,6 +551,18 @@ export function compileArtifactSpec(fixture) {
         images: assets.images,
         capability: 'poster-frame',
         note: 'Declared poster frame — a still is not an interaction clip.',
+        // THE DECISION MUST SURVIVE INTO THE ARTEFACT.
+        //
+        // This short-circuit is deliberate and stays: a still is not a clip, and fabricating a
+        // build sequence here would be the forbidden substitute. But until now the exported slide
+        // carried ZERO trace of that reasoning — no motion shapes, no timing, no name. A slide the
+        // compiler examined and consciously excused was byte-identical to one nobody had
+        // considered, so the playback canary counted it as an absent subject rather than a
+        // resolved one. That is "exists but never mounts", in deck form.
+        //
+        // Naming the scene is the whole fix. It is emitted ONLY when the fixture actually declared
+        // motion — there is nothing to excuse on an archetype that never asked for any.
+        ...(spec.kind === 'motion' ? { declaredStaticScene: fixture.artifactType } : {}),
       };
     }
     return { ...base, kind: 'image', images: assets.images, callouts: assets.callouts };
@@ -1007,6 +1019,13 @@ export async function buildV3NativeDeck(fixtures) {
           // frame at its own aspect instead of distorting it to fill.
           sizing: { type: 'contain', w, h: w * 0.56 },
           altText: img.alt,
+          // The examined-and-excused marker rides on the poster frame itself — the very shape that
+          // stands in for the motion. Naming an existing shape rather than adding a new one is what
+          // makes this a zero-pixel change: the rendered slide is identical, only the OOXML now
+          // records which scene was considered and consciously left still.
+          ...(i === 0 && spec.declaredStaticScene
+            ? { objectName: `ns:motion:${spec.declaredStaticScene}:declared-static` }
+            : {}),
         });
         if (img.caption) {
           slide.addText(img.caption, {

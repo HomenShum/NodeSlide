@@ -34,6 +34,7 @@ import { authorizeBeforeConsumingQuota, nodeSlideActorQuotaKey } from './lib/nod
 import {
   type NodeSlideBudgetLedgerClient,
   bindNodeSlideBudgetLedgerClient,
+  createNodeSlideBudgetedCreateDispatch,
   createNodeSlideBudgetedEditDispatch,
 } from './lib/nodeslideBudgetedProvider';
 import {
@@ -77,6 +78,8 @@ import {
   configuredSearchProviders,
   searchExternalReferences,
 } from './lib/nodeslideInspirationSearch';
+import { nodeSlideJobRequestDigest } from './lib/nodeslideJobState';
+import { nodeSlideCreateJobRequestFromArgs } from './lib/nodeslideJobValidators';
 import { nodeSlideMemoryUse } from './lib/nodeslideMemoryPolicy';
 import { nodeSlideProductionProbeFields } from './lib/nodeslideProductionProbe';
 import { NODESLIDE_EDIT_MODEL, callNodeSlideFreeJson } from './lib/nodeslideProvider';
@@ -148,6 +151,54 @@ function nodeSlideEditRunBudget(instruction: string): NodeSlideRunBudgetInput {
   if (!constraint) return {};
   const requestedUsd = constraint.maxCostMicroUsd / NODESLIDE_MICRO_USD_PER_USD;
   return { maxCostUsd: Math.min(NODESLIDE_RUN_BUDGET_BOUNDS.maxCostUsd.default, requestedUsd) };
+}
+
+/**
+ * The hard cap for one create run: the normalized default bounds.
+ *
+ * A create brief carries no caller spend-ceiling field, which is the same
+ * reasoning `startCreateDeck` records when it opens the job's ledger row with
+ * `{}`. The edit path can tighten from its instruction text because an edit
+ * instruction is a sentence; a brief is structured content, and inventing a
+ * ceiling from its prose here would be a policy this codebase never agreed to.
+ */
+function nodeSlideCreateRunBudget(): NodeSlideRunBudgetInput {
+  return {};
+}
+
+/**
+ * The budget run identity for one deck creation.
+ *
+ * Derived from the canonical request digest — `stableSerialize`, i.e. sorted-key
+ * hashing — so a retried create reserves against the SAME ledger row instead of
+ * minting a fresh cap each attempt. That is what makes the reservation replay
+ * safely: `callNodeSlideBudgetedJson` keys idempotency on (budgetId, callId),
+ * so an identical retried request replays its receipt rather than paying twice.
+ *
+ * Deliberately NOT the deck id: the deck id is minted AFTER the provider call
+ * (it embeds `Date.now()`), and a budget that only exists after the money is
+ * spent cannot refuse the spend.
+ */
+function nodeSlideCreateRunId(requestDigest: string): string {
+  return nodeslideStableId('nsrun_create', requestDigest);
+}
+
+/**
+ * True when a metered call left the ledger unable to say what it cost.
+ *
+ * `unreconciled` and `accounting_error` both mean the reservation is still
+ * standing against the run with no settled receipt to close it — the provider
+ * may well have been paid. Persisting a deterministic fallback deck on top of
+ * that would hand the caller a successful-looking result for a run whose spend
+ * is unknown, which is the exact "2xx on a failure path" this codebase refuses.
+ * The create action turns it into a public error and creates no deck instead.
+ */
+function nodeSlideCreateSpendUnreconciled(result: unknown): boolean {
+  if (!result || typeof result !== 'object' || !('accounting' in result)) return false;
+  const accounting = (result as { accounting?: { disposition?: unknown } }).accounting;
+  return (
+    accounting?.disposition === 'unreconciled' || accounting?.disposition === 'accounting_error'
+  );
 }
 
 interface NodeSlideWebSourceInput {
@@ -1796,39 +1847,73 @@ export const createDeckFromBrief = action({
         },
       },
     };
+    // THE CREATE ENFORCEMENT SEAM. Deck creation was the last unmetered provider
+    // call in the product: the edit path reserved before dispatch while this one
+    // called the wire directly, so `enforcementPosture: 'enforced'` was a global
+    // claim over a half-metered system. Every metered brief dispatch now goes
+    // through `callNodeSlideBudgetedJson`, which reserves the worst case against
+    // this run's cap BEFORE the request reaches the wire and settles the receipt
+    // against that reservation afterwards.
+    //
+    // A denial is not an error path: the budgeted call returns a coded
+    // `{ ok: false }`, `invokeNodeSlideBriefProvider` treats it as an unusable
+    // provider response, and the run degrades to the deterministic fallback
+    // spec. A create that cannot be priced or cannot be afforded therefore
+    // produces a deck without spending, rather than spending without a ceiling.
+    //
+    // The deterministic route stays unbudgeted on purpose: it issues no provider
+    // request, so there is nothing to reserve.
+    const briefDispatch = createNodeSlideBudgetedCreateDispatch({
+      runId: nodeSlideCreateRunId(
+        nodeSlideJobRequestDigest(nodeSlideCreateJobRequestFromArgs(args)),
+      ),
+      budget: nodeSlideCreateRunBudget(),
+      metered: providerChoice.providerMode !== 'deterministic',
+      ledger: nodeSlideBudgetLedgerClient(ctx),
+      dispatch: (request, dependencies) =>
+        callNodeSlideFreeJson(request, {
+          // Full-deck generation is a ~5k-token completion; the 30s edit-path
+          // default guarantees a timeout and a silent (honest) fallback. The
+          // budgeted dispatch policy can only TIGHTEN this, never raise it,
+          // which is why the create seam carries its own wire ceilings.
+          timeoutMs: 240_000,
+          ...(dependencies?.dispatchPolicy ? { dispatchPolicy: dependencies.dispatchPolicy } : {}),
+        }),
+    });
     const callBriefProvider = (revision?: { previousSpec: unknown; reportJson: string }) =>
-      callNodeSlideFreeJson(
-        {
-          systemPrompt: revision
-            ? `${briefSystemPrompt}\n\nREVISION PASS: your previous spec had these concrete issues: ${revision.reportJson}. Return the full corrected spec.`
-            : briefSystemPrompt,
-          userText: JSON.stringify({
-            title,
-            brief,
-            attachments,
-            storySpec: storyContext.storySpec,
-            materialInventory: storyContext.materialInventory,
-            artifactSourceInventory,
-            requestedRoute: args.route,
-            providerMode: providerChoice.providerMode,
-            ...(revision ? { previousSpec: revision.previousSpec } : {}),
-          }),
-          maxTokens: 5000,
-          ...(providerChoice.providerMode !== 'deterministic'
-            ? {
-                model: providerChoice.providerModel,
-                reasoningEffort: providerChoice.providerEffort,
-              }
-            : {}),
-          jsonSchema: briefJsonSchema,
-        },
-        // Full-deck generation is a ~5k-token completion; the 30s edit-path
-        // default guarantees a timeout and a silent (honest) fallback.
-        { timeoutMs: 240_000 },
-      );
+      briefDispatch({
+        systemPrompt: revision
+          ? `${briefSystemPrompt}\n\nREVISION PASS: your previous spec had these concrete issues: ${revision.reportJson}. Return the full corrected spec.`
+          : briefSystemPrompt,
+        userText: JSON.stringify({
+          title,
+          brief,
+          attachments,
+          storySpec: storyContext.storySpec,
+          materialInventory: storyContext.materialInventory,
+          artifactSourceInventory,
+          requestedRoute: args.route,
+          providerMode: providerChoice.providerMode,
+          ...(revision ? { previousSpec: revision.previousSpec } : {}),
+        }),
+        maxTokens: 5000,
+        ...(providerChoice.providerMode !== 'deterministic'
+          ? {
+              model: providerChoice.providerModel,
+              reasoningEffort: providerChoice.providerEffort,
+            }
+          : {}),
+        jsonSchema: briefJsonSchema,
+      });
     const provider = await invokeNodeSlideBriefProvider(providerChoice, async () =>
       callBriefProvider(),
     );
+    if (nodeSlideCreateSpendUnreconciled(provider)) {
+      throw nodeslideCreatePublicError(
+        'invalid_request',
+        'The live provider call ended without a reconcilable billing receipt. No fallback deck was created under an unresolved paid call; retry after the receipt is reconciled.',
+      );
+    }
     const providerSpec = provider?.ok === true ? provider.value : fallbackSpec;
     const runtimeEnvironment = process.env['NODESLIDE_RUNTIME_ENV'];
     const faultFlag = process.env['NODESLIDE_DEV_CREATION_FAULT'];
@@ -1862,6 +1947,14 @@ export const createDeckFromBrief = action({
       requestRevision: async (promptReport) =>
         await callBriefProvider({ previousSpec: firstSpec, reportJson: promptReport }),
     });
+    // The revision pass is a second metered dispatch, so it can strand a
+    // reservation exactly like the first one can.
+    if (nodeSlideCreateSpendUnreconciled(critique.revision)) {
+      throw nodeslideCreatePublicError(
+        'invalid_request',
+        'The live provider revision call ended without a reconcilable billing receipt. No fallback deck was created under an unresolved paid call; retry after the receipt is reconciled.',
+      );
+    }
     const rawSpec = critique.spec;
     const plan = extractPlan(provider?.ok === true ? rawSpec : null, fallbackSpec);
     const now = Date.now();

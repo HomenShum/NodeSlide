@@ -13,6 +13,9 @@ import type { MutationCtx, QueryCtx } from './_generated/server';
 import { internalMutation, internalQuery, mutation, query } from './_generated/server';
 import { createOwnerAccessKey, isOwnerAccessKey, requireOwnerAccess } from './lib/nodeslideAccess';
 import { nodeSlideActorQuotaKey } from './lib/nodeslideAuthority';
+// Imported for its export list, not to call it: the posture below asks whether
+// each job kind's dispatch seam is present in this module.
+import * as nodeslideBudgetedProviderModule from './lib/nodeslideBudgetedProvider';
 import {
   findCurrentValidationRow,
   findPatchRow,
@@ -1112,22 +1115,49 @@ async function finalizeNodeSlideJobBudgetBestEffort(
 }
 
 /**
- * Whether this deployment can actually hold a run to its cap.
+ * The dispatch seam each job kind must go through for its spend to be capped.
+ *
+ * A budgeted path needs BOTH halves: the ledger has to be able to reserve, and
+ * this kind's provider call has to actually route through a seam that reserves.
+ * Keeping the seam names here — rather than a boolean — is what makes the
+ * posture derivable per path instead of per deployment.
+ */
+const NODESLIDE_BUDGETED_DISPATCH_SEAM_BY_KIND = {
+  create_deck: 'createNodeSlideBudgetedCreateDispatch',
+  edit_proposal: 'createNodeSlideBudgetedEditDispatch',
+} as const;
+
+/**
+ * Whether this deployment can actually hold THIS PATH's run to its cap.
  *
  * `budget.enforcement` is the literal `'hard'` for every normalized budget — it
- * is a property of the contract, not of the deployment. Enforcement happens in
- * exactly one place, `nodeslideBudgets.reserve`, which quotes a call against the
- * cap before dispatch and refuses it if the worst case does not fit. That
- * mutation is withheld here pending the model price table, so a receipt that
- * reported `enforcement: 'hard'` and nothing else would be claiming a ceiling
- * that no code path is currently able to apply.
+ * is a property of the contract, not of the deployment. Enforcement needs two
+ * things to be true at once, and for a while only one of them was:
  *
- * This is DERIVED from the ledger module's own exports rather than declared, so
- * it flips to `'enforced'` the moment `reserve` lands and nobody has to remember
- * to update a flag. `nodeslideBudgetWiring.test.ts` pins both directions.
+ *  1. `nodeslideBudgets.reserve` must exist — it quotes a call against the cap
+ *     before dispatch and refuses it if the worst case does not fit.
+ *  2. This job kind's provider call must actually GO THROUGH a seam that calls
+ *     it. `reserve` existing says nothing about who reaches it.
+ *
+ * The previous version of this function tested only (1), from module scope, and
+ * therefore could not see that `createDeckFromBrief` was calling the provider
+ * directly while only the edit path reserved. Every create receipt truthfully
+ * reported `enforcement: 'hard'` and then claimed `enforced` over a call that
+ * nothing had capped. A per-deployment answer to a per-path question is how a
+ * receipt ends up asserting a ceiling that no code path applies to it.
+ *
+ * Both halves stay DERIVED from the two modules' own exports rather than
+ * declared, so unwiring either one flips the posture without anyone remembering
+ * to update a flag, and an unmapped kind can never claim `enforced`.
+ * `nodeslideBudgetWiring.test.ts` pins every direction.
  */
-function nodeSlideBudgetEnforcementPosture(): 'enforced' | 'accounting_only' {
-  return 'reserve' in nodeslideBudgetsModule ? 'enforced' : 'accounting_only';
+function nodeSlideBudgetEnforcementPosture(
+  kind: Doc<'nodeslide_agent_jobs'>['kind'],
+): 'enforced' | 'accounting_only' {
+  if (!('reserve' in nodeslideBudgetsModule)) return 'accounting_only';
+  const seam = NODESLIDE_BUDGETED_DISPATCH_SEAM_BY_KIND[kind];
+  if (!seam) return 'accounting_only';
+  return seam in nodeslideBudgetedProviderModule ? 'enforced' : 'accounting_only';
 }
 
 async function loadPublicBudgetReceipt(ctx: ReadCtx, job: Doc<'nodeslide_agent_jobs'>) {
@@ -1152,8 +1182,9 @@ async function loadPublicBudgetReceipt(ctx: ReadCtx, job: Doc<'nodeslide_agent_j
     budgetId: budget.id,
     status: budget.status,
     enforcement: budget.budget.enforcement,
-    // The contract says 'hard'; this says whether this deployment can apply it.
-    enforcementPosture: nodeSlideBudgetEnforcementPosture(),
+    // The contract says 'hard'; this says whether this deployment can apply it
+    // to THIS job's path. A create receipt and an edit receipt can disagree.
+    enforcementPosture: nodeSlideBudgetEnforcementPosture(job.kind),
     cap: {
       maxCostMicroUsd: budget.budget.maxCostMicroUsd,
       maxInputTokens: budget.budget.maxInputTokens,

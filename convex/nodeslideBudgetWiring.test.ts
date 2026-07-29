@@ -274,10 +274,14 @@ describe('the budget ledger writer is actually reachable', () => {
 
 describe('getBudgetReceipt returns a real receipt instead of null', () => {
   /** The job row a started provider-backed create leaves behind. */
-  function seedJobRow(database: MemoryDatabase, budgetId: string | undefined) {
+  function seedJobRow(
+    database: MemoryDatabase,
+    budgetId: string | undefined,
+    kind = 'create_deck',
+  ) {
     return database.insert('nodeslide_agent_jobs', {
       id: CREATE_JOB_ID,
-      kind: 'create_deck',
+      kind,
       clientSessionId: CREATE_ARGS.clientSessionId,
       ownerDigest: nodeSlideJobOwnerDigest(OWNER_ACCESS_KEY),
       idempotencyKey: CREATE_ARGS.idempotencyKey,
@@ -367,6 +371,45 @@ describe('getBudgetReceipt returns a real receipt instead of null', () => {
     // dispatch path in `convex/nodeslideAgent.ts`. The line above is the one
     // that must never be edited; it pins the derivation itself.
     expect(receipt?.enforcementPosture).toBe('enforced');
+  });
+
+  /**
+   * The posture is PER PATH, because enforcement is.
+   *
+   * `'reserve' in budgets` is a fact about the deployment; it says nothing about
+   * whether a given job kind's provider call ever reaches it. While
+   * `createDeckFromBrief` called the provider directly, every create receipt
+   * still reported `enforced` on the strength of the edit path's wiring. These
+   * cases pin the two halves separately so one path can never vouch for another.
+   */
+  async function postureFor(kind: string): Promise<unknown> {
+    const database = new MemoryDatabase();
+    const { ctx } = recordingContext(database);
+    await seedJobRow(database, CREATE_BUDGET_ID, kind);
+    await rawHandler(budgets.create)(ctx, { budgetId: CREATE_BUDGET_ID, budget: {} });
+    const receipt = (await rawHandler(getBudgetReceipt)(readContext(database), {
+      jobId: CREATE_JOB_ID,
+      ownerAccessKey: OWNER_ACCESS_KEY,
+    })) as Record<string, unknown> | null;
+    return receipt?.enforcementPosture;
+  }
+
+  it('reports enforced for both budgeted paths, each on its own seam', async () => {
+    // create_deck earns this through `createNodeSlideBudgetedCreateDispatch`,
+    // edit_proposal through `createNodeSlideBudgetedEditDispatch`. Deleting
+    // either seam drops that path — and only that path — to accounting_only.
+    await expect(postureFor('create_deck')).resolves.toBe('enforced');
+    await expect(postureFor('edit_proposal')).resolves.toBe('enforced');
+  });
+
+  it('cannot claim enforced for a path with no budgeted dispatch seam', async () => {
+    // A kind nothing routes through a reserving seam. Its spend is unmetered no
+    // matter how capable the ledger module is, so its receipt must say so —
+    // this is the assertion the old module-level derivation could not make.
+    await expect(
+      postureFor('render_export'),
+      'a receipt from an unbudgeted path must never claim a ceiling nothing applies',
+    ).resolves.toBe('accounting_only');
   });
 
   it('refuses the receipt to a caller who is not the job owner', async () => {

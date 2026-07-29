@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "nodeslide.motion-intent/v1",
+  "_comment": [
+    "Declared motion intent for the deck compiled from atlas.json by scripts/build-atlas-v3-native.mjs.",
+    "",
+    "WHY THIS FILE EXISTS. The PPTX playback canary can read whether a deck contains a timing tree.",
+    "It cannot read a mind. `not-run: exporter emits no timing structure` is a correct verdict and an",
+    "open question: it does not distinguish 'motion was never intended here' from 'motion was intended",
+    "and got lost'. This file is where the recipe answers that question, once, in a form a machine can",
+    "check.",
+    "",
+    "WHY IT LIVES HERE. Next to atlas.json, the recipe it describes — not next to the .pptx it produces.",
+    "outputs/ is generated: a declaration parked there could be rewritten by the next build, or read as",
+    "a property of the artefact rather than a statement by its author. Intent is authored, so it is",
+    "versioned and reviewed with the authoring source.",
+    "",
+    "IT CANNOT BE APPLIED BY ACCIDENT. Nothing discovers this file by convention. It reaches the canary",
+    "only via an explicit --intent flag, and the `deck` field below binds it to one artefact by name;",
+    "pointing it at any other deck is a hard failure rather than a silent excuse.",
+    "",
+    "IT IS A CLAIM, NOT A PASS. Every statement here is checked against the exported OOXML. A scene",
+    "listed below must carry ns:motion:<scene>:declared-static in the deck, on the slide named, and",
+    "must carry no timing. Saying it does not make it so."
+  ],
+  "deck": "nodeslide-artifact-atlas-v3-native.pptx",
+  "recipe": "benchmarks/artifact-atlas/v2/atlas.json",
+  "intent": "motion",
+  "rationale": "The deck delivers a real PowerPoint step build for the two fixtures whose payloads carry >= 2 states (evidence-scrollytelling, animated-chart-progression). One further fixture declares motion and is consciously compiled to a still; it is declared below rather than left silent.",
+  "declaredStaticScenes": [
+    {
+      "scene": "interaction-clip",
+      "slide": 25,
+      "reason": "Fixture 25 declares kind:'motion' with 3 states and transition:'step', but this archetype's only real asset is a single captured poster frame (artifacts/camera-proof-20260720/production/e4-insert-attempt2-blocked.png). Compiling three states out of one capture would fabricate two frames that were never captured, and 'still-image-labelled-demo' is this archetype's named forbidden substitute. The compiler therefore short-circuits to the poster frame in scripts/build-atlas-v3-native.mjs (REAL_ASSETS['product-evidence.interaction-clip'].posterFrameOnly), and this entry is the countersignature: the scene was examined, the degradation was chosen, and the exported slide carries the marker that says so."
+    }
+  ]
+}

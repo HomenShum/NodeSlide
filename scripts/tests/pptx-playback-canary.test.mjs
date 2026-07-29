@@ -16,7 +16,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import JSZip from 'jszip';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { analyzeSlide, decidePlayback } from '../lib/pptx-playback-structure.mjs';
+import {
+  analyzeSlide,
+  decidePlayback,
+  parseMotionIntent,
+} from '../lib/pptx-playback-structure.mjs';
 import { readDeckSlides } from '../nodeslide-pptx-playback-canary.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -29,6 +33,24 @@ const DECK = path.join(
 const ROUNDTRIP = path.join(repoRoot, 'outputs', 'atlas-v3-native', 'roundtrip-ppt.pptx');
 const MOTION_SLIDE = 21; // the slide the v3 native builder compiles a step build onto
 
+/**
+ * The deck's own motion-intent declaration.
+ *
+ * Slide 25 carries `ns:motion:interaction-clip:declared-static` — the record that its scene was
+ * examined and consciously compiled to a poster frame. That marker is a CLAIM, and the canary
+ * refuses to honour a claim the recipe has not countersigned, so the baseline below supplies the
+ * declaration. The knockout proving the marker is not self-authorising (the same deck WITHOUT this
+ * file must go red) lives in pptx-declared-static-intent.test.mjs.
+ */
+const INTENT_PATH = path.join(
+  repoRoot,
+  'benchmarks',
+  'artifact-atlas',
+  'v2',
+  'atlas.motion-intent.json',
+);
+let ATLAS_INTENT = null;
+
 /** Raw slide XML by slide number, straight out of the archive. */
 async function loadSlideXml(deckPath) {
   const zip = await JSZip.loadAsync(await readFile(deckPath));
@@ -40,13 +62,26 @@ async function loadSlideXml(deckPath) {
   return out;
 }
 
+/** Load the shipped declaration once, bound to the deck it names. */
+async function atlasIntent() {
+  if (ATLAS_INTENT) return ATLAS_INTENT;
+  const parsed = parseMotionIntent(JSON.parse(await readFile(INTENT_PATH, 'utf8')), {
+    deck: 'nodeslide-artifact-atlas-v3-native.pptx',
+  });
+  expect(parsed.ok, `the shipped declaration must parse: ${parsed.errors.join('; ')}`).toBe(true);
+  ATLAS_INTENT = parsed.intent;
+  return ATLAS_INTENT;
+}
+
 /** Decide over a map of slideNumber -> xml, optionally rewriting one slide first. */
-function decide(xmlBySlide, mutate = null) {
+function decide(xmlBySlide, mutate = null, intent = ATLAS_INTENT) {
   const slides = [];
   for (const [n, xml] of xmlBySlide) {
     slides.push(analyzeSlide(mutate ? mutate(xml, n) : xml, n));
   }
-  return decidePlayback(slides, { deck: 'knockout-subject' });
+  // The deck name must match the declaration's binding, or the intent would not apply at all and
+  // every knockout below would be grading a different configuration than the one that ships.
+  return decidePlayback(slides, { deck: 'nodeslide-artifact-atlas-v3-native.pptx', intent });
 }
 
 function assertionOf(result, id) {
@@ -64,6 +99,7 @@ describe('pptx playback canary — baseline is green and the sensor is armed', (
   let xmlBySlide;
   beforeAll(async () => {
     xmlBySlide = await loadSlideXml(DECK);
+    await atlasIntent();
   });
 
   it('reads a real deck and reports a pass', () => {
@@ -98,6 +134,7 @@ describe('pptx playback canary — knockouts, one per assertion', () => {
   let xmlBySlide;
   beforeAll(async () => {
     xmlBySlide = await loadSlideXml(DECK);
+    await atlasIntent();
   });
 
   // ---- A1 : the vacuous pass ------------------------------------------------------------------
@@ -355,7 +392,7 @@ describe('pptx playback canary — regression lock on the round-trip artefact', 
   });
 
   it('carries no <p:transition> at all, and A4 is silent rather than green', async () => {
-    const result = decide(await loadSlideXml(ROUNDTRIP));
+    const result = decide(await loadSlideXml(ROUNDTRIP), null, null);
     expect(result.verdict).toBe('pass');
     const a4 = assertionOf(result, 'A4');
     // Zero subjects is the honest report for a deck that declares no transitions. A4 must NOT
@@ -366,7 +403,7 @@ describe('pptx playback canary — regression lock on the round-trip artefact', 
   });
 
   it('kept the step-build timing the round trip existed to measure', async () => {
-    const result = decide(await loadSlideXml(ROUNDTRIP));
+    const result = decide(await loadSlideXml(ROUNDTRIP), null, null);
     // The fix removed a converter default, not our motion. If the normalizer had over-reached,
     // these three would go silent and the suite above would still be green — so they are the guard.
     expect(assertionOf(result, 'A1').subjects).toBe(2);

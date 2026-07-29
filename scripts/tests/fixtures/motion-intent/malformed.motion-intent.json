@@ -1,0 +1,6 @@
+{
+  "_comment": "KNOCKOUT FIXTURE. Wrong schema, no intent, and a scene entry missing both its slide number and its reason. A declaration the canary cannot honour must fail loudly rather than be ignored — an ignored declaration leaves the operator believing an intent was applied that never was.",
+  "schemaVersion": "nodeslide.motion-intent/v0",
+  "deck": "declared-static-fixture.pptx",
+  "declaredStaticScenes": [{ "scene": "poster-only" }]
+}

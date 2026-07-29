@@ -17,18 +17,32 @@
  * one proves the file and runs anywhere.
  *
  * Usage:
- *   node scripts/nodeslide-pptx-playback-canary.mjs --pptx <deck.pptx> [--json <out.json>] [--quiet]
+ *   node scripts/nodeslide-pptx-playback-canary.mjs --pptx <deck.pptx> [--intent <intent.json>]
+ *                                                   [--json <out.json>] [--quiet]
  *
  * Exit codes (read these, not the summary line):
- *   0  pass     at least one assertion had a subject, and none failed
- *   1  fail     a named slide carries a named structural defect
- *   2  not-run  nothing gradeable; the reason says which sensor found nothing
+ *   0  pass            at least one assertion had a subject, and none failed
+ *   1  fail            a named slide carries a named structural defect, OR a supplied declaration
+ *                      is unusable, OR the artefact contradicts the declaration
+ *   2  not-run         nothing gradeable; the reason says which sensor found nothing
+ *   3  not-applicable  the recipe declared this deck static and the artefact agrees
+ *
+ * 2 and 3 are both "nothing was graded", and they are deliberately different codes. 2 is an open
+ * question that must block; 3 is an answered one that a gate may choose to accept. A consumer must
+ * be able to tell them apart without parsing English out of the reason line.
  */
 
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import JSZip from 'jszip';
-import { analyzeSlide, decidePlayback, exitCodeFor } from './lib/pptx-playback-structure.mjs';
+import {
+  EXIT,
+  MOTION_INTENT_SCHEMA,
+  analyzeSlide,
+  decidePlayback,
+  exitCodeFor,
+  parseMotionIntent,
+} from './lib/pptx-playback-structure.mjs';
 
 function flag(name, argv) {
   const i = argv.indexOf(`--${name}`);
@@ -45,7 +59,12 @@ const SCOPE = `SCOPE — what this canary proves, and what it does not
            separate instrument and reports separately. "Timing structure present" must never be
            read as "the animation works".
   DOES NOT PROVE the animation is well-designed, on-brand, or perceptible. It proves the file is
-           not lying about containing one.`;
+           not lying about containing one.
+  INTENT   with --intent <file>, a recipe may declare that a deck (or a single scene inside it) was
+           meant to be static. That turns the open question "no timing — was any wanted?" into an
+           answered one, and is reported as not-applicable (exit 3), never as a pass. Without the
+           flag nothing changes: an undeclared deck with no timing is still not-run (exit 2).
+           A declaration is a CLAIM. If the artefact contradicts it, that is a defect (exit 1).`;
 
 export async function readDeckSlides(buffer) {
   const zip = await JSZip.loadAsync(buffer);
@@ -66,8 +85,16 @@ function render(result) {
   lines.push('='.repeat(72));
   lines.push(SCOPE);
   lines.push('');
+  // ARM THE SENSOR FIRST. Every line below this one is a claim about what was or was not found;
+  // this line is the proof that anything was looked at at all. "No marker found" and "the deck
+  // never parsed" must never print the same way.
   lines.push(
     `SENSOR  ${result.slideCount} slide(s), ${result.shapeCount} shape(s) read from the archive.`,
+  );
+  lines.push(
+    result.intent
+      ? `INTENT  declared "${result.intent.mode}" by ${result.intent.source ?? result.intent.recipe ?? 'a supplied declaration'} for deck ${result.intent.deck}; ${result.intent.declaredStaticScenes.length} scene-level declaration(s).`
+      : 'INTENT  none supplied (--intent absent). Silence is not a declaration: an undeclared deck with no timing stays not-run.',
   );
   if (result.verdict === 'not-run') {
     lines.push('');
@@ -77,11 +104,25 @@ function render(result) {
     );
     return lines.join('\n');
   }
+  if (result.verdict === 'not-applicable' && result.assertions.length === 0) {
+    lines.push('');
+    lines.push(`VERDICT not-applicable (declared static): ${result.reason}`);
+    lines.push(
+      'not-applicable is not a pass either. It is an ANSWERED question — the recipe stated no motion',
+    );
+    lines.push(
+      'was intended and the artefact agrees — where not-run is an open one. Exit 3, never 0.',
+    );
+    return lines.join('\n');
+  }
   lines.push(
     `        slides carrying <p:timing>: ${(result.timedSlides ?? []).join(', ') || 'none'}`,
   );
   lines.push(
     `        slides declaring a motion scene: ${(result.motionSlides ?? []).join(', ') || 'none'}`,
+  );
+  lines.push(
+    `        slides declared static (examined and excused): ${(result.excusedSlides ?? []).join(', ') || 'none'}`,
   );
   lines.push('');
   for (const a of result.assertions) {
@@ -115,6 +156,7 @@ function render(result) {
 async function main() {
   const argv = process.argv.slice(2);
   const pptxPath = flag('pptx', argv);
+  const intentPath = flag('intent', argv);
   const jsonPath = flag('json', argv);
   const quiet = argv.includes('--quiet');
 
@@ -147,7 +189,41 @@ async function main() {
     process.exit(2);
   }
 
-  const result = decidePlayback(slides, { deck: path.basename(pptxPath) });
+  const deckName = path.basename(pptxPath);
+
+  // A supplied-but-unusable declaration FAILS. It is not downgraded to not-run, because the caller
+  // explicitly asked this canary to honour a statement of intent and it cannot: unreadable, wrong
+  // schema, or written for a different deck. Quietly ignoring it would leave the operator believing
+  // an intent was applied that never was — a blind gate that still prints a verdict.
+  let intent = null;
+  if (intentPath) {
+    let raw;
+    try {
+      raw = JSON.parse(await readFile(intentPath, 'utf8'));
+    } catch (error) {
+      process.stderr.write(
+        `fail: --intent ${intentPath} could not be read as JSON (${error.code ?? error.message}).\nThe declaration was applied but cannot be honoured, so no verdict about this deck is issued.\n`,
+      );
+      process.exit(EXIT.fail);
+    }
+    const parsed = parseMotionIntent(
+      { ...raw, __source: path.basename(intentPath) },
+      { deck: deckName },
+    );
+    if (!parsed.ok) {
+      process.stderr.write(
+        `fail: --intent ${intentPath} is not a usable ${MOTION_INTENT_SCHEMA} declaration for ${deckName}:\n${parsed.errors
+          .map((e) => `  - ${e}\n`)
+          .join(
+            '',
+          )}A declaration is a claim. An unusable claim is a defect, not a reason to grade softly.\n`,
+      );
+      process.exit(EXIT.fail);
+    }
+    intent = parsed.intent;
+  }
+
+  const result = decidePlayback(slides, { deck: deckName, intent });
   if (!quiet) process.stdout.write(`${render(result)}\n`);
 
   if (jsonPath) {

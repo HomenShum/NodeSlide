@@ -1,0 +1,700 @@
+{
+  "numTotalTestSuites": 13,
+  "numPassedTestSuites": 13,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 70,
+  "numPassedTests": 70,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "snapshot": {
+    "added": 0,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0,
+    "didUpdate": false
+  },
+  "startTime": 1785283296876,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["the projection carries the real run, not a summary of it"],
+          "fullName": "the projection carries the real run, not a summary of it holds all 84 receipts from the 2026-07-22 arena run",
+          "status": "passed",
+          "title": "holds all 84 receipts from the 2026-07-22 arena run",
+          "duration": 16.691600000000108,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["the projection carries the real run, not a summary of it"],
+          "fullName": "the projection carries the real run, not a summary of it grades every artifactType — an unmapped one would be silently ungraded",
+          "status": "passed",
+          "title": "grades every artifactType — an unmapped one would be silently ungraded",
+          "duration": 2.086099999999533,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["the projection carries the real run, not a summary of it"],
+          "fullName": "the projection carries the real run, not a summary of it binds itself to a source commit and a content hash",
+          "status": "passed",
+          "title": "binds itself to a source commit and a content hash",
+          "duration": 0.7950000000000728,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["the projection carries the real run, not a summary of it"],
+          "fullName": "the projection carries the real run, not a summary of it the content digest still matches the data it claims to cover",
+          "status": "passed",
+          "title": "the content digest still matches the data it claims to cover",
+          "duration": 6.065300000000207,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["the projection carries the real run, not a summary of it"],
+          "fullName": "the projection carries the real run, not a summary of it points at the commit that introduced the receipts, not at whatever HEAD was",
+          "status": "passed",
+          "title": "points at the commit that introduced the receipts, not at whatever HEAD was",
+          "duration": 0.3815999999997075,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["the projection carries the real run, not a summary of it"],
+          "fullName": "the projection carries the real run, not a summary of it ships no maturity field — the claim must not travel beside its own evidence",
+          "status": "passed",
+          "title": "ships no maturity field — the claim must not travel beside its own evidence",
+          "duration": 4.608200000000579,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["the projection carries the real run, not a summary of it"],
+          "fullName": "the projection carries the real run, not a summary of it labels every receipt as model or deterministic-baseline",
+          "status": "passed",
+          "title": "labels every receipt as model or deterministic-baseline",
+          "duration": 6.895299999999224,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["the projection carries the real run, not a summary of it"],
+          "fullName": "the projection carries the real run, not a summary of it carries paid telemetry a deterministic path could not fake",
+          "status": "passed",
+          "title": "carries paid telemetry a deterministic path could not fake",
+          "duration": 0.9441999999999098,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["what the receipts actually earn"],
+          "fullName": "what the receipts actually earn grades every recipe, and every grade is on the ladder",
+          "status": "passed",
+          "title": "grades every recipe, and every grade is on the ladder",
+          "duration": 3.0158000000001266,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["what the receipts actually earn"],
+          "fullName": "what the receipts actually earn reaches proven on model receipts, and stops there",
+          "status": "passed",
+          "title": "reaches proven on model receipts, and stops there",
+          "duration": 0.7503000000006068,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["what the receipts actually earn"],
+          "fullName": "what the receipts actually earn never lets a recipe backed only by baselines exceed vetted",
+          "status": "passed",
+          "title": "never lets a recipe backed only by baselines exceed vetted",
+          "duration": 0.5050000000001091,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["what the receipts actually earn"],
+          "fullName": "what the receipts actually earn drops to vetted when the model receipts are removed — the grade tracks the evidence",
+          "status": "passed",
+          "title": "drops to vetted when the model receipts are removed — the grade tracks the evidence",
+          "duration": 0.6405999999997221,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["what the receipts actually earn"],
+          "fullName": "what the receipts actually earn explains each standing rather than only ranking it",
+          "status": "passed",
+          "title": "explains each standing rather than only ranking it",
+          "duration": 1.0351999999993495,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1785283302443,
+      "endTime": 1785283302489.0352,
+      "status": "passed",
+      "message": "",
+      "name": "D:/VSCode Projects/nodeslide-complete-discussions/shared/nodeslideAtlasReceipts.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["NodeSlide benchmark automation gate"],
+          "fullName": "NodeSlide benchmark automation gate passes the fixed corpus, schema, determinism, and isolation PR lane",
+          "status": "passed",
+          "title": "passes the fixed corpus, schema, determinism, and isolation PR lane",
+          "duration": 3066.5689,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["NodeSlide benchmark automation gate"],
+          "fullName": "NodeSlide benchmark automation gate keeps the scheduled producer fixed to C01, E01, A05 and fail-closed visual judging",
+          "status": "passed",
+          "title": "keeps the scheduled producer fixed to C01, E01, A05 and fail-closed visual judging",
+          "duration": 24.575399999999718,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["NodeSlide benchmark automation gate"],
+          "fullName": "NodeSlide benchmark automation gate emits honest UNSCORED output without evidence and enforces it only on request",
+          "status": "passed",
+          "title": "emits honest UNSCORED output without evidence and enforces it only on request",
+          "duration": 459.14510000000064,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["NodeSlide benchmark automation gate"],
+          "fullName": "NodeSlide benchmark automation gate can select a supplemental live case without changing the P0 fixture contract",
+          "status": "passed",
+          "title": "can select a supplemental live case without changing the P0 fixture contract",
+          "duration": 1738.923999999999,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["NodeSlide benchmark automation gate"],
+          "fullName": "NodeSlide benchmark automation gate never aggregates missing TasteBench evidence into a fabricated PASS",
+          "status": "passed",
+          "title": "never aggregates missing TasteBench evidence into a fabricated PASS",
+          "duration": 0.741199999998571,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["NodeSlide benchmark automation gate"],
+          "fullName": "NodeSlide benchmark automation gate writes deterministic reports and idempotent hash-chained run/reward records",
+          "status": "passed",
+          "title": "writes deterministic reports and idempotent hash-chained run/reward records",
+          "duration": 1729.0098000000016,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["NodeSlide benchmark automation gate"],
+          "fullName": "NodeSlide benchmark automation gate detects broken chains and refuses incomparable baselines",
+          "status": "passed",
+          "title": "detects broken chains and refuses incomparable baselines",
+          "duration": 556.4928999999993,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1785283302399,
+      "endTime": 1785283309978.493,
+      "status": "passed",
+      "message": "",
+      "name": "D:/VSCode Projects/nodeslide-complete-discussions/scripts/tests/nodeslide-benchmark-gate.test.mjs"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["trust-surface census — clause 1, enumeration"],
+          "fullName": "trust-surface census — clause 1, enumeration reports an unannotated decision surface as not-run, by file and component",
+          "status": "passed",
+          "title": "reports an unannotated decision surface as not-run, by file and component",
+          "duration": 133.34050000000025,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["trust-surface census — clause 1, enumeration"],
+          "fullName": "trust-surface census — clause 1, enumeration stops reporting it the moment the component declares itself",
+          "status": "passed",
+          "title": "stops reporting it the moment the component declares itself",
+          "duration": 248.35169999999925,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["trust-surface census — clause 1, enumeration"],
+          "fullName": "trust-surface census — clause 1, enumeration binds an annotation to its own component, not to the file",
+          "status": "passed",
+          "title": "binds an annotation to its own component, not to the file",
+          "duration": 213.6851999999999,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["trust-surface census — clause 1, enumeration"],
+          "fullName": "trust-surface census — clause 1, enumeration finds a surface that uses none of the accept/reject vocabulary",
+          "status": "passed",
+          "title": "finds a surface that uses none of the accept/reject vocabulary",
+          "duration": 109.29010000000017,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["trust-surface census — clause 1, enumeration"],
+          "fullName": "trust-surface census — clause 1, enumeration does not flag prose that merely describes a decision",
+          "status": "passed",
+          "title": "does not flag prose that merely describes a decision",
+          "duration": 278.0715,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["trust-surface census — clause 3, not styled to imply an outcome"],
+          "fullName": "trust-surface census — clause 3, not styled to imply an outcome catches a transition on a decision affordance",
+          "status": "passed",
+          "title": "catches a transition on a decision affordance",
+          "duration": 684.3995999999997,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["trust-surface census — clause 3, not styled to imply an outcome"],
+          "fullName": "trust-surface census — clause 3, not styled to imply an outcome reports a clean selector, not the comment that precedes it",
+          "status": "passed",
+          "title": "reports a clean selector, not the comment that precedes it",
+          "duration": 592.3025000000007,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["trust-surface census — clause 3, not styled to imply an outcome"],
+          "fullName": "trust-surface census — clause 3, not styled to imply an outcome keeps CSS line numbers true after comments are blanked",
+          "status": "passed",
+          "title": "keeps CSS line numbers true after comments are blanked",
+          "duration": 271.29359999999997,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #1 exists but never mounts — has at least one fixture",
+          "status": "passed",
+          "title": "#1 exists but never mounts — has at least one fixture",
+          "duration": 2.6508999999996377,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #1 annotated surface behind a false guard, never rendered — is MISSED",
+          "status": "passed",
+          "title": "#1 annotated surface behind a false guard, never rendered — is MISSED",
+          "duration": 226.1310999999996,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #1 — the recorded verdict \"not-detected\" matches what the gate does",
+          "status": "passed",
+          "title": "#1 — the recorded verdict \"not-detected\" matches what the gate does",
+          "duration": 261.47289999999975,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #2 animation targets an off-screen decoy — has at least one fixture",
+          "status": "passed",
+          "title": "#2 animation targets an off-screen decoy — has at least one fixture",
+          "duration": 0.34069999999974243,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #2 motion on an off-screen decoy, real surface untouched — is MISSED",
+          "status": "passed",
+          "title": "#2 motion on an off-screen decoy, real surface untouched — is MISSED",
+          "duration": 217.57480000000032,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #2 — the recorded verdict \"not-detected\" matches what the gate does",
+          "status": "passed",
+          "title": "#2 — the recorded verdict \"not-detected\" matches what the gate does",
+          "duration": 162.47839999999997,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #3 screenshots differ only because of a clock — has at least one fixture",
+          "status": "passed",
+          "title": "#3 screenshots differ only because of a clock — has at least one fixture",
+          "duration": 0.3756999999986874,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #3 live timestamp inside the trust surface — is MISSED",
+          "status": "passed",
+          "title": "#3 live timestamp inside the trust surface — is MISSED",
+          "duration": 50.952400000000125,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #3 — the recorded verdict \"not-detected\" matches what the gate does",
+          "status": "passed",
+          "title": "#3 — the recorded verdict \"not-detected\" matches what the gate does",
+          "duration": 82.38820000000123,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #4 trust surface animates toward apparent approval — has at least one fixture",
+          "status": "passed",
+          "title": "#4 trust surface animates toward apparent approval — has at least one fixture",
+          "duration": 0.3204999999998108,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #4 4a approval motion declared in CSS — is CAUGHT",
+          "status": "passed",
+          "title": "#4 4a approval motion declared in CSS — is CAUGHT",
+          "duration": 99.85120000000097,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #4 4b approval motion as a utility class — is CAUGHT",
+          "status": "passed",
+          "title": "#4 4b approval motion as a utility class — is CAUGHT",
+          "duration": 77.04839999999967,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #4 4c approval motion in an inline style prop — is CAUGHT",
+          "status": "passed",
+          "title": "#4 4c approval motion in an inline style prop — is CAUGHT",
+          "duration": 70.1252999999997,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #4 4d approval motion via Framer Motion props — is CAUGHT",
+          "status": "passed",
+          "title": "#4 4d approval motion via Framer Motion props — is CAUGHT",
+          "duration": 31.85530000000108,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #4 4e approval motion via the Web Animations API — is CAUGHT",
+          "status": "passed",
+          "title": "#4 4e approval motion via the Web Animations API — is CAUGHT",
+          "duration": 54.71399999999994,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #4 — the recorded verdict \"detected\" matches what the gate does",
+          "status": "passed",
+          "title": "#4 — the recorded verdict \"detected\" matches what the gate does",
+          "duration": 353.6949000000004,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #5 reduced-motion renders a different design — has at least one fixture",
+          "status": "passed",
+          "title": "#5 reduced-motion renders a different design — has at least one fixture",
+          "duration": 0.3677000000006956,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #5 prefers-reduced-motion repaints the card in the approval colour — is MISSED",
+          "status": "passed",
+          "title": "#5 prefers-reduced-motion repaints the card in the approval colour — is MISSED",
+          "duration": 408.59950000000026,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #5 — the recorded verdict \"not-detected\" matches what the gate does",
+          "status": "passed",
+          "title": "#5 — the recorded verdict \"not-detected\" matches what the gate does",
+          "duration": 251.41679999999906,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #6 GSAP knockout jumps to the end and falsely passes — has at least one fixture",
+          "status": "passed",
+          "title": "#6 GSAP knockout jumps to the end and falsely passes — has at least one fixture",
+          "duration": 0.38249999999970896,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #6 GSAP tween whose knockout path sets duration to zero — is MISSED",
+          "status": "passed",
+          "title": "#6 GSAP tween whose knockout path sets duration to zero — is MISSED",
+          "duration": 154.1892000000007,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #6 — the recorded verdict \"not-detected\" matches what the gate does",
+          "status": "passed",
+          "title": "#6 — the recorded verdict \"not-detected\" matches what the gate does",
+          "duration": 27.817799999998897,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #7 video shows motion the live application does not contain — has at least one fixture",
+          "status": "passed",
+          "title": "#7 video shows motion the live application does not contain — has at least one fixture",
+          "duration": 0.2739000000001397,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #7 compliant source; the motion exists only in the recording — is MISSED",
+          "status": "passed",
+          "title": "#7 compliant source; the motion exists only in the recording — is MISSED",
+          "duration": 89.48270000000048,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture #7 — the recorded verdict \"not-detected\" matches what the gate does",
+          "status": "passed",
+          "title": "#7 — the recorded verdict \"not-detected\" matches what the gate does",
+          "duration": 35.32040000000052,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — graded, fixture by fixture"],
+          "fullName": "motion deception corpus — graded, fixture by fixture records a verdict for all seven corpus classes, with no gaps",
+          "status": "passed",
+          "title": "records a verdict for all seven corpus classes, with no gaps",
+          "duration": 0.5370000000002619,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "motion deception corpus — the three routes a CSS-only scan could not see"
+          ],
+          "fullName": "motion deception corpus — the three routes a CSS-only scan could not see goes red on inline style prop",
+          "status": "passed",
+          "title": "goes red on inline style prop",
+          "duration": 184.4403000000002,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "motion deception corpus — the three routes a CSS-only scan could not see"
+          ],
+          "fullName": "motion deception corpus — the three routes a CSS-only scan could not see goes red on Framer Motion animate prop",
+          "status": "passed",
+          "title": "goes red on Framer Motion animate prop",
+          "duration": 28.06629999999859,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "motion deception corpus — the three routes a CSS-only scan could not see"
+          ],
+          "fullName": "motion deception corpus — the three routes a CSS-only scan could not see goes red on bare <motion.div> with no props yet",
+          "status": "passed",
+          "title": "goes red on bare <motion.div> with no props yet",
+          "duration": 56.23869999999988,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "motion deception corpus — the three routes a CSS-only scan could not see"
+          ],
+          "fullName": "motion deception corpus — the three routes a CSS-only scan could not see goes red on WAAPI .animate() from an effect",
+          "status": "passed",
+          "title": "goes red on WAAPI .animate() from an effect",
+          "duration": 43.78399999999965,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "motion deception corpus — the three routes a CSS-only scan could not see"
+          ],
+          "fullName": "motion deception corpus — the three routes a CSS-only scan could not see stays green on a decision surface with no motion at all",
+          "status": "passed",
+          "title": "stays green on a decision surface with no motion at all",
+          "duration": 194.29140000000007,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": [
+            "motion deception corpus — the three routes a CSS-only scan could not see"
+          ],
+          "fullName": "motion deception corpus — the three routes a CSS-only scan could not see ignores motion on a failed-state surface, which is policed by a different rule",
+          "status": "passed",
+          "title": "ignores motion on a failed-state surface, which is policed by a different rule",
+          "duration": 129.65929999999935,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — the table cannot overstate itself"],
+          "fullName": "motion deception corpus — the table cannot overstate itself fails when a corpus entry carries no verdict",
+          "status": "passed",
+          "title": "fails when a corpus entry carries no verdict",
+          "duration": 2385.080600000001,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — the table cannot overstate itself"],
+          "fullName": "motion deception corpus — the table cannot overstate itself fails when an entry claims a detector that does not exist",
+          "status": "passed",
+          "title": "fails when an entry claims a detector that does not exist",
+          "duration": 1061.5257999999994,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — the table cannot overstate itself"],
+          "fullName": "motion deception corpus — the table cannot overstate itself fails when an entry claims \"detected\" but names no detector",
+          "status": "passed",
+          "title": "fails when an entry claims \"detected\" but names no detector",
+          "duration": 812.0053000000007,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — the table cannot overstate itself"],
+          "fullName": "motion deception corpus — the table cannot overstate itself fails when two entries share an id",
+          "status": "passed",
+          "title": "fails when two entries share an id",
+          "duration": 816.4596999999994,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — the coverage the gate prints about itself"],
+          "fullName": "motion deception corpus — the coverage the gate prints about itself states a denominator, so a green run cannot read as \"no deceptive motion exists\"",
+          "status": "passed",
+          "title": "states a denominator, so a green run cannot read as \"no deceptive motion exists\"",
+          "duration": 4.430199999998877,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — the coverage the gate prints about itself"],
+          "fullName": "motion deception corpus — the coverage the gate prints about itself names every corpus class, detected or not, with its reason",
+          "status": "passed",
+          "title": "names every corpus class, detected or not, with its reason",
+          "duration": 6.962600000000748,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["motion deception corpus — the coverage the gate prints about itself"],
+          "fullName": "motion deception corpus — the coverage the gate prints about itself cites a PROBED runner for every not-detected class, never a bare command",
+          "status": "passed",
+          "title": "cites a PROBED runner for every not-detected class, never a bare command",
+          "duration": 1.7458999999998923,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["trust-surface gate — the repository itself"],
+          "fullName": "trust-surface gate — the repository itself passes every static clause with no surface left not-run",
+          "status": "passed",
+          "title": "passes every static clause with no surface left not-run",
+          "duration": 826.9595000000008,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["trust-surface gate — the repository itself"],
+          "fullName": "trust-surface gate — the repository itself enumerates every kind the shipped surfaces actually use",
+          "status": "passed",
+          "title": "enumerates every kind the shipped surfaces actually use",
+          "duration": 835.824700000001,
+          "failureMessages": [],
+          "meta": {}
+        },
+        {
+          "ancestorTitles": ["trust-surface gate — the repository itself"],
+          "fullName": "trust-surface gate — the repository itself never reports a browser-only clause as passed",
+          "status": "passed",
+          "title": "never reports a browser-only clause as passed",
+          "duration": 3.3562999999994645,
+          "failureMessages": [],
+          "meta": {}
+        }
+      ],
+      "startTime": 1785283302085,
+      "endTime": 1785283314676.3562,
+      "status": "passed",
+      "message": "",
+      "name": "D:/VSCode Projects/nodeslide-complete-discussions/scripts/tests/nodeslide-trust-surface-census.test.mjs"
+    }
+  ]
+}

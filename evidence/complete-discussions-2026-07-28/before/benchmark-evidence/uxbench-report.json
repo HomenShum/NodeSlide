@@ -1,0 +1,486 @@
+{
+  "schemaVersion": "nodeslide-uxbench-report/v1",
+  "harness": {
+    "name": "nodeslide-uxbench",
+    "version": "1.0.0"
+  },
+  "corpus": {
+    "version": "2026-07-15",
+    "registryDigest": "sha256:b90db01f9acfd7395f40874dd18cc745a99b4f22bbd5fc108459a52192dd00ae",
+    "fixtureDigests": {
+      "C01": "sha256:362db3c1749351928f3e944c0842594517ae86743f0f23d7e0fb087458bcf33c",
+      "C05": "sha256:fdb0092d379477fa9389886f428c6e96c0801b2dada03c4822afce72f9ba1c92",
+      "C06": "sha256:f89bc1e610d94b9aca0d3402fb9e8f09384a93142429ecdddd7dcf7f6b702fa9",
+      "N04": "sha256:af3384914dc509179cdf03fca6574c27a2673c02b97fec7ec0c497964238cc35",
+      "E01": "sha256:9ce29a2198c8efc016f525091ef6079fc25c06df496e2add92bd0c6079f9c16c",
+      "E06": "sha256:e09a3c9aafd125feec338c1967b834b5785fe7045bf3f7f0e00788b9f349b72b",
+      "E11": "sha256:93d4c9dfca89d8248e326446bb1d84d535cfd49515dfeef60072c5ecca7c8023",
+      "V01": "sha256:6a37abe8abcdad050d5f8278541e38abcf500745880d7df271d76b300ec26d88",
+      "V07": "sha256:91f9be9463c08c48399b508b949ff68f1787733262f109d100ac6ef592614bca",
+      "D01": "sha256:f8f83463e7eef6b0839258d039774bd783ca62749a4356c264bfa73ea003e456",
+      "D03": "sha256:d335531141f592f6f3164fd08307415f86164f43021af0979511f814983f4312",
+      "I02": "sha256:576ed0830bc0bf2406a39cded67b1dc8c0920392fd1d3d8df8a31ca7f8cfc46f",
+      "M01": "sha256:e47d3dc3bbef397d7385a474a81aba3c85a318454cbb854dcc0506765d98dafc",
+      "T09": "sha256:1562153b074ae7c345104b112f85c6f4cabd530539f6271f74926954ab98798a",
+      "R01": "sha256:2246bd00973f638ebb7c9d89d21d5ff5a3c3f906801e4547f4a81db274eb26f3",
+      "S07": "sha256:57c532be578412dd0af3b9a6cb4069a9aa9645a28eec936f28b0d1fc28758b39",
+      "Q01": "sha256:a348d2ae753dcb4d98453cc8d02367678f4d2968e98ae60f430916768e313310",
+      "P01": "sha256:75e299b70c8fb0bfb312b59b3a3385d12a7650ed25bec721f420ea50285226a7",
+      "A03": "sha256:1c9fcb986cce97b24a9b5f12a4969d04bdd86d45bef7208fafc57df4d5dfd034",
+      "F08": "sha256:7f17699cddcf02f7c44b0d0eedf969e7bac1188b3ccb1ca1c1a28b95f2b70431",
+      "A05": "sha256:850bcd16d3904daad9c6a9aa0904bfe35bf2ec12a5cd7ca8fbf01073bcbe8cdb"
+    }
+  },
+  "status": "UNSCORED",
+  "summary": {
+    "pass": 0,
+    "fail": 0,
+    "unscored": 21
+  },
+  "artifactCount": 0,
+  "inputIssues": [],
+  "cases": [
+    {
+      "caseId": "C01",
+      "title": "Exact-count deck creation",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:362db3c1749351928f3e944c0842594517ae86743f0f23d7e0fb087458bcf33c",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "C05",
+      "title": "Multi-file evidence-bound creation",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:fdb0092d379477fa9389886f428c6e96c0801b2dada03c4822afce72f9ba1c92",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "C06",
+      "title": "Web and file source creation",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:f89bc1e610d94b9aca0d3402fb9e8f09384a93142429ecdddd7dcf7f6b702fa9",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "N04",
+      "title": "Bounded multi-slide narrative tension",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:af3384914dc509179cdf03fca6574c27a2673c02b97fec7ec0c497964238cc35",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "E01",
+      "title": "Selected-element copy edit",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:9ce29a2198c8efc016f525091ef6079fc25c06df496e2add92bd0c6079f9c16c",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "E06",
+      "title": "Selected-slide persuasive refinement",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:e09a3c9aafd125feec338c1967b834b5785fe7045bf3f7f0e00788b9f349b72b",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "E11",
+      "title": "Three-slide bounded headline edit",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:93d4c9dfca89d8248e326446bb1d84d535cfd49515dfeef60072c5ecca7c8023",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "V01",
+      "title": "Editable left-to-right flow diagram",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:6a37abe8abcdad050d5f8278541e38abcf500745880d7df271d76b300ec26d88",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "V07",
+      "title": "Replace equal-card clutter with hierarchy",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:91f9be9463c08c48399b508b949ff68f1787733262f109d100ac6ef592614bca",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "D01",
+      "title": "CSV to typed native line chart",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:f8f83463e7eef6b0839258d039774bd783ca62749a4356c264bfa73ea003e456",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "D03",
+      "title": "Preserve chart values while editing labels",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:d335531141f592f6f3164fd08307415f86164f43021af0979511f814983f4312",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "I02",
+      "title": "Image alt text and visible credit",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:576ed0830bc0bf2406a39cded67b1dc8c0920392fd1d3d8df8a31ca7f8cfc46f",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "M01",
+      "title": "Editable native math conversion",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:e47d3dc3bbef397d7385a474a81aba3c85a318454cbb854dcc0506765d98dafc",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "T09",
+      "title": "Three genuine design directions",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:1562153b074ae7c345104b112f85c6f4cabd530539f6271f74926954ab98798a",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "R01",
+      "title": "Comment-to-AI scoped proposal",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:2246bd00973f638ebb7c9d89d21d5ff5a3c3f906801e4547f4a81db274eb26f3",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "S07",
+      "title": "Missing-source coverage audit",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:57c532be578412dd0af3b9a6cb4069a9aa9645a28eec936f28b0d1fc28758b39",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "Q01",
+      "title": "Full structured deck validation",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:a348d2ae753dcb4d98453cc8d02367678f4d2968e98ae60f430916768e313310",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "P01",
+      "title": "Sixty-second notes for every slide",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:75e299b70c8fb0bfb312b59b3a3385d12a7650ed25bec721f420ea50285226a7",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "A03",
+      "title": "Autonomous completion within grant",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:1c9fcb986cce97b24a9b5f12a4969d04bdd86d45bef7208fafc57df4d5dfd034",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "F08",
+      "title": "Stale proposal fails closed",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:7f17699cddcf02f7c44b0d0eedf969e7bac1188b3ccb1ca1c1a28b95f2b70431",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    },
+    {
+      "caseId": "A05",
+      "title": "Hard per-run cost ceiling",
+      "status": "UNSCORED",
+      "runId": null,
+      "fixtureDigest": "sha256:850bcd16d3904daad9c6a9aa0904bfe35bf2ec12a5cd7ca8fbf01073bcbe8cdb",
+      "artifactManifestDigest": null,
+      "checks": [
+        {
+          "id": "artifact-supplied",
+          "status": "UNSCORED",
+          "message": "No run artifact was supplied for this fixture.",
+          "evidenceRefs": []
+        }
+      ],
+      "summary": {
+        "pass": 0,
+        "fail": 0,
+        "unscored": 1
+      }
+    }
+  ],
+  "reportId": "sha256:e66fd499ccfb8e5a77bc3937c4fa28dd33a8bd2a132765d520bee6ee5bef4e86"
+}

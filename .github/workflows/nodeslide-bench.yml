@@ -75,14 +75,44 @@ jobs:
           retention-days: 14
           path: benchmark-results/pr/
 
+  evidence_absence:
+    name: No supplied evidence (expected UNSCORED)
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Prove the no-evidence lane stays fail-closed
+        shell: bash
+        run: |
+          set +e
+          npm run nodeslide:bench:evidence -- --out benchmark-results/evidence-absence
+          exit_code=$?
+          set -e
+          test "$exit_code" -eq 2
+          grep -F '"status": "UNSCORED"' benchmark-results/evidence-absence/benchmark-summary.json
+      - name: Upload the explicit absence receipt
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v5
+        with:
+          name: nodeslide-bench-evidence-absence-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: error
+          retention-days: 14
+          path: benchmark-results/evidence-absence/
+
   evidence:
     name: Supplied evidence lane
     if: >-
-      github.event_name == 'push' ||
-      (github.event_name == 'workflow_dispatch' && inputs.evidence_path != '')
+      github.event_name == 'workflow_dispatch' &&
+      inputs.evidence_path != ''
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.enforce != true }}
+    continue-on-error: ${{ inputs.enforce != true }}
     env:
       EVIDENCE_PATH: ${{ inputs.evidence_path }}
       BASELINE_PATH: ${{ inputs.baseline_path }}
@@ -143,9 +173,14 @@ jobs:
         env:
           OPENROUTER_API_KEY: ${{ secrets.NODESLIDE_TASTE_JUDGE_OPENROUTER_KEY }}
         run: |
-          test -n "$PLAYWRIGHT_BASE_URL"
-          test -n "$NODESLIDE_BENCH_CONVEX_URL"
-          test -n "$OPENROUTER_API_KEY"
+          missing=()
+          [[ -n "$PLAYWRIGHT_BASE_URL" ]] || missing+=(NODESLIDE_PRODUCTION_URL)
+          [[ -n "$NODESLIDE_BENCH_CONVEX_URL" ]] || missing+=(NODESLIDE_PRODUCTION_CONVEX_URL)
+          [[ -n "$OPENROUTER_API_KEY" ]] || missing+=(NODESLIDE_TASTE_JUDGE_OPENROUTER_KEY)
+          if (( ${#missing[@]} > 0 )); then
+            printf 'Missing required live-evidence configuration: %s\n' "${missing[*]}" >&2
+            exit 1
+          fi
       - run: npx playwright install --with-deps chromium
       - name: Produce exact C01, E01, and A05 browser evidence
         id: producer

@@ -15,6 +15,7 @@
       "benchmarks/artifact-atlas/v2",
       "docs/dogfood",
       "docs/plans/assets",
+      "evidence/complete-discussions-2026-07-28",
       "contracts",
       "convex/_generated",
       "packages/convex/component/_generated",

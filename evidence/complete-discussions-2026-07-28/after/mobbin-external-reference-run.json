@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "nodeslide.external-reference-proof/v1",
+  "provider": "mobbin",
+  "operation": "authenticated-live-inspection",
+  "authenticationResult": "PASS",
+  "checkedAt": "2026-07-29T01:04:17.055Z",
+  "inspectionTool": "mobbin/search_flows",
+  "app": "Figma Slides",
+  "flow": "Starting a presentation (Figma Slides)",
+  "flowId": "033bd9d8-9418-4c27-b9f5-9a2a072a0937",
+  "sourceUrl": "https://mobbin.com/flows/033bd9d8-9418-4c27-b9f5-9a2a072a0937",
+  "observationId": "observation:mobbin:figma-slides:start-presentation:2026-07-29",
+  "observationDigest": "sha256:9d4f443224319f11709121bf7a8358f0dbc3bd61d78d00594d62b44541f0656c",
+  "externalReferenceRunDigest": "sha256:60209a59a2c3e51c149c39e8256aa11b138d11a9eeffcdf207979839b1f3d3bb",
+  "facts": [
+    {
+      "kind": "count",
+      "subject": "flow 033bd9d8-9418-4c27-b9f5-9a2a072a0937",
+      "property": "screen_count",
+      "value": 3,
+      "unit": "screens",
+      "locatorDescription": "flow-level screen_count"
+    },
+    {
+      "kind": "relationship",
+      "subject": "screen bcdacfdb-c856-4dc9-979d-8eb351267f21 at position 1",
+      "property": "precedes",
+      "value": "screen ab34bc66-2b87-45f0-8a7d-ed8cb3120df7 at position 2",
+      "unit": "ordered-flow-position",
+      "locatorDescription": "flow choreography positions 1 → 2"
+    },
+    {
+      "kind": "relationship",
+      "subject": "screen ab34bc66-2b87-45f0-8a7d-ed8cb3120df7 at position 2",
+      "property": "precedes",
+      "value": "screen 471a4980-ccae-4212-9a65-b5ed4c01e480 at position 3",
+      "unit": "ordered-flow-position",
+      "locatorDescription": "flow choreography positions 2 → 3"
+    },
+    {
+      "kind": "relationship",
+      "subject": "flow 033bd9d8-9418-4c27-b9f5-9a2a072a0937",
+      "property": "categorized as",
+      "value": "Starting & Completing",
+      "unit": "category",
+      "locatorDescription": "flow-level category"
+    }
+  ],
+  "retention": {
+    "storedPixels": false,
+    "cachedSourcePayload": false,
+    "embeddingStored": false,
+    "ragIndexed": false,
+    "trainingUsed": false,
+    "storedDom": false,
+    "storedOcr": false
+  },
+  "rawSourcePayloadIncluded": false
+}

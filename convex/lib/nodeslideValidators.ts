@@ -1173,10 +1173,18 @@ export const nodeslideVariationAxesValidator = v.object({
   ),
 });
 
-export const nodeslideVariationOriginValidator = v.union(
+/**
+ * Authorship of a proposal's operations: the model route produced them, or the deterministic
+ * fallback did after the route failed. Declared once and shared by the patch/trace lane and the
+ * variation lane, because they answer the same question about the same kind of offer — two
+ * copies of one union is how the two lanes would eventually disagree about what a value means.
+ */
+export const nodeslideProposalOriginValidator = v.union(
   v.literal('free_route'),
   v.literal('deterministic_fallback'),
 );
+
+export const nodeslideVariationOriginValidator = nodeslideProposalOriginValidator;
 
 export const nodeslideVariationStatusValidator = v.union(
   v.literal('ready'),

@@ -26,6 +26,7 @@ import {
   nodeslidePatchScopeValidator,
   nodeslidePatchSourceValidator,
   nodeslidePatchStatusValidator,
+  nodeslideProposalOriginValidator,
   nodeslideSlideArchetypeValidator,
   nodeslideSnapshotValidator,
   nodeslideSourceBindingStatusValidator,
@@ -517,6 +518,11 @@ export default defineSchema({
     candidateValidation: v.optional(nodeslideCandidateValidationReceiptValidator),
     profileId: v.optional(v.string()),
     profileDigest: v.optional(v.string()),
+    // Authorship of the operations, carried from the planner receipt. Optional because rows
+    // written before proposal-authorship provenance genuinely do not know; the surfaces render
+    // that absence as `unattributed` rather than as a missing attribute.
+    origin: v.optional(nodeslideProposalOriginValidator),
+    fallbackReason: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
@@ -1214,6 +1220,10 @@ export default defineSchema({
     outputTokens: v.optional(v.number()),
     sourceBindingStatus: v.optional(nodeslideSourceBindingStatusValidator),
     claimSourceBindings: v.optional(v.array(nodeslideClaimSourceBindingValidator)),
+    // Authorship, alongside provider/model rather than derived from them: a fallback run still
+    // reports the provider it CALLED, so `provider` cannot answer "who wrote these operations".
+    origin: v.optional(nodeslideProposalOriginValidator),
+    fallbackReason: v.optional(v.string()),
     createdAt: v.number(),
     completedAt: v.optional(v.number()),
   })

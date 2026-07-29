@@ -6,6 +6,8 @@ import type {
   NodeSlideAuthoredArtifactBinding,
 } from './nodeslideArtifactSpec.js';
 
+import type { NodeSlideProposalOrigin } from './nodeslideProposalOrigin.js';
+
 export const NODESLIDE_SCHEMA_VERSION = 'nodeslide.slidelang/v1' as const;
 export const NODESLIDE_TOOLCHAIN_VERSION = 'local-slidelang-adapter/1.1.0' as const;
 export const NODESLIDE_EMBEDDED_RASTER_IMAGE_MAX_LENGTH = 700_000;
@@ -770,6 +772,15 @@ export interface DeckPatch {
   /** Immutable signature revision; profileId and profileDigest always appear together. */
   profileId?: string;
   profileDigest?: string;
+  /**
+   * Who authored these operations. Carried from the planner receipt so a reviewer — human or
+   * agent — can tell a model's plan from the deterministic fallback's plan without reading
+   * prose. Absent on rows written before proposal-authorship provenance; the surfaces render
+   * that absence as `unattributed` rather than dropping the attribute.
+   */
+  origin?: NodeSlideProposalOrigin;
+  /** Why the deterministic fallback ran. Present only alongside `deterministic_fallback`. */
+  fallbackReason?: string;
   createdAt: number;
   updatedAt: number;
 }
@@ -1165,6 +1176,13 @@ export interface AgentTrace {
   sourceBindingStatus?: NodeSlideSourceBindingStatus;
   /** Empty for non-factual runs and honestly unavailable on legacy traces. */
   claimSourceBindings?: NodeSlideClaimSourceBinding[];
+  /**
+   * Authorship of the patch this trace explains, carried alongside `provider`/`model` because
+   * those two answer a different question: a fallback run still reports the provider it CALLED.
+   */
+  origin?: NodeSlideProposalOrigin;
+  /** Why the deterministic fallback ran. Present only alongside `deterministic_fallback`. */
+  fallbackReason?: string;
   createdAt: number;
   completedAt?: number;
 }

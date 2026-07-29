@@ -72,6 +72,81 @@ const KIND_CONTRACT = {
  */
 const DECISION_VALUES = new Set(['undecided', 'accepted', 'rejected', 'failed', 'none']);
 
+/* -------------------------------------------------- authorship: who wrote the proposal */
+
+/**
+ * A proposal surface must publish WHO AUTHORED IT, not only whether it has been decided.
+ *
+ * `data-decision` says a decision is outstanding. It does not say whether accepting is safe,
+ * and for an agent-authored change the fact that answers that is authorship: a plan the model
+ * actually produced and a plan the deterministic fallback produced after the provider timed out
+ * are different offers with identical-looking operations. Both surfaces DISCLOSED this already,
+ * in visible copy that is correct and is not being changed — the variation card renders
+ * "Deterministic fallback" plus a "Fallback reason:" line, the agent thread renders the
+ * planner's own `Planner · deterministic fallback: …` step. Neither published an attribute, so
+ * the disclosure was legible to a person and invisible to a reader.
+ *
+ * Presence is asserted separately from value, for the same reason clause 2 does it: the
+ * `data-agent-web-consent` regression was a surface that kept working perfectly while its
+ * posture stopped being published, and a value-only check passes when the attribute is gone.
+ */
+export const PROPOSAL_ORIGIN_ATTRIBUTE = 'data-proposal-origin';
+
+/**
+ * The kinds that present authored operations for accept/reject. `consent` answers how egress
+ * was authorized and `failed-state` is a readout — neither carries somebody's draft — and
+ * `permission` is a grant, where the question is who may act, not who wrote what.
+ */
+export const PROPOSAL_ORIGIN_KINDS = new Set(['proposal', 'diff-review']);
+
+/**
+ * Values the attribute may carry. `unattributed` is the honest answer for a record written
+ * before authorship provenance existed; it is NOT a synonym for either real origin, and it is
+ * emphatically not the same as the attribute being absent — see the vocabulary check below.
+ */
+export const PROPOSAL_ORIGIN_VALUES = new Set([
+  'free_route',
+  'deterministic_fallback',
+  'unattributed',
+]);
+
+/**
+ * The one function allowed to compute the value (`shared/nodeslideProposalOrigin.ts`).
+ *
+ * This is the "one writer per attribute" rule made checkable. The mapping function is the only
+ * place that refuses a value outside the vocabulary, so a surface that computes its own — via
+ * `String(patch.origin)`, a template literal, a `??` chain — routes around the one guard that
+ * exists and can stamp the literal text "undefined" onto a trust surface. That is strictly
+ * worse than an absent attribute: absent is a hole a gate can see, "undefined" is a hole
+ * wearing the costume of an answer, and an agent that trusts it learns something false.
+ */
+export const PROPOSAL_ORIGIN_WRITER = 'nodeSlideProposalOriginAttribute';
+
+/**
+ * Surfaces that present a decision but have no authorship to publish, each with the reason.
+ *
+ * `unattributed` would be the wrong answer on both of these, and wrong in a specific way: it
+ * means "this record predates authorship provenance and does not know". Here we DO know — a
+ * person typed the JSON, a local generator built the spec — and answering "unknown" to a
+ * question we can answer is its own small dishonesty. So they are exempted by name, with a
+ * reason, and the staleness check below makes the exemption expire the moment it stops
+ * describing something real.
+ */
+export const PROPOSAL_ORIGIN_AUTHORLESS = [
+  {
+    file: 'src/domains/nodeslide/inspector/JsonInspector.tsx',
+    component: 'ElementJsonEditor',
+    reason:
+      'The operations are the text a person typed into the textarea on this very card. No planner ran, no provider was called, and there is no receipt to carry an origin — the author is the reviewer. `free_route` and `deterministic_fallback` both describe a machine that was never involved.',
+  },
+  {
+    file: 'src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx',
+    component: 'OpenUiMaterialWorkbench',
+    reason:
+      'Deterministic OpenUI Phase 0. The material spec is built locally from axes the user set and never passes through the edit planner, so there is no route that could have failed and nothing to have fallen back from. The surface already carries `data-verification`, which is the provenance question that DOES apply to it.',
+  },
+];
+
 /* ------------------------------------------------------------------ sweep patterns */
 
 /**
@@ -555,7 +630,18 @@ export async function collectTrustSurfaceCensus({
  *   that finding goes red. Those are different claims, and the corpus grading needs the
  *   second one. Production callers pass nothing.
  */
-export async function trustSurfaceChecks({ corpus = MOTION_DECEPTION_CORPUS, ...options } = {}) {
+export async function trustSurfaceChecks({
+  corpus = MOTION_DECEPTION_CORPUS,
+  /*
+   * Overridable for exactly the reason `allowlist` is: the shipped authorless table names two
+   * real repository components, so against a fixture tree BOTH entries are stale and the
+   * staleness check goes red on both. That red would drown the finding the fixture exists to
+   * produce, and a fixture must be able to fail for its own reason. Production callers pass
+   * nothing and get the real table.
+   */
+  proposalOriginAllowlist = PROPOSAL_ORIGIN_AUTHORLESS,
+  ...options
+} = {}) {
   const census = await collectTrustSurfaceCensus(options);
   const { annotated, notRun, staleAllowlist, cssRules, byComponent, allowlist } = census;
   const checks = [];
@@ -632,6 +718,128 @@ export async function trustSurfaceChecks({ corpus = MOTION_DECEPTION_CORPUS, ...
     badValues.length === 0
       ? `vocabulary: ${[...DECISION_VALUES].join('|')}`
       : `unknown values: ${badValues.join(', ')}`,
+  );
+
+  /* --- CLAUSE 1, second fact: authorship is published, not only narrated ------ */
+
+  const originSurfaces = annotated.filter((a) => PROPOSAL_ORIGIN_KINDS.has(a.kind));
+  const originAuthorlessKeys = new Set(
+    proposalOriginAllowlist.map((entry) => `${entry.file}::${entry.component}`),
+  );
+  const originCarrying = originSurfaces.filter((a) =>
+    a.tagText.includes(PROPOSAL_ORIGIN_ATTRIBUTE),
+  );
+  const originMissing = originSurfaces.filter(
+    (a) =>
+      !a.tagText.includes(PROPOSAL_ORIGIN_ATTRIBUTE) &&
+      !originAuthorlessKeys.has(`${a.file}::${a.component}`),
+  );
+
+  // GATE. EXISTENCE, not value. Proven red by deleting the attribute from ThreadTurn: the run
+  // named `AgentThread.tsx:292 ThreadTurn` and exited nonzero, which is the whole point — a
+  // redesign that drops the attribute must not be able to leave the value check passing
+  // vacuously over an element that no longer has one.
+  add(
+    `trust-surfaces clause 1: every proposal surface publishes ${PROPOSAL_ORIGIN_ATTRIBUTE}`,
+    originMissing.length === 0,
+    originMissing.length === 0
+      ? `${originCarrying.length} of ${originSurfaces.length} proposal/diff-review surfaces carry it; ${proposalOriginAllowlist.length} reviewed as authorless: ${originCarrying
+          .map((a) => a.component)
+          .join(' ')}`
+      : `missing ${PROPOSAL_ORIGIN_ATTRIBUTE}: ${originMissing
+          .map((a) => `${a.file}:${a.line} ${a.component} (${a.kind})`)
+          .join(', ')}`,
+  );
+
+  // GATE. An exemption is only honest while it still describes something. Two ways it rots:
+  // the component disappears, or it grows an origin and the exemption becomes a lie that would
+  // hide the NEXT surface to lose the attribute behind a stale name.
+  const staleAuthorless = proposalOriginAllowlist.filter((entry) => {
+    const matches = originSurfaces.filter(
+      (a) => a.file === entry.file && a.component === entry.component,
+    );
+    return (
+      matches.length === 0 || matches.some((a) => a.tagText.includes(PROPOSAL_ORIGIN_ATTRIBUTE))
+    );
+  });
+  add(
+    'trust-surfaces clause 1: no stale entry in the authorless-proposal allowlist',
+    staleAuthorless.length === 0,
+    staleAuthorless.length === 0
+      ? `${proposalOriginAllowlist.length} authorless surfaces, all still enumerated and still without an origin`
+      : `stale: ${staleAuthorless.map((e) => `${e.file}::${e.component}`).join(', ')}`,
+  );
+
+  // GATE. Every exemption states a reason. An allowlist of bare paths is a list of holes.
+  const unreasonedAuthorless = proposalOriginAllowlist.filter(
+    (entry) => (entry.reason ?? '').trim().length < 40,
+  );
+  add(
+    'trust-surfaces clause 1: every authorless exemption states why it has no origin',
+    unreasonedAuthorless.length === 0,
+    unreasonedAuthorless.length === 0
+      ? `${proposalOriginAllowlist.length} exemptions, all reasoned`
+      : `unreasoned: ${unreasonedAuthorless.map((e) => `${e.file}::${e.component}`).join(', ')}`,
+  );
+
+  // GATE. The census cannot be emptied by allowlisting everything. Without this, the cheapest
+  // way to silence the presence check above is to move every surface into the exemption table
+  // one honest-looking entry at a time, and each individual move looks locally reasonable.
+  add(
+    `trust-surfaces clause 1: at least one surface actually carries ${PROPOSAL_ORIGIN_ATTRIBUTE}`,
+    originCarrying.length > 0,
+    `${originCarrying.length} surface(s) publishing authorship`,
+  );
+
+  // GATE. Value, checked only after presence, and checked at the WRITER rather than at the
+  // rendered string: these are JSX expressions, so there is no literal in source to read. What
+  // source CAN prove is that the value comes from the one function that refuses anything
+  // outside the vocabulary. A literal is allowed too, and must be in the vocabulary.
+  const originAttributeValue = new RegExp(
+    `${PROPOSAL_ORIGIN_ATTRIBUTE}=(?:"([^"]*)"|\\{([\\s\\S]*?)\\}(?=\\s|/?>))`,
+  );
+  const badOriginValues = [];
+  for (const surface of originCarrying) {
+    const match = originAttributeValue.exec(surface.tagText);
+    if (!match) {
+      badOriginValues.push(`${surface.file}:${surface.line} value could not be read off the tag`);
+      continue;
+    }
+    const literal = match[1];
+    const expression = match[2];
+    if (literal !== undefined) {
+      if (!PROPOSAL_ORIGIN_VALUES.has(literal)) {
+        badOriginValues.push(`${surface.file}:${surface.line} literal "${literal}"`);
+      }
+      continue;
+    }
+    if (!(expression ?? '').includes(`${PROPOSAL_ORIGIN_WRITER}(`)) {
+      badOriginValues.push(
+        `${surface.file}:${surface.line} expression \`${(expression ?? '').trim().slice(0, 80)}\` does not go through ${PROPOSAL_ORIGIN_WRITER}()`,
+      );
+    }
+  }
+  add(
+    `trust-surfaces clause 2: every ${PROPOSAL_ORIGIN_ATTRIBUTE} is written by ${PROPOSAL_ORIGIN_WRITER}() or a declared literal`,
+    badOriginValues.length === 0,
+    badOriginValues.length === 0
+      ? `vocabulary: ${[...PROPOSAL_ORIGIN_VALUES].join('|')}; ${originCarrying.length} surface(s) route through ${PROPOSAL_ORIGIN_WRITER}()`
+      : `unguarded: ${badOriginValues.join(', ')}`,
+  );
+
+  // GATE. Named separately from the vocabulary check even though it is a subset of it, because
+  // it is the specific failure this whole area exists to prevent and a reader scanning the
+  // check list should be able to see that it is covered. `String(undefined)` renders as the
+  // four-letter word "undefined" and React will happily set it as an attribute value.
+  const stringifiedUndefined = originSurfaces.filter((a) =>
+    new RegExp(`${PROPOSAL_ORIGIN_ATTRIBUTE}=(?:"undefined"|\\{\\s*String\\()`).test(a.tagText),
+  );
+  add(
+    `trust-surfaces clause 2: no ${PROPOSAL_ORIGIN_ATTRIBUTE} is stringified into the literal "undefined"`,
+    stringifiedUndefined.length === 0,
+    stringifiedUndefined.length === 0
+      ? `${originSurfaces.length} proposal/diff-review surfaces checked for "undefined" and String( coercion`
+      : `stringified: ${stringifiedUndefined.map((a) => `${a.file}:${a.line}`).join(', ')}`,
   );
 
   /* --- CLAUSE 3: not styled to imply an outcome (static approximation) -------- */
@@ -974,6 +1182,21 @@ if (process.argv[1]?.endsWith('nodeslide-trust-surface-census.mjs')) {
   for (const entry of REVIEWED_NON_SURFACES) {
     console.log(`  ${entry.file} :: ${entry.component}\n      ${entry.reason}`);
   }
+  console.log(`\n=== PROPOSAL AUTHORSHIP (${PROPOSAL_ORIGIN_ATTRIBUTE}) ===`);
+  for (const surface of census.annotated.filter((a) => PROPOSAL_ORIGIN_KINDS.has(a.kind))) {
+    const carries = surface.tagText.includes(PROPOSAL_ORIGIN_ATTRIBUTE);
+    const exempt = PROPOSAL_ORIGIN_AUTHORLESS.some(
+      (entry) => entry.file === surface.file && entry.component === surface.component,
+    );
+    console.log(
+      `  ${carries ? 'PUBLISHES ' : exempt ? 'AUTHORLESS' : 'MISSING   '} ${surface.file}:${surface.line} ${surface.component} (${surface.kind})`,
+    );
+  }
+  console.log('\n  reviewed as authorless, with reason:');
+  for (const entry of PROPOSAL_ORIGIN_AUTHORLESS) {
+    console.log(`    ${entry.file} :: ${entry.component}\n        ${entry.reason}`);
+  }
+
   console.log('\n=== NOT-RUN (swept, never enumerated) ===');
   if (census.notRun.length === 0) console.log('  (none)');
   for (const entry of census.notRun) {

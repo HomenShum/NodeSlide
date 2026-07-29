@@ -17,6 +17,7 @@ import {
   isNodeSlideAgentModelId,
   nodeSlideAgentModel,
 } from '../../../../shared/nodeslide';
+import { nodeSlideProposalOriginAttribute } from '../../../../shared/nodeslideProposalOrigin';
 import type { AiReviewablePatch } from './reviewTypes';
 
 /**
@@ -278,12 +279,19 @@ function ThreadTurn({
            * in `primary` — the same token the Accept button fills with. Tinting the card in the
            * colour of one outcome reads as a decision that has already been made. The decision
            * state is on the element as `data-decision` so it is legible without a store.
+           *
+           * `data-proposal-origin` answers the second question a reviewer needs and the first
+           * one an agent cannot ask in prose: WHO wrote these operations. The thread already
+           * disclosed a deterministic fallback in the planner step message above — visible,
+           * correct, and unreadable to anything that is not parsing English. ThreadTurn owns
+           * this node, so ThreadTurn is the one writer of the attribute on it.
            */
           <div
             className="mt-1 flex items-center gap-2 rounded-md border border-border bg-muted/40 px-2 py-1.5"
             data-testid="agent-thread-patch"
             data-trust-surface="proposal"
             data-decision="undecided"
+            data-proposal-origin={nodeSlideProposalOriginAttribute(patch.origin)}
             data-patch-status={patch.status}
             onMouseEnter={() => onPreviewPatch?.(patch)}
             onMouseLeave={() => onPreviewPatch?.(null)}
@@ -315,6 +323,11 @@ function ThreadTurn({
            * as an accepted one, so the outcome was unreadable both to a person and to the DOM.
            * The copy is unchanged; the decision is now carried by data-decision and by a colour
            * that does not claim success for a change that was refused.
+           *
+           * Authorship survives the decision, so `data-proposal-origin` is published here too.
+           * An accepted deterministic fallback is still a deterministic fallback, and a settled
+           * readout that dropped the fact would leave the record of what WAS accepted less
+           * inspectable than the offer had been.
            */
           <p
             className={`text-[11px] ${
@@ -323,6 +336,7 @@ function ThreadTurn({
             data-testid="agent-thread-patch-settled"
             data-trust-surface="proposal"
             data-decision={patchAccepted ? 'accepted' : 'rejected'}
+            data-proposal-origin={nodeSlideProposalOriginAttribute(patch.origin)}
             data-patch-status={patch.status}
           >
             Patch {patch.status}.

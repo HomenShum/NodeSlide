@@ -1,10 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { collectTrustSurfaceCensus } from '../nodeslide-trust-surface-census.mjs';
+import {
+  PROPOSAL_ORIGIN_AUTHORLESS,
+  collectTrustSurfaceCensus,
+} from '../nodeslide-trust-surface-census.mjs';
 import {
   MOTION_FLOOR_SECONDS,
   REACH_PLAN,
   armSensors,
   clauseAnimations,
+  clauseProposalOrigin,
   clauseReducedMotion,
   clauseStateAgreement,
   clauseSuccessToken,
@@ -79,6 +83,9 @@ function observation(overrides = {}) {
     attributes: {
       'data-trust-surface': 'proposal',
       'data-decision': 'undecided',
+      // An honest proposal states not only that a decision is outstanding but who authored the
+      // thing being decided on. A card missing this is a scenario below, not the baseline.
+      'data-proposal-origin': 'free_route',
       'data-testid': 'proposal-card',
     },
     classList: ['ns-proposal-card'],
@@ -104,14 +111,14 @@ const verdicts = (clauses) => Object.values(clauses).map((clause) => clause.verd
 /* ------------------------------------------------------------------------ happy path */
 
 describe('the reviewer lands on an honest pending proposal', () => {
-  it('passes all four clauses, and every pass cites what was actually inspected', () => {
+  it('passes all five clauses, and every pass cites what was actually inspected', () => {
     const clauses = evaluateSurface({
       plan: PLAN,
       normal: observation(),
       reduced: observation(),
       motionAfter: observation(),
     });
-    expect(verdicts(clauses)).toEqual(['passed', 'passed', 'passed', 'passed']);
+    expect(verdicts(clauses)).toEqual(['passed', 'passed', 'passed', 'passed', 'passed']);
     // A verdict without the observed value behind it is not evidence. Every reason has to
     // carry something a reader can check, not the word "ok".
     for (const clause of Object.values(clauses)) {
@@ -486,6 +493,140 @@ describe('a transition is a lie only when it moves toward the accepted appearanc
   });
 });
 
+/* ------------------------------------------ clause E: the proposal names its own author */
+
+/*
+ * Scenario: the reviewer is an AGENT, deciding whether to accept a patch on the owner's behalf.
+ * It can read `data-decision="undecided"` and knows a decision is outstanding. What it cannot
+ * do — and what a human glancing at the card can — is read the sentence "Deterministic
+ * fallback" and understand that the model it asked for never produced this plan. Until the
+ * attribute existed, that fact reached the agent through prose or not at all.
+ *
+ * Every case below is that card, deformed in exactly one way, and the assertion is that the
+ * probe names the deformation rather than reporting a green it did not earn.
+ */
+describe('the reviewer needs to know who authored the thing they are accepting', () => {
+  it('passes when the surface publishes a declared origin, and cites the value', () => {
+    const verdict = clauseProposalOrigin(
+      observation({
+        attributes: {
+          'data-trust-surface': 'proposal',
+          'data-decision': 'undecided',
+          'data-proposal-origin': 'deterministic_fallback',
+        },
+      }),
+      PLAN,
+    );
+    expect(verdict.verdict).toBe('passed');
+    expect(verdict.reason).toContain('deterministic_fallback');
+  });
+
+  it('FAILS when a redesign drops the attribute — the silent-capability-loss shape', () => {
+    /*
+     * The `data-agent-web-consent` regression in its exact historical shape, one surface over:
+     * the component keeps working perfectly, the copy still says the right thing, and the
+     * posture simply stops being published. A value-only check reads the missing attribute as
+     * `undefined`, compares it against nothing, and reports green.
+     */
+    const stripped = observation({
+      attributes: { 'data-trust-surface': 'proposal', 'data-decision': 'undecided' },
+    });
+    const verdict = clauseProposalOrigin(stripped, PLAN);
+    expect(verdict.verdict).toBe('failed');
+    expect(verdict.reason).toContain('runtime attribute loss');
+    expect(verdict.reason).toContain(PLAN.key);
+  });
+
+  it('FAILS on the literal string "undefined" — worse than absent, not better', () => {
+    // `String(patch.origin)` on a legacy row. React sets it happily; a reader takes it for an
+    // answer. This is why the value is computed in exactly one place and nowhere else.
+    for (const value of ['undefined', 'null', '   ']) {
+      const verdict = clauseProposalOrigin(
+        observation({
+          attributes: {
+            'data-trust-surface': 'proposal',
+            'data-decision': 'undecided',
+            'data-proposal-origin': value,
+          },
+        }),
+        PLAN,
+      );
+      expect(verdict.verdict).toBe('failed');
+      expect(verdict.reason).toContain('stringified absence');
+    }
+  });
+
+  it('FAILS on an invented value rather than accepting a word nobody declared', () => {
+    const verdict = clauseProposalOrigin(
+      observation({
+        attributes: {
+          'data-trust-surface': 'proposal',
+          'data-decision': 'undecided',
+          'data-proposal-origin': 'model',
+        },
+      }),
+      PLAN,
+    );
+    expect(verdict.verdict).toBe('failed');
+    expect(verdict.reason).toContain('outside the declared vocabulary');
+  });
+
+  it('reports not-run — never passed — when the surface was never reached', () => {
+    const verdict = clauseProposalOrigin({ present: false }, PLAN);
+    expect(verdict.verdict).toBe('not-run');
+    expect(verdict.reason).toContain(PLAN.requires);
+  });
+
+  it('reports not-applicable WITH the reason for a census-reviewed authorless surface', () => {
+    /*
+     * The JSON element editor. A person typed the operations into the textarea on that very
+     * card, so neither `free_route` nor `deterministic_fallback` is true of them and
+     * `unattributed` would claim we do not know something we do know. Reporting `passed` here
+     * would inflate the census with authorship that was never examined.
+     */
+    const verdict = clauseProposalOrigin(
+      observation({
+        attributes: { 'data-trust-surface': 'proposal', 'data-decision': 'undecided' },
+      }),
+      { ...PLAN, key: 'src/x.tsx::ElementJsonEditor', proposalOrigin: 'authorless' },
+    );
+    expect(verdict.verdict).toBe('not-applicable');
+    expect(verdict.reason).toContain('authorless');
+  });
+
+  it('reports not-applicable for a kind that carries nobody drafted operations', () => {
+    const verdict = clauseProposalOrigin(
+      observation({
+        attributes: { 'data-trust-surface': 'failed-state', 'data-state': 'fail' },
+      }),
+      { ...PLAN, kind: 'failed-state', stateAttribute: 'data-state' },
+    );
+    expect(verdict.verdict).toBe('not-applicable');
+    expect(verdict.reason).toContain('no authored operations');
+  });
+
+  it('derives the authorless expectation from the census, never from a second hand list', async () => {
+    /*
+     * Two lists is how the probe would eventually excuse a surface the census still requires.
+     * `planForCensus` reads the census's own table, so this asserts the two agree by
+     * construction: every planned surface the census reviewed as authorless is marked
+     * authorless here, and no other one is.
+     */
+    const authorless = new Set(
+      PROPOSAL_ORIGIN_AUTHORLESS.map((entry) => `${entry.file}::${entry.component}`),
+    );
+    const { planned } = planForCensus((await collectTrustSurfaceCensus()).annotated);
+    expect(planned.length).toBeGreaterThan(0);
+    for (const entry of planned) {
+      expect(entry.proposalOrigin).toBe(authorless.has(entry.key) ? 'authorless' : 'required');
+    }
+    // The exemption table is not empty and not everything: an all-or-nothing table is a table
+    // that has stopped making a judgement.
+    expect(planned.some((entry) => entry.proposalOrigin === 'authorless')).toBe(true);
+    expect(planned.some((entry) => entry.proposalOrigin === 'required')).toBe(true);
+  });
+});
+
 /* ------------------------------------------------- welded sensors: the adversarial half */
 
 describe('the sensor refuses to report a green it did not earn', () => {
@@ -495,7 +636,7 @@ describe('the sensor refuses to report a green it did not earn', () => {
       normal: { present: false },
       reduced: { present: false },
     });
-    expect(verdicts(clauses)).toEqual(['not-run', 'not-run', 'not-run', 'not-run']);
+    expect(verdicts(clauses)).toEqual(['not-run', 'not-run', 'not-run', 'not-run', 'not-run']);
     for (const clause of Object.values(clauses)) {
       expect(clause.reason).toContain('a pending AI patch proposal');
     }
@@ -808,14 +949,22 @@ describe('the clause invariants hold across every state combination, not just th
         }
       }
     }
-    expect(checked).toBe(kinds.length * states.length * deformations.length * 4);
+    expect(checked).toBe(kinds.length * states.length * deformations.length * 5);
   });
 
   it('always attaches a non-empty, value-bearing reason to every failed verdict', () => {
     const states = ['undecided', 'pending', 'rejected', 'failed', 'none'];
     for (const state of states) {
       const poisoned = observation({
-        attributes: { 'data-trust-surface': 'proposal', 'data-decision': state },
+        // Authorship is honest here on purpose: this test is about the paint/motion clauses
+        // proving their failures with an observed value, and a surface that ALSO fails clause E
+        // would drag an unrelated reason into the assertion. Clause E's own reasons are asserted
+        // by the authorship knockouts above.
+        attributes: {
+          'data-trust-surface': 'proposal',
+          'data-decision': state,
+          'data-proposal-origin': 'free_route',
+        },
         paint: [{ ...neutralPaint('span.status'), color: POSITIVE }],
         motion: [
           { ...stillMotion('button'), transitionProperty: 'all', transitionDuration: '0.2s' },

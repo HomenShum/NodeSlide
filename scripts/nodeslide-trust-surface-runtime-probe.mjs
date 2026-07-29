@@ -62,7 +62,13 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { collectTrustSurfaceCensus } from './nodeslide-trust-surface-census.mjs';
+import {
+  PROPOSAL_ORIGIN_ATTRIBUTE,
+  PROPOSAL_ORIGIN_AUTHORLESS,
+  PROPOSAL_ORIGIN_KINDS,
+  PROPOSAL_ORIGIN_VALUES,
+  collectTrustSurfaceCensus,
+} from './nodeslide-trust-surface-census.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -453,8 +459,15 @@ export function planForCensus(annotated) {
   }
   const planKeys = new Set(REACH_PLAN.map((entry) => entry.key));
 
+  // Authorship expectation is DERIVED from the census's own authorless table, never restated
+  // here. A second hand-maintained list is how the probe would eventually excuse a surface the
+  // census still requires — the two-list disagreement this whole file is arranged to prevent.
+  const authorlessKeys = new Set(
+    PROPOSAL_ORIGIN_AUTHORLESS.map((entry) => `${entry.file}::${entry.component}`),
+  );
   const planned = REACH_PLAN.filter((entry) => byKey.has(entry.key)).map((entry) => ({
     ...entry,
+    proposalOrigin: authorlessKeys.has(entry.key) ? 'authorless' : 'required',
     census: byKey.get(entry.key),
   }));
   const unplanned = [...byKey.entries()]
@@ -1265,13 +1278,96 @@ export function clauseReducedMotion(observation, reduced, plan, motionAfter = nu
   };
 }
 
-/** All four clauses for one surface. */
+/**
+ * CLAUSE E — a proposal surface publishes WHO AUTHORED IT, in the rendered DOM.
+ *
+ * The census proves the attribute is in the SOURCE. That is not the same claim: the
+ * `data-agent-web-consent` regression was a component that still declared its posture in source
+ * while a wrapper that did not spread `data-*` erased it from the page. So this clause asks the
+ * browser, and it asks about EXISTENCE first — a value-only check reads a missing attribute as
+ * `undefined`, compares it against nothing, and passes, which is exactly the silent-capability-
+ * loss shape the attribute exists to make impossible.
+ *
+ * Honesty rules preserved:
+ *  - a surface the probe could not reach is `not-run` via armSensors, never `passed`;
+ *  - a surface the census reviewed as AUTHORLESS is `not-applicable` WITH the reason, never
+ *    `passed`: nothing about authorship was examined there, because there is none to examine.
+ */
+export function clauseProposalOrigin(observation, plan) {
+  const blocked = armSensors(observation, plan);
+  if (blocked) return { ...blocked, clause: 'E' };
+
+  if (!PROPOSAL_ORIGIN_KINDS.has(plan.kind)) {
+    return {
+      clause: 'E',
+      verdict: NOT_APPLICABLE,
+      reason: `kind "${plan.kind}" carries no authored operations, so it has no proposal author to publish`,
+    };
+  }
+  if (plan.proposalOrigin === 'authorless') {
+    return {
+      clause: 'E',
+      verdict: NOT_APPLICABLE,
+      reason: [
+        `the census reviews ${plan.key} as authorless (a person or a local generator wrote`,
+        'these operations, so neither free_route nor deterministic_fallback is true of them);',
+        'nothing about authorship was examined here',
+      ].join(' '),
+    };
+  }
+
+  const value = observation.attributes?.[PROPOSAL_ORIGIN_ATTRIBUTE];
+  if (value === undefined) {
+    return {
+      clause: 'E',
+      verdict: FAIL,
+      reason: [
+        `runtime attribute loss: the census enumerates ${plan.key} as a proposal surface that`,
+        `publishes ${PROPOSAL_ORIGIN_ATTRIBUTE}, and the rendered DOM does not carry it. Whoever`,
+        'reads this page can see that a decision is outstanding and cannot see who authored the',
+        'thing being decided on.',
+      ].join(' '),
+      observed: { attributes: Object.keys(observation.attributes ?? {}) },
+    };
+  }
+  // Named on its own because it is the specific failure this attribute exists to prevent: a
+  // stringified missing value is a hole wearing the costume of an answer.
+  if (value === 'undefined' || value === 'null' || value.trim() === '') {
+    return {
+      clause: 'E',
+      verdict: FAIL,
+      reason: [
+        `${PROPOSAL_ORIGIN_ATTRIBUTE}="${value}" is a stringified absence, not an authorship`,
+        'claim. An absent attribute is a hole a gate can see; this one reads as an answer and',
+        'is worse than absent.',
+      ].join(' '),
+      observed: { value },
+    };
+  }
+  if (!PROPOSAL_ORIGIN_VALUES.has(value)) {
+    return {
+      clause: 'E',
+      verdict: FAIL,
+      reason: `${PROPOSAL_ORIGIN_ATTRIBUTE}="${value}" is outside the declared vocabulary (${[...PROPOSAL_ORIGIN_VALUES].join('|')}); a reader learns nothing from a value nobody declared`,
+      observed: { value },
+    };
+  }
+  return {
+    clause: 'E',
+    verdict: PASS,
+    reason: `authorship published as ${PROPOSAL_ORIGIN_ATTRIBUTE}="${value}" alongside ${plan.stateAttribute}="${observation.attributes[plan.stateAttribute]}"`,
+    observed: { value },
+  };
+}
+
+/** All five clauses for one surface. */
 export function evaluateSurface({ plan, normal, reduced, motionAfter = null }) {
   return {
     A_noAnimationOnDecisionAffordance: clauseAnimations(normal, plan),
     B_noSuccessTokenOnPending: clauseSuccessToken(normal, plan),
     C_declaredStateMatchesRendered: clauseStateAgreement(normal, plan),
     D_reducedMotionCollapsesToFinalState: clauseReducedMotion(normal, reduced, plan, motionAfter),
+    E_proposalPublishesItsAuthor: clauseProposalOrigin(normal, plan),
   };
 }
 
@@ -1573,6 +1669,7 @@ export async function runTrustSurfaceProbe({
           'B_noSuccessTokenOnPending',
           'C_declaredStateMatchesRendered',
           'D_reducedMotionCollapsesToFinalState',
+          'E_proposalPublishesItsAuthor',
         ].map((clause) => [
           clause,
           {

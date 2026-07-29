@@ -163,6 +163,8 @@ export function patchFromRow(row: Doc<'nodeslide_patches'>): DeckPatch {
       : {}),
     ...(row.profileId !== undefined ? { profileId: row.profileId } : {}),
     ...(row.profileDigest !== undefined ? { profileDigest: row.profileDigest } : {}),
+    ...(row.origin !== undefined ? { origin: row.origin } : {}),
+    ...(row.fallbackReason !== undefined ? { fallbackReason: row.fallbackReason } : {}),
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
@@ -233,6 +235,8 @@ export function traceFromRow(row: Doc<'nodeslide_traces'>): AgentTrace {
     ...(row.costMicroUsd !== undefined ? { costMicroUsd: row.costMicroUsd } : {}),
     ...(row.inputTokens !== undefined ? { inputTokens: row.inputTokens } : {}),
     ...(row.outputTokens !== undefined ? { outputTokens: row.outputTokens } : {}),
+    ...(row.origin !== undefined ? { origin: row.origin } : {}),
+    ...(row.fallbackReason !== undefined ? { fallbackReason: row.fallbackReason } : {}),
     createdAt: row.createdAt,
     ...(row.completedAt !== undefined ? { completedAt: row.completedAt } : {}),
   };

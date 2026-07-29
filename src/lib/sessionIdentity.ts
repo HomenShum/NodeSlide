@@ -8,9 +8,46 @@ export interface OwnerAccessPersistenceReceipt {
   primaryAccessDurable: boolean;
 }
 
+/** Bytes of entropy in a fallback session id. 16 bytes = 128 bits, above randomUUID's 122. */
+const SESSION_ID_ENTROPY_BYTES = 16;
+
+/**
+ * Session ids are a de-facto bearer token, so they are minted at full entropy or not at all.
+ *
+ * `nodeslideJobs:listSessionJobs` takes a session id as its ONLY argument and has no other
+ * authorization: whoever holds the string reads that session's job receipts, including the
+ * free-text `error` field. That makes the id's unguessability the entire access control.
+ *
+ * The previous fallback was `session-${Date.now()}-${Math.random().toString(36).slice(2)}`, which
+ * fails that job twice over. `Date.now()` is public knowledge to the second, and `Math.random()` is
+ * explicitly not cryptographically random — V8 seeds it from a 128-bit xorshift state that is
+ * recoverable from a handful of outputs. So the search space is not 122 bits; it is "the second the
+ * session started" times a PRNG an attacker can often solve outright.
+ *
+ * `crypto.getRandomValues` is the fix rather than a second-best: it is available in every context
+ * that has `crypto` at all — including the non-secure contexts and older browsers the old fallback
+ * was written for — while `crypto.randomUUID` is restricted to secure contexts. So the branch that
+ * previously degraded to guessable now degrades to a different CSPRNG call, and
+ * `convex/lib/nodeslideAccess.ts` already mints owner capabilities exactly this way.
+ *
+ * If neither API exists we THROW rather than mint. A weak session id is not a degraded session, it
+ * is a readable one, and failing to start is the honest outcome — callers surface a real error
+ * instead of silently handing the user an id that leaks.
+ */
 function randomId(): string {
-  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID();
-  return `session-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  if (typeof crypto !== 'undefined' && typeof crypto.getRandomValues === 'function') {
+    const bytes = new Uint8Array(SESSION_ID_ENTROPY_BYTES);
+    crypto.getRandomValues(bytes);
+    return `session-${[...bytes].map((byte) => byte.toString(16).padStart(2, '0')).join('')}`;
+  }
+  throw new Error(
+    'NodeSlide cannot mint a session id: no cryptographic randomness is available. ' +
+      'A session id is the only authorization on session-scoped reads, so a guessable one ' +
+      'would expose this session to anyone who guesses it. Refusing rather than degrading.',
+  );
 }
 
 export function getOrCreateSessionId(): string {

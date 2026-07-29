@@ -669,7 +669,11 @@ describe('compact durable telemetry projection', () => {
     expect(html).toContain('Full timeline');
     expect(html).toContain('Plan bounded slide edit');
     expect(html).toContain('204');
-    expect(html).toContain('Older telemetry is available on the server');
+    // The compact partial notice now names the exact unloaded count and scopes the caveat to the
+    // loaded window, replacing the older generic "Older telemetry is available on the server".
+    // Asserting the derived count keeps this a real sensor rather than a copy match.
+    expect(html).toContain('202 older records not loaded');
+    expect(html).toContain('Counts and search cover the loaded window only');
     expect(html).toContain('Chain of custody and countersigned receipt');
   });
 });

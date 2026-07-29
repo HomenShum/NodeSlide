@@ -42,15 +42,16 @@ export const NODESLIDE_OPENROUTER_BRIEF_CONSENT = 'openrouter_full_brief_v1' as 
 export const NODESLIDE_NEBIUS_BRIEF_CONSENT = 'nebius_full_brief_v1' as const;
 
 export type NodeSlideBriefProviderMode = 'deterministic' | 'openrouter_free' | 'nebius';
+export type NodeSlideBriefProviderConsent =
+  | typeof NODESLIDE_OPENROUTER_BRIEF_CONSENT
+  | typeof NODESLIDE_NEBIUS_BRIEF_CONSENT;
 
 export interface CreateDeckAdmissionRequest extends CreateDeckRequest {
   accessCode?: string;
   providerMode: NodeSlideBriefProviderMode;
   providerModel?: NodeSlideAgentModelId;
   providerEffort?: NodeSlideReasoningEffort;
-  providerConsent?:
-    | typeof NODESLIDE_OPENROUTER_BRIEF_CONSENT
-    | typeof NODESLIDE_NEBIUS_BRIEF_CONSENT;
+  providerConsent?: NodeSlideBriefProviderConsent;
 }
 
 export interface RecentDeck {
@@ -58,6 +59,47 @@ export interface RecentDeck {
   title: string;
   version: number;
   updatedAt: number;
+}
+
+export type CreateDeckProviderAdmission = Pick<
+  CreateDeckAdmissionRequest,
+  'providerMode' | 'providerModel' | 'providerEffort' | 'providerConsent'
+>;
+
+/**
+ * The consent a mode requires, or null when the mode sends nothing outside.
+ */
+export function nodeSlideBriefProviderConsent(
+  providerMode: NodeSlideBriefProviderMode,
+): NodeSlideBriefProviderConsent | null {
+  if (providerMode === 'nebius') return NODESLIDE_NEBIUS_BRIEF_CONSENT;
+  if (providerMode === 'openrouter_free') return NODESLIDE_OPENROUTER_BRIEF_CONSENT;
+  return null;
+}
+
+/**
+ * Fail-closed admission. The previous inline version derived the consent STRING from the
+ * currently selected mode at submit time, so a box ticked while OpenRouter was selected
+ * silently became a Nebius consent if the user then switched providers — a recorded consent
+ * for a destination the user was never shown. Here the held consent must equal the consent
+ * the current mode demands, or there is no admission at all.
+ */
+export function createDeckProviderAdmission(
+  providerMode: NodeSlideBriefProviderMode,
+  providerModel: NodeSlideAgentModelId,
+  providerEffort: NodeSlideReasoningEffort,
+  providerConsent: NodeSlideBriefProviderConsent | null,
+): CreateDeckProviderAdmission | null {
+  if (providerMode === 'deterministic') return { providerMode };
+  if (providerConsent === null || providerConsent !== nodeSlideBriefProviderConsent(providerMode)) {
+    return null;
+  }
+  return {
+    providerMode,
+    providerModel,
+    providerEffort,
+    providerConsent,
+  };
 }
 
 interface ProjectDialogProps {
@@ -153,7 +195,10 @@ export function ProjectDialog({
   const [providerEffort, setProviderEffort] = useState<NodeSlideReasoningEffort>(
     initialDraft?.providerEffort ?? NODESLIDE_DEFAULT_REASONING_EFFORT,
   );
-  const [providerConsent, setProviderConsent] = useState(false);
+  const [grantedProviderConsent, setGrantedProviderConsent] =
+    useState<NodeSlideBriefProviderConsent | null>(null);
+  // A consent is only current while the mode it was granted for is still selected.
+  const providerConsent = grantedProviderConsent === nodeSlideBriefProviderConsent(providerMode);
   const [attachments, setAttachments] = useState<NodeSlideDataAttachment[]>(
     initialDraft?.attachments ?? [],
   );
@@ -178,7 +223,7 @@ export function ProjectDialog({
     setProviderMode(nodeSlideProviderModeForModel(NODESLIDE_DEFAULT_AGENT_MODEL));
     setProviderModel(NODESLIDE_DEFAULT_AGENT_MODEL);
     setProviderEffort(NODESLIDE_DEFAULT_REASONING_EFFORT);
-    setProviderConsent(false);
+    setGrantedProviderConsent(null);
     setAttachments([]);
     setAttachmentError(null);
     onClose();
@@ -206,7 +251,7 @@ export function ProjectDialog({
     setProviderMode(nodeSlideProviderModeForModel(NODESLIDE_DEFAULT_AGENT_MODEL));
     setProviderModel(NODESLIDE_DEFAULT_AGENT_MODEL);
     setProviderEffort(NODESLIDE_DEFAULT_REASONING_EFFORT);
-    setProviderConsent(false);
+    setGrantedProviderConsent(null);
     setAttachments([]);
     setAttachmentError(null);
   }, [
@@ -257,6 +302,13 @@ export function ProjectDialog({
     ) {
       return;
     }
+    const providerAdmission = createDeckProviderAdmission(
+      providerMode,
+      providerModel,
+      providerEffort,
+      grantedProviderConsent,
+    );
+    if (!providerAdmission) return;
     onCreate({
       accessCode: previewAccessCode,
       clientSessionId,
@@ -272,18 +324,8 @@ export function ProjectDialog({
       },
       themeId,
       route: 'free',
-      providerMode,
       attachments,
-      ...(providerMode !== 'deterministic'
-        ? {
-            providerModel,
-            providerEffort,
-            providerConsent:
-              providerMode === 'nebius'
-                ? NODESLIDE_NEBIUS_BRIEF_CONSENT
-                : NODESLIDE_OPENROUTER_BRIEF_CONSENT,
-          }
-        : {}),
+      ...providerAdmission,
     });
     setAccessCode('');
   };
@@ -563,7 +605,7 @@ export function ProjectDialog({
                     className={providerMode === 'deterministic' ? 'is-active' : ''}
                     onClick={() => {
                       setProviderMode('deterministic');
-                      setProviderConsent(false);
+                      setGrantedProviderConsent(null);
                     }}
                   >
                     <ShieldCheck size={20} aria-hidden="true" />
@@ -583,7 +625,7 @@ export function ProjectDialog({
                     className={providerMode !== 'deterministic' ? 'is-active' : ''}
                     onClick={() => {
                       setProviderMode(nodeSlideProviderModeForModel(providerModel));
-                      setProviderConsent(false);
+                      setGrantedProviderConsent(null);
                     }}
                   >
                     <Sparkles size={20} aria-hidden="true" />
@@ -614,7 +656,7 @@ export function ProjectDialog({
                       if (!nodeSlideModelSupportsReasoningEffort(model, providerEffort)) {
                         setProviderEffort('high');
                       }
-                      setProviderConsent(false);
+                      setGrantedProviderConsent(null);
                     }}
                   >
                     {NODESLIDE_OFFERED_AGENT_MODELS.map((model) => (
@@ -635,7 +677,7 @@ export function ProjectDialog({
                     disabled={providerMode === 'deterministic'}
                     onChange={(event) => {
                       setProviderEffort(event.target.value as NodeSlideReasoningEffort);
-                      setProviderConsent(false);
+                      setGrantedProviderConsent(null);
                     }}
                   >
                     {NODESLIDE_REASONING_EFFORTS.filter((effort) =>
@@ -666,7 +708,12 @@ export function ProjectDialog({
                     data-testid="provider-consent"
                     checked={providerConsent}
                     disabled={providerMode === 'deterministic'}
-                    onChange={(event) => setProviderConsent(event.target.checked)}
+                    data-consent-scope={nodeSlideBriefProviderConsent(providerMode) ?? 'none'}
+                    onChange={(event) =>
+                      setGrantedProviderConsent(
+                        event.target.checked ? nodeSlideBriefProviderConsent(providerMode) : null,
+                      )
+                    }
                     style={{
                       accentColor: 'var(--ns-accent)',
                       marginTop: 2,

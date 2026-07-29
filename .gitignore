@@ -25,5 +25,9 @@ outputs/artifact-atlas-v3/*.inspect.ndjson
 artifacts/**/*.stdout.log
 artifacts/**/*.stderr.log
 
+# The conformance receipt binds the commit and worktree state of one local run. Committing it
+# would dirty the tree, so the next run would report worktreeClean: false forever.
+artifacts/conformance/proof-receipt.json
+
 # Playback canary screen captures — evidence is the signature JSON, not 34MB of PNGs.
 outputs/**/playback-frames/

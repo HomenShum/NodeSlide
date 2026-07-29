@@ -113,6 +113,10 @@ jobs:
             --yes \
             --token="$VERCEL_TOKEN"
           node scripts/verify-built-web-identity.mjs .vercel/output/static/index.html "$DEPLOY_SHA"
+      - name: Load every emitted serverless function under real node
+        # Ground truth for the function bundle: a cold start is an ESM import,
+        # and an unresolvable specifier fails there, before any handler logic.
+        run: node scripts/verify-function-bundle.mjs --emitted
       - name: Recheck exact main immediately before production mutation
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -187,3 +191,8 @@ jobs:
             "$PROD_WEB_URL/"
           node scripts/verify-deployed-html.mjs .vercel/output/static/index.html "$canonical_html"
           node scripts/verify-live-web-identity.mjs "$DEPLOY_SHA" "$PROD_WEB_URL/"
+      - name: Verify the live share route answers rather than crashing
+        # The static bundle being correct says nothing about the serverless
+        # function. An unresolvable share slug must return NodeSlide's rendered
+        # refusal, never the platform's FUNCTION_INVOCATION_FAILED page.
+        run: node scripts/verify-live-share-route.mjs "$PROD_WEB_URL"

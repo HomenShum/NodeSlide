@@ -20,10 +20,12 @@ import {
   NODESLIDE_LAYER_OPERATION_VERSION,
   NODESLIDE_PATCH_OPERATION_LIMIT,
   NODESLIDE_REFERENCE_USE_POLICIES,
+  type NodeSlideEvidenceBox,
   type NodeSlideWorkspace,
   type PatchOperation,
   type PatchScope,
   type PatchSource,
+  type SourceRecord,
   type ValidationResult,
   clampNormalized,
 } from '../shared/nodeslide';
@@ -78,6 +80,7 @@ import {
   nodeSlideDataAttachmentShape,
   normalizeNodeSlideDataAttachment,
 } from './lib/nodeslideDataAttachment';
+import { forkNodeSlideSnapshot } from './lib/nodeslideDeckFork';
 import {
   NODESLIDE_EXECUTION_TRACE_LIMIT_PER_DECK,
   type NodeSlideExecutionTrace,
@@ -123,6 +126,7 @@ import {
   requireDeckSignatureProfile,
   requireSignatureProfile,
 } from './lib/nodeslideSignatureProfiles';
+import { buildNodeSlideSourceRevision } from './lib/nodeslideSourceRevision';
 import { isNormalizedBoundingBox, validateNodeSlideSnapshot } from './lib/nodeslideValidation';
 import {
   nodeslideBriefAttachmentValidator,
@@ -257,6 +261,200 @@ type PackageJsonValue =
   | null
   | PackageJsonValue[]
   | { [key: string]: PackageJsonValue };
+
+const NODESLIDE_EVIDENCE_CAPTURE_LIMIT_PER_RUN = 20;
+const NODESLIDE_EVIDENCE_STEP_LIMIT_PER_CAPTURE = 20;
+const NODESLIDE_EVIDENCE_CAPTURE_TTL_MS = 30 * 24 * 60 * 60 * 1_000;
+
+const nodeslideEvidenceBoxValidator = v.object({
+  x: v.number(),
+  y: v.number(),
+  w: v.number(),
+  h: v.number(),
+  page: v.optional(v.number()),
+  pageCount: v.optional(v.number()),
+});
+
+const nodeslideEvidenceViewportValidator = v.object({
+  width: v.number(),
+  height: v.number(),
+});
+
+function isNormalizedEvidenceBox(box: NodeSlideEvidenceBox & { pageCount?: number }): boolean {
+  return (
+    Number.isFinite(box.x) &&
+    Number.isFinite(box.y) &&
+    Number.isFinite(box.w) &&
+    Number.isFinite(box.h) &&
+    box.x >= 0 &&
+    box.y >= 0 &&
+    box.w > 0 &&
+    box.h > 0 &&
+    box.x + box.w <= 1 &&
+    box.y + box.h <= 1 &&
+    (box.page === undefined ||
+      (Number.isInteger(box.page) && box.page > 0 && box.page <= 10_000)) &&
+    (box.pageCount === undefined ||
+      (Number.isInteger(box.pageCount) &&
+        box.pageCount > 0 &&
+        box.pageCount <= 100_000 &&
+        box.page !== undefined &&
+        box.page <= box.pageCount))
+  );
+}
+
+/**
+ * The actor a revision is attributed to, without retaining the capability that
+ * proves it. A revision outlives the key that created it, so storing the key
+ * would turn an append-only evidence table into an append-only secret store.
+ */
+function nodeSlideEvidenceOwnerDigest(ownerAccessKey: string): string {
+  return `actor_${nodeslideContentDigest(ownerAccessKey)}`;
+}
+
+function sourceRecordForRevision(
+  source: Pick<
+    Doc<'nodeslide_sources'>,
+    | 'id'
+    | 'deckId'
+    | 'title'
+    | 'url'
+    | 'sourceType'
+    | 'retrievedAt'
+    | 'citation'
+    | 'license'
+    | 'format'
+    | 'contentDigest'
+    | 'byteSize'
+    | 'rowCount'
+    | 'columns'
+    | 'provider'
+    | 'retention'
+    | 'status'
+    | 'lastRefreshedAt'
+  >,
+  contentDigest: string,
+): SourceRecord {
+  return {
+    id: source.id,
+    deckId: source.deckId,
+    title: source.title,
+    ...(source.url ? { url: source.url } : {}),
+    sourceType: source.sourceType,
+    retrievedAt: source.retrievedAt,
+    citation: source.citation,
+    ...(source.license ? { license: source.license } : {}),
+    ...(source.format ? { format: source.format } : {}),
+    contentDigest,
+    ...(source.byteSize !== undefined ? { byteSize: source.byteSize } : {}),
+    ...(source.rowCount !== undefined ? { rowCount: source.rowCount } : {}),
+    ...(source.columns ? { columns: source.columns } : {}),
+    ...(source.provider ? { provider: source.provider } : {}),
+    ...(source.retention ? { retention: source.retention } : {}),
+    ...(source.status ? { status: source.status } : {}),
+    ...(source.lastRefreshedAt !== undefined ? { lastRefreshedAt: source.lastRefreshedAt } : {}),
+  };
+}
+
+/**
+ * Records the immutable revision for a source, or returns the existing one when
+ * the exact content has already been captured. Content-addressed by
+ * (sourceId, contentDigest), so re-attaching identical bytes is a read.
+ */
+async function ensureNodeSlideSourceRevision(
+  ctx: Pick<MutationCtx, 'db'>,
+  args: {
+    source: Doc<'nodeslide_sources'> | Omit<Doc<'nodeslide_sources'>, '_id' | '_creationTime'>;
+    ownerAccessKey: string;
+    contentDigest?: string;
+    createdAt?: number;
+  },
+): Promise<{
+  id: string;
+  revisionDigest: string;
+  ownerDigest: string;
+  deckId: string;
+  sourceId: string;
+  contentDigest: string;
+  title: string;
+}> {
+  const contentDigest =
+    args.contentDigest ?? args.source.contentDigest ?? nodeslideContentDigest(args.source.citation);
+  const ownerDigest = nodeSlideEvidenceOwnerDigest(args.ownerAccessKey);
+  const matches = await ctx.db
+    .query('nodeslide_source_revisions')
+    .withIndex('by_source_content_digest', (query) =>
+      query.eq('sourceId', args.source.id).eq('contentDigest', contentDigest),
+    )
+    .take(2);
+  if (matches.length > 1) {
+    throw new Error('Immutable source revision identity is ambiguous.');
+  }
+  const existing = matches[0];
+  if (existing) {
+    if (existing.deckId !== args.source.deckId || existing.ownerDigest !== ownerDigest) {
+      throw new Error('Immutable source revision crossed its owner or deck boundary.');
+    }
+    return existing;
+  }
+
+  const predecessor = await ctx.db
+    .query('nodeslide_source_revisions')
+    .withIndex('by_source_created', (query) => query.eq('sourceId', args.source.id))
+    .order('desc')
+    .first();
+  if (predecessor && predecessor.deckId !== args.source.deckId) {
+    throw new Error('Immutable source revision predecessor crossed its deck boundary.');
+  }
+  const revision = buildNodeSlideSourceRevision({
+    source: sourceRecordForRevision(args.source, contentDigest),
+    ...(predecessor
+      ? {
+          predecessor: {
+            revisionId: predecessor.id,
+            revisionDigest: predecessor.revisionDigest,
+          },
+        }
+      : {}),
+  });
+  await ctx.db.insert('nodeslide_source_revisions', {
+    id: revision.revisionId,
+    schema: revision.schema,
+    revisionDigest: revision.revisionDigest,
+    ownerDigest,
+    deckId: revision.deckId,
+    sourceId: revision.sourceId,
+    title: revision.title,
+    ...(revision.url ? { url: revision.url } : {}),
+    sourceType: revision.sourceType,
+    retrievedAt: revision.retrievedAt,
+    citation: revision.citation,
+    ...(revision.license ? { license: revision.license } : {}),
+    ...(revision.format ? { format: revision.format } : {}),
+    contentDigest: revision.contentDigest,
+    ...(revision.byteSize !== undefined ? { byteSize: revision.byteSize } : {}),
+    ...(revision.rowCount !== undefined ? { rowCount: revision.rowCount } : {}),
+    ...(revision.columns ? { columns: [...revision.columns] } : {}),
+    ...(revision.provider ? { provider: revision.provider } : {}),
+    ...(revision.retention ? { retention: revision.retention } : {}),
+    ...(revision.predecessor
+      ? {
+          predecessorRevisionId: revision.predecessor.revisionId,
+          predecessorRevisionDigest: revision.predecessor.revisionDigest,
+        }
+      : {}),
+    createdAt: args.createdAt ?? Date.now(),
+  });
+  return {
+    id: revision.revisionId,
+    revisionDigest: revision.revisionDigest,
+    ownerDigest,
+    deckId: revision.deckId,
+    sourceId: revision.sourceId,
+    contentDigest: revision.contentDigest,
+    title: revision.title,
+  };
+}
 
 export const ensureWorkspace = mutation({
   args: { clientSessionId: v.string(), ownerAccessKey: v.optional(v.string()) },
@@ -412,6 +610,105 @@ export const attachDataSource = mutation({
       if (sourceCount >= 64) throw new Error('This deck has reached its source attachment limit.');
       await ctx.db.insert('nodeslide_sources', source);
     }
+    await ensureNodeSlideSourceRevision(ctx, {
+      source,
+      ownerAccessKey: args.ownerAccessKey,
+      contentDigest: source.contentDigest,
+      createdAt: source.lastRefreshedAt,
+    });
+    return { id, kind: 'source' as const, label: `Source: ${title}` };
+  },
+});
+
+/** Server-only sink for approved storage-backed text uploads. */
+export const attachStoredDataSourceInternal = internalMutation({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    title: v.string(),
+    format: v.union(
+      v.literal('csv'),
+      v.literal('json'),
+      v.literal('txt'),
+      v.literal('md'),
+      v.literal('pdf'),
+    ),
+    preview: v.string(),
+    previewTruncated: v.boolean(),
+    contentDigest: v.string(),
+    byteSize: v.number(),
+    rowCount: v.optional(v.number()),
+    columns: v.optional(v.array(v.string())),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const title = requiredText(args.title, 'data file name', 180);
+    const preview = args.preview
+      .replace(/^\u{FEFF}/u, '')
+      .replace(/\r\n?/g, '\n')
+      .trim();
+    if (!preview || preview.length > 7_200 || preview.includes('\x00')) {
+      throw new Error('Stored data preview is invalid.');
+    }
+    if (!Number.isSafeInteger(args.byteSize) || args.byteSize <= 0) {
+      throw new Error('Stored data byte size is invalid.');
+    }
+    if (
+      args.rowCount !== undefined &&
+      (!Number.isSafeInteger(args.rowCount) || args.rowCount < 0)
+    ) {
+      throw new Error('Stored data row count is invalid.');
+    }
+    const columns = args.columns?.map((column) => requiredText(column, 'column', 240)).slice(0, 64);
+    const sourceType =
+      args.format === 'csv'
+        ? 'spreadsheet'
+        : args.format === 'txt' || args.format === 'md'
+          ? 'note'
+          : 'document';
+    const id = nodeslideStableId('source', args.deckId, sourceType, title, args.contentDigest);
+    const existing = await ctx.db
+      .query('nodeslide_sources')
+      .withIndex('by_stable_id', (query) => query.eq('id', id))
+      .unique();
+    const now = Date.now();
+    const previewLabel = args.previewTruncated
+      ? 'Bounded model preview; exact full-file digest retained'
+      : 'Complete model-readable content';
+    const source = {
+      id,
+      deckId: args.deckId,
+      title,
+      sourceType,
+      retrievedAt: existing?.retrievedAt ?? now,
+      citation: `Uploaded file: ${title}\n${previewLabel}\n${preview}`,
+      license: 'User supplied',
+      format: args.format,
+      contentDigest: args.contentDigest,
+      byteSize: args.byteSize,
+      ...(args.rowCount !== undefined ? { rowCount: args.rowCount } : {}),
+      ...(columns?.length ? { columns } : {}),
+      retention: 'until_deleted' as const,
+      status: 'ready' as const,
+      lastRefreshedAt: now,
+    } as const;
+    if (existing) await ctx.db.patch(existing._id, source);
+    else {
+      const sourceCount = (
+        await ctx.db
+          .query('nodeslide_sources')
+          .withIndex('by_deck', (query) => query.eq('deckId', args.deckId))
+          .collect()
+      ).length;
+      if (sourceCount >= 64) throw new Error('This deck has reached its source attachment limit.');
+      await ctx.db.insert('nodeslide_sources', source);
+    }
+    await ensureNodeSlideSourceRevision(ctx, {
+      source,
+      ownerAccessKey: args.ownerAccessKey,
+      contentDigest: source.contentDigest,
+      createdAt: source.lastRefreshedAt,
+    });
     return { id, kind: 'source' as const, label: `Source: ${title}` };
   },
 });
@@ -525,6 +822,141 @@ export const listAgentTelemetryPage = query({
       hasMore: page.length === limit && nextBeforeSequence !== undefined && nextBeforeSequence > 1,
       ...(nextBeforeSequence !== undefined ? { nextBeforeSequence } : {}),
       totalRecorded: Math.max(0, (run.nextTelemetrySequence ?? 1) - 1),
+    };
+  },
+});
+
+export const listEvidenceCaptureSummaries = query({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    runId: v.string(),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const run = await ctx.db
+      .query('nodeslide_agent_runs')
+      .withIndex('by_stable_id', (query) => query.eq('id', args.runId))
+      .unique();
+    if (!run || run.deckId !== args.deckId) throw new Error('Agent run not found.');
+    const limit = Math.max(
+      1,
+      Math.min(NODESLIDE_EVIDENCE_CAPTURE_LIMIT_PER_RUN, Math.floor(args.limit ?? 20)),
+    );
+    const captures = await ctx.db
+      .query('nodeslide_evidence_captures')
+      .withIndex('by_run_created', (query) => query.eq('runId', args.runId))
+      .order('desc')
+      .take(limit);
+    const sources = await ctx.db
+      .query('nodeslide_sources')
+      .withIndex('by_deck', (query) => query.eq('deckId', args.deckId))
+      .collect();
+    const sourceTitles = new Map(sources.map((source) => [source.id, source.title] as const));
+    const revisionTitles = new Map(
+      (
+        await Promise.all(
+          [
+            ...new Set(
+              captures.flatMap((capture) =>
+                capture.sourceRevisionId ? [capture.sourceRevisionId] : [],
+              ),
+            ),
+          ].map((revisionId) =>
+            ctx.db
+              .query('nodeslide_source_revisions')
+              .withIndex('by_stable_id', (query) => query.eq('id', revisionId))
+              .unique(),
+          ),
+        )
+      ).flatMap((revision) =>
+        revision && revision.deckId === args.deckId
+          ? ([[revision.id, revision.title]] as const)
+          : [],
+      ),
+    );
+    const now = Date.now();
+    return captures.map(({ _id, _creationTime, ...capture }) => ({
+      ...capture,
+      sourceTitle:
+        (capture.sourceRevisionId ? revisionTitles.get(capture.sourceRevisionId) : undefined) ??
+        sourceTitles.get(capture.sourceId) ??
+        'Unavailable source',
+      status:
+        capture.expiresAt !== undefined && capture.expiresAt <= now
+          ? ('expired' as const)
+          : capture.status,
+    }));
+  },
+});
+
+/** Resolve storage URLs only for the single capture the owner explicitly opened. */
+export const getEvidenceCaptureDetail = query({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    captureId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const capture = await ctx.db
+      .query('nodeslide_evidence_captures')
+      .withIndex('by_stable_id', (query) => query.eq('id', args.captureId))
+      .unique();
+    if (!capture || capture.deckId !== args.deckId) return null;
+    const source = await ctx.db
+      .query('nodeslide_sources')
+      .withIndex('by_stable_id', (query) => query.eq('id', capture.sourceId))
+      .unique();
+    const captureSourceRevisionId = capture.sourceRevisionId;
+    const sourceRevision = captureSourceRevisionId
+      ? await ctx.db
+          .query('nodeslide_source_revisions')
+          .withIndex('by_stable_id', (query) => query.eq('id', captureSourceRevisionId))
+          .unique()
+      : null;
+    const validSource = source?.deckId === args.deckId ? source : null;
+    const validRevision =
+      sourceRevision?.deckId === args.deckId && sourceRevision.sourceId === capture.sourceId
+        ? sourceRevision
+        : null;
+    if (!validSource && !validRevision) return null;
+    const steps = await ctx.db
+      .query('nodeslide_evidence_steps')
+      .withIndex('by_capture_sequence', (query) => query.eq('captureId', capture.id))
+      .take(NODESLIDE_EVIDENCE_STEP_LIMIT_PER_CAPTURE);
+    const expired = capture.expiresAt !== undefined && capture.expiresAt <= Date.now();
+    const resolvedSteps = await Promise.all(
+      steps.map(async ({ _id, _creationTime, screenshotStorageId, pdfStorageId, ...step }) => {
+        const attachment = expired
+          ? undefined
+          : screenshotStorageId
+            ? {
+                kind: 'screenshot' as const,
+                url: await ctx.storage.getUrl(screenshotStorageId),
+                ...(step.box ? { box: step.box } : {}),
+              }
+            : pdfStorageId
+              ? {
+                  kind: 'pdf' as const,
+                  url: await ctx.storage.getUrl(pdfStorageId),
+                  ...(step.box ? { box: step.box } : {}),
+                  ...(step.box?.page !== undefined ? { page: step.box.page } : {}),
+                }
+              : undefined;
+        return {
+          ...step,
+          ...(attachment?.url ? { attachment } : {}),
+        };
+      }),
+    );
+    const { _id, _creationTime, ...captureData } = capture;
+    return {
+      ...captureData,
+      sourceTitle: validRevision?.title ?? validSource?.title ?? 'Unavailable source',
+      status: expired ? ('expired' as const) : capture.status,
+      steps: resolvedSteps,
     };
   },
 });
@@ -2262,6 +2694,373 @@ export const writeAgentAssistantStreamInternal = internalMutation({
   },
 });
 
+export const recordEvidenceCaptureInternal = internalMutation({
+  args: {
+    id: v.string(),
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    runId: v.string(),
+    parentSpanId: v.string(),
+    sourceId: v.string(),
+    url: v.string(),
+    goal: v.string(),
+    provider: v.string(),
+    status: v.union(v.literal('ready'), v.literal('failed')),
+    error: v.optional(v.string()),
+    contentDigest: v.optional(v.string()),
+    startedAt: v.number(),
+    completedAt: v.number(),
+    steps: v.array(
+      v.object({
+        phase: v.string(),
+        label: v.string(),
+        status: v.union(v.literal('ok'), v.literal('warning'), v.literal('error')),
+        detail: v.optional(v.string()),
+        screenshotStorageId: v.optional(v.id('_storage')),
+        pdfStorageId: v.optional(v.id('_storage')),
+        box: v.optional(nodeslideEvidenceBoxValidator),
+        regionScope: v.union(v.literal('source'), v.literal('claim')),
+        selector: v.optional(v.string()),
+        quote: v.optional(v.string()),
+        viewport: v.optional(nodeslideEvidenceViewportValidator),
+        contentDigest: v.optional(v.string()),
+        startedAt: v.number(),
+        completedAt: v.optional(v.number()),
+      }),
+    ),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const run = await ctx.db
+      .query('nodeslide_agent_runs')
+      .withIndex('by_stable_id', (query) => query.eq('id', args.runId))
+      .unique();
+    if (!run || run.deckId !== args.deckId) throw new Error('Agent run not found.');
+    const parent = await ctx.db
+      .query('nodeslide_agent_spans')
+      .withIndex('by_stable_id', (query) =>
+        query.eq('id', nodeslideStableId('agent_span', args.runId, args.parentSpanId)),
+      )
+      .unique();
+    if (!parent || parent.deckId !== args.deckId || parent.runId !== args.runId) {
+      throw new Error('Evidence capture parent span is invalid.');
+    }
+    const source = await ctx.db
+      .query('nodeslide_sources')
+      .withIndex('by_stable_id', (query) => query.eq('id', args.sourceId))
+      .unique();
+    if (!source || source.deckId !== args.deckId || source.url !== args.url) {
+      throw new Error('Evidence capture source binding is invalid.');
+    }
+    const existing = await ctx.db
+      .query('nodeslide_evidence_captures')
+      .withIndex('by_stable_id', (query) => query.eq('id', args.id))
+      .unique();
+    if (existing) {
+      if (
+        existing.deckId !== args.deckId ||
+        existing.runId !== args.runId ||
+        existing.sourceId !== args.sourceId
+      ) {
+        throw new Error('Evidence capture idempotency binding is invalid.');
+      }
+      return { created: false, captureId: existing.id, spanId: existing.spanId };
+    }
+    const captureCount = await ctx.db
+      .query('nodeslide_evidence_captures')
+      .withIndex('by_run_created', (query) => query.eq('runId', args.runId))
+      .take(NODESLIDE_EVIDENCE_CAPTURE_LIMIT_PER_RUN + 1);
+    if (captureCount.length >= NODESLIDE_EVIDENCE_CAPTURE_LIMIT_PER_RUN) {
+      throw new Error('This run has reached its visual evidence capture limit.');
+    }
+    if (args.steps.length < 1 || args.steps.length > NODESLIDE_EVIDENCE_STEP_LIMIT_PER_CAPTURE) {
+      throw new Error('Evidence capture step count is invalid.');
+    }
+    const startedAt = Math.max(0, Math.floor(args.startedAt));
+    const completedAt = Math.max(startedAt, Math.floor(args.completedAt));
+    const traceId = run.otelTraceId ?? agentTraceId(args.deckId, args.runId);
+    if (parent.traceId !== traceId) throw new Error('Evidence capture trace binding is invalid.');
+    const sourceRevision = await ensureNodeSlideSourceRevision(ctx, {
+      source,
+      ownerAccessKey: args.ownerAccessKey,
+      ...(args.contentDigest ? { contentDigest: args.contentDigest } : {}),
+      createdAt: completedAt,
+    });
+    let telemetrySequence = run.nextTelemetrySequence ?? 3;
+    const preparedSteps = args.steps.map((step, index) => {
+      if (step.screenshotStorageId && step.pdfStorageId) {
+        throw new Error('An evidence step cannot contain both screenshot and PDF storage.');
+      }
+      if (step.box && !isNormalizedEvidenceBox(step.box)) {
+        throw new Error('Evidence capture box must use normalized coordinates.');
+      }
+      if (
+        step.viewport &&
+        (!Number.isInteger(step.viewport.width) ||
+          !Number.isInteger(step.viewport.height) ||
+          step.viewport.width <= 0 ||
+          step.viewport.height <= 0 ||
+          step.viewport.width > 10_000 ||
+          step.viewport.height > 10_000)
+      ) {
+        throw new Error('Evidence capture viewport is invalid.');
+      }
+      const sequence = telemetrySequence;
+      telemetrySequence += 2;
+      const phase = requiredText(step.phase, 'evidence phase', 80);
+      const label = requiredText(step.label, 'evidence label', 300);
+      const stepStartedAt = Math.max(startedAt, Math.floor(step.startedAt));
+      const stepCompletedAt = Math.max(
+        stepStartedAt,
+        Math.floor(step.completedAt ?? stepStartedAt),
+      );
+      const spanId = agentSpanId(traceId, `capture_${args.id}_${index}`, sequence);
+      const box =
+        step.pdfStorageId &&
+        args.provider === 'nodeslide-source-snapshot/v1' &&
+        step.box?.page === 1 &&
+        step.box.pageCount === undefined
+          ? { ...step.box, pageCount: 1 }
+          : step.box;
+      const attachmentKind = step.screenshotStorageId
+        ? ('screenshot' as const)
+        : step.pdfStorageId
+          ? ('pdf' as const)
+          : undefined;
+      const attachmentDigest =
+        attachmentKind && /^sha256:[0-9a-f]{64}$/.test(step.contentDigest ?? '')
+          ? step.contentDigest
+          : undefined;
+      const evidenceStepDigest = nodeslideContentDigest(
+        stableJson({
+          captureId: args.id,
+          sequence: index + 1,
+          phase,
+          label,
+          status: step.status,
+          detail: step.detail,
+          attachmentKind,
+          attachmentDigest,
+          box,
+          regionScope: step.regionScope,
+          selector: step.selector,
+          quote: step.quote,
+          viewport: step.viewport,
+          contentDigest: step.contentDigest,
+          startedAt: stepStartedAt,
+          completedAt: stepCompletedAt,
+        }),
+      );
+      return {
+        ...step,
+        phase,
+        label,
+        ...(box ? { box } : {}),
+        ...(attachmentKind ? { attachmentKind } : {}),
+        ...(attachmentDigest ? { attachmentDigest } : {}),
+        evidenceStepDigest,
+        sequence,
+        spanId,
+        startedAt: stepStartedAt,
+        completedAt: stepCompletedAt,
+      };
+    });
+    const captureSpanId = preparedSteps[0]?.spanId;
+    if (!captureSpanId) throw new Error('Evidence capture did not produce a span.');
+    const now = Date.now();
+    for (const [index, step] of preparedSteps.entries()) {
+      await ctx.db.insert('nodeslide_agent_spans', {
+        id: nodeslideStableId('agent_span', args.runId, step.spanId),
+        deckId: args.deckId,
+        runId: args.runId,
+        traceId,
+        spanId: step.spanId,
+        parentSpanId: args.parentSpanId,
+        name: `Capture ${step.phase}`,
+        operationName: `evidence.${step.phase.toLowerCase().replace(/[^a-z0-9]+/g, '_')}`,
+        kind: 'client',
+        status: step.status === 'error' ? 'error' : 'ok',
+        startTime: step.startedAt,
+        endTime: step.completedAt,
+        durationMs: Math.max(0, step.completedAt - step.startedAt),
+        provider: args.provider,
+        toolName: 'capture_source',
+        sourceIds: [args.sourceId],
+        attributes: [
+          { key: 'nodeslide.evidence.capture_id', value: args.id },
+          { key: 'nodeslide.evidence.source_id', value: args.sourceId },
+          { key: 'nodeslide.evidence.step', value: index + 1 },
+          { key: 'nodeslide.evidence.has_screenshot', value: Boolean(step.screenshotStorageId) },
+          { key: 'nodeslide.evidence.has_pdf', value: Boolean(step.pdfStorageId) },
+          ...(step.contentDigest
+            ? [{ key: 'nodeslide.evidence.content_digest', value: step.contentDigest }]
+            : []),
+        ],
+        sequence: step.sequence,
+        createdAt: now,
+        updatedAt: now,
+      });
+      await ctx.db.insert('nodeslide_agent_events', {
+        id: nodeslideStableId('agent_event', args.runId, String(step.sequence + 1), args.id),
+        deckId: args.deckId,
+        runId: args.runId,
+        traceId,
+        spanId: step.spanId,
+        name: step.status === 'error' ? 'evidence.capture.failed' : 'evidence.capture.attached',
+        severity: step.status === 'error' ? 'error' : step.status === 'warning' ? 'warn' : 'info',
+        timestamp: step.completedAt,
+        body:
+          step.status === 'error'
+            ? 'Visual evidence capture failed; the source citation remains available.'
+            : 'Visual evidence was attached to this exact retrieval span.',
+        attributes: [
+          { key: 'nodeslide.evidence.capture_id', value: args.id },
+          { key: 'nodeslide.evidence.source_id', value: args.sourceId },
+        ],
+        sequence: step.sequence + 1,
+      });
+      await ctx.db.insert('nodeslide_evidence_steps', {
+        id: nodeslideStableId('evidence_step', args.id, String(index)),
+        captureId: args.id,
+        deckId: args.deckId,
+        runId: args.runId,
+        traceId,
+        spanId: step.spanId,
+        sequence: index + 1,
+        phase: step.phase,
+        label: step.label,
+        status: step.status,
+        ...(step.detail ? { detail: requiredText(step.detail, 'evidence detail', 1000) } : {}),
+        ...(step.screenshotStorageId
+          ? { screenshotStorageId: step.screenshotStorageId, attachmentKind: 'screenshot' as const }
+          : {}),
+        ...(step.pdfStorageId
+          ? { pdfStorageId: step.pdfStorageId, attachmentKind: 'pdf' as const }
+          : {}),
+        ...(step.box ? { box: step.box } : {}),
+        regionScope: step.regionScope,
+        ...(step.selector
+          ? { selector: requiredText(step.selector, 'evidence selector', 300) }
+          : {}),
+        ...(step.quote ? { quote: requiredText(step.quote, 'evidence quote', 1000) } : {}),
+        ...(step.viewport ? { viewport: step.viewport } : {}),
+        ...(step.contentDigest ? { contentDigest: step.contentDigest.slice(0, 180) } : {}),
+        ...(step.attachmentDigest ? { attachmentDigest: step.attachmentDigest } : {}),
+        evidenceStepDigest: step.evidenceStepDigest,
+        startedAt: step.startedAt,
+        completedAt: step.completedAt,
+        createdAt: now,
+      });
+    }
+    const screenshotCount = preparedSteps.filter((step) => step.screenshotStorageId).length;
+    const pdfCount = preparedSteps.filter((step) => step.pdfStorageId).length;
+    const captureDigest = nodeslideContentDigest(
+      stableJson({
+        deckId: args.deckId,
+        runId: args.runId,
+        traceId,
+        parentSpanId: args.parentSpanId,
+        sourceRevisionId: sourceRevision.id,
+        sourceRevisionDigest: sourceRevision.revisionDigest,
+        url: source.url ?? args.url,
+        goal: args.goal,
+        provider: args.provider,
+        status: args.status,
+        error: args.error,
+        contentDigest: args.contentDigest,
+        steps: preparedSteps.map((step) => ({
+          sequence: step.sequence,
+          evidenceStepDigest: step.evidenceStepDigest,
+        })),
+        startedAt,
+        completedAt,
+      }),
+    );
+    await ctx.db.insert('nodeslide_evidence_captures', {
+      id: args.id,
+      deckId: args.deckId,
+      runId: args.runId,
+      traceId,
+      spanId: captureSpanId,
+      parentSpanId: args.parentSpanId,
+      sourceId: args.sourceId,
+      sourceRevisionId: sourceRevision.id,
+      sourceRevisionDigest: sourceRevision.revisionDigest,
+      captureDigest,
+      url: source.url ?? args.url,
+      goal: requiredText(args.goal, 'evidence goal', 500),
+      provider: requiredText(args.provider, 'evidence provider', 80),
+      status: args.status,
+      ...(args.error ? { error: requiredText(args.error, 'evidence error', 500) } : {}),
+      ...(args.contentDigest ? { contentDigest: args.contentDigest.slice(0, 180) } : {}),
+      stepCount: preparedSteps.length,
+      screenshotCount,
+      pdfCount,
+      createdAt: startedAt,
+      completedAt,
+      expiresAt: completedAt + NODESLIDE_EVIDENCE_CAPTURE_TTL_MS,
+    });
+    const parentEndTime = Math.max(parent.endTime ?? parent.startTime, completedAt);
+    await ctx.db.patch(parent._id, {
+      endTime: parentEndTime,
+      durationMs: Math.max(0, parentEndTime - parent.startTime),
+      updatedAt: now,
+    });
+    await ctx.db.patch(run._id, {
+      nextTelemetrySequence: telemetrySequence,
+      updatedAt: Math.max(run.updatedAt, completedAt),
+      lastHeartbeatAt: Math.max(run.lastHeartbeatAt ?? 0, completedAt),
+    });
+    return { created: true, captureId: args.id, spanId: captureSpanId };
+  },
+});
+
+/** Removes expired binary attachments while retaining their auditable trace metadata and digest. */
+export const pruneExpiredEvidenceCapturesInternal = internalMutation({
+  args: {},
+  handler: async (ctx) => {
+    const now = Date.now();
+    const captures = await ctx.db
+      .query('nodeslide_evidence_captures')
+      .withIndex('by_expiry', (query) => query.lte('expiresAt', now))
+      .take(20);
+    let deletedAttachments = 0;
+    for (const capture of captures) {
+      const steps = await ctx.db
+        .query('nodeslide_evidence_steps')
+        .withIndex('by_capture_sequence', (query) => query.eq('captureId', capture.id))
+        .take(NODESLIDE_EVIDENCE_STEP_LIMIT_PER_CAPTURE + 1);
+      if (steps.length > NODESLIDE_EVIDENCE_STEP_LIMIT_PER_CAPTURE) {
+        throw new Error('Expired evidence capture exceeds its bounded step limit.');
+      }
+      for (const step of steps) {
+        if (step.screenshotStorageId) {
+          await ctx.storage.delete(step.screenshotStorageId);
+          deletedAttachments += 1;
+        }
+        if (step.pdfStorageId) {
+          await ctx.storage.delete(step.pdfStorageId);
+          deletedAttachments += 1;
+        }
+        if (step.screenshotStorageId || step.pdfStorageId || step.attachmentKind) {
+          await ctx.db.patch(step._id, {
+            screenshotStorageId: undefined,
+            pdfStorageId: undefined,
+            attachmentKind: undefined,
+          });
+        }
+      }
+      await ctx.db.patch(capture._id, {
+        status: 'expired',
+        screenshotCount: 0,
+        pdfCount: 0,
+        expiresAt: undefined,
+      });
+    }
+    return { captures: captures.length, deletedAttachments };
+  },
+});
+
 export const advanceAgentRunInternal = internalMutation({
   args: {
     deckId: v.string(),
@@ -2695,6 +3494,153 @@ export const getAgentContextInternal = internalQuery({
   handler: async (ctx, { deckId, ownerAccessKey }) => {
     await requireOwnerAccess(ctx, deckId, ownerAccessKey);
     return await loadNodeSlideWorkspace(ctx, deckId, Date.now());
+  },
+});
+
+/**
+ * Duplicates a deck into a brand-new identity owned by a different access key.
+ *
+ * `forkNodeSlideSnapshot` has lived in `lib/nodeslideDeckFork.ts` since the
+ * decoupling landed, but nothing outside its own unit test called it: the
+ * library was copied and its only caller was not. This mutation is that caller.
+ * It reuses `createWorkspaceRows`, so a duplicate is persisted through the same
+ * validation, project row, initial version and creation trace as any other new
+ * deck — a fork that skipped that path would be the one deck in the deployment
+ * whose snapshot was never validated.
+ *
+ * Share links, publications and signature bindings are deliberately NOT copied;
+ * they name rows owned by the source deck, and duplicating the pointer would
+ * hand the copy's owner a capability over the original.
+ */
+export const duplicateDeck = mutation({
+  args: {
+    deckId: v.string(),
+    ownerAccessKey: v.string(),
+    newOwnerAccessKey: v.string(),
+    clientSessionId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    if (!isOwnerAccessKey(args.newOwnerAccessKey)) {
+      throw new Error('Invalid NodeSlide owner access key for the duplicate.');
+    }
+    const source = await requireSnapshot(ctx, args.deckId);
+    const now = Date.now();
+    const forkDigest = nodeslideContentDigest(`${args.deckId}:${now}:${args.clientSessionId}`);
+    const deckId = nodeslideStableId('deck_fork', forkDigest);
+    const projectId = nodeslideStableId('project_fork', forkDigest);
+    const forked = forkNodeSlideSnapshot(source, { deckId, projectId, now });
+    await createWorkspaceRows(ctx, {
+      clientSessionId: args.clientSessionId,
+      ownerAccessKey: args.newOwnerAccessKey,
+      built: {
+        snapshot: forked,
+        plan: [
+          `Duplicated from "${source.deck.title}"`,
+          'Re-identified every slide, element, and source',
+          'Validated the duplicate before persisting',
+        ],
+        spec: {
+          title: forked.deck.title,
+          narrative: [`Duplicated from deck ${source.deck.id} at v${source.deck.version}`],
+          slides: [],
+        },
+      },
+      trace: {
+        summary: `Duplicated "${source.deck.title}" as a new editable deck.`,
+        context: [
+          `Source deck: ${source.deck.id} at v${source.deck.version}`,
+          'Share links, publications, and signature bindings were not copied.',
+        ],
+        toolCalls: [
+          'Forked the canonical snapshot with fresh identities',
+          'Reset version clocks to v1',
+          'Validated snapshot',
+        ],
+      },
+    });
+    return { deckId, title: forked.deck.title };
+  },
+});
+
+/**
+ * Persists a server-imported PPTX snapshot as a brand-new deck.
+ *
+ * Same shape of argument as `duplicateDeck` above and for the same reason:
+ * `importPptxSnapshot` has lived in `src/domains/nodeslide/slidelang/pptxImport.ts`
+ * since the decoupling landed, and the only in-repo path that reached it was
+ * `createPptxImportCandidate`, which imports INTO an existing deck through
+ * applyPatch/CAS. There was no path that imported into a NEW one, so a user
+ * holding a .pptx and no deck had nothing to start from. This mutation, and its
+ * only caller `nodeslidePptxCreate.importPptxAsNewDeck`, are that path.
+ *
+ * It goes through `createWorkspaceRows`, so an imported deck gets the same
+ * artifact-compilation gate, validation row, project row, initial version and
+ * creation trace as a brief-created deck. An import that skipped that path would
+ * be the one deck in the deployment whose snapshot was never validated.
+ *
+ * Parity passes `layoutBlockerPolicy: 'persist_with_findings'` here. That
+ * parameter has no equivalent in this repo and none is added: parity's
+ * `createWorkspaceRows` REJECTS a first draft carrying collision/overflow
+ * errors unless the import path opts out, whereas this repo's already persists
+ * with its findings visible for every caller. Passing a flag that only restates
+ * the existing behaviour would imply a choice the code does not make.
+ *
+ * The fidelity notes are the honest part of the receipt. An import that lost a
+ * feature says so in the creation trace instead of presenting a lossy deck as a
+ * clean one, and an import that lost nothing says that explicitly rather than
+ * leaving the reader to infer it from an empty list.
+ */
+export const createImportedDeckInternal = internalMutation({
+  args: {
+    clientSessionId: v.string(),
+    ownerAccessKey: v.string(),
+    snapshot: v.any(),
+    fileName: v.string(),
+    fidelityNotes: v.array(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const snapshot = structuredClone(args.snapshot) as DeckSnapshot;
+    const existing = await findDeckRow(ctx, snapshot.deck.id);
+    if (existing) {
+      // The deck id is derived from the caller's idempotency key, so a retry
+      // lands here. Re-authorize before reporting the reuse: an unauthorized
+      // caller must not learn that a deck with this id exists.
+      await requireOwnerAccess(ctx, snapshot.deck.id, args.ownerAccessKey);
+      return { deckId: snapshot.deck.id, reused: true };
+    }
+    await createWorkspaceRows(ctx, {
+      clientSessionId: args.clientSessionId,
+      ownerAccessKey: args.ownerAccessKey,
+      built: {
+        snapshot,
+        plan: [
+          `Imported ${args.fileName}`,
+          'Parsed slides, text, and native objects inside bounded import limits',
+          'Validated the imported structure before persisting',
+        ],
+        spec: {
+          title: snapshot.deck.title,
+          narrative: [`Imported from PowerPoint: ${args.fileName}`],
+          slides: [],
+        },
+      },
+      trace: {
+        summary: `Imported ${args.fileName} as a new editable deck.`,
+        context: [
+          `Source file: ${args.fileName}`,
+          ...(args.fidelityNotes.length
+            ? args.fidelityNotes.map((note) => `Fidelity: ${note}`)
+            : ['Fidelity: full import, no recorded loss']),
+        ],
+        toolCalls: [
+          'Parsed PPTX archive server-side within hostile-input bounds',
+          'Imported slides and elements into the canonical snapshot',
+          'Validated snapshot',
+        ],
+      },
+    });
+    return { deckId: snapshot.deck.id, reused: false };
   },
 });
 

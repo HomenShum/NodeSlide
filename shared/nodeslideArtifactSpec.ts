@@ -1,4 +1,9 @@
-import type { DeckSnapshot, ElementKind, SlideElement } from './nodeslide';
+import type {
+  DeckSnapshot,
+  ElementKind,
+  ExportableDeckSnapshot,
+  SlideElement,
+} from './nodeslide.js';
 import {
   NODESLIDE_CANONICAL_ARTIFACT_KINDS,
   type NodeSlideArtifactCompilerDescriptor,
@@ -422,8 +427,15 @@ export interface NodeSlideArtifactShadowReceipt {
   receiptDigest: string;
 }
 
+/**
+ * Accepts `ExportableDeckSnapshot` rather than `DeckSnapshot` because the
+ * compiler reads only slides, elements, sources, and the deck version/timestamp
+ * — every field a published snapshot also carries. Widening the parameter lets
+ * the public share projection run the same fail-closed gate as an owner export
+ * instead of a weaker one; a full `DeckSnapshot` still satisfies it.
+ */
 export function compileNodeSlideArtifactSpecs(
-  snapshot: DeckSnapshot,
+  snapshot: ExportableDeckSnapshot,
 ): NodeSlideArtifactCompilation {
   const sourceById = new Map(snapshot.sources.map((source) => [source.id, source]));
   const claimedElements = new Set<string>();
@@ -868,7 +880,7 @@ export function validateNodeSlideArtifactSpec(
 }
 
 export function assertNodeSlideArtifactCompilation(
-  snapshot: DeckSnapshot,
+  snapshot: ExportableDeckSnapshot,
 ): NodeSlideArtifactCompilationReceipt {
   const receipt = compileNodeSlideArtifactSpecs(snapshot).receipt;
   if (receipt.status === 'failed') {

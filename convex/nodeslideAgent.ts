@@ -10,8 +10,14 @@ import {
   type PatchOperation,
   nodeSlideAgentModel,
 } from '../shared/nodeslide';
+import {
+  NODESLIDE_MICRO_USD_PER_USD,
+  NODESLIDE_RUN_BUDGET_BOUNDS,
+  type NodeSlideRunBudgetInput,
+  parseNodeSlideSpendConstraint,
+} from '../shared/nodeslideRunBudget';
 import { internal } from './_generated/api';
-import { action } from './_generated/server';
+import { type ActionCtx, action } from './_generated/server';
 import { createOwnerAccessKey, isOwnerAccessKey } from './lib/nodeslideAccess';
 import {
   authorizeNodeSlideAgenticOperation,
@@ -25,6 +31,12 @@ import {
   nodeSlideAuthoredArtifactSourceInventory,
 } from './lib/nodeslideAuthoredArtifact';
 import { authorizeBeforeConsumingQuota, nodeSlideActorQuotaKey } from './lib/nodeslideAuthority';
+import {
+  type NodeSlideBudgetLedgerClient,
+  bindNodeSlideBudgetLedgerClient,
+  createNodeSlideBudgetedCreateDispatch,
+  createNodeSlideBudgetedEditDispatch,
+} from './lib/nodeslideBudgetedProvider';
 import {
   injectNodeSlideSyntheticCreationFault,
   nodeSlideCreationCritiquePromptReport,
@@ -56,12 +68,19 @@ import {
   NODESLIDE_EDIT_SHADOW_ADAPTER_VERSION,
   planNodeSlideEditShadow,
 } from './lib/nodeslideEditShadowPlanner';
+import {
+  captureNodeSlideWebEvidence,
+  createNodeSlideSourceSnapshotPdf,
+} from './lib/nodeslideEvidenceCapture';
 import { executionTraceFromDeckRepl } from './lib/nodeslideExecutionTrace';
 import { nodeslideContentDigest, nodeslideEventId, nodeslideStableId } from './lib/nodeslideIds';
 import {
   configuredSearchProviders,
   searchExternalReferences,
 } from './lib/nodeslideInspirationSearch';
+import { nodeSlideJobRequestDigest } from './lib/nodeslideJobState';
+import { nodeSlideCreateJobRequestFromArgs } from './lib/nodeslideJobValidators';
+import { nodeSlideMemoryUse } from './lib/nodeslideMemoryPolicy';
 import { nodeSlideProductionProbeFields } from './lib/nodeslideProductionProbe';
 import { NODESLIDE_EDIT_MODEL, callNodeSlideFreeJson } from './lib/nodeslideProvider';
 import {
@@ -98,6 +117,7 @@ import {
   validateNodeSlideCreateDeckFields,
   validateNodeSlidePreviewAdmission,
 } from './lib/nodeslideValidators';
+import type { NodeSlideScopedMemoryItem } from './nodeslideScopedMemory';
 
 // Convex's generated API creates a TypeScript self-reference when this action module invokes
 // functions whose declarations also include this module. Runtime arguments still cross explicit
@@ -106,6 +126,332 @@ import {
 const nodeslideInternal: any = (internal as any).nodeslide;
 // biome-ignore lint/suspicious/noExplicitAny: breaks generated Convex action self-reference recursion
 const nodeslideMemoryInternal: any = (internal as any).nodeslideMemory;
+// biome-ignore lint/suspicious/noExplicitAny: generated Convex self-reference described above
+const nodeslideScopedMemoryInternal: any = (internal as any).nodeslideScopedMemory;
+// biome-ignore lint/suspicious/noExplicitAny: generated Convex self-reference described above
+const nodeslideBudgetsInternal: any = (internal as any).nodeslideBudgets;
+
+/** Binds the durable ledger mutations, `reserve` included. See the lib module. */
+function nodeSlideBudgetLedgerClient(
+  ctx: Pick<ActionCtx, 'runMutation' | 'runQuery'>,
+): NodeSlideBudgetLedgerClient {
+  return bindNodeSlideBudgetLedgerClient(ctx, nodeslideBudgetsInternal);
+}
+
+/**
+ * The hard cap for one edit run. Defaults come from
+ * `NODESLIDE_RUN_BUDGET_BOUNDS`; an explicit ceiling in the author's own
+ * instruction ("spend no more than $0.20 on this run") TIGHTENS it and can never
+ * raise it. A malformed ceiling is not silently ignored — the parser throws a
+ * validation error, and refusing the run is the correct response to an
+ * instruction whose spend limit could not be understood.
+ */
+function nodeSlideEditRunBudget(instruction: string): NodeSlideRunBudgetInput {
+  const constraint = parseNodeSlideSpendConstraint(instruction);
+  if (!constraint) return {};
+  const requestedUsd = constraint.maxCostMicroUsd / NODESLIDE_MICRO_USD_PER_USD;
+  return { maxCostUsd: Math.min(NODESLIDE_RUN_BUDGET_BOUNDS.maxCostUsd.default, requestedUsd) };
+}
+
+/**
+ * The hard cap for one create run: the normalized default bounds.
+ *
+ * A create brief carries no caller spend-ceiling field, which is the same
+ * reasoning `startCreateDeck` records when it opens the job's ledger row with
+ * `{}`. The edit path can tighten from its instruction text because an edit
+ * instruction is a sentence; a brief is structured content, and inventing a
+ * ceiling from its prose here would be a policy this codebase never agreed to.
+ */
+function nodeSlideCreateRunBudget(): NodeSlideRunBudgetInput {
+  return {};
+}
+
+/**
+ * The budget run identity for one deck creation.
+ *
+ * Derived from the canonical request digest — `stableSerialize`, i.e. sorted-key
+ * hashing — so a retried create reserves against the SAME ledger row instead of
+ * minting a fresh cap each attempt. That is what makes the reservation replay
+ * safely: `callNodeSlideBudgetedJson` keys idempotency on (budgetId, callId),
+ * so an identical retried request replays its receipt rather than paying twice.
+ *
+ * Deliberately NOT the deck id: the deck id is minted AFTER the provider call
+ * (it embeds `Date.now()`), and a budget that only exists after the money is
+ * spent cannot refuse the spend.
+ */
+function nodeSlideCreateRunId(requestDigest: string): string {
+  return nodeslideStableId('nsrun_create', requestDigest);
+}
+
+/**
+ * True when a metered call left the ledger unable to say what it cost.
+ *
+ * `unreconciled` and `accounting_error` both mean the reservation is still
+ * standing against the run with no settled receipt to close it — the provider
+ * may well have been paid. Persisting a deterministic fallback deck on top of
+ * that would hand the caller a successful-looking result for a run whose spend
+ * is unknown, which is the exact "2xx on a failure path" this codebase refuses.
+ * The create action turns it into a public error and creates no deck instead.
+ */
+function nodeSlideCreateSpendUnreconciled(result: unknown): boolean {
+  if (!result || typeof result !== 'object' || !('accounting' in result)) return false;
+  const accounting = (result as { accounting?: { disposition?: unknown } }).accounting;
+  return (
+    accounting?.disposition === 'unreconciled' || accounting?.disposition === 'accounting_error'
+  );
+}
+
+interface NodeSlideWebSourceInput {
+  title: string;
+  url: string;
+  snippet: string;
+  provider: string;
+}
+
+export interface NodeSlideStoredWebSource extends NodeSlideWebSourceInput {
+  sourceId: string;
+}
+
+/**
+ * Rejoins mutation results to inputs by the same stable URL identity used by
+ * `attachWebSourcesInternal`. Invalid inputs can therefore be skipped without
+ * shifting every later source binding.
+ */
+export function pairNodeSlideStoredWebSources(args: {
+  deckId: string;
+  inputs: readonly NodeSlideWebSourceInput[];
+  references: readonly { id: string }[];
+}): NodeSlideStoredWebSource[] {
+  const inputsBySourceId = new Map<string, NodeSlideStoredWebSource>();
+  for (const input of args.inputs) {
+    const url = normalizedStoredNodeSlideWebSourceUrl(input.url);
+    if (!url) continue;
+    const sourceId = nodeslideStableId('source_web', args.deckId, url);
+    inputsBySourceId.set(sourceId, { ...input, sourceId, url });
+  }
+  return args.references.flatMap((reference) => {
+    const source = inputsBySourceId.get(reference.id);
+    return source ? [source] : [];
+  });
+}
+
+function normalizedStoredNodeSlideWebSourceUrl(value: string): string | undefined {
+  try {
+    const parsed = new URL(value);
+    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') return undefined;
+    return parsed.toString().slice(0, 900);
+  } catch {
+    return undefined;
+  }
+}
+
+export function nodeSlideEvidenceAttachmentDigest(bytes: Uint8Array): string {
+  return nodeslideContentDigest(bytes);
+}
+
+/** Deletes a just-stored attachment if its custody record cannot be committed, then rethrows. */
+export async function finalizeNodeSlideEvidenceRecord<TStorageId, TResult>(args: {
+  storageId: TStorageId;
+  deleteStorage: (storageId: TStorageId) => Promise<void>;
+  record: () => Promise<TResult>;
+}): Promise<TResult> {
+  try {
+    return await args.record();
+  } catch (recordError) {
+    try {
+      await args.deleteStorage(args.storageId);
+    } catch (cleanupError) {
+      throw new AggregateError(
+        [recordError, cleanupError],
+        'Evidence custody recording failed and the orphaned attachment could not be deleted.',
+      );
+    }
+    throw recordError;
+  }
+}
+
+export async function captureWebSourcesBestEffort(
+  ctx: ActionCtx,
+  args: {
+    deckId: string;
+    ownerAccessKey: string;
+    runId: string;
+    parentSpanId: string;
+    sources: NodeSlideStoredWebSource[];
+  },
+): Promise<void> {
+  const apiKey = process.env['FIRECRAWL_API_KEY']?.trim();
+  const targets = args.sources.slice(0, 3);
+  const captures = await Promise.allSettled(
+    targets.map(async (source) => ({
+      source,
+      capture: apiKey ? await captureNodeSlideWebEvidence({ url: source.url, apiKey }) : null,
+    })),
+  );
+  for (const result of captures) {
+    if (result.status === 'rejected') continue;
+    const { source, capture } = result.value;
+    const retrievedAt = Date.now();
+    const snapshotPdf = createNodeSlideSourceSnapshotPdf({
+      title: source.title,
+      url: source.url,
+      excerpt: source.snippet,
+      provider: source.provider,
+      retrievedAt,
+    });
+    let storedAttachment:
+      | {
+          storageId: Awaited<ReturnType<ActionCtx['storage']['store']>>;
+          kind: 'screenshot' | 'pdf';
+          digest: string;
+        }
+      | undefined;
+    if (capture?.screenshot) {
+      const bytes = Uint8Array.from(capture.screenshot.bytes);
+      try {
+        storedAttachment = {
+          storageId: await ctx.storage.store(
+            new Blob([bytes.buffer], { type: capture.screenshot.mimeType }),
+          ),
+          kind: 'screenshot',
+          digest: nodeSlideEvidenceAttachmentDigest(bytes),
+        };
+      } catch {
+        storedAttachment = undefined;
+      }
+    }
+    if (!storedAttachment) {
+      const bytes = Uint8Array.from(snapshotPdf.bytes);
+      try {
+        storedAttachment = {
+          storageId: await ctx.storage.store(new Blob([bytes.buffer], { type: 'application/pdf' })),
+          kind: 'pdf',
+          digest: nodeSlideEvidenceAttachmentDigest(bytes),
+        };
+      } catch {
+        // Evidence remains additive when no attachment was stored; retained citations still work.
+        continue;
+      }
+    }
+    const contentDigest = storedAttachment.digest;
+    const captureId = nodeslideStableId(
+      'evidence_capture',
+      args.runId,
+      source.sourceId,
+      contentDigest,
+    );
+    const screenshotStorageId =
+      storedAttachment.kind === 'screenshot' ? storedAttachment.storageId : undefined;
+    const pdfStorageId = storedAttachment.kind === 'pdf' ? storedAttachment.storageId : undefined;
+    const screenshotViewport = screenshotStorageId ? capture?.screenshot?.viewport : undefined;
+    const screenshotBox = screenshotViewport ? { x: 0, y: 0, w: 1, h: 1 } : undefined;
+    await finalizeNodeSlideEvidenceRecord({
+      storageId: storedAttachment.storageId,
+      deleteStorage: (storageId) => ctx.storage.delete(storageId),
+      record: () =>
+        ctx.runMutation(nodeslideInternal.recordEvidenceCaptureInternal, {
+          id: captureId,
+          deckId: args.deckId,
+          ownerAccessKey: args.ownerAccessKey,
+          runId: args.runId,
+          parentSpanId: args.parentSpanId,
+          sourceId: source.sourceId,
+          url: source.url,
+          goal: `Preserve evidence for ${source.title}`,
+          provider: screenshotStorageId
+            ? (capture?.provider ?? 'firecrawl')
+            : 'nodeslide-source-snapshot/v1',
+          status: 'ready',
+          contentDigest,
+          startedAt: capture?.startedAt ?? retrievedAt,
+          completedAt: capture?.completedAt ?? retrievedAt,
+          steps: [
+            {
+              phase: 'observe',
+              label: screenshotStorageId
+                ? `Captured webpage evidence for ${source.title}`
+                : `Preserved search-provider snapshot for ${source.title}`,
+              status: screenshotStorageId && screenshotViewport ? 'ok' : 'warning',
+              ...(screenshotStorageId && !screenshotViewport
+                ? {
+                    detail:
+                      'Stored the exact screenshot bytes, but the encoded image dimensions could not be verified. No region geometry was recorded.',
+                  }
+                : !screenshotStorageId
+                  ? {
+                      detail: capture?.error
+                        ? `${capture.error} Stored an exact title, URL, and excerpt snapshot instead; it is not a webpage screenshot.`
+                        : 'Stored the exact search-provider title, URL, and excerpt as a PDF; it is not a webpage screenshot.',
+                    }
+                  : {}),
+              ...(screenshotStorageId
+                ? {
+                    screenshotStorageId,
+                    ...(screenshotBox ? { box: screenshotBox } : {}),
+                    ...(screenshotViewport ? { viewport: screenshotViewport } : {}),
+                  }
+                : {}),
+              ...(pdfStorageId
+                ? { pdfStorageId, box: snapshotPdf.box, viewport: snapshotPdf.viewport }
+                : {}),
+              regionScope: 'source',
+              quote: source.snippet.slice(0, 1000),
+              contentDigest,
+              startedAt: capture?.startedAt ?? retrievedAt,
+              completedAt: capture?.completedAt ?? retrievedAt,
+            },
+          ],
+        }),
+    });
+  }
+}
+
+/**
+ * The deduplicated, byte-bounded union of the scoped memory store and the legacy
+ * agent-memory store, in that priority order.
+ *
+ * Scoped memories go first because they are the author's explicit standing
+ * instructions; the legacy rows are agent-written recall. The 6-item and
+ * 4,800-byte caps are the prompt budget: without them a deck that accumulated
+ * memories over months would grow the planner prompt without limit, which is a
+ * cost and latency regression that only shows up on long-lived decks.
+ */
+export function mergeAgentJobMemories(
+  deckId: string,
+  scoped: readonly NodeSlideScopedMemoryItem[],
+  legacy: readonly NodeSlideAgentMemory[],
+): NodeSlideAgentMemory[] {
+  const selected: NodeSlideAgentMemory[] = [];
+  const contentDigests = new Set<string>();
+  let bytes = 0;
+  for (const memory of [
+    ...scoped.map((item) => ({
+      id: item.id,
+      deckId,
+      category: item.category,
+      content: item.content,
+      status: item.status,
+      source: item.source,
+      ...(item.sourceRunId ? { sourceRunId: item.sourceRunId } : {}),
+      contentDigest: item.contentDigest,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
+      ...(item.lastUsedAt ? { lastUsedAt: item.lastUsedAt } : {}),
+      useCount: item.useCount,
+    })),
+    ...legacy,
+  ]) {
+    if (selected.length >= 6) break;
+    if (memory.status !== 'active') continue;
+    if (contentDigests.has(memory.contentDigest)) continue;
+    const memoryBytes = new TextEncoder().encode(memory.content).byteLength;
+    if (bytes + memoryBytes > 4_800) continue;
+    selected.push(memory);
+    contentDigests.add(memory.contentDigest);
+    bytes += memoryBytes;
+  }
+  return selected;
+}
 
 const NODESLIDE_PREVIEW_ACCESS_CODE_ENV = 'NODESLIDE_PREVIEW_ACCESS_CODE';
 const NODESLIDE_PREVIEW_ADMISSION_SUBJECT_ENV = 'NODESLIDE_PREVIEW_ADMISSION_SUBJECT';
@@ -265,6 +611,8 @@ export const proposeEdit = action({
 
     try {
       let webSourceIds: string[] = [];
+      // Search inputs rejoined to their stored source rows by stable URL identity.
+      let storedWebSources: NodeSlideStoredWebSource[] = [];
       let webProvidersUsed: string[] = [];
       if (args.webResearch) {
         await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
@@ -285,36 +633,67 @@ export const proposeEdit = action({
         }
         const search = await searchExternalReferences(instruction, 'mixed');
         webProvidersUsed = search.providers;
+        const webSourceInputs = search.references
+          .filter((reference) => reference.mediaType === 'website')
+          .slice(0, 10)
+          .map((reference) => ({
+            title: reference.title,
+            url: reference.sourceUrl,
+            snippet: reference.snippet || `Search result from ${reference.provider}.`,
+            provider: reference.provider,
+          }));
         const webRefs = await ctx.runMutation(nodeslideInternal.attachWebSourcesInternal, {
           deckId: args.deckId,
           ownerAccessKey: args.ownerAccessKey,
-          sources: search.references
-            .filter((reference) => reference.mediaType === 'website')
-            .slice(0, 10)
-            .map((reference) => ({
-              title: reference.title,
-              url: reference.sourceUrl,
-              snippet: reference.snippet || `Search result from ${reference.provider}.`,
-              provider: reference.provider,
-            })),
+          sources: webSourceInputs,
         });
         webSourceIds = webRefs.map((reference: { id: string }) => reference.id);
+        // `attachWebSourcesInternal` drops inputs whose URL will not parse, so the
+        // returned references are NOT positionally aligned with `webSourceInputs`.
+        // Zipping them by index — the obvious thing — silently attributes source
+        // B's title and snippet to source A's row the moment one URL is bad.
+        // `pairNodeSlideStoredWebSources` rejoins on the same stable URL identity
+        // the mutation used, so a skipped input shifts nothing.
+        storedWebSources = pairNodeSlideStoredWebSources({
+          deckId: args.deckId,
+          inputs: webSourceInputs,
+          references: webRefs,
+        });
         if (webSourceIds.length === 0) {
           throw publicAgentError(
             'fallback_unavailable',
             'The web search returned no usable sources. No proposal was created.',
           );
         }
-        await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
-          deckId: args.deckId,
-          ownerAccessKey: args.ownerAccessKey,
-          runId,
-          status: 'planning',
-          message: `Retained ${webSourceIds.length} web sources from ${webProvidersUsed.join(', ') || configured.join(', ')}.`,
-          role: 'tool',
-          toolName: 'source_snapshot',
-          sourceIds: webSourceIds,
-        });
+        const sourceSnapshotReceipt = await ctx.runMutation(
+          nodeslideInternal.advanceAgentRunInternal,
+          {
+            deckId: args.deckId,
+            ownerAccessKey: args.ownerAccessKey,
+            runId,
+            status: 'planning',
+            message: `Retained ${webSourceIds.length} web sources from ${webProvidersUsed.join(', ') || configured.join(', ')}${storedWebSources.length > 0 ? `: ${storedWebSources.map((source) => source.title).join('; ')}` : ''}.`,
+            role: 'tool',
+            toolName: 'source_snapshot',
+            sourceIds: webSourceIds,
+          },
+        );
+        // A retained citation is a URL and a snippet the search provider handed
+        // us. It proves nothing on its own: the page can change or vanish, and
+        // the reader has no way to check what was actually there when the deck
+        // was written. Capturing the page — or, when no capture provider is
+        // configured, an exact title/URL/excerpt snapshot PDF — is what turns the
+        // citation into evidence. Best-effort by design: a capture failure must
+        // never cost the author their proposal.
+        if (sourceSnapshotReceipt?.spanId && storedWebSources.length > 0) {
+          await captureWebSourcesBestEffort(ctx, {
+            deckId: args.deckId,
+            ownerAccessKey: args.ownerAccessKey,
+            runId,
+            parentSpanId: sourceSnapshotReceipt.spanId,
+            sources: storedWebSources,
+          });
+        }
         workspace = (await ctx.runQuery(nodeslideInternal.getAgentContextInternal, {
           deckId: args.deckId,
           ownerAccessKey: args.ownerAccessKey,
@@ -327,7 +706,14 @@ export const proposeEdit = action({
           status: 'planning',
         });
       }
-      const memories: NodeSlideAgentMemory[] =
+      // Two memory stores exist in this repo and only one of them was reaching
+      // the planner. `nodeslide_scoped_memories` is where an author's explicit
+      // standing instructions land ("always use our brand blue"); the legacy
+      // `nodeslide_agent_memories` table holds agent-written recall. Reading only
+      // the legacy table meant a user could save a standing instruction, see it
+      // stored, and watch every subsequent edit ignore it. `mergeAgentJobMemories`
+      // is the deduplicating, byte-bounded union of the two.
+      const legacyMemories: NodeSlideAgentMemory[] =
         args.memoryMode === 'relevant'
           ? ((await ctx.runQuery(nodeslideMemoryInternal.retrieveRelevantInternal, {
               deckId: args.deckId,
@@ -335,24 +721,60 @@ export const proposeEdit = action({
               instruction,
             })) as NodeSlideAgentMemory[])
           : [];
+      const scopedMemories: NodeSlideScopedMemoryItem[] =
+        args.memoryMode === 'relevant'
+          ? ((await ctx.runQuery(nodeslideScopedMemoryInternal.retrieveForOwnerInternal, {
+              deckId: args.deckId,
+              ownerAccessKey: args.ownerAccessKey,
+            })) as NodeSlideScopedMemoryItem[])
+          : [];
+      const memories = mergeAgentJobMemories(args.deckId, scopedMemories, legacyMemories);
       if (memories.length > 0) {
+        const standingInstructionCount = memories.filter(
+          (memory) => nodeSlideMemoryUse(memory) === 'standing_instruction',
+        ).length;
+        const retrievedMemoryCount = memories.length - standingInstructionCount;
         await ctx.runMutation(nodeslideInternal.advanceAgentRunInternal, {
           deckId: args.deckId,
           ownerAccessKey: args.ownerAccessKey,
           runId,
           status: 'planning',
           activity: 'memory_retrieval',
-          message: `Retrieved ${memories.length} relevant deck memor${memories.length === 1 ? 'y' : 'ies'} for this run.`,
+          message: `Loaded ${standingInstructionCount} explicit standing instruction${standingInstructionCount === 1 ? '' : 's'} and ${retrievedMemoryCount} relevant retrieved memor${retrievedMemoryCount === 1 ? 'y' : 'ies'} for this run.`,
           role: 'tool',
           toolName: 'memory_retrieval',
           memoryIds: memories.map((memory) => memory.id),
           memoryDigests: memories.map((memory) => memory.contentDigest),
         });
-        await ctx.runMutation(nodeslideMemoryInternal.markUsedInternal, {
-          deckId: args.deckId,
-          ownerAccessKey: args.ownerAccessKey,
-          memoryIds: memories.map((memory) => memory.id),
-        });
+        // Mark used per store, and only for the rows that actually survived the
+        // merge. Marking the whole retrieval would inflate `useCount` for
+        // memories the planner never saw, which is the signal the ranker reads.
+        const legacyMemoryIds = new Set(legacyMemories.map((memory) => memory.id));
+        const usedLegacyMemoryIds = memories
+          .filter((memory) => legacyMemoryIds.has(memory.id))
+          .map((memory) => memory.id);
+        if (usedLegacyMemoryIds.length > 0) {
+          await ctx.runMutation(nodeslideMemoryInternal.markUsedInternal, {
+            deckId: args.deckId,
+            ownerAccessKey: args.ownerAccessKey,
+            memoryIds: usedLegacyMemoryIds,
+          });
+        }
+        const usedMemoryIds = new Set(memories.map((memory) => memory.id));
+        const scopedBindings = scopedMemories
+          .filter((memory) => usedMemoryIds.has(memory.id))
+          .map((memory) => ({
+            memoryId: memory.id,
+            contentDigest: memory.contentDigest,
+            bindingDigest: memory.binding.bindingDigest,
+          }));
+        if (scopedBindings.length > 0) {
+          await ctx.runMutation(nodeslideScopedMemoryInternal.markUsedForOwnerInternal, {
+            deckId: args.deckId,
+            ownerAccessKey: args.ownerAccessKey,
+            bindings: scopedBindings,
+          });
+        }
       }
       const scopedCommentId = args.scope.kind === 'comment' ? args.scope.commentId : undefined;
       const snapshot = snapshotOf(workspace);
@@ -417,13 +839,40 @@ export const proposeEdit = action({
       // failure mode on the same graceful deterministic fallback, keeping attribution honest.
       let baseline: Awaited<ReturnType<typeof planNodeSlideEditRouted>>;
       let providerErrored = false;
-      const callStreamingPlanner: NodeSlideEditProvider = (providerArgs) =>
-        callNodeSlideFreeJson({
-          ...providerArgs,
-          ...(providerArgs.jsonSchema?.name === 'nodeslide_edit_patch'
-            ? { onTextDelta: (event) => assistantStream.observe(event) }
-            : {}),
-        });
+      // THE ENFORCEMENT SEAM. Every metered planner dispatch in this run goes
+      // through `callNodeSlideBudgetedJson`, which reserves the worst case
+      // against this run's hard cap BEFORE the request reaches the wire and
+      // settles the receipt against that reservation afterwards. This is the
+      // only caller of `nodeslideBudgets.reserve`, and it is what makes
+      // `nodeSlideBudgetEnforcementPosture()` report 'enforced' truthfully.
+      //
+      // A denial is not an error path here: the budgeted call returns a coded
+      // `{ ok: false }`, the router treats it as an unusable provider response,
+      // and the run degrades to the deterministic planner. A run that cannot be
+      // priced or cannot be afforded therefore produces a deck without spending,
+      // rather than spending without a ceiling.
+      //
+      // The deterministic route is dispatched unbudgeted on purpose: it issues
+      // no provider request, so there is nothing to reserve and a reservation
+      // would be accounting theatre.
+      const callStreamingPlanner: NodeSlideEditProvider = createNodeSlideBudgetedEditDispatch({
+        runId,
+        budget: nodeSlideEditRunBudget(instruction),
+        metered: providerChoice.providerMode !== 'deterministic',
+        ledger: nodeSlideBudgetLedgerClient(ctx),
+        dispatch: (request, dependencies) =>
+          callNodeSlideFreeJson(
+            {
+              ...request,
+              ...(request.jsonSchema?.name === 'nodeslide_edit_patch'
+                ? { onTextDelta: (event) => assistantStream.observe(event) }
+                : {}),
+            },
+            ...(dependencies?.dispatchPolicy
+              ? [{ dispatchPolicy: dependencies.dispatchPolicy }]
+              : []),
+          ),
+      });
       try {
         baseline = await planNodeSlideEditRouted(
           { snapshot, scopedComment, readContext, request },
@@ -1398,39 +1847,73 @@ export const createDeckFromBrief = action({
         },
       },
     };
+    // THE CREATE ENFORCEMENT SEAM. Deck creation was the last unmetered provider
+    // call in the product: the edit path reserved before dispatch while this one
+    // called the wire directly, so `enforcementPosture: 'enforced'` was a global
+    // claim over a half-metered system. Every metered brief dispatch now goes
+    // through `callNodeSlideBudgetedJson`, which reserves the worst case against
+    // this run's cap BEFORE the request reaches the wire and settles the receipt
+    // against that reservation afterwards.
+    //
+    // A denial is not an error path: the budgeted call returns a coded
+    // `{ ok: false }`, `invokeNodeSlideBriefProvider` treats it as an unusable
+    // provider response, and the run degrades to the deterministic fallback
+    // spec. A create that cannot be priced or cannot be afforded therefore
+    // produces a deck without spending, rather than spending without a ceiling.
+    //
+    // The deterministic route stays unbudgeted on purpose: it issues no provider
+    // request, so there is nothing to reserve.
+    const briefDispatch = createNodeSlideBudgetedCreateDispatch({
+      runId: nodeSlideCreateRunId(
+        nodeSlideJobRequestDigest(nodeSlideCreateJobRequestFromArgs(args)),
+      ),
+      budget: nodeSlideCreateRunBudget(),
+      metered: providerChoice.providerMode !== 'deterministic',
+      ledger: nodeSlideBudgetLedgerClient(ctx),
+      dispatch: (request, dependencies) =>
+        callNodeSlideFreeJson(request, {
+          // Full-deck generation is a ~5k-token completion; the 30s edit-path
+          // default guarantees a timeout and a silent (honest) fallback. The
+          // budgeted dispatch policy can only TIGHTEN this, never raise it,
+          // which is why the create seam carries its own wire ceilings.
+          timeoutMs: 240_000,
+          ...(dependencies?.dispatchPolicy ? { dispatchPolicy: dependencies.dispatchPolicy } : {}),
+        }),
+    });
     const callBriefProvider = (revision?: { previousSpec: unknown; reportJson: string }) =>
-      callNodeSlideFreeJson(
-        {
-          systemPrompt: revision
-            ? `${briefSystemPrompt}\n\nREVISION PASS: your previous spec had these concrete issues: ${revision.reportJson}. Return the full corrected spec.`
-            : briefSystemPrompt,
-          userText: JSON.stringify({
-            title,
-            brief,
-            attachments,
-            storySpec: storyContext.storySpec,
-            materialInventory: storyContext.materialInventory,
-            artifactSourceInventory,
-            requestedRoute: args.route,
-            providerMode: providerChoice.providerMode,
-            ...(revision ? { previousSpec: revision.previousSpec } : {}),
-          }),
-          maxTokens: 5000,
-          ...(providerChoice.providerMode !== 'deterministic'
-            ? {
-                model: providerChoice.providerModel,
-                reasoningEffort: providerChoice.providerEffort,
-              }
-            : {}),
-          jsonSchema: briefJsonSchema,
-        },
-        // Full-deck generation is a ~5k-token completion; the 30s edit-path
-        // default guarantees a timeout and a silent (honest) fallback.
-        { timeoutMs: 240_000 },
-      );
+      briefDispatch({
+        systemPrompt: revision
+          ? `${briefSystemPrompt}\n\nREVISION PASS: your previous spec had these concrete issues: ${revision.reportJson}. Return the full corrected spec.`
+          : briefSystemPrompt,
+        userText: JSON.stringify({
+          title,
+          brief,
+          attachments,
+          storySpec: storyContext.storySpec,
+          materialInventory: storyContext.materialInventory,
+          artifactSourceInventory,
+          requestedRoute: args.route,
+          providerMode: providerChoice.providerMode,
+          ...(revision ? { previousSpec: revision.previousSpec } : {}),
+        }),
+        maxTokens: 5000,
+        ...(providerChoice.providerMode !== 'deterministic'
+          ? {
+              model: providerChoice.providerModel,
+              reasoningEffort: providerChoice.providerEffort,
+            }
+          : {}),
+        jsonSchema: briefJsonSchema,
+      });
     const provider = await invokeNodeSlideBriefProvider(providerChoice, async () =>
       callBriefProvider(),
     );
+    if (nodeSlideCreateSpendUnreconciled(provider)) {
+      throw nodeslideCreatePublicError(
+        'invalid_request',
+        'The live provider call ended without a reconcilable billing receipt. No fallback deck was created under an unresolved paid call; retry after the receipt is reconciled.',
+      );
+    }
     const providerSpec = provider?.ok === true ? provider.value : fallbackSpec;
     const runtimeEnvironment = process.env['NODESLIDE_RUNTIME_ENV'];
     const faultFlag = process.env['NODESLIDE_DEV_CREATION_FAULT'];
@@ -1464,6 +1947,14 @@ export const createDeckFromBrief = action({
       requestRevision: async (promptReport) =>
         await callBriefProvider({ previousSpec: firstSpec, reportJson: promptReport }),
     });
+    // The revision pass is a second metered dispatch, so it can strand a
+    // reservation exactly like the first one can.
+    if (nodeSlideCreateSpendUnreconciled(critique.revision)) {
+      throw nodeslideCreatePublicError(
+        'invalid_request',
+        'The live provider revision call ended without a reconcilable billing receipt. No fallback deck was created under an unresolved paid call; retry after the receipt is reconciled.',
+      );
+    }
     const rawSpec = critique.spec;
     const plan = extractPlan(provider?.ok === true ? rawSpec : null, fallbackSpec);
     const now = Date.now();

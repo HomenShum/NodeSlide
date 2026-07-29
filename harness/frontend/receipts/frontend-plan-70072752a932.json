@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "nodekit.frontend-plan/v1",
+  "planId": "frontend-plan-70072752a932",
+  "contractPath": "harness/frontend/product-packets/inspector.yaml",
+  "routePath": "harness/frontend/route.yaml",
+  "productContractHash": "b644a861163b2d2b1b936ef7c11de50046455c4d1d40ed591125bdc6850113b1",
+  "routeHash": "95c80af4ee17d46c29f5ac8af3c00df18584d93b2cf16a74a3c339aabf7ba88e",
+  "routeStatus": "unprofiled",
+  "requestedRoute": null,
+  "resolvedRoute": null,
+  "protectedContract": {
+    "primaryUser": "A solo founder preparing a deck whose numbers will be questioned in the room, working alongside a coding agent that proposes edits.",
+    "primaryJob": "Review and accept or reject an agent's proposed change to a slide, and see what evidence backs the claim on it.",
+    "primaryArtifact": "The slide itself, as a typed DeckSpec whose elements carry their sources.",
+    "journey": [
+      "Open a deck and see the slide, not the tooling.",
+      "Ask the agent for a change in plain language.",
+      "Read the proposal beside the current slide.",
+      "Check what the claim is bound to before accepting it.",
+      "Accept, and watch the deck version advance.",
+      "Export, and know what survived the export and what did not."
+    ],
+    "protectedDecisions": {
+      "primaryUser": "nodekit",
+      "primaryJob": "nodekit",
+      "canonicalWorkflow": "nodekit",
+      "dataAuthority": "nodekit",
+      "permissionBoundaries": "nodekit",
+      "completionCriteria": "nodeproof",
+      "finalVerdict": "nodeproof"
+    }
+  },
+  "requiredViews": [
+    "desktop-first-arrival",
+    "desktop-active-workflow",
+    "desktop-proposal-review",
+    "mobile-primary-artifact",
+    "mobile-agent",
+    "mobile-review"
+  ],
+  "directionCount": 3,
+  "finalVerdictAuthority": "nodeproof",
+  "implementationAuthority": "proposal_workspace",
+  "deploymentAuthorized": false
+}

@@ -159,6 +159,7 @@ function ThreadTurn({
   const prose = messages.filter((message) => message.role === 'assistant');
   const citationCount = new Set(messages.flatMap((message) => message.sourceIds ?? [])).size;
   const patchReviewable = patch && ['draft', 'validating', 'ready', 'stale'].includes(patch.status);
+  const patchAccepted = patch ? ['accepted', 'applied'].includes(patch.status) : false;
 
   return (
     <section
@@ -272,9 +273,18 @@ function ThreadTurn({
 
         {/* Inline patch card — accept in place */}
         {patch && patchReviewable && (
+          /*
+           * trust-surfaces: an undecided proposal is drawn in the neutral border/surface, not
+           * in `primary` — the same token the Accept button fills with. Tinting the card in the
+           * colour of one outcome reads as a decision that has already been made. The decision
+           * state is on the element as `data-decision` so it is legible without a store.
+           */
           <div
-            className="mt-1 flex items-center gap-2 rounded-md border border-primary/40 bg-primary/5 px-2 py-1.5"
+            className="mt-1 flex items-center gap-2 rounded-md border border-border bg-muted/40 px-2 py-1.5"
             data-testid="agent-thread-patch"
+            data-trust-surface="proposal"
+            data-decision="undecided"
+            data-patch-status={patch.status}
             onMouseEnter={() => onPreviewPatch?.(patch)}
             onMouseLeave={() => onPreviewPatch?.(null)}
           >
@@ -300,7 +310,21 @@ function ThreadTurn({
           </div>
         )}
         {patch && !patchReviewable && (
-          <p className="text-[11px] text-muted-foreground" data-testid="agent-thread-patch-settled">
+          /*
+           * trust-surfaces: a rejected proposal used to render in exactly the same muted grey
+           * as an accepted one, so the outcome was unreadable both to a person and to the DOM.
+           * The copy is unchanged; the decision is now carried by data-decision and by a colour
+           * that does not claim success for a change that was refused.
+           */
+          <p
+            className={`text-[11px] ${
+              patchAccepted ? 'text-muted-foreground' : 'text-destructive'
+            }`}
+            data-testid="agent-thread-patch-settled"
+            data-trust-surface="proposal"
+            data-decision={patchAccepted ? 'accepted' : 'rejected'}
+            data-patch-status={patch.status}
+          >
             Patch {patch.status}.
           </p>
         )}

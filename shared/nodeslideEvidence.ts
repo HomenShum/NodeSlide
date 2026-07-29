@@ -3,9 +3,11 @@
  *
  * Web research stores the provider's text excerpt on the source record and as
  * an immutable retrieved-excerpt snapshot. It never claims to photograph the
- * third-party page. These helpers keep capture validation and claim-region
- * highlighting deterministic and testable.
+ * third-party page. These helpers keep capture validation, claim-region
+ * highlighting and binding coverage deterministic and testable.
  */
+
+import type { SlideElement } from './nodeslide';
 
 export interface WebSourceExcerptInput {
   title: string;
@@ -162,4 +164,51 @@ export function highlightExcerpt(excerpt: string, terms: readonly string[]): Exc
     segments.push({ text: excerpt.slice(cursor), highlighted: false });
   }
   return segments;
+}
+
+/**
+ * Slide furniture: a page number, a footer or an accent rail asserts nothing, so
+ * an empty `sourceIds` on one is not a missing citation. Counting them would
+ * report 28 unsourced claims on a deck whose 43 real claims are all bound.
+ * Mirrors the role exclusions already used by the geometry collision gate.
+ */
+const FURNITURE_ROLE =
+  /(?:decorat|background|watermark|accent|rail|brand|footer|page_number|section|eyebrow)/i;
+
+/** Every source the element binds, across `sourceIds` and the primitive bindings. */
+export function boundSourceIds(element: SlideElement): string[] {
+  return [
+    ...element.sourceIds,
+    ...(element.chart?.sourceId ? [element.chart.sourceId] : []),
+    ...(element.math?.sourceId ? [element.math.sourceId] : []),
+    ...(element.image?.sourceId ? [element.image.sourceId] : []),
+  ];
+}
+
+/**
+ * Whether the element asserts something a source could back. Every structured
+ * primitive does; text does once it carries content; furniture, connectors and
+ * empty shapes never do.
+ */
+export function isClaimBearingElement(element: SlideElement): boolean {
+  if (FURNITURE_ROLE.test(element.role ?? '')) return false;
+  if (element.kind === 'connector') return false;
+  if (element.chart || element.math || element.image || element.video) return true;
+  return Boolean(element.content?.trim());
+}
+
+export interface EvidenceBindingCoverage {
+  claims: number;
+  bound: number;
+  /** Claims carrying nothing — countable, and usually mid-work rather than an error. */
+  unsourced: SlideElement[];
+}
+
+/** Deck-level binding coverage, in deck element order. */
+export function evidenceBindingCoverage(
+  elements: readonly SlideElement[],
+): EvidenceBindingCoverage {
+  const claims = elements.filter(isClaimBearingElement);
+  const unsourced = claims.filter((element) => boundSourceIds(element).length === 0);
+  return { claims: claims.length, bound: claims.length - unsourced.length, unsourced };
 }

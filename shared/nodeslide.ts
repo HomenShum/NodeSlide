@@ -1,10 +1,10 @@
-import type { NodeSlideDataAttachment } from './nodeslideAttachments';
+import type { NodeSlideDataAttachment } from './nodeslideAttachments.js';
 
 import type {
   NodeSlideArtifactBinding,
   NodeSlideArtifactCompilationReceipt,
   NodeSlideAuthoredArtifactBinding,
-} from './nodeslideArtifactSpec';
+} from './nodeslideArtifactSpec.js';
 
 export const NODESLIDE_SCHEMA_VERSION = 'nodeslide.slidelang/v1' as const;
 export const NODESLIDE_TOOLCHAIN_VERSION = 'local-slidelang-adapter/1.1.0' as const;
@@ -309,6 +309,8 @@ export const NODESLIDE_NEBIUS_VARIATIONS_CONSENT =
 export const NODESLIDE_WEB_RESEARCH_CONSENT = 'nodeslide_web_research_v1' as const;
 /** Exact consent for a local MCP process to send scoped context to a user-selected BYOK model. */
 export const NODESLIDE_LOCAL_BYOK_EDIT_CONSENT = 'nodeslide_local_byok_edit_v1' as const;
+/** Exact consent for an external coding agent to submit already-authored operations for review. */
+export const NODESLIDE_EXTERNAL_AGENT_PATCH_CONSENT = 'nodeslide_external_agent_patch_v1' as const;
 /** Exact consent for sending an image query to the Openverse licensed-media catalog. */
 export const NODESLIDE_IMAGE_SEARCH_CONSENT = 'nodeslide_image_search_v1' as const;
 export const NODESLIDE_OPENVERSE_API_HOST = 'api.openverse.org' as const;
@@ -727,7 +729,15 @@ export type PatchOperation =
       slideId: string;
       properties: Partial<Pick<Slide, 'title' | 'notes' | 'background'>>;
     }
-  | { op: 'update_deck'; properties: { title?: string } };
+  | { op: 'update_deck'; properties: { title?: string } }
+  | {
+      op: 'update_theme_v1';
+      properties: {
+        mode?: ThemeSpec['mode'];
+        colors?: Partial<ThemeSpec['colors']>;
+        typography?: Partial<ThemeSpec['typography']>;
+      };
+    };
 
 export interface DeckPatch {
   id: string;
@@ -774,7 +784,7 @@ export interface SourceRecord {
   citation: string;
   license?: string;
   /** Typed ingestion metadata. Optional for rows created before source-metadata v1. */
-  format?: 'csv' | 'json' | 'txt' | 'web';
+  format?: 'csv' | 'json' | 'txt' | 'md' | 'pdf' | 'web';
   contentDigest?: string;
   byteSize?: number;
   rowCount?: number;
@@ -893,6 +903,136 @@ export interface NodeSlideAgentTelemetryPage {
   hasMore: boolean;
   totalRecorded: number;
 }
+
+export type NodeSlideEvidenceCaptureStatus = 'ready' | 'failed' | 'expired';
+export type NodeSlideEvidenceStepStatus = 'ok' | 'warning' | 'error';
+export type NodeSlideEvidenceAttachmentKind = 'screenshot' | 'pdf';
+export type NodeSlideEvidenceRegionScope = 'source' | 'claim';
+
+/** Normalized evidence region. Coordinates are 0..1 in the rendered screenshot or PDF page. */
+export interface NodeSlideEvidenceBox {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  page?: number;
+}
+
+export interface NodeSlideEvidenceViewport {
+  width: number;
+  height: number;
+}
+
+/** Lightweight capture row. It never contains storage IDs or signed attachment URLs. */
+export interface NodeSlideEvidenceCaptureSummary {
+  id: string;
+  deckId: string;
+  runId: string;
+  traceId: string;
+  spanId: string;
+  parentSpanId: string;
+  sourceId: string;
+  sourceTitle: string;
+  url: string;
+  goal: string;
+  provider: string;
+  status: NodeSlideEvidenceCaptureStatus;
+  error?: string;
+  contentDigest?: string;
+  stepCount: number;
+  screenshotCount: number;
+  pdfCount: number;
+  createdAt: number;
+  completedAt?: number;
+  expiresAt?: number;
+}
+
+export interface NodeSlideEvidenceStepSummary {
+  id: string;
+  captureId: string;
+  spanId: string;
+  sequence: number;
+  phase: string;
+  label: string;
+  status: NodeSlideEvidenceStepStatus;
+  detail?: string;
+  attachmentKind?: NodeSlideEvidenceAttachmentKind;
+  box?: NodeSlideEvidenceBox;
+  /** Missing on legacy rows and therefore treated as source-level, never claim-level. */
+  regionScope?: NodeSlideEvidenceRegionScope;
+  selector?: string;
+  quote?: string;
+  viewport?: NodeSlideEvidenceViewport;
+  contentDigest?: string;
+  createdAt: number;
+}
+
+export interface NodeSlideEvidenceAttachment {
+  kind: NodeSlideEvidenceAttachmentKind;
+  url: string;
+  box?: NodeSlideEvidenceBox;
+  page?: number;
+}
+
+export interface NodeSlideEvidenceStepDetail extends NodeSlideEvidenceStepSummary {
+  attachment?: NodeSlideEvidenceAttachment;
+}
+
+/** Owner-only detail resolved on demand for the single selected capture. */
+export interface NodeSlideEvidenceCaptureDetail extends NodeSlideEvidenceCaptureSummary {
+  steps: NodeSlideEvidenceStepDetail[];
+}
+
+export type NodeSlideAgentToolState =
+  | 'input-streaming'
+  | 'input-available'
+  | 'approval-requested'
+  | 'approval-responded'
+  | 'output-available'
+  | 'output-error'
+  | 'output-denied';
+
+/** Query-projected lifecycle backed only by durable run/span records. */
+export interface NodeSlideAgentToolActivity {
+  state: NodeSlideAgentToolState;
+  input?: unknown;
+  output?: unknown;
+  errorText?: string;
+}
+
+/** A source link is exposed to activity UI only after both fields resolve. */
+export interface NodeSlideAgentResolvedSource {
+  id: string;
+  title: string;
+  url: string;
+}
+
+export type NodeSlideSourceBindingStatus = 'bound' | 'not_applicable' | 'legacy_unavailable';
+
+/** Immutable element-level evidence binding for one factual candidate operation. */
+export interface NodeSlideClaimSourceBinding {
+  operationIndex: number;
+  operation: 'replace_text' | 'update_chart' | 'add_element';
+  slideId: string;
+  elementId: string;
+  sourceIds: string[];
+  claimDigest: string;
+}
+
+/**
+ * Durable presentation-workflow identity. Planner/executor/validator are retained so
+ * conversations written before the six-role workflow remain readable and valid.
+ */
+export type NodeSlideAgentRole =
+  | 'researcher'
+  | 'analyst'
+  | 'storyteller'
+  | 'designer'
+  | 'fact_checker'
+  | 'reviewer'
+  | 'planner'
+  | 'executor'
+  | 'validator';
 
 export interface NodeSlideAgentMessage {
   id: string;
@@ -1021,6 +1161,10 @@ export interface AgentTrace {
   costMicroUsd?: number;
   inputTokens?: number;
   outputTokens?: number;
+  /** Always hydrated for current API reads; absent only on older serialized clients. */
+  sourceBindingStatus?: NodeSlideSourceBindingStatus;
+  /** Empty for non-factual runs and honestly unavailable on legacy traces. */
+  claimSourceBindings?: NodeSlideClaimSourceBinding[];
   createdAt: number;
   completedAt?: number;
 }
@@ -1051,6 +1195,31 @@ export interface Presence {
 
 export interface DeckSnapshot {
   deck: Deck;
+  slides: Slide[];
+  elements: SlideElement[];
+  sources: SourceRecord[];
+}
+
+/**
+ * The snapshot fields the SlideLang export paths and the ArtifactSpec compiler
+ * actually read. A published snapshot carries the same slides, elements, and
+ * sources but omits the owner-only deck context (project, brief, signature
+ * profile, share capability), so those paths accept this shape and both a full
+ * `DeckSnapshot` and a `PublishedDeckSnapshot` still satisfy it.
+ */
+export interface ExportableDeckSnapshot {
+  deck: Pick<
+    Deck,
+    | 'schemaVersion'
+    | 'toolchainVersion'
+    | 'id'
+    | 'title'
+    | 'theme'
+    | 'slideOrder'
+    | 'version'
+    | 'createdAt'
+    | 'updatedAt'
+  >;
   slides: Slide[];
   elements: SlideElement[];
   sources: SourceRecord[];
@@ -1209,7 +1378,7 @@ export interface CreateDeckRequest {
 export const NODESLIDE_PRODUCTION_PROBE_CLEANUP_STORAGE_KEY =
   'nodeslide.productionProbeCleanupToken.v1' as const;
 
-export type { NodeSlideDataAttachment } from './nodeslideAttachments';
+export type { NodeSlideDataAttachment } from './nodeslideAttachments.js';
 
 export function isElementOperation(
   operation: PatchOperation,
@@ -1220,6 +1389,7 @@ export function isElementOperation(
   | { op: 'reorder_slide' }
   | { op: 'update_slide' }
   | { op: 'update_deck' }
+  | { op: 'update_theme_v1' }
   | { op: 'group_elements_v1' }
   | { op: 'ungroup_elements_v1' }
 > {
@@ -1229,9 +1399,67 @@ export function isElementOperation(
     operation.op !== 'reorder_slide' &&
     operation.op !== 'update_slide' &&
     operation.op !== 'update_deck' &&
+    operation.op !== 'update_theme_v1' &&
     operation.op !== 'group_elements_v1' &&
     operation.op !== 'ungroup_elements_v1'
   );
+}
+
+/**
+ * Compile-time exhaustiveness guard for `PatchOperation` narrowing chains.
+ *
+ * Every site that narrows the deck-level operations away and then reads
+ * `operation.slideId` must dead-end in a call to this. Adding a member to
+ * `PatchOperation` that the site does not handle makes the argument stop being
+ * assignable to `never`, so the call fails to compile *at that site*, naming the
+ * unhandled member — instead of the site quietly targeting `undefined` (or, at
+ * best, producing a "Property 'slideId' does not exist" error several lines away
+ * from the decision that actually needs revisiting).
+ *
+ * It never throws, so it is safe on a React render path: if unvalidated data
+ * ever carries an op this build does not know about, callers get the raw op name
+ * back and degrade visibly rather than crashing or silently showing nothing.
+ */
+/**
+ * The canonical runtime enumeration of `PatchOperation['op']`.
+ *
+ * `satisfies Record<PatchOperation['op'], true>` makes it compile-time exhaustive:
+ * adding a member to the `PatchOperation` union fails to compile here until the
+ * op is listed. Wire boundaries that must enumerate ops at runtime (the external
+ * agent's argument validator, the external change-set normalizer) derive their
+ * allowlists from this instead of keeping a hand-maintained copy that can silently
+ * fall behind the type. The Convex argument validator cannot import it — Convex
+ * validators are built from `v.literal` objects, not a list — so it is checked
+ * against this table by test instead.
+ */
+const NODESLIDE_PATCH_OPERATION_OP_TABLE = {
+  move: true,
+  resize: true,
+  replace_text: true,
+  update_style: true,
+  update_chart: true,
+  update_image: true,
+  add_element: true,
+  remove_element: true,
+  set_visibility_v1: true,
+  group_elements_v1: true,
+  ungroup_elements_v1: true,
+  reorder_element_v1: true,
+  add_slide: true,
+  remove_slide: true,
+  reorder_slide: true,
+  update_slide: true,
+  update_deck: true,
+  update_theme_v1: true,
+} satisfies Record<PatchOperation['op'], true>;
+
+export const NODESLIDE_PATCH_OPERATION_OPS = Object.keys(
+  NODESLIDE_PATCH_OPERATION_OP_TABLE,
+) as PatchOperation['op'][];
+
+export function unhandledPatchOperation(operation: never): string {
+  const op: unknown = (operation as { op?: unknown } | null | undefined)?.op;
+  return typeof op === 'string' && op ? op : 'unknown_operation';
 }
 
 export function operationElementIds(operation: PatchOperation): string[] {

@@ -111,6 +111,34 @@ const chart = element({
   },
 } as Partial<SlideElement> & { id: string; slideId: string });
 
+/** Written by the agent, not yet cited — the honest mid-work case. */
+const draftClaim = element({
+  id: 'el-draft',
+  slideId: 'slide-2',
+  name: 'Draft takeaway',
+  content: 'Charging density is the binding constraint',
+  sourceIds: [],
+});
+
+/** Slide furniture. Empty sourceIds here is not a missing citation. */
+const pageNumber = element({
+  id: 'el-page-number',
+  slideId: 'slide-2',
+  name: 'Page number',
+  role: 'page_number',
+  content: '02',
+  sourceIds: [],
+});
+
+const accentRail = element({
+  id: 'el-accent-rail',
+  slideId: 'slide-3',
+  name: 'Accent rail',
+  kind: 'shape',
+  role: 'decoration',
+  sourceIds: [],
+});
+
 const slides = [slide('slide-2', 'Market shift'), slide('slide-3', 'Revenue')];
 const elements = [headline, chart];
 
@@ -246,5 +274,123 @@ describe('DataInspector evidence lineage', () => {
     );
     expect(screen.getByTestId('evidence-capture-failed').textContent).toContain('Capture failed');
     expect(screen.queryByTestId('evidence-no-snapshot')).toBeNull();
+  });
+});
+
+/*
+ * Scenario: the same analyst, one step earlier. The agent has written a
+ * takeaway it has not cited yet. NodeSlide's whole claim is that claims carry
+ * their sources, so a claim carrying none has to be countable on the tab that
+ * makes that claim — not a silent absence, and not an alarm either, because an
+ * uncited element is usually mid-work.
+ *
+ * `tools/brain/capture-required-states.mjs` reaches the required `exception`
+ * state with getByText(/no evidence|not attached|unsourced|0 sources/i). That
+ * regex is asserted verbatim below so the harness and the surface cannot drift.
+ */
+const CAPTURE_EXCEPTION_PATTERN = /no evidence|not attached|unsourced|0 sources/i;
+
+describe('DataInspector unsourced claims', () => {
+  it('counts a claim with nothing bound to it, and lets the reviewer select it', async () => {
+    const onSelectElement = vi.fn();
+    render(
+      <DataInspector
+        sources={[webSource, csvSource]}
+        selectedElements={[]}
+        elements={[headline, chart, draftClaim]}
+        slides={slides}
+        onSelectElement={onSelectElement}
+      />,
+    );
+
+    expect(screen.getByTestId('evidence-unsourced-count').textContent).toBe('1');
+    const chip = screen.getByTestId('evidence-unsourced-element');
+    expect(chip.textContent).toContain('Draft takeaway');
+    expect(chip.textContent).toContain('Market shift');
+
+    await userEvent.click(chip);
+    expect(onSelectElement).toHaveBeenCalledWith('slide-2', 'el-draft');
+  });
+
+  it('does not count slide furniture — a page number and an accent rail assert nothing', () => {
+    render(
+      <DataInspector
+        sources={[webSource, csvSource]}
+        selectedElements={[]}
+        elements={[headline, chart, pageNumber, accentRail]}
+        slides={slides}
+        onSelectElement={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByTestId('evidence-unsourced-count').textContent).toBe('0');
+    expect(screen.getByTestId('evidence-coverage').textContent).toContain('Claims2');
+    expect(screen.queryByTestId('evidence-unsourced-list')).toBeNull();
+  });
+
+  it('states a fully bound deck as a zero, and refuses the click rather than opening nothing', () => {
+    render(
+      <DataInspector
+        sources={[webSource, csvSource]}
+        selectedElements={[]}
+        elements={elements}
+        slides={slides}
+        onSelectElement={vi.fn()}
+      />,
+    );
+
+    const toggle = screen.getByTestId<HTMLButtonElement>('evidence-unsourced-toggle');
+    expect(toggle.disabled).toBe(true);
+    expect(toggle.getAttribute('aria-expanded')).toBe('false');
+    expect(screen.getByTestId('evidence-coverage').textContent).toBe('Claims2Bound2Unsourced0');
+  });
+
+  it('collapses and reopens the list without losing the count', async () => {
+    render(
+      <DataInspector
+        sources={[webSource]}
+        selectedElements={[]}
+        elements={[headline, draftClaim]}
+        slides={slides}
+        onSelectElement={vi.fn()}
+      />,
+    );
+
+    const toggle = screen.getByTestId('evidence-unsourced-toggle');
+    expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    await userEvent.click(toggle);
+    expect(screen.queryByTestId('evidence-unsourced-list')).toBeNull();
+    expect(screen.getByTestId('evidence-unsourced-count').textContent).toBe('1');
+    await userEvent.click(toggle);
+    expect(screen.getByTestId('evidence-unsourced-list')).not.toBeNull();
+  });
+
+  it('satisfies the capture harness assertion in both the zero and the populated case', () => {
+    render(
+      <DataInspector
+        sources={[webSource]}
+        selectedElements={[]}
+        elements={elements}
+        slides={slides}
+      />,
+    );
+    // getByText throws when absent, so reaching the assertion is the assertion.
+    expect(screen.getByText(CAPTURE_EXCEPTION_PATTERN).isConnected).toBe(true);
+    cleanup();
+
+    render(
+      <DataInspector
+        sources={[webSource]}
+        selectedElements={[]}
+        elements={[headline, draftClaim]}
+        slides={slides}
+      />,
+    );
+    expect(screen.getByText(CAPTURE_EXCEPTION_PATTERN).isConnected).toBe(true);
+  });
+
+  it('stays silent when the caller passes no deck elements, rather than reporting a false zero', () => {
+    render(<DataInspector sources={[webSource]} selectedElements={[]} />);
+    expect(screen.queryByTestId('evidence-coverage')).toBeNull();
   });
 });

@@ -284,3 +284,39 @@ describe('AgentThread', () => {
     expect(html).not.toContain('agent-thread-stream-cursor');
   });
 });
+
+/**
+ * trust-surfaces: the inline patch card is where a human decides whether to believe the agent.
+ * It must state its decision in the DOM, and must not be painted in the colour of an outcome
+ * that has not happened yet.
+ */
+describe('AgentThread proposal card is honest about its decision state', () => {
+  it('marks an undecided proposal undecided, in neutral colour', () => {
+    const html = renderToStaticMarkup(
+      <AgentThread
+        runs={[run({ id: 'run-9', patchId: reviewablePatch.id, status: 'awaiting_review' })]}
+        messages={[]}
+        patches={[reviewablePatch]}
+        onAcceptPatch={() => {}}
+        onRejectPatch={() => {}}
+      />,
+    );
+    expect(html).toContain('data-decision="undecided"');
+    // `primary` is the Accept button's own fill. An undecided card must not wear it.
+    expect(html).not.toContain('border-primary/40 bg-primary/5');
+  });
+
+  it('distinguishes a refused proposal from an accepted one', () => {
+    const html = renderToStaticMarkup(
+      <AgentThread
+        runs={[run({ id: 'run-10', patchId: 'patch-r', status: 'completed' })]}
+        messages={[]}
+        patches={[{ ...reviewablePatch, id: 'patch-r', status: 'rejected' } as DeckPatch]}
+        onAcceptPatch={() => {}}
+        onRejectPatch={() => {}}
+      />,
+    );
+    expect(html).toContain('data-decision="rejected"');
+    expect(html).toContain('text-destructive');
+  });
+});

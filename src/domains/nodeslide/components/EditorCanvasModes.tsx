@@ -7,6 +7,7 @@ import {
   useMemo,
 } from 'react';
 import type { PatchOperation, Slide, SlideElement, ThemeSpec } from '../../../../shared/nodeslide';
+import { unhandledPatchOperation } from '../../../../shared/nodeslide';
 import {
   type EditorCandidateReceipt,
   type EditorCandidateStatus,
@@ -50,6 +51,11 @@ export interface EditorCanvasModesProps {
   candidateSlide?: Slide | null;
   candidateElements?: readonly SlideElement[];
   candidateLabel?: string;
+  /**
+   * The write scope of the pending proposal, rendered next to "pending review" so the
+   * blast radius is legible before acceptance rather than only after opening the AI tab.
+   */
+  candidateScopeLabel?: string;
   compareOperations?: readonly (PatchOperation | EditorCompareOperation)[];
   candidateReceipt?: EditorCandidateReceipt | null;
 
@@ -88,6 +94,7 @@ export function EditorCanvasModes({
   candidateSlide,
   candidateElements,
   candidateLabel,
+  candidateScopeLabel,
   compareOperations = [],
   candidateReceipt,
   sliderPosition = 50,
@@ -212,7 +219,12 @@ export function EditorCanvasModes({
               </button>
             ))}
           </div>
-          <span>{hasCandidate ? 'proposal · pending review' : 'no proposal pending'}</span>
+          <span>
+            {hasCandidate ? 'proposal · pending review' : 'no proposal pending'}
+            {hasCandidate && candidateScopeLabel ? (
+              <span data-testid="compare-scope-label"> · {candidateScopeLabel}</span>
+            ) : null}
+          </span>
           {narrativeBanner ? <span className="ns-sr-only">{narrativeBanner}</span> : null}
         </div>
       ) : null}
@@ -500,6 +512,13 @@ function CandidateReceipt({
 }) {
   const status = receipt?.status ?? 'unavailable';
   const acceptEnabled = editorCandidateCanAccept(receipt);
+  /*
+   * trust-surfaces clause 1: the Compare footer is the diff-review surface — Accept here
+   * commits the candidate. `undecided` is derived from `editorCandidateCanAccept`, the same
+   * predicate that enables the button, so the DOM posture and the affordance cannot disagree:
+   * a receipt with no matching digest binding offers no decision, and says `none`.
+   */
+  const decision = acceptEnabled ? 'undecided' : 'none';
   return (
     <footer
       className={`ns-candidate-receipt is-${status}`}
@@ -507,6 +526,8 @@ function CandidateReceipt({
       aria-label="Candidate receipt"
       data-candidate-status={status}
       data-testid="candidate-receipt"
+      data-trust-surface="diff-review"
+      data-decision={decision}
     >
       <span>
         Compare · {baselineLabel} → {candidateLabel}
@@ -572,9 +593,12 @@ function operationTarget(operation: PatchOperation) {
   if (operation.op === 'add_element') return operation.element.id;
   if (operation.op === 'group_elements_v1' || operation.op === 'ungroup_elements_v1')
     return operation.groupId;
-  if (operation.op === 'update_deck') return 'deck';
+  if (operation.op === 'update_deck' || operation.op === 'update_theme_v1') return 'deck';
   if ('elementId' in operation) return operation.elementId;
-  return operation.slideId;
+  if ('slideId' in operation) return operation.slideId;
+  // Exhaustiveness guard: a new deck-level operation must be given a target
+  // above instead of falling through to an undefined slideId.
+  return unhandledPatchOperation(operation);
 }
 
 function candidateStatusLabel(status: EditorCandidateStatus) {

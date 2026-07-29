@@ -38,7 +38,15 @@ export default defineConfig({
     },
   },
   test: {
-    exclude: [...configDefaults.exclude, '**/.claude/**', 'packages/external-agent/**', 'mcp/**'],
+    exclude: [
+      ...configDefaults.exclude,
+      '**/.claude/**',
+      'packages/external-agent/**',
+      'mcp/**',
+      // Playwright specs, not vitest specs. `npm run nodeslide:bench:produce-live`
+      // owns tests/e2e; vitest collecting it fails on the playwright/test import.
+      'tests/e2e/**',
+    ],
   },
   server: {
     port: 5180,
@@ -55,6 +63,12 @@ export default defineConfig({
           // helper packages (react-remove-scroll, …) out of vendor and break
           // React's init order at runtime (useLayoutEffect undefined).
           if (/node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) return 'react';
+          // The OpenUI Lang renderer is reached only through AiInspector's dynamic import of
+          // the visual-material lab. Left in 'vendor' it would be swept into a chunk the entry
+          // depends on statically, so the third-party DSL runtime would download for every
+          // visitor including the ones who never open the lab — which is most of them, and
+          // which would quietly undo the lazy() edge that exists to avoid exactly that.
+          if (/node_modules[\\/]@openuidev[\\/]/.test(id)) return 'openui';
           if (id.includes('convex')) return 'convex';
           if (id.includes('lucide-react')) return 'icons';
           if (id.includes('jszip')) return 'zip';

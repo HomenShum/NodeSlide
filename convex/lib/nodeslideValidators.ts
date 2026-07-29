@@ -917,6 +917,32 @@ export const nodeslidePatchOperationValidator = v.union(
       title: v.optional(v.string()),
     }),
   }),
+  v.object({
+    op: v.literal('update_theme_v1'),
+    properties: v.object({
+      mode: v.optional(v.union(v.literal('light'), v.literal('dark'))),
+      colors: v.optional(
+        v.object({
+          canvas: v.optional(v.string()),
+          ink: v.optional(v.string()),
+          muted: v.optional(v.string()),
+          accent: v.optional(v.string()),
+          accentSoft: v.optional(v.string()),
+          insight: v.optional(v.string()),
+          insightInk: v.optional(v.string()),
+          trace: v.optional(v.string()),
+          border: v.optional(v.string()),
+        }),
+      ),
+      typography: v.optional(
+        v.object({
+          display: v.optional(v.string()),
+          body: v.optional(v.string()),
+          data: v.optional(v.string()),
+        }),
+      ),
+    }),
+  }),
 );
 
 export const nodeslidePatchSourceValidator = v.union(
@@ -998,7 +1024,14 @@ export const nodeslideSourceValidator = v.object({
   citation: v.string(),
   license: v.optional(v.string()),
   format: v.optional(
-    v.union(v.literal('csv'), v.literal('json'), v.literal('txt'), v.literal('web')),
+    v.union(
+      v.literal('csv'),
+      v.literal('json'),
+      v.literal('txt'),
+      v.literal('md'),
+      v.literal('pdf'),
+      v.literal('web'),
+    ),
   ),
   contentDigest: v.optional(v.string()),
   byteSize: v.optional(v.number()),
@@ -1217,3 +1250,22 @@ export const nodeslideVariationDecisionEventValidator = v.union(
   v.literal('variation_selected'),
   v.literal('variation_rejected'),
 );
+
+export const nodeslideSourceBindingStatusValidator = v.union(
+  v.literal('bound'),
+  v.literal('not_applicable'),
+  v.literal('legacy_unavailable'),
+);
+
+export const nodeslideClaimSourceBindingValidator = v.object({
+  operationIndex: v.number(),
+  operation: v.union(
+    v.literal('replace_text'),
+    v.literal('update_chart'),
+    v.literal('add_element'),
+  ),
+  slideId: v.string(),
+  elementId: v.string(),
+  sourceIds: v.array(v.string()),
+  claimDigest: v.string(),
+});

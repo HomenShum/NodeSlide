@@ -855,8 +855,20 @@
   font-weight: 590;
 }
 
+/*
+ * trust-surfaces clause 2: this base rule was `var(--ns-positive)`, and every status EXCEPT
+ * `ready` had an override. So the one state that means "validated, and waiting for you to
+ * press Accept or Decline" was the single state that inherited the success green — the
+ * default painted the undecided case with the accepted colour. The base is now neutral and
+ * `ready` is stated explicitly, in the attention token, so no pending state can ever again
+ * reach success styling by falling through the cascade.
+ */
 .nodeslide-studio .ns-candidate-status {
-  color: var(--ns-positive);
+  color: var(--ns-muted);
+}
+
+.nodeslide-studio .ns-candidate-receipt.is-ready .ns-candidate-status {
+  color: var(--ns-accent-dark);
 }
 
 .nodeslide-studio .ns-candidate-receipt.is-warning .ns-candidate-status,

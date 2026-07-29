@@ -22,8 +22,18 @@ jobs:
       - run: npm ci
       - name: Lint (biome)
         run: npm run lint
+      # The agent-operability surface (identity attributes, composer controls, and the
+      # UI contract) is only a capability while something fails when it disappears.
+      # This linter existed as a package script no workflow ran; a dropped attribute
+      # would have shipped green.
+      - name: Agent-operability lint (NodeSlide agent UI surface)
+        run: npm run lint:nodeslide-agent-ui
       - name: Typecheck (tsc)
         run: npm run typecheck
+      - name: Serverless function module graph (Node ESM resolution)
+        # Vitest and Vite both resolve extensionless relative specifiers; the
+        # deployed function is loaded by Node's ESM loader, which does not.
+        run: npm run verify:function-bundle
       - name: Test (vitest)
         run: npm test
       - name: Production build (packages + app)

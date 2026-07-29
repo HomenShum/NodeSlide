@@ -4,6 +4,8 @@ export * from './hosted';
 export * from './html';
 export * from './localAdapter';
 export * from './pptx';
+export * from './pptxImport';
+export * from './pptxImportTypes';
 export * from './repair';
 export * from './types';
 export * from './validation';

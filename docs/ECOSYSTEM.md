@@ -180,3 +180,23 @@ The reusable producer was fixed by
 passed; the final NodeRoom main audit reports zero warnings and zero Node 20
 annotations. The user's unrelated dirty NodeRoom checkout remains untouched. No
 automatic routing or promotion mutation is exposed by this package.
+
+## Proof receipt — `nodeslide.conformance/v1`
+
+`npm run proof` now runs through `scripts/nodeslide-conformance-proof.mjs`, which
+executes the same two steps it always did — `npm run test`, then
+`npm run proof:external-agent` — and writes
+`artifacts/conformance/proof-receipt.json` binding what actually ran: the exact
+commit, whether the worktree was clean, each step's exit code and duration, the
+SHA-256 and byte size of each captured stream, the vitest tallies read back from
+the run, and the smoke script's own JSON result. `nodekit.yaml` declares that
+schema, which moves the P0 certification from 6/8 to 7/8; `noKey: partial` is the
+criterion that remains.
+
+The receipt asserts only what ran. A step is `passed`, `failed`, or `not-run`; a
+step the `&&` chain never reached is recorded `not-run` with a null exit code and
+no evidence, never as passed. `assertNodeSlideConformanceReceipt` derives the
+verdict from the steps rather than accepting one, refuses a receipt that drops a
+declared step, and refuses one that claims a later step ran after an earlier step
+failed. The receipt itself is gitignored: it binds one local run, so committing it
+would dirty the tree and make every later run report `worktreeClean: false`.

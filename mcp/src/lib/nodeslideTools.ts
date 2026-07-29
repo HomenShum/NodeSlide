@@ -9,6 +9,9 @@ const BRIEF_CONSENT = 'openrouter_full_brief_v1';
 const WEB_CONSENT = 'nodeslide_web_research_v1';
 const LOCAL_BYOK_CONSENT = 'nodeslide_local_byok_edit_v1';
 const DEFAULT_BYOK_MODEL = process.env.NODESLIDE_BYOK_MODEL ?? 'z-ai/glm-5.2';
+const NODE_SLIDE_EXTERNAL_OPERATION_MAX = 8;
+const NODE_SLIDE_PAGE_DEFAULT = 25;
+const NODE_SLIDE_PAGE_MAX = 100;
 
 type ConvexCall = (
   kind: 'query' | 'mutation' | 'action',
@@ -51,9 +54,271 @@ export interface NodeSlideWorkspace {
   validations: Array<Record<string, unknown>>;
 }
 
+/**
+ * The exact PatchOperation shape, as a schema rather than a promise.
+ *
+ * The local-BYOK planner asks a model for `{summary, operations}` and previously forwarded
+ * whatever came back to Convex after checking only `Array.isArray` and a length bound. Convex
+ * revalidates, so this is not the last line of defence — but an unparsed operations array is
+ * a shape the MCP layer cannot describe, cannot type, and cannot reject early, and `.strict()`
+ * here is what stops a hallucinated extra field from travelling any further.
+ */
+const finiteNumber = z.number().finite();
+const nonNegativeInteger = z.number().int().min(0);
+const boundingBoxSchema = z
+  .object({
+    x: finiteNumber,
+    y: finiteNumber,
+    width: finiteNumber,
+    height: finiteNumber,
+  })
+  .strict();
+const elementStyleSchema = z
+  .object({
+    fill: z.string().optional(),
+    stroke: z.string().optional(),
+    strokeWidth: finiteNumber.optional(),
+    color: z.string().optional(),
+    fontFamily: z.string().optional(),
+    fontSize: finiteNumber.optional(),
+    fontWeight: finiteNumber.optional(),
+    lineHeight: finiteNumber.optional(),
+    letterSpacing: finiteNumber.optional(),
+    textAlign: z.enum(['left', 'center', 'right']).optional(),
+    verticalAlign: z.enum(['top', 'middle', 'bottom']).optional(),
+    radius: finiteNumber.optional(),
+    opacity: finiteNumber.optional(),
+    padding: finiteNumber.optional(),
+    shadow: z.string().optional(),
+  })
+  .strict();
+const chartDataSchema = z
+  .object({
+    chartType: z.enum(['bar', 'line', 'area', 'donut']),
+    labels: z.array(z.string()),
+    series: z.array(
+      z
+        .object({
+          name: z.string(),
+          values: z.array(finiteNumber),
+          color: z.string().optional(),
+        })
+        .strict(),
+    ),
+    unit: z.string().optional(),
+    sourceId: z.string().optional(),
+  })
+  .strict();
+const mathDataSchema = z
+  .object({
+    expression: z.string(),
+    syntax: z.enum(['plain', 'latex']).optional(),
+    displayMode: z.enum(['inline', 'block']).optional(),
+    description: z.string().optional(),
+    display: z.string().optional(),
+    variables: z
+      .array(
+        z.object({ label: z.string(), value: finiteNumber, unit: z.string().optional() }).strict(),
+      )
+      .optional(),
+    sourceId: z.string().optional(),
+  })
+  .strict();
+const imageDataSchema = z
+  .object({
+    placeholder: z.boolean(),
+    credit: z.string().optional(),
+    sourceId: z.string().optional(),
+  })
+  .strict();
+const videoDataSchema = z
+  .object({
+    url: z.string(),
+    posterUrl: z.string().optional(),
+    title: z.string().optional(),
+    captionsUrl: z.string().optional(),
+    captionsLanguage: z.string().optional(),
+    startAtSeconds: finiteNumber.optional(),
+    endAtSeconds: finiteNumber.optional(),
+  })
+  .strict();
+const slideElementSchema = z
+  .object({
+    id: z.string(),
+    slideId: z.string(),
+    name: z.string(),
+    kind: z.enum(['text', 'shape', 'image', 'chart', 'math', 'video', 'connector']),
+    role: z.string().optional(),
+    bbox: boundingBoxSchema,
+    rotation: finiteNumber,
+    content: z.string().optional(),
+    style: elementStyleSchema,
+    chart: chartDataSchema.optional(),
+    math: mathDataSchema.optional(),
+    video: videoDataSchema.optional(),
+    image: imageDataSchema.optional(),
+    imageUrl: z.string().optional(),
+    altText: z.string().optional(),
+    sourceIds: z.array(z.string()).max(64),
+    locked: z.boolean(),
+    visible: z.boolean().optional(),
+    groupId: z.string().max(128).optional(),
+    exportCapabilities: z.array(
+      z.enum([
+        'web_native',
+        'pptx_editable',
+        'pptx_static_fallback',
+        'google_importable',
+        'web_only',
+      ]),
+    ),
+    version: nonNegativeInteger,
+  })
+  .strict();
+const slideSchema = z
+  .object({
+    id: z.string(),
+    deckId: z.string(),
+    title: z.string(),
+    section: z.string().optional(),
+    notes: z.string().optional(),
+    background: z.string(),
+    elementOrder: z.array(z.string()),
+    version: nonNegativeInteger,
+  })
+  .strict();
+
+export const nodeSlidePatchOperationSchema = z.discriminatedUnion('op', [
+  z
+    .object({
+      op: z.literal('move'),
+      slideId: z.string(),
+      elementId: z.string(),
+      x: finiteNumber,
+      y: finiteNumber,
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('resize'),
+      slideId: z.string(),
+      elementId: z.string(),
+      width: finiteNumber,
+      height: finiteNumber,
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('replace_text'),
+      slideId: z.string(),
+      elementId: z.string(),
+      text: z.string(),
+      sourceIds: z.array(z.string()).max(64).optional(),
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('update_style'),
+      slideId: z.string(),
+      elementId: z.string(),
+      properties: elementStyleSchema,
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('update_chart'),
+      slideId: z.string(),
+      elementId: z.string(),
+      chart: chartDataSchema,
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('update_image'),
+      slideId: z.string(),
+      elementId: z.string(),
+      imageUrl: z.string(),
+      altText: z.string(),
+      credit: z.string().optional(),
+      sourceIds: z.array(z.string()).max(64).optional(),
+    })
+    .strict(),
+  z
+    .object({ op: z.literal('add_element'), slideId: z.string(), element: slideElementSchema })
+    .strict(),
+  z
+    .object({ op: z.literal('remove_element'), slideId: z.string(), elementId: z.string() })
+    .strict(),
+  z
+    .object({
+      op: z.literal('set_visibility_v1'),
+      slideId: z.string(),
+      elementId: z.string(),
+      visible: z.boolean(),
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('group_elements_v1'),
+      slideId: z.string(),
+      elementIds: z.array(z.string()).min(2).max(64),
+      groupId: z.string().min(1).max(128),
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('ungroup_elements_v1'),
+      slideId: z.string(),
+      elementIds: z.array(z.string()).min(2).max(64),
+      groupId: z.string().min(1).max(128),
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('reorder_element_v1'),
+      slideId: z.string(),
+      elementId: z.string(),
+      index: nonNegativeInteger,
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('add_slide'),
+      slide: slideSchema,
+      elements: z.array(slideElementSchema).max(128),
+      index: nonNegativeInteger,
+    })
+    .strict(),
+  z.object({ op: z.literal('remove_slide'), slideId: z.string() }).strict(),
+  z
+    .object({ op: z.literal('reorder_slide'), slideId: z.string(), index: nonNegativeInteger })
+    .strict(),
+  z
+    .object({
+      op: z.literal('update_slide'),
+      slideId: z.string(),
+      properties: z
+        .object({
+          title: z.string().optional(),
+          notes: z.string().optional(),
+          background: z.string().optional(),
+        })
+        .strict(),
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal('update_deck'),
+      properties: z.object({ title: z.string().optional() }).strict(),
+    })
+    .strict(),
+]);
+
+export type NodeSlidePatchOperation = z.infer<typeof nodeSlidePatchOperationSchema>;
+
 interface LocalPlannerResult {
   summary: string;
-  operations: unknown[];
+  operations: NodeSlidePatchOperation[];
   telemetry: Pick<
     CallResult,
     'provider' | 'modelUsed' | 'costUsd' | 'inputTokens' | 'outputTokens'
@@ -83,6 +348,8 @@ interface NodeSlideMcpToolArguments {
   ownerAccessKey?: string;
   traceId?: string;
   limit: number;
+  /** Opaque, deck-version-bound page cursor. See paginateNodeSlideItems. */
+  cursor?: string;
   instruction: string;
   scope: 'deck' | 'slide' | 'elements';
   slideId?: string;
@@ -162,15 +429,16 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
     },
     async (args) => {
       const workspace = await getWorkspace(convexCall, args.deckId, args.ownerAccessKey);
+      const canonical = canonicalNodeSlideSnapshot(workspace);
       return textResult({
-        deck: workspace.deck,
+        deck: canonical.deck,
         counts: {
           slides: workspace.slides.length,
           elements: workspace.elements.length,
           sources: workspace.sources.length,
           pendingProposals: workspace.patches.filter((patch) => patch.status === 'ready').length,
         },
-        validation: workspace.validations.at(-1) ?? null,
+        validation: stripCapabilitySecrets(workspace.validations.at(-1) ?? null),
         receipt: readReceipt('nodeslide.get_deck', workspace),
       });
     },
@@ -181,17 +449,30 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
     'nodeslide.list_slides',
     {
       title: 'List structured NodeSlide slides',
-      description: 'Owner-gated, read-only list of slides and their version clocks.',
-      inputSchema: ownerArgs,
+      description:
+        'Owner-gated, read-only list of slides and their version clocks. Bounded and cursor-paginated; cursors are deck-version-bound, so a deck that changed must be read again from the first page.',
+      inputSchema: {
+        ...ownerArgs,
+        cursor: z.string().max(512).optional(),
+        limit: z.number().int().min(1).max(NODE_SLIDE_PAGE_MAX).default(NODE_SLIDE_PAGE_DEFAULT),
+      },
       annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
     },
     async (args) => {
       const workspace = await getWorkspace(convexCall, args.deckId, args.ownerAccessKey);
+      const canonical = canonicalNodeSlideSnapshot(workspace);
+      const ranked = canonical.slides.map((slide, index) => ({ index: index + 1, ...slide }));
+      const page = paginateNodeSlideItems(ranked, {
+        deckId: workspace.deck.id,
+        deckVersion: workspace.deck.version,
+        collection: 'slides',
+        cursor: args.cursor,
+        limit: args.limit,
+      });
+      const { items: slides, ...pagination } = page;
       return textResult({
-        slides: workspace.deck.slideOrder.map((id, index) => {
-          const slide = workspace.slides.find((candidate) => candidate.id === id);
-          return { index: index + 1, ...slide };
-        }),
+        slides,
+        pagination,
         receipt: readReceipt('nodeslide.list_slides', workspace),
       });
     },
@@ -217,7 +498,10 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
         .sort((left, right) => right.createdAt - left.createdAt)
         .filter((trace) => !args.traceId || trace.id === args.traceId)
         .slice(0, args.limit);
-      return textResult({ traces, receipt: readReceipt('nodeslide.get_trace', workspace) });
+      return textResult({
+        traces: stripCapabilitySecrets(traces),
+        receipt: readReceipt('nodeslide.get_trace', workspace),
+      });
     },
   );
 
@@ -236,7 +520,10 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
         .sort((left, right) => right.version - left.version || right.createdAt - left.createdAt)
         .slice(0, args.limit)
         .map(({ snapshot: _snapshot, ...version }) => version);
-      return textResult({ versions, receipt: readReceipt('nodeslide.list_versions', workspace) });
+      return textResult({
+        versions: stripCapabilitySecrets(versions),
+        receipt: readReceipt('nodeslide.list_versions', workspace),
+      });
     },
   );
 
@@ -525,12 +812,17 @@ export async function planLocalByokEdit(args: {
   }
   const parsed = parseJsonObject(response.text);
   const summary = typeof parsed?.summary === 'string' ? parsed.summary.trim().slice(0, 500) : '';
-  const operations = Array.isArray(parsed?.operations) ? parsed.operations : [];
-  if (!summary || operations.length === 0 || operations.length > 8) {
+  const parsedOperations = z
+    .array(nodeSlidePatchOperationSchema)
+    .min(1)
+    .max(NODE_SLIDE_EXTERNAL_OPERATION_MAX)
+    .safeParse(parsed?.operations);
+  if (!summary || !parsedOperations.success) {
     throw new Error(
       'Local BYOK model returned an invalid bounded proposal. No proposal was saved.',
     );
   }
+  const operations = parsedOperations.data;
   return {
     summary,
     operations,
@@ -629,6 +921,168 @@ function clocksForScope(workspace: NodeSlideWorkspace, scope: NodeSlideScope) {
         .map((element) => [element.id, element.version]),
     ),
   };
+}
+
+/**
+ * Deterministic read order plus recursive capability-secret removal.
+ *
+ * Ordering matters because an agent that re-reads a deck and sees the same rows
+ * in a different order cannot tell a reordering from an edit. Rows are ranked by
+ * the deck's own `slideOrder` / `elementOrder`, with the id as the tiebreak for
+ * anything the order arrays do not mention.
+ *
+ * The secret filter is the load-bearing half. `getWorkspace` destructures a
+ * top-level `ownerAccessKey` away, but `patches`, `traces` and `versions` are
+ * open `Record<string, unknown>` server payloads, so any nested `*AccessToken`,
+ * `*RefreshToken`, `*GrantToken`, `*TokenDigest` or `*AccessKey` field would
+ * otherwise be serialized straight into a tool result and into the calling
+ * model's context.
+ */
+export function canonicalNodeSlideSnapshot(workspace: NodeSlideWorkspace) {
+  const slideRank = new Map(workspace.deck.slideOrder.map((id, index) => [id, index]));
+  const slides = [...workspace.slides].sort((left, right) => {
+    const leftRank = slideRank.get(left.id) ?? Number.MAX_SAFE_INTEGER;
+    const rightRank = slideRank.get(right.id) ?? Number.MAX_SAFE_INTEGER;
+    return leftRank - rightRank || left.id.localeCompare(right.id);
+  });
+  const elementRank = new Map(
+    slides.map((slide) => [
+      slide.id,
+      new Map(
+        ((slide as { elementOrder?: string[] }).elementOrder ?? []).map((id, index) => [id, index]),
+      ),
+    ]),
+  );
+  const elements = [...workspace.elements].sort((left, right) => {
+    const slideDifference =
+      (slideRank.get(left.slideId) ?? Number.MAX_SAFE_INTEGER) -
+      (slideRank.get(right.slideId) ?? Number.MAX_SAFE_INTEGER);
+    if (slideDifference !== 0) return slideDifference;
+    const order = elementRank.get(left.slideId);
+    const elementDifference =
+      (order?.get(left.id) ?? Number.MAX_SAFE_INTEGER) -
+      (order?.get(right.id) ?? Number.MAX_SAFE_INTEGER);
+    return elementDifference || left.id.localeCompare(right.id);
+  });
+  const sources = [...workspace.sources].sort((left, right) => left.id.localeCompare(right.id));
+  return stripCapabilitySecrets({
+    deck: workspace.deck,
+    slides,
+    elements,
+    sources,
+  });
+}
+
+/**
+ * Offset pagination whose cursor is bound to the deck version, the collection
+ * and the filter. An agent holding a cursor across an edit cannot silently
+ * resume into a shifted list — the cursor is rejected and it must read again
+ * from the first page.
+ */
+export function paginateNodeSlideItems<T>(
+  items: readonly T[],
+  args: {
+    deckId: string;
+    deckVersion: number;
+    collection: 'slides' | 'elements';
+    filter?: string;
+    cursor?: string;
+    limit?: number;
+  },
+): {
+  items: T[];
+  nextCursor: string | null;
+  hasMore: boolean;
+  total: number;
+  limit: number;
+} {
+  const limit = Math.min(
+    NODE_SLIDE_PAGE_MAX,
+    Math.max(1, Math.trunc(args.limit ?? NODE_SLIDE_PAGE_DEFAULT)),
+  );
+  const cursorContext = {
+    deckId: args.deckId,
+    deckVersion: args.deckVersion,
+    collection: args.collection,
+    filter: args.filter ?? '*',
+  };
+  const offset = args.cursor ? decodeNodeSlideCursor(args.cursor, cursorContext) : 0;
+  if (offset > items.length) {
+    throw new Error('NodeSlide cursor is outside the current collection. Start again without it.');
+  }
+  const pageItems = items.slice(offset, offset + limit);
+  const nextOffset = offset + pageItems.length;
+  const hasMore = nextOffset < items.length;
+  return {
+    items: pageItems,
+    nextCursor: hasMore
+      ? Buffer.from(JSON.stringify({ ...cursorContext, offset: nextOffset }), 'utf8').toString(
+          'base64url',
+        )
+      : null,
+    hasMore,
+    total: items.length,
+    limit,
+  };
+}
+
+function decodeNodeSlideCursor(
+  cursor: string,
+  expected: {
+    deckId: string;
+    deckVersion: number;
+    collection: 'slides' | 'elements';
+    filter: string;
+  },
+): number {
+  try {
+    const parsed = JSON.parse(Buffer.from(cursor, 'base64url').toString('utf8')) as Record<
+      string,
+      unknown
+    >;
+    if (
+      parsed.deckId !== expected.deckId ||
+      parsed.deckVersion !== expected.deckVersion ||
+      parsed.collection !== expected.collection ||
+      parsed.filter !== expected.filter ||
+      !Number.isInteger(parsed.offset) ||
+      (parsed.offset as number) < 0
+    ) {
+      throw new Error('context mismatch');
+    }
+    return parsed.offset as number;
+  } catch {
+    throw new Error(
+      'NodeSlide cursor is invalid or stale for this deck version, collection, or filter. Start again without it.',
+    );
+  }
+}
+
+function stripCapabilitySecrets<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value.map((item) => stripCapabilitySecrets(item)) as T;
+  }
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.entries(value as Record<string, unknown>)
+      .filter(([key]) => !isCapabilitySecretField(key))
+      .map(([key, item]) => [key, stripCapabilitySecrets(item)]),
+  ) as T;
+}
+
+function isCapabilitySecretField(key: string): boolean {
+  const normalized = key.replace(/[^a-z0-9]/giu, '').toLowerCase();
+  return (
+    normalized === 'token' ||
+    normalized.endsWith('accesstoken') ||
+    normalized.endsWith('refreshtoken') ||
+    normalized.endsWith('bearertoken') ||
+    normalized.endsWith('delegationtoken') ||
+    normalized.endsWith('granttoken') ||
+    normalized.endsWith('capabilitytoken') ||
+    normalized.endsWith('tokendigest') ||
+    normalized.endsWith('accesskey')
+  );
 }
 
 function readReceipt(tool: string, workspace: NodeSlideWorkspace) {

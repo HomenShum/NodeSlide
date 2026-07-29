@@ -1,11 +1,20 @@
 import {
   type BoundingBox,
   type DeckSnapshot,
+  type ExportableDeckSnapshot,
   NODESLIDE_MIN_READABLE_FONT_SIZE,
   type Slide,
   type SlideElement,
   isNodeSlideEmbeddedRasterDataUrl,
-} from '../../../../shared/nodeslide';
+} from '../../../../shared/nodeslide.js';
+
+/**
+ * The snapshot shape every SlideLang export path accepts. Re-exported under the
+ * SlideLang name so export helpers do not each reach into the shared module for
+ * it; the definition lives in `shared/nodeslide.ts` because the ArtifactSpec
+ * compiler, which is not a SlideLang module, reads the same fields.
+ */
+export type ExportableSnapshot = ExportableDeckSnapshot;
 
 export const SVG_WIDTH = 1600;
 export const SVG_HEIGHT = 900;
@@ -47,7 +56,7 @@ export function isEmbeddedImageData(value: string | undefined): value is string 
   return isNodeSlideEmbeddedRasterDataUrl(value);
 }
 
-export function orderedSlides(snapshot: DeckSnapshot): Slide[] {
+export function orderedSlides(snapshot: ExportableSnapshot): Slide[] {
   const byId = new Map(snapshot.slides.map((slide) => [slide.id, slide]));
   const ordered = snapshot.deck.slideOrder.flatMap((slideId) => {
     const slide = byId.get(slideId);
@@ -57,7 +66,7 @@ export function orderedSlides(snapshot: DeckSnapshot): Slide[] {
   return [...ordered, ...snapshot.slides.filter((slide) => !seen.has(slide.id))];
 }
 
-export function orderedElements(snapshot: DeckSnapshot, slide: Slide): SlideElement[] {
+export function orderedElements(snapshot: ExportableSnapshot, slide: Slide): SlideElement[] {
   const candidates = snapshot.elements.filter((element) => element.slideId === slide.id);
   const byId = new Map(candidates.map((element) => [element.id, element]));
   const ordered = slide.elementOrder.flatMap((elementId) => {
@@ -69,7 +78,7 @@ export function orderedElements(snapshot: DeckSnapshot, slide: Slide): SlideElem
 }
 
 /** Non-mutating element view shared by every SlideLang export path. */
-export function orderedExportElements(snapshot: DeckSnapshot, slide: Slide): SlideElement[] {
+export function orderedExportElements(snapshot: ExportableSnapshot, slide: Slide): SlideElement[] {
   return orderedElements(snapshot, slide).filter((element) => element.visible !== false);
 }
 
@@ -171,4 +180,4 @@ export {
   estimateTextFit,
   intersectionRatio,
   type TextFitEstimate,
-} from '../../../../shared/nodeslideGeometryChecks';
+} from '../../../../shared/nodeslideGeometryChecks.js';

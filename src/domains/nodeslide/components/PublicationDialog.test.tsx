@@ -20,7 +20,7 @@ describe('NodeSlide publication dialog', () => {
       <PublicationDialog
         open
         publication={publication}
-        shareUrl="https://example.com/?share=share-private&amp;present=1"
+        shareUrl="https://example.com/s/share-private"
         currentDeckVersion={5}
         busy={false}
         onClose={() => undefined}

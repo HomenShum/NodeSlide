@@ -73,6 +73,27 @@ export function getDeckOwnerAccessKey(deckId: string): string | undefined {
   return readDeckAccess()[deckId];
 }
 
+/**
+ * Drops the local capability for a deck that no longer exists. Called after a
+ * confirmed erasure: leaving the key behind would keep offering the deck in
+ * "recent decks" and would let a retry authenticate against a tombstone.
+ */
+export function forgetDeckOwnerAccessKey(deckId: string): void {
+  if (typeof window === 'undefined' || !deckId) return;
+  const access = readDeckAccess();
+  const forgotten = access[deckId];
+  if (forgotten === undefined) return;
+  delete access[deckId];
+  writeStorage(window.localStorage, DECK_ACCESS_KEY, JSON.stringify(access));
+  if (readStorage(window.localStorage, OWNER_ACCESS_KEY) === forgotten) {
+    try {
+      window.localStorage.removeItem(OWNER_ACCESS_KEY);
+    } catch {
+      // Hardened contexts may refuse removal; the in-memory state is already clear.
+    }
+  }
+}
+
 export function listStoredDeckAccess(): Array<{ deckId: string; ownerAccessKey: string }> {
   return Object.entries(readDeckAccess()).map(([deckId, ownerAccessKey]) => ({
     deckId,

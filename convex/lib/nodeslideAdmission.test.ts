@@ -21,6 +21,82 @@ vi.mock('./nodeslideProvider', async (importOriginal) => ({
 const PREVIEW_ACCESS_CODE = 'preview-code-7f21';
 const PREVIEW_ADMISSION_SUBJECT = 'invite-cohort-2026-07';
 
+/**
+ * A create on a named model is now a BUDGETED dispatch, so the action reserves
+ * against the ledger before the request reaches the wire. This file is about the
+ * admission boundary, not about accounting, so the ledger here is a permissive
+ * stand-in that always affords the call: its only job is to let the metered
+ * route through so the routing assertions below can run.
+ *
+ * The real proof that reserve is reached before money moves — real mutations,
+ * real preflight, real price table — is `convex/nodeslideBudgetEnforcement.test.ts`.
+ * Nothing here should be read as evidence that enforcement works.
+ */
+function permissiveLedgerView(callStatus?: 'reserved' | 'settled') {
+  return {
+    budget: {
+      id: 'nsbudget_admission_stub',
+      status: 'open' as const,
+      revision: 1,
+      stateDigest: 'sha256:admission-stub',
+      actualMicroUsd: 0,
+      reservedMicroUsd: 0,
+      unreconciledMicroUsd: 0,
+    },
+    ...(callStatus
+      ? {
+          call: {
+            callId: 'call_admission_stub',
+            status: callStatus,
+            quoteMicroUsd: 5_000_000,
+            // 10k total across the two attempts leaves the create path its full
+            // 5k-token per-attempt request instead of silently halving it.
+            providerSafeOutputTokenCeiling: 10_000,
+            providerTimeoutMs: 300_000,
+          },
+        }
+      : {}),
+  };
+}
+
+/**
+ * Routes the budget ledger's mutations away from the caller's sequence mock, so
+ * the positional assertions on quota (call 0) and persistence (call 1) keep
+ * describing the two mutations this test is actually about.
+ *
+ * Dispatch is on the ARGUMENT shape, not the function reference: the generated
+ * `internal.*` accessors are proxies that need not return a stable object
+ * identity. Only the ledger mutations carry `budgetId`, and each one is
+ * identified by a field unique to its own signature.
+ */
+function meteredCreateCtx(runMutation: (reference: unknown, args: unknown) => Promise<unknown>) {
+  return {
+    runMutation: async (reference: unknown, args: unknown) => {
+      const ledgerArgs = args as Record<string, unknown> | undefined;
+      if (ledgerArgs && 'budgetId' in ledgerArgs) {
+        if ('estimatedInputTokens' in ledgerArgs) return permissiveLedgerView('reserved');
+        if ('inputTokens' in ledgerArgs) return permissiveLedgerView('settled');
+        return permissiveLedgerView();
+      }
+      return await runMutation(reference, args);
+    },
+    // No prior call: this run has never dispatched before.
+    runQuery: async () => null,
+  };
+}
+
+/** A provider receipt whose attempts are proven settled, as a real one is. */
+const SETTLED_ATTEMPTS = [
+  {
+    attempt: 'initial' as const,
+    attempted: true as const,
+    settled: true,
+    ambiguous: false,
+    unreconciled: false,
+    elapsedMs: 120,
+  },
+];
+
 afterEach(() => {
   vi.clearAllMocks();
   vi.unstubAllEnvs();
@@ -149,6 +225,7 @@ describe('NodeSlide create action admission boundary', () => {
         costMicroUsd: 1200,
         inputTokens: 20,
         outputTokens: 30,
+        attempts: SETTLED_ATTEMPTS,
       },
     });
     const workspace = { deck: { id: 'deck-created' } };
@@ -164,7 +241,7 @@ describe('NodeSlide create action admission boundary', () => {
       attachments: [{ title: 'world-cup.csv', format: 'csv', content: 'metric,value\ngoals,172' }],
     };
 
-    await expect(createDeckHandler({ runMutation }, args)).resolves.toBe(workspace);
+    await expect(createDeckHandler(meteredCreateCtx(runMutation), args)).resolves.toBe(workspace);
 
     expect(callNodeSlideFreeJson).toHaveBeenCalledWith(
       expect.objectContaining({ model: 'anthropic/claude-sonnet-5' }),

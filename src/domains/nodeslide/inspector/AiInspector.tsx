@@ -40,12 +40,15 @@ import {
   type FormEvent,
   type KeyboardEvent,
   type Ref,
+  Suspense,
+  lazy,
   useEffect,
   useId,
   useMemo,
   useRef,
   useState,
 } from 'react';
+import type { NodeSlideDeckCiResult } from '../../../../convex/lib/nodeslideDeckCi';
 import {
   type AgentTrace,
   type Deck,
@@ -54,6 +57,7 @@ import {
   NODESLIDE_DEFAULT_REASONING_EFFORT,
   NODESLIDE_OFFERED_AGENT_MODELS,
   NODESLIDE_REASONING_EFFORTS,
+  NODESLIDE_SCOPE_SLIDE_LIMIT,
   type NodeSlideAgentMemory,
   type NodeSlideAgentMemoryCategory,
   type NodeSlideAgentMessage,
@@ -70,11 +74,13 @@ import {
   nodeSlideDefaultModelForProviderMode,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
+  unhandledPatchOperation,
 } from '../../../../shared/nodeslide';
 import type { SlideVariation } from '../../../../shared/nodeslideVariation';
 import { NodeSlideConnectionsDialog } from '../components/NodeSlideConnectionsDialog';
 import { NodeSlideMemoryDialog } from '../components/NodeSlideMemoryDialog';
 import { AgentThread } from './AgentThread';
+import { DeckCiStatus } from './DeckCiStatus';
 import {
   AI_DRAFTING_PHASE_MS,
   type AiAgentActivity,
@@ -96,6 +102,23 @@ import {
   NODESLIDE_OPENROUTER_VARIATIONS_CONSENT,
   NODESLIDE_WEB_RESEARCH_CONSENT,
 } from './reviewTypes';
+import { nodeSlideScopeLabel } from './scopePresentation';
+
+/**
+ * The OpenUI lab is the only thing in this file that pulls a third-party DSL renderer
+ * (`@openuidev/react-lang` and its `@openuidev/lang-core`). It is opened from a composer button
+ * by a user who wants it, which is exactly the shape `lazy()` is for: the module — and the
+ * dependency behind it — stays out of the initial chunk for everyone who never opens it.
+ *
+ * `AiInspector.openUiWiring.test.tsx` reads this file as text and fails if either this lazy edge
+ * or the button that reaches it is deleted. A workbench nobody can open is a copy, not a port,
+ * and the file would still compile.
+ */
+const OpenUiMaterialWorkbench = lazy(() =>
+  import('../openui/OpenUiMaterialWorkbench').then((module) => ({
+    default: module.OpenUiMaterialWorkbench,
+  })),
+);
 
 export {
   AI_DRAFTING_PHASE_MS,
@@ -121,7 +144,7 @@ export type {
   AiVariationRequest,
 } from './reviewTypes';
 
-type ScopeChoice = 'deck' | 'slide' | 'elements';
+type ScopeChoice = 'deck' | 'slide' | 'selected_slides' | 'elements';
 
 interface ComposerTrigger {
   kind: 'reference' | 'command';
@@ -142,6 +165,12 @@ export interface AiInspectorProps<CommandId extends string = string> {
   deck: Deck;
   slide: Slide;
   selectedElements: readonly SlideElement[];
+  /** Slides ctrl-clicked in the navigator. Two or more unlock the multi-slide write scope. */
+  selectedSlideIds?: readonly string[];
+  /** Deck CI gate summary. `undefined` means the query has not been asked; `null` means no result. */
+  deckCiResult?: NodeSlideDeckCiResult | null;
+  deckCiLoading?: boolean;
+  onOpenDeckCiTrace?: () => void;
   workspaceElements?: readonly SlideElement[];
   patches: readonly AiReviewablePatch[];
   traces: readonly AgentTrace[];
@@ -183,6 +212,11 @@ export interface AiInspectorProps<CommandId extends string = string> {
     options: AiProposalOptions<CommandId>,
   ) => void;
   onAttachDataFile?: (file: File) => Promise<AiReadReference>;
+  /**
+   * Opens the OpenUI visual-material lab. Optional on purpose: when the host does not supply it,
+   * the composer button is not rendered and the lazy chunk is never requested.
+   */
+  onProposeOpenUiMaterial?: (operations: PatchOperation[], summary: string) => Promise<void>;
   onCreateMemory?: (category: NodeSlideAgentMemoryCategory, content: string) => Promise<void>;
   onUpdateMemory?: (
     memoryId: string,
@@ -204,6 +238,10 @@ export function AiInspector<CommandId extends string = string>({
   deck,
   slide,
   selectedElements,
+  selectedSlideIds = [],
+  deckCiResult,
+  deckCiLoading = false,
+  onOpenDeckCiTrace,
   workspaceElements = [],
   patches,
   traces,
@@ -232,6 +270,7 @@ export function AiInspector<CommandId extends string = string>({
   previewedPatchId = null,
   onPropose,
   onAttachDataFile,
+  onProposeOpenUiMaterial,
   onCreateMemory,
   onUpdateMemory,
   onDeleteMemory,
@@ -302,8 +341,17 @@ export function AiInspector<CommandId extends string = string>({
   const [attachmentBusy, setAttachmentBusy] = useState(false);
   const [attachmentError, setAttachmentError] = useState<string | null>(null);
   const [connectionsOpen, setConnectionsOpen] = useState(false);
+  const [materialWorkbenchOpen, setMaterialWorkbenchOpen] = useState(false);
   const [memoryOpen, setMemoryOpen] = useState(false);
   const [memoryEnabled, setMemoryEnabled] = useState(false);
+  /*
+   * A proposal already waiting on a human is a reason to stop offering to make another one. The
+   * lab creates unapplied add-slide proposals; two of them stacked in the review lane is how a
+   * reviewer loses track of which one they are accepting.
+   */
+  const hasReviewableProposal = patches.some(
+    (patch) => patch.status === 'ready' || patch.status === 'validating',
+  );
   const activeMemoryCount = memories.filter((memory) => memory.status === 'active').length;
   const useMemoryForRun = memoryEnabled && activeMemoryCount > 0;
   const composerId = useId();
@@ -348,7 +396,8 @@ export function AiInspector<CommandId extends string = string>({
 
   useEffect(() => {
     if (scopeChoice === 'elements' && selectedElements.length === 0) setScopeChoice('slide');
-  }, [scopeChoice, selectedElements.length]);
+    if (scopeChoice === 'selected_slides' && selectedSlideIds.length < 2) setScopeChoice('slide');
+  }, [scopeChoice, selectedElements.length, selectedSlideIds.length]);
 
   const activeTrace = useMemo(
     () =>
@@ -603,7 +652,14 @@ export function AiInspector<CommandId extends string = string>({
     }
     const writeScope = commentContext
       ? createCommentScope(commentContext, operationMode, deck, workspaceElements)
-      : createScope(scopeChoice, operationMode, deck.id, slide.id, selectedElements);
+      : createScope(
+          scopeChoice,
+          operationMode,
+          deck.id,
+          slide.id,
+          selectedSlideIds,
+          selectedElements,
+        );
     const options: AiProposalOptions<CommandId> = {
       ...provider,
       readContext: requestedReadContext,
@@ -627,6 +683,8 @@ export function AiInspector<CommandId extends string = string>({
           }
         : {}),
     };
+    // Fail closed: an unrepresentable scope must not silently widen to the whole deck.
+    if (!writeScope) return;
     setOptimisticAsk(text);
     onPropose(text, writeScope, options);
     updateInstruction('');
@@ -1025,6 +1083,39 @@ export function AiInspector<CommandId extends string = string>({
         ) : null}
       </div>
 
+      {deckCiResult !== undefined || deckCiLoading ? (
+        <DeckCiStatus
+          result={deckCiResult ?? null}
+          loading={deckCiLoading}
+          {...(onOpenDeckCiTrace ? { onOpenTrace: onOpenDeckCiTrace } : {})}
+        />
+      ) : null}
+
+      {materialWorkbenchOpen && onProposeOpenUiMaterial ? (
+        <section className="ns-ai-material-tool" data-testid="ai-material-workbench">
+          <header>
+            <span>
+              <Layers3 size={12} /> Visual material
+            </span>
+            <button
+              type="button"
+              onClick={() => setMaterialWorkbenchOpen(false)}
+              aria-label="Close visual material tool"
+            >
+              <X size={12} />
+            </button>
+          </header>
+          <Suspense fallback={<div className="ns-openui-loading">Loading visual lab…</div>}>
+            <OpenUiMaterialWorkbench
+              deck={deck}
+              slide={slide}
+              disabled={isSubmitting || hasReviewableProposal}
+              onPropose={onProposeOpenUiMaterial}
+            />
+          </Suspense>
+        </section>
+      ) : null}
+
       <div
         className={`ns-ai-composer ns-ai-v3-composer ${composerExpanded ? 'is-expanded' : ''}`}
         data-testid="ai-composer"
@@ -1219,6 +1310,17 @@ export function AiInspector<CommandId extends string = string>({
                       >
                         This slide
                       </button>
+                      {selectedSlideIds.length >= 2 ? (
+                        <button
+                          type="button"
+                          className={scopeChoice === 'selected_slides' ? 'is-active' : ''}
+                          aria-pressed={scopeChoice === 'selected_slides'}
+                          data-testid="ai-scope-selected-slides"
+                          onClick={() => setScopeChoice('selected_slides')}
+                        >
+                          {`Selected slides · ${selectedSlideIds.length}`}
+                        </button>
+                      ) : null}
                       <button
                         type="button"
                         className={scopeChoice === 'elements' ? 'is-active' : ''}
@@ -1445,6 +1547,19 @@ export function AiInspector<CommandId extends string = string>({
                     tooltip="Search the web and persist source snapshots before planning"
                     aria-label="Toggle web research"
                     data-testid="ai-web-research-toggle"
+                    // Machine-readable consent posture. Zero-friction consent removed the
+                    // session-scoped checkbox (see `providerConsent` above), which also removed
+                    // the only DOM signal telling an agent HOW egress is authorized here — the
+                    // posture became invisible even though the product still enforces it. The
+                    // value is "per-send", not "session": this toggle grants nothing durable,
+                    // it decides whether NODESLIDE_WEB_RESEARCH_CONSENT rides along on the next
+                    // send, and `aria-pressed` carries the current answer.
+                    data-agent-web-consent="per-send"
+                    // trust-surfaces clause 1: this is the composer's consent surface, so it is
+                    // enumerated as one. The census requires a `consent` surface to publish
+                    // `data-agent-web-consent`; annotating the same node keeps one writer and
+                    // one owning node for the posture.
+                    data-trust-surface="consent"
                   >
                     <Globe2 size={14} />
                   </PromptInputButton>
@@ -1478,6 +1593,18 @@ export function AiInspector<CommandId extends string = string>({
                   >
                     <Command size={14} />
                   </PromptInputButton>
+                  {onProposeOpenUiMaterial ? (
+                    <PromptInputButton
+                      variant={materialWorkbenchOpen ? 'default' : 'ghost'}
+                      aria-pressed={materialWorkbenchOpen}
+                      onClick={() => setMaterialWorkbenchOpen((open) => !open)}
+                      aria-label="Open the visual material tool"
+                      tooltip="Open the visual material lab"
+                      data-testid="ai-open-material-workbench"
+                    >
+                      <Layers3 size={14} />
+                    </PromptInputButton>
+                  ) : null}
                   {onAttachDataFile ? (
                     <>
                       <input
@@ -1643,6 +1770,21 @@ function VariationCard({
     !variation.validation.issues.some((issue) => issue.severity === 'error');
   const reviewable = variation.status === 'ready' && validationClean;
   const previewable = variation.status === 'ready' && validationClean;
+  /*
+   * trust-surfaces clause 1: this card carries Preview / Accept / Reject on a generated
+   * direction, so the decision it holds belongs in the DOM and not only in the variation
+   * store. `stale` maps to `none` rather than to a decision: a stale direction cannot be
+   * accepted or rejected any more, it has to be regenerated, and calling that "undecided"
+   * would advertise a choice the buttons no longer offer.
+   */
+  const decision =
+    variation.status === 'ready'
+      ? 'undecided'
+      : variation.status === 'accepted'
+        ? 'accepted'
+        : variation.status === 'rejected'
+          ? 'rejected'
+          : 'none';
   return (
     <li
       ref={focusRef}
@@ -1650,6 +1792,8 @@ function VariationCard({
       className={`ns-variation-card is-${variation.status} ${previewed ? 'is-previewed' : ''}`}
       data-testid="variation-card"
       data-variation-id={variation.id}
+      data-trust-surface="diff-review"
+      data-decision={decision}
     >
       <div className="ns-variation-card-topline">
         <span className={`ns-status-dot ns-status-dot--${variation.status}`} />
@@ -1784,11 +1928,27 @@ function ProposalCard({
   const candidateValidation =
     patch.candidateValidation?.patchId === patch.id ? patch.candidateValidation : undefined;
   const previewAvailable = patch.status === 'ready' && Boolean(onPreview);
+  /*
+   * trust-surfaces clause 1: the Accept button is enabled on exactly `ready`, so `undecided`
+   * is derived from the same condition rather than restated — the attribute and the affordance
+   * cannot drift apart. `draft` / `validating` / `stale` are `none`: nothing is offered to
+   * decide yet, or the offer has expired.
+   */
+  const decision =
+    patch.status === 'ready'
+      ? 'undecided'
+      : patch.status === 'accepted'
+        ? 'accepted'
+        : patch.status === 'rejected'
+          ? 'rejected'
+          : 'none';
   return (
     <article
       className={`ns-proposal-card ${stale ? 'is-stale' : ''} ${previewed ? 'is-previewed' : ''}`}
       data-testid="proposal-card"
       data-proposal-id={patch.id}
+      data-trust-surface="proposal"
+      data-decision={decision}
     >
       <div className="ns-proposal-topline">
         <span className={`ns-status-dot ns-status-dot--${patch.status}`} />
@@ -1805,7 +1965,7 @@ function ProposalCard({
       <dl className="ns-proposal-evidence" aria-label="Proposal evidence">
         <div>
           <dt>Write scope</dt>
-          <dd>{scopeEvidence(patch.scope)}</dd>
+          <dd>{nodeSlideScopeLabel(patch.scope)}</dd>
         </div>
         <div>
           <dt>Base</dt>
@@ -2005,10 +2165,17 @@ function createScope(
   operationMode: OperationMode,
   deckId: string,
   slideId: string,
+  selectedSlideIds: readonly string[],
   selectedElements: readonly SlideElement[],
-): PatchScope {
+): PatchScope | null {
   if (choice === 'deck') return { kind: 'deck', deckId, operationMode };
+  if (choice === 'selected_slides') {
+    const exactSlideIds = [...new Set(selectedSlideIds)];
+    if (exactSlideIds.length < 2 || exactSlideIds.length > NODESLIDE_SCOPE_SLIDE_LIMIT) return null;
+    return { kind: 'slide', deckId, slideIds: exactSlideIds, operationMode };
+  }
   if (choice === 'elements') {
+    if (selectedElements.length === 0) return null;
     return {
       kind: 'elements',
       deckId,
@@ -2161,19 +2328,6 @@ function defaultSuggestedActions(
   ];
 }
 
-function scopeEvidence(scope: PatchScope) {
-  if (scope.kind === 'deck') return 'Entire deck';
-  if (scope.kind === 'slide')
-    return `${scope.slideIds.length} slide${scope.slideIds.length === 1 ? '' : 's'}`;
-  if (scope.kind === 'elements') {
-    return `${scope.elementIds.length} element${scope.elementIds.length === 1 ? '' : 's'} on ${
-      scope.slideIds.length
-    } slide${scope.slideIds.length === 1 ? '' : 's'}`;
-  }
-  if (scope.kind === 'bounding_box') return `Bounding box on ${scope.slideIds.length} slide`;
-  return `Comment ${scope.commentId}`;
-}
-
 function baseEvidence(patch: DeckPatch) {
   const slideClocks = Object.keys(patch.baseSlideVersions).length;
   const elementClocks = Object.keys(patch.baseElementVersions).length;
@@ -2316,7 +2470,11 @@ function describeOperation(operation: PatchOperation) {
     return `Add ${operation.element.kind} “${operation.element.name}”`;
   if (operation.op === 'remove_element') return `Remove ${operation.elementId}`;
   if (operation.op === 'reorder_slide') return `Move slide to position ${operation.index + 1}`;
-  return `Update slide ${operation.slideId}`;
+  if (operation.op === 'update_theme_v1') return 'Update deck theme';
+  if ('slideId' in operation) return `Update slide ${operation.slideId}`;
+  // Exhaustiveness guard: a new deck-level operation must get its own sentence
+  // above rather than being described against an undefined slide.
+  return `Update ${unhandledPatchOperation(operation).replaceAll('_', ' ')}`;
 }
 
 function truncateOperationText(value: string) {

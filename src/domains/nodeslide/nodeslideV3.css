@@ -48,6 +48,340 @@
   grid-template-rows: 52px minmax(0, 1fr);
 }
 
+/* OpenUI Phase 0: bounded visual-material proposal surface inside the AI rail.
+ *
+ * Nothing in this block animates or transitions. The surface ends in a proposal a human has to
+ * accept, so it is a trust surface, and motion-ladder's forbidden-surface rule applies whole:
+ * a diff you are about to accept may not move. */
+.nodeslide-studio .ns-openui-workbench {
+  background: transparent;
+  border-block: 1px solid var(--ns-line-b);
+}
+
+.nodeslide-studio .ns-openui-loading {
+  color: var(--ns-faint);
+  font-size: 10px;
+  padding: 12px;
+}
+
+.nodeslide-studio .ns-openui-workbench > [data-slot="collapsible-trigger"] {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: grid;
+  font-family: inherit;
+  gap: 8px;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  min-height: 36px;
+  padding: 5px 12px;
+  text-align: left;
+  width: 100%;
+}
+
+.nodeslide-studio .ns-openui-summary-icon {
+  align-items: center;
+  background: var(--ns-accent-soft);
+  border: 1px solid color-mix(in srgb, var(--ns-accent) 28%, transparent);
+  border-radius: 8px;
+  color: var(--ns-accent-dark);
+  display: inline-flex;
+  height: 22px;
+  justify-content: center;
+  width: 22px;
+}
+
+.nodeslide-studio .ns-openui-workbench > [data-slot="collapsible-trigger"] > span:nth-child(2) {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.nodeslide-studio .ns-openui-workbench > [data-slot="collapsible-trigger"] strong {
+  color: var(--ns-ink);
+  font-size: 11.5px;
+}
+
+.nodeslide-studio .ns-openui-workbench > [data-slot="collapsible-trigger"] small {
+  color: var(--ns-faint);
+  font-family: var(--ns-mono, ui-monospace, "JetBrains Mono", Menlo, monospace);
+  font-size: 9px;
+}
+
+.nodeslide-studio .ns-openui-workbench > [data-slot="collapsible-trigger"] > span:last-child {
+  align-items: center;
+  border: 1px solid var(--ns-line-c);
+  border-radius: 999px;
+  color: var(--ns-faint);
+  display: inline-flex;
+  font-size: 9px;
+  font-weight: 650;
+  gap: 3px;
+  line-height: 1;
+  padding: 4px 7px;
+}
+
+.nodeslide-studio
+  .ns-openui-workbench
+  > [data-slot="collapsible-trigger"]
+  > span:last-child.is-valid {
+  border-color: color-mix(in srgb, var(--ns-positive) 28%, transparent);
+  color: var(--ns-positive);
+}
+
+.nodeslide-studio .ns-openui-workbench-body {
+  padding: 0 12px 12px;
+}
+
+/* The fixture's verification status, drawn as a caution rather than as chrome. It is warning
+ * coloured because "we do not know if these numbers are real" is the single most important thing
+ * on this panel, and the panel is otherwise handsome enough to read as authoritative. */
+.nodeslide-studio .ns-openui-verification {
+  align-items: flex-start;
+  background: color-mix(in srgb, var(--ns-warning) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ns-warning) 26%, transparent);
+  border-radius: 8px;
+  color: var(--ns-warning);
+  display: flex;
+  font-size: 9.5px;
+  gap: 6px;
+  line-height: 1.4;
+  margin: 0 0 8px;
+  padding: 8px 10px;
+}
+
+.nodeslide-studio .ns-openui-verification svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.nodeslide-studio .ns-openui-material {
+  background: var(--ns-surface);
+  border: 1px solid var(--ns-line-c);
+  border-radius: 12px;
+  box-shadow: var(--ns-shadow-sm);
+  overflow: hidden;
+}
+
+.nodeslide-studio .ns-openui-material-heading {
+  display: grid;
+  gap: 5px;
+  padding: 12px;
+}
+
+.nodeslide-studio .ns-openui-material-heading > span {
+  color: var(--ns-accent-dark);
+  font-family: var(--ns-mono, ui-monospace, "JetBrains Mono", Menlo, monospace);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.nodeslide-studio .ns-openui-material-heading h3 {
+  color: var(--ns-ink);
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.18;
+  margin: 0;
+}
+
+.nodeslide-studio .ns-openui-material-heading p {
+  color: var(--ns-ink2);
+  font-size: 10px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.nodeslide-studio .ns-openui-ladder {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0 12px 12px;
+}
+
+.nodeslide-studio .ns-openui-ladder li {
+  align-items: center;
+  border-top: 1px solid var(--ns-line-b);
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  min-height: 52px;
+  padding: 7px 0;
+}
+
+.nodeslide-studio .ns-openui-step-number {
+  color: var(--ns-accent-dark);
+  font-family: var(--ns-mono, ui-monospace, "JetBrains Mono", Menlo, monospace);
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.nodeslide-studio .ns-openui-ladder li > div {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.nodeslide-studio .ns-openui-ladder small,
+.nodeslide-studio .ns-openui-ladder li > div > span {
+  color: var(--ns-faint);
+  font-size: 9px;
+}
+
+.nodeslide-studio .ns-openui-ladder strong {
+  color: var(--ns-ink);
+  font-family: var(--ns-mono, ui-monospace, "JetBrains Mono", Menlo, monospace);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.nodeslide-studio .ns-openui-ladder svg {
+  color: var(--ns-line-f);
+  transform: rotate(90deg);
+}
+
+.nodeslide-studio .ns-openui-material-footer {
+  align-items: center;
+  background: var(--ns-raised);
+  border-top: 1px solid var(--ns-line-b);
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 10px 12px;
+}
+
+.nodeslide-studio .ns-openui-material-footer > span {
+  align-items: center;
+  color: var(--ns-faint);
+  display: inline-flex;
+  font-size: 9px;
+  gap: 4px;
+  line-height: 1.3;
+}
+
+/* The provenance line is not tinted green when it is unverified. The component already refuses
+ * the tick icon there; this keeps the colour honest for the same reason. */
+.nodeslide-studio .ns-openui-material-footer > span[data-provenance-verified="false"] {
+  color: var(--ns-warning);
+}
+
+.nodeslide-studio .ns-openui-material-footer .ns-button {
+  font-size: 9.5px;
+  min-height: 28px;
+  padding-inline: 8px;
+  white-space: nowrap;
+}
+
+.nodeslide-studio .ns-openui-host-action {
+  align-items: center;
+  background: var(--ns-raised);
+  border: 1px solid var(--ns-line-c);
+  border-top: 0;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 10px 12px;
+}
+
+.nodeslide-studio .ns-openui-host-action > span {
+  color: var(--ns-faint);
+  font-size: 9px;
+  line-height: 1.3;
+}
+
+.nodeslide-studio .ns-openui-host-action .ns-button {
+  font-size: 9.5px;
+  min-height: 28px;
+  padding-inline: 8px;
+  white-space: nowrap;
+}
+
+.nodeslide-studio .ns-openui-status {
+  border-radius: 8px;
+  display: block;
+  font-size: 10px;
+  line-height: 1.4;
+  margin-top: 8px;
+  padding: 8px 10px;
+}
+
+/* trust-surfaces clause 2, and the reason this rule reads differently from the one it was
+ * ported from.
+ *
+ * Parity drew this state on `--ns-positive` — the success colour — because the local action
+ * succeeded. But the sentence it paints is "the deck is unchanged until you accept it": the
+ * change is UNDECIDED, and it is undecided by design, because this lab deliberately cannot
+ * apply anything. Green says the opposite of the words, and colour is read before copy. The
+ * state is now drawn as unresolved: neutral surface, a dashed edge that does not close, and
+ * `data-decision="undecided"` on the same node so an agent reads the same posture a person
+ * sees. Same defect the AgentThread proposal card carried, same fix. */
+.nodeslide-studio .ns-openui-status.is-proposed,
+.nodeslide-studio .ns-openui-status[data-decision="undecided"] {
+  background: var(--ns-raised);
+  border: 1px dashed var(--ns-line-f);
+  color: var(--ns-ink2);
+}
+
+/* An error is a failure, not a decision, so it keeps its colour and gets no decision state. */
+.nodeslide-studio .ns-openui-status.is-error {
+  background: color-mix(in srgb, var(--ns-danger) 9%, transparent);
+  color: var(--ns-danger);
+}
+
+/* Host frame for the lab inside the AI rail. */
+.nodeslide-studio .ns-ai-material-tool {
+  border-bottom: 1px solid var(--ns-line-b);
+}
+
+.nodeslide-studio .ns-ai-material-tool > header {
+  align-items: center;
+  background: var(--ns-raised);
+  border-bottom: 1px solid var(--ns-line-b);
+  color: var(--ns-ink2);
+  display: flex;
+  font-size: 9.5px;
+  justify-content: space-between;
+  min-height: 32px;
+  padding: 5px 10px 5px 13px;
+}
+
+.nodeslide-studio .ns-ai-material-tool > header span {
+  align-items: center;
+  display: inline-flex;
+  gap: 5px;
+}
+
+.nodeslide-studio .ns-ai-material-tool > header button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: var(--ns-faint);
+  cursor: pointer;
+  display: inline-flex;
+  height: 24px;
+  justify-content: center;
+  width: 24px;
+}
+
+.nodeslide-studio .ns-ai-material-tool > header button:hover {
+  background: var(--ns-chip);
+  color: var(--ns-ink);
+}
+
+.nodeslide-studio .ns-ai-material-tool .ns-openui-material {
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+}
+
 /* Agentic authoring v4: readable durable conversation, tools, and data lifecycle. */
 .ns-ai-v3-shell,
 .ns-data-inspector,
@@ -213,6 +547,68 @@
 .ns-evidence-citing-element:disabled {
   cursor: default;
   opacity: 0.7;
+}
+
+/*
+ * Binding coverage. How many claims the deck makes, how many carry a source, and
+ * how many do not — three values at one size, label muted and value full
+ * contrast, so nothing is made smaller to say "this matters less".
+ * A claim with no source is usually mid-work, so the unsourced control is dashed
+ * and accent-bordered, never an alarm colour, and it is inert while the count is
+ * zero rather than inviting a click into an empty list.
+ */
+.ns-evidence-coverage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 9px;
+}
+
+.ns-evidence-coverage > span,
+.ns-evidence-unsourced-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 3px 8px;
+  border: 1px solid var(--ns-border, #ddd6cd);
+  border-radius: 8px;
+  background: transparent;
+  font: inherit;
+}
+
+.ns-evidence-coverage > span > span,
+.ns-evidence-unsourced-toggle > span {
+  color: var(--ns-muted, #6d665f);
+}
+
+.ns-evidence-coverage strong {
+  color: var(--ns-ink, #2b2620);
+  font-weight: 650;
+}
+
+.ns-evidence-unsourced-toggle:enabled {
+  border-style: dashed;
+  border-color: var(--ns-accent, #b7803a);
+  cursor: pointer;
+}
+
+.ns-evidence-unsourced-toggle:disabled {
+  cursor: default;
+}
+
+.ns-evidence-unsourced-toggle:disabled strong {
+  color: var(--ns-muted, #6d665f);
+}
+
+.ns-unsourced-claims {
+  padding: 13px 15px 0;
+}
+
+.ns-evidence-citing-element.is-unsourced {
+  border-style: dashed;
+  border-color: var(--ns-accent, #b7803a);
 }
 
 .ns-source-metadata {
@@ -1968,6 +2364,65 @@
   overflow: hidden;
 }
 
+/* Visited-but-hidden panels stay mounted; only the active one occupies the box. */
+.nodeslide-studio .ns-inspector-tabpanel {
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.nodeslide-studio .ns-inspector-tabpanel[hidden] {
+  display: none;
+}
+
+/* Narrow rails move Versions and JSON into an overflow menu. The nav is the grid that
+ * keeps the tablist and that trigger on one row without letting either scroll away. */
+.nodeslide-studio .ns-inspector-nav {
+  align-items: stretch;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-width: 0;
+  position: relative;
+}
+
+.nodeslide-studio .ns-inspector-more {
+  align-items: stretch;
+  border-bottom: 1px solid var(--ns-line-b);
+  display: flex;
+  min-width: 0;
+  position: relative;
+}
+
+.nodeslide-studio .ns-inspector-more-trigger {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--ns-ink2);
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 550;
+  gap: 3px;
+  justify-content: center;
+  margin-left: 2px;
+  min-height: 39px;
+  min-width: 0;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+.nodeslide-studio .ns-inspector-more-trigger.is-active {
+  border-bottom-color: var(--ns-accent);
+  color: var(--ns-ink);
+  font-weight: 650;
+}
+
+.nodeslide-studio .ns-inspector-more-trigger:focus-visible {
+  border-radius: 6px;
+}
+
 /* The inspector is a containment boundary. Every scrollable lane owns only its
  * vertical axis; no descendant may widen or horizontally translate the rail. */
 .nodeslide-studio
@@ -2342,49 +2797,14 @@
   order: 20;
 }
 
-.nodeslide-studio .ns-ai-inline-consent {
-  display: grid;
-  gap: 5px;
-  border-top: 1px solid var(--ns-line-b);
-  margin-top: 0;
-  padding: 5px 7px 7px;
-}
-
-.nodeslide-studio .ns-ai-inline-consent > label {
-  align-items: center;
-  background: transparent;
-  border: 0;
-  border-radius: 6px;
-  color: var(--ns-ink2);
-  cursor: pointer;
-  display: grid;
-  font-size: 10px;
-  gap: 6px;
-  grid-template-columns: auto minmax(0, 1fr);
-  line-height: 1.3;
-  padding: 3px 4px;
-}
-
-.nodeslide-studio .ns-ai-inline-consent > label.is-ready {
-  background: color-mix(in srgb, var(--ns-positive) 7%, var(--ns-raised));
-  border-color: color-mix(in srgb, var(--ns-positive) 28%, var(--ns-line-c));
-}
-
-.nodeslide-studio .ns-ai-inline-consent input {
-  accent-color: var(--ns-accent);
-  margin: 2px 0 0;
-}
-
-.nodeslide-studio .ns-ai-inline-consent span,
-.nodeslide-studio .ns-ai-inline-consent small {
-  display: block;
-}
-
-.nodeslide-studio .ns-ai-inline-consent small {
-  color: var(--ns-faint);
-  font-size: 9px;
-  margin-top: 1px;
-}
+/*
+ * `.ns-ai-inline-consent` was deleted here. It styled the session-scoped consent checkbox that
+ * the zero-friction consent redesign removed; nodeslideV3.test.ts already asserts the class is
+ * never rendered, so these rules had no producer. They are removed rather than recoloured
+ * because the census flagged `> label.is-ready` painting a success tint on a consent row that
+ * had not been given yet — dead code that would have become a live trust-surface violation the
+ * moment anyone reinstated the markup it was waiting for.
+ */
 
 .nodeslide-studio .ns-ai-v3-composer > .ns-ai-attachment-error {
   order: 5;
@@ -2614,6 +3034,13 @@
   line-height: 1.4;
   margin: 0;
   overflow-wrap: anywhere;
+}
+
+.nodeslide-studio .ns-trace-scope {
+  color: var(--ns-ink2);
+  display: block;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 10px;
 }
 
 .nodeslide-studio .ns-trace-attrib {
@@ -4381,10 +4808,6 @@
   .nodeslide-studio .ns-ai-v3-policy-summary span:not(.is-scope) {
     display: none;
   }
-
-  .nodeslide-studio .ns-ai-inline-consent small {
-    display: none;
-  }
 }
 
 .nodeslide-studio .ns-ai-optimistic-ask p {
@@ -5354,6 +5777,122 @@
 /* Durable deck memory stays behind one compact composer affordance. The
    manager uses the same progressive-disclosure surface as model connections
    while making retention and egress controls visible at the point of use. */
+/* ---- Data rights: export my data, delete this deck ---------------------- */
+
+.nodeslide-studio .ns-data-rights p {
+  margin: 0 0 10px;
+}
+
+.nodeslide-studio .ns-data-export-control {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.nodeslide-studio .ns-data-export-control output {
+  color: var(--ns-ink-soft, inherit);
+  font-size: var(--ns-font-small, 12px);
+  line-height: 1.45;
+}
+
+.nodeslide-studio .ns-data-export-control output[role="alert"] {
+  color: var(--ns-danger, #b42318);
+}
+
+.nodeslide-studio .ns-delete-deck-trigger {
+  width: 100%;
+}
+
+.nodeslide-studio .ns-delete-deck-dialog {
+  background: transparent;
+  border: 0;
+  color: var(--ns-ink);
+  margin: auto;
+  max-height: min(88dvh, 620px);
+  max-width: min(520px, calc(100vw - 28px));
+  padding: 0;
+  width: 100%;
+}
+
+.nodeslide-studio .ns-delete-deck-dialog::backdrop {
+  background: rgb(15 23 42 / 38%);
+  backdrop-filter: blur(6px);
+}
+
+.nodeslide-studio .ns-delete-deck-shell {
+  background: var(--ns-paper);
+  border: 1px solid color-mix(in srgb, var(--ns-line-d) 78%, transparent);
+  border-radius: 18px;
+  box-shadow: 0 28px 80px rgb(15 23 42 / 22%);
+  overflow: hidden;
+}
+
+.nodeslide-studio .ns-delete-deck-header {
+  align-items: center;
+  border-bottom: 1px solid var(--ns-line);
+  display: grid;
+  gap: 11px;
+  grid-template-columns: 36px minmax(0, 1fr) auto;
+  padding: 17px 19px;
+}
+
+.nodeslide-studio .ns-delete-deck-header h1 {
+  font-family: "Fraunces Variable", Fraunces, Georgia, serif;
+  font-size: 21px;
+  font-weight: 560;
+  letter-spacing: -0.025em;
+  margin: 1px 0 0;
+}
+
+.nodeslide-studio .ns-delete-deck-mark {
+  align-items: center;
+  background: var(--ns-danger, #b42318);
+  border-radius: 10px;
+  color: var(--ns-paper);
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  width: 36px;
+}
+
+.nodeslide-studio .ns-delete-deck-body {
+  display: grid;
+  gap: 12px;
+  padding: 17px 19px;
+}
+
+.nodeslide-studio .ns-delete-deck-body p {
+  margin: 0;
+}
+
+.nodeslide-studio .ns-delete-deck-confirm {
+  display: grid;
+  gap: 6px;
+}
+
+.nodeslide-studio .ns-delete-deck-confirm input {
+  border: 1px solid var(--ns-line-d);
+  border-radius: 9px;
+  padding: 8px 10px;
+  width: 100%;
+}
+
+.nodeslide-studio .ns-delete-deck-confirm input[aria-invalid="true"] {
+  border-color: var(--ns-danger, #b42318);
+}
+
+.nodeslide-studio .ns-delete-deck-body output[role="alert"] {
+  color: var(--ns-danger, #b42318);
+}
+
+.nodeslide-studio .ns-delete-deck-footer {
+  border-top: 1px solid var(--ns-line);
+  display: flex;
+  gap: 9px;
+  justify-content: flex-end;
+  padding: 14px 19px;
+}
+
 .nodeslide-studio .ns-memory-dialog {
   background: transparent;
   border: 0;
@@ -5851,6 +6390,109 @@
   background: var(--ns-ink);
   border-color: var(--ns-ink);
   color: var(--ns-paper);
+}
+
+/* Google Slides connection + sync workbench. The section spans both columns
+   because its review states are a sequence of decisions, not a sidebar. */
+.nodeslide-studio .ns-google-connection-section {
+  grid-column: 1 / -1;
+}
+
+.nodeslide-studio .ns-google-connection-card {
+  align-items: center;
+  background: var(--ns-paper);
+  border: 1px solid var(--ns-line);
+  border-radius: 10px;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.nodeslide-studio .ns-google-connection-card > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nodeslide-studio .ns-google-connection-card small {
+  color: var(--ns-faint);
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.nodeslide-studio .ns-google-connection-card button,
+.nodeslide-studio .ns-google-sync-workbench button,
+.nodeslide-studio .ns-connection-section > .ns-google-sync-actions > button {
+  align-items: center;
+  background: var(--ns-paper);
+  border: 1px solid var(--ns-line-d);
+  border-radius: 8px;
+  color: var(--ns-muted);
+  cursor: pointer;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 650;
+  gap: 5px;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 10px;
+}
+
+.nodeslide-studio .ns-google-connection-card button.is-danger {
+  color: var(--ns-danger);
+}
+
+.nodeslide-studio .ns-google-sync-workbench {
+  background: color-mix(in srgb, var(--ns-paper) 80%, transparent);
+  border: 1px solid var(--ns-line);
+  border-radius: 10px;
+  margin-top: 8px;
+  padding: 10px;
+}
+
+.nodeslide-studio .ns-google-sync-workbench label {
+  display: grid;
+  font-size: 10px;
+  font-weight: 650;
+  gap: 6px;
+}
+
+.nodeslide-studio .ns-google-sync-workbench label > span:last-child {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.nodeslide-studio .ns-google-sync-workbench input {
+  background: var(--ns-paper);
+  border: 1px solid var(--ns-line-d);
+  border-radius: 8px;
+  color: var(--ns-ink);
+  font: inherit;
+  min-width: 0;
+  padding: 8px 9px;
+}
+
+.nodeslide-studio .ns-google-sync-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.nodeslide-studio .ns-google-sync-workbench button.is-primary {
+  background: var(--ns-ink);
+  border-color: var(--ns-ink);
+  color: var(--ns-paper);
+}
+
+/* Conflict and error text is the point of the workbench, so it is not muted. */
+.nodeslide-studio .ns-google-sync-workbench output {
+  color: var(--ns-danger);
+  flex-basis: 100%;
+  font-size: 10px;
+  line-height: 1.45;
 }
 
 .nodeslide-studio .ns-agent-connect-card {
@@ -6772,4 +7414,17 @@
  */
 .nodeslide-studio .ns-inspector :is(.ns-eyebrow, .ns-inspector-context-chips span) {
   font-size: var(--ns-font-tag);
+}
+
+/* The binding-coverage row, which reads `Claims 43 · Bound 43 · Unsourced 0`.
+ *
+ * Its labels are spans and its values are `strong`, so the two rules above split
+ * the row across the tag step and the body step: measured on a local build
+ * against production data, `Claims` came out 11px and `43` came out 13px. A row
+ * whose label is smaller than its value is the exact thing this block exists to
+ * stop, so both halves are pinned to the body step and the label is separated by
+ * colour instead. Last in the last-loaded stylesheet, for the reason above.
+ */
+.nodeslide-studio .ns-inspector-scroll .ns-evidence-coverage :is(span, strong) {
+  font-size: var(--ns-font-body);
 }

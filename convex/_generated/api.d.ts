@@ -9,6 +9,7 @@
  */
 
 import type * as crons from "../crons.js";
+import type * as http from "../http.js";
 import type * as lib_nodeslideAccess from "../lib/nodeslideAccess.js";
 import type * as lib_nodeslideAgenticControls from "../lib/nodeslideAgenticControls.js";
 import type * as lib_nodeslideAgenticTelemetry from "../lib/nodeslideAgenticTelemetry.js";
@@ -22,12 +23,17 @@ import type * as lib_nodeslideCompositionFanout from "../lib/nodeslideCompositio
 import type * as lib_nodeslideCreationCritique from "../lib/nodeslideCreationCritique.js";
 import type * as lib_nodeslideData from "../lib/nodeslideData.js";
 import type * as lib_nodeslideDataAttachment from "../lib/nodeslideDataAttachment.js";
+import type * as lib_nodeslideDataExport from "../lib/nodeslideDataExport.js";
 import type * as lib_nodeslideDeckRepl from "../lib/nodeslideDeckRepl.js";
+import type * as lib_nodeslideDeckRows from "../lib/nodeslideDeckRows.js";
 import type * as lib_nodeslideDesignPlan from "../lib/nodeslideDesignPlan.js";
 import type * as lib_nodeslideEditPlanner from "../lib/nodeslideEditPlanner.js";
 import type * as lib_nodeslideEditShadowPlanner from "../lib/nodeslideEditShadowPlanner.js";
+import type * as lib_nodeslideErasureContract from "../lib/nodeslideErasureContract.js";
 import type * as lib_nodeslideExecutionTrace from "../lib/nodeslideExecutionTrace.js";
 import type * as lib_nodeslideExecutionTraceValidator from "../lib/nodeslideExecutionTraceValidator.js";
+import type * as lib_nodeslideGoogleOAuth from "../lib/nodeslideGoogleOAuth.js";
+import type * as lib_nodeslideGoogleSlidesRuntime from "../lib/nodeslideGoogleSlidesRuntime.js";
 import type * as lib_nodeslideGymArtifactEvidence from "../lib/nodeslideGymArtifactEvidence.js";
 import type * as lib_nodeslideGymShadow from "../lib/nodeslideGymShadow.js";
 import type * as lib_nodeslideIds from "../lib/nodeslideIds.js";
@@ -35,6 +41,7 @@ import type * as lib_nodeslideImageSearch from "../lib/nodeslideImageSearch.js";
 import type * as lib_nodeslideInspirationSearch from "../lib/nodeslideInspirationSearch.js";
 import type * as lib_nodeslideManagedKernel from "../lib/nodeslideManagedKernel.js";
 import type * as lib_nodeslideModelFleetProbe from "../lib/nodeslideModelFleetProbe.js";
+import type * as lib_nodeslideMultiAgent from "../lib/nodeslideMultiAgent.js";
 import type * as lib_nodeslideOtlp from "../lib/nodeslideOtlp.js";
 import type * as lib_nodeslidePatches from "../lib/nodeslidePatches.js";
 import type * as lib_nodeslidePreferenceEtl from "../lib/nodeslidePreferenceEtl.js";
@@ -47,6 +54,7 @@ import type * as lib_nodeslidePublishApprovalPolicy from "../lib/nodeslidePublis
 import type * as lib_nodeslideQuota from "../lib/nodeslideQuota.js";
 import type * as lib_nodeslideReadContext from "../lib/nodeslideReadContext.js";
 import type * as lib_nodeslideRenderRepairLoop from "../lib/nodeslideRenderRepairLoop.js";
+import type * as lib_nodeslideRoomReady from "../lib/nodeslideRoomReady.js";
 import type * as lib_nodeslideRoutingPolicy from "../lib/nodeslideRoutingPolicy.js";
 import type * as lib_nodeslideSeed from "../lib/nodeslideSeed.js";
 import type * as lib_nodeslideShadowComparison from "../lib/nodeslideShadowComparison.js";
@@ -62,17 +70,30 @@ import type * as lib_nodeslideWorkflowCandidate from "../lib/nodeslideWorkflowCa
 import type * as nodeslide from "../nodeslide.js";
 import type * as nodeslideAgent from "../nodeslideAgent.js";
 import type * as nodeslideArtifactArena from "../nodeslideArtifactArena.js";
+import type * as nodeslideAuthoringQuality from "../nodeslideAuthoringQuality.js";
 import type * as nodeslideArtifactSpec from "../nodeslideArtifactSpec.js";
 import type * as nodeslideBuildIdentity from "../nodeslideBuildIdentity.js";
+import type * as nodeslideDataExport from "../nodeslideDataExport.js";
+import type * as nodeslideDeckCi from "../nodeslideDeckCi.js";
+import type * as nodeslideGoogleAuth from "../nodeslideGoogleAuth.js";
+import type * as nodeslideGoogleSlidesRuntime from "../nodeslideGoogleSlidesRuntime.js";
 import type * as nodeslideGymShadow from "../nodeslideGymShadow.js";
 import type * as nodeslideImages from "../nodeslideImages.js";
+import type * as nodeslideJobs from "../nodeslideJobs.js";
 import type * as nodeslideMemory from "../nodeslideMemory.js";
 import type * as nodeslideModelProbe from "../nodeslideModelProbe.js";
 import type * as nodeslidePreferences from "../nodeslidePreferences.js";
+import type * as nodeslidePptxCreate from "../nodeslidePptxCreate.js";
+import type * as nodeslidePptxSync from "../nodeslidePptxSync.js";
 import type * as nodeslidePublishApproval from "../nodeslidePublishApproval.js";
 import type * as nodeslideRetention from "../nodeslideRetention.js";
+import type * as nodeslideSessions from "../nodeslideSessions.js";
 import type * as nodeslideSignatures from "../nodeslideSignatures.js";
+import type * as nodeslideSourceRefresh from "../nodeslideSourceRefresh.js";
+import type * as nodeslideSync from "../nodeslideSync.js";
 import type * as nodeslideTelemetry from "../nodeslideTelemetry.js";
+import type * as nodeslideUploadExtraction from "../nodeslideUploadExtraction.js";
+import type * as nodeslideUploads from "../nodeslideUploads.js";
 import type * as nodeslideVariationProof from "../nodeslideVariationProof.js";
 import type * as nodeslideVariationProvider from "../nodeslideVariationProvider.js";
 import type * as nodeslideVariations from "../nodeslideVariations.js";
@@ -85,6 +106,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   crons: typeof crons;
+  http: typeof http;
   "lib/nodeslideAccess": typeof lib_nodeslideAccess;
   "lib/nodeslideAgenticControls": typeof lib_nodeslideAgenticControls;
   "lib/nodeslideAgenticTelemetry": typeof lib_nodeslideAgenticTelemetry;
@@ -98,12 +120,17 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslideCreationCritique": typeof lib_nodeslideCreationCritique;
   "lib/nodeslideData": typeof lib_nodeslideData;
   "lib/nodeslideDataAttachment": typeof lib_nodeslideDataAttachment;
+  "lib/nodeslideDataExport": typeof lib_nodeslideDataExport;
   "lib/nodeslideDeckRepl": typeof lib_nodeslideDeckRepl;
+  "lib/nodeslideDeckRows": typeof lib_nodeslideDeckRows;
   "lib/nodeslideDesignPlan": typeof lib_nodeslideDesignPlan;
   "lib/nodeslideEditPlanner": typeof lib_nodeslideEditPlanner;
   "lib/nodeslideEditShadowPlanner": typeof lib_nodeslideEditShadowPlanner;
+  "lib/nodeslideErasureContract": typeof lib_nodeslideErasureContract;
   "lib/nodeslideExecutionTrace": typeof lib_nodeslideExecutionTrace;
   "lib/nodeslideExecutionTraceValidator": typeof lib_nodeslideExecutionTraceValidator;
+  "lib/nodeslideGoogleOAuth": typeof lib_nodeslideGoogleOAuth;
+  "lib/nodeslideGoogleSlidesRuntime": typeof lib_nodeslideGoogleSlidesRuntime;
   "lib/nodeslideGymArtifactEvidence": typeof lib_nodeslideGymArtifactEvidence;
   "lib/nodeslideGymShadow": typeof lib_nodeslideGymShadow;
   "lib/nodeslideIds": typeof lib_nodeslideIds;
@@ -111,6 +138,7 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslideInspirationSearch": typeof lib_nodeslideInspirationSearch;
   "lib/nodeslideManagedKernel": typeof lib_nodeslideManagedKernel;
   "lib/nodeslideModelFleetProbe": typeof lib_nodeslideModelFleetProbe;
+  "lib/nodeslideMultiAgent": typeof lib_nodeslideMultiAgent;
   "lib/nodeslideOtlp": typeof lib_nodeslideOtlp;
   "lib/nodeslidePatches": typeof lib_nodeslidePatches;
   "lib/nodeslidePreferenceEtl": typeof lib_nodeslidePreferenceEtl;
@@ -123,6 +151,7 @@ declare const fullApi: ApiFromModules<{
   "lib/nodeslideQuota": typeof lib_nodeslideQuota;
   "lib/nodeslideReadContext": typeof lib_nodeslideReadContext;
   "lib/nodeslideRenderRepairLoop": typeof lib_nodeslideRenderRepairLoop;
+  "lib/nodeslideRoomReady": typeof lib_nodeslideRoomReady;
   "lib/nodeslideRoutingPolicy": typeof lib_nodeslideRoutingPolicy;
   "lib/nodeslideSeed": typeof lib_nodeslideSeed;
   "lib/nodeslideShadowComparison": typeof lib_nodeslideShadowComparison;
@@ -138,17 +167,30 @@ declare const fullApi: ApiFromModules<{
   nodeslide: typeof nodeslide;
   nodeslideAgent: typeof nodeslideAgent;
   nodeslideArtifactArena: typeof nodeslideArtifactArena;
+  nodeslideAuthoringQuality: typeof nodeslideAuthoringQuality;
   nodeslideArtifactSpec: typeof nodeslideArtifactSpec;
   nodeslideBuildIdentity: typeof nodeslideBuildIdentity;
+  nodeslideDataExport: typeof nodeslideDataExport;
+  nodeslideDeckCi: typeof nodeslideDeckCi;
+  nodeslideGoogleAuth: typeof nodeslideGoogleAuth;
+  nodeslideGoogleSlidesRuntime: typeof nodeslideGoogleSlidesRuntime;
   nodeslideGymShadow: typeof nodeslideGymShadow;
   nodeslideImages: typeof nodeslideImages;
+  nodeslideJobs: typeof nodeslideJobs;
   nodeslideMemory: typeof nodeslideMemory;
   nodeslideModelProbe: typeof nodeslideModelProbe;
   nodeslidePreferences: typeof nodeslidePreferences;
+  nodeslidePptxCreate: typeof nodeslidePptxCreate;
+  nodeslidePptxSync: typeof nodeslidePptxSync;
   nodeslidePublishApproval: typeof nodeslidePublishApproval;
   nodeslideRetention: typeof nodeslideRetention;
+  nodeslideSessions: typeof nodeslideSessions;
   nodeslideSignatures: typeof nodeslideSignatures;
+  nodeslideSourceRefresh: typeof nodeslideSourceRefresh;
+  nodeslideSync: typeof nodeslideSync;
   nodeslideTelemetry: typeof nodeslideTelemetry;
+  nodeslideUploadExtraction: typeof nodeslideUploadExtraction;
+  nodeslideUploads: typeof nodeslideUploads;
   nodeslideVariationProof: typeof nodeslideVariationProof;
   nodeslideVariationProvider: typeof nodeslideVariationProvider;
   nodeslideVariations: typeof nodeslideVariations;
@@ -180,4 +222,7 @@ export declare const internal: FilterApi<
   FunctionReference<any, "internal">
 >;
 
-export declare const components: {};
+export declare const components: {
+  workflow: import("@convex-dev/workflow/_generated/component.js").ComponentApi<"workflow">;
+  persistentTextStreaming: import("@convex-dev/persistent-text-streaming/_generated/component.js").ComponentApi<"persistentTextStreaming">;
+};

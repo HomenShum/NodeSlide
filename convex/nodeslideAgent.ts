@@ -130,6 +130,8 @@ const nodeslideMemoryInternal: any = (internal as any).nodeslideMemory;
 const nodeslideScopedMemoryInternal: any = (internal as any).nodeslideScopedMemory;
 // biome-ignore lint/suspicious/noExplicitAny: generated Convex self-reference described above
 const nodeslideBudgetsInternal: any = (internal as any).nodeslideBudgets;
+// biome-ignore lint/suspicious/noExplicitAny: generated Convex self-reference described above
+const nodeslideJobsInternal: any = (internal as any).nodeslideJobs;
 
 /** Binds the durable ledger mutations, `reserve` included. See the lib module. */
 function nodeSlideBudgetLedgerClient(
@@ -1661,18 +1663,94 @@ export const createDeckFromBrief = action({
     providerConsent: v.optional(v.string()),
     attachments: v.optional(v.array(nodeslideBriefAttachmentValidator)),
     productionProbeCleanupToken: v.optional(v.string()),
+    // THE DURABLE JOB SEAM. `nodeslideJobRunner.executeCreateDeckInternal` has
+    // always sent this object; until it was declared here, Convex rejected the
+    // whole call with `ArgumentValidationError: Object contains extra field
+    // \`durableJob\``, which made every durable create job fail at 35% progress.
+    //
+    // Declaring it is only half the contract. The runner derives `deckId` from
+    // the job id BEFORE dispatching and re-checks the returned deck against that
+    // derivation afterwards; if this action accepted the argument and still
+    // minted a random deck id, the mismatch would surface only AFTER the
+    // provider call had been paid for. The handler therefore binds the output
+    // identity up front — see the fail-fast below.
+    durableJob: v.optional(
+      v.object({
+        jobId: v.string(),
+        deckId: v.string(),
+        projectId: v.string(),
+        ownerAccessKey: v.string(),
+        executionAccessKey: v.string(),
+      }),
+    ),
   },
   handler: async (ctx, args) => {
     const clientSessionId = requiredCreateText(args.clientSessionId, 'clientSessionId', 256, 768);
+    const durableJob = args.durableJob
+      ? {
+          jobId: requiredCreateText(args.durableJob.jobId, 'durableJob.jobId', 256, 768),
+          deckId: requiredCreateText(args.durableJob.deckId, 'durableJob.deckId', 256, 768),
+          projectId: requiredCreateText(
+            args.durableJob.projectId,
+            'durableJob.projectId',
+            256,
+            768,
+          ),
+          ownerAccessKey: args.durableJob.ownerAccessKey,
+          executionAccessKey: args.durableJob.executionAccessKey,
+        }
+      : null;
+    // THE OUTPUT-IDENTITY BINDING, and the reason it runs here rather than after
+    // generation. Both checks below are pure string comparisons over arguments
+    // already in hand: no database read, no quota, no provider call. A caller
+    // that cannot name the job whose deck it claims to be producing is refused
+    // for free. Moving either check later would convert a free refusal into one
+    // that arrives after a paid completion.
+    if (durableJob) {
+      if (
+        !isOwnerAccessKey(durableJob.ownerAccessKey) ||
+        !isOwnerAccessKey(durableJob.executionAccessKey)
+      ) {
+        throw nodeslideCreatePublicError(
+          'invalid_request',
+          'The durable NodeSlide job owner capability is invalid.',
+        );
+      }
+      if (
+        durableJob.deckId !== nodeslideStableId('deck_job', durableJob.jobId) ||
+        durableJob.projectId !== nodeslideStableId('project_nodeslide_job', durableJob.jobId)
+      ) {
+        throw nodeslideCreatePublicError(
+          'invalid_request',
+          'The durable NodeSlide job output identity is invalid.',
+        );
+      }
+    }
+    // Admission for a durable create is the JOB ROW, not the preview access
+    // code: `startCreateDeck` already ran the access check and consumed the
+    // quota when it wrote the row. Re-running either here would charge the
+    // author twice for one deck. The digest is the canonical sorted-key request
+    // digest, so a runner that mutated the request in flight cannot be admitted.
+    const durableAdmission = durableJob
+      ? ((await ctx.runQuery(nodeslideJobsInternal.authorizeExecutionInternal, {
+          jobId: durableJob.jobId,
+          kind: 'create_deck',
+          ownerAccessKey: durableJob.ownerAccessKey,
+          executionAccessKey: durableJob.executionAccessKey,
+          requestDigest: nodeSlideJobRequestDigest(nodeSlideCreateJobRequestFromArgs(args)),
+        })) as { admissionQuotaSubject: string })
+      : null;
     const publicCreationEnabled =
       process.env[NODESLIDE_PUBLIC_CREATION_ENV]?.trim().toLowerCase() === 'true';
-    const admissionQuotaSubject = publicCreationEnabled
-      ? 'public-launch-v1'
-      : await validateNodeSlidePreviewAdmission({
-          providedAccessCode: args.accessCode,
-          expectedAccessCode: process.env[NODESLIDE_PREVIEW_ACCESS_CODE_ENV],
-          admissionSubject: process.env[NODESLIDE_PREVIEW_ADMISSION_SUBJECT_ENV],
-        });
+    const admissionQuotaSubject =
+      durableAdmission?.admissionQuotaSubject ??
+      (publicCreationEnabled
+        ? 'public-launch-v1'
+        : await validateNodeSlidePreviewAdmission({
+            providedAccessCode: args.accessCode,
+            expectedAccessCode: process.env[NODESLIDE_PREVIEW_ACCESS_CODE_ENV],
+            admissionSubject: process.env[NODESLIDE_PREVIEW_ADMISSION_SUBJECT_ENV],
+          }));
     if (args.route !== 'free') {
       throw nodeslideCreatePublicError(
         'invalid_request',
@@ -1691,24 +1769,28 @@ export const createDeckFromBrief = action({
     });
     const themeId = requiredCreateText(args.themeId, 'themeId', 128, 256);
     const attachments = validateNodeSlideBriefAttachments(args.attachments);
-    const previewSessionQuotaSubject = nodeslideContentDigest(
-      `${admissionQuotaSubject}:${clientSessionId}`,
-    ).slice('sha256:'.length);
-    const quotaResult = (await ctx.runMutation(nodeslideInternal.consumePreviewQuotaResult, {
-      buckets: [
-        {
-          key: `create:${previewSessionQuotaSubject}`,
-          limit: 10,
-          windowMs: 86_400_000,
-        },
-        { key: 'create:global', limit: 120, windowMs: 3_600_000 },
-      ],
-    })) as { ok: boolean; reason?: 'quota_exceeded' };
-    if (!quotaResult.ok) {
-      throw nodeslideCreatePublicError(
-        'quota_exceeded',
-        'NodeSlide creation quota reached. Try again after the current window.',
-      );
+    // A durable job already paid its quota at `startCreateDeck`; charging again
+    // here would let a workflow retry burn the author's daily allowance.
+    if (!durableAdmission) {
+      const previewSessionQuotaSubject = nodeslideContentDigest(
+        `${admissionQuotaSubject}:${clientSessionId}`,
+      ).slice('sha256:'.length);
+      const quotaResult = (await ctx.runMutation(nodeslideInternal.consumePreviewQuotaResult, {
+        buckets: [
+          {
+            key: `create:${previewSessionQuotaSubject}`,
+            limit: 10,
+            windowMs: 86_400_000,
+          },
+          { key: 'create:global', limit: 120, windowMs: 3_600_000 },
+        ],
+      })) as { ok: boolean; reason?: 'quota_exceeded' };
+      if (!quotaResult.ok) {
+        throw nodeslideCreatePublicError(
+          'quota_exceeded',
+          'NodeSlide creation quota reached. Try again after the current window.',
+        );
+      }
     }
 
     const generationBrief =
@@ -1863,10 +1945,22 @@ export const createDeckFromBrief = action({
     //
     // The deterministic route stays unbudgeted on purpose: it issues no provider
     // request, so there is nothing to reserve.
+    //
+    // RUN IDENTITY, and how it reconciles with the digest-keyed id #113 added.
+    // `nodeSlideProviderBudgetId(runId)` is `nodeslideStableId('nsbudget',
+    // runId)`, and `startCreateDeck` opens the job's ledger row at
+    // `nodeslideStableId('nsbudget', jobId)`. So for a durable create the job id
+    // is the ONLY run id that lands on the row `nodeslideJobs.getBudgetReceipt`
+    // reads — keying on the request digest instead would reserve against a
+    // second, orphaned ledger row and the job's own receipt would report zero
+    // spend forever. The digest-keyed id still wins for a direct create, where
+    // there is no job row and no id to inherit; #113's reasoning for it (a retry
+    // must reserve against the same row rather than mint a fresh cap) is exactly
+    // what the job id already provides here.
     const briefDispatch = createNodeSlideBudgetedCreateDispatch({
-      runId: nodeSlideCreateRunId(
-        nodeSlideJobRequestDigest(nodeSlideCreateJobRequestFromArgs(args)),
-      ),
+      runId:
+        durableJob?.jobId ??
+        nodeSlideCreateRunId(nodeSlideJobRequestDigest(nodeSlideCreateJobRequestFromArgs(args))),
       budget: nodeSlideCreateRunBudget(),
       metered: providerChoice.providerMode !== 'deterministic',
       ledger: nodeSlideBudgetLedgerClient(ctx),
@@ -1962,8 +2056,13 @@ export const createDeckFromBrief = action({
       ? nodeSlideProductionProbeFields(args.productionProbeCleanupToken, now)
       : {};
     const uniqueness = `${clientSessionId}:${title}:${now}`;
-    const deckId = nodeslideEventId('deck', now, uniqueness);
-    const projectId = nodeslideEventId('project_nodeslide', now, uniqueness);
+    // A durable job's deck id was fixed by the job id and validated at the top of
+    // this handler; a direct create mints a fresh one. `nodeslideEventId` embeds
+    // `now`, which is why a job-driven deck can never be identified this way —
+    // the runner has to know the deck id before the action runs.
+    const deckId = durableJob?.deckId ?? nodeslideEventId('deck', now, uniqueness);
+    const projectId =
+      durableJob?.projectId ?? nodeslideEventId('project_nodeslide', now, uniqueness);
     // Aggregate telemetry over both passes so persisted cost/token receipts
     // stay honest when the self-critique revision call ran.
     const revisionTelemetry = critique.revision?.telemetry;
@@ -1996,7 +2095,9 @@ export const createDeckFromBrief = action({
       deckId,
       projectId,
       clientSessionId,
-      ownerAccessKey: createOwnerAccessKey(),
+      // The runner reads the finished deck back with the job's owner key, so a
+      // durable create must persist under that key rather than a fresh one.
+      ownerAccessKey: durableJob?.ownerAccessKey ?? createOwnerAccessKey(),
       title,
       brief,
       attachments,

@@ -67,7 +67,7 @@ export function ShipItCard({ onAccept, onReject, proposal }) {
 const ANNOTATED_CARD = `
 export function ShipItCard({ onAccept, onReject, proposal }) {
   return (
-    <div className="ns-ship-card" data-trust-surface="proposal" data-decision="undecided">
+    <div className="ns-ship-card" data-trust-surface="proposal" data-decision="undecided" data-proposal-origin="free_route">
       <p>{proposal.summary}</p>
       <button type="button" onClick={() => onAccept(proposal)}>
         Accept
@@ -225,7 +225,7 @@ describe('trust-surface census — clause 3, not styled to imply an outcome', ()
 const proposalCard = ({ extra = '', styleProp = '', tag = 'div', body = '' } = {}) => `
 export function ShipItCard({ onAccept, onReject, proposal }) {
   return (
-    <${tag} className="ns-ship-card${extra}" data-trust-surface="proposal" data-decision="undecided"${styleProp}>
+    <${tag} className="ns-ship-card${extra}" data-trust-surface="proposal" data-decision="undecided" data-proposal-origin="free_route"${styleProp}>
       ${body}<p>{proposal.summary}</p>
       <button type="button" onClick={() => onAccept(proposal)}>
         Accept
@@ -328,6 +328,7 @@ export function ShipItCard({ onAccept, onReject, proposal }) {
       className="ns-ship-card"
       data-trust-surface="proposal"
       data-decision="undecided"
+      data-proposal-origin="free_route"
       initial={{ borderColor: 'var(--ns-line)' }}
       animate={{ borderColor: 'var(--ns-positive)' }}
       transition={{ duration: 0.4 }}
@@ -361,7 +362,7 @@ export function ShipItCard({ onAccept, onReject, proposal }) {
     );
   }, []);
   return (
-    <div ref={cardRef} className="ns-ship-card" data-trust-surface="proposal" data-decision="undecided">
+    <div ref={cardRef} className="ns-ship-card" data-trust-surface="proposal" data-decision="undecided" data-proposal-origin="free_route">
       <p>{proposal.summary}</p>
       <button type="button" onClick={() => onAccept(proposal)}>
         Accept
@@ -403,7 +404,7 @@ export function ShipItCard({ onAccept, onReject, proposal, prefersReduced }) {
     });
   }, [prefersReduced]);
   return (
-    <div className="ns-ship-card" data-trust-surface="proposal" data-decision="undecided">
+    <div className="ns-ship-card" data-trust-surface="proposal" data-decision="undecided" data-proposal-origin="free_route">
       <p>{proposal.summary}</p>
       <button type="button" onClick={() => onAccept(proposal)}>
         Accept
@@ -430,10 +431,22 @@ export function ShipItCard({ onAccept, onReject, proposal, prefersReduced }) {
   ],
 };
 
-/** Run the real checks against a fixture tree, with the repo allowlist out of the way. */
+/**
+ * Run the real checks against a fixture tree, with BOTH repo allowlists out of the way.
+ *
+ * The authorless table is emptied for the same reason the reviewed-non-surface one is: it names
+ * two real repository components, so against a fixture tree both entries are stale and the
+ * staleness check goes red on both. That red drowns the finding the fixture exists to produce.
+ * A fixture must be able to fail for its own reason.
+ */
 async function gradeFixture(files) {
   const dir = await fixture(files);
-  const { checks } = await trustSurfaceChecks({ srcDir: dir, relativeTo: dir, allowlist: [] });
+  const { checks } = await trustSurfaceChecks({
+    srcDir: dir,
+    relativeTo: dir,
+    allowlist: [],
+    proposalOriginAllowlist: [],
+  });
   return checks.filter(([, passed]) => !passed).map(([label, , detail]) => ({ label, detail }));
 }
 
@@ -561,6 +574,190 @@ export function DeckCiStatus({ onAccept, state }) {
 `,
     });
     expect(failures.map((f) => f.label).join(' | ')).not.toContain('inline style motion');
+  });
+});
+
+/* ------------------------------------- authorship: the second fact a proposal must publish */
+
+/*
+ * Scenario: an engineer restyles the proposal card. The visible copy is untouched — the card
+ * still says "Deterministic fallback" where it should — but a wrapper is introduced, or a prop
+ * spread is tidied up, and the attribute that made authorship machine-readable goes with it.
+ * Nothing else about the component changes and nothing else in the suite notices.
+ *
+ * That is the exact shape of the `data-agent-web-consent` regression: a surface that keeps
+ * working perfectly while the fact a reader needs stops being published. The knockouts below
+ * are the four ways it can happen, each pinned to the check that must name it.
+ */
+describe('a proposal that will not say who wrote it', () => {
+  const KNOCKOUTS = [
+    {
+      name: 'the attribute is dropped entirely — presence, not value, is the assertion',
+      source: proposalCard().replace(' data-proposal-origin="free_route"', ''),
+      label: 'every proposal surface publishes data-proposal-origin',
+      detail: 'ShipItCard',
+    },
+    {
+      name: 'the value is stringified from a missing field into the word "undefined"',
+      source: proposalCard().replace(
+        'data-proposal-origin="free_route"',
+        'data-proposal-origin="undefined"',
+      ),
+      label: 'stringified into the literal "undefined"',
+      detail: 'ShipItCard',
+    },
+    {
+      name: 'the value is coerced with String(), routing around the one guard that exists',
+      source: proposalCard().replace(
+        'data-proposal-origin="free_route"',
+        'data-proposal-origin={String(proposal.origin)}',
+      ),
+      label: 'stringified into the literal "undefined"',
+      detail: 'ShipItCard',
+    },
+    {
+      name: 'a plausible-looking word nobody declared is invented',
+      source: proposalCard().replace(
+        'data-proposal-origin="free_route"',
+        'data-proposal-origin="model"',
+      ),
+      label: 'written by nodeSlideProposalOriginAttribute',
+      detail: 'literal "model"',
+    },
+    {
+      name: 'the value is computed inline, bypassing the function that refuses bad values',
+      source: proposalCard().replace(
+        'data-proposal-origin="free_route"',
+        'data-proposal-origin={proposal.origin ?? "unknown"}',
+      ),
+      label: 'written by nodeSlideProposalOriginAttribute',
+      detail: 'does not go through',
+    },
+  ];
+
+  for (const knockout of KNOCKOUTS) {
+    it(`goes red when ${knockout.name}`, async () => {
+      const failures = await gradeFixture({ 'ShipItCard.tsx': knockout.source });
+      const matching = failures.filter((f) => f.label.includes(knockout.label));
+      // Red by the RIGHT check, and naming the surface. A failure that does not say WHERE
+      // sends the next reader to read the whole tree, which is how a gate stops being run.
+      expect(matching, JSON.stringify(failures)).toHaveLength(1);
+      expect(matching[0].detail).toContain(knockout.detail);
+    });
+  }
+
+  it('stays green on a proposal that publishes a declared origin', async () => {
+    // The other half of every knockout. A check that has never been silent is not a detector.
+    expect(await gradeFixture({ 'ShipItCard.tsx': proposalCard() })).toEqual([]);
+  });
+
+  it('accepts `unattributed` — a legacy row saying so is an answer, not a hole', async () => {
+    const source = proposalCard().replace(
+      'data-proposal-origin="free_route"',
+      'data-proposal-origin="unattributed"',
+    );
+    expect(await gradeFixture({ 'ShipItCard.tsx': source })).toEqual([]);
+  });
+
+  it('accepts the shared mapping function, which is where the value is supposed to come from', async () => {
+    const source = proposalCard().replace(
+      'data-proposal-origin="free_route"',
+      'data-proposal-origin={nodeSlideProposalOriginAttribute(proposal.origin)}',
+    );
+    expect(await gradeFixture({ 'ShipItCard.tsx': source })).toEqual([]);
+  });
+
+  it('cannot be silenced by moving every surface into the authorless table', async () => {
+    /*
+     * The cheapest way to make the presence check quiet is not to delete it — it is to exempt
+     * everything, one locally-reasonable entry at a time, until the gate polices an empty set.
+     * The non-empty check is what makes that fail as loudly as deleting the attribute would.
+     */
+    const dir = await fixture({
+      'ShipItCard.tsx': proposalCard().replace(' data-proposal-origin="free_route"', ''),
+    });
+    const { checks } = await trustSurfaceChecks({
+      srcDir: dir,
+      relativeTo: dir,
+      allowlist: [],
+      proposalOriginAllowlist: [
+        {
+          file: 'ShipItCard.tsx',
+          component: 'ShipItCard',
+          reason:
+            'a plausible-sounding exemption long enough to satisfy the reason check, which is exactly how this hole would be opened in practice',
+        },
+      ],
+    });
+    const failed = checks.filter(([, passed]) => !passed).map(([label]) => label);
+    expect(failed.join(' | ')).toContain('at least one surface actually carries');
+    // And the presence check itself is genuinely quiet — proving the non-empty check is the
+    // thing catching this, not a coincidental second failure.
+    expect(failed.join(' | ')).not.toContain('every proposal surface publishes');
+  });
+
+  it('expires an exemption the moment the surface it names grows an origin', async () => {
+    // A stale exemption is a hole with a story attached: it would go on excusing the NEXT
+    // surface to lose the attribute long after it stopped describing anything real.
+    const dir = await fixture({ 'ShipItCard.tsx': proposalCard() });
+    const { checks } = await trustSurfaceChecks({
+      srcDir: dir,
+      relativeTo: dir,
+      allowlist: [],
+      proposalOriginAllowlist: [
+        {
+          file: 'ShipItCard.tsx',
+          component: 'ShipItCard',
+          reason: 'this card has no authorship to publish — which stopped being true',
+        },
+      ],
+    });
+    const stale = checks.find(([label]) => label.includes('no stale entry in the authorless'));
+    expect(stale?.[1]).toBe(false);
+    expect(stale?.[2]).toContain('ShipItCard');
+  });
+
+  it('refuses an exemption that states no reason', async () => {
+    const dir = await fixture({
+      'ShipItCard.tsx': proposalCard().replace(' data-proposal-origin="free_route"', ''),
+    });
+    const { checks } = await trustSurfaceChecks({
+      srcDir: dir,
+      relativeTo: dir,
+      allowlist: [],
+      proposalOriginAllowlist: [{ file: 'ShipItCard.tsx', component: 'ShipItCard', reason: 'n/a' }],
+    });
+    const reasoned = checks.find(([label]) => label.includes('states why it has no origin'));
+    expect(reasoned?.[1]).toBe(false);
+  });
+
+  it('leaves consent, permission and failed-state surfaces alone — they carry nobody drafts', async () => {
+    /*
+     * Scope, asserted rather than assumed. `consent` answers how egress was authorized,
+     * `permission` answers whether a grant has happened, `failed-state` is a readout. None of
+     * them presents someone's draft for approval, so demanding an author of them would be a
+     * gate inventing a requirement, and inventing requirements is how gates get suppressed.
+     */
+    const failures = await gradeFixture({
+      'Consent.tsx': `
+export function WebConsent({ onGrant, posture }) {
+  return (
+    <div data-trust-surface="consent" data-agent-web-consent={posture}>
+      <button type="button" onClick={() => onGrant()}>Grant</button>
+    </div>
+  );
+}
+`,
+    });
+    const labels = failures.map((f) => f.label).join(' | ');
+    expect(labels).not.toContain('every proposal surface publishes');
+    expect(labels).not.toContain('stringified into the literal');
+    expect(labels).not.toContain('written by nodeSlideProposalOriginAttribute');
+    // The non-empty check DOES fire here, and correctly: a tree whose only trust surface is a
+    // consent banner has no proposal authorship to police, so the gate is watching nothing.
+    // Asserted rather than filtered away, because "the gate is watching nothing" is precisely
+    // the state this check exists to refuse to call a pass.
+    expect(labels).toContain('at least one surface actually carries');
   });
 });
 

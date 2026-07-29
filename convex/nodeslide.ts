@@ -32,6 +32,7 @@ import {
 import { assertNodeSlideArtifactCompilation } from '../shared/nodeslideArtifactSpec';
 import { normalizeWebSourceExcerpt } from '../shared/nodeslideEvidence';
 import { applyDeckPatch } from '../shared/nodeslidePatch';
+import type { NodeSlideProposalOrigin } from '../shared/nodeslideProposalOrigin';
 import type { SlideVariation } from '../shared/nodeslideVariation';
 import { internal } from './_generated/api';
 import type { Doc } from './_generated/dataModel';
@@ -135,6 +136,7 @@ import {
   nodeslideCursorValidator,
   nodeslidePatchOperationValidator,
   nodeslidePatchScopeValidator,
+  nodeslideProposalOriginValidator,
   nodeslideReasoningEffortValidator,
   nodeslideVersionClockValidator,
 } from './lib/nodeslideValidators';
@@ -212,6 +214,8 @@ type PatchMutationArgs = {
   candidateValidation?: CandidateValidationReceipt;
   profileId?: string;
   profileDigest?: string;
+  origin?: NodeSlideProposalOrigin;
+  fallbackReason?: string;
 };
 
 type PackageHostPatchCommand = Omit<HumanPatchMutationArgs, 'ownerAccessKey'>;
@@ -3773,10 +3777,23 @@ export const proposeAgentPatchInternal = internalMutation({
     costMicroUsd: v.optional(v.number()),
     inputTokens: v.optional(v.number()),
     outputTokens: v.optional(v.number()),
+    // Authorship, carried from the planner receipt onto BOTH the patch and its trace. The
+    // single-patch lane used to drop it here, which is why the UI could disclose a fallback in
+    // prose and had nothing to publish as an attribute.
+    origin: v.optional(nodeslideProposalOriginValidator),
+    fallbackReason: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
     if (args.toolCalls.length > 16) throw new Error('Too many agent tool calls recorded.');
+    // A fallback reason without a fallback is a claim the record cannot support, and the
+    // absence of a reason on a fallback is the disclosure going missing at the source.
+    if (args.origin === 'deterministic_fallback' && !args.fallbackReason?.trim()) {
+      throw new Error('A deterministic-fallback proposal must record why the fallback ran.');
+    }
+    if (args.origin !== 'deterministic_fallback' && args.fallbackReason !== undefined) {
+      throw new Error('Only a deterministic-fallback proposal may record a fallback reason.');
+    }
     if (
       args.traceContext.length > 40 ||
       args.traceContext.some((line) => line.length === 0 || line.length > 500)
@@ -3847,6 +3864,12 @@ export const proposeAgentPatchInternal = internalMutation({
       ...(args.costMicroUsd !== undefined ? { costMicroUsd: args.costMicroUsd } : {}),
       ...(args.inputTokens !== undefined ? { inputTokens: args.inputTokens } : {}),
       ...(args.outputTokens !== undefined ? { outputTokens: args.outputTokens } : {}),
+      // Read off the persisted patch, not off args: the patch row is the record the client
+      // reads, so binding the trace to it keeps the two receipts from ever disagreeing.
+      ...(proposal.patch.origin !== undefined ? { origin: proposal.patch.origin } : {}),
+      ...(proposal.patch.fallbackReason !== undefined
+        ? { fallbackReason: proposal.patch.fallbackReason }
+        : {}),
       createdAt: now,
       ...(proposal.patch.status === 'stale' ? { completedAt: now } : {}),
     };
@@ -5562,9 +5585,26 @@ function patchRow(
       : {}),
     ...(args.profileId !== undefined ? { profileId: args.profileId } : {}),
     ...(args.profileDigest !== undefined ? { profileDigest: args.profileDigest } : {}),
+    ...(args.origin !== undefined ? { origin: args.origin } : {}),
+    ...(args.fallbackReason !== undefined
+      ? { fallbackReason: boundedFallbackReason(args.fallbackReason) }
+      : {}),
     createdAt,
     updatedAt: now,
   };
+}
+
+/**
+ * The fallback reason is provider-derived text, so it is bounded before it reaches a row.
+ * Truncated rather than rejected: this string exists to explain a degraded run, and refusing to
+ * persist the proposal because its explanation was long would turn a disclosure into an outage.
+ */
+const NODESLIDE_FALLBACK_REASON_MAX = 500;
+function boundedFallbackReason(reason: string): string {
+  const trimmed = reason.trim();
+  return trimmed.length > NODESLIDE_FALLBACK_REASON_MAX
+    ? `${trimmed.slice(0, NODESLIDE_FALLBACK_REASON_MAX - 1)}…`
+    : trimmed;
 }
 
 function assertProposalMetadata(

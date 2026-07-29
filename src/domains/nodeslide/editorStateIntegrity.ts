@@ -1,4 +1,5 @@
 import type { DeckPatch, DeckVersion, SlideElement } from '../../../shared/nodeslide';
+import type { NodeSlideProposalOrigin } from '../../../shared/nodeslideProposalOrigin';
 
 export type EditorCandidateStatus =
   | 'ready'
@@ -21,30 +22,41 @@ export interface EditorCandidateReceipt {
   summary?: string;
   versionLabel?: string;
   binding?: EditorCandidateBinding;
+  /**
+   * Who authored the operations this candidate materializes. Carried on every branch, including
+   * the refusals: a reviewer looking at an `invalid` or `stale` footer is still entitled to know
+   * whether the plan came from the model they asked for or from the deterministic fallback.
+   */
+  origin?: NodeSlideProposalOrigin;
 }
 
 export function editorCandidateReceiptForPatch(
   patch: DeckPatch,
   currentDeck: { id: string; version: number },
 ): EditorCandidateReceipt {
+  // Spread into every return below rather than assembled per branch. The branch list has grown
+  // twice; a field added to only the branches that existed on the day is how a receipt starts
+  // reporting authorship on the happy path and silently dropping it on the refusals.
+  const authorship = patch.origin !== undefined ? { origin: patch.origin } : {};
   if (
     patch.status === 'stale' ||
     patch.deckId !== currentDeck.id ||
     patch.scope.deckId !== currentDeck.id
   ) {
-    return { id: patch.id, status: 'stale', summary: patch.summary };
+    return { ...authorship, id: patch.id, status: 'stale', summary: patch.summary };
   }
   if (patch.status === 'draft' || patch.status === 'validating') {
-    return { id: patch.id, status: 'validating', summary: patch.summary };
+    return { ...authorship, id: patch.id, status: 'validating', summary: patch.summary };
   }
   if (patch.status !== 'ready') {
-    return { id: patch.id, status: 'unavailable', summary: patch.summary };
+    return { ...authorship, id: patch.id, status: 'unavailable', summary: patch.summary };
   }
 
   const candidateDigest = patch.candidateDigest;
   const receipt = patch.candidateValidation;
   if (!candidateDigest || !receipt) {
     return {
+      ...authorship,
       id: patch.id,
       status: 'unavailable',
       summary: 'The exact candidate validation receipt is unavailable.',
@@ -59,6 +71,7 @@ export function editorCandidateReceiptForPatch(
   };
   if (!candidateBindingMatches(binding) || receipt.deckId !== patch.deckId) {
     return {
+      ...authorship,
       id: patch.id,
       status: 'invalid',
       summary: 'The validation receipt does not match this exact patch candidate.',
@@ -67,6 +80,7 @@ export function editorCandidateReceiptForPatch(
   }
   if (receipt.deckVersion !== currentDeck.version + 1) {
     return {
+      ...authorship,
       id: patch.id,
       status: 'stale',
       summary: 'The exact candidate was validated against an older deck version.',
@@ -77,6 +91,7 @@ export function editorCandidateReceiptForPatch(
   const hasErrors = receipt.issues.some((issue) => issue.severity === 'error');
   if (!receipt.ok || hasErrors) {
     return {
+      ...authorship,
       id: patch.id,
       status: 'invalid',
       summary: patch.summary,
@@ -86,6 +101,7 @@ export function editorCandidateReceiptForPatch(
   }
 
   return {
+    ...authorship,
     id: patch.id,
     status: receipt.issues.some((issue) => issue.severity === 'warning') ? 'warning' : 'ready',
     summary: patch.summary,

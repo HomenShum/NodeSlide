@@ -8,6 +8,7 @@ import {
 } from 'react';
 import type { PatchOperation, Slide, SlideElement, ThemeSpec } from '../../../../shared/nodeslide';
 import { unhandledPatchOperation } from '../../../../shared/nodeslide';
+import { nodeSlideProposalOriginAttribute } from '../../../../shared/nodeslideProposalOrigin';
 import {
   type EditorCandidateReceipt,
   type EditorCandidateStatus,
@@ -517,6 +518,12 @@ function CandidateReceipt({
    * commits the candidate. `undecided` is derived from `editorCandidateCanAccept`, the same
    * predicate that enables the button, so the DOM posture and the affordance cannot disagree:
    * a receipt with no matching digest binding offers no decision, and says `none`.
+   *
+   * `data-proposal-origin` answers the other half: Accept here COMMITS the candidate, so the
+   * reviewer needs to know whether the operations came from the model route they asked for or
+   * from the deterministic fallback. The receipt carries authorship on every branch, including
+   * the refusals, and a receipt that is absent entirely reads `unattributed` — never the string
+   * "undefined", which would be a hole wearing the costume of an answer.
    */
   const decision = acceptEnabled ? 'undecided' : 'none';
   return (
@@ -528,6 +535,7 @@ function CandidateReceipt({
       data-testid="candidate-receipt"
       data-trust-surface="diff-review"
       data-decision={decision}
+      data-proposal-origin={nodeSlideProposalOriginAttribute(receipt?.origin)}
     >
       <span>
         Compare · {baselineLabel} → {candidateLabel}

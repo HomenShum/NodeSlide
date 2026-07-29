@@ -1115,6 +1115,18 @@ export const proposeEdit = action({
                 : {}),
             }
           : { provider: 'deterministic', model: 'bounded-edit-planner/v1' };
+      const proposalOrigin = usedFallback
+        ? ('deterministic_fallback' as const)
+        : baseline.receipt.origin;
+      // Every `deterministic_fallback` carries its reason: the mutation refuses the pair
+      // otherwise, so a fallback can never reach a reviewer as an unexplained one.
+      const proposalFallbackReason =
+        proposalOrigin === 'deterministic_fallback'
+          ? (baseline.receipt.fallbackReason ??
+            (providerRequested
+              ? `the ${requestedProviderLabel} response was invalid`
+              : 'provider_not_requested'))
+          : undefined;
       const shadowAuthorization = authorizeNodeSlideAgenticOperation(
         resolveNodeSlideAgenticControls(process.env),
         { operation: 'deck_repl_shadow' },
@@ -1168,6 +1180,23 @@ export const proposeEdit = action({
             }
           : {}),
         ...(shadowComparison ? { shadowComparison } : {}),
+        /*
+         * Authorship, carried onto the record the client actually reads.
+         *
+         * `usedFallback` — not `baseline.receipt.origin` alone — is the honest predicate, and it
+         * is the same one the traceSummary below and the trace model chip above already use. A
+         * provider that ERRORED before the planner parsed anything leaves the receipt reading
+         * `free_route` while the operations came from the deterministic path; publishing
+         * `free_route` there would make the machine-readable half assert what the visible half
+         * correctly denies. Where the two could disagree, the pessimistic reading wins.
+         *
+         * A pure deterministic turn (no provider requested) already reaches here as
+         * `deterministic_fallback` / `provider_not_requested` — the same pair the variation lane
+         * uses to render "Private deterministic" rather than a failure. The distinction lives in
+         * the reason, not in a fourth origin value.
+         */
+        origin: proposalOrigin,
+        ...(proposalFallbackReason !== undefined ? { fallbackReason: proposalFallbackReason } : {}),
         traceSummary: usedFallback
           ? `Deterministic fallback proposed ${finalOperations.length} scoped operation${finalOperations.length === 1 ? '' : 's'} because ${baseline.receipt.fallbackReason ?? `the ${requestedProviderLabel} response was invalid`}`
           : providerRequested
@@ -1398,6 +1427,10 @@ export const proposeExternalAgentEdit = action({
         ],
         provider,
         model,
+        // The local BYOK lane persists a candidate an external model actually produced — the
+        // deterministic planner never ran on this path, so there is nothing to fall back FROM.
+        // `free_route` is the same claim the visible trace summary makes one line above.
+        origin: 'free_route' as const,
         ...(args.costMicroUsd !== undefined ? { costMicroUsd: args.costMicroUsd } : {}),
         ...(args.inputTokens !== undefined ? { inputTokens: args.inputTokens } : {}),
         ...(args.outputTokens !== undefined ? { outputTokens: args.outputTokens } : {}),

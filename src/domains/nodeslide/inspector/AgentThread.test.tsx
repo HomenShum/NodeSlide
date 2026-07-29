@@ -320,3 +320,101 @@ describe('AgentThread proposal card is honest about its decision state', () => {
     expect(html).toContain('text-destructive');
   });
 });
+
+/**
+ * Scenario: the provider timed out and the deterministic fallback wrote the operations. The
+ * thread already told the HUMAN so, in the planner's own step line — that disclosure works and
+ * is not being changed. What it never told the AGENT reviewer was anything at all: an agent
+ * could read that a decision was outstanding and could not read who authored the thing it was
+ * about to accept, unless it string-matched English prose.
+ *
+ * The two halves are asserted separately and deliberately. A machine-readable channel that
+ * makes the visible one deletable has traded one blind reviewer for another.
+ */
+describe('AgentThread publishes who authored the patch, and still says so in words', () => {
+  const fallbackPatch = {
+    ...reviewablePatch,
+    id: 'patch-fallback',
+    origin: 'deterministic_fallback',
+    fallbackReason: 'provider timeout',
+  } as DeckPatch;
+
+  it('carries the authorship on the undecided patch card as an attribute', () => {
+    const html = renderToStaticMarkup(
+      <AgentThread
+        runs={[run({ id: 'run-f', patchId: fallbackPatch.id, status: 'awaiting_review' })]}
+        messages={[]}
+        patches={[fallbackPatch]}
+        onAcceptPatch={() => {}}
+        onRejectPatch={() => {}}
+      />,
+    );
+    expect(html).toContain('data-proposal-origin="deterministic_fallback"');
+    // Alongside the decision, never instead of it: "is a decision outstanding" and "is
+    // accepting safe" are two questions and the card has to answer both.
+    expect(html).toContain('data-decision="undecided"');
+  });
+
+  it('keeps the authorship on the settled readout — an accepted fallback is still a fallback', () => {
+    const html = renderToStaticMarkup(
+      <AgentThread
+        runs={[run({ id: 'run-g', patchId: fallbackPatch.id, status: 'completed' })]}
+        messages={[]}
+        patches={[{ ...fallbackPatch, status: 'applied' } as unknown as DeckPatch]}
+        onAcceptPatch={() => {}}
+        onRejectPatch={() => {}}
+      />,
+    );
+    expect(html).toContain('agent-thread-patch-settled');
+    expect(html).toContain('data-proposal-origin="deterministic_fallback"');
+  });
+
+  it('renders `unattributed` for a legacy patch, never the literal string "undefined"', () => {
+    /*
+     * A row written before authorship provenance existed. `String(patch.origin)` would put the
+     * four-letter word "undefined" on a trust surface, which reads as an answer and is worse
+     * than an absent attribute — absent is a hole a gate can see.
+     */
+    const html = renderToStaticMarkup(
+      <AgentThread
+        runs={[run({ id: 'run-h', patchId: reviewablePatch.id, status: 'awaiting_review' })]}
+        messages={[]}
+        patches={[reviewablePatch]}
+        onAcceptPatch={() => {}}
+        onRejectPatch={() => {}}
+      />,
+    );
+    expect(html).toContain('data-proposal-origin="unattributed"');
+    expect(html).not.toContain('data-proposal-origin="undefined"');
+    expect(html).not.toContain('undefined');
+  });
+
+  it('KNOCKOUT PAIR: still shows the planner step that discloses the fallback in words', () => {
+    /*
+     * The half that already worked. The planner writes its own attribution into the step
+     * message (`convex/nodeslideAgent.ts`), and the thread renders it. Drop the step rendering
+     * — or drop the label from the message — and this goes red while every attribute assertion
+     * above stays green, which is exactly why it is a separate test.
+     */
+    const html = renderToStaticMarkup(
+      <AgentThread
+        runs={[run({ id: 'run-i', patchId: fallbackPatch.id, status: 'awaiting_review' })]}
+        messages={[
+          message({
+            id: 'step-planner',
+            runId: 'run-i',
+            role: 'tool',
+            toolName: 'planner',
+            content: 'Planner · deterministic fallback: proposed 2 operations.',
+            createdAt: 1,
+          }),
+        ]}
+        patches={[fallbackPatch]}
+        onAcceptPatch={() => {}}
+        onRejectPatch={() => {}}
+      />,
+    );
+    expect(html).toContain('deterministic fallback');
+    expect(html).toContain('proposed 2 operations.');
+  });
+});

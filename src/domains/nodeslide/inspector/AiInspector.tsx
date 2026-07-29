@@ -76,6 +76,7 @@ import {
   nodeSlideProviderModeForModel,
   unhandledPatchOperation,
 } from '../../../../shared/nodeslide';
+import { nodeSlideProposalOriginAttribute } from '../../../../shared/nodeslideProposalOrigin';
 import type { SlideVariation } from '../../../../shared/nodeslideVariation';
 import { NodeSlideConnectionsDialog } from '../components/NodeSlideConnectionsDialog';
 import { NodeSlideMemoryDialog } from '../components/NodeSlideMemoryDialog';
@@ -1785,6 +1786,19 @@ function VariationCard({
         : variation.status === 'rejected'
           ? 'rejected'
           : 'none';
+  /*
+   * trust-surfaces clause 1: `data-proposal-origin` publishes WHO authored these operations.
+   *
+   * The variation record has carried `origin` since the harness was written, and the evidence
+   * row below has always rendered it in words — "External model route" / "Private deterministic"
+   * / "Deterministic fallback", plus a "Fallback reason:" line. That disclosure is correct and
+   * is deliberately untouched. What it was not is READABLE: an agent deciding whether accepting
+   * is safe had to string-match English prose to learn the one fact that answers the question.
+   *
+   * VariationCard owns this node, so VariationCard is the single writer of the attribute on it —
+   * the `data-ns-theme` collision in this repo came from two writers of one attribute on
+   * different nodes, and the fix is to put the write where the state is owned.
+   */
   return (
     <li
       ref={focusRef}
@@ -1794,6 +1808,7 @@ function VariationCard({
       data-variation-id={variation.id}
       data-trust-surface="diff-review"
       data-decision={decision}
+      data-proposal-origin={nodeSlideProposalOriginAttribute(variation.origin)}
     >
       <div className="ns-variation-card-topline">
         <span className={`ns-status-dot ns-status-dot--${variation.status}`} />
@@ -1942,6 +1957,16 @@ function ProposalCard({
         : patch.status === 'rejected'
           ? 'rejected'
           : 'none';
+  /*
+   * trust-surfaces clause 1, second fact: `data-proposal-origin` is NOT derivable from the
+   * "Provider · model" row rendered below. That row reports the route this run CALLED, and a
+   * deterministic-fallback run still called one — it is why the trace's model chip has to say
+   * `<model> (deterministic fallback)` in words. Reading provider/model as authorship is the
+   * exact misreading the attribute exists to prevent, so authorship gets its own channel.
+   *
+   * ProposalCard owns this node. AgentThread owns its own patch card. Neither writes onto the
+   * other's: one writer per attribute, on the node that owns the state.
+   */
   return (
     <article
       className={`ns-proposal-card ${stale ? 'is-stale' : ''} ${previewed ? 'is-previewed' : ''}`}
@@ -1949,6 +1974,7 @@ function ProposalCard({
       data-proposal-id={patch.id}
       data-trust-surface="proposal"
       data-decision={decision}
+      data-proposal-origin={nodeSlideProposalOriginAttribute(patch.origin)}
     >
       <div className="ns-proposal-topline">
         <span className={`ns-status-dot ns-status-dot--${patch.status}`} />

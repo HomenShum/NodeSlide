@@ -13,6 +13,7 @@ import { requireOwnerAccess } from './lib/nodeslideAccess';
 import { nodeSlideCandidateDigest } from './lib/nodeslideCandidate';
 import { loadNodeSlideSnapshot, sourceFromRow } from './lib/nodeslideData';
 import { evaluateNodeSlideDeckCi } from './lib/nodeslideDeckCi';
+import { redactNodeSlideErrorText } from './lib/nodeslideErrorRedaction';
 import { captureNodeSlideWebEvidence, safePublicCaptureUrl } from './lib/nodeslideEvidenceCapture';
 import { nodeslideContentDigest, nodeslideStableId } from './lib/nodeslideIds';
 import { planNodeSlideSourceRefresh } from './lib/nodeslideSourceRefresh';
@@ -513,7 +514,9 @@ export const recordFailureInternal = internalMutation({
       failureCount,
       nextRunAt: now + backoffMinutes * 60_000,
       lastCheckedAt: now,
-      lastError: args.error.replace(/\s+/gu, ' ').trim().slice(0, 500),
+      // The caught error is an outbound fetch failure, and fetch failures quote
+      // the URL — which is where a source's API key lives when it has one.
+      lastError: redactNodeSlideErrorText(args.error, 500, 'The source refresh failed.'),
       leaseId: undefined,
       leaseExpiresAt: undefined,
       updatedAt: now,

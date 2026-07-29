@@ -31,6 +31,7 @@ import {
   type NodeSlideSchemaLike,
   nodeSlideBinaryFields,
 } from './nodeslideErasureContract';
+import { isNodeSlideSensitiveKey, redactNodeSlideSecrets } from './nodeslideErrorRedaction';
 
 export const NODESLIDE_DATA_EXPORT_MAX_ROWS_PER_COLLECTION = 1_000;
 export const NODESLIDE_DATA_EXPORT_MAX_RECORDS = 8_000;
@@ -51,42 +52,14 @@ interface RedactionState {
  * Field-level omissions, expressed as one predicate rather than a per-table
  * list. A new column named `providerRefreshToken` is withheld the moment it
  * exists; nobody has to remember to add it anywhere.
+ *
+ * The predicate itself moved to `nodeslideErrorRedaction.ts` unchanged, because
+ * the error scrubber has to answer exactly the same question about a key it
+ * finds inside a string. Two copies of "what counts as a secret" would drift,
+ * and the half that drifted would be the one nobody was testing. Re-exported
+ * here under its original name so callers and tests are unaffected.
  */
-export function isNodeSlideSensitiveExportField(key: string): boolean {
-  const normalized = key.replace(/[^a-z0-9]/gi, '').toLowerCase();
-  if (
-    [
-      'owneraccesskey',
-      'shareslug',
-      'idempotencykey',
-      'ownerdigest',
-      'clientsessionid',
-      'tokendigest',
-    ].includes(normalized)
-  ) {
-    return true;
-  }
-  if (
-    normalized.includes('ciphertext') ||
-    normalized.includes('password') ||
-    normalized.includes('passphrase') ||
-    normalized.includes('secret') ||
-    normalized.includes('credential') ||
-    normalized.includes('privatekey') ||
-    normalized.includes('apikey') ||
-    normalized.includes('accesskey') ||
-    normalized.includes('capabilitykey') ||
-    normalized.endsWith('capability') ||
-    normalized.endsWith('capabilitytoken')
-  ) {
-    return true;
-  }
-  if (normalized.endsWith('storageid')) return true;
-  if (normalized.endsWith('cleanupdigest') || normalized.endsWith('cleanuptoken')) return true;
-  return /^(?:access|refresh|auth|authorization|bearer|oauth|provider)?token(?:ciphertext|value)?$/.test(
-    normalized,
-  );
-}
+export const isNodeSlideSensitiveExportField = isNodeSlideSensitiveKey;
 
 export interface NodeSlideDataExportInput {
   deck: Doc<'nodeslide_decks'>;
@@ -325,12 +298,12 @@ function redactString(value: string, state: RedactionState): string {
   for (const sensitiveValue of state.sensitiveValues) {
     redacted = redacted.split(sensitiveValue).join(REDACTED);
   }
-  redacted = redacted
-    .replace(/\bBearer\s+[^\s,;]+/gi, `Bearer ${REDACTED}`)
-    .replace(/\b(?:sk|rk|pk|api)[-_][A-Za-z0-9_-]{12,}\b/gi, REDACTED)
-    .replace(/\b(?:ghp|github_pat|glpat)[-_][A-Za-z0-9_-]{12,}\b/gi, REDACTED)
-    .replace(/\bAKIA[0-9A-Z]{16}\b/g, REDACTED)
-    .replace(/\bAIza[0-9A-Za-z_-]{30,}\b/g, REDACTED);
+  // The shape rules live in `nodeslideErrorRedaction.ts` now. The export used
+  // to own them alone; the persisted-error path needs the same ones, and the
+  // export gains the capability-shape rule for free — an owner key belonging to
+  // some OTHER deck, quoted inside an exported error string, was previously
+  // outside `state.sensitiveValues` and therefore survived the export.
+  redacted = redactNodeSlideSecrets(redacted);
   if (redacted !== value) state.redactedValueCount += 1;
   return redacted;
 }

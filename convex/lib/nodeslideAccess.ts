@@ -1,9 +1,17 @@
 import type { Doc } from '../_generated/dataModel';
 import type { MutationCtx, QueryCtx } from '../_generated/server';
 import { findDeckRow } from './nodeslideData';
+import {
+  NODESLIDE_CAPABILITY_BYTES,
+  NODESLIDE_CAPABILITY_PATTERN,
+} from './nodeslideErrorRedaction';
 
-const OWNER_ACCESS_KEY_BYTES = 32;
-const OWNER_ACCESS_KEY_PATTERN = /^[A-Za-z0-9_-]{43}$/;
+// The minter and the scrubber share one definition of a capability's shape.
+// `nodeslideErrorRedaction.ts` matches this exact alphabet and length wherever
+// it appears in persisted error text; if the shape ever changes, both move
+// together instead of the redaction quietly falling behind the credential.
+const OWNER_ACCESS_KEY_BYTES = NODESLIDE_CAPABILITY_BYTES;
+const OWNER_ACCESS_KEY_PATTERN = NODESLIDE_CAPABILITY_PATTERN;
 
 type ReadCtx = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
 

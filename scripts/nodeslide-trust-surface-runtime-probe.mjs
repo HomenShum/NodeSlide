@@ -23,7 +23,11 @@
  * sweep and all perfectly visible to `Element.getAnimations()`.
  *
  * THE FOUR CLAUSES THIS RUNS
- *   A. getAnimations()      — no animation running on a decision affordance.
+ *   A. getAnimations()      — no animation running on a decision affordance, and no transition
+ *                             that can move it toward the ACCEPTED appearance while its
+ *                             declared state stays the same. See "THE NARROWING" below for
+ *                             why the second half is stated by direction rather than by the
+ *                             mere presence of a `transition:` declaration.
  *   B. computed success     — no element whose declared state is pending resolves to a
  *                             success token. This is the clause the static gate reports
  *                             not-run by name.
@@ -92,6 +96,243 @@ export const SUCCESS_TOKENS = ['--ns-positive', '--ns-success', '--ns-good'];
  */
 export const SETTLED_SUCCESS_COPY =
   /\b(accepted|approved|applied|granted|published|done|succeeded|complete|completed)\b/i;
+
+/* ------------------------------------------------------- clause A: which motion is a lie */
+
+/**
+ * THE NARROWING, and why it exists.
+ *
+ * The first version of clause A banned every transition on every node inside a trust surface.
+ * On production that fired exactly once, on the AI composer's web-research consent toggle,
+ * for `transition: all 0.15s` inherited from the shadcn `buttonVariants` base three components
+ * up. Reading the rule that produced that verdict against the thing it actually caught is what
+ * this section is:
+ *
+ *   motion-ladder bans motion on `proposal`, `conflict`, `failed_safe` and diff surfaces, and
+ *   it gives three reasons — motion can hide what changed by moving it while the eye is
+ *   elsewhere, imply a commit that has not happened because arrival reads as acceptance, or
+ *   make a failure look like a loading state. All three are about CONTENT ARRIVING on a review
+ *   surface. None of them is about a button shading on hover. The same skill's rung 2 is
+ *   literally "CSS — hover, focus, open/close, opacity, simple transforms", so the ladder
+ *   blesses the exact treatment its forbidden-surface clause was being read to ban.
+ *
+ * So the ban is kept, and its target is stated precisely instead of by proxy:
+ *
+ *   **A transition is a lie iff it can move the element's paint toward the ACCEPTED
+ *   appearance while the element's DECLARED STATE stays the same.**
+ *
+ * That sentence is the whole clause, and every part of it is load-bearing:
+ *
+ *  - "toward the accepted appearance" — direction, not presence. A hover that shades a
+ *    not-yet-granted control toward the granted hue makes it look granted before it is; a
+ *    hover that shades it toward a neutral surface colour makes no claim about the decision
+ *    at all. Only the first is the bug the rule was written for.
+ *  - "while the declared state stays the same" — the deception is PAINT RUNNING AHEAD OF
+ *    STATE. Endpoints reachable only by a state change are the opposite case: `aria-pressed`
+ *    and `data-*` flip synchronously on click and the paint then catches up over 150ms, so
+ *    the paint LAGS a decision that was already committed. Feedback that lags a committed
+ *    decision is not a claim about an uncommitted one. This is why the probe measures only
+ *    the endpoints reachable through `:hover`, `:focus`, `:focus-visible` and `:active` —
+ *    precisely the paint an element can reach while the DOM still says nothing has changed.
+ *
+ * Keyframe and WAAPI animations are NOT narrowed and stay banned outright: a running
+ * animation is not affordance feedback, it is the arrival/pulse class the ladder names.
+ */
+
+/**
+ * Properties whose transition can carry a claim about the DECISION. Colour moves toward the
+ * accept hue; `opacity` moves an unsettled thing toward settled; `transform` moves a thing
+ * toward dismissal or into a resting position it has not earned.
+ */
+export const DECISION_IMPLYING_PROPERTIES = new Set([
+  'background',
+  'background-color',
+  'color',
+  'fill',
+  'opacity',
+  'transform',
+]);
+
+/**
+ * Tokens that resolve to "this is the decided/accepted look".
+ *
+ * The success tokens are the accepted look for a proposal or a readout. `--primary` is added
+ * because for a two-state control the granted appearance IS the primary fill — the consent
+ * toggle renders `variant="default"` (`bg-primary`) when web egress is on and `variant="ghost"`
+ * (transparent) when it is off, so `--primary` is literally the colour that means "granted"
+ * on the surface this clause was rewritten for.
+ */
+export const ACCEPT_APPEARANCE_TOKENS = [...SUCCESS_TOKENS, '--primary', '--color-accent'];
+
+/** Pseudo-classes an element can enter WITHOUT its declared state changing. */
+export const SAME_STATE_PSEUDOS = ['hover', 'focus', 'focus-visible', 'active'];
+
+/**
+ * How close, in OKLab, an endpoint has to be to an accept appearance before the transition is
+ * reading as "toward accepted".
+ *
+ * OKLab is used rather than raw RGB because the question is perceptual — does this look like
+ * the accept colour to a human deciding something — and RGB distance answers a different
+ * question. 0.10 is comfortably inside "the same colour, slightly different shade" and
+ * comfortably outside the measured live case: the consent toggle's hover endpoint
+ * (`--color-surface-hover`, oklch(0.96 0.015 75), a near-achromatic near-white) sits 0.37 from
+ * `--primary` (oklch(0.62 0.16 35)) and 0.44 from `--color-success`. It is not a near miss.
+ */
+export const ACCEPT_PROXIMITY_OKLAB = 0.1;
+
+/** Parse a computed `rgb()`/`rgba()` string. Returns null for `none`, `transparent`, alpha-0. */
+export function parseColor(value) {
+  const match = /^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:[,\s/]+([\d.]+))?\s*\)$/i.exec(
+    String(value ?? '').trim(),
+  );
+  if (!match) return null;
+  const alpha = match[4] === undefined ? 1 : Number.parseFloat(match[4]);
+  if (!Number.isFinite(alpha) || alpha === 0) return null;
+  return { r: Number(match[1]), g: Number(match[2]), b: Number(match[3]), a: alpha };
+}
+
+/** sRGB (0-255) to OKLab. */
+export function srgbToOklab({ r, g, b }) {
+  const lin = (channel) => {
+    const c = channel / 255;
+    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  };
+  const R = lin(r);
+  const G = lin(g);
+  const B = lin(b);
+  const l = Math.cbrt(0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B);
+  const m = Math.cbrt(0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B);
+  const s = Math.cbrt(0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B);
+  return {
+    L: 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+    a: 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    b: 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
+  };
+}
+
+/**
+ * Any computed colour string to OKLab, or null if it is not comparable paint.
+ *
+ * `oklch()` and `oklab()` are handled natively rather than through an sRGB round trip, and
+ * that is not a nicety — it is the fix for a bug this probe committed on its FIRST live run
+ * after the narrowing. Chromium does not serialize a wide-gamut computed colour down to
+ * `rgb()`: `--primary` came back as the literal string `oklch(0.62 0.16 35)` and the ghost
+ * hover endpoint as `oklch(0.96 0.015 75)`. An rgb-only parser returned null for both, every
+ * distance was therefore null, and the clause concluded "no accept hue nearby" when what it
+ * had actually established was "I could not read either colour". The consent surface passed
+ * for a reason that was not the reason printed next to it.
+ *
+ * That is the probe's own honesty rule 2 turned on itself: an absence assertion from a sensor
+ * that never fired. The parser below is half the fix; the other half is that an uncomparable
+ * endpoint is now reported as UNMEASURABLE rather than silently counted as neutral.
+ */
+export function toOklab(value) {
+  const text = String(value ?? '').trim();
+  const rgb = parseColor(text);
+  if (rgb) return srgbToOklab(rgb);
+
+  const lab = /^okl(ch|ab)\(\s*([^)]+)\)$/i.exec(text);
+  if (!lab) return null;
+  const parts = lab[2].split('/');
+  if (parts[1] !== undefined && Number.parseFloat(parts[1]) === 0) return null; // alpha 0
+  const numbers = parts[0]
+    .trim()
+    .split(/[\s,]+/)
+    .filter(Boolean)
+    .map((part) => (part.endsWith('%') ? Number.parseFloat(part) / 100 : Number.parseFloat(part)));
+  if (numbers.length < 3 || numbers.some((n) => !Number.isFinite(n))) return null;
+  const [first, second, third] = numbers;
+  if (lab[1].toLowerCase() === 'ab') return { L: first, a: second, b: third };
+  const hue = (third * Math.PI) / 180;
+  return { L: first, a: second * Math.cos(hue), b: second * Math.sin(hue) };
+}
+
+/** Perceptual distance between two computed colour strings, or null if either is not paint. */
+export function oklabDistance(left, right) {
+  const x = toOklab(left);
+  const y = toOklab(right);
+  if (!x || !y) return null;
+  return Math.hypot(x.L - y.L, x.a - y.a, x.b - y.b);
+}
+
+/**
+ * Given one same-state endpoint, decide whether it is directional — i.e. whether it moves the
+ * element toward looking accepted. Returns a describing object, or null when the endpoint is
+ * neutral affordance feedback.
+ *
+ * Every branch reports the NUMBER it decided on. "This hover is neutral" is only evidence if
+ * the distance that made it neutral travels with it.
+ */
+export function classifyEndpoint(endpoint, acceptAppearances) {
+  const { property, value, pseudo, restValue } = endpoint;
+  if (!DECISION_IMPLYING_PROPERTIES.has(property)) return null;
+
+  if (property === 'opacity') {
+    const to = Number.parseFloat(value);
+    const from = Number.parseFloat(restValue ?? '1');
+    // "Toward settled" is toward fully opaque. A pending thing rendered at 0.6 that fills in
+    // to 1.0 on hover is being shown at rest as unresolved and on hover as resolved.
+    if (Number.isFinite(to) && Number.isFinite(from) && from < 1 && to > from) {
+      return {
+        ...endpoint,
+        why: `opacity moves ${from} -> ${to}, toward fully settled`,
+        delta: to - from,
+      };
+    }
+    return null;
+  }
+
+  if (property === 'transform') {
+    const to = String(value ?? '').trim();
+    if (to && to !== 'none' && /translate|scale\s*\(\s*0|matrix/i.test(to)) {
+      return {
+        ...endpoint,
+        why: `transform reaches "${to}", a displacement toward dismissal or a resting position`,
+        delta: null,
+      };
+    }
+    return null;
+  }
+
+  // An endpoint that cannot be compared is UNMEASURABLE, not neutral. Silently returning null
+  // here is precisely how the first live run of the narrowed clause cleared the consent surface
+  // while every distance it claimed to have measured was null.
+  if (toOklab(value) === null) {
+    return {
+      ...endpoint,
+      unmeasurable: true,
+      why: `:${pseudo} sets ${property} to "${value}", which is not a colour this probe can place in OKLab`,
+    };
+  }
+  const comparable = Object.entries(acceptAppearances ?? {}).filter(
+    ([, resolved]) => toOklab(resolved) !== null,
+  );
+  if (comparable.length === 0) {
+    return {
+      ...endpoint,
+      unmeasurable: true,
+      why: `no accept appearance resolved to a colour comparable with ${property}="${value}"`,
+    };
+  }
+
+  let nearest = null;
+  for (const [token, resolved] of comparable) {
+    const distance = oklabDistance(value, resolved);
+    if (distance === null) continue;
+    if (!nearest || distance < nearest.distance) nearest = { token, resolved, distance };
+  }
+  if (!nearest || nearest.distance > ACCEPT_PROXIMITY_OKLAB) return null;
+  return {
+    ...endpoint,
+    why: [
+      `:${pseudo} moves ${property} to ${value}, which is ${nearest.distance.toFixed(3)} in OKLab`,
+      `from ${nearest.token}=${nearest.resolved} (threshold ${ACCEPT_PROXIMITY_OKLAB}) — the`,
+      'accepted appearance, reached without the declared state changing',
+    ].join(' '),
+    delta: nearest.distance,
+    token: nearest.token,
+  };
+}
 
 /* ------------------------------------------------------------------------- reach plan */
 
@@ -238,6 +479,105 @@ export function planForCensus(annotated) {
 /* c8 ignore start -- executes in the browser, not under the node test runner */
 export function observeSurfacesInPage(selectors) {
   const CAP = 60;
+  const PSEUDOS = ['hover', 'focus', 'focus-visible', 'active'];
+  const WATCHED = ['background', 'background-color', 'color', 'fill', 'opacity', 'transform'];
+
+  /*
+   * Collect, ONCE per document, every style rule that fires on a same-state pseudo-class.
+   *
+   * These are the endpoints an element can reach while the DOM still declares the same
+   * decision — which is exactly the set clause A now asks about. A rule reachable only by a
+   * class change (the `ghost` -> `default` variant flip when a toggle is actually pressed) is
+   * deliberately NOT here: by the time that class lands, `aria-pressed` and the state
+   * attribute have already flipped, so the paint is lagging a committed decision rather than
+   * running ahead of an uncommitted one.
+   *
+   * Cross-origin sheets throw on `.cssRules`. They are COUNTED, not swallowed: a clause that
+   * concluded "no directional endpoint" while blind to half the stylesheets would be asserting
+   * an absence it never looked for, which is the one thing this probe is built not to do.
+   */
+  const collectPseudoRules = () => {
+    const rules = [];
+    let unreadableSheets = 0;
+    let sheetsRead = 0;
+    const walk = (list) => {
+      for (const rule of list) {
+        if (rule.cssRules && !rule.selectorText) {
+          walk(rule.cssRules); // @media / @supports / @layer
+          continue;
+        }
+        const selectorText = rule.selectorText;
+        if (!selectorText || !rule.style) continue;
+        for (const part of selectorText.split(',')) {
+          const selector = part.trim();
+          const hit = PSEUDOS.find((pseudo) => new RegExp(`:${pseudo}(?![\\w-])`).test(selector));
+          if (!hit) continue;
+          const declarations = [];
+          for (const property of WATCHED) {
+            const value = rule.style.getPropertyValue(property);
+            if (value) declarations.push([property, value.trim()]);
+          }
+          if (declarations.length === 0) continue;
+          // Strip the same-state pseudo-classes so the remainder can be matched against a
+          // real element. `.dark .btn:hover` -> `.dark .btn`; `.group:hover .btn` ->
+          // `.group .btn`, which is still an endpoint reachable with no state change.
+          let base = selector;
+          for (const pseudo of PSEUDOS) {
+            base = base.replace(new RegExp(`:${pseudo}(?![\\w-])`, 'g'), '');
+          }
+          base = base.trim();
+          if (!base || base.includes('::')) continue;
+          rules.push({ pseudo: hit, base, declarations });
+        }
+      }
+    };
+    for (const sheet of document.styleSheets) {
+      let list = null;
+      try {
+        list = sheet.cssRules;
+      } catch {
+        unreadableSheets += 1;
+        continue;
+      }
+      if (!list) {
+        unreadableSheets += 1;
+        continue;
+      }
+      sheetsRead += 1;
+      walk(list);
+    }
+    return { rules, unreadableSheets, sheetsRead };
+  };
+
+  const sheetScan = collectPseudoRules();
+
+  /**
+   * Resolve a DECLARED value (`var(--accent)`, `oklch(...)`, a keyword) to the canonical
+   * `rgb(...)` the compositor would paint, in the cascade scope of the node that would wear
+   * it. Same two-fallback sentinel as `resolveTokens`, generalized: the value is painted
+   * inside two wrappers with different inherited colours, so "resolved" and "fell back to
+   * inherit" stop being the same reading.
+   */
+  const resolveDeclared = (value, scope) => {
+    const read = (fallback) => {
+      const wrap = document.createElement('span');
+      wrap.style.position = 'absolute';
+      wrap.style.opacity = '0';
+      wrap.style.pointerEvents = 'none';
+      wrap.style.color = fallback;
+      const probe = document.createElement('span');
+      wrap.appendChild(probe);
+      scope.appendChild(wrap);
+      probe.style.color = value;
+      const out = getComputedStyle(probe).color;
+      wrap.remove();
+      return out;
+    };
+    const a = read('rgb(1, 2, 3)');
+    const b = read('rgb(4, 5, 6)');
+    if (a !== b || a === 'rgb(1, 2, 3)' || a === 'rgb(4, 5, 6)') return null;
+    return a;
+  };
 
   /*
    * Resolve the success tokens IN THE SCOPE OF THE SURFACE, with a two-fallback sentinel.
@@ -299,6 +639,35 @@ export function observeSurfacesInPage(selectors) {
 
   const motionOf = (el) => {
     const s = getComputedStyle(el);
+
+    // The endpoints THIS node can reach with no state change, each resolved to real paint and
+    // paired with the rest value it would animate away from.
+    const endpoints = [];
+    for (const rule of sheetScan.rules) {
+      let matches = false;
+      try {
+        matches = el.matches(rule.base);
+      } catch {
+        matches = false;
+      }
+      if (!matches) continue;
+      for (const [property, declared] of rule.declarations) {
+        const restValue = s.getPropertyValue(property);
+        const value =
+          property === 'opacity' || property === 'transform'
+            ? declared
+            : resolveDeclared(declared, el);
+        endpoints.push({
+          pseudo: rule.pseudo,
+          property,
+          declared,
+          value,
+          restValue,
+          resolved: value !== null,
+        });
+      }
+    }
+
     return {
       node: describe(el),
       transitionProperty: s.transitionProperty,
@@ -306,6 +675,9 @@ export function observeSurfacesInPage(selectors) {
       animationName: s.animationName,
       animationDuration: s.animationDuration,
       animationIterationCount: s.animationIterationCount,
+      sameStateEndpoints: endpoints.slice(0, 24),
+      sheetsRead: sheetScan.sheetsRead,
+      unreadableSheets: sheetScan.unreadableSheets,
     };
   };
 
@@ -318,6 +690,12 @@ export function observeSurfacesInPage(selectors) {
       continue;
     }
     const tokens = resolveTokens(['--ns-positive', '--ns-success', '--ns-good'], el);
+    // The accepted LOOK, which is a superset of the success tokens: for a two-state control
+    // the granted appearance is the primary fill, not a green.
+    const acceptAppearances = resolveTokens(
+      ['--ns-positive', '--ns-success', '--ns-good', '--primary', '--color-accent'],
+      el,
+    );
 
     // The nodes a decision is actually carried by: the surface itself, its status readouts,
     // and every affordance inside it. Not the whole subtree — a proposal card can contain a
@@ -368,6 +746,7 @@ export function observeSurfacesInPage(selectors) {
       motion: nodes.map(motionOf),
       paint: nodes.map(paintOf),
       successTokens: tokens,
+      acceptAppearances,
     };
   }
   return results;
@@ -405,6 +784,31 @@ const namedAnimation = (name) =>
   String(name ?? 'none')
     .split(',')
     .some((part) => part.trim() && part.trim() !== 'none');
+
+/**
+ * The properties a node ACTUALLY transitions: `transition-property` paired with its matching
+ * `transition-duration`, dropping any pair whose duration is at or below the motion floor.
+ *
+ * The pairing matters. `transition: opacity 0s, background-color 150ms` computes to
+ * `transition-property: opacity, background-color` — reading the property list alone would
+ * report a transition on `opacity` that does not exist. CSS cycles the shorter list, which is
+ * why the duration index wraps.
+ */
+export function transitionedProperties(entry) {
+  const properties = String(entry?.transitionProperty ?? 'none')
+    .split(',')
+    .map((part) => part.trim())
+    .filter((part) => part && part !== 'none');
+  if (properties.length === 0) return [];
+  const durations = String(entry?.transitionDuration ?? '0s')
+    .split(',')
+    .map((part) => part.trim());
+  return properties.filter((_, index) => {
+    const duration = durations[index % durations.length];
+    const value = Number.parseFloat(duration);
+    return Number.isFinite(value) && value > MOTION_FLOOR_SECONDS;
+  });
+}
 
 /** Every paint value on the surface that exactly equals a resolved success token. */
 export function successPaints(observation) {
@@ -482,41 +886,160 @@ export function clauseAnimations(observation, plan) {
     };
   }
 
+  // -- the unnarrowed half. A keyframe or WAAPI animation is never affordance feedback.
   const running = observation.runningAnimations.filter(
     (entry) => entry.playState === 'running' || entry.playState === 'paused',
   );
-  const declared = observation.motion.filter(
-    (entry) => nonZero(entry.transitionDuration) || namedAnimation(entry.animationName),
-  );
+  const animated = observation.motion.filter((entry) => namedAnimation(entry.animationName));
+  if (running.length > 0 || animated.length > 0) {
+    return {
+      clause: 'A',
+      verdict: FAIL,
+      reason: [
+        running.length
+          ? `running: ${running.map((r) => `${r.node} ${r.type}(${r.name}) ${r.playState}`).join(' | ')}`
+          : '',
+        animated.length
+          ? `named animation in the computed cascade: ${animated
+              .map((d) => `${d.node} animation:${d.animationName}/${d.animationDuration}`)
+              .join(' | ')}`
+          : '',
+        `(declared state ${plan.stateAttribute}="${state}")`,
+      ]
+        .filter(Boolean)
+        .join(' ;; '),
+      observed: { state, running, animated },
+    };
+  }
 
-  if (running.length === 0 && declared.length === 0) {
+  // -- the narrowed half. A transition is graded on WHICH property it moves and WHERE to.
+  const decisionTransitions = [];
+  const neutralTransitions = [];
+  for (const entry of observation.motion) {
+    const live = transitionedProperties(entry);
+    if (live.length === 0) continue;
+    const covers = live.includes('all')
+      ? [...DECISION_IMPLYING_PROPERTIES]
+      : live.filter((property) => DECISION_IMPLYING_PROPERTIES.has(property));
+    if (covers.length === 0) {
+      neutralTransitions.push({ node: entry.node, properties: live });
+      continue;
+    }
+    decisionTransitions.push({ entry, covers });
+  }
+
+  if (decisionTransitions.length === 0) {
     return {
       clause: 'A',
       verdict: PASS,
-      reason: `${observation.motion.length} node(s) inspected: no running animation, no non-zero transition or named animation in the computed cascade`,
-      observed: { state, nodesInspected: observation.motion.length },
+      reason:
+        `${observation.motion.length} node(s) inspected: no animation, and no transition on a ` +
+        `decision-implying property${
+          neutralTransitions.length
+            ? `. Neutral affordance transitions only: ${neutralTransitions
+                .map((n) => `${n.node} [${n.properties.join(' ')}]`)
+                .join(' | ')}`
+            : ''
+        }`,
+      observed: { state, nodesInspected: observation.motion.length, neutralTransitions },
+    };
+  }
+
+  const accept = observation.acceptAppearances ?? {};
+  const directional = [];
+  const neutralEndpoints = [];
+  const unmeasurable = [];
+
+  for (const { entry, covers } of decisionTransitions) {
+    if (!Array.isArray(entry.sameStateEndpoints)) {
+      unmeasurable.push(
+        `${entry.node}: transitions ${covers.join('/')} but this observation carries no same-state endpoint measurement`,
+      );
+      continue;
+    }
+    if ((entry.unreadableSheets ?? 0) > 0) {
+      unmeasurable.push(
+        `${entry.node}: ${entry.unreadableSheets} stylesheet(s) could not be read (cross-origin), so the endpoint set is incomplete`,
+      );
+      continue;
+    }
+    const colourish = covers.some((property) => property !== 'opacity' && property !== 'transform');
+    if (colourish && Object.keys(accept).length === 0) {
+      unmeasurable.push(
+        `${entry.node}: transitions a colour property but no accept-appearance token resolved in this document, so "toward accepted" has no reference point`,
+      );
+      continue;
+    }
+    for (const endpoint of entry.sameStateEndpoints) {
+      if (!covers.includes(endpoint.property)) continue;
+      const literal = endpoint.property === 'opacity' || endpoint.property === 'transform';
+      if (!literal && endpoint.resolved !== true) {
+        unmeasurable.push(
+          `${entry.node}: :${endpoint.pseudo} sets ${endpoint.property}: ${endpoint.declared}, which did not resolve to paint in this document`,
+        );
+        continue;
+      }
+      const hit = classifyEndpoint(endpoint, accept);
+      if (hit?.unmeasurable) unmeasurable.push(`${entry.node}: ${hit.why}`);
+      else if (hit) directional.push({ node: entry.node, ...hit });
+      else
+        neutralEndpoints.push({
+          node: entry.node,
+          pseudo: endpoint.pseudo,
+          property: endpoint.property,
+          value: endpoint.value,
+        });
+    }
+  }
+
+  if (directional.length > 0) {
+    return {
+      clause: 'A',
+      verdict: FAIL,
+      reason: `transition moves this surface toward the ACCEPTED appearance with no state change: ${directional
+        .map((d) => `${d.node} ${d.why}`)
+        .join(' | ')} ;; (declared state ${plan.stateAttribute}="${state}")`,
+      observed: { state, directional, acceptAppearances: accept },
+    };
+  }
+  if (unmeasurable.length > 0) {
+    return {
+      clause: 'A',
+      verdict: NOT_RUN,
+      reason: [
+        'a decision-implying transition was found but its endpoints could not be measured, and',
+        `an unmeasured endpoint is not a neutral one: ${unmeasurable.join(' | ')}`,
+      ].join(' '),
+      observed: { state, unmeasurable, acceptAppearances: accept },
     };
   }
   return {
     clause: 'A',
-    verdict: FAIL,
-    reason: [
-      running.length
-        ? `running: ${running.map((r) => `${r.node} ${r.type}(${r.name}) ${r.playState}`).join(' | ')}`
-        : '',
-      declared.length
-        ? `computed motion: ${declared
-            .map(
-              (d) =>
-                `${d.node} transition:${d.transitionProperty}/${d.transitionDuration} animation:${d.animationName}/${d.animationDuration}`,
-            )
-            .join(' | ')}`
-        : '',
-      `(declared state ${plan.stateAttribute}="${state}")`,
-    ]
-      .filter(Boolean)
-      .join(' ;; '),
-    observed: { state, running, declared },
+    verdict: PASS,
+    reason:
+      `${observation.motion.length} node(s) inspected; ${decisionTransitions.length} carry a transition on a ` +
+      `decision-implying property, and every endpoint reachable without a state change is neutral: ${
+        neutralEndpoints.length
+          ? neutralEndpoints
+              .map((n) => `${n.node} :${n.pseudo} ${n.property}=${n.value}`)
+              .join(' | ')
+          : 'no :hover/:focus/:active rule reaches these nodes at all, so the transition has no same-state endpoint to animate toward'
+      }. Accept appearances compared against: ${Object.entries(accept)
+        .map(([token, value]) => `${token}=${value}`)
+        .join(' ')}`,
+    observed: {
+      state,
+      neutralEndpoints,
+      acceptAppearances: accept,
+      // Serialized as text, not as an array of one word per line. `JSON.stringify(_, null, 2)`
+      // always expands an array while the repo formatter collapses a short one, so an array
+      // here makes every regenerated receipt fail `biome check` — a gate whose own artifact
+      // breaks the lint gate is a gate people start skipping.
+      decisionTransitions: decisionTransitions.map(({ entry, covers }) => ({
+        node: entry.node,
+        transitions: covers.join(' '),
+      })),
+    },
   };
 }
 
@@ -1116,6 +1639,30 @@ ${KNOCKOUT_TARGET} {
   })()`,
 };
 
+/**
+ * THE SECOND KNOCKOUT — the one that guards the narrowing itself.
+ *
+ * `KNOCKOUT` above proves the probe can still see motion at all. It does NOT prove the
+ * narrowed clause A can still tell a deception from an affordance, because it fails clause A
+ * on an infinite keyframe animation, which the narrowing never touched.
+ *
+ * This one is aimed at the exact surface the narrowing cleared, and it changes exactly one
+ * thing: the hover endpoint of the UNGRANTED consent toggle becomes the granted fill. Nothing
+ * else moves — same duration, same property, same element, same declared state. The only
+ * difference between the production styling (which now passes) and this (which must fail) is
+ * the DIRECTION the colour travels. If clause A cannot separate those two, the narrowing was
+ * an allowlist wearing a lab coat and this run says so.
+ */
+export const DIRECTIONAL_KNOCKOUT_TARGET = '[data-testid="ai-web-research-toggle"]';
+
+const DIRECTIONAL_KNOCKOUT = {
+  css: `
+${DIRECTIONAL_KNOCKOUT_TARGET}:hover {
+  background-color: var(--primary) !important;
+}
+`,
+};
+
 function parseArgs(argv) {
   const args = {
     baseUrl: process.env['NODESLIDE_PROBE_BASE_URL'] ?? DEFAULT_BASE_URL,
@@ -1203,7 +1750,26 @@ if (process.argv[1]?.endsWith('nodeslide-trust-surface-runtime-probe.mjs')) {
       // that stopped rendering. Arm the sensor before trusting its red, exactly as the
       // clauses themselves do.
       const reachedBoth = cleanRow?.reached === true && poisonedRow?.reached === true;
-      const ok = reachedBoth && flipped.length >= 3;
+
+      /*
+       * The narrowing's own knockout. Clause A on the CONSENT toggle must be `passed` clean —
+       * that is the whole verdict this change rests on — and must flip to `failed` when the
+       * one thing that changes is the direction its hover colour travels.
+       */
+      const directional = await runTrustSurfaceProbe({
+        browser,
+        baseUrl: args.baseUrl,
+        knockout: DIRECTIONAL_KNOCKOUT,
+      });
+      const consentClean = clean.surfaces.find((s) => s.selector === DIRECTIONAL_KNOCKOUT_TARGET)
+        ?.clauses?.A_noAnimationOnDecisionAffordance;
+      const consentPoisoned = directional.surfaces.find(
+        (s) => s.selector === DIRECTIONAL_KNOCKOUT_TARGET,
+      )?.clauses?.A_noAnimationOnDecisionAffordance;
+      const directionProved =
+        consentClean?.verdict === 'passed' && consentPoisoned?.verdict === 'failed';
+
+      const ok = reachedBoth && flipped.length >= 3 && directionProved;
 
       console.log('\n=== KNOCKOUT SELFTEST ===');
       console.log(`  target: ${KNOCKOUT_TARGET}`);
@@ -1214,6 +1780,12 @@ if (process.argv[1]?.endsWith('nodeslide-trust-surface-runtime-probe.mjs')) {
           `    ${entry.clause}: ${entry.before} -> ${entry.after}\n        ${entry.reason}`,
         );
       }
+      console.log('\n=== DIRECTIONAL KNOCKOUT (guards the clause-A narrowing) ===');
+      console.log(`  target: ${DIRECTIONAL_KNOCKOUT_TARGET}`);
+      console.log(`  clause A clean    : ${consentClean?.verdict}`);
+      console.log(`  clause A poisoned : ${consentPoisoned?.verdict}`);
+      console.log(`  ${consentPoisoned?.reason ?? '(no reason)'}`);
+      console.log(`  DIRECTION PROVED: ${directionProved}`);
       await fs.mkdir(path.join(root, path.dirname(args.out)), { recursive: true });
       await fs.writeFile(
         path.join(root, args.out.replace(/\.json$/, '.knockout.json')),
@@ -1229,6 +1801,13 @@ if (process.argv[1]?.endsWith('nodeslide-trust-surface-runtime-probe.mjs')) {
             knockoutProved: ok,
             cleanRow,
             poisonedRow,
+            directionalKnockout: {
+              target: DIRECTIONAL_KNOCKOUT_TARGET,
+              css: DIRECTIONAL_KNOCKOUT.css,
+              clean: consentClean,
+              poisoned: consentPoisoned,
+              directionProved,
+            },
           },
           null,
           2,

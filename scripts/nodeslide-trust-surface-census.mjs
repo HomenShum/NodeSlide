@@ -377,22 +377,13 @@ export const MOTION_DECEPTION_CORPUS = [
     ],
     why: 'Detected at the DECLARATION SITE, in all five routes source can express. Not proof of absence: motion injected at runtime (a class added by script, a stylesheet fetched at runtime, a third-party widget) is still invisible here, and the cascade half of clause 3 stays not-run.',
     /*
-     * The shipped-product exemplar of the rule this class violates. Recorded as a link and a
-     * sentence, never a stored image: Mobbin's terms are download:false / cache:false, so an
-     * observation may be cited and a screenshot may not be kept.
-     *
-     * PROVENANCE IS PART OF THE RECORD. This was reported to me as a live Mobbin observation;
-     * it was NOT re-verified during this run, because the Mobbin connector was unauthenticated
-     * in this session. It is cited as supporting evidence for a rule that stands on its own
-     * reasoning, not as a measurement this gate took.
+     * This static deception fixture has no external-reference provenance. A
+     * previously reported Mobbin screen description was removed because no
+     * authenticated run bound that description to an observation digest. The
+     * current authenticated Figma Slides flow facts live in
+     * shared/nodeslideReferenceKnowledge.ts and do not support this unrelated
+     * pending-card rule.
      */
-    reference: {
-      url: 'https://mobbin.com/screens/b727d76e-6475-4a20-a8bd-d0ad05569b30',
-      observation:
-        'Grammarly web suggestion card: the Accept BUTTON carries the green fill while the undecided CARD stays neutral. The affordance is coloured; the pending container is not. That split is the whole rule — colour the thing you may press, never the thing awaiting your decision.',
-      verified: false,
-      note: 'reported live-product observation; not independently re-verified in this run (Mobbin connector unauthenticated). Link and observation only — no image stored.',
-    },
   },
   {
     id: 5,

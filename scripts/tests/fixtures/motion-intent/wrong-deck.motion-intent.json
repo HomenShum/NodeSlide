@@ -1,0 +1,7 @@
+{
+  "_comment": "KNOCKOUT FIXTURE. Structurally valid, and authored for a different artefact. Applying it to any other deck must fail on the binding rather than silently excuse a deck nobody wrote it for — copy-paste onto a neighbouring deck is the most likely way an excuse lands where it was never authored.",
+  "schemaVersion": "nodeslide.motion-intent/v1",
+  "deck": "a-completely-different-deck.pptx",
+  "intent": "static",
+  "rationale": "Belongs to another deck entirely."
+}

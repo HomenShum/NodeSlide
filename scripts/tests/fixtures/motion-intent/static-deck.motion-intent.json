@@ -1,0 +1,8 @@
+{
+  "_comment": "KNOCKOUT FIXTURE. A well-formed deck-level static declaration. Used twice: once over a deck that genuinely has no motion (must report not-applicable, exit 3) and once over a deck carrying a real timing tree (must FAIL — a claim contradicted by its own artefact is a defect, not a pass).",
+  "schemaVersion": "nodeslide.motion-intent/v1",
+  "deck": "declared-static-fixture.pptx",
+  "recipe": "scripts/tests/fixtures/motion-intent/static-deck.motion-intent.json",
+  "intent": "static",
+  "rationale": "Fixture deck. Its recipe never asked for motion, so an absence of <p:timing> is the intended outcome rather than a loss."
+}

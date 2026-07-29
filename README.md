@@ -42,6 +42,20 @@ Unedited recording against the deployed Convex backend and the live Kimi K3 rout
 
 Nothing in the agent loop is mocked. That clip is the product thesis: agent edits are reviewable diffs on a typed document, never silent overwrites.
 
+### The NodeSlide walkthrough clips — three doors
+
+Three clips are published. Lengths are `ffprobe` readings of the source renders, not estimates:
+
+| Clip | Length | Audio | Journey |
+|---|---|---|---|
+| [NodeSlide — decks that stay editable, built from a brief](https://youtu.be/M9cc5Gj1pQE) | 23s | silent | S1 + S2 — brief → deck → the audit tabs |
+| [NodeSlide — the full walkthrough, narrated](https://youtu.be/5FnzEKmm9fw) | 82s | local-TTS voiceover | S1 + S2 in one continuous pass |
+| [NodeSlide — the other five doors, narrated](https://youtu.be/eCMEWKoq5C0) | 115s | local-TTS voiceover | S3 BYOK/Agents · S4 Artifact Lab · S5 Present · S6 link-guard refusal · S7 Export |
+
+<sub>Unlike the two production recordings above, these three were captured against the app running locally on `localhost:5180`.</sub>
+
+<sub>**Coverage, honestly.** These cover **7 of the 7 NodeSlide journeys** on the journey map; across both products the tally is **10 of 13 journeys shot, 0 reachable and unshot** — all three remaining entries are NodeRoom's (R5 declined by the owner, R4 the same root cause, R6 not a distinct journey after probing). Journey coverage is not control coverage: the S1 capture touches **8/91** controls across the landing (13) and the deck editor (78), and S4's Artifact Lab alone is **207 controls**. These are journey clips, not control sweeps.</sub>
+
 ---
 
 ## Why
@@ -309,7 +323,7 @@ The disclosure discipline from the AI Fund Build Challenge template, kept as a p
 
 **What I reused (disclosed).** React 19 / Vite / Convex / Tailwind; shadcn + Radix interaction primitives; Vercel AI Elements (prompt input, thread pieces); OpenRouter for model routing (Kimi K3 default). Reuse is a feature: the edge is the governance and proof glue, not re-implementing editors.
 
-**What broke and how I debugged it.** The agent route itself. The default model route was dead (missing key + model absent from the client catalog), and Kimi K3 initially returned *empty content* — `reasoning: true` consumed the token budget before any text. Root-caused request-by-request against the OpenRouter API, registered the model with honest pricing so cost receipts are non-zero, promoted it to the validated default, pinned with tests. The demo video above is that same route working end to end; the failure, fix, and proof are all in this repo's git history.
+**What broke and how I debugged it.** The agent route itself. The default model route was dead (missing key + model absent from the client catalog), and Kimi K3 initially returned *empty content* — `reasoning: true` consumed the token budget before any text. Root-caused request-by-request against the OpenRouter API, registered the model with honest pricing so cost receipts are non-zero, promoted it to the validated default, pinned with tests. The 2 min 26 s production demo above is that same route working end to end; the failure, fix, and proof are all in this repo's git history.
 
 ## Trust & verification
 

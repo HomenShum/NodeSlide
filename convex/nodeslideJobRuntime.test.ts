@@ -175,17 +175,30 @@ describe('nodeslide durable job runtime dependencies', () => {
       // error proves the start mutation is doing work rather than declining it.
       // This is the positive half of the refusal: it is exactly the assertion
       // that would go quietly green if it were written as `if (absent) return`.
-      for (const [name, start, args] of [
-        ['startCreateDeck', startCreateDeck, CREATE_ARGS],
-        ['startEditProposal', startEditProposal, EDIT_ARGS],
-      ] as const) {
-        const error = await rawHandler(start)(forbiddenCtx(), args).catch(
-          (thrown: unknown) => thrown,
-        );
-        expect(error, `${name} resolved without a ctx that can satisfy it`).toBeInstanceOf(Error);
-        expect((error as Error).message, name).toMatch(/touched the database/i);
-        expect((error as Error).message, name).not.toMatch(/durable jobs are unavailable/i);
-      }
+      //
+      // Only the create path is asserted here. `startEditProposal` now refuses
+      // at enqueue for a DIFFERENT and narrower reason — `nodeslideAgent.
+      // proposeEdit` does not declare four of the arguments the runner sends it
+      // — so its sibling modules being on disk no longer implies it can run.
+      // That refusal is specified in `nodeslideJobSeam.test.ts`; asserting it
+      // here too would make this test pass for a reason it does not measure.
+      const error = await rawHandler(startCreateDeck)(forbiddenCtx(), CREATE_ARGS).catch(
+        (thrown: unknown) => thrown,
+      );
+      expect(error, 'startCreateDeck resolved without a ctx that can satisfy it').toBeInstanceOf(
+        Error,
+      );
+      expect((error as Error).message).toMatch(/touched the database/i);
+      expect((error as Error).message).not.toMatch(/durable jobs are unavailable/i);
+
+      // The edit start must still refuse before the database, and must not
+      // borrow the orchestrator guard's wording to do it.
+      const editError = await rawHandler(startEditProposal)(forbiddenCtx(), EDIT_ARGS).catch(
+        (thrown: unknown) => thrown,
+      );
+      expect(editError).toBeInstanceOf(Error);
+      expect((editError as Error).message).not.toMatch(/touched the database/i);
+      expect((editError as Error).message).toMatch(/durable edit jobs are unavailable/i);
     },
   );
 

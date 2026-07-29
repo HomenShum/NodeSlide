@@ -142,6 +142,60 @@ function requireJobOrchestrator(): void {
   );
 }
 
+/**
+ * Arguments `nodeslideJobRunner.executeEditProposalInternal` sends to
+ * `nodeslideAgent.proposeEdit` that the action does not declare.
+ *
+ * The create half of this seam was ported: `createDeckFromBrief` now declares
+ * `durableJob` AND binds its output identity to the job id, so a job-driven
+ * create is refused for free when the binding is wrong and otherwise produces
+ * the deck the runner is waiting for.
+ *
+ * The edit half is deliberately NOT ported, because a faithful port is not
+ * available in this repo and a partial one would be worse than a refusal:
+ *
+ *  - `maxCostUsd` is a caller-supplied HARD SPEND CEILING. `proposeEdit` derives
+ *    its run budget from the instruction text alone. Declaring the field without
+ *    honouring it would accept a dollar limit and then ignore it — a lie about
+ *    money, which is a strictly worse failure than rejecting the call.
+ *  - `sourceRefreshBinding` names a proposal/snapshot pair that this repo has no
+ *    feature to honour.
+ *  - `clientSessionId` and `durableJob` are portable on their own, but porting
+ *    only the portable two leaves the other two silently dropped.
+ *
+ * So the refusal moves to the FRONT of the start mutation. Before this guard the
+ * request was admitted, charged against the edit quota, given a budget ledger
+ * row and a workflow, and then died ~7s later inside the runner with a raw
+ * `ArgumentValidationError`. Nothing was reachable at the end of that path; the
+ * only thing it produced was a failed job and a spent quota unit.
+ *
+ * `nodeslideJobSeam.test.ts` derives this list from the two validators and fails
+ * when it drifts in either direction — so porting `proposeEdit` without deleting
+ * the corresponding entry here is a red test, and so is claiming a field is
+ * unported when the action declares it.
+ */
+export const NODESLIDE_UNPORTED_EDIT_PROPOSAL_ARGS = [
+  'clientSessionId',
+  'durableJob',
+  'maxCostUsd',
+  'sourceRefreshBinding',
+] as const;
+
+/**
+ * Fail closed at the front of `startEditProposal`, before the idempotency
+ * lookup, the quota, the budget row, and the workflow start.
+ *
+ * A durable edit job cannot succeed while the seam above is open. Refusing at
+ * enqueue costs the caller nothing and names the missing seam; the alternative
+ * that shipped until now was to accept the request and fail after the work had
+ * been scheduled.
+ */
+function requireEditProposalSeam(): void {
+  throw new Error(
+    `NodeSlide durable edit jobs are unavailable: nodeslideAgent.proposeEdit does not declare ${NODESLIDE_UNPORTED_EDIT_PROPOSAL_ARGS.join(', ')}, which nodeslideJobRunner.executeEditProposalInternal sends on every attempt. No job was created, no quota was consumed, and no provider call was made. Use the synchronous nodeslideAgent.proposeEdit action, which is unaffected.`,
+  );
+}
+
 const NODESLIDE_PREVIEW_ACCESS_CODE_ENV = 'NODESLIDE_PREVIEW_ACCESS_CODE';
 const NODESLIDE_PREVIEW_ADMISSION_SUBJECT_ENV = 'NODESLIDE_PREVIEW_ADMISSION_SUBJECT';
 const NODESLIDE_PUBLIC_CREATION_ENV = 'NODESLIDE_PUBLIC_CREATION';
@@ -342,6 +396,7 @@ export const startEditProposal = mutation({
   },
   handler: async (ctx, args) => {
     requireJobOrchestrator();
+    requireEditProposalSeam();
     const ownerAccessKey = requiredOwnerAccessKey(args.ownerAccessKey);
     const clientSessionId = requiredText(args.clientSessionId, 'clientSessionId', 256);
     const idempotencyKey = requiredText(args.idempotencyKey, 'idempotencyKey', 160);

@@ -49,9 +49,9 @@ function permissiveLedgerView(callStatus?: 'reserved' | 'settled') {
             callId: 'call_admission_stub',
             status: callStatus,
             quoteMicroUsd: 5_000_000,
-            // 10k total across the two attempts leaves the create path its full
-            // 5k-token per-attempt request instead of silently halving it.
-            providerSafeOutputTokenCeiling: 10_000,
+            // 20k total across the two attempts leaves the create path its full
+            // 10k-token per-attempt request instead of silently halving it.
+            providerSafeOutputTokenCeiling: 20_000,
             providerTimeoutMs: 300_000,
           },
         }

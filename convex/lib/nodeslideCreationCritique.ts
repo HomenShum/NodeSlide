@@ -720,7 +720,16 @@ function comparisonArtifactHasPlottableSignal(artifactSpec: Record<string, unkno
   });
 }
 
-function repairCreationVisualLogic(rawSpec: unknown): {
+function briefForbidsIllustrativeQuantities(brief: DeckBrief): boolean {
+  return /\b(?:never|do not|don't|must not|no)\s+(?:\w+\s+){0,3}(?:invent|fabricat|make up)\w*\s+(?:\w+\s+){0,3}(?:numbers?|figures?|data|metrics?|outcomes?)\b/iu.test(
+    `${brief.prompt} ${brief.purpose} ${brief.successCriteria.join(' ')}`,
+  );
+}
+
+function repairCreationVisualLogic(
+  rawSpec: unknown,
+  brief: DeckBrief,
+): {
   spec: unknown;
   repairCount: number;
 } {
@@ -735,9 +744,21 @@ function repairCreationVisualLogic(rawSpec: unknown): {
     const authoredPayload = isCreationSpecRecord(authoredArtifact)
       ? authoredArtifact['payload']
       : undefined;
+    const authoredProvenance = isCreationSpecRecord(authoredArtifact)
+      ? authoredArtifact['provenance']
+      : undefined;
+    const authoredTruthState = isCreationSpecRecord(authoredProvenance)
+      ? authoredProvenance['truthState']
+      : undefined;
+    const violatesBriefTruthPolicy =
+      briefForbidsIllustrativeQuantities(brief) &&
+      isCreationSpecRecord(authoredArtifact) &&
+      ['chart', 'comparison'].includes(String(authoredArtifact['kind'])) &&
+      ['illustrative', 'estimated'].includes(String(authoredTruthState));
     const unsupportedAuthoredArtifact =
       isCreationSpecRecord(authoredArtifact) &&
-      (authoredArtifact['kind'] === 'evidence-media' ||
+      (violatesBriefTruthPolicy ||
+        authoredArtifact['kind'] === 'evidence-media' ||
         (authoredArtifact['kind'] === 'generic' &&
           (!isCreationSpecRecord(authoredPayload) ||
             authoredPayload['displayValue'] === undefined ||
@@ -748,7 +769,13 @@ function repairCreationVisualLogic(rawSpec: unknown): {
         (authoredArtifact['kind'] === 'comparison' &&
           !comparisonArtifactHasPlottableSignal(authoredArtifact)));
     if (unsupportedAuthoredArtifact) {
-      const { artifactSpec: _unsupportedArtifact, ...withoutArtifact } = slide;
+      const {
+        artifactSpec: _unsupportedArtifact,
+        chart: _unsupportedChart,
+        metric: _unsupportedMetric,
+        metricLabel: _unsupportedMetricLabel,
+        ...withoutArtifact
+      } = slide;
       slide = withoutArtifact;
       if (
         authoredArtifact['kind'] === 'evidence-media' &&
@@ -832,7 +859,7 @@ function hasRenderableVideo(value: unknown): boolean {
 export async function runNodeSlideCreationCritique(
   input: RunNodeSlideCreationCritiqueInput,
 ): Promise<NodeSlideCreationCritiqueOutcome> {
-  const firstRepair = repairCreationVisualLogic(input.firstSpec);
+  const firstRepair = repairCreationVisualLogic(input.firstSpec, input.brief);
   const firstSpec = firstRepair.spec;
   const repairSummary =
     firstRepair.repairCount > 0
@@ -894,7 +921,7 @@ export async function runNodeSlideCreationCritique(
     };
   }
 
-  const secondRepair = repairCreationVisualLogic(revision.value);
+  const secondRepair = repairCreationVisualLogic(revision.value, input.brief);
   const secondReport = collectNodeSlideCreationQualityReport({
     ...reportInput,
     rawSpec: secondRepair.spec,

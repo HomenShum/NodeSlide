@@ -433,6 +433,53 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(JSON.stringify(outcome.spec)).not.toContain('Typed artifact');
   });
 
+  it('removes an illustrative outlook chart when the board brief forbids invented numbers', async () => {
+    const strictBoardBrief = {
+      ...ROADSHOW_BRIEF,
+      prompt: `${ROADSHOW_BRIEF.prompt} Never invent missing numbers.`,
+    };
+    const degradedSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 4
+          ? {
+              ...slide,
+              chart: { labels: ['Q1', 'Q2', 'Outlook'], values: [0.8, 1.1, 1.5] },
+              artifactSpec: {
+                schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+                id: 'illustrative-outlook',
+                kind: 'chart',
+                narrativeJob: 'Show the medium-term outlook.',
+                provenance: {
+                  truthState: 'illustrative',
+                  rationale: 'The filing values were not retrieved.',
+                  sourceRefs: [],
+                },
+                payload: {
+                  labels: ['Q1', 'Q2', 'Outlook'],
+                  values: [0.8, 1.1, 1.5],
+                  unit: 'normalized',
+                },
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      brief: strictBoardBrief,
+      firstSpec: degradedSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlide = (outcome.spec as typeof degradedSpec).slides[4];
+
+    expect(repairedSlide).not.toHaveProperty('artifactSpec');
+    expect(repairedSlide).not.toHaveProperty('chart');
+    expect(JSON.stringify(outcome.spec)).not.toContain('illustrative-outlook');
+  });
+
   it('runs exactly one revision and adopts a corrected pass 2', async () => {
     const requestRevision = vi.fn(
       async (promptReport: string): Promise<NodeSlideProviderResult> => {

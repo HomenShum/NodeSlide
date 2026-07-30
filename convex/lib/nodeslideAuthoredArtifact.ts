@@ -638,15 +638,15 @@ function compileCanonicalPayload(spec: NodeSlideCanonicalArtifactSpec): {
           },
         };
       }
-      return {
-        planned: {
-          metric: `${cohorts.length} cohorts`,
-          metricLabel: `${metric?.id ?? 'Comparison'} — no compatible plotted metric`,
+      throw new NodeSlideAuthoredArtifactValidationError([
+        {
+          code: 'comparison_without_plottable_signal',
+          severity: 'error',
+          message: 'Comparison requires one metric with at least two finite cohort values.',
+          path: '$.payload.cohorts',
+          repair: { operation: 'remove', path: '$.artifactSpec' },
         },
-        projection: summaryProjection('comparison', [
-          'No metric had at least two finite cohort values; an explicit summary is used.',
-        ]),
-      };
+      ]);
     }
     case 'equation': {
       const expression = expressionToText(spec.payload.expression);

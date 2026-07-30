@@ -278,36 +278,32 @@ describe('NodeSlide creation quality report', () => {
     ).toMatchObject({ severity: 'error' });
   });
 
-  it(
-    'keeps the visual-logic report bounded during a recurring 100-deck portfolio review',
-    () => {
-      const recurringPortfolioSpec = {
-        ...CORRECTED_SPEC,
-        slides: CORRECTED_SPEC.slides.map((slide, index) =>
-          index === 5
-            ? {
-                ...slide,
-                image: {
-                  altText: 'Missing portfolio-company product capture',
-                  credit: 'Pending portfolio update',
-                },
-              }
-            : slide,
-        ),
-      };
+  it('keeps the visual-logic report bounded during a recurring 100-deck portfolio review', () => {
+    const recurringPortfolioSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 5
+          ? {
+              ...slide,
+              image: {
+                altText: 'Missing portfolio-company product capture',
+                credit: 'Pending portfolio update',
+              },
+            }
+          : slide,
+      ),
+    };
 
-      const reports = Array.from({ length: 100 }, () => reportFor(recurringPortfolioSpec));
+    const reports = Array.from({ length: 100 }, () => reportFor(recurringPortfolioSpec));
 
-      expect(
-        reports.every(
-          (report) =>
-            report.visualRhythmIssues.length <= 12 &&
-            report.visualRhythmIssues.some((issue) => issue.code === 'visual_placeholder_hero'),
-        ),
-      ).toBe(true);
-    },
-    15_000,
-  );
+    expect(
+      reports.every(
+        (report) =>
+          report.visualRhythmIssues.length <= 12 &&
+          report.visualRhythmIssues.some((issue) => issue.code === 'visual_placeholder_hero'),
+      ),
+    ).toBe(true);
+  }, 15_000);
 
   it('bounds the prompt report payload', () => {
     const promptReport = nodeSlideCreationCritiquePromptReport(reportFor(FLAWED_SPEC));

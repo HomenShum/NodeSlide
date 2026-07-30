@@ -285,6 +285,55 @@ describe('NodeSlide seed', () => {
     ]);
   });
 
+  it('repairs matrix prose after malformed visuals are discarded at the typed boundary', () => {
+    const brief = {
+      prompt: 'Prepare an executive risk-gate decision.',
+      audience: 'Risk committee',
+      purpose: 'Decide whether a model can enter production',
+      successCriteria: ['Never invent quantitative evidence'],
+    };
+    const slides = Array.from({ length: 6 }, (_, index) => ({
+      title: index === 4 ? 'Residual Risk on One Matrix' : `Decision ${index + 1}`,
+      section: index < 2 ? 'Build' : 'Prove',
+      headline:
+        index === 4
+          ? 'The candidate is positioned in the amber band.'
+          : `Grounded decision ${index + 1}`,
+      body:
+        index === 4
+          ? 'Plotted on likelihood and impact axes, the model sits above tolerance.'
+          : 'Keep the decision grounded in verified evidence.',
+      bullets: ['Evidence owner', 'Verified source', 'Release decision'],
+      ...(index === 4
+        ? {
+            metric: '94%',
+            diagram: {
+              kind: 'architecture',
+              direction: 'horizontal',
+              nodes: [{ id: 'orphan', label: '' }],
+              edges: [{ from: 'orphan', to: 'missing' }],
+            },
+          }
+        : {}),
+    }));
+
+    const repaired = coerceBriefSpec({ title: 'Risk gate', slides }, 'Risk gate', brief).slides[4];
+
+    expect(repaired).toMatchObject({
+      headline: 'The release gate stays closed until the evidence is verified',
+      diagram: {
+        kind: 'architecture',
+        edges: [
+          { from: 'evidence-1', to: 'evidence-2', label: 'then' },
+          { from: 'evidence-2', to: 'evidence-3', label: 'then' },
+          { from: 'evidence-3', to: 'claim', label: 'unlocks' },
+        ],
+      },
+    });
+    expect(repaired).not.toHaveProperty('metric');
+    expect(JSON.stringify(repaired)).not.toMatch(/\b(?:plotted|axes|amber band)\b/i);
+  });
+
   it('keeps a CFO decision metric clear of its explanation in the rendered stat panel', () => {
     const baseSlide = (index: number) => ({
       title: `Slide ${index + 1}`,

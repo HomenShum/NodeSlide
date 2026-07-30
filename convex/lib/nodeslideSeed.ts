@@ -2572,18 +2572,20 @@ function coercePlannedSlide(
   // Numeric semantics win first, followed by explicit relationships, formula,
   // image, and video. The critique reports the conflict and requests a revision.
   const chart = explicitChart;
-  const diagram = chart ? undefined : explicitDiagram;
-  const formula = chart || diagram ? undefined : explicitFormula;
-  const image = chart || diagram || formula ? undefined : explicitImage;
-  const video = chart || diagram || formula || image ? undefined : explicitVideo;
+  const suppliedDiagram = chart ? undefined : explicitDiagram;
+  const missingQuantitativeFrame =
+    !chart &&
+    !suppliedDiagram &&
+    plannedCopyClaimsQuantitativeFrame({ title, headline, body, bullets });
   const quantitativeGap = quarantinedMisalignedChart && !chart;
-  const safeHeadline = quantitativeGap
+  const quarantinedQuantitative = quantitativeGap || missingQuantitativeFrame;
+  const safeHeadline = quarantinedQuantitative
     ? 'The release gate stays closed until the evidence is verified'
     : headline;
-  const safeBody = quantitativeGap
+  const safeBody = quarantinedQuantitative
     ? 'The supplied series is not valid aligned evidence, so NodeSlide does not invent a quantitative outlook. Publication resumes when exact values and source citations are attached.'
     : body;
-  const safeBullets = quantitativeGap
+  const safeBullets = quarantinedQuantitative
     ? [
         'Hold the release decision',
         'Align every value to a labeled category',
@@ -2592,14 +2594,22 @@ function coercePlannedSlide(
     : bullets.length > 0
       ? bullets
       : ['Context', 'Action', 'Outcome'];
+  const diagram =
+    suppliedDiagram ??
+    (missingQuantitativeFrame
+      ? buildPostCoercionEvidenceDiagram(safeBullets, safeHeadline)
+      : undefined);
+  const formula = chart || diagram ? undefined : explicitFormula;
+  const image = chart || diagram || formula ? undefined : explicitImage;
+  const video = chart || diagram || formula || image ? undefined : explicitVideo;
   return {
     title,
     section,
     headline: safeHeadline,
     body: safeBody,
     bullets: safeBullets,
-    ...(!quantitativeGap && metric ? { metric } : {}),
-    ...(!quantitativeGap && metricLabel ? { metricLabel } : {}),
+    ...(!quarantinedQuantitative && metric ? { metric } : {}),
+    ...(!quarantinedQuantitative && metricLabel ? { metricLabel } : {}),
     ...(chart ? { chart } : {}),
     ...(diagram ? { diagram } : {}),
     ...(formula ? { formula } : {}),
@@ -2608,6 +2618,44 @@ function coercePlannedSlide(
     ...(authoredArtifact ? { authoredArtifactCompilation: authoredArtifact.receipt } : {}),
     ...(authoredArtifact ? { authoredArtifactSpec: authoredArtifact.spec } : {}),
     ...(authoredArtifact?.geometry ? { authoredArtifactGeometry: authoredArtifact.geometry } : {}),
+  };
+}
+
+function plannedCopyClaimsQuantitativeFrame(input: {
+  title: string;
+  headline: string;
+  body: string;
+  bullets: string[];
+}): boolean {
+  const copy = [input.title, input.headline, input.body, ...input.bullets].join(' ');
+  return (
+    /\b(?:plotted|plotting|mapped|position(?:ed|ing)?|placement)\b/iu.test(copy) &&
+    /\b(?:axes?|matrix|quadrant|heatmap|band)\b/iu.test(copy)
+  );
+}
+
+function buildPostCoercionEvidenceDiagram(
+  bullets: string[],
+  headline: string,
+): NodeSlidePlannedDiagram {
+  const evidenceNodes: NodeSlidePlannedDiagramNode[] = bullets.slice(0, 3).map((label, index) => ({
+    id: `evidence-${index + 1}`,
+    label: label.slice(0, 80),
+    kind: 'system',
+  }));
+  const nodes: NodeSlidePlannedDiagramNode[] = [
+    ...evidenceNodes,
+    { id: 'claim', label: headline.slice(0, 80), kind: 'decision' },
+  ];
+  return {
+    kind: 'architecture',
+    direction: 'horizontal',
+    nodes,
+    edges: nodes.slice(0, -1).map((node, index) => ({
+      from: node.id,
+      to: nodes[index + 1]?.id ?? 'claim',
+      label: index === nodes.length - 2 ? 'unlocks' : 'then',
+    })),
   };
 }
 

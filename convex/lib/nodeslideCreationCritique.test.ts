@@ -519,7 +519,7 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedSlides[4]).not.toHaveProperty('metricLabel');
     expect(repairedSlides[4]).not.toHaveProperty('image');
     expect(repairedSlides[4]).toHaveProperty('diagram.kind', 'architecture');
-    expect(repairedSlides[4]).toHaveProperty('diagram.edges.0.label', 'supports');
+    expect(repairedSlides[4]).toHaveProperty('diagram.edges.0.label', 'then');
     expect(repairedSlides[4]).toMatchObject({
       headline: 'Concise headline for act 5.',
       body: expect.stringMatching(/source evidence must be captured/iu),
@@ -817,6 +817,11 @@ describe('NodeSlide creation self-critique loop', () => {
 
     expect(repairedSlide).toHaveProperty('diagram');
     expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:position|matrix|bands)\b/i);
+    expect(repairedSlide.diagram?.edges).toEqual([
+      { from: 'evidence-1', to: 'evidence-2', label: 'then' },
+      { from: 'evidence-2', to: 'evidence-3', label: 'then' },
+      { from: 'evidence-3', to: 'claim', label: 'unlocks' },
+    ]);
   });
 
   it('removes chart-dependent copy when a referenced filing was not retrieved', async () => {

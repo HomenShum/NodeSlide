@@ -677,6 +677,7 @@ function claimDiagramFromSlide(slide: Record<string, unknown>): Record<string, u
     label: bullet.trim().slice(0, 80),
     kind: 'system',
   }));
+  const orderedIds = [...evidenceNodes.map((node) => node.id), 'claim'];
   return {
     kind: 'architecture',
     direction: 'horizontal',
@@ -691,10 +692,10 @@ function claimDiagramFromSlide(slide: Record<string, unknown>): Record<string, u
         kind: 'decision',
       },
     ],
-    edges: evidenceNodes.map((node) => ({
-      from: node.id,
-      to: 'claim',
-      label: 'supports',
+    edges: orderedIds.slice(0, -1).map((from, index) => ({
+      from,
+      to: orderedIds[index + 1],
+      label: index === orderedIds.length - 2 ? 'unlocks' : 'then',
     })),
   };
 }

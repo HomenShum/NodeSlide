@@ -2145,6 +2145,8 @@ describe('NodeSlide release security', () => {
       if (!element || !internalSource) throw new Error('Publication fixture is incomplete.');
       element.sourceIds = [internalSource.id, publicSourceId];
     });
+    const internalSource = fixture.snapshot.sources.find((source) => source.sourceType !== 'url');
+    if (!internalSource) throw new Error('Publication fixture has no private source.');
     const context = { db: database } as unknown as MutationCtx;
 
     const first = await publishDeckHandler(context, {
@@ -2161,16 +2163,28 @@ describe('NodeSlide release security', () => {
     expect('brief' in publicRead.snapshot.deck).toBe(false);
     expect('activeSignatureProfileId' in publicRead.snapshot.deck).toBe(false);
     expect('shareSlug' in publicRead.snapshot.deck).toBe(false);
-    expect(publicRead.snapshot.sources).toEqual([
-      expect.objectContaining({
-        sourceType: 'url',
-        url: 'https://example.com/evidence',
-      }),
-    ]);
-    expect(publicRead.snapshot.elements.flatMap((element) => element.sourceIds)).toEqual([
-      `public-source-${fixture.snapshot.deck.id}`,
-    ]);
+    expect(publicRead.snapshot.sources).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          sourceType: 'url',
+          url: 'https://example.com/evidence',
+        }),
+        expect.objectContaining({
+          id: internalSource.id,
+          title: 'Private evidence',
+          sourceType: 'note',
+          retention: 'public_snapshot',
+        }),
+      ]),
+    );
+    const publicSources = JSON.stringify(publicRead.snapshot.sources);
+    expect(publicSources).not.toContain(internalSource.title);
+    expect(publicSources).not.toContain(internalSource.citation);
+    expect(publicRead.snapshot.elements.flatMap((element) => element.sourceIds)).toEqual(
+      expect.arrayContaining([internalSource.id, `public-source-${fixture.snapshot.deck.id}`]),
+    );
     expect(publicRead.snapshot.elements[0]?.sourceIds).toEqual([
+      internalSource.id,
       `public-source-${fixture.snapshot.deck.id}`,
     ]);
 

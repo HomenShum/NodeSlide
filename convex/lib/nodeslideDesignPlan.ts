@@ -316,7 +316,10 @@ export function buildNodeSlideDesignPlans(input: {
   slides: readonly NodeSlidePlannedSlide[];
   storySpec?: NodeSlideStorySpec;
 }): NodeSlideDesignPlan[] {
-  const archetypes = chooseDeckArchetypes(contentShapes(input.slides));
+  const archetypes = chooseDeckArchetypes(
+    contentShapes(input.slides),
+    input.storySpec?.compositionPlan,
+  );
   return input.slides.map((slide, slideIndex) => {
     const semanticArchetype = archetypes[slideIndex] ?? 'split';
     const requiredArtifacts = artifacts(slide);
@@ -331,14 +334,18 @@ export function buildNodeSlideDesignPlans(input: {
         .flatMap((obligation) => obligation.materialIds) ?? [];
     return {
       slideIndex,
-      narrativeJob: slide.headline,
+      narrativeJob: input.storySpec?.revealPacing[slideIndex]
+        ? `${input.storySpec.revealPacing[slideIndex]?.beat}: ${slide.headline}`
+        : slide.headline,
       semanticArchetype,
       dominantVisualCenter: visualCenter(slide, semanticArchetype),
       requiredArtifacts,
       requiredMaterialIds: [...new Set(requiredMaterialIds)],
       referenceIds: references.map((reference) => reference.id),
       density: density(slide),
-      compositionIntent: `Make ${visualCenter(slide, semanticArchetype)} the visual center so the audience can ${slide.headline.replace(/[.!?]+$/u, '').toLocaleLowerCase()}.`,
+      compositionIntent: input.storySpec
+        ? `Continue the ${input.storySpec.sceneContinuity.motif}; use ${input.storySpec.visualMetaphor.subject} to ${input.storySpec.visualMetaphor.transformation}. Make ${visualCenter(slide, semanticArchetype)} the visual center for the ${input.storySpec.revealPacing[slideIndex]?.beat ?? 'reveal'} beat.`
+        : `Make ${visualCenter(slide, semanticArchetype)} the visual center so the audience can ${slide.headline.replace(/[.!?]+$/u, '').toLocaleLowerCase()}.`,
       forbiddenPatterns: [
         'more than one dominant visual',
         'decorative evidence without provenance',

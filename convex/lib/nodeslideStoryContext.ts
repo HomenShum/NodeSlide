@@ -1,4 +1,4 @@
-import type { DeckBrief } from '../../shared/nodeslide';
+import type { DeckBrief, SlideArchetype } from '../../shared/nodeslide';
 import type { NodeSlideDataAttachment } from '../../shared/nodeslideAttachments';
 
 export type NodeSlideVisualMaterialKind =
@@ -50,6 +50,24 @@ export interface NodeSlideStorySpec {
   memorableTakeaway: string;
   proofObligations: NodeSlideProofObligation[];
   pacing: NodeSlideStoryPhase[];
+  sceneContinuity: {
+    motif: string;
+    progression: string[];
+  };
+  visualMetaphor: {
+    kind: 'bridge' | 'journey' | 'signal' | 'threshold';
+    subject: string;
+    transformation: string;
+  };
+  revealPacing: Array<{
+    beat: 'orient' | 'tension' | 'hint' | 'reveal' | 'prove' | 'resolve';
+    intensity: number;
+  }>;
+  emotionalArc: {
+    shape: 'rise-climax-release';
+    intensity: number[];
+  };
+  compositionPlan: SlideArchetype[];
 }
 
 export interface NodeSlideVisualMaterialInventory {
@@ -80,6 +98,85 @@ function clean(value: string, maxLength: number): string {
 
 function lowercaseLead(value: string): string {
   return value ? `${value[0]?.toLocaleLowerCase() ?? ''}${value.slice(1)}` : value;
+}
+
+const STORY_BEATS = ['orient', 'tension', 'hint', 'reveal', 'prove', 'resolve'] as const;
+const COMPOSITION_RHYTHM: SlideArchetype[] = [
+  'statement',
+  'comparison',
+  'diagram-dominant',
+  'stat-dominant',
+  'chart-dominant',
+  'media-dominant',
+  'split',
+];
+
+function cinematicDirection(
+  title: string,
+  brief: DeckBrief,
+  slideCount: number,
+): Pick<
+  NodeSlideStorySpec,
+  'sceneContinuity' | 'visualMetaphor' | 'revealPacing' | 'emotionalArc' | 'compositionPlan'
+> {
+  const text = `${title} ${brief.prompt} ${brief.purpose}`.toLowerCase();
+  const metaphor: NodeSlideStorySpec['visualMetaphor'] = /risk|security|trust|exposure/u.test(text)
+    ? {
+        kind: 'threshold',
+        subject: 'a guarded threshold',
+        transformation: 'move from exposed uncertainty to controlled passage',
+      }
+    : /data|signal|metric|evidence|research/u.test(text)
+      ? {
+          kind: 'signal',
+          subject: 'a signal emerging from noise',
+          transformation: 'separate weak noise from decision-grade evidence',
+        }
+      : /platform|system|architecture|workflow|bridge/u.test(text)
+        ? {
+            kind: 'bridge',
+            subject: 'a bridge assembled span by span',
+            transformation: 'connect isolated work into a dependable path',
+          }
+        : {
+            kind: 'journey',
+            subject: 'a route from present constraint to chosen future',
+            transformation: 'turn uncertainty into an owned next move',
+          };
+  const revealPacing = Array.from({ length: slideCount }, (_, index) => {
+    const progress = slideCount === 1 ? 1 : index / (slideCount - 1);
+    const beatIndex = Math.min(STORY_BEATS.length - 1, Math.floor(progress * STORY_BEATS.length));
+    const climaxIndex = Math.max(1, slideCount - 2);
+    const intensity =
+      index <= climaxIndex
+        ? Math.round(24 + (index / climaxIndex) * 76)
+        : Math.max(58, 100 - (index - climaxIndex) * 24);
+    return { beat: STORY_BEATS[beatIndex] ?? 'resolve', intensity };
+  });
+  const motifNoun =
+    metaphor.kind === 'threshold'
+      ? 'threshold line'
+      : metaphor.kind === 'signal'
+        ? 'signal pulse'
+        : metaphor.kind === 'bridge'
+          ? 'connecting span'
+          : 'route marker';
+  return {
+    sceneContinuity: {
+      motif: motifNoun,
+      progression: revealPacing.map(({ beat }, index) => `${motifNoun} ${index + 1}: ${beat}`),
+    },
+    visualMetaphor: metaphor,
+    revealPacing,
+    emotionalArc: {
+      shape: 'rise-climax-release',
+      intensity: revealPacing.map(({ intensity }) => intensity),
+    },
+    compositionPlan: Array.from(
+      { length: slideCount },
+      (_, index) => COMPOSITION_RHYTHM[index % COMPOSITION_RHYTHM.length] ?? 'split',
+    ),
+  };
 }
 
 function requestedSlideCount(title: string, brief: DeckBrief): number {
@@ -281,6 +378,8 @@ export function buildNodeSlideStoryContext(input: {
       ),
     );
 
+  const pacing = pacingFor(requestedSlideCount(input.title, input.brief));
+  const slideCount = pacing.reduce((sum, phase) => sum + phase.slideCount, 0);
   return {
     storySpec: {
       narrativeJob:
@@ -292,7 +391,8 @@ export function buildNodeSlideStoryContext(input: {
       memorableTakeaway:
         clean(input.brief.purpose, 220) || clean(input.brief.prompt, 220) || clean(input.title, 80),
       proofObligations,
-      pacing: pacingFor(requestedSlideCount(input.title, input.brief)),
+      pacing,
+      ...cinematicDirection(input.title, input.brief, slideCount),
     },
     materialInventory: {
       materials,

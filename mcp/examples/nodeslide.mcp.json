@@ -4,10 +4,10 @@
       "command": "npx",
       "args": ["-y", "https://parity-studio.vercel.app/downloads/parity-studio-mcp-0.4.0.tgz"],
       "env": {
-        "PARITY_CONVEX_URL": "https://blissful-pig-998.convex.cloud",
+        "PARITY_CONVEX_URL": "https://agile-stoat-411.convex.cloud",
         "PARITY_DASHBOARD": "disabled",
         "NODESLIDE_OWNER_ACCESS_KEY": "${NODESLIDE_OWNER_ACCESS_KEY}",
-        "NODESLIDE_BYOK_MODEL": "z-ai/glm-5.2",
+        "NODESLIDE_BYOK_MODEL": "moonshotai/kimi-k3",
         "OPENROUTER_API_KEY": "${OPENROUTER_API_KEY}"
       }
     }

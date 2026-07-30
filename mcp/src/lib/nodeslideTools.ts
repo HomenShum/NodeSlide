@@ -1,5 +1,9 @@
+import { isAbsolute, relative, resolve, sep } from 'node:path';
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
+import { buildNodeSlideStoryContext } from '../../../convex/lib/nodeslideStoryContext.js';
+import { writeDeckArtifacts } from '../../../packages/cli/src/generate.js';
+import type { NodeSlideWorkspace as CanonicalNodeSlideWorkspace } from '../../../shared/nodeslide.js';
 
 import { localByokStatus, requireLocalKeys } from './byok.js';
 import { type CallResult, callByModel } from './llmClient.js';
@@ -8,7 +12,7 @@ const REVIEW_CONSENT = 'openrouter_nodeslide_review_context_v1';
 const BRIEF_CONSENT = 'openrouter_full_brief_v1';
 const WEB_CONSENT = 'nodeslide_web_research_v1';
 const LOCAL_BYOK_CONSENT = 'nodeslide_local_byok_edit_v1';
-const DEFAULT_BYOK_MODEL = process.env.NODESLIDE_BYOK_MODEL ?? 'z-ai/glm-5.2';
+const DEFAULT_BYOK_MODEL = process.env.NODESLIDE_BYOK_MODEL ?? 'moonshotai/kimi-k3';
 const NODE_SLIDE_EXTERNAL_OPERATION_MAX = 8;
 const NODE_SLIDE_PAGE_DEFAULT = 25;
 const NODE_SLIDE_PAGE_MAX = 100;
@@ -344,6 +348,7 @@ const scopeArgs = {
 
 interface NodeSlideMcpToolArguments {
   model?: string;
+  effort: 'low' | 'medium' | 'high' | 'xhigh' | 'max';
   deckId: string;
   ownerAccessKey?: string;
   traceId?: string;
@@ -370,6 +375,9 @@ interface NodeSlideMcpToolArguments {
   themeId: string;
   clientSessionId: string;
   accessCode?: string;
+  outputDirectory: string;
+  publish: boolean;
+  allowFallback: boolean;
 }
 
 interface NodeSlideMcpToolConfig {
@@ -541,6 +549,9 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
         execution: z.enum(['byok', 'hosted', 'deterministic']).default('byok'),
         model: z.string().optional(),
         consent: z.boolean().default(false),
+        outputDirectory: z.string().min(1).default('nodeslide-output'),
+        publish: z.boolean().default(true),
+        allowFallback: z.boolean().default(false),
         idempotencyKey: z.string().max(160).optional(),
       },
       annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: true },
@@ -593,7 +604,7 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
           scope,
           providerMode: args.execution === 'hosted' ? 'openrouter_free' : 'deterministic',
           ...(args.execution === 'hosted'
-            ? { providerModel: args.model ?? 'z-ai/glm-5.2', providerConsent: REVIEW_CONSENT }
+            ? { providerModel: args.model ?? 'moonshotai/kimi-k3', providerConsent: REVIEW_CONSENT }
             : {}),
           ...(args.idempotencyKey ? { idempotencyKey: args.idempotencyKey } : {}),
         });
@@ -728,8 +739,12 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
         clientSessionId: z.string().min(8).max(256),
         accessCode: z.string().optional(),
         execution: z.enum(['hosted', 'deterministic']).default('hosted'),
-        model: z.string().default('z-ai/glm-5.2'),
+        model: z.string().default('moonshotai/kimi-k3'),
+        effort: z.enum(['low', 'medium', 'high', 'xhigh', 'max']).default('low'),
         consent: z.boolean().default(false),
+        outputDirectory: z.string().min(1).default('nodeslide-output'),
+        publish: z.boolean().default(true),
+        allowFallback: z.boolean().default(false),
       },
       annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: true },
     },
@@ -751,15 +766,76 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
         route: 'free',
         providerMode: args.execution === 'hosted' ? 'openrouter_free' : 'deterministic',
         ...(args.execution === 'hosted'
-          ? { providerModel: args.model, providerConsent: BRIEF_CONSENT }
+          ? {
+              providerModel: args.model,
+              providerEffort: args.effort,
+              providerConsent: BRIEF_CONSENT,
+            }
           : {}),
       })) as NodeSlideWorkspace & { ownerAccessKey?: string; shareSlug?: string | null };
       if (result.ownerAccessKey) ownerKeys.set(result.deck.id, result.ownerAccessKey);
+      const latestTrace = result.traces.at(-1);
+      const traceSummary = typeof latestTrace?.summary === 'string' ? latestTrace.summary : '';
+      const fellBack = traceSummary.toLowerCase().includes('deterministic fallback');
+      if (args.execution === 'hosted' && fellBack && !args.allowFallback) {
+        throw new Error(
+          `Hosted generation did not complete with the requested model; refusing a deterministic fallback. ${traceSummary}`.trim(),
+        );
+      }
+      let publishedUrl: string | null = null;
+      if (args.publish) {
+        if (!result.ownerAccessKey) throw new Error('Creation did not return an owner capability.');
+        const publicationResult = (await convexCall('mutation', 'nodeslide:publishDeck', {
+          deckId: result.deck.id,
+          ownerAccessKey: result.ownerAccessKey,
+        })) as {
+          publication?: { slug?: string; shareSlug?: string };
+          slug?: string;
+          shareSlug?: string;
+        };
+        const slug =
+          publicationResult.publication?.shareSlug ??
+          publicationResult.publication?.slug ??
+          publicationResult.shareSlug ??
+          publicationResult.slug;
+        if (!slug) throw new Error('Publish completed without a public share slug.');
+        const publicBaseUrl = (
+          process.env.NODESLIDE_PUBLIC_URL ?? 'https://nodeslide.vercel.app'
+        ).replace(/\/+$/u, '');
+        publishedUrl = `${publicBaseUrl}/s/${slug}`;
+      }
+      const localRoot = resolve(process.env.NODESLIDE_LOCAL_ROOT ?? process.cwd());
+      const outputDirectory = isAbsolute(args.outputDirectory)
+        ? resolve(args.outputDirectory)
+        : resolve(localRoot, args.outputDirectory);
+      const fromRoot = relative(localRoot, outputDirectory);
+      if (fromRoot === '..' || fromRoot.startsWith(`..${sep}`) || isAbsolute(fromRoot)) {
+        throw new Error(`outputDirectory must stay within NODESLIDE_LOCAL_ROOT (${localRoot}).`);
+      }
+      const storySpec = buildNodeSlideStoryContext({
+        title: args.title,
+        brief: {
+          prompt: args.prompt,
+          audience: args.audience,
+          purpose: args.purpose,
+          successCriteria: args.successCriteria,
+        },
+      }).storySpec;
+      const delivery = await writeDeckArtifacts({
+        workspace: result as unknown as CanonicalNodeSlideWorkspace,
+        title: args.title,
+        outputDirectory,
+        execution: fellBack ? 'deterministic_fallback' : 'hosted',
+        publishedUrl,
+        storySpec,
+      });
       const { ownerAccessKey: _ownerAccessKey, ...safe } = result;
       return textResult({
         deck: safe.deck,
         slideCount: safe.slides.length,
-        shareSlug: safe.shareSlug ?? null,
+        publishedUrl,
+        files: delivery.files,
+        storySpec: delivery.storySpec,
         ownerCapability: 'retained in this MCP process (not returned)',
         trace: safe.traces.at(-1) ?? null,
       });

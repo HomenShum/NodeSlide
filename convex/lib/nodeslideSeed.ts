@@ -48,6 +48,7 @@ import {
   NODESLIDE_CANONICAL_AUTHORED_ARTIFACT_VERSION,
   type NodeSlideAuthoredArtifactReceipt,
   type NodeSlideAuthoredArtifactSpec,
+  NodeSlideAuthoredArtifactValidationError,
   compileNodeSlideAuthoredArtifact,
   nodeSlideAuthoredArtifactLinkedUrls,
   nodeSlideAuthoredArtifactReceiptLineageMatches,
@@ -1028,7 +1029,9 @@ function buildNodeSlideDeck(input: {
     hasFormula: planned.formula !== undefined,
     bulletCount: planned.bullets.filter(Boolean).length,
   }));
-  const archetypes = chooseDeckArchetypes(contentShapes);
+  const archetypes =
+    input.spec.designPlans?.map((plan) => plan.semanticArchetype) ??
+    chooseDeckArchetypes(contentShapes, input.spec.storySpec?.compositionPlan);
 
   const slides: Slide[] = [];
   const elements: SlideElement[] = [];
@@ -1049,6 +1052,7 @@ function buildNodeSlideDeck(input: {
       sourceEvidenceId,
       linkedSourceIds,
       authoredSourceIdByRef,
+      ...(input.spec.storySpec ? { storySpec: input.spec.storySpec } : {}),
     });
     slides.push(built.slide);
     const designPlan = input.spec.designPlans?.[index];
@@ -1096,6 +1100,7 @@ function buildSlide(input: {
   sourceEvidenceId: string;
   linkedSourceIds: string[];
   authoredSourceIdByRef: ReadonlyMap<string, string>;
+  storySpec?: NodeSlideStorySpec;
 }): { slide: Slide; elements: SlideElement[] } {
   const { planned, theme } = input;
   if (
@@ -1149,6 +1154,28 @@ function buildSlide(input: {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
+  const storyBeat = input.storySpec?.revealPacing[input.index];
+  const continuityProgress = (input.index + 1) / Math.max(1, input.total);
+  if (input.storySpec && storyBeat) {
+    add(
+      element('story-continuity-motif', {
+        name: `Story continuity · ${input.storySpec.sceneContinuity.motif}`,
+        kind: 'shape',
+        role: `story_motif_${input.storySpec.visualMetaphor.kind}`,
+        bbox: box(0.07, 0.115, Math.max(0.08, 0.82 * continuityProgress), 0.008),
+        rotation: 0,
+        style: {
+          fill: theme.colors.accent,
+          opacity: Math.max(0.28, storyBeat.intensity / 100),
+          radius: 999,
+        },
+        altText: `${input.storySpec.sceneContinuity.progression[input.index]}; emotional intensity ${storyBeat.intensity} of 100`,
+        sourceIds: [],
+        locked: true,
+        exportCapabilities: [...EDITABLE_CAPABILITIES],
+      }),
+    );
+  }
   add(
     element('section', {
       name: 'Section label',
@@ -1278,7 +1305,7 @@ function buildSlide(input: {
   // from content (legacy proportions as minimums) and capped so the bullet
   // stack that follows it always stays above the footer band. Comparison
   // slides cap the body earlier to leave room for the three columns below.
-  const bodyFontSize = isDiagramDominant ? 17 : 19;
+  const bodyFontSize = hasVisual ? 15 : isDiagramDominant ? 16 : 19;
   const bodyY = headlineY + headlineHeight + (isOpening ? 0.06 : isDiagramDominant ? 0.03 : 0.05);
   const bodyMaxBottom = isComparison
     ? 0.58
@@ -1317,7 +1344,7 @@ function buildSlide(input: {
     }),
   );
 
-  const bulletFontSize = horizontalBullets ? 16 : 17;
+  const bulletFontSize = horizontalBullets ? 16 : hasVisual ? 14 : 17;
   const bulletX = horizontalBullets || isComparison ? 0.07 : hasVisual ? copyX : 0.59;
   const bulletWidth = horizontalBullets
     ? 0.25
@@ -2319,10 +2346,25 @@ function coercePlannedSlide(
         .filter(Boolean)
         .slice(0, 3)
     : (fallback?.bullets ?? []);
-  const authoredArtifact =
-    value.artifactSpec === undefined
-      ? undefined
-      : compileNodeSlideAuthoredArtifact(value.artifactSpec, artifactValidationOptions);
+  let authoredArtifact: ReturnType<typeof compileNodeSlideAuthoredArtifact> | undefined;
+  if (value.artifactSpec !== undefined) {
+    try {
+      authoredArtifact = compileNodeSlideAuthoredArtifact(
+        value.artifactSpec,
+        artifactValidationOptions,
+      );
+    } catch (error) {
+      // A provider-authored primitive is optional enrichment, never permission
+      // to abort the user's entire deck. Canonical validation remains strict:
+      // quarantine only an inconsistent computed equation result, which the
+      // validated legacy formula can replace. Provenance/source failures still
+      // abort so the critique loop can repair them instead of laundering them.
+      if (!(error instanceof NodeSlideAuthoredArtifactValidationError)) throw error;
+      if (!error.issues.every((issue) => issue.code === 'equation_evaluation_mismatch')) {
+        throw error;
+      }
+    }
+  }
   const metric =
     authoredArtifact?.planned.metric ??
     (typeof value.metric === 'string' ? nodeslideCleanText(value.metric, 24) : undefined);

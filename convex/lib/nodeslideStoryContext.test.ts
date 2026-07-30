@@ -44,6 +44,48 @@ describe('NodeSlide StorySpec and visual-material inventory', () => {
       ),
     ).toMatchObject({ fulfillment: 'constructible' });
     expect(context.storySpec.pacing.reduce((sum, phase) => sum + phase.slideCount, 0)).toBe(7);
+    expect(context.storySpec.sceneContinuity.progression).toHaveLength(7);
+    expect(context.storySpec.visualMetaphor.kind).toBe('bridge');
+    expect(context.storySpec.revealPacing.map(({ beat }) => beat)).toEqual([
+      'orient',
+      'tension',
+      'hint',
+      'reveal',
+      'prove',
+      'resolve',
+      'resolve',
+    ]);
+    expect(Math.max(...context.storySpec.emotionalArc.intensity)).toBe(100);
+    expect(context.storySpec.emotionalArc.intensity.at(-1)).toBeLessThan(100);
+    expect(new Set(context.storySpec.compositionPlan).size).toBeGreaterThanOrEqual(6);
+  });
+
+  it('keeps cinematic direction bounded and deterministic under a sustained 300-brief agent run', () => {
+    const receipts = Array.from(
+      { length: 300 },
+      (_, index) =>
+        buildNodeSlideStoryContext({
+          title: `Agent review ${index}`,
+          brief: {
+            ...BRIEF,
+            prompt: `Create a ${6 + (index % 3)}-slide security decision with evidence ${index}.`,
+          },
+        }).storySpec,
+    );
+
+    for (const receipt of receipts) {
+      expect(receipt.revealPacing.length).toBeGreaterThanOrEqual(6);
+      expect(receipt.revealPacing.length).toBeLessThanOrEqual(8);
+      expect(receipt.sceneContinuity.progression).toHaveLength(receipt.revealPacing.length);
+      expect(receipt.compositionPlan).toHaveLength(receipt.revealPacing.length);
+      expect(new Set(receipt.compositionPlan).size).toBeGreaterThanOrEqual(6);
+      expect(receipt.emotionalArc.intensity.every((value) => value >= 0 && value <= 100)).toBe(
+        true,
+      );
+    }
+    expect(buildNodeSlideStoryContext({ title: 'Repeat', brief: BRIEF }).storySpec).toEqual(
+      buildNodeSlideStoryContext({ title: 'Repeat', brief: BRIEF }).storySpec,
+    );
   });
 
   it('blocks a requested chart when no numeric evidence is supplied', () => {

@@ -1264,9 +1264,13 @@ export interface PublishedDeck {
 /** Speaker notes are intentionally absent from public slides. */
 export type PublishedSlide = Omit<Slide, 'notes'>;
 
-/** Only explicitly public URL citations are included in a published snapshot. */
-export type PublishedSourceRecord = Omit<SourceRecord, 'sourceType'> & {
-  sourceType: 'url';
+/**
+ * Public citations include explicit URLs and redacted provenance stubs for
+ * private evidence that remains bound to a visible artifact.
+ */
+export type PublishedSourceRecord = Omit<SourceRecord, 'sourceType' | 'retention'> & {
+  sourceType: 'url' | 'note';
+  retention?: 'public_snapshot';
 };
 
 export interface PublishedDeckSnapshot {

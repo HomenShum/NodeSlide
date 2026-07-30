@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { nodeSlideUserErrorMessage, sanitizeNodeSlideUserError } from './nodeslideUserError';
 
@@ -63,7 +64,7 @@ describe('NodeSlide user-facing errors', () => {
    */
   it('is the studio toast path, not an unused module', () => {
     const studio = readFileSync(
-      new URL('./NodeSlideStudio.tsx', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/u, '$1'),
+      fileURLToPath(new URL('./NodeSlideStudio.tsx', import.meta.url)),
       'utf8',
     );
     expect(studio).toContain("from './nodeslideUserError'");

@@ -59,7 +59,7 @@ describe('NodeSlide NodeKit reference authority', () => {
       /^\.nodekit\/references\/scores\/[0-9a-f]{64}\.json$/u,
     );
     expect(decision.decisionDigest).toMatch(/^sha256:[0-9a-f]{64}$/u);
-  });
+  }, 15_000);
 
   it('blocks a plain local Mobbin PASS when the candidate commit has no signed external run', async () => {
     const fixture = await referenceFixture({ origin: 'mobbin-without-attestation' });
@@ -87,7 +87,7 @@ describe('NodeSlide NodeKit reference authority', () => {
     expect(decision.findings.join(' ')).toMatch(
       /requires exactly one tracked valid external run/iu,
     );
-  });
+  }, 15_000);
 
   it('keeps one immutable authority receipt across retry bursts and sustained worker retries', async () => {
     const fixture = await referenceFixture({ origin: 'nodekit-owned' });

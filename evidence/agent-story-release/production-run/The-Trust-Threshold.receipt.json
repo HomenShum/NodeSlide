@@ -1,0 +1,150 @@
+{
+  "deckId": "deck_ms6q9tfy_d82cdbe67c1c61226b26cac857f886fe",
+  "slideCount": 7,
+  "execution": "hosted",
+  "publishedUrl": "https://nodeslide.vercel.app/s/share-7402b88eb954b71251ab7b408bc991c526e6",
+  "files": {
+    "pptx": "D:\\VSCode Projects\\nodeslide-release\\evidence\\agent-story-release\\production-run\\The-Trust-Threshold.pptx",
+    "html": "D:\\VSCode Projects\\nodeslide-release\\evidence\\agent-story-release\\production-run\\The-Trust-Threshold.html",
+    "snapshot": "D:\\VSCode Projects\\nodeslide-release\\evidence\\agent-story-release\\production-run\\The-Trust-Threshold.nodeslide.json",
+    "receipt": "D:\\VSCode Projects\\nodeslide-release\\evidence\\agent-story-release\\production-run\\The-Trust-Threshold.receipt.json"
+  },
+  "storySpec": {
+    "narrativeJob": "Approve the production-grade NodeSlide agent workflow",
+    "audienceNeed": "Help Engineering and product leaders approve the production-grade NodeSlide agent workflow.",
+    "memorableTakeaway": "Approve the production-grade NodeSlide agent workflow",
+    "proofObligations": [
+      {
+        "id": "proof-1",
+        "claim": "Show the requested numeric series as an inspectable artifact.",
+        "requiredMaterialKinds": ["numeric-series"],
+        "materialIds": ["material-numeric-series"],
+        "fulfillment": "constructible"
+      },
+      {
+        "id": "proof-2",
+        "claim": "Show the requested diagram as an inspectable artifact.",
+        "requiredMaterialKinds": ["diagram"],
+        "materialIds": ["material-diagram"],
+        "fulfillment": "constructible"
+      },
+      {
+        "id": "success-1",
+        "claim": "Scene continuity is visible",
+        "requiredMaterialKinds": ["brief"],
+        "materialIds": ["material-brief"],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-2",
+        "claim": "The threshold metaphor transforms across slides",
+        "requiredMaterialKinds": ["brief"],
+        "materialIds": ["material-brief"],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-3",
+        "claim": "Reveal pacing escalates then resolves",
+        "requiredMaterialKinds": ["brief"],
+        "materialIds": ["material-brief"],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-4",
+        "claim": "At least four compositions are visibly distinct",
+        "requiredMaterialKinds": ["brief"],
+        "materialIds": ["material-brief"],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-5",
+        "claim": "PPTX and public share both complete",
+        "requiredMaterialKinds": ["brief"],
+        "materialIds": ["material-brief"],
+        "fulfillment": "supported"
+      }
+    ],
+    "pacing": [
+      {
+        "phase": "orient",
+        "slideCount": 1,
+        "intent": "Establish the audience tension and central promise."
+      },
+      {
+        "phase": "build",
+        "slideCount": 2,
+        "intent": "Develop the causal argument with distinct visual jobs."
+      },
+      {
+        "phase": "prove",
+        "slideCount": 3,
+        "intent": "Resolve proof obligations with inspectable artifacts."
+      },
+      {
+        "phase": "decide",
+        "slideCount": 1,
+        "intent": "Close with a decision, owner, and next checkpoint."
+      }
+    ],
+    "sceneContinuity": {
+      "motif": "threshold line",
+      "progression": [
+        "threshold line 1: orient",
+        "threshold line 2: tension",
+        "threshold line 3: hint",
+        "threshold line 4: reveal",
+        "threshold line 5: prove",
+        "threshold line 6: resolve",
+        "threshold line 7: resolve"
+      ]
+    },
+    "visualMetaphor": {
+      "kind": "threshold",
+      "subject": "a guarded threshold",
+      "transformation": "move from exposed uncertainty to controlled passage"
+    },
+    "revealPacing": [
+      {
+        "beat": "orient",
+        "intensity": 24
+      },
+      {
+        "beat": "tension",
+        "intensity": 39
+      },
+      {
+        "beat": "hint",
+        "intensity": 54
+      },
+      {
+        "beat": "reveal",
+        "intensity": 70
+      },
+      {
+        "beat": "prove",
+        "intensity": 85
+      },
+      {
+        "beat": "resolve",
+        "intensity": 100
+      },
+      {
+        "beat": "resolve",
+        "intensity": 76
+      }
+    ],
+    "emotionalArc": {
+      "shape": "rise-climax-release",
+      "intensity": [24, 39, 54, 70, 85, 100, 76]
+    },
+    "compositionPlan": [
+      "statement",
+      "comparison",
+      "diagram-dominant",
+      "stat-dominant",
+      "chart-dominant",
+      "media-dominant",
+      "split"
+    ]
+  }
+}

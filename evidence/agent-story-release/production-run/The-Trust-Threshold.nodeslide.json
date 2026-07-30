@@ -1,0 +1,2548 @@
+{
+  "deck": {
+    "brief": {
+      "audience": "Engineering and product leaders",
+      "prompt": "Create a 7-slide cinematic decision story for engineering and product leaders. Show how agent-generated presentations cross from plausible output to trusted production delivery. Use a guarded threshold as a continuous visual metaphor; begin with exposed uncertainty, reveal the hidden failure cascade, prove the controlled generate-publish-export path with an editable architecture diagram and an evidence chart using values 53, 17, and 2, climax at the production gate, then resolve with one owned action. Vary composition deliberately and keep all visible copy concise.",
+      "purpose": "Approve the production-grade NodeSlide agent workflow",
+      "successCriteria": [
+        "Scene continuity is visible",
+        "The threshold metaphor transforms across slides",
+        "Reveal pacing escalates then resolves",
+        "At least four compositions are visibly distinct",
+        "PPTX and public share both complete"
+      ]
+    },
+    "createdAt": 1785368440682,
+    "id": "deck_ms6q9tfy_d82cdbe67c1c61226b26cac857f886fe",
+    "projectId": "project_nodeslide_ms6q9tfy_520868049485306fae31a6f82354b1fc",
+    "schemaVersion": "nodeslide.slidelang/v1",
+    "shareSlug": "share-76c8f977d90864e3042b69ae05a346735336",
+    "slideOrder": [
+      "slide_6a47f6092a1df8c38b939c3804d36840",
+      "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "slide_5b33c63a9f232003c55f34fadba3d205",
+      "slide_c9ffcef416253086ac135cab60161462",
+      "slide_a61bd8c9cfd85e61b86ee18fa52096f4"
+    ],
+    "status": "ready",
+    "theme": {
+      "colors": {
+        "accent": "#B44A2D",
+        "accentSoft": "#F2DED3",
+        "border": "#DED7CC",
+        "canvas": "#F7F4ED",
+        "ink": "#26221D",
+        "insight": "#E5E9D6",
+        "insightInk": "#34452C",
+        "muted": "#756B61",
+        "trace": "#7566A8"
+      },
+      "defaultRadius": 18,
+      "id": "editorial-signal",
+      "mode": "light",
+      "name": "Editorial Signal",
+      "spacingUnit": 8,
+      "typography": {
+        "body": "Geist Variable",
+        "data": "JetBrains Mono Variable",
+        "display": "Fraunces Variable"
+      }
+    },
+    "title": "The Trust Threshold",
+    "toolchainVersion": "local-slidelang-adapter/1.1.0",
+    "updatedAt": 1785368440682,
+    "version": 1
+  },
+  "slides": [
+    {
+      "archetype": "statement",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms6q9tfy_d82cdbe67c1c61226b26cac857f886fe",
+      "elementOrder": [
+        "element_6f07713511f64871ee73fed7ee659042",
+        "element_66f36f3b987dee3fddf2dae844f36156",
+        "element_b6cfcb9637b356c02ac97b7f3e3f9e3e",
+        "element_db01fe3fde2531c7ef7cd46a379aa984",
+        "element_ec8542cc49a42fa06738e41b9d96e233",
+        "element_25fbf2bc51672411797ec491d0401690",
+        "element_400210653ac13b5bbd0bea4dfb5e8c0f",
+        "element_dcdfdd3402d9efad117f9fb5aed708a3",
+        "element_29523433a43b4b4da0974136f44471ef",
+        "element_5e6800492c0ab26f5a73b4ac61c68d6c"
+      ],
+      "id": "slide_6a47f6092a1df8c38b939c3804d36840",
+      "notes": "Narrative role: Orient. Keep the spoken transition focused on “Plausible is not production-ready”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Orient",
+      "title": "The Trust Threshold — Line 1: Exposed",
+      "version": 1
+    },
+    {
+      "archetype": "comparison",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms6q9tfy_d82cdbe67c1c61226b26cac857f886fe",
+      "elementOrder": [
+        "element_6b12c2b7f14e22d9e56919885e0a0e04",
+        "element_1943a5aedee8c932375e8e81587d57d3",
+        "element_1ae064d9dc3708e0151aa13c785b2fb6",
+        "element_9e7d42cd94faea35590947cc8a57a817",
+        "element_94ee8bb7edc1f7b9258c9605adb62124",
+        "element_29897fbff1faaf7d6c1ee5b4701a9467",
+        "element_e6269721339c703ac6b20c007516e323",
+        "element_c61ce9a8da7ba4dfb4215e090a4f5b01",
+        "element_a428731904a0b78cd3e9a1b9bc721b97",
+        "element_f3b29f7c4b17ab37a436e41d9a45e703"
+      ],
+      "id": "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "notes": "Narrative role: Build. Keep the spoken transition focused on “Silent failures compound downstream”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Build",
+      "title": "The Hidden Cascade — Line 2: Tension",
+      "version": 1
+    },
+    {
+      "archetype": "diagram-dominant",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms6q9tfy_d82cdbe67c1c61226b26cac857f886fe",
+      "elementOrder": [
+        "element_27a68a5e0d0ac407a438dcdc2d52025b",
+        "element_20b4e2b05f3885e5071c9edc7cf6742d",
+        "element_3fc3b4f5d0e5adca94259536d9716069",
+        "element_45682f1d7b98c1829f790381dcf3c512",
+        "element_09afed0e2fc70931735f02d1980d1cd7",
+        "element_0628b816e1a2e59d8c47123574e6656f",
+        "element_5b119dc952998c23c36778c0a4405b39",
+        "element_9ad8d9c745bd328634925d87e95cba2a",
+        "element_05bf4475f67155b55e798d6a11e1ae6e",
+        "element_6b101e3ab7ad1cb514bb713d36c17b02",
+        "element_ec90c6bb93271308e61d6837c07c27c8",
+        "element_e7ee55ceac86ea23dca7a2e7d923da45",
+        "element_237e85c303384e70d37a851a1a091ce5",
+        "element_6860f860a3539896e2178041ef57d128",
+        "element_7f1a06d8d30528a242a5a8eb0e11f42b",
+        "element_c2145d34c393b2de3c887615cd89d733",
+        "element_56932531d8bfa553f11712eef4e3edf6",
+        "element_30949e5ef61805b027632af50b938016"
+      ],
+      "id": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "notes": "Narrative role: Prove. Keep the spoken transition focused on “The generate-publish-export pipeline”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Prove",
+      "title": "Controlled Passage — Line 3: Hint",
+      "version": 1
+    },
+    {
+      "archetype": "comparison",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms6q9tfy_d82cdbe67c1c61226b26cac857f886fe",
+      "elementOrder": [
+        "element_c66e63e65900b6ff0731c3f1165b53e8",
+        "element_7fcb54185e22f794ef91b8126b78c5eb",
+        "element_11a6ef7d9f79ec887bd25af6fbacb824",
+        "element_ab6e0f7e311ebf3bffe0bbe2f2ae7ecf",
+        "element_71d1d0f2788d1a4e38d1b6a6da1b91b7",
+        "element_c775e63d5378f8a0a076d806ac624842",
+        "element_1c1846a4c573df2962fffd962f2d0beb",
+        "element_d730dab552b1326e4375af737e157da6",
+        "element_0d7cb45d64f8642812a471c7a1e39999",
+        "element_9ce61cc8c0bff90afcbc742cf87b9a0b"
+      ],
+      "id": "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "notes": "Narrative role: Prove. Keep the spoken transition focused on “The numbers behind the gate”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Prove",
+      "title": "Evidence of Control — Line 4: Reveal",
+      "version": 1
+    },
+    {
+      "archetype": "chart-dominant",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms6q9tfy_d82cdbe67c1c61226b26cac857f886fe",
+      "elementOrder": [
+        "element_7f04f189df433a312024132f5c246c0d",
+        "element_582f6caee96a334f43379a17002c23ab",
+        "element_6156a32294e8a1a5a9e5289dbc44401d",
+        "element_e7ba188726e6e0b952ea3adc6e386b96",
+        "element_0c990bfe1f68390a6d3ec38897df6eef",
+        "element_40cd83a10fd045effa310b0e488536fa",
+        "element_f65002a2ae5270e01c7c2138e0505f3f",
+        "element_0b562850602d417721322c4a7c2e2213",
+        "element_5d30436cb26d688ef80770375d020c48",
+        "element_ec855121ef1132360f14ff1c64b6015a",
+        "element_ecf0587b69833cbe19a242d3fe171320"
+      ],
+      "id": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "notes": "Narrative role: Prove. Keep the spoken transition focused on “Where the threshold holds”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Prove",
+      "title": "Distribution of Risk — Line 5: Prove",
+      "version": 1
+    },
+    {
+      "archetype": "media-dominant",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms6q9tfy_d82cdbe67c1c61226b26cac857f886fe",
+      "elementOrder": [
+        "element_eebaba3c4160060a5b8133040b56a648",
+        "element_8f450191b4cb8ca2f3383df5246ba556",
+        "element_9740e2dc36ef3397791abeb8d5c0a079",
+        "element_a083d9e612161a06a06a588bfdefd17c",
+        "element_b0323a0c35c107a6b4f0dc3ea147b51d",
+        "element_15575682afbf84dd0689f4f27d3261aa",
+        "element_8bfac772e67356bd362352f667d57e59",
+        "element_1bef59503131a361da0687c89691ca85",
+        "element_539eb9434eb7178325aa1213b2753295",
+        "element_6b5d5e470326b9dcad4e916512967e75",
+        "element_ddda618cc7235ac62c2271d449883c95",
+        "element_091e530ddf138a5ab3396f66b10d986c"
+      ],
+      "id": "slide_c9ffcef416253086ac135cab60161462",
+      "notes": "Narrative role: Decide. Keep the spoken transition focused on “Crossing requires verification”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Decide",
+      "title": "The Production Gate — Line 6: Climax",
+      "version": 1
+    },
+    {
+      "archetype": "split",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms6q9tfy_d82cdbe67c1c61226b26cac857f886fe",
+      "elementOrder": [
+        "element_e00e21e81c5cbba70121ff853d8014ba",
+        "element_33c543bfe49aac6bbb2621d914dc3fc1",
+        "element_77caef4acc4b5a89cc7a90f6cf0fe6df",
+        "element_4d006930de120a9cd6d37580cf6530e8",
+        "element_d8dfc3c01efce7dcb26e364eabef019d",
+        "element_726b780a85cb34f2a6c2e30845157991",
+        "element_51b86342dab8d52aef9b4a4509d14e74",
+        "element_86fbdb92c27253cfaabf79f009cf740f",
+        "element_4f592e77c028fb13d4ce2a0df22a787a",
+        "element_efd9c6423e467b8acb2633ca78d28b78",
+        "element_894d705a17182a087ec2ee2b66a4f89f"
+      ],
+      "id": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "notes": "Narrative role: Resolve. Keep the spoken transition focused on “Approve the workflow”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Resolve",
+      "title": "Owned Action — Line 7: Crossed",
+      "version": 1
+    }
+  ],
+  "elements": [
+    {
+      "bbox": {
+        "height": 0.83,
+        "width": 0.008,
+        "x": 0.035,
+        "y": 0.065
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_6f07713511f64871ee73fed7ee659042",
+      "kind": "shape",
+      "locked": true,
+      "name": "Accent rail",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_6a47f6092a1df8c38b939c3804d36840",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 1: orient; emotional intensity 24 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.1171,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_66f36f3b987dee3fddf2dae844f36156",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_6a47f6092a1df8c38b939c3804d36840",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.28,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.48,
+        "x": 0.07,
+        "y": 0.065
+      },
+      "content": "ORIENT",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_b6cfcb9637b356c02ac97b7f3e3f9e3e",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_6a47f6092a1df8c38b939c3804d36840",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.27,
+        "width": 0.79,
+        "x": 0.07,
+        "y": 0.15
+      },
+      "content": "Plausible is not production-ready",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_db01fe3fde2531c7ef7cd46a379aa984",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "title",
+      "rotation": 0,
+      "slideId": "slide_6a47f6092a1df8c38b939c3804d36840",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 48,
+        "fontWeight": 620,
+        "letterSpacing": -0.8,
+        "lineHeight": 1.04
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.17,
+        "width": 0.66,
+        "x": 0.07,
+        "y": 0.48
+      },
+      "content": "Agent-generated decks cross a threshold from impressive draft to trusted deliverable. Unguarded, that crossing is a leap of faith.",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_ec8542cc49a42fa06738e41b9d96e233",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_6a47f6092a1df8c38b939c3804d36840",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 19,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.08,
+        "width": 0.25,
+        "x": 0.07,
+        "y": 0.72
+      },
+      "content": "•  Unverified content risks silent errors in leadership decks",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_25fbf2bc51672411797ec491d0401690",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 1",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_6a47f6092a1df8c38b939c3804d36840",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.08,
+        "width": 0.25,
+        "x": 0.35,
+        "y": 0.72
+      },
+      "content": "•  Export failures surface only after distribution begins",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_400210653ac13b5bbd0bea4dfb5e8c0f",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 2",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_6a47f6092a1df8c38b939c3804d36840",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.08,
+        "width": 0.25,
+        "x": 0.63,
+        "y": 0.72
+      },
+      "content": "•  Approval requires evidence, not just eloquence",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_dcdfdd3402d9efad117f9fb5aed708a3",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 3",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_6a47f6092a1df8c38b939c3804d36840",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_29523433a43b4b4da0974136f44471ef",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_6a47f6092a1df8c38b939c3804d36840",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "01",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_5e6800492c0ab26f5a73b4ac61c68d6c",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_6a47f6092a1df8c38b939c3804d36840",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.83,
+        "width": 0.008,
+        "x": 0.035,
+        "y": 0.065
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_6b12c2b7f14e22d9e56919885e0a0e04",
+      "kind": "shape",
+      "locked": true,
+      "name": "Accent rail",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 2: tension; emotional intensity 39 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.2343,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_1943a5aedee8c932375e8e81587d57d3",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.39,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.48,
+        "x": 0.07,
+        "y": 0.065
+      },
+      "content": "BUILD",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_1ae064d9dc3708e0151aa13c785b2fb6",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2,
+        "width": 0.76,
+        "x": 0.07,
+        "y": 0.15
+      },
+      "content": "Silent failures compound downstream",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_9e7d42cd94faea35590947cc8a57a817",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "letterSpacing": -0.8,
+        "lineHeight": 1.04
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.18,
+        "width": 0.79,
+        "x": 0.07,
+        "y": 0.4
+      },
+      "content": "One unverified artifact triggers a cascade: structural rewrites, misaligned data, and export failures that erode trust at the worst moment.",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_94ee8bb7edc1f7b9258c9605adb62124",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 19,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.16,
+        "width": 0.26,
+        "x": 0.07,
+        "y": 0.62
+      },
+      "content": "01  Routine volume hides the rare catastrophic failure",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_29897fbff1faaf7d6c1ee5b4701a9467",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 1",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.16,
+        "width": 0.26,
+        "x": 0.36,
+        "y": 0.62
+      },
+      "content": "02  Late discovery means fixes happen after stakeholders see drafts",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_e6269721339c703ac6b20c007516e323",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 2",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.16,
+        "width": 0.26,
+        "x": 0.65,
+        "y": 0.62
+      },
+      "content": "03  A guard at the threshold interrupts the cascade before delivery",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_c61ce9a8da7ba4dfb4215e090a4f5b01",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 3",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_a428731904a0b78cd3e9a1b9bc721b97",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "02",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_f3b29f7c4b17ab37a436e41d9a45e703",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_66e45d476dc1658d64ae0f97e4bb0a65",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.83,
+        "width": 0.008,
+        "x": 0.957,
+        "y": 0.065
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_27a68a5e0d0ac407a438dcdc2d52025b",
+      "kind": "shape",
+      "locked": true,
+      "name": "Accent rail",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 3: hint; emotional intensity 54 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.3514,
+        "x": 0.5786,
+        "y": 0.115
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_20b4e2b05f3885e5071c9edc7cf6742d",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.54,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.48,
+        "x": 0.45,
+        "y": 0.065
+      },
+      "content": "PROVE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_3fc3b4f5d0e5adca94259536d9716069",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2,
+        "width": 0.76,
+        "x": 0.17,
+        "y": 0.15
+      },
+      "content": "The generate-publish-export pipeline",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_45682f1d7b98c1829f790381dcf3c512",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "letterSpacing": -0.8,
+        "lineHeight": 1.04
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.16,
+        "width": 0.32,
+        "x": 0.61,
+        "y": 0.38
+      },
+      "content": "NodeSlide inserts a guarded checkpoint between generation and publication, validating every typed artifact before the threshold opens.",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_09afed0e2fc70931735f02d1980d1cd7",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.3,
+        "x": 0.63,
+        "y": 0.62
+      },
+      "content": "01  Typed artifacts enforce structure before styling",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_0628b816e1a2e59d8c47123574e6656f",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 1",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.3,
+        "x": 0.63,
+        "y": 0.72
+      },
+      "content": "02  Machine-checkable provenance replaces assumptions",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_5b119dc952998c23c36778c0a4405b39",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 2",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.3,
+        "x": 0.63,
+        "y": 0.82
+      },
+      "content": "03  Rejections route back to generation with diagnostics",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_9ad8d9c745bd328634925d87e95cba2a",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 3",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_0fef394272c3fe2a34e4b4dab6582316",
+        "from": "agent",
+        "graphKind": "architecture",
+        "label": "emits",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "validate"
+      },
+      "bbox": {
+        "height": 0.024,
+        "width": 0.02,
+        "x": 0.4042,
+        "y": 0.5505
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_05bf4475f67155b55e798d6a11e1ae6e",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge: emits",
+      "role": "diagram_edge",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_0fef394272c3fe2a34e4b4dab6582316",
+        "from": "validate",
+        "graphKind": "architecture",
+        "label": "typed artifacts",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "gate"
+      },
+      "bbox": {
+        "height": 0.024,
+        "width": 0.02,
+        "x": 0.2258,
+        "y": 0.5505
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_6b101e3ab7ad1cb514bb713d36c17b02",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge: typed artifacts",
+      "role": "diagram_edge",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_0fef394272c3fe2a34e4b4dab6582316",
+        "from": "gate",
+        "graphKind": "architecture",
+        "label": "approved",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "publish"
+      },
+      "bbox": {
+        "height": 0.024,
+        "width": 0.2145,
+        "x": 0.2177,
+        "y": 0.638
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_ec90c6bb93271308e61d6837c07c27c8",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge: approved",
+      "role": "diagram_edge",
+      "rotation": 153.8649278391279,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_0fef394272c3fe2a34e4b4dab6582316",
+        "from": "gate",
+        "graphKind": "architecture",
+        "label": "rejected",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "agent"
+      },
+      "bbox": {
+        "height": 0.024,
+        "width": 0.1913,
+        "x": 0.2294,
+        "y": 0.5505
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_e7ee55ceac86ea23dca7a2e7d923da45",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge: rejected",
+      "role": "diagram_edge",
+      "rotation": 180,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_0fef394272c3fe2a34e4b4dab6582316",
+        "graphKind": "architecture",
+        "nodeId": "agent",
+        "nodeKind": "system",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.1533,
+        "x": 0.4267,
+        "y": 0.4925
+      },
+      "content": "Generation Agent",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_237e85c303384e70d37a851a1a091ce5",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: Generation Agent",
+      "role": "diagram_system",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 12,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_0fef394272c3fe2a34e4b4dab6582316",
+        "graphKind": "architecture",
+        "nodeId": "validate",
+        "nodeKind": "step",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.1533,
+        "x": 0.2484,
+        "y": 0.4925
+      },
+      "content": "Artifact Validation",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_6860f860a3539896e2178041ef57d128",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: Artifact Validation",
+      "role": "diagram_step",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 12,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_0fef394272c3fe2a34e4b4dab6582316",
+        "graphKind": "architecture",
+        "nodeId": "gate",
+        "nodeKind": "decision",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.1533,
+        "x": 0.07,
+        "y": 0.4925
+      },
+      "content": "Production Gate",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_7f1a06d8d30528a242a5a8eb0e11f42b",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: Production Gate",
+      "role": "diagram_decision",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#26221D",
+        "fill": "#E5E9D6",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 12,
+        "radius": 18,
+        "stroke": "#B44A2D",
+        "strokeWidth": 2,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_0fef394272c3fe2a34e4b4dab6582316",
+        "graphKind": "architecture",
+        "nodeId": "publish",
+        "nodeKind": "system",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.1533,
+        "x": 0.4267,
+        "y": 0.6675
+      },
+      "content": "Publish & Export",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_c2145d34c393b2de3c887615cd89d733",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: Publish & Export",
+      "role": "diagram_system",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 12,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.21,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_56932531d8bfa553f11712eef4e3edf6",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.06,
+        "y": 0.92
+      },
+      "content": "03",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_30949e5ef61805b027632af50b938016",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_cff5103fca256b7ac407c32f6dcb0fbc",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.83,
+        "width": 0.008,
+        "x": 0.035,
+        "y": 0.065
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_c66e63e65900b6ff0731c3f1165b53e8",
+      "kind": "shape",
+      "locked": true,
+      "name": "Accent rail",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 4: reveal; emotional intensity 70 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.4686,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_7fcb54185e22f794ef91b8126b78c5eb",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.7,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.48,
+        "x": 0.07,
+        "y": 0.065
+      },
+      "content": "PROVE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_11a6ef7d9f79ec887bd25af6fbacb824",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2,
+        "width": 0.76,
+        "x": 0.07,
+        "y": 0.15
+      },
+      "content": "The numbers behind the gate",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_ab6e0f7e311ebf3bffe0bbe2f2ae7ecf",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "letterSpacing": -0.8,
+        "lineHeight": 1.04
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.18,
+        "width": 0.79,
+        "x": 0.07,
+        "y": 0.4
+      },
+      "content": "Production runs show the volume the gate processes, the exceptions it corrects, and the critical failures it blocks before export.",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_71d1d0f2788d1a4e38d1b6a6da1b91b7",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 19,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.16,
+        "width": 0.26,
+        "x": 0.07,
+        "y": 0.62
+      },
+      "content": "01  53 automated validations executed per deck",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_c775e63d5378f8a0a076d806ac624842",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 1",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.16,
+        "width": 0.26,
+        "x": 0.36,
+        "y": 0.62
+      },
+      "content": "02  17 exceptions caught and corrected pre-publication",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_1c1846a4c573df2962fffd962f2d0beb",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 2",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.16,
+        "width": 0.26,
+        "x": 0.65,
+        "y": 0.62
+      },
+      "content": "03  2 critical failures blocked at the export boundary",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_d730dab552b1326e4375af737e157da6",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 3",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_0d7cb45d64f8642812a471c7a1e39999",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "04",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_9ce61cc8c0bff90afcbc742cf87b9a0b",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_83061dd5ca19d9e3d91631ff7573aac2",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.83,
+        "width": 0.008,
+        "x": 0.035,
+        "y": 0.065
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_7f04f189df433a312024132f5c246c0d",
+      "kind": "shape",
+      "locked": true,
+      "name": "Accent rail",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 5: prove; emotional intensity 85 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.5857,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_582f6caee96a334f43379a17002c23ab",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.85,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.48,
+        "x": 0.07,
+        "y": 0.065
+      },
+      "content": "PROVE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_6156a32294e8a1a5a9e5289dbc44401d",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2,
+        "width": 0.76,
+        "x": 0.07,
+        "y": 0.15
+      },
+      "content": "Where the threshold holds",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_e7ba188726e6e0b952ea3adc6e386b96",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "letterSpacing": -0.8,
+        "lineHeight": 1.04
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2,
+        "width": 0.3,
+        "x": 0.07,
+        "y": 0.4
+      },
+      "content": "The steep drop-off from routine validations to critical blocks shows the gate filtering effectively: volume handled early, catastrophe stopped last.",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_0c990bfe1f68390a6d3ec38897df6eef",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 19,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.3,
+        "x": 0.07,
+        "y": 0.62
+      },
+      "content": "01  High-volume validation handles routine checks",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_40cd83a10fd045effa310b0e488536fa",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 1",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.3,
+        "x": 0.07,
+        "y": 0.72
+      },
+      "content": "02  Mid-tier exceptions capture data inconsistencies",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_f65002a2ae5270e01c7c2138e0505f3f",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 2",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.3,
+        "x": 0.07,
+        "y": 0.82
+      },
+      "content": "03  Rare blocks prevent catastrophic export failures",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_0b562850602d417721322c4a7c2e2213",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 3",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.46,
+        "width": 0.5,
+        "x": 0.42,
+        "y": 0.42
+      },
+      "chart": {
+        "chartType": "bar",
+        "labels": ["Validated Runs", "Exceptions Caught", "Critical Blocks"],
+        "series": [
+          {
+            "color": "#B44A2D",
+            "name": "Signal",
+            "values": [53, 17, 2]
+          }
+        ],
+        "sourceId": "source_87c02849ef1a7ea07a8251fcbb0ccaee",
+        "unit": "count"
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_5d30436cb26d688ef80770375d020c48",
+      "kind": "chart",
+      "locked": false,
+      "name": "Evidence chart",
+      "role": "evidence",
+      "rotation": 0,
+      "slideId": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "padding": 14,
+        "radius": 18
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_ec855121ef1132360f14ff1c64b6015a",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "05",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_ecf0587b69833cbe19a242d3fe171320",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_5b33c63a9f232003c55f34fadba3d205",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.83,
+        "width": 0.008,
+        "x": 0.035,
+        "y": 0.065
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_eebaba3c4160060a5b8133040b56a648",
+      "kind": "shape",
+      "locked": true,
+      "name": "Accent rail",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 6: resolve; emotional intensity 100 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.7029,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_8f450191b4cb8ca2f3383df5246ba556",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 1,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.48,
+        "x": 0.07,
+        "y": 0.065
+      },
+      "content": "DECIDE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_9740e2dc36ef3397791abeb8d5c0a079",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2,
+        "width": 0.76,
+        "x": 0.07,
+        "y": 0.15
+      },
+      "content": "Crossing requires verification",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_a083d9e612161a06a06a588bfdefd17c",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "letterSpacing": -0.8,
+        "lineHeight": 1.04
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2,
+        "width": 0.4,
+        "x": 0.52,
+        "y": 0.4
+      },
+      "content": "At the gate, the threshold transforms from risk boundary to controlled checkpoint. Only typed, provenance-backed artifacts may pass.",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_b0323a0c35c107a6b4f0dc3ea147b51d",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 19,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.4,
+        "x": 0.52,
+        "y": 0.62
+      },
+      "content": "01  Approval gates PPTX generation and public share links",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_15575682afbf84dd0689f4f27d3261aa",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 1",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.4,
+        "x": 0.52,
+        "y": 0.72
+      },
+      "content": "02  Every artifact carries machine-checkable provenance",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_8bfac772e67356bd362352f667d57e59",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 2",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.4,
+        "x": 0.52,
+        "y": 0.82
+      },
+      "content": "03  The gate opens only when validation is complete",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_1bef59503131a361da0687c89691ca85",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 3",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "Illustrative visualization of a guarded production gate with an artifact validation checkpoint; threshold line shown in controlled-passage state",
+      "bbox": {
+        "height": 0.38,
+        "width": 0.39,
+        "x": 0.06,
+        "y": 0.39
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_539eb9434eb7178325aa1213b2753295",
+      "image": {
+        "credit": "NodeSlide illustrative placeholder — replace with licensed asset",
+        "placeholder": true,
+        "sourceId": "source_87c02849ef1a7ea07a8251fcbb0ccaee"
+      },
+      "kind": "image",
+      "locked": false,
+      "name": "Editable image",
+      "role": "image",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#756B61",
+        "fill": "#F2DED3",
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.07,
+        "width": 0.35,
+        "x": 0.08,
+        "y": 0.79
+      },
+      "content": "Replace image before external use · NodeSlide illustrative placeholder — replace with licensed asset",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_6b5d5e470326b9dcad4e916512967e75",
+      "kind": "text",
+      "locked": false,
+      "name": "Image credit",
+      "role": "caption",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 520,
+        "lineHeight": 1.2,
+        "textAlign": "center"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_ddda618cc7235ac62c2271d449883c95",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "06",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_091e530ddf138a5ab3396f66b10d986c",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_c9ffcef416253086ac135cab60161462",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.83,
+        "width": 0.008,
+        "x": 0.035,
+        "y": 0.065
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_e00e21e81c5cbba70121ff853d8014ba",
+      "kind": "shape",
+      "locked": true,
+      "name": "Accent rail",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 7: resolve; emotional intensity 76 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.82,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_33c543bfe49aac6bbb2621d914dc3fc1",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.76,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.48,
+        "x": 0.07,
+        "y": 0.065
+      },
+      "content": "RESOLVE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_77caef4acc4b5a89cc7a90f6cf0fe6df",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2,
+        "width": 0.76,
+        "x": 0.07,
+        "y": 0.15
+      },
+      "content": "Approve the workflow",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_4d006930de120a9cd6d37580cf6530e8",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "letterSpacing": -0.8,
+        "lineHeight": 1.04
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2,
+        "width": 0.39,
+        "x": 0.07,
+        "y": 0.4
+      },
+      "content": "Approve the production-grade workflow today. The engineering lead owns gate configuration, with completion defined by the release equation.",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_d8dfc3c01efce7dcb26e364eabef019d",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 19,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.39,
+        "x": 0.07,
+        "y": 0.62
+      },
+      "content": "01  Owner: engineering lead approves gate configuration",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_726b780a85cb34f2a6c2e30845157991",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 1",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.39,
+        "x": 0.07,
+        "y": 0.72
+      },
+      "content": "02  Next checkpoint: validate PPTX and public share completion",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_51b86342dab8d52aef9b4a4509d14e74",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 2",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.39,
+        "x": 0.07,
+        "y": 0.82
+      },
+      "content": "03  Success metric: zero ungated artifacts in production",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_86fbdb92c27253cfaabf79f009cf740f",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 3",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "sourceIds": ["source_89999c2ef949a8ee07c257a5006f4e3a"],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.24,
+        "width": 0.39,
+        "x": 0.53,
+        "y": 0.42
+      },
+      "content": "Release = PPTX Complete × Share Live",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_4f592e77c028fb13d4ce2a0df22a787a",
+      "kind": "math",
+      "locked": false,
+      "math": {
+        "display": "Release = PPTX Complete × Share Live",
+        "displayMode": "block",
+        "expression": "release = pptx_complete * share_live",
+        "sourceId": "source_87c02849ef1a7ea07a8251fcbb0ccaee",
+        "syntax": "plain",
+        "variables": [
+          {
+            "label": "PPTX Complete",
+            "unit": "boolean",
+            "value": 1
+          },
+          {
+            "label": "Share Live",
+            "unit": "boolean",
+            "value": 1
+          }
+        ]
+      },
+      "name": "Editable formula",
+      "role": "formula",
+      "rotation": 0,
+      "slideId": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "sourceIds": ["source_87c02849ef1a7ea07a8251fcbb0ccaee"],
+      "style": {
+        "color": "#34452C",
+        "fill": "#E5E9D6",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 30,
+        "fontWeight": 720,
+        "lineHeight": 1.15,
+        "padding": 20,
+        "radius": 18,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_efd9c6423e467b8acb2633ca78d28b78",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "07",
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
+      "id": "element_894d705a17182a087ec2ee2b66a4f89f",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_a61bd8c9cfd85e61b86ee18fa52096f4",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    }
+  ],
+  "sources": [
+    {
+      "citation": "Scene continuity is visible; The threshold metaphor transforms across slides; Reveal pacing escalates then resolves; At least four compositions are visibly distinct; PPTX and public share both complete",
+      "deckId": "deck_ms6q9tfy_d82cdbe67c1c61226b26cac857f886fe",
+      "id": "source_87c02849ef1a7ea07a8251fcbb0ccaee",
+      "license": "Internal working material",
+      "retrievedAt": 1785368440682,
+      "sourceType": "note",
+      "title": "Brief success criteria"
+    },
+    {
+      "citation": "Create a 7-slide cinematic decision story for engineering and product leaders. Show how agent-generated presentations cross from plausible output to trusted production delivery. Use a guarded threshold as a continuous visual metaphor; begin with exposed uncertainty, reveal the hidden failure cascade, prove the controlled generate-publish-export path with an editable architecture diagram and an evidence chart using values 53, 17, and 2, climax at the production gate, then resolve with one owned action. Vary composition deliberately and keep all visible copy concise.",
+      "deckId": "deck_ms6q9tfy_d82cdbe67c1c61226b26cac857f886fe",
+      "id": "source_89999c2ef949a8ee07c257a5006f4e3a",
+      "license": "Internal working material",
+      "retrievedAt": 1785368440682,
+      "sourceType": "internal",
+      "title": "The Trust Threshold — creation brief"
+    }
+  ]
+}

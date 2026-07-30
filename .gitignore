@@ -32,3 +32,11 @@ artifacts/conformance/proof-receipt.json
 # Playback canary screen captures — evidence is the signature JSON, not 34MB of PNGs.
 outputs/**/playback-frames/
 .env*.local
+
+# Disposable production dogfood outputs. The scenario corpus and concise proof
+# report are tracked; generated decks, renders, receipts, and provider logs are local evidence.
+evidence/visual-logic-campaign/before/
+evidence/visual-logic-campaign/after/
+evidence/visual-logic-campaign/*.pid
+evidence/visual-logic-campaign/*.log
+evidence/visual-logic-campaign/*-results.json

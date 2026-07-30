@@ -150,6 +150,55 @@ describe('NodeSlide seed', () => {
     ]);
   });
 
+  it('keeps a CFO decision metric clear of its explanation in the rendered stat panel', () => {
+    const baseSlide = (index: number) => ({
+      title: `Slide ${index + 1}`,
+      section: `Board review / ${index + 1}`,
+      headline: `Decision checkpoint ${index + 1}`,
+      body: 'The finance team needs a readable decision signal during a live board review.',
+      bullets: ['Trace the source', 'Name the owner', 'Record the decision'],
+    });
+    const built = buildBriefNodeSlide({
+      deckId: 'deck-cfo-long-metric',
+      projectId: 'project-cfo-long-metric',
+      title: 'CFO board review',
+      brief: {
+        prompt: 'Build a board review around a sourced adjusted operating margin.',
+        audience: 'CFO and audit committee',
+        purpose: 'Approve the operating plan',
+        successCriteria: ['Keep the decision metric legible'],
+      },
+      themeId: 'quiet-precision',
+      rawSpec: {
+        title: 'CFO board review',
+        narrative: ['Move from evidence to a bounded decision.'],
+        slides: [
+          baseSlide(0),
+          {
+            ...baseSlide(1),
+            metric: '12.4% adjusted margin',
+            metricLabel: 'FY2025 adjusted operating margin — sourced in the board packet',
+          },
+          baseSlide(2),
+          baseSlide(3),
+          baseSlide(4),
+          baseSlide(5),
+        ],
+      },
+      now: 1_000,
+    }).snapshot;
+    const metric = built.elements.find((element) => element.role === 'metric');
+    const caption = built.elements.find(
+      (element) => element.role === 'caption' && element.content?.includes('FY2025'),
+    );
+
+    expect(metric?.style.fontSize).toBeLessThanOrEqual(46);
+    expect(metric?.bbox.height).toBeGreaterThan(0.2);
+    expect(
+      (caption?.bbox.y ?? 0) - ((metric?.bbox.y ?? 0) + (metric?.bbox.height ?? 0)),
+    ).toBeGreaterThanOrEqual(0.02);
+  });
+
   it('materializes chart, formula, image-placeholder, and URL evidence as real primitives', () => {
     const brief = {
       prompt:

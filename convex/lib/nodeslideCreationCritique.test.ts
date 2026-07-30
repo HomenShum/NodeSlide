@@ -36,6 +36,8 @@ const WORLD_CUP_BRIEF: DeckBrief = {
 
 const THEME_ID = 'editorial-signal';
 const NOW = 1_700_000_000_000;
+const EMBEDDED_IMAGE =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
 
 interface SlideOverride {
   chart?: { labels: string[]; values: number[]; unit?: string };
@@ -44,7 +46,7 @@ interface SlideOverride {
     display: string;
     variables: Array<{ label: string; value: number }>;
   };
-  image?: { altText: string; credit: string };
+  image?: { altText: string; credit: string; url?: string };
   diagram?: {
     kind: 'process';
     direction: 'horizontal';
@@ -92,7 +94,11 @@ const EXPLICIT_FORMULA: SlideOverride = {
   },
 };
 const EXPLICIT_IMAGE: SlideOverride = {
-  image: { altText: 'Team photo', credit: 'Company archive' },
+  image: {
+    altText: 'Team photo',
+    credit: 'Company archive',
+    url: EMBEDDED_IMAGE,
+  },
 };
 
 // Pass 1: formula present, but the requested chart never materializes.
@@ -205,6 +211,100 @@ describe('NodeSlide creation quality report', () => {
     );
   });
 
+  it('flags visually dominant placeholders and zero-value proxy metrics before publication', () => {
+    const riskCommitteeSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) => {
+        if (index === 1) {
+          return {
+            ...slide,
+            metric: '0 cohorts',
+            metricLabel: 'editability - no compatible plotted metric',
+          };
+        }
+        if (index === 5) {
+          return {
+            ...slide,
+            image: {
+              altText: 'Production evidence screenshot placeholder',
+              credit: 'No renderable asset supplied',
+            },
+          };
+        }
+        if (index === 4) {
+          return {
+            ...slide,
+            artifactSpec: {
+              schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+              id: 'unpopulated-outlook',
+              kind: 'chart',
+              narrativeJob: 'Show an outlook bridge.',
+              provenance: {
+                truthState: 'missing',
+                rationale: 'The referenced filing was not retrieved.',
+                sourceRefs: [],
+              },
+              payload: {
+                labels: ['Actual', 'Target'],
+                values: [0, 0],
+                unit: 'USD',
+              },
+            },
+          };
+        }
+        if (index === 6) {
+          return {
+            ...slide,
+            metric: 'Typed artifact',
+            metricLabel: 'Pair each assumption with its invalidating risk',
+          };
+        }
+        return slide;
+      }),
+    };
+
+    const report = reportFor(riskCommitteeSpec);
+    const codes = report.visualRhythmIssues.map((issue) => issue.code);
+
+    expect(codes).toEqual(
+      expect.arrayContaining([
+        'visual_metric_without_signal',
+        'visual_placeholder_hero',
+        'visual_missing_truth_hero',
+      ]),
+    );
+    expect(
+      report.visualRhythmIssues.find((issue) => issue.code === 'visual_placeholder_hero'),
+    ).toMatchObject({ severity: 'error' });
+  });
+
+  it('keeps the visual-logic report bounded during a recurring 100-deck portfolio review', () => {
+    const recurringPortfolioSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 5
+          ? {
+              ...slide,
+              image: {
+                altText: 'Missing portfolio-company product capture',
+                credit: 'Pending portfolio update',
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const reports = Array.from({ length: 100 }, () => reportFor(recurringPortfolioSpec));
+
+    expect(
+      reports.every(
+        (report) =>
+          report.visualRhythmIssues.length <= 12 &&
+          report.visualRhythmIssues.some((issue) => issue.code === 'visual_placeholder_hero'),
+      ),
+    ).toBe(true);
+  });
+
   it('bounds the prompt report payload', () => {
     const promptReport = nodeSlideCreationCritiquePromptReport(reportFor(FLAWED_SPEC));
     expect(promptReport.length).toBeLessThanOrEqual(4_000);
@@ -219,6 +319,41 @@ describe('NodeSlide creation self-critique loop', () => {
     themeId: THEME_ID,
     now: NOW,
   };
+
+  it('deterministically removes unusable hero primitives when the provider path is degraded', async () => {
+    const degradedSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 4
+          ? {
+              ...slide,
+              chart: undefined,
+              metric: '0 cohorts',
+              metricLabel: 'no compatible plotted metric',
+              image: {
+                altText: 'Missing production capture',
+                credit: 'Pending',
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      firstSpec: degradedSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlides = (outcome.spec as typeof degradedSpec).slides;
+
+    expect(repairedSlides[4]).not.toHaveProperty('metric');
+    expect(repairedSlides[4]).not.toHaveProperty('metricLabel');
+    expect(repairedSlides[4]).not.toHaveProperty('image');
+    expect(repairedSlides[4]).toHaveProperty('diagram.kind', 'architecture');
+    expect(repairedSlides[4]).toHaveProperty('diagram.edges.0.label', 'supports');
+    expect(outcome.summary).toContain('deterministic visual-logic repair corrected 2');
+  });
 
   it('runs exactly one revision and adopts a corrected pass 2', async () => {
     const requestRevision = vi.fn(

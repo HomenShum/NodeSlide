@@ -60,6 +60,30 @@ describe('NodeSlide StorySpec and visual-material inventory', () => {
     expect(new Set(context.storySpec.compositionPlan).size).toBeGreaterThanOrEqual(6);
   });
 
+  it('does not turn explicit visual prohibitions into proof obligations', () => {
+    const context = buildNodeSlideStoryContext({
+      title: 'Investor briefing',
+      brief: {
+        prompt:
+          'Use two charts, but no fake screenshots, without stock photos, and never include a code sample.',
+        audience: 'board directors',
+        purpose: 'Choose the operating plan',
+        successCriteria: ['Label forward-looking assumptions'],
+      },
+    });
+    const requiredKinds = context.storySpec.proofObligations.flatMap(
+      (obligation) => obligation.requiredMaterialKinds,
+    );
+
+    expect(requiredKinds).toContain('numeric-series');
+    expect(requiredKinds).not.toContain('screenshot');
+    expect(requiredKinds).not.toContain('image');
+    expect(requiredKinds).not.toContain('code');
+    expect(context.materialInventory.blockedKinds).not.toEqual(
+      expect.arrayContaining(['screenshot', 'image', 'code']),
+    );
+  });
+
   it('keeps cinematic direction bounded and deterministic under a sustained 300-brief agent run', () => {
     const receipts = Array.from(
       { length: 300 },

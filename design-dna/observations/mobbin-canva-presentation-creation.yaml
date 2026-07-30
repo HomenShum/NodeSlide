@@ -1,0 +1,48 @@
+id: obs-mobbin-canva-presentation-creation-1
+source:
+  url: https://mobbin.com/flows/16ed12d5-4a57-435d-8fe0-d3b18c085885
+  app: Canva
+  surface: presentation creation
+  capturedVia: mobbin-live
+firstSeenAt: 2026-07-29
+lastVerifiedAt: 2026-07-29
+facts:
+  - id: f1
+    kind: count
+    subject: creation journey
+    property: recorded screens
+    value: 5
+    unit: screens
+    locatorDescription: Mobbin flow header and five ordered screen previews
+  - id: f2
+    kind: relationship
+    subject: generated presentation
+    property: destination
+    value: final flow screen is the editor rather than a detached success page
+    unit: state transition
+    locatorDescription: fifth preview in the Creating a presentation flow
+  - id: f3
+    kind: relationship
+    subject: editor layout
+    property: visual priority
+    value: central slide canvas is wider than either adjacent control region
+    unit: viewport relationship
+    locatorDescription: final editor screen, center canvas between the left rail and right edge
+  - id: f4
+    kind: relationship
+    subject: presentation sequence
+    property: visibility
+    value: multiple slide thumbnails remain visible while one slide is edited
+    unit: persistent context
+    locatorDescription: final editor screen, ordered thumbnail strip adjacent to the canvas
+  - id: f5
+    kind: relationship
+    subject: completion controls
+    property: placement
+    value: share and presentation actions remain outside the slide canvas
+    unit: hierarchy
+    locatorDescription: final editor screen, application chrome above the canvas
+problemTags: [first-run-orientation, creation-completion, deck-continuity]
+intentTags: [generate, edit, present, share]
+layoutTags: [dominant-canvas, persistent-sequence, bounded-chrome]
+interactionTags: [progressive-creation, direct-to-editor]

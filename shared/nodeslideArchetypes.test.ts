@@ -14,6 +14,8 @@ const BRIEF = {
   purpose: 'Archetype variety acceptance',
   successCriteria: ['At least three distinct archetypes', 'No avoidable adjacent repeats'],
 };
+const EMBEDDED_IMAGE =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
 
 function collidableElements(snapshot: DeckSnapshot, slideId: string): SlideElement[] {
   return snapshot.elements.filter(
@@ -106,8 +108,9 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
           body: 'Media-dominant layout gives the image its own column.',
           bullets: ['Replaceable, credited visual'],
           image: {
-            altText: 'Workflow evidence screenshot placeholder',
-            caption: 'Replace with a licensed asset before publication.',
+            altText: 'Workflow evidence screenshot',
+            caption: 'Licensed workflow capture.',
+            url: EMBEDDED_IMAGE,
           },
         },
         {
@@ -168,6 +171,14 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
     expect(new Set(continuityMotifs.map((element) => element?.role))).toEqual(
       new Set(['story_motif_journey']),
     );
+    expect(
+      snapshot.slides.every(
+        (slide) =>
+          snapshot.elements.filter(
+            (element) => element.slideId === slide.id && element.role?.startsWith('story_motif_'),
+          ).length === 2,
+      ),
+    ).toBe(true);
     for (let index = 1; index < continuityMotifs.length; index += 1) {
       expect(continuityMotifs[index]?.bbox.width ?? 0).toBeGreaterThan(
         continuityMotifs[index - 1]?.bbox.width ?? 0,
@@ -268,14 +279,16 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
     expectZeroCollisions(snapshot);
   });
 
-  it('alternates the media column by slide index for deck rhythm', () => {
-    const mediaSlide = (label: string) => ({
+  it('reserves media-dominant composition for renderable assets', () => {
+    const mediaSlide = (label: string, imageUrl?: string) => ({
       title: label,
       section: `${label} / media`,
       headline: `${label} keeps the visual honest.`,
-      body: 'Media-dominant layout with an explicit image placeholder.',
+      body: imageUrl
+        ? 'Media-dominant layout with a renderable evidence image.'
+        : 'The requested evidence image has not been supplied.',
       bullets: ['Credited visual'],
-      image: { altText: `${label} evidence placeholder` },
+      image: { altText: `${label} evidence`, url: imageUrl },
     });
     const textSlide = (label: string) => ({
       title: label,
@@ -296,8 +309,8 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
         slides: [
           textSlide('Opening'),
           textSlide('Setup'),
-          mediaSlide('Even media'), // index 2 → visual right
-          mediaSlide('Odd media'), // index 3 → visual left
+          mediaSlide('Missing media'),
+          mediaSlide('Resolved media', EMBEDDED_IMAGE),
           textSlide('Bridge'),
           textSlide('Closing'),
         ],
@@ -311,9 +324,8 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
         (element) => element.slideId === slide.id && element.kind === 'image',
       );
     };
-    expect(snapshot.slides[2]?.archetype).toBe('media-dominant');
+    expect(snapshot.slides[2]?.archetype).not.toBe('media-dominant');
     expect(snapshot.slides[3]?.archetype).toBe('media-dominant');
-    expect(imageFor(2)?.bbox.x ?? 0).toBeGreaterThan(0.5);
     expect(imageFor(3)?.bbox.x ?? 1).toBeLessThan(0.5);
     expectZeroCollisions(snapshot);
   });

@@ -819,8 +819,7 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:position|matrix|bands)\b/i);
     expect(repairedSlide.diagram?.edges).toEqual([
       { from: 'evidence-1', to: 'evidence-2', label: 'then' },
-      { from: 'evidence-2', to: 'evidence-3', label: 'then' },
-      { from: 'evidence-3', to: 'claim', label: 'unlocks' },
+      { from: 'evidence-2', to: 'claim', label: 'unlocks' },
     ]);
   });
 

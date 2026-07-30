@@ -672,7 +672,7 @@ function claimDiagramFromSlide(slide: Record<string, unknown>): Record<string, u
       )
     : [];
   if (bullets.length < 2) return null;
-  const evidenceNodes = bullets.slice(0, 3).map((bullet, index) => ({
+  const evidenceNodes = bullets.slice(0, 2).map((bullet, index) => ({
     id: `evidence-${index + 1}`,
     label: bullet.trim().slice(0, 80),
     kind: 'system',

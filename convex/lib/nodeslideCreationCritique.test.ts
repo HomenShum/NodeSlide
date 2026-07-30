@@ -408,6 +408,38 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(outcome.summary).toContain('deterministic visual-logic repair corrected 2');
   });
 
+  it('keeps a visual-slide briefing from painting body copy into its decision bullets', async () => {
+    const longBody =
+      'The filing poses one tension: is customer and revenue momentum converting into lasting margin structure? This briefing tests that claim before asking leadership for two accountable decisions. The remaining detail belongs in the decision bullets and speaker notes.';
+    const crowdedSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 0
+          ? {
+              ...slide,
+              body: longBody,
+              metric: 'Q4/FY2025',
+              metricLabel: 'Reporting period under review',
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      firstSpec: crowdedSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedBody = (outcome.spec as typeof crowdedSpec).slides[0].body;
+
+    expect(repairedBody.length).toBeLessThanOrEqual(220);
+    expect(repairedBody).toMatch(/[.!?]$/u);
+    expect(repairedBody).not.toContain('…');
+    expect(repairedBody).toContain('two accountable decisions');
+    expect(repairedBody).not.toContain('speaker notes');
+  });
+
   it('removes a provider comparison that cannot plot two cohorts instead of minting a zero proxy', async () => {
     const degradedSpec = {
       ...CORRECTED_SPEC,

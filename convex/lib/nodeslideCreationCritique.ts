@@ -768,6 +768,21 @@ function replaceQuarantinedEvidenceCopy(slide: Record<string, unknown>): Record<
   return repaired;
 }
 
+function compactVisualBodyCopy(value: string, maxLength = 220): string {
+  if (value.length <= maxLength) return value;
+  const completeSentences = value.match(/[^.!?]+[.!?]+(?:\s+|$)/gu) ?? [];
+  let compact = '';
+  for (const sentence of completeSentences) {
+    const candidate = `${compact}${sentence}`.trim();
+    if (candidate.length > maxLength) break;
+    compact = candidate;
+  }
+  if (compact) return compact;
+  const bounded = value.slice(0, maxLength + 1);
+  const lastSpace = bounded.lastIndexOf(' ');
+  return bounded.slice(0, lastSpace > 0 ? lastSpace : maxLength).trimEnd();
+}
+
 function repairCreationVisualLogic(
   rawSpec: unknown,
   brief: DeckBrief,
@@ -858,6 +873,19 @@ function repairCreationVisualLogic(
     if (metricHasNoVisualSignal(slide['metric'], slide['metricLabel'])) {
       const { metric: _invalidMetric, metricLabel: _invalidMetricLabel, ...withoutMetric } = slide;
       slide = withoutMetric;
+      repairCount += 1;
+    }
+    const hasPrimaryVisual = [
+      'metric',
+      'chart',
+      'diagram',
+      'formula',
+      'image',
+      'video',
+      'artifactSpec',
+    ].some((key) => slide[key] !== undefined && slide[key] !== null);
+    if (hasPrimaryVisual && typeof slide['body'] === 'string' && slide['body'].length > 220) {
+      slide = { ...slide, body: compactVisualBodyCopy(slide['body']) };
       repairCount += 1;
     }
     const artifactSpec = slide['artifactSpec'];

@@ -54,6 +54,25 @@ function isPrimaryVisual(element: SlideElement): boolean {
   );
 }
 
+function hasOrderSensitiveHorizontalSequence(elements: readonly SlideElement[]): boolean {
+  if (
+    elements.some(
+      (element) =>
+        element.role?.startsWith('diagram_node') === true ||
+        element.role?.startsWith('diagram_connector') === true,
+    )
+  ) {
+    return true;
+  }
+  const bullets = elements.filter((element) => element.role === 'bullet');
+  return (
+    bullets.length >= 2 &&
+    Math.max(...bullets.map((element) => element.bbox.y)) -
+      Math.min(...bullets.map((element) => element.bbox.y)) <
+      0.04
+  );
+}
+
 function mirror(elements: readonly SlideElement[]): SlideElement[] {
   return cloneElements(elements).map((element) => ({
     ...element,
@@ -166,6 +185,8 @@ function candidateSummary(input: {
         : input.variant === 'mirrored'
           ? 2
           : 4;
+  const semanticOrderPenalty =
+    input.variant === 'mirrored' && hasOrderSensitiveHorizontalSequence(input.elements) ? 1_000 : 0;
   return {
     id: `composition/${input.plan.slideIndex + 1}/${input.variant}`,
     slideIndex: input.plan.slideIndex,
@@ -177,7 +198,8 @@ function candidateSummary(input: {
         variantBonus +
         Math.min(12, dominantArea * 20) -
         overlapCount * 12 -
-        outOfBoundsCount * 50
+        outOfBoundsCount * 50 -
+        semanticOrderPenalty
       ).toFixed(3),
     ),
     overlapCount,

@@ -7,6 +7,7 @@ const campaignDir = path.dirname(fileURLToPath(import.meta.url));
 const repo = path.resolve(campaignDir, '..', '..');
 const phase = process.argv[2] ?? 'before';
 const requested = new Set(process.argv.slice(3));
+const requestedModel = process.env.NODESLIDE_CORPUS_MODEL?.trim();
 const scenarios = JSON.parse(readFileSync(path.join(campaignDir, 'scenarios.json'), 'utf8')).filter(
   (scenario) => requested.size === 0 || requested.has(scenario.id),
 );
@@ -33,6 +34,7 @@ for (const scenario of scenarios) {
         scenario.prompt,
         '--output',
         output,
+        ...(requestedModel ? ['--model', requestedModel] : []),
       ],
       {
         cwd: repo,
@@ -51,6 +53,7 @@ for (const scenario of scenarios) {
       exitCode: result.status,
       signal: result.signal,
       timedOut: result.error?.code === 'ETIMEDOUT',
+      model: requestedModel ?? 'default',
       stdoutPath,
       stderrPath,
     };

@@ -61,6 +61,39 @@ describe('NodeSlide rendered composition fan-out', () => {
     expect(validateNodeSlideSnapshot(built.snapshot, NOW).publishOk).toBe(true);
   });
 
+  it('refuses to mirror a horizontal numbered sequence into right-to-left reading order', () => {
+    const built = fixture();
+    const slide = built.snapshot.slides.find((candidate) => {
+      const bullets = built.snapshot.elements.filter(
+        (element) => element.slideId === candidate.id && element.role === 'bullet',
+      );
+      return bullets.length >= 2;
+    });
+    const basePlan = built.spec.designPlans?.[0];
+    if (!slide || !basePlan) throw new Error('Expected a bullet slide and plan.');
+    let bulletIndex = 0;
+    const elements = built.snapshot.elements
+      .filter((element) => element.slideId === slide.id)
+      .map((element) => {
+        if (element.role !== 'bullet') return element;
+        const horizontal = {
+          ...element,
+          bbox: { ...element.bbox, x: 0.07 + bulletIndex * 0.28, y: 0.72 },
+        };
+        bulletIndex += 1;
+        return horizontal;
+      });
+    const result = fanOutNodeSlideComposition({
+      elements,
+      plan: { ...basePlan, slideIndex: 2 },
+    });
+
+    expect(
+      result.candidates.find((candidate) => candidate.variant === 'mirrored')?.score,
+    ).toBeLessThan(0);
+    expect(result.candidates.find((candidate) => candidate.selected)?.variant).not.toBe('mirrored');
+  });
+
   it('feeds pixel-adapter observations into the bounded loop and emits a concrete move repair', () => {
     const built = fixture();
     const dirty = structuredClone(built.snapshot);

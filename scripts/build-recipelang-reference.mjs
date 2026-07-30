@@ -8,7 +8,7 @@ import {
   verifyRecipeGridAlignment,
 } from '../packages/recipelang/dist/index.js';
 
-const sourcePath = resolve('benchmarks/recipelang/edge-data-contract.recipe.yaml');
+const sourcePath = resolve('packages/recipelang/reference/edge-data-contract.recipe.yaml');
 const htmlPath = resolve('public/recipelang/edge-data-contract.html');
 const svgPath = resolve('public/recipelang/edge-data-contract.svg');
 const receiptPath = resolve('public/recipelang/edge-data-contract.receipt.json');
@@ -22,7 +22,7 @@ if (!alignment.passed) {
 const receipt = `${JSON.stringify(
   {
     schemaVersion: 'recipelang.reference/v1',
-    source: 'benchmarks/recipelang/edge-data-contract.recipe.yaml',
+    source: 'packages/recipelang/reference/edge-data-contract.recipe.yaml',
     htmlSha256: sha256(html),
     svgSha256: sha256(svg),
     alignment,

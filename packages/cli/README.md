@@ -76,6 +76,7 @@ deck, publishes the share, and atomically writes editable PPTX, standalone
 HTML, canonical snapshot, and receipt files. A hosted provider silently
 falling back to deterministic content is an error unless the caller explicitly
 passes `--allow-fallback`. Use `--no-publish` only for a deliberate local-only
-run, `--model` to select another qualified model, and `--effort` to raise
-reasoning above the structured-generation default of `low`.
+run and `--model` to select another qualified model. When `--effort` is omitted,
+the CLI chooses that model's lowest supported effort; an explicitly unsupported
+model/effort pair is refused before the provider call.
 `NODESLIDE_CONVEX_URL` targets a different deployment.

@@ -6,13 +6,44 @@ import {
   type NodeSlideStorySpec,
   buildNodeSlideStoryContext,
 } from '../../../convex/lib/nodeslideStoryContext';
-import type { DeckSnapshot, NodeSlideWorkspace } from '../../../shared/nodeslide';
+import {
+  type DeckSnapshot,
+  NODESLIDE_AGENT_MODELS,
+  type NodeSlideReasoningEffort,
+  type NodeSlideWorkspace,
+  isNodeSlideReasoningEffort,
+} from '../../../shared/nodeslide';
 import { renderDeckHtml } from '../../../src/domains/nodeslide/slidelang/html';
 import { buildPptx } from '../../../src/domains/nodeslide/slidelang/pptx';
 
 const MAX_PPTX_BYTES = 24 * 1024 * 1024;
 const MAX_HTML_BYTES = 8 * 1024 * 1024;
 const CREATE_TIMEOUT_MS = 360_000;
+
+/**
+ * Resolves a model-compatible effort before the CLI spends or opens a deck.
+ *
+ * Most offered models accept `low`, but GLM's OpenRouter route intentionally
+ * starts at `high`. A model-only CLI invocation must therefore derive its
+ * default from the selected model instead of manufacturing an invalid pair.
+ */
+export function resolveGenerateEffort(
+  modelId: string,
+  requested?: string,
+): NodeSlideReasoningEffort {
+  if (requested !== undefined && !isNodeSlideReasoningEffort(requested)) {
+    throw new Error('--effort must be low, medium, high, xhigh, or max.');
+  }
+  const model = NODESLIDE_AGENT_MODELS.find((candidate) => candidate.id === modelId);
+  const supported = model?.supportedEfforts as readonly NodeSlideReasoningEffort[] | undefined;
+  const effort = requested ?? (supported?.includes('low') ? 'low' : (supported?.[0] ?? 'low'));
+  if (supported && !supported.includes(effort)) {
+    throw new Error(
+      `${modelId} does not support --effort ${effort}; choose ${supported.join(', ')}.`,
+    );
+  }
+  return effort;
+}
 
 export interface GenerateOptions {
   convexUrl: string;

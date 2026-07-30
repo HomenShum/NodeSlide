@@ -41,6 +41,41 @@ describe('NodeSlide creation completion boundary', () => {
     ).toBe(false);
   });
 
+  it('turns a misaligned risk chart into an explicit evidence gap instead of aborting creation', () => {
+    const rawSpec = structuredClone(deterministicBriefSpec('Risk release gate', brief));
+    const artifactSlide = rawSpec.slides[4];
+    expect(artifactSlide).toBeDefined();
+    if (!artifactSlide) return;
+    artifactSlide.artifactSpec = canonicalArtifactFixture('chart');
+    const artifact = artifactSlide.artifactSpec as {
+      payload?: { series?: Array<{ values?: number[] }> };
+    };
+    artifact.payload?.series?.[0]?.values?.pop();
+
+    const built = buildBriefNodeSlide({
+      deckId: 'deck-risk-chart-boundary',
+      projectId: 'project-risk-chart-boundary',
+      title: 'Risk release gate',
+      brief,
+      themeId: 'editorial-signal',
+      rawSpec,
+      now: 1_700_000_000_000,
+    });
+
+    expect(built.snapshot.slides).toHaveLength(7);
+    expect(
+      built.snapshot.elements.some(
+        (element) =>
+          element.kind === 'text' &&
+          typeof element.content === 'string' &&
+          element.content.includes('Evidence gap: exact figures required before publication'),
+      ),
+    ).toBe(true);
+    expect(
+      built.snapshot.elements.some((element) => element.authoredArtifactBinding?.kind === 'chart'),
+    ).toBe(false);
+  });
+
   it('lets an owner publish a chart without exposing the private evidence record', () => {
     const built = buildBriefNodeSlide({
       deckId: 'deck-public-chart',

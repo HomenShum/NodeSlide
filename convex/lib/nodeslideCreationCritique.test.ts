@@ -492,6 +492,37 @@ describe('NodeSlide creation self-critique loop', () => {
     ]);
   });
 
+  it('orders a district review close from decision to owner to checkpoint', async () => {
+    const reversedClose = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 5
+          ? {
+              ...slide,
+              bullets: [
+                "03 Checkpoint: first full-cycle run at next month's review.",
+                '02 Owner: district programme manager and M&E officer.',
+                '01 Decision: adopt the verify–visualize–decide–follow-up loop.',
+              ],
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      firstSpec: reversedClose,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+
+    expect((outcome.spec as typeof reversedClose).slides[5].bullets).toEqual([
+      'Decision: adopt the verify–visualize–decide–follow-up loop.',
+      'Owner: district programme manager and M&E officer.',
+      "Checkpoint: first full-cycle run at next month's review.",
+    ]);
+  });
+
   it('removes a provider comparison that cannot plot two cohorts instead of minting a zero proxy', async () => {
     const degradedSpec = {
       ...CORRECTED_SPEC,

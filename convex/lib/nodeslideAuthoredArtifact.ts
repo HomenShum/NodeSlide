@@ -1,4 +1,4 @@
-import type { DeckBrief } from '../../shared/nodeslide';
+import { type DeckBrief, isNodeSlideEmbeddedRasterDataUrl } from '../../shared/nodeslide';
 import {
   NODESLIDE_ARTIFACT_GEOMETRY_VERSION,
   type NodeSlideNativeArtifactGeometry,
@@ -281,6 +281,33 @@ export function compileNodeSlideAuthoredArtifact(
   const materialization = compileCanonicalPayload(spec);
   const projection = materialization.projection ?? registryProjection;
   const planned = materialization.planned;
+  if (
+    planned.metric &&
+    (!authoredMetricHasVisualSignal(planned.metric, planned.metricLabel) ||
+      /^0\s*\/\s*\d+\s+values?$/iu.test(planned.metric.trim()))
+  ) {
+    throw new NodeSlideAuthoredArtifactValidationError([
+      {
+        code: 'artifact_visual_without_signal',
+        severity: 'error',
+        message: 'Authored metric fallback does not contain a decision-relevant visual signal.',
+        path: '$.payload',
+        repair: { operation: 'remove', path: '$.artifactSpec' },
+      },
+    ]);
+  }
+  const imageUrl = planned.image?.imageUrl ?? planned.image?.url;
+  if (planned.image && !isNodeSlideEmbeddedRasterDataUrl(imageUrl)) {
+    throw new NodeSlideAuthoredArtifactValidationError([
+      {
+        code: 'artifact_image_without_renderable_asset',
+        severity: 'error',
+        message: 'Authored image fallback has no renderable embedded asset.',
+        path: '$.payload',
+        repair: { operation: 'remove', path: '$.artifactSpec' },
+      },
+    ]);
+  }
   const authoredSpecDigest = nodeSlideArtifactDigest(spec);
   const renderLineage = {
     baseInputDigest: nodeSlideArtifactDigest(value),
@@ -327,6 +354,28 @@ export function compileNodeSlideAuthoredArtifact(
     ...(geometry ? { geometry } : {}),
     receipt,
   };
+}
+
+function authoredMetricHasVisualSignal(metric: string, label: string | undefined): boolean {
+  const normalized = metric.trim();
+  const hasDecisionSignal =
+    /(?:\d|[$€£¥%]|[≥≤<>]|\b(?:approved|blocked|ready|live|pass|fail|go|no-go)\b)/iu.test(
+      normalized,
+    );
+  if (!hasDecisionSignal) return false;
+  if (
+    !/^(?:0(?:[.,]0+)?\s*(?:cohorts?|items?|records?|series|datasets?)?|n\/?a|none|unknown|unavailable|[-—])$/iu.test(
+      normalized,
+    )
+  ) {
+    return true;
+  }
+  return !(
+    !label ||
+    /\b(?:no compatible|no data|not supplied|placeholder|pending|unavailable|unknown)\b/iu.test(
+      label,
+    )
+  );
 }
 
 export function nodeSlideAuthoredArtifactReceiptLineageMatches(

@@ -2415,7 +2415,13 @@ function coercePlannedSlide(
       // validated legacy formula can replace. Provenance/source failures still
       // abort so the critique loop can repair them instead of laundering them.
       if (!(error instanceof NodeSlideAuthoredArtifactValidationError)) throw error;
-      if (!error.issues.every((issue) => issue.code === 'equation_evaluation_mismatch')) {
+      const quarantinableArtifactIssues = new Set([
+        'equation_evaluation_mismatch',
+        'comparison_without_plottable_signal',
+        'artifact_visual_without_signal',
+        'artifact_image_without_renderable_asset',
+      ]);
+      if (!error.issues.every((issue) => quarantinableArtifactIssues.has(issue.code))) {
         throw error;
       }
     }

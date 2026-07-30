@@ -160,5 +160,9 @@
     "@hono/node-server": "^2.0.12",
     "protobufjs": "7.6.5",
     "ws": "^8.21.0"
+  },
+  "optionalDependencies": {
+    "@biomejs/cli-linux-x64": "1.9.4",
+    "@rollup/rollup-linux-x64-gnu": "4.62.2"
   }
 }

@@ -1216,7 +1216,7 @@ function repairCreationVisualLogic(
       slide = replaceQuarantinedQuantitativeCopy(withoutFormula);
       repairCount += 1;
     }
-    const hasPrimaryVisual = [
+    const primaryVisualKeys = [
       'metric',
       'chart',
       'diagram',
@@ -1224,7 +1224,19 @@ function repairCreationVisualLogic(
       'image',
       'video',
       'artifactSpec',
-    ].some((key) => slide[key] !== undefined && slide[key] !== null);
+    ];
+    if (
+      !primaryVisualKeys.some((key) => slide[key] !== undefined && slide[key] !== null) &&
+      claimsMissingQuantitativeVisual(slide)
+    ) {
+      slide = replaceQuarantinedQuantitativeCopy(slide);
+      const claimDiagram = claimDiagramFromSlide(slide);
+      if (claimDiagram) slide['diagram'] = claimDiagram;
+      repairCount += 1;
+    }
+    const hasPrimaryVisual = primaryVisualKeys.some(
+      (key) => slide[key] !== undefined && slide[key] !== null,
+    );
     if (hasPrimaryVisual && typeof slide['body'] === 'string' && slide['body'].length > 220) {
       slide = { ...slide, body: compactVisualBodyCopy(slide['body']) };
       repairCount += 1;
@@ -1262,6 +1274,21 @@ function repairCreationVisualLogic(
   return repairCount > 0
     ? { spec: { ...rawSpec, slides: adjacentRepair.slides }, repairCount }
     : { spec: rawSpec, repairCount };
+}
+
+function claimsMissingQuantitativeVisual(slide: Record<string, unknown>): boolean {
+  const copy = [
+    slide['title'],
+    slide['headline'],
+    slide['body'],
+    ...(Array.isArray(slide['bullets']) ? slide['bullets'] : []),
+  ]
+    .map((value) => String(value ?? ''))
+    .join(' ');
+  return (
+    /\b(?:plotted|plotting|mapped|positioned)\b/iu.test(copy) &&
+    /\b(?:axes?|matrix|quadrant|heatmap|band)\b/iu.test(copy)
+  );
 }
 
 function repairAdjacentQuantitativeQuarantines(

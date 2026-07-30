@@ -879,17 +879,17 @@ function replaceQuarantinedQuantitativeCopy(
 ): Record<string, unknown> {
   const repaired = { ...slide };
   if (typeof repaired['headline'] === 'string') {
-    repaired['headline'] = 'Evidence gap: exact figures required before publication';
+    repaired['headline'] = 'The release gate stays closed until the evidence is verified';
   }
   if (typeof repaired['body'] === 'string') {
     repaired['body'] =
-      'No quantitative outlook is shown because the supplied context does not contain verified figures. Add exact values with a source citation before publication.';
+      'The supplied context does not contain verified figures, so NodeSlide does not invent a quantitative outlook. Publication resumes when exact values and source citations are attached.';
   }
   if (Array.isArray(repaired['bullets'])) {
     repaired['bullets'] = [
-      'No values or trend are inferred from missing evidence',
-      'Use the source metric definition and reconciliation',
-      'Keep the decision gated until the figures are verified',
+      'Hold the release decision',
+      'Attach exact figures and metric definitions',
+      'Verify the source, owner, and reconciliation',
     ];
   }
   return repaired;

@@ -371,6 +371,7 @@ describe('local SlideLangAdapter', () => {
     expect(html).toContain('data-source-ids="source:adoption"');
     expect(html).toContain('data-element-id="element:headline"');
     expect(html).toContain('data-element-kind="text"');
+    expect(html).toContain('font-size:66.668px');
     expect(html).toContain('data-slide-semantics');
     expect(html).toContain('Slide 1 of 1: Overview</h2>');
     expect(html).toContain('>Editable native headline</h3>');

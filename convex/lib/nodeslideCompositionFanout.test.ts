@@ -94,6 +94,46 @@ describe('NodeSlide rendered composition fan-out', () => {
     expect(result.candidates.find((candidate) => candidate.selected)?.variant).not.toBe('mirrored');
   });
 
+  it('keeps a risk-committee process diagram in semantic reading order across sustained fan-out', () => {
+    const built = fixture();
+    const slideIndex = built.snapshot.slides.findIndex((candidate) =>
+      built.snapshot.elements.some(
+        (element) => element.slideId === candidate.id && element.role?.startsWith('diagram_'),
+      ),
+    );
+    const slide = built.snapshot.slides[slideIndex];
+    const plan = built.spec.designPlans?.find((candidate) => candidate.slideIndex === slideIndex);
+    if (!slide || !plan) throw new Error('Expected a diagram slide and plan.');
+    const elements = built.snapshot.elements.filter((element) => element.slideId === slide.id);
+
+    for (let iteration = 0; iteration < 100; iteration += 1) {
+      const result = fanOutNodeSlideComposition({ elements, plan });
+      expect(
+        result.candidates.find((candidate) => candidate.variant === 'mirrored')?.score,
+      ).toBeLessThan(0);
+      expect(result.candidates.find((candidate) => candidate.selected)?.variant).not.toBe(
+        'mirrored',
+      );
+    }
+  });
+
+  it('mirrors connector direction with its geometry instead of leaving a reversed arrow', () => {
+    const built = fixture();
+    const connector = built.snapshot.elements.find((element) => element.kind === 'connector');
+    if (!connector) throw new Error('Expected a connector.');
+    const slideIndex = built.snapshot.slides.findIndex(
+      (candidate) => candidate.id === connector.slideId,
+    );
+    const plan = built.spec.designPlans?.find((candidate) => candidate.slideIndex === slideIndex);
+    if (!plan) throw new Error('Expected the connector slide plan.');
+    const result = fanOutNodeSlideComposition({ elements: [connector], plan });
+    const mirrored = result.renderCandidates
+      .find((candidate) => candidate.variant === 'mirrored')
+      ?.elements.find((element) => element.id === connector.id);
+
+    expect(mirrored?.rotation).toBe(180);
+  });
+
   it('feeds pixel-adapter observations into the bounded loop and emits a concrete move repair', () => {
     const built = fixture();
     const dirty = structuredClone(built.snapshot);

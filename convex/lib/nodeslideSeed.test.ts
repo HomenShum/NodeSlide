@@ -36,6 +36,85 @@ describe('NodeSlide seed', () => {
     });
   });
 
+  it('lays out a cross-cutting governance loop as a readable release path', () => {
+    const brief = {
+      prompt: 'Prepare a NIST AI RMF release decision for a bank risk committee.',
+      audience: 'Chief risk officer, legal, security, and model risk',
+      purpose: 'Move one AI system to a governed release decision',
+      successCriteria: ['Keep GOVERN cross-cutting', 'Show the release gate'],
+    };
+    const rawSpec = {
+      title: 'AI release decision',
+      slides: Array.from({ length: 6 }, (_, index) => ({
+        title: `Decision ${index + 1}`,
+        section: index === 2 ? 'Build' : 'Orient',
+        headline:
+          index === 2
+            ? 'MAP, MEASURE, and MANAGE cycle continuously; GOVERN surrounds them all.'
+            : `Decision frame ${index + 1}`,
+        body: 'Use verified evidence to move from uncertainty to a controlled release.',
+        bullets: ['Name the owner', 'Inspect the evidence', 'Hold the gate when proof is missing'],
+        ...(index === 2
+          ? {
+              diagram: {
+                kind: 'process',
+                direction: 'horizontal',
+                nodes: [
+                  { id: 'govern', label: 'GOVERN (cross-cutting)' },
+                  { id: 'map', label: 'MAP' },
+                  { id: 'measure', label: 'MEASURE' },
+                  { id: 'manage', label: 'MANAGE' },
+                  { id: 'gate', label: 'Release Gate', kind: 'decision' },
+                ],
+                edges: [
+                  { from: 'govern', to: 'map', label: 'oversight' },
+                  { from: 'govern', to: 'measure', label: 'oversight' },
+                  { from: 'govern', to: 'manage', label: 'oversight' },
+                  { from: 'map', to: 'measure' },
+                  { from: 'measure', to: 'manage' },
+                  { from: 'manage', to: 'map', label: 'feedback' },
+                  { from: 'manage', to: 'gate', label: 'evidence' },
+                ],
+              },
+            }
+          : {}),
+      })),
+    };
+    const snapshot = buildBriefNodeSlide({
+      deckId: 'deck-ai-release-loop',
+      projectId: 'project-ai-release-loop',
+      title: rawSpec.title,
+      brief,
+      themeId: 'editorial-signal',
+      rawSpec,
+      now: 1_000,
+    }).snapshot;
+    const slide = snapshot.slides[2];
+    if (!slide) throw new Error('Missing governance loop slide.');
+    const elements = snapshot.elements.filter((element) => element.slideId === slide.id);
+    const node = (label: string) =>
+      elements.find((element) => element.kind === 'shape' && element.content === label);
+    const govern = node('GOVERN (cross-cutting)');
+    const map = node('MAP');
+    const measure = node('MEASURE');
+    const manage = node('MANAGE');
+    const gate = node('Release Gate');
+
+    expect(govern?.bbox.width).toBeGreaterThan(0.4);
+    expect([map?.bbox.x, measure?.bbox.x, manage?.bbox.x, gate?.bbox.x]).toEqual(
+      [...[map?.bbox.x, measure?.bbox.x, manage?.bbox.x, gate?.bbox.x]].sort(
+        (left, right) => (left ?? 0) - (right ?? 0),
+      ),
+    );
+    expect(
+      elements.some(
+        (element) => element.role === 'diagram_edge' && element.artifactBinding?.from === 'govern',
+      ),
+    ).toBe(false);
+    expect(elements.some((element) => element.role === 'diagram_feedback')).toBe(true);
+    expect(validateNodeSlideSnapshot(snapshot, 1_000).issues).toEqual([]);
+  });
+
   it('preserves the owner and checkpoint in a realistic board decision slide', () => {
     const brief = {
       prompt: 'Prepare a board decision brief.',

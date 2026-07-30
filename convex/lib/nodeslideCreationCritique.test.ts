@@ -425,8 +425,8 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedSlide).not.toHaveProperty('artifactSpec');
     expect(repairedSlide).not.toHaveProperty('chart');
     expect(repairedSlide).toMatchObject({
-      headline: 'Evidence gap: exact figures required before publication',
-      body: expect.stringContaining('does not contain verified figures'),
+      headline: 'The release gate stays closed until the evidence is verified',
+      body: expect.stringContaining('does not invent a quantitative outlook'),
     });
     expect(repairedSlides.every((slide) => !('artifactSpec' in slide) && !('chart' in slide))).toBe(
       true,
@@ -671,8 +671,8 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedSlide).not.toHaveProperty('chart');
     expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:chart|shape|placeholder)\b/i);
     expect(repairedSlide).toMatchObject({
-      headline: 'Evidence gap: exact figures required before publication',
-      body: expect.stringContaining('No quantitative outlook is shown'),
+      headline: 'The release gate stays closed until the evidence is verified',
+      body: expect.stringContaining('does not invent a quantitative outlook'),
     });
   });
 
@@ -766,11 +766,11 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(JSON.stringify(outcome.spec)).not.toContain('illustrative-outlook');
     expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:chart|shape|trajectory)\b/i);
     expect(repairedSlide).toMatchObject({
-      headline: 'Evidence gap: exact figures required before publication',
-      body: expect.stringContaining('No quantitative outlook is shown'),
+      headline: 'The release gate stays closed until the evidence is verified',
+      body: expect.stringContaining('does not invent a quantitative outlook'),
       bullets: expect.arrayContaining([
-        'No values or trend are inferred from missing evidence',
-        'Keep the decision gated until the figures are verified',
+        'Hold the release decision',
+        'Verify the source, owner, and reconciliation',
       ]),
     });
   });
@@ -930,8 +930,8 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedSlide).not.toHaveProperty('formula');
     expect(JSON.stringify(repairedSlide)).not.toContain('0.5');
     expect(repairedSlide).toMatchObject({
-      headline: 'Evidence gap: exact figures required before publication',
-      body: expect.stringContaining('No quantitative outlook is shown'),
+      headline: 'The release gate stays closed until the evidence is verified',
+      body: expect.stringContaining('does not invent a quantitative outlook'),
     });
   });
 
@@ -986,7 +986,7 @@ describe('NodeSlide creation self-critique loop', () => {
 
     expect(repairedFormulaSlide).not.toHaveProperty('formula');
     expect(repairedFormulaSlide).toMatchObject({
-      headline: 'Evidence gap: exact figures required before publication',
+      headline: 'The release gate stays closed until the evidence is verified',
     });
     expect(repairedDecisionSlide).not.toHaveProperty('metric');
     expect(repairedDecisionSlide).not.toHaveProperty('metricLabel');

@@ -55,6 +55,21 @@ function withSecondSlide(
 }
 
 describe('@nodeslide/react controlled surfaces', () => {
+  it('keeps canonical point typography readable in a full-size host viewer', () => {
+    const snapshot = withSecondSlide(createNodeSlideTestSnapshot());
+    const activeSlideId = snapshot.deck.slideOrder[1];
+    if (!activeSlideId) throw new Error('Missing decision slide.');
+    const titleId = `${activeSlideId}:title`;
+    const { container } = render(
+      <NodeSlideDeckViewer snapshot={snapshot} activeSlideId={activeSlideId} />,
+    );
+
+    expect(
+      (container.querySelector(`[data-nodeslide-element-id="${titleId}"]`) as HTMLElement | null)
+        ?.style.fontSize,
+    ).toBe(`${36 / 9.6}cqw`);
+  });
+
   it('renders only the host-selected slide and reports navigation intent', async () => {
     const user = userEvent.setup();
     const snapshot = withSecondSlide(createNodeSlideTestSnapshot());

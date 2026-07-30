@@ -68,7 +68,7 @@ describe('NodeSlide creation completion boundary', () => {
         (element) =>
           element.kind === 'text' &&
           typeof element.content === 'string' &&
-          element.content.includes('Evidence gap: exact figures required before publication'),
+          element.content.includes('The release gate stays closed until the evidence is verified'),
       ),
     ).toBe(true);
     expect(

@@ -775,6 +775,64 @@ describe('NodeSlide creation self-critique loop', () => {
     });
   });
 
+  it('preserves the slide thesis when a grounded symbolic visual survives quarantine', async () => {
+    const riskSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 4
+          ? {
+              ...slide,
+              headline: 'Residual risk must be scored separately from performance',
+              bullets: [
+                'Performance answers whether the model works',
+                'Residual risk answers what harm remains',
+                'The release gate weighs both',
+              ],
+              formula: {
+                expression: 'residual_risk = likelihood * impact * remaining_control_gap',
+                display: 'Residual Risk = Likelihood × Impact × Remaining Control Gap',
+                variables: [],
+              },
+              chart: { labels: ['Initial', 'Gate'], values: [20, 9] },
+              artifactSpec: {
+                schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+                id: 'illustrative-risk-trajectory',
+                kind: 'chart',
+                narrativeJob: 'Show residual risk moving toward tolerance.',
+                provenance: {
+                  truthState: 'illustrative',
+                  rationale: 'The values demonstrate the metaphor only.',
+                  sourceRefs: [],
+                },
+                payload: {
+                  labels: ['Initial', 'Gate'],
+                  values: [20, 9],
+                },
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      brief: {
+        ...ROADSHOW_BRIEF,
+        prompt: 'Create a NIST AI RMF release decision deck.',
+      },
+      firstSpec: riskSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlide = (outcome.spec as typeof riskSpec).slides[4];
+
+    expect(repairedSlide).not.toHaveProperty('artifactSpec');
+    expect(repairedSlide).not.toHaveProperty('chart');
+    expect(repairedSlide).toHaveProperty('formula');
+    expect(repairedSlide.headline).toBe('Residual risk must be scored separately from performance');
+    expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:20|9)\b/u);
+  });
+
   it('removes an invented score formula whose filing inputs are still pending', async () => {
     const strictBoardBrief = {
       ...ROADSHOW_BRIEF,

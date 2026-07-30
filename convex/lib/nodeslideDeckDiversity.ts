@@ -87,7 +87,7 @@ function computeSlideSilhouette(
     const row = Math.min(2, Math.floor(element.bbox.y * 3));
     const region = row * 3 + col;
     regionOccupancy |= 1 << region;
-    regionAreas[region]! += area;
+    regionAreas[region] = (regionAreas[region] ?? 0) + area;
   }
 
   // Dominant region: the region with the most content area

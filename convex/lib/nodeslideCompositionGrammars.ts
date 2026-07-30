@@ -7,10 +7,10 @@
  * NOT parameter presets over one element tree — they produce materially
  * different element sets and silhouettes.
  */
-import {
-  type BoundingBox,
-  type SlideElement,
-  type ThemeSpec,
+import type {
+  BoundingBox,
+  SlideElement,
+  ThemeSpec,
 } from '../../shared/nodeslide';
 import { estimateTextHeight, resolveCollisions } from '../../shared/nodeslideLayoutMetrics';
 import {
@@ -295,8 +295,10 @@ function buildChartElement(
   height: number,
 ): SlideElement {
   const { planned, theme } = ctx;
-  const labels = planned.chart!.labels.slice(0, 8);
-  const values = planned.chart!.values.slice(0, labels.length);
+  const chart = planned.chart;
+  if (!chart) return makeElement(ctx, 'chart-placeholder', { name: 'Chart', kind: 'text', role: 'evidence', content: '', bbox: box(x, y, width, height), rotation: 0, style: { fill: theme.colors.accentSoft, color: theme.colors.insightInk, fontSize: 10, fontFamily: theme.typography.body, fontWeight: 400, lineHeight: 1.2, textAlign: 'center', verticalAlign: 'middle' }, sourceIds: [], locked: false, exportCapabilities: [...EDITABLE_CAPABILITIES] });
+  const labels = chart.labels.slice(0, 8);
+  const values = chart.values.slice(0, labels.length);
   const binding = authoredArtifactBinding(ctx);
   return makeElement(ctx, 'chart', {
     name: 'Evidence chart',
@@ -314,7 +316,7 @@ function buildChartElement(
       chartType: 'bar',
       labels,
       series: [{ name: 'Signal', values, color: theme.colors.accent }],
-      ...(planned.chart!.unit ? { unit: planned.chart!.unit } : {}),
+      ...(chart.unit ? { unit: chart.unit } : {}),
       sourceId: evidenceSourceIds(ctx)[0] ?? ctx.sourceEvidenceId,
     },
     sourceIds: evidenceSourceIds(ctx),
@@ -340,7 +342,7 @@ function buildMetricElement(
     role: 'metric',
     bbox: box(x, y, width, height),
     rotation: 0,
-    content: planned.metric!,
+    content: planned.metric ?? '',
     style: {
       color: theme.colors.insightInk,
       fill: theme.colors.insight,
@@ -373,7 +375,7 @@ function buildFormulaElement(
     role: 'formula',
     bbox: box(x, y, width, height),
     rotation: 0,
-    content: planned.formula!.display,
+    content: planned.formula?.display ?? '',
     style: {
       fill: theme.colors.insight,
       color: theme.colors.insightInk,
@@ -387,19 +389,19 @@ function buildFormulaElement(
       verticalAlign: 'middle',
     },
     math: {
-      expression: planned.formula!.expression,
-      display: planned.formula!.display,
-      variables: planned.formula!.variables,
-      syntax: planned.formula!.syntax ?? 'plain',
+      expression: planned.formula?.expression ?? '',
+      display: planned.formula?.display ?? '',
+      variables: planned.formula?.variables ?? [],
+      syntax: planned.formula?.syntax ?? 'plain',
       displayMode: 'block',
-      ...(planned.formula!.description ? { description: planned.formula!.description } : {}),
+      ...(planned.formula?.description ? { description: planned.formula.description } : {}),
       sourceId: evidenceSourceIds(ctx)[0] ?? ctx.sourceEvidenceId,
     },
     sourceIds: evidenceSourceIds(ctx),
     ...(binding ? { authoredArtifactBinding: binding } : {}),
     locked: false,
     exportCapabilities:
-      planned.formula!.syntax === 'latex'
+      (planned.formula?.syntax ?? 'plain') === 'latex'
         ? [...STATIC_MATH_CAPABILITIES]
         : [...EDITABLE_CAPABILITIES],
   });
@@ -415,7 +417,7 @@ function buildImageElement(
   const { planned, theme } = ctx;
   if (!planned.image) return undefined;
   const imageUrl = planned.image.imageUrl ?? planned.image.url;
-  const hasEmbeddedAsset = Boolean(imageUrl && imageUrl.startsWith('data:image/'));
+  const hasEmbeddedAsset = Boolean(imageUrl?.startsWith('data:image/'));
   const credit =
     planned.image.credit ?? planned.image.caption ?? 'Credit required before external publication';
   const binding = authoredArtifactBinding(ctx);
@@ -1511,12 +1513,12 @@ function buildTensionContrastField(ctx: GrammarBuildContext): GrammarBuildResult
     );
     elements.push(
       makeElement(ctx, `tension-label-${index + 1}`, {
-        name: labels[index]!,
+        name: labels[index] ?? '',
         kind: 'text',
         role: 'section',
         bbox: box(blockX + 0.02, blockY + 0.02, blockWidth - 0.04, 0.04),
         rotation: 0,
-        content: labels[index]!.toUpperCase(),
+        content: (labels[index] ?? '').toUpperCase(),
         style: {
           color: index === 0 ? theme.colors.accent : theme.colors.insightInk,
           fontFamily: theme.typography.data,

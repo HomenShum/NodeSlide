@@ -801,9 +801,13 @@ function applyDeterministicBriefPrimitives(slides: NodeSlidePlannedSlide[], prom
         ],
       };
       // Remove generic diagram from slide 2 since we replaced it
+      // biome-ignore lint/performance/noDelete: exactOptionalPropertyTypes requires delete
       delete contextSlide.formula;
+      // biome-ignore lint/performance/noDelete: exactOptionalPropertyTypes requires delete
       delete contextSlide.chart;
+      // biome-ignore lint/performance/noDelete: exactOptionalPropertyTypes requires delete
       delete contextSlide.metric;
+      // biome-ignore lint/performance/noDelete: exactOptionalPropertyTypes requires delete
       delete contextSlide.metricLabel;
     }
   }

@@ -757,22 +757,30 @@ function replaceQuarantinedQuantitativeCopy(
 }
 
 function replaceQuarantinedEvidenceCopy(slide: Record<string, unknown>): Record<string, unknown> {
+  const sourceGate = 'Source evidence must be captured before publication';
+  const originalHeadline = typeof slide['headline'] === 'string' ? slide['headline'].trim() : '';
+  const originalBody = typeof slide['body'] === 'string' ? slide['body'].trim() : '';
+  const missingAssetPattern =
+    /\b(?:placeholder|no captured|not captured|pending (?:a )?(?:licensed )?capture|missing (?:source|asset))\b/iu;
   const repaired: Record<string, unknown> = {
     ...slide,
-    headline: 'Source evidence required before publication',
-    body: 'No captured source asset was supplied. This slide keeps the evidence gap explicit instead of presenting an unsupported visual as proof.',
+    headline:
+      originalHeadline && !missingAssetPattern.test(originalHeadline)
+        ? originalHeadline
+        : 'Source evidence required before publication',
+    body:
+      originalBody && !missingAssetPattern.test(originalBody)
+        ? `${originalBody} ${sourceGate}.`
+        : `The narrative is preserved, but its ${sourceGate.toLowerCase()}.`,
   };
   if (Array.isArray(repaired['bullets'])) {
     const sourcedBullets = repaired['bullets'].filter(
       (bullet): bullet is string =>
-        typeof bullet === 'string' &&
-        bullet.trim().length > 0 &&
-        !/\bplaceholder\b|\bno captured\b/iu.test(bullet),
+        typeof bullet === 'string' && bullet.trim().length > 0 && !missingAssetPattern.test(bullet),
     );
-    repaired['bullets'] =
-      sourcedBullets.length >= 2
-        ? sourcedBullets
-        : [...sourcedBullets, 'A captured source asset is required before publication'];
+    repaired['bullets'] = sourcedBullets.includes(sourceGate)
+      ? sourcedBullets
+      : [...sourcedBullets, sourceGate];
   }
   return repaired;
 }
@@ -870,11 +878,18 @@ function repairCreationVisualLogic(
     const authoredTruthState = isCreationSpecRecord(authoredProvenance)
       ? authoredProvenance['truthState']
       : undefined;
+    const authoredSourceRefs = isCreationSpecRecord(authoredProvenance)
+      ? authoredProvenance['sourceRefs']
+      : undefined;
+    const quantitativeArtifact =
+      isCreationSpecRecord(authoredArtifact) &&
+      ['chart', 'comparison', 'equation'].includes(String(authoredArtifact['kind']));
     const violatesBriefTruthPolicy =
       briefForbidsIllustrativeQuantities(brief) &&
-      isCreationSpecRecord(authoredArtifact) &&
-      ['chart', 'comparison', 'equation'].includes(String(authoredArtifact['kind'])) &&
-      ['illustrative', 'estimated'].includes(String(authoredTruthState));
+      quantitativeArtifact &&
+      (['illustrative', 'estimated'].includes(String(authoredTruthState)) ||
+        (authoredTruthState === 'supported' &&
+          (!Array.isArray(authoredSourceRefs) || authoredSourceRefs.length === 0)));
     const unsupportedAuthoredArtifact =
       isCreationSpecRecord(authoredArtifact) &&
       (violatesBriefTruthPolicy ||

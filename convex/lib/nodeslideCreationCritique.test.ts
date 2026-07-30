@@ -320,7 +320,7 @@ describe('NodeSlide creation self-critique loop', () => {
     now: NOW,
   };
 
-  it('turns a missing portfolio evidence hero into an explicit source gate', async () => {
+  it('removes missing portfolio media without erasing the slide thesis', async () => {
     const degradedSpec = {
       ...CORRECTED_SPEC,
       slides: CORRECTED_SPEC.slides.map((slide, index) =>
@@ -362,10 +362,75 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedSlide).not.toHaveProperty('artifactSpec');
     expect(repairedSlide).toHaveProperty('diagram');
     expect(repairedSlide).toMatchObject({
-      headline: 'Source evidence required before publication',
-      body: expect.stringContaining('evidence gap explicit'),
+      headline: 'One source of truth: the captured evidence',
+      body: expect.stringContaining('source evidence must be captured'),
+      bullets: expect.arrayContaining([
+        'Use the dated filing as the source of record',
+        'Source evidence must be captured before publication',
+      ]),
     });
     expect(JSON.stringify(repairedSlide)).not.toMatch(/\bplaceholder\b/i);
+  });
+
+  it('quarantines a claimed-supported chart when no evidence backs its figures', async () => {
+    const unsupportedChartSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 4
+          ? {
+              ...slide,
+              headline: 'Where the inventory sits today',
+              chart: { labels: ['Exposed', 'Conditional', 'Released'], values: [4, 6, 2] },
+              artifactSpec: {
+                schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+                id: 'unsupported-inventory-chart',
+                kind: 'chart',
+                narrativeJob: 'Show the current AI inventory by release state.',
+                provenance: {
+                  truthState: 'supported',
+                  rationale: 'Counts are treated as current.',
+                  sourceRefs: [],
+                },
+                payload: {
+                  chartType: 'bar',
+                  labels: ['Exposed', 'Conditional', 'Released'],
+                  series: [{ name: 'Systems', values: [4, 6, 2] }],
+                },
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcomes = await Promise.all(
+      Array.from({ length: 100 }, () =>
+        runNodeSlideCreationCritique({
+          ...loopInput,
+          brief: {
+            ...ROADSHOW_BRIEF,
+            prompt:
+              'Create a risk committee deck. Do not invent numbers, figures, data, metrics, or outcomes.',
+          },
+          firstSpec: unsupportedChartSpec,
+          providerLive: false,
+          requestRevision: vi.fn(),
+        }),
+      ),
+    );
+    const repairedSlides = outcomes.map(
+      (outcome) => (outcome.spec as typeof unsupportedChartSpec).slides[4],
+    );
+    const repairedSlide = repairedSlides[0];
+
+    expect(repairedSlide).not.toHaveProperty('artifactSpec');
+    expect(repairedSlide).not.toHaveProperty('chart');
+    expect(repairedSlide).toMatchObject({
+      headline: 'Evidence gap: exact figures required before publication',
+      body: expect.stringContaining('does not contain verified figures'),
+    });
+    expect(repairedSlides.every((slide) => !('artifactSpec' in slide) && !('chart' in slide))).toBe(
+      true,
+    );
   });
 
   it('deterministically removes unusable hero primitives when the provider path is degraded', async () => {
@@ -401,8 +466,8 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedSlides[4]).toHaveProperty('diagram.kind', 'architecture');
     expect(repairedSlides[4]).toHaveProperty('diagram.edges.0.label', 'supports');
     expect(repairedSlides[4]).toMatchObject({
-      headline: 'Source evidence required before publication',
-      body: expect.stringContaining('evidence gap explicit'),
+      headline: 'Concise headline for act 5.',
+      body: expect.stringMatching(/source evidence must be captured/iu),
     });
     expect(JSON.stringify(repairedSlides[4])).not.toMatch(/\bplaceholder\b/i);
     expect(outcome.summary).toContain('deterministic visual-logic repair corrected 2');

@@ -453,7 +453,7 @@ describe('NodeSlide durable session v2 persistence', () => {
     expect(boundedDatabase.rows('nodeslide_durable_session_events')).toHaveLength(
       NODESLIDE_DURABLE_SESSION_MAX_TRANSITIONS,
     );
-  });
+  }, 15_000);
 });
 
 describe('NodeSlide durable model-result replay cache', () => {

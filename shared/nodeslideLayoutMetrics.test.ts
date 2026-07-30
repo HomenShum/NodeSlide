@@ -16,25 +16,25 @@ describe('NodeSlide layout metrics', () => {
       expect(result.height).toBeGreaterThan(0);
     });
 
-    it('computes characters per line from the 0.52em average glyph width', () => {
+    it('computes characters per line after converting PowerPoint points to render pixels', () => {
       // 0.39 slide-widths on a 1600px canvas = 624px inner width;
-      // 19px type at 0.52em averages 9.88px/char -> 63 characters per line.
-      expect(measureText('x', 19, 1.35, 0.39).charactersPerLine).toBe(63);
+      // 19pt at 120dpi is 31.67px; 0.52em averages 16.47px/char -> 37 chars.
+      expect(measureText('x', 19, 1.35, 0.39).charactersPerLine).toBe(37);
     });
 
     it('wraps at the calibrated line width and converts lines to normalized height', () => {
-      const oneLine = measureText('x'.repeat(63), 19, 1.35, 0.39);
-      const twoLines = measureText('x'.repeat(64), 19, 1.35, 0.39);
+      const oneLine = measureText('x'.repeat(37), 19, 1.35, 0.39);
+      const twoLines = measureText('x'.repeat(38), 19, 1.35, 0.39);
       expect(oneLine.lines).toBe(1);
       expect(twoLines.lines).toBe(2);
-      // 2 lines * 19px * 1.35 line-height / 900px canvas height ~= 0.057.
-      expect(twoLines.height).toBeCloseTo(0.057, 3);
+      // 2 lines * 19pt * 120/72 px/pt * 1.35 / 900px ~= 0.095.
+      expect(twoLines.height).toBeCloseTo(0.095, 3);
     });
 
     it('word-wraps prose instead of counting raw characters', () => {
       const words = Array.from({ length: 20 }, () => 'evidence').join(' ');
-      // 20 8-char words + separators = 179 chars -> 3 lines at 63 cpl.
-      expect(measureText(words, 19, 1.35, 0.39).lines).toBe(3);
+      // 20 8-char words + separators = 179 chars -> 5 lines at 37 cpl.
+      expect(measureText(words, 19, 1.35, 0.39).lines).toBe(5);
     });
 
     it('estimates a 600-character body as taller than the legacy fixed 0.2 block', () => {

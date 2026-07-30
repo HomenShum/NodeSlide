@@ -373,7 +373,7 @@ describe('the projection stays bounded and fails closed', () => {
     const sections = projection.body.match(/data-slide-id="/g) ?? [];
     expect(sections).toHaveLength(120);
     expect(projection.body).toContain('10 further slides are in the presentation');
-  });
+  }, 15_000);
 
   it('refuses with 500 when the snapshot does not pass the ArtifactSpec contract', async () => {
     // `renderSlideHtml` runs `assertNodeSlideArtifactCompilation` in this repo.

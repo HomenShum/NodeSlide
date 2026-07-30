@@ -57,3 +57,25 @@ with `gh release verify` and `gh release verify-asset`. It resolves both tags to
 their exact commit SHAs, rejects incomplete or extra release assets, rebuilds
 the checked-out candidate tag, and byte-compares the manifest and all 11
 tarballs with the public release before accepting the install/upgrade proof.
+
+## Generate a finished deck
+
+After cloning the repository and running `npm ci`, any coding agent can create,
+publish, and export a deck with one command:
+
+```bash
+npm run nodeslide:generate -- \
+  --title "The trust threshold" \
+  --prompt "Build a seven-scene decision story about production readiness" \
+  --output ./output
+```
+
+The command uses the production NodeSlide backend and the qualified Kimi K3
+route by default. It does not stop at a draft: it validates the structured
+deck, publishes the share, and atomically writes editable PPTX, standalone
+HTML, canonical snapshot, and receipt files. A hosted provider silently
+falling back to deterministic content is an error unless the caller explicitly
+passes `--allow-fallback`. Use `--no-publish` only for a deliberate local-only
+run, `--model` to select another qualified model, and `--effort` to raise
+reasoning above the structured-generation default of `low`.
+`NODESLIDE_CONVEX_URL` targets a different deployment.

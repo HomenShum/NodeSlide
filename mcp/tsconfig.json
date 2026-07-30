@@ -10,7 +10,7 @@
       "@nodeslide/engine": ["packages/engine/src/index.ts"],
       "@nodeslide/external-agent": ["packages/external-agent/src/index.ts"]
     },
-    "lib": ["ES2022"],
+    "lib": ["ES2022", "DOM"],
     "outDir": "./dist",
     "strict": true,
     "noUnusedLocals": true,

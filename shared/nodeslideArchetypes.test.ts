@@ -6,7 +6,7 @@ import {
   archetypeCandidates,
   chooseDeckArchetypes,
 } from './nodeslideArchetypes';
-import { findCollisions } from './nodeslideLayoutMetrics';
+import { findCollisions, findCompressedTextElements } from './nodeslideLayoutMetrics';
 
 const BRIEF = {
   prompt: 'Prove that varied planned content materializes with varied, collision-free layouts.',
@@ -78,8 +78,12 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
           title: 'The number',
           section: 'Metric / 03',
           headline: 'One metric carries this slide.',
-          body: 'Stat-dominant layout: copy on the left, a huge metric on the right.',
-          bullets: ['Measured, not asserted'],
+          body: 'The decision on the table is singular and owned. Adopt the guarded threshold as the production standard for every generated presentation.',
+          bullets: [
+            'Make the readiness gate a hard publish requirement',
+            'Name an engineering owner and a product sign-off owner',
+            'Review telemetry and replace illustrative data at the next checkpoint',
+          ],
           metric: '48%',
           metricLabel: 'reduction in handoff rework',
         },
@@ -87,8 +91,12 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
           title: 'The trend',
           section: 'Trend / 04',
           headline: 'The chart claims the majority of the canvas.',
-          body: 'Chart-dominant layout narrows the copy column.',
-          bullets: ['Quarterly signal'],
+          body: 'An inspectable view of where decks fail before the gate. No failure dataset was supplied, so the plotted series remains explicitly illustrative.',
+          bullets: [
+            'Structured artifacts fail less than free prose',
+            'Export completion is the highest-risk seam',
+            'Every value remains inspectable and replaceable',
+          ],
           chart: { labels: ['Q1', 'Q2', 'Q3', 'Q4'], values: [3, 5, 8, 13], unit: 'wins' },
         },
         {
@@ -150,6 +158,24 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
       expect(archetypes[index]).not.toBe(archetypes[index - 1]);
     }
     expectZeroCollisions(snapshot);
+    expect(findCompressedTextElements(snapshot.elements)).toEqual([]);
+    const continuityMotifs = snapshot.slides.map((slide) =>
+      snapshot.elements.find(
+        (element) => element.slideId === slide.id && element.role?.startsWith('story_motif_'),
+      ),
+    );
+    expect(continuityMotifs.every(Boolean)).toBe(true);
+    expect(new Set(continuityMotifs.map((element) => element?.role))).toEqual(
+      new Set(['story_motif_journey']),
+    );
+    for (let index = 1; index < continuityMotifs.length; index += 1) {
+      expect(continuityMotifs[index]?.bbox.width ?? 0).toBeGreaterThan(
+        continuityMotifs[index - 1]?.bbox.width ?? 0,
+      );
+    }
+    expect(continuityMotifs.some((element) => element?.altText?.includes('intensity 100'))).toBe(
+      true,
+    );
 
     // Comparison slide: three bullets share one row in three distinct columns.
     const comparisonSlide = snapshot.slides[1];

@@ -45,12 +45,24 @@ export function archetypeCandidates(shape: SlideContentShape): SlideArchetype[] 
  * alternative. When the shape supports exactly one archetype the repeat is
  * allowed — variety never overrides content honesty.
  */
-export function chooseDeckArchetypes(shapes: readonly SlideContentShape[]): SlideArchetype[] {
+export function chooseDeckArchetypes(
+  shapes: readonly SlideContentShape[],
+  preferred: readonly SlideArchetype[] = [],
+): SlideArchetype[] {
   const chosen: SlideArchetype[] = [];
-  for (const shape of shapes) {
+  for (const [index, shape] of shapes.entries()) {
     const candidates = archetypeCandidates(shape);
     const previous = chosen[chosen.length - 1];
-    const pick = candidates.find((candidate) => candidate !== previous) ?? candidates[0] ?? 'split';
+    const preferredCandidate = preferred[index];
+    const pick =
+      (preferredCandidate &&
+      candidates.includes(preferredCandidate) &&
+      preferredCandidate !== previous
+        ? preferredCandidate
+        : undefined) ??
+      candidates.find((candidate) => candidate !== previous) ??
+      candidates[0] ??
+      'split';
     chosen.push(pick);
   }
   return chosen;

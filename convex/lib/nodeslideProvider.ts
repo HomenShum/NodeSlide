@@ -516,7 +516,7 @@ export async function callNodeSlideFreeJson(
         invalidResponse = '';
       } else {
         invalidResponse = result.text;
-        const value = parseStrictJson(result.text);
+        const value = parseNodeSlideProviderJson(result.text);
         if (
           result.stopReason !== 'length' &&
           value !== undefined &&
@@ -1018,11 +1018,51 @@ function usdToMicroUsd(usd: number): number {
   return Math.floor(usd * 1_000_000);
 }
 
-function parseStrictJson(text: string): unknown | undefined {
+export function parseNodeSlideProviderJson(text: string): unknown | undefined {
   const trimmed = text.trim();
-  if (!trimmed.startsWith('{') || !trimmed.endsWith('}')) return undefined;
+  if (trimmed.length === 0 || responseBytes(trimmed) > MAX_RESPONSE_BYTES) {
+    return undefined;
+  }
+  let start = -1;
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+  let candidate = '';
+  for (let index = 0; index < trimmed.length; index += 1) {
+    const character = trimmed[index];
+    if (start < 0) {
+      if (character !== '{') continue;
+      start = index;
+      depth = 1;
+      continue;
+    }
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (character === '\\') escaped = true;
+      else if (character === '"') inString = false;
+      continue;
+    }
+    if (character === '"') inString = true;
+    else if (character === '{') depth += 1;
+    else if (character === '}') {
+      depth -= 1;
+      if (depth === 0) {
+        candidate = trimmed.slice(start, index + 1);
+        if (
+          trimmed
+            .slice(index + 1)
+            .replace(/```/gu, '')
+            .trim()
+            .includes('{')
+        )
+          return undefined;
+        break;
+      }
+    }
+  }
+  if (!candidate) return undefined;
   try {
-    return JSON.parse(trimmed) as unknown;
+    return JSON.parse(candidate) as unknown;
   } catch {
     return undefined;
   }

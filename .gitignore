@@ -31,3 +31,4 @@ artifacts/conformance/proof-receipt.json
 
 # Playback canary screen captures — evidence is the signature JSON, not 34MB of PNGs.
 outputs/**/playback-frames/
+.env*.local

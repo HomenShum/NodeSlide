@@ -101,7 +101,20 @@ export function publicRenderInput(published: PublishedNodeSlide): ExportableSnap
     },
     slides: snapshot.slides.map(publicSlide),
     elements: snapshot.elements.map(publicElement),
-    sources: snapshot.sources.filter((source) => source.sourceType === 'url'),
+    // Publication sanitization has already reduced bound private evidence to a
+    // content-free provenance stub. Retain only that exact stub shape (plus
+    // public URLs): arbitrary private records still fail the projection's
+    // defense-in-depth filter.
+    sources: snapshot.sources
+      .filter(
+        (source) =>
+          source.sourceType === 'url' ||
+          (source.sourceType === 'note' &&
+            source.retention === 'public_snapshot' &&
+            source.title === 'Private evidence' &&
+            source.url === undefined),
+      )
+      .map((source) => ({ ...source })),
   };
 }
 

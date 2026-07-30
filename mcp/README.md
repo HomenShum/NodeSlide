@@ -23,3 +23,11 @@ node dist/index.js --help
 
 See [`../docs/EXTERNAL_AGENT_ACCESS.md`](../docs/EXTERNAL_AGENT_ACCESS.md) for
 tool names, configuration, security boundaries, and tarball verification.
+
+`nodeslide.create_deck` is a completion transaction, not a draft-only call. It
+creates and validates the deck, rejects silent deterministic fallback by
+default, publishes the share, and writes bounded PPTX, HTML, snapshot, and
+receipt artifacts beneath `NODESLIDE_LOCAL_ROOT`. The response returns the
+public URL and artifact paths while retaining the owner capability only inside
+the MCP process. This makes the same finished-deck path available to Codex,
+Claude Code, Cursor, Devin, Goose, Hermes, and any other MCP client.

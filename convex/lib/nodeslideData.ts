@@ -308,12 +308,35 @@ export function publishedNodeSlideFromRow(row: Doc<'nodeslide_publications'>): P
 
 /**
  * Creates a detached public snapshot. Notes, creation brief/project context,
- * signature configuration, the mutable share capability, and non-public source
- * records are intentionally omitted.
+ * signature configuration, the mutable share capability, and private source
+ * details are intentionally omitted. Visible artifacts retain redacted
+ * provenance stubs so the public snapshot still satisfies its evidence
+ * contract without disclosing the underlying brief or source metadata.
  */
 export function sanitizeNodeSlideSnapshot(snapshot: DeckSnapshot): PublishedDeckSnapshot {
+  const boundSourceIds = new Set(
+    snapshot.elements.flatMap((element) => [
+      ...element.sourceIds,
+      ...(element.chart?.sourceId ? [element.chart.sourceId] : []),
+      ...(element.math?.sourceId ? [element.math.sourceId] : []),
+      ...(element.image?.sourceId ? [element.image.sourceId] : []),
+    ]),
+  );
   const sources = snapshot.sources.flatMap((source): PublishedSourceRecord[] => {
-    if (source.sourceType !== 'url') return [];
+    if (source.sourceType !== 'url') {
+      if (!boundSourceIds.has(source.id)) return [];
+      return [
+        {
+          id: source.id,
+          deckId: source.deckId,
+          title: 'Private evidence',
+          sourceType: 'note',
+          retrievedAt: source.retrievedAt,
+          citation: 'Evidence supplied by the deck owner; source details withheld.',
+          retention: 'public_snapshot',
+        },
+      ];
+    }
     return [
       {
         id: source.id,
@@ -346,6 +369,7 @@ export function sanitizeNodeSlideSnapshot(snapshot: DeckSnapshot): PublishedDeck
       deckId: slide.deckId,
       title: slide.title,
       ...(slide.section !== undefined ? { section: slide.section } : {}),
+      ...(slide.archetype !== undefined ? { archetype: slide.archetype } : {}),
       background: slide.background,
       elementOrder: [...slide.elementOrder],
       version: slide.version,

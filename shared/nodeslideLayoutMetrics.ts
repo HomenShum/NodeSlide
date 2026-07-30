@@ -4,13 +4,16 @@ import type { BoundingBox, SlideElement } from './nodeslide.js';
  * Pure text-measurement and geometry helpers for the deck materializer.
  *
  * The canvas model matches the renderer/validator raster: a 13.333in wide
- * 16:9 slide rendered at 120px/in, i.e. 1600x900 canvas pixels, with font
- * sizes expressed in canvas pixels and an average glyph width of ~0.52em
- * (the same heuristic used by the SlideLang overflow validator).
+ * 16:9 slide rendered at 120px/in, i.e. 1600x900 canvas pixels. SlideLang font
+ * sizes are PowerPoint points, so measurement converts them at 120/72 px per
+ * point before applying the ~0.52em average glyph width. Using the numeric
+ * point value as pixels underestimates copy by 40% and misses collisions that
+ * appear only in the exported PPTX.
  */
 export const NODESLIDE_CANVAS_WIDTH_IN = 13.333;
 export const NODESLIDE_CANVAS_ASPECT = 16 / 9;
 export const NODESLIDE_CANVAS_PX_PER_IN = 120;
+export const NODESLIDE_FONT_PX_PER_POINT = NODESLIDE_CANVAS_PX_PER_IN / 72;
 export const NODESLIDE_AVG_CHAR_WIDTH_EM = 0.52;
 
 /** Overlap of more than 8% of the smaller box counts as a collision. */
@@ -33,18 +36,20 @@ export interface NodeSlideTextMeasurement {
  */
 export function measureText(
   content: string,
-  fontSizePx: number,
+  fontSizePoints: number,
   lineHeight: number,
   boxWidthNormalized: number,
   canvasWidthIn: number = NODESLIDE_CANVAS_WIDTH_IN,
 ): NodeSlideTextMeasurement {
-  const safeFontSize = Number.isFinite(fontSizePx) && fontSizePx > 0 ? fontSizePx : 24;
+  const safeFontSizePoints =
+    Number.isFinite(fontSizePoints) && fontSizePoints > 0 ? fontSizePoints : 24;
+  const safeFontSizePx = safeFontSizePoints * NODESLIDE_FONT_PX_PER_POINT;
   const safeLineHeight =
     Number.isFinite(lineHeight) && lineHeight > 0 ? Math.max(0.8, lineHeight) : 1.2;
   const canvasWidthPx = Math.max(1, canvasWidthIn) * NODESLIDE_CANVAS_PX_PER_IN;
   const canvasHeightPx = canvasWidthPx / NODESLIDE_CANVAS_ASPECT;
   const innerWidthPx = Math.max(1, boxWidthNormalized * canvasWidthPx);
-  const averageCharWidthPx = safeFontSize * NODESLIDE_AVG_CHAR_WIDTH_EM;
+  const averageCharWidthPx = safeFontSizePx * NODESLIDE_AVG_CHAR_WIDTH_EM;
   const charactersPerLine = Math.max(1, Math.floor(innerWidthPx / averageCharWidthPx));
 
   let lines = 0;
@@ -77,19 +82,19 @@ export function measureText(
   return {
     lines,
     charactersPerLine,
-    height: (lines * safeFontSize * safeLineHeight) / canvasHeightPx,
+    height: (lines * safeFontSizePx * safeLineHeight) / canvasHeightPx,
   };
 }
 
 /** Normalized height of `content` wrapped inside a box of the given width. */
 export function estimateTextHeight(
   content: string,
-  fontSizePx: number,
+  fontSizePoints: number,
   lineHeight: number,
   boxWidthNormalized: number,
   canvasWidthIn: number = NODESLIDE_CANVAS_WIDTH_IN,
 ): number {
-  return measureText(content, fontSizePx, lineHeight, boxWidthNormalized, canvasWidthIn).height;
+  return measureText(content, fontSizePoints, lineHeight, boxWidthNormalized, canvasWidthIn).height;
 }
 
 export interface NodeSlideStackBlock {

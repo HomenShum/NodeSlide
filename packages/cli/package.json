@@ -15,10 +15,12 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts src/cli.ts --format esm --dts --clean --sourcemap --platform node --external @nodeslide/registry",
+    "build": "tsup",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@nodeslide/registry": "0.2.2"
+    "@nodeslide/registry": "0.2.2",
+    "convex": "^1.31.7",
+    "pptxgenjs": "^4.0.1"
   }
 }

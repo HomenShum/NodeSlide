@@ -209,6 +209,7 @@ const nodeslidePublishedSlideValidator = v.object({
   deckId: v.string(),
   title: v.string(),
   section: v.optional(v.string()),
+  archetype: v.optional(nodeslideSlideArchetypeValidator),
   background: v.string(),
   elementOrder: v.array(v.string()),
   version: v.number(),
@@ -219,10 +220,11 @@ const nodeslidePublishedSourceValidator = v.object({
   deckId: v.string(),
   title: v.string(),
   url: v.optional(v.string()),
-  sourceType: v.literal('url'),
+  sourceType: v.union(v.literal('url'), v.literal('note')),
   retrievedAt: v.number(),
   citation: v.string(),
   license: v.optional(v.string()),
+  retention: v.optional(v.literal('public_snapshot')),
 });
 
 const nodeslidePublishedSnapshotValidator = v.object({

@@ -1286,7 +1286,7 @@ function claimsMissingQuantitativeVisual(slide: Record<string, unknown>): boolea
     .map((value) => String(value ?? ''))
     .join(' ');
   return (
-    /\b(?:plotted|plotting|mapped|positioned)\b/iu.test(copy) &&
+    /\b(?:plotted|plotting|mapped|position(?:ed|ing)?|placement)\b/iu.test(copy) &&
     /\b(?:axes?|matrix|quadrant|heatmap|band)\b/iu.test(copy)
   );
 }

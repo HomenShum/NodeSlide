@@ -873,7 +873,7 @@ function repairCreationVisualLogic(
         chart: _missingChart,
         ...withoutMissingChart
       } = slide;
-      slide = withoutMissingChart;
+      slide = replaceQuarantinedQuantitativeCopy(withoutMissingChart);
       repairCount += 1;
     }
     return slide;

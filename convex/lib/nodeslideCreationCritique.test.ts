@@ -446,6 +446,51 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(JSON.stringify(outcome.spec)).not.toContain('0 cohorts');
   });
 
+  it('removes chart-dependent copy when a referenced filing was not retrieved', async () => {
+    const degradedSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 4
+          ? {
+              ...slide,
+              headline: 'The question is the slope of margin',
+              body: 'This chart is an illustrative placeholder showing the expected shape.',
+              bullets: ['The chart carries the argument', 'Replace every value before publish'],
+              chart: { labels: ['Q1', 'Q2'], values: [0, 0] },
+              artifactSpec: {
+                schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+                id: 'unretrieved-filing-chart',
+                kind: 'chart',
+                narrativeJob: 'Show margin discipline.',
+                provenance: {
+                  truthState: 'missing',
+                  rationale: 'The referenced filing was not retrieved.',
+                  sourceRefs: [],
+                },
+                payload: { labels: ['Q1', 'Q2'], values: [0, 0], unit: '%' },
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      firstSpec: degradedSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlide = (outcome.spec as typeof degradedSpec).slides[4];
+
+    expect(repairedSlide).not.toHaveProperty('artifactSpec');
+    expect(repairedSlide).not.toHaveProperty('chart');
+    expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:chart|shape|placeholder)\b/i);
+    expect(repairedSlide).toMatchObject({
+      headline: 'Evidence gap: exact figures required before publication',
+      body: expect.stringContaining('No quantitative outlook is shown'),
+    });
+  });
+
   it('quarantines an empty generic artifact instead of promoting Typed artifact to a hero', async () => {
     const degradedSpec = {
       ...CORRECTED_SPEC,

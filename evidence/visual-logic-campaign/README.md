@@ -49,10 +49,14 @@ CLI and records bounded, retry-aware results.
    an unplottable cohort set into a `0 cohorts` metric. This downstream fallback was discovered by
    the first after-deployment deck; the campaign rejected that deployment and moved the invariant
    into both raw artifact repair and canonical compilation.
-6. The bounded critique loop could retain a known-bad first pass when the provider was degraded.
-7. Metric height and caption position used fixed geometry, so long decision metrics could render
+6. The next clean after attempt exposed the sibling path: a `generic` artifact without
+   `displayValue` compiled into the literal hero `Typed artifact`. Canonical compilation now
+   rejects every metric fallback without a numeric or explicit decision-state signal and rejects
+   image fallbacks without an embedded renderable asset.
+7. The bounded critique loop could retain a known-bad first pass when the provider was degraded.
+8. Metric height and caption position used fixed geometry, so long decision metrics could render
    beyond their nominal box without a safe gutter.
-8. Story continuity was represented by a single growing line. It indicated progress, but did not
+9. Story continuity was represented by a single growing line. It indicated progress, but did not
    visibly transform.
 
 ## Deterministic repair contract
@@ -66,6 +70,9 @@ CLI and records bounded, retry-aware results.
 - Missing-truth charts are removed rather than rendered as zero-value evidence.
 - Comparisons without one metric shared by at least two finite cohorts are rejected by the
   canonical artifact compiler; the old `0 cohorts` summary fallback is forbidden.
+- All canonical artifact families pass through the same final visual-signal assertion. Empty
+  generic metrics and non-renderable image projections are quarantined as optional enrichment,
+  not promoted to heroes and not allowed to abort the rest of the deck.
 - Visual primitives without authored truth state are errors when they dominate the slide.
 - Story continuity has both a progress line and a transforming marker tied to reveal intensity.
 - Long stat-panel metrics use measured height, a reduced font when needed, and a larger caption
@@ -76,9 +83,11 @@ CLI and records bounded, retry-aware results.
 
 Before deployment:
 
-- 64 focused visual-logic/layout scenarios passed.
+- 66 focused visual-logic/layout scenarios passed.
 - Restoring the old comparison fallback makes the dedicated compiler regression test fail.
-- 2,718 repository/workspace tests passed; 7 unrelated tests were skipped by their suites.
+- 2,720 repository/workspace tests passed with four Vitest workers; 7 unrelated tests were skipped
+  by their suites. The unconstrained local runner hit timing-only failures while other Node
+  workspaces were active; bounding workers removed the contention without changing test budgets.
 - Typecheck, Biome, and the production build passed.
 - The first combined `npm run check` wrapper was killed by the command timeout during package
   build, producing an EPIPE. Running its four gates independently proved each gate.

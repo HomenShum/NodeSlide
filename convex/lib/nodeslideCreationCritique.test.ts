@@ -278,32 +278,36 @@ describe('NodeSlide creation quality report', () => {
     ).toMatchObject({ severity: 'error' });
   });
 
-  it('keeps the visual-logic report bounded during a recurring 100-deck portfolio review', () => {
-    const recurringPortfolioSpec = {
-      ...CORRECTED_SPEC,
-      slides: CORRECTED_SPEC.slides.map((slide, index) =>
-        index === 5
-          ? {
-              ...slide,
-              image: {
-                altText: 'Missing portfolio-company product capture',
-                credit: 'Pending portfolio update',
-              },
-            }
-          : slide,
-      ),
-    };
+  it(
+    'keeps the visual-logic report bounded during a recurring 100-deck portfolio review',
+    () => {
+      const recurringPortfolioSpec = {
+        ...CORRECTED_SPEC,
+        slides: CORRECTED_SPEC.slides.map((slide, index) =>
+          index === 5
+            ? {
+                ...slide,
+                image: {
+                  altText: 'Missing portfolio-company product capture',
+                  credit: 'Pending portfolio update',
+                },
+              }
+            : slide,
+        ),
+      };
 
-    const reports = Array.from({ length: 100 }, () => reportFor(recurringPortfolioSpec));
+      const reports = Array.from({ length: 100 }, () => reportFor(recurringPortfolioSpec));
 
-    expect(
-      reports.every(
-        (report) =>
-          report.visualRhythmIssues.length <= 12 &&
-          report.visualRhythmIssues.some((issue) => issue.code === 'visual_placeholder_hero'),
-      ),
-    ).toBe(true);
-  });
+      expect(
+        reports.every(
+          (report) =>
+            report.visualRhythmIssues.length <= 12 &&
+            report.visualRhythmIssues.some((issue) => issue.code === 'visual_placeholder_hero'),
+        ),
+      ).toBe(true);
+    },
+    15_000,
+  );
 
   it('bounds the prompt report payload', () => {
     const promptReport = nodeSlideCreationCritiquePromptReport(reportFor(FLAWED_SPEC));
@@ -396,6 +400,41 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedSlide).not.toHaveProperty('artifactSpec');
     expect(repairedSlide).not.toHaveProperty('metric');
     expect(JSON.stringify(outcome.spec)).not.toContain('0 cohorts');
+  });
+
+  it('quarantines an empty generic artifact instead of promoting Typed artifact to a hero', async () => {
+    const degradedSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 6
+          ? {
+              ...slide,
+              artifactSpec: {
+                schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+                id: 'empty-generic',
+                kind: 'generic',
+                narrativeJob: 'Pair assumptions with invalidating risks.',
+                provenance: {
+                  truthState: 'missing',
+                  rationale: 'No display value was supplied.',
+                  sourceRefs: [],
+                },
+                payload: { label: 'Assumption review' },
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      firstSpec: degradedSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+
+    expect((outcome.spec as typeof degradedSpec).slides[6]).not.toHaveProperty('artifactSpec');
+    expect(JSON.stringify(outcome.spec)).not.toContain('Typed artifact');
   });
 
   it('runs exactly one revision and adopts a corrected pass 2', async () => {

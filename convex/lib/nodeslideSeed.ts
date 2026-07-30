@@ -29,7 +29,11 @@ import {
   type ThemeSpec,
   isNodeSlideEmbeddedRasterDataUrl,
 } from '../../shared/nodeslide';
-import { type SlideContentShape, chooseDeckArchetypes } from '../../shared/nodeslideArchetypes';
+import {
+  type SlideContentShape,
+  archetypeCandidates,
+  chooseDeckArchetypes,
+} from '../../shared/nodeslideArchetypes';
 import type { NodeSlideNativeArtifactGeometry } from '../../shared/nodeslideArtifactGeometry.js';
 import {
   NODESLIDE_AUTHORED_ARTIFACT_BINDING_VERSION,
@@ -60,6 +64,8 @@ import {
   type NodeSlideCompositionCandidateSummary,
   fanOutNodeSlideComposition,
 } from './nodeslideCompositionFanout';
+import { dispatchCompositionGrammar } from './nodeslideCompositionGrammars';
+import { evaluateDeckDiversity } from './nodeslideDeckDiversity';
 import { type NodeSlideDesignPlan, buildNodeSlideDesignPlans } from './nodeslideDesignPlan';
 import {
   nodeslideCleanText,
@@ -162,6 +168,13 @@ export interface NodeSlideDeckSpec {
   designPlans?: NodeSlideDesignPlan[];
   /** Three-way composition comparison receipts for visually important slides. */
   compositionFanout?: NodeSlideCompositionCandidateSummary[];
+  /** Deck-level diversity gate report. */
+  deckDiversity?: {
+    score: number;
+    passes: boolean;
+    distinctFamilies: number;
+    nearDuplicatePairs: Array<{ first: number; second: number; similarity: number }>;
+  };
 }
 
 export interface NodeSlideBuildResult {
@@ -690,15 +703,119 @@ export function deterministicBriefSpec(
   return spec;
 }
 
+function detectGovernanceHub(prompt: string): {
+  hub: string;
+  hubId: string;
+  sequence: string[];
+} | null {
+  const normalized = prompt.toUpperCase();
+  // Look for a cross-cutting hub term followed by sequence nodes.
+  // Patterns: "GOVERN cross-cutting MAP, MEASURE, MANAGE", "governance over X, Y, Z"
+  const hubPatterns = [
+    /\b(GOVERN(?:ANCE)?)\s+(?:IS\s+)?CROSS[-\s]?CUTTING[:\s]+([A-Z][A-Z\s,]+)/u,
+    /\b(GOVERN(?:ANCE)?)\s+(?:SURROUNDS?|OVERSEES?|GUIDES?)\s+([A-Z][A-Z\s,]+)/u,
+    /\b(OVERSIGHT|GUARDRAIL|POLICY)\s+(?:OVER|OF|FOR)\s+([A-Z][A-Z\s,]+)/u,
+  ];
+  for (const pattern of hubPatterns) {
+    const match = normalized.match(pattern);
+    if (!match) continue;
+    const hub = match[1] ?? '';
+    const rawSequence = match[2] ?? '';
+    const sequence = rawSequence
+      .split(/[,;]\s*|\s+AND\s+/u)
+      .map((s) => s.trim().replace(/^AND\s+/iu, ''))
+      .filter((s) => s.length > 1 && s.length < 30)
+      .slice(0, 5);
+    if (sequence.length >= 2) {
+      return {
+        hub,
+        hubId: hub.toLowerCase().replace(/\s+/gu, '-'),
+        sequence,
+      };
+    }
+  }
+  return null;
+}
+
 function applyDeterministicBriefPrimitives(slides: NodeSlidePlannedSlide[], prompt: string): void {
   const csvRecords = briefMetricCsvRecords(prompt);
   const csvByMetric = new Map(csvRecords.map((record) => [record.metric, record]));
   const totalGoals = Number(csvByMetric.get('total_goals')?.value);
   const matchesPlayed = Number(csvByMetric.get('matches_played')?.value);
   const suppliedGoalsPerMatch = Number(csvByMetric.get('goals_per_match')?.value);
+
+  // Governance briefs: when the prompt names a cross-cutting hub (GOVERN,
+  // oversight, guardrail, policy) plus sequence nodes, emit a hub-spoke
+  // diagram instead of the generic 3-node chain. This matches the layout the
+  // composition grammar's cross-cutting hub detection expects.
+  const governanceMatch = detectGovernanceHub(prompt);
+  if (governanceMatch) {
+    const contextSlide = slides[1];
+    if (contextSlide) {
+      contextSlide.title = 'The governance loop';
+      contextSlide.headline = `${governanceMatch.hub} is cross-cutting: it surrounds ${governanceMatch.sequence.join(', ')}.`;
+      contextSlide.body = `The ${governanceMatch.hub} function sets culture, accountability, and structure around ${governanceMatch.sequence.join(', ')}, which operate iteratively from inventory entry through retirement.`;
+      contextSlide.bullets = [
+        `Keep ${governanceMatch.hub} cross-cutting`,
+        'Show the release gate',
+        'Name the decision metric',
+      ];
+      contextSlide.diagram = {
+        kind: 'process',
+        direction: 'horizontal',
+        nodes: [
+          { id: governanceMatch.hubId, label: governanceMatch.hub, kind: 'system' },
+          ...governanceMatch.sequence.map((label, index) => ({
+            id: `seq-${index + 1}`,
+            label,
+            kind: 'step' as const,
+          })),
+          { id: 'gate', label: 'Release Gate', kind: 'decision' },
+          { id: 'committee', label: 'Committee Decision', kind: 'decision' },
+        ],
+        edges: [
+          ...governanceMatch.sequence.map((_, index) => ({
+            from: governanceMatch.hubId,
+            to: `seq-${index + 1}`,
+            label: 'oversight',
+          })),
+          ...governanceMatch.sequence.slice(0, -1).map((_, index) => ({
+            from: `seq-${index + 1}`,
+            to: `seq-${index + 2}`,
+          })),
+          {
+            from: `seq-${governanceMatch.sequence.length}`,
+            to: 'gate',
+            label: 'evidence',
+          },
+          { from: 'gate', to: 'committee', label: 'escalate' },
+          ...(governanceMatch.sequence.length >= 3
+            ? [
+                {
+                  from: `seq-${governanceMatch.sequence.length}`,
+                  to: 'seq-1',
+                  label: 'feedback',
+                },
+              ]
+            : []),
+        ],
+      };
+      // Remove generic diagram from slide 2 since we replaced it
+      // biome-ignore lint/performance/noDelete: exactOptionalPropertyTypes requires delete
+      delete contextSlide.formula;
+      // biome-ignore lint/performance/noDelete: exactOptionalPropertyTypes requires delete
+      delete contextSlide.chart;
+      // biome-ignore lint/performance/noDelete: exactOptionalPropertyTypes requires delete
+      delete contextSlide.metric;
+      // biome-ignore lint/performance/noDelete: exactOptionalPropertyTypes requires delete
+      delete contextSlide.metricLabel;
+    }
+  }
+
   const contextSlide = slides[1];
   const derivedSlide = slides[2];
   if (
+    !governanceMatch &&
     Number.isFinite(totalGoals) &&
     Number.isFinite(matchesPlayed) &&
     matchesPlayed > 0 &&
@@ -1045,6 +1162,7 @@ function buildNodeSlideDeck(input: {
     const planned = input.spec.slides[index];
     if (!planned) continue;
     const slideId = nodeslideStableId('slide', input.deckId, String(index + 1), planned.title);
+    const designPlan = input.spec.designPlans?.[index];
     const built = buildSlide({
       deckId: input.deckId,
       slideId,
@@ -1058,9 +1176,9 @@ function buildNodeSlideDeck(input: {
       linkedSourceIds,
       authoredSourceIdByRef,
       ...(input.spec.storySpec ? { storySpec: input.spec.storySpec } : {}),
+      ...(designPlan ? { designPlan } : {}),
     });
     slides.push(built.slide);
-    const designPlan = input.spec.designPlans?.[index];
     if (designPlan) {
       const fanout = fanOutNodeSlideComposition({ elements: built.elements, plan: designPlan });
       elements.push(...fanout.selectedElements);
@@ -1070,6 +1188,127 @@ function buildNodeSlideDeck(input: {
     }
   }
   if (compositionFanout.length > 0) input.spec.compositionFanout = compositionFanout;
+
+  // Deck-level diversity gate: measure silhouette similarity across slides.
+  // When design plans are available, the gate checks for near-duplicate
+  // adjacent slides and composition family dominance. When near-duplicates
+  // are found, the gate ACTS: re-dispatch the later slide in each pair to an
+  // alternate grammar that its content shape supports, then re-evaluate.
+  // Bounded to 2 re-dispatch passes to avoid oscillation.
+  if (input.spec.designPlans && slides.length >= 2) {
+    for (let pass = 0; pass < 2; pass += 1) {
+      const slideElements = slides.map((slide, slideIndex) => ({
+        slideIndex,
+        elements: elements.filter((e) => e.slideId === slide.id),
+      }));
+      const diversityReport = evaluateDeckDiversity(slideElements);
+      if (diversityReport.passes) {
+        input.spec.deckDiversity = {
+          score: diversityReport.score,
+          passes: true,
+          distinctFamilies: diversityReport.distinctFamilies,
+          nearDuplicatePairs: [],
+        };
+        break;
+      }
+      if (pass === 1) {
+        // Final pass failed — log and store the report.
+        console.warn(
+          `NodeSlide deck diversity gate (after ${pass + 1} passes): ${diversityReport.failures.join('; ')}`,
+        );
+        input.spec.deckDiversity = {
+          score: diversityReport.score,
+          passes: false,
+          distinctFamilies: diversityReport.distinctFamilies,
+          nearDuplicatePairs: diversityReport.nearDuplicatePairs,
+        };
+        break;
+      }
+      // Re-dispatch near-duplicate slides to alternate grammars.
+      let redispatched = false;
+      // Track archetype counts to avoid exceeding the 2-per-archetype limit.
+      const archetypeCounts = new Map<string, number>();
+      for (const arch of archetypes) {
+        archetypeCounts.set(arch, (archetypeCounts.get(arch) ?? 0) + 1);
+      }
+      for (const pair of diversityReport.nearDuplicatePairs) {
+        const laterIndex = pair.second;
+        const planned = input.spec.slides[laterIndex];
+        const currentPlan = input.spec.designPlans[laterIndex];
+        if (!planned || !currentPlan) continue;
+        const shape = contentShapes[laterIndex];
+        if (!shape) continue;
+        // Prefer alternates that are underused (fewer than 2 slides currently).
+        const candidates = archetypeCandidates(shape).filter(
+          (candidate) =>
+            candidate !== currentPlan.semanticArchetype &&
+            (archetypeCounts.get(candidate) ?? 0) < 2,
+        );
+        if (candidates.length === 0) continue;
+        // Pick the least-used alternate archetype the content supports.
+        candidates.sort(
+          (left, right) => (archetypeCounts.get(left) ?? 0) - (archetypeCounts.get(right) ?? 0),
+        );
+        const alternate = candidates[0];
+        if (!alternate) continue;
+        // Rebuild the design plan with the alternate archetype.
+        const alternatePlan = {
+          ...currentPlan,
+          semanticArchetype: alternate,
+        };
+        const slideId = slides[laterIndex]?.id;
+        if (!slideId) continue;
+        const rebuilt = buildSlide({
+          deckId: input.deckId,
+          slideId,
+          planned,
+          archetype: alternate,
+          index: laterIndex,
+          total: input.spec.slides.length,
+          theme,
+          sourceBriefId,
+          sourceEvidenceId,
+          linkedSourceIds,
+          authoredSourceIdByRef,
+          ...(input.spec.storySpec ? { storySpec: input.spec.storySpec } : {}),
+          designPlan: alternatePlan,
+        });
+        // Replace slide and elements.
+        slides[laterIndex] = rebuilt.slide;
+        // Remove old elements for this slide, add new ones.
+        const oldElementIds = new Set(
+          elements.filter((e) => e.slideId === slideId).map((e) => e.id),
+        );
+        for (let i = elements.length - 1; i >= 0; i -= 1) {
+          if (oldElementIds.has(elements[i]?.id ?? '')) elements.splice(i, 1);
+        }
+        elements.push(...rebuilt.elements);
+        // Update the design plan so downstream consumers see the alternate.
+        input.spec.designPlans[laterIndex] = alternatePlan;
+        archetypes[laterIndex] = alternate;
+        // Update counts for subsequent re-dispatch decisions.
+        archetypeCounts.set(
+          currentPlan.semanticArchetype,
+          (archetypeCounts.get(currentPlan.semanticArchetype) ?? 1) - 1,
+        );
+        archetypeCounts.set(alternate, (archetypeCounts.get(alternate) ?? 0) + 1);
+        redispatched = true;
+      }
+      if (!redispatched) {
+        // No alternates available — accept the failure.
+        console.warn(
+          `NodeSlide deck diversity gate: ${diversityReport.failures.join('; ')} (no alternates available)`,
+        );
+        input.spec.deckDiversity = {
+          score: diversityReport.score,
+          passes: false,
+          distinctFamilies: diversityReport.distinctFamilies,
+          nearDuplicatePairs: diversityReport.nearDuplicatePairs,
+        };
+        break;
+      }
+    }
+  }
 
   const deck = {
     schemaVersion: NODESLIDE_SCHEMA_VERSION,
@@ -1106,6 +1345,7 @@ function buildSlide(input: {
   linkedSourceIds: string[];
   authoredSourceIdByRef: ReadonlyMap<string, string>;
   storySpec?: NodeSlideStorySpec;
+  designPlan?: NodeSlideDesignPlan;
 }): { slide: Slide; elements: SlideElement[] } {
   const { planned, theme } = input;
   if (
@@ -1131,6 +1371,41 @@ function buildSlide(input: {
       'NodeSlide authored ArtifactSpec failed [artifact_geometry_lineage]: planned geometry does not match the compiler receipt.',
     );
   }
+
+  // When a design plan is available, dispatch to an executable composition
+  // grammar instead of the shared scaffold. Each grammar produces a
+  // materially different element tree. Slides with authored artifacts use
+  // the legacy scaffold to preserve native geometry rendering.
+  if (input.designPlan && !planned.authoredArtifactSpec) {
+    const grammarResult = dispatchCompositionGrammar(input.designPlan.semanticArchetype, {
+      deckId: input.deckId,
+      slideId: input.slideId,
+      planned,
+      index: input.index,
+      total: input.total,
+      theme: input.theme,
+      sourceBriefId: input.sourceBriefId,
+      sourceEvidenceId: input.sourceEvidenceId,
+      linkedSourceIds: input.linkedSourceIds,
+      authoredSourceIdByRef: input.authoredSourceIdByRef,
+      ...(input.storySpec ? { storySpec: input.storySpec } : {}),
+    });
+    return {
+      slide: {
+        id: input.slideId,
+        deckId: input.deckId,
+        title: planned.title,
+        section: planned.section,
+        archetype: input.archetype,
+        notes: `Narrative role: ${planned.section}. Composition grammar: ${grammarResult.grammarId}. Keep the spoken transition focused on "${planned.headline}"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.`,
+        background: theme.colors.canvas,
+        elementOrder: grammarResult.elements.map((e: SlideElement) => e.id),
+        version: 1,
+      },
+      elements: grammarResult.elements,
+    };
+  }
+
   const elements: SlideElement[] = [];
   const add = (element: SlideElement) => {
     elements.push(element);

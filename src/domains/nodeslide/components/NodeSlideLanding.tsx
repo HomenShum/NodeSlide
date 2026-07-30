@@ -367,19 +367,53 @@ export function NodeSlideLanding({
             </button>
           </div>
           {creating ? (
-            <output
-              className="ns-landing-create-status"
-              aria-live="polite"
-              data-testid="landing-create-status"
-            >
-              <LoaderCircle className="ns-spin" size={13} />
-              <span data-testid="landing-create-stage">
-                {creationStageMessage(creationElapsedSeconds)}
-              </span>
-              <span className="ns-landing-create-elapsed" data-testid="landing-create-elapsed">
-                {formatElapsed(creationElapsedSeconds)}
-              </span>
-            </output>
+            <div className="ns-landing-create-wait">
+              <output
+                className="ns-landing-create-status"
+                aria-live="polite"
+                data-testid="landing-create-status"
+              >
+                <LoaderCircle className="ns-spin" size={13} />
+                <span data-testid="landing-create-stage">
+                  {creationStageMessage(creationElapsedSeconds)}
+                </span>
+                <span className="ns-landing-create-elapsed" data-testid="landing-create-elapsed">
+                  {formatElapsed(creationElapsedSeconds)}
+                </span>
+              </output>
+              <div className="ns-landing-create-tutorial" aria-label="What happens next">
+                <div
+                  className={
+                    creationElapsedSeconds < 15
+                      ? 'ns-landing-tutorial-step ns-active'
+                      : 'ns-landing-tutorial-step'
+                  }
+                >
+                  <strong>1 · Plan</strong>
+                  <span>Your brief becomes a slide outline you can review</span>
+                </div>
+                <div
+                  className={
+                    creationElapsedSeconds >= 15 && creationElapsedSeconds < 150
+                      ? 'ns-landing-tutorial-step ns-active'
+                      : 'ns-landing-tutorial-step'
+                  }
+                >
+                  <strong>2 · Compose</strong>
+                  <span>Each slide is built from editable primitives, not images</span>
+                </div>
+                <div
+                  className={
+                    creationElapsedSeconds >= 150
+                      ? 'ns-landing-tutorial-step ns-active'
+                      : 'ns-landing-tutorial-step'
+                  }
+                >
+                  <strong>3 · Refine</strong>
+                  <span>Scoped AI edits, validation, and export in the editor</span>
+                </div>
+              </div>
+            </div>
           ) : error ? (
             <output className="ns-landing-create-error" role="alert">
               {error}
@@ -416,16 +450,15 @@ export function NodeSlideLanding({
               {starter.label}
             </button>
           ))}
+          <button
+            className="ns-landing-sample"
+            type="button"
+            data-testid="landing-explore-sample"
+            onClick={onExploreSample}
+          >
+            <Layers3 size={13} /> See an example deck
+          </button>
         </div>
-
-        <button
-          className="ns-landing-sample"
-          type="button"
-          data-testid="landing-explore-sample"
-          onClick={onExploreSample}
-        >
-          <Layers3 size={15} /> Explore the editable sample workspace
-        </button>
 
         {recentDecks.length > 0 ? (
           <section className="ns-landing-recents" aria-labelledby="nodeslide-recent-title">

@@ -783,6 +783,45 @@ function compactVisualBodyCopy(value: string, maxLength = 220): string {
   return bounded.slice(0, lastSpace > 0 ? lastSpace : maxLength).trimEnd();
 }
 
+function repairEvidencePipelineDiagram(
+  slide: Record<string, unknown>,
+): Record<string, unknown> | null {
+  const diagram = slide['diagram'];
+  if (!isCreationSpecRecord(diagram) || !Array.isArray(diagram['nodes'])) return null;
+  const nodes = diagram['nodes'].filter(isCreationSpecRecord);
+  const labelFor = (node: Record<string, unknown>) =>
+    typeof node['label'] === 'string' ? node['label'] : '';
+  const source = nodes.find((node) => /\b(?:source|filed|filing|deck)\b/iu.test(labelFor(node)));
+  const extract = nodes.find((node) => /\bextract\w*\b/iu.test(labelFor(node)));
+  const validate = nodes.find((node) => /\bvalidat\w*\b/iu.test(labelFor(node)));
+  const decision = nodes.find((node) => /\b(?:decision|board)\b/iu.test(labelFor(node)));
+  if (!source || !extract || !validate || !decision) return null;
+  const label = nodes.find(
+    (node) =>
+      node !== source &&
+      node !== extract &&
+      node !== validate &&
+      node !== decision &&
+      /\b(?:label|tier|classif)\w*\b/iu.test(labelFor(node)),
+  );
+  const ordered = [source, extract, validate, ...(label ? [label] : []), decision];
+  const orderedIds = ordered.map((node) => String(node['id']));
+  if (orderedIds.some((id) => !id || id === 'undefined')) return null;
+  return {
+    ...slide,
+    diagram: {
+      ...diagram,
+      direction: 'horizontal',
+      nodes: ordered,
+      edges: orderedIds.slice(0, -1).map((from, index) => ({
+        from,
+        to: orderedIds[index + 1],
+        label: 'then',
+      })),
+    },
+  };
+}
+
 function repairCreationVisualLogic(
   rawSpec: unknown,
   brief: DeckBrief,
@@ -886,6 +925,11 @@ function repairCreationVisualLogic(
     ].some((key) => slide[key] !== undefined && slide[key] !== null);
     if (hasPrimaryVisual && typeof slide['body'] === 'string' && slide['body'].length > 220) {
       slide = { ...slide, body: compactVisualBodyCopy(slide['body']) };
+      repairCount += 1;
+    }
+    const evidencePipelineRepair = repairEvidencePipelineDiagram(slide);
+    if (evidencePipelineRepair) {
+      slide = evidencePipelineRepair;
       repairCount += 1;
     }
     const artifactSpec = slide['artifactSpec'];

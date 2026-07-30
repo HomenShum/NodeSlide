@@ -1216,27 +1216,13 @@ function repairCreationVisualLogic(
       slide = replaceQuarantinedQuantitativeCopy(withoutFormula);
       repairCount += 1;
     }
-    const primaryVisualKeys = [
-      'metric',
-      'chart',
-      'diagram',
-      'formula',
-      'image',
-      'video',
-      'artifactSpec',
-    ];
-    if (
-      !primaryVisualKeys.some((key) => slide[key] !== undefined && slide[key] !== null) &&
-      claimsMissingQuantitativeVisual(slide)
-    ) {
+    if (!hasUsablePrimaryVisual(slide) && claimsMissingQuantitativeVisual(slide)) {
       slide = replaceQuarantinedQuantitativeCopy(slide);
       const claimDiagram = claimDiagramFromSlide(slide);
       if (claimDiagram) slide['diagram'] = claimDiagram;
       repairCount += 1;
     }
-    const hasPrimaryVisual = primaryVisualKeys.some(
-      (key) => slide[key] !== undefined && slide[key] !== null,
-    );
+    const hasPrimaryVisual = hasUsablePrimaryVisual(slide);
     if (hasPrimaryVisual && typeof slide['body'] === 'string' && slide['body'].length > 220) {
       slide = { ...slide, body: compactVisualBodyCopy(slide['body']) };
       repairCount += 1;
@@ -1288,6 +1274,71 @@ function claimsMissingQuantitativeVisual(slide: Record<string, unknown>): boolea
   return (
     /\b(?:plotted|plotting|mapped|position(?:ed|ing)?|placement)\b/iu.test(copy) &&
     /\b(?:axes?|matrix|quadrant|heatmap|band)\b/iu.test(copy)
+  );
+}
+
+function hasUsablePrimaryVisual(slide: Record<string, unknown>): boolean {
+  if (typeof slide['metric'] === 'string' && slide['metric'].trim().length > 0) return true;
+
+  const chart = slide['chart'];
+  if (
+    isCreationSpecRecord(chart) &&
+    Array.isArray(chart['labels']) &&
+    Array.isArray(chart['values']) &&
+    chart['labels'].length >= 2 &&
+    chart['labels'].length === chart['values'].length &&
+    chart['labels'].every((label) => typeof label === 'string' && label.trim().length > 0) &&
+    chart['values'].every((value) => typeof value === 'number' && Number.isFinite(value))
+  ) {
+    return true;
+  }
+
+  const diagram = slide['diagram'];
+  if (
+    isCreationSpecRecord(diagram) &&
+    Array.isArray(diagram['nodes']) &&
+    Array.isArray(diagram['edges']) &&
+    diagram['nodes'].length >= 2 &&
+    diagram['edges'].length >= 1
+  ) {
+    return true;
+  }
+
+  const formula = slide['formula'];
+  if (
+    isCreationSpecRecord(formula) &&
+    typeof formula['expression'] === 'string' &&
+    formula['expression'].trim().length > 0
+  ) {
+    return true;
+  }
+
+  const image = slide['image'];
+  if (
+    isCreationSpecRecord(image) &&
+    typeof image['altText'] === 'string' &&
+    image['altText'].trim().length > 0
+  ) {
+    return true;
+  }
+
+  const video = slide['video'];
+  if (
+    isCreationSpecRecord(video) &&
+    typeof video['url'] === 'string' &&
+    video['url'].trim().length > 0
+  ) {
+    return true;
+  }
+
+  const artifactSpec = slide['artifactSpec'];
+  if (!isCreationSpecRecord(artifactSpec)) return false;
+  const provenance = artifactSpec['provenance'];
+  return (
+    typeof artifactSpec['kind'] === 'string' &&
+    artifactSpec['kind'].trim().length > 0 &&
+    isCreationSpecRecord(artifactSpec['payload']) &&
+    (!isCreationSpecRecord(provenance) || provenance['truthState'] !== 'missing')
   );
 }
 

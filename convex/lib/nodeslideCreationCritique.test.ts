@@ -678,6 +678,50 @@ describe('NodeSlide creation self-critique loop', () => {
     });
   });
 
+  it('removes an invented score formula whose filing inputs are still pending', async () => {
+    const strictBoardBrief = {
+      ...ROADSHOW_BRIEF,
+      prompt: `${ROADSHOW_BRIEF.prompt} Never invent missing numbers.`,
+    };
+    const degradedSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 6
+          ? {
+              ...slide,
+              headline: 'A transparent score leadership can audit',
+              body: 'Leadership can score growth and discipline equally.',
+              bullets: ['Inputs come from the filing', 'Equal weights are a governance choice'],
+              formula: {
+                expression: '0.5*g + 0.5*m',
+                display: 'Quality Score = 0.5 × revenue growth + 0.5 × margin',
+                variables: [
+                  { label: 'Revenue growth (pending filing)', value: 0 },
+                  { label: 'Margin (pending filing)', value: 0 },
+                ],
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      brief: strictBoardBrief,
+      firstSpec: degradedSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlide = (outcome.spec as typeof degradedSpec).slides[6];
+
+    expect(repairedSlide).not.toHaveProperty('formula');
+    expect(JSON.stringify(repairedSlide)).not.toContain('0.5');
+    expect(repairedSlide).toMatchObject({
+      headline: 'Evidence gap: exact figures required before publication',
+      body: expect.stringContaining('No quantitative outlook is shown'),
+    });
+  });
+
   it('runs exactly one revision and adopts a corrected pass 2', async () => {
     const requestRevision = vi.fn(
       async (promptReport: string): Promise<NodeSlideProviderResult> => {

@@ -720,6 +720,15 @@ function comparisonArtifactHasPlottableSignal(artifactSpec: Record<string, unkno
   });
 }
 
+function formulaInventsPendingQuantities(value: unknown): boolean {
+  if (!isCreationSpecRecord(value)) return false;
+  const serialized = JSON.stringify(value);
+  return (
+    /(?:^|[^\p{L}])\d+(?:\.\d+)?/u.test(serialized) &&
+    /\b(?:pending|missing|placeholder|not retrieved|not supplied)\b/iu.test(serialized)
+  );
+}
+
 function briefForbidsIllustrativeQuantities(brief: DeckBrief): boolean {
   return /\b(?:never|do not|don't|must not|no)\s+(?:\w+\s+){0,3}(?:invent|fabricat|make up)\w*\s+(?:\w+\s+){0,3}(?:numbers?|figures?|data|metrics?|outcomes?)\b/iu.test(
     `${brief.prompt} ${brief.purpose} ${brief.successCriteria.join(' ')}`,
@@ -849,7 +858,7 @@ function repairCreationVisualLogic(
     const violatesBriefTruthPolicy =
       briefForbidsIllustrativeQuantities(brief) &&
       isCreationSpecRecord(authoredArtifact) &&
-      ['chart', 'comparison'].includes(String(authoredArtifact['kind'])) &&
+      ['chart', 'comparison', 'equation'].includes(String(authoredArtifact['kind'])) &&
       ['illustrative', 'estimated'].includes(String(authoredTruthState));
     const unsupportedAuthoredArtifact =
       isCreationSpecRecord(authoredArtifact) &&
@@ -912,6 +921,14 @@ function repairCreationVisualLogic(
     if (metricHasNoVisualSignal(slide['metric'], slide['metricLabel'])) {
       const { metric: _invalidMetric, metricLabel: _invalidMetricLabel, ...withoutMetric } = slide;
       slide = withoutMetric;
+      repairCount += 1;
+    }
+    if (
+      briefForbidsIllustrativeQuantities(brief) &&
+      formulaInventsPendingQuantities(slide['formula'])
+    ) {
+      const { formula: _unsupportedFormula, ...withoutFormula } = slide;
+      slide = replaceQuarantinedQuantitativeCopy(withoutFormula);
       repairCount += 1;
     }
     const hasPrimaryVisual = [

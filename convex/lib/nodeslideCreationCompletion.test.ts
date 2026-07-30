@@ -83,11 +83,12 @@ describe('NodeSlide creation completion boundary', () => {
     if (!artifactSlide) return;
     artifactSlide.artifactSpec = canonicalArtifactFixture('risk-matrix');
     const artifact = artifactSlide.artifactSpec as {
-      payload?: { likelihoodAxis?: { high?: string } };
+      payload?: { likelihoodAxis?: { high?: string }; risks?: unknown[] };
     };
     if (artifact.payload?.likelihoodAxis) {
       artifact.payload.likelihoodAxis.high = undefined;
     }
+    if (artifact.payload) artifact.payload.risks = [];
 
     const built = buildBriefNodeSlide({
       deckId: 'deck-risk-axis-boundary',

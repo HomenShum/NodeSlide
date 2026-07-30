@@ -792,7 +792,7 @@ describe('NodeSlide creation self-critique loop', () => {
               section: slide.section,
               headline: 'Position on the matrix, not test scores, opens the threshold.',
               body: "The committee's gate reads the candidate system's likelihood-and-impact position after treatment.",
-              metric: ' ',
+              metric: '94%',
               bullets: [
                 'Likelihood and impact bands are set by institutional risk appetite.',
                 'Post-treatment position determines gate state.',

@@ -846,7 +846,7 @@ describe('NodeSlide creation self-critique loop', () => {
               bullets: [
                 'Adopt the continuous release gate',
                 'Name the accountable owner',
-                'Set the next evidence checkpoint',
+                'Complete the first checkpoint within 90 days',
               ],
               chart: { labels: ['Now', 'Target'], values: [20, 9] },
               artifactSpec: {
@@ -885,7 +885,10 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedSlide).not.toHaveProperty('chart');
     expect(repairedSlide).toHaveProperty('diagram');
     expect(repairedSlide.headline).toBe('Adopt the gate, name the owner, set the checkpoint.');
-    expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:20|9)\b/u);
+    expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:20|9|90)\b/u);
+    expect(repairedSlide.bullets).toContain(
+      'Set and source the checkpoint timing before publication',
+    );
   });
 
   it('removes an invented score formula whose filing inputs are still pending', async () => {

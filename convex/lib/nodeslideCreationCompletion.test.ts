@@ -76,6 +76,45 @@ describe('NodeSlide creation completion boundary', () => {
     ).toBe(false);
   });
 
+  it('quarantines a risk matrix with missing axis anchors instead of aborting creation', () => {
+    const rawSpec = structuredClone(deterministicBriefSpec('Risk matrix boundary', brief));
+    const artifactSlide = rawSpec.slides[5];
+    expect(artifactSlide).toBeDefined();
+    if (!artifactSlide) return;
+    artifactSlide.artifactSpec = canonicalArtifactFixture('risk-matrix');
+    const artifact = artifactSlide.artifactSpec as {
+      payload?: { likelihoodAxis?: { high?: string } };
+    };
+    if (artifact.payload?.likelihoodAxis) {
+      artifact.payload.likelihoodAxis.high = undefined;
+    }
+
+    const built = buildBriefNodeSlide({
+      deckId: 'deck-risk-axis-boundary',
+      projectId: 'project-risk-axis-boundary',
+      title: 'Risk matrix boundary',
+      brief,
+      themeId: 'editorial-signal',
+      rawSpec,
+      now: 1_700_000_000_000,
+    });
+
+    expect(built.snapshot.slides).toHaveLength(7);
+    expect(
+      built.snapshot.elements.some(
+        (element) => element.authoredArtifactBinding?.kind === 'risk-matrix',
+      ),
+    ).toBe(false);
+    expect(
+      built.snapshot.elements.some(
+        (element) =>
+          element.kind === 'text' &&
+          element.role === 'headline' &&
+          element.content === artifactSlide.headline,
+      ),
+    ).toBe(true);
+  });
+
   it('lets an owner publish a chart without exposing the private evidence record', () => {
     const built = buildBriefNodeSlide({
       deckId: 'deck-public-chart',

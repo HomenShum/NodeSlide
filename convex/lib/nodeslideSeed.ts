@@ -2422,6 +2422,7 @@ function coercePlannedSlide(
         'artifact_visual_without_signal',
         'artifact_image_without_renderable_asset',
         'chart_series_alignment',
+        'risk_axis_labels_missing',
       ]);
       if (!error.issues.every((issue) => quarantinableArtifactIssues.has(issue.code))) {
         throw error;

@@ -7,7 +7,7 @@
   "bin": {
     "recipelang": "./dist/cli.js"
   },
-  "files": ["dist", "README.md"],
+  "files": ["dist", "reference", "README.md"],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

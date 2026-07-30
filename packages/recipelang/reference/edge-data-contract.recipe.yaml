@@ -1,0 +1,61 @@
+schemaVersion: recipelang/v1
+kind: Recipe
+meta:
+  id: edge-data-contract
+  title: Treat the Edge as a Data Contract
+  description: Deterministic plumbing before agent judgment
+  version: 12
+inputs:
+  - id: research-a
+    label: Research A
+    produces: results-a
+  - id: research-b
+    label: Research B
+    produces: results-b
+  - id: research-c
+    label: Research C
+    produces: results-c
+artifacts:
+  - id: results-a
+    shape: Item[]
+  - id: results-b
+    shape: Item[]
+  - id: results-c
+    shape: Item[]
+  - id: deduped-items
+    shape: DedupedItem[]
+    invariants: [unique-by:id, no-null-values, passes:edge-filter]
+  - id: final-brief
+    shape: ResearchBrief
+steps:
+  - id: reduce-results
+    label: Flatten → filter → dedupe
+    consumes: [results-a, results-b, results-c]
+    produces: [deduped-items]
+    executor:
+      kind: code
+      runtime: javascript
+      ref: ./edges/reduceResults.ts#reduceResults
+      deterministic: true
+  - id: synthesize
+    label: Judge and synthesize
+    consumes: [deduped-items]
+    produces: [final-brief]
+    executor:
+      kind: agent
+      capability: synthesis
+      deterministic: false
+outputs:
+  - artifact: final-brief
+    label: Final research brief
+notes:
+  - id: plumbing-note
+    anchor: reduce-results
+    kind: warning
+    body: Save agents for judgment, not flattening and deduplication.
+render:
+  profile: recipe-grid
+  direction: left-to-right
+  showContracts: true
+  showExecutorBadges: true
+  showNotes: true

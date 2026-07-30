@@ -33,7 +33,7 @@ recipelang.render
 recipelang.export
 ```
 
-See `benchmarks/recipelang/edge-data-contract.recipe.yaml` for the checked-in
+See `reference/edge-data-contract.recipe.yaml` for the checked-in
 many-to-one reference fixture. `npm run recipelang:reference` deterministically
 rebuilds the live HTML/SVG fixture in `public/recipelang/`; `:check` fails when
 those artifacts drift. The alignment receipt uses Cooking for Engineers'

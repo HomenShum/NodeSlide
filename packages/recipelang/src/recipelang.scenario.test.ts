@@ -15,7 +15,7 @@ import type { RecipePatch, RecipeSnapshot } from './types';
 
 const fixturePath = resolve(
   import.meta.dirname,
-  '../../../benchmarks/recipelang/edge-data-contract.recipe.yaml',
+  '../reference/edge-data-contract.recipe.yaml',
 );
 
 async function fixture(): Promise<RecipeSnapshot> {

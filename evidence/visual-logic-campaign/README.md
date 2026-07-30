@@ -53,10 +53,14 @@ CLI and records bounded, retry-aware results.
    `displayValue` compiled into the literal hero `Typed artifact`. Canonical compilation now
    rejects every metric fallback without a numeric or explicit decision-state signal and rejects
    image fallbacks without an embedded renderable asset.
-7. The bounded critique loop could retain a known-bad first pass when the provider was degraded.
-8. Metric height and caption position used fixed geometry, so long decision metrics could render
+7. The next attempt passed both false-hero gates but violated the SEC brief by rendering an
+   explicitly illustrative normalized outlook chart after “never invent missing numbers.” A
+   brief-level truth policy now removes illustrative or estimated authored charts/comparisons when
+   the user forbids invented or fabricated quantitative evidence.
+8. The bounded critique loop could retain a known-bad first pass when the provider was degraded.
+9. Metric height and caption position used fixed geometry, so long decision metrics could render
    beyond their nominal box without a safe gutter.
-9. Story continuity was represented by a single growing line. It indicated progress, but did not
+10. Story continuity was represented by a single growing line. It indicated progress, but did not
    visibly transform.
 
 ## Deterministic repair contract
@@ -73,6 +77,9 @@ CLI and records bounded, retry-aware results.
 - All canonical artifact families pass through the same final visual-signal assertion. Empty
   generic metrics and non-renderable image projections are quarantined as optional enrichment,
   not promoted to heroes and not allowed to abort the rest of the deck.
+- Brief truth policy is explicit: a “never invent/fabricate numbers, figures, data, metrics, or
+  outcomes” constraint rejects illustrative and estimated quantitative artifacts. Briefs that
+  explicitly permit labeled teaching miniatures or synthetic test data remain unaffected.
 - Visual primitives without authored truth state are errors when they dominate the slide.
 - Story continuity has both a progress line and a transforming marker tied to reveal intensity.
 - Long stat-panel metrics use measured height, a reduced font when needed, and a larger caption
@@ -83,7 +90,7 @@ CLI and records bounded, retry-aware results.
 
 Before deployment:
 
-- 66 focused visual-logic/layout scenarios passed.
+- 67 focused visual-logic/layout scenarios passed.
 - Restoring the old comparison fallback makes the dedicated compiler regression test fail.
 - 2,720 repository/workspace tests passed with four Vitest workers; 7 unrelated tests were skipped
   by their suites. The unconstrained local runner hit timing-only failures while other Node

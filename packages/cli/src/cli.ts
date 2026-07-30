@@ -6,7 +6,7 @@ import type {
   NodeSlideInstallProfile,
   NodeSlideUiMode,
 } from '@nodeslide/registry';
-import { generateDeck } from './generate';
+import { generateDeck, resolveGenerateEffort } from './generate';
 import { type NodeSlideInitOptions, runNodeSlideInit, runNodeSlideUpgrade } from './index';
 
 const args = process.argv.slice(2);
@@ -54,7 +54,7 @@ try {
       clientSessionId:
         pathValue(flags, 'session') ?? `cli-${Date.now()}-${crypto.randomUUID().slice(0, 12)}`,
       model: pathValue(flags, 'model') ?? 'moonshotai/kimi-k3',
-      effort: effortValue(flags),
+      effort: effortValue(flags, pathValue(flags, 'model') ?? 'moonshotai/kimi-k3'),
       ...((pathValue(flags, 'access-code') ?? process.env['NODESLIDE_PREVIEW_ACCESS_CODE'])
         ? {
             accessCode:
@@ -178,12 +178,8 @@ function boolFlag(flags: Flags, name: string): boolean {
   return flags.get(name) === true;
 }
 
-function effortValue(flags: Flags): 'low' | 'medium' | 'high' | 'xhigh' | 'max' {
-  const effort = pathValue(flags, 'effort') ?? 'low';
-  if (!['low', 'medium', 'high', 'xhigh', 'max'].includes(effort)) {
-    throw new Error('--effort must be low, medium, high, xhigh, or max.');
-  }
-  return effort as 'low' | 'medium' | 'high' | 'xhigh' | 'max';
+function effortValue(flags: Flags, model: string): 'low' | 'medium' | 'high' | 'xhigh' | 'max' {
+  return resolveGenerateEffort(model, pathValue(flags, 'effort'));
 }
 
 function usage(): void {

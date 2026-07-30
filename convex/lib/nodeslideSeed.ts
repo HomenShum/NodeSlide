@@ -2402,6 +2402,7 @@ function coercePlannedSlide(
         .slice(0, 3)
     : (fallback?.bullets ?? []);
   let authoredArtifact: ReturnType<typeof compileNodeSlideAuthoredArtifact> | undefined;
+  let quarantinedMisalignedChart = false;
   if (value.artifactSpec !== undefined) {
     try {
       authoredArtifact = compileNodeSlideAuthoredArtifact(
@@ -2420,10 +2421,14 @@ function coercePlannedSlide(
         'comparison_without_plottable_signal',
         'artifact_visual_without_signal',
         'artifact_image_without_renderable_asset',
+        'chart_series_alignment',
       ]);
       if (!error.issues.every((issue) => quarantinableArtifactIssues.has(issue.code))) {
         throw error;
       }
+      quarantinedMisalignedChart = error.issues.some(
+        (issue) => issue.code === 'chart_series_alignment',
+      );
     }
   }
   const metric =
@@ -2460,14 +2465,30 @@ function coercePlannedSlide(
   const formula = chart || diagram ? undefined : explicitFormula;
   const image = chart || diagram || formula ? undefined : explicitImage;
   const video = chart || diagram || formula || image ? undefined : explicitVideo;
+  const quantitativeGap = quarantinedMisalignedChart && !chart;
+  const safeHeadline = quantitativeGap
+    ? 'Evidence gap: exact figures required before publication'
+    : headline;
+  const safeBody = quantitativeGap
+    ? 'No quantitative outlook is shown because the supplied context does not contain a valid aligned series. Add exact values with a source citation before publication.'
+    : body;
+  const safeBullets = quantitativeGap
+    ? [
+        'No values or trend are inferred from a malformed series',
+        'Align every series value to a labeled category',
+        'Keep the decision gated until the figures are verified',
+      ]
+    : bullets.length > 0
+      ? bullets
+      : ['Context', 'Action', 'Outcome'];
   return {
     title,
     section,
-    headline,
-    body,
-    bullets: bullets.length > 0 ? bullets : ['Context', 'Action', 'Outcome'],
-    ...(metric ? { metric } : {}),
-    ...(metricLabel ? { metricLabel } : {}),
+    headline: safeHeadline,
+    body: safeBody,
+    bullets: safeBullets,
+    ...(!quantitativeGap && metric ? { metric } : {}),
+    ...(!quantitativeGap && metricLabel ? { metricLabel } : {}),
     ...(chart ? { chart } : {}),
     ...(diagram ? { diagram } : {}),
     ...(formula ? { formula } : {}),

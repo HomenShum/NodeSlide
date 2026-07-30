@@ -821,6 +821,28 @@ function removeUnsupportedMetricCopy(
   return repaired;
 }
 
+function preserveNarrativeAfterQuantitativeQuarantine(
+  slide: Record<string, unknown>,
+  unsupportedQuantities: number[],
+): Record<string, unknown> {
+  const unsupported = new Set(unsupportedQuantities);
+  const containsUnsupportedQuantity = (value: string) =>
+    (value.match(/-?\d[\d,]*(?:\.\d+)?/gu) ?? []).some((token) =>
+      unsupported.has(Number(token.replaceAll(',', ''))),
+    );
+  if (!Array.isArray(slide['bullets'])) return slide;
+  const groundedBullets = slide['bullets'].filter(
+    (bullet): bullet is string =>
+      typeof bullet === 'string' &&
+      bullet.trim().length > 0 &&
+      !containsUnsupportedQuantity(bullet),
+  );
+  return {
+    ...slide,
+    bullets: groundedBullets.slice(0, 3),
+  };
+}
+
 function replaceQuarantinedQuantitativeCopy(
   slide: Record<string, unknown>,
 ): Record<string, unknown> {
@@ -1003,7 +1025,19 @@ function repairCreationVisualLogic(
       } = slide;
       slide = withoutArtifact;
       if (violatesBriefTruthPolicy) {
-        slide = replaceQuarantinedQuantitativeCopy(slide);
+        const hasGroundedAlternative = ['diagram', 'formula', 'image', 'video'].some(
+          (key) => slide[key] !== undefined && slide[key] !== null,
+        );
+        slide = hasGroundedAlternative
+          ? preserveNarrativeAfterQuantitativeQuarantine(
+              slide,
+              unsupportedArtifactQuantities(brief, authoredPayload),
+            )
+          : replaceQuarantinedQuantitativeCopy(slide);
+        if (!hasGroundedAlternative) {
+          const claimDiagram = claimDiagramFromSlide(slide);
+          if (claimDiagram) slide['diagram'] = claimDiagram;
+        }
       }
       if (authoredArtifact['kind'] === 'evidence-media') {
         slide = replaceQuarantinedEvidenceCopy(slide);

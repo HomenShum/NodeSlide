@@ -831,6 +831,21 @@ function repairEvidencePipelineDiagram(
   };
 }
 
+function repairDecisionBulletOrder(slide: Record<string, unknown>): Record<string, unknown> | null {
+  if (!Array.isArray(slide['bullets'])) return null;
+  const bullets = slide['bullets'].filter(
+    (bullet): bullet is string => typeof bullet === 'string' && bullet.trim().length > 0,
+  );
+  const decision = bullets.find((bullet) => /\bdecision\b/iu.test(bullet));
+  const owner = bullets.find((bullet) => /\bowner\b/iu.test(bullet));
+  const checkpoint = bullets.find((bullet) => /\bcheckpoint\b/iu.test(bullet));
+  if (!decision || !owner || !checkpoint) return null;
+  const ordered = [decision, owner, checkpoint].map((bullet) =>
+    bullet.replace(/^\s*0?\d{1,2}(?:(?:[.):\-·])|\s)+\s*/u, '').trim(),
+  );
+  return { ...slide, bullets: ordered };
+}
+
 function repairCreationVisualLogic(
   rawSpec: unknown,
   brief: DeckBrief,
@@ -947,6 +962,11 @@ function repairCreationVisualLogic(
     const evidencePipelineRepair = repairEvidencePipelineDiagram(slide);
     if (evidencePipelineRepair) {
       slide = evidencePipelineRepair;
+      repairCount += 1;
+    }
+    const decisionBulletRepair = repairDecisionBulletOrder(slide);
+    if (decisionBulletRepair) {
+      slide = decisionBulletRepair;
       repairCount += 1;
     }
     const artifactSpec = slide['artifactSpec'];

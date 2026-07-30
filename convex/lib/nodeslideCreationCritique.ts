@@ -821,6 +821,37 @@ function removeUnsupportedMetricCopy(
   return repaired;
 }
 
+function removeUnsupportedSchedulingCopy(
+  slide: Record<string, unknown>,
+  brief: DeckBrief,
+): { slide: Record<string, unknown>; changed: boolean } {
+  if (!Array.isArray(slide['bullets'])) return { slide, changed: false };
+  const suppliedQuantities = briefSuppliedQuantities(brief);
+  const unsupportedSchedulePattern =
+    /(-?\d[\d,]*(?:\.\d+)?)\s*(?:business\s+)?(?:days?|weeks?|months?|years?)\b/iu;
+  let changed = false;
+  const groundedBullets = slide['bullets'].filter((bullet): bullet is string => {
+    if (typeof bullet !== 'string' || bullet.trim().length === 0) return false;
+    const match = bullet.match(unsupportedSchedulePattern);
+    if (!match) return true;
+    const quantity = Number(match[1]?.replaceAll(',', ''));
+    if (suppliedQuantities.has(quantity)) return true;
+    changed = true;
+    return false;
+  });
+  if (!changed) return { slide, changed: false };
+  return {
+    slide: {
+      ...slide,
+      bullets: [
+        ...groundedBullets,
+        'Set and source the checkpoint timing before publication',
+      ].slice(0, 3),
+    },
+    changed: true,
+  };
+}
+
 function preserveNarrativeAfterQuantitativeQuarantine(
   slide: Record<string, unknown>,
   unsupportedQuantities: number[],
@@ -976,6 +1007,11 @@ function repairCreationVisualLogic(
   const slides = rawSpec.slides.map((value) => {
     if (!isCreationSpecRecord(value)) return value;
     let slide: Record<string, unknown> = { ...value };
+    const schedulingRepair = removeUnsupportedSchedulingCopy(slide, brief);
+    if (schedulingRepair.changed) {
+      slide = schedulingRepair.slide;
+      repairCount += 1;
+    }
     const authoredArtifact = slide['artifactSpec'];
     const authoredPayload = isCreationSpecRecord(authoredArtifact)
       ? authoredArtifact['payload']

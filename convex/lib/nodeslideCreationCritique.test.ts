@@ -686,6 +686,102 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(JSON.stringify(outcome.spec)).not.toContain('0 cohorts');
   });
 
+  it('does not mistake incidental brief numbers for evidence behind an illustrative risk matrix', async () => {
+    const riskBrief = {
+      ...ROADSHOW_BRIEF,
+      prompt:
+        'Create a 7-slide NIST AI RMF 1.0 deck. Preserve all four functions and show a risk matrix. Do not invent regulatory obligations.',
+    };
+    const degradedSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 4
+          ? {
+              ...slide,
+              headline: 'Illustrative residual-risk placement',
+              body: 'Plotted on likelihood and impact axes, the candidate and two comparators sit in the amber band after controls.',
+              bullets: [
+                'Candidate: high impact',
+                'Comparator A: strong controls',
+                'Comparator B: bias evidence pending',
+              ],
+              artifactSpec: {
+                schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+                id: 'illustrative-risk-matrix',
+                kind: 'comparison',
+                narrativeJob: 'Place three systems on a risk matrix.',
+                provenance: {
+                  truthState: 'illustrative',
+                  rationale: 'No measured system values were supplied.',
+                  sourceRefs: [],
+                },
+                payload: {
+                  metrics: [
+                    { id: 'likelihood', label: 'Likelihood' },
+                    { id: 'impact', label: 'Impact' },
+                  ],
+                  cohorts: [
+                    { id: 'candidate', label: 'Candidate', values: { likelihood: 4, impact: 1 } },
+                    { id: 'peer-a', label: 'Peer A', values: { likelihood: 7, impact: 4 } },
+                  ],
+                },
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      brief: riskBrief,
+      firstSpec: degradedSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlide = (outcome.spec as typeof degradedSpec).slides[4];
+
+    expect(repairedSlide).not.toHaveProperty('artifactSpec');
+    expect(repairedSlide).toHaveProperty('diagram');
+    expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:plotted|axes|amber band)\b/i);
+  });
+
+  it('repairs a chartless slide that still claims viewers can see a plotted risk matrix', async () => {
+    const chartlessSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 4
+          ? {
+              title: slide.title,
+              section: slide.section,
+              headline: 'Illustrative residual-risk placement',
+              body: 'Plotted on likelihood and impact axes, the candidate and two comparators sit in the amber band after controls.',
+              bullets: [
+                'Candidate: high impact',
+                'Comparator A: strong controls',
+                'Comparator B: bias evidence pending',
+              ],
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      brief: {
+        ...ROADSHOW_BRIEF,
+        prompt:
+          'Create a 7-slide NIST AI RMF 1.0 deck. Preserve all four functions and show a risk matrix.',
+      },
+      firstSpec: chartlessSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlide = (outcome.spec as typeof chartlessSpec).slides[4];
+
+    expect(repairedSlide).toHaveProperty('diagram');
+    expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:plotted|axes|amber band)\b/i);
+  });
+
   it('removes chart-dependent copy when a referenced filing was not retrieved', async () => {
     const degradedSpec = {
       ...CORRECTED_SPEC,

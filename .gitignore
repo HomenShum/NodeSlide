@@ -39,6 +39,7 @@ evidence/visual-logic-campaign/before/
 evidence/visual-logic-campaign/after/
 evidence/visual-logic-campaign/after-rejected-*/
 evidence/visual-logic-campaign/recovery*/
+evidence/visual-logic-campaign/runtime-logs/
 evidence/visual-logic-campaign/*.pid
 evidence/visual-logic-campaign/*.log
 evidence/visual-logic-campaign/*-results.json

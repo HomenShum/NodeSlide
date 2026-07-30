@@ -553,9 +553,11 @@ describe('the chain from the live dispatch path down to reserve', () => {
 describe('deck creation is reserved before it is issued', () => {
   const CREATE_REQUEST = {
     systemPrompt: 'Return a full NodeSlide deck spec.',
-    userText: '{"title":"Q4 review","brief":{"prompt":"Summarise the quarter"}}',
-    // The real create path asks for 5k output tokens; a full deck needs them.
-    maxTokens: 5_000,
+    userText:
+      '{"title":"NIST AI RMF release decision","brief":{"prompt":"Create a seven-slide risk-committee operating-model deck with typed artifacts."}}',
+    // The real create path asks for 10k output tokens; a maximum-size deck needs
+    // room for slide content, typed artifacts, and story receipts.
+    maxTokens: 10_000,
     model: 'moonshotai/kimi-k3',
     jsonSchema: {
       name: 'nodeslide_enforcement_deck',
@@ -661,11 +663,14 @@ describe('deck creation is reserved before it is issued', () => {
     await briefDispatch(CREATE_REQUEST);
 
     expect(observed).toHaveLength(1);
-    // 2_200 here means the deck was silently halved by the edit path's ceiling.
+    // Scenario: a seven-slide NIST risk-committee deck with typed-artifact and
+    // story receipts exceeded the historical 5k envelope. 2_200 means the deck
+    // was silently halved by the edit path; 5_000 recreates that observed JSON
+    // truncation. The bounded 10k envelope covers the maximum eight-slide form.
     expect(
       observed[0]?.maxOutputTokens,
-      'a full deck must keep its 5k-token completion under metering',
-    ).toBe(5_000);
+      'a seven/eight-slide typed-artifact deck must fit without truncating JSON',
+    ).toBe(10_000);
     // 30_000 here means every provider-backed create would time out.
     expect(observed[0]?.timeoutMs, 'a full deck must keep its 240s deadline under metering').toBe(
       240_000,

@@ -62,8 +62,9 @@ const PROVIDER_HARD_TIMEOUT_MS = 30_000;
  *
  * They are parameterized because the two metered paths have genuinely different
  * shapes, and a single set of numbers silently broke one of them. An edit patch
- * is a small JSON delta that finishes inside 30s; a full deck is a ~5k-token
- * completion that the create path already gives 240s. Feeding create the edit
+ * is a small JSON delta that finishes inside 30s; a full eight-slide deck with
+ * typed artifacts and story receipts needs a bounded 10k-token completion and
+ * 240s. Feeding create the edit
  * ceilings does not "enforce a budget" on it — `resolveDispatchPolicy` TIGHTENS
  * (takes the min), so it would have silently cut create's completion to 2_200
  * tokens and its deadline to 30s, guaranteeing a truncated spec and a
@@ -81,9 +82,16 @@ export const NODESLIDE_EDIT_PROVIDER_CEILINGS: NodeSlideProviderHardCeilings = {
   timeoutMs: PROVIDER_HARD_TIMEOUT_MS,
 };
 
-/** Matches the unbudgeted create call this seam replaced: 5k tokens, 240s. */
+/**
+ * Covers the maximum eight-slide authored-artifact response.
+ *
+ * The historical 5k ceiling was reached exactly by a seven-slide NIST
+ * risk-committee case across four provider families. Each returned truncated
+ * JSON and degraded to the generic fallback. Ten thousand remains finite,
+ * metered, and below the normalized run-level output/cost budgets.
+ */
 export const NODESLIDE_CREATE_PROVIDER_CEILINGS: NodeSlideProviderHardCeilings = {
-  maxOutputTokensPerAttempt: 5_000,
+  maxOutputTokensPerAttempt: 10_000,
   timeoutMs: 240_000,
 };
 const MAX_REPAIR_CONTEXT_UTF8_BYTES = 24_000 * 4;

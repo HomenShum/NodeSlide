@@ -32,6 +32,7 @@ import {
 } from './lib/nodeslideAuthoredArtifact';
 import { authorizeBeforeConsumingQuota, nodeSlideActorQuotaKey } from './lib/nodeslideAuthority';
 import {
+  NODESLIDE_CREATE_PROVIDER_CEILINGS,
   type NodeSlideBudgetLedgerClient,
   bindNodeSlideBudgetLedgerClient,
   createNodeSlideBudgetedCreateDispatch,
@@ -1999,8 +2000,8 @@ export const createDeckFromBrief = action({
       ledger: nodeSlideBudgetLedgerClient(ctx),
       dispatch: (request, dependencies) =>
         callNodeSlideFreeJson(request, {
-          // Full-deck generation is a ~5k-token completion; the 30s edit-path
-          // default guarantees a timeout and a silent (honest) fallback. The
+          // Full-deck generation can reach the bounded create envelope; the 30s
+          // edit-path default guarantees a timeout and an honest fallback. The
           // budgeted dispatch policy can only TIGHTEN this, never raise it,
           // which is why the create seam carries its own wire ceilings.
           timeoutMs: 240_000,
@@ -2023,7 +2024,7 @@ export const createDeckFromBrief = action({
           providerMode: providerChoice.providerMode,
           ...(revision ? { previousSpec: revision.previousSpec } : {}),
         }),
-        maxTokens: 5000,
+        maxTokens: NODESLIDE_CREATE_PROVIDER_CEILINGS.maxOutputTokensPerAttempt,
         ...(providerChoice.providerMode !== 'deterministic'
           ? {
               model: providerChoice.providerModel,

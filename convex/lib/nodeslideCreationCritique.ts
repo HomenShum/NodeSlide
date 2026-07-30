@@ -732,9 +732,19 @@ function repairCreationVisualLogic(rawSpec: unknown): {
     if (!isCreationSpecRecord(value)) return value;
     let slide: Record<string, unknown> = { ...value };
     const authoredArtifact = slide['artifactSpec'];
+    const authoredPayload = isCreationSpecRecord(authoredArtifact)
+      ? authoredArtifact['payload']
+      : undefined;
     const unsupportedAuthoredArtifact =
       isCreationSpecRecord(authoredArtifact) &&
       (authoredArtifact['kind'] === 'evidence-media' ||
+        (authoredArtifact['kind'] === 'generic' &&
+          (!isCreationSpecRecord(authoredPayload) ||
+            authoredPayload['displayValue'] === undefined ||
+            metricHasNoVisualSignal(
+              authoredPayload['displayValue'],
+              authoredPayload['label'] ?? authoredArtifact['narrativeJob'],
+            ))) ||
         (authoredArtifact['kind'] === 'comparison' &&
           !comparisonArtifactHasPlottableSignal(authoredArtifact)));
     if (unsupportedAuthoredArtifact) {

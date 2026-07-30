@@ -37,6 +37,7 @@ outputs/**/playback-frames/
 # report are tracked; generated decks, renders, receipts, and provider logs are local evidence.
 evidence/visual-logic-campaign/before/
 evidence/visual-logic-campaign/after/
+evidence/visual-logic-campaign/after-rejected-*/
 evidence/visual-logic-campaign/*.pid
 evidence/visual-logic-campaign/*.log
 evidence/visual-logic-campaign/*-results.json

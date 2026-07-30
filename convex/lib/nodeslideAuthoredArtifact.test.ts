@@ -97,8 +97,16 @@ describe('model-authored production ArtifactSpec adapter', () => {
     ).toBe(true);
   });
 
-  it('compiles every canonical family to a declared primitive or honest fallback', () => {
+  it('compiles every canonical family to a declared primitive or rejects absent media', () => {
     for (const kind of NODESLIDE_CANONICAL_ARTIFACT_KINDS) {
+      if (kind === 'evidence-media') {
+        expect(() =>
+          compileNodeSlideAuthoredArtifact(canonicalArtifactFixture(kind), {
+            allowedSourceRefs: ['brief:prompt'],
+          }),
+        ).toThrow(/artifact_image_without_renderable_asset/u);
+        continue;
+      }
       const compilation = compileNodeSlideAuthoredArtifact(canonicalArtifactFixture(kind), {
         allowedSourceRefs: ['brief:prompt'],
       });
@@ -171,6 +179,20 @@ describe('model-authored production ArtifactSpec adapter', () => {
         allowedSourceRefs: ['brief:prompt'],
       }),
     ).toThrow(/comparison_without_plottable_signal/u);
+  });
+
+  it('rejects a generic artifact with no decision signal instead of compiling Typed artifact', () => {
+    const generic = canonicalArtifactFixture('generic');
+    const invalidGeneric = {
+      ...generic,
+      payload: { label: 'Pair assumptions with invalidating risks' },
+    };
+
+    expect(() =>
+      compileNodeSlideAuthoredArtifact(invalidGeneric, {
+        allowedSourceRefs: ['brief:prompt'],
+      }),
+    ).toThrow(/artifact_visual_without_signal/u);
   });
 
   it('compiles a bounded typed chart deterministically', () => {

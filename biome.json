@@ -18,6 +18,7 @@
       "evidence/complete-discussions-2026-07-28",
       "evidence/visual-logic-campaign/before",
       "evidence/visual-logic-campaign/after",
+      "evidence/visual-logic-campaign/after-rejected-*",
       "contracts",
       "convex/_generated",
       "packages/convex/component/_generated",

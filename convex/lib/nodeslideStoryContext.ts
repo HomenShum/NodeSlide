@@ -214,7 +214,23 @@ function pacingFor(slideCount: number): NodeSlideStoryPhase[] {
 }
 
 function requestedKinds(requestText: string): NodeSlideVisualMaterialKind[] {
-  return REQUEST_PATTERNS.filter(([, pattern]) => pattern.test(requestText)).map(([kind]) => kind);
+  return REQUEST_PATTERNS.filter(([, pattern]) => hasUnnegatedRequest(requestText, pattern)).map(
+    ([kind]) => kind,
+  );
+}
+
+function hasUnnegatedRequest(requestText: string, pattern: RegExp): boolean {
+  const matcher = new RegExp(pattern.source, `${pattern.flags.replace('g', '')}g`);
+  for (const match of requestText.matchAll(matcher)) {
+    const index = match.index ?? 0;
+    const prefix = requestText.slice(Math.max(0, index - 72), index);
+    const negated =
+      /(?:\bno\b(?:[\s-]+\w+){0,3}|\bwithout\b(?:[\s-]+\w+){0,4}|\b(?:do\s+not|never|avoid|forbid)\b(?:[\s-]+\w+){0,4})[\s:,-]*$/iu.test(
+        prefix,
+      );
+    if (!negated) return true;
+  }
+  return false;
 }
 
 function attachmentKind(attachment: NodeSlideDataAttachment): NodeSlideVisualMaterialKind {

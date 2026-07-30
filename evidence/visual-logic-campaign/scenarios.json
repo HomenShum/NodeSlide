@@ -1,0 +1,78 @@
+[
+  {
+    "id": "earnings",
+    "title": "Remitly FY2025 - Growth With Operating Discipline",
+    "prompt": "Create an 8-slide board and investor-relations briefing from Remitly's public Q4 and FY2025 earnings presentation filed with the SEC on February 18, 2026: https://www.sec.gov/Archives/edgar/data/1782170/000162828026009031/final4q25earningsdeck.htm. Audience: CFO, board directors, and long-term shareholders. Communication job: explain whether growth quality is strengthening and end with the two operating decisions leadership must make. Narrative: begin with the tension between growth and durable economics; establish the evidence hierarchy; contrast revenue momentum with margin and expense discipline; visualize the path to the medium-term outlook; expose risks and assumptions; resolve with accountable decisions. Use only claims supported by the filing, label forward-looking statements and non-GAAP metrics, and never invent missing numbers. Visual expectations: restrained investor-grade design, two or three data-led slides, one coherent visual metaphor, no repeated adjacent composition, no fake screenshots, no decorative dashboard cards, and a decisive closing slide.",
+    "expected": {
+      "audience": "CFO, board directors, and long-term shareholders",
+      "narrative": ["tension", "evidence", "economics", "outlook", "risk", "decision"],
+      "requiredVisuals": ["chart", "metric"],
+      "forbidden": [
+        "invented number",
+        "unlabeled non-GAAP metric",
+        "placeholder hero",
+        "zero-value proxy metric"
+      ],
+      "distribution": "published reading view and editable PPTX"
+    }
+  },
+  {
+    "id": "ai-governance",
+    "title": "From AI Inventory to Release Decision",
+    "prompt": "Create a 7-slide executive risk-committee decision deck for a regulated financial institution operationalizing the NIST AI Risk Management Framework 1.0. Primary sources: https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10 and https://airc.nist.gov/airmf-resources/airmf/5-sec-core/. Audience: chief risk officer, general counsel, model risk, security, data science, and product leaders. Communication job: move the committee from abstract framework language to one governed release decision. Preserve the four functions GOVERN, MAP, MEASURE, and MANAGE; show governance as cross-cutting rather than a first step; distinguish model performance from residual risk; assign an owner and evidence requirement at the release gate. Do not present the framework as a linear checklist and do not invent regulatory obligations. Visual expectations: one lifecycle diagram, one risk matrix or evidence table, a continuous gate metaphor that changes state, visible escalation to a release decision, and no unresolved media placeholders.",
+    "expected": {
+      "audience": "cross-functional executive risk committee",
+      "narrative": ["ambiguity", "framework", "operating model", "evidence", "gate", "decision"],
+      "requiredVisuals": ["diagram", "table-or-matrix"],
+      "forbidden": [
+        "linear-checklist framing",
+        "invented regulation",
+        "placeholder hero",
+        "decorative metric"
+      ],
+      "distribution": "committee pre-read and editable operating artifact"
+    }
+  },
+  {
+    "id": "health-data",
+    "title": "When Routine Health Data Becomes a Decision",
+    "prompt": "Create an 8-slide training and action deck for district health programme managers using the WHO Toolkit for analysis and use of routine health facility data, especially presentation and communication: https://www.who.int/publications/i/item/9789240063938. Audience: programme managers, monitoring and evaluation officers, and frontline health-system leaders. Communication job: show how the same dataset can mislead or enable action depending on denominator quality, chart choice, and audience packaging. Explain that tables support detail, charts support comparison and trends, and maps require the underlying numbers and limitations. End with a repeatable monthly review decision. Do not fabricate health outcomes or country data; use clearly labeled miniature illustrative examples only when needed to teach a method. Visual expectations: one before/after communication contrast, one chart-selection decision tree, one uncertainty or denominator visual, one action loop, minimal prose, and no dashboard-card collage.",
+    "expected": {
+      "audience": "district health programme managers",
+      "narrative": ["data", "misinterpretation", "choice", "uncertainty", "action"],
+      "requiredVisuals": ["comparison", "diagram", "chart"],
+      "forbidden": [
+        "fabricated health outcome",
+        "unlabeled illustrative data",
+        "dashboard collage",
+        "placeholder hero"
+      ],
+      "distribution": "training presentation and monthly-review leave-behind"
+    }
+  },
+  {
+    "id": "seed-pitch",
+    "title": "SignalForge Seed Narrative",
+    "prompt": "Create a 9-slide seed fundraising deck for SignalForge, a fictional startup that helps industrial maintenance teams turn machine telemetry into evidence-backed maintenance decisions. Follow the communication needs in Y Combinator's seed fundraising guide: https://www.ycombinator.com/blog/this-brief-guide-is-a-summary-of-what-startup-founders-need-to-know-about-raising-the-seed-funds-critical-to-getting-their-company-off-the-ground. Audience: seed investors who must retell the opportunity to partners. Treat every company-specific number as synthetic and label it SYNTHETIC TEST DATA. Narrative: costly surprise failure; why existing alert dashboards do not create accountable decisions; the evidence chain product; one customer workflow; synthetic traction; market wedge; defensibility; use of funds; memorable ask. Visual expectations: strong opening image or metaphor without pretending a placeholder is evidence, one product workflow diagram, one synthetic traction chart with disclosure, silhouette changes at every reveal, and a closing slide that can be retold in one sentence.",
+    "expected": {
+      "audience": "seed investors",
+      "narrative": [
+        "pain",
+        "failed-status-quo",
+        "product",
+        "traction",
+        "wedge",
+        "defensibility",
+        "ask"
+      ],
+      "requiredVisuals": ["diagram", "chart", "closing-statement"],
+      "forbidden": [
+        "unlabeled synthetic number",
+        "generic TAM claim",
+        "placeholder hero",
+        "repeated card grid"
+      ],
+      "distribution": "investor meeting and partner-forwardable leave-behind"
+    }
+  }
+]

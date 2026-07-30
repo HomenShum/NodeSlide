@@ -1,0 +1,48 @@
+id: obs-mobbin-pitch-editor-1
+source:
+  url: https://mobbin.com/screens/cc270921-5a03-41ac-9959-3642bcda9aca
+  app: Pitch
+  surface: presentation editor
+  capturedVia: mobbin-live
+firstSeenAt: 2026-07-29
+lastVerifiedAt: 2026-07-29
+facts:
+  - id: f1
+    kind: count
+    subject: editor
+    property: primary horizontal regions
+    value: 3
+    unit: regions
+    locatorDescription: slide sequence at left, active canvas in center, application actions around the canvas
+  - id: f2
+    kind: relationship
+    subject: active slide
+    property: area
+    value: active canvas occupies more area than the visible slide sequence
+    unit: viewport relationship
+    locatorDescription: center of the Mobbin screen compared with the left thumbnail rail
+  - id: f3
+    kind: relationship
+    subject: slide sequence
+    property: ordering
+    value: thumbnails are displayed in a single ordered rail
+    unit: spatial sequence
+    locatorDescription: left edge of the editor from top thumbnail to bottom thumbnail
+  - id: f4
+    kind: relationship
+    subject: collaboration and delivery actions
+    property: separation
+    value: actions are placed in editor chrome rather than inside slide content
+    unit: hierarchy
+    locatorDescription: controls surrounding the active canvas
+  - id: f5
+    kind: relationship
+    subject: inactive slides
+    property: context persistence
+    value: inactive slides remain visible while the active slide changes
+    unit: persistent context
+    locatorDescription: left rail and highlighted active thumbnail
+problemTags: [deck-continuity, editing-orientation, distribution-boundary]
+intentTags: [edit, review, collaborate, present]
+layoutTags: [dominant-canvas, ordered-filmstrip, external-controls]
+interactionTags: [direct-manipulation, persistent-context]

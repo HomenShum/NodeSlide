@@ -1025,6 +1025,10 @@ function buildNodeSlideDeck(input: {
     hasMetric: planned.metric !== undefined,
     hasChart: planned.chart !== undefined,
     hasDiagram: planned.diagram !== undefined,
+    // The critique gate removes unresolved media before production
+    // materialization. If a trusted caller intentionally keeps a placeholder
+    // (for example, the canonical editor fixture), still reserve media geometry
+    // so the placeholder cannot collide with comparison columns.
     hasMedia: planned.image !== undefined || planned.video !== undefined,
     hasFormula: planned.formula !== undefined,
     bulletCount: planned.bullets.filter(Boolean).length,
@@ -1157,6 +1161,9 @@ function buildSlide(input: {
   const storyBeat = input.storySpec?.revealPacing[input.index];
   const continuityProgress = (input.index + 1) / Math.max(1, input.total);
   if (input.storySpec && storyBeat) {
+    const motifKind = input.storySpec.visualMetaphor.kind;
+    const markerProgress = Math.min(0.82, 0.82 * continuityProgress);
+    const markerSize = motifKind === 'signal' ? 0.012 + 0.012 * (storyBeat.intensity / 100) : 0.016;
     add(
       element('story-continuity-motif', {
         name: `Story continuity · ${input.storySpec.sceneContinuity.motif}`,
@@ -1170,6 +1177,35 @@ function buildSlide(input: {
           radius: 999,
         },
         altText: `${input.storySpec.sceneContinuity.progression[input.index]}; emotional intensity ${storyBeat.intensity} of 100`,
+        sourceIds: [],
+        locked: true,
+        exportCapabilities: [...EDITABLE_CAPABILITIES],
+      }),
+    );
+    add(
+      element('story-continuity-marker', {
+        name: `Story transformation · ${input.storySpec.visualMetaphor.transformation}`,
+        kind: 'shape',
+        role: `story_motif_${motifKind}_marker`,
+        bbox:
+          motifKind === 'threshold'
+            ? box(0.884, 0.097, 0.006, 0.044)
+            : box(
+                Math.min(0.876, 0.07 + markerProgress - markerSize / 2),
+                0.111 - markerSize / 2,
+                markerSize,
+                markerSize,
+              ),
+        rotation: 0,
+        style: {
+          fill: motifKind === 'threshold' ? theme.colors.insightInk : theme.colors.accent,
+          opacity: Math.max(0.38, storyBeat.intensity / 100),
+          radius: motifKind === 'threshold' ? 3 : 999,
+        },
+        altText:
+          motifKind === 'threshold'
+            ? `Decision threshold; the story signal has reached ${Math.round(continuityProgress * 100)} percent of the gate`
+            : `${input.storySpec.visualMetaphor.subject}; transformation progress ${Math.round(continuityProgress * 100)} percent`,
         sourceIds: [],
         locked: true,
         exportCapabilities: [...EDITABLE_CAPABILITIES],
@@ -1200,7 +1236,13 @@ function buildSlide(input: {
 
   // Archetype-driven layout switches. Every archetype reuses the same
   // measurement helpers and ends in the same collision gate below.
-  const { archetype } = input;
+  // A deliberately retained editor placeholder still occupies real geometry.
+  // Production critique does not let it satisfy a visual-proof obligation, but
+  // the materializer must prevent it from colliding with comparison columns.
+  const archetype =
+    (planned.image || planned.video) && input.archetype !== 'media-dominant'
+      ? 'media-dominant'
+      : input.archetype;
   const isStatement = archetype === 'statement';
   const isComparison = archetype === 'comparison';
   const isChartDominant = archetype === 'chart-dominant';
@@ -1213,7 +1255,7 @@ function buildSlide(input: {
   // Measured layout: heights derive from content (with the historical fixed
   // proportions kept as minimums) and blocks stack sequentially so long copy
   // pushes everything below it down instead of overlapping it.
-  const headlineFontSize = isOpening ? 48 : 38;
+  const headlineFontSize = isOpening ? 52 : 38;
   const headlineWidth = isOpening ? 0.79 : 0.76;
   const headlineY = 0.15;
   const headlineHeight = Math.min(
@@ -1305,7 +1347,7 @@ function buildSlide(input: {
   // from content (legacy proportions as minimums) and capped so the bullet
   // stack that follows it always stays above the footer band. Comparison
   // slides cap the body earlier to leave room for the three columns below.
-  const bodyFontSize = hasVisual ? 15 : isDiagramDominant ? 16 : 19;
+  const bodyFontSize = hasVisual ? 16 : isDiagramDominant ? 16 : 19;
   const bodyY = headlineY + headlineHeight + (isOpening ? 0.06 : isDiagramDominant ? 0.03 : 0.05);
   const bodyMaxBottom = isComparison
     ? 0.58
@@ -1453,7 +1495,14 @@ function buildSlide(input: {
   // column: a taller panel and a larger figure so the number carries the slide.
   const hugeMetric = archetype === 'stat-dominant' && !planned.chart;
   if (planned.metric && !hasPrimaryMedia) {
-    const metricBox = placeRight(0.41, hugeMetric ? 0.2 : 0.15);
+    const metricFontSize =
+      hugeMetric && planned.metric.trim().length > 14 ? 46 : hugeMetric ? 56 : 43;
+    const measuredMetricHeight = estimateTextHeight(planned.metric, metricFontSize, 1, 0.29) + 0.07;
+    const metricHeight = Math.min(
+      hugeMetric ? 0.28 : 0.22,
+      Math.max(hugeMetric ? 0.2 : 0.15, measuredMetricHeight),
+    );
+    const metricBox = placeRight(0.41, metricHeight);
     add(
       element('metric', {
         name: 'Primary metric',
@@ -1466,7 +1515,7 @@ function buildSlide(input: {
           color: theme.colors.insightInk,
           fill: theme.colors.insight,
           fontFamily: theme.typography.data,
-          fontSize: hugeMetric ? 56 : 43,
+          fontSize: metricFontSize,
           fontWeight: 720,
           lineHeight: 1,
           padding: 20,
@@ -1478,7 +1527,7 @@ function buildSlide(input: {
         exportCapabilities: [...EDITABLE_CAPABILITIES],
       }),
     );
-    const metricLabelBox = placeRight(0.58, 0.09, 0.02);
+    const metricLabelBox = placeRight(0.58, 0.09, 0.04);
     add(
       element('metric-label', {
         name: 'Metric label',
@@ -2256,8 +2305,14 @@ function buildSlide(input: {
     collidable.map((candidate) => ({ id: candidate.id, bbox: candidate.bbox })),
   );
   if (!resolution.resolved) {
+    const elementNameById = new Map(elements.map((candidate) => [candidate.id, candidate.name]));
     const pairs = resolution.remaining
-      .map((pair) => `${pair.first} × ${pair.second} (${Math.round(pair.overlapRatio * 100)}%)`)
+      .map(
+        (pair) =>
+          `${elementNameById.get(pair.first) ?? pair.first} × ${
+            elementNameById.get(pair.second) ?? pair.second
+          } (${Math.round(pair.overlapRatio * 100)}%)`,
+      )
       .join('; ');
     throw new Error(
       `NodeSlide layout: unresolved element collision on slide "${planned.title}": ${pairs}`,
@@ -2276,7 +2331,7 @@ function buildSlide(input: {
       deckId: input.deckId,
       title: planned.title,
       section: planned.section,
-      archetype,
+      archetype: input.archetype,
       notes: `Narrative role: ${planned.section}. Keep the spoken transition focused on “${planned.headline}”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.`,
       background: theme.colors.canvas,
       elementOrder: elements.map((candidate) => candidate.id),

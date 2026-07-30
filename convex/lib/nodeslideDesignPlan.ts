@@ -277,7 +277,9 @@ function contentShapes(slides: readonly NodeSlidePlannedSlide[]): SlideContentSh
     hasMetric: slide.metric !== undefined,
     hasChart: slide.chart !== undefined,
     hasDiagram: slide.diagram !== undefined,
-    hasMedia: slide.image !== undefined || slide.video !== undefined,
+    hasMedia: Boolean(
+      slide.image?.url?.trim() || slide.image?.imageUrl?.trim() || slide.video?.url?.trim(),
+    ),
     hasFormula: slide.formula !== undefined,
     bulletCount: slide.bullets.filter(Boolean).length,
   }));

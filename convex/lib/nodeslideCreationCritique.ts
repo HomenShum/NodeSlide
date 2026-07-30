@@ -1,4 +1,8 @@
-import type { DeckBrief, DeckSnapshot } from '../../shared/nodeslide';
+import {
+  type DeckBrief,
+  type DeckSnapshot,
+  isNodeSlideEmbeddedRasterDataUrl,
+} from '../../shared/nodeslide';
 import type { NodeSlideDataAttachment } from '../../shared/nodeslideAttachments';
 import { findCompressedTextElements } from '../../shared/nodeslideLayoutMetrics';
 import type { NodeSlideProviderResult } from './nodeslideProvider';
@@ -251,6 +255,8 @@ export function collectNodeSlideCreationQualityReport(
   const archetypes = built.snapshot.slides.map((slide) => slide.archetype ?? 'unknown');
   const visualRhythmIssues = [
     ...collectPrimaryVisualConflicts(input.rawSpec),
+    ...collectRawVisualLogicIssues(input.rawSpec),
+    ...collectVisualLogicIssues(built.snapshot),
     ...collectVisualRhythmIssues(built.snapshot, archetypes),
   ];
 
@@ -302,6 +308,116 @@ function collectPrimaryVisualConflicts(rawSpec: unknown): NodeSlideCreationQuali
   });
 }
 
+const NO_VISUAL_SIGNAL_VALUE =
+  /^(?:0(?:[.,]0+)?\s*(?:cohorts?|items?|records?|series|datasets?)?|n\/?a|none|unknown|unavailable|[-—])$/iu;
+const NO_VISUAL_SIGNAL_CONTEXT =
+  /\b(?:no compatible|no data|not supplied|placeholder|pending|unavailable|unknown)\b/iu;
+
+function metricHasNoVisualSignal(value: unknown, label: unknown): boolean {
+  if (value === undefined || value === null) return false;
+  if (typeof value !== 'string') return true;
+  const normalized = value.trim();
+  const hasDecisionSignal =
+    /(?:\d|[$€£¥%]|[≥≤<>]|\b(?:approved|blocked|ready|live|pass|fail|go|no-go)\b)/iu.test(
+      normalized,
+    );
+  if (!hasDecisionSignal) return true;
+  if (!NO_VISUAL_SIGNAL_VALUE.test(normalized)) return false;
+  return (
+    typeof label !== 'string' || label.trim().length === 0 || NO_VISUAL_SIGNAL_CONTEXT.test(label)
+  );
+}
+
+function collectRawVisualLogicIssues(rawSpec: unknown): NodeSlideCreationQualityIssue[] {
+  if (!isCreationSpecRecord(rawSpec) || !Array.isArray(rawSpec.slides)) return [];
+  return rawSpec.slides.flatMap((value, index) => {
+    if (!isCreationSpecRecord(value)) return [];
+    if (!metricHasNoVisualSignal(value['metric'], value['metricLabel'])) return [];
+    return [
+      {
+        severity: 'error' as const,
+        code: 'visual_metric_without_signal',
+        message: `Slide ${index + 1} promotes a zero-value or unavailable proxy as its metric; remove it or supply decision-relevant evidence.`,
+      },
+    ];
+  });
+}
+
+function collectVisualLogicIssues(snapshot: DeckSnapshot): NodeSlideCreationQualityIssue[] {
+  const issues: NodeSlideCreationQualityIssue[] = [];
+  for (const slide of snapshot.slides) {
+    const elements = snapshot.elements.filter((element) => element.slideId === slide.id);
+    const slideText = elements
+      .map((element) => element.content ?? '')
+      .filter(Boolean)
+      .join(' ');
+    const placeholderHero = elements.find(
+      (element) =>
+        element.kind === 'image' &&
+        element.image?.placeholder === true &&
+        !element.imageUrl?.trim() &&
+        (slide.archetype === 'media-dominant' || element.bbox.width * element.bbox.height >= 0.12),
+    );
+    if (placeholderHero) {
+      issues.push({
+        severity: 'error',
+        code: 'visual_placeholder_hero',
+        message: `Slide ${slide.id} gives unresolved media hero-scale space; use a renderable asset or a non-media composition.`,
+        slideId: slide.id,
+      });
+    }
+
+    const weakMetric = elements.find(
+      (element) => element.role === 'metric' && metricHasNoVisualSignal(element.content, slideText),
+    );
+    if (weakMetric) {
+      issues.push({
+        severity: 'error',
+        code: 'visual_metric_without_signal',
+        message: `Slide ${slide.id} promotes a zero-value or unavailable proxy as its metric; remove it or supply decision-relevant evidence.`,
+        slideId: slide.id,
+      });
+    }
+
+    const missingTruthHero = elements.find(
+      (element) =>
+        ['chart', 'image', 'math', 'video'].includes(element.kind) &&
+        element.authoredArtifactBinding?.truthState === 'missing' &&
+        element.bbox.width * element.bbox.height >= 0.12,
+    );
+    if (missingTruthHero) {
+      issues.push({
+        severity: 'error',
+        code: 'visual_missing_truth_hero',
+        message: `Slide ${slide.id} gives hero-scale space to an artifact whose truth state is missing; replace it with supported evidence or a non-evidence composition.`,
+        slideId: slide.id,
+      });
+    }
+  }
+  const storySlides = snapshot.slides.filter((slide) =>
+    snapshot.elements.some(
+      (element) => element.slideId === slide.id && element.role?.startsWith('story_motif_'),
+    ),
+  );
+  if (
+    storySlides.length >= 4 &&
+    storySlides.some(
+      (slide) =>
+        snapshot.elements.filter(
+          (element) => element.slideId === slide.id && element.role?.startsWith('story_motif_'),
+        ).length < 2,
+    )
+  ) {
+    issues.push({
+      severity: 'warning',
+      code: 'visual_metaphor_not_transformed',
+      message:
+        'The continuity motif repeats as a single decoration; pair it with a changing state marker so each scene advances the metaphor.',
+    });
+  }
+  return issues;
+}
+
 function collectVisualRhythmIssues(
   snapshot: DeckSnapshot,
   archetypes: readonly string[],
@@ -339,10 +455,19 @@ function collectVisualRhythmIssues(
       (element) =>
         element.slideId === slide.id &&
         (element.kind === 'chart' ||
-          element.kind === 'image' ||
+          (element.kind === 'image' &&
+            element.image?.placeholder !== true &&
+            Boolean(element.imageUrl?.trim())) ||
           element.kind === 'video' ||
           element.kind === 'math' ||
-          element.role === 'metric' ||
+          (element.role === 'metric' &&
+            !metricHasNoVisualSignal(
+              element.content,
+              snapshot.elements
+                .filter((candidate) => candidate.slideId === slide.id)
+                .map((candidate) => candidate.content ?? '')
+                .join(' '),
+            )) ||
           element.role?.startsWith('diagram_')),
     );
     if (hasStructuredVisual) {
@@ -540,6 +665,108 @@ function isCreationSpecRecord(value: unknown): value is Record<string, unknown> 
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+function repairCreationVisualLogic(rawSpec: unknown): {
+  spec: unknown;
+  repairCount: number;
+} {
+  if (!isCreationSpecRecord(rawSpec) || !Array.isArray(rawSpec.slides)) {
+    return { spec: rawSpec, repairCount: 0 };
+  }
+  let repairCount = 0;
+  const slides = rawSpec.slides.map((value) => {
+    if (!isCreationSpecRecord(value)) return value;
+    let slide: Record<string, unknown> = { ...value };
+    const image = slide['image'];
+    if (image !== undefined && !hasRenderableImage(image)) {
+      const { image: _invalidImage, ...withoutImage } = slide;
+      slide = withoutImage;
+      const bullets = Array.isArray(slide['bullets'])
+        ? slide['bullets'].filter(
+            (bullet): bullet is string => typeof bullet === 'string' && bullet.trim().length > 0,
+          )
+        : [];
+      const hasOtherVisual = ['chart', 'diagram', 'formula', 'video', 'artifactSpec'].some(
+        (key) => slide[key] !== undefined && slide[key] !== null,
+      );
+      if (!hasOtherVisual && bullets.length >= 2) {
+        const evidenceNodes = bullets.slice(0, 3).map((bullet, index) => ({
+          id: `evidence-${index + 1}`,
+          label: bullet.trim().slice(0, 80),
+          kind: 'system',
+        }));
+        slide['diagram'] = {
+          kind: 'architecture',
+          direction: 'horizontal',
+          nodes: [
+            ...evidenceNodes,
+            {
+              id: 'claim',
+              label:
+                typeof slide['headline'] === 'string'
+                  ? slide['headline'].trim().slice(0, 80)
+                  : 'Decision claim',
+              kind: 'decision',
+            },
+          ],
+          edges: evidenceNodes.map((node) => ({
+            from: node.id,
+            to: 'claim',
+            label: 'supports',
+          })),
+        };
+      }
+      repairCount += 1;
+    }
+    const video = slide['video'];
+    if (video !== undefined && !hasRenderableVideo(video)) {
+      const { video: _invalidVideo, ...withoutVideo } = slide;
+      slide = withoutVideo;
+      repairCount += 1;
+    }
+    if (metricHasNoVisualSignal(slide['metric'], slide['metricLabel'])) {
+      const { metric: _invalidMetric, metricLabel: _invalidMetricLabel, ...withoutMetric } = slide;
+      slide = withoutMetric;
+      repairCount += 1;
+    }
+    const artifactSpec = slide['artifactSpec'];
+    const provenance = isCreationSpecRecord(artifactSpec) ? artifactSpec['provenance'] : undefined;
+    if (
+      isCreationSpecRecord(artifactSpec) &&
+      artifactSpec['kind'] === 'chart' &&
+      isCreationSpecRecord(provenance) &&
+      provenance['truthState'] === 'missing'
+    ) {
+      const {
+        artifactSpec: _missingArtifact,
+        chart: _missingChart,
+        ...withoutMissingChart
+      } = slide;
+      slide = withoutMissingChart;
+      repairCount += 1;
+    }
+    return slide;
+  });
+  return repairCount > 0
+    ? { spec: { ...rawSpec, slides }, repairCount }
+    : { spec: rawSpec, repairCount };
+}
+
+function hasRenderableImage(value: unknown): boolean {
+  if (!isCreationSpecRecord(value)) return false;
+  return [value['url'], value['imageUrl']].some(
+    (candidate) =>
+      typeof candidate === 'string' && isNodeSlideEmbeddedRasterDataUrl(candidate.trim()),
+  );
+}
+
+function hasRenderableVideo(value: unknown): boolean {
+  return (
+    isCreationSpecRecord(value) &&
+    typeof value['url'] === 'string' &&
+    value['url'].trim().length > 0
+  );
+}
+
 /**
  * Run the bounded self-critique loop: at most one revision call, and the
  * revised spec is kept only when it strictly reduces the concrete issue count
@@ -548,12 +775,18 @@ function isCreationSpecRecord(value: unknown): value is Record<string, unknown> 
 export async function runNodeSlideCreationCritique(
   input: RunNodeSlideCreationCritiqueInput,
 ): Promise<NodeSlideCreationCritiqueOutcome> {
+  const firstRepair = repairCreationVisualLogic(input.firstSpec);
+  const firstSpec = firstRepair.spec;
+  const repairSummary =
+    firstRepair.repairCount > 0
+      ? `; deterministic visual-logic repair corrected ${firstRepair.repairCount} unusable hero primitive${firstRepair.repairCount === 1 ? '' : 's'}`
+      : '';
   if (!input.providerLive) {
     return {
-      spec: input.firstSpec,
+      spec: firstSpec,
       passes: 1,
       decision: 'skipped',
-      summary: '1 pass (deterministic route; self-critique loop skipped)',
+      summary: `1 pass (deterministic route; self-critique loop skipped${repairSummary})`,
       firstReport: null,
       chosenReport: null,
       revision: null,
@@ -569,14 +802,14 @@ export async function runNodeSlideCreationCritique(
   };
   const firstReport = collectNodeSlideCreationQualityReport({
     ...reportInput,
-    rawSpec: input.firstSpec,
+    rawSpec: firstSpec,
   });
   if (firstReport.issueCount === 0) {
     return {
-      spec: input.firstSpec,
+      spec: firstSpec,
       passes: 1,
       decision: 'clean',
-      summary: '1 pass, clean',
+      summary: `1 pass, clean${repairSummary}`,
       firstReport,
       chosenReport: firstReport,
       revision: null,
@@ -594,36 +827,37 @@ export async function runNodeSlideCreationCritique(
   }
   if (revision.ok !== true) {
     return {
-      spec: input.firstSpec,
+      spec: firstSpec,
       passes: 2,
       decision: 'revision_failed',
-      summary: `2 passes: revision call failed (${revision.reason.slice(0, 120)}); kept pass 1 with ${firstReport.issueCount} known issue${firstReport.issueCount === 1 ? '' : 's'}`,
+      summary: `2 passes: revision call failed (${revision.reason.slice(0, 120)}); kept pass 1 with ${firstReport.issueCount} known issue${firstReport.issueCount === 1 ? '' : 's'}${repairSummary}`,
       firstReport,
       chosenReport: firstReport,
       revision,
     };
   }
 
+  const secondRepair = repairCreationVisualLogic(revision.value);
   const secondReport = collectNodeSlideCreationQualityReport({
     ...reportInput,
-    rawSpec: revision.value,
+    rawSpec: secondRepair.spec,
   });
   if (creationReportScore(secondReport) < creationReportScore(firstReport)) {
     return {
-      spec: revision.value,
+      spec: secondRepair.spec,
       passes: 2,
       decision: 'revised',
-      summary: `2 passes: revised to fix ${describeReport(firstReport)} (${firstReport.issueCount} -> ${secondReport.issueCount} issue${secondReport.issueCount === 1 ? '' : 's'})`,
+      summary: `2 passes: revised to fix ${describeReport(firstReport)} (${firstReport.issueCount} -> ${secondReport.issueCount} issue${secondReport.issueCount === 1 ? '' : 's'})${secondRepair.repairCount > 0 ? `; deterministic visual-logic repair corrected ${secondRepair.repairCount} unusable hero primitive${secondRepair.repairCount === 1 ? '' : 's'} from pass 2` : ''}`,
       firstReport,
       chosenReport: secondReport,
       revision,
     };
   }
   return {
-    spec: input.firstSpec,
+    spec: firstSpec,
     passes: 2,
     decision: 'revision_not_better',
-    summary: `2 passes: revision did not improve on ${describeReport(firstReport)} (${firstReport.issueCount} -> ${secondReport.issueCount} issue${secondReport.issueCount === 1 ? '' : 's'}); kept pass 1`,
+    summary: `2 passes: revision did not improve on ${describeReport(firstReport)} (${firstReport.issueCount} -> ${secondReport.issueCount} issue${secondReport.issueCount === 1 ? '' : 's'}); kept pass 1${repairSummary}`,
     firstReport,
     chosenReport: firstReport,
     revision,

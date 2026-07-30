@@ -19,6 +19,7 @@ artifacts/
 outputs/
 .qa/
 benchmarks/
+!benchmarks/recipelang/edge-data-contract.recipe.yaml
 skills/
 
 # Local recordings and release evidence are uploaded to GitHub Releases, not Vercel.

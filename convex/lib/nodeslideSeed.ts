@@ -1348,19 +1348,28 @@ function buildSlide(input: {
   // from content (legacy proportions as minimums) and capped so the bullet
   // stack that follows it always stays above the footer band. Comparison
   // slides cap the body earlier to leave room for the three columns below.
-  const bodyFontSize = hasVisual ? 16 : isDiagramDominant ? 16 : 19;
+  const preferredBodyFontSize = hasVisual ? 16 : isDiagramDominant ? 16 : 19;
   const bodyY = headlineY + headlineHeight + (isOpening ? 0.06 : isDiagramDominant ? 0.03 : 0.05);
   const bodyMaxBottom = isComparison
     ? 0.58
     : isDiagramDominant
-      ? 0.56
+      ? 0.622
       : hasVisual
         ? 0.7
         : horizontalBullets
           ? 0.78
           : 0.9;
+  const bodyMaxHeight = Math.max(0.06, bodyMaxBottom - bodyY);
+  const bodyFontSize = fitTextFontSize(
+    planned.body,
+    preferredBodyFontSize,
+    14,
+    1.35,
+    bodyWidth,
+    bodyMaxHeight,
+  );
   const bodyHeight = Math.min(
-    Math.max(0.06, bodyMaxBottom - bodyY),
+    bodyMaxHeight,
     Math.max(
       isOpening ? 0.17 : isDiagramDominant ? 0.16 : 0.2,
       estimateTextHeight(planned.body, bodyFontSize, 1.35, bodyWidth),
@@ -2455,6 +2464,20 @@ function diagramNodeFontSize(label: string, width: number): number {
   const preferred = normalized.length > 15 ? 12 : normalized.length > 9 ? 13 : 14;
   const usablePoints = Math.max(1, width * SLIDE_WIDTH_IN * 72 - 16);
   return Math.max(10, Math.min(preferred, Math.floor(usablePoints / (longestWord * 0.56))));
+}
+
+function fitTextFontSize(
+  content: string,
+  preferred: number,
+  minimum: number,
+  lineHeight: number,
+  width: number,
+  maxHeight: number,
+): number {
+  for (let fontSize = preferred; fontSize >= minimum; fontSize -= 1) {
+    if (estimateTextHeight(content, fontSize, lineHeight, width) <= maxHeight) return fontSize;
+  }
+  return minimum;
 }
 
 function diagramNodeRayInset(

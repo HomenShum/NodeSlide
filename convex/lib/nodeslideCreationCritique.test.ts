@@ -440,6 +440,58 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedBody).not.toContain('speaker notes');
   });
 
+  it('orders a board evidence pipeline from source through extraction to decision', async () => {
+    const reversedSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 2
+          ? {
+              ...slide,
+              diagram: {
+                kind: 'process',
+                direction: 'horizontal',
+                nodes: [
+                  { id: 'validate', label: 'Validate claims' },
+                  { id: 'label', label: 'Label evidence tier' },
+                  { id: 'extract', label: 'Extract figures' },
+                  { id: 'source', label: 'SEC-filed source deck' },
+                  { id: 'decision', label: 'Board decision' },
+                ],
+                edges: [
+                  { from: 'validate', to: 'label' },
+                  { from: 'label', to: 'extract' },
+                  { from: 'extract', to: 'source' },
+                  { from: 'source', to: 'decision' },
+                ],
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      firstSpec: reversedSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repaired = (outcome.spec as typeof reversedSpec).slides[2].diagram;
+
+    expect(repaired.nodes.map((node) => node.id)).toEqual([
+      'source',
+      'extract',
+      'validate',
+      'label',
+      'decision',
+    ]);
+    expect(repaired.edges).toEqual([
+      { from: 'source', to: 'extract', label: 'then' },
+      { from: 'extract', to: 'validate', label: 'then' },
+      { from: 'validate', to: 'label', label: 'then' },
+      { from: 'label', to: 'decision', label: 'then' },
+    ]);
+  });
+
   it('removes a provider comparison that cannot plot two cohorts instead of minting a zero proxy', async () => {
     const degradedSpec = {
       ...CORRECTED_SPEC,

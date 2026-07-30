@@ -16,6 +16,9 @@ describe('NodeSlide seed', () => {
     const snapshot = buildGoldenNodeSlide('theme-and-repair-test', 1_000).snapshot;
 
     expect(validateNodeSlideSnapshot(snapshot, 1_000).issues).toEqual([]);
+    for (const bullet of snapshot.elements.filter((element) => element.role === 'bullet')) {
+      expect(bullet.bbox.y + bullet.bbox.height).toBeLessThanOrEqual(0.9);
+    }
     expect(snapshot.elements.map((element) => element.kind)).toEqual(
       expect.arrayContaining(['text', 'shape', 'image', 'chart', 'math']),
     );
@@ -31,6 +34,42 @@ describe('NodeSlide seed', () => {
       image: { placeholder: true },
       altText: 'Structured deck graph connecting slides, elements, sources, and versions',
     });
+  });
+
+  it('preserves the owner and checkpoint in a realistic board decision slide', () => {
+    const brief = {
+      prompt: 'Prepare a board decision brief.',
+      audience: 'CFO and board',
+      purpose: 'Set a reinvestment rate and margin floor',
+      successCriteria: ['Name the owner and review checkpoint'],
+    };
+    const baseSlide = (index: number) => ({
+      title: `Decision ${index + 1}`,
+      section: 'Decide',
+      headline: `Decision frame ${index + 1}`,
+      body: 'Keep the decision grounded in verified evidence.',
+      bullets: ['Context', 'Action', 'Outcome'],
+    });
+    const decisionBody =
+      'Growth quality is strengthening only if leadership commits to two accountable choices. Decision one: set the FY2026 reinvestment rate in customer acquisition at a level the filed unit economics can fund. Decision two: commit to a non-GAAP Adjusted EBITDA margin floor that growth spending may not breach. Owner: CFO with board approval; checkpoint: Q1 2026 earnings review.';
+    const ownerBullet =
+      'Decision 2 — Margin floor: a non-GAAP Adjusted EBITDA floor growth spend cannot breach (Owner: Board)';
+    const spec = coerceBriefSpec(
+      {
+        title: 'Board decisions',
+        slides: Array.from({ length: 6 }, (_, index) =>
+          index === 5
+            ? { ...baseSlide(index), body: decisionBody, bullets: ['Decision 1', ownerBullet] }
+            : baseSlide(index),
+        ),
+      },
+      'Board decisions',
+      brief,
+    );
+
+    expect(spec.slides[5]?.body).toContain('checkpoint: Q1 2026 earnings review');
+    expect(spec.slides[5]?.bullets[1]).toContain('(Owner: Board)');
+    expect(JSON.stringify(spec.slides[5])).not.toContain('…');
   });
 
   it('rejects malformed first-class math and video primitives', () => {

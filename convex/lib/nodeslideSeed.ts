@@ -1414,7 +1414,7 @@ function buildSlide(input: {
   // each bullet in its own column on a shared row; vertical stacks begin
   // below the body (visual layouts) or beside it (right column) and are
   // compressed by stackBlocks if they would run past the footer band.
-  const horizontalRowY = Math.min(0.9, Math.max(0.72, bodyY + bodyHeight + 0.03));
+  const horizontalRowY = Math.min(0.82, Math.max(0.72, bodyY + bodyHeight + 0.03));
   const comparisonRowY = Math.min(0.7, bodyY + bodyHeight + 0.04);
   const bulletStackStart = isDiagramDominant
     ? Math.max(0.62, bodyY + bodyHeight + 0.04)
@@ -1431,7 +1431,7 @@ function buildSlide(input: {
             height,
             gapBefore: 0.03,
           })),
-          0.95,
+          0.9,
         );
   bulletTexts.forEach((content, bulletIndex) => {
     const stacked = stackedBullets[bulletIndex];
@@ -2392,7 +2392,7 @@ function coercePlannedSlide(
   if (!isRecord(value)) return fallback ?? null;
   const title = cleanField(value.title, fallback?.title ?? `Slide ${index + 1}`, 80);
   const headline = cleanField(value.headline, fallback?.headline ?? title, 180);
-  const body = cleanField(value.body, fallback?.body ?? headline, 360);
+  const body = cleanField(value.body, fallback?.body ?? headline, 480);
   const section = cleanField(value.section, fallback?.section ?? `Story / ${index + 1}`, 60);
   const bullets = Array.isArray(value.bullets)
     ? value.bullets
@@ -2667,7 +2667,7 @@ function cleanField(value: unknown, fallback: string, maxLength: number): string
 }
 
 function cleanPlannedBullet(value: string): string {
-  return nodeslideCleanText(value, 100)
+  return nodeslideCleanText(value, 160)
     .replace(/^(?:(?:0?\d{1,2})\s*[.):\-·]\s*|[•–—-]\s*)+/u, '')
     .trim();
 }

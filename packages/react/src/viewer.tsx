@@ -335,7 +335,7 @@ function elementStyle(element: SlideElement): CSSProperties {
     boxShadow: style.shadow,
     color: style.color,
     fontFamily: style.fontFamily,
-    fontSize: style.fontSize === undefined ? undefined : `${style.fontSize / 12.8}cqw`,
+    fontSize: style.fontSize === undefined ? undefined : `${style.fontSize / 9.6}cqw`,
     fontWeight: style.fontWeight,
     height: `${element.bbox.height * 100}%`,
     justifyContent:

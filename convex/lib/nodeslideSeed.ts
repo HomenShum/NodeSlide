@@ -2108,6 +2108,7 @@ function buildSlide(input: {
 
   if (planned.diagram && !hasNativeArtifactGeometry) {
     const diagram = planned.diagram;
+    const crossCuttingHubId = diagramCrossCuttingHubId(diagram);
     const diagramArtifactId =
       authoredArtifactBinding?.artifactId ?? nodeslideStableId('artifact_graph', input.slideId);
     const diagramX = 0.42;
@@ -2120,6 +2121,40 @@ function buildSlide(input: {
       const from = positionsById.get(edge.from);
       const to = positionsById.get(edge.to);
       if (!from || !to) return;
+      if (edge.from === crossCuttingHubId) return;
+      if (edge.label && /(?:feedback|loop|cycle)/i.test(edge.label)) {
+        add(
+          element(`diagram-feedback-${edgeIndex + 1}`, {
+            name: `Diagram feedback: ${edge.label}`,
+            kind: 'text',
+            role: 'diagram_feedback',
+            bbox: box(
+              Math.min(from.x, to.x),
+              Math.min(0.84, Math.max(from.y + from.height, to.y + to.height) + 0.014),
+              Math.max(
+                0.12,
+                Math.max(from.x + from.width, to.x + to.width) - Math.min(from.x, to.x),
+              ),
+              0.036,
+            ),
+            rotation: 0,
+            content: `↺ ${edge.label}`,
+            style: {
+              color: theme.colors.trace,
+              fontFamily: theme.typography.data,
+              fontSize: 14,
+              fontWeight: 650,
+              letterSpacing: 0.8,
+              textAlign: 'center',
+            },
+            sourceIds: evidenceSourceIds,
+            ...(authoredArtifactBinding ? { authoredArtifactBinding } : {}),
+            locked: false,
+            exportCapabilities: [...EDITABLE_CAPABILITIES],
+          }),
+        );
+        return;
+      }
       const fromCenter = { x: from.x + from.width / 2, y: from.y + from.height / 2 };
       const toCenter = { x: to.x + to.width / 2, y: to.y + to.height / 2 };
       const deltaX = toCenter.x - fromCenter.x;
@@ -2170,24 +2205,30 @@ function buildSlide(input: {
     positions.forEach((position, nodeIndex) => {
       const node = diagram.nodes[nodeIndex];
       if (!node) return;
+      const isCrossCuttingHub = node.id === crossCuttingHubId;
+      const nodeKind =
+        node.kind ?? (/\b(?:gate|approve|decision)\b/i.test(node.label) ? 'decision' : 'step');
       add(
         element(`diagram-node-${node.id}`, {
           name: `Diagram node: ${node.label}`,
           kind: 'shape',
-          role: `diagram_${node.kind ?? 'step'}`,
+          role: isCrossCuttingHub ? 'diagram_cross_cutting' : `diagram_${nodeKind}`,
           bbox: box(position.x, position.y, position.width, position.height),
           rotation: 0,
           content: node.label,
           style: {
             fill:
-              node.kind === 'decision' || node.kind === 'milestone'
+              isCrossCuttingHub || nodeKind === 'decision' || nodeKind === 'milestone'
                 ? theme.colors.insight
                 : theme.colors.accentSoft,
-            stroke: node.kind === 'decision' ? theme.colors.accent : theme.colors.border,
-            strokeWidth: node.kind === 'decision' ? 2 : 1,
+            stroke:
+              isCrossCuttingHub || nodeKind === 'decision'
+                ? theme.colors.accent
+                : theme.colors.border,
+            strokeWidth: isCrossCuttingHub || nodeKind === 'decision' ? 2 : 1,
             color: theme.colors.ink,
             fontFamily: theme.typography.body,
-            fontSize: 16,
+            fontSize: isCrossCuttingHub ? 15 : 16,
             fontWeight: 650,
             lineHeight: 1.15,
             padding: 12,
@@ -2341,6 +2382,18 @@ function buildSlide(input: {
   };
 }
 
+function diagramCrossCuttingHubId(diagram: NodeSlidePlannedDiagram): string | undefined {
+  const crossCuttingSignal = /(?:govern|oversight|cross[-\s]?cutting|guardrail|policy)/i;
+  return diagram.nodes.find((node) => {
+    const outgoing = diagram.edges.filter((edge) => edge.from === node.id);
+    if (outgoing.length < Math.min(2, Math.max(1, diagram.nodes.length - 2))) return false;
+    return (
+      crossCuttingSignal.test(node.label) ||
+      outgoing.every((edge) => crossCuttingSignal.test(edge.label ?? ''))
+    );
+  })?.id;
+}
+
 function layoutDiagramNodes(
   diagram: NodeSlidePlannedDiagram,
   x: number,
@@ -2348,6 +2401,30 @@ function layoutDiagramNodes(
   width: number,
   height: number,
 ): Array<{ id: string; x: number; y: number; width: number; height: number }> {
+  const crossCuttingHubId = diagramCrossCuttingHubId(diagram);
+  if (crossCuttingHubId) {
+    const sequenceNodes = diagram.nodes.filter((node) => node.id !== crossCuttingHubId);
+    const gapX = sequenceNodes.length > 1 ? 0.025 : 0;
+    const hubHeight = Math.min(0.1, height * 0.24);
+    const sequenceY = y + hubHeight + 0.045;
+    const sequenceHeight = Math.min(0.14, Math.max(0.08, height - hubHeight - 0.08));
+    const sequenceWidth =
+      (width - gapX * Math.max(0, sequenceNodes.length - 1)) / Math.max(1, sequenceNodes.length);
+    const sequenceIndexById = new Map(sequenceNodes.map((node, index) => [node.id, index]));
+    return diagram.nodes.map((node) => {
+      if (node.id === crossCuttingHubId) {
+        return { id: node.id, x, y, width, height: hubHeight };
+      }
+      const index = sequenceIndexById.get(node.id) ?? 0;
+      return {
+        id: node.id,
+        x: x + index * (sequenceWidth + gapX),
+        y: sequenceY,
+        width: sequenceWidth,
+        height: sequenceHeight,
+      };
+    });
+  }
   const count = diagram.nodes.length;
   const columns =
     diagram.direction === 'vertical' ? (count > 4 ? 2 : 1) : Math.min(count, count > 4 ? 4 : 3);
@@ -2469,16 +2546,16 @@ function coercePlannedSlide(
   const video = chart || diagram || formula || image ? undefined : explicitVideo;
   const quantitativeGap = quarantinedMisalignedChart && !chart;
   const safeHeadline = quantitativeGap
-    ? 'Evidence gap: exact figures required before publication'
+    ? 'The release gate stays closed until the evidence is verified'
     : headline;
   const safeBody = quantitativeGap
-    ? 'No quantitative outlook is shown because the supplied context does not contain a valid aligned series. Add exact values with a source citation before publication.'
+    ? 'The supplied series is not valid aligned evidence, so NodeSlide does not invent a quantitative outlook. Publication resumes when exact values and source citations are attached.'
     : body;
   const safeBullets = quantitativeGap
     ? [
-        'No values or trend are inferred from a malformed series',
-        'Align every series value to a labeled category',
-        'Keep the decision gated until the figures are verified',
+        'Hold the release decision',
+        'Align every value to a labeled category',
+        'Verify the source, owner, and reconciliation',
       ]
     : bullets.length > 0
       ? bullets

@@ -55,13 +55,7 @@ function isPrimaryVisual(element: SlideElement): boolean {
 }
 
 function hasOrderSensitiveHorizontalSequence(elements: readonly SlideElement[]): boolean {
-  if (
-    elements.some(
-      (element) =>
-        element.role?.startsWith('diagram_node') === true ||
-        element.role?.startsWith('diagram_connector') === true,
-    )
-  ) {
+  if (elements.some((element) => element.role?.startsWith('diagram_') === true)) {
     return true;
   }
   const bullets = elements.filter((element) => element.role === 'bullet');
@@ -77,6 +71,10 @@ function mirror(elements: readonly SlideElement[]): SlideElement[] {
   return cloneElements(elements).map((element) => ({
     ...element,
     bbox: { ...element.bbox, x: Number((1 - element.bbox.x - element.bbox.width).toFixed(6)) },
+    rotation:
+      element.kind === 'connector'
+        ? Number((((180 - element.rotation) % 360) + 360).toFixed(6)) % 360
+        : element.rotation,
   }));
 }
 

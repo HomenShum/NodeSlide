@@ -1,4 +1,9 @@
-import type { ChartData, Slide, SlideElement } from '../../../../shared/nodeslide.js';
+import {
+  type ChartData,
+  SLIDE_WIDTH_IN,
+  type Slide,
+  type SlideElement,
+} from '../../../../shared/nodeslide.js';
 import { assertNodeSlideArtifactCompilation } from '../../../../shared/nodeslideArtifactSpec.js';
 import {
   type SlideSourceReference,
@@ -284,7 +289,9 @@ function renderTextBox(
       ? snapshot.deck.theme.typography.display
       : snapshot.deck.theme.typography.body);
   const color = colorToHex(style.color, snapshot.deck.theme.colors.ink);
-  const fontSize = clamp(finite(style.fontSize, 24), 1, 240);
+  const fontSize = Number(
+    ((clamp(finite(style.fontSize, 24), 1, 240) * SVG_WIDTH) / (SLIDE_WIDTH_IN * 72)).toFixed(3),
+  );
   const fontWeight = clamp(finite(style.fontWeight, 400), 100, 900);
   const lineHeight = clamp(finite(style.lineHeight, 1.2), 0.8, 3);
   const letterSpacing = clamp(finite(style.letterSpacing, 0), -10, 40);

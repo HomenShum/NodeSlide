@@ -146,6 +146,33 @@ describe('model-authored production ArtifactSpec adapter', () => {
     }
   });
 
+  it('rejects a comparison with no plottable cohort pair instead of compiling a zero proxy', () => {
+    const comparison = canonicalArtifactFixture('comparison');
+    const invalidComparison = {
+      ...comparison,
+      provenance: {
+        ...comparison.provenance,
+        truthState: 'missing' as const,
+        rationale: 'The comparison values were not retrieved.',
+      },
+      payload: {
+        ...comparison.payload,
+        cohorts: comparison.payload.cohorts.map((cohort) => ({
+          ...cohort,
+          status: 'missing',
+          plotted: false,
+          values: {},
+        })),
+      },
+    };
+
+    expect(() =>
+      compileNodeSlideAuthoredArtifact(invalidComparison, {
+        allowedSourceRefs: ['brief:prompt'],
+      }),
+    ).toThrow(/comparison_without_plottable_signal/u);
+  });
+
   it('compiles a bounded typed chart deterministically', () => {
     const spec = {
       schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,

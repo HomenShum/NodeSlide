@@ -665,6 +665,61 @@ function isCreationSpecRecord(value: unknown): value is Record<string, unknown> 
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+function claimDiagramFromSlide(slide: Record<string, unknown>): Record<string, unknown> | null {
+  const bullets = Array.isArray(slide['bullets'])
+    ? slide['bullets'].filter(
+        (bullet): bullet is string => typeof bullet === 'string' && bullet.trim().length > 0,
+      )
+    : [];
+  if (bullets.length < 2) return null;
+  const evidenceNodes = bullets.slice(0, 3).map((bullet, index) => ({
+    id: `evidence-${index + 1}`,
+    label: bullet.trim().slice(0, 80),
+    kind: 'system',
+  }));
+  return {
+    kind: 'architecture',
+    direction: 'horizontal',
+    nodes: [
+      ...evidenceNodes,
+      {
+        id: 'claim',
+        label:
+          typeof slide['headline'] === 'string'
+            ? slide['headline'].trim().slice(0, 80)
+            : 'Decision claim',
+        kind: 'decision',
+      },
+    ],
+    edges: evidenceNodes.map((node) => ({
+      from: node.id,
+      to: 'claim',
+      label: 'supports',
+    })),
+  };
+}
+
+function comparisonArtifactHasPlottableSignal(artifactSpec: Record<string, unknown>): boolean {
+  const payload = artifactSpec['payload'];
+  if (!isCreationSpecRecord(payload)) return false;
+  const metrics = Array.isArray(payload['metrics'])
+    ? payload['metrics'].filter(isCreationSpecRecord)
+    : [];
+  const cohorts = Array.isArray(payload['cohorts'])
+    ? payload['cohorts'].filter(isCreationSpecRecord)
+    : [];
+  return metrics.some((metric) => {
+    const metricId = typeof metric['id'] === 'string' ? metric['id'] : '';
+    if (!metricId) return false;
+    return (
+      cohorts.filter((cohort) => {
+        const values = cohort['values'];
+        return isCreationSpecRecord(values) && Number.isFinite(values[metricId]);
+      }).length >= 2
+    );
+  });
+}
+
 function repairCreationVisualLogic(rawSpec: unknown): {
   spec: unknown;
   repairCount: number;
@@ -676,44 +731,36 @@ function repairCreationVisualLogic(rawSpec: unknown): {
   const slides = rawSpec.slides.map((value) => {
     if (!isCreationSpecRecord(value)) return value;
     let slide: Record<string, unknown> = { ...value };
+    const authoredArtifact = slide['artifactSpec'];
+    const unsupportedAuthoredArtifact =
+      isCreationSpecRecord(authoredArtifact) &&
+      (authoredArtifact['kind'] === 'evidence-media' ||
+        (authoredArtifact['kind'] === 'comparison' &&
+          !comparisonArtifactHasPlottableSignal(authoredArtifact)));
+    if (unsupportedAuthoredArtifact) {
+      const { artifactSpec: _unsupportedArtifact, ...withoutArtifact } = slide;
+      slide = withoutArtifact;
+      if (
+        authoredArtifact['kind'] === 'evidence-media' &&
+        slide['diagram'] === undefined &&
+        slide['chart'] === undefined &&
+        slide['formula'] === undefined
+      ) {
+        const claimDiagram = claimDiagramFromSlide(slide);
+        if (claimDiagram) slide['diagram'] = claimDiagram;
+      }
+      repairCount += 1;
+    }
     const image = slide['image'];
     if (image !== undefined && !hasRenderableImage(image)) {
       const { image: _invalidImage, ...withoutImage } = slide;
       slide = withoutImage;
-      const bullets = Array.isArray(slide['bullets'])
-        ? slide['bullets'].filter(
-            (bullet): bullet is string => typeof bullet === 'string' && bullet.trim().length > 0,
-          )
-        : [];
       const hasOtherVisual = ['chart', 'diagram', 'formula', 'video', 'artifactSpec'].some(
         (key) => slide[key] !== undefined && slide[key] !== null,
       );
-      if (!hasOtherVisual && bullets.length >= 2) {
-        const evidenceNodes = bullets.slice(0, 3).map((bullet, index) => ({
-          id: `evidence-${index + 1}`,
-          label: bullet.trim().slice(0, 80),
-          kind: 'system',
-        }));
-        slide['diagram'] = {
-          kind: 'architecture',
-          direction: 'horizontal',
-          nodes: [
-            ...evidenceNodes,
-            {
-              id: 'claim',
-              label:
-                typeof slide['headline'] === 'string'
-                  ? slide['headline'].trim().slice(0, 80)
-                  : 'Decision claim',
-              kind: 'decision',
-            },
-          ],
-          edges: evidenceNodes.map((node) => ({
-            from: node.id,
-            to: 'claim',
-            label: 'supports',
-          })),
-        };
+      if (!hasOtherVisual) {
+        const claimDiagram = claimDiagramFromSlide(slide);
+        if (claimDiagram) slide['diagram'] = claimDiagram;
       }
       repairCount += 1;
     }

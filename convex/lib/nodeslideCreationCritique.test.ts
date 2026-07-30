@@ -355,6 +355,49 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(outcome.summary).toContain('deterministic visual-logic repair corrected 2');
   });
 
+  it('removes a provider comparison that cannot plot two cohorts instead of minting a zero proxy', async () => {
+    const degradedSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 1
+          ? {
+              ...slide,
+              artifactSpec: {
+                schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+                id: 'empty-comparison',
+                kind: 'comparison',
+                narrativeJob: 'Compare operating outcomes.',
+                provenance: {
+                  truthState: 'missing',
+                  rationale: 'The filing values were not retrieved.',
+                  sourceRefs: [],
+                },
+                payload: {
+                  metrics: [{ id: 'margin', label: 'Margin', unit: '%' }],
+                  cohorts: [
+                    { id: 'actual', label: 'Actual', values: {} },
+                    { id: 'target', label: 'Target', values: {} },
+                  ],
+                },
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      firstSpec: degradedSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlide = (outcome.spec as typeof degradedSpec).slides[1];
+
+    expect(repairedSlide).not.toHaveProperty('artifactSpec');
+    expect(repairedSlide).not.toHaveProperty('metric');
+    expect(JSON.stringify(outcome.spec)).not.toContain('0 cohorts');
+  });
+
   it('runs exactly one revision and adopts a corrected pass 2', async () => {
     const requestRevision = vi.fn(
       async (promptReport: string): Promise<NodeSlideProviderResult> => {

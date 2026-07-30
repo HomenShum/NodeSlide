@@ -400,6 +400,11 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedSlides[4]).not.toHaveProperty('image');
     expect(repairedSlides[4]).toHaveProperty('diagram.kind', 'architecture');
     expect(repairedSlides[4]).toHaveProperty('diagram.edges.0.label', 'supports');
+    expect(repairedSlides[4]).toMatchObject({
+      headline: 'Source evidence required before publication',
+      body: expect.stringContaining('evidence gap explicit'),
+    });
+    expect(JSON.stringify(repairedSlides[4])).not.toMatch(/\bplaceholder\b/i);
     expect(outcome.summary).toContain('deterministic visual-logic repair corrected 2');
   });
 

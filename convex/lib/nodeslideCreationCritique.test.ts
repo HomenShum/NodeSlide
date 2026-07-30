@@ -833,6 +833,61 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:20|9)\b/u);
   });
 
+  it('preserves the closing decision when its invented numeric hero is quarantined', async () => {
+    const decisionSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 6
+          ? {
+              ...slide,
+              title: 'The Release Decision',
+              section: 'Decide',
+              headline: 'Adopt the gate, name the owner, set the checkpoint.',
+              bullets: [
+                'Adopt the continuous release gate',
+                'Name the accountable owner',
+                'Set the next evidence checkpoint',
+              ],
+              chart: { labels: ['Now', 'Target'], values: [20, 9] },
+              artifactSpec: {
+                schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+                id: 'illustrative-decision-score',
+                kind: 'chart',
+                narrativeJob: 'Close on the release decision.',
+                provenance: {
+                  truthState: 'illustrative',
+                  rationale: 'The values are not measured.',
+                  sourceRefs: [],
+                },
+                payload: {
+                  labels: ['Now', 'Target'],
+                  values: [20, 9],
+                },
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      brief: {
+        ...ROADSHOW_BRIEF,
+        prompt: 'Create a NIST AI RMF release decision deck.',
+      },
+      firstSpec: decisionSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlide = (outcome.spec as typeof decisionSpec).slides[6];
+
+    expect(repairedSlide).not.toHaveProperty('artifactSpec');
+    expect(repairedSlide).not.toHaveProperty('chart');
+    expect(repairedSlide).toHaveProperty('diagram');
+    expect(repairedSlide.headline).toBe('Adopt the gate, name the owner, set the checkpoint.');
+    expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:20|9)\b/u);
+  });
+
   it('removes an invented score formula whose filing inputs are still pending', async () => {
     const strictBoardBrief = {
       ...ROADSHOW_BRIEF,

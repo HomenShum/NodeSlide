@@ -1028,7 +1028,14 @@ function repairCreationVisualLogic(
         const hasGroundedAlternative = ['diagram', 'formula', 'image', 'video'].some(
           (key) => slide[key] !== undefined && slide[key] !== null,
         );
-        slide = hasGroundedAlternative
+        const preservesDecisionNarrative =
+          /\b(?:decision|decide|adopt|approve|release|owner)\b/iu.test(
+            `${String(slide['title'] ?? '')} ${String(slide['section'] ?? '')} ${String(
+              slide['headline'] ?? '',
+            )}`,
+          );
+        const preserveNarrative = hasGroundedAlternative || preservesDecisionNarrative;
+        slide = preserveNarrative
           ? preserveNarrativeAfterQuantitativeQuarantine(
               slide,
               unsupportedArtifactQuantities(brief, authoredPayload),

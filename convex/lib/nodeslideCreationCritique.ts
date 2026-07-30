@@ -839,7 +839,7 @@ function repairCreationVisualLogic(
     const image = slide['image'];
     if (image !== undefined && !hasRenderableImage(image)) {
       const { image: _invalidImage, ...withoutImage } = slide;
-      slide = withoutImage;
+      slide = replaceQuarantinedEvidenceCopy(withoutImage);
       const hasOtherVisual = ['chart', 'diagram', 'formula', 'video', 'artifactSpec'].some(
         (key) => slide[key] !== undefined && slide[key] !== null,
       );

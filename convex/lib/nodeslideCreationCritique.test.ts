@@ -320,6 +320,54 @@ describe('NodeSlide creation self-critique loop', () => {
     now: NOW,
   };
 
+  it('turns a missing portfolio evidence hero into an explicit source gate', async () => {
+    const degradedSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 5
+          ? {
+              ...slide,
+              headline: 'One source of truth: the captured evidence',
+              body: 'The visual is a placeholder pending a licensed capture.',
+              bullets: [
+                'All figures must reconcile to the source',
+                'Placeholder image — no captured evidence is claimed',
+                'Use the dated filing as the source of record',
+              ],
+              artifactSpec: {
+                schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+                id: 'missing-source-capture',
+                kind: 'evidence-media',
+                narrativeJob: 'Show the source of record.',
+                provenance: {
+                  truthState: 'missing',
+                  rationale: 'No captured asset was supplied.',
+                  sourceRefs: [],
+                },
+                payload: { altText: 'Source filing screenshot' },
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      firstSpec: degradedSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlide = (outcome.spec as typeof degradedSpec).slides[5];
+
+    expect(repairedSlide).not.toHaveProperty('artifactSpec');
+    expect(repairedSlide).toHaveProperty('diagram');
+    expect(repairedSlide).toMatchObject({
+      headline: 'Source evidence required before publication',
+      body: expect.stringContaining('evidence gap explicit'),
+    });
+    expect(JSON.stringify(repairedSlide)).not.toMatch(/\bplaceholder\b/i);
+  });
+
   it('deterministically removes unusable hero primitives when the provider path is degraded', async () => {
     const degradedSpec = {
       ...CORRECTED_SPEC,
@@ -433,7 +481,7 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(JSON.stringify(outcome.spec)).not.toContain('Typed artifact');
   });
 
-  it('removes an illustrative outlook chart when the board brief forbids invented numbers', async () => {
+  it('keeps a CFO board brief honest and coherent when an illustrative outlook is quarantined', async () => {
     const strictBoardBrief = {
       ...ROADSHOW_BRIEF,
       prompt: `${ROADSHOW_BRIEF.prompt} Never invent missing numbers.`,
@@ -444,6 +492,13 @@ describe('NodeSlide creation self-critique loop', () => {
         index === 4
           ? {
               ...slide,
+              headline: 'Illustrative trajectory: Adjusted EBITDA margin path',
+              body: 'The chart is an illustrative shape of the discipline story.',
+              bullets: [
+                'Replace values before publish',
+                'Reconcile the metric',
+                'The shape carries the argument',
+              ],
               chart: { labels: ['Q1', 'Q2', 'Outlook'], values: [0.8, 1.1, 1.5] },
               artifactSpec: {
                 schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
@@ -478,6 +533,15 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedSlide).not.toHaveProperty('artifactSpec');
     expect(repairedSlide).not.toHaveProperty('chart');
     expect(JSON.stringify(outcome.spec)).not.toContain('illustrative-outlook');
+    expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:chart|shape|trajectory)\b/i);
+    expect(repairedSlide).toMatchObject({
+      headline: 'Evidence gap: exact figures required before publication',
+      body: expect.stringContaining('No quantitative outlook is shown'),
+      bullets: expect.arrayContaining([
+        'No values or trend are inferred from missing evidence',
+        'Keep the decision gated until the figures are verified',
+      ]),
+    });
   });
 
   it('runs exactly one revision and adopts a corrected pass 2', async () => {

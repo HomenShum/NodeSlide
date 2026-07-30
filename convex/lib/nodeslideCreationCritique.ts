@@ -726,6 +726,48 @@ function briefForbidsIllustrativeQuantities(brief: DeckBrief): boolean {
   );
 }
 
+function replaceQuarantinedQuantitativeCopy(
+  slide: Record<string, unknown>,
+): Record<string, unknown> {
+  const repaired = { ...slide };
+  if (typeof repaired['headline'] === 'string') {
+    repaired['headline'] = 'Evidence gap: exact figures required before publication';
+  }
+  if (typeof repaired['body'] === 'string') {
+    repaired['body'] =
+      'No quantitative outlook is shown because the supplied context does not contain verified figures. Add exact values with a source citation before publication.';
+  }
+  if (Array.isArray(repaired['bullets'])) {
+    repaired['bullets'] = [
+      'No values or trend are inferred from missing evidence',
+      'Use the source metric definition and reconciliation',
+      'Keep the decision gated until the figures are verified',
+    ];
+  }
+  return repaired;
+}
+
+function replaceQuarantinedEvidenceCopy(slide: Record<string, unknown>): Record<string, unknown> {
+  const repaired: Record<string, unknown> = {
+    ...slide,
+    headline: 'Source evidence required before publication',
+    body: 'No captured source asset was supplied. This slide keeps the evidence gap explicit instead of presenting an unsupported visual as proof.',
+  };
+  if (Array.isArray(repaired['bullets'])) {
+    const sourcedBullets = repaired['bullets'].filter(
+      (bullet): bullet is string =>
+        typeof bullet === 'string' &&
+        bullet.trim().length > 0 &&
+        !/\bplaceholder\b|\bno captured\b/iu.test(bullet),
+    );
+    repaired['bullets'] =
+      sourcedBullets.length >= 2
+        ? sourcedBullets
+        : [...sourcedBullets, 'A captured source asset is required before publication'];
+  }
+  return repaired;
+}
+
 function repairCreationVisualLogic(
   rawSpec: unknown,
   brief: DeckBrief,
@@ -777,6 +819,12 @@ function repairCreationVisualLogic(
         ...withoutArtifact
       } = slide;
       slide = withoutArtifact;
+      if (violatesBriefTruthPolicy) {
+        slide = replaceQuarantinedQuantitativeCopy(slide);
+      }
+      if (authoredArtifact['kind'] === 'evidence-media') {
+        slide = replaceQuarantinedEvidenceCopy(slide);
+      }
       if (
         authoredArtifact['kind'] === 'evidence-media' &&
         slide['diagram'] === undefined &&

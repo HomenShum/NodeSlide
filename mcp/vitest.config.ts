@@ -19,6 +19,9 @@ export default defineConfig({
       '@nodeslide/engine': fileURLToPath(
         new URL('../packages/engine/src/index.ts', import.meta.url),
       ),
+      '@nodeslide/recipelang': fileURLToPath(
+        new URL('../packages/recipelang/src/index.ts', import.meta.url),
+      ),
       '@nodeslide/testing': fileURLToPath(
         new URL('../packages/testing/src/index.ts', import.meta.url),
       ),

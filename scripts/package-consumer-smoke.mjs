@@ -21,6 +21,7 @@ const packageNames = [
   '@nodeslide/react-headless',
   '@nodeslide/react',
   '@nodeslide/registry',
+  '@nodeslide/recipelang',
   '@nodeslide/cli',
 ];
 const npmCli = process.env.npm_execpath;
@@ -199,6 +200,9 @@ function assertPackedEntrypoints(packageName, files) {
   }
   if (packageName === '@nodeslide/cli') {
     assert(paths.has('dist/cli.js'), '@nodeslide/cli tarball is missing its executable.');
+  }
+  if (packageName === '@nodeslide/recipelang') {
+    assert(paths.has('dist/cli.js'), '@nodeslide/recipelang tarball is missing its executable.');
   }
 }
 
@@ -382,6 +386,7 @@ import {
   NODESLIDE_REGISTRY_ENTRIES,
   readNodeSlideRegistryEntry,
 } from '@nodeslide/registry';
+import { compileRecipe } from '@nodeslide/recipelang';
 import {
   MemoryNodeSlideRepository,
   NODESLIDE_TEST_PRINCIPAL,
@@ -402,6 +407,23 @@ for (const packageName of ${JSON.stringify(packageNames)}) {
 }
 
 const snapshot = createNodeSlideTestSnapshot('deck:packed-consumer');
+const compiledRecipe = compileRecipe({
+  schemaVersion: 'recipelang/v1',
+  kind: 'Recipe',
+  meta: { id: 'packed-recipe', title: 'Packed recipe', version: 1 },
+  inputs: [{ id: 'input-a', label: 'Input A', produces: 'raw' }],
+  artifacts: [{ id: 'raw', shape: 'Item[]' }, { id: 'done', shape: 'Brief' }],
+  steps: [{
+    id: 'reduce',
+    label: 'Reduce',
+    consumes: ['raw'],
+    produces: ['done'],
+    executor: { kind: 'code', deterministic: true },
+  }],
+  outputs: [{ artifact: 'done', label: 'Done' }],
+});
+assert.equal(compiledRecipe.receipt.contractErrors, 0);
+assert.equal(compiledRecipe.steps[0]?.rowSpan, 1);
 assert.equal(snapshot.deck.schemaVersion, NODESLIDE_SCHEMA_VERSION);
 const proposal = createNodeSlideTextPatch(snapshot, 'Packed package accepted');
 const enginePreview = applyDeckPatch(snapshot, proposal, snapshot.deck.updatedAt + 1);

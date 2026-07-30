@@ -65,6 +65,7 @@ describe('NodeSlide seed', () => {
                   { id: 'measure', label: 'MEASURE' },
                   { id: 'manage', label: 'MANAGE' },
                   { id: 'gate', label: 'Release Gate', kind: 'decision' },
+                  { id: 'committee', label: 'Committee Decision', kind: 'decision' },
                 ],
                 edges: [
                   { from: 'govern', to: 'map', label: 'oversight' },
@@ -74,6 +75,7 @@ describe('NodeSlide seed', () => {
                   { from: 'measure', to: 'manage' },
                   { from: 'manage', to: 'map', label: 'feedback' },
                   { from: 'manage', to: 'gate', label: 'evidence' },
+                  { from: 'gate', to: 'committee', label: 'escalate' },
                 ],
               },
             }
@@ -99,13 +101,17 @@ describe('NodeSlide seed', () => {
     const measure = node('MEASURE');
     const manage = node('MANAGE');
     const gate = node('Release Gate');
+    const committee = node('Committee Decision');
 
     expect(govern?.bbox.width).toBeGreaterThan(0.4);
-    expect([map?.bbox.x, measure?.bbox.x, manage?.bbox.x, gate?.bbox.x]).toEqual(
-      [...[map?.bbox.x, measure?.bbox.x, manage?.bbox.x, gate?.bbox.x]].sort(
+    expect([map?.bbox.x, measure?.bbox.x, manage?.bbox.x, gate?.bbox.x, committee?.bbox.x]).toEqual(
+      [...[map?.bbox.x, measure?.bbox.x, manage?.bbox.x, gate?.bbox.x, committee?.bbox.x]].sort(
         (left, right) => (left ?? 0) - (right ?? 0),
       ),
     );
+    expect(measure?.bbox.width).toBeGreaterThanOrEqual(0.09);
+    expect(measure?.style.fontSize).toBeLessThanOrEqual(14);
+    expect(committee?.style.fontSize).toBeLessThanOrEqual(12);
     expect(
       elements.some(
         (element) => element.role === 'diagram_edge' && element.artifactBinding?.from === 'govern',

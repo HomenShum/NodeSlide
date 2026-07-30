@@ -48,11 +48,11 @@ describe('immutable package release invariants', () => {
     ).toThrow(/order is not canonical/);
   });
 
-  it('requires exactly the manifest and canonical 11 tarballs', async () => {
+  it('requires exactly the manifest and canonical 12 tarballs', async () => {
     const { directory, manifest } = await writeArtifactSet('same');
     await expect(
       assertExactArtifactDirectory(directory, manifest, 'Fixture'),
-    ).resolves.toHaveLength(12);
+    ).resolves.toHaveLength(13);
     await writeFile(path.join(directory, 'unexpected.txt'), 'extra');
     await expect(assertExactArtifactDirectory(directory, manifest, 'Fixture')).rejects.toThrow(
       /extra: unexpected\.txt/,

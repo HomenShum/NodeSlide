@@ -19,6 +19,7 @@
   "dependencies": {
     "@earendil-works/pi-ai": "0.80.6",
     "@modelcontextprotocol/sdk": "^1.30.0",
+    "@nodeslide/recipelang": "0.2.2",
     "convex": "^1.31.7",
     "katex": "^0.18.1",
     "pptxgenjs": "^4.0.1",

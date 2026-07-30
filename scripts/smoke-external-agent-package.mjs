@@ -25,12 +25,34 @@ try {
   );
   const mcpTarball = join(consumer, mcpPack[0]?.filename ?? '');
   if (!mcpPack[0]?.filename) throw new Error('npm pack did not return an MCP tarball filename.');
+  runNpm(['run', 'build', '--workspace', '@nodeslide/recipelang'], repositoryRoot);
+  const recipeLangPack = JSON.parse(
+    runNpm(
+      ['pack', './packages/recipelang', '--pack-destination', consumer, '--json'],
+      repositoryRoot,
+    ),
+  );
+  const recipeLangTarball = join(consumer, recipeLangPack[0]?.filename ?? '');
+  if (!recipeLangPack[0]?.filename) {
+    throw new Error('npm pack did not return a RecipeLang tarball filename.');
+  }
 
   await writeFile(
     join(consumer, 'package.json'),
     `${JSON.stringify({ name: 'nodeslide-external-consumer-smoke', private: true, type: 'module' }, null, 2)}\n`,
   );
-  runNpm(['install', '--ignore-scripts', '--no-audit', '--no-fund', tarball, mcpTarball], consumer);
+  runNpm(
+    [
+      'install',
+      '--ignore-scripts',
+      '--no-audit',
+      '--no-fund',
+      tarball,
+      recipeLangTarball,
+      mcpTarball,
+    ],
+    consumer,
+  );
 
   const snapshot = createSnapshot();
   const patch = createPatch(snapshot);
@@ -119,14 +141,42 @@ try {
   if (!mcpHelp.includes('Offline file tools are always available')) {
     throw new Error('Packed MCP help does not expose the offline file-tool mode.');
   }
+  const recipe = createRecipe();
+  await writeFile(join(consumer, 'recipe.json'), `${JSON.stringify(recipe, null, 2)}\n`);
+  const recipeLangCli = join(
+    consumer,
+    'node_modules',
+    '@nodeslide',
+    'recipelang',
+    'dist',
+    'cli.js',
+  );
+  const recipeAlignment = JSON.parse(
+    run(process.execPath, [recipeLangCli, 'verify-alignment', 'recipe.json', '--json'], consumer),
+  );
+  if (recipeAlignment.alignment?.passed !== true) {
+    throw new Error('Packed RecipeLang CLI failed its alignment gate.');
+  }
 
   console.log(
     JSON.stringify({
       ok: true,
       proof: 'external-agent-and-mcp-tarball-consumer',
-      packages: ['@nodeslide/external-agent@0.1.0', 'nodeslide-mcp@0.1.0'],
-      commands: ['--help', 'inspect', 'propose', 'apply', 'nodeslide-mcp --help'],
+      packages: [
+        '@nodeslide/external-agent@0.2.2',
+        '@nodeslide/recipelang@0.2.2',
+        'nodeslide-mcp@0.2.2',
+      ],
+      commands: [
+        '--help',
+        'inspect',
+        'propose',
+        'apply',
+        'recipelang verify-alignment',
+        'nodeslide-mcp --help',
+      ],
       resultingDeckVersion: next.deck.version,
+      recipeAlignmentPassed: true,
     }),
   );
 } finally {
@@ -243,5 +293,28 @@ function createPatch(snapshot) {
     operations: [{ op: 'replace_text', slideId: 'slide:1', elementId: 'element:1', text: 'After' }],
     source: 'agent',
     summary: 'Replace the title.',
+  };
+}
+
+function createRecipe() {
+  return {
+    schemaVersion: 'recipelang/v1',
+    kind: 'Recipe',
+    meta: { id: 'packed-smoke', title: 'Packed RecipeLang smoke', version: 1 },
+    inputs: [{ id: 'source', label: 'Source', produces: 'raw' }],
+    artifacts: [
+      { id: 'raw', shape: 'Item[]' },
+      { id: 'brief', shape: 'Brief' },
+    ],
+    steps: [
+      {
+        id: 'synthesize',
+        label: 'Synthesize',
+        consumes: ['raw'],
+        produces: ['brief'],
+        executor: { kind: 'agent', deterministic: false },
+      },
+    ],
+    outputs: [{ artifact: 'brief', label: 'Brief' }],
   };
 }

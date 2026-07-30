@@ -21,6 +21,7 @@ import {
   type DeckSnapshot,
   NODESLIDE_SCHEMA_VERSION,
   NODESLIDE_TOOLCHAIN_VERSION,
+  SLIDE_WIDTH_IN,
   type Slide,
   type SlideArchetype,
   type SlideElement,
@@ -2228,10 +2229,10 @@ function buildSlide(input: {
             strokeWidth: isCrossCuttingHub || nodeKind === 'decision' ? 2 : 1,
             color: theme.colors.ink,
             fontFamily: theme.typography.body,
-            fontSize: isCrossCuttingHub ? 15 : 16,
+            fontSize: isCrossCuttingHub ? 15 : diagramNodeFontSize(node.label, position.width),
             fontWeight: 650,
             lineHeight: 1.15,
-            padding: 12,
+            padding: isCrossCuttingHub ? 12 : 8,
             radius: theme.defaultRadius,
             textAlign: 'center',
             verticalAlign: 'middle',
@@ -2404,7 +2405,7 @@ function layoutDiagramNodes(
   const crossCuttingHubId = diagramCrossCuttingHubId(diagram);
   if (crossCuttingHubId) {
     const sequenceNodes = diagram.nodes.filter((node) => node.id !== crossCuttingHubId);
-    const gapX = sequenceNodes.length > 1 ? 0.025 : 0;
+    const gapX = sequenceNodes.length > 1 ? 0.012 : 0;
     const hubHeight = Math.min(0.1, height * 0.24);
     const sequenceY = y + hubHeight + 0.045;
     const sequenceHeight = Math.min(0.14, Math.max(0.08, height - hubHeight - 0.08));
@@ -2446,6 +2447,14 @@ function layoutDiagramNodes(
       height: nodeHeight,
     };
   });
+}
+
+function diagramNodeFontSize(label: string, width: number): number {
+  const normalized = label.trim().replace(/\s+/g, ' ');
+  const longestWord = Math.max(1, ...normalized.split(' ').map((word) => word.length));
+  const preferred = normalized.length > 15 ? 12 : normalized.length > 9 ? 13 : 14;
+  const usablePoints = Math.max(1, width * SLIDE_WIDTH_IN * 72 - 16);
+  return Math.max(10, Math.min(preferred, Math.floor(usablePoints / (longestWord * 0.56))));
 }
 
 function diagramNodeRayInset(

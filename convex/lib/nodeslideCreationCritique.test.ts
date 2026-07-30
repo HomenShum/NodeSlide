@@ -433,6 +433,61 @@ describe('NodeSlide creation self-critique loop', () => {
     );
   });
 
+  it('preserves distinct narrative jobs when adjacent quantitative slides are quarantined', async () => {
+    const unsupportedAdjacentSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 4 || index === 5
+          ? {
+              ...slide,
+              headline:
+                index === 4
+                  ? 'Residual risk is separate from model performance'
+                  : 'Evidence obligations before committee review',
+              artifactSpec: {
+                schemaVersion: NODESLIDE_AUTHORED_ARTIFACT_VERSION,
+                id: `unsupported-${index}`,
+                kind: 'chart',
+                narrativeJob: index === 4 ? 'Separate risk from performance.' : 'Bind evidence.',
+                provenance: {
+                  truthState: 'supported',
+                  rationale: 'No source references were supplied.',
+                  sourceRefs: [],
+                },
+                payload: {
+                  chartType: 'bar',
+                  labels: ['Pending', 'Ready'],
+                  series: [{ name: 'Systems', values: [4, 6] }],
+                },
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      brief: {
+        ...ROADSHOW_BRIEF,
+        prompt: 'Create a risk committee deck. Do not invent numbers, figures, or metrics.',
+      },
+      firstSpec: unsupportedAdjacentSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repaired = (outcome.spec as typeof unsupportedAdjacentSpec).slides;
+
+    expect(repaired[4]?.headline).toBe(
+      'The release gate stays closed until the evidence is verified',
+    );
+    expect(repaired[5]?.headline).toBe('Evidence obligations before committee review');
+    expect(repaired[5]?.bullets).toEqual([
+      'Define the evidence owner',
+      'Bind each claim to a source',
+      'Record the unresolved risk at the gate',
+    ]);
+  });
+
   it('deterministically removes unusable hero primitives when the provider path is degraded', async () => {
     const degradedSpec = {
       ...CORRECTED_SPEC,
@@ -997,6 +1052,41 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(repairedDecisionSlide.bullets).toContain(
       'Set and source the checkpoint timing before publication',
     );
+  });
+
+  it('removes unsourced timing from decision prose and emits three distinct decision bullets', async () => {
+    const decisionSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 6
+          ? {
+              ...slide,
+              headline: 'Release, release with controls, or hold — signed and dated.',
+              body: 'The chief risk officer signs the decision and the review clock starts immediately. Next checkpoint: first governed review within 30 days.',
+              bullets: [
+                'Decision owner: chief risk officer, countersigned by general counsel',
+                'Decision owner: chief risk officer, countersigned by general counsel',
+                'Set and source the checkpoint timing before publication',
+              ],
+            }
+          : slide,
+      ),
+    };
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      brief: {
+        ...ROADSHOW_BRIEF,
+        prompt: 'Create a NIST AI RMF risk committee deck. Do not invent regulatory obligations.',
+      },
+      firstSpec: decisionSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repaired = (outcome.spec as typeof decisionSpec).slides[6];
+
+    expect(repaired?.body).not.toMatch(/\b(?:30 days|immediately)\b/iu);
+    expect(new Set(repaired?.bullets).size).toBe(3);
+    expect(repaired?.bullets[0]).toBe('Record release, release with controls, or hold');
   });
 
   it('runs exactly one revision and adopts a corrected pass 2', async () => {

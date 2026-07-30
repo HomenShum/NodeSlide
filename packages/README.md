@@ -53,7 +53,7 @@ npm run artifacts:build -- \
   --registry-version 0.2.2
 ```
 
-The manifest pins the exact 11-package closure with SHA-256 and npm SHA-512
+The manifest pins the exact 12-package closure with SHA-256 and npm SHA-512
 integrity. Artifact-mode installs consume the whole verified closure so npm
 never resolves an unpublished internal `@nodeslide/*` dependency from a mutable
 registry.
@@ -112,6 +112,6 @@ For upgrades, use a separately generated, strictly newer release set and run
 installs v0.1.0 into a clean consumer, upgrades to v0.2.2, checks the lockfile
 and receipt pins, and rejects mixed or tampered sets. Public-release acceptance
 additionally requires GitHub release immutability, the exact canonical
-11-package asset roster, manifest release IDs equal to both tag commit SHAs,
+12-package asset roster, manifest release IDs equal to both tag commit SHAs,
 successful `gh release verify` and per-asset `gh release verify-asset` checks,
 and a byte-identical rebuild of the checked-out candidate tag.

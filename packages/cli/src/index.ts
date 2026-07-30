@@ -330,6 +330,7 @@ function packagesFor(
     'full-studio': [
       '@nodeslide/contracts',
       '@nodeslide/engine',
+      '@nodeslide/recipelang',
       '@nodeslide/backend',
       '@nodeslide/testing',
       '@nodeslide/react-headless',
@@ -338,20 +339,27 @@ function packagesFor(
     ],
     'agent-thread': [
       '@nodeslide/contracts',
+      '@nodeslide/recipelang',
       '@nodeslide/backend',
       '@nodeslide/react-headless',
       '@nodeslide/react',
       '@nodeslide/agent',
     ],
-    renderer: ['@nodeslide/contracts', '@nodeslide/react'],
+    renderer: ['@nodeslide/contracts', '@nodeslide/recipelang', '@nodeslide/react'],
     presenter: ['@nodeslide/contracts', '@nodeslide/react-headless', '@nodeslide/react'],
     'backend-only': [
       '@nodeslide/contracts',
       '@nodeslide/engine',
+      '@nodeslide/recipelang',
       '@nodeslide/backend',
       '@nodeslide/testing',
     ],
-    'agent-pack-only': ['@nodeslide/contracts', '@nodeslide/backend', '@nodeslide/agent'],
+    'agent-pack-only': [
+      '@nodeslide/contracts',
+      '@nodeslide/backend',
+      '@nodeslide/recipelang',
+      '@nodeslide/agent',
+    ],
   };
   const values = [...byProfile[options.profile]];
   if (options.uiMode === 'headless') {

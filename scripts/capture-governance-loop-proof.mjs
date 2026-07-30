@@ -48,7 +48,7 @@ const bundled = await build({
                 { id: 'map', label: 'MAP' },
                 { id: 'measure', label: 'MEASURE' },
                 { id: 'manage', label: 'MANAGE' },
-                { id: 'gate', label: 'Release Gate', kind: 'decision' },
+                { id: 'gate', label: 'Committee Decision', kind: 'decision' },
               ],
               edges: [
                 { from: 'govern', to: 'map', label: 'oversight' },
@@ -84,7 +84,7 @@ const bundled = await build({
           map: position('MAP'),
           measure: position('MEASURE'),
           manage: position('MANAGE'),
-          gate: position('Release Gate'),
+          gate: position('Committee Decision'),
         },
         feedbackCount: elements.filter((element) => element.role === 'diagram_feedback').length,
         connectorCount: elements.filter((element) => element.role === 'diagram_edge').length,

@@ -14,6 +14,7 @@ export const NODESLIDE_IMMUTABLE_PACKAGE_NAMES = Object.freeze([
   '@nodeslide/react-headless',
   '@nodeslide/react',
   '@nodeslide/registry',
+  '@nodeslide/recipelang',
   '@nodeslide/cli',
 ]);
 
@@ -37,7 +38,7 @@ export function assertCanonicalPackageRoster(packageNames, label = 'Artifact man
       duplicate.length > 0 ? `duplicate: ${[...new Set(duplicate)].join(', ')}` : undefined,
     ].filter(Boolean);
     throw new Error(
-      `${label} must contain the exact canonical 11-package roster (${details.join('; ')}).`,
+      `${label} must contain the exact canonical 12-package roster (${details.join('; ')}).`,
     );
   }
   const outOfOrder = actual.findIndex((name, index) => name !== expected[index]);

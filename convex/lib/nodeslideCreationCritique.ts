@@ -735,31 +735,90 @@ function briefForbidsIllustrativeQuantities(brief: DeckBrief): boolean {
   );
 }
 
-function collectFiniteQuantities(value: unknown, quantities: number[] = []): number[] {
+function collectFiniteQuantities(
+  value: unknown,
+  quantities: number[] = [],
+  includeNumericText = false,
+): number[] {
   if (typeof value === 'number' && Number.isFinite(value)) {
     quantities.push(value);
     return quantities;
   }
+  if (includeNumericText && typeof value === 'string') {
+    for (const token of value.match(/-?\d[\d,]*(?:\.\d+)?/gu) ?? []) {
+      const quantity = Number(token.replaceAll(',', ''));
+      if (Number.isFinite(quantity)) quantities.push(quantity);
+    }
+    return quantities;
+  }
   if (Array.isArray(value)) {
-    for (const item of value) collectFiniteQuantities(item, quantities);
+    for (const item of value) collectFiniteQuantities(item, quantities, includeNumericText);
     return quantities;
   }
   if (isCreationSpecRecord(value)) {
-    for (const item of Object.values(value)) collectFiniteQuantities(item, quantities);
+    for (const item of Object.values(value)) {
+      collectFiniteQuantities(item, quantities, includeNumericText);
+    }
   }
   return quantities;
 }
 
-function briefSupportsArtifactQuantities(brief: DeckBrief, payload: unknown): boolean {
-  const quantities = collectFiniteQuantities(payload);
-  if (quantities.length === 0) return true;
+function briefSuppliedQuantities(brief: DeckBrief): Set<number> {
   const briefText = `${brief.prompt} ${brief.purpose} ${brief.successCriteria.join(' ')}`;
-  const suppliedQuantities = new Set(
+  return new Set(
     (briefText.match(/-?\d[\d,]*(?:\.\d+)?/gu) ?? [])
       .map((token) => Number(token.replaceAll(',', '')))
       .filter(Number.isFinite),
   );
-  return quantities.every((quantity) => suppliedQuantities.has(quantity));
+}
+
+function unsupportedArtifactQuantities(
+  brief: DeckBrief,
+  payload: unknown,
+  includeNumericText = false,
+): number[] {
+  const suppliedQuantities = briefSuppliedQuantities(brief);
+  return [
+    ...new Set(
+      collectFiniteQuantities(payload, [], includeNumericText).filter(
+        (quantity) => !suppliedQuantities.has(quantity),
+      ),
+    ),
+  ];
+}
+
+function briefSupportsArtifactQuantities(
+  brief: DeckBrief,
+  payload: unknown,
+  includeNumericText = false,
+): boolean {
+  return unsupportedArtifactQuantities(brief, payload, includeNumericText).length === 0;
+}
+
+function removeUnsupportedMetricCopy(
+  slide: Record<string, unknown>,
+  unsupportedQuantities: number[],
+): Record<string, unknown> {
+  const unsupported = new Set(unsupportedQuantities);
+  const copyContainsUnsupportedQuantity = (value: unknown) =>
+    typeof value === 'string' &&
+    (value.match(/-?\d[\d,]*(?:\.\d+)?/gu) ?? []).some((token) =>
+      unsupported.has(Number(token.replaceAll(',', ''))),
+    );
+  const repaired = { ...slide };
+  if (Array.isArray(repaired['bullets'])) {
+    const groundedBullets = repaired['bullets'].filter(
+      (bullet): bullet is string =>
+        typeof bullet === 'string' &&
+        bullet.trim().length > 0 &&
+        !copyContainsUnsupportedQuantity(bullet),
+    );
+    repaired['bullets'] = [
+      ...groundedBullets,
+      'Set and source the checkpoint timing before publication',
+    ].slice(0, 3);
+  }
+  return repaired;
 }
 
 function replaceQuarantinedQuantitativeCopy(
@@ -985,8 +1044,50 @@ function repairCreationVisualLogic(
       repairCount += 1;
     }
     if (
-      briefForbidsIllustrativeQuantities(brief) &&
-      formulaInventsPendingQuantities(slide['formula'])
+      slide['metric'] !== undefined &&
+      (briefForbidsIllustrativeQuantities(brief) ||
+        /\b(?:days?|weeks?|months?|years?|score|threshold|tolerance|target)\b/iu.test(
+          `${String(slide['metric'])} ${String(slide['metricLabel'] ?? '')}`,
+        )) &&
+      !briefSupportsArtifactQuantities(
+        brief,
+        { metric: slide['metric'], metricLabel: slide['metricLabel'] },
+        true,
+      )
+    ) {
+      const unsupportedQuantities = unsupportedArtifactQuantities(
+        brief,
+        { metric: slide['metric'], metricLabel: slide['metricLabel'] },
+        true,
+      );
+      const {
+        metric: _unsupportedMetric,
+        metricLabel: _unsupportedMetricLabel,
+        ...withoutMetric
+      } = slide;
+      slide = removeUnsupportedMetricCopy(withoutMetric, unsupportedQuantities);
+      repairCount += 1;
+    }
+    if (
+      slide['chart'] !== undefined &&
+      (briefForbidsIllustrativeQuantities(brief) ||
+        /\b(?:illustrative|estimated|synthetic|placeholder)\b/iu.test(
+          JSON.stringify(slide['chart']),
+        )) &&
+      !briefSupportsArtifactQuantities(brief, slide['chart'])
+    ) {
+      const { chart: _unsupportedChart, ...withoutChart } = slide;
+      slide = replaceQuarantinedQuantitativeCopy(withoutChart);
+      repairCount += 1;
+    }
+    if (
+      slide['formula'] !== undefined &&
+      ((!briefSupportsArtifactQuantities(brief, slide['formula'], true) &&
+        /\b(?:illustrative|estimated|tolerance|threshold|pending|missing|placeholder|not retrieved|not supplied)\b/iu.test(
+          JSON.stringify(slide['formula']),
+        )) ||
+        (briefForbidsIllustrativeQuantities(brief) &&
+          formulaInventsPendingQuantities(slide['formula'])))
     ) {
       const { formula: _unsupportedFormula, ...withoutFormula } = slide;
       slide = replaceQuarantinedQuantitativeCopy(withoutFormula);

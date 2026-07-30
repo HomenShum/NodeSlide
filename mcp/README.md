@@ -1,9 +1,11 @@
 # NodeSlide MCP
 
-The stdio MCP server exposes the existing 11 host-backed NodeSlide tools plus
-four offline DeckSnapshot file tools. Both local file mutation and the
-standalone CLI use the canonical `@nodeslide/engine`; this package does not
-carry a second patch implementation.
+The stdio MCP server exposes the host-backed NodeSlide tools, four offline
+DeckSnapshot file tools, and nine model-neutral RecipeLang compiler tools,
+including `recipelang.verify_alignment` for deterministic RecipeGrid geometry.
+Local deck mutation uses `@nodeslide/engine`; recipe validation, CAS patching,
+inspection, and rendering use the same `@nodeslide/recipelang` implementation
+as the standalone CLI.
 
 ```bash
 npm run build

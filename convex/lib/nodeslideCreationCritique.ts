@@ -825,11 +825,37 @@ function removeUnsupportedSchedulingCopy(
   slide: Record<string, unknown>,
   brief: DeckBrief,
 ): { slide: Record<string, unknown>; changed: boolean } {
-  if (!Array.isArray(slide['bullets'])) return { slide, changed: false };
   const suppliedQuantities = briefSuppliedQuantities(brief);
   const unsupportedSchedulePattern =
     /(-?\d[\d,]*(?:\.\d+)?)\s*(?:business\s+)?(?:days?|weeks?|months?|years?)\b/iu;
   let changed = false;
+  const sanitizeSchedulingCopy = (value: unknown): unknown => {
+    if (typeof value !== 'string') return value;
+    const sanitized = value.replace(
+      new RegExp(unsupportedSchedulePattern.source, 'giu'),
+      (match, quantityToken: string) => {
+        const quantity = Number(quantityToken.replaceAll(',', ''));
+        if (suppliedQuantities.has(quantity)) return match;
+        changed = true;
+        return 'at a sourced checkpoint';
+      },
+    );
+    if (
+      /do not invent regulatory obligations/iu.test(brief.prompt) &&
+      /\bimmediately\b/iu.test(sanitized)
+    ) {
+      changed = true;
+      return sanitized.replace(/\bimmediately\b/giu, 'when the signed decision is recorded');
+    }
+    return sanitized;
+  };
+  const headline = sanitizeSchedulingCopy(slide['headline']);
+  const body = sanitizeSchedulingCopy(slide['body']);
+  if (!Array.isArray(slide['bullets'])) {
+    return changed
+      ? { slide: { ...slide, headline, body }, changed: true }
+      : { slide, changed: false };
+  }
   const groundedBullets = slide['bullets'].filter((bullet): bullet is string => {
     if (typeof bullet !== 'string' || bullet.trim().length === 0) return false;
     const match = bullet.match(unsupportedSchedulePattern);
@@ -843,6 +869,8 @@ function removeUnsupportedSchedulingCopy(
   return {
     slide: {
       ...slide,
+      headline,
+      body,
       bullets: [
         ...groundedBullets,
         'Set and source the checkpoint timing before publication',
@@ -980,12 +1008,30 @@ function repairEvidencePipelineDiagram(
 
 function repairDecisionBulletOrder(slide: Record<string, unknown>): Record<string, unknown> | null {
   if (!Array.isArray(slide['bullets'])) return null;
-  const bullets = slide['bullets'].filter(
-    (bullet): bullet is string => typeof bullet === 'string' && bullet.trim().length > 0,
-  );
-  const decision = bullets.find((bullet) => /\bdecision\b/iu.test(bullet));
+  const bullets = [
+    ...new Set(
+      slide['bullets']
+        .filter(
+          (bullet): bullet is string => typeof bullet === 'string' && bullet.trim().length > 0,
+        )
+        .map((bullet) => bullet.trim()),
+    ),
+  ];
   const owner = bullets.find((bullet) => /\bowner\b/iu.test(bullet));
   const checkpoint = bullets.find((bullet) => /\bcheckpoint\b/iu.test(bullet));
+  const decision =
+    bullets.find(
+      (bullet) =>
+        bullet !== owner &&
+        bullet !== checkpoint &&
+        /\b(?:decision|release|hold|adopt|approve)\b/iu.test(bullet),
+    ) ??
+    (typeof slide['headline'] === 'string' &&
+    /\b(?:release|hold)\b/iu.test(slide['headline']) &&
+    owner &&
+    checkpoint
+      ? 'Record release, release with controls, or hold'
+      : undefined);
   if (!decision || !owner || !checkpoint) return null;
   const ordered = [decision, owner, checkpoint].map((bullet) =>
     bullet.replace(/^\s*0?\d{1,2}(?:(?:[.):\-·])|\s)+\s*/u, '').trim(),
@@ -1211,9 +1257,51 @@ function repairCreationVisualLogic(
     }
     return slide;
   });
+  const adjacentRepair = repairAdjacentQuantitativeQuarantines(slides, rawSpec.slides);
+  repairCount += adjacentRepair.repairCount;
   return repairCount > 0
-    ? { spec: { ...rawSpec, slides }, repairCount }
+    ? { spec: { ...rawSpec, slides: adjacentRepair.slides }, repairCount }
     : { spec: rawSpec, repairCount };
+}
+
+function repairAdjacentQuantitativeQuarantines(
+  slides: unknown[],
+  originals: unknown[],
+): { slides: unknown[]; repairCount: number } {
+  const quarantineHeadline = 'The release gate stays closed until the evidence is verified';
+  let repairCount = 0;
+  const repaired = slides.map((value, index) => {
+    if (!isCreationSpecRecord(value) || index === 0) return value;
+    const previous = slides[index - 1];
+    if (
+      !isCreationSpecRecord(previous) ||
+      previous['headline'] !== quarantineHeadline ||
+      value['headline'] !== quarantineHeadline
+    ) {
+      return value;
+    }
+    const original = originals[index];
+    const originalHeadline =
+      isCreationSpecRecord(original) && typeof original['headline'] === 'string'
+        ? original['headline'].trim()
+        : '';
+    const safeOriginalHeadline =
+      originalHeadline.length > 0 && !/\d/u.test(originalHeadline)
+        ? originalHeadline
+        : 'The next evidence obligation must be resolved before release';
+    repairCount += 1;
+    return {
+      ...value,
+      headline: safeOriginalHeadline,
+      body: 'The prior gate hold establishes the decision boundary. This evidence obligation names what must be verified before committee review can resume.',
+      bullets: [
+        'Define the evidence owner',
+        'Bind each claim to a source',
+        'Record the unresolved risk at the gate',
+      ],
+    };
+  });
+  return { slides: repaired, repairCount };
 }
 
 function hasRenderableImage(value: unknown): boolean {

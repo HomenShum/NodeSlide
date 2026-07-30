@@ -109,7 +109,7 @@ describe('@nodeslide/cli installer', () => {
     });
     expect(plan.artifactSet?.manifest.releaseVersion).toBe('0.1.0');
     expect(plan.installSpecs.every((specifier) => path.isAbsolute(specifier))).toBe(true);
-    expect(plan.installSpecs).toHaveLength(5);
+    expect(plan.installSpecs).toHaveLength(6);
     const stagingDirectory = plan.artifactSet?.stagingDirectory;
     await disposeNodeSlideArtifactSet(plan.artifactSet);
     await expect(access(String(stagingDirectory))).rejects.toMatchObject({ code: 'ENOENT' });
@@ -127,7 +127,7 @@ describe('@nodeslide/cli installer', () => {
       releaseVersion: '0.1.0',
       releaseId: 'release:0.1.0',
     });
-    expect(installed.artifactSet?.packages).toHaveLength(5);
+    expect(installed.artifactSet?.packages).toHaveLength(6);
 
     const upgraded = await runNodeSlideUpgrade({
       cwd,
@@ -309,6 +309,7 @@ async function artifactSet(version: string, releaseId: string): Promise<string> 
     '@nodeslide/backend',
     '@nodeslide/contracts',
     '@nodeslide/react-headless',
+    '@nodeslide/recipelang',
     '@nodeslide/cli',
   ].map((name) => {
     const file = `${name.replace(/^@/, '').replace('/', '-')}-${version}.tgz`;

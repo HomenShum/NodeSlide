@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "recipelang.reference/v1",
+  "source": "benchmarks/recipelang/edge-data-contract.recipe.yaml",
+  "htmlSha256": "sha256:3a2418eef1d4a488d3d76ecbd0a95a9cd231de89601cc34f1413df5866eb98b6",
+  "svgSha256": "sha256:4fb36773c4d389fc78cb5d337fa743d9f908e66d689f51af5254f4bf65aa5de5",
+  "alignment": {
+    "schemaVersion": "recipelang.alignment/v1",
+    "reference": "cooking-for-engineers-trn",
+    "passed": true,
+    "checks": {
+      "contiguousColumns": true,
+      "leftToRight": true,
+      "mergedSpanIntegrity": true,
+      "outputConvergence": true,
+      "rowBoundaryAlignment": true
+    },
+    "issues": []
+  }
+}

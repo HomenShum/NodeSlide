@@ -1,0 +1,17 @@
+{
+  "schemaVersion": "recipelang.patch/v1",
+  "commandId": "cmd_add_decision_note",
+  "idempotencyKey": "benchmark:edge-data-contract:note:v1",
+  "baseVersion": 12,
+  "operations": [
+    {
+      "op": "note.add",
+      "note": {
+        "id": "decision-note",
+        "anchor": "synthesize",
+        "kind": "decision",
+        "body": "Use the agent only after deterministic contract checks pass."
+      }
+    }
+  ]
+}

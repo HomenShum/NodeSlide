@@ -4,8 +4,9 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 
 import { registerNodeSlideLocalTools } from './lib/localDeckTools.js';
 import { registerNodeSlideTools } from './lib/nodeslideTools.js';
+import { registerRecipeLangTools } from './lib/recipeLangTools.js';
 
-const VERSION = '0.1.0';
+const VERSION = '0.2.2';
 
 // Optional. Local-file tools work without a hosted deployment; the original 11
 // tools stay registered and fail with an explicit configuration error if called
@@ -49,8 +50,8 @@ Modes:
   Offline file tools are always available and are restricted to a trusted
   NODESLIDE_LOCAL_ROOT (default: process cwd). Keep that root and its parents
   outside untrusted concurrent write/rename access. Set NODESLIDE_CONVEX_URL to
-  enable the existing 11 host-backed deck, proposal, source, research, trace,
-  and BYOK tools.
+  enable the existing host-backed deck, proposal, source, research, trace,
+  and BYOK tools. RecipeLang compiler tools are always offline and model-neutral.
 
 Transport:
   stdio (stdout is reserved for MCP protocol messages).`);
@@ -67,6 +68,7 @@ Transport:
   const server = new McpServer({ name: 'nodeslide', version: VERSION });
   registerNodeSlideTools(server, convexCall);
   registerNodeSlideLocalTools(server);
+  registerRecipeLangTools(server);
   const transport = new StdioServerTransport();
   await server.connect(transport);
   // stderr only: stdout is the MCP transport and must stay clean.

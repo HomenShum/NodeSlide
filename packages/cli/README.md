@@ -24,7 +24,7 @@ npx @nodeslide/cli init \
 ```
 
 `nodeslide-artifacts.json` pins one release ID and version across the complete
-11-package closure. Every tarball has an independent SHA-256 digest and npm
+12-package closure. Every tarball has an independent SHA-256 digest and npm
 SHA-512 integrity value. Artifact installs verify the manifest, reject
 unlisted tarballs, mixed versions, unsafe filenames, missing packages, and
 tampered bytes before invoking npm. The installation receipt preserves the

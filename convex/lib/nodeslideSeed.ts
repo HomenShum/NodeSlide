@@ -2638,7 +2638,7 @@ function buildPostCoercionEvidenceDiagram(
   bullets: string[],
   headline: string,
 ): NodeSlidePlannedDiagram {
-  const evidenceNodes: NodeSlidePlannedDiagramNode[] = bullets.slice(0, 3).map((label, index) => ({
+  const evidenceNodes: NodeSlidePlannedDiagramNode[] = bullets.slice(0, 2).map((label, index) => ({
     id: `evidence-${index + 1}`,
     label: label.slice(0, 80),
     kind: 'system',

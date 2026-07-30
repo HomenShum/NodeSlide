@@ -325,8 +325,7 @@ describe('NodeSlide seed', () => {
         kind: 'architecture',
         edges: [
           { from: 'evidence-1', to: 'evidence-2', label: 'then' },
-          { from: 'evidence-2', to: 'evidence-3', label: 'then' },
-          { from: 'evidence-3', to: 'claim', label: 'unlocks' },
+          { from: 'evidence-2', to: 'claim', label: 'unlocks' },
         ],
       },
     });

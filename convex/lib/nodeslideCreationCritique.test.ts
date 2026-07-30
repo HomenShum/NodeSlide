@@ -819,6 +819,70 @@ describe('NodeSlide creation self-critique loop', () => {
     });
   });
 
+  it('removes unsupplied formula and checkpoint quantities from a governance decision', async () => {
+    const governanceSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) => {
+        if (index === 3) {
+          return {
+            ...slide,
+            formula: {
+              expression: 'residual_risk = likelihood * impact',
+              display: 'Residual Risk = 3 × 4 = 12 (tolerance ≤ 9)',
+              variables: [
+                { label: 'Likelihood', value: 3 },
+                { label: 'Impact', value: 4 },
+                { label: 'Tolerance', value: 9 },
+              ],
+            },
+          };
+        }
+        if (index === 6) {
+          return {
+            ...slide,
+            headline: 'Adopt the gate, name the owner, set the checkpoint.',
+            bullets: [
+              'Adopt the continuous release gate',
+              'Name the accountable owner',
+              'Complete the first full-inventory review within 90 days',
+            ],
+            metric: '90',
+            metricLabel: 'days to first full-inventory gate review',
+          };
+        }
+        return slide;
+      }),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      brief: {
+        ...ROADSHOW_BRIEF,
+        prompt:
+          'Create a seven-slide NIST AI RMF risk committee deck. Do not invent regulatory obligations.',
+      },
+      firstSpec: governanceSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedFormulaSlide = (outcome.spec as typeof governanceSpec).slides[3];
+    const repairedDecisionSlide = (outcome.spec as typeof governanceSpec).slides[6];
+
+    expect(repairedFormulaSlide).not.toHaveProperty('formula');
+    expect(repairedFormulaSlide).toMatchObject({
+      headline: 'Evidence gap: exact figures required before publication',
+    });
+    expect(repairedDecisionSlide).not.toHaveProperty('metric');
+    expect(repairedDecisionSlide).not.toHaveProperty('metricLabel');
+    expect(repairedDecisionSlide.headline).toBe(
+      'Adopt the gate, name the owner, set the checkpoint.',
+    );
+    expect(JSON.stringify(repairedDecisionSlide)).not.toMatch(/\b90\b/u);
+    expect(repairedDecisionSlide.bullets).toContain(
+      'Set and source the checkpoint timing before publication',
+    );
+  });
+
   it('runs exactly one revision and adopts a corrected pass 2', async () => {
     const requestRevision = vi.fn(
       async (promptReport: string): Promise<NodeSlideProviderResult> => {

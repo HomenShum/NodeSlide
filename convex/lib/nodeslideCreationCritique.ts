@@ -735,6 +735,33 @@ function briefForbidsIllustrativeQuantities(brief: DeckBrief): boolean {
   );
 }
 
+function collectFiniteQuantities(value: unknown, quantities: number[] = []): number[] {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    quantities.push(value);
+    return quantities;
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) collectFiniteQuantities(item, quantities);
+    return quantities;
+  }
+  if (isCreationSpecRecord(value)) {
+    for (const item of Object.values(value)) collectFiniteQuantities(item, quantities);
+  }
+  return quantities;
+}
+
+function briefSupportsArtifactQuantities(brief: DeckBrief, payload: unknown): boolean {
+  const quantities = collectFiniteQuantities(payload);
+  if (quantities.length === 0) return true;
+  const briefText = `${brief.prompt} ${brief.purpose} ${brief.successCriteria.join(' ')}`;
+  const suppliedQuantities = new Set(
+    (briefText.match(/-?\d[\d,]*(?:\.\d+)?/gu) ?? [])
+      .map((token) => Number(token.replaceAll(',', '')))
+      .filter(Number.isFinite),
+  );
+  return quantities.every((quantity) => suppliedQuantities.has(quantity));
+}
+
 function replaceQuarantinedQuantitativeCopy(
   slide: Record<string, unknown>,
 ): Record<string, unknown> {
@@ -884,11 +911,15 @@ function repairCreationVisualLogic(
     const quantitativeArtifact =
       isCreationSpecRecord(authoredArtifact) &&
       ['chart', 'comparison', 'equation'].includes(String(authoredArtifact['kind']));
-    const violatesBriefTruthPolicy =
-      briefForbidsIllustrativeQuantities(brief) &&
+    const artifactInventsUnsuppliedQuantities =
       quantitativeArtifact &&
-      (['illustrative', 'estimated'].includes(String(authoredTruthState)) ||
-        (authoredTruthState === 'supported' &&
+      ['illustrative', 'estimated'].includes(String(authoredTruthState)) &&
+      !briefSupportsArtifactQuantities(brief, authoredPayload);
+    const violatesBriefTruthPolicy =
+      quantitativeArtifact &&
+      (artifactInventsUnsuppliedQuantities ||
+        (briefForbidsIllustrativeQuantities(brief) &&
+          authoredTruthState === 'supported' &&
           (!Array.isArray(authoredSourceRefs) || authoredSourceRefs.length === 0)));
     const unsupportedAuthoredArtifact =
       isCreationSpecRecord(authoredArtifact) &&

@@ -711,10 +711,11 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(JSON.stringify(outcome.spec)).not.toContain('Typed artifact');
   });
 
-  it('keeps a CFO board brief honest and coherent when an illustrative outlook is quarantined', async () => {
-    const strictBoardBrief = {
+  it('keeps a risk committee brief honest when an unsupplied illustrative trajectory is quarantined', async () => {
+    const riskCommitteeBrief = {
       ...ROADSHOW_BRIEF,
-      prompt: `${ROADSHOW_BRIEF.prompt} Never invent missing numbers.`,
+      prompt:
+        'Create a seven-slide NIST AI RMF risk committee deck. Do not invent regulatory obligations.',
     };
     const degradedSpec = {
       ...CORRECTED_SPEC,
@@ -753,7 +754,7 @@ describe('NodeSlide creation self-critique loop', () => {
 
     const outcome = await runNodeSlideCreationCritique({
       ...loopInput,
-      brief: strictBoardBrief,
+      brief: riskCommitteeBrief,
       firstSpec: degradedSpec,
       providerLive: false,
       requestRevision: vi.fn(),

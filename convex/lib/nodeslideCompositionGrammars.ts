@@ -7,16 +7,12 @@
  * NOT parameter presets over one element tree — they produce materially
  * different element sets and silhouettes.
  */
-import type {
-  BoundingBox,
-  SlideElement,
-  ThemeSpec,
-} from '../../shared/nodeslide';
-import { estimateTextHeight, resolveCollisions } from '../../shared/nodeslideLayoutMetrics';
+import type { BoundingBox, SlideElement, ThemeSpec } from '../../shared/nodeslide';
 import {
   NODESLIDE_AUTHORED_ARTIFACT_BINDING_VERSION,
   type NodeSlideAuthoredArtifactBinding,
 } from '../../shared/nodeslideArtifactSpec';
+import { estimateTextHeight, resolveCollisions } from '../../shared/nodeslideLayoutMetrics';
 import { nodeslideStableId } from './nodeslideIds';
 import type { NodeSlidePlannedSlide } from './nodeslideSeed';
 import type { NodeSlideStorySpec } from './nodeslideStoryContext';
@@ -261,12 +257,7 @@ function footerElements(ctx: GrammarBuildContext): SlideElement[] {
   ];
 }
 
-function sectionLabel(
-  ctx: GrammarBuildContext,
-  x: number,
-  y: number,
-  width: number,
-): SlideElement {
+function sectionLabel(ctx: GrammarBuildContext, x: number, y: number, width: number): SlideElement {
   return makeElement(ctx, 'section', {
     name: 'Section label',
     kind: 'text',
@@ -296,7 +287,28 @@ function buildChartElement(
 ): SlideElement {
   const { planned, theme } = ctx;
   const chart = planned.chart;
-  if (!chart) return makeElement(ctx, 'chart-placeholder', { name: 'Chart', kind: 'text', role: 'evidence', content: '', bbox: box(x, y, width, height), rotation: 0, style: { fill: theme.colors.accentSoft, color: theme.colors.insightInk, fontSize: 10, fontFamily: theme.typography.body, fontWeight: 400, lineHeight: 1.2, textAlign: 'center', verticalAlign: 'middle' }, sourceIds: [], locked: false, exportCapabilities: [...EDITABLE_CAPABILITIES] });
+  if (!chart)
+    return makeElement(ctx, 'chart-placeholder', {
+      name: 'Chart',
+      kind: 'text',
+      role: 'evidence',
+      content: '',
+      bbox: box(x, y, width, height),
+      rotation: 0,
+      style: {
+        fill: theme.colors.accentSoft,
+        color: theme.colors.insightInk,
+        fontSize: 10,
+        fontFamily: theme.typography.body,
+        fontWeight: 400,
+        lineHeight: 1.2,
+        textAlign: 'center',
+        verticalAlign: 'middle',
+      },
+      sourceIds: [],
+      locked: false,
+      exportCapabilities: [...EDITABLE_CAPABILITIES],
+    });
   const labels = chart.labels.slice(0, 8);
   const values = chart.values.slice(0, labels.length);
   const binding = authoredArtifactBinding(ctx);
@@ -562,8 +574,7 @@ function buildDiagramElements(
   const positionsById = new Map(positions.map((p) => [p.id, p]));
   const evidenceIds = evidenceSourceIds(ctx);
   const binding = authoredArtifactBinding(ctx);
-  const diagramArtifactId =
-    binding?.artifactId ?? nodeslideStableId('artifact_graph', ctx.slideId);
+  const diagramArtifactId = binding?.artifactId ?? nodeslideStableId('artifact_graph', ctx.slideId);
   const crossCuttingHubId = diagramCrossCuttingHubId(diagram);
   diagram.edges.forEach((edge, edgeIndex) => {
     const from = positionsById.get(edge.from);
@@ -579,10 +590,7 @@ function buildDiagramElements(
           bbox: box(
             Math.min(from.x, to.x),
             Math.min(0.84, Math.max(from.y + from.height, to.y + to.height) + 0.014),
-            Math.max(
-              0.12,
-              Math.max(from.x + from.width, to.x + to.width) - Math.min(from.x, to.x),
-            ),
+            Math.max(0.12, Math.max(from.x + from.width, to.x + to.width) - Math.min(from.x, to.x)),
             0.036,
           ),
           rotation: 0,
@@ -850,13 +858,7 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
     .slice(0, 3)
     .map((bullet, bulletIndex) => `0${bulletIndex + 1}  ${bullet}`);
   const bulletFontSize = hasVisual ? 14 : 17;
-  const bulletX = hasVisual
-    ? mediaOnLeft
-      ? isChartDominant
-        ? 0.58
-        : 0.5
-      : 0.07
-    : 0.59;
+  const bulletX = hasVisual ? (mediaOnLeft ? (isChartDominant ? 0.58 : 0.5) : 0.07) : 0.59;
   const bulletWidth = hasVisual
     ? mediaOnLeft
       ? isChartDominant
@@ -949,7 +951,12 @@ function buildProcessCanvas(ctx: GrammarBuildContext): GrammarBuildResult {
   }
   // Body copy below the diagram for context
   const diagramBottom = planned.diagram
-    ? 0.14 + headlineHeight + 0.05 + Math.min(0.24, (0.85 - 0.14 - headlineHeight - 0.05) * 0.24) + 0.045 + 0.14
+    ? 0.14 +
+      headlineHeight +
+      0.05 +
+      Math.min(0.24, (0.85 - 0.14 - headlineHeight - 0.05) * 0.24) +
+      0.045 +
+      0.14
     : 0.14 + headlineHeight + 0.05 + 0.55;
   const bodyY = Math.max(0.14 + headlineHeight + 0.05, diagramBottom + 0.03);
   const bodyFontSize = fitTextFontSize(planned.body, 16, 14, 1.35, 0.79, 0.85 - bodyY);
@@ -1315,14 +1322,7 @@ function buildComparisonField(ctx: GrammarBuildContext): GrammarBuildResult {
         exportCapabilities: [...EDITABLE_CAPABILITIES],
       }),
     );
-    const colTextFontSize = fitTextFontSize(
-      bullet,
-      17,
-      14,
-      1.3,
-      colWidth - 0.02,
-      colHeight - 0.1,
-    );
+    const colTextFontSize = fitTextFontSize(bullet, 17, 14, 1.3, colWidth - 0.02, colHeight - 0.1);
     elements.push(
       makeElement(ctx, `col-text-${index + 1}`, {
         name: `Column ${index + 1} text`,
@@ -1531,14 +1531,7 @@ function buildTensionContrastField(ctx: GrammarBuildContext): GrammarBuildResult
         exportCapabilities: [...EDITABLE_CAPABILITIES],
       }),
     );
-    const textFontSize = fitTextFontSize(
-      bullet,
-      16,
-      13,
-      1.3,
-      blockWidth - 0.04,
-      blockHeight - 0.1,
-    );
+    const textFontSize = fitTextFontSize(bullet, 16, 13, 1.3, blockWidth - 0.04, blockHeight - 0.1);
     elements.push(
       makeElement(ctx, `tension-text-${index + 1}`, {
         name: `${labels[index]} detail`,

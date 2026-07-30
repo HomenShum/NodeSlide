@@ -48,10 +48,7 @@ const NEAR_DUPLICATE_THRESHOLD = 0.85;
 const MIN_DISTINCT_FAMILIES = 4;
 const MAX_SINGLE_FAMILY_FRACTION = 0.6;
 
-function computeSlideSilhouette(
-  elements: SlideElement[],
-  slideIndex: number,
-): SlideSilhouette {
+function computeSlideSilhouette(elements: SlideElement[], slideIndex: number): SlideSilhouette {
   const contentElements = elements.filter(
     (e) =>
       e.role !== 'footer' &&

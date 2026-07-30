@@ -1216,7 +1216,7 @@ function repairCreationVisualLogic(
       slide = replaceQuarantinedQuantitativeCopy(withoutFormula);
       repairCount += 1;
     }
-    if (!hasUsablePrimaryVisual(slide) && claimsMissingQuantitativeVisual(slide)) {
+    if (!hasUsableQuantitativeFrameVisual(slide) && claimsMissingQuantitativeVisual(slide)) {
       slide = replaceQuarantinedQuantitativeCopy(slide);
       const claimDiagram = claimDiagramFromSlide(slide);
       if (claimDiagram) slide['diagram'] = claimDiagram;
@@ -1340,6 +1340,15 @@ function hasUsablePrimaryVisual(slide: Record<string, unknown>): boolean {
     isCreationSpecRecord(artifactSpec['payload']) &&
     (!isCreationSpecRecord(provenance) || provenance['truthState'] !== 'missing')
   );
+}
+
+function hasUsableQuantitativeFrameVisual(slide: Record<string, unknown>): boolean {
+  const candidate = {
+    chart: slide['chart'],
+    diagram: slide['diagram'],
+    artifactSpec: slide['artifactSpec'],
+  };
+  return hasUsablePrimaryVisual(candidate);
 }
 
 function repairAdjacentQuantitativeQuarantines(

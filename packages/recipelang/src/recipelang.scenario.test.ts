@@ -13,10 +13,7 @@ import {
 } from './index';
 import type { RecipePatch, RecipeSnapshot } from './types';
 
-const fixturePath = resolve(
-  import.meta.dirname,
-  '../reference/edge-data-contract.recipe.yaml',
-);
+const fixturePath = resolve(import.meta.dirname, '../reference/edge-data-contract.recipe.yaml');
 
 async function fixture(): Promise<RecipeSnapshot> {
   return parse(await readFile(fixturePath, 'utf8')) as RecipeSnapshot;

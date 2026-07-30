@@ -782,6 +782,42 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:plotted|axes|amber band)\b/i);
   });
 
+  it('repairs the production phrasing “position on the matrix” when no matrix was rendered', async () => {
+    const chartlessSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 4
+          ? {
+              title: 'The Gate Changes State on Residual Risk',
+              section: slide.section,
+              headline: 'Position on the matrix, not test scores, opens the threshold.',
+              body: "The committee's gate reads the candidate system's likelihood-and-impact position after treatment.",
+              bullets: [
+                'Likelihood and impact bands are set by institutional risk appetite.',
+                'Post-treatment position determines gate state.',
+              ],
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      brief: {
+        ...ROADSHOW_BRIEF,
+        prompt:
+          'Create a 7-slide NIST AI RMF 1.0 deck. Preserve all four functions and show a risk matrix.',
+      },
+      firstSpec: chartlessSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlide = (outcome.spec as typeof chartlessSpec).slides[4];
+
+    expect(repairedSlide).toHaveProperty('diagram');
+    expect(JSON.stringify(repairedSlide)).not.toMatch(/\b(?:position|matrix|bands)\b/i);
+  });
+
   it('removes chart-dependent copy when a referenced filing was not retrieved', async () => {
     const degradedSpec = {
       ...CORRECTED_SPEC,

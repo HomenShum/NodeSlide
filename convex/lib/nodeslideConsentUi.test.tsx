@@ -106,7 +106,7 @@ describe('NodeSlide informed provider controls', () => {
     expect(markup).toContain('Attach data');
     expect(markup).toContain('Create directly; the route, tokens, and cost are recorded in Trace.');
     expect(markup).toContain('aria-label="Create presentation"');
-    expect(markup).toContain('Explore the editable sample workspace');
+    expect(markup).toContain('See an example deck');
     expect(markup).not.toContain('nodeslide-preview-access-code');
     expect(markup).not.toContain('NodeSlide inspector');
   });

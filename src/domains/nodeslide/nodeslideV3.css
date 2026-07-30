@@ -6992,17 +6992,65 @@
   color: var(--ns-ink);
 }
 
+.nodeslide-studio .ns-landing-create-wait {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.nodeslide-studio .ns-landing-create-tutorial {
+  background: rgb(255 255 255 / 55%);
+  border: 1px solid var(--ns-line-b);
+  border-radius: 12px;
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+}
+
+.nodeslide-studio .ns-landing-tutorial-step {
+  align-items: baseline;
+  color: var(--ns-faint);
+  display: flex;
+  gap: 10px;
+  padding: 5px 0;
+  transition: color 0.3s ease;
+}
+
+.nodeslide-studio .ns-landing-tutorial-step strong {
+  color: var(--ns-faint);
+  font-size: 12px;
+  font-weight: 620;
+  min-width: 82px;
+  transition: color 0.3s ease;
+}
+
+.nodeslide-studio .ns-landing-tutorial-step span {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.nodeslide-studio .ns-landing-tutorial-step.ns-active,
+.nodeslide-studio .ns-landing-tutorial-step.ns-active strong {
+  color: var(--ns-ink);
+}
+
 .nodeslide-studio .ns-landing-sample {
   background: transparent;
   border-color: transparent;
   color: var(--ns-faint);
-  margin-top: 10px;
+  font-size: 12px;
+  padding: 6px 10px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--ns-line-c);
 }
 
 .nodeslide-studio .ns-landing-sample:hover {
-  background: rgb(255 255 255 / 60%);
-  border-color: var(--ns-line-c);
+  background: transparent;
+  border-color: transparent;
   color: var(--ns-ink);
+  text-decoration-color: var(--ns-ink);
 }
 
 .nodeslide-studio .ns-landing-recents {

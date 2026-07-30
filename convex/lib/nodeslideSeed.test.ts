@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { NODESLIDE_ARTIFACT_SPEC_VERSION } from '../../shared/nodeslideArtifactRegistry.js';
+import { estimateTextHeight } from '../../shared/nodeslideLayoutMetrics.js';
 import { validateSnapshot } from '../../src/domains/nodeslide/slidelang/validation';
 import {
   buildBriefNodeSlide,
@@ -52,7 +53,10 @@ describe('NodeSlide seed', () => {
           index === 2
             ? 'MAP, MEASURE, and MANAGE cycle continuously; GOVERN surrounds them all.'
             : `Decision frame ${index + 1}`,
-        body: 'Use verified evidence to move from uncertainty to a controlled release.',
+        body:
+          index === 2
+            ? 'The AI RMF Core defines four functions. GOVERN is cross-cutting: it sets culture, accountability, and structure around the other three, which operate iteratively on each system from inventory entry through retirement.'
+            : 'Use verified evidence to move from uncertainty to a controlled release.',
         bullets: ['Name the owner', 'Inspect the evidence', 'Hold the gate when proof is missing'],
         ...(index === 2
           ? {
@@ -112,6 +116,13 @@ describe('NodeSlide seed', () => {
     expect(measure?.bbox.width).toBeGreaterThanOrEqual(0.09);
     expect(measure?.style.fontSize).toBeLessThanOrEqual(14);
     expect(committee?.style.fontSize).toBeLessThanOrEqual(12);
+    const body = elements.find((element) => element.role === 'body');
+    if (!body || typeof body.content !== 'string' || typeof body.style.fontSize !== 'number') {
+      throw new Error('Missing measurable governance-loop body copy.');
+    }
+    expect(
+      estimateTextHeight(body.content, body.style.fontSize, 1.35, body.bbox.width),
+    ).toBeLessThanOrEqual(body.bbox.height + 0.0001);
     expect(
       elements.some(
         (element) => element.role === 'diagram_edge' && element.artifactBinding?.from === 'govern',

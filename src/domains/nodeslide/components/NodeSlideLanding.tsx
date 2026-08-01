@@ -111,9 +111,9 @@ export function NodeSlideLanding({
         audience: 'Decision-makers described in the brief',
         purpose: 'Create an editable, reviewable presentation from this idea',
         successCriteria: [
-          'A coherent 6–8 slide narrative',
-          'Structured chart, formula, and image primitives where relevant',
-          'Validation passes before presentation or export',
+          'Honor explicit slide-count and presentation constraints in the brief',
+          'Use only claims and artifact types supported by the supplied brief and evidence',
+          'Validation passes before presentation, export, or publication',
         ],
       },
       themeId: 'editorial-signal',

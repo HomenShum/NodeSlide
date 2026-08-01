@@ -479,7 +479,7 @@ describe('NodeSlide seed', () => {
     ]);
   });
 
-  it('compiles deterministic success criteria through a source-bound canonical ArtifactSpec', () => {
+  it('keeps qualitative success criteria as text instead of manufacturing numeric chart data', () => {
     const brief = {
       prompt: 'Explain a bounded pilot.',
       audience: 'Reviewers',
@@ -489,20 +489,12 @@ describe('NodeSlide seed', () => {
     const spec = deterministicBriefSpec('Pilot story', brief);
     const successSlide = spec.slides.find((slide) => slide.title === 'What success looks like');
 
-    expect(successSlide?.artifactSpec).toMatchObject({
-      schemaVersion: NODESLIDE_ARTIFACT_SPEC_VERSION,
-      id: 'deterministic-success-signals',
-      kind: 'chart',
-      sourceIds: ['brief:success-criteria'],
-      provenance: {
-        truthState: 'derived',
-        sourceRefs: ['brief:success-criteria'],
-      },
-      payload: {
-        xAxis: { labels: ['S1', 'S2'] },
-        series: [{ id: 'defined-signals', values: [1, 1] }],
-      },
+    expect(successSlide).toMatchObject({
+      bullets: ['Show the boundary', 'Name the owner'],
     });
+    expect(successSlide?.chart).toBeUndefined();
+    expect(successSlide?.metric).toBeUndefined();
+    expect(successSlide?.artifactSpec).toBeUndefined();
 
     const snapshot = buildBriefNodeSlide({
       deckId: 'deck-deterministic-typed-success',
@@ -512,23 +504,12 @@ describe('NodeSlide seed', () => {
       themeId: 'quiet-precision',
       now: 1_000,
     }).snapshot;
-    const authoredChart = snapshot.elements.find(
-      (element) => element.kind === 'chart' && element.authoredArtifactBinding?.kind === 'chart',
-    );
-    const successCriteriaSource = snapshot.sources.find(
-      (source) => source.title === 'Brief success criteria',
-    );
-
-    expect(authoredChart).toMatchObject({
-      kind: 'chart',
-      sourceIds: [successCriteriaSource?.id],
-      authoredArtifactBinding: {
-        artifactId: 'deterministic-success-signals',
-        kind: 'chart',
-        truthState: 'derived',
-        sourceIds: [successCriteriaSource?.id],
-      },
-    });
+    expect(snapshot.elements.filter((element) => element.kind === 'chart')).toEqual([]);
+    expect(
+      snapshot.elements.some(
+        (element) => element.kind === 'text' && element.content === 'Show the boundary',
+      ),
+    ).toBe(true);
     expect(validateSnapshot(snapshot).issues).toEqual([]);
   });
 
@@ -599,7 +580,7 @@ describe('NodeSlide seed', () => {
     expect(built.spec.deckDiversity?.nearDuplicatePairs.length).toBeGreaterThan(0);
   });
 
-  it('labels default deterministic success signals illustrative without inventing source refs', () => {
+  it('keeps default success guidance qualitative when no evidence is supplied', () => {
     const brief = {
       prompt: 'Explain a bounded pilot.',
       audience: 'Reviewers',
@@ -609,12 +590,10 @@ describe('NodeSlide seed', () => {
     const spec = deterministicBriefSpec('Pilot story', brief);
     const successSlide = spec.slides.find((slide) => slide.title === 'What success looks like');
 
-    expect(successSlide?.artifactSpec).toMatchObject({
-      schemaVersion: NODESLIDE_ARTIFACT_SPEC_VERSION,
-      kind: 'chart',
-      sourceIds: [],
-      provenance: { truthState: 'illustrative', sourceRefs: [] },
-    });
+    expect(successSlide?.bullets).toEqual(['Make the decision clear', 'Show credible evidence']);
+    expect(successSlide?.chart).toBeUndefined();
+    expect(successSlide?.metric).toBeUndefined();
+    expect(successSlide?.artifactSpec).toBeUndefined();
 
     const snapshot = buildBriefNodeSlide({
       deckId: 'deck-deterministic-illustrative-success',
@@ -624,14 +603,7 @@ describe('NodeSlide seed', () => {
       themeId: 'quiet-precision',
       now: 1_000,
     }).snapshot;
-    expect(
-      snapshot.elements.find((element) => element.authoredArtifactBinding?.kind === 'chart')
-        ?.authoredArtifactBinding,
-    ).toMatchObject({
-      artifactId: 'deterministic-success-signals',
-      truthState: 'illustrative',
-      sourceIds: [],
-    });
+    expect(snapshot.elements.filter((element) => element.kind === 'chart')).toEqual([]);
     expect(validateSnapshot(snapshot).issues.filter((issue) => issue.severity === 'error')).toEqual(
       [],
     );

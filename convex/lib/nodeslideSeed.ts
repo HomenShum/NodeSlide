@@ -52,7 +52,6 @@ import {
 } from '../../shared/nodeslideLayoutMetrics';
 import { inferNodeSlideRequestedSlideCount } from '../../shared/nodeslideSlideCount';
 import {
-  NODESLIDE_CANONICAL_AUTHORED_ARTIFACT_VERSION,
   type NodeSlideAuthoredArtifactReceipt,
   type NodeSlideAuthoredArtifactSpec,
   NodeSlideAuthoredArtifactValidationError,
@@ -573,34 +572,6 @@ export function deterministicBriefSpec(
     .slice(0, 3);
   const success =
     criteria.length > 0 ? criteria : ['Make the decision clear', 'Show credible evidence'];
-  const successSourceRefs = criteria.length > 0 ? ['brief:success-criteria'] : [];
-  const successArtifact = compileNodeSlideAuthoredArtifact(
-    {
-      schemaVersion: NODESLIDE_CANONICAL_AUTHORED_ARTIFACT_VERSION,
-      id: 'deterministic-success-signals',
-      kind: 'chart',
-      narrativeJob: 'Show the brief-defined success signals as an explicit evaluation checklist.',
-      claimIds: [],
-      sourceIds: [...successSourceRefs],
-      provenance: {
-        truthState: criteria.length > 0 ? 'derived' : 'illustrative',
-        rationale:
-          criteria.length > 0
-            ? 'Each equal-height bar represents one success criterion supplied in the brief.'
-            : 'No success criteria were supplied, so the equal-height bars are an illustrative default checklist rather than measured evidence.',
-        sourceRefs: [...successSourceRefs],
-      },
-      payload: {
-        unit: 'defined',
-        xAxis: { labels: success.map((_, index) => `S${index + 1}`) },
-        yAxis: { min: 0, max: 1 },
-        series: [{ id: 'defined-signals', values: success.map(() => 1) }],
-      },
-    },
-    nodeSlideAuthoredArtifactValidationOptions(
-      nodeSlideAuthoredArtifactSourceInventory(brief, attachments),
-    ),
-  );
 
   const spec: NodeSlideDeckSpec = {
     title: cleanTitle,
@@ -655,15 +626,8 @@ export function deterministicBriefSpec(
         title: 'What success looks like',
         section: 'Evidence / 05',
         headline: 'Define proof before asking for commitment.',
-        body: 'Use the brief’s success criteria as explicit evaluation signals, with assumptions clearly separated from measured evidence.',
+        body: 'Use the brief’s success criteria as qualitative review questions until measured evidence is supplied.',
         bullets: success,
-        metric: `${success.length} signals`,
-        metricLabel: 'agreed measures of a successful outcome',
-        artifactSpec: successArtifact.spec,
-        ...successArtifact.planned,
-        authoredArtifactCompilation: successArtifact.receipt,
-        authoredArtifactSpec: successArtifact.spec,
-        ...(successArtifact.geometry ? { authoredArtifactGeometry: successArtifact.geometry } : {}),
       },
       {
         title: 'A practical path forward',

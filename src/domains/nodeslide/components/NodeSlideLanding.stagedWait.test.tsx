@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act, cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { NodeSlideLanding, creationStageMessage, formatElapsed } from './NodeSlideLanding';
 
@@ -138,5 +138,37 @@ describe('NodeSlide landing staged creation wait', () => {
     expect(formatElapsed(7)).toBe('0:07');
     expect(formatElapsed(65)).toBe('1:05');
     expect(formatElapsed(155)).toBe('2:35');
+  });
+
+  it('preserves an exact-count qualitative brief without injecting artifact requirements', () => {
+    const onCreate = vi.fn();
+    render(
+      <NodeSlideLanding
+        clientSessionId="risk-committee-session"
+        recentDecks={[]}
+        creating={false}
+        onCreate={onCreate}
+        onExploreSample={() => undefined}
+        onOpenProjects={() => undefined}
+        onOpenDeck={() => undefined}
+      />,
+    );
+
+    fireEvent.change(screen.getByLabelText('Presentation brief'), {
+      target: {
+        value:
+          'Build exactly 12 qualitative slides. Do not invent figures, formulas, thresholds, or operating rules.',
+      },
+    });
+    fireEvent.click(screen.getByLabelText('Create presentation'));
+
+    expect(onCreate).toHaveBeenCalledOnce();
+    const request = onCreate.mock.calls[0]?.[0];
+    expect(request.brief.successCriteria).toEqual([
+      'Honor explicit slide-count and presentation constraints in the brief',
+      'Use only claims and artifact types supported by the supplied brief and evidence',
+      'Validation passes before presentation, export, or publication',
+    ]);
+    expect(request.brief.successCriteria.join(' ')).not.toMatch(/6–8|chart|formula|image/i);
   });
 });

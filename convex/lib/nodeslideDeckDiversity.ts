@@ -44,7 +44,8 @@ export interface DeckDiversityReport {
   silhouettes: SlideSilhouette[];
 }
 
-const NEAR_DUPLICATE_THRESHOLD = 0.85;
+const NEAR_DUPLICATE_THRESHOLD = 0.82;
+const NON_ADJACENT_REPEAT_THRESHOLD = 0.9;
 const MIN_DISTINCT_FAMILIES = 4;
 const MAX_SINGLE_FAMILY_FRACTION = 0.6;
 
@@ -54,6 +55,7 @@ function computeSlideSilhouette(elements: SlideElement[], slideIndex: number): S
       e.role !== 'footer' &&
       e.role !== 'page_number' &&
       e.role !== 'decoration' &&
+      e.role?.startsWith('story_motif') !== true &&
       e.visible !== false,
   );
   const decorativeElements = elements.filter(
@@ -181,7 +183,14 @@ function identifyCompositionFamily(silhouette: SlideSilhouette): string {
   // Classify into composition families based on geometric signature
   if (silhouette.contentElementCount <= 2) return 'minimal';
   if (silhouette.visualAreaRatio > 0.6) return 'visual-dominant';
-  if (silhouette.textAreaRatio > 0.8) return 'text-dominant';
+  if (silhouette.textAreaRatio > 0.8) {
+    if (silhouette.contentElementCount <= 4) {
+      return silhouette.dominantRegion === 3 || silhouette.dominantAxisX >= 0.44
+        ? 'text-thesis-centered'
+        : 'text-thesis-offset';
+    }
+    return silhouette.dominantAxisX >= 0.44 ? 'editorial-centered' : 'editorial-offset';
+  }
   if (silhouette.elementKinds.has('chart') || silhouette.elementKinds.has('image'))
     return 'mixed-evidence';
   if (silhouette.elementKinds.has('connector')) return 'process';
@@ -203,16 +212,43 @@ export function evaluateDeckDiversity(
   const failures: string[] = [];
   const nearDuplicatePairs: DeckDiversityReport['nearDuplicatePairs'] = [];
 
-  // Check adjacent slide pairs for near-duplicates
+  const recordedPairs = new Set<string>();
+  // Adjacent repetition always damages reveal pacing.
   for (let i = 0; i < silhouettes.length - 1; i += 1) {
     const a = silhouettes[i];
     const b = silhouettes[i + 1];
     if (!a || !b) continue;
     const similarity = computePairSimilarity(a, b);
-    if (similarity > NEAR_DUPLICATE_THRESHOLD) {
-      nearDuplicatePairs.push({ first: i, second: i + 1, similarity });
+    if (similarity <= NEAR_DUPLICATE_THRESHOLD) continue;
+    nearDuplicatePairs.push({ first: i, second: i + 1, similarity });
+    recordedPairs.add(`${i}:${i + 1}`);
+    failures.push(
+      `Slides ${i + 1} and ${i + 2} are near-duplicates (similarity: ${similarity.toFixed(2)})`,
+    );
+  }
+
+  // A composition may recur once for visual rhythm. The third near-identical
+  // use is template repetition, even when other slides separate the copies.
+  for (let j = 0; j < silhouettes.length; j += 1) {
+    const current = silhouettes[j];
+    if (!current) continue;
+    const previousMatches: Array<{ index: number; similarity: number }> = [];
+    for (let i = 0; i < j; i += 1) {
+      const previous = silhouettes[i];
+      if (!previous) continue;
+      const similarity = computePairSimilarity(previous, current);
+      if (similarity > NON_ADJACENT_REPEAT_THRESHOLD) {
+        previousMatches.push({ index: i, similarity });
+      }
+    }
+    if (previousMatches.length < 2) continue;
+    for (const match of previousMatches) {
+      const key = `${match.index}:${j}`;
+      if (recordedPairs.has(key)) continue;
+      nearDuplicatePairs.push({ first: match.index, second: j, similarity: match.similarity });
+      recordedPairs.add(key);
       failures.push(
-        `Slides ${i + 1} and ${i + 2} are near-duplicates (similarity: ${similarity.toFixed(2)})`,
+        `Slides ${match.index + 1} and ${j + 1} are a repeated composition (similarity: ${match.similarity.toFixed(2)})`,
       );
     }
   }

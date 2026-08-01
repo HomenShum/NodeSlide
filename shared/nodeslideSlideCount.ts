@@ -1,7 +1,7 @@
 export const NODESLIDE_MIN_REQUESTED_SLIDES = 3;
-export const NODESLIDE_MAX_REQUESTED_SLIDES = 8;
+export const NODESLIDE_MAX_REQUESTED_SLIDES = 12;
 
-export type NodeSlideRequestedSlideCount = 3 | 4 | 5 | 6 | 7 | 8;
+export type NodeSlideRequestedSlideCount = 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 const SLIDE_COUNT_BY_TOKEN: Record<string, number> = {
   '1': 1,

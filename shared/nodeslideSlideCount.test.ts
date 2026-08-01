@@ -15,6 +15,10 @@ describe('NodeSlide requested slide count', () => {
     ['Build six highly visual editable slides', 6],
     ['Create exactly seven concise, claim-led slides', 7],
     ['Build exactly 7 slides', 7],
+    ['Prepare nine slides for the operating review', 9],
+    ['Create a 10-slide investor update', 10],
+    ['Build exactly eleven slides', 11],
+    ['Build a 12-slide board update', 12],
     ['An eight — slide narrative', 8],
   ])('recognizes an explicit supported count in %s', (prompt, expected) => {
     expect(inferNodeSlideRequestedSlideCount(prompt)).toBe(expected);
@@ -24,7 +28,7 @@ describe('NodeSlide requested slide count', () => {
     expect(inferNodeSlideRequestedSlideCount('Put the decision on slide 6')).toBeNull();
     expect(inferNodeSlideRequestedSlideCount('Use evidence from slides 3 and 4')).toBeNull();
     expect(inferNodeSlideRequestedSlideCount('Create two slides')).toBeNull();
-    expect(inferNodeSlideRequestedSlideCount('Create nine slides')).toBeNull();
+    expect(inferNodeSlideRequestedSlideCount('Create thirteen slides')).toBeNull();
   });
 
   it('distinguishes unsupported explicit deck lengths from ordinary slide references', () => {
@@ -32,8 +36,10 @@ describe('NodeSlide requested slide count', () => {
     expect(explicitNodeSlideRequestedSlideCount('Build a 12-slide board update')).toBe(12);
     expect(explicitNodeSlideRequestedSlideCount('Put the decision on slide 6')).toBeNull();
     expect(nodeSlideRequestedSlideCountIssue('Create two slides')).toBe(
-      'NodeSlide currently creates 3–8 slides. Change the requested 2-slide deck to 3–8 slides.',
+      'NodeSlide currently creates 3–12 slides. Change the requested 2-slide deck to 3–12 slides.',
     );
+    expect(nodeSlideRequestedSlideCountIssue('Create 13 slides')).toContain('3');
+    expect(nodeSlideRequestedSlideCountIssue('Create 13 slides')).toContain('12');
     expect(nodeSlideRequestedSlideCountIssue('Create 6 slides')).toBeNull();
   });
 });

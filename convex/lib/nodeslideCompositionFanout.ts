@@ -78,8 +78,98 @@ function mirror(elements: readonly SlideElement[]): SlideElement[] {
   }));
 }
 
-function focusPrimaryVisual(elements: readonly SlideElement[]): SlideElement[] {
+function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: number): SlideElement[] {
+  const hasPrimaryVisual = elements.some(isPrimaryVisual);
+  const evidenceCardIds = new Map(
+    elements
+      .filter((element) => element.role === 'evidence_card')
+      .sort((left, right) => left.bbox.x - right.bbox.x)
+      .map((element, index) => [element.id, index] as const),
+  );
+  const textOnlyBulletIds = new Map(
+    elements
+      .filter((element) => element.role === 'bullet')
+      .map((element, index) => [element.id, index] as const),
+  );
+  const diagramNodeIds = new Map(
+    elements
+      .filter(
+        (element) => element.role?.startsWith('diagram_') === true && element.kind === 'shape',
+      )
+      .sort((left, right) => left.bbox.x - right.bbox.x || left.bbox.y - right.bbox.y)
+      .map((element, index) => [element.id, index] as const),
+  );
+  const diagramEdgeIds = new Map(
+    elements
+      .filter((element) => element.role === 'diagram_edge')
+      .sort((left, right) => left.bbox.x - right.bbox.x || left.bbox.y - right.bbox.y)
+      .map((element, index) => [element.id, index] as const),
+  );
+  const comparisonSectionIds = new Map(
+    elements
+      .filter((element) => element.role === 'section' && element.bbox.y > 0.2)
+      .sort((left, right) => left.bbox.x - right.bbox.x)
+      .map((element, index) => [element.id, index] as const),
+  );
+  const comparisonBulletIds = new Map(
+    elements
+      .filter((element) => element.role === 'bullet' && comparisonSectionIds.size >= 2)
+      .sort((left, right) => left.bbox.x - right.bbox.x)
+      .map((element, index) => [element.id, index] as const),
+  );
+  const comparisonRuleIds = new Map(
+    elements
+      .filter(
+        (element) =>
+          element.role === 'decoration' &&
+          element.bbox.height > 0.1 &&
+          comparisonSectionIds.size >= 2,
+      )
+      .sort((left, right) => left.bbox.x - right.bbox.x)
+      .map((element, index) => [element.id, index] as const),
+  );
+  const comparisonRailX = slideIndex % 3 === 0 ? 0.08 : 0.56;
+  const diagramRailX = slideIndex % 4 === 0 ? 0.56 : 0.08;
   return cloneElements(elements).map((element) => {
+    if (comparisonSectionIds.has(element.id)) {
+      const sectionIndex = comparisonSectionIds.get(element.id) ?? 0;
+      return {
+        ...element,
+        bbox: {
+          ...element.bbox,
+          x: comparisonRailX,
+          y: 0.34 + sectionIndex * 0.17,
+          width: 0.36,
+          height: 0.05,
+        },
+      };
+    }
+    if (comparisonBulletIds.has(element.id)) {
+      const bulletIndex = comparisonBulletIds.get(element.id) ?? 0;
+      return {
+        ...element,
+        bbox: {
+          ...element.bbox,
+          x: comparisonRailX,
+          y: 0.39 + bulletIndex * 0.17,
+          width: 0.36,
+          height: 0.09,
+        },
+      };
+    }
+    if (comparisonRuleIds.has(element.id)) {
+      const ruleIndex = comparisonRuleIds.get(element.id) ?? 0;
+      return {
+        ...element,
+        bbox: {
+          ...element.bbox,
+          x: comparisonRailX,
+          y: 0.495 + ruleIndex * 0.17,
+          width: 0.36,
+          height: 0.002,
+        },
+      };
+    }
     if (element.role === 'decoration') {
       return {
         ...element,
@@ -94,9 +184,28 @@ function focusPrimaryVisual(elements: readonly SlideElement[]): SlideElement[] {
       };
     }
     if (element.role === 'headline') {
+      if (comparisonSectionIds.size >= 2) {
+        return {
+          ...element,
+          bbox: {
+            ...element.bbox,
+            x: comparisonRailX < 0.5 ? 0.52 : 0.07,
+            y: 0.2,
+            width: 0.4,
+            height: Math.max(0.34, element.bbox.height),
+          },
+          style: { ...element.style, textAlign: 'left' },
+        };
+      }
       return {
         ...element,
-        bbox: { ...element.bbox, x: 0.14, y: 0.15, width: 0.72, height: 0.17 },
+        bbox: {
+          ...element.bbox,
+          x: 0.14,
+          y: hasPrimaryVisual ? 0.15 : 0.18,
+          width: 0.72,
+          height: hasPrimaryVisual ? 0.17 : Math.max(0.18, element.bbox.height),
+        },
         style: { ...element.style, textAlign: 'center' },
       };
     }
@@ -104,6 +213,90 @@ function focusPrimaryVisual(elements: readonly SlideElement[]): SlideElement[] {
       return {
         ...element,
         bbox: { ...element.bbox, x: 0.22, width: 0.56 },
+        style: { ...element.style, textAlign: 'center' },
+      };
+    }
+    if (evidenceCardIds.size > 0 && element.role === 'evidence_card') {
+      const cardIndex = evidenceCardIds.get(element.id) ?? 0;
+      return {
+        ...element,
+        bbox: { ...element.bbox, x: 0.18, y: 0.4 + cardIndex * 0.14, width: 0.64, height: 0.11 },
+      };
+    }
+    if (evidenceCardIds.size > 0 && element.role === 'bullet') {
+      const bulletIndex = textOnlyBulletIds.get(element.id) ?? 0;
+      return {
+        ...element,
+        bbox: { ...element.bbox, x: 0.21, y: 0.42 + bulletIndex * 0.14, width: 0.58, height: 0.07 },
+        style: { ...element.style, textAlign: 'left' },
+      };
+    }
+    if (diagramNodeIds.size > 0 && diagramNodeIds.has(element.id)) {
+      const nodeIndex = diagramNodeIds.get(element.id) ?? 0;
+      return {
+        ...element,
+        bbox: {
+          ...element.bbox,
+          x: diagramRailX,
+          y: 0.38 + nodeIndex * 0.15,
+          width: 0.34,
+          height: 0.1,
+        },
+      };
+    }
+    if (diagramEdgeIds.has(element.id)) {
+      const edgeIndex = diagramEdgeIds.get(element.id) ?? 0;
+      return {
+        ...element,
+        bbox: {
+          ...element.bbox,
+          x: diagramRailX + 0.16,
+          y: 0.48 + edgeIndex * 0.15,
+          width: 0.02,
+          height: 0.05,
+        },
+        rotation: 90,
+      };
+    }
+    if (diagramNodeIds.size > 0 && element.role === 'body') {
+      return {
+        ...element,
+        bbox: {
+          ...element.bbox,
+          x: diagramRailX < 0.5 ? 0.52 : 0.08,
+          y: 0.4,
+          width: 0.38,
+          height: Math.max(0.2, element.bbox.height),
+        },
+      };
+    }
+    if (!hasPrimaryVisual && element.role === 'body') {
+      return {
+        ...element,
+        bbox: {
+          ...element.bbox,
+          x: 0.2,
+          y: 0.45,
+          width: 0.6,
+          height: Math.max(0.12, element.bbox.height),
+        },
+        style: { ...element.style, textAlign: 'center' },
+      };
+    }
+    if (!hasPrimaryVisual && element.role === 'bullet') {
+      const bulletIndex = textOnlyBulletIds.get(element.id) ?? 0;
+      const bulletCount = Math.max(1, textOnlyBulletIds.size);
+      const width = bulletCount === 1 ? 0.46 : Math.min(0.25, 0.78 / bulletCount);
+      const gap = bulletCount === 1 ? 0 : (0.78 - width * bulletCount) / (bulletCount - 1);
+      return {
+        ...element,
+        bbox: {
+          ...element.bbox,
+          x: bulletCount === 1 ? 0.27 : 0.11 + bulletIndex * (width + gap),
+          y: 0.7,
+          width,
+          height: Math.max(0.1, element.bbox.height),
+        },
         style: { ...element.style, textAlign: 'center' },
       };
     }
@@ -215,7 +408,7 @@ export function fanOutNodeSlideComposition(input: {
   const variants: Array<[NodeSlideCompositionVariant, SlideElement[]]> = [
     ['canonical', cloneElements(input.elements)],
     ['mirrored', mirror(input.elements)],
-    ['visual-focus', focusPrimaryVisual(input.elements)],
+    ['visual-focus', focusPrimaryVisual(input.elements, input.plan.slideIndex)],
   ];
   const candidates: Candidate[] = variants.map(([variant, elements], index) => ({
     variant,

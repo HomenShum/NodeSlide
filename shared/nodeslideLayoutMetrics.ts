@@ -29,6 +29,21 @@ export interface NodeSlideTextMeasurement {
   height: number;
 }
 
+export function nodeSlideTextInnerBox(
+  width: number,
+  height: number,
+  paddingPoints: number,
+  canvasWidthIn: number = NODESLIDE_CANVAS_WIDTH_IN,
+): { width: number; height: number } {
+  const canvasWidthPx = Math.max(1, canvasWidthIn) * NODESLIDE_CANVAS_PX_PER_IN;
+  const canvasHeightPx = canvasWidthPx / NODESLIDE_CANVAS_ASPECT;
+  const paddingPx = Math.max(0, paddingPoints) * NODESLIDE_FONT_PX_PER_POINT;
+  return {
+    width: Math.max(1 / canvasWidthPx, width - (paddingPx * 2) / canvasWidthPx),
+    height: Math.max(1 / canvasHeightPx, height - (paddingPx * 2) / canvasHeightPx),
+  };
+}
+
 /**
  * Estimate how many wrapped lines `content` needs inside a box of
  * `boxWidthNormalized` slide-widths, using greedy word wrapping with an

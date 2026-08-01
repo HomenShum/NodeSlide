@@ -131,7 +131,9 @@ describe('NodeSlide rendered composition fan-out', () => {
       .find((candidate) => candidate.variant === 'mirrored')
       ?.elements.find((element) => element.id === connector.id);
 
-    expect(mirrored?.rotation).toBe(180);
+    expect(mirrored?.rotation).toBe(
+      Number((((180 - connector.rotation) % 360) + 360).toFixed(6)) % 360,
+    );
   });
 
   it('feeds pixel-adapter observations into the bounded loop and emits a concrete move repair', () => {

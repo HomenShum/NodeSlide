@@ -532,6 +532,73 @@ describe('NodeSlide seed', () => {
     expect(validateSnapshot(snapshot).issues).toEqual([]);
   });
 
+  it('finishes an exact 12-slide brief when the provider returns an incomplete eight-slide plan', () => {
+    const brief = {
+      prompt:
+        'Build a 12-slide governance decision deck using only supplied qualitative evidence and no invented figures.',
+      audience: 'Risk committee',
+      purpose: 'Decide whether the release gate can open',
+      successCriteria: ['Preserve all twelve narrative jobs', 'Name the evidence boundary'],
+    };
+    const incomplete = deterministicBriefSpec('Release decision', {
+      ...brief,
+      prompt: 'Build an 8-slide governance decision deck.',
+    });
+
+    const repaired = coerceBriefSpec(incomplete, 'Release decision', brief);
+
+    expect(repaired.slides).toHaveLength(12);
+    expect(new Set(repaired.slides.map((slide) => slide.title)).size).toBe(12);
+    expect(repaired.storySpec?.revealPacing).toHaveLength(12);
+    expect(repaired.designPlans).toHaveLength(12);
+  });
+
+  it('refuses publication when a provider repeats the same qualitative scene across 12 slides', () => {
+    const brief = {
+      prompt: 'Build a 12-slide qualitative governance deck with no invented numbers.',
+      audience: 'Risk committee',
+      purpose: 'Decide whether to release',
+      successCriteria: ['Keep evidence explicit'],
+    };
+    const slides = Array.from({ length: 12 }, (_, index) => ({
+      title: `Scene ${index + 1}`,
+      section: 'Build',
+      headline: `Scene ${index + 1} advances a distinct governance decision`,
+      body: `This scene explains ${['the opening tension', 'the evidence boundary', 'the operating handoff', 'the review gate'][index % 4]} without inventing quantitative claims.`,
+      bullets: [`Claim ${String.fromCharCode(65 + (index % 4))}`],
+      ...([2, 8].includes(index)
+        ? {
+            diagram: {
+              kind: 'process' as const,
+              direction: 'horizontal' as const,
+              nodes: [
+                { id: 'claim', label: 'Supplied claim', kind: 'step' as const },
+                { id: 'review', label: 'Review boundary', kind: 'decision' as const },
+                { id: 'gate', label: 'Decision gate', kind: 'milestone' as const },
+              ],
+              edges: [
+                { from: 'claim', to: 'review' },
+                { from: 'review', to: 'gate' },
+              ],
+            },
+          }
+        : {}),
+    }));
+
+    const built = buildBriefNodeSlide({
+      deckId: 'deck-qualitative-diversity',
+      projectId: 'project-qualitative-diversity',
+      title: 'Governance decision',
+      brief,
+      themeId: 'editorial-signal',
+      rawSpec: { title: 'Governance decision', slides },
+      now: 1_000,
+    });
+
+    expect(built.spec.deckDiversity?.passes).toBe(false);
+    expect(built.spec.deckDiversity?.nearDuplicatePairs.length).toBeGreaterThan(0);
+  });
+
   it('labels default deterministic success signals illustrative without inventing source refs', () => {
     const brief = {
       prompt: 'Explain a bounded pilot.',

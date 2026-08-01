@@ -3,7 +3,7 @@ import { buildGoldenNodeSlide } from '../convex/lib/nodeslideSeed';
 import { validateNodeSlideSnapshot } from '../convex/lib/nodeslideValidation';
 import { validateSnapshot } from '../src/domains/nodeslide/slidelang/validation';
 import type { DeckSnapshot, ValidationIssue } from './nodeslide';
-import { geometryIssueDrafts } from './nodeslideGeometryChecks';
+import { estimateTextFit, geometryIssueDrafts } from './nodeslideGeometryChecks';
 
 /**
  * The shared geometry validator is the single source for collision and text
@@ -105,5 +105,21 @@ describe('shared geometry checks (single-sourced collision + overflow)', () => {
     expect(geometryIssueDrafts(snapshot)).toEqual([]);
     expect(geometryTuples(validateNodeSlideSnapshot(snapshot, 1_000).issues)).toEqual([]);
     expect(geometryTuples(validateSnapshot(snapshot).issues)).toEqual([]);
+  });
+
+  it('measures PowerPoint point sizes as rendered pixels instead of undercounting text', () => {
+    const { snapshot } = buildGoldenNodeSlide('geometry-point-conversion', 1_000);
+    const body = snapshot.elements.find((element) => element.role === 'body');
+    if (!body) throw new Error('Missing body fixture.');
+    body.bbox = { x: 0.06, y: 0.07, width: 0.25, height: 0.095 };
+    body.content =
+      'Evidence must stay readable after editable PowerPoint export and independent rerender.';
+    body.style.fontSize = 30;
+    body.style.lineHeight = 1.2;
+
+    const fit = estimateTextFit(body);
+
+    expect(fit.estimatedCharactersPerLine).toBeLessThanOrEqual(16);
+    expect(fit.overflow).toBe(true);
   });
 });

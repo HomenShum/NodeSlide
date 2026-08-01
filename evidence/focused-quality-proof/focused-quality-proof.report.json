@@ -1,0 +1,33 @@
+{
+  "generatedAt": "2026-08-01T22:15:32.615Z",
+  "slideCount": 12,
+  "archetypes": [
+    "statement",
+    "diagram-dominant",
+    "comparison",
+    "split",
+    "chart-dominant",
+    "comparison",
+    "diagram-dominant",
+    "statement",
+    "diagram-dominant",
+    "comparison",
+    "split",
+    "statement"
+  ],
+  "diversity": {
+    "score": 0.3868371476678939,
+    "passes": true,
+    "distinctFamilies": 5,
+    "nearDuplicatePairs": []
+  },
+  "validation": {
+    "publishOk": true,
+    "cleanOk": true,
+    "issues": []
+  },
+  "forbiddenLogic": {
+    "mathElements": 0,
+    "formulaTextMatches": 0
+  }
+}

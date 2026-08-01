@@ -1191,6 +1191,43 @@ describe('NodeSlide creation self-critique loop', () => {
     );
   });
 
+  it('removes unsupplied formula weights even when the provider presents them as settled logic', async () => {
+    const weightedSpec = {
+      ...CORRECTED_SPEC,
+      slides: CORRECTED_SPEC.slides.map((slide, index) =>
+        index === 4
+          ? {
+              ...slide,
+              headline: 'A weighted readiness score determines release',
+              formula: {
+                expression: '0.6*evidence + 0.4*controls',
+                display: 'Readiness = 60% evidence + 40% controls',
+                variables: [
+                  { label: 'Evidence', value: 0.6 },
+                  { label: 'Controls', value: 0.4 },
+                ],
+              },
+            }
+          : slide,
+      ),
+    };
+
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      brief: {
+        ...ROADSHOW_BRIEF,
+        prompt: 'Create a seven-slide qualitative release decision. No weights are supplied.',
+      },
+      firstSpec: weightedSpec,
+      providerLive: false,
+      requestRevision: vi.fn(),
+    });
+    const repairedSlide = (outcome.spec as typeof weightedSpec).slides[4];
+
+    expect(repairedSlide).not.toHaveProperty('formula');
+    expect(JSON.stringify(repairedSlide)).not.toMatch(/(?:0\.6|0\.4|60%|40%)/u);
+  });
+
   it('removes unsourced timing from decision prose and emits three distinct decision bullets', async () => {
     const decisionSpec = {
       ...CORRECTED_SPEC,

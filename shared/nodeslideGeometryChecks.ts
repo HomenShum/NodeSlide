@@ -5,7 +5,11 @@ import type {
   SlideElement,
   ValidationIssue,
 } from './nodeslide.js';
-import { overlapOfSmallerRatio } from './nodeslideLayoutMetrics.js';
+import {
+  NODESLIDE_FONT_PX_PER_POINT,
+  nodeSlideTextInnerBox,
+  overlapOfSmallerRatio,
+} from './nodeslideLayoutMetrics.js';
 
 /**
  * Single-source geometry validation (collision + text overflow) shared by the
@@ -66,17 +70,13 @@ export function estimateTextFit(element: SlideElement): TextFitEstimate {
   const padding = Number.isFinite(element.style.padding)
     ? Math.max(0, element.style.padding ?? 0)
     : 0;
-  const innerWidth = Math.max(
-    1,
-    element.bbox.width * NODESLIDE_GEOMETRY_CANVAS_WIDTH - padding * 2,
-  );
-  const innerHeight = Math.max(
-    1,
-    element.bbox.height * NODESLIDE_GEOMETRY_CANVAS_HEIGHT - padding * 2,
-  );
-  const averageCharacterWidth = fontSize * 0.52;
+  const fontSizePx = fontSize * NODESLIDE_FONT_PX_PER_POINT;
+  const innerBox = nodeSlideTextInnerBox(element.bbox.width, element.bbox.height, padding);
+  const innerWidth = Math.max(1, innerBox.width * NODESLIDE_GEOMETRY_CANVAS_WIDTH);
+  const innerHeight = Math.max(1, innerBox.height * NODESLIDE_GEOMETRY_CANVAS_HEIGHT);
+  const averageCharacterWidth = fontSizePx * 0.52;
   const charactersPerLine = Math.max(1, Math.floor(innerWidth / averageCharacterWidth));
-  const availableLines = Math.max(1, Math.floor(innerHeight / (fontSize * lineHeight)));
+  const availableLines = Math.max(1, Math.floor((innerHeight + 0.5) / (fontSizePx * lineHeight)));
 
   let estimatedLines = 0;
   for (const paragraph of content.split(/\r?\n/)) {
@@ -163,7 +163,9 @@ export function collisionIssueDrafts(snapshot: DeckSnapshot, slide: Slide): Geom
 /** Estimated text-overflow drafts for one element (text, shape, or math). */
 export function overflowIssueDrafts(element: SlideElement): GeometryIssueDraft[] {
   const textLikeContent =
-    element.kind === 'math' ? element.math?.expression : element.content?.trim();
+    element.kind === 'math'
+      ? (element.math?.display ?? element.math?.expression ?? element.content?.trim())
+      : element.content?.trim();
   if (
     (element.kind !== 'text' && element.kind !== 'shape' && element.kind !== 'math') ||
     !textLikeContent

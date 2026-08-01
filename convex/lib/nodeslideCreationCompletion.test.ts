@@ -33,7 +33,9 @@ describe('NodeSlide creation completion boundary', () => {
     });
 
     expect(built.snapshot.slides).toHaveLength(7);
-    expect(built.snapshot.elements.some((element) => element.kind === 'math')).toBe(true);
+    // The provider's invalid equation is quarantined. The fallback must not
+    // fabricate a replacement equation merely because the brief asked for one.
+    expect(built.snapshot.elements.some((element) => element.kind === 'math')).toBe(false);
     expect(
       built.snapshot.elements.some(
         (element) => element.authoredArtifactBinding?.kind === 'equation',

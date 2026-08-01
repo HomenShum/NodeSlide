@@ -368,15 +368,9 @@
         "lineHeight": 1.02,
         "letterSpacing": -1.2
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_6fabda3bba143852e2f1db824b25e90f",
       "slideId": "slide_3667014d92fc85fc999adafa98f8e5d6",
       "version": 1
@@ -398,11 +392,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_810848fe6b2896ee758ecc2cb23c9a68",
       "slideId": "slide_3667014d92fc85fc999adafa98f8e5d6",
       "version": 1
@@ -428,11 +418,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_9f6fe43176af908aa2e49b7a750f0384",
       "slideId": "slide_3667014d92fc85fc999adafa98f8e5d6",
       "version": 1
@@ -456,11 +442,7 @@
       "altText": "threshold line 1: orient; emotional intensity 24 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_4dfb193872e09e826994ef01708a0d53",
       "slideId": "slide_3667014d92fc85fc999adafa98f8e5d6",
       "version": 1
@@ -484,11 +466,7 @@
       "altText": "Decision threshold; the story signal has reached 8 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_e490767cfc270c47e07d7770fa815579",
       "slideId": "slide_3667014d92fc85fc999adafa98f8e5d6",
       "version": 1
@@ -514,11 +492,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_a4fffb5a445f13bbc4b0674ed9b83862",
       "slideId": "slide_3667014d92fc85fc999adafa98f8e5d6",
       "version": 1
@@ -544,11 +518,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_39e0b1490378a8331820819d56c484c7",
       "slideId": "slide_3667014d92fc85fc999adafa98f8e5d6",
       "version": 1
@@ -574,11 +544,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_44381cd0088ac6673082f69baa52be30",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -602,15 +568,9 @@
         "fontWeight": 600,
         "lineHeight": 1.1
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_ef88c7a6b888b314dbe72a807cf63c20",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -638,15 +598,9 @@
         "from": "friction",
         "to": "consequence"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_b8bfa90c98153d93e51ae3840c4376bf",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -674,15 +628,9 @@
         "from": "consequence",
         "to": "urgency"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_c233b908d19e8ad31beecbf8afbb88ed",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -721,15 +669,9 @@
         "nodeId": "friction",
         "nodeKind": "step"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_90272b2d40e3a9b78c9dba3d927e4915",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -768,15 +710,9 @@
         "nodeId": "consequence",
         "nodeKind": "step"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_fb73a802315b6b93508e6b95aa5b5935",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -815,15 +751,9 @@
         "nodeId": "urgency",
         "nodeKind": "milestone"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_cb8eefd47a4a2b78e34ac86424096791",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -847,15 +777,9 @@
         "fontWeight": 430,
         "lineHeight": 1.35
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_d1a9c03fb7334d545a8d1869c217b6be",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -879,11 +803,7 @@
       "altText": "threshold line 2: orient; emotional intensity 32 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_4fc31dae182284dcf338386231dea805",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -907,11 +827,7 @@
       "altText": "Decision threshold; the story signal has reached 17 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_0863bf40e771002e00239ed0b983a1de",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -937,11 +853,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_82630ecf1ac5c034c5dacca7ecc7588b",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -967,11 +879,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_90e792ba2102d738d006b3527f6a4438",
       "slideId": "slide_611b598c73200dcb847a6898e091b729",
       "version": 1
@@ -997,11 +905,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_e61c759b5991ddab7519c4ba86050f26",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1026,15 +930,9 @@
         "lineHeight": 1.05,
         "letterSpacing": -0.4
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_4165ae0e78801868814b872642cb85f0",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1059,11 +957,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_0cd22c7825549d238a2c3a2d241ab229",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1087,15 +981,9 @@
         "fontWeight": 540,
         "lineHeight": 1.3
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_245358f6ab12155c5e45ea977879ae5a",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1117,11 +1005,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_8c203e423fbd62b08d92ed4759d6d73a",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1146,11 +1030,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_d5de3aabf747e2bf7b724b0545a28b9c",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1174,15 +1054,9 @@
         "fontWeight": 540,
         "lineHeight": 1.3
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_2086b0ff50bf3ae623db850433b10cc5",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1204,11 +1078,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_97ab7ecae56ec1776656977b8e25e3c0",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1233,11 +1103,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_7010331e2b1e3de07cf36534c0adc4b8",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1261,15 +1127,9 @@
         "fontWeight": 540,
         "lineHeight": 1.3
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_1b60324c6b7f5783f5a754e56d9948e0",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1293,11 +1153,7 @@
       "altText": "threshold line 3: tension; emotional intensity 39 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_37a4bc82ab0b9246ab9eb7354fc02a5e",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1321,11 +1177,7 @@
       "altText": "Decision threshold; the story signal has reached 25 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_e0524b866427b69c5b0845f76b6e666d",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1351,11 +1203,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_067f3a0d1eba61000005e9bad9cb13f5",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1381,11 +1229,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_2671789c9bd8d845617aa2e74e43166b",
       "slideId": "slide_a8388328de9998e3e17f6f0e76015bcc",
       "version": 1
@@ -1411,11 +1255,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_bd3fb5ace4e8834b5d9f65adb70a5fbc",
       "slideId": "slide_c0855c90bba17f07ee4a62c442a37909",
       "version": 1
@@ -1440,15 +1280,9 @@
         "lineHeight": 1.05,
         "letterSpacing": -0.6
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_6142bc44aacfb2d9463991e2d7cde753",
       "slideId": "slide_c0855c90bba17f07ee4a62c442a37909",
       "version": 1
@@ -1472,15 +1306,9 @@
         "fontWeight": 430,
         "lineHeight": 1.35
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_08826f3969236b3138f1faae626f0b56",
       "slideId": "slide_c0855c90bba17f07ee4a62c442a37909",
       "version": 1
@@ -1504,15 +1332,9 @@
         "fontWeight": 560,
         "lineHeight": 1.2
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_088fa05f0bcd208e1d24a2d48c19557c",
       "slideId": "slide_c0855c90bba17f07ee4a62c442a37909",
       "version": 1
@@ -1536,15 +1358,9 @@
         "fontWeight": 560,
         "lineHeight": 1.2
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_8f3061e3d30510ac9fbe8f340598d7d7",
       "slideId": "slide_c0855c90bba17f07ee4a62c442a37909",
       "version": 1
@@ -1568,15 +1384,9 @@
         "fontWeight": 560,
         "lineHeight": 1.2
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_19697b4ee0b391195def7396b0ea2e77",
       "slideId": "slide_c0855c90bba17f07ee4a62c442a37909",
       "version": 1
@@ -1600,11 +1410,7 @@
       "altText": "threshold line 4: tension; emotional intensity 47 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_01501a0af1a328d51c1f7ce3b73b6317",
       "slideId": "slide_c0855c90bba17f07ee4a62c442a37909",
       "version": 1
@@ -1628,11 +1434,7 @@
       "altText": "Decision threshold; the story signal has reached 33 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_fbc9836ae12738bdd695741b288b5761",
       "slideId": "slide_c0855c90bba17f07ee4a62c442a37909",
       "version": 1
@@ -1658,11 +1460,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_d4d107d2bd512a64c76ea25b9aa58ba0",
       "slideId": "slide_c0855c90bba17f07ee4a62c442a37909",
       "version": 1
@@ -1688,11 +1486,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_470f1b2f47208c1eb69c7e3e573c7dd1",
       "slideId": "slide_c0855c90bba17f07ee4a62c442a37909",
       "version": 1
@@ -1714,11 +1508,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_f3a984e95e6d83ee5d93888bf1d2c1c5",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -1742,11 +1532,7 @@
       "altText": "threshold line 5: hint; emotional intensity 54 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_cf4ebb92f16e57411932dbfff4583a5d",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -1770,11 +1556,7 @@
       "altText": "Decision threshold; the story signal has reached 42 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_a53bf2db7ef69ebe67bcd5635a41f55f",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -1800,11 +1582,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_8f10f9df4dd8b9aae6b16bbad950e85b",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -1829,15 +1607,9 @@
         "lineHeight": 1.04,
         "letterSpacing": -0.8
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_df5bef6eac17140b14f75e340c14e84f",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -1861,15 +1633,9 @@
         "fontWeight": 430,
         "lineHeight": 1.35
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_c47aee04e448eed51a5ce79fc86254d5",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -1893,15 +1659,9 @@
         "fontWeight": 560,
         "lineHeight": 1.2
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_709737f64c5ad86a002fabddf6e89b56",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -1925,15 +1685,9 @@
         "fontWeight": 560,
         "lineHeight": 1.2
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_2e4784ee81b34dec2a6fa6cd6fdc7976",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -1957,15 +1711,9 @@
         "fontWeight": 560,
         "lineHeight": 1.2
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_a4fc24d245ea222f92facbecf16187c8",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -1992,9 +1740,7 @@
         "padding": 20,
         "radius": 18
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "authoredArtifactBinding": {
         "schemaVersion": "nodeslide.authored-artifact-binding/v1",
         "artifactId": "deterministic-success-signals",
@@ -2003,9 +1749,7 @@
         "truthState": "derived",
         "rationale": "Each equal-height bar represents one success criterion supplied in the brief.",
         "claimIds": [],
-        "sourceIds": [
-          "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-        ],
+        "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
         "specDigest": "sha256:de58eb6f18e63dbb3d85c78242826f58c0df6d931a50f93395352656ff87a8a0",
         "projection": {
           "primitive": "chart",
@@ -2017,11 +1761,7 @@
         }
       },
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_d6914a75b80f03bd9501c24eb8c0fac9",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -2046,15 +1786,9 @@
         "lineHeight": 1.25,
         "textAlign": "center"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_4c7d248c3d421c20be6492f7a8e54e74",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -2078,28 +1812,18 @@
       },
       "chart": {
         "chartType": "bar",
-        "labels": [
-          "S1",
-          "S2",
-          "S3"
-        ],
+        "labels": ["S1", "S2", "S3"],
         "series": [
           {
             "name": "Signal",
-            "values": [
-              1,
-              1,
-              1
-            ],
+            "values": [1, 1, 1],
             "color": "#B44A2D"
           }
         ],
         "unit": "defined",
         "sourceId": "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "authoredArtifactBinding": {
         "schemaVersion": "nodeslide.authored-artifact-binding/v1",
         "artifactId": "deterministic-success-signals",
@@ -2108,9 +1832,7 @@
         "truthState": "derived",
         "rationale": "Each equal-height bar represents one success criterion supplied in the brief.",
         "claimIds": [],
-        "sourceIds": [
-          "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-        ],
+        "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
         "specDigest": "sha256:de58eb6f18e63dbb3d85c78242826f58c0df6d931a50f93395352656ff87a8a0",
         "projection": {
           "primitive": "chart",
@@ -2122,11 +1844,7 @@
         }
       },
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_3abd4d2d650297317ba39fc3e3bac9c9",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -2152,11 +1870,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_77cd5d1bdd515b473ad4e0a7dacf0bca",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -2182,11 +1896,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_a920dda165cdf30e0f113c784ef2f9aa",
       "slideId": "slide_192f2c84f3157c558fdaf9687153f871",
       "version": 1
@@ -2212,11 +1922,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_1836b2c8f2e76cb18210d006d219f073",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2241,15 +1947,9 @@
         "lineHeight": 1.05,
         "letterSpacing": -0.4
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_34c729fcaaf1d803c83aaa4ce55ab69f",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2274,11 +1974,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_5e91076bdaf24536f250d15b7055ee1e",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2302,15 +1998,9 @@
         "fontWeight": 540,
         "lineHeight": 1.3
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_8e7828de1b5aee82f6188a3478d3e140",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2332,11 +2022,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_043df1ba4ac0b4e924121619adc0814c",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2361,11 +2047,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_71921222fae1032555b8510f06715750",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2389,15 +2071,9 @@
         "fontWeight": 540,
         "lineHeight": 1.3
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_ec9c21e836658c3acc15c141bb052894",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2419,11 +2095,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_cd477a51ecc3b83f4498f58122f335cd",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2448,11 +2120,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_bedb3a433e86e05ac7dbf4eac03c52e5",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2476,15 +2144,9 @@
         "fontWeight": 540,
         "lineHeight": 1.3
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_b15f52ad840da80162f053c55b1ce990",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2508,11 +2170,7 @@
       "altText": "threshold line 6: hint; emotional intensity 62 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_459219c663aa05c03c00544ec36205e1",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2536,11 +2194,7 @@
       "altText": "Decision threshold; the story signal has reached 50 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_b48332c619f8b850f15e6d66e2776702",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2566,11 +2220,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_20720ded327c923f918d22da4332e501",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2596,11 +2246,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_78248f0686f9793262b561c4e1bc54de",
       "slideId": "slide_273f91647b91cf0c22bc36d9f371fd53",
       "version": 1
@@ -2626,11 +2272,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_cc76a7eb547308f071489f1593267ffc",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -2654,15 +2296,9 @@
         "fontWeight": 600,
         "lineHeight": 1.1
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_ea1099e902031087f3858fed57cf67cd",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -2690,15 +2326,9 @@
         "from": "supplied",
         "to": "verify"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_35d7eb887ad3db316aa07b283f5554dc",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -2726,15 +2356,9 @@
         "from": "verify",
         "to": "decision"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_221406c4055d0f51d716f85f1de91d24",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -2773,15 +2397,9 @@
         "nodeId": "supplied",
         "nodeKind": "system"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_f41328a04e234a8a538973c0768ec8c7",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -2820,15 +2438,9 @@
         "nodeId": "verify",
         "nodeKind": "decision"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_a4f25791dc92e262e13db86ee2e8f887",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -2867,15 +2479,9 @@
         "nodeId": "decision",
         "nodeKind": "milestone"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_ad53a5c493eaea5b6009d0119d805f1e",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -2899,15 +2505,9 @@
         "fontWeight": 430,
         "lineHeight": 1.35
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_a4e470adebf567fe574a114cdefd48fb",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -2931,11 +2531,7 @@
       "altText": "threshold line 7: reveal; emotional intensity 70 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_8d6ef5c4e6367e5b730a9d2af1e8dbb4",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -2959,11 +2555,7 @@
       "altText": "Decision threshold; the story signal has reached 58 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_051f7f132b90a3e0d04578777a490c93",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -2989,11 +2581,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_40451251f2efa6df8c49358591a21d43",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -3019,11 +2607,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_c54bbb48681d7aaad2da5e5d75654106",
       "slideId": "slide_838a963b5430d576a66a5c4b1e5758cc",
       "version": 1
@@ -3050,11 +2634,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_0b4691c354d23ef49b40c0974e9506d6",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3080,15 +2660,9 @@
         "letterSpacing": -0.4,
         "textAlign": "center"
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_44695b5a6db350aed6a0e91321aa93d5",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3110,15 +2684,9 @@
         "strokeWidth": 1,
         "radius": 18
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_94a4c596f46080888e468569bba7a9b9",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3143,15 +2711,9 @@
         "lineHeight": 1.25,
         "textAlign": "left"
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_8f2c8e500f89ac9c143e7843a302e6ff",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3173,15 +2735,9 @@
         "strokeWidth": 1,
         "radius": 18
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_eb7ffa24a10bf13d2574112ad44b6689",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3206,15 +2762,9 @@
         "lineHeight": 1.25,
         "textAlign": "left"
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_3f60ca24043e3ff64b107e22199f2ee4",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3236,15 +2786,9 @@
         "strokeWidth": 1,
         "radius": 18
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_f33d44dfea47e21ea711ebbf22abe495",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3269,15 +2813,9 @@
         "lineHeight": 1.25,
         "textAlign": "left"
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_9e3358580384bfb28f0a20ba6797e801",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3301,11 +2839,7 @@
       "altText": "threshold line 8: reveal; emotional intensity 77 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_39566aa15dbe546e4814adb112d25538",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3329,11 +2863,7 @@
       "altText": "Decision threshold; the story signal has reached 67 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_a79fab007810f5590cc0f762707da9d7",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3360,11 +2890,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_6e169471117348e35b032df1271399dc",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3390,11 +2916,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_e18df33f3db54be135e09eee7a42c749",
       "slideId": "slide_25710c90fb2ed4cd947d41e0feb8fb44",
       "version": 1
@@ -3420,11 +2942,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_24c336654fbde3d27dcafe3bd0e61862",
       "slideId": "slide_ceb2424830d69be4b2a17bb3fb40c36c",
       "version": 1
@@ -3449,15 +2967,9 @@
         "lineHeight": 1.05,
         "letterSpacing": -0.6
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_b75c3f9e36fb9fb8dc73923e05536abc",
       "slideId": "slide_ceb2424830d69be4b2a17bb3fb40c36c",
       "version": 1
@@ -3481,15 +2993,9 @@
         "fontWeight": 430,
         "lineHeight": 1.35
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_b335a44d7e401911061a64410539feb0",
       "slideId": "slide_ceb2424830d69be4b2a17bb3fb40c36c",
       "version": 1
@@ -3513,15 +3019,9 @@
         "fontWeight": 560,
         "lineHeight": 1.2
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_c876962da15af50a3a3418e450b710d7",
       "slideId": "slide_ceb2424830d69be4b2a17bb3fb40c36c",
       "version": 1
@@ -3545,15 +3045,9 @@
         "fontWeight": 560,
         "lineHeight": 1.2
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_cce6061da349f06f174dfb156461da45",
       "slideId": "slide_ceb2424830d69be4b2a17bb3fb40c36c",
       "version": 1
@@ -3577,15 +3071,9 @@
         "fontWeight": 560,
         "lineHeight": 1.2
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_2ba27cde993309d182ac7b38e25bbeb4",
       "slideId": "slide_ceb2424830d69be4b2a17bb3fb40c36c",
       "version": 1
@@ -3609,11 +3097,7 @@
       "altText": "threshold line 11: resolve; emotional intensity 100 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_85488858231fa495c9d8808989e92442",
       "slideId": "slide_ceb2424830d69be4b2a17bb3fb40c36c",
       "version": 1
@@ -3637,11 +3121,7 @@
       "altText": "Decision threshold; the story signal has reached 92 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_9eb3757bd2d7aa4b4aa316797c1bf834",
       "slideId": "slide_ceb2424830d69be4b2a17bb3fb40c36c",
       "version": 1
@@ -3667,11 +3147,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_0c1526e7148f23dcf0a3cb67eb4cbae6",
       "slideId": "slide_ceb2424830d69be4b2a17bb3fb40c36c",
       "version": 1
@@ -3697,11 +3173,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_0171fa97dd519d6d68ef59fa2fcfbfee",
       "slideId": "slide_ceb2424830d69be4b2a17bb3fb40c36c",
       "version": 1
@@ -3727,11 +3199,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_c9145126dd3ca9ee01b533ed5d572c8c",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -3756,15 +3224,9 @@
         "lineHeight": 1.05,
         "letterSpacing": -0.4
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_c98d1eaa3b75b5da8245e55eed2013cc",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -3786,15 +3248,9 @@
         "strokeWidth": 1,
         "radius": 18
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_ca56a053b289a5ab3a32f36dc6a79100",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -3818,15 +3274,9 @@
         "fontWeight": 560,
         "lineHeight": 1.25
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_9048689b614b2a8a5062c8089a5e247c",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -3848,15 +3298,9 @@
         "strokeWidth": 1,
         "radius": 18
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_3c70d43a710ed605197625008cb4948a",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -3880,15 +3324,9 @@
         "fontWeight": 560,
         "lineHeight": 1.25
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_07edaa35bd48e392cc223e98d968658c",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -3910,15 +3348,9 @@
         "strokeWidth": 1,
         "radius": 18
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_529e307239d65b7780624c371cf9e21c",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -3942,15 +3374,9 @@
         "fontWeight": 560,
         "lineHeight": 1.25
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_829f7a25da59589c448ea8fc7121a974",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -3974,11 +3400,7 @@
       "altText": "threshold line 12: resolve; emotional intensity 76 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_553630a83ea887bef0f25c96c4628b7c",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -4002,11 +3424,7 @@
       "altText": "Decision threshold; the story signal has reached 100 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_8acadbf02433edf5abbb1945b48e2fd9",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -4032,11 +3450,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_c8bd323ad13b18128541e75f3d81a636",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -4062,11 +3476,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_f696659e8d2bb3478890a33d7eee514a",
       "slideId": "slide_5a47977a59903a2c2eed3a5485895c8c",
       "version": 1
@@ -4093,11 +3503,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_d71010aa15610407d31d9bc28672ef18",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4122,15 +3528,9 @@
         "lineHeight": 1.1,
         "textAlign": "center"
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_9402779c2189b220cc99b886dbc1e23c",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4158,15 +3558,9 @@
         "from": "prepare",
         "to": "review"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_ded16ceadc86607125473a212cee4be3",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4194,15 +3588,9 @@
         "from": "review",
         "to": "record"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_f2d942f9b0b2125f721d1ab4e3558fac",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4241,15 +3629,9 @@
         "nodeId": "prepare",
         "nodeKind": "step"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_067fe9b4328ee18b1b86553cb0a288a2",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4288,15 +3670,9 @@
         "nodeId": "review",
         "nodeKind": "decision"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_9ba81a7551e4c7f68b5bca93c24a429d",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4335,15 +3711,9 @@
         "nodeId": "record",
         "nodeKind": "milestone"
       },
-      "sourceIds": [
-        "source_6fdbf7ab52cb19c3ec1ca2f821d92cac"
-      ],
+      "sourceIds": ["source_6fdbf7ab52cb19c3ec1ca2f821d92cac"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_0d57bc58e479f6c24c1bc89fb069c231",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4367,15 +3737,9 @@
         "fontWeight": 430,
         "lineHeight": 1.35
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_1c37a23295e5ee15bdd5acac51bbd54d",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4399,11 +3763,7 @@
       "altText": "threshold line 9: prove; emotional intensity 85 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_40f13d8d056271eadb5df5ff927937e6",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4427,11 +3787,7 @@
       "altText": "Decision threshold; the story signal has reached 75 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_68e21c2a6ae94e77cfc2b302baae1cc9",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4458,11 +3814,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_6f8ad7df7b2ab182a60ee2c92be42850",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4488,11 +3840,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_20fe1a5b3aa73498b302cb9c7a9d9c58",
       "slideId": "slide_460b8053502f20768174fa2dab4809d5",
       "version": 1
@@ -4519,11 +3867,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_382e1c273674bfb07d2fdbfe51b5046f",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4549,15 +3893,9 @@
         "letterSpacing": -0.4,
         "textAlign": "left"
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_daca1009b1dbcff8e973a7af07fbd033",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4582,11 +3920,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_e436da89762ee9e86491d8c06de501d6",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4610,15 +3944,9 @@
         "fontWeight": 540,
         "lineHeight": 1.3
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_06a6c09edc28d210cd9a359e16184d7b",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4640,11 +3968,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_158fc538c89c2ce095e6b2f8d8279ba7",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4669,11 +3993,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_20b20c6521e2131295cdbb9aa2b190cc",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4697,15 +4017,9 @@
         "fontWeight": 540,
         "lineHeight": 1.3
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_d33c00e21a2173aca30426125f744fa7",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4727,11 +4041,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_b144b53c960ff38539a5c8c8af5e1e37",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4756,11 +4066,7 @@
       },
       "sourceIds": [],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_d24c48f2494a54f12727d17e02c45256",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4784,15 +4090,9 @@
         "fontWeight": 540,
         "lineHeight": 1.3
       },
-      "sourceIds": [
-        "source_d4a3615c1e38994a887d4867b3569cff"
-      ],
+      "sourceIds": ["source_d4a3615c1e38994a887d4867b3569cff"],
       "locked": false,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_9c4bc18150d9495719bf56545f76d21f",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4816,11 +4116,7 @@
       "altText": "threshold line 10: prove; emotional intensity 92 of 100",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_a2e1c1967aa74a2607e0ba620be2347a",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4844,11 +4140,7 @@
       "altText": "Decision threshold; the story signal has reached 83 percent of the gate",
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_7dc27ad876591af098d620d3a3afde3d",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4875,11 +4167,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_745b5f6f2f3292a192f1ad20db05df6c",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1
@@ -4905,11 +4193,7 @@
       },
       "sourceIds": [],
       "locked": true,
-      "exportCapabilities": [
-        "web_native",
-        "pptx_editable",
-        "google_importable"
-      ],
+      "exportCapabilities": ["web_native", "pptx_editable", "google_importable"],
       "id": "element_f6a08cc6baabd261eca8a785d303a697",
       "slideId": "slide_f9c1a8407210eaa54edbf54803ad2dbb",
       "version": 1

@@ -1,5 +1,6 @@
 import type { DeckBrief, SlideArchetype } from '../../shared/nodeslide';
 import type { NodeSlideDataAttachment } from '../../shared/nodeslideAttachments';
+import { inferNodeSlideRequestedSlideCount } from '../../shared/nodeslideSlideCount';
 
 export type NodeSlideVisualMaterialKind =
   | 'brief'
@@ -180,15 +181,11 @@ function cinematicDirection(
 }
 
 function requestedSlideCount(title: string, brief: DeckBrief): number {
-  const match = `${title} ${brief.prompt}`
-    .toLowerCase()
-    .match(/\b(six|seven|eight|6|7|8)[-\s]slide/u);
-  if (!match) return 7;
-  return { six: 6, seven: 7, eight: 8, '6': 6, '7': 7, '8': 8 }[match[1] ?? ''] ?? 7;
+  return inferNodeSlideRequestedSlideCount(title, brief.prompt) ?? 7;
 }
 
 function pacingFor(slideCount: number): NodeSlideStoryPhase[] {
-  const buildCount = slideCount === 8 ? 3 : 2;
+  const buildCount = Math.max(1, Math.min(4, Math.floor(slideCount / 3)));
   return [
     {
       phase: 'orient',

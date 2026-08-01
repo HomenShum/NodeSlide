@@ -46,9 +46,11 @@ import {
 } from '../../shared/nodeslideAttachments';
 import {
   estimateTextHeight,
+  nodeSlideTextInnerBox,
   resolveCollisions,
   stackBlocks,
 } from '../../shared/nodeslideLayoutMetrics';
+import { inferNodeSlideRequestedSlideCount } from '../../shared/nodeslideSlideCount';
 import {
   NODESLIDE_CANONICAL_AUTHORED_ARTIFACT_VERSION,
   type NodeSlideAuthoredArtifactReceipt,
@@ -648,13 +650,6 @@ export function deterministicBriefSpec(
         headline: 'Turn the idea into a sequence people can understand and own.',
         body: 'Connect intent, action, and feedback in one visible operating path so the audience can see both the destination and the mechanics.',
         bullets: ['Align on intent', 'Execute the critical moves', 'Review measurable outcomes'],
-        formula: {
-          expression: 'accepted change = proposal ∩ authorized scope',
-          display: 'accepted change = proposal ∩ authorized scope',
-          variables: [],
-          syntax: 'plain',
-          description: 'Only the authorized portion of a proposal may be accepted.',
-        },
       },
       {
         title: 'What success looks like',
@@ -680,10 +675,6 @@ export function deterministicBriefSpec(
           'Review evidence with stakeholders',
           'Scale what earns confidence',
         ],
-        image: {
-          altText: 'Structured evidence map derived from the supplied brief',
-          caption: 'The visual is illustrative and remains replaceable as an image object.',
-        },
       },
       {
         title: 'The decision',
@@ -696,11 +687,113 @@ export function deterministicBriefSpec(
     ...buildNodeSlideStoryContext({ title: cleanTitle, brief, attachments }),
   };
   applyDeterministicBriefPrimitives(spec.slides, brief.prompt);
+  spec.slides = fitDeterministicBriefSlideCount(
+    spec.slides,
+    inferNodeSlideRequestedSlideCount(cleanTitle, brief.prompt) ?? 7,
+    success,
+  );
   spec.designPlans = buildNodeSlideDesignPlans({
     slides: spec.slides,
     ...(spec.storySpec ? { storySpec: spec.storySpec } : {}),
   });
   return spec;
+}
+
+function fitDeterministicBriefSlideCount(
+  slides: readonly NodeSlidePlannedSlide[],
+  requestedCount: number,
+  success: readonly string[],
+): NodeSlidePlannedSlide[] {
+  const count = Math.max(3, Math.min(12, Math.trunc(requestedCount)));
+  if (count === slides.length) return slides.map((slide) => structuredClone(slide));
+  if (count < slides.length) {
+    const selected = new Set<number>([0, slides.length - 1]);
+    for (let index = 1; index < slides.length - 1 && selected.size < count; index += 1) {
+      const slide = slides[index];
+      if (slide && (slide.chart || slide.diagram || slide.formula || slide.image || slide.video)) {
+        selected.add(index);
+      }
+    }
+    for (let index = 1; index < slides.length - 1 && selected.size < count; index += 1) {
+      selected.add(index);
+    }
+    return [...selected]
+      .sort((left, right) => left - right)
+      .slice(0, count)
+      .map((index) => structuredClone(slides[index] as NodeSlidePlannedSlide));
+  }
+
+  const evidenceSignals = success.slice(0, 3);
+  const expansions: NodeSlidePlannedSlide[] = [
+    {
+      title: 'The evidence boundary',
+      section: 'Evidence',
+      headline: 'Separate what is supplied from what still needs verification.',
+      body: 'Keep the decision grounded by making supported evidence, open questions, and publication blockers visible as different states.',
+      bullets: evidenceSignals,
+      diagram: {
+        kind: 'process',
+        direction: 'horizontal',
+        nodes: [
+          { id: 'supplied', label: 'Supplied evidence', kind: 'system' },
+          { id: 'verify', label: 'Verification gate', kind: 'decision' },
+          { id: 'decision', label: 'Decision-ready', kind: 'milestone' },
+        ],
+        edges: [
+          { from: 'supplied', to: 'verify' },
+          { from: 'verify', to: 'decision' },
+        ],
+      },
+    },
+    {
+      title: 'The open assumptions',
+      section: 'Evidence',
+      headline: 'Unverified assumptions remain questions, not conclusions.',
+      body: 'Record the unresolved evidence explicitly so the audience can distinguish a missing input from a negative finding.',
+      bullets: ['Name the open question', 'Assign the evidence owner', 'Keep the gate honest'],
+    },
+    {
+      title: 'Ownership and handoffs',
+      section: 'Operating model',
+      headline: 'A decision becomes executable when each handoff has an owner.',
+      body: 'Connect evidence preparation, review, and the final decision without implying an organization structure that was not supplied.',
+      bullets: ['Prepare the evidence', 'Review the boundary', 'Record the decision'],
+      diagram: {
+        kind: 'process',
+        direction: 'horizontal',
+        nodes: [
+          { id: 'prepare', label: 'Prepare', kind: 'step' },
+          { id: 'review', label: 'Review', kind: 'decision' },
+          { id: 'record', label: 'Record', kind: 'milestone' },
+        ],
+        edges: [
+          { from: 'prepare', to: 'review' },
+          { from: 'review', to: 'record' },
+        ],
+      },
+    },
+    {
+      title: 'Risks and controls',
+      section: 'Risk',
+      headline: 'Controls should answer the risks the brief actually establishes.',
+      body: 'Keep the comparison qualitative until likelihood, impact, and tolerance values are supplied and sourced.',
+      bullets: ['Established risk', 'Required control', 'Evidence still needed'],
+    },
+    {
+      title: 'The measurement plan',
+      section: 'Proof',
+      headline: 'Agree how success will be judged before the next decision.',
+      body: 'Use the supplied success criteria as review questions; do not turn them into invented scores or weights.',
+      bullets: evidenceSignals,
+    },
+  ];
+  const opening = slides.slice(0, -1).map((slide) => structuredClone(slide));
+  const closing = slides.at(-1);
+  return [
+    ...opening,
+    ...expansions.slice(0, count - slides.length),
+    ...(closing ? [structuredClone(closing)] : []),
+  ];
 }
 
 function detectGovernanceHub(prompt: string): {
@@ -996,6 +1089,7 @@ export function coerceBriefSpec(
 ): NodeSlideDeckSpec {
   const fallback = deterministicBriefSpec(title, brief, attachments);
   if (!isRecord(rawSpec) || !Array.isArray(rawSpec.slides)) return fallback;
+  const requestedSlideCount = inferNodeSlideRequestedSlideCount(title, brief.prompt);
   const artifactValidationOptions = nodeSlideAuthoredArtifactValidationOptions(
     nodeSlideAuthoredArtifactSourceInventory(brief, attachments),
   );
@@ -1004,8 +1098,13 @@ export function coerceBriefSpec(
       coercePlannedSlide(value, fallback.slides[index], index, artifactValidationOptions),
     )
     .filter((slide): slide is NodeSlidePlannedSlide => slide !== null)
-    .slice(0, 8);
-  if (slides.length < 6) return fallback;
+    .slice(0, requestedSlideCount ?? 8);
+  if (
+    (requestedSlideCount !== null && slides.length !== requestedSlideCount) ||
+    (requestedSlideCount === null && slides.length < 6)
+  ) {
+    return fallback;
+  }
 
   const narrative = Array.isArray(rawSpec.narrative)
     ? rawSpec.narrative
@@ -1158,6 +1257,14 @@ function buildNodeSlideDeck(input: {
   const slides: Slide[] = [];
   const elements: SlideElement[] = [];
   const compositionFanout: NodeSlideCompositionCandidateSummary[] = [];
+  const compositionCandidatesBySlide = new Map<
+    number,
+    Array<{
+      id: string;
+      elements: SlideElement[];
+      summary: NodeSlideCompositionCandidateSummary;
+    }>
+  >();
   for (let index = 0; index < input.spec.slides.length; index += 1) {
     const planned = input.spec.slides[index];
     if (!planned) continue;
@@ -1183,6 +1290,13 @@ function buildNodeSlideDeck(input: {
       const fanout = fanOutNodeSlideComposition({ elements: built.elements, plan: designPlan });
       elements.push(...fanout.selectedElements);
       compositionFanout.push(...fanout.candidates);
+      compositionCandidatesBySlide.set(
+        index,
+        fanout.renderCandidates.flatMap((candidate) => {
+          const summary = fanout.candidates.find((item) => item.id === candidate.id);
+          return summary ? [{ ...candidate, summary }] : [];
+        }),
+      );
     } else {
       elements.push(...built.elements);
     }
@@ -1194,9 +1308,11 @@ function buildNodeSlideDeck(input: {
   // adjacent slides and composition family dominance. When near-duplicates
   // are found, the gate ACTS: re-dispatch the later slide in each pair to an
   // alternate grammar that its content shape supports, then re-evaluate.
-  // Bounded to 2 re-dispatch passes to avoid oscillation.
+  // One bounded pass per slide lets a 12-slide deck repair non-adjacent reuse
+  // without turning generation into an unbounded optimizer.
   if (input.spec.designPlans && slides.length >= 2) {
-    for (let pass = 0; pass < 2; pass += 1) {
+    const maxDiversityPasses = Math.min(12, slides.length);
+    for (let pass = 0; pass < maxDiversityPasses; pass += 1) {
       const slideElements = slides.map((slide, slideIndex) => ({
         slideIndex,
         elements: elements.filter((e) => e.slideId === slide.id),
@@ -1211,7 +1327,7 @@ function buildNodeSlideDeck(input: {
         };
         break;
       }
-      if (pass === 1) {
+      if (pass === maxDiversityPasses - 1) {
         // Final pass failed — log and store the report.
         console.warn(
           `NodeSlide deck diversity gate (after ${pass + 1} passes): ${diversityReport.failures.join('; ')}`,
@@ -1238,6 +1354,62 @@ function buildNodeSlideDeck(input: {
         if (!planned || !currentPlan) continue;
         const shape = contentShapes[laterIndex];
         if (!shape) continue;
+        // Media slides carry an intentional left/right reading rhythm. Diversity
+        // repair may recompose prose, but it must not reverse that narrative beat.
+        const variantCandidates =
+          currentPlan.semanticArchetype === 'media-dominant'
+            ? []
+            : (compositionCandidatesBySlide.get(laterIndex) ?? []);
+        let bestVariant:
+          | {
+              id: string;
+              elements: SlideElement[];
+              report: ReturnType<typeof evaluateDeckDiversity>;
+            }
+          | undefined;
+        for (const candidate of variantCandidates) {
+          if (
+            candidate.summary.selected ||
+            candidate.summary.outOfBoundsCount > 0 ||
+            candidate.summary.score < 0
+          ) {
+            continue;
+          }
+          const trialGroups = slides.map((slide, slideIndex) => ({
+            slideIndex,
+            elements:
+              slideIndex === laterIndex
+                ? candidate.elements
+                : elements.filter((element) => element.slideId === slide.id),
+          }));
+          const report = evaluateDeckDiversity(trialGroups);
+          const incumbent = bestVariant?.report ?? diversityReport;
+          const improves =
+            report.nearDuplicatePairs.length < incumbent.nearDuplicatePairs.length ||
+            (report.nearDuplicatePairs.length === incumbent.nearDuplicatePairs.length &&
+              (report.failures.length < incumbent.failures.length ||
+                (report.failures.length === incumbent.failures.length &&
+                  report.score > incumbent.score + 0.000_001)));
+          if (improves) bestVariant = { id: candidate.id, elements: candidate.elements, report };
+        }
+        if (bestVariant) {
+          const slideId = slides[laterIndex]?.id;
+          if (slideId) {
+            for (let index = elements.length - 1; index >= 0; index -= 1) {
+              if (elements[index]?.slideId === slideId) elements.splice(index, 1);
+            }
+            elements.push(...bestVariant.elements.map((element) => structuredClone(element)));
+            for (const summary of compositionFanout) {
+              if (summary.slideIndex === laterIndex)
+                summary.selected = summary.id === bestVariant.id;
+            }
+            for (const candidate of variantCandidates) {
+              candidate.summary.selected = candidate.id === bestVariant.id;
+            }
+            redispatched = true;
+            continue;
+          }
+        }
         // Prefer alternates that are underused (fewer than 2 slides currently).
         const candidates = archetypeCandidates(shape).filter(
           (candidate) =>
@@ -1282,7 +1454,23 @@ function buildNodeSlideDeck(input: {
         for (let i = elements.length - 1; i >= 0; i -= 1) {
           if (oldElementIds.has(elements[i]?.id ?? '')) elements.splice(i, 1);
         }
-        elements.push(...rebuilt.elements);
+        const alternateFanout = fanOutNodeSlideComposition({
+          elements: rebuilt.elements,
+          plan: alternatePlan,
+        });
+        elements.push(...alternateFanout.selectedElements);
+        for (let index = compositionFanout.length - 1; index >= 0; index -= 1) {
+          if (compositionFanout[index]?.slideIndex === laterIndex)
+            compositionFanout.splice(index, 1);
+        }
+        compositionFanout.push(...alternateFanout.candidates);
+        compositionCandidatesBySlide.set(
+          laterIndex,
+          alternateFanout.renderCandidates.flatMap((candidate) => {
+            const summary = alternateFanout.candidates.find((item) => item.id === candidate.id);
+            return summary ? [{ ...candidate, summary }] : [];
+          }),
+        );
         // Update the design plan so downstream consumers see the alternate.
         input.spec.designPlans[laterIndex] = alternatePlan;
         archetypes[laterIndex] = alternate;
@@ -1293,6 +1481,72 @@ function buildNodeSlideDeck(input: {
         );
         archetypeCounts.set(alternate, (archetypeCounts.get(alternate) ?? 0) + 1);
         redispatched = true;
+      }
+      if (!redispatched) {
+        let bestDeckVariant:
+          | {
+              slideIndex: number;
+              id: string;
+              elements: SlideElement[];
+              report: ReturnType<typeof evaluateDeckDiversity>;
+            }
+          | undefined;
+        for (const [slideIndex, candidates] of compositionCandidatesBySlide) {
+          if (input.spec.designPlans[slideIndex]?.semanticArchetype === 'media-dominant') {
+            continue;
+          }
+          for (const candidate of candidates) {
+            if (
+              candidate.summary.selected ||
+              candidate.summary.outOfBoundsCount > 0 ||
+              candidate.summary.score < 0
+            ) {
+              continue;
+            }
+            const trialGroups = slides.map((slide, index) => ({
+              slideIndex: index,
+              elements:
+                index === slideIndex
+                  ? candidate.elements
+                  : elements.filter((element) => element.slideId === slide.id),
+            }));
+            const report = evaluateDeckDiversity(trialGroups);
+            const incumbent = bestDeckVariant?.report ?? diversityReport;
+            const improves =
+              report.failures.length < incumbent.failures.length ||
+              (report.failures.length === incumbent.failures.length &&
+                (report.distinctFamilies > incumbent.distinctFamilies ||
+                  (report.distinctFamilies === incumbent.distinctFamilies &&
+                    report.score > incumbent.score + 0.000_001)));
+            if (improves) {
+              bestDeckVariant = {
+                slideIndex,
+                id: candidate.id,
+                elements: candidate.elements,
+                report,
+              };
+            }
+          }
+        }
+        if (bestDeckVariant) {
+          const slideId = slides[bestDeckVariant.slideIndex]?.id;
+          if (slideId) {
+            for (let index = elements.length - 1; index >= 0; index -= 1) {
+              if (elements[index]?.slideId === slideId) elements.splice(index, 1);
+            }
+            elements.push(...bestDeckVariant.elements.map((element) => structuredClone(element)));
+            for (const summary of compositionFanout) {
+              if (summary.slideIndex === bestDeckVariant.slideIndex) {
+                summary.selected = summary.id === bestDeckVariant.id;
+              }
+            }
+            for (const candidate of compositionCandidatesBySlide.get(bestDeckVariant.slideIndex) ??
+              []) {
+              candidate.summary.selected = candidate.id === bestDeckVariant.id;
+            }
+            redispatched = true;
+          }
+        }
       }
       if (!redispatched) {
         // No alternates available — accept the failure.
@@ -1838,6 +2092,16 @@ function buildSlide(input: {
 
   if (planned.formula) {
     const formulaBox = placeRight(0.42, 0.24);
+    const formulaPadding = 12;
+    const formulaFontSize = fitTextFontSize(
+      planned.formula.display,
+      30,
+      18,
+      1.15,
+      0.39,
+      formulaBox.height,
+      formulaPadding,
+    );
     add(
       element('formula', {
         name: 'Editable formula',
@@ -1850,10 +2114,10 @@ function buildSlide(input: {
           fill: theme.colors.insight,
           color: theme.colors.insightInk,
           fontFamily: theme.typography.data,
-          fontSize: 30,
+          fontSize: formulaFontSize,
           fontWeight: 720,
           lineHeight: 1.15,
-          padding: 20,
+          padding: formulaPadding,
           radius: theme.defaultRadius,
           textAlign: 'center',
           verticalAlign: 'middle',
@@ -2748,9 +3012,12 @@ function fitTextFontSize(
   lineHeight: number,
   width: number,
   maxHeight: number,
+  paddingPoints = 0,
 ): number {
+  const inner = nodeSlideTextInnerBox(width, maxHeight, paddingPoints);
   for (let fontSize = preferred; fontSize >= minimum; fontSize -= 1) {
-    if (estimateTextHeight(content, fontSize, lineHeight, width) <= maxHeight) return fontSize;
+    if (estimateTextHeight(content, fontSize, lineHeight, inner.width) <= inner.height)
+      return fontSize;
   }
   return minimum;
 }

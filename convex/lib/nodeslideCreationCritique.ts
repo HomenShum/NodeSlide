@@ -1207,7 +1207,7 @@ function repairCreationVisualLogic(
     if (
       slide['formula'] !== undefined &&
       ((!briefSupportsArtifactQuantities(brief, slide['formula'], true) &&
-        /\b(?:illustrative|estimated|tolerance|threshold|pending|missing|placeholder|not retrieved|not supplied)\b/iu.test(
+        /\b(?:illustrative|estimated|tolerance|threshold|pending|missing|placeholder|not retrieved|not supplied|weights?|weighted|readiness|score)\b/iu.test(
           JSON.stringify(slide['formula']),
         )) ||
         (briefForbidsIllustrativeQuantities(brief) &&

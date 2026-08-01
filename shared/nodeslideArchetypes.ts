@@ -35,8 +35,8 @@ export function archetypeCandidates(shape: SlideContentShape): SlideArchetype[] 
   }
   if (shape.hasChart) return ['chart-dominant'];
   if (isEdge) return ['statement', 'split'];
-  if (shape.bulletCount >= 3) return ['comparison', 'split'];
-  return ['split'];
+  if (shape.bulletCount >= 2) return ['comparison', 'split', 'statement'];
+  return ['split', 'statement'];
 }
 
 /**

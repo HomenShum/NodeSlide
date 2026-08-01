@@ -188,23 +188,34 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
       true,
     );
 
-    // Comparison slide: three bullets share one row in three distinct columns.
+    // Comparison slide: fan-out may use either columns or a stacked comparison
+    // rail, but reading order remains monotonic and boxes never overlap.
     const comparisonSlide = snapshot.slides[1];
     expect(comparisonSlide).toBeDefined();
     if (!comparisonSlide) return;
     const comparisonBullets = snapshot.elements
       .filter((element) => element.slideId === comparisonSlide.id && element.role === 'bullet')
-      .sort((left, right) => left.bbox.x - right.bbox.x);
+      .sort((left, right) => left.bbox.y - right.bbox.y || left.bbox.x - right.bbox.x);
     expect(comparisonBullets).toHaveLength(3);
     const [firstColumn, secondColumn, thirdColumn] = comparisonBullets;
     expect(firstColumn && secondColumn && thirdColumn).toBeTruthy();
     if (!firstColumn || !secondColumn || !thirdColumn) return;
-    expect(secondColumn.bbox.y).toBe(firstColumn.bbox.y);
-    expect(thirdColumn.bbox.y).toBe(firstColumn.bbox.y);
-    expect(secondColumn.bbox.x).toBeGreaterThanOrEqual(firstColumn.bbox.x + firstColumn.bbox.width);
-    expect(thirdColumn.bbox.x).toBeGreaterThanOrEqual(
-      secondColumn.bbox.x + secondColumn.bbox.width,
-    );
+    const isColumnRow = secondColumn.bbox.y === firstColumn.bbox.y;
+    if (isColumnRow) {
+      expect(secondColumn.bbox.x).toBeGreaterThanOrEqual(
+        firstColumn.bbox.x + firstColumn.bbox.width,
+      );
+      expect(thirdColumn.bbox.x).toBeGreaterThanOrEqual(
+        secondColumn.bbox.x + secondColumn.bbox.width,
+      );
+    } else {
+      expect(secondColumn.bbox.y).toBeGreaterThanOrEqual(
+        firstColumn.bbox.y + firstColumn.bbox.height,
+      );
+      expect(thirdColumn.bbox.y).toBeGreaterThanOrEqual(
+        secondColumn.bbox.y + secondColumn.bbox.height,
+      );
+    }
 
     // Chart-dominant slide: the chart claims roughly the right 55%.
     const chartSlide = snapshot.slides[3];
@@ -349,5 +360,19 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
       shape(1, total, { hasMedia: true }),
     ]);
     expect(mediaRun).toEqual(['media-dominant', 'media-dominant']);
+  });
+
+  it('keeps a second honest silhouette available for sparse middle slides', () => {
+    const total = 12;
+    const sparse = shape(5, total, { bulletCount: 1 });
+
+    expect(archetypeCandidates(sparse)).toEqual(['split', 'statement']);
+    expect(
+      chooseDeckArchetypes([
+        shape(4, total, { bulletCount: 1 }),
+        sparse,
+        shape(6, total, { bulletCount: 1 }),
+      ]),
+    ).toEqual(['split', 'statement', 'split']);
   });
 });

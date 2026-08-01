@@ -12,7 +12,11 @@ import {
   NODESLIDE_AUTHORED_ARTIFACT_BINDING_VERSION,
   type NodeSlideAuthoredArtifactBinding,
 } from '../../shared/nodeslideArtifactSpec';
-import { estimateTextHeight, resolveCollisions } from '../../shared/nodeslideLayoutMetrics';
+import {
+  estimateTextHeight,
+  nodeSlideTextInnerBox,
+  resolveCollisions,
+} from '../../shared/nodeslideLayoutMetrics';
 import { nodeslideStableId } from './nodeslideIds';
 import type { NodeSlidePlannedSlide } from './nodeslideSeed';
 import type { NodeSlideStorySpec } from './nodeslideStoryContext';
@@ -77,11 +81,37 @@ function fitTextFontSize(
   lineHeight: number,
   width: number,
   maxHeight: number,
+  paddingPoints = 0,
 ): number {
+  const inner = nodeSlideTextInnerBox(width, maxHeight, paddingPoints);
   for (let fontSize = preferred; fontSize >= minimum; fontSize -= 1) {
-    if (estimateTextHeight(content, fontSize, lineHeight, width) <= maxHeight) return fontSize;
+    if (estimateTextHeight(content, fontSize, lineHeight, inner.width) <= inner.height)
+      return fontSize;
   }
   return minimum;
+}
+
+function fitTextContent(
+  content: string,
+  fontSize: number,
+  lineHeight: number,
+  width: number,
+  maxHeight: number,
+): string {
+  if (estimateTextHeight(content, fontSize, lineHeight, width) <= maxHeight) return content;
+  const words = content.trim().split(/\s+/u);
+  let low = 0;
+  let high = words.length;
+  while (low < high) {
+    const middle = Math.ceil((low + high) / 2);
+    const candidate = `${words.slice(0, middle).join(' ')}…`;
+    if (estimateTextHeight(candidate, fontSize, lineHeight, width) <= maxHeight) {
+      low = middle;
+    } else {
+      high = middle - 1;
+    }
+  }
+  return `${words.slice(0, Math.max(1, low)).join(' ')}…`;
 }
 
 function resolveGeometryCollisions(elements: SlideElement[], slideTitle: string): void {
@@ -381,6 +411,16 @@ function buildFormulaElement(
 ): SlideElement {
   const { planned, theme } = ctx;
   const binding = authoredArtifactBinding(ctx);
+  const padding = 12;
+  const fontSize = fitTextFontSize(
+    planned.formula?.display ?? '',
+    30,
+    18,
+    1.15,
+    width,
+    height,
+    padding,
+  );
   return makeElement(ctx, 'formula', {
     name: 'Editable formula',
     kind: 'math',
@@ -392,10 +432,10 @@ function buildFormulaElement(
       fill: theme.colors.insight,
       color: theme.colors.insightInk,
       fontFamily: theme.typography.data,
-      fontSize: 30,
+      fontSize,
       fontWeight: 720,
       lineHeight: 1.15,
-      padding: 20,
+      padding,
       radius: theme.defaultRadius,
       textAlign: 'center',
       verticalAlign: 'middle',
@@ -464,7 +504,25 @@ function buildImageElement(
     name: 'Image credit',
     kind: 'text',
     role: 'caption',
-    bbox: box(x, y + height + 0.01, width, 0.05),
+    bbox: box(
+      x,
+      y + height + 0.01,
+      width,
+      Math.min(
+        0.09,
+        Math.max(
+          0.05,
+          estimateTextHeight(
+            planned.image.caption
+              ? planned.image.caption
+              : `${hasEmbeddedAsset ? 'Image credit' : 'Replace image before external use'} · ${credit}`,
+            14,
+            1.2,
+            width,
+          ),
+        ),
+      ),
+    ),
     rotation: 0,
     content: planned.image.caption
       ? planned.image.caption
@@ -770,9 +828,9 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
   const hasVisual = Boolean(planned.chart || planned.formula || planned.image);
   const mediaOnLeft = ctx.index % 2 === 1;
   elements.push(sectionLabel(ctx, 0.07, 0.065, 0.4));
-  const headlineFontSize = 42;
   const headlineWidth = hasVisual ? (mediaOnLeft ? 0.42 : 0.52) : 0.86;
   const headlineX = hasVisual && mediaOnLeft ? 0.5 : 0.07;
+  const headlineFontSize = fitTextFontSize(planned.headline, 42, 28, 1.05, headlineWidth, 0.3);
   const headlineHeight = Math.min(
     0.3,
     Math.max(0.18, estimateTextHeight(planned.headline, headlineFontSize, 1.05, headlineWidth)),
@@ -812,9 +870,10 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
   const bodyX = hasVisual && mediaOnLeft ? (isChartDominant ? 0.58 : 0.5) : 0.07;
   const bodyMaxHeight = Math.min(0.2, 0.85 - bodyY);
   const bodyFontSize = fitTextFontSize(planned.body, 18, 14, 1.35, bodyWidth, bodyMaxHeight);
+  const displayBody = fitTextContent(planned.body, bodyFontSize, 1.35, bodyWidth, bodyMaxHeight);
   const bodyHeight = Math.min(
     bodyMaxHeight,
-    Math.max(0.15, estimateTextHeight(planned.body, bodyFontSize, 1.35, bodyWidth)),
+    Math.max(0.15, estimateTextHeight(displayBody, bodyFontSize, 1.35, bodyWidth)),
   );
   elements.push(
     makeElement(ctx, 'body', {
@@ -823,7 +882,7 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
       role: 'body',
       bbox: box(bodyX, bodyY, bodyWidth, bodyHeight),
       rotation: 0,
-      content: planned.body,
+      content: displayBody,
       style: {
         color: theme.colors.muted,
         fontFamily: theme.typography.body,
@@ -913,10 +972,10 @@ function buildProcessCanvas(ctx: GrammarBuildContext): GrammarBuildResult {
   const { planned, theme } = ctx;
   const elements: SlideElement[] = [];
   elements.push(sectionLabel(ctx, 0.07, 0.06, 0.4));
-  const headlineFontSize = 32;
   const headlineWidth = 0.82;
+  const headlineFontSize = fitTextFontSize(planned.headline, 32, 24, 1.1, headlineWidth, 0.14);
   const headlineHeight = Math.min(
-    0.12,
+    0.14,
     Math.max(0.08, estimateTextHeight(planned.headline, headlineFontSize, 1.1, headlineWidth)),
   );
   elements.push(
@@ -1596,7 +1655,9 @@ export function dispatchCompositionGrammar(
   if (hasDiagram) return buildProcessCanvas(ctx);
   if (hasFormula) return buildAsymmetricEditorial(ctx);
   if (hasImage || hasVideo) return buildAsymmetricEditorial(ctx);
+  if (bulletCount <= 1 && archetype === 'statement') return buildFullBleedThesis(ctx);
   if (bulletCount >= 2 && archetype === 'comparison') return buildComparisonField(ctx);
+  if (bulletCount >= 2 && archetype === 'split') return buildAsymmetricEditorial(ctx);
   if (bulletCount >= 2) return buildEvidenceDossier(ctx);
   return buildAsymmetricEditorial(ctx);
 }

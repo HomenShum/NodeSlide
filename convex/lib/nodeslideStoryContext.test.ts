@@ -127,6 +127,23 @@ describe('NodeSlide StorySpec and visual-material inventory', () => {
     expect(context.storySpec.proofObligations[0]).toMatchObject({ fulfillment: 'blocked' });
   });
 
+  it('carries a 12-slide governance request through pacing, continuity, and reveal contracts', () => {
+    const context = buildNodeSlideStoryContext({
+      title: 'AI governance release decision',
+      brief: {
+        ...BRIEF,
+        prompt:
+          'Create a 12-slide governance deck that moves from inventory through evidence to a release decision.',
+      },
+    });
+
+    expect(context.storySpec.pacing.reduce((sum, phase) => sum + phase.slideCount, 0)).toBe(12);
+    expect(context.storySpec.sceneContinuity.progression).toHaveLength(12);
+    expect(context.storySpec.revealPacing).toHaveLength(12);
+    expect(context.storySpec.compositionPlan).toHaveLength(12);
+    expect(Math.max(...context.storySpec.emotionalArc.intensity)).toBe(100);
+  });
+
   it('recomputes the authoritative context instead of trusting provider material claims', () => {
     const providerSpec = deterministicBriefSpec('Screenshot review', {
       ...BRIEF,

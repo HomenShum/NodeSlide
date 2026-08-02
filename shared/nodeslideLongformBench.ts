@@ -103,7 +103,10 @@ export interface SlideArtifactEligibility {
 export type VisualInspectionCheck = 'pass' | 'fail';
 
 export interface SlideVisualInspectionReceipt {
+  deckKind: 'long' | 'short' | 'executive';
   slideIndex: number;
+  inspectionSource: 'independent-ledger';
+  assessmentDigest: string;
   browserImageDigest: string;
   pptxImageDigest: string;
   checks: {

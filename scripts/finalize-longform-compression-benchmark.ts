@@ -5,7 +5,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateNodeSlideSnapshot } from '../convex/lib/nodeslideValidation';
 import type { DeckSnapshot } from '../shared/nodeslide';
-import { validateLongformBenchmarkRun } from './lib/longform-compression-core.mjs';
+import {
+  findMissingRenderedClaims,
+  validateLongformBenchmarkRun,
+} from './lib/longform-compression-core.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fixtureRoot = path.join(repoRoot, 'benchmarks/longform-compression/v1/staar-alcon');
@@ -19,6 +22,7 @@ const fileDigest = async (filePath: string) => sha256(await readFile(filePath));
 interface Claim {
   claimId: string;
   statement: string;
+  displayStatement?: string;
   criticality: 'decision-critical' | 'supporting' | 'background';
   value?: number;
   evidenceSourceIds: string[];
@@ -48,6 +52,33 @@ interface RenderDeckReceipt {
   }>;
 }
 
+interface InspectionPage {
+  deckKind: 'long' | 'short' | 'executive';
+  slideIndex: number;
+  browserPath: string;
+  pptxPath: string;
+  browserImageDigest: string;
+  pptxImageDigest: string;
+  inspectionSource: 'independent-ledger';
+  assessmentDigest: string;
+  checks: Record<string, 'pass' | 'fail'>;
+  observedProblems: string[];
+  requiredRepairs: string[];
+  inspectedBy: string;
+  inspectedAt: string;
+}
+
+interface InspectionLedger {
+  schemaVersion: 'nodeslide.longform-visual-inspection-ledger/v1';
+  assessmentPath: string;
+  assessmentDigest: string;
+  renderReceiptPath: string;
+  renderReceiptDigest: string;
+  pages: InspectionPage[];
+  sectionMontages: Array<Record<string, unknown>>;
+  contactSheets: Record<'long' | 'short' | 'executive', Record<string, unknown>>;
+}
+
 const benchmark = await readJson<Record<string, unknown>>(
   path.join(benchmarkRoot, 'benchmark.json'),
 );
@@ -72,6 +103,32 @@ const compressionLedger = await readJson<Array<Record<string, unknown>>>(
 const renderReceipt = await readJson<{
   decks: Record<'long' | 'short' | 'executive', RenderDeckReceipt>;
 }>(path.join(outputRoot, 'dual-render-receipt.json'));
+const inspectionLedger = await readJson<InspectionLedger>(
+  path.join(outputRoot, 'visual-inspection-ledger.json'),
+);
+if (inspectionLedger.schemaVersion !== 'nodeslide.longform-visual-inspection-ledger/v1') {
+  throw new Error(`Unsupported visual inspection ledger: ${inspectionLedger.schemaVersion}`);
+}
+
+async function assertCurrentDigest(label: string, filePath: string, expectedDigest: string) {
+  const actualDigest = await fileDigest(filePath);
+  if (actualDigest !== expectedDigest) {
+    throw new Error(
+      `${label} digest changed after inspection: ${actualDigest} != ${expectedDigest}`,
+    );
+  }
+}
+
+await assertCurrentDigest(
+  'Dual-render receipt',
+  path.join(outputRoot, 'dual-render-receipt.json'),
+  inspectionLedger.renderReceiptDigest,
+);
+await assertCurrentDigest(
+  'Independent visual assessment',
+  inspectionLedger.assessmentPath,
+  inspectionLedger.assessmentDigest,
+);
 
 const snapshots = Object.fromEntries(
   await Promise.all(
@@ -81,31 +138,19 @@ const snapshots = Object.fromEntries(
     ]),
   ),
 ) as Record<'long' | 'short' | 'executive', DeckSnapshot>;
-const corpora = Object.fromEntries(
-  Object.entries(snapshots).map(([kind, snapshot]) => [
-    kind,
-    snapshot.elements
-      .map((element) => element.content ?? '')
-      .join('\n')
-      .toLocaleLowerCase(),
-  ]),
-) as Record<'long' | 'short' | 'executive', string>;
-const claimPresent = (kind: 'long' | 'short', claim: Claim) =>
-  corpora[kind].includes(claim.statement.slice(0, 45).toLocaleLowerCase());
 const missingRenderedClaims = Object.fromEntries(
   (['long', 'short'] as const).map((kind) => [
     kind,
-    criticalFacts.claims
-      .filter((claim) => !claimPresent(kind, claim))
-      .map((claim) => claim.claimId),
+    findMissingRenderedClaims(snapshots[kind], criticalFacts.claims),
   ]),
 );
+const claimPresent = (kind: 'long' | 'short', claim: Claim) =>
+  findMissingRenderedClaims(snapshots[kind], [claim]).length === 0;
 if (missingRenderedClaims.long.length > 0 || missingRenderedClaims.short.length > 0) {
   throw new Error(`Rendered claim reconciliation failed: ${JSON.stringify(missingRenderedClaims)}`);
 }
 
 const now = new Date().toISOString();
-const visualInspectionReceipts = [];
 for (const kind of ['long', 'short', 'executive'] as const) {
   const snapshot = snapshots[kind];
   const validation = validateNodeSlideSnapshot(snapshot, Date.UTC(2026, 7, 2));
@@ -145,37 +190,45 @@ for (const kind of ['long', 'short', 'executive'] as const) {
       `${kind} snapshot failed publication validation: ${JSON.stringify({ summary, samples })}`,
     );
   }
-  for (let offset = 0; offset < snapshot.slides.length; offset += 1) {
-    const slideIndex = offset + 1;
-    const browserPath = path.join(
-      outputRoot,
-      kind,
-      'browser',
-      `slide-${String(slideIndex).padStart(3, '0')}.png`,
-    );
-    const pptxPath = path.join(outputRoot, kind, 'pptx-render', `slide-${slideIndex}.png`);
-    visualInspectionReceipts.push({
-      deckKind: kind,
-      slideIndex,
-      browserImageDigest: await fileDigest(browserPath),
-      pptxImageDigest: await fileDigest(pptxPath),
-      checks: {
-        overlap: 'pass',
-        clipping: 'pass',
-        minimumType: 'pass',
-        sourceLegibility: 'pass',
-        visualHierarchy: 'pass',
-        semanticVisualFit: 'pass',
-        density: 'pass',
-        exportParity: 'pass',
-      },
-      observedProblems: [],
-      requiredRepairs: [],
-      inspectedBy: 'codex-dual-render-contact-sheet-review-2026-08-02',
-      inspectedAt: now,
-    });
-  }
 }
+
+const visualInspectionReceipts = await Promise.all(
+  inspectionLedger.pages.map(async ({ browserPath, pptxPath, ...receipt }) => {
+    const expectedBrowserPath = path.join(
+      outputRoot,
+      receipt.deckKind,
+      'browser',
+      `slide-${String(receipt.slideIndex).padStart(3, '0')}.png`,
+    );
+    const expectedPptxPath = path.join(
+      outputRoot,
+      receipt.deckKind,
+      'pptx-render',
+      `slide-${receipt.slideIndex}.png`,
+    );
+    if (
+      path.resolve(browserPath) !== path.resolve(expectedBrowserPath) ||
+      path.resolve(pptxPath) !== path.resolve(expectedPptxPath)
+    ) {
+      throw new Error(
+        `${receipt.deckKind}:${receipt.slideIndex} inspection points to substituted render paths.`,
+      );
+    }
+    await Promise.all([
+      assertCurrentDigest(
+        `${receipt.deckKind}:${receipt.slideIndex} browser image`,
+        browserPath,
+        receipt.browserImageDigest,
+      ),
+      assertCurrentDigest(
+        `${receipt.deckKind}:${receipt.slideIndex} PPTX image`,
+        pptxPath,
+        receipt.pptxImageDigest,
+      ),
+    ]);
+    return receipt;
+  }),
+);
 
 const graphDigest = sha256(
   JSON.stringify({ sourceManifest, criticalFacts, questions, deckProgram }),
@@ -202,16 +255,43 @@ const decisionQuestionResults = questions.questions.map((question) => ({
     return claim ? claimPresent('short', claim) : false;
   }),
 }));
-const sectionMontages = renderReceipt.decks.long.sectionMontages as Array<Record<string, string>>;
-const contactSheet = async (kind: 'long' | 'short' | 'executive') => ({
-  inspected: true,
-  browserPath: renderReceipt.decks[kind].browserMontagePath,
-  browserDigest: await fileDigest(renderReceipt.decks[kind].browserMontagePath),
-  pptxPath: renderReceipt.decks[kind].pptxMontagePath,
-  pptxDigest: await fileDigest(renderReceipt.decks[kind].pptxMontagePath),
-  inspectedBy: 'codex-dual-render-contact-sheet-review-2026-08-02',
-  inspectedAt: now,
-});
+const sectionMontages = await Promise.all(
+  inspectionLedger.sectionMontages.map(async (section) => {
+    const browserPath = String(section.browserMontagePath ?? '');
+    const pptxPath = String(section.pptxMontagePath ?? '');
+    await Promise.all([
+      assertCurrentDigest(
+        `Section ${String(section.sectionId)} browser montage`,
+        browserPath,
+        String(section.browserDigest),
+      ),
+      assertCurrentDigest(
+        `Section ${String(section.sectionId)} PPTX montage`,
+        pptxPath,
+        String(section.pptxDigest),
+      ),
+    ]);
+    return section;
+  }),
+);
+const contactSheets = Object.fromEntries(
+  await Promise.all(
+    (['long', 'short', 'executive'] as const).map(async (kind) => {
+      const receipt = inspectionLedger.contactSheets[kind];
+      const browserPath = String(receipt.browserPath ?? '');
+      const pptxPath = String(receipt.pptxPath ?? '');
+      await Promise.all([
+        assertCurrentDigest(
+          `${kind} browser contact sheet`,
+          browserPath,
+          String(receipt.browserDigest),
+        ),
+        assertCurrentDigest(`${kind} PPTX contact sheet`, pptxPath, String(receipt.pptxDigest)),
+      ]);
+      return [kind, receipt];
+    }),
+  ),
+);
 const run = {
   canonicalEvidenceGraphDigest: graphDigest,
   longDeck: { kind: 'long', slideCount: 72, canonicalEvidenceGraphDigest: graphDigest },
@@ -224,22 +304,12 @@ const run = {
     .filter((source) => source.role === 'evidence-source' && source.authority === 'primary')
     .map((source) => source.sourceId),
   artifactEligibility: eligibility,
+  visualInspectionAssessmentDigest: inspectionLedger.assessmentDigest,
   visualInspectionReceipts,
-  sectionMontageReceipts: await Promise.all(
-    sectionMontages.map(async (section) => ({
-      sectionId: section.sectionId,
-      inspected: true,
-      browserMontagePath: section.browserMontagePath,
-      browserDigest: await fileDigest(section.browserMontagePath),
-      pptxMontagePath: section.pptxMontagePath,
-      pptxDigest: await fileDigest(section.pptxMontagePath),
-      inspectedBy: 'codex-full-deck-and-section-contact-sheet-review-2026-08-02',
-      inspectedAt: now,
-    })),
-  ),
-  longContactSheetInspection: await contactSheet('long'),
-  shortContactSheetInspection: await contactSheet('short'),
-  executiveContactSheetInspection: await contactSheet('executive'),
+  sectionMontageReceipts: sectionMontages,
+  longContactSheetInspection: contactSheets.long,
+  shortContactSheetInspection: contactSheets.short,
+  executiveContactSheetInspection: contactSheets.executive,
   compressionLedger,
   reconciledClaimValues: { long: reconciledValues, short: reconciledValues },
   unsupportedDecisionCriticalClaims: [],

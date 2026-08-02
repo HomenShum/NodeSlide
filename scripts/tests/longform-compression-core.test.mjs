@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   findGenericNarrativeFallbacks,
   findMissingRenderedClaims,
+  findTruncatedTextElements,
   validateGeneratedDeckGates,
   validateLongformBenchmarkDefinition,
   validateLongformBenchmarkRun,
@@ -16,11 +17,62 @@ const deckProgram = await load('staar-alcon/deck-program.json');
 const questions = await load('staar-alcon/decision-questions.json');
 const criticalFacts = await load('staar-alcon/critical-facts.json');
 const heldOutPlan = await load('held-out-plan.json');
+const rendererSource = await readFile(
+  new URL('../render-longform-compression-benchmark.ts', import.meta.url),
+  'utf8',
+);
+
+describe('rendered-text integrity', () => {
+  it('fails a committee deck when generated copy hides evidence behind an ellipsis', () => {
+    const snapshot = {
+      elements: [
+        {
+          id: 'element-risk',
+          slideId: 'slide-10',
+          name: 'Risk evidence',
+          content: 'Citi relied on management forecasts without independent verification…',
+        },
+        {
+          id: 'element-clean',
+          slideId: 'slide-11',
+          name: 'Clean evidence',
+          content: 'Closing requires HSR clearance.',
+        },
+      ],
+    };
+
+    expect(findTruncatedTextElements(snapshot)).toEqual([
+      {
+        slideId: 'slide-10',
+        elementId: 'element-risk',
+        name: 'Risk evidence',
+        content: 'Citi relied on management forecasts without independent verification…',
+      },
+    ]);
+  });
+});
+
+describe('committee-page evidence alignment', () => {
+  it('keeps forecast, process, and outstanding-diligence evidence on their actual decision pages', () => {
+    const longSlidesFor = (claimId) =>
+      criticalFacts.claims.find((claim) => claim.claimId === claimId)?.longDeckSlideIndexes ?? [];
+
+    expect(longSlidesFor('citi-forecast-reliance')).toContain(64);
+    expect(longSlidesFor('broadwood-opposition')).toContain(65);
+    expect(longSlidesFor('open-diligence-boundary')).toContain(68);
+    expect(longSlidesFor('regulatory-clearances')).toContain(68);
+    expect(longSlidesFor('staar-termination-fee')).not.toContain(68);
+    expect(longSlidesFor('reduced-termination-fee')).not.toContain(68);
+    expect(longSlidesFor('alcon-regulatory-fee')).not.toContain(68);
+  });
+});
 
 function receipt(deckKind, slideIndex) {
   return {
     deckKind,
     slideIndex,
+    inspectionSource: 'independent-ledger',
+    assessmentDigest: 'sha256:independent-visual-assessment',
     browserImageDigest: `sha256:browser-${deckKind}-${slideIndex}`,
     pptxImageDigest: `sha256:pptx-${deckKind}-${slideIndex}`,
     checks: {
@@ -48,6 +100,7 @@ function completeRun() {
       .map((claim) => [claim.claimId, claim.value]),
   );
   return {
+    visualInspectionAssessmentDigest: 'sha256:independent-visual-assessment',
     canonicalEvidenceGraphDigest: graphDigest,
     longDeck: { kind: 'long', slideCount: 72, canonicalEvidenceGraphDigest: graphDigest },
     shortDeck: { kind: 'short', slideCount: 12, canonicalEvidenceGraphDigest: graphDigest },
@@ -74,10 +127,24 @@ function completeRun() {
     sectionMontageReceipts: deckProgram.sections.map((section) => ({
       sectionId: section.sectionId,
       inspected: true,
+      inspectionSource: 'independent-ledger',
+      assessmentDigest: 'sha256:independent-visual-assessment',
     })),
-    longContactSheetInspection: { inspected: true },
-    shortContactSheetInspection: { inspected: true },
-    executiveContactSheetInspection: { inspected: true },
+    longContactSheetInspection: {
+      inspected: true,
+      inspectionSource: 'independent-ledger',
+      assessmentDigest: 'sha256:independent-visual-assessment',
+    },
+    shortContactSheetInspection: {
+      inspected: true,
+      inspectionSource: 'independent-ledger',
+      assessmentDigest: 'sha256:independent-visual-assessment',
+    },
+    executiveContactSheetInspection: {
+      inspected: true,
+      inspectionSource: 'independent-ledger',
+      assessmentDigest: 'sha256:independent-visual-assessment',
+    },
     compressionLedger: criticalFacts.claims.map((claim) => ({
       sourceClaimId: claim.claimId,
       sourceSlideIndexes: claim.longDeckSlideIndexes,
@@ -100,6 +167,12 @@ function completeRun() {
 }
 
 describe('NodeSlide Longform & Compression Bench', () => {
+  it('keeps an investment-committee browser render on the canonical NodeSlide visual path', () => {
+    expect(rendererSource).toContain('renderSlideHtml(snapshot, slideId)');
+    expect(rendererSource).not.toContain('linear-gradient(180deg,#C65334,#E6A18D)');
+    expect(rendererSource).not.toContain('class="bar-wrap"');
+  });
+
   it('rejects generic evidence placeholders in a transaction associate draft', () => {
     expect(
       findGenericNarrativeFallbacks([
@@ -198,6 +271,18 @@ describe('NodeSlide Longform & Compression Bench', () => {
     expect(
       validateLongformBenchmarkRun({ benchmark, sourceManifest, criticalFacts, run }),
     ).toContain('long:47 was not opened and inspected');
+  });
+
+  it('kills a self-certified run whose finalizer fabricated visual passes without an independent assessment', () => {
+    const run = completeRun();
+    run.visualInspectionAssessmentDigest = undefined;
+    for (const receipt of run.visualInspectionReceipts) {
+      receipt.inspectionSource = undefined;
+      receipt.assessmentDigest = undefined;
+    }
+    expect(
+      validateLongformBenchmarkRun({ benchmark, sourceManifest, criticalFacts, run }),
+    ).toContain('visual inspection must derive from an independent digest-bound assessment');
   });
 
   it('kills a run when post-vote hindsight leaks into the pre-vote generation bundle', () => {

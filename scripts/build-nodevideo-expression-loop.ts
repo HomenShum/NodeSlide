@@ -5,6 +5,7 @@ import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import JSZip from 'jszip';
 import { chromium } from 'playwright';
 import { nodeslideStableId } from '../convex/lib/nodeslideIds';
 import { type NodeSlidePlannedSlide, buildBriefNodeSlide } from '../convex/lib/nodeslideSeed';
@@ -203,6 +204,29 @@ function unsupportedMatches(snapshot: DeckSnapshot, prohibited: string[]) {
   return prohibited.filter((claim) => corpus.includes(claim.toLowerCase()));
 }
 
+function benchmarkClaimMatches(corpus: string) {
+  const patterns = [
+    /\b\d{1,3}(?:,\d{3})+\s+held-out requests\b/giu,
+    /\b\d+(?:\.\d+)?%\s+(?:review|abstain)\b/giu,
+  ];
+  return [...new Set(patterns.flatMap((pattern) => corpus.match(pattern) ?? []))];
+}
+
+function snapshotCorpus(snapshot: DeckSnapshot) {
+  return [
+    ...snapshot.slides.flatMap((slide) => [slide.title, slide.section ?? '', slide.notes ?? '']),
+    ...snapshot.elements.map((element) => element.content ?? ''),
+  ].join('\n');
+}
+
+function assertNoBenchmarkShorthand(label: string, corpus: string) {
+  const matches = benchmarkClaimMatches(corpus);
+  if (matches.length > 0) {
+    throw new Error(`${label} contains prohibited benchmark shorthand: ${matches.join(', ')}`);
+  }
+  return matches;
+}
+
 const approved = JSON.parse(await readFile(approvedPath, 'utf8')) as ApprovedExplanation;
 if (approved.schemaVersion !== 'nodeagent.approved-explanation/v1') {
   throw new Error(`Unsupported approved explanation schema: ${approved.schemaVersion}`);
@@ -211,6 +235,11 @@ if (approved.sections.length !== 5) {
   throw new Error(`Expected exactly five approved sections; received ${approved.sections.length}.`);
 }
 
+const plannedSlides = slidesFromApproved(approved.sections);
+const plannedBenchmarkMatches = assertNoBenchmarkShorthand(
+  'Planned slides',
+  JSON.stringify(plannedSlides),
+);
 const deckId = `nodevideo-expression-loop-${approved.id}`;
 const built = buildBriefNodeSlide({
   deckId,
@@ -230,7 +259,7 @@ const built = buildBriefNodeSlide({
   rawSpec: {
     title: 'NodeVideo Expression Loop — trust through typed execution',
     narrative: approved.sections.map((section) => section.role),
-    slides: slidesFromApproved(approved.sections),
+    slides: plannedSlides,
   },
   now,
 });
@@ -288,6 +317,7 @@ if (snapshot.slides.some((slide) => !slide.notes?.includes('Evidence pointers:')
 if (snapshot.elements.some((element) => !element.exportCapabilities.includes('pptx_editable'))) {
   throw new Error('Editability gate failed: a slide element lacks pptx_editable capability.');
 }
+const snapshotBenchmarkMatches = assertNoBenchmarkShorthand('Snapshot', snapshotCorpus(snapshot));
 
 await mkdir(outputRoot, { recursive: true });
 const html = renderDeckHtml(snapshot);
@@ -299,6 +329,15 @@ const pptx = Buffer.from(
       ? pptxBinary
       : new Uint8Array(await pptxBinary.arrayBuffer()),
 );
+const pptxZip = await JSZip.loadAsync(pptx);
+const pptxTextParts = await Promise.all(
+  Object.entries(pptxZip.files)
+    .filter(
+      ([name, entry]) => !entry.dir && /^ppt\/(?:slides|notesSlides)\/[^/]+\.xml$/u.test(name),
+    )
+    .map(([, entry]) => entry.async('string')),
+);
+const pptxBenchmarkMatches = assertNoBenchmarkShorthand('PPTX', pptxTextParts.join('\n'));
 const snapshotPath = path.join(outputRoot, 'nodevideo-expression-loop.nodeslide.json');
 const htmlPath = path.join(outputRoot, 'nodevideo-expression-loop.html');
 const pptxPath = path.join(outputRoot, 'nodevideo-expression-loop.pptx');
@@ -314,6 +353,10 @@ await Promise.all([mkdir(browserDir, { recursive: true }), mkdir(pptxDir, { recu
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
 await page.goto(`file:///${htmlPath.replaceAll('\\', '/')}`, { waitUntil: 'load' });
+const htmlBenchmarkMatches = assertNoBenchmarkShorthand(
+  'HTML',
+  (await page.locator('[data-slide-id]').allTextContents()).join('\n'),
+);
 const browserDigests: string[] = [];
 for (let index = 0; index < snapshot.slides.length; index += 1) {
   await page.evaluate((activeIndex) => {
@@ -380,6 +423,17 @@ const report = {
     issues: validation.issues,
   },
   unsupportedClaimMatches: prohibited,
+  prohibitedBenchmarkPercentagesAbsent:
+    plannedBenchmarkMatches.length === 0 &&
+    snapshotBenchmarkMatches.length === 0 &&
+    htmlBenchmarkMatches.length === 0 &&
+    pptxBenchmarkMatches.length === 0,
+  prohibitedBenchmarkMatches: {
+    plannedSlides: plannedBenchmarkMatches,
+    snapshot: snapshotBenchmarkMatches,
+    html: htmlBenchmarkMatches,
+    pptx: pptxBenchmarkMatches,
+  },
   editableElementCount: snapshot.elements.filter((element) =>
     element.exportCapabilities.includes('pptx_editable'),
   ).length,

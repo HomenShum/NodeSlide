@@ -151,6 +151,20 @@ describe('NodeSlide private-preview admission', () => {
 });
 
 describe('NodeSlide create action admission boundary', () => {
+  it('refuses a direct create with no per-submission identity before quota or provider work', async () => {
+    vi.stubEnv('NODESLIDE_PUBLIC_CREATION', 'true');
+    const runMutation = vi.fn();
+    const { creationAttemptId: _omitted, ...args } = createActionArgs(undefined);
+
+    await expect(
+      createDeckHandler({ runMutation }, args as CreateActionArgs),
+    ).rejects.toMatchObject({
+      data: { kind: 'nodeslide_create', code: 'invalid_request' },
+    });
+    expect(runMutation).not.toHaveBeenCalled();
+    expect(callNodeSlideFreeJson).not.toHaveBeenCalled();
+  });
+
   it('allows quota-bound public launch creation without a manual access code', async () => {
     vi.stubEnv('NODESLIDE_PUBLIC_CREATION', 'true');
     const workspace = { deck: { id: 'deck-public-created' } };
@@ -492,6 +506,7 @@ function validFields() {
 interface CreateActionArgs {
   accessCode?: string;
   clientSessionId: string;
+  creationAttemptId: string;
   title: string;
   brief: {
     prompt: string;
@@ -525,6 +540,7 @@ function createActionArgs(accessCode: string | undefined): CreateActionArgs {
   return {
     ...(accessCode === undefined ? {} : { accessCode }),
     clientSessionId: 'rotatable-session',
+    creationAttemptId: 'create-test-attempt-00000000000000000000000000000001',
     title: 'Private preview deck',
     brief: {
       prompt: 'Explain the decision clearly.',

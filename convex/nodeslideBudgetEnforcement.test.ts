@@ -725,6 +725,7 @@ describe('deck creation is reserved before it is issued', () => {
       'createDeckFromBrief must build its provider through a named budgeted seam',
     ).toBeGreaterThan(0);
     expect(seam).toContain('const briefDispatch = createNodeSlideBudgetedCreateDispatch({');
+    expect(seam).toContain('requiredNodeSlideDirectCreateRunId(');
     expect(seam).toContain('ledger: nodeSlideBudgetLedgerClient(ctx)');
     // Derived from the route, never a literal: a hardcoded `false` would
     // silently unmeter every create.

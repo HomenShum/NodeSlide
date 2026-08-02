@@ -28,7 +28,13 @@ describe('NodeSlideStudio mounts the agent session', () => {
   it('imports the provider from the session barrel', () => {
     // Co-imports are allowed (the UI contract publisher reads `useOptionalAgentSession`
     // from the same barrel); dropping `AgentSessionProvider` is not.
-    expect(STUDIO_SOURCE).toMatch(/import \{ AgentSessionProvider[^}]*\} from '\.\/session';/u);
+    expect(STUDIO_SOURCE).toMatch(
+      /import\s*\{[^}]*AgentSessionProvider[^}]*\}\s*from '\.\/session';/u,
+    );
+  });
+
+  it('mints a fresh cryptographic identity at the direct landing create boundary', () => {
+    expect(STUDIO_SOURCE).toContain('creationAttemptId: `create-${createAgentSessionSecret()}`');
   });
 
   it('wraps the studio content in the provider', () => {

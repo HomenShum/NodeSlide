@@ -173,18 +173,32 @@ function nodeSlideCreateRunBudget(): NodeSlideRunBudgetInput {
 /**
  * The budget run identity for one deck creation.
  *
- * Derived from the canonical request digest — `stableSerialize`, i.e. sorted-key
- * hashing — so a retried create reserves against the SAME ledger row instead of
- * minting a fresh cap each attempt. That is what makes the reservation replay
- * safely: `callNodeSlideBudgetedJson` keys idempotency on (budgetId, callId),
- * so an identical retried request replays its receipt rather than paying twice.
+ * Derived from a per-submission id plus the canonical request digest. Convex
+ * transport retries carry the SAME id and replay safely, while a deliberate
+ * second submission of an identical brief carries a fresh id and gets a fresh
+ * provider call. Request-digest identity alone incorrectly collapsed those two
+ * different user intents into one permanently-accounted run.
  *
  * Deliberately NOT the deck id: the deck id is minted AFTER the provider call
  * (it embeds `Date.now()`), and a budget that only exists after the money is
  * spent cannot refuse the spend.
  */
-function nodeSlideCreateRunId(requestDigest: string): string {
-  return nodeslideStableId('nsrun_create', requestDigest);
+export function nodeSlideDirectCreateRunId(
+  clientSessionId: string,
+  creationAttemptId: string,
+  requestDigest: string,
+): string {
+  return nodeslideStableId('nsrun_create', clientSessionId, creationAttemptId, requestDigest);
+}
+
+function requiredNodeSlideDirectCreateRunId(
+  clientSessionId: string,
+  creationAttemptId: string | null,
+  requestDigest: string,
+): string {
+  if (!creationAttemptId)
+    throw new Error('Direct NodeSlide create is missing its attempt identity.');
+  return nodeSlideDirectCreateRunId(clientSessionId, creationAttemptId, requestDigest);
 }
 
 /**
@@ -1688,6 +1702,7 @@ export const createDeckFromBrief = action({
   args: {
     accessCode: v.optional(v.string()),
     clientSessionId: v.string(),
+    creationAttemptId: v.optional(v.string()),
     title: v.string(),
     brief: nodeslideBriefValidator,
     themeId: v.string(),
@@ -1735,6 +1750,9 @@ export const createDeckFromBrief = action({
           executionAccessKey: args.durableJob.executionAccessKey,
         }
       : null;
+    const creationAttemptId = durableJob
+      ? null
+      : requiredCreateText(args.creationAttemptId ?? '', 'creationAttemptId', 96, 256);
     // THE OUTPUT-IDENTITY BINDING, and the reason it runs here rather than after
     // generation. Both checks below are pure string comparisons over arguments
     // already in hand: no database read, no quota, no provider call. A caller
@@ -1984,14 +2002,14 @@ export const createDeckFromBrief = action({
     // is the ONLY run id that lands on the row `nodeslideJobs.getBudgetReceipt`
     // reads — keying on the request digest instead would reserve against a
     // second, orphaned ledger row and the job's own receipt would report zero
-    // spend forever. The digest-keyed id still wins for a direct create, where
-    // there is no job row and no id to inherit; #113's reasoning for it (a retry
-    // must reserve against the same row rather than mint a fresh cap) is exactly
-    // what the job id already provides here.
+    // spend forever. A direct create uses the client-minted submission id: one
+    // action retry reuses it, but a later intentional rerun does not replay the
+    // first run merely because its brief is identical.
+    const createRequestDigest = nodeSlideJobRequestDigest(nodeSlideCreateJobRequestFromArgs(args));
     const briefDispatch = createNodeSlideBudgetedCreateDispatch({
       runId:
         durableJob?.jobId ??
-        nodeSlideCreateRunId(nodeSlideJobRequestDigest(nodeSlideCreateJobRequestFromArgs(args))),
+        requiredNodeSlideDirectCreateRunId(clientSessionId, creationAttemptId, createRequestDigest),
       budget: nodeSlideCreateRunBudget(),
       metered: providerChoice.providerMode !== 'deterministic',
       ledger: nodeSlideBudgetLedgerClient(ctx),

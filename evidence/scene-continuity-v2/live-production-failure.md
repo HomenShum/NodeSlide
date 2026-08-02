@@ -38,12 +38,14 @@
 ## Post-deploy knockout exposed a second failure lane
 
 - Fresh production deck: `deck_msb6tyjy_e5e73278ff94749748b78729d699a961`.
-- The UI created 12 slides in one second but did not call Kimi again. The completed prior job's owner capability and idempotency key were reused because the browser session matched only `kind + requestFingerprint`, even after terminal success.
+- The UI created 12 slides in one second but did not call Kimi again. Initial diagnosis implicated the editor's durable-session binding, but a same-tab knockout after that fix still replayed. Browser storage was empty and the landing page was shown to bypass `AgentSessionProvider`, disproving that explanation as the cause of this lane.
+- The actual landing path calls `createDeckFromBrief` directly. Its budget run id was derived only from the canonical brief digest, so a deliberate second submission of a byte-identical prompt was indistinguishable from a transport retry and permanently reused the first call receipt.
 - The budget ledger honestly refused to bill the same call twice, but the create path then presented a deterministic fallback as the new run. The trace disclosed the fallback; the visible creation flow did not make the replay obvious.
 - That exact fallback exposed three new slide-11 overflows: one centered headline and two success-criteria bullets. Visual focus changed their widths but retained heights measured for their pre-focus widths.
 
 ## Second-lane closure
 
-- Reuse a creation binding only while a job is active or after an ambiguous failed admission; terminal success now mints a fresh owner capability and idempotency key.
+- The editor session binding still reuses a creation binding only while a job is active or after an ambiguous failed admission; terminal success now mints a fresh owner capability and idempotency key.
+- The direct landing path now mints a cryptographic per-submission attempt id. Convex retries retain that id and replay one budget row; a later click gets a fresh id and therefore a fresh provider call even for an identical brief. The server binds session id, attempt id, and canonical request digest into the run id.
 - Recompute visual-focus headline and bullet heights after their widths change, with renderer headroom.
-- Lock both behaviors with the exact saved production brief and a repeated completed-run session scenario.
+- Lock the geometry behavior with the exact saved production brief; lock retry-versus-rerun semantics with positive retry, deliberate repeat, and cross-session collision scenarios.

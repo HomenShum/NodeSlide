@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { dispatchCompositionGrammar } from '../convex/lib/nodeslideCompositionGrammars';
 import { buildBriefNodeSlide } from '../convex/lib/nodeslideSeed';
+import type { NodeSlideStorySpec } from '../convex/lib/nodeslideStoryContext';
 import { validateNodeSlideSnapshot } from '../convex/lib/nodeslideValidation';
 
 const brief = {
@@ -266,5 +268,132 @@ describe('long-form artifact composition', () => {
       .filter((element) => element.slideId === built.snapshot.slides[9]?.id)
       .map((element) => element.role);
     expect(closingRoles).toContain('artifact_decision_gate');
+  });
+
+  it('keeps a transaction metric stage inside the canvas with long evidence prose', () => {
+    const planned = {
+      title: 'Advisor economics',
+      section: 'Valuation',
+      headline: 'Analyst target context',
+      body: 'Approximately $26.6 million of the roughly $30.6 million fee was contingent on closing. Preserve the source boundary and the fairness-opinion limitation.',
+      bullets: [
+        'Contingent fee',
+        'Forecasts were not independently verified',
+        'The opinion was not a vote recommendation',
+      ],
+      metric: '26.6',
+      metricLabel: 'USD millions contingent on closing',
+    };
+    const built = buildBriefNodeSlide({
+      deckId: 'metric-stage-long-prose',
+      projectId: 'transaction-approval',
+      title: 'Advisor economics',
+      brief: {
+        prompt: 'Show the contingent advisor fee and its decision limitation.',
+        audience: 'Transaction committee',
+        purpose: 'Review conflicts',
+        successCriteria: ['No overflow'],
+      },
+      themeId: 'quiet-precision',
+      rawSpec: {
+        title: 'Advisor economics',
+        narrative: ['conflict'],
+        slides: [planned],
+      },
+      now: Date.UTC(2026, 7, 2),
+    });
+    const direct = dispatchCompositionGrammar('stat-dominant', {
+      deckId: built.snapshot.deck.id,
+      slideId: 'metric-stage-proof',
+      planned,
+      index: 2,
+      total: 5,
+      theme: built.snapshot.deck.theme,
+      sourceBriefId: 'brief',
+      sourceEvidenceId: 'evidence',
+      linkedSourceIds: [],
+      authoredSourceIdByRef: new Map(),
+    });
+    expect(direct.grammarId).toBe('metric-stage');
+    expect(
+      direct.elements.every(
+        (element) => element.bbox.y >= 0 && element.bbox.y + element.bbox.height <= 1,
+      ),
+    ).toBe(true);
+    expect(direct.elements.some((element) => element.role === 'bullet')).toBe(false);
+  });
+
+  it('keeps a centered executive scene legible with three transaction evidence claims', () => {
+    const planned = {
+      title: 'Economics',
+      section: 'Readout / 02',
+      headline: 'Economics',
+      body: "The $28 offer represented approximately a 59% premium to STAAR's 90-day VWAP and 51% to its August 4, 2025 closing price. Q2 2025 net sales were $44.320 million, down 55.2% year over year. At June 27, 2025, cash and investments totaled $189.883 million.",
+      bullets: [
+        "The $28 offer represented approximately a 59% premium to STAAR's 90-day VWAP and 51% to its August 4, 2025 closing price.",
+      ],
+    };
+    const storySpec = {
+      narrativeJob: 'Support an approval decision.',
+      audienceNeed: 'Inspect transaction economics.',
+      memorableTakeaway: 'Price, performance, and liquidity stay distinct.',
+      proofObligations: [],
+      pacing: [],
+      sceneContinuity: { motif: 'threshold', progression: ['approach'] },
+      visualMetaphor: { kind: 'threshold', subject: 'decision', transformation: 'approach' },
+      revealPacing: [],
+      sceneStates: [
+        {
+          index: 0,
+          stage: 'establish',
+          progress: 0,
+          intensity: 0,
+          framing: 'wide',
+          subjectState: 'open',
+        },
+        {
+          index: 1,
+          stage: 'approach',
+          progress: 0.5,
+          intensity: 0.5,
+          framing: 'split',
+          subjectState: 'priced',
+        },
+      ],
+      emotionalArc: { shape: 'rise-climax-release', intensity: [0, 0.5] },
+      compositionPlan: ['title', 'comparison'],
+    } satisfies NodeSlideStorySpec;
+    const direct = dispatchCompositionGrammar('scene-stage', {
+      deckId: 'executive-scene-proof',
+      slideId: 'executive-scene-proof-2',
+      planned,
+      index: 1,
+      total: 4,
+      theme: buildBriefNodeSlide({
+        deckId: 'executive-scene-theme',
+        projectId: 'transaction-approval',
+        title: 'Executive readout',
+        brief,
+        themeId: 'quiet-precision',
+        rawSpec: { title: 'Executive readout', narrative: ['orient'], slides: [slide(1)] },
+        now: Date.UTC(2026, 7, 2),
+      }).snapshot.deck.theme,
+      sourceBriefId: 'brief',
+      sourceEvidenceId: 'evidence',
+      linkedSourceIds: [],
+      authoredSourceIdByRef: new Map(),
+      storySpec,
+    });
+    const body = direct.elements.find((element) => element.name === 'Supporting context');
+    const takeaway = direct.elements.find((element) => element.name === 'Decisive point');
+    expect(body?.bbox.width).toBeGreaterThanOrEqual(0.39);
+    expect(body?.bbox.height).toBeGreaterThanOrEqual(0.2);
+    expect(body?.content).not.toContain('The $28 offer represented approximately a 59% premium');
+    expect(takeaway?.style.fontSize).toBeGreaterThanOrEqual(14);
+    expect(
+      direct.elements.every(
+        (element) => element.bbox.y >= 0 && element.bbox.y + element.bbox.height <= 1,
+      ),
+    ).toBe(true);
   });
 });

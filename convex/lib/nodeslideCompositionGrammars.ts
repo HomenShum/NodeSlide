@@ -318,7 +318,7 @@ function sectionLabel(ctx: GrammarBuildContext, x: number, y: number, width: num
     name: 'Section label',
     kind: 'text',
     role: 'section',
-    bbox: box(x, y, width, 0.05),
+    bbox: box(x, y, width, 0.07),
     rotation: 0,
     content: ctx.planned.section.toUpperCase(),
     style: {
@@ -963,10 +963,8 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
   const bulletStackStart = bodyY + bodyHeight + 0.02;
   let bulletCursor = bulletStackStart;
   bulletTexts.forEach((content, bulletIndex) => {
-    const bulletHeight = Math.max(
-      0.031,
-      estimateTextHeight(content, bulletFontSize, 1.2, bulletWidth),
-    );
+    const bulletHeight =
+      Math.max(0.031, estimateTextHeight(content, bulletFontSize, 1.2, bulletWidth)) + 0.012;
     elements.push(
       makeElement(ctx, `bullet-${bulletIndex + 1}`, {
         name: `Key point ${bulletIndex + 1}`,
@@ -987,7 +985,7 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
         exportCapabilities: [...EDITABLE_CAPABILITIES],
       }),
     );
-    bulletCursor += bulletHeight + 0.03;
+    bulletCursor += bulletHeight + 0.015;
   });
   elements.push(...storyContinuityElements(ctx));
   elements.push(...footerElements(ctx));
@@ -1034,7 +1032,7 @@ function buildProcessCanvas(ctx: GrammarBuildContext): GrammarBuildResult {
   );
   if (planned.diagram) {
     const diagramY = 0.14 + headlineHeight + 0.05;
-    const diagramBottomLimit = planned.body.trim().length > 0 ? 0.66 : 0.85;
+    const diagramBottomLimit = planned.body.trim().length > 0 ? 0.56 : 0.85;
     const diagramHeight = Math.max(0.2, diagramBottomLimit - diagramY);
     const diagramElements = buildDiagramElements(
       ctx,
@@ -1315,10 +1313,11 @@ function buildMetricStage(ctx: GrammarBuildContext): GrammarBuildResult {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
-  // Bullet elements below body
-  const bulletTexts = planned.bullets
-    .slice(0, 3)
-    .map((bullet, bulletIndex) => `0${bulletIndex + 1}  ${bullet}`);
+  // A metric stage has already spent the lower-canvas budget on the metric and
+  // its evidence body. Repeating bullets below that body creates overflow.
+  const bulletTexts = (planned.metric ? [] : planned.bullets.slice(0, 3)).map(
+    (bullet, bulletIndex) => `0${bulletIndex + 1}  ${bullet}`,
+  );
   const bulletFontSize = 14;
   const bulletX = 0.07;
   const bulletWidth = 0.79;
@@ -1487,7 +1486,7 @@ function buildSparseTransition(ctx: GrammarBuildContext): GrammarBuildResult {
       style: {
         color: theme.colors.accent,
         fontFamily: theme.typography.display,
-        fontSize: 120,
+        fontSize: 100,
         fontWeight: 720,
         lineHeight: 1,
         letterSpacing: -3,
@@ -1502,7 +1501,7 @@ function buildSparseTransition(ctx: GrammarBuildContext): GrammarBuildResult {
       name: 'Section label',
       kind: 'text',
       role: 'section',
-      bbox: box(0.07, 0.3, 0.5, 0.05),
+      bbox: box(0.07, 0.3, 0.8, 0.05),
       rotation: 0,
       content: ctx.planned.section.toUpperCase(),
       style: {
@@ -1626,10 +1625,15 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
-  const bodyX = sceneCentered ? 0.62 : textX;
-  const bodyWidth = sceneCentered ? 0.31 : headlineWidth;
-  const bodyY = sceneCentered ? 0.59 : headlineY + headlineHeight + 0.035;
-  const bodyHeight = sceneCentered ? 0.16 : Math.min(0.23, Math.max(0.15, 0.75 - bodyY));
+  const bodyX = sceneCentered ? 0.56 : textX;
+  const bodyWidth = sceneCentered ? 0.39 : headlineWidth;
+  const bodyY = sceneCentered ? 0.58 : headlineY + headlineHeight + 0.035;
+  const bodyHeight = sceneCentered ? 0.2 : Math.min(0.23, Math.max(0.15, 0.75 - bodyY));
+  const decisivePoint = planned.bullets[0];
+  const supportingBody =
+    decisivePoint && planned.body.startsWith(decisivePoint)
+      ? planned.body.slice(decisivePoint.length).trim()
+      : planned.body;
   elements.push(
     makeElement(ctx, 'body', {
       name: 'Supporting context',
@@ -1637,11 +1641,11 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
       role: 'body',
       bbox: box(bodyX, bodyY, bodyWidth, bodyHeight),
       rotation: 0,
-      content: planned.body,
+      content: supportingBody,
       style: {
         color: theme.colors.muted,
         fontFamily: theme.typography.body,
-        fontSize: fitTextFontSize(planned.body, 16, 14, 1.38, bodyWidth, bodyHeight),
+        fontSize: fitTextFontSize(supportingBody, 16, 14, 1.38, bodyWidth, bodyHeight),
         fontWeight: 450,
         lineHeight: 1.38,
       },
@@ -1650,16 +1654,15 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
-  const decisivePoint = planned.bullets[0];
   if (decisivePoint) {
-    const takeawayX = sceneCentered ? 0.62 : textX;
-    const takeawayWidth = sceneCentered ? 0.31 : headlineWidth;
-    const takeawayMaxHeight = 0.145;
+    const takeawayX = sceneCentered ? 0.56 : textX;
+    const takeawayWidth = sceneCentered ? 0.39 : headlineWidth;
+    const takeawayMaxHeight = sceneCentered ? 0.15 : 0.145;
     const takeawayPadding = 12;
     const takeawayFontSize = fitTextFontSize(
       decisivePoint,
       16,
-      12,
+      14,
       1.25,
       takeawayWidth - 0.04,
       takeawayMaxHeight,
@@ -1680,7 +1683,7 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
         name: 'Decisive point',
         kind: 'text',
         role: 'takeaway',
-        bbox: box(takeawayX, 0.77, takeawayWidth, takeawayHeight),
+        bbox: box(takeawayX, sceneCentered ? 0.8 : 0.77, takeawayWidth, takeawayHeight),
         rotation: 0,
         content: decisivePoint,
         style: {
@@ -1777,7 +1780,7 @@ function buildTensionContrastField(ctx: GrammarBuildContext): GrammarBuildResult
         style: {
           color: index === 0 ? theme.colors.accent : theme.colors.insightInk,
           fontFamily: theme.typography.data,
-          fontSize: 13,
+          fontSize: 14,
           fontWeight: 700,
           letterSpacing: 1.2,
         },
@@ -1884,7 +1887,7 @@ function buildRiskField(ctx: GrammarBuildContext): GrammarBuildResult {
         style: {
           color: theme.colors.muted,
           fontFamily: theme.typography.data,
-          fontSize: 11,
+          fontSize: 14,
           fontWeight: 650,
           letterSpacing: 0.8,
           textAlign: key.endsWith('high') && key.startsWith('likelihood') ? 'right' : 'left',
@@ -1901,8 +1904,8 @@ function buildRiskField(ctx: GrammarBuildContext): GrammarBuildResult {
   geometry.marks.risks.forEach((risk, index) => {
     const centerX = field.x + (risk.x / 100) * field.width;
     const centerY = field.y + (risk.y / 100) * field.height;
-    const width = Math.min(0.16, Math.max(0.105, risk.label.length * 0.0065));
-    const height = 0.072;
+    const width = Math.min(0.16, Math.max(0.12, risk.label.length * 0.005));
+    const height = 0.08;
     const x = Math.max(
       field.x + 0.008,
       Math.min(field.x + field.width - width - 0.008, centerX - width / 2),
@@ -1918,14 +1921,14 @@ function buildRiskField(ctx: GrammarBuildContext): GrammarBuildResult {
         role: 'artifact_risk_marker',
         bbox: box(x, y, width, height),
         rotation: 0,
-        content: risk.label,
+        content: fitTextContent(risk.label, 14, 1.2, width - 0.02, height - 0.025),
         style: {
           fill: theme.colors.accent,
           stroke: theme.colors.insightInk,
           strokeWidth: 1,
           color: theme.colors.canvas,
           fontFamily: theme.typography.body,
-          fontSize: 12,
+          fontSize: 14,
           fontWeight: 700,
           padding: 5,
           radius: 999,
@@ -2052,7 +2055,7 @@ function buildRiskEscalation(ctx: GrammarBuildContext): GrammarBuildResult {
         role: 'artifact_risk_escalation',
         bbox: box(x, y, width, height),
         rotation: 0,
-        content,
+        content: fitTextContent(content, 14, 1.18, width - 0.035, height - 0.045),
         style: {
           fill: index === 2 ? theme.colors.accent : theme.colors.accentSoft,
           opacity: 0.45 + index * 0.22,
@@ -2156,14 +2159,15 @@ function buildDecisionGate(ctx: GrammarBuildContext): GrammarBuildResult {
     }),
   );
   planned.bullets.slice(0, 3).forEach((content, index) => {
+    const conditionContent = `${String(index + 1).padStart(2, '0')}  ${content}`;
     elements.push(
       makeElement(ctx, `decision-condition-${index + 1}`, {
         name: `Decision condition ${index + 1}`,
         kind: 'shape',
         role: 'decision_condition',
-        bbox: box(0.47, 0.63 + index * 0.09, 0.46, 0.07),
+        bbox: box(0.47, 0.61 + index * 0.1, 0.46, 0.082),
         rotation: 0,
-        content: `${String(index + 1).padStart(2, '0')}  ${content}`,
+        content: fitTextContent(conditionContent, 14, 1.2, 0.42, 0.058),
         style: {
           fill: index === 0 ? theme.colors.insight : theme.colors.accentSoft,
           color: theme.colors.insightInk,

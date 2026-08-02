@@ -2480,18 +2480,15 @@ function buildSlide(input: {
         ),
       );
       geometry.marks.bars.forEach((bar, index) => {
+        const renderedHeight = mapHeight(bar.height);
         pushNative(`bar-${index + 1}`, {
           name: `Waterfall bar: ${bar.label}`,
           kind: 'shape',
           role: 'artifact_waterfall_bar',
-          bbox: boundedNativeBox(
-            mapX(bar.x),
-            mapY(bar.y),
-            mapWidth(bar.width),
-            mapHeight(bar.height),
-          ),
+          bbox: boundedNativeBox(mapX(bar.x), mapY(bar.y), mapWidth(bar.width), renderedHeight),
           rotation: 0,
-          content: `${bar.label}\n${bar.value} ${bar.unit}`,
+          ...(renderedHeight >= 0.08 ? { content: `${bar.label}\n${bar.value} ${bar.unit}` } : {}),
+          altText: `${bar.label}: ${bar.value} ${bar.unit}`,
           style: {
             fill:
               bar.id === 'baseline' || bar.id === 'final'

@@ -1,25 +1,133 @@
 {
   "frozenBeforeGeneration": true,
   "questions": [
-    { "questionId": "q01", "question": "What consideration does each STAAR shareholder receive?", "expectedClaimIds": ["offer-price"], "decisionCritical": true },
-    { "questionId": "q02", "question": "What decision is requested and what is the recommendation?", "expectedClaimIds": ["offer-price"], "decisionCritical": true },
-    { "questionId": "q03", "question": "What conditions must be satisfied before closing?", "expectedClaimIds": ["staar-termination-fee", "alcon-regulatory-fee"], "decisionCritical": true },
-    { "questionId": "q04", "question": "What are each party's principal termination rights and fees?", "expectedClaimIds": ["staar-termination-fee", "reduced-termination-fee", "alcon-regulatory-fee"], "decisionCritical": true },
-    { "questionId": "q05", "question": "How did the agreed price compare with prior Alcon proposals?", "expectedClaimIds": ["offer-price", "prior-offer"], "decisionCritical": true },
-    { "questionId": "q06", "question": "What strategic benefits does management assert and which remain unverified?", "expectedClaimIds": [], "decisionCritical": true },
-    { "questionId": "q07", "question": "What are the strongest counterarguments to the transaction?", "expectedClaimIds": ["prior-offer", "q2-china-sales"], "decisionCritical": true },
-    { "questionId": "q08", "question": "What is STAAR's revenue history and current trajectory?", "expectedClaimIds": ["2024-sales", "q2-2025-sales", "q2-2025-sales-decline"], "decisionCritical": true },
-    { "questionId": "q09", "question": "How material is the China deterioration?", "expectedClaimIds": ["q2-china-sales", "q2-2025-sales-decline"], "decisionCritical": true },
-    { "questionId": "q10", "question": "What changed in gross margin and profitability?", "expectedClaimIds": [], "decisionCritical": true },
-    { "questionId": "q11", "question": "What liquidity and balance-sheet resources support a standalone path?", "expectedClaimIds": [], "decisionCritical": true },
-    { "questionId": "q12", "question": "What revenue path do final management projections assume?", "expectedClaimIds": ["2026e-sales", "2030e-sales"], "decisionCritical": true },
-    { "questionId": "q13", "question": "Which forecast drivers create the greatest downside sensitivity?", "expectedClaimIds": ["2026e-sales", "2030e-sales", "q2-china-sales"], "decisionCritical": true },
-    { "questionId": "q14", "question": "How do final projections differ from July diligence forecasts?", "expectedClaimIds": ["2026e-sales"], "decisionCritical": true },
-    { "questionId": "q15", "question": "Where does the $28 offer sit versus public-company and precedent ranges?", "expectedClaimIds": ["offer-price", "public-comps-range", "precedents-range"], "decisionCritical": true },
-    { "questionId": "q16", "question": "What DCF range and core assumptions were used?", "expectedClaimIds": ["dcf-range", "dcf-discount-rate"], "decisionCritical": true },
-    { "questionId": "q17", "question": "What conflicts or limitations affect the fairness analysis?", "expectedClaimIds": ["citi-contingent-fee"], "decisionCritical": true },
-    { "questionId": "q18", "question": "How is the transaction funded and what capital-structure changes result?", "expectedClaimIds": [], "decisionCritical": true },
-    { "questionId": "q19", "question": "Which risks could change the recommendation?", "expectedClaimIds": ["q2-china-sales", "prior-offer", "citi-contingent-fee"], "decisionCritical": true },
-    { "questionId": "q20", "question": "What diligence remains open, who owns it, and by when must it resolve?", "expectedClaimIds": [], "decisionCritical": true }
+    {
+      "questionId": "q01",
+      "question": "What consideration does each STAAR shareholder receive?",
+      "expectedClaimIds": ["offer-price"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q02",
+      "question": "What decision is requested and what is the recommendation?",
+      "expectedClaimIds": ["offer-price"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q03",
+      "question": "What conditions must be satisfied before closing?",
+      "expectedClaimIds": ["regulatory-clearances", "vote-threshold"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q04",
+      "question": "What are each party's principal termination rights and fees?",
+      "expectedClaimIds": [
+        "staar-termination-fee",
+        "reduced-termination-fee",
+        "alcon-regulatory-fee"
+      ],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q05",
+      "question": "How did the agreed price compare with prior Alcon proposals?",
+      "expectedClaimIds": ["offer-price", "prior-offer"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q06",
+      "question": "What strategic benefits does management assert and which remain unverified?",
+      "expectedClaimIds": ["attributed-board-rationale"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q07",
+      "question": "What are the strongest counterarguments to the transaction?",
+      "expectedClaimIds": ["prior-offer", "q2-china-sales"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q08",
+      "question": "What is STAAR's revenue history and current trajectory?",
+      "expectedClaimIds": ["2024-sales", "q2-2025-sales", "q2-2025-sales-decline"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q09",
+      "question": "How material is the China deterioration?",
+      "expectedClaimIds": ["q2-china-sales", "q2-2025-sales-decline"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q10",
+      "question": "What changed in gross margin and profitability?",
+      "expectedClaimIds": ["q2-gross-margin", "q2-operating-loss"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q11",
+      "question": "What liquidity and balance-sheet resources support a standalone path?",
+      "expectedClaimIds": ["standalone-liquidity"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q12",
+      "question": "What revenue path do final management projections assume?",
+      "expectedClaimIds": ["2026e-sales", "2030e-sales"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q13",
+      "question": "Which forecast drivers create the greatest downside sensitivity?",
+      "expectedClaimIds": ["2026e-sales", "2030e-sales", "q2-china-sales"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q14",
+      "question": "How do final projections differ from July diligence forecasts?",
+      "expectedClaimIds": ["2026e-sales", "projection-growth-assumption"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q15",
+      "question": "Where does the $28 offer sit versus public-company and precedent ranges?",
+      "expectedClaimIds": ["offer-price", "public-comps-range", "precedents-range"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q16",
+      "question": "What DCF range and core assumptions were used?",
+      "expectedClaimIds": ["dcf-range", "dcf-discount-rate"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q17",
+      "question": "What conflicts or limitations affect the fairness analysis?",
+      "expectedClaimIds": [
+        "citi-contingent-fee",
+        "citi-forecast-reliance",
+        "fairness-not-vote-recommendation"
+      ],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q18",
+      "question": "How is the transaction funded and what capital-structure changes result?",
+      "expectedClaimIds": ["alcon-funding-representation"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q19",
+      "question": "Which risks could change the recommendation?",
+      "expectedClaimIds": ["q2-china-sales", "prior-offer", "citi-contingent-fee"],
+      "decisionCritical": true
+    },
+    {
+      "questionId": "q20",
+      "question": "What diligence remains open, who owns it, and by when must it resolve?",
+      "expectedClaimIds": ["open-diligence-boundary"],
+      "decisionCritical": true
+    }
   ]
 }

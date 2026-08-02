@@ -1,6 +1,9 @@
 import { readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
 import {
+  findGenericNarrativeFallbacks,
+  findMissingRenderedClaims,
+  validateGeneratedDeckGates,
   validateLongformBenchmarkDefinition,
   validateLongformBenchmarkRun,
 } from '../lib/longform-compression-core.mjs';
@@ -97,6 +100,21 @@ function completeRun() {
 }
 
 describe('NodeSlide Longform & Compression Bench', () => {
+  it('rejects generic evidence placeholders in a transaction associate draft', () => {
+    expect(
+      findGenericNarrativeFallbacks([
+        'Historical performance is assessed only from the frozen pre-vote bundle.',
+        'Committee decision',
+      ]),
+    ).toEqual(['is assessed only from the frozen pre-vote bundle', 'committee decision']);
+    expect(
+      findGenericNarrativeFallbacks([
+        'Q2 2025 gross margin declined to 74.0% from 79.2%.',
+        'Decision changes if China recovery evidence fails.',
+      ]),
+    ).toEqual([]);
+  });
+
   it('accepts the frozen pre-vote transaction program before an investment committee run', () => {
     expect(
       validateLongformBenchmarkDefinition({
@@ -108,6 +126,57 @@ describe('NodeSlide Longform & Compression Bench', () => {
         heldOutPlan,
       }),
     ).toEqual([]);
+  });
+
+  it('rejects a frozen decision question that has no expected evidence', () => {
+    const incompleteQuestions = structuredClone(questions);
+    incompleteQuestions.questions.find(
+      (question) => question.questionId === 'q10',
+    ).expectedClaimIds = [];
+    expect(
+      validateLongformBenchmarkDefinition({
+        benchmark,
+        sourceManifest,
+        deckProgram,
+        questions: incompleteQuestions,
+        criticalFacts,
+        heldOutPlan,
+      }),
+    ).toContain('q10 has no frozen expected evidence');
+  });
+
+  it('kills an approval-book run before export when count or diversity regresses', () => {
+    const built = {
+      long: {
+        snapshot: { slides: Array.from({ length: 71 }) },
+        spec: { deckDiversity: { passes: true } },
+      },
+      short: {
+        snapshot: { slides: Array.from({ length: 12 }) },
+        spec: { deckDiversity: { passes: false } },
+      },
+      executive: {
+        snapshot: { slides: Array.from({ length: 4 }) },
+        spec: { deckDiversity: { passes: true } },
+      },
+    };
+    expect(
+      validateGeneratedDeckGates({
+        built,
+        expectedCounts: { long: 72, short: 12, executive: 4 },
+      }),
+    ).toEqual(['long deck count 71 does not match 72', 'short deck diversity gate did not pass']);
+  });
+
+  it('kills compression when a decision claim exists in the plan but disappears from rendered elements', () => {
+    const claims = [
+      { claimId: 'liquidity', statement: 'Cash and investments totaled $189.883 million.' },
+      { claimId: 'offer', statement: 'Alcon offered $28.00 in cash per STAAR share.' },
+    ];
+    const snapshot = {
+      elements: [{ content: 'Alcon offered $28.00 in cash per STAAR share.' }],
+    };
+    expect(findMissingRenderedClaims(snapshot, claims)).toEqual(['liquidity']);
   });
 
   it('accepts a fully reconciled 72-to-12-to-4 production receipt', () => {

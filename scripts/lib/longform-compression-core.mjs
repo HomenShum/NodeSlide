@@ -9,6 +9,52 @@ const REQUIRED_CHECKS = [
   'exportParity',
 ];
 
+const GENERIC_NARRATIVE_FALLBACKS = [
+  'is assessed only from the frozen pre-vote bundle',
+  'open diligence: identify the source or owner',
+  'unresolved evidence',
+  'committee decision',
+];
+
+export function findGenericNarrativeFallbacks(content) {
+  const normalized = (content ?? []).map((value) => String(value).trim().toLocaleLowerCase());
+  return GENERIC_NARRATIVE_FALLBACKS.filter((fallback) =>
+    fallback === 'committee decision'
+      ? normalized.includes(fallback)
+      : normalized.some((value) => value.includes(fallback)),
+  );
+}
+
+export function validateGeneratedDeckGates({ built, expectedCounts }) {
+  const failures = [];
+  for (const [kind, expectedCount] of Object.entries(expectedCounts)) {
+    const result = built?.[kind];
+    const actualCount = result?.snapshot?.slides?.length ?? 0;
+    if (actualCount !== expectedCount) {
+      failures.push(`${kind} deck count ${actualCount} does not match ${expectedCount}`);
+    }
+    if (result?.spec?.deckDiversity?.passes !== true) {
+      failures.push(`${kind} deck diversity gate did not pass`);
+    }
+  }
+  return failures;
+}
+
+export function findMissingRenderedClaims(snapshot, claims, prefixLength = 45) {
+  const corpus = (snapshot?.elements ?? [])
+    .map((element) => element?.content ?? '')
+    .join('\n')
+    .toLocaleLowerCase();
+  return (claims ?? [])
+    .filter((claim) => {
+      const prefix = String(claim?.statement ?? '')
+        .slice(0, prefixLength)
+        .toLocaleLowerCase();
+      return prefix.length === 0 || !corpus.includes(prefix);
+    })
+    .map((claim) => claim.claimId);
+}
+
 function entries(manifest) {
   return [
     ...(manifest?.evidenceSources ?? []),
@@ -85,6 +131,9 @@ export function validateLongformBenchmarkDefinition({
     failures.push('decision questions must be frozen before generation');
   const claimIds = new Set((criticalFacts?.claims ?? []).map((claim) => claim.claimId));
   for (const question of questions?.questions ?? []) {
+    if (question.decisionCritical && (question.expectedClaimIds ?? []).length === 0) {
+      failures.push(`${question.questionId} has no frozen expected evidence`);
+    }
     for (const claimId of question.expectedClaimIds ?? []) {
       if (!claimIds.has(claimId))
         failures.push(`${question.questionId} references unknown claim ${claimId}`);

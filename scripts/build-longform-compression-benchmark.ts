@@ -4,6 +4,11 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { type NodeSlidePlannedSlide, buildBriefNodeSlide } from '../convex/lib/nodeslideSeed';
+import {
+  findGenericNarrativeFallbacks,
+  findMissingRenderedClaims,
+  validateGeneratedDeckGates,
+} from './lib/longform-compression-core.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const fixtureRoot = path.join(repoRoot, 'benchmarks/longform-compression/v1/staar-alcon');
@@ -39,6 +44,7 @@ const deckProgram = await load<{
 }>('deck-program.json');
 const criticalFacts = await load<{ claims: Claim[] }>('critical-facts.json');
 const sourceManifest = await load<Record<string, unknown>>('source-manifest.json');
+const claimById = new Map(criticalFacts.claims.map((claim) => [claim.claimId, claim]));
 
 const artifactKinds = [
   'chart',
@@ -58,6 +64,40 @@ for (const claim of criticalFacts.claims) {
     claims.push(claim);
     claimBySlide.set(index, claims);
   }
+}
+
+const shortClaimIdsBySlide = [
+  ['offer-price', 'attributed-board-rationale', 'open-diligence-boundary'],
+  ['staar-termination-fee', 'reduced-termination-fee', 'alcon-regulatory-fee'],
+  ['prior-offer', 'offer-premium', 'h1-2025-sales'],
+  ['business-scale', 'regional-sales-change'],
+  ['2024-sales', 'q2-2025-sales', 'q2-2025-sales-decline'],
+  ['2026e-sales', '2030e-sales', 'projection-growth-assumption'],
+  ['public-comps-range', 'precedents-range', 'dcf-range'],
+  ['dcf-discount-rate', 'q2-china-sales', 'q2-gross-margin'],
+  ['alcon-funding-representation', 'standalone-liquidity', 'q2-operating-loss'],
+  ['citi-contingent-fee', 'citi-forecast-reliance', 'fairness-not-vote-recommendation'],
+  ['vote-threshold', 'regulatory-clearances', 'broadwood-opposition'],
+  [],
+];
+const shortClaimsBySlide = new Map(
+  shortClaimIdsBySlide.map((claimIds, offset) => [
+    offset + 1,
+    claimIds.flatMap((claimId) => {
+      const claim = claimById.get(claimId);
+      if (!claim) throw new Error(`Short-deck program references unknown claim ${claimId}.`);
+      return [claim];
+    }),
+  ]),
+);
+const assignedShortClaimIds = new Set(
+  [...shortClaimsBySlide.values()].flatMap((claims) => claims.map((claim) => claim.claimId)),
+);
+if (assignedShortClaimIds.size !== criticalFacts.claims.length) {
+  const missing = criticalFacts.claims
+    .filter((claim) => !assignedShortClaimIds.has(claim.claimId))
+    .map((claim) => claim.claimId);
+  throw new Error(`Short-deck program does not account for every claim: ${missing.join(', ')}`);
 }
 
 const pageTopics: Record<string, string[]> = {
@@ -171,6 +211,12 @@ function quantitativeSeries(
     29: { labels: ['Q2 2024', 'Q2 2025'], values: [99.005, 44.32], unit: 'USD millions' },
     30: { labels: ['H1 2024', 'H1 2025'], values: [176.361, 86.909], unit: 'USD millions' },
     31: { labels: ['Q2 2024', 'Q2 2025'], values: [63.519, 5.299], unit: 'USD millions' },
+    32: { labels: ['Q2 2024', 'Q2 2025'], values: [79.2, 74], unit: 'percent gross margin' },
+    33: {
+      labels: ['Q2 2024', 'Q2 2025'],
+      values: [12, -67.6],
+      unit: 'percent operating income (loss)',
+    },
     36: {
       labels: ['2025E', '2026E', '2027E', '2028E', '2029E', '2030E'],
       values: [260, 340, 375, 408, 448, 495],
@@ -183,6 +229,7 @@ function quantitativeSeries(
       unit: 'USD millions',
     },
     39: { labels: ['2025E', '2026E', '2027E'], values: [7, 98, 142], unit: 'USD millions EBITDA' },
+    40: { labels: ['2026E', '2030E'], values: [340, 495], unit: 'USD millions net sales' },
     45: {
       labels: ['Public comps low', 'Public comps high', 'Offer'],
       values: [16.35, 23.8, 28],
@@ -202,6 +249,17 @@ function quantitativeSeries(
     49: {
       labels: ['52-week low', 'Offer', '52-week high'],
       values: [15.09, 28, 40.36],
+      unit: 'USD/share',
+    },
+    50: { labels: ['Contingent fee', 'Total fee'], values: [26.6, 30.6], unit: 'USD millions' },
+    57: {
+      labels: ['Q2 2024 sales', 'Q2 2025 sales', 'China 2024', 'China 2025'],
+      values: [99.005, 44.32, 63.519, 5.299],
+      unit: 'USD millions',
+    },
+    62: {
+      labels: ['April 2024 proposal', 'August 2025 agreement'],
+      values: [58, 28],
       unit: 'USD/share',
     },
   };
@@ -244,23 +302,22 @@ function artifactKindFor(index: number, sectionId: string): ArtifactKind | null 
       index as 31 | 32 | 33 | 34
     ];
   if (sectionId === 'projections')
-    return ({ 40: 'waterfall', 41: 'sankey', 42: 'graph', 43: null } as const)[
+    return ({ 40: 'waterfall', 41: 'graph', 42: 'risk-matrix', 43: null } as const)[
       index as 40 | 41 | 42 | 43
     ];
   if (sectionId === 'valuation') return index === 50 ? null : 'waterfall';
   if (sectionId === 'downside')
-    return ({ 58: 'timeline', 59: 'waterfall', 60: 'sankey', 61: null } as const)[
-      index as 58 | 59 | 60 | 61
-    ];
-  if (sectionId === 'risks') return index === 66 ? 'sankey' : 'risk-matrix';
+    return ({ 58: null, 59: 'waterfall', 60: null, 61: null } as const)[index as 58 | 59 | 60 | 61];
+  if (sectionId === 'risks')
+    return index === 62 ? 'comparison' : index === 66 ? null : 'risk-matrix';
   if (sectionId === 'terms')
     return ['timeline', 'comparison', 'graph', 'waterfall', 'risk-matrix'][
       index - 6
     ] as ArtifactKind;
   if (sectionId === 'process')
-    return ({ 67: null, 68: 'timeline', 69: 'waterfall' } as const)[index as 67 | 68 | 69];
+    return ({ 67: 'graph', 68: 'graph', 69: 'graph' } as const)[index as 67 | 68 | 69];
   if (sectionId === 'financing')
-    return ['sankey', 'waterfall', 'graph', 'sankey', 'timeline'][index - 52] as ArtifactKind;
+    return ['graph', 'graph', 'graph', null, null][index - 52] as ArtifactKind | null;
   if (sectionId === 'rationale')
     return (
       {
@@ -279,14 +336,145 @@ function artifactKindFor(index: number, sectionId: string): ArtifactKind | null 
         20: 'chart',
         21: 'risk-matrix',
         22: null,
-        23: 'sankey',
-        24: 'timeline',
+        23: null,
+        24: 'graph',
         25: 'comparison',
       } as const
     )[index as 19 | 20 | 21 | 22 | 23 | 24 | 25];
   return ['graph', 'timeline', 'sankey', 'risk-matrix', 'waterfall', 'comparison', 'chart'][
     index % 7
   ] as ArtifactKind;
+}
+
+function effectiveArtifactKind(
+  requestedKind: ArtifactKind | null,
+  series: { labels: string[]; values: number[]; unit: string } | null,
+): ArtifactKind | null {
+  if (requestedKind === null) return null;
+  if (series) {
+    return requestedKind === 'comparison' || requestedKind === 'waterfall'
+      ? requestedKind
+      : 'chart';
+  }
+  if (requestedKind === 'sankey' || requestedKind === 'timeline') return 'graph';
+  if (requestedKind && ['chart', 'comparison', 'waterfall'].includes(requestedKind)) return null;
+  return requestedKind;
+}
+
+function evidenceBoundNarrative(sectionId: string, topic: string) {
+  const topicLower = topic.toLocaleLowerCase();
+  const copy: Record<string, { body: string; bullets: string[] }> = {
+    executive: {
+      body: `Frame ${topicLower} as a committee decision, not a promotional summary. State the evidence that changes the recommendation and the condition that remains open.`,
+      bullets: [
+        `Decision: resolve ${topicLower}`,
+        'Evidence boundary: filed facts and explicitly attributed advocacy only',
+        'Condition: no approval while a recommendation-changing assumption remains open',
+      ],
+    },
+    terms: {
+      body: `Read ${topicLower} from the merger agreement and definitive proxy. Separate enforceable terms, attributed process history, and closing dependencies.`,
+      bullets: [
+        `Term under review: ${topic}`,
+        'Decision test: quantify the value or obligation without interpolation',
+        'Source boundary: agreement and definitive proxy control',
+      ],
+    },
+    rationale: {
+      body: `Treat ${topicLower} as attributed Board or management rationale until independent evidence corroborates it. Test the claim against standalone execution and China concentration.`,
+      bullets: [
+        `Attributed thesis: ${topic}`,
+        'Counterweight: standalone value and forecast execution risk',
+        'Required proof: independent evidence beyond transaction advocacy',
+      ],
+    },
+    'company-market': {
+      body: `Use the filings to establish ${topicLower}; distinguish installed scale from current demand durability and geographic concentration.`,
+      bullets: [
+        `Observed business evidence: ${topic}`,
+        'Durability test: regional growth outside China versus China deterioration',
+        'Do not convert company positioning into independent market proof',
+      ],
+    },
+    historical: {
+      body: `Anchor ${topicLower} to filed actuals and comparable periods. Keep reported values, derived changes, and missing evidence visibly separate.`,
+      bullets: [
+        `Filed actuals: ${topic}`,
+        'Comparison rule: identical periods and units',
+        'Decision implication: identify whether the standalone base has stabilized',
+      ],
+    },
+    projections: {
+      body: `Management projections are unaudited. For ${topicLower}, separate the final case from July diligence estimates and expose the assumption that creates the bridge.`,
+      bullets: [
+        `Projection evidence: ${topic}`,
+        'Required bridge: final case versus July diligence case',
+        'Downside test: China recovery, new products, and operating leverage',
+      ],
+    },
+    valuation: {
+      body: `Evaluate ${topicLower} within Citi's stated scope and limitations. Keep the $28 offer marker constant and do not treat the fairness opinion as a voting recommendation.`,
+      bullets: [
+        `Valuation method: ${topic}`,
+        'Common reference: $28 cash offer',
+        'Limitation: management forecasts were not independently verified by Citi',
+      ],
+    },
+    financing: {
+      body: `The proxy records Alcon's sufficiency-of-funds representation for ${topicLower}; it does not disclose a new financing commitment or justify invented leverage assumptions.`,
+      bullets: [
+        `Funding evidence: ${topic}`,
+        'Known: consideration plus related fees and expenses are covered',
+        'Unknown: do not invent debt mix, pricing, or pro forma leverage',
+      ],
+    },
+    downside: {
+      body: `Stress ${topicLower} against the observed China decline, margin compression, and the final projection assumptions. Preserve the base case and downside case as separate states.`,
+      bullets: [
+        `Downside variable: ${topic}`,
+        'Observed anchor: current filed performance',
+        'Decision threshold: recommendation changes if recovery evidence fails',
+      ],
+    },
+    risks: {
+      body: `Treat ${topicLower} as recommendation-changing until evidence, mitigation, owner, and decision cutoff are explicit.`,
+      bullets: [
+        `Risk: ${topic}`,
+        'Evidence: primary filing or attributed opposition only',
+        'Mitigation: named owner and dated proof before approval',
+      ],
+    },
+    process: {
+      body: `Convert ${topicLower} into an enforceable approval condition with an owner, source, and cutoff. Regulatory clearances and the stockholder vote are closing facts, not decorative milestones.`,
+      bullets: [
+        `Process requirement: ${topic}`,
+        'Owner: transaction team must record the accountable reviewer',
+        'Cutoff: resolve before the committee decision or keep the gate closed',
+      ],
+    },
+    recommendation: {
+      body: 'The recommendation is conditional: preserve the $28 economics, but keep the gate closed until China durability, the forecast bridge, and regulatory clearances are resolved.',
+      bullets: [
+        'Approve only with named evidence conditions',
+        'Do not treat management advocacy as independent support',
+        'Escalate any critical numerical mismatch or unresolved source gap',
+      ],
+    },
+    sources: {
+      body: `Index ${topicLower} by canonical claim id, filing date, and locator so every number and conclusion can be traced from long deck to memo.`,
+      bullets: [
+        `Register: ${topic}`,
+        'Separate evidence, visual precedent, evaluation target, and hidden hindsight',
+        'No missing locator for a decision-critical claim',
+      ],
+    },
+  };
+  return (
+    copy[sectionId] ?? {
+      body: `${topic} must be resolved from the frozen source bundle without inventing evidence.`,
+      bullets: [topic, 'Primary evidence only', 'Record the decision implication'],
+    }
+  );
 }
 
 function artifactSpec(
@@ -362,10 +550,14 @@ function artifactSpec(
             { id: 'evidence', label: topic, kind: 'system' },
             {
               id: 'condition',
-              label: claims[0]?.statement ?? 'Unresolved evidence',
+              label: claims[0]?.statement ?? `Resolve ${topic.toLocaleLowerCase()}`,
               kind: 'decision',
             },
-            { id: 'decision', label: 'Committee decision', kind: 'milestone' },
+            {
+              id: 'decision',
+              label: `Decision on ${topic.toLocaleLowerCase()}`,
+              kind: 'milestone',
+            },
           ],
           edges: [
             { id: 'edge-1', from: 'evidence', to: 'condition', directed: true },
@@ -383,13 +575,13 @@ function artifactSpec(
             { id: `primary-${index}`, label: topic, likelihood: 4, impact: 5 },
             {
               id: `evidence-${index}`,
-              label: claims[0]?.statement ?? 'Evidence remains incomplete',
+              label: 'Evidence quality',
               likelihood: 3,
               impact: 4,
             },
             {
               id: `decision-${index}`,
-              label: 'Decision changes if assumption fails',
+              label: 'Recommendation sensitivity',
               likelihood: 2,
               impact: 4,
             },
@@ -433,36 +625,32 @@ function longSlide(index: number): NodeSlidePlannedSlide {
   const topic = pageTopic(index, section);
   const series = quantitativeSeries(index);
   const requestedKind = artifactKindFor(index, section.sectionId);
-  const kind = series
-    ? requestedKind === 'comparison' || requestedKind === 'waterfall'
-      ? requestedKind
-      : 'chart'
-    : requestedKind === 'sankey'
-      ? 'graph'
-      : requestedKind && ['chart', 'comparison', 'waterfall'].includes(requestedKind)
-        ? null
-        : requestedKind;
+  const kind = effectiveArtifactKind(requestedKind, series);
   const primary = claims[0];
   const sectionOffset = index - section.startSlideIndex + 1;
-  const headline = primary?.statement ?? topic;
+  const headline = topic;
+  const boundedNarrative = evidenceBoundNarrative(section.sectionId, topic);
   const body =
     claims.length > 1
-      ? `Reconcile ${claims
-          .slice(1)
+      ? `${topic}: reconcile ${claims
           .map((claim) => claim.statement)
           .join(' ')} Keep advocacy, primary evidence, and unresolved diligence visibly separate.`
-      : `${topic} is assessed only from the frozen pre-vote bundle. Separate reported evidence, attributed management claims, derived analysis, and the diligence still needed to change the recommendation.`;
+      : primary
+        ? `${topic}: ${primary.statement} Preserve its source boundary and state the decision implication without adding an unsupported conclusion.`
+        : boundedNarrative.body;
   return {
     title: index === 1 ? 'STAAR Surgical / Alcon' : `${section.title} · ${sectionOffset}`,
     section: `${String(index).padStart(2, '0')} / ${section.title}`,
     headline,
     body,
-    bullets: [
-      claims[0]?.statement ?? `${topic}: contemporaneous evidence only`,
-      claims[1]?.statement ??
-        `Decision implication: test ${topic.toLocaleLowerCase()} against the downside case`,
-      `Open diligence: identify the source or owner that can resolve ${topic.toLocaleLowerCase()}`,
-    ],
+    bullets: (claims.length > 0
+      ? [
+          claims[0]?.statement ?? boundedNarrative.bullets[0],
+          claims[1]?.statement ?? `Lens: ${topic}`,
+          `Decision implication: ${boundedNarrative.bullets[2]}`,
+        ]
+      : boundedNarrative.bullets
+    ).slice(0, kind === 'chart' || kind === 'waterfall' || kind === 'comparison' ? 2 : 3),
     ...(kind ? { artifactSpec: artifactSpec(index, kind, claims, topic, series) } : {}),
     ...(!kind && primary?.value !== undefined
       ? { metric: String(primary.value), metricLabel: primary.unit ?? 'reported value' }
@@ -490,13 +678,19 @@ function compressedSlide(index: number, kind: 'short' | 'executive'): NodeSlideP
   const executiveTitles = ['Decision', 'Economics', 'Downside', 'Conditions to proceed'];
   const title =
     (kind === 'short' ? shortTitles : executiveTitles)[index - 1] ?? `Decision page ${index}`;
-  const claims = criticalFacts.claims
-    .filter((claim) =>
-      kind === 'short'
-        ? claim.shortDeckSlideIndexes.includes(index)
-        : claim.criticality === 'decision-critical',
-    )
-    .slice(0, kind === 'short' ? 4 : 3);
+  const executiveClaimIds = [
+    ['offer-price', 'vote-threshold', 'open-diligence-boundary'],
+    ['offer-premium', 'q2-2025-sales', 'standalone-liquidity'],
+    ['q2-china-sales', 'projection-growth-assumption', 'prior-offer'],
+    ['regulatory-clearances', 'broadwood-opposition', 'citi-forecast-reliance'],
+  ];
+  const claims =
+    kind === 'short'
+      ? (shortClaimsBySlide.get(index) ?? [])
+      : (executiveClaimIds[index - 1] ?? []).flatMap((claimId) => {
+          const claim = claimById.get(claimId);
+          return claim ? [claim] : [];
+        });
   const series = kind === 'short' ? compressedQuantitativeSeries(index) : null;
   const shortArtifactKinds: ArtifactKind[] = [
     'graph',
@@ -517,25 +711,13 @@ function compressedSlide(index: number, kind: 'short' | 'executive'): NodeSlideP
     kind === 'short' && index === 12
       ? null
       : ((kind === 'short' ? shortArtifactKinds : executiveArtifactKinds)[index - 1] ?? 'graph');
-  const artifactKind = series
-    ? requestedArtifactKind === 'comparison'
-      ? 'comparison'
-      : 'chart'
-    : requestedArtifactKind === 'sankey'
-      ? 'graph'
-      : requestedArtifactKind &&
-          ['chart', 'comparison', 'waterfall'].includes(requestedArtifactKind)
-        ? null
-        : requestedArtifactKind;
+  const artifactKind = effectiveArtifactKind(requestedArtifactKind, series);
   return {
     title,
     section: `${kind === 'short' ? 'Memo' : 'Readout'} / ${String(index).padStart(2, '0')}`,
-    headline: claims[0]?.statement ?? `${title} remains conditional on unresolved diligence.`,
+    headline: title,
     body:
-      claims
-        .slice(1)
-        .map((claim) => claim.statement)
-        .join(' ') ||
+      claims.map((claim) => claim.statement).join('\n') ||
       'No new claim is introduced during compression; this page points back to accepted long-deck evidence.',
     bullets:
       index === 12
@@ -606,6 +788,36 @@ const built = {
   short: buildDeck('short'),
   executive: buildDeck('executive'),
 };
+const generatedGateFailures = validateGeneratedDeckGates({
+  built,
+  expectedCounts: { long: 72, short: 12, executive: 4 },
+});
+if (generatedGateFailures.length > 0) {
+  throw new Error(
+    `Generated deck gates failed: ${generatedGateFailures.join('; ')}. Diversity: ${JSON.stringify(
+      Object.fromEntries(
+        Object.entries(built).map(([kind, result]) => [kind, result.spec.deckDiversity]),
+      ),
+    )}`,
+  );
+}
+for (const kind of ['long', 'short'] as const) {
+  const missingRenderedClaims = findMissingRenderedClaims(
+    built[kind].snapshot,
+    criticalFacts.claims,
+  );
+  if (missingRenderedClaims.length > 0) {
+    throw new Error(`${kind} deck dropped rendered claims: ${missingRenderedClaims.join(', ')}`);
+  }
+}
+const repeatedNarrativeFailures = findGenericNarrativeFallbacks(
+  built.long.snapshot.elements.map((element) => element.content ?? ''),
+);
+if (repeatedNarrativeFailures.length > 0) {
+  throw new Error(
+    `Long-form narrative still contains generic fallback copy: ${repeatedNarrativeFailures.join(', ')}`,
+  );
+}
 for (const [kind, result] of Object.entries(built)) {
   await writeFile(
     path.join(outputRoot, `${kind}.nodeslide.json`),
@@ -620,7 +832,10 @@ for (const [kind, result] of Object.entries(built)) {
 const eligibility = Array.from({ length: 72 }, (_, offset) => {
   const slideIndex = offset + 1;
   const section = sectionFor(slideIndex);
-  const selectedArtifact = artifactKindFor(slideIndex, section.sectionId);
+  const selectedArtifact = effectiveArtifactKind(
+    artifactKindFor(slideIndex, section.sectionId),
+    quantitativeSeries(slideIndex),
+  );
   return {
     slideIndex,
     narrativeRole: section.title,

@@ -1,7 +1,7 @@
 #!/usr/bin/env -S npx vite-node
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { access, copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -11,6 +11,18 @@ import { buildPptx } from '../src/domains/nodeslide/slidelang/pptx';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outputRoot = path.join(repoRoot, 'outputs/longform-compression-v1/staar-alcon');
+const deckProgram = JSON.parse(
+  await readFile(
+    path.join(repoRoot, 'benchmarks/longform-compression/v1/staar-alcon/deck-program.json'),
+    'utf8',
+  ),
+) as {
+  sections: Array<{
+    sectionId: string;
+    startSlideIndex: number;
+    endSlideIndex: number;
+  }>;
+};
 const WIDTH = 1280;
 const HEIGHT = 720;
 
@@ -188,6 +200,103 @@ for (const kind of ['long', 'short', 'executive'] as const) {
     throw new Error(
       `${kind} PPTX render count ${pptxFiles.length} does not match ${snapshot.deck.slideOrder.length}`,
     );
+  const browserMontagePath = path.join(deckRoot, 'browser-montage.png');
+  const pptxMontagePath = path.join(deckRoot, 'pptx-montage.png');
+  await Promise.all([
+    run(
+      python,
+      [
+        tools.montage,
+        '--input_dir',
+        browserDir,
+        '--output_file',
+        browserMontagePath,
+        '--label_mode',
+        'filename',
+      ],
+      120_000,
+    ),
+    run(
+      python,
+      [
+        tools.montage,
+        '--input_dir',
+        pptxDir,
+        '--output_file',
+        pptxMontagePath,
+        '--label_mode',
+        'filename',
+      ],
+      120_000,
+    ),
+  ]);
+  const sectionMontages: Array<{
+    sectionId: string;
+    browserMontagePath: string;
+    pptxMontagePath: string;
+  }> = [];
+  if (kind === 'long') {
+    for (const section of deckProgram.sections) {
+      const sectionRoot = path.join(deckRoot, 'sections', section.sectionId);
+      const sectionBrowserDir = path.join(sectionRoot, 'browser');
+      const sectionPptxDir = path.join(sectionRoot, 'pptx-render');
+      await Promise.all([
+        mkdir(sectionBrowserDir, { recursive: true }),
+        mkdir(sectionPptxDir, { recursive: true }),
+      ]);
+      for (
+        let slideIndex = section.startSlideIndex;
+        slideIndex <= section.endSlideIndex;
+        slideIndex += 1
+      ) {
+        await Promise.all([
+          copyFile(
+            path.join(browserDir, `slide-${String(slideIndex).padStart(3, '0')}.png`),
+            path.join(sectionBrowserDir, `slide-${String(slideIndex).padStart(3, '0')}.png`),
+          ),
+          copyFile(
+            path.join(pptxDir, `slide-${slideIndex}.png`),
+            path.join(sectionPptxDir, `slide-${slideIndex}.png`),
+          ),
+        ]);
+      }
+      const sectionBrowserMontage = path.join(sectionRoot, 'browser-montage.png');
+      const sectionPptxMontage = path.join(sectionRoot, 'pptx-montage.png');
+      await Promise.all([
+        run(
+          python,
+          [
+            tools.montage,
+            '--input_dir',
+            sectionBrowserDir,
+            '--output_file',
+            sectionBrowserMontage,
+            '--label_mode',
+            'filename',
+          ],
+          120_000,
+        ),
+        run(
+          python,
+          [
+            tools.montage,
+            '--input_dir',
+            sectionPptxDir,
+            '--output_file',
+            sectionPptxMontage,
+            '--label_mode',
+            'filename',
+          ],
+          120_000,
+        ),
+      ]);
+      sectionMontages.push({
+        sectionId: section.sectionId,
+        browserMontagePath: sectionBrowserMontage,
+        pptxMontagePath: sectionPptxMontage,
+      });
+    }
+  }
   renderReceipt.decks[kind] = {
     slideCount: snapshot.deck.slideOrder.length,
     pptxPath,
@@ -195,6 +304,9 @@ for (const kind of ['long', 'short', 'executive'] as const) {
     pptxDir,
     browserDigests,
     pptxFiles,
+    browserMontagePath,
+    pptxMontagePath,
+    sectionMontages,
   };
 }
 await browser.close();

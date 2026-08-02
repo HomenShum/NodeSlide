@@ -1313,11 +1313,12 @@ function buildMetricStage(ctx: GrammarBuildContext): GrammarBuildResult {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
-  // A metric stage has already spent the lower-canvas budget on the metric and
-  // its evidence body. Repeating bullets below that body creates overflow.
-  const bulletTexts = (planned.metric ? [] : planned.bullets.slice(0, 3)).map(
-    (bullet, bulletIndex) => `0${bulletIndex + 1}  ${bullet}`,
-  );
+  // A metric stage has already spent most of the lower-canvas budget on the
+  // metric and its evidence body. Preserve one decision cue, not the repeated
+  // three-item stack that pushed dense transaction slides beyond the canvas.
+  const bulletTexts = (
+    planned.metric ? planned.bullets.slice(0, 1) : planned.bullets.slice(0, 3)
+  ).map((bullet, bulletIndex) => `0${bulletIndex + 1}  ${bullet}`);
   const bulletFontSize = 14;
   const bulletX = 0.07;
   const bulletWidth = 0.79;
@@ -1326,7 +1327,10 @@ function buildMetricStage(ctx: GrammarBuildContext): GrammarBuildResult {
   bulletTexts.forEach((content, bulletIndex) => {
     const bulletHeight = Math.max(
       0.031,
-      estimateTextHeight(content, bulletFontSize, 1.2, bulletWidth),
+      Math.min(
+        estimateTextHeight(content, bulletFontSize, 1.2, bulletWidth),
+        Math.max(0.031, 0.9 - bulletCursor),
+      ),
     );
     elements.push(
       makeElement(ctx, `bullet-${bulletIndex + 1}`, {

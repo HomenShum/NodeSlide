@@ -78,7 +78,7 @@ function sourceIdsAttribute(sourceIds: readonly string[]): string {
 function isDecorativeElement(element: SlideElement): boolean {
   if (DECORATIVE_ROLE.test(element.role ?? '')) return true;
   if (element.kind === 'connector') return true;
-  return element.kind === 'shape' && !element.content?.trim();
+  return element.kind === 'shape' && !element.content?.trim() && !element.altText?.trim();
 }
 
 function semanticElementAttributes(element: SlideElement): string {
@@ -118,7 +118,7 @@ function renderSemanticTextBlocks(content: string): string {
 }
 
 function renderSemanticTextElement(element: SlideElement): string {
-  const content = element.content?.trim();
+  const content = element.content?.trim() || element.altText?.trim();
   if (!content) return '';
   const attributes = semanticElementAttributes(element);
   if (HEADING_ROLE.test(element.role ?? '')) {

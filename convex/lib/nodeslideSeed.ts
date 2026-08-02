@@ -2427,6 +2427,16 @@ function buildSlide(input: {
     const mapY = (value: number) => stage.y + (value / 100) * stage.height;
     const mapWidth = (value: number) => (value / 100) * stage.width;
     const mapHeight = (value: number) => (value / 100) * stage.height;
+    const compactMeasure = (value: number, unit: string) => {
+      const number = Number.isInteger(value)
+        ? String(value)
+        : value.toFixed(2).replace(/0+$/u, '').replace(/\.$/u, '');
+      if (unit === 'USD millions') return `$${number}m`;
+      if (unit === 'USD/share') return `$${number}/share`;
+      if (unit === 'percent gross margin') return `${number}% gross margin`;
+      if (unit === 'percent operating income (loss)') return `${number}% op. margin`;
+      return `${number} ${unit}`;
+    };
     const boundedNativeBox = (x: number, y: number, width: number, height: number): BoundingBox => {
       const boundedX = Math.max(stage.x, Math.min(stage.x + stage.width - 0.004, x));
       const boundedY = Math.max(stage.y, Math.min(stage.y + stage.height - 0.004, y));
@@ -2481,11 +2491,14 @@ function buildSlide(input: {
       );
       geometry.marks.bars.forEach((bar, index) => {
         const renderedHeight = mapHeight(bar.height);
+        const renderedWidth = mapWidth(bar.width);
+        const renderedX = mapX(bar.x);
+        const renderedY = mapY(bar.y);
         pushNative(`bar-${index + 1}`, {
           name: `Waterfall bar: ${bar.label}`,
           kind: 'shape',
           role: 'artifact_waterfall_bar',
-          bbox: boundedNativeBox(mapX(bar.x), mapY(bar.y), mapWidth(bar.width), renderedHeight),
+          bbox: boundedNativeBox(renderedX, renderedY, renderedWidth, renderedHeight),
           rotation: 0,
           ...(renderedHeight >= 0.08 ? { content: `${bar.label}\n${bar.value} ${bar.unit}` } : {}),
           altText: `${bar.label}: ${bar.value} ${bar.unit}`,
@@ -2508,6 +2521,31 @@ function buildSlide(input: {
             verticalAlign: 'middle',
           },
         });
+        if (renderedHeight < 0.08) {
+          const labelWidth = Math.max(0.11, renderedWidth * 1.25);
+          pushNative(`bar-label-${index + 1}`, {
+            name: `Waterfall label: ${bar.label}`,
+            kind: 'text',
+            role: 'artifact_waterfall_label',
+            bbox: boundedNativeBox(
+              renderedX + renderedWidth / 2 - labelWidth / 2,
+              renderedY - 0.078,
+              labelWidth,
+              0.07,
+            ),
+            rotation: 0,
+            content: `${bar.label}\n${compactMeasure(bar.value, bar.unit)}`,
+            altText: `${bar.label}: ${bar.value} ${bar.unit}`,
+            style: {
+              color: theme.colors.ink,
+              fontFamily: theme.typography.data,
+              fontSize: 14,
+              fontWeight: 650,
+              lineHeight: 1.15,
+              textAlign: 'center',
+            },
+          });
+        }
       });
     } else if (geometry.kind === 'sankey') {
       geometry.marks.links.forEach((link, index) => {

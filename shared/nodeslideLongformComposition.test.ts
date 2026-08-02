@@ -320,7 +320,11 @@ describe('long-form artifact composition', () => {
         (element) => element.bbox.y >= 0 && element.bbox.y + element.bbox.height <= 1,
       ),
     ).toBe(true);
-    expect(direct.elements.some((element) => element.role === 'bullet')).toBe(false);
+    const metricBullets = direct.elements.filter((element) => element.role === 'bullet');
+    expect(metricBullets).toHaveLength(1);
+    expect(metricBullets[0]?.bbox.y + (metricBullets[0]?.bbox.height ?? 0)).toBeLessThanOrEqual(
+      0.9,
+    );
   });
 
   it('keeps a centered executive scene legible with three transaction evidence claims', () => {

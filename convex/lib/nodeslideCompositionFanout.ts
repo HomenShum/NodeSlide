@@ -4,6 +4,7 @@ import type {
   PatchOperation,
   SlideElement,
 } from '../../shared/nodeslide';
+import { estimateTextHeight } from '../../shared/nodeslideLayoutMetrics';
 import type { NodeSlideDesignPlan } from './nodeslideDesignPlan';
 import { type NodeSlidePatchInput, clocksForNodeSlideOperations } from './nodeslidePatches';
 import type { NodeSlideRepairObservation } from './nodeslideRenderRepairLoop';
@@ -197,14 +198,26 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
           style: { ...element.style, textAlign: 'left' },
         };
       }
+      const focusedHeadlineWidth = 0.72;
+      const focusedHeadlineHeight =
+        estimateTextHeight(
+          element.content ?? '',
+          element.style.fontSize ?? 16,
+          element.style.lineHeight ?? 1.05,
+          focusedHeadlineWidth,
+        ) * 1.25;
       return {
         ...element,
         bbox: {
           ...element.bbox,
           x: 0.14,
           y: hasPrimaryVisual ? 0.15 : 0.18,
-          width: 0.72,
-          height: hasPrimaryVisual ? 0.17 : Math.max(0.18, element.bbox.height),
+          width: focusedHeadlineWidth,
+          height: Math.max(
+            hasPrimaryVisual ? 0.17 : 0.18,
+            element.bbox.height,
+            focusedHeadlineHeight,
+          ),
         },
         style: { ...element.style, textAlign: 'center' },
       };
@@ -301,6 +314,13 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
       const bulletCount = Math.max(1, textOnlyBulletIds.size);
       const width = bulletCount === 1 ? 0.46 : Math.min(0.25, 0.78 / bulletCount);
       const gap = bulletCount === 1 ? 0 : (0.78 - width * bulletCount) / (bulletCount - 1);
+      const focusedBulletHeight =
+        estimateTextHeight(
+          element.content ?? '',
+          element.style.fontSize ?? 16,
+          element.style.lineHeight ?? 1.2,
+          width,
+        ) * 1.1;
       return {
         ...element,
         bbox: {
@@ -308,7 +328,7 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
           x: bulletCount === 1 ? 0.27 : 0.11 + bulletIndex * (width + gap),
           y: 0.7,
           width,
-          height: Math.max(0.1, element.bbox.height),
+          height: Math.max(0.1, element.bbox.height, focusedBulletHeight),
         },
         style: { ...element.style, textAlign: 'center' },
       };

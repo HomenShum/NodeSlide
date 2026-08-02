@@ -15,6 +15,7 @@ import {
   classifyAgentSessionJobFreshness,
   failAgentSessionJob,
   failPreparedAgentSessionJob,
+  isAgentSessionJobActive,
   prepareAgentSessionJob,
   readAgentSessionState,
   reconcileAgentSessionJob,
@@ -125,7 +126,10 @@ export function AgentSessionProvider({
     }) => {
       const current = stateRef.current.activeJob;
       const reusing =
-        current?.kind === input.kind && current.requestFingerprint === input.requestFingerprint;
+        current?.kind === input.kind &&
+        current.requestFingerprint === input.requestFingerprint &&
+        (isAgentSessionJobActive(current.status) ||
+          (current.status === 'failed' && current.jobId === undefined));
       const prepared = prepareAgentSessionJob(
         stateRef.current,
         {

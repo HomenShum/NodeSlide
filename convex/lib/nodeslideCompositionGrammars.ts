@@ -2141,15 +2141,15 @@ function buildDecisionGate(ctx: GrammarBuildContext): GrammarBuildResult {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
-  const bodyFontSize = fitTextFontSize(planned.body, 16, 14, 1.32, 0.46, 0.14);
+  const bodyFontSize = fitTextFontSize(planned.body, 16, 14, 1.32, 0.46, 0.17);
   elements.push(
     makeElement(ctx, 'decision-context', {
       name: 'Decision context',
       kind: 'text',
       role: 'body',
-      bbox: box(0.47, 0.44, 0.46, 0.14),
+      bbox: box(0.47, 0.43, 0.46, 0.17),
       rotation: 0,
-      content: fitTextContent(planned.body, bodyFontSize, 1.32, 0.46, 0.14),
+      content: fitTextContent(planned.body, bodyFontSize, 1.32, 0.46, 0.17),
       style: {
         color: theme.colors.muted,
         fontFamily: theme.typography.body,
@@ -2169,9 +2169,9 @@ function buildDecisionGate(ctx: GrammarBuildContext): GrammarBuildResult {
         name: `Decision condition ${index + 1}`,
         kind: 'shape',
         role: 'decision_condition',
-        bbox: box(0.47, 0.61 + index * 0.1, 0.46, 0.082),
+        bbox: box(0.47, 0.62 + index * 0.095, 0.46, 0.078),
         rotation: 0,
-        content: fitTextContent(conditionContent, 14, 1.2, 0.42, 0.058),
+        content: fitTextContent(conditionContent, 14, 1.2, 0.42, 0.055),
         style: {
           fill: index === 0 ? theme.colors.insight : theme.colors.accentSoft,
           color: theme.colors.insightInk,
@@ -2221,6 +2221,7 @@ export function dispatchCompositionGrammar(
     !hasImage &&
     !hasVideo &&
     /(?:risk|conflict|loss|downside|sensitivity|miss|challenge)/u.test(semanticText);
+  const isConclusion = /\bconclusion\b/u.test(semanticText);
   const isDecisionGate =
     /(?:recommendation|requested decision|committee request|approvals and decision rights|conditions to proceed)/u.test(
       semanticText,
@@ -2241,14 +2242,24 @@ export function dispatchCompositionGrammar(
 
   if (planned.authoredArtifactGeometry?.kind === 'risk-matrix') return buildRiskField(ctx);
 
+  if (planned.compositionMode === 'risk-escalation') return buildRiskEscalation(ctx);
+  if (planned.compositionMode === 'tension-contrast') return buildTensionContrastField(ctx);
+  if (planned.compositionMode === 'evidence-dossier') return buildEvidenceDossier(ctx);
+  if (planned.compositionMode === 'comparison-field') return buildComparisonField(ctx);
+  if (planned.compositionMode === 'decision-gate') return buildDecisionGate(ctx);
+  if (planned.compositionMode === 'full-bleed-thesis') return buildFullBleedThesis(ctx);
+
   if (isDecisionGate) return buildDecisionGate(ctx);
 
+  if (isConclusion && !hasDiagram && !hasChart && !hasMetric) {
+    return buildAsymmetricEditorial(ctx);
+  }
+
   if (isRiskTension && bulletCount >= 2) {
-    const semanticVariant = [...planned.headline].reduce(
-      (sum, character) => sum + (character.codePointAt(0) ?? 0),
-      0,
-    );
-    return semanticVariant % 2 === 0 ? buildRiskEscalation(ctx) : buildTensionContrastField(ctx);
+    const variant = ctx.index % 3;
+    if (variant === 0) return buildRiskEscalation(ctx);
+    if (variant === 1) return buildTensionContrastField(ctx);
+    return buildEvidenceDossier(ctx);
   }
 
   if (

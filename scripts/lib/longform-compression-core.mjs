@@ -47,12 +47,26 @@ export function findMissingRenderedClaims(snapshot, claims, prefixLength = 45) {
     .toLocaleLowerCase();
   return (claims ?? [])
     .filter((claim) => {
-      const prefix = String(claim?.statement ?? '')
+      const prefix = String(claim?.displayStatement ?? claim?.statement ?? '')
         .slice(0, prefixLength)
         .toLocaleLowerCase();
       return prefix.length === 0 || !corpus.includes(prefix);
     })
     .map((claim) => claim.claimId);
+}
+
+export function findTruncatedTextElements(snapshot) {
+  return (snapshot?.elements ?? [])
+    .filter((element) => {
+      const content = String(element?.content ?? '');
+      return content.includes('…') || /\.{3}(?:\s|$)/u.test(content);
+    })
+    .map((element) => ({
+      slideId: element.slideId,
+      elementId: element.id,
+      name: element.name,
+      content: element.content,
+    }));
 }
 
 function entries(manifest) {
@@ -231,6 +245,10 @@ export function validateLongformBenchmarkRun({ benchmark, sourceManifest, critic
       receipt,
     ]),
   );
+  const assessmentDigest = run?.visualInspectionAssessmentDigest;
+  if (!assessmentDigest || !String(assessmentDigest).startsWith('sha256:')) {
+    failures.push('visual inspection must derive from an independent digest-bound assessment');
+  }
   for (const key of expectedInspectionKeys) {
     const receipt = inspectionByKey.get(key);
     if (!receipt) {
@@ -241,6 +259,18 @@ export function validateLongformBenchmarkRun({ benchmark, sourceManifest, critic
       failures.push(`${key} is missing a browser or PPTX image digest`);
     if (!receipt.inspectedBy || !receipt.inspectedAt)
       failures.push(`${key} has no inspection observation identity`);
+    if (
+      receipt.inspectionSource !== 'independent-ledger' ||
+      receipt.assessmentDigest !== assessmentDigest
+    ) {
+      failures.push(`${key} is not bound to the independent visual assessment`);
+    }
+    if (!Array.isArray(receipt.observedProblems) || !Array.isArray(receipt.requiredRepairs)) {
+      failures.push(`${key} is missing explicit visual findings`);
+    }
+    if ((receipt.requiredRepairs ?? []).length > 0) {
+      failures.push(`${key} still has unresolved visual repairs`);
+    }
     for (const check of REQUIRED_CHECKS) {
       if (receipt.checks?.[check] !== 'pass') failures.push(`${key} failed visual check ${check}`);
     }
@@ -249,12 +279,36 @@ export function validateLongformBenchmarkRun({ benchmark, sourceManifest, critic
     failures.push('visual inspection receipt count does not match every required rendered page');
   if ((run?.sectionMontageReceipts ?? []).length !== 14)
     failures.push('all 14 long-deck section montages must be inspected');
+  for (const receipt of run?.sectionMontageReceipts ?? []) {
+    if (
+      receipt.inspected !== true ||
+      receipt.inspectionSource !== 'independent-ledger' ||
+      receipt.assessmentDigest !== assessmentDigest
+    ) {
+      failures.push(
+        `section montage ${receipt.sectionId ?? 'unknown'} lacks independent inspection`,
+      );
+    }
+  }
   if (
     !run?.longContactSheetInspection ||
     !run?.shortContactSheetInspection ||
     !run?.executiveContactSheetInspection
   ) {
     failures.push('long, short, and executive full-deck contact sheets must be inspected');
+  }
+  for (const [kind, receipt] of [
+    ['long', run?.longContactSheetInspection],
+    ['short', run?.shortContactSheetInspection],
+    ['executive', run?.executiveContactSheetInspection],
+  ]) {
+    if (
+      receipt?.inspected !== true ||
+      receipt?.inspectionSource !== 'independent-ledger' ||
+      receipt?.assessmentDigest !== assessmentDigest
+    ) {
+      failures.push(`${kind} contact sheet lacks independent inspection`);
+    }
   }
 
   const ledgerByClaim = new Map(

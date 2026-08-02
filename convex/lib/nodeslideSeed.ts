@@ -148,6 +148,14 @@ export interface NodeSlidePlannedSlide {
   formula?: NodeSlidePlannedFormula;
   image?: NodeSlidePlannedImage;
   video?: NodeSlidePlannedVideo;
+  /** Deterministic composition override for evidence-bound programs; omitted for normal automatic routing. */
+  compositionMode?:
+    | 'risk-escalation'
+    | 'tension-contrast'
+    | 'evidence-dossier'
+    | 'comparison-field'
+    | 'decision-gate'
+    | 'full-bleed-thesis';
   /** Canonical authoring input retained so deterministic specs use the typed compiler boundary. */
   artifactSpec?: NodeSlideAuthoredArtifactSpec;
   /** Present only when an additive model-authored typed artifact compiled successfully. */
@@ -3282,6 +3290,18 @@ function coercePlannedSlide(
     ? authoredArtifact.planned.image
     : coerceImage(value.image);
   const explicitVideo = authoredArtifact ? undefined : coerceVideo(value.video);
+  const compositionMode =
+    typeof value['compositionMode'] === 'string' &&
+    [
+      'risk-escalation',
+      'tension-contrast',
+      'evidence-dossier',
+      'comparison-field',
+      'decision-gate',
+      'full-bleed-thesis',
+    ].includes(value['compositionMode'])
+      ? (value['compositionMode'] as NonNullable<NodeSlidePlannedSlide['compositionMode']>)
+      : undefined;
   // A valid provider slide must stand on the structured artifacts it actually
   // supplied. Borrowing a fallback artifact by slide index can make a prose-only
   // response look complete and prevents the creation critique from detecting
@@ -3334,6 +3354,7 @@ function coercePlannedSlide(
     ...(formula ? { formula } : {}),
     ...(image ? { image } : {}),
     ...(video ? { video } : {}),
+    ...(compositionMode ? { compositionMode } : {}),
     ...(authoredArtifact ? { authoredArtifactCompilation: authoredArtifact.receipt } : {}),
     ...(authoredArtifact ? { authoredArtifactSpec: authoredArtifact.spec } : {}),
     ...(authoredArtifact?.geometry ? { authoredArtifactGeometry: authoredArtifact.geometry } : {}),

@@ -1,12 +1,13 @@
 #!/usr/bin/env -S npx vite-node
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { access, copyFile, mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { access, copyFile, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
-import type { DeckSnapshot, SlideElement } from '../shared/nodeslide';
+import type { DeckSnapshot } from '../shared/nodeslide';
+import { renderSlideHtml } from '../src/domains/nodeslide/slidelang/html';
 import { buildPptx } from '../src/domains/nodeslide/slidelang/pptx';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -25,6 +26,16 @@ const deckProgram = JSON.parse(
 };
 const WIDTH = 1280;
 const HEIGHT = 720;
+
+async function resetGeneratedDeckDirectory(deckRoot: string) {
+  const relative = path.relative(outputRoot, deckRoot);
+  if (!relative || relative.startsWith('..') || path.isAbsolute(relative)) {
+    throw new Error(
+      `Refusing to reset generated directory outside the benchmark output: ${deckRoot}`,
+    );
+  }
+  await rm(deckRoot, { recursive: true, force: true });
+}
 
 async function run(executable: string, args: string[], timeoutMs: number) {
   const child = spawn(executable, args, { cwd: repoRoot, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -72,72 +83,14 @@ async function presentationTools() {
   throw new Error('Presentation render tools are unavailable.');
 }
 
-function escapeHtml(value: string) {
-  return value
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;');
-}
-
-function elementHtml(element: SlideElement) {
-  const { x, y, width, height } = element.bbox;
-  const style = element.style ?? {};
-  const base = [
-    `left:${x * 100}%`,
-    `top:${y * 100}%`,
-    `width:${width * 100}%`,
-    `height:${height * 100}%`,
-    `color:${style.color ?? '#17231D'}`,
-    `font-size:${Math.max(8, Number(style.fontSize ?? 18)) * 1.12}px`,
-    `font-weight:${style.fontWeight ?? 400}`,
-    `text-align:${style.textAlign ?? 'left'}`,
-    `opacity:${style.opacity ?? 1}`,
-    `transform:rotate(${element.rotation ?? 0}deg)`,
-  ].join(';');
-  if (element.kind === 'text' || element.kind === 'math') {
-    return `<div class="el text role-${escapeHtml(element.role ?? 'content')}" style="${base}">${escapeHtml(element.content ?? '')}</div>`;
-  }
-  if (element.kind === 'chart') {
-    const values = element.chart.series.flatMap((series) => series.values);
-    const max = Math.max(1, ...values.map((value) => Math.abs(value)));
-    const bars = values
-      .slice(0, 8)
-      .map(
-        (value, index) =>
-          `<div class="bar-wrap"><div class="bar" style="height:${Math.max(3, (Math.abs(value) / max) * 78)}%"></div><span>${escapeHtml(element.chart.labels[index] ?? String(index + 1))}</span></div>`,
-      )
-      .join('');
-    return `<div class="el chart" style="${base}">${bars}</div>`;
-  }
-  if (element.kind === 'connector') {
-    return `<div class="el connector" style="${base};border-top:2px solid ${style.color ?? '#7066B0'}"></div>`;
-  }
-  if (element.kind === 'image' && element.imageUrl) {
-    return `<img class="el" alt="${escapeHtml(element.altText ?? '')}" src="${escapeHtml(element.imageUrl)}" style="${base};object-fit:${element.fit ?? 'cover'}" />`;
-  }
-  const label = element.content ? escapeHtml(element.content) : '';
-  return `<div class="el shape role-${escapeHtml(element.role ?? 'shape')}" style="${base};background:${style.fill ?? style.color ?? 'rgba(198,83,52,.12)'};border:${style.strokeWidth ?? 0}px solid ${style.stroke ?? 'transparent'};border-radius:${style.radius ?? 8}px">${label}</div>`;
-}
-
 function slideHtml(snapshot: DeckSnapshot, slideIndex: number) {
-  const slide = snapshot.slides.find(
-    (candidate) => candidate.id === snapshot.deck.slideOrder[slideIndex],
-  );
-  if (!slide) throw new Error(`Slide ${slideIndex + 1} is missing.`);
-  const elements = slide.elementOrder
-    .map((id) => snapshot.elements.find((element) => element.id === id))
-    .filter((element): element is SlideElement => Boolean(element) && element?.visible !== false);
+  const slideId = snapshot.deck.slideOrder[slideIndex];
+  if (!slideId) throw new Error(`Slide ${slideIndex + 1} is missing.`);
+  const section = renderSlideHtml(snapshot, slideId);
   return `<!doctype html><html><head><meta charset="utf-8"><style>
-    *{box-sizing:border-box}html,body{margin:0;width:${WIDTH}px;height:${HEIGHT}px;overflow:hidden;background:#101311}
-    .slide{position:relative;width:${WIDTH}px;height:${HEIGHT}px;overflow:hidden;background:${slide.background};font-family:Arial,sans-serif}
-    .el{position:absolute;overflow:hidden}.text{white-space:pre-wrap;line-height:1.12;padding:2px}.shape{display:flex;align-items:center;justify-content:center}
-    .role-headline{font-family:Georgia,serif;letter-spacing:-.02em}.role-footer,.role-page_number{letter-spacing:.12em;text-transform:uppercase}
-    .chart{display:flex;align-items:flex-end;gap:3%;padding:7% 5% 3%;border-left:1px solid #B7B0A5;border-bottom:1px solid #B7B0A5}
-    .bar-wrap{height:100%;flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;gap:5px;font-size:10px;color:#59645E;text-align:center}
-    .bar{background:linear-gradient(180deg,#C65334,#E6A18D);border-radius:5px 5px 0 0;min-height:3px}
-    .connector{transform-origin:left center}
-  </style></head><body><div class="slide" data-slide-index="${slideIndex + 1}">${elements.map(elementHtml).join('')}</div></body></html>`;
+    *{box-sizing:border-box}html,body{margin:0;width:${WIDTH}px;height:${HEIGHT}px;overflow:hidden}
+    [data-slide-id]{width:${WIDTH}px!important;height:${HEIGHT}px!important;aspect-ratio:auto!important;box-shadow:none!important}
+  </style></head><body>${section}</body></html>`;
 }
 
 const tools = await presentationTools();
@@ -158,6 +111,7 @@ for (const kind of ['long', 'short', 'executive'] as const) {
   const snapshotPath = path.join(outputRoot, `${kind}.nodeslide.json`);
   const snapshot = JSON.parse(await readFile(snapshotPath, 'utf8')) as DeckSnapshot;
   const deckRoot = path.join(outputRoot, kind);
+  await resetGeneratedDeckDirectory(deckRoot);
   const browserDir = path.join(deckRoot, 'browser');
   const pptxDir = path.join(deckRoot, 'pptx-render');
   await Promise.all([mkdir(browserDir, { recursive: true }), mkdir(pptxDir, { recursive: true })]);

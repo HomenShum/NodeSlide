@@ -117,6 +117,98 @@ describe('NodeSlide rendered composition fan-out', () => {
     }
   });
 
+  it('keeps focused comparison copy tall enough for a board-risk statement', () => {
+    const built = fixture();
+    const slideIndex = built.snapshot.slides.findIndex((slide) => slide.archetype === 'comparison');
+    const slide = built.snapshot.slides[slideIndex];
+    const plan = built.spec.designPlans?.find((candidate) => candidate.slideIndex === slideIndex);
+    if (!slide || !plan) throw new Error('Expected a comparison slide and plan.');
+    const baseElements = built.snapshot.elements.filter((element) => element.slideId === slide.id);
+    const textTemplate = baseElements.find((element) => element.kind === 'text');
+    if (!textTemplate) throw new Error('Expected comparison text geometry.');
+    const elements = [
+      ...baseElements,
+      ...[0, 1].flatMap((columnIndex) => [
+        {
+          ...structuredClone(textTemplate),
+          id: `comparison-section-${columnIndex}`,
+          role: 'section',
+          bbox: { x: 0.08 + columnIndex * 0.42, y: 0.3, width: 0.36, height: 0.05 },
+        },
+        {
+          ...structuredClone(textTemplate),
+          id: `comparison-bullet-${columnIndex}`,
+          role: 'bullet',
+          content: 'Supplied: the decision framing, audience, and success criteria in the brief',
+          bbox: { x: 0.08 + columnIndex * 0.42, y: 0.39, width: 0.36, height: 0.16 },
+        },
+      ]),
+    ];
+    const originalBulletHeight = Math.max(
+      ...elements
+        .filter((element) => element.role === 'bullet')
+        .map((element) => element.bbox.height),
+    );
+    const result = fanOutNodeSlideComposition({
+      elements,
+      plan: { ...plan, slideIndex: 1 },
+    });
+    const focusedBullets = result.renderCandidates
+      .find((candidate) => candidate.variant === 'visual-focus')
+      ?.elements.filter((element) => element.role === 'bullet');
+
+    expect(focusedBullets?.length).toBeGreaterThan(0);
+    expect(focusedBullets?.every((element) => element.bbox.height >= originalBulletHeight)).toBe(
+      true,
+    );
+  });
+
+  it('moves diagram bullets opposite the visual rail and selects the least-colliding candidate', () => {
+    const built = fixture();
+    const slideIndex = built.snapshot.slides.findIndex((slide) =>
+      built.snapshot.elements.some(
+        (element) => element.slideId === slide.id && element.role?.startsWith('diagram_'),
+      ),
+    );
+    const slide = built.snapshot.slides[slideIndex];
+    const plan = built.spec.designPlans?.find((candidate) => candidate.slideIndex === slideIndex);
+    if (!slide || !plan) throw new Error('Expected a diagram slide and plan.');
+    const baseElements = built.snapshot.elements.filter((element) => element.slideId === slide.id);
+    const textTemplate = baseElements.find((element) => element.kind === 'text');
+    if (!textTemplate) throw new Error('Expected diagram text geometry.');
+    const elements = [
+      ...baseElements,
+      ...Array.from({ length: 3 }, (_, bulletIndex) => ({
+        ...structuredClone(textTemplate),
+        id: `diagram-bullet-${bulletIndex}`,
+        role: 'bullet',
+        content: `${bulletIndex + 1}  Board-risk decision evidence`,
+        bbox: { x: 0.07, y: 0.64 + bulletIndex * 0.1, width: 0.3, height: 0.08 },
+      })),
+    ];
+    const result = fanOutNodeSlideComposition({
+      elements,
+      plan: { ...plan, slideIndex: 10 },
+    });
+    const focused = result.renderCandidates.find(
+      (candidate) => candidate.variant === 'visual-focus',
+    );
+    const focusedNodes = focused?.elements.filter(
+      (element) => element.kind === 'shape' && element.role?.startsWith('diagram_'),
+    );
+    const focusedBullets = focused?.elements.filter((element) => element.role === 'bullet');
+    expect(focusedNodes?.length).toBeGreaterThan(0);
+    expect(focusedBullets?.length).toBeGreaterThan(0);
+    expect(Math.max(...(focusedNodes ?? []).map((element) => element.bbox.x))).toBeLessThan(0.5);
+    expect(Math.min(...(focusedBullets ?? []).map((element) => element.bbox.x))).toBeGreaterThan(
+      0.5,
+    );
+    const selected = result.candidates.find((candidate) => candidate.selected);
+    expect(selected?.overlapCount).toBe(
+      Math.min(...result.candidates.map((candidate) => candidate.overlapCount)),
+    );
+  });
+
   it('mirrors connector direction with its geometry instead of leaving a reversed arrow', () => {
     const built = fixture();
     const connector = built.snapshot.elements.find((element) => element.kind === 'connector');

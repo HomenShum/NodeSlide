@@ -1619,9 +1619,29 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
   );
   const decisivePoint = planned.bullets[0];
   if (decisivePoint) {
-    const takeawayHeight = 0.11;
     const takeawayX = sceneCentered ? 0.62 : textX;
     const takeawayWidth = sceneCentered ? 0.31 : headlineWidth;
+    const takeawayMaxHeight = 0.145;
+    const takeawayPadding = 12;
+    const takeawayFontSize = fitTextFontSize(
+      decisivePoint,
+      16,
+      12,
+      1.25,
+      takeawayWidth - 0.04,
+      takeawayMaxHeight,
+      takeawayPadding,
+    );
+    const takeawayInner = nodeSlideTextInnerBox(takeawayWidth, 1, takeawayPadding);
+    const takeawayVerticalPadding = 1 - takeawayInner.height;
+    const takeawayHeight = Math.min(
+      takeawayMaxHeight,
+      Math.max(
+        0.11,
+        estimateTextHeight(decisivePoint, takeawayFontSize, 1.25, takeawayInner.width) * 1.02 +
+          takeawayVerticalPadding,
+      ),
+    );
     elements.push(
       makeElement(ctx, 'decisive-point', {
         name: 'Decisive point',
@@ -1634,15 +1654,7 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
           color: theme.colors.insightInk,
           fill: theme.colors.insight,
           fontFamily: theme.typography.body,
-          fontSize: fitTextFontSize(
-            decisivePoint,
-            16,
-            14,
-            1.25,
-            takeawayWidth - 0.04,
-            takeawayHeight,
-            12,
-          ),
+          fontSize: takeawayFontSize,
           fontWeight: 650,
           lineHeight: 1.25,
           padding: 12,

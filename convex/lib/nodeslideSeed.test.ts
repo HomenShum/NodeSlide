@@ -62,6 +62,8 @@ describe('NodeSlide seed', () => {
       'Honor explicit slide-count and presentation constraints in the brief',
       'Name every unresolved owner before the controlled passage opens',
     ];
+    takeaways[0] =
+      'Decision risk: the gate opens without sufficient evidence and named ownership — control: enforce the evidence boundary before passage';
     climaxSlides.forEach((slide, index) => {
       slide.bullets = [takeaways[index] ?? takeaways[0] ?? 'Keep the gate explicit'];
     });

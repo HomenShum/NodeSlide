@@ -92,6 +92,40 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
       .filter((element) => element.role === 'bullet')
       .map((element, index) => [element.id, index] as const),
   );
+  const evidenceBulletIds = new Map(
+    elements
+      .filter((element) => element.role === 'bullet' && evidenceCardIds.size > 0)
+      .sort((left, right) => left.bbox.x - right.bbox.x || left.bbox.y - right.bbox.y)
+      .map((element, index) => [element.id, index] as const),
+  );
+  const evidenceBulletByIndex = new Map(
+    elements
+      .filter((element) => evidenceBulletIds.has(element.id))
+      .map((element) => [evidenceBulletIds.get(element.id) ?? 0, element] as const),
+  );
+  const evidenceCardLayout = new Map<string, { y: number; height: number }>();
+  const evidenceBulletLayout = new Map<string, { y: number; height: number }>();
+  let evidenceCursor = 0.4;
+  for (const [cardId, cardIndex] of evidenceCardIds) {
+    const bullet = evidenceBulletByIndex.get(cardIndex);
+    const bulletHeight = bullet
+      ? Math.max(
+          0.07,
+          estimateTextHeight(
+            bullet.content ?? '',
+            bullet.style.fontSize ?? 16,
+            bullet.style.lineHeight ?? 1.25,
+            0.58,
+          ) * 1.1,
+        )
+      : 0.07;
+    const cardHeight = Math.max(0.11, bulletHeight + 0.04);
+    evidenceCardLayout.set(cardId, { y: evidenceCursor, height: cardHeight });
+    if (bullet) {
+      evidenceBulletLayout.set(bullet.id, { y: evidenceCursor + 0.02, height: bulletHeight });
+    }
+    evidenceCursor += cardHeight + 0.02;
+  }
   const diagramNodeIds = new Map(
     elements
       .filter(
@@ -230,17 +264,17 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
       };
     }
     if (evidenceCardIds.size > 0 && element.role === 'evidence_card') {
-      const cardIndex = evidenceCardIds.get(element.id) ?? 0;
+      const layout = evidenceCardLayout.get(element.id) ?? { y: element.bbox.y, height: 0.11 };
       return {
         ...element,
-        bbox: { ...element.bbox, x: 0.18, y: 0.4 + cardIndex * 0.14, width: 0.64, height: 0.11 },
+        bbox: { ...element.bbox, x: 0.18, y: layout.y, width: 0.64, height: layout.height },
       };
     }
     if (evidenceCardIds.size > 0 && element.role === 'bullet') {
-      const bulletIndex = textOnlyBulletIds.get(element.id) ?? 0;
+      const layout = evidenceBulletLayout.get(element.id) ?? { y: element.bbox.y, height: 0.07 };
       return {
         ...element,
-        bbox: { ...element.bbox, x: 0.21, y: 0.42 + bulletIndex * 0.14, width: 0.58, height: 0.07 },
+        bbox: { ...element.bbox, x: 0.21, y: layout.y, width: 0.58, height: layout.height },
         style: { ...element.style, textAlign: 'left' },
       };
     }

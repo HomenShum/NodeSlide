@@ -18,7 +18,7 @@
       "value": 43.425,
       "unit": "USD millions",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16"],
-      "longDeckSlideIndexes": [9, 68],
+      "longDeckSlideIndexes": [9],
       "shortDeckSlideIndexes": [2, 11]
     },
     {
@@ -28,7 +28,7 @@
       "value": 14.475,
       "unit": "USD millions",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16"],
-      "longDeckSlideIndexes": [9, 68],
+      "longDeckSlideIndexes": [9],
       "shortDeckSlideIndexes": [2, 11]
     },
     {
@@ -38,7 +38,7 @@
       "value": 72.375,
       "unit": "USD millions",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16"],
-      "longDeckSlideIndexes": [9, 68],
+      "longDeckSlideIndexes": [9],
       "shortDeckSlideIndexes": [2, 11]
     },
     {
@@ -77,6 +77,7 @@
     {
       "claimId": "q2-china-sales",
       "statement": "Q2 2025 China sales were $5.299 million versus $63.519 million a year earlier.",
+      "displayStatement": "China sales: $5.299M versus $63.519M.",
       "criticality": "decision-critical",
       "value": 5.299,
       "unit": "USD millions",
@@ -88,6 +89,7 @@
     {
       "claimId": "2026e-sales",
       "statement": "Final management projections showed 2026E net sales of $340 million.",
+      "displayStatement": "2026E net sales: $340 million.",
       "criticality": "decision-critical",
       "value": 340,
       "unit": "USD millions",
@@ -98,6 +100,7 @@
     {
       "claimId": "2030e-sales",
       "statement": "Final management projections showed 2030E net sales of $495 million.",
+      "displayStatement": "2030E net sales: $495 million.",
       "criticality": "decision-critical",
       "value": 495,
       "unit": "USD millions",
@@ -108,6 +111,7 @@
     {
       "claimId": "public-comps-range",
       "statement": "Selected public companies implied a per-share range of $16.35 to $23.80.",
+      "displayStatement": "Public comps: $16.35-$23.80 per share.",
       "criticality": "decision-critical",
       "unit": "USD/share",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16"],
@@ -117,6 +121,7 @@
     {
       "claimId": "precedents-range",
       "statement": "Selected precedent transactions implied a per-share range of $17.15 to $30.80.",
+      "displayStatement": "Precedents: $17.15-$30.80 per share.",
       "criticality": "decision-critical",
       "unit": "USD/share",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16"],
@@ -126,6 +131,7 @@
     {
       "claimId": "dcf-range",
       "statement": "DCF analysis implied a per-share range of $17.70 to $37.50.",
+      "displayStatement": "DCF: $17.70-$37.50 per share.",
       "criticality": "decision-critical",
       "unit": "USD/share",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16"],
@@ -144,6 +150,7 @@
     {
       "claimId": "prior-offer",
       "statement": "Alcon had offered $58 per share in April 2024 before the $28 2025 agreement.",
+      "displayStatement": "$58/share in April 2024 preceded the $28 agreement.",
       "criticality": "decision-critical",
       "value": 58,
       "unit": "USD/share",
@@ -154,6 +161,7 @@
     {
       "claimId": "citi-contingent-fee",
       "statement": "Approximately $26.6 million of Citi's roughly $30.6 million fee was contingent on closing.",
+      "displayStatement": "Citi fee: $26.6M of roughly $30.6M depended on closing.",
       "criticality": "decision-critical",
       "value": 26.6,
       "unit": "USD millions",
@@ -164,6 +172,7 @@
     {
       "claimId": "offer-premium",
       "statement": "The $28 offer represented approximately a 59% premium to STAAR's 90-day VWAP and 51% to its August 4, 2025 closing price.",
+      "displayStatement": "$28 was approximately 59% above STAAR's 90-day VWAP and 51% above its August 4, 2025 close.",
       "criticality": "supporting",
       "unit": "percent",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16"],
@@ -173,6 +182,7 @@
     {
       "claimId": "vote-threshold",
       "statement": "Adoption required a majority of outstanding shares; 24,677,062 shares constituted that majority at the record date.",
+      "displayStatement": "Majority threshold: 24,677,062 shares.",
       "criticality": "decision-critical",
       "value": 24677062,
       "unit": "shares",
@@ -193,6 +203,7 @@
     {
       "claimId": "regional-sales-change",
       "statement": "In Q2 2025 APAC sales fell 69%, while EMEA and Americas sales increased 11% and 10%, respectively.",
+      "displayStatement": "Q2 2025 APAC sales fell 69%; EMEA rose 11% and Americas rose 10%.",
       "criticality": "decision-critical",
       "evidenceSourceIds": ["staar-2025-q2-10q"],
       "longDeckSlideIndexes": [21, 23],
@@ -201,6 +212,7 @@
     {
       "claimId": "h1-2025-sales",
       "statement": "First-half 2025 net sales were $86.909 million versus $176.361 million a year earlier, a 50.7% decline.",
+      "displayStatement": "H1 2025 sales were $86.909 million versus $176.361 million, down 50.7%.",
       "criticality": "decision-critical",
       "value": 86.909,
       "unit": "USD millions",
@@ -221,6 +233,7 @@
     {
       "claimId": "q2-operating-loss",
       "statement": "Q2 2025 operating loss was 67.6% of sales versus operating income of 12.0% of sales a year earlier.",
+      "displayStatement": "Q2 2025 operating loss was 67.6% of sales versus 12.0% operating income a year earlier.",
       "criticality": "decision-critical",
       "value": -67.6,
       "unit": "percent of sales",
@@ -231,6 +244,7 @@
     {
       "claimId": "standalone-liquidity",
       "statement": "At June 27, 2025, cash and cash equivalents plus available-for-sale investments totaled $189.883 million.",
+      "displayStatement": "Cash and available-for-sale investments totaled $189.883 million at June 27, 2025.",
       "criticality": "decision-critical",
       "value": 189.883,
       "unit": "USD millions",
@@ -241,6 +255,7 @@
     {
       "claimId": "projection-growth-assumption",
       "statement": "Management's final projections assumed approximately 10% annual net-sales growth beginning in 2027.",
+      "displayStatement": "Final case: approximately 10% annual sales growth from 2027.",
       "criticality": "decision-critical",
       "value": 10,
       "unit": "percent",
@@ -251,14 +266,16 @@
     {
       "claimId": "citi-forecast-reliance",
       "statement": "Citi relied on management forecasts without independent verification and expressed no opinion on the forecasts or their assumptions.",
+      "displayStatement": "Citi: forecasts unverified; assumptions not opined.",
       "criticality": "decision-critical",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16"],
-      "longDeckSlideIndexes": [51, 65],
+      "longDeckSlideIndexes": [51, 64],
       "shortDeckSlideIndexes": [7, 10]
     },
     {
       "claimId": "fairness-not-vote-recommendation",
       "statement": "Citi's fairness opinion addressed financial fairness to holders and was not a recommendation on how any stockholder should vote.",
+      "displayStatement": "Citi assessed fairness; it did not recommend a stockholder vote.",
       "criticality": "decision-critical",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16"],
       "longDeckSlideIndexes": [50, 51],
@@ -267,24 +284,27 @@
     {
       "claimId": "broadwood-opposition",
       "statement": "Broadwood disclosed 27.3% beneficial ownership and later stated that it intended to vote against the merger proposal.",
+      "displayStatement": "Broadwood: 27.3% ownership; opposed the merger.",
       "criticality": "decision-critical",
       "value": 27.3,
       "unit": "percent beneficial ownership",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16", "broadwood-opposition-2025-09-24"],
-      "longDeckSlideIndexes": [64],
+      "longDeckSlideIndexes": [65],
       "shortDeckSlideIndexes": [10]
     },
     {
       "claimId": "regulatory-clearances",
       "statement": "Closing required HSR clearance plus specified antitrust clearances including China, Japan, the United Kingdom, Australia, and other jurisdictions.",
+      "displayStatement": "Closing requires HSR and antitrust clearances.",
       "criticality": "decision-critical",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16", "agreement-8k-2025-08-04"],
-      "longDeckSlideIndexes": [10, 69],
+      "longDeckSlideIndexes": [10, 68, 69],
       "shortDeckSlideIndexes": [2, 11]
     },
     {
       "claimId": "alcon-funding-representation",
       "statement": "Alcon represented that it would have immediately available funds sufficient to pay the merger consideration and related fees and expenses.",
+      "displayStatement": "Alcon represented that available funds cover the merger consideration, fees, and expenses.",
       "criticality": "supporting",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16", "agreement-8k-2025-08-04"],
       "longDeckSlideIndexes": [52, 53],
@@ -293,6 +313,7 @@
     {
       "claimId": "attributed-board-rationale",
       "statement": "The Board cited certain $28 cash value against standalone execution risk, including forecast risk and high China concentration.",
+      "displayStatement": "$28 cash vs. standalone, forecast, and China risk.",
       "criticality": "supporting",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16"],
       "longDeckSlideIndexes": [11, 16, 17],
@@ -301,9 +322,10 @@
     {
       "claimId": "open-diligence-boundary",
       "statement": "Approval remains conditional on resolving China recovery durability, the final-versus-July forecast bridge, and required regulatory clearances before the decision cutoff.",
+      "displayStatement": "Gate: China, forecast bridge, and clearances.",
       "criticality": "decision-critical",
       "evidenceSourceIds": ["definitive-proxy-2025-09-16", "staar-2025-q2-10q"],
-      "longDeckSlideIndexes": [5, 41, 61, 69, 70],
+      "longDeckSlideIndexes": [5, 41, 61, 68, 69, 70],
       "shortDeckSlideIndexes": [1, 8, 11, 12]
     }
   ]

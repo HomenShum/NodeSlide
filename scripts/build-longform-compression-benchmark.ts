@@ -7,6 +7,7 @@ import { type NodeSlidePlannedSlide, buildBriefNodeSlide } from '../convex/lib/n
 import {
   findGenericNarrativeFallbacks,
   findMissingRenderedClaims,
+  findTruncatedTextElements,
   validateGeneratedDeckGates,
 } from './lib/longform-compression-core.mjs';
 
@@ -26,12 +27,33 @@ interface SectionPlan {
 interface Claim {
   claimId: string;
   statement: string;
+  displayStatement?: string;
   criticality: 'decision-critical' | 'supporting' | 'background';
   value?: number;
   unit?: string;
   evidenceSourceIds: string[];
   longDeckSlideIndexes: number[];
   shortDeckSlideIndexes: number[];
+}
+
+function claimText(claim: Claim) {
+  return claim.displayStatement ?? claim.statement;
+}
+
+function riskLabel(topic: string) {
+  const labels: Record<string, string> = {
+    'Decision scorecard': 'Scorecard',
+    'Terms that change the risk/reward': 'Terms',
+    'Rationale under a downside case': 'Rationale',
+    'Customer and channel structure': 'Channel',
+    'Forecast risk map': 'Forecast',
+    'China and channel risk': 'China',
+    'Forecast credibility': 'Forecast',
+    'Process and price challenge': 'Process',
+    'Company and market': 'Market',
+    'Downside and sensitivities': 'Downside',
+  };
+  return labels[topic] ?? topic;
 }
 
 const deckProgram = await load<{
@@ -307,7 +329,7 @@ function artifactKindFor(index: number, sectionId: string): ArtifactKind | null 
     ];
   if (sectionId === 'valuation') return index === 50 ? null : 'waterfall';
   if (sectionId === 'downside')
-    return ({ 58: null, 59: 'waterfall', 60: null, 61: null } as const)[index as 58 | 59 | 60 | 61];
+    return ({ 58: null, 59: 'graph', 60: null, 61: null } as const)[index as 58 | 59 | 60 | 61];
   if (sectionId === 'risks')
     return index === 62 ? 'comparison' : index === 66 ? null : 'risk-matrix';
   if (sectionId === 'terms')
@@ -365,11 +387,11 @@ function evidenceBoundNarrative(sectionId: string, topic: string) {
   const topicLower = topic.toLocaleLowerCase();
   const copy: Record<string, { body: string; bullets: string[] }> = {
     executive: {
-      body: `Frame ${topicLower} as a committee decision, not a promotional summary. State the evidence that changes the recommendation and the condition that remains open.`,
+      body: `Frame ${topicLower} as a committee decision. Show the evidence and the open condition.`,
       bullets: [
-        `Decision: resolve ${topicLower}`,
-        'Evidence boundary: filed facts and explicitly attributed advocacy only',
-        'Condition: no approval while a recommendation-changing assumption remains open',
+        `Decide: ${topic}`,
+        'Use filed facts and attributed advocacy',
+        'Gate stays closed while critical evidence is open',
       ],
     },
     terms: {
@@ -550,7 +572,7 @@ function artifactSpec(
             { id: 'evidence', label: topic, kind: 'system' },
             {
               id: 'condition',
-              label: claims[0]?.statement ?? `Resolve ${topic.toLocaleLowerCase()}`,
+              label: `Evidence gate: ${topic}`,
               kind: 'decision',
             },
             {
@@ -572,16 +594,16 @@ function artifactSpec(
           likelihoodAxis: { low: 'rare', high: 'likely' },
           impactAxis: { low: 'minor', high: 'critical' },
           risks: [
-            { id: `primary-${index}`, label: topic, likelihood: 4, impact: 5 },
+            { id: `primary-${index}`, label: riskLabel(topic), likelihood: 4, impact: 5 },
             {
               id: `evidence-${index}`,
-              label: 'Evidence quality',
+              label: 'Evidence',
               likelihood: 3,
               impact: 4,
             },
             {
               id: `decision-${index}`,
-              label: 'Recommendation sensitivity',
+              label: 'Decision',
               likelihood: 2,
               impact: 4,
             },
@@ -632,28 +654,44 @@ function longSlide(index: number): NodeSlidePlannedSlide {
   const boundedNarrative = evidenceBoundNarrative(section.sectionId, topic);
   const body =
     claims.length > 1
-      ? `${topic}: reconcile ${claims
-          .map((claim) => claim.statement)
-          .join(' ')} Keep advocacy, primary evidence, and unresolved diligence visibly separate.`
+      ? `${topic}: ${claims.map(claimText).join(' ')}`
       : primary
-        ? `${topic}: ${primary.statement} Preserve its source boundary and state the decision implication without adding an unsupported conclusion.`
+        ? `${topic}: ${claimText(primary)}`
         : boundedNarrative.body;
+  const claimBullets = claims.map(claimText);
+  const metric = (() => {
+    if (primary?.value === undefined) return undefined;
+    if (primary.claimId === 'business-scale') return '3M+';
+    if (primary.claimId === 'vote-threshold') return primary.value.toLocaleString('en-US');
+    return String(primary.value);
+  })();
+  const metricLabel =
+    primary?.claimId === 'business-scale'
+      ? 'ICLs sold'
+      : primary?.claimId === 'vote-threshold'
+        ? 'shares at the majority threshold'
+        : (primary?.unit ?? 'reported value');
+  const compositionMode = (
+    {
+      58: 'tension-contrast',
+      60: 'evidence-dossier',
+      61: 'decision-gate',
+      72: 'comparison-field',
+    } as const
+  )[index as 58 | 60 | 61 | 72];
   return {
     title: index === 1 ? 'STAAR Surgical / Alcon' : `${section.title} · ${sectionOffset}`,
     section: `${String(index).padStart(2, '0')} / ${section.title}`,
     headline,
     body,
-    bullets: (claims.length > 0
-      ? [
-          claims[0]?.statement ?? boundedNarrative.bullets[0],
-          claims[1]?.statement ?? `Lens: ${topic}`,
-          `Decision implication: ${boundedNarrative.bullets[2]}`,
-        ]
-      : boundedNarrative.bullets
-    ).slice(0, kind === 'chart' || kind === 'waterfall' || kind === 'comparison' ? 2 : 3),
+    ...(compositionMode ? { compositionMode } : {}),
+    bullets: (claimBullets.length > 0 ? claimBullets : boundedNarrative.bullets).slice(
+      0,
+      kind === 'chart' || kind === 'waterfall' || kind === 'comparison' ? 2 : 3,
+    ),
     ...(kind ? { artifactSpec: artifactSpec(index, kind, claims, topic, series) } : {}),
-    ...(!kind && primary?.value !== undefined
-      ? { metric: String(primary.value), metricLabel: primary.unit ?? 'reported value' }
+    ...(!kind && metric !== undefined
+      ? { metric, metricLabel }
       : !kind && index === 67
         ? { metric: '3', metricLabel: 'approval and diligence checkpoints' }
         : {}),
@@ -715,18 +753,20 @@ function compressedSlide(index: number, kind: 'short' | 'executive'): NodeSlideP
   return {
     title,
     section: `${kind === 'short' ? 'Memo' : 'Readout'} / ${String(index).padStart(2, '0')}`,
-    headline: title,
+    headline: kind === 'short' && index === 12 ? 'Decision summary + appendix' : title,
     body:
-      claims.map((claim) => claim.statement).join('\n') ||
+      claims.map(claimText).join('\n') ||
       'No new claim is introduced during compression; this page points back to accepted long-deck evidence.',
     bullets:
       index === 12
         ? ['Approve only with the stated conditions and linked diligence owners']
-        : [
-            claims[0]?.statement ?? `Memo page ${index}: preserve the decision, not every page`,
-            claims[1]?.statement ?? 'Retain downside and source coverage',
-            claims[2]?.statement ?? 'Link unresolved diligence to an owner',
-          ],
+        : claims.length > 0
+          ? claims.map(claimText)
+          : [
+              `Memo page ${index}: preserve the decision, not every page`,
+              'Retain downside and source coverage',
+              'Link unresolved diligence to an owner',
+            ],
     ...(artifactKind
       ? { artifactSpec: artifactSpec(index, artifactKind, claims, title, series) }
       : {}),
@@ -792,6 +832,16 @@ const generatedGateFailures = validateGeneratedDeckGates({
   built,
   expectedCounts: { long: 72, short: 12, executive: 4 },
 });
+for (const [kind, result] of Object.entries(built)) {
+  const truncated = findTruncatedTextElements(result.snapshot);
+  if (truncated.length > 0) {
+    generatedGateFailures.push(
+      `${kind} deck contains generated ellipses: ${truncated
+        .map((element) => `${element.name} (${element.slideId})`)
+        .join(', ')}`,
+    );
+  }
+}
 if (generatedGateFailures.length > 0) {
   throw new Error(
     `Generated deck gates failed: ${generatedGateFailures.join('; ')}. Diversity: ${JSON.stringify(

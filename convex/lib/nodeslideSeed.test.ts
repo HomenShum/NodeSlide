@@ -14,6 +14,30 @@ import {
 import { validateNodeSlideSnapshot } from './nodeslideValidation';
 
 describe('NodeSlide seed', () => {
+  it('preserves a validated composition intent when a long-form committee page crosses the provider boundary', () => {
+    const brief = {
+      prompt: 'Build exactly 1 slide with a distinct downside composition.',
+      audience: 'Transaction approval committee',
+      purpose: 'Make the decision evidence inspectable',
+      successCriteria: ['Keep the requested composition intent'],
+    };
+    const spec = coerceBriefSpec(
+      {
+        title: 'Committee decision',
+        slides: Array.from({ length: 6 }, (_, index) => ({
+          title: index === 0 ? 'Standalone downside' : `Evidence page ${index + 1}`,
+          headline: index === 0 ? 'Standalone downside' : `Evidence page ${index + 1}`,
+          body: 'Stress the accepted case.',
+          ...(index === 0 ? { compositionMode: 'tension-contrast' } : {}),
+        })),
+      },
+      'Committee decision',
+      brief,
+    );
+
+    expect(spec.slides[0]?.compositionMode).toBe('tension-contrast');
+  });
+
   it('keeps the exact production fallback brief export-safe across every slide', () => {
     const brief = {
       prompt:

@@ -126,7 +126,7 @@ import type { JsonPatchProposalRequest } from './inspector/JsonInspector';
 import { nodeSlideScopeLabel } from './inspector/scopePresentation';
 import type { InspectorTab } from './inspector/types';
 import { nodeSlideUserErrorMessage } from './nodeslideUserError';
-import { AgentSessionProvider, useOptionalAgentSession } from './session';
+import { AgentSessionProvider, createAgentSessionSecret, useOptionalAgentSession } from './session';
 import { extractPptxSignature } from './signature/index';
 import {
   NODESLIDE_TASTE_PACKS,
@@ -352,7 +352,10 @@ interface NodeSlideGeneratedApi {
     remove: PublicMutation<{ deckId: string; ownerAccessKey: string; memoryId: string }, boolean>;
   };
   nodeslideAgent: {
-    createDeckFromBrief: PublicAction<CreateDeckAdmissionRequest, OwnerWorkspace>;
+    createDeckFromBrief: PublicAction<
+      CreateDeckAdmissionRequest & { creationAttemptId: string },
+      OwnerWorkspace
+    >;
     proposeEdit: PublicAction<AgentEditRequest & { ownerAccessKey: string }, PatchReceipt>;
   };
   nodeslideDeckCi: {
@@ -1904,6 +1907,10 @@ function NodeSlideStudioContent({ clientSessionId }: { clientSessionId: string }
       const result = await monitorDeploymentAction(
         createDeckFromBrief({
           ...request,
+          // One deliberate click is one budgeted provider run. Convex may retry
+          // this action with the same arguments, while a later click mints a new
+          // identity even when the brief is byte-for-byte identical.
+          creationAttemptId: `create-${createAgentSessionSecret()}`,
           ...(validProductionProbeCleanupToken
             ? { productionProbeCleanupToken: validProductionProbeCleanupToken }
             : {}),

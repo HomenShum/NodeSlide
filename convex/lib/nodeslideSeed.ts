@@ -1798,7 +1798,10 @@ function buildSlide(input: {
   // grammar instead of the shared scaffold. Each grammar produces a
   // materially different element tree. Slides with authored artifacts use
   // the legacy scaffold to preserve native geometry rendering.
-  if (input.designPlan && !planned.authoredArtifactSpec) {
+  if (
+    input.designPlan &&
+    (!planned.authoredArtifactGeometry || planned.authoredArtifactGeometry.kind === 'risk-matrix')
+  ) {
     const grammarResult = dispatchCompositionGrammar(input.designPlan.semanticArchetype, {
       deckId: input.deckId,
       slideId: input.slideId,

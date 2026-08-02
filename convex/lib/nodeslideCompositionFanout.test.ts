@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { overflowIssueDrafts } from '../../shared/nodeslideGeometryChecks';
 import {
   fanOutNodeSlideComposition,
   observeNodeSlideCompositionBounds,
@@ -207,6 +208,43 @@ describe('NodeSlide rendered composition fan-out', () => {
     expect(selected?.overlapCount).toBe(
       Math.min(...result.candidates.map((candidate) => candidate.overlapCount)),
     );
+  });
+
+  it('keeps a board ruling readable when visual focus restacks evidence cards', () => {
+    const built = fixture();
+    const plan = built.spec.designPlans?.[0];
+    const textTemplate = built.snapshot.elements.find((element) => element.kind === 'text');
+    const shapeTemplate = built.snapshot.elements.find((element) => element.kind === 'shape');
+    if (!plan || !textTemplate || !shapeTemplate)
+      throw new Error('Expected composition templates.');
+    const rulingLines = [
+      '01  Ruling: hold or conditional passage; unconditional opening is unsupported',
+      '02  Owner: board risk committee, with operating owners to be named today',
+      '03  Checkpoint: reconvene with evidence answering the three open questions',
+    ];
+    const elements = rulingLines.flatMap((content, index) => [
+      {
+        ...structuredClone(shapeTemplate),
+        id: `evidence-card-${index}`,
+        role: 'evidence_card',
+        content: undefined,
+        bbox: { x: 0.07 + index * 0.28, y: 0.5, width: 0.24, height: 0.16 },
+      },
+      {
+        ...structuredClone(textTemplate),
+        id: `evidence-bullet-${index}`,
+        role: 'bullet',
+        content,
+        style: { ...textTemplate.style, fontSize: 16, lineHeight: 1.25 },
+        bbox: { x: 0.09 + index * 0.28, y: 0.53, width: 0.2, height: 0.1 },
+      },
+    ]);
+    const focused = fanOutNodeSlideComposition({ elements, plan })
+      .renderCandidates.find((candidate) => candidate.variant === 'visual-focus')
+      ?.elements.filter((element) => element.role === 'bullet');
+
+    expect(focused).toHaveLength(3);
+    expect(focused?.flatMap(overflowIssueDrafts)).toEqual([]);
   });
 
   it('mirrors connector direction with its geometry instead of leaving a reversed arrow', () => {

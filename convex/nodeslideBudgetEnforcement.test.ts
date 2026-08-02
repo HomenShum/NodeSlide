@@ -741,4 +741,19 @@ describe('deck creation is reserved before it is issued', () => {
     expect(briefCall).toContain('briefDispatch({');
     expect(briefCall).not.toContain('callNodeSlideFreeJson(');
   });
+
+  it('finishes creation from settled pass 1 when only the optional revision is unreconciled', async () => {
+    const { readFileSync } = await import('node:fs');
+    const source = readFileSync(new URL('./nodeslideAgent.ts', import.meta.url), 'utf8');
+    const critiquePolicy = source.slice(
+      source.indexOf('const critique = await runNodeSlideCreationCritique'),
+      source.indexOf('const rawSpec = critique.spec'),
+    );
+
+    expect(critiquePolicy).toContain(
+      'const revisionSpendUnreconciled = nodeSlideCreateSpendUnreconciled(critique.revision)',
+    );
+    expect(critiquePolicy).not.toContain('throw nodeslideCreatePublicError');
+    expect(critiquePolicy).not.toContain('retry after the receipt is reconciled');
+  });
 });

@@ -49,3 +49,16 @@
 - The direct landing path now mints a cryptographic per-submission attempt id. Convex retries retain that id and replay one budget row; a later click gets a fresh id and therefore a fresh provider call even for an identical brief. The server binds session id, attempt id, and canonical request digest into the run id.
 - Recompute visual-focus headline and bullet heights after their widths change, with renderer headroom.
 - Lock the geometry behavior with the exact saved production brief; lock retry-versus-rerun semantics with positive retry, deliberate repeat, and cross-session collision scenarios.
+
+## Third live lane: optional revision timeout
+
+- Production SHA: `8be090db2cef8d845955470a4dfa742c94a290b2`.
+- The first Kimi call settled normally: 6,813 input tokens, 4,003 output tokens, 20,535 ms, and 80,484 micro-USD.
+- The optional self-critique revision reserved 842,664 micro-USD, then reached the exact 240,000 ms create-wire timeout. The ledger conservatively moved the full reservation to `unreconciled`; it did not release or misreport the possible exposure.
+- `runNodeSlideCreationCritique` correctly retained the valid first spec on revision failure, but `createDeckFromBrief` then threw solely because the optional revision was unreconciled. That action-level throw contradicted the critique loop's fail-soft contract and discarded a usable paid result.
+
+## Third-lane closure
+
+- Keep the initial provider call fail-closed when its spend is ambiguous, because no trustworthy provider-authored deck exists yet.
+- Treat the second revision as the optional improvement it is: preserve its unreconciled ledger state and disclose it in Trace, but persist the settled pass-1 deck that the critique loop already selected.
+- Scenario proof pins both layers: an ambiguous paid revision retains pass 1, and the create action contains no post-critique throw. Restoring the old throw turns that integration guard red.

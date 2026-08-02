@@ -322,9 +322,9 @@ describe('long-form artifact composition', () => {
     ).toBe(true);
     const metricBullets = direct.elements.filter((element) => element.role === 'bullet');
     expect(metricBullets).toHaveLength(1);
-    expect(metricBullets[0]?.bbox.y + (metricBullets[0]?.bbox.height ?? 0)).toBeLessThanOrEqual(
-      0.9,
-    );
+    const metricBullet = metricBullets[0];
+    if (!metricBullet) throw new Error('Missing bounded metric decision cue.');
+    expect(metricBullet.bbox.y + metricBullet.bbox.height).toBeLessThanOrEqual(0.9);
   });
 
   it('keeps a centered executive scene legible with three transaction evidence claims', () => {

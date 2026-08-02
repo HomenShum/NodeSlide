@@ -107,13 +107,12 @@ function slidesFromApproved(sections: ApprovedSection[]): NodeSlidePlannedSlide[
       title: proof.title,
       section: '05 / Proof + next',
       headline: 'Mechanics pass. Quality is unproven.',
-      body: 'Of 1,392 held-out requests: 49.4% review; 50.6% abstain. Strict timing failed.',
-      bullets: [proof.visualLines[0] ?? '', proof.visualLines[3] ?? ''],
-      chart: {
-        labels: ['Review', 'Abstain'],
-        values: [49.4, 50.6],
-        unit: 'percent of 1,392 held-out requests',
-      },
+      body: '22 targeted tests pass. Strict editorial audit failed: 1/5 cuts within ±2 frames.',
+      bullets: [
+        '22 TARGETED TESTS PASS',
+        'STRICT EDITORIAL AUDIT FAILED: 1/5 CUTS WITHIN ±2 FRAMES',
+        'MANUAL SYNTHETIC DOGFOOD — NOT THE FULL EXPRESSION LOOP',
+      ],
     },
   ];
 }

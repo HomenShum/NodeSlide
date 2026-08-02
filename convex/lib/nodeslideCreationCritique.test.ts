@@ -1341,6 +1341,45 @@ describe('NodeSlide creation self-critique loop', () => {
     expect(outcome.summary).toContain('kept pass 1');
   });
 
+  it('keeps a risk-committee deck usable when an optional paid revision times out ambiguously', async () => {
+    const requestRevision = vi.fn(
+      async (): Promise<NodeSlideProviderResult> => ({
+        ok: false,
+        reason:
+          'The Kimi K3 via OpenRouter route timed out. The provider call ended ambiguously; its full reservation remains unreconciled.',
+        code: 'ambiguous_provider_call',
+        accounting: {
+          budgetId: 'nsbudget_risk_committee',
+          callId: 'nscall_optional_revision',
+          disposition: 'unreconciled',
+          ledger: {
+            budget: {
+              id: 'nsbudget_risk_committee',
+              status: 'open',
+              revision: 5,
+              stateDigest: `sha256:${'1'.repeat(64)}`,
+              actualMicroUsd: 80_484,
+              reservedMicroUsd: 0,
+              unreconciledMicroUsd: 842_664,
+            },
+          },
+        },
+      }),
+    );
+    const outcome = await runNodeSlideCreationCritique({
+      ...loopInput,
+      firstSpec: FLAWED_SPEC,
+      providerLive: true,
+      requestRevision,
+    });
+
+    expect(requestRevision).toHaveBeenCalledTimes(1);
+    expect(outcome.decision).toBe('revision_failed');
+    expect(outcome.spec).toBe(FLAWED_SPEC);
+    expect(outcome.revision?.accounting?.disposition).toBe('unreconciled');
+    expect(outcome.summary).toContain('kept pass 1');
+  });
+
   it('keeps pass 1 when the revision request throws', async () => {
     const outcome = await runNodeSlideCreationCritique({
       ...loopInput,

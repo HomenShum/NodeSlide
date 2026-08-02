@@ -2090,14 +2090,13 @@ export const createDeckFromBrief = action({
       requestRevision: async (promptReport) =>
         await callBriefProvider({ previousSpec: firstSpec, reportJson: promptReport }),
     });
-    // The revision pass is a second metered dispatch, so it can strand a
-    // reservation exactly like the first one can.
-    if (nodeSlideCreateSpendUnreconciled(critique.revision)) {
-      throw nodeslideCreatePublicError(
-        'invalid_request',
-        'The live provider revision call ended without a reconcilable billing receipt. No fallback deck was created under an unresolved paid call; retry after the receipt is reconciled.',
-      );
-    }
+    // The revision pass is optional: runNodeSlideCreationCritique already keeps
+    // the valid, settled pass 1 when this second dispatch fails. An ambiguous
+    // revision must remain unreconciled in the budget ledger, but it must not
+    // discard the usable first result and turn a best-effort improvement into a
+    // failed creation job. The initial provider call above remains fail-closed
+    // because no provider-authored deck exists when that call is ambiguous.
+    const revisionSpendUnreconciled = nodeSlideCreateSpendUnreconciled(critique.revision);
     const rawSpec = critique.spec;
     const plan = extractPlan(provider?.ok === true ? rawSpec : null, fallbackSpec);
     const now = Date.now();
@@ -2139,7 +2138,11 @@ export const createDeckFromBrief = action({
           : `The user consented to send the full brief${attachments.length > 0 ? ' and uploaded data sources' : ''} to ${selectedProviderName}. NodeSlide used its deterministic fallback because ${provider?.ok === false ? provider.reason : `the ${selectedModelLabel} route was unavailable.`}`;
     const traceSummaryWithCritique = `${traceSummary}${
       syntheticFaultResult ? ` ${syntheticFaultResult.traceLabel}` : ''
-    } Self-critique: ${critique.summary}.`;
+    } Self-critique: ${critique.summary}.${
+      revisionSpendUnreconciled
+        ? ' The optional revision remains unreconciled in the spend ledger; the settled first pass was retained.'
+        : ''
+    }`;
     return await ctx.runMutation(nodeslideInternal.createFromBriefInternal, {
       deckId,
       projectId,

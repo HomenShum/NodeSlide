@@ -247,6 +247,65 @@ describe('NodeSlide rendered composition fan-out', () => {
     expect(focused?.flatMap(overflowIssueDrafts)).toEqual([]);
   });
 
+  it('keeps the headline opposite a focused formula in a board constraint check', () => {
+    const built = fixture();
+    const plan = built.spec.designPlans?.[0];
+    const textTemplate = built.snapshot.elements.find((element) => element.kind === 'text');
+    const shapeTemplate = built.snapshot.elements.find((element) => element.kind === 'shape');
+    if (!plan || !textTemplate || !shapeTemplate)
+      throw new Error('Expected composition templates.');
+    const headline = {
+      ...structuredClone(textTemplate),
+      id: 'constraint-headline',
+      role: 'headline',
+      content: 'The deck honors the stated count',
+      bbox: { x: 0.5, y: 0.16, width: 0.42, height: 0.18 },
+      style: { ...textTemplate.style, fontSize: 42, lineHeight: 1.05 },
+    };
+    const formula = {
+      ...structuredClone(shapeTemplate),
+      id: 'constraint-formula',
+      kind: 'math' as const,
+      role: 'formula',
+      content: '12 = 12',
+      bbox: { x: 0.06, y: 0.26, width: 0.38, height: 0.3 },
+      locked: false,
+      math: {
+        expression: 'actual_slides == required_slides',
+        display: '12 = 12',
+        syntax: 'plain' as const,
+        displayMode: 'block' as const,
+        variables: [
+          { label: 'required_slides', value: 12, unit: 'slides' },
+          { label: 'actual_slides', value: 12, unit: 'slides' },
+        ],
+      },
+    };
+    const result = fanOutNodeSlideComposition({
+      elements: [headline, formula],
+      plan: {
+        ...plan,
+        slideIndex: 5,
+        semanticArchetype: 'split',
+        dominantVisualCenter: 'formula',
+      },
+    });
+    const focused = result.renderCandidates.find(
+      (candidate) => candidate.variant === 'visual-focus',
+    );
+    const focusedHeadline = focused?.elements.find((element) => element.role === 'headline');
+    const focusedFormula = focused?.elements.find((element) => element.role === 'formula');
+
+    expect(focusedHeadline).toBeDefined();
+    expect(focusedFormula).toBeDefined();
+    expect(focusedHeadline?.bbox.x).toBeGreaterThanOrEqual(
+      (focusedFormula?.bbox.x ?? 0) + (focusedFormula?.bbox.width ?? 0),
+    );
+    expect(
+      result.candidates.find((candidate) => candidate.variant === 'visual-focus')?.overlapCount,
+    ).toBe(0);
+  });
+
   it('mirrors connector direction with its geometry instead of leaving a reversed arrow', () => {
     const built = fixture();
     const connector = built.snapshot.elements.find((element) => element.kind === 'connector');

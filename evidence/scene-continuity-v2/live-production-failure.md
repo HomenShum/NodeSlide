@@ -62,3 +62,16 @@
 - Keep the initial provider call fail-closed when its spend is ambiguous, because no trustworthy provider-authored deck exists yet.
 - Treat the second revision as the optional improvement it is: preserve its unreconciled ledger state and disclose it in Trace, but persist the settled pass-1 deck that the critique loop already selected.
 - Scenario proof pins both layers: an ambiguous paid revision retains pass 1, and the create action contains no post-critique throw. Restoring the old throw turns that integration guard red.
+
+## Fourth live lane: focused formula collision
+
+- Production SHA: `d890c5cad34421d0ec1fdb31867f96f960d7098e`.
+- Fresh deck: `deck_msbcjr3i_4c12c5548f35fac361c1685458506af5`.
+- Creation completed with exactly 12 slides and a real two-pass Kimi receipt, proving the third-lane fix. The four prior text overflows were gone.
+- Slide 6 still blocked export: the `visual-focus` candidate enlarged the left-side formula while recentering the headline across 72% of the slide, producing a measured 25% overlap. The transform had erased the asymmetric grammar's visual/copy separation.
+
+## Fourth-lane closure
+
+- Determine the primary visual's side before applying visual focus.
+- Place and remeasure the headline on the opposite 42% copy rail for formula, chart, media, and diagram slides; retain the centered 72% treatment only for slides without a primary visual.
+- The exact board constraint-check geometry is pinned as a regression. Before the fix the headline starts at `0.14` while the formula ends at `0.4552`; after the fix their boxes are disjoint and the focused candidate reports zero overlaps.

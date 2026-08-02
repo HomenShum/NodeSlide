@@ -80,7 +80,12 @@ function mirror(elements: readonly SlideElement[]): SlideElement[] {
 }
 
 function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: number): SlideElement[] {
-  const hasPrimaryVisual = elements.some(isPrimaryVisual);
+  const primaryVisuals = elements.filter(isPrimaryVisual);
+  const hasPrimaryVisual = primaryVisuals.length > 0;
+  const primaryVisualCenterX =
+    primaryVisuals.reduce((sum, element) => sum + element.bbox.x + element.bbox.width / 2, 0) /
+    Math.max(1, primaryVisuals.length);
+  const primaryVisualOnLeft = primaryVisualCenterX < 0.5;
   const evidenceCardIds = new Map(
     elements
       .filter((element) => element.role === 'evidence_card')
@@ -232,7 +237,7 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
           style: { ...element.style, textAlign: 'left' },
         };
       }
-      const focusedHeadlineWidth = 0.72;
+      const focusedHeadlineWidth = hasPrimaryVisual ? 0.42 : 0.72;
       const focusedHeadlineHeight =
         estimateTextHeight(
           element.content ?? '',
@@ -244,7 +249,7 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
         ...element,
         bbox: {
           ...element.bbox,
-          x: 0.14,
+          x: hasPrimaryVisual ? (primaryVisualOnLeft ? 0.5 : 0.08) : 0.14,
           y: hasPrimaryVisual ? 0.15 : 0.18,
           width: focusedHeadlineWidth,
           height: Math.max(

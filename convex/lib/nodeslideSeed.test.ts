@@ -14,13 +14,43 @@ import {
 import { validateNodeSlideSnapshot } from './nodeslideValidation';
 
 describe('NodeSlide seed', () => {
+  it('keeps the exact production fallback brief export-safe across every slide', () => {
+    const brief = {
+      prompt:
+        'Build exactly 12 slides for a risk committee deciding whether an AI release gate may open. Audience: board risk committee. Use supplied facts only. Preserve unknowns as explicit questions. Show a guarded threshold that evolves from exposure to controlled passage across the deck. Include an evidence boundary, open assumptions, operating ownership, risks and controls, success criteria, and a final decision. Do not invent metrics, equations, scores, or financial figures. Deliver editable slides with at least four composition silhouettes and visual continuity.',
+      audience: 'Decision-makers described in the brief',
+      purpose: 'Create an editable, reviewable presentation from this idea',
+      successCriteria: [
+        'Honor explicit slide-count and presentation constraints in the brief',
+        'Use only claims and artifact types supported by the supplied brief and evidence',
+        'Validation passes before presentation, export, or publication',
+      ],
+    };
+    const spec = deterministicBriefSpec('Risk committee release gate', brief);
+    const built = buildBriefNodeSlide({
+      deckId: 'deck-live-fallback-overflow',
+      projectId: 'project-live-fallback-overflow',
+      title: spec.title,
+      brief,
+      rawSpec: spec,
+      themeId: 'editorial-signal',
+      now: 1_000,
+    });
+
+    expect(built.snapshot.elements.flatMap(overflowIssueDrafts)).toEqual([]);
+  });
+
   it('keeps long risk-committee scene takeaways export-safe', () => {
     const brief = {
       prompt:
         'Build exactly 12 slides for a risk committee deciding whether an AI release gate may open.',
-      audience: 'board risk committee',
-      purpose: 'make the release decision',
-      successCriteria: ['Keep unknowns explicit'],
+      audience: 'Decision-makers described in the brief',
+      purpose: 'Create an editable, reviewable presentation from this idea',
+      successCriteria: [
+        'Honor explicit slide-count and presentation constraints in the brief',
+        'Use only claims and artifact types supported by the supplied brief and evidence',
+        'Validation passes before presentation, export, or publication',
+      ],
     };
     const spec = deterministicBriefSpec('Risk committee release gate', brief);
     if (spec.slides[4]) {
@@ -44,6 +74,7 @@ describe('NodeSlide seed', () => {
       themeId: 'editorial-signal',
       now: 1_000,
     });
+    expect(built.snapshot.elements.flatMap(overflowIssueDrafts)).toEqual([]);
     const sceneTakeaways = built.snapshot.elements.filter(
       (element) => element.role === 'takeaway' && element.bbox.width === 0.34,
     );

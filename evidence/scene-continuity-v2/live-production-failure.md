@@ -34,3 +34,16 @@
 - When every fan-out candidate is imperfect, minimize bounds/collisions before applying style bonuses.
 - Promote at least four story beats into dominant scenes and vary the actual stage geometry by framing state.
 - Give the second approach beat a centered upper scene plus lower split copy instead of a mirrored duplicate.
+
+## Post-deploy knockout exposed a second failure lane
+
+- Fresh production deck: `deck_msb6tyjy_e5e73278ff94749748b78729d699a961`.
+- The UI created 12 slides in one second but did not call Kimi again. The completed prior job's owner capability and idempotency key were reused because the browser session matched only `kind + requestFingerprint`, even after terminal success.
+- The budget ledger honestly refused to bill the same call twice, but the create path then presented a deterministic fallback as the new run. The trace disclosed the fallback; the visible creation flow did not make the replay obvious.
+- That exact fallback exposed three new slide-11 overflows: one centered headline and two success-criteria bullets. Visual focus changed their widths but retained heights measured for their pre-focus widths.
+
+## Second-lane closure
+
+- Reuse a creation binding only while a job is active or after an ambiguous failed admission; terminal success now mints a fresh owner capability and idempotency key.
+- Recompute visual-focus headline and bullet heights after their widths change, with renderer headroom.
+- Lock both behaviors with the exact saved production brief and a repeated completed-run session scenario.

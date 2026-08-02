@@ -46,6 +46,30 @@ describe('AgentSessionProvider', () => {
     expect(screen.getByTestId('job-binding').textContent).toBe(firstBinding);
   });
 
+  it('mints a new creation binding when the same brief is intentionally run after completion', () => {
+    renderSession();
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare completed job' }));
+    const completedBinding = screen.getByTestId('job-binding').textContent;
+    expect(screen.getByTestId('job-status')).toHaveTextContent('succeeded');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare completed job' }));
+
+    expect(screen.getByTestId('job-status')).toHaveTextContent('succeeded');
+    expect(screen.getByTestId('job-binding').textContent).not.toBe(completedBinding);
+  });
+
+  it('mints a new creation binding after a server-attached failed run', () => {
+    renderSession();
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare server-failed job' }));
+    const failedBinding = screen.getByTestId('job-binding').textContent;
+    expect(screen.getByTestId('job-status')).toHaveTextContent('failed');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare server-failed job' }));
+
+    expect(screen.getByTestId('job-status')).toHaveTextContent('failed');
+    expect(screen.getByTestId('job-binding').textContent).not.toBe(failedBinding);
+  });
+
   it('binds edit jobs to the existing deck owner capability and target deck', () => {
     renderSession();
     fireEvent.click(screen.getByRole('button', { name: 'Prepare edit job' }));
@@ -144,6 +168,52 @@ function SessionHarness() {
         }}
       >
         Prepare job
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          const prepared = session.prepareJob({
+            kind: 'create_deck',
+            requestFingerprint: 'completed-request',
+          });
+          session.attachJob({
+            jobId: `job-${prepared.idempotencyKey}`,
+            kind: 'create_deck',
+            idempotencyKey: prepared.idempotencyKey,
+            status: 'succeeded',
+            phase: 'completed',
+            progress: 100,
+            attempt: 1,
+            maxAttempts: 3,
+            resultDeckId: 'deck-completed',
+            updatedAt: 10,
+          });
+        }}
+      >
+        Prepare completed job
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          const prepared = session.prepareJob({
+            kind: 'create_deck',
+            requestFingerprint: 'server-failed-request',
+          });
+          session.attachJob({
+            jobId: `job-${prepared.idempotencyKey}`,
+            kind: 'create_deck',
+            idempotencyKey: prepared.idempotencyKey,
+            status: 'failed',
+            phase: 'failed',
+            progress: 100,
+            attempt: 1,
+            maxAttempts: 3,
+            error: 'Provider failed after admission.',
+            updatedAt: 10,
+          });
+        }}
+      >
+        Prepare server-failed job
       </button>
       <button
         type="button"

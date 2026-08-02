@@ -580,6 +580,107 @@ describe('NodeSlide seed', () => {
     expect(built.spec.deckDiversity?.nearDuplicatePairs.length).toBeGreaterThan(0);
   });
 
+  it.each([
+    {
+      label: 'governance threshold',
+      prompt: 'Build a 7-slide risk and security release decision around a guarded threshold.',
+      kind: 'threshold',
+      roles: ['story_scene_threshold_gate_left', 'story_scene_threshold_gate_right'],
+    },
+    {
+      label: 'research signal',
+      prompt: 'Build a 7-slide research evidence story where a signal emerges from noisy data.',
+      kind: 'signal',
+      roles: ['story_scene_signal_noise', 'story_scene_signal_core'],
+    },
+    {
+      label: 'operating bridge',
+      prompt:
+        'Build a 7-slide operating workflow story that bridges isolated teams into one system.',
+      kind: 'bridge',
+      roles: ['story_scene_bridge_anchor', 'story_scene_bridge_span'],
+    },
+    {
+      label: 'startup journey',
+      prompt:
+        'Build a 7-slide startup narrative journey from a painful status quo to the chosen future.',
+      kind: 'journey',
+      roles: ['story_scene_journey_route', 'story_scene_journey_waypoint'],
+    },
+  ])(
+    'turns the $label metaphor into a visibly evolving scene, not one progress rail',
+    (scenario) => {
+      const built = buildBriefNodeSlide({
+        deckId: `deck-scene-${scenario.kind}`,
+        projectId: `project-scene-${scenario.kind}`,
+        title: `Scene continuity ${scenario.kind}`,
+        brief: {
+          prompt: scenario.prompt,
+          audience: 'A decision-making team',
+          purpose: 'Reach one defensible next decision',
+          successCriteria: ['Keep the visual transformation legible at thumbnail scale'],
+        },
+        themeId: 'editorial-signal',
+        now: 1_000,
+      });
+
+      expect(built.spec.storySpec?.visualMetaphor.kind).toBe(scenario.kind);
+      expect(
+        built.snapshot.elements.some((element) => element.role?.startsWith('story_motif_')),
+      ).toBe(false);
+      const sceneSignatures = built.snapshot.slides.map((slide) => {
+        const scene = built.snapshot.elements.filter(
+          (element) => element.slideId === slide.id && element.role?.startsWith('story_scene_'),
+        );
+        expect(scene.length).toBeGreaterThanOrEqual(4);
+        expect(
+          scene.some((element) => element.bbox.width >= 0.08 || element.bbox.height >= 0.08),
+        ).toBe(true);
+        for (const role of scenario.roles) {
+          expect(scene.some((element) => element.role?.startsWith(role))).toBe(true);
+        }
+        return JSON.stringify(
+          scene.map((element) => ({
+            role: element.role,
+            bbox: element.bbox,
+            opacity: element.style.opacity,
+          })),
+        );
+      });
+      expect(new Set(sceneSignatures).size).toBe(built.snapshot.slides.length);
+      const dominantSceneSlides = built.snapshot.slides.filter((slide) =>
+        built.snapshot.elements.some(
+          (element) =>
+            element.slideId === slide.id &&
+            element.role === 'story_scene_field' &&
+            element.bbox.width * element.bbox.height >= 0.16,
+        ),
+      );
+      expect(dominantSceneSlides.length).toBeGreaterThanOrEqual(2);
+
+      for (const slide of dominantSceneSlides) {
+        const headline = built.snapshot.elements.find(
+          (element) => element.slideId === slide.id && element.role === 'headline',
+        );
+        const body = built.snapshot.elements.find(
+          (element) => element.slideId === slide.id && element.role === 'body',
+        );
+        expect(headline).toBeDefined();
+        expect(body).toBeDefined();
+        if (!headline || !body) continue;
+        const renderedHeadlineBudget =
+          estimateTextHeight(
+            headline.content,
+            headline.style.fontSize,
+            headline.style.lineHeight ?? 1.04,
+            headline.bbox.width,
+          ) * 1.25;
+        expect(headline.bbox.height + 0.0001).toBeGreaterThanOrEqual(renderedHeadlineBudget);
+        expect(headline.bbox.y + headline.bbox.height + 0.025).toBeLessThanOrEqual(body.bbox.y);
+      }
+    },
+  );
+
   it('keeps default success guidance qualitative when no evidence is supplied', () => {
     const brief = {
       prompt: 'Explain a bounded pilot.',

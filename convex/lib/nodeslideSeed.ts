@@ -79,6 +79,7 @@ import {
   type NodeSlideStorySpec,
   type NodeSlideVisualMaterialInventory,
   buildNodeSlideStoryContext,
+  buildNodeSlideStorySceneMarks,
 } from './nodeslideStoryContext';
 import { validateNodeSlideSnapshot } from './nodeslideValidation';
 
@@ -1528,6 +1529,25 @@ function buildNodeSlideDeck(input: {
     }
   }
 
+  const repeatedQualitativeScenes = repeatedQualitativeScenePairs(input.spec.slides);
+  if (repeatedQualitativeScenes.length > 0) {
+    const current = input.spec.deckDiversity;
+    input.spec.deckDiversity = {
+      score: current?.score ?? 0,
+      passes: false,
+      distinctFamilies: current?.distinctFamilies ?? 0,
+      nearDuplicatePairs: [
+        ...(current?.nearDuplicatePairs ?? []),
+        ...repeatedQualitativeScenes.filter(
+          (pair) =>
+            !current?.nearDuplicatePairs.some(
+              (candidate) => candidate.first === pair.first && candidate.second === pair.second,
+            ),
+        ),
+      ],
+    };
+  }
+
   const deck = {
     schemaVersion: NODESLIDE_SCHEMA_VERSION,
     toolchainVersion: NODESLIDE_TOOLCHAIN_VERSION,
@@ -1548,6 +1568,27 @@ function buildNodeSlideDeck(input: {
     plan: input.plan,
     spec: input.spec,
   };
+}
+
+function repeatedQualitativeScenePairs(
+  slides: readonly NodeSlidePlannedSlide[],
+): Array<{ first: number; second: number; similarity: number }> {
+  const bySignature = new Map<string, number[]>();
+  slides.forEach((slide, index) => {
+    const normalize = (value: string) => value.replace(/\s+/gu, ' ').trim().toLocaleLowerCase();
+    const signature = JSON.stringify({
+      body: normalize(slide.body),
+      bullets: slide.bullets.map(normalize),
+    });
+    const indices = bySignature.get(signature) ?? [];
+    indices.push(index);
+    bySignature.set(signature, indices);
+  });
+  return [...bySignature.values()].flatMap((indices) =>
+    indices.length < 3
+      ? []
+      : indices.slice(1).map((second) => ({ first: indices[0] ?? 0, second, similarity: 1 })),
+  );
 }
 
 function buildSlide(input: {
@@ -1652,54 +1693,25 @@ function buildSlide(input: {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
-  const storyBeat = input.storySpec?.revealPacing[input.index];
-  const continuityProgress = (input.index + 1) / Math.max(1, input.total);
-  if (input.storySpec && storyBeat) {
-    const motifKind = input.storySpec.visualMetaphor.kind;
-    const markerProgress = Math.min(0.82, 0.82 * continuityProgress);
-    const markerSize = motifKind === 'signal' ? 0.012 + 0.012 * (storyBeat.intensity / 100) : 0.016;
+  for (const mark of buildNodeSlideStorySceneMarks(input.storySpec, input.index)) {
     add(
-      element('story-continuity-motif', {
-        name: `Story continuity · ${input.storySpec.sceneContinuity.motif}`,
+      element(mark.key, {
+        name: `Story scene · ${input.storySpec?.visualMetaphor.transformation ?? 'continuity'}`,
         kind: 'shape',
-        role: `story_motif_${input.storySpec.visualMetaphor.kind}`,
-        bbox: box(0.07, 0.115, Math.max(0.08, 0.82 * continuityProgress), 0.008),
-        rotation: 0,
+        role: mark.role,
+        bbox: mark.bbox,
+        rotation: mark.rotation,
         style: {
-          fill: theme.colors.accent,
-          opacity: Math.max(0.28, storyBeat.intensity / 100),
-          radius: 999,
+          fill:
+            mark.tone === 'insight'
+              ? theme.colors.insightInk
+              : mark.tone === 'accent-soft'
+                ? theme.colors.accentSoft
+                : theme.colors.accent,
+          opacity: mark.opacity,
+          radius: mark.radius,
         },
-        altText: `${input.storySpec.sceneContinuity.progression[input.index]}; emotional intensity ${storyBeat.intensity} of 100`,
-        sourceIds: [],
-        locked: true,
-        exportCapabilities: [...EDITABLE_CAPABILITIES],
-      }),
-    );
-    add(
-      element('story-continuity-marker', {
-        name: `Story transformation · ${input.storySpec.visualMetaphor.transformation}`,
-        kind: 'shape',
-        role: `story_motif_${motifKind}_marker`,
-        bbox:
-          motifKind === 'threshold'
-            ? box(0.884, 0.097, 0.006, 0.044)
-            : box(
-                Math.min(0.876, 0.07 + markerProgress - markerSize / 2),
-                0.111 - markerSize / 2,
-                markerSize,
-                markerSize,
-              ),
-        rotation: 0,
-        style: {
-          fill: motifKind === 'threshold' ? theme.colors.insightInk : theme.colors.accent,
-          opacity: Math.max(0.38, storyBeat.intensity / 100),
-          radius: motifKind === 'threshold' ? 3 : 999,
-        },
-        altText:
-          motifKind === 'threshold'
-            ? `Decision threshold; the story signal has reached ${Math.round(continuityProgress * 100)} percent of the gate`
-            : `${input.storySpec.visualMetaphor.subject}; transformation progress ${Math.round(continuityProgress * 100)} percent`,
+        altText: mark.altText,
         sourceIds: [],
         locked: true,
         exportCapabilities: [...EDITABLE_CAPABILITIES],

@@ -45,6 +45,19 @@ describe('NodeSlide StorySpec and visual-material inventory', () => {
     ).toMatchObject({ fulfillment: 'constructible' });
     expect(context.storySpec.pacing.reduce((sum, phase) => sum + phase.slideCount, 0)).toBe(7);
     expect(context.storySpec.sceneContinuity.progression).toHaveLength(7);
+    expect(context.storySpec.sceneStates).toHaveLength(7);
+    expect(context.storySpec.sceneStates.map(({ stage }) => stage)).toEqual([
+      'establish',
+      'pressure',
+      'approach',
+      'crossing',
+      'proof',
+      'release',
+      'release',
+    ]);
+    expect(
+      new Set(context.storySpec.sceneStates.map(({ subjectState }) => subjectState)).size,
+    ).toBe(6);
     expect(context.storySpec.visualMetaphor.kind).toBe('bridge');
     expect(context.storySpec.revealPacing.map(({ beat }) => beat)).toEqual([
       'orient',
@@ -101,6 +114,10 @@ describe('NodeSlide StorySpec and visual-material inventory', () => {
       expect(receipt.revealPacing.length).toBeGreaterThanOrEqual(6);
       expect(receipt.revealPacing.length).toBeLessThanOrEqual(8);
       expect(receipt.sceneContinuity.progression).toHaveLength(receipt.revealPacing.length);
+      expect(receipt.sceneStates).toHaveLength(receipt.revealPacing.length);
+      expect(
+        receipt.sceneStates.every((state, index) => state.progress > 0 && state.index === index),
+      ).toBe(true);
       expect(receipt.compositionPlan).toHaveLength(receipt.revealPacing.length);
       expect(new Set(receipt.compositionPlan).size).toBeGreaterThanOrEqual(6);
       expect(receipt.emotionalArc.intensity.every((value) => value >= 0 && value <= 100)).toBe(
@@ -139,6 +156,11 @@ describe('NodeSlide StorySpec and visual-material inventory', () => {
 
     expect(context.storySpec.pacing.reduce((sum, phase) => sum + phase.slideCount, 0)).toBe(12);
     expect(context.storySpec.sceneContinuity.progression).toHaveLength(12);
+    expect(context.storySpec.sceneStates).toHaveLength(12);
+    expect(context.storySpec.sceneStates.at(-1)).toMatchObject({
+      stage: 'release',
+      progress: 1,
+    });
     expect(context.storySpec.revealPacing).toHaveLength(12);
     expect(context.storySpec.compositionPlan).toHaveLength(12);
     expect(Math.max(...context.storySpec.emotionalArc.intensity)).toBe(100);

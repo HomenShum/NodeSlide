@@ -395,6 +395,29 @@ describe('production ArtifactSpec compiler', () => {
       ]),
     });
 
+    const sceneLed = structuredClone(proseOnly);
+    const shapeTemplate = sceneLed.elements.find((element) => element.kind === 'shape');
+    if (!shapeTemplate) throw new Error('Golden deck shape unavailable.');
+    for (const [sceneIndex, slide] of sceneLed.slides.slice(0, 2).entries()) {
+      const sceneElements = Array.from({ length: 5 }, (_, markIndex) => ({
+        ...structuredClone(shapeTemplate),
+        id: `scene-${sceneIndex}-${markIndex}`,
+        slideId: slide.id,
+        role: markIndex === 0 ? 'story_scene_field' : 'story_scene_journey_route',
+        bbox:
+          markIndex === 0
+            ? { x: 0.06, y: 0.2, width: 0.48, height: 0.56 }
+            : { x: 0.1 + markIndex * 0.06, y: 0.4, width: 0.04, height: 0.02 },
+      }));
+      sceneLed.elements.push(...sceneElements);
+      slide.elementOrder.push(...sceneElements.map((element) => element.id));
+    }
+    expect(
+      compileNodeSlideArtifactSpecs(sceneLed).receipt.issues.some(
+        (issue) => issue.code === 'artifact_visual_coverage',
+      ),
+    ).toBe(false);
+
     const dense = structuredClone(snapshot());
     const text = dense.elements.find((element) => element.kind === 'text');
     if (!text) throw new Error('Golden deck text unavailable.');

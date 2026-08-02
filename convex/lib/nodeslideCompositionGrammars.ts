@@ -600,8 +600,7 @@ function layoutDiagramNodes(
     });
   }
   const count = diagram.nodes.length;
-  const columns =
-    diagram.direction === 'vertical' ? (count > 4 ? 2 : 1) : Math.min(count, count > 4 ? 4 : 3);
+  const columns = diagram.direction === 'vertical' ? (count > 4 ? 2 : 1) : Math.min(count, 4);
   const rows = Math.ceil(count / columns);
   const gapX = columns > 1 ? 0.025 : 0;
   const gapY = rows > 1 ? 0.035 : 0;
@@ -1005,6 +1004,7 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
 function buildProcessCanvas(ctx: GrammarBuildContext): GrammarBuildResult {
   const { planned, theme } = ctx;
   const elements: SlideElement[] = [];
+  let materializedDiagramBottom: number | undefined;
   elements.push(sectionLabel(ctx, 0.07, 0.06, 0.4));
   const headlineWidth = 0.82;
   const headlineFontSize = fitTextFontSize(planned.headline, 32, 24, 1.1, headlineWidth, 0.14);
@@ -1034,23 +1034,27 @@ function buildProcessCanvas(ctx: GrammarBuildContext): GrammarBuildResult {
   );
   if (planned.diagram) {
     const diagramY = 0.14 + headlineHeight + 0.05;
-    const diagramHeight = 0.85 - diagramY;
-    elements.push(
-      ...buildDiagramElements(ctx, planned.diagram, 0.07, diagramY, 0.86, diagramHeight),
+    const diagramBottomLimit = planned.body.trim().length > 0 ? 0.66 : 0.85;
+    const diagramHeight = Math.max(0.2, diagramBottomLimit - diagramY);
+    const diagramElements = buildDiagramElements(
+      ctx,
+      planned.diagram,
+      0.07,
+      diagramY,
+      0.86,
+      diagramHeight,
+    );
+    elements.push(...diagramElements);
+    materializedDiagramBottom = Math.max(
+      diagramY,
+      ...diagramElements.map((element) => element.bbox.y + element.bbox.height),
     );
   } else if (planned.chart) {
     const chartY = 0.14 + headlineHeight + 0.05;
     elements.push(buildChartElement(ctx, 0.07, chartY, 0.86, 0.85 - chartY));
   }
   // Body copy below the diagram for context
-  const diagramBottom = planned.diagram
-    ? 0.14 +
-      headlineHeight +
-      0.05 +
-      Math.min(0.24, (0.85 - 0.14 - headlineHeight - 0.05) * 0.24) +
-      0.045 +
-      0.14
-    : 0.14 + headlineHeight + 0.05 + 0.55;
+  const diagramBottom = materializedDiagramBottom ?? 0.14 + headlineHeight + 0.05 + 0.55;
   const bodyY = Math.max(0.14 + headlineHeight + 0.05, diagramBottom + 0.03);
   const bodyFontSize = fitTextFontSize(planned.body, 16, 14, 1.35, 0.79, 0.85 - bodyY);
   const bodyHeight = Math.min(

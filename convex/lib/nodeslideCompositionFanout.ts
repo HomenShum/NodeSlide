@@ -153,7 +153,7 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
           x: comparisonRailX,
           y: 0.39 + bulletIndex * 0.17,
           width: 0.36,
-          height: 0.09,
+          height: Math.max(0.09, element.bbox.height),
         },
       };
     }
@@ -267,6 +267,19 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
           y: 0.4,
           width: 0.38,
           height: Math.max(0.2, element.bbox.height),
+        },
+      };
+    }
+    if (diagramNodeIds.size > 0 && element.role === 'bullet') {
+      const bulletIndex = textOnlyBulletIds.get(element.id) ?? 0;
+      return {
+        ...element,
+        bbox: {
+          ...element.bbox,
+          x: diagramRailX < 0.5 ? 0.52 : 0.08,
+          y: 0.64 + bulletIndex * 0.1,
+          width: 0.38,
+          height: Math.max(0.08, element.bbox.height),
         },
       };
     }
@@ -424,7 +437,10 @@ export function fanOutNodeSlideComposition(input: {
     (candidate) => candidate.summary.outOfBoundsCount === 0 && candidate.summary.overlapCount === 0,
   );
   const selected = [...(cleanCandidates.length > 0 ? cleanCandidates : candidates)].sort(
-    (left, right) => right.summary.score - left.summary.score,
+    (left, right) =>
+      left.summary.outOfBoundsCount - right.summary.outOfBoundsCount ||
+      left.summary.overlapCount - right.summary.overlapCount ||
+      right.summary.score - left.summary.score,
   )[0];
   if (!selected) throw new Error('Composition fan-out produced no candidates.');
   return {

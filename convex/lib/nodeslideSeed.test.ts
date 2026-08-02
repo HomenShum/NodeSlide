@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { NODESLIDE_ARTIFACT_SPEC_VERSION } from '../../shared/nodeslideArtifactRegistry.js';
+import { overflowIssueDrafts } from '../../shared/nodeslideGeometryChecks.js';
 import { estimateTextHeight } from '../../shared/nodeslideLayoutMetrics.js';
 import { validateSnapshot } from '../../src/domains/nodeslide/slidelang/validation';
 import {
@@ -13,6 +14,62 @@ import {
 import { validateNodeSlideSnapshot } from './nodeslideValidation';
 
 describe('NodeSlide seed', () => {
+  it('keeps long risk-committee scene takeaways export-safe', () => {
+    const brief = {
+      prompt:
+        'Build exactly 12 slides for a risk committee deciding whether an AI release gate may open.',
+      audience: 'board risk committee',
+      purpose: 'make the release decision',
+      successCriteria: ['Keep unknowns explicit'],
+    };
+    const spec = deterministicBriefSpec('Risk committee release gate', brief);
+    if (spec.slides[4]) {
+      spec.slides[4].headline = 'Define proof before asking for commitment.';
+    }
+    const climaxSlides = spec.slides.slice(8, 11);
+    const takeaways = [
+      'Unassessed behavior pairs with risk assessment — unconfirmed',
+      'Honor explicit slide-count and presentation constraints in the brief',
+      'Name every unresolved owner before the controlled passage opens',
+    ];
+    climaxSlides.forEach((slide, index) => {
+      slide.bullets = [takeaways[index] ?? takeaways[0] ?? 'Keep the gate explicit'];
+    });
+    const built = buildBriefNodeSlide({
+      deckId: 'deck-live-risk-takeaway',
+      projectId: 'project-live-risk-takeaway',
+      title: spec.title,
+      brief,
+      rawSpec: spec,
+      themeId: 'editorial-signal',
+      now: 1_000,
+    });
+    const sceneTakeaways = built.snapshot.elements.filter(
+      (element) => element.role === 'takeaway' && element.bbox.width === 0.34,
+    );
+    expect(
+      built.snapshot.elements.filter((element) => element.role === 'story_scene_field').length,
+    ).toBeGreaterThanOrEqual(4);
+    expect(sceneTakeaways.length).toBeGreaterThanOrEqual(2);
+    expect(sceneTakeaways.flatMap(overflowIssueDrafts)).toEqual([]);
+    const approachHeadline = built.snapshot.elements.find(
+      (element) =>
+        element.role === 'headline' &&
+        element.content === 'Define proof before asking for commitment.',
+    );
+    expect(approachHeadline).toBeDefined();
+    if (approachHeadline) {
+      expect(approachHeadline.bbox.height + 0.0001).toBeGreaterThanOrEqual(
+        estimateTextHeight(
+          approachHeadline.content,
+          approachHeadline.style.fontSize,
+          approachHeadline.style.lineHeight ?? 1.04,
+          approachHeadline.bbox.width,
+        ) * 1.5,
+      );
+    }
+  });
+
   it('builds a clean canonical golden snapshot', () => {
     const snapshot = buildGoldenNodeSlide('theme-and-repair-test', 1_000).snapshot;
 

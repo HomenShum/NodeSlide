@@ -190,10 +190,30 @@ function authoredArtifactBinding(
 
 function storyContinuityElements(
   ctx: GrammarBuildContext,
-  placement: 'header' | 'field-left' | 'field-right' = 'header',
+  placement: 'header' | 'field-left' | 'field-right' | 'field-center' = 'header',
 ): SlideElement[] {
   const scene = ctx.storySpec?.sceneStates[ctx.index];
   const marks = buildNodeSlideStorySceneMarks(ctx.storySpec, ctx.index);
+  const fieldLayout =
+    placement === 'field-center'
+      ? { y: 0.14, width: 0.46, height: 0.34 }
+      : scene
+        ? scene.stage === 'approach'
+          ? { y: 0.28, width: 0.42, height: 0.44 }
+          : scene.stage === 'crossing'
+            ? { y: 0.23, width: 0.46, height: 0.52 }
+            : scene.stage === 'proof'
+              ? { y: 0.18, width: 0.48, height: 0.6 }
+              : { y: 0.25, width: 0.44, height: 0.48 }
+        : { y: 0.2, width: 0.48, height: 0.56 };
+  const fieldX =
+    placement === 'field-center'
+      ? (1 - fieldLayout.width) / 2
+      : placement === 'field-left'
+        ? 0.06
+        : 0.94 - fieldLayout.width;
+  const markXScale = (fieldLayout.width - 0.05) / 0.24;
+  const markYScale = (fieldLayout.height - 0.1) / 0.1;
   const elements = marks.map((mark) =>
     makeElement(ctx, mark.key, {
       name: `Story scene · ${ctx.storySpec?.visualMetaphor.transformation ?? 'continuity'}`,
@@ -202,10 +222,10 @@ function storyContinuityElements(
       bbox:
         placement !== 'header'
           ? box(
-              (placement === 'field-left' ? 0.085 : 0.485) + (mark.bbox.x - 0.68) * 1.65,
-              0.25 + (mark.bbox.y - 0.05) * 3.5,
-              mark.bbox.width * 1.65,
-              mark.bbox.height * 3.5,
+              fieldX + 0.025 + (mark.bbox.x - 0.68) * markXScale,
+              fieldLayout.y + 0.05 + (mark.bbox.y - 0.05) * markYScale,
+              mark.bbox.width * markXScale,
+              mark.bbox.height * markYScale,
             )
           : mark.bbox,
       rotation: mark.rotation,
@@ -231,7 +251,7 @@ function storyContinuityElements(
         name: `Story scene field · ${scene.subjectState}`,
         kind: 'shape',
         role: 'story_scene_field',
-        bbox: box(placement === 'field-left' ? 0.06 : 0.46, 0.2, 0.48, 0.56),
+        bbox: box(fieldX, fieldLayout.y, fieldLayout.width, fieldLayout.height),
         rotation: 0,
         style: {
           fill: ctx.theme.colors.accentSoft,
@@ -1518,22 +1538,38 @@ function buildSparseTransition(ctx: GrammarBuildContext): GrammarBuildResult {
 
 function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
   const { planned, theme } = ctx;
-  const sceneOnLeft = ctx.index % 2 === 1;
-  const textX = sceneOnLeft ? 0.6 : 0.06;
+  const sceneStage = ctx.storySpec?.sceneStates[ctx.index]?.stage;
+  const sceneCentered = sceneStage === 'approach' && ctx.index % 2 === 1;
+  const sceneOnLeft = !sceneCentered && ctx.index % 2 === 1;
+  const textX = sceneCentered ? 0.07 : sceneOnLeft ? 0.6 : 0.06;
   const elements: SlideElement[] = [
-    ...storyContinuityElements(ctx, sceneOnLeft ? 'field-left' : 'field-right'),
+    ...storyContinuityElements(
+      ctx,
+      sceneCentered ? 'field-center' : sceneOnLeft ? 'field-left' : 'field-right',
+    ),
   ];
   elements.push(sectionLabel(ctx, textX, 0.065, 0.3));
-  const headlineWidth = 0.34;
-  const headlineFontSize = fitTextFontSize(planned.headline, 38, 34, 1.04, headlineWidth, 0.272);
+  const headlineWidth = sceneCentered ? 0.5 : sceneStage === 'approach' ? 0.4 : 0.34;
+  const headlineMaxHeight = sceneCentered ? 0.23 : sceneStage === 'approach' ? 0.36 : 0.34;
+  const headlineHeadroom = sceneStage === 'approach' ? 1.5 : 1.25;
+  const headlineY = sceneCentered ? 0.57 : 0.18;
+  const headlineFontSize = fitTextFontSize(
+    planned.headline,
+    38,
+    34,
+    1.04,
+    headlineWidth,
+    headlineMaxHeight / headlineHeadroom,
+  );
   // Office renderers wrap more conservatively than our deterministic text
   // estimator. Preserve 25% glyph headroom so the visible title cannot cross
   // into the supporting-copy box even when the geometry itself is valid.
   const headlineHeight = Math.min(
-    0.34,
+    headlineMaxHeight,
     Math.max(
       0.16,
-      estimateTextHeight(planned.headline, headlineFontSize, 1.04, headlineWidth) * 1.25,
+      estimateTextHeight(planned.headline, headlineFontSize, 1.04, headlineWidth) *
+        headlineHeadroom,
     ),
   );
   elements.push(
@@ -1541,7 +1577,7 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
       name: 'Headline',
       kind: 'text',
       role: 'headline',
-      bbox: box(textX, 0.18, headlineWidth, headlineHeight),
+      bbox: box(textX, headlineY, headlineWidth, headlineHeight),
       rotation: 0,
       content: planned.headline,
       style: {
@@ -1557,20 +1593,22 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
-  const bodyY = 0.18 + headlineHeight + 0.035;
-  const bodyHeight = Math.min(0.23, Math.max(0.15, 0.75 - bodyY));
+  const bodyX = sceneCentered ? 0.62 : textX;
+  const bodyWidth = sceneCentered ? 0.31 : headlineWidth;
+  const bodyY = sceneCentered ? 0.59 : headlineY + headlineHeight + 0.035;
+  const bodyHeight = sceneCentered ? 0.16 : Math.min(0.23, Math.max(0.15, 0.75 - bodyY));
   elements.push(
     makeElement(ctx, 'body', {
       name: 'Supporting context',
       kind: 'text',
       role: 'body',
-      bbox: box(textX, bodyY, headlineWidth, bodyHeight),
+      bbox: box(bodyX, bodyY, bodyWidth, bodyHeight),
       rotation: 0,
       content: planned.body,
       style: {
         color: theme.colors.muted,
         fontFamily: theme.typography.body,
-        fontSize: fitTextFontSize(planned.body, 16, 14, 1.38, headlineWidth, bodyHeight),
+        fontSize: fitTextFontSize(planned.body, 16, 14, 1.38, bodyWidth, bodyHeight),
         fontWeight: 450,
         lineHeight: 1.38,
       },
@@ -1581,19 +1619,30 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
   );
   const decisivePoint = planned.bullets[0];
   if (decisivePoint) {
+    const takeawayHeight = 0.11;
+    const takeawayX = sceneCentered ? 0.62 : textX;
+    const takeawayWidth = sceneCentered ? 0.31 : headlineWidth;
     elements.push(
       makeElement(ctx, 'decisive-point', {
         name: 'Decisive point',
         kind: 'text',
         role: 'takeaway',
-        bbox: box(textX, 0.79, headlineWidth, 0.08),
+        bbox: box(takeawayX, 0.77, takeawayWidth, takeawayHeight),
         rotation: 0,
         content: decisivePoint,
         style: {
           color: theme.colors.insightInk,
           fill: theme.colors.insight,
           fontFamily: theme.typography.body,
-          fontSize: fitTextFontSize(decisivePoint, 16, 14, 1.25, headlineWidth - 0.04, 0.045),
+          fontSize: fitTextFontSize(
+            decisivePoint,
+            16,
+            14,
+            1.25,
+            takeawayWidth - 0.04,
+            takeawayHeight,
+            12,
+          ),
           fontWeight: 650,
           lineHeight: 1.25,
           padding: 12,
@@ -1740,7 +1789,7 @@ export function dispatchCompositionGrammar(
   const isTransition = planned.section.toLowerCase().includes('transition');
   const sceneStage = ctx.storySpec?.sceneStates[ctx.index]?.stage;
   const isSceneClimax =
-    sceneStage === 'crossing' || sceneStage === 'proof' || sceneStage === 'release';
+    sceneStage === 'approach' || sceneStage === 'crossing' || sceneStage === 'proof';
 
   // Qualitative fallbacks: when quantitative evidence fails, preserve
   // narrative with non-quantitative compositions.

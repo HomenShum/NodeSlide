@@ -1,6 +1,6 @@
 {
   "schemaVersion": "nodeslide.scene-continuity-proof/v2",
-  "generatedAt": "2026-08-02T00:55:43.514Z",
+  "generatedAt": "2026-08-02T02:10:48.477Z",
   "slideCount": 12,
   "requestedSlideCount": 12,
   "exactCount": true,
@@ -109,6 +109,7 @@
       }
     ],
     "uniqueSceneSignatures": 12,
+    "dominantSceneSlideCount": 4,
     "legacyProgressRailCount": 0
   },
   "archetypes": [
@@ -126,7 +127,7 @@
     "statement"
   ],
   "diversity": {
-    "score": 0.32082069212300046,
+    "score": 0.31504232144782796,
     "passes": true,
     "distinctFamilies": 5,
     "nearDuplicatePairs": []

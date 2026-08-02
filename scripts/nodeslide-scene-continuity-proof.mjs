@@ -51,6 +51,11 @@ try {
       }));
     return JSON.stringify(marks);
   });
+  const dominantSceneSlideCount = built.snapshot.slides.filter((slide) =>
+    built.snapshot.elements.some(
+      (element) => element.slideId === slide.id && element.role === 'story_scene_field',
+    ),
+  ).length;
   const report = {
     schemaVersion: 'nodeslide.scene-continuity-proof/v2',
     generatedAt: new Date().toISOString(),
@@ -61,6 +66,7 @@ try {
       metaphor: built.spec.storySpec?.visualMetaphor,
       sceneStates: built.spec.storySpec?.sceneStates,
       uniqueSceneSignatures: new Set(sceneSignatures).size,
+      dominantSceneSlideCount,
       legacyProgressRailCount: built.snapshot.elements.filter((element) =>
         element.role?.startsWith('story_motif_'),
       ).length,
@@ -89,6 +95,11 @@ try {
   if (!report.exactCount) throw new Error(`Expected 12 slides; received ${report.slideCount}.`);
   if (report.story.uniqueSceneSignatures !== 12 || report.story.legacyProgressRailCount !== 0) {
     throw new Error(`Scene continuity failed: ${JSON.stringify(report.story)}.`);
+  }
+  if (report.story.dominantSceneSlideCount < 4) {
+    throw new Error(
+      `Scene continuity stayed decorative: expected at least 4 dominant scenes, found ${report.story.dominantSceneSlideCount}.`,
+    );
   }
   if (!report.diversity?.passes) {
     throw new Error(`Composition diversity failed: ${JSON.stringify(report.diversity)}.`);

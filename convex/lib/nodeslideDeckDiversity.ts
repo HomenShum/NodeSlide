@@ -27,6 +27,11 @@ export interface SlideSilhouette {
   decorativePrimitiveCount: number;
   /** Number of content elements (excluding footer/page_number/decorations) */
   contentElementCount: number;
+  /** Semantic artifact roles prevent a waterfall and risk matrix from being
+   * collapsed into one generic shape-only silhouette. */
+  artifactRoles: Set<string>;
+  /** Materializer-selected composition family when the caller has it. */
+  compositionFamily?: string;
 }
 
 export interface DeckDiversityReport {
@@ -44,12 +49,20 @@ export interface DeckDiversityReport {
   silhouettes: SlideSilhouette[];
 }
 
+export interface DeckDiversityOptions {
+  intentionalSeries?: Array<{ slideIndexes: number[] }>;
+}
+
 const NEAR_DUPLICATE_THRESHOLD = 0.82;
 const NON_ADJACENT_REPEAT_THRESHOLD = 0.9;
 const MIN_DISTINCT_FAMILIES = 4;
 const MAX_SINGLE_FAMILY_FRACTION = 0.6;
 
-function computeSlideSilhouette(elements: SlideElement[], slideIndex: number): SlideSilhouette {
+function computeSlideSilhouette(
+  elements: SlideElement[],
+  slideIndex: number,
+  compositionFamily?: string,
+): SlideSilhouette {
   const contentElements = elements.filter(
     (e) =>
       e.role !== 'footer' &&
@@ -63,6 +76,7 @@ function computeSlideSilhouette(elements: SlideElement[], slideIndex: number): S
   );
 
   const elementKinds = new Set<string>();
+  const artifactRoles = new Set<string>();
   let regionOccupancy = 0;
   let textArea = 0;
   let visualArea = 0;
@@ -70,6 +84,15 @@ function computeSlideSilhouette(elements: SlideElement[], slideIndex: number): S
 
   for (const element of contentElements) {
     elementKinds.add(element.kind);
+    if (
+      element.role?.startsWith('artifact_') ||
+      element.role?.startsWith('diagram_') ||
+      element.role === 'evidence' ||
+      element.kind === 'chart' ||
+      element.kind === 'image'
+    ) {
+      artifactRoles.add(element.role ?? element.kind);
+    }
     const area = element.bbox.width * element.bbox.height;
     if (element.kind === 'text' || element.kind === 'math') {
       textArea += area;
@@ -127,6 +150,8 @@ function computeSlideSilhouette(elements: SlideElement[], slideIndex: number): S
     dominantAxisX,
     decorativePrimitiveCount: decorativeElements.length,
     contentElementCount: contentElements.length,
+    artifactRoles,
+    ...(compositionFamily ? { compositionFamily } : {}),
   };
 }
 
@@ -160,6 +185,7 @@ function countBits(n: number): number {
 function computePairSimilarity(a: SlideSilhouette, b: SlideSilhouette): number {
   // Weighted similarity across multiple dimensions
   const kindSim = jaccardSimilarity(a.elementKinds, b.elementKinds);
+  const artifactRoleSim = jaccardSimilarity(a.artifactRoles, b.artifactRoles);
   const regionSim = regionSimilarity(a.regionOccupancy, b.regionOccupancy);
   const dominantRegionSim = a.dominantRegion === b.dominantRegion ? 1 : 0;
   const axisSim = 1 - Math.min(1, Math.abs(a.dominantAxisX - b.dominantAxisX) * 2);
@@ -170,16 +196,18 @@ function computePairSimilarity(a: SlideSilhouette, b: SlideSilhouette): number {
       Math.max(1, Math.max(a.contentElementCount, b.contentElementCount));
 
   return (
-    kindSim * 0.25 +
-    regionSim * 0.2 +
-    dominantRegionSim * 0.15 +
+    kindSim * 0.18 +
+    artifactRoleSim * 0.22 +
+    regionSim * 0.16 +
+    dominantRegionSim * 0.12 +
     axisSim * 0.1 +
-    textRatioSim * 0.15 +
-    elementCountSim * 0.15
+    textRatioSim * 0.1 +
+    elementCountSim * 0.12
   );
 }
 
 function identifyCompositionFamily(silhouette: SlideSilhouette): string {
+  if (silhouette.compositionFamily) return silhouette.compositionFamily;
   // Classify into composition families based on geometric signature
   if (silhouette.contentElementCount <= 2) return 'minimal';
   if (silhouette.visualAreaRatio > 0.6) return 'visual-dominant';
@@ -203,21 +231,32 @@ function identifyCompositionFamily(silhouette: SlideSilhouette): string {
  * and reasons for failure.
  */
 export function evaluateDeckDiversity(
-  slideElements: Array<{ slideIndex: number; elements: SlideElement[] }>,
+  slideElements: Array<{
+    slideIndex: number;
+    elements: SlideElement[];
+    compositionFamily?: string;
+  }>,
+  options: DeckDiversityOptions = {},
 ): DeckDiversityReport {
-  const silhouettes = slideElements.map(({ slideIndex, elements }) =>
-    computeSlideSilhouette(elements, slideIndex),
+  const silhouettes = slideElements.map(({ slideIndex, elements, compositionFamily }) =>
+    computeSlideSilhouette(elements, slideIndex, compositionFamily),
   );
 
   const failures: string[] = [];
   const nearDuplicatePairs: DeckDiversityReport['nearDuplicatePairs'] = [];
 
   const recordedPairs = new Set<string>();
+  const intentionalSeries = (options.intentionalSeries ?? []).map(
+    (series) => new Set(series.slideIndexes.map((index) => index - 1)),
+  );
+  const isIntentionalPair = (first: number, second: number) =>
+    intentionalSeries.some((series) => series.has(first) && series.has(second));
   // Adjacent repetition always damages reveal pacing.
   for (let i = 0; i < silhouettes.length - 1; i += 1) {
     const a = silhouettes[i];
     const b = silhouettes[i + 1];
     if (!a || !b) continue;
+    if (isIntentionalPair(i, i + 1)) continue;
     const similarity = computePairSimilarity(a, b);
     if (similarity <= NEAR_DUPLICATE_THRESHOLD) continue;
     nearDuplicatePairs.push({ first: i, second: i + 1, similarity });
@@ -227,8 +266,10 @@ export function evaluateDeckDiversity(
     );
   }
 
-  // A composition may recur once for visual rhythm. The third near-identical
-  // use is template repetition, even when other slides separate the copies.
+  // A composition may recur proportionally in a long deck. Twelve-slide decks
+  // still fail on the third use; a 72-page approval book can reuse a system up
+  // to six times across distant chapters before it becomes template repetition.
+  const nonAdjacentRepeatAllowance = Math.max(2, Math.ceil(silhouettes.length / 12));
   for (let j = 0; j < silhouettes.length; j += 1) {
     const current = silhouettes[j];
     if (!current) continue;
@@ -236,25 +277,34 @@ export function evaluateDeckDiversity(
     for (let i = 0; i < j; i += 1) {
       const previous = silhouettes[i];
       if (!previous) continue;
+      if (isIntentionalPair(i, j)) continue;
       const similarity = computePairSimilarity(previous, current);
       if (similarity > NON_ADJACENT_REPEAT_THRESHOLD) {
         previousMatches.push({ index: i, similarity });
       }
     }
-    if (previousMatches.length < 2) continue;
-    for (const match of previousMatches) {
-      const key = `${match.index}:${j}`;
-      if (recordedPairs.has(key)) continue;
-      nearDuplicatePairs.push({ first: match.index, second: j, similarity: match.similarity });
-      recordedPairs.add(key);
-      failures.push(
-        `Slides ${match.index + 1} and ${j + 1} are a repeated composition (similarity: ${match.similarity.toFixed(2)})`,
-      );
-    }
+    if (previousMatches.length < nonAdjacentRepeatAllowance) continue;
+    // The current slide is the repeated use. Record one nearest matching
+    // predecessor instead of emitting an O(n^2) list of equivalent pairs.
+    const match = previousMatches.at(-1);
+    if (!match) continue;
+    const key = `${match.index}:${j}`;
+    if (recordedPairs.has(key)) continue;
+    nearDuplicatePairs.push({ first: match.index, second: j, similarity: match.similarity });
+    recordedPairs.add(key);
+    failures.push(
+      `Slides ${match.index + 1} and ${j + 1} are a repeated composition (similarity: ${match.similarity.toFixed(2)})`,
+    );
   }
 
   // Count composition families
-  const families = silhouettes.map(identifyCompositionFamily);
+  const representativeIndexes = new Set(silhouettes.map((_, index) => index));
+  for (const series of intentionalSeries) {
+    const sorted = [...series].sort((left, right) => left - right);
+    for (const index of sorted.slice(1)) representativeIndexes.delete(index);
+  }
+  const familySilhouettes = silhouettes.filter((_, index) => representativeIndexes.has(index));
+  const families = familySilhouettes.map(identifyCompositionFamily);
   const distinctFamilies = new Set(families).size;
 
   // Check if one family dominates
@@ -263,8 +313,8 @@ export function evaluateDeckDiversity(
     familyCounts.set(family, (familyCounts.get(family) ?? 0) + 1);
   }
   const maxFamilyCount = Math.max(...familyCounts.values());
-  const maxFamilyFraction = maxFamilyCount / Math.max(1, silhouettes.length);
-  if (maxFamilyFraction > MAX_SINGLE_FAMILY_FRACTION && silhouettes.length >= 4) {
+  const maxFamilyFraction = maxFamilyCount / Math.max(1, familySilhouettes.length);
+  if (maxFamilyFraction > MAX_SINGLE_FAMILY_FRACTION && familySilhouettes.length >= 4) {
     const dominantFamily = [...familyCounts.entries()].find(
       ([, count]) => count === maxFamilyCount,
     )?.[0];
@@ -274,7 +324,7 @@ export function evaluateDeckDiversity(
   }
 
   // Check minimum distinct families
-  if (distinctFamilies < MIN_DISTINCT_FAMILIES && silhouettes.length >= 6) {
+  if (distinctFamilies < MIN_DISTINCT_FAMILIES && familySilhouettes.length >= 6) {
     failures.push(
       `Only ${distinctFamilies} distinct composition families used (minimum: ${MIN_DISTINCT_FAMILIES})`,
     );
@@ -288,6 +338,7 @@ export function evaluateDeckDiversity(
       const a = silhouettes[i];
       const b = silhouettes[j];
       if (!a || !b) continue;
+      if (isIntentionalPair(i, j)) continue;
       totalSimilarity += computePairSimilarity(a, b);
       pairCount += 1;
     }

@@ -1,0 +1,27 @@
+{
+  "benchmarkId": "nodeslide-longform-compression-v1",
+  "name": "NodeSlide Longform & Compression Bench",
+  "developmentCaseId": "staar-alcon-pre-vote-2025-09-26",
+  "canonicalDeckStore": "DeckSnapshot",
+  "requiredOutputs": {
+    "longDeckSlides": 72,
+    "shortDeckSlides": 12,
+    "executiveReadoutMinimumSlides": 3,
+    "executiveReadoutMaximumSlides": 5,
+    "decisionQuestions": 20
+  },
+  "gates": {
+    "minimumEligibleAtlasUtilization": 0.85,
+    "maximumUnjustifiedGenericFallbackRate": 0.1,
+    "maximumMissingRequiredArtifacts": 0,
+    "minimumWeightedCompressionRetention": 0.95,
+    "minimumShortDeckCorrectAnswers": 19,
+    "minimumSlideCountReduction": 0.8,
+    "maximumCriticalNumberMismatches": 0,
+    "maximumUnsupportedDecisionCriticalClaims": 0,
+    "maximumUninspectedPages": 0,
+    "requireBothBrowserAndPptxRenders": true
+  },
+  "completionRule": "Every rendered page must be inspected, every decision-critical fact reconciled, and every compression decision recorded.",
+  "readinessClaimPolicy": "This development case cannot establish generalized long-form readiness. That claim requires the frozen 30-case held-out suite."
+}

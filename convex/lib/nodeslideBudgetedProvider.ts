@@ -85,15 +85,16 @@ export const NODESLIDE_EDIT_PROVIDER_CEILINGS: NodeSlideProviderHardCeilings = {
 };
 
 /**
- * Covers the maximum eight-slide authored-artifact response.
+ * Covers bounded short and long-form authored-artifact responses.
  *
  * The historical 5k ceiling was reached exactly by a seven-slide NIST
  * risk-committee case across four provider families. Each returned truncated
- * JSON and degraded to the generic fallback. Ten thousand remains finite,
- * metered, and below the normalized run-level output/cost budgets.
+ * JSON and degraded to the generic fallback. The caller still requests 10k for
+ * decks through 12 slides; exact 13-100 slide programs scale proportionally up
+ * to this finite 50k hard ceiling and remain subject to the run-level spend cap.
  */
 export const NODESLIDE_CREATE_PROVIDER_CEILINGS: NodeSlideProviderHardCeilings = {
-  maxOutputTokensPerAttempt: 10_000,
+  maxOutputTokensPerAttempt: 50_000,
   timeoutMs: 240_000,
   completionHeadroomMs: 30_000,
 };

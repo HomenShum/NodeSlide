@@ -329,11 +329,20 @@ function checksFromDeckDiversity(snapshot: DeckSnapshot): CheckDraft[] {
   // slides, repeated geometry becomes a story-rhythm failure and must not be
   // hidden behind a clean validation receipt.
   if (snapshot.deck.slideOrder.length < 6) return [];
+  const archetypeBySlideId = new Map(
+    snapshot.slides.flatMap((slide) =>
+      slide.archetype ? [[slide.id, slide.archetype] as const] : [],
+    ),
+  );
   const report = evaluateDeckDiversity(
     snapshot.deck.slideOrder.map((slideId, slideIndex) => ({
       slideIndex,
       elements: snapshot.elements.filter((element) => element.slideId === slideId),
+      ...(archetypeBySlideId.has(slideId)
+        ? { compositionFamily: archetypeBySlideId.get(slideId) as string }
+        : {}),
     })),
+    snapshot.deck.intentionalSeries ? { intentionalSeries: snapshot.deck.intentionalSeries } : {},
   );
   if (report.passes) return [];
   const affectedIndexes = new Set(

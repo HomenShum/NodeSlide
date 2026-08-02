@@ -1,0 +1,28 @@
+{
+  "suiteId": "nodeslide-longform-held-out-v1",
+  "totalCases": 30,
+  "partitions": {
+    "reference": "Visible only to retrieval and apprenticeship layers.",
+    "development": "Visible while implementing and repairing NodeSlide; STAAR/Alcon belongs here.",
+    "heldOut": "Never available to prompts, recipe construction, repair rules, or generation-time evaluators."
+  },
+  "heldOutCaseCounts": {
+    "transaction": 12,
+    "earningsOrInvestorDay": 6,
+    "opportunityMemo": 6,
+    "academicPaperToDeck": 6
+  },
+  "releaseGates": {
+    "completeCases": "30/30",
+    "pageInspectionCoverage": 1,
+    "criticalNumericalMismatches": 0,
+    "unsupportedDecisionCriticalClaims": 0,
+    "browserPptxMissingElementMismatches": 0,
+    "renderBlockingOverflows": 0,
+    "minimumWeightedCompressionRetention": 0.95,
+    "minimumAtlasEligibleUtilization": 0.85,
+    "minimumBlindHumanPreference": 0.65,
+    "minimumHumanRepairReduction": 0.25
+  },
+  "leakagePolicy": "Case ids, source documents, evaluation answers, visual references, and derived repair rules are digest-checked before every held-out run."
+}

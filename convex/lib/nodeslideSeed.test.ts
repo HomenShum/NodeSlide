@@ -624,6 +624,43 @@ describe('NodeSlide seed', () => {
     expect(repaired.designPlans).toHaveLength(12);
   });
 
+  it('finishes an exact 72-slide transaction program without collapsing to twelve pages', () => {
+    const brief = {
+      prompt:
+        'Build an exact 72-slide transaction approval deck from the supplied filing evidence.',
+      audience: 'Independent transaction committee',
+      purpose: 'Approve, reject, or condition the proposed transaction',
+      successCriteria: [
+        'Preserve every decision-critical source',
+        'Expose downside and outstanding diligence',
+        'Do not invent financial values',
+      ],
+    };
+
+    const spec = deterministicBriefSpec('STAAR / Alcon approval review', brief);
+    const built = buildBriefNodeSlide({
+      deckId: 'deck-longform-72',
+      projectId: 'project-longform-72',
+      title: spec.title,
+      brief,
+      rawSpec: spec,
+      themeId: 'editorial-signal',
+      now: 1_000,
+    });
+
+    expect(spec.slides).toHaveLength(72);
+    expect(new Set(spec.slides.map((slide) => slide.title)).size).toBe(72);
+    expect(spec.storySpec?.sceneStates).toHaveLength(72);
+    expect(spec.designPlans).toHaveLength(72);
+    expect(built.snapshot.slides).toHaveLength(72);
+    expect(built.snapshot.deck.slideOrder).toHaveLength(72);
+    expect(
+      validateNodeSlideSnapshot(built.snapshot, 1_000).issues.filter(
+        (issue) => issue.severity === 'error',
+      ),
+    ).toEqual([]);
+  });
+
   it('refuses publication when a provider repeats the same qualitative scene across 12 slides', () => {
     const brief = {
       prompt: 'Build a 12-slide qualitative governance deck with no invented numbers.',

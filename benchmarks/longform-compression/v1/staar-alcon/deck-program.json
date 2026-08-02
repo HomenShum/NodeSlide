@@ -1,0 +1,32 @@
+{
+  "exactSlideCount": 72,
+  "sections": [
+    { "sectionId": "cover", "title": "Cover", "startSlideIndex": 1, "endSlideIndex": 1, "requiredDecisionQuestions": [] },
+    { "sectionId": "executive", "title": "Executive summary and requested decision", "startSlideIndex": 2, "endSlideIndex": 5, "requiredDecisionQuestions": ["q01", "q02", "q19", "q20"] },
+    { "sectionId": "terms", "title": "Transaction overview and key terms", "startSlideIndex": 6, "endSlideIndex": 10, "requiredDecisionQuestions": ["q01", "q02", "q03", "q04", "q05"] },
+    { "sectionId": "rationale", "title": "Strategic rationale", "startSlideIndex": 11, "endSlideIndex": 17, "requiredDecisionQuestions": ["q06", "q07"] },
+    { "sectionId": "company-market", "title": "Company and market overview", "startSlideIndex": 18, "endSlideIndex": 25, "requiredDecisionQuestions": ["q08", "q09"] },
+    { "sectionId": "historical", "title": "Historical operating performance", "startSlideIndex": 26, "endSlideIndex": 34, "requiredDecisionQuestions": ["q08", "q09", "q10", "q11"] },
+    { "sectionId": "projections", "title": "Management projections and model drivers", "startSlideIndex": 35, "endSlideIndex": 43, "requiredDecisionQuestions": ["q12", "q13", "q14"] },
+    { "sectionId": "valuation", "title": "Valuation analyses", "startSlideIndex": 44, "endSlideIndex": 51, "requiredDecisionQuestions": ["q15", "q16", "q17"] },
+    { "sectionId": "financing", "title": "Sources, uses, financing, and capital structure", "startSlideIndex": 52, "endSlideIndex": 56, "requiredDecisionQuestions": ["q18"] },
+    { "sectionId": "downside", "title": "Sensitivities and downside scenarios", "startSlideIndex": 57, "endSlideIndex": 61, "requiredDecisionQuestions": ["q09", "q13", "q16"] },
+    { "sectionId": "risks", "title": "Key risks and counterarguments", "startSlideIndex": 62, "endSlideIndex": 66, "requiredDecisionQuestions": ["q07", "q09", "q19"] },
+    { "sectionId": "process", "title": "Process, approvals, and outstanding diligence", "startSlideIndex": 67, "endSlideIndex": 69, "requiredDecisionQuestions": ["q03", "q04", "q20"] },
+    { "sectionId": "recommendation", "title": "Recommendation", "startSlideIndex": 70, "endSlideIndex": 70, "requiredDecisionQuestions": ["q20"] },
+    { "sectionId": "sources", "title": "Source register and appendix index", "startSlideIndex": 71, "endSlideIndex": 72, "requiredDecisionQuestions": [] }
+  ],
+  "recurringSystems": {
+    "financialTables": "consistent periods, units, actual/estimate boundary, variance callouts, and source footer",
+    "valuationPages": "method label, range visual, offer-price marker, assumptions, limitations, and source footer",
+    "riskPages": "risk, evidence, likelihood, severity, mitigation, owner, and unresolved-status fields",
+    "sourceNotes": "claim-level source ids with filing date and page/section locator"
+  },
+  "intentionalSeries": [
+    { "seriesId": "actual-to-forecast-financial-system", "slideIndexes": [27, 28, 29, 30, 36, 37, 38, 39], "reasonForRepeatedLayout": "A stable financial frame preserves the actual-to-forecast boundary and makes historical and projected periods directly comparable." },
+    { "seriesId": "historical-financial-series", "slideIndexes": [27, 28, 29, 30], "reasonForRepeatedLayout": "Stable period columns and axes make operating trends directly comparable." },
+    { "seriesId": "projection-driver-series", "slideIndexes": [36, 37, 38, 39], "reasonForRepeatedLayout": "The same driver frame exposes assumption changes without visual remapping." },
+    { "seriesId": "valuation-method-series", "slideIndexes": [45, 46, 47, 48, 49], "reasonForRepeatedLayout": "A stable offer-price marker and range scale allow apples-to-apples valuation comparison." },
+    { "seriesId": "risk-register-series", "slideIndexes": [63, 64, 65], "reasonForRepeatedLayout": "A common risk schema makes probability, severity, evidence, and mitigation comparable." }
+  ]
+}

@@ -311,6 +311,18 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
       };
     }
     if (diagramNodeIds.size > 0 && element.role === 'body') {
+      const focusedBodyHeight = Math.min(
+        0.4,
+        Math.max(
+          0.24,
+          estimateTextHeight(
+            element.content ?? '',
+            element.style.fontSize ?? 16,
+            element.style.lineHeight ?? 1.35,
+            0.38,
+          ) * 1.15,
+        ),
+      );
       return {
         ...element,
         bbox: {
@@ -318,7 +330,7 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
           x: diagramRailX < 0.5 ? 0.52 : 0.08,
           y: 0.4,
           width: 0.38,
-          height: Math.max(0.2, element.bbox.height),
+          height: focusedBodyHeight,
         },
       };
     }
@@ -336,6 +348,18 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
       };
     }
     if (!hasPrimaryVisual && element.role === 'body') {
+      const focusedBodyHeight = Math.min(
+        0.24,
+        Math.max(
+          0.16,
+          estimateTextHeight(
+            element.content ?? '',
+            element.style.fontSize ?? 16,
+            element.style.lineHeight ?? 1.35,
+            0.6,
+          ) * 1.15,
+        ),
+      );
       return {
         ...element,
         bbox: {
@@ -343,7 +367,7 @@ function focusPrimaryVisual(elements: readonly SlideElement[], slideIndex: numbe
           x: 0.2,
           y: 0.45,
           width: 0.6,
-          height: Math.max(0.12, element.bbox.height),
+          height: focusedBodyHeight,
         },
         style: { ...element.style, textAlign: 'center' },
       };

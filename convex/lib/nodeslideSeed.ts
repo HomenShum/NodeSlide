@@ -162,6 +162,11 @@ export interface NodeSlideDeckSpec {
   title: string;
   narrative: string[];
   slides: NodeSlidePlannedSlide[];
+  intentionalSeries?: Array<{
+    seriesId: string;
+    slideIndexes: number[];
+    reasonForRepeatedLayout: string;
+  }>;
   /** Server-derived before composition; providers may consume but never author it. */
   storySpec?: NodeSlideStorySpec;
   /** Honest inventory: placeholders and missing assets are never counted as evidence. */
@@ -669,7 +674,7 @@ function fitDeterministicBriefSlideCount(
   requestedCount: number,
   success: readonly string[],
 ): NodeSlidePlannedSlide[] {
-  const count = Math.max(3, Math.min(12, Math.trunc(requestedCount)));
+  const count = Math.max(3, Math.min(100, Math.trunc(requestedCount)));
   if (count === slides.length) return slides.map((slide) => structuredClone(slide));
   if (count < slides.length) {
     const selected = new Set<number>([0, slides.length - 1]);
@@ -754,11 +759,131 @@ function fitDeterministicBriefSlideCount(
   ];
   const opening = slides.slice(0, -1).map((slide) => structuredClone(slide));
   const closing = slides.at(-1);
-  return [
-    ...opening,
-    ...expansions.slice(0, count - slides.length),
-    ...(closing ? [structuredClone(closing)] : []),
+  const boundedExpansions = Array.from(
+    { length: Math.max(0, count - slides.length) },
+    (_, index) =>
+      expansions[index] ?? longFormDeterministicSlide(index - expansions.length, success),
+  );
+  return [...opening, ...boundedExpansions, ...(closing ? [structuredClone(closing)] : [])];
+}
+
+function longFormDeterministicSlide(
+  index: number,
+  success: readonly string[],
+): NodeSlidePlannedSlide {
+  const chapter = Math.floor(index / 10) + 2;
+  const sequence = index + 1;
+  const sectionNumber = String(chapter).padStart(2, '0');
+  const pageLabel = String(sequence).padStart(2, '0');
+  const templates: Array<() => NodeSlidePlannedSlide> = [
+    () => ({
+      title: `Decision thesis ${pageLabel}`,
+      section: `Decision / ${sectionNumber}`,
+      headline: 'State the decision question before adding supporting detail.',
+      body: 'This bounded fallback preserves the requested page count while keeping conclusions conditional on supplied evidence.',
+      bullets: success.slice(0, 3),
+    }),
+    () => ({
+      title: `Evidence register ${pageLabel}`,
+      section: `Evidence / ${sectionNumber}`,
+      headline: 'Separate filed facts, management claims, and unresolved diligence.',
+      body: 'Every consequential statement remains classified by provenance instead of inheriting the voice of a persuasive source.',
+      bullets: ['Filed evidence', 'Attributed management view', 'Open verification item'],
+      diagram: {
+        kind: 'process',
+        direction: 'horizontal',
+        nodes: [
+          { id: `filed-${sequence}`, label: 'Filed fact', kind: 'system' },
+          { id: `test-${sequence}`, label: 'Verification', kind: 'decision' },
+          { id: `use-${sequence}`, label: 'Decision use', kind: 'milestone' },
+        ],
+        edges: [
+          { from: `filed-${sequence}`, to: `test-${sequence}` },
+          { from: `test-${sequence}`, to: `use-${sequence}` },
+        ],
+      },
+    }),
+    () => ({
+      title: `Operating driver ${pageLabel}`,
+      section: `Operating / ${sectionNumber}`,
+      headline: 'Connect the operating driver to the decision without inventing magnitude.',
+      body: 'The evidence owner must supply the measured relationship before this qualitative driver becomes a forecast input.',
+      bullets: ['Observed driver', 'Unverified relationship', 'Required model input'],
+    }),
+    () => ({
+      title: `Model boundary ${pageLabel}`,
+      section: `Model / ${sectionNumber}`,
+      headline: 'A model is useful only when its assumptions remain inspectable.',
+      body: 'Keep source inputs, derived outputs, and sensitivities distinct so a reviewer can reject one assumption without losing the whole analysis.',
+      bullets: ['Source input', 'Derived output', 'Sensitivity still required'],
+    }),
+    () => ({
+      title: `Alternative case ${pageLabel}`,
+      section: `Alternatives / ${sectionNumber}`,
+      headline: 'The recommended path must survive comparison with a credible alternative.',
+      body: 'Describe what changes under the alternative and which missing evidence would reverse the recommendation.',
+      bullets: ['Recommended case', 'Standalone or alternative case', 'Reversal condition'],
+    }),
+    () => ({
+      title: `Risk-control pair ${pageLabel}`,
+      section: `Risk / ${sectionNumber}`,
+      headline: 'Pair each established risk with a control and an evidence test.',
+      body: 'Do not manufacture probability or impact scores when the source bundle does not provide them.',
+      bullets: ['Established risk', 'Proposed control', 'Evidence test'],
+    }),
+    () => ({
+      title: `Diligence gate ${pageLabel}`,
+      section: `Diligence / ${sectionNumber}`,
+      headline: 'Unresolved diligence should change the approval condition.',
+      body: 'The page records what is unknown, who owns the answer, and what decision cannot be taken before resolution.',
+      bullets: ['Open question', 'Named evidence owner', 'Approval dependency'],
+      diagram: {
+        kind: 'process',
+        direction: 'vertical',
+        nodes: [
+          { id: `question-${sequence}`, label: 'Open question', kind: 'step' },
+          { id: `owner-${sequence}`, label: 'Evidence owner', kind: 'system' },
+          { id: `gate-${sequence}`, label: 'Approval gate', kind: 'decision' },
+        ],
+        edges: [
+          { from: `question-${sequence}`, to: `owner-${sequence}` },
+          { from: `owner-${sequence}`, to: `gate-${sequence}` },
+        ],
+      },
+    }),
+    () => ({
+      title: `Source note ${pageLabel}`,
+      section: `Sources / ${sectionNumber}`,
+      headline: 'A reviewer should be able to reproduce the page from its citations.',
+      body: 'Carry exact filing references and distinguish contemporaneous evidence from later outcome evidence.',
+      bullets: ['Primary filing', 'As-of date', 'Generation visibility'],
+    }),
+    () => ({
+      title: `Committee implication ${pageLabel}`,
+      section: `Implication / ${sectionNumber}`,
+      headline: 'Translate the analysis into one explicit committee implication.',
+      body: 'The implication remains conditional until all linked evidence obligations are satisfied.',
+      bullets: ['What the evidence supports', 'What it does not support', 'Next decision'],
+    }),
+    () => ({
+      title: `Chapter checkpoint ${pageLabel}`,
+      section: `Checkpoint / ${sectionNumber}`,
+      headline: 'Close the chapter by reconciling what changed in the decision.',
+      body: 'Summarize retained evidence, new uncertainty, and the next proof obligation without adding a new claim.',
+      bullets: ['Retained conclusion', 'New uncertainty', 'Next proof obligation'],
+    }),
   ];
+  const selected = templates[index % templates.length];
+  if (!selected) {
+    return {
+      title: `Decision checkpoint ${pageLabel}`,
+      section: `Decision / ${sectionNumber}`,
+      headline: 'Reconcile the evidence before advancing the decision.',
+      body: 'This bounded fallback preserves the requested page count without inventing a quantitative claim.',
+      bullets: ['Evidence reviewed', 'Uncertainty retained', 'Next proof obligation'],
+    };
+  }
+  return selected();
 }
 
 function detectGovernanceHub(prompt: string): {
@@ -1086,6 +1211,27 @@ export function coerceBriefSpec(
         : fallback.title,
     narrative: narrative.length > 0 ? narrative : fallback.narrative,
     slides,
+    ...(Array.isArray(rawSpec['intentionalSeries'])
+      ? {
+          intentionalSeries: rawSpec['intentionalSeries'].flatMap((value) => {
+            if (!isRecord(value) || !Array.isArray(value['slideIndexes'])) return [];
+            const seriesId = cleanField(value['seriesId'], '', 64);
+            const reasonForRepeatedLayout = cleanField(value['reasonForRepeatedLayout'], '', 240);
+            const slideIndexes = [...new Set(value['slideIndexes'])]
+              .filter(
+                (index): index is number =>
+                  typeof index === 'number' &&
+                  Number.isInteger(index) &&
+                  index >= 1 &&
+                  index <= slides.length,
+              )
+              .sort((left, right) => left - right);
+            return seriesId && reasonForRepeatedLayout && slideIndexes.length >= 2
+              ? [{ seriesId, slideIndexes, reasonForRepeatedLayout }]
+              : [];
+          }),
+        }
+      : {}),
     ...storyContext,
   };
   spec.designPlans = buildNodeSlideDesignPlans({
@@ -1281,8 +1427,12 @@ function buildNodeSlideDeck(input: {
       const slideElements = slides.map((slide, slideIndex) => ({
         slideIndex,
         elements: elements.filter((e) => e.slideId === slide.id),
+        ...(slide.archetype ? { compositionFamily: slide.archetype } : {}),
       }));
-      const diversityReport = evaluateDeckDiversity(slideElements);
+      const diversityReport = evaluateDeckDiversity(
+        slideElements,
+        input.spec.intentionalSeries ? { intentionalSeries: input.spec.intentionalSeries } : {},
+      );
       if (diversityReport.passes) {
         input.spec.deckDiversity = {
           score: diversityReport.score,
@@ -1346,8 +1496,12 @@ function buildNodeSlideDeck(input: {
               slideIndex === laterIndex
                 ? candidate.elements
                 : elements.filter((element) => element.slideId === slide.id),
+            ...(slide.archetype ? { compositionFamily: slide.archetype } : {}),
           }));
-          const report = evaluateDeckDiversity(trialGroups);
+          const report = evaluateDeckDiversity(
+            trialGroups,
+            input.spec.intentionalSeries ? { intentionalSeries: input.spec.intentionalSeries } : {},
+          );
           const incumbent = bestVariant?.report ?? diversityReport;
           const improves =
             report.nearDuplicatePairs.length < incumbent.nearDuplicatePairs.length ||
@@ -1474,8 +1628,14 @@ function buildNodeSlideDeck(input: {
                 index === slideIndex
                   ? candidate.elements
                   : elements.filter((element) => element.slideId === slide.id),
+              ...(slide.archetype ? { compositionFamily: slide.archetype } : {}),
             }));
-            const report = evaluateDeckDiversity(trialGroups);
+            const report = evaluateDeckDiversity(
+              trialGroups,
+              input.spec.intentionalSeries
+                ? { intentionalSeries: input.spec.intentionalSeries }
+                : {},
+            );
             const incumbent = bestDeckVariant?.report ?? diversityReport;
             const improves =
               report.failures.length < incumbent.failures.length ||
@@ -1557,6 +1717,9 @@ function buildNodeSlideDeck(input: {
     brief: structuredClone(input.brief),
     theme,
     slideOrder: slides.map((slide) => slide.id),
+    ...(input.spec.intentionalSeries
+      ? { intentionalSeries: structuredClone(input.spec.intentionalSeries) }
+      : {}),
     version: 1,
     status: 'ready' as const,
     shareSlug: input.shareSlug,
@@ -1635,7 +1798,10 @@ function buildSlide(input: {
   // grammar instead of the shared scaffold. Each grammar produces a
   // materially different element tree. Slides with authored artifacts use
   // the legacy scaffold to preserve native geometry rendering.
-  if (input.designPlan && !planned.authoredArtifactSpec) {
+  if (
+    input.designPlan &&
+    (!planned.authoredArtifactGeometry || planned.authoredArtifactGeometry.kind === 'risk-matrix')
+  ) {
     const grammarResult = dispatchCompositionGrammar(input.designPlan.semanticArchetype, {
       deckId: input.deckId,
       slideId: input.slideId,
@@ -2261,6 +2427,16 @@ function buildSlide(input: {
     const mapY = (value: number) => stage.y + (value / 100) * stage.height;
     const mapWidth = (value: number) => (value / 100) * stage.width;
     const mapHeight = (value: number) => (value / 100) * stage.height;
+    const compactMeasure = (value: number, unit: string) => {
+      const number = Number.isInteger(value)
+        ? String(value)
+        : value.toFixed(2).replace(/0+$/u, '').replace(/\.$/u, '');
+      if (unit === 'USD millions') return `$${number}m`;
+      if (unit === 'USD/share') return `$${number}/share`;
+      if (unit === 'percent gross margin') return `${number}% gross margin`;
+      if (unit === 'percent operating income (loss)') return `${number}% op. margin`;
+      return `${number} ${unit}`;
+    };
     const boundedNativeBox = (x: number, y: number, width: number, height: number): BoundingBox => {
       const boundedX = Math.max(stage.x, Math.min(stage.x + stage.width - 0.004, x));
       const boundedY = Math.max(stage.y, Math.min(stage.y + stage.height - 0.004, y));
@@ -2314,18 +2490,18 @@ function buildSlide(input: {
         ),
       );
       geometry.marks.bars.forEach((bar, index) => {
+        const renderedHeight = mapHeight(bar.height);
+        const renderedWidth = mapWidth(bar.width);
+        const renderedX = mapX(bar.x);
+        const renderedY = mapY(bar.y);
         pushNative(`bar-${index + 1}`, {
           name: `Waterfall bar: ${bar.label}`,
           kind: 'shape',
           role: 'artifact_waterfall_bar',
-          bbox: boundedNativeBox(
-            mapX(bar.x),
-            mapY(bar.y),
-            mapWidth(bar.width),
-            mapHeight(bar.height),
-          ),
+          bbox: boundedNativeBox(renderedX, renderedY, renderedWidth, renderedHeight),
           rotation: 0,
-          content: `${bar.label}\n${bar.value} ${bar.unit}`,
+          ...(renderedHeight >= 0.08 ? { content: `${bar.label}\n${bar.value} ${bar.unit}` } : {}),
+          altText: `${bar.label}: ${bar.value} ${bar.unit}`,
           style: {
             fill:
               bar.id === 'baseline' || bar.id === 'final'
@@ -2345,6 +2521,31 @@ function buildSlide(input: {
             verticalAlign: 'middle',
           },
         });
+        if (renderedHeight < 0.08) {
+          const labelWidth = Math.max(0.11, renderedWidth * 1.25);
+          pushNative(`bar-label-${index + 1}`, {
+            name: `Waterfall label: ${bar.label}`,
+            kind: 'text',
+            role: 'artifact_waterfall_label',
+            bbox: boundedNativeBox(
+              renderedX + renderedWidth / 2 - labelWidth / 2,
+              renderedY - 0.078,
+              labelWidth,
+              0.07,
+            ),
+            rotation: 0,
+            content: `${bar.label}\n${compactMeasure(bar.value, bar.unit)}`,
+            altText: `${bar.label}: ${bar.value} ${bar.unit}`,
+            style: {
+              color: theme.colors.ink,
+              fontFamily: theme.typography.data,
+              fontSize: 14,
+              fontWeight: 650,
+              lineHeight: 1.15,
+              textAlign: 'center',
+            },
+          });
+        }
       });
     } else if (geometry.kind === 'sankey') {
       geometry.marks.links.forEach((link, index) => {

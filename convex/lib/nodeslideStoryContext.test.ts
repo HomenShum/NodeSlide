@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { coerceBriefSpec, deterministicBriefSpec } from './nodeslideSeed';
-import { buildNodeSlideStoryContext } from './nodeslideStoryContext';
+import { buildNodeSlideStoryContext, buildNodeSlideStorySceneMarks } from './nodeslideStoryContext';
 
 const BRIEF = {
   prompt:
@@ -164,6 +164,58 @@ describe('NodeSlide StorySpec and visual-material inventory', () => {
     expect(context.storySpec.revealPacing).toHaveLength(12);
     expect(context.storySpec.compositionPlan).toHaveLength(12);
     expect(Math.max(...context.storySpec.emotionalArc.intensity)).toBe(100);
+  });
+
+  it('turns a risk-committee threshold into six perceptually distinct story scenes', () => {
+    const context = buildNodeSlideStoryContext({
+      title: 'AI release gate',
+      brief: {
+        ...BRIEF,
+        prompt:
+          'Create a 12-slide risk committee decision that moves from exposure to controlled passage.',
+      },
+    });
+    const firstIndexByStage = new Map<string, number>();
+    for (const scene of context.storySpec.sceneStates) {
+      if (!firstIndexByStage.has(scene.stage)) firstIndexByStage.set(scene.stage, scene.index);
+    }
+    const stageMarks = [...firstIndexByStage.entries()].map(([stage, index]) => ({
+      stage,
+      marks: buildNodeSlideStorySceneMarks(context.storySpec, index),
+    }));
+    const roleSignatures = stageMarks.map(({ marks }) =>
+      marks
+        .map(({ role }) => role)
+        .sort()
+        .join('|'),
+    );
+    const geometrySignatures = stageMarks.map(({ marks }) =>
+      marks
+        .map(({ bbox }) => `${bbox.x},${bbox.y},${bbox.width},${bbox.height}`)
+        .sort()
+        .join('|'),
+    );
+
+    expect(context.storySpec.visualMetaphor.kind).toBe('threshold');
+    expect(stageMarks.map(({ stage }) => stage)).toEqual([
+      'establish',
+      'pressure',
+      'approach',
+      'crossing',
+      'proof',
+      'release',
+    ]);
+    expect(new Set(roleSignatures).size).toBe(6);
+    expect(new Set(geometrySignatures).size).toBe(6);
+    expect(stageMarks.find(({ stage }) => stage === 'pressure')?.marks).toEqual(
+      expect.arrayContaining([expect.objectContaining({ role: 'story_scene_threshold_pressure' })]),
+    );
+    expect(stageMarks.find(({ stage }) => stage === 'proof')?.marks).toEqual(
+      expect.arrayContaining([expect.objectContaining({ role: 'story_scene_threshold_evidence' })]),
+    );
+    expect(stageMarks.find(({ stage }) => stage === 'release')?.marks).toEqual(
+      expect.arrayContaining([expect.objectContaining({ role: 'story_scene_threshold_release' })]),
+    );
   });
 
   it('recomputes the authoritative context instead of trusting provider material claims', () => {

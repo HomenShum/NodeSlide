@@ -55,6 +55,7 @@ import {
   nodeSlideCandidateValidationId,
   validationFromCandidateReceipt,
 } from './lib/nodeslideCandidate';
+import { nodeSlideCreationTraceStartedAt } from './lib/nodeslideCreationTraceTiming';
 import {
   NODESLIDE_WORKSPACE_LIMITS,
   commentFromRow,
@@ -3680,6 +3681,7 @@ export const createFromBriefInternal = internalMutation({
     plan: v.array(v.string()),
     spec: v.any(),
     traceSummary: v.string(),
+    traceStartedAt: v.number(),
     critiquePasses: v.optional(v.number()),
     critiqueDecision: v.optional(v.string()),
     critiqueReport: v.optional(v.string()),
@@ -3726,6 +3728,10 @@ export const createFromBriefInternal = internalMutation({
         ? { productionProbeExpiresAt: args.productionProbeExpiresAt }
         : {}),
       trace: {
+        startedAt: nodeSlideCreationTraceStartedAt(
+          args.traceStartedAt,
+          built.snapshot.deck.createdAt,
+        ),
         summary: args.traceSummary,
         context: [
           `Requested route: ${args.route}`,
@@ -5664,6 +5670,7 @@ async function createWorkspaceRows(
     productionProbeCleanupDigest?: string;
     productionProbeExpiresAt?: number;
     trace: {
+      startedAt?: number;
       summary: string;
       context: string[];
       toolCalls: string[];
@@ -5739,7 +5746,7 @@ async function createWorkspaceRows(
     ...(args.trace.costMicroUsd !== undefined ? { costMicroUsd: args.trace.costMicroUsd } : {}),
     ...(args.trace.inputTokens !== undefined ? { inputTokens: args.trace.inputTokens } : {}),
     ...(args.trace.outputTokens !== undefined ? { outputTokens: args.trace.outputTokens } : {}),
-    createdAt: now,
+    createdAt: args.trace.startedAt ?? now,
     completedAt: now,
   });
 }

@@ -428,5 +428,46 @@ describe('production ArtifactSpec compiler', () => {
         expect.objectContaining({ code: 'artifact_density_limit', severity: 'error' }),
       ]),
     });
+
+    const decorativeScaffold = structuredClone(snapshot());
+    const shape = decorativeScaffold.elements.find((element) => element.kind === 'shape');
+    if (!shape) throw new Error('Golden deck shape unavailable.');
+    const scaffoldSlide = decorativeScaffold.slides[0];
+    if (!scaffoldSlide) throw new Error('Golden deck slide unavailable.');
+    for (let index = 0; index < 30; index += 1) {
+      const decoration = {
+        ...structuredClone(shape),
+        id: `bounded-decoration-${index}`,
+        slideId: scaffoldSlide.id,
+        role: 'decoration' as const,
+      };
+      decorativeScaffold.elements.push(decoration);
+      scaffoldSlide.elementOrder.push(decoration.id);
+    }
+    expect(
+      compileNodeSlideArtifactSpecs(decorativeScaffold).receipt.issues.some(
+        (issue) => issue.code === 'artifact_density_limit',
+      ),
+    ).toBe(false);
+
+    const contentOverload = structuredClone(snapshot());
+    const contentSlide = contentOverload.slides[0];
+    if (!contentSlide) throw new Error('Golden deck slide unavailable.');
+    for (let index = 0; index < 25; index += 1) {
+      const content = {
+        ...structuredClone(shape),
+        id: `reader-facing-shape-${index}`,
+        slideId: contentSlide.id,
+        role: 'evidence' as const,
+      };
+      contentOverload.elements.push(content);
+      contentSlide.elementOrder.push(content.id);
+    }
+    expect(compileNodeSlideArtifactSpecs(contentOverload).receipt).toMatchObject({
+      status: 'failed',
+      issues: expect.arrayContaining([
+        expect.objectContaining({ code: 'artifact_density_limit', severity: 'error' }),
+      ]),
+    });
   });
 });

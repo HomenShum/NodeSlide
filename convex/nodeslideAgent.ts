@@ -33,12 +33,15 @@ import {
 } from './lib/nodeslideAuthoredArtifact';
 import { authorizeBeforeConsumingQuota, nodeSlideActorQuotaKey } from './lib/nodeslideAuthority';
 import {
-  NODESLIDE_CREATE_PROVIDER_CEILINGS,
   type NodeSlideBudgetLedgerClient,
   bindNodeSlideBudgetLedgerClient,
   createNodeSlideBudgetedCreateDispatch,
   createNodeSlideBudgetedEditDispatch,
 } from './lib/nodeslideBudgetedProvider';
+import {
+  nodeSlideCreateOutputTokenLimit,
+  nodeSlideCreateScaledRunBudget,
+} from './lib/nodeslideCreateScale';
 import {
   injectNodeSlideSyntheticCreationFault,
   nodeSlideCreationCritiquePromptReport,
@@ -166,8 +169,8 @@ function nodeSlideEditRunBudget(instruction: string): NodeSlideRunBudgetInput {
  * instruction is a sentence; a brief is structured content, and inventing a
  * ceiling from its prose here would be a policy this codebase never agreed to.
  */
-function nodeSlideCreateRunBudget(): NodeSlideRunBudgetInput {
-  return {};
+function nodeSlideCreateRunBudget(slideCount: number | null): NodeSlideRunBudgetInput {
+  return nodeSlideCreateScaledRunBudget(slideCount);
 }
 
 /**
@@ -1735,6 +1738,7 @@ export const createDeckFromBrief = action({
     ),
   },
   handler: async (ctx, args) => {
+    const traceStartedAt = Date.now();
     const clientSessionId = requiredCreateText(args.clientSessionId, 'clientSessionId', 256, 768);
     const durableJob = args.durableJob
       ? {
@@ -1860,7 +1864,7 @@ export const createDeckFromBrief = action({
           };
     // An explicit supported count is enforced by the response schema itself,
     // not by prompt hope. The shared parser keeps UI, agent, StorySpec, and
-    // deterministic fallback on one 3-12 slide contract.
+    // deterministic fallback on one bounded 3-100 slide contract.
     const requestedSlideCount = inferNodeSlideRequestedSlideCount(brief.prompt, title);
     const storyContext = buildNodeSlideStoryContext({ title, brief, attachments });
     const artifactSourceInventory = nodeSlideAuthoredArtifactSourceInventory(brief, attachments);
@@ -2010,7 +2014,7 @@ export const createDeckFromBrief = action({
       runId:
         durableJob?.jobId ??
         requiredNodeSlideDirectCreateRunId(clientSessionId, creationAttemptId, createRequestDigest),
-      budget: nodeSlideCreateRunBudget(),
+      budget: nodeSlideCreateRunBudget(requestedSlideCount),
       metered: providerChoice.providerMode !== 'deterministic',
       ledger: nodeSlideBudgetLedgerClient(ctx),
       dispatch: (request, dependencies) =>
@@ -2039,7 +2043,7 @@ export const createDeckFromBrief = action({
           providerMode: providerChoice.providerMode,
           ...(revision ? { previousSpec: revision.previousSpec } : {}),
         }),
-        maxTokens: NODESLIDE_CREATE_PROVIDER_CEILINGS.maxOutputTokensPerAttempt,
+        maxTokens: nodeSlideCreateOutputTokenLimit(requestedSlideCount),
         ...(providerChoice.providerMode !== 'deterministic'
           ? {
               model: providerChoice.providerModel,
@@ -2158,6 +2162,7 @@ export const createDeckFromBrief = action({
       plan,
       spec: rawSpec,
       traceSummary: traceSummaryWithCritique,
+      traceStartedAt,
       ...productionProbeFields,
       critiquePasses: critique.passes,
       critiqueDecision: critique.decision,

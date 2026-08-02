@@ -19,6 +19,9 @@ describe('NodeSlide requested slide count', () => {
     ['Create a 10-slide investor update', 10],
     ['Build exactly eleven slides', 11],
     ['Build a 12-slide board update', 12],
+    ['Build exactly 50 slides for a transaction committee', 50],
+    ['Prepare a 72-slide transaction approval deck', 72],
+    ['Create a 100-slide research appendix', 100],
     ['An eight — slide narrative', 8],
   ])('recognizes an explicit supported count in %s', (prompt, expected) => {
     expect(inferNodeSlideRequestedSlideCount(prompt)).toBe(expected);
@@ -28,7 +31,7 @@ describe('NodeSlide requested slide count', () => {
     expect(inferNodeSlideRequestedSlideCount('Put the decision on slide 6')).toBeNull();
     expect(inferNodeSlideRequestedSlideCount('Use evidence from slides 3 and 4')).toBeNull();
     expect(inferNodeSlideRequestedSlideCount('Create two slides')).toBeNull();
-    expect(inferNodeSlideRequestedSlideCount('Create thirteen slides')).toBeNull();
+    expect(inferNodeSlideRequestedSlideCount('Create 101 slides')).toBeNull();
   });
 
   it('distinguishes unsupported explicit deck lengths from ordinary slide references', () => {
@@ -36,10 +39,11 @@ describe('NodeSlide requested slide count', () => {
     expect(explicitNodeSlideRequestedSlideCount('Build a 12-slide board update')).toBe(12);
     expect(explicitNodeSlideRequestedSlideCount('Put the decision on slide 6')).toBeNull();
     expect(nodeSlideRequestedSlideCountIssue('Create two slides')).toBe(
-      'NodeSlide currently creates 3–12 slides. Change the requested 2-slide deck to 3–12 slides.',
+      'NodeSlide currently creates 3–100 slides. Change the requested 2-slide deck to 3–100 slides.',
     );
-    expect(nodeSlideRequestedSlideCountIssue('Create 13 slides')).toContain('3');
-    expect(nodeSlideRequestedSlideCountIssue('Create 13 slides')).toContain('12');
+    expect(nodeSlideRequestedSlideCountIssue('Create 101 slides')).toContain('3');
+    expect(nodeSlideRequestedSlideCountIssue('Create 101 slides')).toContain('100');
+    expect(nodeSlideRequestedSlideCountIssue('Create 72 slides')).toBeNull();
     expect(nodeSlideRequestedSlideCountIssue('Create 6 slides')).toBeNull();
   });
 });

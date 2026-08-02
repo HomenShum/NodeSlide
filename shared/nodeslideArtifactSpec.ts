@@ -618,15 +618,23 @@ export function compileNodeSlideArtifactSpecs(
   }
   for (const slide of snapshot.slides) {
     const elements = snapshot.elements.filter((element) => element.slideId === slide.id);
-    const textCharacters = elements.reduce(
+    const readerFacingElements = elements.filter(
+      (element) =>
+        element.visible !== false &&
+        element.role !== 'decoration' &&
+        element.role !== 'footer' &&
+        element.role !== 'page_number' &&
+        element.role?.startsWith('story_') !== true,
+    );
+    const textCharacters = readerFacingElements.reduce(
       (total, element) => total + (element.content?.trim().length ?? 0),
       0,
     );
-    if (elements.length > 24 || textCharacters > 2_400) {
+    if (readerFacingElements.length > 24 || elements.length > 80 || textCharacters > 2_400) {
       issues.push({
         code: 'artifact_density_limit',
         severity: 'error',
-        message: `Slide exceeds the bounded artifact density contract (${elements.length} elements, ${textCharacters} text characters).`,
+        message: `Slide exceeds the bounded artifact density contract (${readerFacingElements.length} reader-facing elements, ${elements.length} total primitives, ${textCharacters} text characters).`,
         slideId: slide.id,
       });
     }

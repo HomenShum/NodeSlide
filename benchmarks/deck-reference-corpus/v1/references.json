@@ -1,0 +1,478 @@
+{
+  "schemaVersion": "nodeslide.deck-reference-corpus/v1",
+  "purpose": "Executable reference library for truth-bound long-form deck generation and auditable long-to-short compression.",
+  "references": [
+    {
+      "id": "sec-companyfacts-api",
+      "domain": "finance",
+      "sourceClass": "dataset",
+      "authority": "primary",
+      "title": "SEC EDGAR Companyfacts API",
+      "url": "https://www.sec.gov/search-filings/edgar-application-programming-interfaces",
+      "format": "json-api",
+      "patternTags": ["reported-financials", "xbrl-lineage", "time-series"],
+      "benchmarkUse": "Populate model schedules and bind every reported value to filing provenance."
+    },
+    {
+      "id": "kaggle-sec-financial-statement-extracts",
+      "domain": "finance",
+      "sourceClass": "dataset",
+      "authority": "sec-derived",
+      "title": "SEC Financial Statement Data Sets on Kaggle",
+      "url": "https://www.kaggle.com/datasets/securities-exchange-commission/financial-statement-extracts",
+      "format": "tabular",
+      "patternTags": ["reported-financials", "panel-data", "model-input"],
+      "benchmarkUse": "Exercise wide and long financial tables at portfolio scale while retaining SEC lineage."
+    },
+    {
+      "id": "sec-axos-investor-deck-2025",
+      "domain": "finance",
+      "sourceClass": "deck",
+      "authority": "primary",
+      "title": "Axos Financial September 2025 Investor Presentation",
+      "url": "https://www.sec.gov/Archives/edgar/data/1299709/000129970925000134/sep2025deck.htm",
+      "format": "html-deck",
+      "patternTags": [
+        "company-overview",
+        "kpi-scorecard",
+        "segment-performance",
+        "gaap-reconciliation"
+      ],
+      "benchmarkUse": "Reference recurring public-equity narrative, metric density, and appendix discipline."
+    },
+    {
+      "id": "sec-constellation-projections-2025",
+      "domain": "finance",
+      "sourceClass": "deck",
+      "authority": "primary",
+      "title": "Constellation Brands Projections Presentation",
+      "url": "https://www.sec.gov/Archives/edgar/data/16918/000001691825000017/stzex99-2_022825.pdf",
+      "format": "pdf",
+      "patternTags": ["projections", "assumptions", "forward-looking-statements", "sensitivity"],
+      "benchmarkUse": "Test forecast truth states, explicit assumptions, and projection caveats."
+    },
+    {
+      "id": "sec-kc-kenvue-merger-2025",
+      "domain": "finance",
+      "sourceClass": "filing",
+      "authority": "primary",
+      "title": "Kimberly-Clark / Kenvue Merger Filing with Investor Presentation",
+      "url": "https://www.sec.gov/Archives/edgar/data/55785/000110465925105222/tm2530027d1_8k.htm",
+      "format": "html-filing",
+      "patternTags": ["merger-rationale", "financing", "synergies", "transaction-terms"],
+      "benchmarkUse": "Reference announcement-deck sequencing and transaction-financing disclosure."
+    },
+    {
+      "id": "sec-unifirst-cintas-merger-2026",
+      "domain": "finance",
+      "sourceClass": "filing",
+      "authority": "primary",
+      "title": "UniFirst / Cintas Merger Filing with Investor Presentation",
+      "url": "https://www.sec.gov/Archives/edgar/data/717954/000095010326003569/dp243133_425.htm",
+      "format": "html-filing",
+      "patternTags": [
+        "merger-rationale",
+        "transaction-terms",
+        "operating-results",
+        "forward-looking-statements"
+      ],
+      "benchmarkUse": "Reference a current joint transaction narrative and disclosed risk boundary."
+    },
+    {
+      "id": "sec-mng-gannett-activist-2019",
+      "domain": "finance",
+      "sourceClass": "deck",
+      "authority": "primary",
+      "title": "MNG Enterprises Gannett Strategic Alternatives Presentation",
+      "url": "https://www.sec.gov/Archives/edgar/data/1635718/000092189519001065/investorpresentation.pdf",
+      "format": "pdf",
+      "patternTags": ["activist", "strategic-alternatives", "timeline", "financing-path"],
+      "benchmarkUse": "Reference adversarial claim sequencing and evidence-backed corporate chronology."
+    },
+    {
+      "id": "sec-medley-opposition-2019",
+      "domain": "governance",
+      "sourceClass": "deck",
+      "authority": "primary",
+      "title": "Presentation Opposing the Proposed Medley Merger",
+      "url": "https://www.sec.gov/Archives/edgar/data/1490349/000092189519000079/ex1px14a6g08016016_011119.pdf",
+      "format": "pdf",
+      "patternTags": ["governance", "conflicts", "rebuttal", "transaction-risk"],
+      "benchmarkUse": "Test whether NodeSlide separates allegations, sourced facts, and decision implications."
+    },
+    {
+      "id": "sec-staar-board-response-2025",
+      "domain": "governance",
+      "sourceClass": "deck",
+      "authority": "primary",
+      "title": "STAAR Board Response on Alcon Merger",
+      "url": "https://www.sec.gov/Archives/edgar/data/718937/000119312525218827/d911579dex991.htm",
+      "format": "html-deck",
+      "patternTags": ["board-response", "standalone-case", "premium", "rebuttal"],
+      "benchmarkUse": "Reference claim-counterclaim structure without collapsing uncertainty."
+    },
+    {
+      "id": "sec-nexeo-merger-presentation-2016",
+      "domain": "finance",
+      "sourceClass": "deck",
+      "authority": "primary",
+      "title": "Nexeo / WL Ross Merger Investor Presentation",
+      "url": "https://www.sec.gov/Archives/edgar/data/1604416/000114420416093946/v436788_defa14a.pdf",
+      "format": "pdf",
+      "patternTags": ["transaction-overview", "valuation", "projections", "appendix"],
+      "benchmarkUse": "Seed a full transaction-announcement reconstruction and compression case."
+    },
+    {
+      "id": "sec-quintiles-strategic-alternatives-2003",
+      "domain": "finance",
+      "sourceClass": "deck",
+      "authority": "primary",
+      "title": "Quintiles Strategic Alternatives Board Presentation",
+      "url": "https://www.sec.gov/Archives/edgar/data/919623/000095014403006350/g82643exv99wcw1.htm",
+      "format": "html-deck",
+      "patternTags": ["board-materials", "sale-process", "strategic-alternatives", "valuation"],
+      "benchmarkUse": "Reference board-level alternative framing, auction chronology, and decision logic."
+    },
+    {
+      "id": "sec-acuren-investor-presentation-2025",
+      "domain": "startup",
+      "sourceClass": "filing-index",
+      "authority": "primary",
+      "title": "Acuren Investor Presentation Filing Index",
+      "url": "https://www.sec.gov/Archives/edgar/data/2032966/000121390025043678/0001213900-25-043678-index.htm",
+      "format": "html-index",
+      "patternTags": ["business-combination", "company-overview", "growth-case", "transaction"],
+      "benchmarkUse": "Reference public-company emergence and growth narrative under filing constraints."
+    },
+    {
+      "id": "sec-nextera-dominion-presentation-2026",
+      "domain": "finance",
+      "sourceClass": "filing",
+      "authority": "primary",
+      "title": "NextEra / Dominion Joint Investor Presentation Filing",
+      "url": "https://www.sec.gov/Archives/edgar/data/715957/000119312526227930/d158175d8k.htm",
+      "format": "html-filing",
+      "patternTags": [
+        "joint-presentation",
+        "strategic-rationale",
+        "transaction-terms",
+        "integration"
+      ],
+      "benchmarkUse": "Exercise multi-company source binding and combined operating narrative."
+    },
+    {
+      "id": "sec-rocketlab-iridium-presentation-2026",
+      "domain": "finance",
+      "sourceClass": "filing",
+      "authority": "primary",
+      "title": "Rocket Lab / Iridium Joint Investor Presentation Filing",
+      "url": "https://www.sec.gov/Archives/edgar/data/1418819/000110465926078482/tm2619278d1_8k.htm",
+      "format": "html-filing",
+      "patternTags": [
+        "joint-presentation",
+        "technology-platform",
+        "transaction-rationale",
+        "integration"
+      ],
+      "benchmarkUse": "Exercise technical-product storytelling inside a transaction narrative."
+    },
+    {
+      "id": "sec-transaction-committee-presentation-2025",
+      "domain": "finance",
+      "sourceClass": "deck",
+      "authority": "primary",
+      "title": "Filed Transaction Committee Presentation",
+      "url": "https://www.sec.gov/Archives/edgar/data/1962918/000196386025000015/Exhibit1.pdf",
+      "format": "pdf",
+      "patternTags": ["committee", "valuation", "process", "decision-record"],
+      "benchmarkUse": "Reference transaction approval memo depth and committee decision traceability."
+    },
+    {
+      "id": "sec-strategic-alternatives-proxy-2021",
+      "domain": "governance",
+      "sourceClass": "deck",
+      "authority": "primary",
+      "title": "Filed Strategic Alternatives Proxy Presentation",
+      "url": "https://www.sec.gov/Archives/edgar/data/821127/000092189521000889/ex991dfan14a12910002_033021.pdf",
+      "format": "pdf",
+      "patternTags": ["proxy", "strategic-alternatives", "governance", "shareholder-case"],
+      "benchmarkUse": "Reference long-form governance argument and alternative evaluation."
+    },
+    {
+      "id": "sec-transaction-rebuttal-2022",
+      "domain": "governance",
+      "sourceClass": "deck",
+      "authority": "primary",
+      "title": "Filed Transaction Rebuttal Presentation",
+      "url": "https://www.sec.gov/Archives/edgar/data/885639/000092189522001359/ex1todfan14a11142006_042522.pdf",
+      "format": "pdf",
+      "patternTags": ["rebuttal", "claim-evidence", "governance", "shareholder-decision"],
+      "benchmarkUse": "Test faithful opposing-view compression and claim lineage."
+    },
+    {
+      "id": "doc2ppt-aaai-2022",
+      "domain": "research",
+      "sourceClass": "benchmark",
+      "authority": "primary",
+      "title": "DOC2PPT Document-to-Slide Dataset",
+      "url": "https://doc2ppt.github.io/",
+      "format": "paper-dataset",
+      "patternTags": ["paper-to-slides", "multimodal-alignment", "layout", "paraphrase"],
+      "benchmarkUse": "Benchmark multimodal selection, paraphrase, figure placement, and deck coherence."
+    },
+    {
+      "id": "aaai-fine-grained-paper-slide-2022",
+      "domain": "research",
+      "sourceClass": "benchmark",
+      "authority": "primary",
+      "title": "Fine-Grained Scholarly Paper-to-Slide Alignment",
+      "url": "https://ojs.aaai.org/index.php/AAAI/article/view/21683",
+      "format": "paper-dataset",
+      "patternTags": ["region-alignment", "faithfulness", "paper-to-slides"],
+      "benchmarkUse": "Score every slide against the exact source-paper regions it claims to summarize."
+    },
+    {
+      "id": "deckbench-2026",
+      "domain": "research",
+      "sourceClass": "benchmark",
+      "authority": "primary",
+      "title": "DECKBench Academic Generation and Editing Benchmark",
+      "url": "https://arxiv.org/abs/2602.13318",
+      "format": "paper-code-dataset",
+      "patternTags": ["generation", "multi-turn-editing", "fidelity", "coherence", "layout"],
+      "benchmarkUse": "Adopt reference-bound generation and iterative-edit compliance dimensions."
+    },
+    {
+      "id": "presentbench-2026",
+      "domain": "research",
+      "sourceClass": "benchmark",
+      "authority": "primary",
+      "title": "PresentBench Fine-Grained Rubric Benchmark",
+      "url": "https://arxiv.org/abs/2603.07244",
+      "format": "paper-dataset",
+      "patternTags": ["binary-rubrics", "background-materials", "human-preference"],
+      "benchmarkUse": "Use instance-specific binary checks rather than one opaque aesthetic score."
+    },
+    {
+      "id": "slidesgen-bench-2026",
+      "domain": "research",
+      "sourceClass": "benchmark",
+      "authority": "primary",
+      "title": "SlidesGen-Bench",
+      "url": "https://arxiv.org/abs/2601.09487",
+      "format": "paper-code-dataset",
+      "patternTags": [
+        "rendered-pixels",
+        "content",
+        "aesthetics",
+        "editability",
+        "human-preference"
+      ],
+      "benchmarkUse": "Judge terminal renderings across content, aesthetics, and editability."
+    },
+    {
+      "id": "arcbench-2026",
+      "domain": "research",
+      "sourceClass": "benchmark",
+      "authority": "primary",
+      "title": "ArcBench Oral Paper-Presentation Pairs",
+      "url": "https://huggingface.co/datasets/ArcDeck/ArcBench",
+      "format": "paper-slide-pairs",
+      "patternTags": ["narrative-arc", "discourse", "figures", "tables"],
+      "benchmarkUse": "Reference cohesive academic storytelling from high-information papers."
+    },
+    {
+      "id": "sciduet-d2s",
+      "domain": "research",
+      "sourceClass": "benchmark",
+      "authority": "primary",
+      "title": "SciDuet Document-to-Slide Dataset",
+      "url": "https://huggingface.co/datasets/GEM/SciDuet",
+      "format": "paper-slide-pairs",
+      "patternTags": ["query-based-summarization", "paper-to-slides", "content-selection"],
+      "benchmarkUse": "Measure content-selection fidelity for document-to-slide generation."
+    },
+    {
+      "id": "bigsurvey-ijcai-2022",
+      "domain": "research",
+      "sourceClass": "dataset",
+      "authority": "primary",
+      "title": "BigSurvey Multi-Document Scientific Summarization",
+      "url": "https://www.ijcai.org/proceedings/2022/591",
+      "format": "paper-dataset",
+      "patternTags": ["multi-document", "survey", "citation-graph", "structure"],
+      "benchmarkUse": "Stress institutional research synthesis across many cited sources."
+    },
+    {
+      "id": "long-document-summarization-survey-2022",
+      "domain": "research",
+      "sourceClass": "paper",
+      "authority": "primary",
+      "title": "A Survey on Long Document Summarization",
+      "url": "https://arxiv.org/abs/2207.00939",
+      "format": "paper",
+      "patternTags": ["long-context", "summarization", "evaluation"],
+      "benchmarkUse": "Ground the compression protocol and failure taxonomy for long inputs."
+    },
+    {
+      "id": "squality-2022",
+      "domain": "research",
+      "sourceClass": "dataset",
+      "authority": "primary",
+      "title": "SQuALITY Long-Form Question-Focused Summarization",
+      "url": "https://arxiv.org/abs/2205.11465",
+      "format": "paper-dataset",
+      "patternTags": ["long-form", "question-focused", "human-reference"],
+      "benchmarkUse": "Test whether a short opportunity memo answers the decision question instead of merely shrinking text."
+    }
+  ],
+  "transformations": [
+    {
+      "id": "transaction-approval-80-to-12-to-6",
+      "persona": "M&A transaction committee",
+      "sourceRefs": [
+        "sec-companyfacts-api",
+        "sec-transaction-committee-presentation-2025",
+        "sec-quintiles-strategic-alternatives-2003",
+        "sec-nexeo-merger-presentation-2016"
+      ],
+      "longDeckSlides": { "min": 50, "max": 100 },
+      "decisionMemoSlides": { "min": 10, "max": 15 },
+      "opportunityMemoSlides": { "min": 5, "max": 8 },
+      "mustRetain": [
+        "recommendation and alternatives",
+        "valuation methods and sensitivities",
+        "sources and uses",
+        "financing certainty",
+        "diligence gaps",
+        "risk mitigants",
+        "approval conditions",
+        "source footnotes"
+      ],
+      "lossBudget": {
+        "consequentialClaimsOmitted": 0,
+        "unsourcedNumbers": 0,
+        "unresolvedContradictionsHidden": 0,
+        "requiredSectionsOmitted": 0
+      }
+    },
+    {
+      "id": "public-equity-60-to-10-to-5",
+      "persona": "public-equity investment committee",
+      "sourceRefs": [
+        "sec-companyfacts-api",
+        "kaggle-sec-financial-statement-extracts",
+        "sec-axos-investor-deck-2025",
+        "sec-constellation-projections-2025"
+      ],
+      "longDeckSlides": { "min": 50, "max": 80 },
+      "decisionMemoSlides": { "min": 8, "max": 12 },
+      "opportunityMemoSlides": { "min": 5, "max": 6 },
+      "mustRetain": [
+        "variant perception",
+        "reported versus adjusted metrics",
+        "segment drivers",
+        "estimate assumptions",
+        "valuation range",
+        "catalysts",
+        "risks",
+        "disconfirming evidence"
+      ],
+      "lossBudget": {
+        "consequentialClaimsOmitted": 0,
+        "unsourcedNumbers": 0,
+        "unresolvedContradictionsHidden": 0,
+        "requiredSectionsOmitted": 0
+      }
+    },
+    {
+      "id": "academic-synthesis-50-to-12-to-6",
+      "persona": "principal investigator and grant committee",
+      "sourceRefs": [
+        "doc2ppt-aaai-2022",
+        "aaai-fine-grained-paper-slide-2022",
+        "deckbench-2026",
+        "arcbench-2026",
+        "bigsurvey-ijcai-2022"
+      ],
+      "longDeckSlides": { "min": 50, "max": 75 },
+      "decisionMemoSlides": { "min": 10, "max": 14 },
+      "opportunityMemoSlides": { "min": 5, "max": 8 },
+      "mustRetain": [
+        "research question",
+        "method",
+        "dataset",
+        "main results",
+        "limitations",
+        "contradictory findings",
+        "citation lineage",
+        "next experiment"
+      ],
+      "lossBudget": {
+        "consequentialClaimsOmitted": 0,
+        "unsourcedNumbers": 0,
+        "unresolvedContradictionsHidden": 0,
+        "requiredSectionsOmitted": 0
+      }
+    },
+    {
+      "id": "governance-contested-70-to-12-to-6",
+      "persona": "independent board committee",
+      "sourceRefs": [
+        "sec-medley-opposition-2019",
+        "sec-staar-board-response-2025",
+        "sec-strategic-alternatives-proxy-2021",
+        "sec-transaction-rebuttal-2022"
+      ],
+      "longDeckSlides": { "min": 50, "max": 100 },
+      "decisionMemoSlides": { "min": 10, "max": 15 },
+      "opportunityMemoSlides": { "min": 5, "max": 8 },
+      "mustRetain": [
+        "claim-counterclaim pairs",
+        "conflicts and independence",
+        "process chronology",
+        "standalone alternative",
+        "transaction alternative",
+        "evidence quality",
+        "open questions",
+        "decision rights"
+      ],
+      "lossBudget": {
+        "consequentialClaimsOmitted": 0,
+        "unsourcedNumbers": 0,
+        "unresolvedContradictionsHidden": 0,
+        "requiredSectionsOmitted": 0
+      }
+    },
+    {
+      "id": "agentic-research-100-to-15-to-7",
+      "persona": "research and strategy operating team",
+      "sourceRefs": [
+        "presentbench-2026",
+        "slidesgen-bench-2026",
+        "sciduet-d2s",
+        "long-document-summarization-survey-2022",
+        "squality-2022"
+      ],
+      "longDeckSlides": { "min": 75, "max": 100 },
+      "decisionMemoSlides": { "min": 12, "max": 18 },
+      "opportunityMemoSlides": { "min": 6, "max": 8 },
+      "mustRetain": [
+        "decision question",
+        "source map",
+        "finding hierarchy",
+        "evidence strength",
+        "unknowns",
+        "operating implications",
+        "recommended action",
+        "verification plan"
+      ],
+      "lossBudget": {
+        "consequentialClaimsOmitted": 0,
+        "unsourcedNumbers": 0,
+        "unresolvedContradictionsHidden": 0,
+        "requiredSectionsOmitted": 0
+      }
+    }
+  ]
+}

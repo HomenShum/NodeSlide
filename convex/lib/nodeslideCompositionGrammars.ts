@@ -35,8 +35,12 @@ export type CompositionGrammarId =
   | 'evidence-dossier'
   | 'metric-stage'
   | 'comparison-field'
+  | 'risk-field'
+  | 'risk-escalation'
+  | 'decision-gate'
   | 'sparse-transition'
-  | 'scene-stage';
+  | 'scene-stage'
+  | 'tension-contrast-field';
 
 export interface GrammarBuildContext {
   deckId: string;
@@ -314,7 +318,7 @@ function sectionLabel(ctx: GrammarBuildContext, x: number, y: number, width: num
     name: 'Section label',
     kind: 'text',
     role: 'section',
-    bbox: box(x, y, width, 0.05),
+    bbox: box(x, y, width, 0.07),
     rotation: 0,
     content: ctx.planned.section.toUpperCase(),
     style: {
@@ -596,8 +600,7 @@ function layoutDiagramNodes(
     });
   }
   const count = diagram.nodes.length;
-  const columns =
-    diagram.direction === 'vertical' ? (count > 4 ? 2 : 1) : Math.min(count, count > 4 ? 4 : 3);
+  const columns = diagram.direction === 'vertical' ? (count > 4 ? 2 : 1) : Math.min(count, 4);
   const rows = Math.ceil(count / columns);
   const gapX = columns > 1 ? 0.025 : 0;
   const gapY = rows > 1 ? 0.035 : 0;
@@ -848,10 +851,19 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
   const elements: SlideElement[] = [];
   const claimSourceIds = [ctx.sourceBriefId, ...ctx.linkedSourceIds];
   const hasVisual = Boolean(planned.chart || planned.formula || planned.image);
+  const isChartDominant = planned.chart !== undefined;
   const mediaOnLeft = ctx.index % 2 === 1;
   elements.push(sectionLabel(ctx, 0.07, 0.065, 0.4));
-  const headlineWidth = hasVisual ? (mediaOnLeft ? 0.42 : 0.52) : 0.86;
-  const headlineX = hasVisual && mediaOnLeft ? 0.5 : 0.07;
+  const headlineWidth = isChartDominant
+    ? mediaOnLeft
+      ? 0.34
+      : 0.3
+    : hasVisual
+      ? mediaOnLeft
+        ? 0.42
+        : 0.52
+      : 0.86;
+  const headlineX = hasVisual && mediaOnLeft ? (isChartDominant ? 0.58 : 0.5) : 0.07;
   const headlineFontSize = fitTextFontSize(planned.headline, 42, 28, 1.05, headlineWidth, 0.3);
   const headlineHeight = Math.min(
     0.3,
@@ -879,7 +891,6 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
     }),
   );
   const bodyY = 0.16 + headlineHeight + 0.06;
-  const isChartDominant = planned.chart !== undefined;
   const bodyWidth = hasVisual
     ? mediaOnLeft
       ? isChartDominant
@@ -952,10 +963,8 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
   const bulletStackStart = bodyY + bodyHeight + 0.02;
   let bulletCursor = bulletStackStart;
   bulletTexts.forEach((content, bulletIndex) => {
-    const bulletHeight = Math.max(
-      0.031,
-      estimateTextHeight(content, bulletFontSize, 1.2, bulletWidth),
-    );
+    const bulletHeight =
+      Math.max(0.031, estimateTextHeight(content, bulletFontSize, 1.2, bulletWidth)) + 0.012;
     elements.push(
       makeElement(ctx, `bullet-${bulletIndex + 1}`, {
         name: `Key point ${bulletIndex + 1}`,
@@ -976,7 +985,7 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
         exportCapabilities: [...EDITABLE_CAPABILITIES],
       }),
     );
-    bulletCursor += bulletHeight + 0.03;
+    bulletCursor += bulletHeight + 0.015;
   });
   elements.push(...storyContinuityElements(ctx));
   elements.push(...footerElements(ctx));
@@ -993,6 +1002,7 @@ function buildAsymmetricEditorial(ctx: GrammarBuildContext): GrammarBuildResult 
 function buildProcessCanvas(ctx: GrammarBuildContext): GrammarBuildResult {
   const { planned, theme } = ctx;
   const elements: SlideElement[] = [];
+  let materializedDiagramBottom: number | undefined;
   elements.push(sectionLabel(ctx, 0.07, 0.06, 0.4));
   const headlineWidth = 0.82;
   const headlineFontSize = fitTextFontSize(planned.headline, 32, 24, 1.1, headlineWidth, 0.14);
@@ -1022,23 +1032,27 @@ function buildProcessCanvas(ctx: GrammarBuildContext): GrammarBuildResult {
   );
   if (planned.diagram) {
     const diagramY = 0.14 + headlineHeight + 0.05;
-    const diagramHeight = 0.85 - diagramY;
-    elements.push(
-      ...buildDiagramElements(ctx, planned.diagram, 0.07, diagramY, 0.86, diagramHeight),
+    const diagramBottomLimit = planned.body.trim().length > 0 ? 0.56 : 0.85;
+    const diagramHeight = Math.max(0.2, diagramBottomLimit - diagramY);
+    const diagramElements = buildDiagramElements(
+      ctx,
+      planned.diagram,
+      0.07,
+      diagramY,
+      0.86,
+      diagramHeight,
+    );
+    elements.push(...diagramElements);
+    materializedDiagramBottom = Math.max(
+      diagramY,
+      ...diagramElements.map((element) => element.bbox.y + element.bbox.height),
     );
   } else if (planned.chart) {
     const chartY = 0.14 + headlineHeight + 0.05;
     elements.push(buildChartElement(ctx, 0.07, chartY, 0.86, 0.85 - chartY));
   }
   // Body copy below the diagram for context
-  const diagramBottom = planned.diagram
-    ? 0.14 +
-      headlineHeight +
-      0.05 +
-      Math.min(0.24, (0.85 - 0.14 - headlineHeight - 0.05) * 0.24) +
-      0.045 +
-      0.14
-    : 0.14 + headlineHeight + 0.05 + 0.55;
+  const diagramBottom = materializedDiagramBottom ?? 0.14 + headlineHeight + 0.05 + 0.55;
   const bodyY = Math.max(0.14 + headlineHeight + 0.05, diagramBottom + 0.03);
   const bodyFontSize = fitTextFontSize(planned.body, 16, 14, 1.35, 0.79, 0.85 - bodyY);
   const bodyHeight = Math.min(
@@ -1224,6 +1238,23 @@ function buildMetricStage(ctx: GrammarBuildContext): GrammarBuildResult {
     const metricX = 0.5 - metricWidth / 2;
     const metricY = 0.28;
     elements.push(
+      makeElement(ctx, 'metric-stage-field', {
+        name: 'Metric stage field',
+        kind: 'shape',
+        role: 'artifact_metric_stage',
+        bbox: box(0.12, 0.245, 0.76, 0.31),
+        rotation: 0,
+        style: {
+          fill: theme.colors.accentSoft,
+          opacity: 0.5,
+          radius: Math.max(14, theme.defaultRadius),
+        },
+        sourceIds: evidenceSourceIds(ctx),
+        locked: true,
+        exportCapabilities: [...EDITABLE_CAPABILITIES],
+      }),
+    );
+    elements.push(
       buildMetricElement(ctx, metricX, metricY, metricWidth, metricHeight, metricFontSize),
     );
     metricBottom = metricY + metricHeight;
@@ -1282,10 +1313,12 @@ function buildMetricStage(ctx: GrammarBuildContext): GrammarBuildResult {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
-  // Bullet elements below body
-  const bulletTexts = planned.bullets
-    .slice(0, 3)
-    .map((bullet, bulletIndex) => `0${bulletIndex + 1}  ${bullet}`);
+  // A metric stage has already spent most of the lower-canvas budget on the
+  // metric and its evidence body. Preserve one decision cue, not the repeated
+  // three-item stack that pushed dense transaction slides beyond the canvas.
+  const bulletTexts = (
+    planned.metric ? planned.bullets.slice(0, 1) : planned.bullets.slice(0, 3)
+  ).map((bullet, bulletIndex) => `0${bulletIndex + 1}  ${bullet}`);
   const bulletFontSize = 14;
   const bulletX = 0.07;
   const bulletWidth = 0.79;
@@ -1294,7 +1327,10 @@ function buildMetricStage(ctx: GrammarBuildContext): GrammarBuildResult {
   bulletTexts.forEach((content, bulletIndex) => {
     const bulletHeight = Math.max(
       0.031,
-      estimateTextHeight(content, bulletFontSize, 1.2, bulletWidth),
+      Math.min(
+        estimateTextHeight(content, bulletFontSize, 1.2, bulletWidth),
+        Math.max(0.031, 0.9 - bulletCursor),
+      ),
     );
     elements.push(
       makeElement(ctx, `bullet-${bulletIndex + 1}`, {
@@ -1454,7 +1490,7 @@ function buildSparseTransition(ctx: GrammarBuildContext): GrammarBuildResult {
       style: {
         color: theme.colors.accent,
         fontFamily: theme.typography.display,
-        fontSize: 120,
+        fontSize: 100,
         fontWeight: 720,
         lineHeight: 1,
         letterSpacing: -3,
@@ -1469,7 +1505,7 @@ function buildSparseTransition(ctx: GrammarBuildContext): GrammarBuildResult {
       name: 'Section label',
       kind: 'text',
       role: 'section',
-      bbox: box(0.07, 0.3, 0.5, 0.05),
+      bbox: box(0.07, 0.3, 0.8, 0.05),
       rotation: 0,
       content: ctx.planned.section.toUpperCase(),
       style: {
@@ -1593,10 +1629,15 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
-  const bodyX = sceneCentered ? 0.62 : textX;
-  const bodyWidth = sceneCentered ? 0.31 : headlineWidth;
-  const bodyY = sceneCentered ? 0.59 : headlineY + headlineHeight + 0.035;
-  const bodyHeight = sceneCentered ? 0.16 : Math.min(0.23, Math.max(0.15, 0.75 - bodyY));
+  const bodyX = sceneCentered ? 0.56 : textX;
+  const bodyWidth = sceneCentered ? 0.39 : headlineWidth;
+  const bodyY = sceneCentered ? 0.58 : headlineY + headlineHeight + 0.035;
+  const bodyHeight = sceneCentered ? 0.2 : Math.min(0.23, Math.max(0.15, 0.75 - bodyY));
+  const decisivePoint = planned.bullets[0];
+  const supportingBody =
+    decisivePoint && planned.body.startsWith(decisivePoint)
+      ? planned.body.slice(decisivePoint.length).trim()
+      : planned.body;
   elements.push(
     makeElement(ctx, 'body', {
       name: 'Supporting context',
@@ -1604,11 +1645,11 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
       role: 'body',
       bbox: box(bodyX, bodyY, bodyWidth, bodyHeight),
       rotation: 0,
-      content: planned.body,
+      content: supportingBody,
       style: {
         color: theme.colors.muted,
         fontFamily: theme.typography.body,
-        fontSize: fitTextFontSize(planned.body, 16, 14, 1.38, bodyWidth, bodyHeight),
+        fontSize: fitTextFontSize(supportingBody, 16, 14, 1.38, bodyWidth, bodyHeight),
         fontWeight: 450,
         lineHeight: 1.38,
       },
@@ -1617,16 +1658,15 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
-  const decisivePoint = planned.bullets[0];
   if (decisivePoint) {
-    const takeawayX = sceneCentered ? 0.62 : textX;
-    const takeawayWidth = sceneCentered ? 0.31 : headlineWidth;
-    const takeawayMaxHeight = 0.145;
+    const takeawayX = sceneCentered ? 0.56 : textX;
+    const takeawayWidth = sceneCentered ? 0.39 : headlineWidth;
+    const takeawayMaxHeight = sceneCentered ? 0.15 : 0.145;
     const takeawayPadding = 12;
     const takeawayFontSize = fitTextFontSize(
       decisivePoint,
       16,
-      12,
+      14,
       1.25,
       takeawayWidth - 0.04,
       takeawayMaxHeight,
@@ -1647,7 +1687,7 @@ function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
         name: 'Decisive point',
         kind: 'text',
         role: 'takeaway',
-        bbox: box(takeawayX, 0.77, takeawayWidth, takeawayHeight),
+        bbox: box(takeawayX, sceneCentered ? 0.8 : 0.77, takeawayWidth, takeawayHeight),
         rotation: 0,
         content: decisivePoint,
         style: {
@@ -1744,7 +1784,7 @@ function buildTensionContrastField(ctx: GrammarBuildContext): GrammarBuildResult
         style: {
           color: index === 0 ? theme.colors.accent : theme.colors.insightInk,
           fontFamily: theme.typography.data,
-          fontSize: 13,
+          fontSize: 14,
           fontWeight: 700,
           letterSpacing: 1.2,
         },
@@ -1778,7 +1818,379 @@ function buildTensionContrastField(ctx: GrammarBuildContext): GrammarBuildResult
   elements.push(...storyContinuityElements(ctx));
   elements.push(...footerElements(ctx));
   resolveGeometryCollisions(elements, planned.title);
-  return { elements, grammarId: 'evidence-dossier' };
+  return { elements, grammarId: 'tension-contrast-field' };
+}
+
+function buildRiskField(ctx: GrammarBuildContext): GrammarBuildResult {
+  const { planned, theme } = ctx;
+  const geometry = planned.authoredArtifactGeometry;
+  const binding = authoredArtifactBinding(ctx);
+  if (!geometry || geometry.kind !== 'risk-matrix' || !binding) {
+    throw new Error('Risk-field grammar requires a bound native risk-matrix artifact.');
+  }
+
+  const elements: SlideElement[] = [];
+  const sourceIds = evidenceSourceIds(ctx);
+  const groupId = nodeslideStableId('group', ctx.slideId, binding.artifactId, 'risk-field');
+  const field = { x: 0.055, y: 0.16, width: 0.58, height: 0.7 };
+  const quadrantWidth = field.width / 2;
+  const quadrantHeight = field.height / 2;
+  const quadrantTones = [
+    { key: 'low-low', x: field.x, y: field.y + quadrantHeight, opacity: 0.16 },
+    { key: 'high-low', x: field.x + quadrantWidth, y: field.y + quadrantHeight, opacity: 0.24 },
+    { key: 'low-high', x: field.x, y: field.y, opacity: 0.28 },
+    { key: 'high-high', x: field.x + quadrantWidth, y: field.y, opacity: 0.42 },
+  ];
+  for (const quadrant of quadrantTones) {
+    elements.push(
+      makeElement(ctx, `risk-quadrant-${quadrant.key}`, {
+        name: `Risk field ${quadrant.key}`,
+        kind: 'shape',
+        role: 'artifact_risk_field',
+        bbox: box(quadrant.x, quadrant.y, quadrantWidth - 0.006, quadrantHeight - 0.006),
+        rotation: 0,
+        style: {
+          fill: theme.colors.accentSoft,
+          opacity: quadrant.opacity,
+          radius: 3,
+        },
+        sourceIds: [],
+        locked: true,
+        exportCapabilities: [...EDITABLE_CAPABILITIES],
+      }),
+    );
+  }
+
+  const axisLabels: Array<[string, string, number, number, number]> = [
+    ['likelihood-low', geometry.marks.likelihoodAxis.low, field.x, 0.875, 0.16],
+    [
+      'likelihood-high',
+      geometry.marks.likelihoodAxis.high,
+      field.x + field.width - 0.16,
+      0.875,
+      0.16,
+    ],
+    [
+      'impact-low',
+      geometry.marks.impactAxis.low,
+      field.x + 0.012,
+      field.y + field.height - 0.08,
+      0.16,
+    ],
+    ['impact-high', geometry.marks.impactAxis.high, field.x + 0.012, field.y + 0.018, 0.16],
+  ];
+  for (const [key, label, x, y, width] of axisLabels) {
+    elements.push(
+      makeElement(ctx, `risk-axis-${key}`, {
+        name: `Risk axis: ${label}`,
+        kind: 'text',
+        role: 'artifact_risk_axis',
+        bbox: box(x, y, width, 0.035),
+        rotation: 0,
+        content: label.toUpperCase(),
+        style: {
+          color: theme.colors.muted,
+          fontFamily: theme.typography.data,
+          fontSize: 14,
+          fontWeight: 650,
+          letterSpacing: 0.8,
+          textAlign: key.endsWith('high') && key.startsWith('likelihood') ? 'right' : 'left',
+        },
+        sourceIds,
+        authoredArtifactBinding: binding,
+        groupId,
+        locked: false,
+        exportCapabilities: [...EDITABLE_CAPABILITIES],
+      }),
+    );
+  }
+
+  geometry.marks.risks.forEach((risk, index) => {
+    const centerX = field.x + (risk.x / 100) * field.width;
+    const centerY = field.y + (risk.y / 100) * field.height;
+    const width = Math.min(0.16, Math.max(0.12, risk.label.length * 0.005));
+    const height = 0.08;
+    const x = Math.max(
+      field.x + 0.008,
+      Math.min(field.x + field.width - width - 0.008, centerX - width / 2),
+    );
+    const y = Math.max(
+      field.y + 0.008,
+      Math.min(field.y + field.height - height - 0.008, centerY - height / 2 + index * 0.004),
+    );
+    elements.push(
+      makeElement(ctx, `risk-marker-${index + 1}`, {
+        name: `Risk marker: ${risk.label}`,
+        kind: 'shape',
+        role: 'artifact_risk_marker',
+        bbox: box(x, y, width, height),
+        rotation: 0,
+        content: fitTextContent(risk.label, 14, 1.2, width - 0.02, height - 0.025),
+        style: {
+          fill: theme.colors.accent,
+          stroke: theme.colors.insightInk,
+          strokeWidth: 1,
+          color: theme.colors.canvas,
+          fontFamily: theme.typography.body,
+          fontSize: 14,
+          fontWeight: 700,
+          padding: 5,
+          radius: 999,
+          textAlign: 'center',
+          verticalAlign: 'middle',
+        },
+        altText: `${risk.label}; likelihood ${risk.likelihood}; impact ${risk.impact}`,
+        sourceIds,
+        authoredArtifactBinding: binding,
+        groupId,
+        locked: false,
+        exportCapabilities: [...EDITABLE_CAPABILITIES],
+      }),
+    );
+  });
+
+  elements.push(sectionLabel(ctx, 0.69, 0.15, 0.25));
+  const headlineFontSize = fitTextFontSize(planned.headline, 36, 27, 1.05, 0.25, 0.25);
+  elements.push(
+    makeElement(ctx, 'risk-thesis', {
+      name: 'Risk thesis',
+      kind: 'text',
+      role: 'headline',
+      bbox: box(0.69, 0.23, 0.25, 0.25),
+      rotation: 0,
+      content: fitTextContent(planned.headline, headlineFontSize, 1.05, 0.25, 0.25),
+      style: {
+        color: theme.colors.ink,
+        fontFamily: theme.typography.display,
+        fontSize: headlineFontSize,
+        fontWeight: 620,
+        lineHeight: 1.05,
+        letterSpacing: -0.6,
+      },
+      sourceIds: [ctx.sourceBriefId],
+      locked: false,
+      exportCapabilities: [...EDITABLE_CAPABILITIES],
+    }),
+  );
+  const bodyFontSize = fitTextFontSize(planned.body, 17, 14, 1.3, 0.25, 0.23);
+  elements.push(
+    makeElement(ctx, 'risk-implication', {
+      name: 'Risk implication',
+      kind: 'text',
+      role: 'body',
+      bbox: box(0.69, 0.54, 0.25, 0.23),
+      rotation: 0,
+      content: fitTextContent(planned.body, bodyFontSize, 1.3, 0.25, 0.23),
+      style: {
+        color: theme.colors.muted,
+        fontFamily: theme.typography.body,
+        fontSize: bodyFontSize,
+        fontWeight: 440,
+        lineHeight: 1.3,
+      },
+      sourceIds: [ctx.sourceBriefId, ...ctx.linkedSourceIds],
+      locked: false,
+      exportCapabilities: [...EDITABLE_CAPABILITIES],
+    }),
+  );
+  elements.push(...footerElements(ctx));
+  resolveGeometryCollisions(elements, planned.title);
+  return { elements, grammarId: 'risk-field' };
+}
+
+function buildRiskEscalation(ctx: GrammarBuildContext): GrammarBuildResult {
+  const { planned, theme } = ctx;
+  const elements: SlideElement[] = [];
+  const sourceIds = [ctx.sourceBriefId, ...ctx.linkedSourceIds];
+  elements.push(sectionLabel(ctx, 0.06, 0.065, 0.34));
+  const headlineFontSize = fitTextFontSize(planned.headline, 40, 30, 1.04, 0.38, 0.28);
+  elements.push(
+    makeElement(ctx, 'risk-escalation-headline', {
+      name: 'Risk escalation thesis',
+      kind: 'text',
+      role: 'headline',
+      bbox: box(0.06, 0.17, 0.38, 0.28),
+      rotation: 0,
+      content: fitTextContent(planned.headline, headlineFontSize, 1.04, 0.38, 0.28),
+      style: {
+        color: theme.colors.ink,
+        fontFamily: theme.typography.display,
+        fontSize: headlineFontSize,
+        fontWeight: 650,
+        lineHeight: 1.04,
+        letterSpacing: -0.6,
+      },
+      sourceIds: [ctx.sourceBriefId],
+      locked: false,
+      exportCapabilities: [...EDITABLE_CAPABILITIES],
+    }),
+  );
+  const bodyFontSize = fitTextFontSize(planned.body, 17, 14, 1.35, 0.34, 0.22);
+  elements.push(
+    makeElement(ctx, 'risk-escalation-context', {
+      name: 'Risk escalation context',
+      kind: 'text',
+      role: 'body',
+      bbox: box(0.06, 0.54, 0.34, 0.22),
+      rotation: 0,
+      content: fitTextContent(planned.body, bodyFontSize, 1.35, 0.34, 0.22),
+      style: {
+        color: theme.colors.muted,
+        fontFamily: theme.typography.body,
+        fontSize: bodyFontSize,
+        fontWeight: 440,
+        lineHeight: 1.35,
+      },
+      sourceIds,
+      locked: false,
+      exportCapabilities: [...EDITABLE_CAPABILITIES],
+    }),
+  );
+  const steps = planned.bullets.slice(0, 3);
+  steps.forEach((content, index) => {
+    const x = 0.46 + index * 0.105;
+    const y = 0.66 - index * 0.19;
+    const width = 0.2 + index * 0.035;
+    const height = 0.15 + index * 0.025;
+    elements.push(
+      makeElement(ctx, `risk-escalation-${index + 1}`, {
+        name: `Risk escalation step ${index + 1}`,
+        kind: 'shape',
+        role: 'artifact_risk_escalation',
+        bbox: box(x, y, width, height),
+        rotation: 0,
+        content: fitTextContent(content, 14, 1.18, width - 0.035, height - 0.045),
+        style: {
+          fill: index === 2 ? theme.colors.accent : theme.colors.accentSoft,
+          opacity: 0.45 + index * 0.22,
+          stroke: theme.colors.accent,
+          strokeWidth: 1,
+          color: index === 2 ? theme.colors.canvas : theme.colors.insightInk,
+          fontFamily: theme.typography.body,
+          fontSize: 14,
+          fontWeight: 650,
+          lineHeight: 1.18,
+          padding: 10,
+          radius: Math.max(8, theme.defaultRadius),
+          verticalAlign: 'middle',
+        },
+        sourceIds,
+        locked: false,
+        exportCapabilities: [...EDITABLE_CAPABILITIES],
+      }),
+    );
+  });
+  elements.push(...storyContinuityElements(ctx));
+  elements.push(...footerElements(ctx));
+  resolveGeometryCollisions(elements, planned.title);
+  return { elements, grammarId: 'risk-escalation' };
+}
+
+function buildDecisionGate(ctx: GrammarBuildContext): GrammarBuildResult {
+  const { planned, theme } = ctx;
+  const elements: SlideElement[] = [];
+  const sourceIds = [ctx.sourceBriefId, ...ctx.linkedSourceIds];
+  const gateLabel = planned.metric
+    ? `${planned.metric}\n${planned.metricLabel ?? 'DECISION'}`
+    : 'DECIDE\nWITH CONDITIONS';
+  elements.push(
+    makeElement(ctx, 'decision-gate', {
+      name: 'Decision gate',
+      kind: 'shape',
+      role: 'artifact_decision_gate',
+      bbox: box(0.05, 0.11, 0.34, 0.76),
+      rotation: 0,
+      content: gateLabel,
+      style: {
+        fill: theme.colors.accent,
+        color: theme.colors.canvas,
+        fontFamily: theme.typography.display,
+        fontSize: planned.metric ? 42 : 32,
+        fontWeight: 720,
+        lineHeight: 1.08,
+        padding: 24,
+        radius: Math.max(18, theme.defaultRadius),
+        textAlign: 'center',
+        verticalAlign: 'middle',
+      },
+      sourceIds,
+      locked: false,
+      exportCapabilities: [...EDITABLE_CAPABILITIES],
+    }),
+  );
+  elements.push(sectionLabel(ctx, 0.47, 0.09, 0.44));
+  const headlineFontSize = fitTextFontSize(planned.headline, 38, 28, 1.04, 0.46, 0.24);
+  elements.push(
+    makeElement(ctx, 'decision-headline', {
+      name: 'Decision thesis',
+      kind: 'text',
+      role: 'headline',
+      bbox: box(0.47, 0.18, 0.46, 0.24),
+      rotation: 0,
+      content: fitTextContent(planned.headline, headlineFontSize, 1.04, 0.46, 0.24),
+      style: {
+        color: theme.colors.ink,
+        fontFamily: theme.typography.display,
+        fontSize: headlineFontSize,
+        fontWeight: 650,
+        lineHeight: 1.04,
+        letterSpacing: -0.6,
+      },
+      sourceIds: [ctx.sourceBriefId],
+      locked: false,
+      exportCapabilities: [...EDITABLE_CAPABILITIES],
+    }),
+  );
+  const bodyFontSize = fitTextFontSize(planned.body, 16, 14, 1.32, 0.46, 0.14);
+  elements.push(
+    makeElement(ctx, 'decision-context', {
+      name: 'Decision context',
+      kind: 'text',
+      role: 'body',
+      bbox: box(0.47, 0.44, 0.46, 0.14),
+      rotation: 0,
+      content: fitTextContent(planned.body, bodyFontSize, 1.32, 0.46, 0.14),
+      style: {
+        color: theme.colors.muted,
+        fontFamily: theme.typography.body,
+        fontSize: bodyFontSize,
+        fontWeight: 440,
+        lineHeight: 1.32,
+      },
+      sourceIds,
+      locked: false,
+      exportCapabilities: [...EDITABLE_CAPABILITIES],
+    }),
+  );
+  planned.bullets.slice(0, 3).forEach((content, index) => {
+    const conditionContent = `${String(index + 1).padStart(2, '0')}  ${content}`;
+    elements.push(
+      makeElement(ctx, `decision-condition-${index + 1}`, {
+        name: `Decision condition ${index + 1}`,
+        kind: 'shape',
+        role: 'decision_condition',
+        bbox: box(0.47, 0.61 + index * 0.1, 0.46, 0.082),
+        rotation: 0,
+        content: fitTextContent(conditionContent, 14, 1.2, 0.42, 0.058),
+        style: {
+          fill: index === 0 ? theme.colors.insight : theme.colors.accentSoft,
+          color: theme.colors.insightInk,
+          fontFamily: theme.typography.body,
+          fontSize: 14,
+          fontWeight: 650,
+          padding: 9,
+          radius: 5,
+          verticalAlign: 'middle',
+        },
+        sourceIds,
+        locked: false,
+        exportCapabilities: [...EDITABLE_CAPABILITIES],
+      }),
+    );
+  });
+  elements.push(...footerElements(ctx));
+  resolveGeometryCollisions(elements, planned.title);
+  return { elements, grammarId: 'decision-gate' };
 }
 
 // ============================================================================
@@ -1799,6 +2211,20 @@ export function dispatchCompositionGrammar(
   const bulletCount = planned.bullets.length;
   const isOpening = ctx.index === 0;
   const isTransition = planned.section.toLowerCase().includes('transition');
+  const semanticText = `${planned.title} ${planned.section} ${planned.headline}`.toLowerCase();
+  const isSectionOpening = /·\s*1$/u.test(planned.title);
+  const isRiskTension =
+    !hasDiagram &&
+    !hasChart &&
+    !hasMetric &&
+    !hasFormula &&
+    !hasImage &&
+    !hasVideo &&
+    /(?:risk|conflict|loss|downside|sensitivity|miss|challenge)/u.test(semanticText);
+  const isDecisionGate =
+    /(?:recommendation|requested decision|committee request|approvals and decision rights|conditions to proceed)/u.test(
+      semanticText,
+    );
   const sceneStage = ctx.storySpec?.sceneStates[ctx.index]?.stage;
   const isSceneClimax =
     sceneStage === 'approach' || sceneStage === 'crossing' || sceneStage === 'proof';
@@ -1811,6 +2237,30 @@ export function dispatchCompositionGrammar(
 
   if (isQuarantinedQuantitative && bulletCount >= 2) {
     return buildTensionContrastField(ctx);
+  }
+
+  if (planned.authoredArtifactGeometry?.kind === 'risk-matrix') return buildRiskField(ctx);
+
+  if (isDecisionGate) return buildDecisionGate(ctx);
+
+  if (isRiskTension && bulletCount >= 2) {
+    const semanticVariant = [...planned.headline].reduce(
+      (sum, character) => sum + (character.codePointAt(0) ?? 0),
+      0,
+    );
+    return semanticVariant % 2 === 0 ? buildRiskEscalation(ctx) : buildTensionContrastField(ctx);
+  }
+
+  if (
+    (isTransition || isSectionOpening) &&
+    !hasDiagram &&
+    !hasChart &&
+    !hasMetric &&
+    !hasFormula &&
+    !hasImage &&
+    !hasVideo
+  ) {
+    return buildSparseTransition(ctx);
   }
 
   if (
@@ -1828,7 +2278,6 @@ export function dispatchCompositionGrammar(
 
   // Archetype-driven defaults
   if (isOpening && !hasDiagram && !hasChart && !hasMetric) return buildFullBleedThesis(ctx);
-  if (isTransition) return buildSparseTransition(ctx);
   if (hasMetric && !hasChart && !hasDiagram) return buildMetricStage(ctx);
   if (hasChart && !hasDiagram) return buildAsymmetricEditorial(ctx);
   if (hasDiagram) return buildProcessCanvas(ctx);

@@ -596,6 +596,16 @@ export interface Deck {
   brief: DeckBrief;
   theme: ThemeSpec;
   slideOrder: string[];
+  /**
+   * Program-declared comparison systems whose repeated geometry is intentional.
+   * Slide indexes are one-based and remain reviewable instead of weakening the
+   * deck-wide diversity gate for every repeated layout.
+   */
+  intentionalSeries?: Array<{
+    seriesId: string;
+    slideIndexes: number[];
+    reasonForRepeatedLayout: string;
+  }>;
   version: number;
   status: 'draft' | 'validating' | 'ready' | 'published';
   activeSignatureProfileId?: string;
@@ -1234,6 +1244,7 @@ export interface ExportableDeckSnapshot {
     | 'title'
     | 'theme'
     | 'slideOrder'
+    | 'intentionalSeries'
     | 'version'
     | 'createdAt'
     | 'updatedAt'

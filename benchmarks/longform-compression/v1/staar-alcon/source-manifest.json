@@ -8,7 +8,9 @@
       "title": "Agreement and Plan of Merger summary",
       "organization": "STAAR Surgical Company",
       "sourceDate": "2025-08-04",
-      "sourceRefs": ["https://www.sec.gov/Archives/edgar/data/718937/000119312525173090/d30729d8k.htm"],
+      "sourceRefs": [
+        "https://www.sec.gov/Archives/edgar/data/718937/000119312525173090/d30729d8k.htm"
+      ],
       "generationVisible": true,
       "authority": "primary",
       "permittedUse": ["transaction-terms", "conditions", "termination-rights"]
@@ -19,7 +21,9 @@
       "title": "Definitive merger proxy statement",
       "organization": "STAAR Surgical Company",
       "sourceDate": "2025-09-16",
-      "sourceRefs": ["https://www.sec.gov/Archives/edgar/data/718937/000119312525204396/d72691ddefm14a.htm"],
+      "sourceRefs": [
+        "https://www.sec.gov/Archives/edgar/data/718937/000119312525204396/d72691ddefm14a.htm"
+      ],
       "generationVisible": true,
       "authority": "primary",
       "permittedUse": ["process", "projections", "fairness-opinion", "valuation", "fees", "risks"]
@@ -30,7 +34,9 @@
       "title": "STAAR Surgical 2024 Form 10-K",
       "organization": "STAAR Surgical Company",
       "sourceDate": "2025-04-30",
-      "sourceRefs": ["https://www.sec.gov/Archives/edgar/data/718937/000095017025058179/2024-10k_ars.pdf"],
+      "sourceRefs": [
+        "https://www.sec.gov/Archives/edgar/data/718937/000095017025058179/2024-10k_ars.pdf"
+      ],
       "generationVisible": true,
       "authority": "primary",
       "permittedUse": ["historical-financials", "business", "risk-factors"]
@@ -41,7 +47,9 @@
       "title": "STAAR Surgical quarter ended June 27, 2025 Form 10-Q",
       "organization": "STAAR Surgical Company",
       "sourceDate": "2025-08-06",
-      "sourceRefs": ["https://www.sec.gov/Archives/edgar/data/718937/000095017025103982/staa-20250627.htm"],
+      "sourceRefs": [
+        "https://www.sec.gov/Archives/edgar/data/718937/000095017025103982/staa-20250627.htm"
+      ],
       "generationVisible": true,
       "authority": "primary",
       "permittedUse": ["historical-financials", "liquidity", "regional-performance", "risk-factors"]
@@ -63,7 +71,9 @@
       "title": "Broadwood Partners opposition solicitation",
       "organization": "Broadwood Partners, L.P.",
       "sourceDate": "2025-09-24",
-      "sourceRefs": ["https://www.sec.gov/Archives/edgar/data/718937/000121390025095514/ea0259891-dfan14a_broadwood.htm"],
+      "sourceRefs": [
+        "https://www.sec.gov/Archives/edgar/data/718937/000121390025095514/ea0259891-dfan14a_broadwood.htm"
+      ],
       "generationVisible": true,
       "authority": "advocacy",
       "permittedUse": ["attributed-counterargument", "open-questions"]
@@ -76,7 +86,9 @@
       "title": "STAAR Surgical merger investor presentation",
       "organization": "STAAR Surgical Company",
       "sourceDate": "2025-09-26",
-      "sourceRefs": ["https://www.sec.gov/Archives/edgar/data/718937/000119312525218827/d911579dex991.htm"],
+      "sourceRefs": [
+        "https://www.sec.gov/Archives/edgar/data/718937/000119312525218827/d911579dex991.htm"
+      ],
       "generationVisible": true,
       "authority": "advocacy",
       "permittedUse": ["structure", "visual-patterns", "attributed-company-rationale"]
@@ -102,7 +114,9 @@
       "title": "Failed vote and intended termination announcement",
       "organization": "STAAR Surgical Company",
       "sourceDate": "2026-01-06",
-      "sourceRefs": ["https://www.sec.gov/Archives/edgar/data/718937/000119312526003534/d94037dex991.htm"],
+      "sourceRefs": [
+        "https://www.sec.gov/Archives/edgar/data/718937/000119312526003534/d94037dex991.htm"
+      ],
       "generationVisible": false,
       "authority": "evaluation-only",
       "permittedUse": ["post-hoc-adversarial-evaluation"]
@@ -113,7 +127,9 @@
       "title": "Merger termination Form 8-K",
       "organization": "STAAR Surgical Company",
       "sourceDate": "2026-01-07",
-      "sourceRefs": ["https://www.sec.gov/Archives/edgar/data/0000718937/000119312526004699/d823468d8k.htm"],
+      "sourceRefs": [
+        "https://www.sec.gov/Archives/edgar/data/0000718937/000119312526004699/d823468d8k.htm"
+      ],
       "generationVisible": false,
       "authority": "evaluation-only",
       "permittedUse": ["post-hoc-adversarial-evaluation"]

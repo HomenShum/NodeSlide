@@ -74,6 +74,8 @@ const PROVIDER_HARD_TIMEOUT_MS = 30_000;
 export interface NodeSlideProviderHardCeilings {
   readonly maxOutputTokensPerAttempt: number;
   readonly timeoutMs: number;
+  /** Time kept outside provider dispatch for materialization and persistence. */
+  readonly completionHeadroomMs?: number;
 }
 
 /** The historical ceilings. Every existing caller keeps exactly these. */
@@ -93,6 +95,7 @@ export const NODESLIDE_EDIT_PROVIDER_CEILINGS: NodeSlideProviderHardCeilings = {
 export const NODESLIDE_CREATE_PROVIDER_CEILINGS: NodeSlideProviderHardCeilings = {
   maxOutputTokensPerAttempt: 10_000,
   timeoutMs: 240_000,
+  completionHeadroomMs: 30_000,
 };
 const MAX_REPAIR_CONTEXT_UTF8_BYTES = 24_000 * 4;
 const PROVIDER_MESSAGE_OVERHEAD_TOKENS_PER_ATTEMPT = 4_096;
@@ -429,6 +432,19 @@ export async function callNodeSlideBudgetedJson(
     );
   }
 
+  const providerTimeoutMs = Math.min(
+    reservedCall.providerTimeoutMs - (ceilings.completionHeadroomMs ?? 0),
+    ceilings.timeoutMs,
+  );
+  if (providerTimeoutMs < 1) {
+    return releaseWithoutDispatch(
+      dependencies.ledger,
+      baseAccounting,
+      reservation,
+      'The remaining run time is reserved for deck materialization and persistence.',
+    );
+  }
+
   const startedAt = now();
   let providerResult: NodeSlideProviderResult;
   try {
@@ -437,7 +453,7 @@ export async function callNodeSlideBudgetedJson(
       {
         dispatchPolicy: {
           maxOutputTokens: perAttemptOutputCeiling,
-          timeoutMs: Math.min(reservedCall.providerTimeoutMs, ceilings.timeoutMs),
+          timeoutMs: providerTimeoutMs,
           ...(nodeSlideAgentModel(selectedModel as NodeSlideAgentModelId).provider === 'openrouter'
             ? {
                 maxInputMicroUsdPerMillionTokens: pricing.inputMicroUsdPerMillionTokens,

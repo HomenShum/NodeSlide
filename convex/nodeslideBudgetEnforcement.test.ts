@@ -677,6 +677,102 @@ describe('deck creation is reserved before it is issued', () => {
     );
   });
 
+  it('keeps persistence headroom after a slow first pass instead of spending the five-minute action lifetime on revision', async () => {
+    // Production scenario: a board-risk author requested 12 slides. The settled
+    // first pass took 211s, then the optional revision inherited all 89s left in
+    // the five-minute run and Convex killed the action before pass 1 could be
+    // persisted. Reproduce that timing exactly; the revision may use only 59s,
+    // leaving 30s for critique, materialization, and durable persistence.
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-08-01T00:00:00.000Z'));
+    try {
+      const database = new MemoryDatabase();
+      const ledger = realLedgerClient(database);
+      const observedTimeouts: number[] = [];
+      let invocation = 0;
+      const briefDispatch = createNodeSlideBudgetedCreateDispatch({
+        runId: 'run-create-slow-first-pass',
+        budget: { maxDurationMs: 300_000 },
+        metered: true,
+        ledger,
+        dispatch: async (_request, dependencies) => {
+          invocation += 1;
+          observedTimeouts.push(dependencies?.dispatchPolicy?.timeoutMs as number);
+          vi.setSystemTime(Date.now() + (invocation === 1 ? 211_000 : 1_000));
+          return {
+            ok: true as const,
+            value: { slides: [] },
+            telemetry: {
+              provider: 'openrouter',
+              model: 'moonshotai/kimi-k3',
+              costMicroUsd: 4_200,
+              inputTokens: 900,
+              outputTokens: 120,
+              attempts: [
+                {
+                  attempt: 'initial' as const,
+                  attempted: true as const,
+                  settled: true,
+                  ambiguous: false,
+                  unreconciled: false,
+                  elapsedMs: invocation === 1 ? 211_000 : 1_000,
+                },
+              ],
+            },
+          };
+        },
+      });
+
+      await briefDispatch(CREATE_REQUEST);
+      await briefDispatch({ ...CREATE_REQUEST, userText: '{"revision":"fix overlap"}' });
+
+      expect(observedTimeouts).toEqual([240_000, 59_000]);
+      expect(database.rows('nodeslide_billable_calls').map((call) => call.status)).toEqual([
+        'settled',
+        'settled',
+      ]);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('does not start provider work when only the persistence reserve remains', async () => {
+    // Degraded scenario: a late optional revision reaches the dispatch seam with
+    // only the protected 30s left. Starting a request here recreates the live
+    // cancellation; releasing it lets the critique retain and save pass 1.
+    const database = new MemoryDatabase();
+    const ledger = realLedgerClient(database);
+    const dispatch = vi.fn(async () => ({
+      ok: true as const,
+      value: { slides: [] },
+      telemetry: {
+        provider: 'openrouter' as const,
+        model: 'moonshotai/kimi-k3',
+        costMicroUsd: 4_200,
+        inputTokens: 900,
+        outputTokens: 120,
+      },
+    }));
+    const briefDispatch = createNodeSlideBudgetedCreateDispatch({
+      runId: 'run-create-persistence-reserve-only',
+      budget: { maxDurationMs: 30_000 },
+      metered: true,
+      ledger,
+      dispatch,
+    });
+
+    const result = await briefDispatch(CREATE_REQUEST);
+
+    expect(dispatch).not.toHaveBeenCalled();
+    expect(result).toMatchObject({
+      ok: false,
+      accounting: { disposition: 'released' },
+    });
+    expect(database.rows('nodeslide_billable_calls').map((call) => call.status)).toEqual([
+      'released',
+    ]);
+  });
+
   it('does not open a reservation for a deterministic create, which issues no request', async () => {
     const database = new MemoryDatabase();
     const ledger = realLedgerClient(database);

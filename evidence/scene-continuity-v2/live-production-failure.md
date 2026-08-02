@@ -75,3 +75,17 @@
 - Determine the primary visual's side before applying visual focus.
 - Place and remeasure the headline on the opposite 42% copy rail for formula, chart, media, and diagram slides; retain the centered 72% treatment only for slides without a primary visual.
 - The exact board constraint-check geometry is pinned as a regression. Before the fix the headline starts at `0.14` while the formula ends at `0.4552`; after the fix their boxes are disjoint and the focused candidate reports zero overlaps.
+
+## Fifth live lane: action lifetime consumed by optional revision
+
+- Production SHA: `86abaf2306ff46685cdb203b2b4cdda39475ef86`.
+- A fresh exact-prompt run returned to the landing page after five minutes with Convex's opaque `Called by client` cancellation and no deck.
+- The durable production ledger removes the ambiguity: pass 1 settled after 211,124 ms; the optional revision was then authorized for all 88,876 ms remaining in the 300,000 ms run. It became unreconciled at the exact run boundary.
+- The earlier fail-soft correction could not execute because the outer action was killed before the revision returned. Error handling after a call cannot protect time that the call itself is allowed to consume.
+
+## Fifth-lane closure
+
+- Reserve 30,000 ms outside every create-provider dispatch for critique, deterministic materialization, and durable persistence.
+- Keep the existing 240,000 ms create-call ceiling; the effective deadline is now `min(240,000, remaining run time - 30,000)`. Normal first passes retain their full envelope while late optional revisions are shortened.
+- If less than one millisecond remains after the reserve, release without dispatch. This honestly records a non-call and lets the optional critique retain pass 1 instead of opening a provider request the action cannot finish.
+- The regression reproduces the production timing. Before the fix it observes `[240000, 89000]`; after the fix it observes `[240000, 59000]`, leaving the promised 30-second persistence window.

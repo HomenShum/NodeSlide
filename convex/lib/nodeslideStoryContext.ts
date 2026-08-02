@@ -330,11 +330,11 @@ export function buildNodeSlideStorySceneMarks(
     const center = 0.805;
     const leftX = center - aperture / 2 - 0.012;
     const rightX = center + aperture / 2;
-    return [
+    const foundation = [
       mark(
         'scene-threshold-left',
         'story_scene_threshold_gate_left',
-        sceneBox(leftX, 0.052, 0.012, 0.1),
+        sceneBox(leftX, 0.048, 0.012, scene.stage === 'pressure' ? 0.122 : 0.1),
         'insight',
         opacity,
         2,
@@ -342,7 +342,7 @@ export function buildNodeSlideStorySceneMarks(
       mark(
         'scene-threshold-right',
         'story_scene_threshold_gate_right',
-        sceneBox(rightX, 0.052, 0.012, 0.1),
+        sceneBox(rightX, 0.048, 0.012, scene.stage === 'pressure' ? 0.122 : 0.1),
         'insight',
         opacity,
         2,
@@ -355,14 +355,110 @@ export function buildNodeSlideStorySceneMarks(
         0.42 + 0.35 * progress,
         999,
       ),
+    ];
+    const subject = mark(
+      'scene-threshold-subject',
+      'story_scene_threshold_subject',
+      sceneBox(0.672 + 0.212 * progress, 0.112, 0.022, 0.022),
+      'accent',
+      opacity,
+      999,
+    );
+    if (scene.stage === 'establish') {
+      return [
+        ...foundation,
+        mark(
+          'scene-threshold-horizon',
+          'story_scene_threshold_horizon',
+          sceneBox(0.664, 0.166, 0.274, 0.006),
+          'accent-soft',
+          0.3,
+        ),
+        subject,
+      ];
+    }
+    if (scene.stage === 'pressure') {
+      return [
+        ...foundation,
+        ...[0, 1, 2].map((step) =>
+          mark(
+            `scene-threshold-pressure-${step + 1}`,
+            'story_scene_threshold_pressure',
+            sceneBox(0.664 + step * 0.025, 0.074 + step * 0.018, 0.048, 0.008),
+            'accent-soft',
+            0.38 + step * 0.12,
+            2,
+          ),
+        ),
+        subject,
+      ];
+    }
+    if (scene.stage === 'approach') {
+      return [
+        ...foundation,
+        ...[0, 1, 2].map((step) =>
+          mark(
+            `scene-threshold-approach-${step + 1}`,
+            'story_scene_threshold_approach',
+            sceneBox(0.704 + step * 0.034, 0.129 - step * 0.004, 0.022, 0.006),
+            'accent-soft',
+            0.42 + step * 0.12,
+            2,
+          ),
+        ),
+        subject,
+      ];
+    }
+    if (scene.stage === 'crossing') {
+      return [
+        ...foundation,
+        mark(
+          'scene-threshold-crossing-trail',
+          'story_scene_threshold_crossing',
+          sceneBox(0.742, 0.116, 0.09, 0.014),
+          'accent-soft',
+          0.68,
+          999,
+        ),
+        subject,
+      ];
+    }
+    if (scene.stage === 'proof') {
+      return [
+        ...foundation,
+        ...[0, 1, 2].map((step) =>
+          mark(
+            `scene-threshold-evidence-${step + 1}`,
+            'story_scene_threshold_evidence',
+            sceneBox(0.832 + step * 0.028, 0.077 + (step % 2) * 0.038, 0.016, 0.016),
+            step === 2 ? 'accent' : 'insight',
+            0.62 + step * 0.12,
+            3,
+            45,
+          ),
+        ),
+        subject,
+      ];
+    }
+    return [
+      ...foundation,
       mark(
-        'scene-threshold-subject',
-        'story_scene_threshold_subject',
-        sceneBox(0.684 + 0.19 * progress, 0.112, 0.022, 0.022),
+        'scene-threshold-release-path',
+        'story_scene_threshold_release',
+        sceneBox(rightX + 0.012, 0.124, Math.max(0.03, 0.934 - rightX), 0.009),
         'accent',
-        opacity,
+        0.82,
         999,
       ),
+      mark(
+        'scene-threshold-release-seal',
+        'story_scene_threshold_release',
+        sceneBox(0.916, 0.102, 0.034, 0.034),
+        'insight',
+        0.9,
+        999,
+      ),
+      subject,
     ];
   }
 

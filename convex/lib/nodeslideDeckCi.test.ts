@@ -148,6 +148,34 @@ describe('NodeSlide Deck CI', () => {
     ).toBe(false);
   });
 
+  it('fails publication when a six-slide committee deck repeats one composition', () => {
+    const repeated = snapshot();
+    for (const [index, title] of ['Control owner', 'Final decision'].entries()) {
+      const slideId = `slide-repeat-${index + 1}`;
+      const elementId = `repeat-copy-${index + 1}`;
+      repeated.slides.push(slide(slideId, title, `Decision / 0${index + 5}`, 'Decision copy.'));
+      repeated.elements.push(text(elementId, slideId, 'The same centered memo scaffold repeats.'));
+      const repeatedSlide = repeated.slides.at(-1);
+      if (!repeatedSlide) throw new Error('Expected the repeated slide fixture.');
+      repeatedSlide.elementOrder = [elementId];
+      repeated.deck.slideOrder.push(slideId);
+    }
+
+    const result = evaluateNodeSlideDeckCi(repeated, options());
+
+    expect(result.status).toBe('fail');
+    expect(codes(result)).toContain('deck_composition_diversity_failed');
+    expect(
+      result.checks.find((check) => check.code === 'deck_composition_diversity_failed'),
+    ).toMatchObject({
+      category: 'layout',
+      origin: 'layout_structure_hook',
+      severity: 'error',
+      blocker: true,
+    });
+    expect(nodeSlideDeckCiAllowsAutoCommit(result)).toBe(false);
+  });
+
   it('fails Deck CI and Turbo for an under-covered candidate bound to an exact receipt', () => {
     const base = snapshot();
     const target = requiredElement(base, 'opening-copy');

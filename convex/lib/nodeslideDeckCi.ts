@@ -16,6 +16,7 @@ import {
   nodeSlideCandidateDigest,
   nodeSlideSemanticCoverageReceiptMatches,
 } from './nodeslideCandidate';
+import { evaluateDeckDiversity } from './nodeslideDeckDiversity';
 import { nodeslideContentDigest, nodeslideStableId } from './nodeslideIds';
 import {
   type NodeSlideSemanticEvaluationOptions,
@@ -224,6 +225,7 @@ export function evaluateNodeSlideDeckCi(
     drafts.push(...checksFromPresentationQuality(snapshot, resolvedOptions.presentationQuality));
   }
   drafts.push(...checksFromRequestedSlideCount(snapshot));
+  drafts.push(...checksFromDeckDiversity(snapshot));
   for (const finding of semantic.findings) {
     if (SEMANTIC_CODES.has(finding.code)) drafts.push(checkFromSemanticFinding(finding));
   }
@@ -316,6 +318,46 @@ function checksFromRequestedSlideCount(snapshot: DeckSnapshot): CheckDraft[] {
       blocker: true,
       message: `The brief requested exactly ${requested} slides, but the persisted deck contains ${snapshot.deck.slideOrder.length}.`,
       slideIds: [...snapshot.deck.slideOrder],
+      elementIds: [],
+      sourceIds: [],
+    },
+  ];
+}
+
+function checksFromDeckDiversity(snapshot: DeckSnapshot): CheckDraft[] {
+  // Short decision notes legitimately reuse one scaffold. Once a deck reaches six
+  // slides, repeated geometry becomes a story-rhythm failure and must not be
+  // hidden behind a clean validation receipt.
+  if (snapshot.deck.slideOrder.length < 6) return [];
+  const report = evaluateDeckDiversity(
+    snapshot.deck.slideOrder.map((slideId, slideIndex) => ({
+      slideIndex,
+      elements: snapshot.elements.filter((element) => element.slideId === slideId),
+    })),
+  );
+  if (report.passes) return [];
+  const affectedIndexes = new Set(
+    report.nearDuplicatePairs.flatMap(({ first, second }) => [first, second]),
+  );
+  const slideIds =
+    affectedIndexes.size > 0
+      ? [...affectedIndexes]
+          .sort((left, right) => left - right)
+          .flatMap((index) => snapshot.deck.slideOrder[index] ?? [])
+      : [...snapshot.deck.slideOrder];
+  return [
+    {
+      code: 'deck_composition_diversity_failed',
+      category: 'layout',
+      origin: 'layout_structure_hook',
+      severity: 'error',
+      blocker: true,
+      message:
+        `The final materialized deck repeats composition geometry: ${report.failures.join('; ')}`.slice(
+          0,
+          500,
+        ),
+      slideIds,
       elementIds: [],
       sourceIds: [],
     },

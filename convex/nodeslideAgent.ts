@@ -1735,6 +1735,7 @@ export const createDeckFromBrief = action({
     ),
   },
   handler: async (ctx, args) => {
+    const traceStartedAt = Date.now();
     const clientSessionId = requiredCreateText(args.clientSessionId, 'clientSessionId', 256, 768);
     const durableJob = args.durableJob
       ? {
@@ -2158,6 +2159,7 @@ export const createDeckFromBrief = action({
       plan,
       spec: rawSpec,
       traceSummary: traceSummaryWithCritique,
+      traceStartedAt,
       ...productionProbeFields,
       critiquePasses: critique.passes,
       critiqueDecision: critique.decision,

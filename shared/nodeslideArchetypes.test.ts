@@ -162,31 +162,32 @@ describe('NodeSlide slide archetypes (variety + anti-monotony + geometry gate)',
     }
     expectZeroCollisions(snapshot);
     expect(findCompressedTextElements(snapshot.elements)).toEqual([]);
-    const continuityMotifs = snapshot.slides.map((slide) =>
-      snapshot.elements.find(
-        (element) => element.slideId === slide.id && element.role?.startsWith('story_motif_'),
+    const continuityScenes = snapshot.slides.map((slide) =>
+      snapshot.elements.filter(
+        (element) => element.slideId === slide.id && element.role?.startsWith('story_scene_'),
       ),
     );
-    expect(continuityMotifs.every(Boolean)).toBe(true);
-    expect(new Set(continuityMotifs.map((element) => element?.role))).toEqual(
-      new Set(['story_motif_journey']),
-    );
+    expect(continuityScenes.every((scene) => scene.length >= 5)).toBe(true);
     expect(
-      snapshot.slides.every(
-        (slide) =>
-          snapshot.elements.filter(
-            (element) => element.slideId === slide.id && element.role?.startsWith('story_motif_'),
-          ).length === 2,
+      continuityScenes.every((scene) =>
+        scene.some((element) => element.role === 'story_scene_journey_route'),
       ),
     ).toBe(true);
-    for (let index = 1; index < continuityMotifs.length; index += 1) {
-      expect(continuityMotifs[index]?.bbox.width ?? 0).toBeGreaterThan(
-        continuityMotifs[index - 1]?.bbox.width ?? 0,
-      );
-    }
-    expect(continuityMotifs.some((element) => element?.altText?.includes('intensity 100'))).toBe(
-      true,
-    );
+    expect(
+      new Set(
+        continuityScenes.map((scene) =>
+          JSON.stringify(scene.map((element) => ({ role: element.role, bbox: element.bbox }))),
+        ),
+      ).size,
+    ).toBe(snapshot.slides.length);
+    expect(
+      continuityScenes.some((scene) =>
+        scene.some(
+          (element) =>
+            element.altText?.includes('release stage') && element.altText.includes('100 percent'),
+        ),
+      ),
+    ).toBe(true);
 
     // Comparison slide: fan-out may use either columns or a stacked comparison
     // rail, but reading order remains monotonic and boxes never overlap.

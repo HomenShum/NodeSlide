@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>NodeSlide scene continuity change boundary</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { margin: 0; width: 1440px; height: 1100px; overflow: hidden; background: #05070a; }
+      .proof { position: relative; width: 1440px; height: 1100px; }
+      .proof > img { display: block; width: 1440px; height: 1100px; }
+      .box { position: absolute; border: 3px solid #00f5ff; box-shadow: 0 0 0 2px #07131a, 0 0 24px #00f5ff66; }
+      .label { position: absolute; left: -3px; top: -35px; padding: 7px 10px; border: 3px solid #00f5ff; background: #07131a; color: #fff; font: 700 13px/1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .03em; white-space: nowrap; }
+      .navigator { left: 2px; top: 92px; width: 295px; height: 1005px; }
+      .overview { left: 303px; top: 92px; width: 793px; height: 1005px; }
+      .navigator .label { left: 10px; top: 10px; }
+      .overview .label { left: 12px; top: 10px; }
+      .scope-note { position: absolute; right: 18px; top: 62px; width: 310px; padding: 10px 12px; border-left: 3px solid #ffb000; background: #111820ee; color: #fff; font: 600 12px/1.35 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    </style>
+  </head>
+  <body>
+    <main class="proof">
+      <img src="before.png" alt="Current live NodeSlide production deck overview" />
+      <div class="box navigator"><div class="label">CHANGE B · SLIDE NAVIGATOR OUTPUT</div></div>
+      <div class="box overview"><div class="label">CHANGE A · GENERATED DECK OVERVIEW</div></div>
+      <div class="scope-note">OUT OF SCOPE · top toolbar, editor controls, inspector, AI composer, export/share controls</div>
+    </main>
+  </body>
+</html>

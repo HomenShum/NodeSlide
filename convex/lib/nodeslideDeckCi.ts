@@ -9,6 +9,7 @@ import {
   type NodeSlidePresentationQualityReceipt,
   verifyNodeSlidePresentationQualityReceipt,
 } from '../../shared/nodeslideAuthoringQuality';
+import { inferNodeSlideRequestedSlideCount } from '../../shared/nodeslideSlideCount';
 import { nodeslideArtifactPresenceChecks } from './nodeslideArtifactPresence';
 import {
   type NodeSlideSemanticCoverageReceipt,
@@ -222,6 +223,7 @@ export function evaluateNodeSlideDeckCi(
   if (resolvedOptions.presentationQuality) {
     drafts.push(...checksFromPresentationQuality(snapshot, resolvedOptions.presentationQuality));
   }
+  drafts.push(...checksFromRequestedSlideCount(snapshot));
   for (const finding of semantic.findings) {
     if (SEMANTIC_CODES.has(finding.code)) drafts.push(checkFromSemanticFinding(finding));
   }
@@ -298,6 +300,27 @@ export function evaluateNodeSlideDeckCi(
 }
 
 interface CheckDraft extends Omit<NodeSlideDeckCiCheck, 'id'> {}
+
+function checksFromRequestedSlideCount(snapshot: DeckSnapshot): CheckDraft[] {
+  const requested = inferNodeSlideRequestedSlideCount(
+    snapshot.deck.brief.prompt,
+    snapshot.deck.title,
+  );
+  if (requested === null || snapshot.deck.slideOrder.length === requested) return [];
+  return [
+    {
+      code: 'requested_slide_count_mismatch',
+      category: 'structure',
+      origin: 'validation',
+      severity: 'critical',
+      blocker: true,
+      message: `The brief requested exactly ${requested} slides, but the persisted deck contains ${snapshot.deck.slideOrder.length}.`,
+      slideIds: [...snapshot.deck.slideOrder],
+      elementIds: [],
+      sourceIds: [],
+    },
+  ];
+}
 
 function normalizeInput(
   input: NodeSlideDeckCiInput | DeckSnapshot,

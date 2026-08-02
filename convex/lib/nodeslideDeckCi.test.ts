@@ -115,6 +115,27 @@ describe('NodeSlide Deck CI', () => {
     expect(nodeSlideDeckCiAllowsAutoCommit(result)).toBe(false);
   });
 
+  it('fails closed when a risk committee requested 12 slides but a persisted job contains 4', () => {
+    const incomplete = snapshot();
+    incomplete.deck.title = 'Build exactly 12 slides for a risk committee';
+    incomplete.deck.brief.prompt =
+      'Build exactly 12 slides for a risk committee deciding whether an AI release may proceed.';
+
+    const result = evaluateNodeSlideDeckCi(incomplete, options());
+
+    expect(result.status).toBe('fail');
+    expect(result.blockerCount).toBeGreaterThan(0);
+    expect(codes(result)).toContain('requested_slide_count_mismatch');
+    expect(
+      result.checks.find((check) => check.code === 'requested_slide_count_mismatch'),
+    ).toMatchObject({
+      severity: 'critical',
+      blocker: true,
+      slideIds: ['slide-opening', 'slide-evidence', 'slide-proof', 'slide-close'],
+    });
+    expect(nodeSlideDeckCiAllowsAutoCommit(result)).toBe(false);
+  });
+
   it('fails the Turbo gate closed when a receipt is internally inconsistent', () => {
     const clean = evaluateNodeSlideDeckCi(snapshot(), options());
 

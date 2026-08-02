@@ -1,4 +1,4 @@
-import type { DeckBrief, SlideArchetype } from '../../shared/nodeslide';
+import type { BoundingBox, DeckBrief, SlideArchetype } from '../../shared/nodeslide';
 import type { NodeSlideDataAttachment } from '../../shared/nodeslideAttachments';
 import { inferNodeSlideRequestedSlideCount } from '../../shared/nodeslideSlideCount';
 
@@ -64,11 +64,40 @@ export interface NodeSlideStorySpec {
     beat: 'orient' | 'tension' | 'hint' | 'reveal' | 'prove' | 'resolve';
     intensity: number;
   }>;
+  sceneStates: NodeSlideSceneState[];
   emotionalArc: {
     shape: 'rise-climax-release';
     intensity: number[];
   };
   compositionPlan: SlideArchetype[];
+}
+
+export type NodeSlideSceneStage =
+  | 'establish'
+  | 'pressure'
+  | 'approach'
+  | 'crossing'
+  | 'proof'
+  | 'release';
+
+export interface NodeSlideSceneState {
+  index: number;
+  stage: NodeSlideSceneStage;
+  progress: number;
+  intensity: number;
+  framing: 'wide' | 'split' | 'focused' | 'close';
+  subjectState: string;
+}
+
+export interface NodeSlideStorySceneMark {
+  key: string;
+  role: string;
+  bbox: BoundingBox;
+  rotation: number;
+  tone: 'accent' | 'accent-soft' | 'insight';
+  opacity: number;
+  radius: number;
+  altText: string;
 }
 
 export interface NodeSlideVisualMaterialInventory {
@@ -118,7 +147,12 @@ function cinematicDirection(
   slideCount: number,
 ): Pick<
   NodeSlideStorySpec,
-  'sceneContinuity' | 'visualMetaphor' | 'revealPacing' | 'emotionalArc' | 'compositionPlan'
+  | 'sceneContinuity'
+  | 'visualMetaphor'
+  | 'revealPacing'
+  | 'sceneStates'
+  | 'emotionalArc'
+  | 'compositionPlan'
 > {
   const text = `${title} ${brief.prompt} ${brief.purpose}`.toLowerCase();
   const metaphor: NodeSlideStorySpec['visualMetaphor'] = /risk|security|trust|exposure/u.test(text)
@@ -162,6 +196,78 @@ function cinematicDirection(
         : metaphor.kind === 'bridge'
           ? 'connecting span'
           : 'route marker';
+  const sceneStates = revealPacing.map(({ beat, intensity }, index): NodeSlideSceneState => {
+    const stage: NodeSlideSceneStage =
+      beat === 'orient'
+        ? 'establish'
+        : beat === 'tension'
+          ? 'pressure'
+          : beat === 'hint'
+            ? 'approach'
+            : beat === 'reveal'
+              ? 'crossing'
+              : beat === 'prove'
+                ? 'proof'
+                : 'release';
+    const framing: NodeSlideSceneState['framing'] =
+      stage === 'establish' || stage === 'release'
+        ? 'wide'
+        : stage === 'pressure'
+          ? 'split'
+          : stage === 'approach' || stage === 'crossing'
+            ? 'focused'
+            : 'close';
+    const stateByKind: Record<NodeSlideStorySpec['visualMetaphor']['kind'], string[]> = {
+      threshold: [
+        'the boundary is distant',
+        'exposure presses against the boundary',
+        'the decision approaches the gate',
+        'the subject crosses the gate',
+        'the controlled passage is inspectable',
+        'the release state is explicit',
+      ],
+      signal: [
+        'noise fills the field',
+        'a weak pulse separates from noise',
+        'the trace begins to converge',
+        'one coherent signal is revealed',
+        'the signal is calibrated against evidence',
+        'the decision-grade signal remains visible',
+      ],
+      bridge: [
+        'the two sides remain disconnected',
+        'the gap becomes the central tension',
+        'the first span reaches across the gap',
+        'the path connects end to end',
+        'the joined path carries proof',
+        'the dependable crossing is owned',
+      ],
+      journey: [
+        'the destination is visible but distant',
+        'the route meets its constraint',
+        'the next viable turn appears',
+        'the route clears the decisive turn',
+        'the chosen path is proven',
+        'the next move and owner are explicit',
+      ],
+    };
+    const stageIndex = [
+      'establish',
+      'pressure',
+      'approach',
+      'crossing',
+      'proof',
+      'release',
+    ].indexOf(stage);
+    return {
+      index,
+      stage,
+      progress: Math.round(((index + 1) / Math.max(1, slideCount)) * 1_000) / 1_000,
+      intensity,
+      framing,
+      subjectState: stateByKind[metaphor.kind][stageIndex] ?? metaphor.transformation,
+    };
+  });
   return {
     sceneContinuity: {
       motif: motifNoun,
@@ -169,6 +275,7 @@ function cinematicDirection(
     },
     visualMetaphor: metaphor,
     revealPacing,
+    sceneStates,
     emotionalArc: {
       shape: 'rise-climax-release',
       intensity: revealPacing.map(({ intensity }) => intensity),
@@ -178,6 +285,236 @@ function cinematicDirection(
       (_, index) => COMPOSITION_RHYTHM[index % COMPOSITION_RHYTHM.length] ?? 'split',
     ),
   };
+}
+
+function sceneBox(x: number, y: number, width: number, height: number): BoundingBox {
+  const snap = (value: number) => Math.round(value * 10_000) / 10_000;
+  return { x: snap(x), y: snap(y), width: snap(width), height: snap(height) };
+}
+
+/**
+ * Compiles the typed story state into motif-specific, editable scene marks.
+ * Both the composition-grammar and legacy materializers consume this one seam,
+ * so no route can silently collapse back to the former progress rail.
+ */
+export function buildNodeSlideStorySceneMarks(
+  storySpec: NodeSlideStorySpec | undefined,
+  index: number,
+): NodeSlideStorySceneMark[] {
+  const scene = storySpec?.sceneStates[index];
+  if (!storySpec || !scene) return [];
+  const { progress, intensity } = scene;
+  const opacity = Math.max(0.34, intensity / 100);
+  const altText = `${storySpec.visualMetaphor.subject}: ${scene.subjectState}; ${scene.stage} stage, ${Math.round(progress * 100)} percent through the story`;
+  const mark = (
+    key: string,
+    role: string,
+    bbox: BoundingBox,
+    tone: NodeSlideStorySceneMark['tone'],
+    markOpacity = opacity,
+    radius = 999,
+    rotation = 0,
+  ): NodeSlideStorySceneMark => ({
+    key,
+    role,
+    bbox,
+    rotation,
+    tone,
+    opacity: Math.round(markOpacity * 1_000) / 1_000,
+    radius,
+    altText,
+  });
+
+  if (storySpec.visualMetaphor.kind === 'threshold') {
+    const aperture = 0.035 + 0.105 * progress;
+    const center = 0.805;
+    const leftX = center - aperture / 2 - 0.012;
+    const rightX = center + aperture / 2;
+    return [
+      mark(
+        'scene-threshold-left',
+        'story_scene_threshold_gate_left',
+        sceneBox(leftX, 0.052, 0.012, 0.1),
+        'insight',
+        opacity,
+        2,
+      ),
+      mark(
+        'scene-threshold-right',
+        'story_scene_threshold_gate_right',
+        sceneBox(rightX, 0.052, 0.012, 0.1),
+        'insight',
+        opacity,
+        2,
+      ),
+      mark(
+        'scene-threshold-path',
+        'story_scene_threshold_path',
+        sceneBox(leftX + 0.012, 0.124, aperture, 0.009),
+        'accent-soft',
+        0.42 + 0.35 * progress,
+        999,
+      ),
+      mark(
+        'scene-threshold-subject',
+        'story_scene_threshold_subject',
+        sceneBox(0.684 + 0.19 * progress, 0.112, 0.022, 0.022),
+        'accent',
+        opacity,
+        999,
+      ),
+    ];
+  }
+
+  if (storySpec.visualMetaphor.kind === 'signal') {
+    const noiseOpacity = Math.max(0.12, 0.68 - progress * 0.5);
+    const coreSize = 0.032 + 0.02 * progress;
+    return [
+      mark(
+        'scene-signal-noise-1',
+        'story_scene_signal_noise',
+        sceneBox(0.69, 0.066, 0.015, 0.015),
+        'accent-soft',
+        noiseOpacity,
+      ),
+      mark(
+        'scene-signal-noise-2',
+        'story_scene_signal_noise',
+        sceneBox(0.735, 0.112, 0.011, 0.011),
+        'accent-soft',
+        noiseOpacity * 0.82,
+      ),
+      mark(
+        'scene-signal-noise-3',
+        'story_scene_signal_noise',
+        sceneBox(0.77, 0.071, 0.009, 0.009),
+        'accent-soft',
+        noiseOpacity * 0.64,
+      ),
+      mark(
+        'scene-signal-wave-outer',
+        'story_scene_signal_wave',
+        sceneBox(0.835 - coreSize, 0.102 - coreSize, coreSize * 2.5, coreSize * 2.5),
+        'accent-soft',
+        0.2 + progress * 0.28,
+      ),
+      mark(
+        'scene-signal-wave-inner',
+        'story_scene_signal_wave',
+        sceneBox(0.842 - coreSize / 2, 0.109 - coreSize / 2, coreSize * 1.55, coreSize * 1.55),
+        'accent-soft',
+        0.28 + progress * 0.34,
+      ),
+      mark(
+        'scene-signal-core',
+        'story_scene_signal_core',
+        sceneBox(0.846, 0.113, coreSize, coreSize),
+        'accent',
+        opacity,
+      ),
+    ];
+  }
+
+  if (storySpec.visualMetaphor.kind === 'bridge') {
+    const reached = 0.17 * progress;
+    return [
+      mark(
+        'scene-bridge-left-anchor',
+        'story_scene_bridge_anchor',
+        sceneBox(0.68, 0.066, 0.012, 0.085),
+        'insight',
+        opacity,
+        2,
+      ),
+      mark(
+        'scene-bridge-right-anchor',
+        'story_scene_bridge_anchor',
+        sceneBox(0.91, 0.066, 0.012, 0.085),
+        'insight',
+        opacity,
+        2,
+      ),
+      mark(
+        'scene-bridge-left-span',
+        'story_scene_bridge_span',
+        sceneBox(0.692, 0.099, reached, 0.012),
+        'accent',
+        opacity,
+        3,
+      ),
+      mark(
+        'scene-bridge-right-span',
+        'story_scene_bridge_span',
+        sceneBox(0.91 - reached, 0.099, reached, 0.012),
+        'accent',
+        opacity,
+        3,
+      ),
+      mark(
+        'scene-bridge-deck',
+        'story_scene_bridge_deck',
+        sceneBox(0.692, 0.127, 0.218, 0.008),
+        'accent-soft',
+        0.2 + 0.55 * progress,
+        999,
+      ),
+    ];
+  }
+
+  const routeReach = 0.06 + 0.17 * progress;
+  return [
+    mark(
+      'scene-journey-route-1',
+      'story_scene_journey_route',
+      sceneBox(0.68, 0.13, routeReach, 0.009),
+      'accent',
+      opacity,
+      999,
+      -12,
+    ),
+    mark(
+      'scene-journey-route-2',
+      'story_scene_journey_route',
+      sceneBox(0.73, 0.092, routeReach * 0.42, 0.009),
+      'accent',
+      opacity,
+      999,
+      10,
+    ),
+    mark(
+      'scene-journey-route-3',
+      'story_scene_journey_route',
+      sceneBox(0.79, 0.104, routeReach * 0.4, 0.009),
+      'accent',
+      opacity,
+      999,
+      -8,
+    ),
+    mark(
+      'scene-journey-waypoint-1',
+      'story_scene_journey_waypoint',
+      sceneBox(0.684, 0.122, 0.022, 0.022),
+      'insight',
+      0.55,
+      999,
+    ),
+    mark(
+      'scene-journey-waypoint-2',
+      'story_scene_journey_waypoint',
+      sceneBox(0.78, 0.083, 0.02, 0.02),
+      'accent-soft',
+      0.3 + 0.45 * progress,
+      999,
+    ),
+    mark(
+      'scene-journey-waypoint-3',
+      'story_scene_journey_waypoint',
+      sceneBox(0.895, 0.092, 0.026, 0.026),
+      'accent',
+      opacity,
+      999,
+    ),
+  ];
 }
 
 function requestedSlideCount(title: string, brief: DeckBrief): number {

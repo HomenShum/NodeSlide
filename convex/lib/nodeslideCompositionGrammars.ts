@@ -19,7 +19,7 @@ import {
 } from '../../shared/nodeslideLayoutMetrics';
 import { nodeslideStableId } from './nodeslideIds';
 import type { NodeSlidePlannedSlide } from './nodeslideSeed';
-import type { NodeSlideStorySpec } from './nodeslideStoryContext';
+import { type NodeSlideStorySpec, buildNodeSlideStorySceneMarks } from './nodeslideStoryContext';
 
 const EDITABLE_CAPABILITIES = ['web_native', 'pptx_editable', 'google_importable'] as const;
 const STATIC_MATH_CAPABILITIES = [
@@ -35,7 +35,8 @@ export type CompositionGrammarId =
   | 'evidence-dossier'
   | 'metric-stage'
   | 'comparison-field'
-  | 'sparse-transition';
+  | 'sparse-transition'
+  | 'scene-stage';
 
 export interface GrammarBuildContext {
   deckId: string;
@@ -187,62 +188,63 @@ function authoredArtifactBinding(
   };
 }
 
-function storyContinuityElements(ctx: GrammarBuildContext): SlideElement[] {
-  if (!ctx.storySpec) return [];
-  const storyBeat = ctx.storySpec.revealPacing[ctx.index];
-  if (!storyBeat) return [];
-  const elements: SlideElement[] = [];
-  const motifKind = ctx.storySpec.visualMetaphor.kind;
-  const continuityProgress = (ctx.index + 1) / Math.max(1, ctx.total);
-  const markerProgress = Math.min(0.82, 0.82 * continuityProgress);
-  const markerSize = motifKind === 'signal' ? 0.012 + 0.012 * (storyBeat.intensity / 100) : 0.016;
-  elements.push(
-    makeElement(ctx, 'story-continuity-motif', {
-      name: `Story continuity · ${ctx.storySpec.sceneContinuity.motif}`,
+function storyContinuityElements(
+  ctx: GrammarBuildContext,
+  placement: 'header' | 'field-left' | 'field-right' = 'header',
+): SlideElement[] {
+  const scene = ctx.storySpec?.sceneStates[ctx.index];
+  const marks = buildNodeSlideStorySceneMarks(ctx.storySpec, ctx.index);
+  const elements = marks.map((mark) =>
+    makeElement(ctx, mark.key, {
+      name: `Story scene · ${ctx.storySpec?.visualMetaphor.transformation ?? 'continuity'}`,
       kind: 'shape',
-      role: `story_motif_${ctx.storySpec.visualMetaphor.kind}`,
-      bbox: box(0.07, 0.115, Math.max(0.08, 0.82 * continuityProgress), 0.008),
-      rotation: 0,
-      style: {
-        fill: ctx.theme.colors.accent,
-        opacity: Math.max(0.28, storyBeat.intensity / 100),
-        radius: 999,
-      },
-      altText: `${ctx.storySpec.sceneContinuity.progression[ctx.index]}; emotional intensity ${storyBeat.intensity} of 100`,
-      sourceIds: [],
-      locked: true,
-      exportCapabilities: [...EDITABLE_CAPABILITIES],
-    }),
-  );
-  elements.push(
-    makeElement(ctx, 'story-continuity-marker', {
-      name: `Story transformation · ${ctx.storySpec.visualMetaphor.transformation}`,
-      kind: 'shape',
-      role: `story_motif_${motifKind}_marker`,
+      role: mark.role,
       bbox:
-        motifKind === 'threshold'
-          ? box(0.884, 0.097, 0.006, 0.044)
-          : box(
-              Math.min(0.876, 0.07 + markerProgress - markerSize / 2),
-              0.111 - markerSize / 2,
-              markerSize,
-              markerSize,
-            ),
-      rotation: 0,
+        placement !== 'header'
+          ? box(
+              (placement === 'field-left' ? 0.085 : 0.485) + (mark.bbox.x - 0.68) * 1.65,
+              0.25 + (mark.bbox.y - 0.05) * 3.5,
+              mark.bbox.width * 1.65,
+              mark.bbox.height * 3.5,
+            )
+          : mark.bbox,
+      rotation: mark.rotation,
       style: {
-        fill: motifKind === 'threshold' ? ctx.theme.colors.insightInk : ctx.theme.colors.accent,
-        opacity: Math.max(0.38, storyBeat.intensity / 100),
-        radius: motifKind === 'threshold' ? 3 : 999,
+        fill:
+          mark.tone === 'insight'
+            ? ctx.theme.colors.insightInk
+            : mark.tone === 'accent-soft'
+              ? ctx.theme.colors.accentSoft
+              : ctx.theme.colors.accent,
+        opacity: mark.opacity,
+        radius: mark.radius,
       },
-      altText:
-        motifKind === 'threshold'
-          ? `Decision threshold; the story signal has reached ${Math.round(continuityProgress * 100)} percent of the gate`
-          : `${ctx.storySpec.visualMetaphor.subject}; transformation progress ${Math.round(continuityProgress * 100)} percent`,
+      altText: mark.altText,
       sourceIds: [],
       locked: true,
       exportCapabilities: [...EDITABLE_CAPABILITIES],
     }),
   );
+  if (placement !== 'header' && scene) {
+    elements.unshift(
+      makeElement(ctx, 'story-scene-field', {
+        name: `Story scene field · ${scene.subjectState}`,
+        kind: 'shape',
+        role: 'story_scene_field',
+        bbox: box(placement === 'field-left' ? 0.06 : 0.46, 0.2, 0.48, 0.56),
+        rotation: 0,
+        style: {
+          fill: ctx.theme.colors.accentSoft,
+          opacity: 0.22,
+          radius: Math.max(12, ctx.theme.defaultRadius),
+        },
+        altText: `${scene.subjectState}; dominant ${scene.stage} scene`,
+        sourceIds: [],
+        locked: true,
+        exportCapabilities: [...EDITABLE_CAPABILITIES],
+      }),
+    );
+  }
   return elements;
 }
 
@@ -1509,6 +1511,106 @@ function buildSparseTransition(ctx: GrammarBuildContext): GrammarBuildResult {
 }
 
 // ============================================================================
+// SCENE STAGE: story state becomes the dominant visual center
+// Used for text-led reveal/proof/release beats so continuity is composition,
+// not a badge appended to another layout.
+// ============================================================================
+
+function buildSceneStage(ctx: GrammarBuildContext): GrammarBuildResult {
+  const { planned, theme } = ctx;
+  const sceneOnLeft = ctx.index % 2 === 1;
+  const textX = sceneOnLeft ? 0.6 : 0.06;
+  const elements: SlideElement[] = [
+    ...storyContinuityElements(ctx, sceneOnLeft ? 'field-left' : 'field-right'),
+  ];
+  elements.push(sectionLabel(ctx, textX, 0.065, 0.3));
+  const headlineWidth = 0.34;
+  const headlineFontSize = fitTextFontSize(planned.headline, 38, 34, 1.04, headlineWidth, 0.272);
+  // Office renderers wrap more conservatively than our deterministic text
+  // estimator. Preserve 25% glyph headroom so the visible title cannot cross
+  // into the supporting-copy box even when the geometry itself is valid.
+  const headlineHeight = Math.min(
+    0.34,
+    Math.max(
+      0.16,
+      estimateTextHeight(planned.headline, headlineFontSize, 1.04, headlineWidth) * 1.25,
+    ),
+  );
+  elements.push(
+    makeElement(ctx, 'headline', {
+      name: 'Headline',
+      kind: 'text',
+      role: 'headline',
+      bbox: box(textX, 0.18, headlineWidth, headlineHeight),
+      rotation: 0,
+      content: planned.headline,
+      style: {
+        color: theme.colors.ink,
+        fontFamily: theme.typography.display,
+        fontSize: headlineFontSize,
+        fontWeight: 650,
+        lineHeight: 1.04,
+        letterSpacing: -0.5,
+      },
+      sourceIds: [ctx.sourceBriefId],
+      locked: false,
+      exportCapabilities: [...EDITABLE_CAPABILITIES],
+    }),
+  );
+  const bodyY = 0.18 + headlineHeight + 0.035;
+  const bodyHeight = Math.min(0.23, Math.max(0.15, 0.75 - bodyY));
+  elements.push(
+    makeElement(ctx, 'body', {
+      name: 'Supporting context',
+      kind: 'text',
+      role: 'body',
+      bbox: box(textX, bodyY, headlineWidth, bodyHeight),
+      rotation: 0,
+      content: planned.body,
+      style: {
+        color: theme.colors.muted,
+        fontFamily: theme.typography.body,
+        fontSize: fitTextFontSize(planned.body, 16, 14, 1.38, headlineWidth, bodyHeight),
+        fontWeight: 450,
+        lineHeight: 1.38,
+      },
+      sourceIds: [ctx.sourceBriefId, ...ctx.linkedSourceIds],
+      locked: false,
+      exportCapabilities: [...EDITABLE_CAPABILITIES],
+    }),
+  );
+  const decisivePoint = planned.bullets[0];
+  if (decisivePoint) {
+    elements.push(
+      makeElement(ctx, 'decisive-point', {
+        name: 'Decisive point',
+        kind: 'text',
+        role: 'takeaway',
+        bbox: box(textX, 0.79, headlineWidth, 0.08),
+        rotation: 0,
+        content: decisivePoint,
+        style: {
+          color: theme.colors.insightInk,
+          fill: theme.colors.insight,
+          fontFamily: theme.typography.body,
+          fontSize: fitTextFontSize(decisivePoint, 16, 14, 1.25, headlineWidth - 0.04, 0.045),
+          fontWeight: 650,
+          lineHeight: 1.25,
+          padding: 12,
+          radius: theme.defaultRadius,
+        },
+        sourceIds: [ctx.sourceEvidenceId, ...ctx.linkedSourceIds],
+        locked: false,
+        exportCapabilities: [...EDITABLE_CAPABILITIES],
+      }),
+    );
+  }
+  elements.push(...footerElements(ctx));
+  resolveGeometryCollisions(elements, planned.title);
+  return { elements, grammarId: 'scene-stage' };
+}
+
+// ============================================================================
 // FALLBACK: tension/contrast field
 // Two opposing blocks for before/after, current/target, or tension pairs.
 // ============================================================================
@@ -1636,6 +1738,9 @@ export function dispatchCompositionGrammar(
   const bulletCount = planned.bullets.length;
   const isOpening = ctx.index === 0;
   const isTransition = planned.section.toLowerCase().includes('transition');
+  const sceneStage = ctx.storySpec?.sceneStates[ctx.index]?.stage;
+  const isSceneClimax =
+    sceneStage === 'crossing' || sceneStage === 'proof' || sceneStage === 'release';
 
   // Qualitative fallbacks: when quantitative evidence fails, preserve
   // narrative with non-quantitative compositions.
@@ -1645,6 +1750,19 @@ export function dispatchCompositionGrammar(
 
   if (isQuarantinedQuantitative && bulletCount >= 2) {
     return buildTensionContrastField(ctx);
+  }
+
+  if (
+    isSceneClimax &&
+    !hasDiagram &&
+    !hasChart &&
+    !hasMetric &&
+    !hasFormula &&
+    !hasImage &&
+    !hasVideo &&
+    ctx.index < ctx.total - 1
+  ) {
+    return buildSceneStage(ctx);
   }
 
   // Archetype-driven defaults

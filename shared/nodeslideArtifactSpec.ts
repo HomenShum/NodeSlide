@@ -581,6 +581,19 @@ export function compileNodeSlideArtifactSpecs(
           : [];
       }),
     );
+    const dominantStorySceneSlideIds = new Set(
+      snapshot.slides.flatMap((slide) => {
+        const sceneElements = snapshot.elements.filter(
+          (element) => element.slideId === slide.id && element.role?.startsWith('story_scene_'),
+        );
+        const field = sceneElements.find(
+          (element) =>
+            element.role === 'story_scene_field' &&
+            element.bbox.width * element.bbox.height >= 0.16,
+        );
+        return field && sceneElements.length >= 5 ? [slide.id] : [];
+      }),
+    );
     const visualSlideCount = new Set(
       specs.flatMap((spec) =>
         spec.kind === 'chart' ||
@@ -589,7 +602,8 @@ export function compileNodeSlideArtifactSpecs(
         spec.kind === 'metric' ||
         spec.kind === 'comparison' ||
         (spec.kind === 'evidence-media' && !spec.payload.placeholder) ||
-        nativeVisualSlideIds.has(spec.slideId)
+        nativeVisualSlideIds.has(spec.slideId) ||
+        dominantStorySceneSlideIds.has(spec.slideId)
           ? [spec.slideId]
           : [],
       ),

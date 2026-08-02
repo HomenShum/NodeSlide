@@ -1,0 +1,148 @@
+{
+  "schemaVersion": "nodeslide.scene-continuity-proof/v2",
+  "generatedAt": "2026-08-02T00:55:43.514Z",
+  "slideCount": 12,
+  "requestedSlideCount": 12,
+  "exactCount": true,
+  "story": {
+    "metaphor": {
+      "kind": "threshold",
+      "subject": "a guarded threshold",
+      "transformation": "move from exposed uncertainty to controlled passage"
+    },
+    "sceneStates": [
+      {
+        "index": 0,
+        "stage": "establish",
+        "progress": 0.083,
+        "intensity": 24,
+        "framing": "wide",
+        "subjectState": "the boundary is distant"
+      },
+      {
+        "index": 1,
+        "stage": "establish",
+        "progress": 0.167,
+        "intensity": 32,
+        "framing": "wide",
+        "subjectState": "the boundary is distant"
+      },
+      {
+        "index": 2,
+        "stage": "pressure",
+        "progress": 0.25,
+        "intensity": 39,
+        "framing": "split",
+        "subjectState": "exposure presses against the boundary"
+      },
+      {
+        "index": 3,
+        "stage": "pressure",
+        "progress": 0.333,
+        "intensity": 47,
+        "framing": "split",
+        "subjectState": "exposure presses against the boundary"
+      },
+      {
+        "index": 4,
+        "stage": "approach",
+        "progress": 0.417,
+        "intensity": 54,
+        "framing": "focused",
+        "subjectState": "the decision approaches the gate"
+      },
+      {
+        "index": 5,
+        "stage": "approach",
+        "progress": 0.5,
+        "intensity": 62,
+        "framing": "focused",
+        "subjectState": "the decision approaches the gate"
+      },
+      {
+        "index": 6,
+        "stage": "crossing",
+        "progress": 0.583,
+        "intensity": 70,
+        "framing": "focused",
+        "subjectState": "the subject crosses the gate"
+      },
+      {
+        "index": 7,
+        "stage": "crossing",
+        "progress": 0.667,
+        "intensity": 77,
+        "framing": "focused",
+        "subjectState": "the subject crosses the gate"
+      },
+      {
+        "index": 8,
+        "stage": "proof",
+        "progress": 0.75,
+        "intensity": 85,
+        "framing": "close",
+        "subjectState": "the controlled passage is inspectable"
+      },
+      {
+        "index": 9,
+        "stage": "proof",
+        "progress": 0.833,
+        "intensity": 92,
+        "framing": "close",
+        "subjectState": "the controlled passage is inspectable"
+      },
+      {
+        "index": 10,
+        "stage": "release",
+        "progress": 0.917,
+        "intensity": 100,
+        "framing": "wide",
+        "subjectState": "the release state is explicit"
+      },
+      {
+        "index": 11,
+        "stage": "release",
+        "progress": 1,
+        "intensity": 76,
+        "framing": "wide",
+        "subjectState": "the release state is explicit"
+      }
+    ],
+    "uniqueSceneSignatures": 12,
+    "legacyProgressRailCount": 0
+  },
+  "archetypes": [
+    "statement",
+    "diagram-dominant",
+    "comparison",
+    "split",
+    "comparison",
+    "split",
+    "diagram-dominant",
+    "statement",
+    "diagram-dominant",
+    "comparison",
+    "split",
+    "statement"
+  ],
+  "diversity": {
+    "score": 0.32082069212300046,
+    "passes": true,
+    "distinctFamilies": 5,
+    "nearDuplicatePairs": []
+  },
+  "validation": {
+    "publishOk": true,
+    "cleanOk": true,
+    "issues": []
+  },
+  "deckCi": {
+    "status": "pass",
+    "blockerCount": 0,
+    "checks": []
+  },
+  "forbiddenLogic": {
+    "mathElements": 0,
+    "formulaTextMatches": 0
+  }
+}

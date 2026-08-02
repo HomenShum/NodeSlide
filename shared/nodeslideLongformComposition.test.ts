@@ -361,7 +361,7 @@ describe('long-form artifact composition', () => {
         },
       ],
       emotionalArc: { shape: 'rise-climax-release', intensity: [0, 0.5] },
-      compositionPlan: ['title', 'comparison'],
+      compositionPlan: ['statement', 'comparison'],
     } satisfies NodeSlideStorySpec;
     const direct = dispatchCompositionGrammar('scene-stage', {
       deckId: 'executive-scene-proof',

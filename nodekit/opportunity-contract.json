@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "nodekit.opportunity-contract/v1",
+  "user": "Someone producing a deck they will have to defend — a founder, an EIR, an operator presenting to a room that asks where a number came from.",
+  "problem": "AI edits to a deck arrive as silent overwrites, so the author cannot inspect what changed or defend the result. README: 'never a silent overwrite'.",
+  "wedge": "Every AI edit is a scoped, validated, receipted proposal flowing through one validated mutation path, rather than a direct write to the document.",
+  "primaryJob": "Turn a prompt, a structured brief, or raw data into a presentation the author can inspect and defend.",
+  "inputs": [
+    "founder_brief",
+    "structured_brief",
+    "attached_csv",
+    "uploaded_images"
+  ],
+  "primaryArtifact": "A canonical structured document that compiles to editable slides, with a Trace receipt attributing each plan to the live model.",
+  "rejectedAlternatives": [
+    {
+      "alternative": "Let the agent write directly into slide state.",
+      "reason": "A direct write cannot be reviewed before it lands, which removes the author's ability to defend the deck — the problem the product exists to solve."
+    },
+    {
+      "alternative": "Export-only generation with no in-product editing.",
+      "reason": "The README's structured primitives — clickable chart, formula and image — require native editable elements, not a flattened export."
+    }
+  ],
+  "openUnknowns": [
+    "Whether authors accept a proposal step on every edit, or route around it when they are in a hurry.",
+    "Whether the Trace receipt is read by anyone other than the author who generated it."
+  ],
+  "successCondition": "Every change, human or agent, flows through one validated mutation path, and the author can point at any element and say where it came from.",
+  "authorityLimits": {
+    "read": [
+      "founder brief text",
+      "attached CSV sources",
+      "uploaded images and their credits"
+    ],
+    "propose": [
+      "slide content changes",
+      "structured primitive insertions",
+      "chart and formula edits"
+    ],
+    "approve": [],
+    "prohibited": [
+      "apply a proposal without the author accepting it",
+      "publish or export without the author",
+      "overwrite the canonical document outside the validated mutation path"
+    ]
+  },
+  "derivedFrom": {
+    "source": "NodeSlide/README.md",
+    "method": "mixed",
+    "derivedBy": "node-platform delivery-brief work, 2026-08-03",
+    "unverifiedFields": [
+      "openUnknowns — the README does not state these; they are judgement and should be replaced by whoever owns the product",
+      "rejectedAlternatives — inferred from what the README rules out, not from a stated decision record"
+    ]
+  }
+}

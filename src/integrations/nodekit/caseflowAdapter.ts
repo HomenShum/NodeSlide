@@ -1,5 +1,4 @@
 import {
-  type CaseflowConformanceVerdict,
   type CaseflowRuntime,
   type NodeKitActor,
   type NodeKitApproval,
@@ -10,14 +9,17 @@ import {
   type NodeKitProposal,
   type NodeKitReceipt,
   type NodeKitRun,
-  runCaseflowConformance,
   runtimeProfiles,
 } from '@homenshum/nodekit/caseflow';
 
-export const NODEKIT_CASEFLOW_SOURCE_COMMIT = '5cc61578b3c1bd5b5c8195b83347b91f8b83242b' as const;
+/** Replaced with the final packed source identity when NodeKit is frozen. */
+export const NODEKIT_CASEFLOW_SOURCE_COMMIT = 'pending-final-nodekit-source' as const;
+export const NODEKIT_CASEFLOW_SOURCE_HASH = 'pending-final-nodekit-source-hash' as const;
+export const NODEKIT_CASEFLOW_TARBALL_SHA256 = 'pending-final-nodekit-tarball' as const;
 
 export type NodeSlideCaseflowMutation =
   | 'createCase'
+  | 'updateCaseInput'
   | 'startRun'
   | 'enterStage'
   | 'createArtifact'
@@ -25,7 +27,9 @@ export type NodeSlideCaseflowMutation =
   | 'decideProposal'
   | 'raiseException'
   | 'resolveException'
-  | 'completeRun';
+  | 'completeRun'
+  | 'cancelRun'
+  | 'failRunSafely';
 
 export interface NodeSlideCaseflowTransport {
   mutation(operation: NodeSlideCaseflowMutation, args: Record<string, unknown>): Promise<unknown>;
@@ -33,9 +37,7 @@ export interface NodeSlideCaseflowTransport {
 }
 
 export interface NodeSlideCaseflowScope {
-  /** Authenticated workspace resolved by the application wrapper. */
-  workspaceId: string;
-  /** Existing NodeSlide deck bound to that workspace. */
+  /** Existing NodeSlide deck whose authenticated binding determines component scope. */
   deckId: string;
   /** Optional real nodeslide_agent_runs id for domain adoption flows. */
   generationId?: string;
@@ -51,9 +53,9 @@ type ProposalDecisionInput = Parameters<CaseflowRuntime['decideProposal']>[0] & 
 };
 
 /**
- * Thin portable adapter. Authentication is deliberately absent here: every
- * transport target is an application-owned Convex function that resolves
- * ctx.auth and workspace ownership before touching lifecycle rows.
+ * Portable product adapter over application-owned Convex functions. Those
+ * functions authenticate, authorize the deck, and then call the installed
+ * isolated NodeKit component; this client never receives a scopeKey or bearer.
  */
 export function createNodeSlideCaseflowRuntime(
   transport: NodeSlideCaseflowTransport,
@@ -66,33 +68,40 @@ export function createNodeSlideCaseflowRuntime(
     reused: boolean;
   }>;
 } {
-  const scoped = (args: Record<string, unknown>) => ({ workspaceId: scope.workspaceId, ...args });
+  const scoped = (args: Record<string, unknown>) => ({ deckId: scope.deckId, ...args });
   const mutate = async <T>(operation: NodeSlideCaseflowMutation, args: Record<string, unknown>) =>
     (await transport.mutation(operation, scoped(args))) as T;
 
   return {
     capabilities: runtimeProfiles.convex,
     createCase: async ({ title, primaryJob }) =>
-      mutate<NodeKitCase>('createCase', { deckId: scope.deckId, title, primaryJob }),
+      mutate<NodeKitCase>('createCase', { title, primaryJob }),
+    updateCaseInput: async ({ caseId, title, primaryJob }) =>
+      mutate<NodeKitCase>('updateCaseInput', {
+        caseId,
+        ...(title === undefined ? {} : { title }),
+        ...(primaryJob === undefined ? {} : { primaryJob }),
+      }),
     startRun: async ({ caseId, stages }) =>
       mutate<NodeKitRun>('startRun', {
         caseId,
         stages,
         ...(scope.generationId ? { generationId: scope.generationId } : {}),
       }),
-    enterStage: async ({ runId, stageId, nextAction, nextActionOwner }) =>
+    enterStage: async ({ runId, stageId, nextAction, nextActionOwner, idempotencyKey }) =>
       mutate<NodeKitRun>('enterStage', {
         runId,
         stageId,
         ...(nextAction === undefined ? {} : { nextAction }),
         ...(nextActionOwner === undefined ? {} : { nextActionOwner }),
+        ...(idempotencyKey === undefined ? {} : { idempotencyKey }),
       }),
     createArtifact: async <T = unknown>({
       caseId,
       runId,
-      kind,
       title,
       content,
+      idempotencyKey,
     }: {
       caseId: string;
       runId: string;
@@ -100,33 +109,43 @@ export function createNodeSlideCaseflowRuntime(
       title?: string;
       content: T;
       actor?: NodeKitActor;
+      idempotencyKey?: string;
     }) =>
       mutate<NodeKitArtifact<T>>('createArtifact', {
         caseId,
         runId,
-        title: title ?? 'NodeSlide deck',
         content,
-        ...(kind === undefined ? {} : { kind }),
+        ...(title === undefined ? {} : { title }),
+        ...(scope.generationId ? { generationId: scope.generationId } : {}),
         ...(scope.domainArtifactRef ? { domainArtifactRef: scope.domainArtifactRef } : {}),
+        ...(idempotencyKey === undefined ? {} : { idempotencyKey }),
       }),
     createProposal: async <T = unknown>({
       artifactId,
       baseVersion,
       patch,
       rationale,
+      idempotencyKey,
     }: {
       artifactId: string;
       baseVersion: number;
       patch: T;
       rationale?: string;
       actor?: NodeKitActor;
-    }) =>
-      mutate<NodeKitProposal<T>>('createProposal', {
+      idempotencyKey?: string;
+    }) => {
+      const patchId = (patch as { id?: unknown } | null)?.id;
+      if (typeof patchId !== 'string' || !patchId.trim()) {
+        throw new Error('NodeSlide Caseflow proposals require a persisted patch id.');
+      }
+      return mutate<NodeKitProposal<T>>('createProposal', {
         artifactId,
         baseVersion,
-        patch,
+        patchId,
         ...(rationale === undefined ? {} : { rationale }),
-      }),
+        ...(idempotencyKey === undefined ? {} : { idempotencyKey }),
+      });
+    },
     decideProposal: async (input: ProposalDecisionInput) =>
       mutate<{
         approval: NodeKitApproval;
@@ -146,19 +165,22 @@ export function createNodeSlideCaseflowRuntime(
       code,
       message,
       preservedState,
+      idempotencyKey,
     }: {
       runId: string;
       code?: string;
       message?: string;
       preservedState?: T;
       actor?: NodeKitActor;
+      idempotencyKey?: string;
     }) =>
       mutate<NodeKitException<T>>('raiseException', {
         runId,
-        code: code ?? 'unknown',
-        message: message ?? 'NodeSlide validation requires attention.',
-        preservedState: preservedState ?? {},
+        ...(code === undefined ? {} : { code }),
+        ...(message === undefined ? {} : { message }),
+        ...(preservedState === undefined ? {} : { preservedState }),
         ...(scope.validationRef ? { validationRef: scope.validationRef } : {}),
+        ...(idempotencyKey === undefined ? {} : { idempotencyKey }),
       }),
     resolveException: async ({ exceptionId, resolution, nextAction, nextActionOwner }) =>
       mutate<{ exception: NodeKitException; run: NodeKitRun }>('resolveException', {
@@ -171,27 +193,19 @@ export function createNodeSlideCaseflowRuntime(
       mutate<{ receipt: NodeKitReceipt; run: NodeKitRun; reused: boolean }>('completeRun', {
         runId,
       }),
+    cancelRun: async ({ runId, reason }) =>
+      mutate<{ receipt: NodeKitReceipt; run: NodeKitRun; reused: boolean }>('cancelRun', {
+        runId,
+        ...(reason === undefined ? {} : { reason }),
+      }),
+    failRunSafely: async ({ runId, reason }) =>
+      mutate<{ receipt: NodeKitReceipt; run: NodeKitRun; reused: boolean }>('failRunSafely', {
+        runId,
+        ...(reason === undefined ? {} : { reason }),
+      }),
     snapshot: async () =>
-      (await transport.query('snapshot', {
-        workspaceId: scope.workspaceId,
-      })) as NodeKitCaseflowSnapshot,
+      (await transport.query('snapshot', { deckId: scope.deckId })) as NodeKitCaseflowSnapshot,
   };
 }
-
-export async function runNodeSlideCaseflowConformance(
-  transport: NodeSlideCaseflowTransport,
-  scope: NodeSlideCaseflowScope,
-): Promise<CaseflowConformanceVerdict> {
-  return runCaseflowConformance(() => createNodeSlideCaseflowRuntime(transport, scope));
-}
-
-export type NodeSlideCaseflowDomainRefs = {
-  deckIds: string[];
-  domainArtifactRefs: string[];
-  domainReceiptRefs: string[];
-  generationIds: string[];
-  patchIds: string[];
-  validationRefs: string[];
-};
 
 export type NodeSlideCaseflowActor = NodeKitActor;

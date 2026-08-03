@@ -2,7 +2,6 @@ import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
 import { nodeslideExecutionTraceFields } from './lib/nodeslideExecutionTraceValidator';
 import { nodeslideShadowComparisonFields } from './lib/nodeslideShadowComparisonValidator';
-import { nodekitCaseflowTables } from './nodekitCaseflowTables';
 import {
   nodeslideBoundingBoxValidator,
   nodeslideBriefValidator,
@@ -223,7 +222,23 @@ const nodeslidePublishedSnapshotValidator = v.object({
 });
 
 export default defineSchema({
-  ...nodekitCaseflowTables,
+  /**
+   * Host-owned authorization bridge into the isolated NodeKit component.
+   * It stores no bearer capability and no duplicate Caseflow state, only the
+   * authenticated deck binding and public component identifiers.
+   */
+  nodeslide_nodekit_bindings: defineTable({
+    deckId: v.string(),
+    ownerSubject: v.string(),
+    scopeKey: v.string(),
+    caseId: v.optional(v.string()),
+    currentRunId: v.optional(v.string()),
+    artifactId: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_deck', ['deckId'])
+    .index('by_owner_deck', ['ownerSubject', 'deckId']),
   projects: defineTable({
     clientSessionId: v.optional(v.string()),
     title: v.string(),

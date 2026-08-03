@@ -1,104 +1,116 @@
-# NodeSlide as an authenticated NodeKit Caseflow consumer
+# NodeSlide as an installed NodeKit Caseflow consumer
 
-## Status
+## Status and claim boundary
 
-NodeSlide consumes the supported `@homenshum/nodekit/caseflow` entry point from exact NodeKit
-source revision:
+NodeSlide installs the exact locally packed `@homenshum/nodekit` tarball recorded in
+`vendor/homenshum-nodekit-0.2.1.provenance.json` and mounts its real Convex component through
+`convex/convex.config.ts`.
+
+This repository proves the **local engineering consumer** only. It does not claim a production
+deployment, signed-in browser journey, npm publication, or public Convex Component submission.
+Those gates remain external and fail-closed.
+
+## No copied Caseflow backend
+
+The former application-local Caseflow implementation and its copied lifecycle tables were
+deleted. Component-owned state now lives exclusively inside the installed NodeKit component:
 
 ```text
-5cc61578b3c1bd5b5c8195b83347b91f8b83242b
+@homenshum/nodekit/convex.config.js
+        -> isolated NodeKit Caseflow component
+        -> cases, runs, artifacts, proposals, approvals,
+           exceptions, events, and receipt v2 records
 ```
 
-The package is pinned by full Git commit in `package.json` and `package-lock.json`. No deep
-NodeKit source import is used.
+NodeSlide stores one host-owned authorization bridge table:
 
-This candidate proves an authenticated application-owned Convex implementation and transport
-adapter. The current anonymous live Studio still uses its established owner-capability flow and
-does not yet invoke Caseflow; wiring a signed-in Studio journey is a separate adoption and
-screenshot gate. This evidence must not be represented as production traffic.
+```text
+nodeslide_nodekit_bindings
+  deckId
+  ownerSubject
+  opaque scopeKey
+  public case/run/artifact locators
+```
+
+That table contains no duplicate lifecycle state and never stores the preview bearer.
 
 ## Authority boundary
 
-NodeKit Caseflow is a lifecycle projection. It does not replace or fork the existing
-`NodeSlideRepository`, the NodeSlide patch engine, candidate validation, or the isolated
-`@nodeslide/convex` component.
-
 | Concern | Authority |
 | --- | --- |
-| Deck snapshot and slide/element state | NodeSlide deck repository/component |
+| Deck snapshot and slide/element state | NodeSlide repository/component |
 | Candidate validation and patch application | NodeSlide engine and repository |
 | Domain deck versions and receipts | NodeSlide repository/component |
-| User identity and workspace ownership | NodeSlide application wrapper via `ctx.auth` |
-| Case, run, stage, review, exception and completion progression | NodeKit Caseflow projection |
-| Portable artifact versions and content-addressed completion receipt | NodeKit Caseflow projection |
+| User identity and deck ownership | NodeSlide application wrapper via `ctx.auth` |
+| Case, run, stage, review, exception and terminal progression | Installed NodeKit component |
+| Portable artifact versions and content-addressed receipts | Installed NodeKit component |
 
-The projection stores explicit references to the real domain records:
+The host wrapper at `convex/nodekitCaseflow.ts` authenticates the caller, resolves the deck
+binding, validates every referenced generation, patch, validation result, and domain receipt,
+then calls the component with an opaque `scopeKey`. Callers cannot provide or override that key.
+
+The existing anonymous preview owner capability is accepted only by
+`bindAuthenticatedDeck`. The wrapper verifies it once, binds the deck to `ctx.auth.subject`, and
+discards it. Every normal lifecycle function is bearer-free. IDs locate records; they do not
+grant authority.
+
+## Presentation-specific lifecycle
+
+The deterministic consumer suite exercises:
 
 ```text
-NodeKit Case        -> NodeSlide deck
-NodeKit Run         -> NodeSlide generation attempt
-NodeKit Artifact    -> canonical deck/artifact reference
-NodeKit Proposal    -> NodeSlide patch/proposal
-NodeKit Exception   -> NodeSlide validation result
-NodeKit Approval    -> NodeSlide repository receipt
-NodeKit Receipt     -> all accepted domain references and lifecycle events
+authenticated deck binding
+-> intent and stage plan
+-> deck artifact
+-> persisted NodeSlide patch proposal
+-> human approval
+-> stale same-base conflict
+-> validation exception and recovery
+-> completion / cancellation / safe failure
+-> receipt-v2 hash verification and reload
 ```
 
-## Authentication
+It additionally proves:
 
-Every normal Caseflow query or mutation calls `ctx.auth.getUserIdentity()` and verifies that
-the resolved subject owns the requested workspace. IDs are locators, not authority. A caller
-cannot select another subject, owner, or workspace through request arguments.
+- cross-owner and anonymous denial;
+- no persisted owner bearer;
+- component public IDs rather than Convex document IDs;
+- trimmed idempotency keys and mismatched retry rejection;
+- duplicate stage-plan mismatch rejection;
+- multiple exceptions remain blocked until all are resolved;
+- ordinary mutations are blocked during exceptions and after terminal state;
+- completion is bound to a canonical deck artifact;
+- cancellation and safe failure receive immutable receipts;
+- real NodeSlide patch operations become the component proposal payload;
+- real generation, validation, and package-receipt references are checked in the host;
+- the final receipt binds artifact, proposal, approval, actor, event payload, case, and run hashes;
+- the host schema contains no copied `nodekitCaseflow*` lifecycle tables.
 
-The existing anonymous preview can be claimed once through
-`bootstrapPreviewDeckBinding`. That one function validates the existing unguessable preview
-owner capability, records only the resulting authenticated binding, and never persists the
-capability. After binding, no Caseflow operation accepts a bearer key. Cross-workspace rebinding
-fails closed.
+## Reproducible local proof
 
-This keeps the preview/bootstrap bridge separate from the submission-grade authenticated path.
-
-## Conformance and adversarial proof
-
-Run:
+After the exact tarball is installed:
 
 ```bash
 npm run test:nodekit-caseflow
 npx tsc --noEmit -p convex/tsconfig.json --pretty false
 npx tsc -b --pretty false
 npm run build
+npm run proof:nodekit-caseflow
 ```
 
-`convex/nodekitCaseflow.test.ts` uses `convex-test` against the real application schema and
-functions. It proves:
+`proof/nodekit-caseflow-consumer/receipt.json` binds the exact package source commit, NodeKit
+source hash, tarball SHA-256, installed package identity, consumer implementation hash, command
+logs, and every decisive evidence file by path, byte count, and SHA-256.
 
-- all assertions in packaged `runCaseflowConformance()`;
-- exact NodeKit source revision identity;
-- authenticated workspace ownership and anonymous/cross-owner denial;
-- one-time preview capability binding, followed by bearer-free normal operations;
-- repeated active run start reuse;
-- two proposals racing from the same artifact version;
-- stale acceptance becoming a reviewable conflict;
-- repeated matching decisions without another approval or artifact version;
-- validation exception preservation and recovery with explicit next-action ownership;
-- durable reload and artifact-version integrity;
-- repeated completion returning the identical receipt without another receipt row;
-- receipt hash recomputation with NodeKit's public `contentHash()`;
-- real deck, generation, patch, validation, and domain-receipt references in the completion
-  receipt.
+## Remaining external proof
 
-The candidate-keyed machine-readable evidence is stored in
-`proof/nodekit-caseflow-consumer.json`.
+Before NodeSlide can count as a production consumer for a Convex submission, an authorized
+candidate must still provide:
 
-## Extraction boundary
+- an exact-revision signed-in production or isolated-preview browser journey;
+- screenshots and trace evidence from the real NodeSlide UI;
+- deployed frontend/backend revision identity;
+- independent verification of the exported deck and receipt;
+- explicit authorization for deployment or publication.
 
-The application-owned tables are declared in `convex/nodekitCaseflowTables.ts`. They are kept
-separate from NodeSlide domain tables so the repeated lifecycle subset can later be extracted as
-a Convex Component only after NodeRoom, NodeSlide, and NodeVideo all pass the same package
-conformance. Authentication and domain mutation remain in application wrappers after extraction.
-
-## Release boundary
-
-This consumer proof does not authorize a production deploy, npm publication, or Convex
-Component submission. Those remain gated by the exact-candidate NodeKit timer, screenshot,
-fresh-agent, fresh-human, preview, multi-consumer, and final ProofLoop evidence.
+This local consumer work deliberately does not synthesize or infer any of those results.

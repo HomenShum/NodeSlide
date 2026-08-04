@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "production-agent/v1",
+  "application": "nodeslide",
+  "declaredAt": "2026-08-04",
+  "goalTranslation": {
+    "businessGoal": "Teams publish validated, human-approved decks instead of hand-polishing unreviewable AI drafts; north-star is validated, human-approved decks published per active team (docs/PRD.md).",
+    "quantifiedTarget": {
+      "metric": "edit-accept-rate",
+      "comparator": "at-least",
+      "value": 0.7,
+      "rationale": "docs/PRD.md early-cohort target: edit-accept rate >= 70%."
+    },
+    "decomposition": [
+      "intake prompt into a deck outline",
+      "generate slides as scoped, schema-validated patch operations",
+      "validate and deterministically repair renders (bounded loop, labeled termination)",
+      "suspend for human acceptance of every agent mutation",
+      "publish only behind the fail-closed approval gate"
+    ]
+  },
+  "hitl": {
+    "tiers": [
+      {
+        "action": "Author a scoped, validated, receipted deck-patch proposal (no deck mutation)",
+        "risk": "low",
+        "mode": "auto"
+      },
+      {
+        "action": "Apply an agent-proposed patch to the deck",
+        "risk": "high",
+        "mode": "suspend-approve",
+        "resumeAfterApproval": true
+      },
+      {
+        "action": "Publish a deck version to the public snapshot",
+        "risk": "high",
+        "mode": "suspend-approve",
+        "resumeAfterApproval": true
+      }
+    ]
+  },
+  "toolFaultTolerance": {
+    "interception": {
+      "rawErrorsReachUser": false,
+      "how": "convex/lib/nodeslideErrorRedaction.ts scrubs capability-shaped secrets before any error text is persisted or returned; convex/lib/nodeslideBudgetedProvider.ts converts every provider failure into a coded { ok: false, code, reason } result instead of a bare throw."
+    },
+    "retry": {
+      "maxAttempts": 2,
+      "backoff": "exponential",
+      "baseDelayMs": 50,
+      "maxDelayMs": 1000,
+      "jitter": false
+    },
+    "fallback": {
+      "kind": "degraded-ui",
+      "description": "Provider JSON gets exactly one repair attempt (two model calls max) before falling back deterministically; artifact rendering degrades to the static-fallback editability tier (shared/nodeslideArtifactAtlas.ts) instead of erroring."
+    },
+    "toolContract": {
+      "descriptionsUnambiguous": true,
+      "fewShotForComplexParams": false
+    }
+  },
+  "context": {
+    "strategies": ["none"],
+    "tokenBudgetPerRun": 1048576,
+    "noneRationale": "No conversation-context compression exists. Each provider call is a bounded single-shot structured request; the per-run budget (shared/nodeslideRunBudget.ts) caps input tokens, output tokens, cost, duration, iterations, and tool calls instead of accumulating a transcript."
+  },
+  "slos": [
+    {
+      "metric": "edit-accept-rate",
+      "comparator": "at-least",
+      "value": 0.7,
+      "rationale": "docs/PRD.md early-cohort target."
+    },
+    {
+      "metric": "seeded-prompt-first-try-ok-deck-rate",
+      "comparator": "at-least",
+      "value": 0.95,
+      "rationale": "docs/PRD.md challenge-prototype target."
+    },
+    {
+      "metric": "render-repair-termination-rate",
+      "comparator": "equals",
+      "value": 1,
+      "rationale": "docs/PRD.md: every render-repair run terminates with a clean result or a labeled stop, never unbounded."
+    },
+    {
+      "metric": "agent-mutation-human-gate-rate",
+      "comparator": "equals",
+      "value": 1,
+      "rationale": "docs/PRD.md: 100% of agent mutations gated until human acceptance."
+    },
+    {
+      "metric": "repair-convergence-rate",
+      "comparator": "at-least",
+      "value": 0.8,
+      "rationale": "docs/PRD.md early-cohort target."
+    }
+  ],
+  "runtimeGuards": {
+    "loopBreaker": {
+      "maxIterations": 12,
+      "maxDepth": 1
+    },
+    "costFuse": {
+      "maxTokensPerRun": 1048576,
+      "onTrip": "Reserve-before-dispatch (convex/lib/nodeslideBudgetedProvider.ts): a call whose worst case does not fit the remaining budget is refused with a coded result before the provider is reached; default budget also caps spend at 1 USD per run (shared/nodeslideRunBudget.ts)."
+    }
+  },
+  "release": {
+    "judgeRegression": {
+      "trigger": "nightly-cron",
+      "command": "npm run nodeslide:bench:taste-judge"
+    },
+    "modelMigration": {
+      "pinnedModel": "moonshotai/kimi-k3",
+      "migrationEvalCommand": "npm run deck-gym:matrix"
+    },
+    "tracing": {
+      "traceIdPropagated": true,
+      "field": "traceId"
+    }
+  },
+  "orchestration": {
+    "dispatcher": "Coordination pass in convex/lib/nodeslideMultiAgent.ts briefs a fixed set of cognitive roles; roles never spawn further agents (depth is 1 by construction).",
+    "specialists": [
+      "researcher",
+      "analyst",
+      "storyteller",
+      "designer",
+      "fact_checker",
+      "reviewer"
+    ]
+  }
+}

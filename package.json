@@ -113,7 +113,10 @@
     "atlas:receipts": "node scripts/emit-atlas-receipts.mjs",
     "atlas:receipts:check": "node scripts/emit-atlas-receipts.mjs --check",
     "clip:judge": "node tools/clip-gate/judge-video.mjs",
-    "clip": "node tools/clip-gate/iterate.mjs"
+    "clip": "node tools/clip-gate/iterate.mjs",
+    "clip:readability": "node tools/clip-gate/readability.mjs",
+    "clip:voice": "node tools/clip-gate/voice.mjs",
+    "clip:score": "node tools/clip-gate/score.mjs"
   },
   "dependencies": {
     "@assistant-ui/react-o11y": "0.0.25",

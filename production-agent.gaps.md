@@ -19,7 +19,21 @@ the mechanism.
    not tripped fleet-wide.
 2. **`release.canary` — absent.** Deploy is 100% cutover via
    `.github/workflows/deploy-production.yml` (Convex + Vercel + a live DOM
-   gate). There is no partial-traffic canary and no automatic rollback clause.
+   gate). The workflow now waits for the platform READY state, greps a
+   server-rendered content signal on the canonical alias, and on any
+   post-deploy gate failure automatically runs `vercel rollback` and verifies
+   the alias stopped serving the failed commit — but that is deploy +
+   automatic rollback, not a canary, and the schema agrees: `trafficPercent`
+   must be ≤ 50, so a 100% cutover cannot be declared as one. A partial-traffic
+   canary is deliberately not built: (a) the app is a Vite SPA, not Next.js,
+   so there is no framework middleware layer; (b) the Convex backend is a
+   single shared deployment mutated earlier in the same job, so both traffic
+   cohorts would hit the already-new backend and the risky surface (schema and
+   function changes) cannot be split; (c) the deploy gates byte-compare served
+   HTML against the built bundle, which a traffic-split middleware would break
+   nondeterministically. The rollback is also frontend-only — Convex has no
+   one-command revert, so every Convex change must stay backward-compatible
+   with the previous frontend.
 3. **`release.judgeRegression.trigger` = `"nightly-cron"`** — not in the
    schema enum (`on-commit` / `on-pr` / `pre-deploy`). The taste judge
    (`npm run nodeslide:bench:taste-judge`) runs in the `live_evidence` job of

@@ -17,6 +17,7 @@ describe('NodeSlide inspector shell state', () => {
     expect(INSPECTOR_TABS.map(({ id }) => id)).toEqual([
       'ai',
       'design',
+      'nodebook',
       'comments',
       'versions',
       'data',
@@ -31,7 +32,7 @@ describe('NodeSlide inspector shell state', () => {
     expect(source).toContain('aria-hidden="true"');
   });
 
-  it('keeps five high-frequency views on the narrow rail and moves Versions and JSON into More', () => {
+  it('keeps five high-frequency views on the narrow rail and preserves NodeBook in More', () => {
     expect(PRIMARY_INSPECTOR_TABS.map(({ label }) => label)).toEqual([
       'AI',
       'Design',
@@ -39,7 +40,7 @@ describe('NodeSlide inspector shell state', () => {
       'Evidence',
       'Trace',
     ]);
-    expect(MORE_INSPECTOR_TABS.map(({ label }) => label)).toEqual(['Versions', 'JSON']);
+    expect(MORE_INSPECTOR_TABS.map(({ label }) => label)).toEqual(['NodeBook', 'Versions', 'JSON']);
     expect(source).toContain('data-testid="inspector-more"');
     expect(source).toContain('<DropdownMenuContent');
     expect(source).toContain('<DropdownMenuItem');

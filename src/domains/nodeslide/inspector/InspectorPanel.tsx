@@ -6,6 +6,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {
   Activity,
+  BookOpen,
   Bot,
   Braces,
   ChevronDown,
@@ -47,6 +48,7 @@ import type {
 import type { TasteProfile } from '../../../../shared/nodeslidePreference';
 import type { SignatureProfile } from '../../../../shared/nodeslideSignature';
 import type { SlideVariation } from '../../../../shared/nodeslideVariation';
+import { NodeSlideNodeBookWorkspacePanel } from '../components/NodeBookWorkspacePanel';
 import { NODESLIDE_RESPONSIVE_DRAWER_QUERY } from '../components/editorShellResponsive';
 import { getRovingFocusIndex, useViewportMatch } from '../components/overlayPrimitives';
 import type { NodeSlideTastePackId } from '../signature/packs/index';
@@ -197,6 +199,7 @@ export const INSPECTOR_TABS: Array<{
 }> = [
   { id: 'ai', label: 'AI', icon: Bot, group: 'author' },
   { id: 'design', label: 'Design', icon: SlidersHorizontal, group: 'author' },
+  { id: 'nodebook', label: 'NodeBook', icon: BookOpen, group: 'review' },
   { id: 'comments', label: 'Comments', icon: MessageCircle, group: 'review' },
   { id: 'versions', label: 'Versions', icon: History, group: 'review' },
   { id: 'data', label: 'Evidence', icon: Database, group: 'review' },
@@ -638,6 +641,11 @@ export function InspectorPanel<CommandId extends string = string>({
               {...(onSearchImages ? { onSearchImages } : {})}
               {...(onGenerateImage ? { onGenerateImage } : {})}
             />
+          </InspectorTabPanel>
+        ) : null}
+        {mountedTabsRef.current.has('nodebook') ? (
+          <InspectorTabPanel id="nodebook" activeTab={activeTab} drawerViewport={drawerViewport}>
+            <NodeSlideNodeBookWorkspacePanel workspace={workspace} />
           </InspectorTabPanel>
         ) : null}
         {mountedTabsRef.current.has('comments') ? (

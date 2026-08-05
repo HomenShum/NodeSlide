@@ -7476,3 +7476,56 @@
 .nodeslide-studio .ns-inspector-scroll .ns-evidence-coverage :is(span, strong) {
   font-size: var(--ns-font-body);
 }
+
+.nodeslide-studio .ns-nodebook-artifact-preview {
+  display: grid;
+  gap: 10px;
+}
+
+.nodeslide-studio .ns-nodebook-artifact-preview [data-nodebook-host="nodeslide"] {
+  min-width: 0;
+}
+
+.nodeslide-studio .ns-nodebook-artifact-preview [data-nodebook-surface="artifact"] {
+  max-height: 260px;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid var(--ns-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ns-panel) 90%, var(--ns-accent) 10%);
+}
+
+.nodeslide-studio .ns-nodebook-artifact-preview [data-nodebook-artifact-rendered] > svg {
+  max-height: 240px;
+}
+
+.nodeslide-studio .ns-nodebook-artifact-error {
+  margin: 0;
+  color: var(--ns-danger);
+}
+
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-surface="workspace"] {
+  grid-template-columns: 1fr;
+  min-height: 0;
+}
+
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-pane="outline"],
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-pane="editor"] {
+  border-inline-end: 0;
+  border-block-end: 1px solid var(--nodebook-border);
+}
+
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-pane="outline"] {
+  max-height: 240px;
+  overflow: auto;
+}
+
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-pane="editor"] {
+  max-height: 150px;
+  overflow: auto;
+}
+
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-pane="canvas"] {
+  min-height: 240px;
+  overflow: auto;
+}

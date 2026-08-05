@@ -123,13 +123,6 @@
   },
   "orchestration": {
     "dispatcher": "Coordination pass in convex/lib/nodeslideMultiAgent.ts briefs a fixed set of cognitive roles; roles never spawn further agents (depth is 1 by construction).",
-    "specialists": [
-      "researcher",
-      "analyst",
-      "storyteller",
-      "designer",
-      "fact_checker",
-      "reviewer"
-    ]
+    "specialists": ["researcher", "analyst", "storyteller", "designer", "fact_checker", "reviewer"]
   }
 }

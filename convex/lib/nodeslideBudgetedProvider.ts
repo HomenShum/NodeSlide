@@ -101,6 +101,32 @@ export const NODESLIDE_CREATE_PROVIDER_CEILINGS: NodeSlideProviderHardCeilings =
 const MAX_REPAIR_CONTEXT_UTF8_BYTES = 24_000 * 4;
 const PROVIDER_MESSAGE_OVERHEAD_TOKENS_PER_ATTEMPT = 4_096;
 const MAX_STATE_RETRIES = 2;
+const STATE_RETRY_BACKOFF_BASE_MS = 50;
+const STATE_RETRY_BACKOFF_CAP_MS = 1_000;
+
+/**
+ * Delay before stale-state retry N (0-indexed). Same shape as
+ * `nodeSlideSourceRefreshBackoffMinutes`: base doubled per attempt, hard cap.
+ * That helper is minutes-for-cron; this one is ms-for-in-action sleep, so it
+ * is computed locally rather than imported. Without it a ledger brownout turns
+ * the retry loop into a tight hammer on the very component that is browning out.
+ */
+export function nodeSlideStateRetryBackoffMs(attempt: number): number {
+  return Math.min(
+    STATE_RETRY_BACKOFF_CAP_MS,
+    STATE_RETRY_BACKOFF_BASE_MS * 2 ** Math.min(6, Math.max(0, Math.floor(attempt))),
+  );
+}
+
+/**
+ * In-action sleep. This module only runs inside `'use node'` actions (see
+ * `nodeslideAgent.ts`), where awaiting `setTimeout` is the established pattern
+ * (`nodeslideVariations.ts` does the same between provider retries) — no
+ * scheduler hop is needed because the reservation must resolve within the call.
+ */
+function stateRetryDelay(attempt: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, nodeSlideStateRetryBackoffMs(attempt)));
+}
 
 export type NodeSlideBudgetedJsonRequest = Parameters<typeof callNodeSlideFreeJson>[0];
 
@@ -776,6 +802,7 @@ async function reserveWithStateRetry(
       });
     } catch (error) {
       if (!isStaleStateError(error) || attempt + 1 >= MAX_STATE_RETRIES) throw error;
+      await stateRetryDelay(attempt);
       const replay = await ledger.replay({ budgetId: args.budgetId, callId: args.callId });
       if (!replay) throw error;
       if (replay.call) return replay;
@@ -814,6 +841,7 @@ async function terminalWithStateRetry(
       );
     } catch (error) {
       if (!isStaleStateError(error) || attempt + 1 >= MAX_STATE_RETRIES) throw error;
+      await stateRetryDelay(attempt);
       const replay = await ledger.replay({ budgetId: args.budgetId, callId: args.callId });
       if (!replay) throw error;
       state = replay;

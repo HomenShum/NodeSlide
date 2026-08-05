@@ -156,6 +156,21 @@ jobs:
             exit 1
           fi
           echo "deployment_url=$deployment_url" >> "$GITHUB_OUTPUT"
+      - name: Wait until the deployment reports READY
+        # `vercel deploy` normally blocks until ready, but the URL being
+        # printed is not the same claim as the deployment being READY. Ask the
+        # platform explicitly before trusting any live check against it.
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          DEPLOYMENT_URL: ${{ steps.vercel_deploy.outputs.deployment_url }}
+        run: |
+          npx --yes vercel@56.3.2 inspect "$DEPLOYMENT_URL" \
+            --wait \
+            --timeout 5m \
+            --token="$VERCEL_TOKEN"
       - name: Verify deployment URL and canonical alias serve the gated bundle
         env:
           EXPECTED_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
@@ -190,9 +205,47 @@ jobs:
             --output "$canonical_html" \
             "$PROD_WEB_URL/"
           node scripts/verify-deployed-html.mjs .vercel/output/static/index.html "$canonical_html"
+          # Concrete server-rendered content signal from index.html source:
+          # the byte-compare above is stronger, but this line fails readably
+          # if the alias ever serves a shell that is not NodeSlide's.
+          grep -q 'reviewable presentations, built from a brief' "$canonical_html"
           node scripts/verify-live-web-identity.mjs "$DEPLOY_SHA" "$PROD_WEB_URL/"
       - name: Verify the live share route answers rather than crashing
         # The static bundle being correct says nothing about the serverless
         # function. An unresolvable share slug must return NodeSlide's rendered
         # refusal, never the platform's FUNCTION_INVOCATION_FAILED page.
         run: node scripts/verify-live-share-route.mjs "$PROD_WEB_URL"
+      - name: Roll back the Vercel production alias on post-deploy gate failure
+        # Fires only when the deploy itself succeeded but a live gate after it
+        # failed. Scope is honest: `vercel rollback` repoints the production
+        # alias at the previous frontend deployment. The Convex backend
+        # deployed earlier in this job is NOT rolled back — Convex has no
+        # equivalent one-command revert, so a failed run leaves new backend +
+        # old frontend, which is why every Convex change must stay
+        # backward-compatible with the previous frontend.
+        if: failure() && steps.vercel_deploy.outputs.deployment_url != ''
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          FAILED_URL: ${{ steps.vercel_deploy.outputs.deployment_url }}
+        run: |
+          echo "::error::Post-deploy gates failed for $FAILED_URL — rolling back the production alias."
+          npx --yes vercel@56.3.2 rollback \
+            --yes \
+            --timeout 5m \
+            --token="$VERCEL_TOKEN"
+          # Confirm the canonical alias no longer serves the failed commit.
+          for attempt in $(seq 1 24); do
+            live_sha="$(curl --silent --fail "$PROD_WEB_URL/" \
+              | grep -o 'name="nodeslide-build-sha" content="[0-9a-f]*"' \
+              | grep -o '[0-9a-f]\{40\}' || true)"
+            if [[ -n "$live_sha" && "$live_sha" != "$DEPLOY_SHA" ]]; then
+              echo "Rollback verified: $PROD_WEB_URL now serves $live_sha (not $DEPLOY_SHA)."
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::Rollback command ran but $PROD_WEB_URL still serves $DEPLOY_SHA."
+          exit 1

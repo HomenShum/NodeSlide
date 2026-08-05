@@ -34,6 +34,7 @@ mcp/
 tsconfig.tsbuildinfo
 *.tgz
 !public/downloads/parity-studio-mcp-*.tgz
+!vendor/nodebook/*.tgz
 
 # Local secrets and Vercel state.
 .env

@@ -112,9 +112,7 @@ describe('production GitHub workflow configuration', () => {
     // signal, and an automatic frontend rollback that fails closed.
     expect(workflow).toContain('--wait');
     expect(workflow).toContain("grep -q 'reviewable presentations, built from a brief'");
-    expect(workflow).toContain(
-      "if: failure() && steps.vercel_deploy.outputs.deployment_url != ''",
-    );
+    expect(workflow).toContain("if: failure() && steps.vercel_deploy.outputs.deployment_url != ''");
     expect(workflow).toContain('vercel@56.3.2 rollback');
     expect(appearsBefore(workflow, 'vercel@56.3.2 deploy', 'vercel@56.3.2 inspect')).toBe(true);
     expect(appearsBefore(workflow, 'verify-live-share-route.mjs', 'vercel@56.3.2 rollback')).toBe(

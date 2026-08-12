@@ -38,8 +38,11 @@ describe('production GitHub workflow configuration', () => {
       path.join(workflowDirectory, 'node-platform-conformance.yml'),
       'utf8',
     );
+    // Same pinned commit; the owning repository was renamed node-platform ->
+    // NodeKit (NodeKit ebfe529, 2026-08-10) and reusable-workflow `uses:` refs
+    // do not follow the rename. Was 'HomenShum/node-platform/...' at this SHA.
     expect(conformance).toContain(
-      'HomenShum/node-platform/.github/workflows/repo-conformance.yml@5c9aa6443ca8e61dc8886fbf0a0b4a7b72858e63',
+      'HomenShum/NodeKit/.github/workflows/repo-conformance.yml@5c9aa6443ca8e61dc8886fbf0a0b4a7b72858e63',
     );
   });
 

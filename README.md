@@ -18,7 +18,9 @@
 
 ## Watch the full journey — 2 min 26 s, recorded live on production
 
-https://github.com/HomenShum/NodeSlide/raw/main/docs/demo/nodeslide-demo-final.mp4
+<img src="docs/demo/nodeslide-demo-hero.gif" alt="NodeSlide full journey at 6x speed: brief in, six slides generated live by Kimi K3, structured elements clicked, a validated agent edit accepted, PowerPoint exported" width="940">
+
+*The GIF above is the full committed demo recording ([`docs/demo/nodeslide-demo-final.mp4`](https://github.com/HomenShum/NodeSlide/raw/main/docs/demo/nodeslide-demo-final.mp4), 2 min 26 s) played at 6× — derived with ffmpeg, not re-staged. Watch the mp4 for real pacing.*
 
 Six acts at [nodeslide.vercel.app](https://nodeslide.vercel.app), captured by a fail-closed recorder (every scene asserts real product state before its caption; a failed assert aborts the take — zero seeded or fabricated state):
 

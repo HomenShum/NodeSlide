@@ -70,7 +70,7 @@ reproduction; a hunch is not a defect.
 
 | # | Severity | Journey | Reproduction | Status |
 |---|----------|---------|--------------|--------|
-| D1 | critical | J1 | Fresh clone → `npx convex dev` (anonymous local) → `npm run dev:web` → `localhost:5180` at 1280×800 → type any brief into `#nodeslide-landing-prompt` → set `[data-testid="landing-model-select"]` to `deterministic` → **Create presentation**. The composer shows "Reading the brief and evidence…", then fails with `ConvexError {"kind":"nodeslide_create","code":"preview_not_configured"}`. No deck is created — on the route the README calls "needs no API keys". Root cause traced: `convex/nodeslideAgent.ts:1799-1809` admits a create only if `NODESLIDE_PUBLIC_CREATION=true`, or a durable job row exists, or `validateNodeSlidePreviewAdmission` finds `NODESLIDE_PREVIEW_ACCESS_CODE` **and** `NODESLIDE_PREVIEW_ADMISSION_SUBJECT` in the Convex environment (`convex/lib/nodeslideValidators.ts:255`). `npx convex dev` sets none of the three, and none of them appear in the README, `docs/`, or any `.env.example` (there is no `.env.example`, though the README links one). Evidence: `promotion/evidence/baseline/j1-after-create.png`. | open |
+| D1 | critical | J1 | Fresh clone → `npx convex dev` (anonymous local) → `npm run dev:web` → `localhost:5180` at 1280×800 → type any brief into `#nodeslide-landing-prompt` → set `[data-testid="landing-model-select"]` to `deterministic` → **Create presentation**. The composer shows "Reading the brief and evidence…", then fails with `ConvexError {"kind":"nodeslide_create","code":"preview_not_configured"}`. No deck is created — on the route the README calls "needs no API keys". Root cause traced: `convex/nodeslideAgent.ts:1799-1809` (`publicCreationEnabled`) admits a create only if `NODESLIDE_PUBLIC_CREATION=true`, or a durable job row exists, or `validateNodeSlidePreviewAdmission` finds `NODESLIDE_PREVIEW_ACCESS_CODE` **and** `NODESLIDE_PREVIEW_ADMISSION_SUBJECT` in the Convex environment, at `convex/lib/nodeslideValidators.ts:255` (`validateNodeSlidePreviewAdmission`). `npx convex dev` sets none of the three, and none of them appear in the README, `docs/`, or any `.env.example` (there is no `.env.example`, though the README links one). Evidence: `promotion/evidence/baseline/j1-after-create.png`. | documented, iteration 1 |
 | D2 | major | J1, J5 | Same page, keyboard only: Tab to the brief textarea (`#nodeslide-landing-prompt`, 5th stop) or to the model select (`[data-testid="landing-model-select"]`, 8th stop) and read the computed style of `document.activeElement` — `outlineStyle: "none"` with `boxShadow: "none"`. Every other stop in the first eight reports `outlineStyle: "solid"`. A keyboard user cannot see where they are on the two controls the landing exists for. Evidence: `report.json` step `keyboard-tab-order`. | open |
 | D3 | major | J5 | The failure text a stranger is given is "NodeSlide private-preview admission is not configured." — an internal concept, no next action, and no control on the landing can supply an access code (the only `[data-testid="preview-access-code"]` field lives in `ProjectDialog.tsx`, and `NodeSlideLanding.start()` sends no `accessCode` at all). Typed input is correctly preserved and the message is announced (`role="alert"` + toast), so the recovery *mechanics* are fine and only the content fails. Evidence: `promotion/evidence/baseline/j1-after-create.png`. | open |
 | D4 | major | (build) | `npm run build` fails twice out of two at `packages:build` step 11 with `'tsup' is not recognized as an internal or external command`, although `tsup` **is** present at `node_modules/.bin/tsup` and `npm run build --workspace @nodeslide/convex` alone exits 0. Suspected — *not measured* — Windows `PATH` growth across ten chained `npm run build --workspace …` invocations dropping the root `.bin` entry. Verifying that hypothesis is Wave 2's job. Evidence: build log excerpt in the table above. | open |
@@ -79,4 +79,33 @@ reproduction; a hunch is not a defect.
 
 ## Iterations
 
-_none yet — Wave 1 is the starting line, not a fix cycle._
+### Iteration 1 — 2026-08-13
+- Journey exercised: J0 quickstart, read the way a stranger reads it.
+- Observed: three defects that live in the documents, not in the runtime.
+  (a) The quickstart's promise that "the deterministic path needs no API keys" was
+  true about keys and false about the button — deck creation is admission-gated and a
+  fresh deployment admits nothing, so **Create presentation** fails with
+  `preview_not_configured` (D1). (b) The same paragraph linked `.env.example`, which does
+  not exist and *could not* exist: `.gitignore` line 51 is `.env*`, so git refuses the
+  file — the link had never resolved once. (c) `promotion/PROMOTION_LOG.md` and
+  `promotion/PRODUCT_JOURNEYS.md` were unreachable from the README.
+- Fixed: the `README.md` quickstart now runs
+  `npx convex env set NODESLIDE_PUBLIC_CREATION true` and names all three admission
+  variables and where they live; the dead `.env.example` link is deleted rather than
+  replaced, because all three are Convex deployment variables and a dotfile example would
+  have pointed at the wrong mechanism; the Documentation section links both promotion
+  documents. No runtime behavior changed — the admission gate is untouched.
+- Re-proved: `scripts/tests/docs-citations.test.mjs`, a new guard, plus the knockout that
+  shows it is not decorative. Reverting the quickstart line and restoring the
+  `.env.example` link fails it with `README.md -> .env.example` and
+  `expected … to contain 'npx convex env set NODESLIDE_PUBLIC_CREATION true'`. Moving one
+  citation twenty lines *inside* its own file — the drift a range check cannot see — fails
+  it with `convex/nodeslideAgent.ts:1779-1789 does not contain "publicCreationEnabled"`.
+- Also found by the new guard, which is why it was worth writing: of the 14 `file:line`
+  citations in `README.md`, `docs/` and `promotion/`, **8 pointed at the wrong line** —
+  `convex/schema.ts` cited at line 486 for a table that starts at 1004, `nodeslideAgent.ts`
+  at 94 for an action at 481, `nodeslide.ts` at 368/382/396 for queries at 751/769/787. All
+  are repointed, and every citation now carries the symbol the reader should land on.
+- Tests: `npx vitest run scripts/tests/docs-citations.test.mjs` — 5 passed.
+- Conditions newly PASS: none. D1's *runtime* cause is unchanged; what changed is that the
+  documented path now works, so the row reads `documented`, not `fixed`.

@@ -1,0 +1,106 @@
+{
+  "base": "http://localhost:5180",
+  "startedAt": "2026-08-13T09:16:42.580Z",
+  "steps": [
+    {
+      "step": "landing-desktop",
+      "at": "2026-08-13T09:16:43.905Z",
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "overflows": false,
+      "shot": "promotion/evidence/baseline/j1-landing-desktop.png"
+    },
+    {
+      "step": "keyboard-tab-order",
+      "at": "2026-08-13T09:16:44.034Z",
+      "stops": [
+        {
+          "tag": "A",
+          "label": "NodeSlide home",
+          "outline": "solid",
+          "hiddenPanel": false
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Artifact Lab",
+          "outline": "solid",
+          "hiddenPanel": false
+        },
+        {
+          "tag": "BUTTON",
+          "label": "BYOK / Agents",
+          "outline": "solid",
+          "hiddenPanel": false
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Open deck",
+          "outline": "solid",
+          "hiddenPanel": false
+        },
+        {
+          "tag": "TEXTAREA",
+          "label": "",
+          "outline": "none",
+          "hiddenPanel": false
+        },
+        {
+          "tag": "INPUT",
+          "label": "",
+          "outline": "solid",
+          "hiddenPanel": false
+        },
+        {
+          "tag": "BUTTON",
+          "label": "Attach data",
+          "outline": "solid",
+          "hiddenPanel": false
+        },
+        {
+          "tag": "SELECT",
+          "label": "Generation model",
+          "outline": "none",
+          "hiddenPanel": false
+        }
+      ],
+      "shot": "promotion/evidence/baseline/j1-landing-keyboard.png"
+    },
+    {
+      "step": "landing-mobile-390",
+      "at": "2026-08-13T09:16:44.545Z",
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "overflows": false,
+      "shot": "promotion/evidence/baseline/j1-landing-mobile-390.png"
+    },
+    {
+      "step": "j1-create-deck",
+      "at": "2026-08-13T09:20:44.955Z",
+      "privacyCue": "Private deterministic generation. No external model egress.",
+      "creatingStage": "Reading the brief and evidence…",
+      "outcome": "error: NodeSlide private-preview admission is not configured.",
+      "elapsedMs": 240015,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "overflows": false,
+      "shot": "promotion/evidence/baseline/j1-after-create.png"
+    },
+    {
+      "step": "j4-atlas",
+      "at": "2026-08-13T09:20:46.178Z",
+      "atlasOk": true,
+      "scrollWidth": 1280,
+      "innerWidth": 1280,
+      "overflows": false,
+      "shot": "promotion/evidence/baseline/j4-atlas.png"
+    }
+  ],
+  "console": [
+    {
+      "type": "error",
+      "text": "[CONVEX A(nodeslideAgent:createDeckFromBrief)] [Request ID: ba26e872886faa9e] Server Error\nUncaught ConvexError: {\"kind\":\"nodeslide_create\",\"code\":\"preview_not_configured\",\"message\":\"NodeSlide private-preview admission is not configured.\"}\n"
+    }
+  ],
+  "network": [],
+  "finishedAt": "2026-08-13T09:20:46.185Z"
+}

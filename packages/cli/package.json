@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "bin": {
     "nodeslide": "./dist/cli.js"
   },
@@ -20,6 +23,7 @@
   },
   "dependencies": {
     "@nodeslide/registry": "0.2.2",
-    "convex": "^1.31.7"
+    "convex": "^1.31.7",
+    "pptxgenjs": "^4.0.1"
   }
 }

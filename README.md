@@ -255,6 +255,9 @@ Capability honesty is the product, so it's the README too. As of 2026-07-22:
 - [**Product Requirements (PRD)**](docs/PRD.md) — problem, user, workflow, why structured authoring wins, trust surface, launch requirements, metrics, wedge.
 - [**Technical Design (TDD)**](docs/TDD.md) — architecture, canonical schema, agent execution, mutation protocol, validation/repair, rendering/export/publishing, MCP seam, verification.
 
+- [**Product journeys**](promotion/PRODUCT_JOURNEYS.md) — the six workflows (J0–J5) a stranger is expected to complete unaided, each with its persona, steps, done condition, and browser evidence.
+- [**Promotion log**](promotion/PROMOTION_LOG.md) — the open defect ledger, every entry carrying a reproduction, plus the baseline scorecard that stays honest about what is not yet ready.
+
 ## Quickstart
 
 ```bash
@@ -262,10 +265,13 @@ git clone https://github.com/HomenShum/NodeSlide
 cd NodeSlide
 npm install
 npx convex dev     # one-time: provisions a Convex deployment, writes .env.local, generates convex/_generated/
+npx convex env set NODESLIDE_PUBLIC_CREATION true   # opens deck creation on this deployment
 npm run dev        # vite + convex dev (concurrently) — open the printed localhost URL
 ```
 
-The **deterministic path needs no API keys** and produces a complete, reproducible deck. For live model runs, set `OPENROUTER_API_KEY` in Convex (`npx convex env set OPENROUTER_API_KEY …`) or bring your own key (BYOK). See [`.env.example`](.env.example).
+**The `convex env set` line is not optional.** Deck creation is admission-gated, and a fresh deployment has no admission configured, so **Create presentation** fails with `preview_not_configured` until one of three things is true: `NODESLIDE_PUBLIC_CREATION=true` (above — the right choice for local and self-hosted), a durable create job already authorized the request, or both `NODESLIDE_PREVIEW_ACCESS_CODE` and `NODESLIDE_PREVIEW_ADMISSION_SUBJECT` are set for a code-gated private preview. All three are Convex deployment variables set with `npx convex env set`; none of them live in a `.env` file, which is why this repository ships no `.env.example`.
+
+Past that, the **deterministic path needs no API keys** and produces a complete, reproducible deck. For live model runs, set `OPENROUTER_API_KEY` in Convex (`npx convex env set OPENROUTER_API_KEY …`) or bring your own key (BYOK).
 
 ```bash
 npm test            # current Vitest + workspace suites; no frozen count in docs

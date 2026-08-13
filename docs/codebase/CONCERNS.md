@@ -22,11 +22,24 @@ set in the Convex environment (`convex/lib/nodeslideValidators.ts:255`).
 `npx convex dev` sets none of the three, and there is no `.env.example` — though
 the README links one.
 
-**Status:** open. It is a product-loop defect (D1), not a structural one, and
-Wave 3's rules forbid mixing feature work with structural refactoring. It is
-listed here because it is the first thing a cold reader will hit, and because
-the fix is small: ship `.env.example` and have `npx convex dev` guidance set
-`NODESLIDE_PUBLIC_CREATION=true` for local deployments.
+**Workaround, measured on a fresh anonymous deployment:**
+
+```bash
+npx convex env set NODESLIDE_PUBLIC_CREATION true
+```
+
+Before it, `npx convex run nodeslideAgent:createDeckFromBrief …` throws
+`{"code":"preview_not_configured"}`. After it, the same call returns a deck at
+version 1 with 6 slides and 82 elements — deterministic mode, no API key, no
+network call to a provider. This is now the third line of the setup block in
+`docs/START_HERE.md`.
+
+**Status:** open as a product defect. The workaround is documented and verified,
+but a stranger who follows only the README still hits the wall, and the error
+text names an internal concept with no next action (defect D3). Wave 3 did not
+change the admission code: whether a local deployment should default to open
+creation is a product and security decision, not a refactor, and Wave 3's rules
+forbid mixing feature work with structural work.
 
 ---
 

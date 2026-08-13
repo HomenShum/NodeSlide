@@ -45,6 +45,16 @@ may create a deck at all: `NODESLIDE_PUBLIC_CREATION`,
 and there is no `.env.example`. This is defect **D1** in
 `promotion/PROMOTION_LOG.md`.
 
+For a local deployment, one command clears it:
+
+```bash
+npx convex env set NODESLIDE_PUBLIC_CREATION true
+```
+
+Verified end to end — see `docs/codebase/CONCERNS.md` §1 for the before/after
+receipt. Note these live in the **Convex** environment, not in `.env.local`;
+`.env.local` only carries `VITE_CONVEX_URL` for the browser.
+
 ## Google Slides (optional)
 
 - **Where:** `src/domains/nodeslide/integrations/googleSlides/` (adapter,

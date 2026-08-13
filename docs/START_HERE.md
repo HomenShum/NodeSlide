@@ -21,17 +21,38 @@ overwriting someone's work.
 ## Run it first
 
 ```
-npm install                 # ~7 min the first time
-npx convex dev              # provisions a local backend, writes VITE_CONVEX_URL into .env.local
-npm run dev:web             # open the printed http://localhost:5180
+npm install                                     # ~7 min the first time
+npx convex dev --once                           # provisions a local backend, writes VITE_CONVEX_URL
+npx convex env set NODESLIDE_PUBLIC_CREATION true   # <- do not skip this one
+npx convex dev                                  # leave running
+npm run dev:web                                 # open the printed http://localhost:5180
 ```
 
-`npm run dev` runs the last two together. Use `localhost`, not `127.0.0.1` —
-Vite binds the IPv6 loopback only (defect D6 in `promotion/PROMOTION_LOG.md`).
-On the landing page choose the **`deterministic`** model to exercise the whole
-path without any API key. See [Step 3](#step-3--the-request-is-checked-before-any-money-is-spent)
-for the admission gate you will hit first, and `docs/codebase/CONCERNS.md` for
-what is not yet fixed about it.
+**Why the third line.** Creating a deck is gated by an admission check
+([Step 3](#step-3--the-request-is-checked-before-any-money-is-spent)). `npx
+convex dev` configures none of the three ways past it, so without that command
+your first Create fails with
+`ConvexError {"code":"preview_not_configured"}` — defect D1 in
+`promotion/PROMOTION_LOG.md`. The flag is a local-deployment setting; it does
+not change the code.
+
+Verified on a fresh anonymous deployment, so this is measured rather than
+suggested:
+
+```
+$ npx convex run nodeslideAgent:createDeckFromBrief "$(cat args.json)"
+ConvexError: {"code":"preview_not_configured", …}        # before
+$ npx convex env set NODESLIDE_PUBLIC_CREATION true
+$ npx convex run nodeslideAgent:createDeckFromBrief "$(cat args.json)"
+deck version 1 · 6 slides · 82 elements                  # after
+```
+
+Two more things that will otherwise cost you an hour:
+
+- Use `localhost:5180`, not `127.0.0.1:5180`. Vite binds the IPv6 loopback only
+  (defect D6).
+- On the landing page choose the **`deterministic`** model. It runs the entire
+  path below with no API key and no network call to any model provider.
 
 ---
 

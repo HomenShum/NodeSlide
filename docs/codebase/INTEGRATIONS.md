@@ -41,7 +41,7 @@ a row if it is missing).
 Three environment variables in the Convex deployment decide whether a stranger
 may create a deck at all: `NODESLIDE_PUBLIC_CREATION`,
 `NODESLIDE_PREVIEW_ACCESS_CODE`, `NODESLIDE_PREVIEW_ADMISSION_SUBJECT`
-(`convex/lib/nodeslideValidators.ts:255`). `npx convex dev` sets none of them,
+(`convex/lib/nodeslideValidators.ts:255` (`validateNodeSlidePreviewAdmission`)). `npx convex dev` sets none of them,
 and there is no `.env.example`. This is defect **D1** in
 `promotion/PROMOTION_LOG.md`.
 
@@ -79,7 +79,7 @@ receipt. Note these live in the **Convex** environment, not in `.env.local`;
 
 ## MCP — NodeSlide for coding agents (optional)
 
-- **Where:** `mcp/`, tools registered in `mcp/src/lib/nodeslideTools.ts:414`.
+- **Where:** `mcp/`, tools registered in `mcp/src/lib/nodeslideTools.ts:414` (`registerNodeSlideTools`).
 - **How it connects:** stdio MCP server that calls the same Convex functions the
   browser calls. Provider keys stay in the MCP process — `nodeslide.byok_status`
   reports presence and never returns a value.

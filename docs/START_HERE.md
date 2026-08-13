@@ -164,7 +164,7 @@ Three gates run here, in order:
    name the job whose deck it claims to produce is refused for free.
 3. **Admission and quota.** Either `NODESLIDE_PUBLIC_CREATION=true`, or an
    existing job row, or a preview access code — see
-   `validateNodeSlidePreviewAdmission` in `convex/lib/nodeslideValidators.ts:255`.
+   `validateNodeSlidePreviewAdmission` in `convex/lib/nodeslideValidators.ts:255` (`validateNodeSlidePreviewAdmission`).
    Then a per-session and global rate limit.
 
 Content validation lives next door in `convex/lib/nodeslideValidators.ts`:
@@ -279,7 +279,7 @@ error; the Convex function is never reached.
 **File:** `convex/nodeslide.ts` (persistence) and `convex/lib/nodeslidePatches.ts` (the check)
 **Symbols:** `createFromBriefInternal` (line 3670), `applyPatch` (line 1175),
 `acceptPatch` (line 1224), `commitPatch` (line 5304),
-`evaluateNodeSlideCas` (`convex/lib/nodeslidePatches.ts:659`)
+`evaluateNodeSlideCas` (`convex/lib/nodeslidePatches.ts:659` (`evaluateNodeSlideCas`))
 **Called by:** Step 4 for creation; the editor and the agent for every later edit
 **Calls next:** nothing — this is the bottom of the stack
 
@@ -358,7 +358,7 @@ renders its loading shell. A backend error surfaces through the toast in Step 8.
 Three different things can fail, and each has its own recovery:
 
 1. **The request is refused.** `createDeck` catches, calls the studio's local
-   `errorMessage` helper (`NodeSlideStudio.tsx:4527`), which delegates to
+   `errorMessage` helper (`src/domains/nodeslide/NodeSlideStudio.tsx:4527` (`nodeSlideUserErrorMessage`)), which delegates to
    `nodeSlideUserErrorMessage` in `src/domains/nodeslide/nodeslideUserError.ts`,
    and shows a toast plus an inline `role="alert"`. The typed input is preserved
    so nothing is retyped.

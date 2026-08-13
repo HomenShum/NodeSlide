@@ -8,9 +8,7 @@
   "bin": {
     "nodeslide-mcp": "dist/index.js"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsup src/index.ts --format esm --platform node --dts --clean --sourcemap",
     "dev": "tsup src/index.ts --format esm --platform node --dts --sourcemap --watch",

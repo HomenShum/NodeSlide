@@ -20,15 +20,11 @@
     "@earendil-works/pi-ai": "0.80.6",
     "@modelcontextprotocol/sdk": "^1.30.0",
     "@nodeslide/recipelang": "0.2.2",
-    "convex": "^1.31.7",
-    "katex": "^0.18.1",
-    "pptxgenjs": "^4.0.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@nodeslide/external-agent": "0.2.2",
     "@nodeslide/testing": "0.2.2",
-    "@types/katex": "^0.16.8",
     "@types/node": "^22.0.0",
     "tsup": "^8.5.0",
     "typescript": "^5.7.0",

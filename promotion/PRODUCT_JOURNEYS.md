@@ -1,6 +1,6 @@
 # Canonical journeys — NodeSlide
 
-Five real workflows, in the order a stranger meets them. Not feature tours: a
+Six real workflows (J0–J5), in the order a stranger meets them. Not feature tours: a
 journey is one person, one goal, and the artifact they hold when it worked.
 These are the promotion loop's work queue.
 

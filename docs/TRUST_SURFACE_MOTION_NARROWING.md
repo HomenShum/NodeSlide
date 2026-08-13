@@ -15,8 +15,8 @@ computed motion: button[data-testid=ai-web-research-toggle] transition:all/0.15s
 ;; (declared state data-agent-web-consent="per-send")
 ```
 
-The declaration is `transition-all` in the shadcn `buttonVariants` base
-(`src/components/ui/button.tsx:8`), reaching the annotated tag through
+The declaration is `transition-all` in the shadcn `buttonVariants` base at
+`src/components/ui/button.tsx:8` (`transition-all`), reaching the annotated tag through
 `InputGroupButton` → `PromptInputButton` — three components above it. The source-static census
 reads the annotated element's own `className`, finds it clean, and passes. Only a computed read
 sees it. That part of the gate worked exactly as designed.

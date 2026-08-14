@@ -180,7 +180,8 @@ reproduction; a hunch is not a defect.
 
   Screenshots were kept only for the `prod/` run; `before-dev/` and `after-dev/` retain their
   three JSON files each, which is what the A/B cites. The producer regenerates all of it.
-- Conditions newly PASS: **4, 5, 6, 9** (and 3, which the baseline could not observe past the
-  landing). 7 and 8 move UNVERIFIED → **FAIL**: both audits were run, and both found a major
-  finding that is still open (D7 for 7, D8 for 8). 10 moves UNVERIFIED → **FAIL** on the same
-  measurement as D8.
+- Conditions newly PASS: **3, 4, 5, 6, 9, 12** — 0/12 → 6/12. Six of those were UNVERIFIED only
+  because the baseline never got past the landing; the editor is where they were measured this
+  time. 7, 8 and 10 move UNVERIFIED → **FAIL**, which is the point of running the audits: the
+  reviews happened and each found something real that is still open (D7 for 7, D8 for 8 and 10).
+  1, 2 and 11 stay FAIL. **Nothing is UNVERIFIED any more.**

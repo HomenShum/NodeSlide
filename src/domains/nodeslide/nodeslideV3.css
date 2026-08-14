@@ -5246,6 +5246,10 @@
   text-decoration: none;
 }
 
+.nodeslide-studio .ns-landing-brand > span::before {
+  content: "N";
+}
+
 .nodeslide-studio .ns-landing-brand > span {
   align-items: center;
   background: var(--ns-accent);
@@ -6638,7 +6642,13 @@
   font-size: 16px;
   line-height: 1.55;
   min-height: 104px;
-  outline: 0;
+  /* No `outline: 0` here. The composer's :focus-within ring is a GROUP ring:
+     it is already on when focus arrives from the textarea, so tabbing textarea
+     -> model select -> effort select changed nothing on screen. Measured in
+     promotion/evidence/audit-2026-08-13/report.json (three stops reporting
+     indicatorOn "form.ns-landing-composer"). The global
+     :where(:focus-visible) rule in src/styles.css has zero specificity, so an
+     `outline: 0` here silently won and the control lost its own ring. */
   padding: 15px 16px 8px;
   resize: none;
   width: 100%;
@@ -6742,8 +6752,14 @@
   cursor: pointer;
   font-size: 11px;
   font-weight: 650;
-  outline: 0;
+  /* No `outline: 0` — see the textarea rule above. Both selects sit inside the
+     same composer, so the group ring cannot distinguish them. */
   padding: 8px 16px 8px 3px;
+}
+
+/* The ring has to clear the pill, or it is drawn under the wrapper's border. */
+.nodeslide-studio .ns-landing-model:has(select:focus-visible) {
+  border-color: color-mix(in srgb, var(--ns-accent) 64%, white);
 }
 
 .nodeslide-studio .ns-landing-model::after {
@@ -7170,8 +7186,24 @@
   }
 
   .nodeslide-studio .ns-landing-composer textarea {
-    font-size: 15px;
+    /* 16px, not 15px: iOS Safari zooms the viewport when a focused input is
+       under 16px, and this is the one control the landing exists for. Measured
+       at 390px in promotion/evidence/audit-2026-08-13/report.json
+       (wig.mobile.textInputsUnder16px). */
+    font-size: 16px;
     min-height: 116px;
+  }
+
+  /* Same reason as the textarea: 11px selects trip iOS's focus zoom. Measured
+     at 390 px in the audit report (wig.mobile.textInputsUnder16px). */
+  .nodeslide-studio .ns-landing-model select {
+    font-size: 16px;
+  }
+
+  /* The submit control was 40x40 at 390 px; the mobile floor is 44. */
+  .nodeslide-studio .ns-landing-send {
+    height: 44px;
+    min-width: 44px;
   }
 
   .nodeslide-studio .ns-landing-composer-bar {

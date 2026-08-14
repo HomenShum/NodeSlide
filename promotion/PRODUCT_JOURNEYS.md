@@ -60,13 +60,20 @@ Each journey states, in this order:
      which calls `convex/nodeslideAgent.ts → createDeckFromBrief`.
 - **Done when:** `[data-testid="nodeslide-studio"]` renders with the requested
   slides and the slide rail is populated.
-- **Status:** **FAIL — this is the baseline's headline defect (D1).** On the
-  deterministic route the action rejects with
-  `ConvexError {"code":"preview_not_configured","message":"NodeSlide
-  private-preview admission is not configured."}`. No deck is ever created.
-- **Evidence:** `promotion/evidence/baseline/j1-creating.png` (loading state),
-  `promotion/evidence/baseline/j1-after-create.png` (error state),
-  `report.json` step `j1-create-deck`.
+- **Status:** **PASS as of iteration 2**, on the documented quickstart path. The
+  baseline's headline defect (D1) was the admission gate, not the generator: with
+  `npx convex env set NODESLIDE_PUBLIC_CREATION true` — the line iteration 1 added
+  to the README quickstart — the deterministic route returns
+  `[data-testid="nodeslide-studio"]` with a four-slide rail in **682 ms**, in every
+  one of five audit runs, on the dev server and on the built bundle alike. Without
+  that variable a fresh deployment still rejects with
+  `ConvexError {"code":"preview_not_configured"}`, so D1's runtime cause is
+  documented, not removed.
+- **Evidence:** iteration 2 —
+  `promotion/evidence/audit-2026-08-13/prod/state-loading.png` (loading),
+  `prod/state-success-editor.png` (the deck in the editor),
+  `prod/report.json` `states.afterCreate`. Baseline (the failing state) —
+  `promotion/evidence/baseline/j1-after-create.png`.
 
 ## J2 — "Ask for a change, then decide whether to take it" (steering + receipt)
 

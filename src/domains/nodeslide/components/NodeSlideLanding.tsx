@@ -187,7 +187,12 @@ export function NodeSlideLanding({
     >
       <header className="ns-landing-header">
         <a className="ns-landing-brand" href="/" aria-label="NodeSlide home">
-          <span aria-hidden="true">N</span>
+          {/* The mark is drawn by CSS, not typed here: as a text node it counts
+              as the link's visible text, and "N NodeSlide" is not contained in
+              the accessible name "NodeSlide home", which is what
+              label-content-name-mismatch fails on (a voice-control user saying
+              the visible words does not hit the link). */}
+          <span aria-hidden="true" />
           <strong>NodeSlide</strong>
         </a>
         <div className="ns-landing-header-actions">
@@ -267,6 +272,7 @@ export function NodeSlideLanding({
           ) : null}
           <input
             ref={fileInputRef}
+            aria-label="Attach data files"
             className="ns-sr-only"
             data-testid="landing-file-input"
             type="file"

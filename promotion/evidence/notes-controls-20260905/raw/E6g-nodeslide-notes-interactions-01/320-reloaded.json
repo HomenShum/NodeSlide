@@ -1,0 +1,68 @@
+{
+  "bodyText": "N\n/\n01\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\n02\nCONTEXT / 02\nThe cost of waiting is usually hidden in repeated work.\nFriction\nConsequence\nDecision window\nFrame the current reality for Decision-makers described in the brief: what is fragmented today, why it matters now, and where momentum is being lost.\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n02\n03\nINSIGHT / 03\nA better outcome starts with a sharper point of view.\nCreate a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decis…\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n03\n04\nAPPROACH / 04\nTurn the idea into a sequence people can understand and own.\nConnect intent, action, and feedback in one visible operating path so the audience can see both the destination and the mechanics.\nAlign on intent\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n04\n05\nEVIDENCE / 05\nDefine proof before asking for commitment.\nUse the brief’s success criteria as qualitative review questions until measured evidence is supplied.\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n05\n06\nCLOSE / 07\nCreate an editable, reviewable presentation from this idea\n01  Agree the outcome\n02  Name the owner\n03  Set the next checkpoint\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n06\nAdd slide\nEdit\nOverview\nCompare\nclassification_issue\nSLIDE JOB\nNotes handoff 320 round 4: 00123 stays text; 中文交接. Presenter decision: compare the next slide, then return to this note.\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\n1 / 6\n40%\nFit\nPresenter notes\n20 words",
+  "focus": "\n    NNodeSlide/v15EN Reset demoY Share Present Export CommandsKStoryboard6 slides123456SlidesOutlineLayersOpening / 01101Create an editable, reviewable presentation from this ideaOPENING / 01NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE01Create a six-slide decision review for a fictional sourcing pilot1 warning1 source · stale Drag to reorderContext / 02102CONTEXT / 02The cost of waiting is usually hidden in repeated work.FrictionConsequenceDecision windowFrame the current reality for Decision-makers described in the brief: what is fragmented today, why it matters now, and where momentum is being lost.NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE02The moment to solve2 sources · current Drag to reorderInsight / 03103INSIGHT / 03A better outcome starts with a sharper point of view.Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decis…Honor explicit slide-count and presentation constraints in the briefNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE03The decisive insight2 sources · current Drag to reorderApproach / 04104APPROACH / 04Turn the idea into a sequence people can understand and own.Connect intent, action, and feedback in one visible operating path so the audience can see both the destination and the mechanics.Align on intentNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE04How the approach works2 sources · current Drag to reorderEvidence / 05105EVIDENCE / 05Define proof before asking for commitment.Use the brief’s success criteria as qualitative review questions until measured evidence is supplied.Honor explicit slide-count and presentation constraints in the briefNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE05What success looks like2 sources · current Drag to reorderClose / 07106CLOSE / 07Create an editable, reviewable presentation from this idea01  Agree the outcome02  Name the owner03  Set the next checkpointNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE06The decision1 source · current Drag to reorder Add slideEditOverviewCompare01Create a six-slide decision review for a fictional sourcing pilotclassification_issueSlide jobNarrativeNotes handoff 320 round 4: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.Slide 1 Create a six-slide decision review for a fictional sourcing pilot Live canvasCreate an editable, reviewable presentation from this ideaOPENING / 01NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE011 / 640%FitPresenter notes20 wordsNotes handoff 320 round 4: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.InspectorDeck Gym · Artifact Atlas V2Artifact LabBrowse 38 evidence-bound recipes, compare routes, and inspect export receipts. Artifact Gallery Model Compare Harness Compare Evidence-eligible01 · artifact baselineHero thesisOne evidence-bounded idea with a memorable visual anchor.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.hero-thesis.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON Evidence-eligible02 · artifact baselineKPI stripComparable operating metrics with context, not dashboard confetti.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.kpi-strip.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON Evidence-eligible03 · artifact baselineMulti-series trendAn annotated divergence chart that avoids invented causes.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.multi-series-trend.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON Evidence-eligible04 · artifact baselineUncertainty rangeA forecast band that makes confidence and assumptions visible.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.uncertainty-range.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON Evidence-eligible05 · artifact baselineArchitecture diagramLayered boundaries with inspectable ownership and handoffs.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.system-architecture.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON Evidence-eligible06 · artifact baselineRequest sequenceOrdering, review custody, and failure boundaries in one flow.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.request-sequence.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON Evidence-eligible07 · artifact baselineResearch timelineMilestones from question to evidence-backed decision.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.research-timeline.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON Evidence-eligible08 · artifact baselineScreenshot calloutsProduct evidence with explicit annotation and replacement state.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.screenshot-callouts.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON Evidence-eligible09 · artifact baselineClaim-source lineageTrace a claim through source, validation, and slide usage.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.claim-source-lineage.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON Evidence-eligible10 · artifact baselineQuality / cost equationEditable math tied to measured experiment inputs.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.quality-cost-equation.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON Evidence-eligible11 · artifact baselineCode + runtime proofA small API contract paired with measured behavior.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.code-runtime-proof.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON Evidence-eligible12 · artifact baselineRisk matrixLikelihood and impact positioned for an operating decision.Use slideUse recipeGenerate with my data3 variantsSource JSON · trace · export receiptRecipenodeslide.recipe.risk-matrix.v1Harnessartifact-atlas-v1Buildernodeslide-artifact-builder-v1Deck CIv1-baselinePPTXEditable final state.Human preferencependingCatalog V2 receipt loads with the deployed Atlas.Download source JSON\n    \n  \n\n",
+  "overflow": 0,
+  "viewport": {
+    "width": 320,
+    "height": 844
+  },
+  "notes": "Notes handoff 320 round 4: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+  "controls": [
+    {
+      "label": "Previous slide",
+      "width": 28,
+      "height": 27,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Next slide",
+      "width": 28,
+      "height": 27,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Toggle pan tool",
+      "width": 0,
+      "height": 0,
+      "centerHit": false,
+      "inViewport": true
+    },
+    {
+      "label": "Zoom out",
+      "width": 28,
+      "height": 27,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Zoom in",
+      "width": 28,
+      "height": 27,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Fit slide to workspace",
+      "width": 34.84375,
+      "height": 27,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Presenter notes20 words",
+      "width": 296,
+      "height": 21,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Presenter notes for Create a six-slide decision review for a fictional sourcing pilot",
+      "width": 296,
+      "height": 76.5,
+      "centerHit": true,
+      "inViewport": true
+    }
+  ]
+}

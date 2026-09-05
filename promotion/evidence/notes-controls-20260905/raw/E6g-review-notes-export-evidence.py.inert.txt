@@ -1,0 +1,75 @@
+from pathlib import Path
+import datetime, hashlib, json, posixpath, subprocess, zipfile, xml.etree.ElementTree as ET
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+A=P/'E6g-nodeslide-notes-interactions-01'
+B=P/'E6g-nodeslide-notes-export-recovery-01'
+O=P/'E6g-nodeslide-notes-export-independent'
+O.mkdir(exist_ok=True)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+load=lambda p:json.loads(p.read_text(encoding='utf-8'))
+checks=[]
+def check(n,v,d=None):checks.append({'name':n,'passed':bool(v),'detail':d})
+initial,recovery=load(A/'report.json'),load(B/'report.json')
+files=[(A,e) for e in initial['files']]+[(B,e) for e in recovery['files']]
+for d,e in files:check('exact export bytes: '+d.name+'/'+e['path'],sha(d/e['path'])==e['sha256'] and (d/e['path']).stat().st_size==e['bytes'])
+original=load(A/'before.json'); edited=load(A/'after.json'); final=load(B/'recovered.json')
+note0=initial['files'][0]['expectedNote']; note15=initial['files'][2]['expectedNote']; note16=note0+'\n'+note15
+check('all JSON notes preserve exact Unicode and LF text',original['slides'][0]['notes']==note0 and edited['slides'][0]['notes']==note15 and final['slides'][0]['notes']==note16==recovery['restoredNote'])
+check('same deck/slide identities and six-slide order',original['deck']['id']==edited['deck']['id']==final['deck']['id'] and [s['id'] for s in original['slides']]==[s['id'] for s in edited['slides']]==[s['id'] for s in final['slides']] and len(final['slides'])==6)
+check('deck versions 3 to15 to16, source slide revisions separately retained',[x['deck']['version'] for x in [original,edited,final]]==[3,15,16],{'slideVersions':[x['slides'][0]['version'] for x in [original,edited,final]]})
+check('other five slides/elements/sources exact across updates',original['slides'][1:]==edited['slides'][1:]==final['slides'][1:] and original['elements']==edited['elements']==final['elements'] and original['sources']==edited['sources']==final['sources'])
+def diffs(a,b,p=''):
+    if type(a)!=type(b):return[p]
+    if isinstance(a,dict):return sum((diffs(a.get(k),b.get(k),p+'/'+k) for k in sorted(set(a)|set(b))),[])
+    if isinstance(a,list):return sum((diffs(x,y,p+'/'+str(i)) for i,(x,y) in enumerate(zip(a,b))),[]) if len(a)==len(b) else[p]
+    return [] if a==b else[p]
+paths=diffs(original,final)
+check('JSON changed fields only notes/version timestamps',set(paths)<=set(['/deck/version','/deck/updatedAt','/slides/0/notes','/slides/0/version','/slides/0/updatedAt']),paths)
+ns={'a':'http://schemas.openxmlformats.org/drawingml/2006/main','p':'http://schemas.openxmlformats.org/presentationml/2006/main','rel':'http://schemas.openxmlformats.org/package/2006/relationships'}
+pptx=[]
+for f,expected in [(A/'before.pptx',note0),(B/'recovered.pptx',note16)]:
+    with zipfile.ZipFile(f) as z:
+        check('valid zip CRC: '+f.name,z.testzip() is None)
+        names=z.namelist(); xmlnames=[n for n in names if n.endswith(('.xml','.rels'))]
+        parsed={n:ET.fromstring(z.read(n)) for n in xmlnames}
+        relationships=parsed['ppt/slides/_rels/slide1.xml.rels']
+        rels=[e for e in relationships if e.attrib.get('Type','').endswith('/notesSlide')]
+        check('first actual slide relates to one notes part: '+f.name,len(rels)==1)
+        note_part=posixpath.normpath(posixpath.join('ppt/slides',rels[0].attrib['Target']))
+        root=parsed[note_part]
+        bodies=[s for s in root.findall('.//p:sp',ns) if any(e.attrib.get('type')=='body' for e in s.findall('.//p:ph',ns))]
+        check('actual slide-notes body present: '+f.name,len(bodies)==1)
+        text='\n'.join(t.text or '' for t in bodies[0].findall('.//a:t',ns))
+        textlines=[line for line in text.splitlines() if line]
+        expectedlines=expected.splitlines()
+        check('every note line exact and ordered before provenance: '+f.name,textlines[:len(expectedlines)]==expectedlines and textlines[len(expectedlines)]=='NodeSlide sources')
+        check('entire parsed note text exact before appended provenance: '+f.name,text.startswith(expected+'\n\nNodeSlide sources\n'))
+        notesparts=[n for n in names if n.startswith('ppt/notesSlides/notesSlide') and n.endswith('.xml')]
+        check('six actual slides and six note parts: '+f.name,len(notesparts)==6 and len([n for n in names if n.startswith('ppt/slides/slide') and n.endswith('.xml')])==6)
+        pptx.append({'file':f.relative_to(P).as_posix(),'bytes':f.stat().st_size,'sha256':sha(f),'zipEntries':len(names),'xmlAndRelsParsed':len(xmlnames),'slide1NotesRelationship':note_part,'exactNoteLines':len(expectedlines),'inheritedRawCrCrLf':b'\r\r\n' in z.read(note_part),'notesPartSha256':hashlib.sha256(z.read(note_part)).hexdigest()})
+rounds=[s for s in initial['steps'] if 'round' in s]
+check('twelve native edit/navigation rounds have consecutive versions',len(rounds)==12 and [s['priorVersion'] for s in rounds]==list(range(3,15)) and [s['currentVersion'] for s in rounds]==list(range(4,16)) and all(s['blurNextPreviousPreserved'] and s['nativeReverseTabsToNext']==5 for s in rounds))
+check('three actual zoom/toggle/reload/boundary steps pass',len([s for s in initial['steps'] if s.get('passed') is True])==3 and len(initial['steps'])==15)
+check('original failed proof is retained without relabeling',initial['status']=='FAILED' and 'Timeout 15000ms exceeded' in initial['failure'] and len(initial['files'])==3 and not (A/'after.pptx').exists())
+failure=load(A/'failure.json')['bodyText']
+check('degraded refusal disclosed in actual page record','uses illustrative evidence without a visible slide or notes disclosure' in failure and 'Export is blocked by 1' in failure and 'Illustrative pilot only.' not in note15)
+check('recovery uses original disclosure plus last note and increments one deck version',recovery['versions']=={'before':15,'after':16} and recovery['status']=='PASS_DISCLOSURE_REPAIR_AND_ACTUAL_EXPORT_RECOVERY' and recovery['restoredNote']==note16)
+dom=load(B/'1440-recovered-export.json')
+check('recovery DOM binds exact note and version16',dom['notes']==note16 and dom['version']==16 and 'Validated PowerPoint export prepared.' in dom['text'])
+check('settled inspector visible in recovery record','What should we change?' in dom['text'] and 'Opening workspace tools...' not in dom['text'])
+check('errors/egress empty and grades null',all(x['errors']==[] and x['blockedOrigins']==[] and x['fullGrades'] is None for x in [initial,recovery]))
+check('actual three runtime source bindings unchanged',all(sha(R/s['path'])==s['sha256'] for s in initial['source']))
+evidence=[{'path':f.relative_to(P).as_posix(),'sha256':sha(f),'bytes':f.stat().st_size} for d in [A,B] for f in sorted(d.iterdir()) if f.is_file()]
+for n in ['E6g-notes-controls-interactions.mjs','E6g-notes-export-recovery.mjs']:
+    f=P/n;evidence.append({'path':n,'sha256':sha(f),'bytes':f.stat().st_size})
+record={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PARSED_EXPORT_AND_NATIVE_EVIDENCE_VERIFIED_PENDING_ORDINARY_CHECK','passed':all(c['passed'] for c in checks),'checks':checks,'files':pptx,'source':initial['source'],'jsonChangedPaths':paths,'evidence':evidence,
+ 'reviewerActions':'Read-only JSON and ZIP/XML parsing, source/hash checks and actual recovery PNG viewing; no runtime/browser/Office or suite rerun.',
+ 'limits':['JSON and parsed PPTX note text are exact before the appended provenance. Serialized XML uses CRLF, normalized to LF by the XML parser; no native Office paragraph/rendering claim. Initial reviewer prose misread terminal-rendered CRCRLF; raw bytes showed ordinary CRLF and the report was corrected, with prior report retained.',
+           'Native test uses real blur through pointer Next and real reverse Tab/Enter navigation; note entry uses Playwright fill, not manual typing.',
+           'Twelve rounds and three action bundles are a bounded burst/repetition proof, not a one-minute sustained or scale benchmark.',
+           'Text200 is explicit per-element computed-font doubling before actions; reload starts normal style and therefore does not prove enlarged reload layout.',
+           'No native Office rendering, production/provider, live-user durability beyond this isolated backend, textarea resize/short-height or complete readiness grade.'],
+ 'finalAcceptance':None}
+(O/'report.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8',newline='\n')
+print(json.dumps({'passed':record['passed'],'checks':len(checks),'failed':[c for c in checks if not c['passed']],'pptx':pptx,'jsonChangedPaths':paths,'sha256':sha(O/'report.json')},indent=2));assert record['passed']

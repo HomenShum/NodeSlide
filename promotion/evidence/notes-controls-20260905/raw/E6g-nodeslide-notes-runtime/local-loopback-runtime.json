@@ -1,0 +1,52 @@
+{
+  "at": "2026-09-05T17:31:53.583484+00:00",
+  "status": "READY_FOR_DETERMINISTIC_BROWSER_PROOF",
+  "ports": [
+    49676,
+    49690
+  ],
+  "sourcePushed": true,
+  "admissionSet": true,
+  "providerCalls": 0,
+  "backendTarget": "EXISTING_SYNTHETIC_CANDIDATE_LOOPBACK_ONLY",
+  "privateLogs": "D:\\ProjectRecovery\\NodeSlide first run 20260905\\private-bootstrap-02\\notes-runtime-01",
+  "nativeSecretAndAdminKey": "IN_MEMORY_ONLY_NOT_OUTPUT",
+  "nativePid": 27928,
+  "nativeProcessCreated": 1788629513.5859847,
+  "listeners": [
+    {
+      "pid": 27928,
+      "address": "127.0.0.1",
+      "port": 49690
+    },
+    {
+      "pid": 27928,
+      "address": "127.0.0.1",
+      "port": 49676
+    }
+  ],
+  "verifiedOwnedLoopback": true,
+  "source-push": {
+    "exitCode": 0,
+    "seconds": 14.734000000054948,
+    "privateLogBytes": 148,
+    "privateLogSha256": "f1d6e36e9bb166fbcd58c79cdcc3a1336b8e9637795e2ac298d2c96f04f3fee4"
+  },
+  "creation-admission": {
+    "exitCode": 0,
+    "seconds": 0.40600000007543713,
+    "privateLogBytes": 47,
+    "privateLogSha256": "aea86e16be29e339953255fbec1c84f6412589f5bd7a79003f7e66ce83d7d3a4"
+  },
+  "cleanup": {
+    "method": "WINDOWS_TERMINATE_EXACT_RECORDED_NATIVE_PID",
+    "ownedProcessExited": true,
+    "portsReleased": true
+  },
+  "sourceStatus": [
+    " M src/domains/nodeslide/components/SlideCanvas.tsx",
+    " M src/domains/nodeslide/nodeslide.css",
+    " M src/domains/nodeslide/nodeslideV3.css"
+  ],
+  "stoppedAt": "2026-09-05T17:55:24.133425+00:00"
+}

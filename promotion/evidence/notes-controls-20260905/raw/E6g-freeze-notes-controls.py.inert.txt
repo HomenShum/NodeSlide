@@ -1,0 +1,28 @@
+from pathlib import Path
+import datetime,hashlib,json,subprocess
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+F=P/'E6g_NODESLIDE_NOTES_CONTROLS_FREEZE.json';assert not F.exists()
+def git(*a):return subprocess.check_output(['git','--no-optional-locks',*a],cwd=R)
+def row(p,relative):
+    b=p.read_bytes();return{'path':relative,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+names=['src/domains/nodeslide/components/SlideCanvas.tsx','src/domains/nodeslide/nodeslide.css','src/domains/nodeslide/nodeslideV3.css']
+assert set(git('diff','--name-only').decode().splitlines())==set(names)
+assert not git('diff','--cached','--name-only').strip()and not git('ls-files','--others','--exclude-standard').strip()
+source=[]
+for name in names:
+    d=row(R/name,name);d['gitBlobSha1']=git('hash-object','--path='+name,str(R/name)).decode().strip();source.append(d)
+B=P/'E6g-nodeslide-notes-source-before'
+assert git('ls-files','--stage','-z')==(B/'index.bin').read_bytes()
+assert git('show-ref')==(B/'refs.bin').read_bytes()
+assert git('rev-parse','HEAD')==(B/'head.bin').read_bytes()
+assert (R/'HANDOFF.md').read_bytes()==(B/'HANDOFF.md').read_bytes()
+folders=['E6g-nodeslide-notes-source-before','E6g-nodeslide-notes-before-01','E6g-nodeslide-notes-after-01','E6g-nodeslide-notes-after-02','E6g-nodeslide-notes-interactions-01','E6g-nodeslide-notes-export-recovery-01','E6g-nodeslide-notes-runtime','E6g-nodeslide-notes-check-01']
+loose=['E6g_NODESLIDE_NOTES_CONTROLS_REPAIR_PLAN.md','E6g_NODESLIDE_NOTES_CONTROLS_RECON.md','E6g_NODESLIDE_NOTES_CONTROLS_RECON.json','E6g-prepare-notes-runtime.py','E6g-run-notes-loopback.py','E6g-run-notes-vite.py','E6g-capture-notes-before.mjs','E6g-capture-notes-after.mjs','E6g-capture-notes-after-02.mjs','E6g-apply-notes-controls.py','E6g-notes-controls-interactions.mjs','E6g-notes-export-recovery.mjs','E6g-check-notes-controls.py','E6g-freeze-notes-controls.py']
+files=[f for directory in folders for f in(P/directory).rglob('*')if f.is_file()]+[P/n for n in loose]
+artifacts=sorted([row(f,f.relative_to(P).as_posix())for f in files],key=lambda r:r['path'])
+check=json.loads((P/'E6g-nodeslide-notes-check-01/command.json').read_text(encoding='utf-8'));assert check['exitCode']==0 and check['sourceUnchanged']
+for n in ['local-loopback-runtime.json','vite-runtime.json']:
+    r=json.loads((P/'E6g-nodeslide-notes-runtime'/n).read_text(encoding='utf-8'));assert r.get('cleanup')and r.get('stoppedAt')
+data={'proof':'NODESLIDE-NOTES-CONTROLS-01','at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'SOURCE_AND_OPERATOR_PROOF_FROZEN_FOR_INDEPENDENT_JUDGE','candidate':str(R),'baseHead':git('rev-parse','HEAD').decode().strip(),'baseTree':git('rev-parse','HEAD^{tree}').decode().strip(),'branch':git('branch','--show-current').decode().strip(),'source':source,'sourceDigest':hashlib.sha256(json.dumps(source,sort_keys=True,separators=(',',':')).encode()).hexdigest(),'artifacts':artifacts,'artifactCount':len(artifacts),'artifactBytes':sum(r['bytes']for r in artifacts),'normalCheck':'PASS_150.969_SECONDS_2823_ROOT_PLUS42_WORKSPACE_TESTS_BUILD','geometry':'11_AFTER_STATES_VISIBLE_TARGET_HITS_LABEL_BOUNDS_AND_ROW_SEPARATION_PASS','nativeActions':'15_STEPS_PASS_12_NOTE_REVISIONS_3_WIDTHS','exportBoundary':'Original action script remains FAILED at expected blocked final PPTX because the new notes removed disclosure. Recovery at deck16 restores original disclosure plus latest note and exports both actualJSON/PPTX. Five actual files total; prior3 unchanged.','sourceRuntimeAndProviderSemanticsUnchanged':True,'indexRefsUnchanged':True,'handoffUnchangedUntilPublication':True,'ownedRuntimesStopped':True,'limits':['Earlier ordinary Windows NodeBook timing failure not explained or fixed by current passing check.','Full shape/layout grade remains null; enlarged header/slide/inspector clipping and textarea-resize/short-height observations remain open.','Text200 is computed font scaling; reload removes it. Three native action cells do not certify OS zoom, touch/device, accessibility/performance or sustained/multi-user load.','Actual native actions and exports used existing synthetic memory/capability context in anonymous localConvex; no provider or nativeOffice calls.','Before selector .ns-slide-stage was missing; other bounds valid. After uses actual .ns-canvas-stage. Hidden zero-size pan control excluded.','After02 desktop inspector opening state does not certify inspector content; recovery/failure desktop captures show actual settled inspector.','Stage1 Fit clip retained; stage1CSS inverse reconstruction is hash-matched and explicitly distinguished from separatelycapturedbytes.'],'staged':False,'committed':False,'fullGrades':None}
+F.write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n',encoding='utf-8',newline='\n');print(json.dumps({'freeze':str(F),'sha256':hashlib.sha256(F.read_bytes()).hexdigest(),'sourceDigest':data['sourceDigest'],'artifactCount':data['artifactCount'],'artifactBytes':data['artifactBytes']}))

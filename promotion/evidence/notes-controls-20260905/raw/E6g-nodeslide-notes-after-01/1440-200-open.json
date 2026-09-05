@@ -1,0 +1,324 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "overflow": 0,
+  "bodyText": "N\nNodeSlide\n/\nv3\nEN\nReset demo\nShare\nPresent\nExport\nCommands\nSlides\nOutline\nLayers\nOPENING / 01\n1\n01\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\nCreate a six-slide decision review for a fictional sourcing pilot\n1 source · current\nCONTEXT / 02\n1\n02\nCONTEXT / 02\nThe cost of waiting is usually hidden in repeated work.\nFriction\nConsequence\nDecision window\nFrame the current reality for Decision-makers described in the brief: what is fragmented today, why it matters now, and where momentum is being lost.\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n02\nThe moment to solve\n2 sources · current\nINSIGHT / 03\n1\n03\nINSIGHT / 03\nA better outcome starts with a sharper point of view.\nCreate a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decis…\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n03\nThe decisive insight\n2 sources · current\nAPPROACH / 04\n1\n04\nAPPROACH / 04\nTurn the idea into a sequence people can understand and own.\nConnect intent, action, and feedback in one visible operating path so the audience can see both the destination and the mechanics.\nAlign on intent\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n04\nHow the approach works\n2 sources · current\nEVIDENCE / 05\n1\n05\nEVIDENCE / 05\nDefine proof before asking for commitment.\nUse the brief’s success criteria as qualitative review questions until measured evidence is supplied.\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n05\nWhat success looks like\n2 sources · current\nCLOSE / 07\n1\n06\nCLOSE / 07\nCreate an editable, reviewable presentation from this idea\n01  Agree the outcome\n02  Name the owner\n03  Set the next checkpoint\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n06\nThe decision\n1 source · current\nAdd slide\nEdit\nOverview\nCompare\n01\nCreate a six-slide decision review for a fictional sourcing pilot\nverified\nSLIDE JOB\nIllustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text. Decision: prototype after checking the budget. 中文交接 — no external claims.\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\n1 / 6\n65%\nFit\nPresenter notes\n25 words\nOpening workspace tools…",
+  "regions": [
+    {
+      "selector": ".ns-canvas-stage",
+      "box": {
+        "x": 300,
+        "y": 137.1875,
+        "width": 800,
+        "height": 573.8125,
+        "right": 1100,
+        "bottom": 711
+      },
+      "position": "static",
+      "bottom": "auto",
+      "minHeight": "100%",
+      "padding": "30px 57.6px 54px",
+      "overflow": "visible",
+      "display": "flex",
+      "fontSize": "32px",
+      "zIndex": "auto"
+    },
+    {
+      "selector": ".ns-canvas-viewport",
+      "box": {
+        "x": 300,
+        "y": 137.1875,
+        "width": 800,
+        "height": 573.8125,
+        "right": 1100,
+        "bottom": 711
+      },
+      "position": "static",
+      "bottom": "auto",
+      "minHeight": "0px",
+      "padding": "0px",
+      "overflow": "auto",
+      "display": "block",
+      "fontSize": "32px",
+      "zIndex": "auto"
+    },
+    {
+      "selector": ".ns-canvas-controls",
+      "box": {
+        "x": 300,
+        "y": 711,
+        "width": 800,
+        "height": 48,
+        "right": 1100,
+        "bottom": 759
+      },
+      "position": "static",
+      "bottom": "auto",
+      "minHeight": "auto",
+      "padding": "4px 12px",
+      "overflow": "visible",
+      "display": "flex",
+      "fontSize": "32px",
+      "zIndex": "auto"
+    },
+    {
+      "selector": ".ns-slide-stepper",
+      "box": {
+        "x": 312,
+        "y": 715,
+        "width": 134.015625,
+        "height": 40,
+        "right": 446.015625,
+        "bottom": 755
+      },
+      "position": "static",
+      "bottom": "auto",
+      "minHeight": "auto",
+      "padding": "3px",
+      "overflow": "visible",
+      "display": "flex",
+      "fontSize": "32px",
+      "zIndex": "auto"
+    },
+    {
+      "selector": ".ns-notes-strip",
+      "box": {
+        "x": 300,
+        "y": 759,
+        "width": 800,
+        "height": 201,
+        "right": 1100,
+        "bottom": 960
+      },
+      "position": "static",
+      "bottom": "auto",
+      "minHeight": "auto",
+      "padding": "7px 12px 9px",
+      "overflow": "visible",
+      "display": "grid",
+      "fontSize": "32px",
+      "zIndex": "auto"
+    },
+    {
+      "selector": ".ns-notes-strip textarea",
+      "box": {
+        "x": 312,
+        "y": 816,
+        "width": 776,
+        "height": 135,
+        "right": 1088,
+        "bottom": 951
+      },
+      "position": "static",
+      "bottom": "auto",
+      "minHeight": "auto",
+      "padding": "8px 10px",
+      "overflow": "auto",
+      "display": "block",
+      "fontSize": "26px",
+      "zIndex": "auto"
+    },
+    {
+      "selector": ".ns-zoom-controls",
+      "box": {
+        "x": 936.328125,
+        "y": 715,
+        "width": 151.671875,
+        "height": 40,
+        "right": 1088,
+        "bottom": 755
+      },
+      "position": "static",
+      "bottom": "auto",
+      "minHeight": "auto",
+      "padding": "3px",
+      "overflow": "visible",
+      "display": "flex",
+      "fontSize": "32px",
+      "zIndex": "auto"
+    }
+  ],
+  "controls": [
+    {
+      "label": "Previous slide",
+      "box": {
+        "x": 315,
+        "y": 721.5,
+        "width": 28,
+        "height": 27,
+        "right": 343,
+        "bottom": 748.5
+      },
+      "disabled": true,
+      "rendered": true,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Next slide",
+      "box": {
+        "x": 415.015625,
+        "y": 721.5,
+        "width": 28,
+        "height": 27,
+        "right": 443.015625,
+        "bottom": 748.5
+      },
+      "disabled": false,
+      "rendered": true,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Toggle pan tool",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "disabled": false,
+      "rendered": false,
+      "centerHit": false,
+      "inViewport": true
+    },
+    {
+      "label": "Zoom out",
+      "box": {
+        "x": 939.328125,
+        "y": 721.5,
+        "width": 28,
+        "height": 27,
+        "right": 967.328125,
+        "bottom": 748.5
+      },
+      "disabled": false,
+      "rendered": true,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Zoom in",
+      "box": {
+        "x": 1005.328125,
+        "y": 721.5,
+        "width": 28,
+        "height": 27,
+        "right": 1033.328125,
+        "bottom": 748.5
+      },
+      "disabled": false,
+      "rendered": true,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Fit slide to workspace",
+      "box": {
+        "x": 1037.328125,
+        "y": 721.5,
+        "width": 47.671875,
+        "height": 27,
+        "right": 1085,
+        "bottom": 748.5
+      },
+      "disabled": false,
+      "rendered": true,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Presenter notes25 words",
+      "box": {
+        "x": 312,
+        "y": 767,
+        "width": 776,
+        "height": 43,
+        "right": 1088,
+        "bottom": 810
+      },
+      "disabled": false,
+      "rendered": true,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Presenter notes for Create a six-slide decision review for a fictional sourcing pilot",
+      "box": {
+        "x": 312,
+        "y": 816,
+        "width": 776,
+        "height": 135,
+        "right": 1088,
+        "bottom": 951
+      },
+      "disabled": false,
+      "rendered": true,
+      "centerHit": true,
+      "inViewport": true
+    }
+  ],
+  "labels": [
+    {
+      "text": "1 / 6",
+      "box": {
+        "x": 343,
+        "y": 720.5,
+        "width": 72.015625,
+        "height": 29,
+        "right": 415.015625,
+        "bottom": 749.5
+      },
+      "textBox": {
+        "x": 346,
+        "y": 720.5,
+        "width": 66.015625,
+        "height": 29,
+        "right": 412.015625,
+        "bottom": 749.5
+      }
+    },
+    {
+      "text": "65%",
+      "box": {
+        "x": 967.328125,
+        "y": 723.5,
+        "width": 38,
+        "height": 23,
+        "right": 1005.328125,
+        "bottom": 746.5
+      },
+      "textBox": {
+        "x": 969.828125,
+        "y": 723.5,
+        "width": 33,
+        "height": 23,
+        "right": 1002.828125,
+        "bottom": 746.5
+      }
+    },
+    {
+      "text": "Fit",
+      "box": {
+        "x": 1037.328125,
+        "y": 721.5,
+        "width": 47.671875,
+        "height": 27,
+        "right": 1085,
+        "bottom": 748.5
+      },
+      "textBox": {
+        "x": 1048.328125,
+        "y": 719,
+        "width": 25.671875,
+        "height": 32,
+        "right": 1074,
+        "bottom": 751
+      }
+    }
+  ]
+}

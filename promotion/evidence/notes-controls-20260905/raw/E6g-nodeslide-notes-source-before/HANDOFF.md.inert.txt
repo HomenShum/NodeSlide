@@ -1,6 +1,6 @@
 # NodeSlide developer handoff — 2026-09-05
 
-An author needs an editable deck whose data, revisions and review status can be checked before sharing. The accepted recovery slices preserve multiline briefs, expose the reason a broader deck check failed, make repository checks work from a Windows path containing spaces, and separate notes from slide navigation and zoom controls. The complete product is still under review.
+An author needs an editable deck whose data, revisions and review status can be checked before sharing. This recovery slice preserves multiline briefs, exposes the reason a broader deck check failed, and makes the repository checks work from a Windows path containing spaces. The complete product is still under review.
 
 **Re your request:** make each repository usable for developer/user handoff, including visual, responsive and interaction grading. The verified slices and remaining gaps below are deliberately separate. No full-product grade or production deployment is claimed.
 
@@ -32,7 +32,6 @@ The proof backend and frontend have stopped; their recorded processes exited and
 | Paste a multiline CSV brief and export the generated chart | A shared single-line validator removed all five line breaks, so saved input and exported deck had no chart | Preserve internal prompt whitespace while retaining raw size/blank checks. Real UI creation, title/notes edits and reload produced exact JSON and one native PPTX chart with values 100, 120 and 140. |
 | Open a failed Deck CI result before sharing | The Trace panel showed a narrower passed validation as “publish ready” without the actual composition blocker | Forward only the current deck/version result to both inspector surfaces; show the actual blocker and version; label older validation as recorded core validation. Pending/unavailable checks do not borrow a result. |
 | Enlarge inspector text while reading check counts | The one-line status control clipped blocker/warning counts | Allow the existing count row to wrap. The actual 390/1440 captures and text bounds show the complete counts. Other enlarged controls still have defects. |
-| Edit presenter notes, navigate and adjust zoom | Bottom-positioned pager and zoom controls covered the note editor and obstructed phone targets | Put the unchanged groups in a wrapping row before notes; reserve its height and preserve handlers, save-on-blur, zoom and export policy. The new notes packet records the scoped before/after proof. |
 
 The runtime changes preserve existing export policy, validation booleans, diversity thresholds and provider boundaries. Generated API metadata reflects the existing local Convex modules. No dependencies or backend schema were changed by these slices.
 
@@ -52,31 +51,13 @@ To repeat the author journey in your own local session:
 4. Open Deck CI using the keyboard on phone and desktop widths. Check that its detail identifies the current version and actual reason; an older core receipt must not imply overall readiness.
 5. Test pending/unavailable and stale-result cases through the existing component scenarios. Keep fixture results distinct from the real backend journey.
 
-## Notes and canvas controls: current scoped acceptance
-
-The [notes-controls packet](promotion/evidence/notes-controls-20260905/README.md) records the current three-source layout repair and its independent source judgment. Pager and zoom now occupy their own wrapping row before notes. Ten before states retain the original obstruction; eleven after states show separated rows and unobstructed positive-size targets. The proof includes twelve consecutive note revisions and three native toggle/navigation/zoom/reload bundles, including phone and doubled-text conditions.
-
-The original interaction script remains failed at its final PPTX wait: the replacement note removed the required illustrative disclosure, so export was correctly refused. Recovery restored that disclosure plus the new note, advanced the deck from version 15 to 16, and downloaded actual JSON and PPTX. All three earlier files, other slides and source data remained exact. Independent parsing verifies Unicode/LF notes and the two PPTX ZIP/XML structures. This is file inspection, not native Office rendering.
-
-One ordinary current `npm run check` passed on 2026-09-05 in 150.969 seconds: lint, app/workspace typechecks, 2,823 root tests with seven existing skips, 42 workspace tests and builds. This does not explain or repair the earlier Windows NodeBook deadline failure. The twelve-round interaction proof is not a one-minute endurance or multi-user test.
-
-To inspect this packet without a backend, from the repository root run:
-
-```powershell
-python promotion/evidence/notes-controls-20260905/verify.py
-```
-
-For your own local author journey, use the setup above, open notes, edit and blur, navigate away and back, adjust minus/plus/Fit, then reload and inspect JSON/PPTX. Preserve any illustrative disclosure required by export policy. The archived operator scripts are inert records with historical paths and synthetic access assumptions; do not run them as bootstrap instructions.
-
-Historical integration only: PR 185 merged as `8177142416b6a6f59df057d0e5ab25df08db93ec` on 2026-09-05 at 16:54:08Z. An independent public read at 17:11:48Z identified that base and its content after normal CI/deployment automation. [The dated base judgment](promotion/evidence/notes-controls-20260905/raw/E6g_NODESLIDE_POSTMERGE_FINAL_JUDGE.md.inert.txt) is historical evidence. The current notes repair is local and has no shared-CI or deployment claim yet.
-
 ## Remaining work before a complete product handoff
 
-- Notes/control separation is accepted only for the captured states. Enlarged header, slide text, inspector navigation, density controls and the fixed-height footer can still clip text; textarea resize and short-height behavior remain open. Doubled text is computed-font scaling, not browser zoom or device acceptance.
+- Presenter notes overlap the slide pager/zoom controls. Enlarged inspector navigation, density controls and the fixed-height footer can clip text. The doubled-text proof only certifies the repaired check counts.
 - Six normal viewport sizes have captured evidence, but complete accessibility, keyboard, touch, human-device, performance and long-session coverage is unfinished. Full visual, responsive and interaction dimension grades remain unassigned.
 - The deterministic CSV chart uses the generic unit `value`. Source-column fidelity, prose-only numeric extraction and bare-CR CSV parsing are not certified. The native Office application was not opened.
 - The real model-provider path and production deployment are unverified in this slice. Export success is not proof that a deck meets every quality check.
 - Shared CI and consumer integration must be judged at the actual review commit. Historical package-consumer proofs remain bound to their original source; the latest full check does not relabel them as new consumer runs.
 - Original dirty clones, branches and worktrees remain preserved. Do not wholesale merge them into this candidate or retire them based on this scoped repair.
 
-The next product work must start from the remaining observed layout/device limits and the unexplained Windows timing evidence. The current notes repair is ready for publication review; it does not close those separate requirements.
+The next implementation should address the observed notes/control overlap in its existing layout owner, with an actual before boundary and separate proof. Keep this handoff current when a slice is independently accepted.

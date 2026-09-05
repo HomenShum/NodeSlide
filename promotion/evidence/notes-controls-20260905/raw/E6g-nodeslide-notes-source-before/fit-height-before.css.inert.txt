@@ -1920,8 +1920,7 @@
   border: 0;
   box-shadow: none;
   color: var(--ns-ink2);
-  height: auto;
-  min-height: 40px;
+  height: 40px;
 }
 
 .nodeslide-studio .ns-slide-stepper button,
@@ -1949,9 +1948,7 @@
   border: 1px solid var(--ns-line-c);
   border-radius: 6px;
   font-size: 12px;
-  height: auto;
   margin-left: 4px;
-  min-height: 27px;
   padding: 4px 10px;
   width: auto;
 }

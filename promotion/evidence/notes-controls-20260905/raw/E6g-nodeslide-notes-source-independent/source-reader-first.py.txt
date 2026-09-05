@@ -1,0 +1,72 @@
+from pathlib import Path
+import datetime, difflib, hashlib, json, re, subprocess, textwrap
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+B=P/'E6g-nodeslide-notes-source-before'
+A=P/'E6g-nodeslide-notes-after-02'
+O=P/'E6g-nodeslide-notes-source-independent'
+O.mkdir(exist_ok=True)
+sha=lambda b:hashlib.sha256(b).hexdigest()
+load=lambda p:json.loads(p.read_text(encoding='utf-8'))
+def git(*args):return subprocess.check_output(['git','--no-optional-locks',*args],cwd=R)
+checks=[]
+def check(name,value,detail=None):checks.append({'name':name,'passed':bool(value),'detail':detail})
+repair=load(B/'repair.json'); addendum=load(B/'fit-height-addendum.json')
+guard0={n:sha(git(*a)) for n,a in {'head':['rev-parse','HEAD'],'refs':['for-each-ref','--format=%(refname) %(objectname)'],'index':['ls-files','--stage','-z']}.items()}
+source=[]
+for e in repair['source']:
+    before=(B/e['path']).read_bytes(); after=(R/e['path']).read_bytes()
+    expected=addendum['stage2Sha256'] if e['path'].endswith('nodeslideV3.css') else e['afterSha256']
+    check('before and current source binding: '+e['path'],sha(before)==e['beforeSha256'] and sha(after)==expected)
+    source.append({'path':e['path'],'beforeSha256':sha(before),'currentSha256':sha(after),'bytes':len(after)})
+    (O/(Path(e['path']).name+'.diff.txt')).write_text(''.join(difflib.unified_diff(before.decode().splitlines(True),after.decode().splitlines(True),fromfile='retained before/'+e['path'],tofile='current/'+e['path'])),encoding='utf-8',newline='\n')
+check('exact tracked candidate diff scope',set(git('diff','--name-only').decode().splitlines())=={e['path'] for e in repair['source']})
+check('index entries and refs remain equal to preserved before',guard0['refs']==sha((B/'refs.bin').read_bytes()) and guard0['index']==sha((B/'index.bin').read_bytes()))
+check('source base remains merged817',git('rev-parse','HEAD').decode().strip()=='8177142416b6a6f59df057d0e5ab25df08db93ec')
+
+def group(text,cls):
+    m=re.search(r'^\s*<div className="'+re.escape(cls)+r'"[^\n]*\n',text,re.M)
+    assert m
+    start=m.start(); end=text.index('</div>',m.end())+len('</div>')
+    return text[start:end]
+old=(B/repair['source'][0]['path']).read_text(encoding='utf-8')
+new=(R/repair['source'][0]['path']).read_text(encoding='utf-8')
+old_remainder,new_remainder=old,new
+for cls in ['ns-slide-stepper','ns-zoom-controls']:
+    a,b=group(old,cls),group(new,cls)
+    check('entire existing JSX group preserved: '+cls,textwrap.dedent(a).strip()==textwrap.dedent(b).strip())
+    old_remainder=old_remainder.replace(a,'',1);new_remainder=new_remainder.replace(b,'',1)
+new_remainder=re.sub(r'\s*<div className="ns-canvas-controls">\s*</div>','',new_remainder,count=1)
+check('remaining component, handlers, notes keys and condition unchanged',re.sub(r'\s+',' ',old_remainder).strip()==re.sub(r'\s+',' ',new_remainder).strip())
+check('only one new wrapper and no new state/API/import',new.count('className="ns-canvas-controls"')==1 and all(new.count(s)==old.count(s) for s in ['useState(', 'useEffect(', 'useMemo(', 'interface ', 'import ']))
+
+basecss=(R/'src/domains/nodeslide/nodeslide.css').read_text(encoding='utf-8')
+v3css=(R/'src/domains/nodeslide/nodeslideV3.css').read_text(encoding='utf-8')
+check('old control positioning removed rather than offset workaround',not any(t in basecss[basecss.index('.ns-canvas-controls {'):basecss.index('.ns-zoom-controls button,')] for t in ['position: absolute','bottom:','left:','right:','transform:','z-index:']))
+check('wrapper owns content flow and intrinsic group wrapping','flex-wrap: wrap;' in basecss[basecss.index('.ns-canvas-controls {'):basecss.index('.ns-zoom-controls button,')] and 'flex: 0 0 auto;' in basecss)
+check('before stage1 CSS honestly reconstructed and hash-bound',sha((B/'fit-height-before.css').read_bytes())==addendum['stage1Sha256'] and 'Reconstructed' in addendum['priorBytes'])
+before_stage=(B/'fit-height-before.css').read_text(encoding='utf-8')
+check('stage2 changes exactly the two measured height rules',before_stage.replace('  height: 40px;\n}\n\n.nodeslide-studio .ns-slide-stepper button,','  height: auto;\n  min-height: 40px;\n}\n\n.nodeslide-studio .ns-slide-stepper button,',1).replace('  font-size: 12px;\n  margin-left: 4px;\n  padding: 4px 10px;','  font-size: 12px;\n  height: auto;\n  margin-left: 4px;\n  min-height: 27px;\n  padding: 4px 10px;',1)==v3css)
+
+def overlap(a,b):return max(0,min(a['right'],b['right'])-max(a['x'],b['x']))*max(0,min(a['bottom'],b['bottom'])-max(a['y'],b['y']))
+cells=[]
+for c in load(A/'report.json')['cells']:
+    raw=load(A/(c['name']+'.json')); regs={r['selector']:r for r in c['regions']}
+    # Per-cell files contain the captured DOM payload, not a generated assertion result.
+    dom=raw.get('dom',raw)
+    label_rows=dom['labels']
+    labels_fit=all(l['textBox']['x']>=l['box']['x']-1 and l['textBox']['right']<=l['box']['right']+1 and l['textBox']['y']>=l['box']['y']-1 and l['textBox']['bottom']<=l['box']['bottom']+1 for l in label_rows)
+    visible=[x for x in c['controls'] if x['rendered']]
+    check('actual geometry/targets/label bounds: '+c['name'],all(x['centerHit'] and x['inViewport'] for x in visible) and labels_fit and c['overflow']==0 and regs['.ns-canvas-controls']['box']['bottom']<=regs['.ns-notes-strip']['box']['y']+1 and overlap(regs['.ns-slide-stepper']['box'],regs['.ns-zoom-controls']['box'])==0)
+    cells.append({'name':c['name'],'visibleControls':len(visible),'labels':len(label_rows),'labelsFit':labels_fit,'controlRowHeight':regs['.ns-canvas-controls']['box']['height'],'viewportHeight':regs['.ns-canvas-viewport']['box']['height'],'notesHeight':regs['.ns-notes-strip']['box']['height']})
+check('all eleven declared cells retained',len(cells)==11)
+report=load(A/'report.json')
+check('capture errors and external request attempts empty, grade null',report['errors']==[] and report['blockedOrigins']==[] and report['grade'] is None)
+evidence=[{'path':f.relative_to(P).as_posix(),'sha256':sha(f.read_bytes()),'bytes':f.stat().st_size} for f in sorted(A.iterdir()) if f.is_file()]
+guard1={n:sha(git(*a)) for n,a in {'head':['rev-parse','HEAD'],'refs':['for-each-ref','--format=%(refname) %(objectname)'],'index':['ls-files','--stage','-z']}.items()}
+check('review preserved source and Git guards',guard0==guard1 and all(sha((R/e['path']).read_bytes())==e['currentSha256'] for e in source))
+result={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'SOURCE_AND_RECORDED_GEOMETRY_REVIEW_PENDING_NATIVE_INTERACTIONS_AND_NORMAL_CHECK','checks':checks,'passed':all(c['passed'] for c in checks),'source':source,'cells':cells,'evidence':evidence,'guardBefore':guard0,'guardAfter':guard1,
+ 'directlyViewedPixels':['390-100-open.png','320-200-open.png','1440-100-open.png'],
+ 'notes':['No independent runtime/browser or test rerun in this source review.','Existing minmax viewport row followed by implicit auto rows reserves control and notes space; read-only absence of notes does not leave an explicit empty track.','Group movement changes DOM tab order to pager/zoom/notes consistently with visual flow; all existing group JSX and notes lifecycle remain the same.','The 1440 after inspector is still loading; no settled protected-inspector parity claim follows from that image.','Textarea vertical resize, landscape/short height, native notes identity/persistence and actual current exports remain pending observations.','Full UI and dimension grades remain null.']}
+(O/'source-check.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8',newline='\n')
+print(json.dumps({'passed':result['passed'],'checks':len(checks),'failed':[x for x in checks if not x['passed']],'source':source,'sha256':sha((O/'source-check.json').read_bytes())},indent=2));assert result['passed']

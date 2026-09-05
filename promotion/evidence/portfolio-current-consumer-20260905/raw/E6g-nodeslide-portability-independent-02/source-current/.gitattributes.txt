@@ -1,0 +1,36 @@
+* text=auto
+
+*.cjs text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.jsx text eol=lf
+*.md text eol=lf
+*.mjs text eol=lf
+# .mts and .cts are the ESM/CJS TypeScript extensions. They were missing while every sibling
+# extension was listed, so they fell through to `* text=auto` and, with core.autocrlf=true, were
+# checked out CRLF on Windows. The blob stays LF, so Linux CI is green and only Windows sees the
+# failure — biome reports a formatting error on a file the contributor never touched and cannot fix
+# without committing an unrelated change. .cts has no tracked file today and is listed anyway,
+# because the cost of the missing line is paid by whoever adds the first one.
+*.mts text eol=lf
+*.cts text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.tour text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.env.example text eol=lf
+
+*.gif binary
+*.jpg binary
+*.jpeg binary
+*.mp3 binary
+*.mp4 binary
+*.png binary
+*.pdf binary
+*.pptx binary
+*.webm binary
+*.woff binary
+*.woff2 binary

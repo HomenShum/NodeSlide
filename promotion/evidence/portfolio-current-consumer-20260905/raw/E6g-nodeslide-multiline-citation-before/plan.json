@@ -1,0 +1,13 @@
+{
+  "proof": "NODESLIDE-MULTILINE-BRIEF-01",
+  "amendment": "Root accepts exact derived tour regeneration and numeric citation correction required by the inserted prompt-format argument. Full-check failures retained. No prose/policy changes.",
+  "before": {
+    ".tours/01-primary-user-flow.tour": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97",
+    ".tours/03-debug-and-recovery.tour": "0cda9fd05c121f5dc60edeb3af2f78fb30a28e3e14ce6b0316ae88dece912a84",
+    "docs/codebase/CONCERNS.md": "000d3a9c5f5ffed6c7b48329fd508ee2b45dbbe5ed894734fa42c7cc063b7478",
+    "docs/codebase/INTEGRATIONS.md": "51aa739e07f2e61594064d3aa8ab02a8c51125d435241f3a555b3515b6e81fac",
+    "docs/START_HERE.md": "2310a099f22b314c2634922ef0e5ab324d9eedbca9f513558a1dbf1c9d1cb0b7",
+    "promotion/PROMOTION_LOG.md": "5045754805141c8376058d3c9c98001f4ddb865866a5887ed23481bf3d26afbd"
+  },
+  "fullCheckEvidence": "E6g-nodeslide-multiline-check-01/check.log"
+}

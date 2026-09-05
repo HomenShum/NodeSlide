@@ -1,0 +1,46 @@
+import { readFileSync, existsSync, writeFileSync } from 'node:fs';
+import { resolve, join } from 'node:path';
+import { createHash } from 'node:crypto';
+import vm from 'node:vm';
+import { execFileSync } from 'node:child_process';
+const [repo, output] = process.argv.slice(2).map(p=>resolve(p));
+const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+const file = 'scripts/build-code-tours.mjs';
+const original = readFileSync(join(repo,file),'utf8');
+const importLine = "import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';";
+if(!original.includes(importLine))throw Error('Generator import owner changed');
+const executed = original.replace(importLine,'');
+const bindings = {};
+const modes = ['exact-working-bytes','virtual-CRLF-to-LF-only','virtual-LF-with-one-wrong-tour-line'];
+const rows = modes.map(mode=>{
+  const logs=[], errors=[], tourComparisons=[];
+  const read = (relative, encoding)=>{
+    const actual=readFileSync(join(repo,relative));
+    bindings[relative]={sha256:hash(actual),bytes:actual.length};
+    if(!encoding)return actual;
+    let text=actual.toString(encoding);
+    if(relative.startsWith('.tours/') && relative.endsWith('.tour')) {
+      const lf=text.replace(/\r\n/g,'\n');
+      tourComparisons.push({path:relative,crlf:(text.match(/\r\n/g)??[]).length,normalizedSha256:hash(Buffer.from(lf)),gitBlobEqualsNormalized:Buffer.from(lf).equals(execFileSync('git',['--no-optional-locks','show',`HEAD:${relative}`],{cwd:repo}))});
+      if(mode!=='exact-working-bytes')text=lf;
+      if(mode==='virtual-LF-with-one-wrong-tour-line' && relative==='.tours/01-primary-user-flow.tour') {
+        const parsed=JSON.parse(text); parsed.steps[0].line+=1; text=JSON.stringify(parsed,null,2)+'\n';
+      }
+    }
+    return text;
+  };
+  let exit=0;
+  try { vm.runInNewContext(executed,{
+    existsSync:p=>existsSync(join(repo,p)),
+    mkdirSync:p=>{ if(p!=='.tours'||!existsSync(join(repo,p)))throw Error('Unexpected directory write refused'); },
+    readFileSync:read,
+    writeFileSync:()=>{throw Error('All writes refused');},
+    process:{argv:['node',file,'--check'],exit:code=>{throw Object.assign(Error('generator exit'),{exitCode:code});}},
+    console:{log:v=>logs.push(String(v)),error:v=>errors.push(String(v))},
+  },{filename:file,timeout:5000}); }
+  catch(error) {if(typeof error.exitCode!=='number')throw error;exit=error.exitCode;}
+  return {mode,exitCode:exit,logs,errors,tourComparisons};
+});
+const result={scope:'Exact generator body executed in VM with read-only filesystem facade; only declared .tour read values vary in memory. No on-disk changes, no generated tour publication.',generatorSha256:hash(Buffer.from(original)),importRemoved:importLine,rows,bindings};
+writeFileSync(join(output,'tour-line-ending-causality.json'),JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify({generatorSha256:result.generatorSha256,rows:rows.map(({tourComparisons,...row})=>row),bindingCount:Object.keys(bindings).length}));

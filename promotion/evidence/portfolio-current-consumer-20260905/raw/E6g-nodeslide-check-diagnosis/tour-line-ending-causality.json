@@ -1,0 +1,173 @@
+{
+  "scope": "Exact generator body executed in VM with read-only filesystem facade; only declared .tour read values vary in memory. No on-disk changes, no generated tour publication.",
+  "generatorSha256": "25ea26f2f0b7ac3c82634e39656a1d5428893c6c760b2a5402457e570d777324",
+  "importRemoved": "import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';",
+  "rows": [
+    {
+      "mode": "exact-working-bytes",
+      "exitCode": 1,
+      "logs": [],
+      "errors": [
+        "CodeTours no longer match the source they point at:\n  .tours/01-primary-user-flow.tour\n  .tours/02-agent-execution.tour\n  .tours/03-debug-and-recovery.tour\nRun: node scripts/build-code-tours.mjs"
+      ],
+      "tourComparisons": [
+        {
+          "path": ".tours/01-primary-user-flow.tour",
+          "crlf": 72,
+          "normalizedSha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97",
+          "gitBlobEqualsNormalized": true
+        },
+        {
+          "path": ".tours/02-agent-execution.tour",
+          "crlf": 57,
+          "normalizedSha256": "a274bb90a62570133e66eddd157c63e4408b6938eeb103e7b16c7d455d3eef75",
+          "gitBlobEqualsNormalized": true
+        },
+        {
+          "path": ".tours/03-debug-and-recovery.tour",
+          "crlf": 52,
+          "normalizedSha256": "33df49d1ff3bf1ea7bae328af2d47257919d09c6ea99531d0a64467f10ed716e",
+          "gitBlobEqualsNormalized": true
+        }
+      ]
+    },
+    {
+      "mode": "virtual-CRLF-to-LF-only",
+      "exitCode": 0,
+      "logs": [
+        "checked 3 tours, 32 steps, all locations resolve"
+      ],
+      "errors": [],
+      "tourComparisons": [
+        {
+          "path": ".tours/01-primary-user-flow.tour",
+          "crlf": 72,
+          "normalizedSha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97",
+          "gitBlobEqualsNormalized": true
+        },
+        {
+          "path": ".tours/02-agent-execution.tour",
+          "crlf": 57,
+          "normalizedSha256": "a274bb90a62570133e66eddd157c63e4408b6938eeb103e7b16c7d455d3eef75",
+          "gitBlobEqualsNormalized": true
+        },
+        {
+          "path": ".tours/03-debug-and-recovery.tour",
+          "crlf": 52,
+          "normalizedSha256": "33df49d1ff3bf1ea7bae328af2d47257919d09c6ea99531d0a64467f10ed716e",
+          "gitBlobEqualsNormalized": true
+        }
+      ]
+    },
+    {
+      "mode": "virtual-LF-with-one-wrong-tour-line",
+      "exitCode": 1,
+      "logs": [],
+      "errors": [
+        "CodeTours no longer match the source they point at:\n  .tours/01-primary-user-flow.tour\nRun: node scripts/build-code-tours.mjs"
+      ],
+      "tourComparisons": [
+        {
+          "path": ".tours/01-primary-user-flow.tour",
+          "crlf": 72,
+          "normalizedSha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97",
+          "gitBlobEqualsNormalized": true
+        },
+        {
+          "path": ".tours/02-agent-execution.tour",
+          "crlf": 57,
+          "normalizedSha256": "a274bb90a62570133e66eddd157c63e4408b6938eeb103e7b16c7d455d3eef75",
+          "gitBlobEqualsNormalized": true
+        },
+        {
+          "path": ".tours/03-debug-and-recovery.tour",
+          "crlf": 52,
+          "normalizedSha256": "33df49d1ff3bf1ea7bae328af2d47257919d09c6ea99531d0a64467f10ed716e",
+          "gitBlobEqualsNormalized": true
+        }
+      ]
+    }
+  ],
+  "bindings": {
+    "src/main.tsx": {
+      "sha256": "ca723c8ec8a9bb9191a99dd4c2787f055a6e2b4337d7e85f4e3d06dbfed76c55",
+      "bytes": 1611
+    },
+    "src/App.tsx": {
+      "sha256": "f71a15ea97cc5895f518d5766ae569bd8e54e77a8ec5503ae05335add11f1871",
+      "bytes": 1265
+    },
+    "src/domains/nodeslide/components/NodeSlideLanding.tsx": {
+      "sha256": "9aae636a95736c4ad0b77dc6a8e230db0fcffdf3e149d1b64847aeb52e534918",
+      "bytes": 20779
+    },
+    "src/domains/nodeslide/NodeSlideStudio.tsx": {
+      "sha256": "445543c7c74cc0dee458d013820db0b8204f82e330da2a19439ef4c387b5d980",
+      "bytes": 174326
+    },
+    "convex/nodeslideAgent.ts": {
+      "sha256": "f12b985055f414b1b9515b8098390df7ab72dabfd78ddc0dc8d2fef98e483e25",
+      "bytes": 102690
+    },
+    "convex/lib/nodeslideValidators.ts": {
+      "sha256": "de7bd69e0531bc1081c9196b5e986d6fbefb92459a393bf0e28f7e1163a28075",
+      "bytes": 38641
+    },
+    "src/domains/nodeslide/components/SlideRenderer.tsx": {
+      "sha256": "67626cbb77e0d865aa32d00dca04dfff83b7d89e3137140529a641369eaae257",
+      "bytes": 19017
+    },
+    "mcp/src/lib/nodeslideTools.ts": {
+      "sha256": "d89685455ae44be9d1cf38730195228eb4d785228079f6583b4a08321f0ef4dd",
+      "bytes": 42531
+    },
+    "convex/nodeslide.ts": {
+      "sha256": "7f00acd7231024577628b24eb1917fd7a3f45920a0246f10e0f9c5eb8bbfb555",
+      "bytes": 223752
+    },
+    "convex/lib/nodeslidePatches.ts": {
+      "sha256": "e36f70fc14167d569a7fa4333b7f90ec210427a40451eaf47d8da5f69796b53f",
+      "bytes": 56574
+    },
+    "shared/nodeslidePatch.test.ts": {
+      "sha256": "c0c31de76cd20c30bdaef3f3754177499c0a94ed026e2e3465f7b58e0e9910e8",
+      "bytes": 58329
+    },
+    "src/domains/nodeslide/nodeslideUserError.ts": {
+      "sha256": "f47fc5ac21715065f69091c1069ace8cc71f73c7a1836e2d61e4ab6c7ad18e0f",
+      "bytes": 2297
+    },
+    "convex/crons.ts": {
+      "sha256": "40894e9dd4ba58979d3a81895f8cd3d698f429e46e13d4e9ffa699447fe86626",
+      "bytes": 1026
+    },
+    "convex/nodeslideJobs.ts": {
+      "sha256": "0bc76422db0138bad0be120a10813ec85d79d183b7ffde3e3945a6e4c9039689",
+      "bytes": 70152
+    },
+    "convex/nodeslideJobRunner.ts": {
+      "sha256": "105381de01a55685e1419050c28953597b858f3e0b9d3a57a8931940a9948ae8",
+      "bytes": 9652
+    },
+    "convex/nodeslideAgentRecovery.test.ts": {
+      "sha256": "1cf3a6057a1161b03eb3481aae1536f91f9e12872b9ce79c336acf1b1793f74e",
+      "bytes": 6322
+    },
+    "scripts/tests/workspace-build-depth.test.mjs": {
+      "sha256": "7e5e141b90b3f1c9973bc6db1af62c18dd97cef255577b246855569a725b9674",
+      "bytes": 3118
+    },
+    ".tours/01-primary-user-flow.tour": {
+      "sha256": "a6c7b0b8bf5b4032eb4f3fa8f7f6f2e2a61d2ea9bf38df93c81d27a08855cc2f",
+      "bytes": 6523
+    },
+    ".tours/02-agent-execution.tour": {
+      "sha256": "c4d9dc23f4f2702426704c3e7b1c8c499c74bd5eaf2cf86d0a214a0c8897f012",
+      "bytes": 4420
+    },
+    ".tours/03-debug-and-recovery.tour": {
+      "sha256": "bf4fab658b2e0b7647d6e088e72ee6e57d479a1954dc71c220d50ba0636fe3e1",
+      "bytes": 3756
+    }
+  }
+}

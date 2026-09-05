@@ -1,0 +1,22 @@
+{
+  "scope": "Actual failed deck, current local source; boundary overlays only, no product edit",
+  "cells": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": "badge",
+      "name": "390-badge"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "state": "trace",
+      "name": "390-trace"
+    }
+  ],
+  "errors": []
+}

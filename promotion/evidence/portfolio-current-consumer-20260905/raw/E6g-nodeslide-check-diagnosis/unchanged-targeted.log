@@ -1,0 +1,77 @@
+
+ RUN  v4.1.10 D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905
+
+ × scripts/tests/code-tours.test.mjs > the committed CodeTours still point at the code they describe > regenerates identically from the current source 6ms
+   → expected [Function] to not throw an error but 'Error: spawnSync C:\nvm4w\nodejs\node…' was thrown
+ × scripts/tests/workspace-build-depth.test.mjs > a stranger runs `npm run build` on Windows from a clean checkout > finds no workspace build script that starts a fourth nested npm level 4ms
+   → ENOENT: no such file or directory, scandir 'D:\VSCode%20Projects\cafecorner_nodebench\nodebench_ai4\.portfolio-worktrees\nodeslide-current-consumer-20260905\packages'
+ × scripts/tests/workspace-build-depth.test.mjs > a stranger runs `npm run build` on Windows from a clean checkout > still builds both halves of @nodeslide/convex — flattening must not drop one 2ms
+   → expected '' to match /\btsup\b/
+ ✓ src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx > NodeSlide full shared NodeBook workspace > lets a reviewer navigate deck ? slide ? elements and render the canonical graph artifact 169ms
+ ✓ src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx > NodeSlide full shared NodeBook workspace > fails closed for a foreign slide or production-scale node overflow 10ms
+ ✓ src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx > NodeSlide full shared NodeBook workspace > contains a foreign deck projection as an honest inspector alert instead of crashing NodeSlide 10ms
+ ✓ src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx > NodeSlide full shared NodeBook workspace > projects a near-limit sustained deck without losing slide ownership 12ms
+ ✓ src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx > NodeSlide full shared NodeBook workspace > renders all six portable NodeBook visual kinds inside the real NodeSlide host mount 1394ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/tests/code-tours.test.mjs > the committed CodeTours still point at the code they describe > regenerates identically from the current source
+AssertionError: expected [Function] to not throw an error but 'Error: spawnSync C:\nvm4w\nodejs\node…' was thrown
+
+- Expected:
+undefined
+
++ Received:
+"Error: spawnSync C:\\nvm4w\\nodejs\\node.EXE ENOENT"
+
+ ❯ scripts/tests/code-tours.test.mjs:18:11
+     16|         encoding: 'utf8',
+     17|       }),
+     18|     ).not.toThrow();
+       |           ^
+     19|   });
+     20| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  scripts/tests/workspace-build-depth.test.mjs > a stranger runs `npm run build` on Windows from a clean checkout > finds no workspace build script that starts a fourth nested npm level
+Error: ENOENT: no such file or directory, scandir 'D:\VSCode%20Projects\cafecorner_nodebench\nodebench_ai4\.portfolio-worktrees\nodeslide-current-consumer-20260905\packages'
+ ❯ workspaceManifests scripts/tests/workspace-build-depth.test.mjs:32:14
+     30| // The workspaces declared in the root package.json: `packages/*` and …
+     31| const workspaceManifests = () =>
+     32|   readdirSync(join(repoRoot, 'packages'), { withFileTypes: true })
+       |              ^
+     33|     .filter((entry) => entry.isDirectory())
+     34|     .map((entry) => join(repoRoot, 'packages', entry.name, 'package.js…
+ ❯ scripts/tests/workspace-build-depth.test.mjs:48:32
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { errno: -4058, code: 'ENOENT', syscall: 'scandir', path: 'D:\VSCode%20Projects\cafecorner_nodebench\nodebench_ai4\.portfolio-worktrees\nodeslide-current-consumer-20260905\packages' }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  scripts/tests/workspace-build-depth.test.mjs > a stranger runs `npm run build` on Windows from a clean checkout > still builds both halves of @nodeslide/convex — flattening must not drop one
+AssertionError: expected '' to match /\btsup\b/
+
+- Expected:
+/\btsup\b/
+
++ Received:
+""
+
+ ❯ scripts/tests/workspace-build-depth.test.mjs:64:19
+     62|     // The client bundle (tsup) and the Convex component types (tsc) a…
+     63|     // separate outputs. Removing the nesting is only safe while both …
+     64|     expect(build).toMatch(/\btsup\b/);
+       |                   ^
+     65|     expect(build).toMatch(/tsc -p tsconfig\.component\.json/);
+     66|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  2 failed | 1 passed (3)
+      Tests  3 failed | 5 passed (8)
+   Start at  04:10:05
+   Duration  3.80s (transform 390ms, setup 0ms, import 1.19s, tests 1.61s, environment 924ms)
+
+JSON report written to C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6g-nodeslide-check-diagnosis/unchanged-targeted.json

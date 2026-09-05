@@ -1,0 +1,6 @@
+{
+  "scope": "Actual failed deck, current local source; boundary overlays only, no product edit",
+  "cells": [],
+  "errors": [],
+  "failure": "page.evaluate: Error: Observed boundary absent\n    at eval (eval at evaluate (:303:30), <anonymous>:1:129)\n    at UtilityScript.evaluate (<anonymous>:305:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-capture-readiness-before.mjs:16:14"
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "line": 58,
+    "text": "Create -> edit -> reload -> export -> delete\tUNKNOWN STEP\tif (!run) core.setFailed('No successful main production deployment was found.');"
+  },
+  {
+    "line": 231,
+    "text": "shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}"
+  },
+  {
+    "line": 505,
+    "text": "[prod-probe] FAIL at artifact-and-routing-shadow: edit-persistence: ArtifactSpec shadow did not observe an authored canonical artifact and persisted binding"
+  },
+  {
+    "line": 508,
+    "text": "##[error]Process completed with exit code 1."
+  },
+  {
+    "line": 511,
+    "text": "shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}"
+  },
+  {
+    "line": 571,
+    "text": "##[error]Process completed with exit code 1."
+  }
+]

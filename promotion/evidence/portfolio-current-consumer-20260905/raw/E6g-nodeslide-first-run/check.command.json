@@ -1,0 +1,14 @@
+{
+  "at": "2026-09-05T10:51:36.817546+00:00",
+  "command": [
+    "npm",
+    "run",
+    "check"
+  ],
+  "exitCode": 1,
+  "seconds": 184.78100000007544,
+  "log": "check.log",
+  "isolatedTemporaryRoot": "D:\\ProjectRecovery\\NodeSlide first run 20260905\\temp",
+  "liveTests": "Excluded by existing vite config; no config changed",
+  "environment": "Inherited provider/Convex/Vite/base URL credential names removed without value output; no original env file read."
+}

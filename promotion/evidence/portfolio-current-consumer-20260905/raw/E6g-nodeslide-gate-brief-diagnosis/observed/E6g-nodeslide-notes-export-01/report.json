@@ -1,0 +1,53 @@
+{
+  "at": "2026-09-05T11:31:26.058Z",
+  "proof": "NODESLIDE_CURRENT_DETERMINISTIC_FIRST_RUN_01",
+  "steps": [
+    {
+      "name": "notes-native-blur-and-reload",
+      "status": "PASS",
+      "previousVersion": 2,
+      "currentVersion": 3
+    },
+    {
+      "name": "deck-ci-inspection",
+      "status": "OBSERVED",
+      "detailFile": "02-deck-ci-detail.json"
+    }
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "captures": [
+    "01-notes-reloaded",
+    "02-deck-ci-detail",
+    "03-export-menu-pptx",
+    "04-pptx-downloaded",
+    "03-export-menu-html",
+    "04-html-downloaded",
+    "05-json-inspector"
+  ],
+  "downloads": [
+    {
+      "format": "pptx",
+      "status": "DOWNLOADED",
+      "filename": "nodeslide-local-handoff-illustrative-sourcing-pilot.pptx",
+      "bytes": 137200,
+      "sha256": "3ee7f9c4c5290d797ae8b3ad6f8f0647cd6a991e67034ed7f77fca0239c22032",
+      "failure": null,
+      "slides": 6,
+      "editableCharts": 0,
+      "notesParts": 6,
+      "notesTextPresent": true
+    },
+    {
+      "format": "html",
+      "status": "DOWNLOADED",
+      "filename": "nodeslide-local-handoff-illustrative-sourcing-pilot.html",
+      "bytes": 89395,
+      "sha256": "02905d41ecfbb9bfe084e5951c1730846a3f5ce700c804d9708c2244b52b14e2",
+      "failure": null,
+      "notesTextPresent": true
+    }
+  ],
+  "fullGrades": null,
+  "status": "OBSERVED_NOTES_EXPORT_AND_INSPECTOR"
+}

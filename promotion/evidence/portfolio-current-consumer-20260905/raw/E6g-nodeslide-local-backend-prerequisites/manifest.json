@@ -1,0 +1,22 @@
+[
+  {
+    "path": "native-office-test-source-scan.json",
+    "sha256": "02b41fa32a8416551ef5bda0c2b3ae318759dd8e05223b5419537a93e81acfba",
+    "bytes": 1500
+  },
+  {
+    "path": "script-closure.json",
+    "sha256": "4808e658c1154b21ed882ccaf16d5594c293bd79eabf215db35221d7229058ed",
+    "bytes": 13865
+  },
+  {
+    "path": "source-bindings.json",
+    "sha256": "e4e337accb09b24184759b15fcec07d2d14e004d8a8fcd19cbf0137928fac683",
+    "bytes": 4360
+  },
+  {
+    "path": "source-excerpts.json",
+    "sha256": "f99363012fbe48c1af7af49076580ee344d417fa876bc32c6ec6d8c86ea4db76",
+    "bytes": 68752
+  }
+]

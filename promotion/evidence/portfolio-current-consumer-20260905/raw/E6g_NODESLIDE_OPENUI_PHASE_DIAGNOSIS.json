@@ -1,0 +1,289 @@
+{
+  "verdict": "DIAGNOSTIC_TARGET_PASSED_NPM_LIFECYCLE_CONTEXT_NOT_PRESERVED",
+  "request": "Run exactly one external timing-instrumented original root Vitest suite, measure the lazy module/React boundary, keep existing limits and source unchanged, and stop if the target does not fail.",
+  "repoHead": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "command": {
+    "command": [
+      "C:\\nvm4w\\nodejs\\node.EXE",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-openui-phase-01\\instrumented.config.mts",
+      "--reporter=default",
+      "--reporter=json",
+      "--outputFile.json=C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-openui-phase-01\\suite.json"
+    ],
+    "cwd": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+    "at": "2026-09-05T11:47:06.719963+00:00",
+    "claim": "Instrumented original root Vitest suite only, not ordinary npm check. No filters, new limits, workers, pools, concurrency or retries. Environment-name sanitization/temp selection matches previous normal check runner."
+  },
+  "commandResult": {
+    "exitCode": 1,
+    "elapsedMs": 22203,
+    "sourceIndexRefsUnchanged": true,
+    "changedSourceInputs": [],
+    "head": "b0674b229a3691c09c88fcab1481f2e33342cb21"
+  },
+  "configuration": {
+    "scope": "one timing-only Vite plugin prepended; all original plugins preserve relative order",
+    "sameTestObject": true,
+    "sameResolveObject": true,
+    "sameServerObject": true,
+    "sameBuildObject": true,
+    "originalExplicitTestConfig": {
+      "exclude": [
+        "**/node_modules/**",
+        "**/.git/**",
+        "**/.claude/**",
+        "packages/external-agent/**",
+        "mcp/**",
+        "tests/e2e/**"
+      ]
+    },
+    "changedTopLevelKeys": [
+      "plugins"
+    ],
+    "originalPluginNames": [
+      "vite:react-babel",
+      "vite:react-refresh",
+      "@tailwindcss/vite:scan",
+      "@tailwindcss/vite:generate:serve",
+      "@tailwindcss/vite:generate:build"
+    ],
+    "targets": [
+      "src/domains/nodeslide/inspector/AiInspector.tsx",
+      "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx"
+    ],
+    "noTimeoutRetryWorkerPoolConcurrencyChanges": true,
+    "noPrewarmStaticImportOrMock": true,
+    "observer": "MutationObserver only, no added polling timer; buffered writes after test",
+    "sourceMap": "instrumented modules return map:null; diagnostic stack source positions may shift, raw transformed bytes retained"
+  },
+  "resolvedConfigEvidence": "E6g-nodeslide-openui-phase-01/resolved-config.json",
+  "npmContextCorrection": {
+    "diagnosticCommandStartedWithNodeNotNpm": true,
+    "npmExecpathPresentInCurrentParentEnvironment": false,
+    "actualFailure": "process.env.npm_execpath yielded undefined at assertion line94 before sandbox or tarball creation",
+    "classification": "DIAGNOSTIC_HARNESS_ARTIFACT_NOT_NEW_REPO_FAILURE",
+    "testSourceSha256": "3ca1157abdb324578e38f79be2c5ff2f8faab4e2f3dcd8a56cd357f97cab474d",
+    "normalCheck02DidNotFailThisOwner": true,
+    "noAdditionalSuiteRun": true
+  },
+  "sourceBindings": {
+    "src/domains/nodeslide/inspector/AiInspector.tsx": {
+      "sha256": "d254af21c5486763d11ebf0cd3f6bac2f30252a8973a1d77e448cb63be1b1353",
+      "bytes": 99000
+    },
+    "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx": {
+      "sha256": "eaa74dec3ad9d202fd3af8328d3cfd1b3ac876c686bb629350c705fd379ccb1d",
+      "bytes": 4755
+    },
+    "src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx": {
+      "sha256": "a6da3f550fb33e18bfad668ebfea116db1f2294aafbfff62e99fb45a6460e66a",
+      "bytes": 9361
+    },
+    "vite.config.ts": {
+      "sha256": "13cb07a5bffdaec276a3e2fda34469c4ef982c3a4a1e78bf1b80f9147c7c3e48",
+      "bytes": 3306
+    },
+    ".gitattributes": {
+      "sha256": "e9c61ffa7486f3134f5deae7d81103be5a8eacc3dfbbe4296c09df5d45d7d2f5",
+      "bytes": 1056
+    },
+    "scripts/tests/code-tours.test.mjs": {
+      "sha256": "20358217a7c89ee0af06778ae7d27f82e9b5b771e7e0ddeec4f63a52c97e38eb",
+      "bytes": 902
+    },
+    "scripts/tests/workspace-build-depth.test.mjs": {
+      "sha256": "98e1cc0d259199f01c4b92e2b539a06aa32889e72e7857a1b35a815f0185a40e",
+      "bytes": 3134
+    },
+    "scripts/tests/playwright-trace.test.mjs": {
+      "sha256": "6d58b0fa95c609cc91ab7cecbf032c5136b3c63654454c71824b1b32adbc3b9f",
+      "bytes": 8493
+    },
+    ".tours/03-debug-and-recovery.tour": {
+      "sha256": "0cda9fd05c121f5dc60edeb3af2f78fb30a28e3e14ce6b0316ae88dece912a84",
+      "bytes": 3704
+    },
+    "convex/_generated/api.d.ts": {
+      "sha256": "4d4c28b2dc659c14c57b71777a108df3168e86f5e1c90f61e7624a9a39a7b12e",
+      "bytes": 19134
+    },
+    "package.json": {
+      "sha256": "bdd1fc9f3da93bb84d443dae994436c41aa97f67045df6b82a54bb99dc96c9a7",
+      "bytes": 12415
+    },
+    "package-lock.json": {
+      "sha256": "e618b0ed6230eafd91ffbdbe124bd7df38e550311db8879a0dd409b027bd3ab9",
+      "bytes": 427605
+    },
+    "node_modules/@testing-library/dom/dist/config.js": {
+      "sha256": "3627f6265cccd26604777602d7249788c2347a273bdd1cae41719c790f2c5a7a",
+      "bytes": 2526
+    },
+    "node_modules/@testing-library/dom/dist/wait-for.js": {
+      "sha256": "7ead4a09f15329a1bb9fb175f8af64757bcae28b6f49b62981bdbe1bc6dea391",
+      "bytes": 6734
+    }
+  },
+  "transformationBindings": [
+    {
+      "relative": "src/domains/nodeslide/inspector/AiInspector.tsx",
+      "sourceExact": true,
+      "transformedExact": true,
+      "sourceSha256": "d254af21c5486763d11ebf0cd3f6bac2f30252a8973a1d77e448cb63be1b1353",
+      "transformedSha256": "007a3f9198b5c0071f9a2cf16892110b6c7c6f367d80b9252ee42f1756e1eace",
+      "plannedRawSha256": "0a37a904b410bebd5563a3d0ea5c10095afe5009acb6bc018e4847b5437cb463",
+      "plannedCopyEolDifference": "Python planned-copy write used CRLF; actual Vite code is LF. Only newline decoding reconstructs the actual recorded transform hash. Both byte versions retained; executed wrapper unchanged."
+    },
+    {
+      "relative": "src/domains/nodeslide/inspector/AiInspector.tsx",
+      "sourceExact": true,
+      "transformedExact": true,
+      "sourceSha256": "d254af21c5486763d11ebf0cd3f6bac2f30252a8973a1d77e448cb63be1b1353",
+      "transformedSha256": "007a3f9198b5c0071f9a2cf16892110b6c7c6f367d80b9252ee42f1756e1eace",
+      "plannedRawSha256": "0a37a904b410bebd5563a3d0ea5c10095afe5009acb6bc018e4847b5437cb463",
+      "plannedCopyEolDifference": "Python planned-copy write used CRLF; actual Vite code is LF. Only newline decoding reconstructs the actual recorded transform hash. Both byte versions retained; executed wrapper unchanged."
+    },
+    {
+      "relative": "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx",
+      "sourceExact": true,
+      "transformedExact": true,
+      "sourceSha256": "eaa74dec3ad9d202fd3af8328d3cfd1b3ac876c686bb629350c705fd379ccb1d",
+      "transformedSha256": "40399152122b3a9189b661f326e31da46236b83cdd1561e60d3762d1fef9502d",
+      "plannedRawSha256": "ed89f4214c7904597def2c5a6b12db156a55332ba7b7fa861ec5b6bb0ed5577e",
+      "plannedCopyEolDifference": "Python planned-copy write used CRLF; actual Vite code is LF. Only newline decoding reconstructs the actual recorded transform hash. Both byte versions retained; executed wrapper unchanged."
+    }
+  ],
+  "timeline": [
+    {
+      "phase": "test-start",
+      "monoMs": 4470.3805,
+      "epochMs": 1788608837924.3955
+    },
+    {
+      "phase": "click-start",
+      "monoMs": 4878.3282,
+      "epochMs": 1788608838332.343
+    },
+    {
+      "phase": "import-start",
+      "monoMs": 4945.17,
+      "epochMs": 1788608838399.1848
+    },
+    {
+      "phase": "outer-commit-observed",
+      "monoMs": 4986.74,
+      "epochMs": 1788608838440.755
+    },
+    {
+      "phase": "fallback-commit-observed",
+      "monoMs": 4987.4828,
+      "epochMs": 1788608838441.4978
+    },
+    {
+      "phase": "click-returned",
+      "monoMs": 4991.4596,
+      "epochMs": 1788608838445.4746
+    },
+    {
+      "phase": "wait-start",
+      "monoMs": 5008.2838,
+      "epochMs": 1788608838462.2986,
+      "timeoutMs": 1000,
+      "nominalDeadlineMonoMs": 6008.2592
+    },
+    {
+      "phase": "import-resolved",
+      "monoMs": 5686.5005,
+      "epochMs": 1788608839140.5154
+    },
+    {
+      "phase": "inner-commit-observed",
+      "monoMs": 5713.9994,
+      "epochMs": 1788608839168.0144
+    },
+    {
+      "phase": "wait-resolved",
+      "monoMs": 5722.7072,
+      "epochMs": 1788608839176.7222
+    },
+    {
+      "phase": "wait-settled",
+      "monoMs": 5722.7375,
+      "epochMs": 1788608839176.7524
+    },
+    {
+      "phase": "test-afterEach",
+      "monoMs": 5726.6117,
+      "epochMs": 1788608839180.6267,
+      "innerExists": true,
+      "fallbackExists": false
+    }
+  ],
+  "metrics": {
+    "importStartToResolveMs": 741.3305,
+    "importResolveToInnerDomObservationMs": 27.4989,
+    "waitStartToResolutionMs": 714.4234,
+    "innerBeforeNominalDeadlineMs": 294.2598,
+    "clickStartToInnerDomObservationMs": 835.6712,
+    "waitTimeoutMs": 1000
+  },
+  "result": {
+    "target": {
+      "file": "D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx",
+      "name": "AiInspector OpenUI visual-material wiring opens the visual material lab from the live composer button",
+      "status": "passed",
+      "durationMs": 1266.0816999999997
+    },
+    "rootSuiteExitCode": 1,
+    "rootSuiteCounts": {
+      "total": 2819,
+      "passed": 2811,
+      "failed": 1,
+      "skipped": 7
+    },
+    "failures": [
+      {
+        "file": "D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/scripts/immutable-upgrade-consumer-core.test.mjs",
+        "name": "immutable install and upgrade consumer gates rejects a valid npm tarball whose declaration passes but runtime entry is broken",
+        "durationMs": 5.804700000000139,
+        "failureMessages": [
+          "AssertionError: expected undefined to be truthy\n    at D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/scripts/immutable-upgrade-consumer-core.test.mjs:94:22\n    at file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64"
+        ]
+      }
+    ],
+    "failureClassification": "The one failed consumer case is caused by missing npm_execpath in this direct-node diagnostic, not a new product defect. It fails before its npm tarball work.",
+    "ordinaryNpmCheck": "Not run here; prior ordinary check02 remains failed. Direct-node diagnostic did not preserve npm lifecycle context, so it is not an exact ordinary-environment reproduction."
+  },
+  "causalInterpretation": {
+    "observed": "In this passing target, module import resolution took 741.3305 ms and DOM-observed inner insertion followed 27.4989 ms later. The inner was observed 294.2598 ms before the nominal unchanged 1000 ms deadline. The measured lazy interval was dominated by import resolution, not the subsequent observed React/DOM arrival.",
+    "doesNotEstablish": "The prior failed run has no phase timings. This passing instrumented run cannot identify its cause, establish cold-cache or sustained performance, or prove a permanent latency guarantee. Import resolution includes transform/queue/link/evaluation work and does not isolate those costs. Missing npm_execpath made a different consumer case fail before its intended work, which changes suite workload and further limits timing comparability.",
+    "instrumentationLimits": "MutationObserver records delivery after DOM insertion, not an internal React commit timestamp. Nominal deadline is calculated immediately before unchanged waitFor, not read from its internal timer. Diagnostic imports/observer and module transformation may perturb scheduling. Events are buffered with no added polling timer and flushed only afterEach. Instrumented stack line numbers may shift because map:null is used.",
+    "harnessFailure": "Parent identified the missing npm lifecycle context. Independent source and presence-only environment checks confirm process.env.npm_execpath is required before tarball creation. This diagnostic did not invoke npm, and normal check02 did not fail this test. No source repair is needed for this artifact."
+  },
+  "disposition": {
+    "stopAfterThisSingleSuite": true,
+    "sourceRepairRecommended": false,
+    "timeoutSkipRetryWorkerConcurrencyChangesRecommended": false,
+    "wholeRepoReady": false,
+    "approvedPortabilityJudgementUnchanged": true,
+    "originalFailedEvidenceUnchanged": true,
+    "nextDecision": "Do not infer a runtime or immutable-consumer repair from this run. If future reproduction is separately authorized, preserve npm lifecycle context through the normal npm command before treating it as equivalent. No extra suite run is performed here."
+  },
+  "custody": {
+    "14NamedInputsUnchanged": true,
+    "indexUnchanged": true,
+    "refsUnchanged": true,
+    "noRepoSourceConfigIndexRefEdits": true,
+    "distOrBackendTouchedByReviewer": false,
+    "boundary": "Root owns the concurrent Vite browser/backend; the diagnostic never runs build, codegen, provider or backend commands. No original environment/credential file is opened or published. Ordinary root tests may create their normal temporary outputs using the same isolated temp root as check02."
+  },
+  "evidenceManifest": {
+    "path": "E6g-nodeslide-openui-phase-01/manifest.json",
+    "sha256": "9e5a405528d8128a764bb6d313be0b3d0de84271c2712ff67f3e40ed396859a7"
+  },
+  "finalCriterionScores": null,
+  "dimensionScores": null
+}

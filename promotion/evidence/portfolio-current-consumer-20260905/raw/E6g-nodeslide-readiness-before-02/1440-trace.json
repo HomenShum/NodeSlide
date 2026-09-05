@@ -1,0 +1,586 @@
+{
+  "text": "N\nNodeSlide\n/\nv3\nEN\nReset demo\nShare\nPresent\nExport\nCommands\nSlides\nOutline\nLayers\nOPENING / 01\n1\n01\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\nCreate a six-slide decision review for a fictional sourcing pilot\n1 source · current\nCONTEXT / 02\n1\n02\nCONTEXT / 02\nThe cost of waiting is usually hidden in repeated work.\nFriction\nConsequence\nDecision window\nFrame the current reality for Decision-makers described in the brief: what is fragmented today, why it matters now, and where momentum is being lost.\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n02\nThe moment to solve\n2 sources · current\nINSIGHT / 03\n1\n03\nINSIGHT / 03\nA better outcome starts with a sharper point of view.\nCreate a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decis…\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n03\nThe decisive insight\n2 sources · current\nAPPROACH / 04\n1\n04\nAPPROACH / 04\nTurn the idea into a sequence people can understand and own.\nConnect intent, action, and feedback in one visible operating path so the audience can see both the destination and the mechanics.\nAlign on intent\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n04\nHow the approach works\n2 sources · current\nEVIDENCE / 05\n1\n05\nEVIDENCE / 05\nDefine proof before asking for commitment.\nUse the brief’s success criteria as qualitative review questions until measured evidence is supplied.\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n05\nWhat success looks like\n2 sources · current\nCLOSE / 07\n1\n06\nCLOSE / 07\nCreate an editable, reviewable presentation from this idea\n01  Agree the outcome\n02  Name the owner\n03  Set the next checkpoint\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n06\nThe decision\n1 source · current\nAdd slide\nEdit\nOverview\nCompare\n01\nCreate a six-slide decision review for a fictional sourcing pilot\nverified\nSLIDE JOB\nIllustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text. Decision: prototype after checking the budget. 中文交接 — no external claims.\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\n1 / 6\nPresenter notes\n25 words\n65%\nFit\nINSPECTOR\nSelection · none\nAI\nDesign\nNodeBook\nComments\nVersions\nEvidence\nJSON\nTrace\nAGENT ACTIVITY\nRun details\nSummary\nTimeline\nRaw\n\nProvider, work performed, validation, and human approval in one auditable run.\n\nCurrent deck validation: passed\n\nDeck v3 · publish ready\n\nRUN\nNodeSlide created the deck with its deterministic brief generator. The brief was not sent to an external model provider. Self-critique: 1 pass (deterministic route; self-critique loop skipped).\nCompleted\ndeck v1\nStarted 4:25:27 AM\nNodeSlide created the deck with its deterministic brief generator. The brief was not sent to an external model provider. Self-critique: 1 pass (deterministic route; self-critique loop skipped).\ndeterministic · brief-to-deck/v1\nRUN TIME\n1s\nTOKENS\n— → —\nCOST\nnot recorded\nVALIDATION\nPassed\n\nNo external provider billing was recorded for this fallback.\n\nExecution\n6 auditable records\nStructured timeline unavailable\n\nLegacy runs keep their custody receipt but do not invent span timing.\n\nAuthorization\nConsent not required — no external egress\nContext\n— unsealed\n5 context references read — attribution route degraded\nPlan\n— unsealed\n6-step plan drafted\nActions\nDeck built deterministically (5 tool calls)\nValidation\nDeterministic validation passed (v1)\nApproval\n— unsealed\nProvisional seal — machine only, not signable\nSelected trace validation: passed\n\nDeck v1 · publish ready\n\nStructure, presentation, and cleanup checks passed",
+  "overflow": 0,
+  "controls": [
+    {
+      "name": "Create or open a NodeSlide deck",
+      "text": "NNodeSlide"
+    },
+    {
+      "name": "Collapse slide navigator",
+      "text": ""
+    },
+    {
+      "name": "Undo",
+      "text": ""
+    },
+    {
+      "name": "Redo",
+      "text": ""
+    },
+    {
+      "name": "Switch to dark theme",
+      "text": ""
+    },
+    {
+      "name": "Language and clarity: English",
+      "text": "EN"
+    },
+    {
+      "name": "Reset demo view",
+      "text": " Reset demo"
+    },
+    {
+      "name": "Share deck",
+      "text": " Share"
+    },
+    {
+      "name": "Present deck",
+      "text": " Present"
+    },
+    {
+      "name": "Export deck",
+      "text": " Export "
+    },
+    {
+      "name": "Open command palette",
+      "text": "CommandsK"
+    },
+    {
+      "name": "Collapse slide navigator",
+      "text": ""
+    },
+    {
+      "name": "Go to slide 1: Create a six-slide decision review for a fictional sourcing pilot",
+      "text": "1"
+    },
+    {
+      "name": "Go to slide 2: The moment to solve",
+      "text": "2"
+    },
+    {
+      "name": "Go to slide 3: The decisive insight",
+      "text": "3"
+    },
+    {
+      "name": "Go to slide 4: How the approach works",
+      "text": "4"
+    },
+    {
+      "name": "Go to slide 5: What success looks like",
+      "text": "5"
+    },
+    {
+      "name": "Go to slide 6: The decision",
+      "text": "6"
+    },
+    {
+      "name": null,
+      "text": "Slides"
+    },
+    {
+      "name": null,
+      "text": "Outline"
+    },
+    {
+      "name": null,
+      "text": "Layers"
+    },
+    {
+      "name": null,
+      "text": "Opening / 011"
+    },
+    {
+      "name": "Slide 1: Create a six-slide decision review for a fictional sourcing pilot",
+      "text": "Create an editable, reviewable presentation from this ideaOPENING / 01NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE01"
+    },
+    {
+      "name": null,
+      "text": "Create a six-slide decision review for a fictional sourcing pilot"
+    },
+    {
+      "name": "Slide 1 actions",
+      "text": ""
+    },
+    {
+      "name": null,
+      "text": "Context / 021"
+    },
+    {
+      "name": "Slide 2: The moment to solve",
+      "text": "CONTEXT / 02The cost of waiting is usually hidden in repeated work.FrictionConsequenceDecision windowFrame the current reality for Decision-makers described in the brief: what is fragmented today, why it matters now, and where momentum is being lost.NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE02"
+    },
+    {
+      "name": null,
+      "text": "The moment to solve"
+    },
+    {
+      "name": "Slide 2 actions",
+      "text": ""
+    },
+    {
+      "name": null,
+      "text": "Insight / 031"
+    },
+    {
+      "name": "Slide 3: The decisive insight",
+      "text": "INSIGHT / 03A better outcome starts with a sharper point of view.Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decis…Honor explicit slide-count and presentation constraints in the briefNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE03"
+    },
+    {
+      "name": null,
+      "text": "The decisive insight"
+    },
+    {
+      "name": "Slide 3 actions",
+      "text": ""
+    },
+    {
+      "name": null,
+      "text": "Approach / 041"
+    },
+    {
+      "name": "Slide 4: How the approach works",
+      "text": "APPROACH / 04Turn the idea into a sequence people can understand and own.Connect intent, action, and feedback in one visible operating path so the audience can see both the destination and the mechanics.Align on intentNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE04"
+    },
+    {
+      "name": null,
+      "text": "How the approach works"
+    },
+    {
+      "name": "Slide 4 actions",
+      "text": ""
+    },
+    {
+      "name": null,
+      "text": "Evidence / 051"
+    },
+    {
+      "name": "Slide 5: What success looks like",
+      "text": "EVIDENCE / 05Define proof before asking for commitment.Use the brief’s success criteria as qualitative review questions until measured evidence is supplied.Honor explicit slide-count and presentation constraints in the briefNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE05"
+    },
+    {
+      "name": null,
+      "text": "What success looks like"
+    },
+    {
+      "name": "Slide 5 actions",
+      "text": ""
+    },
+    {
+      "name": null,
+      "text": "Close / 071"
+    },
+    {
+      "name": "Slide 6: The decision",
+      "text": "CLOSE / 07Create an editable, reviewable presentation from this idea01  Agree the outcome02  Name the owner03  Set the next checkpointNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE06"
+    },
+    {
+      "name": null,
+      "text": "The decision"
+    },
+    {
+      "name": "Slide 6 actions",
+      "text": ""
+    },
+    {
+      "name": null,
+      "text": " Add slide"
+    },
+    {
+      "name": null,
+      "text": "Edit"
+    },
+    {
+      "name": null,
+      "text": "Overview"
+    },
+    {
+      "name": null,
+      "text": "Compare"
+    },
+    {
+      "name": "Previous slide",
+      "text": ""
+    },
+    {
+      "name": "Next slide",
+      "text": ""
+    },
+    {
+      "name": null,
+      "text": "Presenter notes25 words"
+    },
+    {
+      "name": "Toggle pan tool",
+      "text": ""
+    },
+    {
+      "name": "Zoom out",
+      "text": ""
+    },
+    {
+      "name": "Zoom in",
+      "text": ""
+    },
+    {
+      "name": "Fit slide to workspace",
+      "text": "Fit"
+    },
+    {
+      "name": "Resize inspector",
+      "text": ""
+    },
+    {
+      "name": "Collapse inspector",
+      "text": ""
+    },
+    {
+      "name": null,
+      "text": "AI"
+    },
+    {
+      "name": null,
+      "text": "Design"
+    },
+    {
+      "name": null,
+      "text": "NodeBook"
+    },
+    {
+      "name": null,
+      "text": "Comments"
+    },
+    {
+      "name": null,
+      "text": "Versions"
+    },
+    {
+      "name": null,
+      "text": "Evidence"
+    },
+    {
+      "name": null,
+      "text": "JSON"
+    },
+    {
+      "name": null,
+      "text": "Trace"
+    },
+    {
+      "name": "Deck CI Failed, 1 blocker, 0 warnings. Open Trace",
+      "text": "Deck CIFailed1 blocker · 0 warnings"
+    },
+    {
+      "name": null,
+      "text": " Generate 3 directions"
+    },
+    {
+      "name": null,
+      "text": "Sharpen the story"
+    },
+    {
+      "name": null,
+      "text": "Reduce density"
+    },
+    {
+      "name": "Agent model",
+      "text": "Kimi K3"
+    },
+    {
+      "name": "Reasoning effort",
+      "text": "High"
+    },
+    {
+      "name": "Advanced provider, privacy, scope, and editing controls",
+      "text": ""
+    },
+    {
+      "name": "Connect BYOK model or coding agent",
+      "text": ""
+    },
+    {
+      "name": "Toggle web research",
+      "text": ""
+    },
+    {
+      "name": "Manage deck memory",
+      "text": ""
+    },
+    {
+      "name": "Add read context reference",
+      "text": ""
+    },
+    {
+      "name": "Add command",
+      "text": ""
+    },
+    {
+      "name": "Open the visual material tool",
+      "text": ""
+    },
+    {
+      "name": "Attach data file",
+      "text": ""
+    },
+    {
+      "name": "Expand composer",
+      "text": ""
+    },
+    {
+      "name": "Propose edit",
+      "text": ""
+    },
+    {
+      "name": null,
+      "text": "Summary"
+    },
+    {
+      "name": null,
+      "text": "Timeline"
+    },
+    {
+      "name": null,
+      "text": "Raw"
+    },
+    {
+      "name": "Expand trace view",
+      "text": ""
+    },
+    {
+      "name": "Authorization — expand",
+      "text": "AuthorizationConsent not required — no external egress"
+    },
+    {
+      "name": "Context — expand",
+      "text": "Context— unsealed5 context references read — attribution route degraded"
+    },
+    {
+      "name": "Plan — expand",
+      "text": "Plan— unsealed6-step plan drafted"
+    },
+    {
+      "name": "Actions — expand",
+      "text": "ActionsDeck built deterministically (5 tool calls)"
+    },
+    {
+      "name": "Validation — expand",
+      "text": "ValidationDeterministic validation passed (v1)"
+    },
+    {
+      "name": "Approval — expand",
+      "text": "Approval— unsealedProvisional seal — machine only, not signable"
+    },
+    {
+      "name": "Structure, presentation, and cleanup checks passed. Open validation details.",
+      "text": "Structure, presentation, and cleanup checks passed"
+    },
+    {
+      "name": "Close Artifact Lab",
+      "text": ""
+    },
+    {
+      "name": null,
+      "text": " Artifact Gallery"
+    },
+    {
+      "name": null,
+      "text": " Model Compare"
+    },
+    {
+      "name": null,
+      "text": " Harness Compare"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    },
+    {
+      "name": null,
+      "text": "Use slide"
+    },
+    {
+      "name": null,
+      "text": "Use recipe"
+    },
+    {
+      "name": null,
+      "text": "Generate with my data"
+    },
+    {
+      "name": null,
+      "text": "3 variants"
+    }
+  ]
+}

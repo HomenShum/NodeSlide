@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "C:\Users\hshum\.codex\worktrees\5dba\nodebench-ai\docs\plans\portfolio-recovery-20260904\E6g-write-openui-phase-diagnosis.py", line 20, in <module>
+    assert all(c['sourceExact'] and c['transformedExact'] for c in checks)
+AssertionError

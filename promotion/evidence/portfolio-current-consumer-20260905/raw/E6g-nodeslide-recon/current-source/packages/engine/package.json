@@ -1,0 +1,21 @@
+{
+  "name": "@nodeslide/engine",
+  "version": "0.2.2",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/contracts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nodeslide/contracts": "0.2.2"
+  }
+}

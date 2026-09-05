@@ -1,0 +1,2477 @@
+{
+  "deck": {
+    "schemaVersion": "nodeslide.slidelang/v1",
+    "toolchainVersion": "local-slidelang-adapter/1.1.0",
+    "id": "deck_golden_0pmxfq8",
+    "projectId": "project_nodeslide_0pmxfq8",
+    "title": "NodeSlide — stories with structure",
+    "brief": {
+      "prompt": "Show how NodeSlide turns presentation work into a traceable, editable, reviewable system.",
+      "audience": "Product, design, and engineering leaders evaluating a new presentation workflow",
+      "purpose": "Demonstrate the NodeSlide product story with a credible, polished golden deck",
+      "successCriteria": [
+        "Make the product promise obvious in the first minute",
+        "Make workflow value legible without inventing evidence",
+        "Explain guarded agent edits, review, and version recovery"
+      ]
+    },
+    "theme": {
+      "id": "editorial-signal",
+      "name": "Editorial Signal",
+      "mode": "light",
+      "colors": {
+        "canvas": "#F7F4ED",
+        "ink": "#26221D",
+        "muted": "#756B61",
+        "accent": "#B44A2D",
+        "accentSoft": "#F2DED3",
+        "insight": "#E5E9D6",
+        "insightInk": "#34452C",
+        "trace": "#7566A8",
+        "border": "#DED7CC"
+      },
+      "typography": {
+        "display": "Fraunces Variable",
+        "body": "Geist Variable",
+        "data": "JetBrains Mono Variable"
+      },
+      "defaultRadius": 18,
+      "spacingUnit": 8
+    },
+    "slideOrder": [
+      "slide_c7ab01fa8b16d6651921feb6d45c75be",
+      "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "slide_efddb818a081be00a721842abd4ec0f1",
+      "slide_410c16baea5eb9e18d8d7e0b0db5e95a",
+      "slide_52b64a889349a6114001fa263bb4dd3b"
+    ],
+    "version": 3,
+    "status": "ready",
+    "shareSlug": "nodeslide-stories-with-structure-0pmxfq8",
+    "createdAt": 100,
+    "updatedAt": 100
+  },
+  "slides": [
+    {
+      "id": "slide_c7ab01fa8b16d6651921feb6d45c75be",
+      "deckId": "deck_golden_0pmxfq8",
+      "title": "Stories with structure",
+      "section": "NodeSlide / 01",
+      "archetype": "statement",
+      "notes": "Narrative role: NodeSlide / 01. Keep the spoken transition focused on “Build the story. Keep every decision editable.”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "background": "#F7F4ED",
+      "elementOrder": [
+        "element_60e0f60f20b1985c0da783fa7c89592a",
+        "element_bdbd1e24f99a65958f1e0bc6ff394f30",
+        "element_3681c33d1fc2b881a7c1294279eed9a3",
+        "element_a701a23f4309facb3b7df6793b5eac16",
+        "element_d0ff40eee8611faba24c33789a4c585d",
+        "element_8777846f57564f5b1fa3d7788dfc22a7",
+        "element_a69b611c4c3f47af9cf4b853ead54466",
+        "element_41a623c98916fd76d2c1b10533630689",
+        "element_ee63a11699522adfbf6f5bd8bac3a49d"
+      ],
+      "version": 1
+    },
+    {
+      "id": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "deckId": "deck_golden_0pmxfq8",
+      "title": "The handoff tax compounds",
+      "section": "Scenario / 02",
+      "archetype": "stat-dominant",
+      "notes": "Narrative role: Scenario / 02. Keep the spoken transition focused on “Keep source context attached as the story moves.”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "background": "#F7F4ED",
+      "elementOrder": [
+        "element_3ff89b8410ac1ba8f44adb8db3b905e3",
+        "element_6cdfac36256c5ae01d74220325003a5a",
+        "element_01ff509a89b0ccb1d5443855e9a70b32",
+        "element_e898695f2fc7c53a60c14572b57b1bac",
+        "element_7fdc325bd031315c00541fa84650e73e",
+        "element_fd4078796309fef79d148e97343b1570",
+        "element_002324f00f8e2029ae8915388c202f40",
+        "element_26f1771e145184941de5bc125a4044ef",
+        "element_05b44675dfa980e9eee8b7c67d7eef02",
+        "element_11c2d84df89a177b8179fbbeafcaea79",
+        "element_a38bad56dfcb917d83fdef03dfc904fc"
+      ],
+      "version": 1
+    },
+    {
+      "id": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "deckId": "deck_golden_0pmxfq8",
+      "title": "A deck is a typed system",
+      "section": "Foundation / 03",
+      "archetype": "media-dominant",
+      "notes": "Narrative role: Foundation / 03. Keep the spoken transition focused on “Structure turns a visual artifact into an operating surface.”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "background": "#F7F4ED",
+      "elementOrder": [
+        "element_e883a731db514808365672a78d4c6886",
+        "element_66a6859b325bf302859e366380341581",
+        "element_b38d1af636cc55ab05fb9b66f272b67a",
+        "element_5e7b4a0b5d36b2167261001ddaea4309",
+        "element_8c4e09ddd00b2316172a1eb5a7dcb61c",
+        "element_80f72699d80ad7ba4f44737ddc8c5e86",
+        "element_9db521110606bd51412f4449fe246619",
+        "element_631862e979af883527f7d83df9452c17",
+        "element_e3128cb67641b5ccd0761ea58469c222",
+        "element_693edfc4ae99b1a04ce1c162bd922ee5",
+        "element_233882c2f0552b077b5823c0fccf8d5c"
+      ],
+      "version": 1
+    },
+    {
+      "id": "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "deckId": "deck_golden_0pmxfq8",
+      "title": "One intent, three guarded passes",
+      "section": "Workflow / 04",
+      "archetype": "split",
+      "notes": "Narrative role: Workflow / 04. Keep the spoken transition focused on “Plan → propose → commit, with scope checked at every boundary.”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "background": "#F7F4ED",
+      "elementOrder": [
+        "element_2e93e4abc392f31456e95cbbe7675507",
+        "element_db41dc9eac0fced50d0b058e187d7636",
+        "element_77062ae2da159a8efd408109e77751fb",
+        "element_9a85d51d7e5dca7c84681b6cd6dcafd0",
+        "element_8375130d51021098e031b7fa9f91914e",
+        "element_8bc74f38625d027002cf29377cd21446",
+        "element_dce6c50c00b61c3667324d6bd79fb82d",
+        "element_c27471154f917e6cb7f6fd0435e4d278",
+        "element_37cf96c9326ec28e64ec6a1e3ea6df26",
+        "element_b87f67d14bd2c9171dd30891d38e58e8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "slide_efddb818a081be00a721842abd4ec0f1",
+      "deckId": "deck_golden_0pmxfq8",
+      "title": "Quality is measurable",
+      "section": "Proof / 05",
+      "archetype": "stat-dominant",
+      "notes": "Narrative role: Proof / 05. Keep the spoken transition focused on “A beautiful deck still needs deterministic gates.”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "background": "#F7F4ED",
+      "elementOrder": [
+        "element_0baa9d0eb527d35941257f90c72cad0f",
+        "element_c8752ffe3dbed9ab4ab38597e789a9a8",
+        "element_932c8f3aa77fc4a459c0dcdda3d3d12e",
+        "element_88edd1fe368b7a806b4b179c5071225c",
+        "element_b0e3b2ccd111a87f2c8f1b83fe62f82e",
+        "element_32667fa3d0b5c02108263f0f8639bb7a",
+        "element_6adb7b17377b0f51b9a61baa23634bc7",
+        "element_824e32eb5ec9d6f5d3179ae7b33305d3",
+        "element_cc680b5e52614223bddc67fabd8c36cd",
+        "element_8bf775c218be6b5a47ea7476079a5fc9",
+        "element_07c0dd2b0041477b85ed33d999471388",
+        "element_30f32af0d7868c2f57acde862c58a4a4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "slide_410c16baea5eb9e18d8d7e0b0db5e95a",
+      "deckId": "deck_golden_0pmxfq8",
+      "title": "Human review stays in the loop",
+      "section": "Trust / 06",
+      "archetype": "comparison",
+      "notes": "Narrative role: Trust / 06. Keep the spoken transition focused on “Comments become context. Patches remain choices.”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "background": "#F7F4ED",
+      "elementOrder": [
+        "element_b40f67ba4ff8af659bebb6ac007d559d",
+        "element_08af235a35100be8fdeb33ee96a9ca12",
+        "element_05c11beeb43124adb6058f4fa99b3b2c",
+        "element_ecdc7ee8c275e3f1b0087bf6ccf8b5b0",
+        "element_d0bada917801214785828ef5e27b139b",
+        "element_831399df0e6ffdfc1b109c5c22b0ff85",
+        "element_c8d307e2a7ad629f7b416868a02099a4",
+        "element_1b0296c96644ff025afef419d57590cf",
+        "element_d2322d6f0fd3ee6129a526ff4a15ebf4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "slide_52b64a889349a6114001fa263bb4dd3b",
+      "deckId": "deck_golden_0pmxfq8",
+      "title": "Ship the story, keep the structure",
+      "section": "Next / 07",
+      "archetype": "statement",
+      "notes": "Narrative role: Next / 07. Keep the spoken transition focused on “Move at presentation speed without giving up engineering-grade trust.”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "background": "#F7F4ED",
+      "elementOrder": [
+        "element_15d0c1170b435f584dc177cb29cbb01b",
+        "element_512d3a34d3acbee06e5198937f7a0fa2",
+        "element_d2972e70143ee7853dc9f93878e41e85",
+        "element_5a5e63e9f45b53cdf31567f5f0a8d95b",
+        "element_225881819b0da9ad5de28eff4758ff5e",
+        "element_d484faa9b2b151b78aee087a65f47ac2",
+        "element_817c9d1987cf897e7f6b5af4f0c294ba",
+        "element_467c2bba273ad4cf5a94492373b3a9ee",
+        "element_3bab95c82320d04ab47dcf6be4ca839e"
+      ],
+      "version": 1
+    }
+  ],
+  "elements": [
+    {
+      "name": "Accent rail",
+      "kind": "shape",
+      "role": "decoration",
+      "bbox": {
+        "x": 0.035,
+        "y": 0.065,
+        "width": 0.008,
+        "height": 0.83
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_60e0f60f20b1985c0da783fa7c89592a",
+      "slideId": "slide_c7ab01fa8b16d6651921feb6d45c75be",
+      "version": 1
+    },
+    {
+      "name": "Section label",
+      "kind": "text",
+      "role": "section",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.065,
+        "width": 0.48,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "NODESLIDE / 01",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "sourceIds": [],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_bdbd1e24f99a65958f1e0bc6ff394f30",
+      "slideId": "slide_c7ab01fa8b16d6651921feb6d45c75be",
+      "version": 1
+    },
+    {
+      "name": "Headline",
+      "kind": "text",
+      "role": "title",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.15,
+        "width": 0.79,
+        "height": 0.27
+      },
+      "rotation": 0,
+      "content": "Build the story. Keep every decision editable.",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 52,
+        "fontWeight": 620,
+        "lineHeight": 1.04,
+        "letterSpacing": -0.8
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3681c33d1fc2b881a7c1294279eed9a3",
+      "slideId": "slide_c7ab01fa8b16d6651921feb6d45c75be",
+      "version": 1
+    },
+    {
+      "name": "Body copy",
+      "kind": "text",
+      "role": "body",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.48,
+        "width": 0.66,
+        "height": 0.17
+      },
+      "rotation": 0,
+      "content": "NodeSlide treats a deck as a typed system: narrative, geometry, sources, comments, and changes stay connected from first brief to final room.",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 19,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a701a23f4309facb3b7df6793b5eac16",
+      "slideId": "slide_c7ab01fa8b16d6651921feb6d45c75be",
+      "version": 1
+    },
+    {
+      "name": "Key point 1",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.72,
+        "width": 0.25,
+        "height": 0.08
+      },
+      "rotation": 0,
+      "content": "•  Structured canvas",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d0ff40eee8611faba24c33789a4c585d",
+      "slideId": "slide_c7ab01fa8b16d6651921feb6d45c75be",
+      "version": 1
+    },
+    {
+      "name": "Key point 2",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.35,
+        "y": 0.72,
+        "width": 0.25,
+        "height": 0.08
+      },
+      "rotation": 0,
+      "content": "•  Guarded edits",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_8777846f57564f5b1fa3d7788dfc22a7",
+      "slideId": "slide_c7ab01fa8b16d6651921feb6d45c75be",
+      "version": 1
+    },
+    {
+      "name": "Key point 3",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.63,
+        "y": 0.72,
+        "width": 0.25,
+        "height": 0.08
+      },
+      "rotation": 0,
+      "content": "•  Traceable claims",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a69b611c4c3f47af9cf4b853ead54466",
+      "slideId": "slide_c7ab01fa8b16d6651921feb6d45c75be",
+      "version": 1
+    },
+    {
+      "name": "Deck footer",
+      "kind": "text",
+      "role": "footer",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.93,
+        "width": 0.72,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_41a623c98916fd76d2c1b10533630689",
+      "slideId": "slide_c7ab01fa8b16d6651921feb6d45c75be",
+      "version": 1
+    },
+    {
+      "name": "Page number",
+      "kind": "text",
+      "role": "page_number",
+      "bbox": {
+        "x": 0.88,
+        "y": 0.92,
+        "width": 0.06,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "01",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ee63a11699522adfbf6f5bd8bac3a49d",
+      "slideId": "slide_c7ab01fa8b16d6651921feb6d45c75be",
+      "version": 1
+    },
+    {
+      "name": "Accent rail",
+      "kind": "shape",
+      "role": "decoration",
+      "bbox": {
+        "x": 0.035,
+        "y": 0.065,
+        "width": 0.008,
+        "height": 0.83
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3ff89b8410ac1ba8f44adb8db3b905e3",
+      "slideId": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "version": 1
+    },
+    {
+      "name": "Section label",
+      "kind": "text",
+      "role": "section",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.065,
+        "width": 0.48,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "SCENARIO / 02",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "sourceIds": [],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6cdfac36256c5ae01d74220325003a5a",
+      "slideId": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "version": 1
+    },
+    {
+      "name": "Headline",
+      "kind": "text",
+      "role": "headline",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.15,
+        "width": 0.76,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "Keep source context attached as the story moves.",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "lineHeight": 1.04,
+        "letterSpacing": -0.8
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_01ff509a89b0ccb1d5443855e9a70b32",
+      "slideId": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "version": 1
+    },
+    {
+      "name": "Body copy",
+      "kind": "text",
+      "role": "body",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.4,
+        "width": 0.39,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "This golden scenario focuses on one design goal: keep copy, layout, citations, and feedback connected through drafting, review, revision, and handoff.",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_e898695f2fc7c53a60c14572b57b1bac",
+      "slideId": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "version": 1
+    },
+    {
+      "name": "Key point 1",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.62,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "01  Draft with source context",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_7fdc325bd031315c00541fa84650e73e",
+      "slideId": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "version": 1
+    },
+    {
+      "name": "Key point 2",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.7167,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "02  Review on stable anchors",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_fd4078796309fef79d148e97343b1570",
+      "slideId": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "version": 1
+    },
+    {
+      "name": "Key point 3",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.8133,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "03  Hand off editable structure",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_002324f00f8e2029ae8915388c202f40",
+      "slideId": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "version": 1
+    },
+    {
+      "name": "Primary metric",
+      "kind": "text",
+      "role": "metric",
+      "bbox": {
+        "x": 0.56,
+        "y": 0.41,
+        "width": 0.34,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "CONTEXT",
+      "style": {
+        "color": "#34452C",
+        "fill": "#E5E9D6",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 56,
+        "fontWeight": 720,
+        "lineHeight": 1,
+        "padding": 20,
+        "radius": 18
+      },
+      "sourceIds": [
+        "source_79c3cff54b86482a3d11a55f1b45d3f1"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_26f1771e145184941de5bc125a4044ef",
+      "slideId": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "version": 1
+    },
+    {
+      "name": "Metric label",
+      "kind": "text",
+      "role": "caption",
+      "bbox": {
+        "x": 0.59,
+        "y": 0.65,
+        "width": 0.29,
+        "height": 0.09
+      },
+      "rotation": 0,
+      "content": "Qualitative workflow label — not a measured benchmark",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 15,
+        "fontWeight": 500,
+        "lineHeight": 1.25,
+        "textAlign": "center"
+      },
+      "sourceIds": [
+        "source_79c3cff54b86482a3d11a55f1b45d3f1"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_05b44675dfa980e9eee8b7c67d7eef02",
+      "slideId": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "version": 1
+    },
+    {
+      "name": "Deck footer",
+      "kind": "text",
+      "role": "footer",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.93,
+        "width": 0.72,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_11c2d84df89a177b8179fbbeafcaea79",
+      "slideId": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "version": 1
+    },
+    {
+      "name": "Page number",
+      "kind": "text",
+      "role": "page_number",
+      "bbox": {
+        "x": 0.88,
+        "y": 0.92,
+        "width": 0.06,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "02",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a38bad56dfcb917d83fdef03dfc904fc",
+      "slideId": "slide_6dc96e4dc69b4fe9758402a30d2855da",
+      "version": 1
+    },
+    {
+      "name": "Accent rail",
+      "kind": "shape",
+      "role": "decoration",
+      "bbox": {
+        "x": 0.035,
+        "y": 0.065,
+        "width": 0.008,
+        "height": 0.83
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_e883a731db514808365672a78d4c6886",
+      "slideId": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "version": 1
+    },
+    {
+      "name": "Section label",
+      "kind": "text",
+      "role": "section",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.065,
+        "width": 0.48,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "FOUNDATION / 03",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "sourceIds": [],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_66a6859b325bf302859e366380341581",
+      "slideId": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "version": 1
+    },
+    {
+      "name": "Headline",
+      "kind": "text",
+      "role": "headline",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.15,
+        "width": 0.76,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "Structure turns a visual artifact into an operating surface.",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "lineHeight": 1.04,
+        "letterSpacing": -0.8
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b38d1af636cc55ab05fb9b66f272b67a",
+      "slideId": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "version": 1
+    },
+    {
+      "name": "Body copy",
+      "kind": "text",
+      "role": "body",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.4,
+        "width": 0.39,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "Slides and elements carry stable IDs, normalized geometry, source links, export capability, locks, and independent versions.",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_5e7b4a0b5d36b2167261001ddaea4309",
+      "slideId": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "version": 1
+    },
+    {
+      "name": "Key point 1",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.62,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "01  Stable IDs survive every view",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_8c4e09ddd00b2316172a1eb5a7dcb61c",
+      "slideId": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "version": 1
+    },
+    {
+      "name": "Key point 2",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.7167,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "02  Normalized boxes travel across renderers",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_80f72699d80ad7ba4f44737ddc8c5e86",
+      "slideId": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "version": 1
+    },
+    {
+      "name": "Key point 3",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.8133,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "03  Locks protect intent",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_9db521110606bd51412f4449fe246619",
+      "slideId": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "version": 1
+    },
+    {
+      "name": "Editable image",
+      "kind": "image",
+      "role": "image",
+      "bbox": {
+        "x": 0.53,
+        "y": 0.39,
+        "width": 0.39,
+        "height": 0.38
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#F2DED3",
+        "stroke": "#DED7CC",
+        "strokeWidth": 2,
+        "color": "#756B61",
+        "radius": 18
+      },
+      "image": {
+        "placeholder": true,
+        "credit": "A canonical deck graph keeps every artifact connected.",
+        "sourceId": "source_79c3cff54b86482a3d11a55f1b45d3f1"
+      },
+      "altText": "Structured deck graph connecting slides, elements, sources, and versions",
+      "sourceIds": [
+        "source_79c3cff54b86482a3d11a55f1b45d3f1"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_631862e979af883527f7d83df9452c17",
+      "slideId": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "version": 1
+    },
+    {
+      "name": "Image credit",
+      "kind": "text",
+      "role": "caption",
+      "bbox": {
+        "x": 0.55,
+        "y": 0.79,
+        "width": 0.35,
+        "height": 0.07
+      },
+      "rotation": 0,
+      "content": "A canonical deck graph keeps every artifact connected.",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 520,
+        "lineHeight": 1.2,
+        "textAlign": "center"
+      },
+      "sourceIds": [
+        "source_79c3cff54b86482a3d11a55f1b45d3f1"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_e3128cb67641b5ccd0761ea58469c222",
+      "slideId": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "version": 1
+    },
+    {
+      "name": "Deck footer",
+      "kind": "text",
+      "role": "footer",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.93,
+        "width": 0.72,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_693edfc4ae99b1a04ce1c162bd922ee5",
+      "slideId": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "version": 1
+    },
+    {
+      "name": "Page number",
+      "kind": "text",
+      "role": "page_number",
+      "bbox": {
+        "x": 0.88,
+        "y": 0.92,
+        "width": 0.06,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "03",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_233882c2f0552b077b5823c0fccf8d5c",
+      "slideId": "slide_93623858c00af7a0cfa21f44cfdd8eaa",
+      "version": 1
+    },
+    {
+      "name": "Accent rail",
+      "kind": "shape",
+      "role": "decoration",
+      "bbox": {
+        "x": 0.035,
+        "y": 0.065,
+        "width": 0.008,
+        "height": 0.83
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_2e93e4abc392f31456e95cbbe7675507",
+      "slideId": "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "version": 1
+    },
+    {
+      "name": "Section label",
+      "kind": "text",
+      "role": "section",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.065,
+        "width": 0.48,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "WORKFLOW / 04",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "sourceIds": [],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_db41dc9eac0fced50d0b058e187d7636",
+      "slideId": "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "version": 1
+    },
+    {
+      "name": "Headline",
+      "kind": "text",
+      "role": "headline",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.15,
+        "width": 0.76,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "Plan → propose → commit, with scope checked at every boundary.",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "lineHeight": 1.04,
+        "letterSpacing": -0.8
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_77062ae2da159a8efd408109e77751fb",
+      "slideId": "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "version": 1
+    },
+    {
+      "name": "Body copy",
+      "kind": "text",
+      "role": "body",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.4,
+        "width": 0.39,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "The agent can reason broadly, but it may only write inside the explicit deck, slide, element, comment, or bounding-box scope.",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_9a85d51d7e5dca7c84681b6cd6dcafd0",
+      "slideId": "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "version": 1
+    },
+    {
+      "name": "Key point 1",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.62,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "01  Read context",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_8375130d51021098e031b7fa9f91914e",
+      "slideId": "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "version": 1
+    },
+    {
+      "name": "Key point 2",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.7167,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "02  Propose an inspectable patch",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_8bc74f38625d027002cf29377cd21446",
+      "slideId": "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "version": 1
+    },
+    {
+      "name": "Key point 3",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.8133,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "03  Validate and accept atomically",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_dce6c50c00b61c3667324d6bd79fb82d",
+      "slideId": "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "version": 1
+    },
+    {
+      "name": "Editable formula",
+      "kind": "math",
+      "role": "formula",
+      "bbox": {
+        "x": 0.53,
+        "y": 0.42,
+        "width": 0.39,
+        "height": 0.24
+      },
+      "rotation": 0,
+      "content": "authorized change = requested scope ∩ allowed scope",
+      "style": {
+        "fill": "#E5E9D6",
+        "color": "#34452C",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 30,
+        "fontWeight": 720,
+        "lineHeight": 1.15,
+        "padding": 12,
+        "radius": 18,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "math": {
+        "expression": "\\text{authorized change} = \\text{requested scope} \\cap \\text{allowed scope}",
+        "display": "authorized change = requested scope ∩ allowed scope",
+        "variables": [],
+        "syntax": "latex",
+        "displayMode": "block",
+        "description": "The agent can only mutate the intersection of requested and authorized scope.",
+        "sourceId": "source_79c3cff54b86482a3d11a55f1b45d3f1"
+      },
+      "sourceIds": [
+        "source_79c3cff54b86482a3d11a55f1b45d3f1"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_static_fallback",
+        "google_importable"
+      ],
+      "id": "element_c27471154f917e6cb7f6fd0435e4d278",
+      "slideId": "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "version": 1
+    },
+    {
+      "name": "Deck footer",
+      "kind": "text",
+      "role": "footer",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.93,
+        "width": 0.72,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_37cf96c9326ec28e64ec6a1e3ea6df26",
+      "slideId": "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "version": 1
+    },
+    {
+      "name": "Page number",
+      "kind": "text",
+      "role": "page_number",
+      "bbox": {
+        "x": 0.88,
+        "y": 0.92,
+        "width": 0.06,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "04",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b87f67d14bd2c9171dd30891d38e58e8",
+      "slideId": "slide_9e5448e978c768ab5dbd2165ebd17528",
+      "version": 1
+    },
+    {
+      "name": "Accent rail",
+      "kind": "shape",
+      "role": "decoration",
+      "bbox": {
+        "x": 0.035,
+        "y": 0.065,
+        "width": 0.008,
+        "height": 0.83
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_0baa9d0eb527d35941257f90c72cad0f",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Section label",
+      "kind": "text",
+      "role": "section",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.065,
+        "width": 0.48,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "PROOF / 05",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "sourceIds": [],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_c8752ffe3dbed9ab4ab38597e789a9a8",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Headline",
+      "kind": "text",
+      "role": "headline",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.15,
+        "width": 0.76,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "A beautiful deck still needs deterministic gates.",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "lineHeight": 1.04,
+        "letterSpacing": -0.8
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_932c8f3aa77fc4a459c0dcdda3d3d12e",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Body copy",
+      "kind": "text",
+      "role": "body",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.4,
+        "width": 0.39,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "Structural, geometry, source, and export checks produce separate signals for basic validity, publishing safety, and a clean handoff.",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_88edd1fe368b7a806b4b179c5071225c",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Key point 1",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.62,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "01  ok · structurally valid",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b0e3b2ccd111a87f2c8f1b83fe62f82e",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Key point 2",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.7167,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "02  publishOk · safe to present",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_32667fa3d0b5c02108263f0f8639bb7a",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Key point 3",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.8133,
+        "width": 0.39,
+        "height": 0.0867
+      },
+      "rotation": 0,
+      "content": "03  cleanOk · no warnings",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6adb7b17377b0f51b9a61baa23634bc7",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Primary metric",
+      "kind": "text",
+      "role": "metric",
+      "bbox": {
+        "x": 0.56,
+        "y": 0.41,
+        "width": 0.34,
+        "height": 0.15
+      },
+      "rotation": 0,
+      "content": "3 gates",
+      "style": {
+        "color": "#34452C",
+        "fill": "#E5E9D6",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 43,
+        "fontWeight": 720,
+        "lineHeight": 1,
+        "padding": 20,
+        "radius": 18
+      },
+      "sourceIds": [
+        "source_79c3cff54b86482a3d11a55f1b45d3f1"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_824e32eb5ec9d6f5d3179ae7b33305d3",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Metric label",
+      "kind": "text",
+      "role": "caption",
+      "bbox": {
+        "x": 0.59,
+        "y": 0.6,
+        "width": 0.29,
+        "height": 0.09
+      },
+      "rotation": 0,
+      "content": "independent validation signals: ok, publishOk, cleanOk",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 15,
+        "fontWeight": 500,
+        "lineHeight": 1.25,
+        "textAlign": "center"
+      },
+      "sourceIds": [
+        "source_79c3cff54b86482a3d11a55f1b45d3f1"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_cc680b5e52614223bddc67fabd8c36cd",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Evidence chart",
+      "kind": "chart",
+      "role": "evidence",
+      "bbox": {
+        "x": 0.53,
+        "y": 0.72,
+        "width": 0.39,
+        "height": 0.17
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#F2DED3",
+        "color": "#26221D",
+        "radius": 18,
+        "padding": 14
+      },
+      "chart": {
+        "chartType": "bar",
+        "labels": [
+          "ok",
+          "publish",
+          "clean"
+        ],
+        "series": [
+          {
+            "name": "Signal",
+            "values": [
+              1,
+              1,
+              1
+            ],
+            "color": "#B44A2D"
+          }
+        ],
+        "unit": "pass",
+        "sourceId": "source_79c3cff54b86482a3d11a55f1b45d3f1"
+      },
+      "sourceIds": [
+        "source_79c3cff54b86482a3d11a55f1b45d3f1"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_8bf775c218be6b5a47ea7476079a5fc9",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Deck footer",
+      "kind": "text",
+      "role": "footer",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.93,
+        "width": 0.72,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_07c0dd2b0041477b85ed33d999471388",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Page number",
+      "kind": "text",
+      "role": "page_number",
+      "bbox": {
+        "x": 0.88,
+        "y": 0.92,
+        "width": 0.06,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "05",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_30f32af0d7868c2f57acde862c58a4a4",
+      "slideId": "slide_efddb818a081be00a721842abd4ec0f1",
+      "version": 1
+    },
+    {
+      "name": "Accent rail",
+      "kind": "shape",
+      "role": "decoration",
+      "bbox": {
+        "x": 0.035,
+        "y": 0.065,
+        "width": 0.008,
+        "height": 0.83
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b40f67ba4ff8af659bebb6ac007d559d",
+      "slideId": "slide_410c16baea5eb9e18d8d7e0b0db5e95a",
+      "version": 1
+    },
+    {
+      "name": "Section label",
+      "kind": "text",
+      "role": "section",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.065,
+        "width": 0.48,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "TRUST / 06",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "sourceIds": [],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_08af235a35100be8fdeb33ee96a9ca12",
+      "slideId": "slide_410c16baea5eb9e18d8d7e0b0db5e95a",
+      "version": 1
+    },
+    {
+      "name": "Headline",
+      "kind": "text",
+      "role": "headline",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.15,
+        "width": 0.76,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "Comments become context. Patches remain choices.",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "lineHeight": 1.04,
+        "letterSpacing": -0.8
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_05c11beeb43124adb6058f4fa99b3b2c",
+      "slideId": "slide_410c16baea5eb9e18d8d7e0b0db5e95a",
+      "version": 1
+    },
+    {
+      "name": "Body copy",
+      "kind": "text",
+      "role": "body",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.4,
+        "width": 0.79,
+        "height": 0.18
+      },
+      "rotation": 0,
+      "content": "A reviewer can anchor feedback to a deck, slide, element, or region; link the resolution to an accepted patch; and restore any prior snapshot.",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 19,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ecdc7ee8c275e3f1b0087bf6ccf8b5b0",
+      "slideId": "slide_410c16baea5eb9e18d8d7e0b0db5e95a",
+      "version": 1
+    },
+    {
+      "name": "Key point 1",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.62,
+        "width": 0.26,
+        "height": 0.16
+      },
+      "rotation": 0,
+      "content": "01  Anchored discussion",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d0bada917801214785828ef5e27b139b",
+      "slideId": "slide_410c16baea5eb9e18d8d7e0b0db5e95a",
+      "version": 1
+    },
+    {
+      "name": "Key point 2",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.36,
+        "y": 0.62,
+        "width": 0.26,
+        "height": 0.16
+      },
+      "rotation": 0,
+      "content": "02  Compare-and-set acceptance",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_831399df0e6ffdfc1b109c5c22b0ff85",
+      "slideId": "slide_410c16baea5eb9e18d8d7e0b0db5e95a",
+      "version": 1
+    },
+    {
+      "name": "Key point 3",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.65,
+        "y": 0.62,
+        "width": 0.26,
+        "height": 0.16
+      },
+      "rotation": 0,
+      "content": "03  Version recovery",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_c8d307e2a7ad629f7b416868a02099a4",
+      "slideId": "slide_410c16baea5eb9e18d8d7e0b0db5e95a",
+      "version": 1
+    },
+    {
+      "name": "Deck footer",
+      "kind": "text",
+      "role": "footer",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.93,
+        "width": 0.72,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_1b0296c96644ff025afef419d57590cf",
+      "slideId": "slide_410c16baea5eb9e18d8d7e0b0db5e95a",
+      "version": 1
+    },
+    {
+      "name": "Page number",
+      "kind": "text",
+      "role": "page_number",
+      "bbox": {
+        "x": 0.88,
+        "y": 0.92,
+        "width": 0.06,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "06",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d2322d6f0fd3ee6129a526ff4a15ebf4",
+      "slideId": "slide_410c16baea5eb9e18d8d7e0b0db5e95a",
+      "version": 1
+    },
+    {
+      "name": "Accent rail",
+      "kind": "shape",
+      "role": "decoration",
+      "bbox": {
+        "x": 0.035,
+        "y": 0.065,
+        "width": 0.008,
+        "height": 0.83
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_15d0c1170b435f584dc177cb29cbb01b",
+      "slideId": "slide_52b64a889349a6114001fa263bb4dd3b",
+      "version": 1
+    },
+    {
+      "name": "Section label",
+      "kind": "text",
+      "role": "section",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.065,
+        "width": 0.48,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "NEXT / 07",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "sourceIds": [],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_512d3a34d3acbee06e5198937f7a0fa2",
+      "slideId": "slide_52b64a889349a6114001fa263bb4dd3b",
+      "version": 1
+    },
+    {
+      "name": "Headline",
+      "kind": "text",
+      "role": "headline",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.15,
+        "width": 0.76,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "Move at presentation speed without giving up engineering-grade trust.",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "lineHeight": 1.04,
+        "letterSpacing": -0.8
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d2972e70143ee7853dc9f93878e41e85",
+      "slideId": "slide_52b64a889349a6114001fa263bb4dd3b",
+      "version": 1
+    },
+    {
+      "name": "Body copy",
+      "kind": "text",
+      "role": "body",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.4,
+        "width": 0.66,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "Start with a brief, shape the narrative together, and leave with a deck whose content, sources, changes, and exports are still yours.",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 19,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_5a5e63e9f45b53cdf31567f5f0a8d95b",
+      "slideId": "slide_52b64a889349a6114001fa263bb4dd3b",
+      "version": 1
+    },
+    {
+      "name": "Key point 1",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.72,
+        "width": 0.25,
+        "height": 0.08
+      },
+      "rotation": 0,
+      "content": "•  Create from brief",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_225881819b0da9ad5de28eff4758ff5e",
+      "slideId": "slide_52b64a889349a6114001fa263bb4dd3b",
+      "version": 1
+    },
+    {
+      "name": "Key point 2",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.35,
+        "y": 0.72,
+        "width": 0.25,
+        "height": 0.08
+      },
+      "rotation": 0,
+      "content": "•  Review every change",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d484faa9b2b151b78aee087a65f47ac2",
+      "slideId": "slide_52b64a889349a6114001fa263bb4dd3b",
+      "version": 1
+    },
+    {
+      "name": "Key point 3",
+      "kind": "text",
+      "role": "bullet",
+      "bbox": {
+        "x": 0.63,
+        "y": 0.72,
+        "width": 0.25,
+        "height": 0.08
+      },
+      "rotation": 0,
+      "content": "•  Present with confidence",
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "sourceIds": [
+        "source_bf8164c274b15f45b9654a4323f12d34"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_817c9d1987cf897e7f6b5af4f0c294ba",
+      "slideId": "slide_52b64a889349a6114001fa263bb4dd3b",
+      "version": 1
+    },
+    {
+      "name": "Deck footer",
+      "kind": "text",
+      "role": "footer",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.93,
+        "width": 0.72,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_467c2bba273ad4cf5a94492373b3a9ee",
+      "slideId": "slide_52b64a889349a6114001fa263bb4dd3b",
+      "version": 1
+    },
+    {
+      "name": "Page number",
+      "kind": "text",
+      "role": "page_number",
+      "bbox": {
+        "x": 0.88,
+        "y": 0.92,
+        "width": 0.06,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "07",
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3bab95c82320d04ab47dcf6be4ca839e",
+      "slideId": "slide_52b64a889349a6114001fa263bb4dd3b",
+      "version": 1
+    }
+  ],
+  "sources": [
+    {
+      "id": "source_bf8164c274b15f45b9654a4323f12d34",
+      "deckId": "deck_golden_0pmxfq8",
+      "title": "NodeSlide product brief",
+      "sourceType": "internal",
+      "retrievedAt": 100,
+      "citation": "Show how NodeSlide turns presentation work into a traceable, editable, reviewable system.",
+      "license": "Internal working material"
+    },
+    {
+      "id": "source_79c3cff54b86482a3d11a55f1b45d3f1",
+      "deckId": "deck_golden_0pmxfq8",
+      "title": "Golden workflow scenario",
+      "sourceType": "note",
+      "retrievedAt": 100,
+      "citation": "Qualitative product-workflow scenario for demonstrating NodeSlide; no measured customer benchmark is claimed.",
+      "license": "Internal working material"
+    }
+  ]
+}

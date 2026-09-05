@@ -1,0 +1,55 @@
+{
+  "at": "2026-09-05T11:19:21.004059+00:00",
+  "plan": "E6g_NODESLIDE_CHECK_DIAGNOSIS.json",
+  "planSha256": "86d251b95f7d410e40b6d35651bcb870ceddd7c9cbd0f6f02faa1213316c915c",
+  "classification": "PATCH_VERIFICATION_PORTABILITY",
+  "proof": "NODESLIDE_WINDOWS_CHECK_PORTABILITY_01",
+  "owners": [
+    "scripts/tests/workspace-build-depth.test.mjs",
+    "scripts/tests/code-tours.test.mjs",
+    "scripts/tests/playwright-trace.test.mjs",
+    ".gitattributes"
+  ],
+  "tourWorkingByteNormalizationOnly": [
+    ".tours/01-primary-user-flow.tour",
+    ".tours/02-agent-execution.tour",
+    ".tours/03-debug-and-recovery.tour"
+  ],
+  "files": {
+    "scripts/tests/workspace-build-depth.test.mjs": {
+      "sha256": "7e5e141b90b3f1c9973bc6db1af62c18dd97cef255577b246855569a725b9674",
+      "bytes": 3118,
+      "gitBlob": "35ec3bf127a35abe67e6f480c651d48803c3f980"
+    },
+    "scripts/tests/code-tours.test.mjs": {
+      "sha256": "f7e898ef82230da28be0f9e2861eb4c4a94bc46e937907d4b1735c0db83106b8",
+      "bytes": 886,
+      "gitBlob": "4a700c744305987208f6bb76b25bff8d4943bd63"
+    },
+    "scripts/tests/playwright-trace.test.mjs": {
+      "sha256": "c7ba6afd85c80466f68c622e4bfda7ab027e56978d62f5f533e7684385e42de7",
+      "bytes": 8082,
+      "gitBlob": "e815b36da7d608d78a24345cd1b580b8045ed656"
+    },
+    ".gitattributes": {
+      "sha256": "d444ed3e7b2a6c881e9ab1da2199a90cd0b664d86fc26eb0abe323642f18029b",
+      "bytes": 1038,
+      "gitBlob": "db19adaceb26c24af0d2a78f6c12a4ddc3d3214d"
+    },
+    ".tours/01-primary-user-flow.tour": {
+      "sha256": "a6c7b0b8bf5b4032eb4f3fa8f7f6f2e2a61d2ea9bf38df93c81d27a08855cc2f",
+      "bytes": 6523,
+      "gitBlob": "5f8ca786b951a5ed2f2dd0458cc4e85fc37f6d04"
+    },
+    ".tours/02-agent-execution.tour": {
+      "sha256": "c4d9dc23f4f2702426704c3e7b1c8c499c74bd5eaf2cf86d0a214a0c8897f012",
+      "bytes": 4420,
+      "gitBlob": "2fe243c6c01b3ce445f7acba48cb773b898894af"
+    },
+    ".tours/03-debug-and-recovery.tour": {
+      "sha256": "bf4fab658b2e0b7647d6e088e72ee6e57d479a1954dc71c220d50ba0636fe3e1",
+      "bytes": 3756,
+      "gitBlob": "f311450fdfb83799b52ad516804a8d78de356093"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+from pathlib import Path
+P=Path(__file__).parent
+s=(P/'E6g-capture-readiness-before.mjs').read_text(encoding='utf-8').replace('E6g-nodeslide-readiness-before','E6g-nodeslide-readiness-before-02').replace("'readiness-before'","'readiness-before-02'")
+s=s.replace("await page.getByTestId('slide-canvas').waitFor();","await page.getByTestId('slide-canvas').waitFor();await page.getByTestId('inspector-tab-ai').waitFor({state:'attached'});")
+s=s.replace(" for(const state of ['badge','trace']){"," await page.getByTestId('inspector-tab-ai').click();await page.getByRole('button',{name:/Deck CI .*Open Trace/}).waitFor();\n for(const state of ['badge','trace']){")
+s=s.replace("if(state==='trace')await page.getByRole('button',{name:/Deck CI .*Open Trace/}).click();","if(state==='trace'){await page.getByRole('button',{name:/Deck CI .*Open Trace/}).click();await page.locator('.ns-trace-inspector .ns-validation-summary').first().waitFor();}")
+(P/'E6g-capture-readiness-before-02.mjs').write_text(s,encoding='utf-8',newline='\n')

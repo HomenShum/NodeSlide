@@ -1,0 +1,72 @@
+{
+  "scope": "Read-only candidate; two equivalent cwd expressions, unchanged real generator --check, actual workspace manifests. Central-only non-trace name discovery fixture.",
+  "runtime": {
+    "node": "v22.22.2",
+    "execPath": "C:\\nvm4w\\nodejs\\node.exe",
+    "executableExists": true
+  },
+  "bindings": {
+    "test": "f7e898ef82230da28be0f9e2861eb4c4a94bc46e937907d4b1735c0db83106b8",
+    "workspace": "7e5e141b90b3f1c9973bc6db1af62c18dd97cef255577b246855569a725b9674",
+    "generator": "25ea26f2f0b7ac3c82634e39656a1d5428893c6c760b2a5402457e570d777324",
+    "finder": "c7ba6afd85c80466f68c622e4bfda7ab027e56978d62f5f533e7684385e42de7"
+  },
+  "pathBoundary": {
+    "url": "file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/",
+    "bad": "D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/",
+    "good": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\",
+    "badExists": false,
+    "goodExists": true
+  },
+  "badChild": {
+    "cwd": "D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/",
+    "args": [
+      "scripts/build-code-tours.mjs",
+      "--check"
+    ],
+    "status": null,
+    "error": {
+      "code": "ENOENT",
+      "syscall": "spawnSync C:\\nvm4w\\nodejs\\node.exe",
+      "message": "spawnSync C:\\nvm4w\\nodejs\\node.exe ENOENT"
+    }
+  },
+  "goodChild": {
+    "cwd": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\",
+    "args": [
+      "scripts/build-code-tours.mjs",
+      "--check"
+    ],
+    "status": 1,
+    "stdout": "",
+    "stderr": "CodeTours no longer match the source they point at:\n  .tours/01-primary-user-flow.tour\n  .tours/02-agent-execution.tour\n  .tours/03-debug-and-recovery.tour\nRun: node scripts/build-code-tours.mjs\n",
+    "error": null
+  },
+  "badManifests": {
+    "error": {
+      "code": "ENOENT",
+      "message": "ENOENT: no such file or directory, scandir 'D:\\VSCode%20Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages'"
+    }
+  },
+  "goodManifests": {
+    "count": 15,
+    "offenders": [],
+    "convexBothOutputs": true
+  },
+  "finder": {
+    "actualShell": {
+      "status": 2,
+      "stdout": "",
+      "stderr": "FIND: Parameter format not correct\r\n"
+    },
+    "actualTmpExists": false,
+    "nativeActual": [],
+    "nativeNestedNames": [
+      "nested folder\\deeper\\trace.zip",
+      "trace.zip"
+    ],
+    "missingRoot": [],
+    "nonDirectoryFailurePropagates": true,
+    "nonDirectoryError": "ENOTDIR"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "at": "2026-09-05T10:47:40.366191+00:00",
+  "source": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "branch": "codex/nodeslide-current-consumer-20260905",
+  "sourceInputCount": 1807,
+  "primaryPreserved": true,
+  "command": [
+    "npm",
+    "ci"
+  ],
+  "exitCode": 0,
+  "seconds": 32.60999999998603,
+  "log": "install.log",
+  "environment": "Inherited provider/Convex/Vite/base URL names removed without value output; no env file copied."
+}

@@ -1,0 +1,30 @@
+from pathlib import Path
+import argparse, subprocess, json, hashlib, datetime, time
+ap=argparse.ArgumentParser();ap.add_argument('--repo',required=True);ap.add_argument('--packet',required=True);a=ap.parse_args()
+R,P=Path(a.repo),Path(a.packet);O=P/'E6g-nodeslide-readiness-independent-source';O.mkdir(exist_ok=True)
+def sha(b):return hashlib.sha256(b).hexdigest()
+def j(p):return json.loads(p.read_text(encoding='utf-8-sig'))
+def w(n,x):(O/n).write_text(json.dumps(x,indent=2)+'\n',encoding='utf-8',newline='\n')
+def git(*a):return subprocess.check_output(['git','--no-optional-locks','-C',str(R),*a])
+f=j(P/'E6g_NODESLIDE_READINESS_FREEZE.json')
+def custody():return {'head':git('rev-parse','HEAD').decode().strip(),'refs':sha(git('show-ref')),'index':sha(git('ls-files','--stage','-z')),'files':[{'path':x['path'],'sha256':sha((R/x['path']).read_bytes()),'bytes':(R/x['path']).stat().st_size} for x in f['source']]}
+b=custody();w('before.json',b);assert b['files']==f['source']
+assert sha(json.dumps(f['source'],separators=(',',':')).encode())==f['sourceDigest']
+assert len(f['artifacts'])==89
+for x in f['artifacts']:
+    raw=(P/x['path']).read_bytes();assert sha(raw)==x['sha256'] and len(raw)==x['bytes'],x['path']
+for x in f['source']:
+    p=x['path'];before=(P/'E6g-nodeslide-readiness-test-copy-before/nodeslideTraceUi.test.tsx') if p.startswith('convex/') else (P/'E6g-nodeslide-readiness-source-before'/p)
+    assert before.read_bytes()==git('show','HEAD:'+p),p
+    dest=O/'current-source'/p;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes((R/p).read_bytes())
+(O/'six-path.diff').write_bytes(git('diff','--',*[x['path'] for x in f['source']]))
+d=subprocess.run(['git','--no-optional-locks','-C',str(R),'diff','--check','--',*[x['path'] for x in f['source']]],capture_output=True);(O/'diff-check.log').write_bytes(d.stdout+d.stderr);assert d.returncode==0
+cmd=['cmd.exe','/d','/c','npm','exec','--','vitest','run','src/domains/nodeslide/inspector/TraceInspector.test.ts','src/domains/nodeslide/inspector/TraceInspector.test.tsx','src/domains/nodeslide/inspector/InspectorPanel.test.ts','src/domains/nodeslide/inspector/DeckCiStatus.test.tsx','convex/lib/nodeslideTraceUi.test.tsx','--reporter=verbose','--reporter=json','--outputFile.json='+str(O/'targeted.json')]
+t=time.monotonic()
+with (O/'targeted.log').open('wb') as log:result=subprocess.run(cmd,cwd=R,stdout=log,stderr=subprocess.STDOUT)
+receipt={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'command':cmd,'exitCode':result.returncode,'seconds':time.monotonic()-t,'scope':'Five existing files, actual installed npm exec, no source, timing, retry or configuration override.'};w('command.json',receipt)
+after=custody();w('after.json',after);assert b==after
+w('custody.json',{'unchanged':True,'sourceFiles':6,'frozenArtifacts':89,'beforeSourceMatchesHead':True,'diffCheckExit':d.returncode})
+assert result.returncode==0
+tests=j(O/'targeted.json');assert tests['numPassedTests']==60 and tests['numFailedTests']==0
+print(json.dumps({'testsPassed':tests['numPassedTests'],'testsFailed':tests['numFailedTests'],'exitCode':result.returncode,'custodyUnchanged':True}))

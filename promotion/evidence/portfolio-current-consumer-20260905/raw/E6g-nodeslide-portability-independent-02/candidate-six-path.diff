@@ -1,0 +1,144 @@
+diff --git a/.gitattributes b/.gitattributes
+index db19ada..e1ca802 100644
+--- a/.gitattributes
++++ b/.gitattributes
+@@ -18,6 +18,7 @@
+ *.cts text eol=lf
+ *.ts text eol=lf
+ *.tsx text eol=lf
++*.tour text eol=lf
+ *.yaml text eol=lf
+ *.yml text eol=lf
+ *.env.example text eol=lf
+diff --git a/.tours/03-debug-and-recovery.tour b/.tours/03-debug-and-recovery.tour
+index f311450..78fde6a 100644
+--- a/.tours/03-debug-and-recovery.tour
++++ b/.tours/03-debug-and-recovery.tour
+@@ -45,7 +45,7 @@
+     },
+     {
+       "file": "scripts/tests/workspace-build-depth.test.mjs",
+-      "line": 46,
++      "line": 47,
+       "description": "**Failure 4: the build, on Windows.**\n\n`npm run build` used to die at the eleventh workspace with `'tsup' is not recognized`, although tsup was installed. It was not a missing tool: each nested `npm run` prepends about 1.4 KB of `.bin` paths to PATH, and a fourth level crossed the ~8,191-character ceiling `cmd.exe` will expand — past which cmd.exe hands the child an empty PATH and *nothing* resolves.\n\nThe header comment above has the full measurement. This test fails if anyone reintroduces the nesting."
+     }
+   ]
+diff --git a/convex/_generated/api.d.ts b/convex/_generated/api.d.ts
+index 7d8c40d..e955cb3 100644
+--- a/convex/_generated/api.d.ts
++++ b/convex/_generated/api.d.ts
+@@ -26,8 +26,10 @@ import type * as lib_nodeslideCandidate from "../lib/nodeslideCandidate.js";
+ import type * as lib_nodeslideClaimEvidenceReceipt from "../lib/nodeslideClaimEvidenceReceipt.js";
+ import type * as lib_nodeslideCompositionFanout from "../lib/nodeslideCompositionFanout.js";
+ import type * as lib_nodeslideCompositionGrammars from "../lib/nodeslideCompositionGrammars.js";
++import type * as lib_nodeslideCreateScale from "../lib/nodeslideCreateScale.js";
+ import type * as lib_nodeslideCreationCritique from "../lib/nodeslideCreationCritique.js";
+ import type * as lib_nodeslideCreationTelemetry from "../lib/nodeslideCreationTelemetry.js";
++import type * as lib_nodeslideCreationTraceTiming from "../lib/nodeslideCreationTraceTiming.js";
+ import type * as lib_nodeslideData from "../lib/nodeslideData.js";
+ import type * as lib_nodeslideDataAttachment from "../lib/nodeslideDataAttachment.js";
+ import type * as lib_nodeslideDataExport from "../lib/nodeslideDataExport.js";
+@@ -159,8 +161,10 @@ declare const fullApi: ApiFromModules<{
+   "lib/nodeslideClaimEvidenceReceipt": typeof lib_nodeslideClaimEvidenceReceipt;
+   "lib/nodeslideCompositionFanout": typeof lib_nodeslideCompositionFanout;
+   "lib/nodeslideCompositionGrammars": typeof lib_nodeslideCompositionGrammars;
++  "lib/nodeslideCreateScale": typeof lib_nodeslideCreateScale;
+   "lib/nodeslideCreationCritique": typeof lib_nodeslideCreationCritique;
+   "lib/nodeslideCreationTelemetry": typeof lib_nodeslideCreationTelemetry;
++  "lib/nodeslideCreationTraceTiming": typeof lib_nodeslideCreationTraceTiming;
+   "lib/nodeslideData": typeof lib_nodeslideData;
+   "lib/nodeslideDataAttachment": typeof lib_nodeslideDataAttachment;
+   "lib/nodeslideDataExport": typeof lib_nodeslideDataExport;
+diff --git a/scripts/tests/code-tours.test.mjs b/scripts/tests/code-tours.test.mjs
+index 4a700c7..a62e524 100644
+--- a/scripts/tests/code-tours.test.mjs
++++ b/scripts/tests/code-tours.test.mjs
+@@ -1,4 +1,5 @@
+ import { execFileSync } from 'node:child_process';
++import { fileURLToPath } from 'node:url';
+ import { describe, expect, it } from 'vitest';
+ 
+ /**
+@@ -12,7 +13,7 @@ describe('the committed CodeTours still point at the code they describe', () =>
+   it('regenerates identically from the current source', () => {
+     expect(() =>
+       execFileSync(process.execPath, ['scripts/build-code-tours.mjs', '--check'], {
+-        cwd: new URL('../..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'),
++        cwd: fileURLToPath(new URL('../..', import.meta.url)),
+         encoding: 'utf8',
+       }),
+     ).not.toThrow();
+diff --git a/scripts/tests/playwright-trace.test.mjs b/scripts/tests/playwright-trace.test.mjs
+index e815b36..c1b32c0 100644
+--- a/scripts/tests/playwright-trace.test.mjs
++++ b/scripts/tests/playwright-trace.test.mjs
+@@ -1,4 +1,5 @@
+-import { execSync } from 'node:child_process';
++import { readdirSync } from 'node:fs';
++import { join } from 'node:path';
+ import JSZip from 'jszip';
+ import { describe, expect, it } from 'vitest';
+ import { deriveRunRecordFromTrace, findAssertionInTrace } from '../lib/playwright-trace.mjs';
+@@ -15,13 +16,23 @@ import { deriveRunRecordFromTrace, findAssertionInTrace } from '../lib/playwrigh
+  */
+ 
+ function realTraces() {
++  let entries;
+   try {
+-    return execSync('find .tmp -name trace.zip', { encoding: 'utf8', cwd: process.cwd() })
+-      .split('\n')
+-      .filter(Boolean);
+-  } catch {
+-    return [];
++    entries = readdirSync('.tmp', { withFileTypes: true });
++  } catch (error) {
++    if (error.code === 'ENOENT') return [];
++    throw error;
+   }
++  const traces = [];
++  function visit(directory, children) {
++    for (const entry of children) {
++      const path = join(directory, entry.name);
++      if (entry.isDirectory()) visit(path, readdirSync(path, { withFileTypes: true }));
++      else if (entry.isFile() && entry.name === 'trace.zip') traces.push(path);
++    }
++  }
++  visit('.tmp', entries);
++  return traces.sort();
+ }
+ 
+ /** Build a synthetic trace.zip in memory — used ONLY for adversarial shapes. */
+@@ -32,10 +43,11 @@ async function syntheticTrace(events, extraFiles = {}) {
+   return zip.generateAsync({ type: 'nodebuffer' });
+ }
+ 
+-const HAS_REAL = realTraces().length > 0;
++const traces = realTraces();
++const HAS_REAL = traces.length > 0;
+ 
+ describe.runIf(HAS_REAL)('against real traces from this repo', () => {
+-  const trace = realTraces()[0];
++  const trace = traces[0];
+ 
+   it('derives paired actions with real selectors and no incompletes from a green run', async () => {
+     const record = await deriveRunRecordFromTrace(trace);
+diff --git a/scripts/tests/workspace-build-depth.test.mjs b/scripts/tests/workspace-build-depth.test.mjs
+index 35ec3bf..1fd6b87 100644
+--- a/scripts/tests/workspace-build-depth.test.mjs
++++ b/scripts/tests/workspace-build-depth.test.mjs
+@@ -1,5 +1,6 @@
+ import { readFileSync, readdirSync } from 'node:fs';
+ import { join } from 'node:path';
++import { fileURLToPath } from 'node:url';
+ import { describe, expect, it } from 'vitest';
+ 
+ /**
+@@ -25,7 +26,7 @@ import { describe, expect, it } from 'vitest';
+  * instead of a per-tool absolute path in sixteen packages.
+  */
+ 
+-const repoRoot = new URL('../..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
++const repoRoot = fileURLToPath(new URL('../..', import.meta.url));
+ 
+ // The workspaces declared in the root package.json: `packages/*` and `mcp`.
+ const workspaceManifests = () =>

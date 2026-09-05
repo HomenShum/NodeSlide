@@ -1,0 +1,9 @@
+
+ RUN  v4.1.10 D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905
+
+
+ Test Files  4 passed (4)
+      Tests  55 passed (55)
+   Start at  05:52:03
+   Duration  3.70s (transform 1.42s, setup 0ms, import 6.30s, tests 332ms, environment 935ms)
+

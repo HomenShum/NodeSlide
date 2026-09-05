@@ -1,0 +1,13 @@
+# NodeSlide local backend execution adjustment
+
+Builder. A developer needs the new deck database to remain private to this computer. The empty bootstrap's native process bound both ports to `0.0.0.0`, despite the CLI displaying a loopback URL. Root stopped all three recorded owned processes and verified both ports were released before any source push or public-creation admission.
+
+**Re your request:** make each repository ready for actual usage and handoff. This adjustment completes the named isolated deterministic first run without changing the installed Convex package or touching an existing backend.
+
+The actual installed native binary's `--help` documents `--interface`; default is `0.0.0.0`. Start that exact binary with `--interface 127.0.0.1` and the new candidate's own generated config, database and storage paths. Its generated instance secret stays in memory/private logs and is never output. Both actual listener addresses and PID ownership must pass before the next command.
+
+The installed anonymous dev flow calls `ensureBackendStopped` before starting its own binary, so it cannot reuse this explicitly bound process. Use the installed self-hosted deployment selection instead: a sanitized child environment sets `CONVEX_SELF_HOSTED_URL` to the verified loopback cloud port, `CONVEX_SELF_HOSTED_ADMIN_KEY` from this newly generated candidate config, and `CONVEX_DEPLOYMENT` to an empty string. Installed `deploymentSelection.ts` lines572–585 does not override existing environment values and treats empty selection as absent; lines769–787 select precisely this self-hosted pair. No original environment is copied, no cloud target is selected, and no CLI credential argument is printed.
+
+Run normal `convex dev --once` with typecheck and code generation intact against that verified process. Only after success, set `NODESLIDE_PUBLIC_CREATION=true` on the same target. This authorizes sample deck creation, not provider use: the browser must explicitly select deterministic mode before Create. Start Vite separately on an owned loopback port. Keep the backend supervised and record its actual shutdown/released ports after the proof. Windows recorded-PID termination is explicit; no graceful CLI hook is claimed.
+
+Source-generated changes are recorded separately from authored fixes. Original clones, dirty worktrees, unrelated ports, cloud deployments, API keys, and existing databases remain untouched. The initial explicit port54821 failed before launch with WinError10013; attempt02 used OS-assigned bindable ports49676/49690. Both failures and the exact binary-help artifact remain preserved.

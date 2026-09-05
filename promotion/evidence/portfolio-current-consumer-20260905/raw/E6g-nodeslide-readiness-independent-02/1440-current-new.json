@@ -1,0 +1,12 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "dom": {
+    "text": "Deck checks · v4Deck CIFailed1 blocker · 0 warningsBlocker: Independent fixture: slides 3 and 4 repeat the same composition.",
+    "version": "4",
+    "state": "fail"
+  },
+  "errors": []
+}

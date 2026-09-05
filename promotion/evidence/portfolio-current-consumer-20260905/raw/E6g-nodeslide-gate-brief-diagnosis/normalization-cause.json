@@ -1,0 +1,303 @@
+{
+  "proof": "NODESLIDE_MULTILINE_PROMPT_LOSS_CAUSAL_REPLAY",
+  "scope": "Actual captured textarea and exported deck, existing pure admission/seed/materializer only; no provider/backend/browser",
+  "inputs": {
+    "landing": {
+      "path": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-chart-fixture-01\\02-deterministic-brief.json",
+      "sha256": "55ba02e5d8c63418f564aa4f8cf5ac823ff4c7726735b06f5076c2b730753dd8"
+    },
+    "persisted": {
+      "path": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-chart-json-01\\deck.json",
+      "sha256": "e581b89b7e387c4364917f51137b89b48a5bbcee068bc91a8db862c26145a87f"
+    }
+  },
+  "trace": {
+    "textareaNewlines": 5,
+    "normalizedNewlines": 0,
+    "persistedNewlines": 0,
+    "normalizedEqualsPersistedPrompt": true,
+    "textareaCharacterCount": 472,
+    "textareaUtf8Bytes": 472
+  },
+  "charts": {
+    "intactMultilinePlanned": 1,
+    "normalizedPlanned": 0,
+    "intactMultilineMaterialized": [
+      {
+        "chartType": "bar",
+        "labels": [
+          "Month 1",
+          "Month 2",
+          "Month 3"
+        ],
+        "series": [
+          {
+            "name": "Signal",
+            "values": [
+              100,
+              120,
+              140
+            ],
+            "color": "#B44A2D"
+          }
+        ],
+        "unit": "value",
+        "sourceId": "source_700117823ff7e7682d942ecc7e5574f1"
+      }
+    ],
+    "normalizedMaterialized": [],
+    "actualPersisted": [],
+    "attachmentPlanned": 1,
+    "attachmentMaterialized": [
+      {
+        "chartType": "bar",
+        "labels": [
+          "Month 1",
+          "Month 2",
+          "Month 3"
+        ],
+        "series": [
+          {
+            "name": "Signal",
+            "values": [
+              100,
+              120,
+              140
+            ],
+            "color": "#B44A2D"
+          }
+        ],
+        "unit": "value",
+        "sourceId": "source_f0e2ca2382d31b3a469c4474a0105cad"
+      }
+    ]
+  },
+  "sourceBindings": [
+    {
+      "path": "shared/nodeslide.ts",
+      "sha256": "3f61a6ba136db5f951757fe7eef1243010dace2da8fdf1e99c885bcfffb47eb5",
+      "bytes": 48022
+    },
+    {
+      "path": "shared/nodeslideDurableSession.ts",
+      "sha256": "c16b3d5f37931683af7a73dc6d5cac26b2b6c37471f5d1addab21f15e3aee205",
+      "bytes": 11399
+    },
+    {
+      "path": "shared/nodeslideAuthoringPolicy.ts",
+      "sha256": "2a9e3c9f94b9ac140c49bd4dadc048e9f2493a7b72c2ed08e14b8e8481118096",
+      "bytes": 9757
+    },
+    {
+      "path": "shared/nodeslideJourneyProof.ts",
+      "sha256": "fdf27ac9550590c28a1ecd936dcc5a27aef350fb189626754eef356118c9eede",
+      "bytes": 9239
+    },
+    {
+      "path": "shared/nodeslideAuthoringQuality.ts",
+      "sha256": "e5d7d45c5150da954e3452a44dc46d82a6bb9c9d5f1d610ba634ef038104a0b0",
+      "bytes": 19713
+    },
+    {
+      "path": "shared/nodeslideSlideCount.ts",
+      "sha256": "3d5702a27e0912ec1f280eb7a76edbe7cdc713a3a16f4b0651530915528a3475",
+      "bytes": 2722
+    },
+    {
+      "path": "shared/nodeslideSemanticIssues.js",
+      "sha256": "f78bc182bdfc11d26241b6d23130548edc2a128732a3cbf31f05f861e148c6b2",
+      "bytes": 17379
+    },
+    {
+      "path": "shared/nodeslideArtifactRegistry.js",
+      "sha256": "534cf9de0ba6c3ee8e0839080f1ef3514e3ae366d803d53ede6ba24ebc820702",
+      "bytes": 48931
+    },
+    {
+      "path": "shared/nodeslideArtifactSpec.ts",
+      "sha256": "5372fff7ac23150587e883adec1f1a8c4f5ef241b3a49a307be53897f4a886f7",
+      "bytes": 55128
+    },
+    {
+      "path": "shared/nodeslideLayoutMetrics.ts",
+      "sha256": "07d224ec3a1db31a785ccc57bd63fd0510c56f54dfa1b07cd7191bab5ed78c96",
+      "bytes": 11530
+    },
+    {
+      "path": "shared/nodeslideGeometryChecks.ts",
+      "sha256": "b262b2fb1c444a59155ac4ac358b8a7e4cc7d90bfd0f2263e3bd593c9dd51737",
+      "bytes": 7702
+    },
+    {
+      "path": "src/domains/nodeslide/slidelang/utils.ts",
+      "sha256": "5e967dcd2f027443ba285e3e9ab328de5a57215ce8632466f8ed31f395f56f4b",
+      "bytes": 6673
+    },
+    {
+      "path": "src/domains/nodeslide/slidelang/provenance.ts",
+      "sha256": "83a3fd2d5c734aaa7f64b62843a8b6d372a404eba8a99c3f18705c66a1ebafdc",
+      "bytes": 1122
+    },
+    {
+      "path": "src/domains/nodeslide/slidelang/html.ts",
+      "sha256": "cfa737ec3a26bbc985746c85ab47baf0ed4a88f084acbf64cc7a7cb7853daf3f",
+      "bytes": 37234
+    },
+    {
+      "path": "convex/lib/nodeslideArtifactPresence.ts",
+      "sha256": "58724aa5921ddd154442879602ea32bb433df48db4ed85d11fba2b3bf4a09d2e",
+      "bytes": 4186
+    },
+    {
+      "path": "shared/nodeslidePatch.ts",
+      "sha256": "a323b8bb0b9d74f9e869a795f6596e53b68f82757cc93104457b062d2627f8bf",
+      "bytes": 26893
+    },
+    {
+      "path": "convex/lib/nodeslideIds.ts",
+      "sha256": "30e7876dd74701557b44681f1418e6cddc1633d62145045fde81d0f234f65be1",
+      "bytes": 5618
+    },
+    {
+      "path": "convex/lib/nodeslideCandidate.ts",
+      "sha256": "e0ef5a3c4cd53a1f07439949c9cc68ce4aac590fade5503b1e0d8b98cc6a9d04",
+      "bytes": 22755
+    },
+    {
+      "path": "convex/lib/nodeslideDeckDiversity.ts",
+      "sha256": "a0ab19373d038063113b34c7d1f12554ee0cfd908eaf4b8ed9d6b26ee04da859",
+      "bytes": 13246
+    },
+    {
+      "path": "convex/lib/nodeslideSemanticEvaluation.ts",
+      "sha256": "d6fa029755d08458c2583914e1c3e078abbe5137da79755bb81fd31785185d9a",
+      "bytes": 111600
+    },
+    {
+      "path": "shared/nodeslideSignature.ts",
+      "sha256": "243a1b030b19b2fd9a7ef41aab06ecec1579ab1574cd2cce32d5a662c3bf7d6c",
+      "bytes": 5515
+    },
+    {
+      "path": "shared/nodeslideSignatureApply.ts",
+      "sha256": "1f91269dd3adae3b3e1a3e9a9222aa617bd9c3a0f399b6670b53cc4aa6e62bde",
+      "bytes": 89415
+    },
+    {
+      "path": "convex/lib/nodeslideValidation.ts",
+      "sha256": "3e12421df9a46706621db41eaf4ac1888d99a93cf11f7937d5a27fcee407e5da",
+      "bytes": 22494
+    },
+    {
+      "path": "convex/lib/nodeslideDeckCi.ts",
+      "sha256": "121a32dce11590cc1e717e9af1845287d00de6662c407396fd508015d93d8a9a",
+      "bytes": 27084
+    },
+    {
+      "path": "node_modules/convex/dist/esm/values/base64.js",
+      "sha256": "a6235a526ac0436b50cc91981a03fd6576a34477d2bafbc4b8d812f263f69efa",
+      "bytes": 3251
+    },
+    {
+      "path": "node_modules/convex/dist/esm/common/index.js",
+      "sha256": "73400eed006f61c8365ed8d90fdac468d221d9fa525b2edd95a21b8946f18c91",
+      "bytes": 1936
+    },
+    {
+      "path": "node_modules/convex/dist/esm/values/value.js",
+      "sha256": "a806596f9a90fcd01b9cb60c5e5172796370ee210d7c18cf5c24b2961d5e4478",
+      "bytes": 9164
+    },
+    {
+      "path": "node_modules/convex/dist/esm/values/validators.js",
+      "sha256": "89368932443978ad5ec11b78e2c1d4fff1834072a5d53cb7283fd4a7c323a030",
+      "bytes": 11429
+    },
+    {
+      "path": "node_modules/convex/dist/esm/values/validator.js",
+      "sha256": "dad51423b1e77d10fa8d50b406a86361bd918b2b715bdf4fe5576fb01b74b881",
+      "bytes": 7628
+    },
+    {
+      "path": "node_modules/convex/dist/esm/values/errors.js",
+      "sha256": "38fb957a1ff55fc622d2817d213263ad322f8d1373552d1e409625a55058470d",
+      "bytes": 796
+    },
+    {
+      "path": "node_modules/convex/dist/esm/values/compare_utf8.js",
+      "sha256": "b832b3e72dedbc2c730e6a84973b578397db4e6939f934dfb2aa12e0bdd9785c",
+      "bytes": 2034
+    },
+    {
+      "path": "node_modules/convex/dist/esm/values/compare.js",
+      "sha256": "e67bd34013be579d7a9d4dfa1340787cdcb6b9e6a2129c29b3fefa125c87e536",
+      "bytes": 3155
+    },
+    {
+      "path": "node_modules/convex/dist/esm/values/size.js",
+      "sha256": "4ddedcdcd4c71b93cafae08ba852af318270da96cb3e000938d48d88b36c3a0d",
+      "bytes": 2186
+    },
+    {
+      "path": "node_modules/convex/dist/esm/values/index.js",
+      "sha256": "768385b7d9680d7a4d8b29d48c7cab2bce4dde1987d3da43fc8149416d3b3f91",
+      "bytes": 353
+    },
+    {
+      "path": "shared/nodeslideAttachments.ts",
+      "sha256": "0d88b0c2c7a3b25606cbaa0ebe8435aee8daff9683f7c68f95f3aadaf9416477",
+      "bytes": 3649
+    },
+    {
+      "path": "convex/lib/nodeslideValidators.ts",
+      "sha256": "de7bd69e0531bc1081c9196b5e986d6fbefb92459a393bf0e28f7e1163a28075",
+      "bytes": 38641
+    },
+    {
+      "path": "shared/nodeslideArchetypes.ts",
+      "sha256": "e794dc0bb14874b0ce7ccdb0bfc9463a7f82f9595cf01ed0c9856b218a4440e7",
+      "bytes": 2592
+    },
+    {
+      "path": "shared/nodeslideArtifactGeometry.js",
+      "sha256": "76c6c7f69ec0cb09217189e96e061dcc0a0aa9a433f42d1a37a4adfb3891164a",
+      "bytes": 9741
+    },
+    {
+      "path": "convex/lib/nodeslideAuthoredArtifact.ts",
+      "sha256": "4ec7541932fccc4f70db995dce4ba4341fbf551d25a9ad1999f8e79ddeb5289b",
+      "bytes": 31232
+    },
+    {
+      "path": "convex/lib/nodeslidePatches.ts",
+      "sha256": "e36f70fc14167d569a7fa4333b7f90ec210427a40451eaf47d8da5f69796b53f",
+      "bytes": 56574
+    },
+    {
+      "path": "convex/lib/nodeslideCompositionFanout.ts",
+      "sha256": "b606833fa16ea88379cdae1a0576eec7d143aed9a852abd8759aa85d20fa3ac9",
+      "bytes": 20308
+    },
+    {
+      "path": "convex/lib/nodeslideStoryContext.ts",
+      "sha256": "41ad49c856e11a3c1393ac3e05b4d75633fa11700ddc1794c0313acbed2489d4",
+      "bytes": 26287
+    },
+    {
+      "path": "convex/lib/nodeslideCompositionGrammars.ts",
+      "sha256": "b168155529ebf85878c09b5ce1250c05562d88c0cac562eb7ad9d63b319bedf8",
+      "bytes": 78068
+    },
+    {
+      "path": "convex/lib/nodeslideDesignPlan.ts",
+      "sha256": "d3bd49a6bed42d324c9be5ed76935ed863eff2b96e11230b3c591ec0516b3646",
+      "bytes": 11365
+    },
+    {
+      "path": "convex/lib/nodeslideSeed.ts",
+      "sha256": "0d0facf4d23b03f6d0fab1dfe1bc165071102dba868fdfd8ac5fb82c254ab6eb",
+      "bytes": 141137
+    }
+  ],
+  "fullGrades": null
+}

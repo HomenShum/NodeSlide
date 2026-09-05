@@ -1,0 +1,10 @@
+[
+  {
+    "file": "ppt/slides/_rels/slide4.xml.rels",
+    "relation": {
+      "Id": "rId1",
+      "Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
+      "Target": "/ppt/charts/chart1.xml"
+    }
+  }
+]

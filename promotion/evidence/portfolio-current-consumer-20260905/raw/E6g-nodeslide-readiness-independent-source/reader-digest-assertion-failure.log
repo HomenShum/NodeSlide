@@ -1,0 +1,8 @@
+Exit code: 1
+Traceback (most recent call last):
+  File "C:\Users\hshum\.codex\worktrees\5dba\nodebench-ai\docs\plans\portfolio-recovery-20260904\E6g-review-readiness-source.py", line 12, in <module>
+    assert sha(json.dumps(f['source'],separators=(',',':')).encode())==f['sourceDigest']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+Reader assumption error: this freeze's actual generator uses sort_keys=True; the preceding multiline freeze did not. Individual six-source and all 89 artifact hashes had already independently passed in rendered-host replays. The assertion aborted before the proposed test subprocess. No test was run or skipped in a repository command. The corrected readback uses the actual generator serialization and reads the already completed root suite logs without repeating them.

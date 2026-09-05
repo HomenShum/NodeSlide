@@ -1,0 +1,1737 @@
+{
+  "text": "N\nNodeSlide\n/\nv3\nEN\nReset demo\nShare\nPresent\nExport\nCommands\nSlides\nOutline\nLayers\nOPENING / 01\n1\n01\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\nCreate a six-slide decision review for a fictional sourcing pilot\n1 source · current\nCONTEXT / 02\n1\n02\nCONTEXT / 02\nThe cost of waiting is usually hidden in repeated work.\nFriction\nConsequence\nDecision window\nFrame the current reality for Decision-makers described in the brief: what is fragmented today, why it matters now, and where momentum is being lost.\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n02\nThe moment to solve\n2 sources · current\nINSIGHT / 03\n1\n03\nINSIGHT / 03\nA better outcome starts with a sharper point of view.\nCreate a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decis…\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n03\nThe decisive insight\n2 sources · current\nAPPROACH / 04\n1\n04\nAPPROACH / 04\nThe uploaded values remain an editable chart.\nLabels and values stay in the canonical deck spec for direct editing, validation, and native export.\nMonth 1\nMonth 2\nMonth 3\n01  Data-bound bars\n02  Source-linked values\n03  Editable labels\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n04\nUploaded comparison\n2 sources · current\nEVIDENCE / 05\n1\n05\nEVIDENCE / 05\nDefine proof before asking for commitment.\nUse the brief’s success criteria as qualitative review questions until measured evidence is supplied.\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n05\nWhat success looks like\n2 sources · current\nCLOSE / 07\n1\n06\nCLOSE / 07\nCreate an editable, reviewable presentation from this idea\n01  Agree the outcome\n02  Name the owner\n03  Set the next checkpoint\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n06\nThe decision\n1 source · current\nAdd slide\nEdit\nOverview\nCompare\n04\nUploaded comparison\nverified\nSLIDE JOB\nNarrative role: Approach / 04. Composition grammar: asymmetric-editorial. Keep the spoken transition focused on \"The uploaded values remain an editable chart.\" Evidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.\nAPPROACH / 04\nThe uploaded values remain an editable chart.\nLabels and values stay in the canonical deck spec for direct editing, validation, and native export.\nMonth 1\nMonth 2\nMonth 3\n01  Data-bound bars\n02  Source-linked values\n03  Editable labels\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n04\n4 / 6\nPresenter notes\n45 words\n65%\nFit\nINSPECTOR\nSelection · none\nAI\nDesign\nNodeBook\nComments\nVersions\nEvidence\nJSON\nTrace\nCONTEXT\nRead context · locked write scope\nSlide 04 · Uploaded comparison\n\nScoped context by default; explicit @ references are additive.\n\nNODESLIDE\nWhat should we change?\n\nDescribe the outcome. I’ll return a scoped, validated patch for review before anything changes.\n\nDeck CI\nPassed\n0 blockers · 0 warnings\nGenerate 3 directions\nSharpen the story\nReduce density\nWhole slide\nKimi K3\nKimi K3 · Moonshot AI · Recommended\nGLM 5.2 · Z.ai · OpenRouter\nClaude Sonnet 5 · Anthropic · OpenRouter\nClaude Fable 5 · Anthropic · OpenRouter\nGemini 3.5 Flash · Google · OpenRouter\nGemini 3.1 Pro · Google · OpenRouter\nGPT-5.6 Sol · OpenAI · OpenRouter\nGPT-5.6 Terra · OpenAI · OpenRouter\nDeterministic · no external model\nHigh\nLight\nHigh\nUltra\nScoped\nStructure, presentation, and cleanup checks passed\nValidated PowerPoint export prepared.",
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "overflow": 0,
+  "fonts": {
+    "geist": true,
+    "fraunces": true
+  },
+  "controls": [
+    {
+      "tag": "BUTTON",
+      "testid": "new-deck-trigger",
+      "label": "Create or open a NodeSlide deck",
+      "text": "NNodeSlide",
+      "box": {
+        "x": 14,
+        "y": 12.5,
+        "width": 101.65625,
+        "height": 26
+      }
+    },
+    {
+      "tag": "INPUT",
+      "testid": "deck-title",
+      "label": "Deck title",
+      "text": "",
+      "value": "NodeSlide local handoff — structured chart fixture",
+      "box": {
+        "x": 138.734375,
+        "y": 12,
+        "width": 153,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Collapse slide navigator",
+      "text": "",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Undo",
+      "text": "",
+      "box": {
+        "x": 685.5,
+        "y": 11,
+        "width": 34,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Redo",
+      "text": "",
+      "box": {
+        "x": 720.5,
+        "y": 11,
+        "width": 34,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Switch to dark theme",
+      "text": "",
+      "box": {
+        "x": 894.390625,
+        "y": 10.5,
+        "width": 30,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Language and clarity: English",
+      "text": "EN",
+      "box": {
+        "x": 932.390625,
+        "y": 10.5,
+        "width": 72.703125,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Reset demo view",
+      "text": "Reset demo",
+      "box": {
+        "x": 1013.09375,
+        "y": 9.5,
+        "width": 72.125,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "share",
+      "label": "Share deck",
+      "text": "Share",
+      "box": {
+        "x": 1093.21875,
+        "y": 9.5,
+        "width": 80.046875,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "present",
+      "label": "Present deck",
+      "text": "Present",
+      "box": {
+        "x": 1181.265625,
+        "y": 9.5,
+        "width": 90,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Export deck",
+      "text": "Export",
+      "box": {
+        "x": 1279.265625,
+        "y": 9.5,
+        "width": 108.734375,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Open command palette",
+      "text": "CommandsK",
+      "box": {
+        "x": 1396,
+        "y": 10.5,
+        "width": 30,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Collapse slide navigator",
+      "text": "",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 1: Create a six-slide decision review for a fictional sourcing pilot",
+      "text": "1",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 2: The moment to solve",
+      "text": "2",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 3: The decisive insight",
+      "text": "3",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 4: Uploaded comparison",
+      "text": "4",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 5: What success looks like",
+      "text": "5",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 6: The decision",
+      "text": "6",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Slides",
+      "box": {
+        "x": 11,
+        "y": 62,
+        "width": 91,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Outline",
+      "box": {
+        "x": 104,
+        "y": 62,
+        "width": 91,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Layers",
+      "box": {
+        "x": 197,
+        "y": 62,
+        "width": 91,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Opening / 011",
+      "box": {
+        "x": 11,
+        "y": 109,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_ea926f5d280fc57755e662911aa607c5",
+      "label": "Slide 1: Create a six-slide decision review for a fictional sourcing pilot",
+      "text": "Create an editable, reviewable presentation from this ideaOPENING / 01NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE01",
+      "box": {
+        "x": 44,
+        "y": 151,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Create a six-slide decision review for a fictional sourcing pilot",
+      "box": {
+        "x": 45,
+        "y": 226,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 1 actions",
+      "text": "",
+      "box": {
+        "x": 168,
+        "y": 224,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Context / 021",
+      "box": {
+        "x": 11,
+        "y": 281.5,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_6120b50964dd3a7bbf243d74b939c974",
+      "label": "Slide 2: The moment to solve",
+      "text": "CONTEXT / 02The cost of waiting is usually hidden in repeated work.FrictionConsequenceDecision windowFrame the current reality for Decision-makers described in the brief: what is f",
+      "box": {
+        "x": 44,
+        "y": 323.5,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "The moment to solve",
+      "box": {
+        "x": 45,
+        "y": 398.5,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 2 actions",
+      "text": "",
+      "box": {
+        "x": 168,
+        "y": 396.5,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Insight / 031",
+      "box": {
+        "x": 11,
+        "y": 454,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_5a06ab7be27666be160a0c3eec91aa75",
+      "label": "Slide 3: The decisive insight",
+      "text": "INSIGHT / 03A better outcome starts with a sharper point of view.Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot vol",
+      "box": {
+        "x": 44,
+        "y": 496,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "The decisive insight",
+      "box": {
+        "x": 45,
+        "y": 571,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 3 actions",
+      "text": "",
+      "box": {
+        "x": 168,
+        "y": 569,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Approach / 041",
+      "box": {
+        "x": 11,
+        "y": 626.5,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_d57e48ec95e39d9a545d45ad253a0d9d",
+      "label": "Slide 4: Uploaded comparison",
+      "text": "APPROACH / 04The uploaded values remain an editable chart.Labels and values stay in the canonical deck spec for direct editing, validation, and native export.Month 1Month 2Month 30",
+      "box": {
+        "x": 44,
+        "y": 668.5,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Uploaded comparison",
+      "box": {
+        "x": 45,
+        "y": 743.5,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 4 actions",
+      "text": "",
+      "box": {
+        "x": 168,
+        "y": 741.5,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Evidence / 051",
+      "box": {
+        "x": 11,
+        "y": 799,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_e370b8bf5d9de343e3f9c82590d773da",
+      "label": "Slide 5: What success looks like",
+      "text": "EVIDENCE / 05Define proof before asking for commitment.Use the brief’s success criteria as qualitative review questions until measured evidence is supplied.Honor explicit slide-cou",
+      "box": {
+        "x": 44,
+        "y": 841,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "What success looks like",
+      "box": {
+        "x": 45,
+        "y": 916,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 5 actions",
+      "text": "",
+      "box": {
+        "x": 168,
+        "y": 914,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Close / 071",
+      "box": {
+        "x": 11,
+        "y": 971.5,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_9474fe0e4b7089e31a716491b594afc5",
+      "label": "Slide 6: The decision",
+      "text": "CLOSE / 07Create an editable, reviewable presentation from this idea01  Agree the outcome02  Name the owner03  Set the next checkpointNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE06",
+      "box": {
+        "x": 44,
+        "y": 1013.5,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "The decision",
+      "box": {
+        "x": 45,
+        "y": 1088.5,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 6 actions",
+      "text": "",
+      "box": {
+        "x": 168,
+        "y": 1086.5,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Add slide",
+      "box": {
+        "x": 11,
+        "y": 892,
+        "width": 277,
+        "height": 38
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Edit",
+      "box": {
+        "x": 320,
+        "y": 58.5,
+        "width": 45.796875,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Overview",
+      "box": {
+        "x": 366.796875,
+        "y": 58.5,
+        "width": 77.171875,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Compare",
+      "box": {
+        "x": 444.96875,
+        "y": 58.5,
+        "width": 75.375,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Previous slide",
+      "text": "",
+      "box": {
+        "x": 315,
+        "y": 926.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Next slide",
+      "text": "",
+      "box": {
+        "x": 382.03125,
+        "y": 926.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Presenter notes45 words",
+      "box": {
+        "x": 312,
+        "y": 847.5,
+        "width": 776,
+        "height": 21
+      }
+    },
+    {
+      "tag": "TEXTAREA",
+      "testid": null,
+      "label": "Presenter notes for Uploaded comparison",
+      "text": "Narrative role: Approach / 04. Composition grammar: asymmetric-editorial. Keep the spoken transition focused on \"The uploaded values remain an editable chart.\"\n\nEvidence note: Cont",
+      "value": "Narrative role: Approach / 04. Composition grammar: asymmetric-editorial. Keep the spoken transition focused on \"The uploaded values remain an editable chart.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "box": {
+        "x": 312,
+        "y": 874.5,
+        "width": 776,
+        "height": 76.5
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Toggle pan tool",
+      "text": "",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Zoom out",
+      "text": "",
+      "box": {
+        "x": 509,
+        "y": 926.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Zoom in",
+      "text": "",
+      "box": {
+        "x": 575,
+        "y": 926.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Fit slide to workspace",
+      "text": "Fit",
+      "box": {
+        "x": 607,
+        "y": 926.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Resize inspector",
+      "text": "",
+      "box": {
+        "x": 1097,
+        "y": 52,
+        "width": 6,
+        "height": 908
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Collapse inspector",
+      "text": "",
+      "box": {
+        "x": 1402,
+        "y": 63,
+        "width": 24,
+        "height": 24
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-ai",
+      "label": null,
+      "text": "AI",
+      "box": {
+        "x": 1113,
+        "y": 90,
+        "width": 10.375,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-design",
+      "label": null,
+      "text": "Design",
+      "box": {
+        "x": 1133.375,
+        "y": 90,
+        "width": 33.75,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-nodebook",
+      "label": null,
+      "text": "NodeBook",
+      "box": {
+        "x": 1188.125,
+        "y": 90,
+        "width": 52.15625,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-comments",
+      "label": null,
+      "text": "Comments",
+      "box": {
+        "x": 1250.28125,
+        "y": 90,
+        "width": 53,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-versions",
+      "label": null,
+      "text": "Versions",
+      "box": {
+        "x": 1313.28125,
+        "y": 90,
+        "width": 40.8125,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-data",
+      "label": null,
+      "text": "Evidence",
+      "box": {
+        "x": 1364.09375,
+        "y": 90,
+        "width": 43.1875,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-json",
+      "label": null,
+      "text": "JSON",
+      "box": {
+        "x": 1417.28125,
+        "y": 90,
+        "width": 26.671875,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-trace",
+      "label": null,
+      "text": "Trace",
+      "box": {
+        "x": 1453.953125,
+        "y": 90,
+        "width": 25.453125,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Deck CI Passed, 0 blockers, 0 warnings. Open Trace",
+      "text": "Deck CIPassed0 blockers · 0 warnings",
+      "box": {
+        "x": 1101,
+        "y": 575.96875,
+        "width": 339,
+        "height": 26.84375
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-generate-directions",
+      "label": null,
+      "text": "Generate 3 directions",
+      "box": {
+        "x": 1113,
+        "y": 814.8125,
+        "width": 155.515625,
+        "height": 26.84375
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-suggested-action",
+      "label": null,
+      "text": "Sharpen the story",
+      "box": {
+        "x": 1273.515625,
+        "y": 814.8125,
+        "width": 119.234375,
+        "height": 26.84375
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-suggested-action",
+      "label": null,
+      "text": "Reduce density",
+      "box": {
+        "x": 1113,
+        "y": 846.65625,
+        "width": 104.75,
+        "height": 26.84375
+      }
+    },
+    {
+      "tag": "INPUT",
+      "testid": null,
+      "label": "Upload files",
+      "text": "",
+      "value": "",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "TEXTAREA",
+      "testid": null,
+      "label": "AI instruction",
+      "text": "",
+      "value": "",
+      "box": {
+        "x": 1114,
+        "y": 614.8125,
+        "width": 313,
+        "height": 64
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-model-select",
+      "label": "Agent model",
+      "text": "Kimi K3",
+      "box": {
+        "x": 1126,
+        "y": 684.8125,
+        "width": 110.0625,
+        "height": 36
+      }
+    },
+    {
+      "tag": "SELECT",
+      "testid": null,
+      "label": null,
+      "text": "Kimi K3 · Moonshot AI · RecommendedGLM 5.2 · Z.ai · OpenRouterClaude Sonnet 5 · Anthropic · OpenRouterClaude Fable 5 · Anthropic · OpenRouterGemini 3.5 Flash · Google · OpenRouterG",
+      "value": "moonshotai/kimi-k3",
+      "box": {
+        "x": 1125,
+        "y": 720.3125,
+        "width": 1,
+        "height": 1
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-effort-select",
+      "label": "Reasoning effort",
+      "text": "High",
+      "box": {
+        "x": 1240.0625,
+        "y": 684.8125,
+        "width": 72,
+        "height": 36
+      }
+    },
+    {
+      "tag": "SELECT",
+      "testid": null,
+      "label": null,
+      "text": "LightHighUltra",
+      "value": "high",
+      "box": {
+        "x": 1125,
+        "y": 720.3125,
+        "width": 1,
+        "height": 1
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-provider-summary",
+      "label": "Advanced provider, privacy, scope, and editing controls",
+      "text": "",
+      "box": {
+        "x": 1316.0625,
+        "y": 686.8125,
+        "width": 32,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-connect-agent",
+      "label": "Connect BYOK model or coding agent",
+      "text": "",
+      "box": {
+        "x": 1352.0625,
+        "y": 686.8125,
+        "width": 32,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-web-research-toggle",
+      "label": "Toggle web research",
+      "text": "",
+      "box": {
+        "x": 1126,
+        "y": 724.8125,
+        "width": 32,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-memory",
+      "label": "Manage deck memory",
+      "text": "",
+      "box": {
+        "x": 1162,
+        "y": 724.8125,
+        "width": 36,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Add read context reference",
+      "text": "",
+      "box": {
+        "x": 1202,
+        "y": 724.8125,
+        "width": 32,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Add command",
+      "text": "",
+      "box": {
+        "x": 1238,
+        "y": 724.8125,
+        "width": 32,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-open-material-workbench",
+      "label": "Open the visual material tool",
+      "text": "",
+      "box": {
+        "x": 1274,
+        "y": 724.8125,
+        "width": 32,
+        "height": 32
+      }
+    },
+    {
+      "tag": "INPUT",
+      "testid": "ai-data-file-input",
+      "label": null,
+      "text": "",
+      "value": "",
+      "box": {
+        "x": 1126,
+        "y": 720.3125,
+        "width": 1,
+        "height": 1
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-attach-data",
+      "label": "Attach data file",
+      "text": "",
+      "box": {
+        "x": 1310,
+        "y": 724.8125,
+        "width": 32,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Expand composer",
+      "text": "",
+      "box": {
+        "x": 1126,
+        "y": 762.8125,
+        "width": 32,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-submit",
+      "label": "Propose edit",
+      "text": "",
+      "box": {
+        "x": 1162,
+        "y": 762.8125,
+        "width": 32,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "validation-status",
+      "label": "Structure, presentation, and cleanup checks passed. Open validation details.",
+      "text": "Structure, presentation, and cleanup checks passed",
+      "box": {
+        "x": 1101,
+        "y": 930,
+        "width": 339,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Close Artifact Lab",
+      "text": "",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Artifact Gallery",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Model Compare",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Harness Compare",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Dismiss notification",
+      "text": "",
+      "box": {
+        "x": 1050,
+        "y": 74,
+        "width": 26,
+        "height": 16
+      }
+    }
+  ]
+}

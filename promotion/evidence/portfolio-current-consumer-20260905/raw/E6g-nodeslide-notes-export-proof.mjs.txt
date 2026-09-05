@@ -1,0 +1,63 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+const P=path.dirname(fileURLToPath(import.meta.url));
+const R='D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905';
+const req=createRequire(path.join(R,'package.json'));const {chromium}=req('playwright');const {expect}=req('playwright/test');const JSZip=req('jszip');
+const parentPrivate='D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02';
+const privateRoot=path.join(parentPrivate,'browser-notes-export-01');
+const O=path.join(P,'E6g-nodeslide-notes-export-01');await fs.mkdir(O);await fs.mkdir(privateRoot);
+const {url}=JSON.parse(await fs.readFile(path.join(parentPrivate,'browser-first-use-01/deck-location.json'),'utf8'));
+const storage=JSON.parse(await fs.readFile(path.join(parentPrivate,'browser-first-use-01/storage-state.json'),'utf8'));
+const secrets=[];
+for(const origin of storage.origins)for(const item of origin.localStorage){
+  if(item.name.includes('sessionId'))secrets.push(item.value);
+  if(item.name==='nodeslide.deckAccess.v1')secrets.push(...Object.values(JSON.parse(item.value)));
+}
+const report={at:new Date().toISOString(),proof:'NODESLIDE_CURRENT_DETERMINISTIC_FIRST_RUN_01',steps:[],errors:[],blockedExternal:[],captures:[],downloads:[],fullGrades:null};
+const browser=await chromium.launch();const context=await browser.newContext({storageState:storage,viewport:{width:1440,height:960},acceptDownloads:true,serviceWorkers:'block'});
+await context.route('**/*',r=>{let u=new URL(r.request().url());if(['http:','https:'].includes(u.protocol)&&!['localhost','127.0.0.1'].includes(u.hostname)){report.blockedExternal.push(u.origin+u.pathname);return r.abort();}return r.continue();});
+await context.tracing.start({screenshots:true,snapshots:true,sources:true});
+const page=await context.newPage();page.setDefaultTimeout(30000);
+const safe=s=>secrets.reduce((value,secret)=>secret?value.replaceAll(secret,'[PRIVATE_SESSION]'):value,String(s));
+page.on('pageerror',e=>report.errors.push({kind:'pageerror',message:safe(e.message)}));
+page.on('console',m=>{if(m.type()==='error')report.errors.push({kind:'console',message:safe(m.text())});});
+async function capture(name){
+ await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(O,name+'.png')});
+ await fs.writeFile(path.join(privateRoot,name+'.html'),await page.content());
+ const dom=await page.evaluate(()=>({text:document.body.innerText,viewport:{width:innerWidth,height:innerHeight},overflow:document.documentElement.scrollWidth-innerWidth,controls:[...document.querySelectorAll('button,input,textarea,select,[role="tab"],[role="menuitem"]')].map(e=>({tag:e.tagName,testid:e.getAttribute('data-testid'),label:e.getAttribute('aria-label'),text:e.textContent?.trim().slice(0,180),value:e instanceof HTMLInputElement||e instanceof HTMLTextAreaElement||e instanceof HTMLSelectElement?e.value:undefined,disabled:e.disabled,box:(()=>{let r=e.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};})()}))}));
+ await fs.writeFile(path.join(O,name+'.json'),safe(JSON.stringify(dom,null,2))+'\n');report.captures.push(name);
+}
+try{
+ await page.goto(url,{waitUntil:'domcontentloaded'});await page.getByTestId('nodeslide-studio').waitFor();
+ const notes=page.getByLabel(/^Presenter notes for /);
+ const note='Illustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text.\nDecision: prototype after checking the budget. 中文交接 — no external claims.';
+ const version=()=>page.locator('.ns-version-label').textContent().then(s=>Number(s.match(/v(\d+)/)?.[1]));const previous=await version();
+ await notes.fill(note);await notes.press('Tab');await expect.poll(version).toBe(previous+1);
+ await page.reload({waitUntil:'domcontentloaded'});await page.getByTestId('nodeslide-studio').waitFor();await expect(notes).toHaveValue(note);await expect.poll(version).toBe(previous+1);
+ report.steps.push({name:'notes-native-blur-and-reload',status:'PASS',previousVersion:previous,currentVersion:await version()});await capture('01-notes-reloaded');
+ await page.getByRole('button',{name:/^Deck CI Failed/}).click();await capture('02-deck-ci-detail');
+ report.steps.push({name:'deck-ci-inspection',status:'OBSERVED',detailFile:'02-deck-ci-detail.json'});
+ for(const [format,testid] of [['pptx','export-pptx'],['html','export-html']]){
+   await page.getByLabel('Export deck',{exact:true}).click();await page.getByTestId(testid).waitFor();await capture('03-export-menu-'+format);
+   const pending=page.waitForEvent('download',{timeout:15000}).then(download=>({download}),error=>({error:String(error)}));
+   await page.getByTestId(testid).click();const result=await pending;
+   if(result.error){report.downloads.push({format,status:'NO_DOWNLOAD_OBSERVED_15S',error:result.error});await capture('04-'+format+'-no-download');continue;}
+   const file=path.join(privateRoot,'actual.'+format);await result.download.saveAs(file);const bytes=await fs.readFile(file);
+   const item={format,status:'DOWNLOADED',filename:result.download.suggestedFilename(),bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex'),failure:await result.download.failure()};
+   if(format==='pptx'){
+     const zip=await JSZip.loadAsync(bytes);const names=Object.keys(zip.files);const xml=await Promise.all(names.filter(n=>n.endsWith('.xml')&&!zip.files[n].dir).map(n=>zip.file(n).async('string')));
+     if(secrets.some(s=>s&&xml.some(t=>t.includes(s))))throw new Error('Export unexpectedly contains private session capability');
+     item.slides=names.filter(n=>/^ppt\/slides\/slide\d+\.xml$/.test(n)).length;item.editableCharts=names.filter(n=>/^ppt\/charts\/chart\d+\.xml$/.test(n)).length;item.notesParts=names.filter(n=>/^ppt\/notesSlides\/notesSlide\d+\.xml$/.test(n)).length;item.notesTextPresent=xml.some(t=>t.includes('Illustrative pilot only.'))&&xml.some(t=>t.includes('00123'))&&xml.some(t=>t.includes('中文交接'));
+   }else{
+     const text=bytes.toString('utf8');if(secrets.some(s=>s&&text.includes(s)))throw new Error('HTML unexpectedly contains private session capability');item.notesTextPresent=text.includes('Illustrative pilot only.')&&text.includes('00123')&&text.includes('中文交接');
+   }
+   await fs.copyFile(file,path.join(O,'actual.'+format));report.downloads.push(item);await capture('04-'+format+'-downloaded');
+ }
+ await page.getByTestId('inspector-tab-json').click();await capture('05-json-inspector');
+ await context.storageState({path:path.join(privateRoot,'storage-state.json')});
+ report.status='OBSERVED_NOTES_EXPORT_AND_INSPECTOR';
+}catch(e){report.status='FAILED';report.failure=safe(e.stack??e);await capture('failure').catch(()=>{});process.exitCode=1;}
+finally{await context.tracing.stop({path:path.join(privateRoot,'trace.zip')});await context.close();await browser.close();await fs.writeFile(path.join(O,'report.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));}

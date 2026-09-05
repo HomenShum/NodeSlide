@@ -1,0 +1,885 @@
+{
+  "text": "NodeSlide\nArtifact Lab\nBYOK / Agents\nOpen deck\nDECKS THAT STAY EDITABLE\nWhat presentation should we build?\n\nStart with an idea, a structured spec, or evidence. NodeSlide turns it into a reviewable deck—not a stack of static images.\n\nPresentation brief\nAttach data\nOpenRouter\nGeneration model\nKimi K3 · Moonshot AI · Recommended\nGLM 5.2 · Z.ai · OpenRouter\nClaude Sonnet 5 · Anthropic · OpenRouter\nClaude Fable 5 · Anthropic · OpenRouter\nGemini 3.5 Flash · Google · OpenRouter\nGemini 3.1 Pro · Google · OpenRouter\nGPT-5.6 Sol · OpenAI · OpenRouter\nGPT-5.6 Terra · OpenAI · OpenRouter\nDeterministic · no external model\nReasoning effort\nLight\nHigh\nUltra\n\nRecommended: Kimi K3 via OpenRouter. Create directly; the route, tokens, and cost are recorded in Trace.\n\nTry an idea\nWorld Cup data story\nAI 2027 scenario\nAI Fund product narrative\nSee an example deck\nRECENT DECKS\nView all\nNodeSlide local handoff — illustrative sourcing pilot\nVersion 3\nEDITABLE PRIMITIVES · SCOPED AI CHANGES · VALIDATION BEFORE PUBLISH",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "overflow": 0,
+  "focused": {
+    "tag": "BODY",
+    "label": null
+  },
+  "controls": [
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Artifact Lab",
+      "fontSize": "12px",
+      "box": {
+        "x": 129.421875,
+        "y": 15,
+        "width": 94.9375,
+        "height": 52
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "BYOK / Agents",
+      "fontSize": "0px",
+      "box": {
+        "x": 232.359375,
+        "y": 23.5,
+        "width": 35,
+        "height": 35
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Open deck",
+      "fontSize": "12px",
+      "box": {
+        "x": 275.359375,
+        "y": 15,
+        "width": 97.640625,
+        "height": 52
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Close Artifact Lab",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Artifact Gallery",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Model Compare",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Harness Compare",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "TEXTAREA",
+      "testid": null,
+      "label": null,
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 24,
+        "y": 322.53125,
+        "width": 342,
+        "height": 122.1875
+      }
+    },
+    {
+      "tag": "INPUT",
+      "testid": "landing-file-input",
+      "label": "Attach data files",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 24,
+        "y": 444.71875,
+        "width": 1,
+        "height": 1
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Attach data",
+      "fontSize": "10px",
+      "box": {
+        "x": 28,
+        "y": 448.71875,
+        "width": 95.421875,
+        "height": 32
+      }
+    },
+    {
+      "tag": "SELECT",
+      "testid": "landing-model-select",
+      "label": "Generation model",
+      "text": "Kimi K3 · Moonshot AI · RecommendedGLM 5.2 · Z.ai · OpenRouterClaude Sonnet 5 · Anthropic · OpenRouterClaude Fable 5 · Anthropic · OpenRoute",
+      "fontSize": "16px",
+      "box": {
+        "x": 56,
+        "y": 487.71875,
+        "width": 352,
+        "height": 37
+      }
+    },
+    {
+      "tag": "SELECT",
+      "testid": "landing-effort-select",
+      "label": "Reasoning effort",
+      "text": "LightHighUltra",
+      "fontSize": "16px",
+      "box": {
+        "x": 36,
+        "y": 532.71875,
+        "width": 58,
+        "height": 37
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Create presentation",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 322,
+        "y": 526.71875,
+        "width": 44,
+        "height": 44
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "World Cup data story",
+      "fontSize": "11px",
+      "box": {
+        "x": 15,
+        "y": 670.71875,
+        "width": 360,
+        "height": 33
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "AI 2027 scenario",
+      "fontSize": "11px",
+      "box": {
+        "x": 15,
+        "y": 711.71875,
+        "width": 360,
+        "height": 33
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "AI Fund product narrative",
+      "fontSize": "11px",
+      "box": {
+        "x": 15,
+        "y": 752.71875,
+        "width": 360,
+        "height": 33
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "landing-explore-sample",
+      "label": null,
+      "text": "See an example deck",
+      "fontSize": "11px",
+      "box": {
+        "x": 15,
+        "y": 793.71875,
+        "width": 360,
+        "height": 33
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "View all",
+      "fontSize": "10px",
+      "box": {
+        "x": 325.234375,
+        "y": 887.71875,
+        "width": 45.765625,
+        "height": 16
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "NodeSlide local handoff — illustrative sourcing pilotVersion 3",
+      "fontSize": "16px",
+      "box": {
+        "x": 15,
+        "y": 912.71875,
+        "width": 360,
+        "height": 55
+      }
+    }
+  ]
+}

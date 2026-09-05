@@ -151,6 +151,39 @@ describe('NodeSlide private-preview admission', () => {
 });
 
 describe('NodeSlide create action admission boundary', () => {
+  it("keeps an analyst's pasted CSV chart through repeated and concurrent deterministic creates", async () => {
+    vi.stubEnv('NODESLIDE_PUBLIC_CREATION', 'true');
+    const create = async (index: number) => {
+      const newline = index % 2 === 0 ? '\n' : '\r\n';
+      const prompt = [
+        'Create six slides for an illustrative sourcing pilot with an editable chart.',
+        '',
+        'metric,value,unit,source',
+        'month_1,100,units,Illustrative test input',
+        'month_2,120,units,Illustrative test input',
+        'month_3,140,units,Illustrative test input',
+      ].join(newline);
+      const runMutation = vi.fn().mockResolvedValueOnce({ ok: true }).mockResolvedValueOnce({});
+      const args = createActionArgs(undefined);
+      args.creationAttemptId = `create-multiline-${String(index).padStart(32, '0')}`;
+      args.brief.prompt = `  ${prompt}  `;
+      await createDeckHandler({ runMutation }, args);
+      const persisted = runMutation.mock.calls[1]?.[1];
+      expect(persisted.brief.prompt).toBe(prompt);
+      const charts = persisted.spec.slides.flatMap((slide: { chart?: unknown }) =>
+        slide.chart ? [slide.chart] : [],
+      );
+      expect(charts).toEqual([
+        { labels: ['Month 1', 'Month 2', 'Month 3'], values: [100, 120, 140], unit: 'value' },
+      ]);
+      expect(runMutation).toHaveBeenCalledTimes(2);
+    };
+    // The mutation stand-ins isolate input handling, not durable quota or load performance.
+    for (let index = 0; index < 4; index += 1) await create(index);
+    await Promise.all([4, 5, 6].map(create));
+    expect(callNodeSlideFreeJson).not.toHaveBeenCalled();
+  });
+
   it('refuses a direct create with no per-submission identity before quota or provider work', async () => {
     vi.stubEnv('NODESLIDE_PUBLIC_CREATION', 'true');
     const runMutation = vi.fn();
@@ -273,6 +306,39 @@ describe('NodeSlide create action admission boundary', () => {
 });
 
 describe('NodeSlide create-deck bounds', () => {
+  it.each(['\n', '\r\n', '\r'])(
+    "preserves internal %j, indentation and Unicode in an author's brief",
+    (newline) => {
+      const prompt = `Review 00123  literally${newline}\t  中文 — plan${newline}    code();`;
+      const result = validateNodeSlideCreateDeckFields({
+        title: '  Pilot\n  review  ',
+        brief: {
+          prompt: ` \t${prompt}\n `,
+          audience: '  Board\n  members ',
+          purpose: ' Make\t a decision ',
+          successCriteria: [' Keep\n  evidence '],
+        },
+      });
+      expect(result).toEqual({
+        title: 'Pilot review',
+        brief: {
+          prompt,
+          audience: 'Board members',
+          purpose: 'Make a decision',
+          successCriteria: ['Keep evidence'],
+        },
+      });
+      for (const invalid of [' \n\r\t ', `${' '.repeat(4_000)}x`, `${'中'.repeat(2_731)}\n`]) {
+        expectInvalidRequest(() =>
+          validateNodeSlideCreateDeckFields({
+            ...validFields(),
+            brief: { ...validFields().brief, prompt: invalid },
+          }),
+        );
+      }
+    },
+  );
+
   it('accepts exact character/count boundaries', () => {
     const limits = NODESLIDE_CREATE_DECK_LIMITS;
     const result = validateNodeSlideCreateDeckFields({

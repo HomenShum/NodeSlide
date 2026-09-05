@@ -1,0 +1,12 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "dom": {
+    "text": "Deck checks · v3Deck CIWarnings0 blockers · 1 warningwarning: Independent fixture: review the source date.",
+    "version": "3",
+    "state": "warn"
+  },
+  "errors": []
+}

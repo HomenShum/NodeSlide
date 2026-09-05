@@ -1,0 +1,54 @@
+import { existsSync, readFileSync, readdirSync, mkdirSync, writeFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+const [repo, output] = process.argv.slice(2).map(p => resolve(p));
+const hash = path => createHash('sha256').update(readFileSync(path)).digest('hex');
+const testPath = join(repo, 'scripts/tests/code-tours.test.mjs');
+const source = readFileSync(testPath, 'utf8');
+const workspaceSource = readFileSync(join(repo, 'scripts/tests/workspace-build-depth.test.mjs'), 'utf8');
+const oldExpression = "new URL('../..', import.meta.url).pathname.replace(/^\\/([A-Za-z]:)/, '$1')";
+if (!source.includes(oldExpression) || !workspaceSource.includes(oldExpression)) throw Error('Actual source expression changed');
+const url = new URL('../..', pathToFileURL(testPath));
+const bad = url.pathname.replace(/^\/([A-Za-z]:)/, '$1');
+const good = fileURLToPath(url);
+function child(cwd, args) {
+  const r = spawnSync(process.execPath, args, {cwd, encoding:'utf8'});
+  return {cwd, args, status:r.status, stdout:r.stdout, stderr:r.stderr, error:r.error ? {code:r.error.code, syscall:r.error.syscall, message:r.error.message}:null};
+}
+function manifests(root) {
+  try {
+    const paths = readdirSync(join(root,'packages'),{withFileTypes:true}).filter(e=>e.isDirectory()).map(e=>join(root,'packages',e.name,'package.json')).concat(join(root,'mcp/package.json'));
+    const values = paths.map(p=>JSON.parse(readFileSync(p,'utf8')));
+    const convex = values.find(v=>v.name==='@nodeslide/convex');
+    return {count:values.length, offenders:values.filter(v=>/\bnpm\s+run\b/.test(v.scripts?.build??'')).map(v=>v.name), convexBothOutputs:/\btsup\b/.test(convex.scripts.build) && /tsc -p tsconfig\.component\.json/.test(convex.scripts.build)};
+  } catch(error) { return {error:{code:error.code,message:error.message}}; }
+}
+const shell = spawnSync('find .tmp -name trace.zip', {cwd:repo, shell:true, encoding:'utf8'});
+// Diagnostic-only proposed discovery: this does not parse or claim these are real traces.
+function discover(root) {
+  let entries;
+  try { entries=readdirSync(root,{recursive:true,withFileTypes:true}); }
+  catch(error) { if(error.code==='ENOENT' && !existsSync(root)) return []; throw error; }
+  return entries.filter(e=>e.isFile() && e.name==='trace.zip').map(e=>join(e.parentPath,e.name)).sort();
+}
+const fixture=join(output,'discovery-only paths # and space');
+mkdirSync(join(fixture,'nested folder','deeper'),{recursive:true});
+writeFileSync(join(fixture,'trace.zip'),'DIAGNOSTIC PATH ONLY; NOT A TRACE');
+writeFileSync(join(fixture,'nested folder','deeper','trace.zip'),'DIAGNOSTIC PATH ONLY; NOT A TRACE');
+writeFileSync(join(fixture,'not-trace.zip'),'DIAGNOSTIC PATH ONLY; NOT A TRACE');
+const result={
+  scope:'Read-only candidate; two equivalent cwd expressions, unchanged real generator --check, actual workspace manifests. Central-only non-trace name discovery fixture.',
+  runtime:{node:process.version, execPath:process.execPath, executableExists:existsSync(process.execPath)},
+  bindings:{test:hash(testPath), workspace:hash(join(repo,'scripts/tests/workspace-build-depth.test.mjs')),generator:hash(join(repo,'scripts/build-code-tours.mjs')),finder:hash(join(repo,'scripts/tests/playwright-trace.test.mjs'))},
+  pathBoundary:{url:url.href, bad, good,badExists:existsSync(bad),goodExists:existsSync(good)},
+  badChild:child(bad,['scripts/build-code-tours.mjs','--check']),
+  goodChild:child(good,['scripts/build-code-tours.mjs','--check']),
+  badManifests:manifests(bad),goodManifests:manifests(good),
+  finder:{actualShell:{status:shell.status,stdout:shell.stdout,stderr:shell.stderr},actualTmpExists:existsSync(join(repo,'.tmp')),nativeActual:discover(join(repo,'.tmp')),nativeNestedNames:discover(fixture).map(p=>p.slice(fixture.length+1)),missingRoot:discover(join(fixture,'absent'))},
+};
+try { discover(join(fixture,'not-trace.zip')); result.finder.nonDirectoryFailurePropagates=false; }
+catch(error) { result.finder.nonDirectoryFailurePropagates=true; result.finder.nonDirectoryError=error.code; }
+writeFileSync(join(output,'path-and-discovery-causality.json'),JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify(result));

@@ -1,0 +1,6 @@
+from pathlib import Path
+P=Path(__file__).parent
+s=(P/'E6g-nodeslide-readiness-browser.mjs').read_text(encoding='utf-8').replace('E6g-nodeslide-readiness-browser-01','E6g-nodeslide-counts-before').replace("'readiness-browser-01'","'counts-before'")
+s=s.replace("[{kind:'fail',folder:'browser-first-use-01'},{kind:'pass',folder:'browser-multiline-01'}]","[{kind:'fail',folder:'browser-first-use-01'}]").replace('round<3','round<1')
+s=s.replace(" const scaled=await capture(page,", " await page.evaluate(()=>{const e=document.querySelector('[data-testid=\"deck-ci-details\"] .ns-deck-ci-status__counts');const r=e.getBoundingClientRect();e.style.outline='3px solid #d20c39';const label=document.createElement('div');label.textContent='C — Enlarged counts clipped';Object.assign(label.style,{position:'fixed',top:Math.max(0,r.top-25)+'px',left:r.left+'px',font:'12px sans-serif',color:'white',background:'#d20c39',zIndex:'999999'});document.body.append(label);});\n const scaled=await capture(page,")
+(P/'E6g-nodeslide-counts-before.mjs').write_text(s,encoding='utf-8',newline='\n')

@@ -1,0 +1,11 @@
+--- before/.tours/03-debug-and-recovery.tour
++++ current/.tours/03-debug-and-recovery.tour
+@@ -10,7 +10,7 @@
+     },
+     {
+       "file": "convex/lib/nodeslideValidators.ts",
+-      "line": 298,
++      "line": 299,
+       "description": "**Failure 1: the request is refused.**\n\nEvery refusal carries a machine-readable `code` alongside its sentence, so the browser can branch on the code and still have something honest to show a human.\n\nGrep for a code you saw in a `ConvexError` and you land on the exact refusal."
+     },
+     {

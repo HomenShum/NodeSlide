@@ -1,0 +1,571 @@
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	﻿2026-09-05T09:39:19.4986583Z Current runner version: '2.337.0'
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5012279Z ##[group]Runner Image Provisioner
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5013164Z Hosted Compute Agent
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5013856Z Version: 20260828.587
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5014515Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5015323Z Build Date: 2026-08-28T16:44:25Z
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5016082Z Worker ID: {a0bbe0b7-4c0d-4074-a506-a7c976f9b21f}
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5017222Z Azure Region: westus
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5017920Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5019789Z ##[group]Operating System
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5020566Z Ubuntu
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5021173Z 24.04.4
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5021695Z LTS
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5022264Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5022833Z ##[group]Runner Image
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5023437Z Image: ubuntu-24.04
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5024150Z Version: 20260831.293.1
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5025441Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260831.293/images/ubuntu/Ubuntu2404-Readme.md
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5027408Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260831.293
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5028457Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5029724Z ##[group]GITHUB_TOKEN Permissions
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5031910Z Actions: read
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5032565Z Contents: read
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5033160Z Metadata: read
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5033845Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5035913Z Secret source: Actions
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5037418Z Prepare workflow directory
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5422866Z Prepare all required actions
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.5483364Z Getting action download info
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:19.8980695Z Download action repository 'actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd' (SHA:ed597411d8f924073f98dfc5c65a23a2325f34cd)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.2950986Z Download action repository 'actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10' (SHA:df4cb1c069e1874edd31b4311f1884172cec0e10)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.3334322Z Download action repository 'actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.4868286Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.6701332Z Complete job name: Create -> edit -> reload -> export -> delete
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.7526380Z ##[group]Run actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.7528050Z with:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.7533408Z   script: const runs = await github.rest.actions.listWorkflowRuns({
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	  ...context.repo,
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	  workflow_id: 'deploy-production.yml',
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	  branch: 'main',
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	  status: 'success',
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	  per_page: 20,
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	});
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	const title = /^Deploy production - ([0-9a-f]{40})$/;
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	const run = runs.data.workflow_runs.find((candidate) => {
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	  const source = candidate.display_title?.match(title)?.[1];
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	  return Boolean(
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	    source &&
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	    source === context.sha &&
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	    candidate.repository?.full_name === 'HomenShum/NodeSlide' &&
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	    candidate.path === '.github/workflows/deploy-production.yml' &&
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	    ['workflow_run', 'workflow_dispatch'].includes(candidate.event) &&
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	    candidate.head_branch === 'main' &&
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	    candidate.status === 'completed' &&
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	    candidate.conclusion === 'success',
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	  );
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	});
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	if (!run) core.setFailed('No successful main production deployment was found.');
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	else {
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	  core.setOutput('sha', run.display_title.match(title)[1]);
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	  core.setOutput('url', run.html_url);
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	}
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.7542610Z   github-token: ***
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.7543195Z   debug: false
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.7543720Z   user-agent: actions/github-script
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.7544327Z   result-encoding: json
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.7544850Z   retries: 0
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.7545409Z   retry-exempt-status-codes: 400,401,403,404,422
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:20.7546373Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5508694Z ##[group]Run actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5509301Z with:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5509617Z   ref: b0674b229a3691c09c88fcab1481f2e33342cb21
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5510243Z   persist-credentials: false
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5510580Z   repository: HomenShum/NodeSlide
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5513481Z   token: ***
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5513754Z   ssh-strict: true
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5514026Z   ssh-user: git
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5514278Z   clean: true
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5514556Z   sparse-checkout-cone-mode: true
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5514880Z   fetch-depth: 1
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5515149Z   fetch-tags: false
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5515453Z   show-progress: true
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5515724Z   lfs: false
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5515975Z   submodules: false
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5516257Z   set-safe-directory: true
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.5516547Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6443535Z Syncing repository: HomenShum/NodeSlide
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6445234Z ##[group]Getting Git version info
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6445738Z Working directory is '/home/runner/work/NodeSlide/NodeSlide'
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6446441Z [command]/usr/bin/git version
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6516215Z git version 2.55.0
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6540583Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6555229Z Temporarily overriding HOME='/home/runner/work/_temp/de468e2e-c9bc-442c-a56a-609eef82a279' before making global git config changes
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6557041Z Adding repository directory to the temporary git global config as a safe directory
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6561524Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NodeSlide/NodeSlide
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6610349Z Deleting the contents of '/home/runner/work/NodeSlide/NodeSlide'
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6614661Z ##[group]Determining repository object format
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6617248Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6618020Z ##[group]Initializing the repository
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6622438Z [command]/usr/bin/git init /home/runner/work/NodeSlide/NodeSlide
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6718176Z hint: Using 'master' as the name for the initial branch. This default branch name
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6722391Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6723513Z hint: to use in all of your new repositories, which will suppress this warning,
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6724301Z hint: call:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6724704Z hint:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6725323Z hint: 	git config --global init.defaultBranch <name>
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6725967Z hint:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6726587Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6727846Z hint: 'development'. The just-created branch can be renamed via this command:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6728672Z hint:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6729117Z hint: 	git branch -m <name>
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6729469Z hint:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6729892Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6730608Z Initialized empty Git repository in /home/runner/work/NodeSlide/NodeSlide/.git/
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6732792Z [command]/usr/bin/git remote add origin https://github.com/HomenShum/NodeSlide
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6778601Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6779480Z ##[group]Disabling automatic garbage collection
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6782887Z [command]/usr/bin/git config --local gc.auto 0
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6812622Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6813588Z ##[group]Setting up auth
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6814199Z Removing SSH command configuration
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6821052Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.6852471Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7184418Z Removing HTTP extra header
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7191150Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7224577Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7441760Z Removing includeIf entries pointing to credentials config files
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7448100Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7482987Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7705262Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7742409Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git.path /home/runner/work/_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7773465Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7804983Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7834627Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7862527Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7863433Z ##[group]Fetching the repository
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:22.7871953Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin b0674b229a3691c09c88fcab1481f2e33342cb21
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:26.7141815Z From https://github.com/HomenShum/NodeSlide
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:26.7142366Z  * branch            b0674b229a3691c09c88fcab1481f2e33342cb21 -> FETCH_HEAD
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:26.7152584Z [command]/usr/bin/git rev-parse --verify --quiet b0674b229a3691c09c88fcab1481f2e33342cb21^{object}
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:26.7177381Z b0674b229a3691c09c88fcab1481f2e33342cb21
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:26.7181906Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:26.7182412Z ##[group]Determining the checkout info
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:26.7183759Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:26.7189397Z [command]/usr/bin/git sparse-checkout disable
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:26.7235522Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:26.7261407Z ##[group]Checking out the ref
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:26.7265433Z [command]/usr/bin/git checkout --progress --force b0674b229a3691c09c88fcab1481f2e33342cb21
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.7427899Z Updating files:  77% (3011/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.7535723Z Updating files:  78% (3043/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.7645117Z Updating files:  79% (3082/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.7759694Z Updating files:  80% (3121/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.7885561Z Updating files:  81% (3160/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.7989704Z Updating files:  82% (3199/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8106138Z Updating files:  83% (3238/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8212383Z Updating files:  84% (3277/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8235851Z Updating files:  85% (3316/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8268062Z Updating files:  86% (3355/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8298892Z Updating files:  87% (3394/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8330380Z Updating files:  88% (3433/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8366183Z Updating files:  89% (3472/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8400449Z Updating files:  90% (3511/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8427668Z Updating files:  91% (3550/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8461098Z Updating files:  92% (3589/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8494885Z Updating files:  93% (3628/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8531048Z Updating files:  94% (3667/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8559167Z Updating files:  95% (3706/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8591250Z Updating files:  96% (3745/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8630818Z Updating files:  97% (3784/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8665091Z Updating files:  98% (3823/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8694533Z Updating files:  99% (3862/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8695155Z Updating files: 100% (3901/3901)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8696089Z Updating files: 100% (3901/3901), done.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8747140Z Note: switching to 'b0674b229a3691c09c88fcab1481f2e33342cb21'.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8747918Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8748220Z You are in 'detached HEAD' state. You can look around, make experimental
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8748830Z changes and commit them, and you can discard any commits you make in this
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8749413Z state without impacting any branches by switching back to a branch.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8749758Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8749993Z If you want to create a new branch to retain commits you create, you may
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8750577Z do so (now or later) by using -c with the switch command. Example:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8750935Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8751088Z   git switch -c <new-branch-name>
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8751311Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8751435Z Or undo this operation with:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8751635Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8751746Z   git switch -
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8751894Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8752170Z Turn off this advice by setting config variable advice.detachedHead to false
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8752561Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8753010Z HEAD is now at b0674b2 Promotion iteration 2: run the WIG review and the web-quality audit, fix what they found (#184)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8811584Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8858001Z [command]/usr/bin/git log -1 --format=%H
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8883987Z b0674b229a3691c09c88fcab1481f2e33342cb21
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8896519Z ##[group]Removing auth
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8897224Z Removing SSH command configuration
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8903105Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.8934811Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9161017Z Removing HTTP extra header
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9161610Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9191767Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9414181Z Removing includeIf entries pointing to credentials config files
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9418398Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9444956Z includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git.path
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9446007Z includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git/worktrees/*.path
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9447274Z includeif.gitdir:/github/workspace/.git.path
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9448000Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9454994Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git.path
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9476622Z /home/runner/work/_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9487340Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git.path /home/runner/work/_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9522423Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git/worktrees/*.path
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9545252Z /home/runner/work/_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9582263Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9610641Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9631274Z /github/runner_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9642745Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9680783Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9738007Z /github/runner_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9762565Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:27.9804043Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0068822Z Removing credentials config '/home/runner/work/_temp/git-credentials-9e1614b8-d5d6-42b5-b2d0-00df45fd8045.config'
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0079706Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0224126Z ##[group]Run rm -f artifacts/prod-probe/report.json
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0224840Z [36;1mrm -f artifacts/prod-probe/report.json[0m
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0225481Z [36;1mrm -f artifacts/convex-logs/production.jsonl[0m
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0226136Z [36;1mrm -f artifacts/model-fleet/model-fleet-probe.json[0m
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0227085Z [36;1mrm -f artifacts/model-fleet/free-router-fleet-probe.json[0m
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0227874Z [36;1mrm -f artifacts/model-fleet/free-router-structured-probe.json[0m
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0228652Z [36;1mrm -rf artifacts/close-all-gaps-20260722/acceptance/ui-qa[0m
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0282366Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0282951Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0528944Z ##[group]Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0529351Z with:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0529544Z   node-version: 22
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0529772Z   package-manager-cache: false
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0530055Z   check-latest: false
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0532706Z   token: ***
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.0532903Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.1974259Z Found in cache @ /opt/hostedtoolcache/node/22.23.2/x64
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:28.1977077Z ##[group]Environment details
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:31.8269328Z node: v22.23.2
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:31.8269593Z npm: 10.9.8
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:31.8269794Z yarn: 1.22.22
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:31.8270786Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:31.8384184Z ##[group]Run npm ci
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:31.8384448Z [36;1mnpm ci[0m
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:31.8427476Z shell: /usr/bin/bash -e {0}
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:31.8427742Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:34.5632870Z npm warn skipping integrity check for git dependency ssh://git@github.com/HomenShum/node-platform.git
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:39:39.6456265Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7709535Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7713111Z added 712 packages, and audited 728 packages in 33s
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7713854Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7714488Z 104 packages are looking for funding
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7715388Z   run `npm fund` for details
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7849583Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7850169Z 7 vulnerabilities (1 moderate, 6 high)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7850565Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7850847Z To address issues that do not require attention, run:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7851205Z   npm audit fix
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7851334Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7851631Z To address all issues (including breaking changes), run:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7851990Z   npm audit fix --force
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7852141Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.7852267Z Run `npm audit` for details.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.8875706Z ##[group]Run npx playwright install --with-deps chromium
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.8876178Z [36;1mnpx playwright install --with-deps chromium[0m
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.8918542Z shell: /usr/bin/bash -e {0}
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:04.8918807Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:05.6971022Z Installing dependencies...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:05.7040144Z Switching to root user to install dependencies...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:05.8658529Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:05.8774973Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:05.9089775Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:05.9091543Z Get:7 https://dl.google.com/linux/chrome-stable/deb stable InRelease [2548 B]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:05.9208288Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:05.9238015Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:05.9299222Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.0146317Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [441 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.0260980Z Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [394 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.1589516Z Get:10 https://dl.google.com/linux/chrome-stable/deb stable/main amd64 Packages [1401 B]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.1872702Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1260 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.1940952Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [292 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.1968771Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [180 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.1978971Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1690 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.2078283Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [339 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.2096620Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.2125747Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1536 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.2221292Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [352 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.2245338Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.2454822Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5740 B]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.2889716Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.2972631Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1002 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.3035287Z Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [212 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.3053176Z Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [46.4 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.3062800Z Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1206 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.3132340Z Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [241 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.3150754Z Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.3 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.3161197Z Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1437 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:06.3242597Z Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [334 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:13.6223060Z Fetched 11.8 MB in 1s (8318 kB/s)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.4357540Z Reading package lists...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.4600080Z Reading package lists...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.6503573Z Building dependency tree...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.6510784Z Reading state information...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7988481Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7989697Z libasound2t64 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7990661Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7991610Z libatk-bridge2.0-0t64 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7992415Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7993395Z libatk1.0-0t64 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7994160Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7994905Z libatspi2.0-0t64 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7995631Z libcairo2 is already the newest version (1.18.0-3build1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7996199Z libcairo2 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7997053Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7997590Z libcups2t64 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7998087Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7998624Z libdbus-1-3 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7999111Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.7999578Z libdrm2 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8000056Z libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.2).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8000514Z libgbm1 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8000952Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.8).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8001383Z libglib2.0-0t64 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8001813Z libnspr4 is already the newest version (2:4.35-1.1build1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8002198Z libnspr4 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8002588Z libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8002955Z libnss3 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8003373Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8003793Z libpango-1.0-0 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8004191Z libx11-6 is already the newest version (2:1.8.7-1build1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8004561Z libx11-6 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8004931Z libxcb1 is already the newest version (1.15-1ubuntu2).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8005291Z libxcb1 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8005703Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8006116Z libxcomposite1 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8006538Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8007177Z libxdamage1 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8007574Z libxext6 is already the newest version (2:1.3.4-1build2).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8007939Z libxext6 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8008353Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8008779Z libxfixes3 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8009184Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8009586Z libxkbcommon0 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8010005Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8010382Z libxrandr2 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8010773Z xvfb is already the newest version (2:21.1.12-1ubuntu1.6).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8011317Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8011892Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8012312Z libfontconfig1 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8012753Z libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.1).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8013174Z libfreetype6 set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8013595Z fonts-liberation is already the newest version (1:2.1.5-3).
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8014032Z fonts-liberation set to manually installed.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8014603Z The following additional packages will be installed:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8014974Z   xfonts-encodings xfonts-utils
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8015254Z Recommended packages:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8015535Z   fonts-ipafont-mincho fonts-tlwg-loma
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8294310Z The following NEW packages will be installed:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8295024Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8305313Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8305785Z   xfonts-utils
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8488606Z 0 upgraded, 9 newly installed, 0 to remove and 38 not upgraded.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8489420Z Need to get 21.1 MB of archives.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8490225Z After this operation, 79.5 MB of additional disk space will be used.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.8491230Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:14.9246444Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:15.0516525Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:15.2188786Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:15.2799416Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:15.3960644Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:15.5991281Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:15.6689140Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:15.7296084Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:15.7956353Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.0702582Z Fetched 21.1 MB in 1s (21.9 MB/s)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1197506Z Selecting previously unselected package fonts-ipafont-gothic.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1865571Z (Reading database ... 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1866059Z (Reading database ... 5%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1866415Z (Reading database ... 10%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1867189Z (Reading database ... 15%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1867581Z (Reading database ... 20%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1867915Z (Reading database ... 25%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1868234Z (Reading database ... 30%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1868552Z (Reading database ... 35%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1868877Z (Reading database ... 40%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1869196Z (Reading database ... 45%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.1869514Z (Reading database ... 50%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.2200019Z (Reading database ... 55%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.6289157Z (Reading database ... 60%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:16.9174810Z (Reading database ... 65%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:17.2169940Z (Reading database ... 70%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:17.4492680Z (Reading database ... 75%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:17.8131829Z (Reading database ... 80%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:18.3562139Z (Reading database ... 85%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:19.2101458Z (Reading database ... 90%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:19.8034701Z (Reading database ... 95%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:19.8035307Z (Reading database ... 100%
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:19.8036214Z (Reading database ... 201676 files and directories currently installed.)
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:19.8079000Z Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:19.8184974Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.0478734Z Selecting previously unselected package fonts-freefont-ttf.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.0604855Z Preparing to unpack .../1-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.0613585Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.1404346Z Selecting previously unselected package fonts-tlwg-loma-otf.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.1535417Z Preparing to unpack .../2-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.1554506Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.1813017Z Selecting previously unselected package fonts-unifont.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.1941646Z Preparing to unpack .../3-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.1950831Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.3042254Z Selecting previously unselected package fonts-wqy-zenhei.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.3170929Z Preparing to unpack .../4-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.3271276Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.7905117Z Selecting previously unselected package xfonts-encodings.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.8034329Z Preparing to unpack .../5-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.8042386Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.8357684Z Selecting previously unselected package xfonts-utils.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.8486353Z Preparing to unpack .../6-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.8499084Z Unpacking xfonts-utils (1:7.7+6build3) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.8865497Z Selecting previously unselected package xfonts-cyrillic.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.8993050Z Preparing to unpack .../7-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.9001827Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.9362109Z Selecting previously unselected package xfonts-scalable.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.9494245Z Preparing to unpack .../8-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.9503164Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:20.9928141Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.0048093Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.0069241Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.0091093Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.0110804Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.0178254Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.0194878Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.0215586Z Setting up xfonts-utils (1:7.7+6build3) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.0257518Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.0790968Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.1147366Z Processing triggers for man-db (2.12.0-4build2) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.1168606Z Not building database; man-db/auto-update is not 'true'.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:21.1186507Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:22.4525110Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:22.4526034Z Running kernel seems to be up-to-date.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:22.4526472Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:22.4527002Z No services need to be restarted.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:22.4527327Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:22.4527561Z No containers need to be restarted.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:22.4527835Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:22.4528109Z No user sessions are running outdated binaries.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:22.4528448Z 
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:22.4528888Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:23.4144799Z Downloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/linux64/chrome-linux64.zip
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:24.4527076Z |                                                                                |   0% of 177 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:24.6203778Z |■■■■■■■■                                                                        |  10% of 177 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:24.7142622Z |■■■■■■■■■■■■■■■■                                                                |  20% of 177 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:24.7968514Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 177 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:24.8925070Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 177 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:24.9805980Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 177 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:25.0722389Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 177 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:25.1988066Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 177 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:25.2897475Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 177 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:25.3773996Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 177 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:25.4603055Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 177 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:28.1423512Z Chrome for Testing 149.0.7827.55 (playwright chromium v1228) downloaded to /home/runner/.cache/ms-playwright/chromium-1228
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:28.1427276Z Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.2687952Z |                                                                                |   0% of 2.3 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.2726323Z |■■■■■■■■                                                                        |  10% of 2.3 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.2757134Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.2792773Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.2811103Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.2830787Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.2846954Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.2860293Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.2876060Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.2890425Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.2904383Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.3489759Z FFmpeg (playwright ffmpeg v1011) downloaded to /home/runner/.cache/ms-playwright/ffmpeg-1011
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:29.3492965Z Downloading Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/linux64/chrome-headless-shell-linux64.zip
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:30.3827822Z |                                                                                |   0% of 114.2 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:30.5006194Z |■■■■■■■■                                                                        |  10% of 114.2 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:30.5608791Z |■■■■■■■■■■■■■■■■                                                                |  20% of 114.2 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:30.6139127Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 114.2 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:30.6721734Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 114.2 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:30.7272912Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 114.2 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:30.7790677Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 114.2 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:30.8293075Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 114.2 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:30.8858336Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 114.2 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:30.9471423Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 114.2 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:31.0116021Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 114.2 MiB
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:32.9637437Z Chrome Headless Shell 149.0.7827.55 (playwright chromium-headless-shell v1228) downloaded to /home/runner/.cache/ms-playwright/chromium_headless_shell-1228
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:32.9915691Z ##[group]Run node scripts/prod-probe.mjs
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:32.9916059Z [36;1mnode scripts/prod-probe.mjs[0m
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:32.9951496Z shell: /usr/bin/bash -e {0}
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:32.9951753Z env:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:32.9954439Z   GITHUB_TOKEN: ***
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:32.9954749Z   PROD_PROBE_COMMIT_SHA: b0674b229a3691c09c88fcab1481f2e33342cb21
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:32.9955143Z   PROD_PROBE_URL: https://nodeslide.vercel.app
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:32.9955511Z   PROD_PROBE_REPORT: artifacts/prod-probe/report.json
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:32.9956009Z   PROD_PROBE_WORKFLOW_RUN_URL: https://github.com/HomenShum/NodeSlide/actions/runs/31770986735
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:32.9956455Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:35.8515632Z [prod-probe] PASS deployment-identity
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:37.8798275Z [prod-probe] PASS landing-live
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:41.2902286Z [prod-probe] PASS create-deterministic
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:41.8852295Z [prod-probe] PASS edit-and-commit
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:42.9948467Z [prod-probe] PASS reload-persisted-edit
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.3086991Z [prod-probe] FAIL at artifact-and-routing-shadow: edit-persistence: ArtifactSpec shadow did not observe an authored canonical artifact and persisted binding
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.6635893Z [prod-probe] PASS retention-cleanup
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.6960962Z [prod-probe] sanitized report: artifacts/prod-probe/report.json
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.7159639Z ##[error]Process completed with exit code 1.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.7243122Z ##[group]Run node scripts/capture-convex-logs.mjs
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.7243554Z [36;1mnode scripts/capture-convex-logs.mjs[0m
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.7279358Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.7279832Z env:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.7280513Z   CONVEX_DEPLOY_KEY: ***
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.7280767Z   CONVEX_LOG_HISTORY: 50
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.7281001Z   CONVEX_LOG_DURATION_MS: 15000
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.7281314Z   CONVEX_LOG_OUTPUT: artifacts/convex-logs/production.jsonl
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:43.7281979Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7810999Z [convex-logs] PASS captured 52 sanitized event(s) with --history 50 --success --jsonl --prod
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7812554Z [convex-logs] artifact: artifacts/convex-logs/production.jsonl
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7940904Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7941349Z with:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7941571Z   name: production-probe-33958565935
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7942748Z   path: artifacts/prod-probe/report.json
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	artifacts/convex-logs/production.jsonl
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	artifacts/model-fleet/model-fleet-probe.json
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	artifacts/model-fleet/free-router-fleet-probe.json
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	artifacts/model-fleet/free-router-structured-probe.json
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	artifacts/close-all-gaps-20260722/acceptance/ui-qa
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7943926Z   if-no-files-found: warn
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7944176Z   include-hidden-files: false
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7944418Z   retention-days: 14
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7944635Z   compression-level: 6
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7944864Z   overwrite: false
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7945070Z   archive: true
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.7945267Z ##[endgroup]
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.9420911Z Multiple search paths detected. Calculating the least common ancestor of all paths
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.9424801Z The least common ancestor is /home/runner/work/NodeSlide/NodeSlide/artifacts. This will be the root directory of the artifact
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.9425625Z With the provided path, there will be 2 files uploaded
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.9429534Z Artifact name is valid!
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:58.9430165Z Root directory input is valid!
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:59.3111464Z Uploading artifact: production-probe-33958565935.zip
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:59.3154435Z Beginning upload of artifact content to blob storage
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:59.6107937Z Uploaded bytes 3508
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:59.6813972Z Finished uploading artifact content to blob storage!
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:59.6815289Z SHA256 digest of uploaded artifact is 23abd1a01f1a6b66aee7daf925718cf9fda11579195299bcf0af3e689a443ce9
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:40:59.6816391Z Finalizing artifact upload
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.1383450Z Artifact production-probe-33958565935 successfully finalized. Artifact ID 9967191932
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.1384789Z Artifact production-probe-33958565935 has been successfully uploaded! Final size is 3508 bytes. Artifact ID is 9967191932
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.1388878Z Artifact download URL: https://github.com/HomenShum/NodeSlide/actions/runs/33958565935/artifacts/9967191932
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.1578720Z Post job cleanup.
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.2437652Z [command]/usr/bin/git version
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.2476927Z git version 2.55.0
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.2517800Z Temporarily overriding HOME='/home/runner/work/_temp/4333c8e1-e5e9-4b1c-a9a2-cf4903786705' before making global git config changes
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.2519684Z Adding repository directory to the temporary git global config as a safe directory
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.2524076Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NodeSlide/NodeSlide
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.2556413Z Removing SSH command configuration
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.2563279Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.2598120Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.2827392Z Removing HTTP extra header
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.2832749Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.2866430Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.3087878Z Removing includeIf entries pointing to credentials config files
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.3095293Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.3127519Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Create -> edit -> reload -> export -> delete	UNKNOWN STEP	2026-09-05T09:41:00.3506237Z Cleaning up orphan processes
+Alert on first red	Keep the workflow red when the journey failed	﻿2026-09-05T09:41:07.8229410Z ##[group]Run exit 1
+Alert on first red	Keep the workflow red when the journey failed	2026-09-05T09:41:07.8230561Z [36;1mexit 1[0m
+Alert on first red	Keep the workflow red when the journey failed	2026-09-05T09:41:07.8272193Z shell: /usr/bin/bash -e {0}
+Alert on first red	Keep the workflow red when the journey failed	2026-09-05T09:41:07.8273651Z ##[endgroup]
+Alert on first red	Keep the workflow red when the journey failed	2026-09-05T09:41:07.8373504Z ##[error]Process completed with exit code 1.

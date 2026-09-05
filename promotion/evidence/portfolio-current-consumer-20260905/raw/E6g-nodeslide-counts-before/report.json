@@ -1,0 +1,50 @@
+{
+  "proof": "NODESLIDE-DECK-CI-DETAIL-01",
+  "at": "2026-09-05T12:45:51.420Z",
+  "cells": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "fail",
+      "round": 0,
+      "tabs": 2,
+      "overflow": 0
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "fail",
+      "textPercent": 200,
+      "overflow": 0,
+      "scope": "Computed inspector component text sizes doubled; no whole-page zoom claim"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "fail",
+      "round": 0,
+      "tabs": 1,
+      "overflow": 0
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "fail",
+      "textPercent": 200,
+      "overflow": 0,
+      "scope": "Computed inspector component text sizes doubled; no whole-page zoom claim"
+    }
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "grade": null,
+  "status": "PASS_NORMAL_ACTUAL_UI_WITH_TEXT200_OBSERVATIONS"
+}

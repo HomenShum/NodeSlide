@@ -1,0 +1,5 @@
+{
+  "title": "Illustrative pilot metrics.csv",
+  "format": "csv",
+  "content": "metric,value,unit,source\nmonth_1,100,units,Illustrative test input\nmonth_2,120,units,Illustrative test input\nmonth_3,140,units,Illustrative test input"
+}

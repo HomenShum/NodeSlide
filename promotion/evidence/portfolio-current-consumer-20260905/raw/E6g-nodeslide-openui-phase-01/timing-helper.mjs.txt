@@ -1,0 +1,30 @@
+import { appendFileSync } from 'node:fs';
+import { performance } from 'node:perf_hooks';
+let run = null;
+export function emit(phase, extra = {}) {
+  if (!run) return;
+  const monoMs = performance.now();
+  run.events.push({phase, monoMs, epochMs:performance.timeOrigin + monoMs, ...extra});
+}
+export function start(doc) {
+  if (run) throw new Error('timing run already active');
+  run={pid:process.pid, events:[], seen:new Set(), doc, initialUtilization:performance.eventLoopUtilization()};
+  const scan=()=>{
+    for(const [phase,selector] of [['outer-commit-observed','[data-testid="ai-material-workbench"]'],['fallback-commit-observed','.ns-openui-loading'],['inner-commit-observed','[data-testid="openui-visual-workbench"]']]) {
+      if(!run.seen.has(phase) && doc.querySelector(selector)) {run.seen.add(phase);emit(phase);}
+    }
+  };
+  run.observer=new doc.defaultView.MutationObserver(scan);
+  run.observer.observe(doc.body,{subtree:true,childList:true});
+  emit('test-start');scan();
+}
+export function waitStart(timeoutMs) {
+  const now=performance.now(); emit('wait-start',{timeoutMs,nominalDeadlineMonoMs:now+timeoutMs});
+}
+export function finish() {
+  if(!run)return;
+  emit('test-afterEach',{innerExists:!!run.doc.querySelector('[data-testid="openui-visual-workbench"]'),fallbackExists:!!run.doc.querySelector('.ns-openui-loading')});
+  run.observer.disconnect();
+  const record={pid:run.pid,events:run.events,eventLoopUtilization:performance.eventLoopUtilization(run.initialUtilization),scope:'DOM insertion timestamps are MutationObserver delivery observations, not internal React commit instrumentation. No polling timer; buffered until afterEach. Nominal wait deadline is measured immediately before unchanged waitFor.'};
+  run=null;appendFileSync("C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6g-nodeslide-openui-phase-01/phases.jsonl",JSON.stringify(record)+'\n');
+}

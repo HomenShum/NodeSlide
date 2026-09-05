@@ -1,0 +1,8 @@
+{
+  "at": "2026-09-05T11:40:27.710925+00:00",
+  "priorPacket": "E6g-nodeslide-responsive-first-use-01",
+  "cause": "studio testid exists on connection shell. Text scaling/notes visibility ran before actual slide loaded; screenshot captured connection shell while later DOM captured loaded editor. These are not same-state pixel/font observations.",
+  "observedByRoot": "Viewed1440text200 PNG is connection shell, same-name DOM later has notes; normal390 and standalone exported HTML visually loaded.",
+  "action": "Replay with actual slide canvas, expected persisted title and expected notes before text scaling/capture. Retain all original captures and report; no product change and no grade claim.",
+  "earlierScriptFailure": "Original responsive script duplicate const caused parse-only failure before any browser action; preserved source in E6g-nodeslide-responsive-first-use-parse-failure.mjs.txt."
+}

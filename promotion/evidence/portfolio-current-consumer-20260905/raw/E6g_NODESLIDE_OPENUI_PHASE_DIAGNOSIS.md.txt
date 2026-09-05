@@ -1,0 +1,21 @@
+**OpenUI passed in this diagnostic, but the wrapper did not preserve npm lifecycle context. Its timestamps are useful observations; they do not close the original normal-suite failure.**
+
+**Re your request:** measure the module-load versus React-arrival boundary before changing NodeSlide. One external wrapper extended the exact current Vite config with one timing plugin; the original test, timeout, worker, retry and concurrency settings remained intact.
+
+| Actual phase | Measured interval |
+|---|---:|
+| Dynamic import starts → resolves | 741.33 ms |
+| Import resolves → inner DOM insertion observed | 27.50 ms |
+| Existing wait starts → resolves | 714.42 ms |
+| Inner insertion observed before nominal deadline | 294.26 ms |
+| Existing wait budget | 1,000 ms |
+
+The [raw timestamp stream](E6g-nodeslide-openui-phase-01/phases.jsonl) records the real click, import start/resolution, outer panel, loading fallback, inner workbench, wait start/deadline and successful wait. This run's delay was dominated by the promise that loads the module. The small subsequent interval does not support changing React state or the component to address the historical failure. Import time combines Vite transformation/queueing, module linking and evaluation; these costs are not separately resolved here.
+
+The instrumented **root suite still failed**: 2,811 passes, 1 failure and 7 skips. That failure is a diagnostic harness artifact. `scripts/immutable-upgrade-consumer-core.test.mjs:94` requires `process.env.npm_execpath`, but this diagnostic invoked Node directly and lacked that lifecycle variable. The test failed before creating its tarball fixture; normal check02 did not fail this owner. Parent identified this distinction, and the [source/context check](E6g-nodeslide-openui-phase-01/npm-context-disposition.json) confirms it. No repository repair is warranted. [Full raw log](E6g-nodeslide-openui-phase-01/suite.log) and [structured result](E6g-nodeslide-openui-phase-01/suite.json) remain failed and preserved. This is **not an ordinary `npm run check`** or an exact normal-environment reproduction. No workspace test scripts or build ran.
+
+[Config delta](E6g-nodeslide-openui-phase-01/config-delta.json) and [actual transform bindings](E6g-nodeslide-openui-phase-01/phase-analysis.json) prove only the two named module bodies were transformed: `AiInspector.tsx` and its wiring test. Original plugin relative order, test exclusions, resolution, server and build configuration remain identical. The helper observed DOM insertions with MutationObserver, added no polling timer, and buffered timestamps until afterEach. The import stayed dynamic; no preload, renderer mock, static import, retry or time-limit change was introduced.
+
+The failed historical run lacks these phase timestamps. This passing instrumented run cannot establish that run's root cause or close whole-suite reliability. Missing npm lifecycle context also removed a consumer test's intended workload, further limiting timing comparison. MutationObserver timestamps are observations after insertion, not internal React commit timestamps; the deadline is nominal immediately before the original wait call. Instrumentation can perturb scheduling. The task stops after this one suite, as requested, with no further reproduction or proposed application repair. A future separately authorized equivalent run would need the normal npm lifecycle context.
+
+[Source and Git custody](E6g-nodeslide-openui-phase-01/command-result.json) confirms all 14 named inputs, index entries and refs unchanged. Exact planned/transformed bytes, wrapper, timing helper, command and raw artifacts are [manifest-bound](E6g-nodeslide-openui-phase-01/manifest.json). The first report-writer assertion is also retained: Python saved planned copies as CRLF while Vite transformed LF. LF-only decoding reconstructs the exact runtime transform hashes; original planned bytes and both executed copies remain preserved. The actual wrapper was not changed or rerun. The separate approved portability judgment remains unchanged. No source/config/index/ref, dist or backend edits, build/codegen/provider/native Office invocation or visual-grade claim was made. All final grades remain null.

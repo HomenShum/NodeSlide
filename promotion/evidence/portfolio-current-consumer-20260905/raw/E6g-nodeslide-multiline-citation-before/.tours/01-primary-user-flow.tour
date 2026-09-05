@@ -1,0 +1,72 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "1 · Brief in, deck out",
+  "description": "Follow one person typing a description of a presentation and pressing Create, from the browser tab to the database row. Companion to docs/START_HERE.md.",
+  "steps": [
+    {
+      "file": "src/main.tsx",
+      "line": 18,
+      "description": "**Where the app starts.**\n\nNodeSlide keeps no application state in the browser bundle. Decks, versions, proposals and receipts all live in Convex, which pushes changes to every open tab. So the first thing that must succeed is this connection.\n\nIf it throws, the `catch` below renders a plain explanation panel instead of a blank screen — a blank page is the failure mode nobody can debug."
+    },
+    {
+      "file": "src/App.tsx",
+      "line": 18,
+      "description": "**There is no router.**\n\nEvery URL renders `NodeSlideStudio`. The single exception is `?domain=atlas`, a read-only gallery that shares no state with the editor and is therefore lazy-loaded.\n\nIf you are looking for 'the page for X', there isn't one. The studio owns the whole surface, including its own empty state."
+    },
+    {
+      "file": "src/domains/nodeslide/components/NodeSlideLanding.tsx",
+      "line": 103,
+      "description": "**The primary user action.**\n\nThis is where a free-form paragraph becomes a structured request. The person typed one sentence; the generator needs an audience, a purpose and success criteria, so `start` supplies sensible defaults rather than interrogating the user with a form.\n\nEverything downstream can therefore assume a complete request shape. Note `route: 'free'` — it is the only route this release accepts, and the server rejects the others."
+    },
+    {
+      "file": "src/domains/nodeslide/NodeSlideStudio.tsx",
+      "line": 1890,
+      "description": "**One click, one budgeted run.**\n\n`creationAttemptId` is minted here, on the click. Convex may retry the action with the same arguments — that must reuse the same id and not charge twice. A *later* click mints a new id even if the brief is byte-for-byte identical, because that is a second deliberate request.\n\nThe `requestGate` guards against a slow first request landing after a faster second one and overwriting it."
+    },
+    {
+      "file": "convex/nodeslideAgent.ts",
+      "line": 1704,
+      "description": "**The trust boundary.**\n\nAbove this line, values came from a browser and are suspect. Below it, everything is typed and checked.\n\nConvex validates every argument against this `args` object *before* the handler body runs, and rejects any undeclared field. Read the comment on `durableJob` below — declaring that one field was the difference between working durable jobs and every job dying at 35% progress."
+    },
+    {
+      "file": "convex/nodeslideAgent.ts",
+      "line": 1760,
+      "description": "**Why the cheap checks run first.**\n\nBoth checks below are pure string comparisons over arguments already in hand: no database read, no quota, no provider call. A caller that cannot name the job whose deck it claims to produce is refused *for free*.\n\nMoving either check later would turn a free refusal into one that arrives after a paid completion. This ordering is the rule the whole file obeys."
+    },
+    {
+      "file": "convex/lib/nodeslideValidators.ts",
+      "line": 255,
+      "description": "**Who is allowed to create a deck.**\n\nThree ways in: the public-creation flag, an existing durable job row, or a preview access code paired with an admission subject.\n\nOn a fresh clone `npx convex dev` sets none of them, so this is where a stranger's first Create fails. That is defect D1 in `promotion/PROMOTION_LOG.md` and concern 1 in `docs/codebase/CONCERNS.md`."
+    },
+    {
+      "file": "convex/nodeslideAgent.ts",
+      "line": 1882,
+      "description": "**The model is asked for intent, not geometry.**\n\nSlide count, allowed element kinds, and required provenance fields are enforced by this JSON schema — not hoped for in prose. `minItems`/`maxItems` come from the count the user actually asked for.\n\nA model that returns coordinates cannot be checked. A model that returns a typed plan can, and deterministic code turns the plan into positioned elements."
+    },
+    {
+      "file": "convex/nodeslideAgent.ts",
+      "line": 2013,
+      "description": "**A ceiling enforced by code, not by prompt.**\n\nThe dispatch reserves budget against a ledger row keyed by the run id, calls the provider with a hard timeout, and reconciles the spend afterwards.\n\nNote the comment on `timeoutMs`: the create path carries its own wire ceiling because full-deck generation legitimately takes minutes, and the 30-second edit-path default would guarantee a timeout and a silently degraded deck."
+    },
+    {
+      "file": "convex/nodeslideAgent.ts",
+      "line": 2058,
+      "description": "**Fail closed on an ambiguous charge.**\n\nIf the paid call ended without a reconcilable billing receipt, creation stops here. No fallback deck is produced under an unresolved charge.\n\nA provider *failure* is different and does fall back to the deterministic generator. Failure and ambiguity are not the same thing, and this repository refuses to treat them alike."
+    },
+    {
+      "file": "convex/nodeslideAgent.ts",
+      "line": 2150,
+      "description": "**The only write.**\n\nEverything above was computation. This one mutation persists the deck, its slides, its elements and their version clocks in a single transaction.\n\nFrom here on, every change to this deck goes through the version check in tour 2."
+    },
+    {
+      "file": "src/domains/nodeslide/NodeSlideStudio.tsx",
+      "line": 732,
+      "description": "**How the result reaches the screen.**\n\nNo polling, no hand-written socket. `useQuery` subscribes; when a mutation changes a row this query read, Convex pushes the new result and React re-renders.\n\nIf you find yourself adding an interval timer, the state you want is probably not in the database yet. Put it there instead."
+    },
+    {
+      "file": "src/domains/nodeslide/components/SlideRenderer.tsx",
+      "line": 28,
+      "description": "**Slides are drawn from the canonical record.**\n\nCharts, formulas and diagrams become real DOM and SVG elements. That is what makes them clickable and editable rather than a picture of a chart — and it is why the same record can also compile to editable PowerPoint."
+    }
+  ]
+}

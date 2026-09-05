@@ -1,0 +1,42 @@
+[
+  {
+    "line": 81,
+    "text": " \u276f src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx (4 tests | 1 failed) 1764ms"
+  },
+  {
+    "line": 86,
+    "text": " FAIL  src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx > AiInspector OpenUI visual-material wiring > opens the visual material lab from the live composer button"
+  },
+  {
+    "line": 87,
+    "text": "TestingLibraryElementError: Unable to find an element by: [data-testid=\"openui-visual-workbench\"]"
+  },
+  {
+    "line": 192,
+    "text": "        data-testid=\"ai-material-workbench\""
+  },
+  {
+    "line": 248,
+    "text": "          class=\"ns-openui-loading\""
+  },
+  {
+    "line": 250,
+    "text": "          Loading visual lab\u2026"
+  },
+  {
+    "line": 362,
+    "text": "          data-testid=\"ai-material-workbench\""
+  },
+  {
+    "line": 416,
+    "text": " \u276f src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx:86:11"
+  },
+  {
+    "line": 427,
+    "text": " Test Files  1 failed | 315 passed (316)"
+  },
+  {
+    "line": 428,
+    "text": "      Tests  1 failed | 2811 passed | 7 skipped (2819)"
+  }
+]

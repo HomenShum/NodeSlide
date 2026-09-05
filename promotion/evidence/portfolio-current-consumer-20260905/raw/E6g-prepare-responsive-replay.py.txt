@@ -1,0 +1,15 @@
+from pathlib import Path
+import json,datetime
+P=Path(__file__).parent
+s=(P/'E6g-nodeslide-responsive-first-use.mjs').read_text(encoding='utf-8')
+s=s.replace('browser-responsive-01','browser-responsive-02').replace('E6g-nodeslide-responsive-first-use-01','E6g-nodeslide-responsive-first-use-02')
+anchor="async function capture(page,name){"
+ready="async function settledEditor(page){await page.getByTestId('slide-canvas').waitFor();await expect(page.getByTestId('deck-title')).toHaveValue('NodeSlide local handoff — illustrative sourcing pilot');await expect(page.getByLabel(/^Presenter notes for /)).toHaveValue(/Illustrative pilot only/);await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));}\n"
+assert anchor in s;s=s.replace(anchor,ready+anchor)
+s=s.replace("await page.getByTestId('nodeslide-studio').waitFor();","await page.getByTestId('nodeslide-studio').waitFor();await settledEditor(page);")
+old="await page.getByTestId(surface==='landing'?'nodeslide-landing':'nodeslide-studio').waitFor();const name="
+new="await page.getByTestId(surface==='landing'?'nodeslide-landing':'nodeslide-studio').waitFor();if(surface==='editor')await settledEditor(page);const name="
+assert old in s;s=s.replace(old,new)
+with (P/'E6g-nodeslide-responsive-first-use-02.mjs').open('x',encoding='utf-8',newline='\n') as f:f.write(s)
+d={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'priorPacket':'E6g-nodeslide-responsive-first-use-01','cause':'studio testid exists on connection shell. Text scaling/notes visibility ran before actual slide loaded; screenshot captured connection shell while later DOM captured loaded editor. These are not same-state pixel/font observations.','observedByRoot':'Viewed1440text200 PNG is connection shell, same-name DOM later has notes; normal390 and standalone exported HTML visually loaded.','action':'Replay with actual slide canvas, expected persisted title and expected notes before text scaling/capture. Retain all original captures and report; no product change and no grade claim.','earlierScriptFailure':'Original responsive script duplicate const caused parse-only failure before any browser action; preserved source in E6g-nodeslide-responsive-first-use-parse-failure.mjs.txt.'}
+with (P/'E6g-nodeslide-responsive-capture-repair.json').open('x',encoding='utf-8',newline='\n') as f:f.write(json.dumps(d,indent=2)+'\n')

@@ -1,0 +1,19 @@
+{
+  "source": "deck.json",
+  "elementKindCounts": {
+    "text": 34,
+    "shape": 46,
+    "connector": 2
+  },
+  "brief": {
+    "audience": "Decision-makers described in the brief",
+    "prompt": "Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources. metric,value,unit,source month_1,100,units,Illustrative test input month_2,120,units,Illustrative test input month_3,140,units,Illustrative test input",
+    "purpose": "Create an editable, reviewable presentation from this idea",
+    "successCriteria": [
+      "Honor explicit slide-count and presentation constraints in the brief",
+      "Use only claims and artifact types supported by the supplied brief and evidence",
+      "Validation passes before presentation, export, or publication"
+    ]
+  },
+  "originalReportCorrection": "The first report queried absent type field. Element discriminator is kind; exported bytes unchanged."
+}

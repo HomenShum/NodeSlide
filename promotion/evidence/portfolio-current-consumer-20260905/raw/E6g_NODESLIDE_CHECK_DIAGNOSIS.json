@@ -1,0 +1,155 @@
+{
+  "mode": "Builder / independent read-only diagnosis",
+  "verdict": "CONFIRMED_NARROW_PORTABILITY_CAUSES_NODEBOOK_FULL_SUITE_TIMEOUT_UNRESOLVED",
+  "request": "Diagnose the initial NodeSlide check failures before source repair; preserve exact failures and propose the smallest truthful first-run repair.",
+  "repo": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "tree": "f3262e171240fec8f54ec5f01aa86310a2b30f5c",
+  "originalCheck": {
+    "exitCode": 1,
+    "failed": 4,
+    "passed": 2808,
+    "skipped": 7,
+    "buildReached": false,
+    "workspaceTestsReached": false,
+    "lintAndTypecheckPassed": true,
+    "raw": "E6g-nodeslide-check-diagnosis/original-full-check.log"
+  },
+  "unchangedTargeted": {
+    "exitCode": 1,
+    "failed": 3,
+    "passed": 5,
+    "skipped": 0,
+    "files": 3,
+    "sixKindsDurationMs": 1394.1797,
+    "commandReceipt": "E6g-nodeslide-check-diagnosis/unchanged-targeted-command.json"
+  },
+  "causes": [
+    {
+      "id": "NODESLIDE_TEST_FILE_URL_01",
+      "status": "CONFIRMED_NOT_EDITED",
+      "owners": [
+        "scripts/tests/workspace-build-depth.test.mjs:28",
+        "scripts/tests/code-tours.test.mjs:15"
+      ],
+      "symptom": "Two workspace assertions and one child ENOENT fail before their real checks.",
+      "boundary": "URL pathname is used as filesystem cwd/root; literal %20 points to absent directory.",
+      "mechanism": "Removing the leading slash on a drive letter does not decode URL escapes. Child executable exists, but spawnSync reports ENOENT because cwd does not exist. readManifest catches the same ENOENT and returns null, making the second build assertion compare an empty string.",
+      "knockout": "Bad cwd fails to spawn; fileURLToPath cwd runs the unchanged generator. Bad manifest root fails; correct root reads 15 manifests, no nested npm offenders, both Convex outputs retained.",
+      "repair": "Import fileURLToPath from node:url in exactly both test owners and use fileURLToPath(new URL('../..', import.meta.url)).",
+      "residual": "Correct cwd exposes a separate tour line-ending failure; cwd change alone is not a green tours gate."
+    },
+    {
+      "id": "NODESLIDE_TOUR_EOL_01",
+      "status": "CONFIRMED_NOT_EDITED",
+      "owners": [
+        ".gitattributes",
+        "scripts/build-code-tours.mjs:232"
+      ],
+      "symptom": "The genuinely executed --check flags all three untouched tours.",
+      "boundary": "Generator expects exact LF JSON; Git checks .tour files out CRLF under core.autocrlf=true because their extension is absent from eol=lf attributes.",
+      "knockout": "Exact generator body under read-only filesystem facade: real CRLF fails three; virtual CRLF-to-LF only passes 3 tours / 32 steps; one wrong line after normalization fails one. All three normalized files equal actual HEAD blobs.",
+      "repair": "Add *.tour text eol=lf at the existing Git text policy and normalize only the three current .tour working bytes after preserving originals. No tour semantic change or weakening of generator exact comparison.",
+      "residual": "New checkout with normal Git filtering must prove this; no candidate attribute change was made here."
+    },
+    {
+      "id": "NODESLIDE_TRACE_DISCOVERY_01",
+      "status": "CONFIRMED_DIAGNOSTIC_SEAM_NOT_ONE_OF_FOUR_FAILURES",
+      "owners": [
+        "scripts/tests/playwright-trace.test.mjs:17"
+      ],
+      "symptom": "Two FIND diagnostics are caught and represented as no real traces.",
+      "boundary": "Unix filesystem find command resolves to Windows FIND text utility; command error is swallowed into [] before describe.runIf.",
+      "knockout": "Actual shell exits 2 with FIND parameter error; candidate .tmp is actually absent, so five real-trace tests currently have a legitimate absence condition independently. Native filesystem discovery returns no actual traces, finds exactly two nested diagnostic names with spaces/#, and propagates ENOTDIR. Diagnostic zip names are explicitly not real traces or parser acceptance.",
+      "repair": "Replace shell discovery with Node fs traversal, preserving no-traces skip only for genuine absence; propagate other errors. Sort discovered real paths for deterministic selection. Do not fabricate traces or force real-trace cases to pass.",
+      "residual": "No actual real trace exists in this candidate. Existing five real-trace cases remain NOT_RUN until one is captured by the authorized app proof."
+    },
+    {
+      "id": "NODESLIDE_NODEBOOK_TIMEOUT_01",
+      "status": "UNRESOLVED_FULL_SUITE_ONLY_NOT_REPRODUCED_IN_BOUNDED_REPLAY",
+      "owners": [
+        "src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx:167"
+      ],
+      "symptom": "Original six-kind test reached 68030 ms and failed existing 60000 ms test limit.",
+      "boundary": "The test includes Promise.all plugin import/validation and then six sequential real host mounts with 15000 ms waits. The initial log gives no per-stage event, so it does not identify loading, validation or rendering as the failing phase.",
+      "observation": "All five unchanged tests pass with exact installed NodeBook inputs; all six kinds render in 1394.1797 ms. Same test limits, mocks and default Vitest config.",
+      "inference": "Full-suite transform/import/worker contention or cold-cache timing is plausible; not causally established by this smaller replay.",
+      "repair": "No NodeBook runtime/test timeout/skip change. After the mechanical portability repair, run the normal original check once. If the same timeout returns, retain it and collect test-stage timings plus worker/event-loop evidence before choosing a scheduling or loader change.",
+      "residual": "Bounded success does not certify whole-suite reliability, actual browser visual fidelity or performance."
+    }
+  ],
+  "plan": {
+    "name": "NODESLIDE_CHECK_PORTABILITY_01",
+    "classification": "Patch / developer first-run tests and Git line-ending policy",
+    "authoredPaths": [
+      "scripts/tests/workspace-build-depth.test.mjs",
+      "scripts/tests/code-tours.test.mjs",
+      ".gitattributes",
+      "scripts/tests/playwright-trace.test.mjs"
+    ],
+    "steps": [
+      "Preserve failed run and exact current four owners plus CRLF tour bytes before any edit.",
+      "Use native URL-to-path conversion in the two actual failing test owners.",
+      "Add the existing LF rule for .tour and normalize only those working files; assert their Git blobs and parsed JSON remain unchanged.",
+      "Replace Unix find with native filesystem discovery; assert nested paths with spaces, actual missing .tmp and non-absence error behavior.",
+      "Replay unchanged workspace/tours assertions and the existing trace tests; assert real-trace skip remains explicitly NOT_RUN when absent and no catch hides errors.",
+      "Run original npm run check with unchanged timeouts/skips, after avoiding concurrent builds on the same generated outputs.",
+      "Keep NodeBook failure unresolved if it recurs, instrument the exact six-kind phase without relaxing its assertions, then freeze an independent narrow review."
+    ],
+    "notInScope": [
+      "NodeBook component redesign",
+      "timeout increase",
+      "disabling tests or assertions",
+      "whole-app readiness grade",
+      "provider/cloud/native Office calls",
+      "native Office fidelity",
+      "historical worktree cleanup"
+    ]
+  },
+  "twinSearch": "TWINS: searched scripts/tests for .pathname and pathname.replace - the two named owners are the only matches; existing docs-citations and nodeslide-landing-a11y tests already use fileURLToPath. The Unix find site is a distinct observed discovery defect.",
+  "custody": {
+    "sourceAndInstalledInputs": 61,
+    "allUnchanged": true,
+    "changed": [],
+    "generatorReadInputs": 20,
+    "allGeneratorReadInputsUnchanged": true,
+    "indexUnchanged": true,
+    "refsUnchanged": true,
+    "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+    "extraBindings": {
+      ".gitattributes": {
+        "sha256": "d444ed3e7b2a6c881e9ab1da2199a90cd0b664d86fc26eb0abe323642f18029b",
+        "bytes": 1038,
+        "headBlobSha256": "267cb2c97a87920fe158d3177afc824d71b31d8d7692aea1064b26bd6592dbd4"
+      },
+      ".tours/01-primary-user-flow.tour": {
+        "sha256": "a6c7b0b8bf5b4032eb4f3fa8f7f6f2e2a61d2ea9bf38df93c81d27a08855cc2f",
+        "bytes": 6523,
+        "headBlobSha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97"
+      },
+      ".tours/02-agent-execution.tour": {
+        "sha256": "c4d9dc23f4f2702426704c3e7b1c8c499c74bd5eaf2cf86d0a214a0c8897f012",
+        "bytes": 4420,
+        "headBlobSha256": "a274bb90a62570133e66eddd157c63e4408b6938eeb103e7b16c7d455d3eef75"
+      },
+      ".tours/03-debug-and-recovery.tour": {
+        "sha256": "bf4fab658b2e0b7647d6e088e72ee6e57d479a1954dc71c220d50ba0636fe3e1",
+        "bytes": 3756,
+        "headBlobSha256": "33df49d1ff3bf1ea7bae328af2d47257919d09c6ea99531d0a64467f10ed716e"
+      }
+    },
+    "boundary": "Only named source, tours, installed NodeBook files, Git entries and refs. Root concurrently owns ordinary generated dist build; no all-filesystem immutability claim."
+  },
+  "evidenceManifest": {
+    "path": "E6g-nodeslide-check-diagnosis/manifest.json",
+    "sha256": "b27181792d1119e646ccfc311c44d7fa20aecdc0080ec67cf1d1518b6353f08d"
+  },
+  "limitations": [
+    "No source/config/index/ref edits, backend/provider/native Office or full check rerun by this reviewer.",
+    "Review context reused from earlier unrelated repairs; nonauthor of this NodeSlide source.",
+    "No browser pixels or whole visual/responsive/interaction grade claimed.",
+    "Original 4 failures and all new failures remain raw and unmodified."
+  ],
+  "overallScore": null,
+  "dimensionScores": null
+}

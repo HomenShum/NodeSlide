@@ -1,0 +1,64 @@
+from pathlib import Path
+import os,subprocess,json,time,datetime,hashlib
+import psutil
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=Path('D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02')
+assert O.is_dir() and not (O/'native-loopback.log').exists()
+config=json.loads((R/'.convex/local/default/config.json').read_text(encoding='utf-8'))
+assert config['deploymentName']=='anonymous-agent' and config.get('cloudProjectId') is None
+assert config.get('instanceSecret') and config.get('adminKey')
+ports=[config['ports']['cloud'],config['ports']['site']]
+assert ports==[49676,49690]
+assert not any(c.status==psutil.CONN_LISTEN and c.laddr.port in ports for c in psutil.net_connections(kind='tcp'))
+binary=Path(os.environ['LOCALAPPDATA'])/'convex/binaries'/config['backendVersion']/'convex-local-backend.exe'
+assert hashlib.sha256(binary.read_bytes()).hexdigest()=='b1e2b0920a36aaa43b4daccfdc04368308148485cd5b327a6146b226fae827ae'
+env=dict(os.environ)
+for key in list(env):
+    upper=key.upper()
+    if any(x in upper for x in ['OPENAI','ANTHROPIC','GEMINI','GOOGLE_API','CONVEX','VITE_','PLAYWRIGHT_BASE_URL']) or upper.endswith(('_API_KEY','_ACCESS_TOKEN','_SECRET')):env.pop(key)
+env.update({'TEMP':'D:/ProjectRecovery/NodeSlide first run 20260905/temp','TMP':'D:/ProjectRecovery/NodeSlide first run 20260905/temp'})
+nativeArgs=[str(binary),'--interface','127.0.0.1','--port',str(ports[0]),'--site-proxy-port',str(ports[1]),'--instance-name',config['deploymentName'],'--instance-secret',config['instanceSecret'],'--local-storage',str(R/'.convex/local/default/convex_local_storage'),'--disable-beacon',str(R/'.convex/local/default/convex_local_backend.sqlite3')]
+record={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'STARTING','ports':ports,'sourcePushed':False,'admissionSet':False,'providerCalls':0,'backendTarget':'NEW_CANDIDATE_LOOPBACK_ONLY','privateLogs':str(O),'nativeSecretAndAdminKey':'IN_MEMORY_ONLY_NOT_OUTPUT'}
+receipt=P/'E6g-nodeslide-first-run/local-loopback-runtime.json'
+assert not receipt.exists()
+def save():receipt.write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8',newline='\n')
+with (O/'native-loopback.log').open('xb') as log:
+    backend=subprocess.Popen(nativeArgs,cwd=R,env=env,stdout=log,stderr=subprocess.STDOUT,stdin=subprocess.DEVNULL,creationflags=subprocess.CREATE_NO_WINDOW)
+    owner=psutil.Process(backend.pid)
+    record['nativePid']=owner.pid;record['nativeProcessCreated']=owner.create_time();save()
+    try:
+        deadline=time.monotonic()+30
+        while time.monotonic()<deadline:
+            listeners=[{'pid':c.pid,'address':c.laddr.ip,'port':c.laddr.port} for c in psutil.net_connections(kind='tcp') if c.status==psutil.CONN_LISTEN and c.laddr.port in ports]
+            if {c['port'] for c in listeners}==set(ports):break
+            assert backend.poll() is None,'Owned native backend exited before readiness'
+            time.sleep(0.5)
+        assert {c['port'] for c in listeners}==set(ports)
+        assert all(c['pid']==owner.pid and c['address']=='127.0.0.1' for c in listeners)
+        record['listeners']=listeners;record['verifiedOwnedLoopback']=True;save()
+        cliEnv=dict(env)
+        cliEnv.update({'CONVEX_SELF_HOSTED_URL':'http://127.0.0.1:'+str(ports[0]),'CONVEX_SELF_HOSTED_ADMIN_KEY':config['adminKey'],'CONVEX_DEPLOYMENT':'','CONVEX_AGENT_MODE':'anonymous'})
+        for label,args in [('source-push',['dev','--once','--tail-logs','disable']),('creation-admission',['env','set','NODESLIDE_PUBLIC_CREATION','true'])]:
+            start=time.monotonic()
+            with (O/(label+'.log')).open('xb') as cliLog:
+                result=subprocess.run(['node','node_modules/convex/bin/main.js',*args],cwd=R,env=cliEnv,stdin=subprocess.DEVNULL,stdout=cliLog,stderr=subprocess.STDOUT,timeout=300,creationflags=subprocess.CREATE_NO_WINDOW)
+            record[label]={'exitCode':result.returncode,'seconds':time.monotonic()-start,'privateLogBytes':(O/(label+'.log')).stat().st_size,'privateLogSha256':hashlib.sha256((O/(label+'.log')).read_bytes()).hexdigest()};save()
+            if result.returncode:
+                record['status']='LOCAL_'+label.upper().replace('-','_')+'_FAILED';save()
+                raise RuntimeError(record['status'])
+            if label=='source-push':record['sourcePushed']=True
+            else:record['admissionSet']=True
+        record['status']='READY_FOR_DETERMINISTIC_BROWSER_PROOF';save()
+        print(json.dumps(record),flush=True)
+        deadline=time.monotonic()+3600
+        while time.monotonic()<deadline and not (O/'STOP_LOOPBACK').exists():
+            assert backend.poll() is None,'Owned native backend exited during proof'
+            time.sleep(1)
+    finally:
+        if owner.is_running():owner.terminate()
+        gone,alive=psutil.wait_procs([owner],timeout=10)
+        record['cleanup']={'method':'WINDOWS_TERMINATE_EXACT_RECORDED_NATIVE_PID','ownedProcessExited':not alive,'portsReleased':not any(c.status==psutil.CONN_LISTEN and c.laddr.port in ports for c in psutil.net_connections(kind='tcp'))}
+        record['sourceStatus']=subprocess.check_output(['git','status','--porcelain=v1'],cwd=R).decode('utf-8').splitlines()
+        record['stoppedAt']=datetime.datetime.now(datetime.timezone.utc).isoformat();save()
+        print(json.dumps({'status':record['status'],'cleanup':record['cleanup']}),flush=True)

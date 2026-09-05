@@ -1,0 +1,33 @@
+{
+  "text": "N\n/\n01\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\n02\nCONTEXT / 02\nThe cost of waiting is usually hidden in repeated work.\nFriction\nConsequence\nDecision window\nFrame the current reality for Decision-makers described in the brief: what is fragmented today, why it matters now, and where momentum is being lost.\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n02\n03\nINSIGHT / 03\nA better outcome starts with a sharper point of view.\nCreate a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decis…\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n03\n04\nAPPROACH / 04\nThe uploaded values remain an editable chart.\nLabels and values stay in the canonical deck spec for direct editing, validation, and native export.\nMonth 1\nMonth 2\nMonth 3\n01  Data-bound bars\n02  Source-linked values\n03  Editable labels\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n04\n05\nEVIDENCE / 05\nDefine proof before asking for commitment.\nUse the brief’s success criteria as qualitative review questions until measured evidence is supplied.\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n05\n06\nCLOSE / 07\nCreate an editable, reviewable presentation from this idea\n01  Agree the outcome\n02  Name the owner\n03  Set the next checkpoint\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n06\nAdd slide\nEdit\nOverview\nCompare\nverified\nSLIDE JOB\nIllustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text. Decision: prototype after checking the budget. 中文交接 — no external claims.\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\n1 / 6\nPresenter notes\n25 words\n40%\nFit\nINSPECTOR\nSelection · none\nAI\nDesign\nComments\nEvidence\nTrace\nMore\nAGENT ACTIVITY\nRun details\nSummary\nTimeline\nRaw\n\nProvider, work performed, validation, and human approval in one auditable run.\n\nDeck checks · v3\nDeck CI\nPassed\n0 blockers · 0 warnings\n\nNo blockers or warnings reported for this version.\n\nLatest recorded core validation: passed\n\nDeck v3 · core checks passed. See Deck CI for broader checks.\n\nRUN\nNodeSlide created the deck with its deterministic brief generator. The brief was not sent to an external model provider. Self-critique: 1 pass (deterministic route; self-critique loop skipped).\nCompleted\ndeck v1\nStarted 5:05:51 AM\nNodeSlide created the deck with its deterministic brief generator. The brief was not sent to an external model provider. Self-critique: 1 pass (deterministic route; self-critique loop skipped).\ndeterministic · brief-to-deck/v1\nRUN TIME\n1s\nTOKENS\n— → —\nCOST\nnot recorded\nVALIDATION\nPassed\n\nNo external provider billing was recorded for this fallback.\n\nExecution\n6 auditable records\nStructured timeline unavailable\n\nLegacy runs keep their custody receipt but do not invent span timing.\n\nAuthorization\nConsent not required — no external egress\nContext\n— unsealed\n5 context references read — attribution route degraded\nPlan\n— unsealed\n6-step plan drafted\nActions\nDeck built deterministically (5 tool calls)\nValidation\nDeterministic validation passed (v1)\nApproval\n— unsealed\nProvisional seal — machine only, not signable\nSelected trace core validation: passed\n\nDeck v1 · core checks passed. See Deck CI for broader checks.\n\nCore validation v3 passed. Review Deck CI.",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "overflow": 0,
+  "details": [
+    {
+      "text": "Deck checks · v3Deck CIPassed0 blockers · 0 warningsNo blockers or warnings reported for this version.",
+      "version": "3",
+      "box": {
+        "x": 11,
+        "y": 414.84375,
+        "width": 369,
+        "height": 211.453125
+      }
+    }
+  ],
+  "states": [
+    {
+      "state": "pass",
+      "text": "Deck CIPassed0 blockers · 0 warnings",
+      "animation": "none"
+    },
+    {
+      "state": "pass",
+      "text": "Deck CIPassed0 blockers · 0 warnings",
+      "animation": "none"
+    }
+  ],
+  "focused": null
+}

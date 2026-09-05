@@ -1,0 +1,6 @@
+from pathlib import Path
+P=Path(__file__).parent
+s=(P/'E6g-check-nodeslide-portability-02.py').read_text(encoding='utf-8')
+s=s.replace('E6g-nodeslide-portability-check-02','E6g-nodeslide-multiline-check-01')
+s=s.replace("'.gitattributes']","'.gitattributes','convex/lib/nodeslideValidators.ts','convex/lib/nodeslideAdmission.test.ts','convex/_generated/api.d.ts','.tours/03-debug-and-recovery.tour']")
+(P/'E6g-check-nodeslide-multiline.py').write_text(s,encoding='utf-8',newline='\n')

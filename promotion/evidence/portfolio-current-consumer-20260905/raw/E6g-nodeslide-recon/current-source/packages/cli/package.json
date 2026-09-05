@@ -1,0 +1,26 @@
+{
+  "name": "@nodeslide/cli",
+  "version": "0.2.2",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "files": ["dist", "README.md"],
+  "bin": {
+    "nodeslide": "./dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nodeslide/registry": "0.2.2",
+    "convex": "^1.31.7",
+    "pptxgenjs": "^4.0.1"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "scope": "Actual failed deck, current local source; boundary overlays only, no product edit",
+  "cells": [],
+  "errors": [],
+  "failure": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('inspector') to be visible\u001b[22m\n\u001b[2m    60 × locator resolved to hidden <aside data-testid=\"inspector\" aria-label=\"Inspector collapsed\" class=\"ns-inspector is-collapsed\">…</aside>\u001b[22m\n\n    at C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-capture-readiness-before-03.mjs:7:488"
+}

@@ -1,0 +1,11 @@
+--- before/docs/codebase/INTEGRATIONS.md
++++ current/docs/codebase/INTEGRATIONS.md
+@@ -41,7 +41,7 @@
+ Three environment variables in the Convex deployment decide whether a stranger
+ may create a deck at all: `NODESLIDE_PUBLIC_CREATION`,
+ `NODESLIDE_PREVIEW_ACCESS_CODE`, `NODESLIDE_PREVIEW_ADMISSION_SUBJECT`
+-(`convex/lib/nodeslideValidators.ts:255` (`validateNodeSlidePreviewAdmission`)). `npx convex dev` sets none of them,
++(`convex/lib/nodeslideValidators.ts:256` (`validateNodeSlidePreviewAdmission`)). `npx convex dev` sets none of them,
+ and there is no `.env.example`. This is defect **D1** in
+ `promotion/PROMOTION_LOG.md`.
+ 

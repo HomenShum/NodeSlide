@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "C:\Users\hshum\.codex\worktrees\5dba\nodebench-ai\docs\plans\portfolio-recovery-20260904\E6g-review-multiline-artifacts.py", line 40, in <module>
+    assert len(links)==1 and links[0]['chart']==chartName
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

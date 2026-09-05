@@ -1,0 +1,58 @@
+[
+  {
+    "repo": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+    "head": {
+      "exitCode": 0,
+      "stdout": "b112cffddaafe08ddbbfabc54a4dd8e6e9c4b10e\n",
+      "stderr": ""
+    },
+    "tree": {
+      "exitCode": 0,
+      "stdout": "87009b5feec51a4732fe0a5eb488b85d45f800de\n",
+      "stderr": ""
+    },
+    "refs": {
+      "exitCode": 0,
+      "stdout": "refs/heads/main b112cffddaafe08ddbbfabc54a4dd8e6e9c4b10e origin/main\nrefs/remotes/origin/HEAD b0674b229a3691c09c88fcab1481f2e33342cb21 \nrefs/remotes/origin/backup/external-agent-surface-pre-restack-20260719 4a03172665c7dd62a303e7b2e1f8a2b5b9936db7 \nrefs/remotes/origin/clip-gate-two-axis 0a3ef965d6a4ba118a72d15aeaf9a5ace6fd9182 \nrefs/remotes/origin/codex/external-agent-interface e00ec69cf73b3e02a62bf9025f0087cc6409b1e1 \nrefs/remotes/origin/codex/external-agent-surface 7815b44fe24d6673745cb5d51af219ef4f6652c9 \nrefs/remotes/origin/codex/injectable-core 81bb2c81b93c5461184bb7b31bb1a6736d64ef01 \nrefs/remotes/origin/codex/nodekit-caseflow-consumer bd41762b96ae5c7fb9764ebb454a8cbd18dca013 \nrefs/remotes/origin/codex/package-consumer-proof e57b4e59636b2428f33015bb8413259d913fa7f3 \nrefs/remotes/origin/codex/react-headless baa2d04290cf15d1094a76bc1cad786ee3920aaa \nrefs/remotes/origin/codex/react-surfaces 5f367932fe10cc9631f522e1e2148519ed2ff369 \nrefs/remotes/origin/deploy-canary 7dbe2d1450b27fe44dee39e64aa1bc9f61f56cc2 \nrefs/remotes/origin/extract/codebase b769794c5980c3a032f5c91261b4c6d1c80e83f5 \nrefs/remotes/origin/feat/ai-elements-composer 5e4b1fbb7f82ab25ec3c6394fc18e1cae0d5d6ef \nrefs/remotes/origin/feat/depth-governance-port 0c4f310ac999d3df978d3bae715026dd0225345e \nrefs/remotes/origin/feat/nodekit-showcase-full 6c19b6d1ba8c705b9c1b4e6b35f8bf9819a07118 \nrefs/remotes/origin/main b0674b229a3691c09c88fcab1481f2e33342cb21 \nrefs/remotes/origin/nodekit/opportunity-contract 8c570679cedad6e487249a2138e6bf6e10155ae5 \nrefs/remotes/origin/port/pptx-import 9b7e0659161931e263c41aef2140058f330ed7f2 \nrefs/remotes/origin/production-agent-contract 8d51d34b1f88b9f816e8a7c51dfee205922a6a64 \nrefs/remotes/origin/wip/nodekit-caseflow-consumer-v2 c1c4b95fc5d774b74c062720caaab569a9a3ce0e \nrefs/tags/v0.1.0 df5567917425901252252e3adb2efb788ec345e4 \nrefs/tags/v0.2.0 39a9ebfcbaaeef52556bc263d386ea4859f476bb \nrefs/tags/v0.2.1 30f62401744930aed280740530c3ab00445c531b \nrefs/tags/v0.2.2 ec4870300e1ad7ddd74209aada3a47a26779b4bb \n",
+      "stderr": ""
+    },
+    "worktrees": {
+      "exitCode": 0,
+      "stdout": "worktree D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/NodeSlide\nHEAD b112cffddaafe08ddbbfabc54a4dd8e6e9c4b10e\nbranch refs/heads/main\n\n",
+      "stderr": ""
+    },
+    "remoteMain": {
+      "exitCode": 0,
+      "stdout": "ref: refs/heads/main\tHEAD\nb0674b229a3691c09c88fcab1481f2e33342cb21\tHEAD\nb0674b229a3691c09c88fcab1481f2e33342cb21\trefs/heads/main\n",
+      "stderr": ""
+    }
+  },
+  {
+    "repo": "D:\\VSCode Projects\\nodeslide",
+    "head": {
+      "exitCode": 0,
+      "stdout": "0a3ef965d6a4ba118a72d15aeaf9a5ace6fd9182\n",
+      "stderr": ""
+    },
+    "tree": {
+      "exitCode": 0,
+      "stdout": "cef6294aabdd52250e10df088cedeb7c24f04ca5\n",
+      "stderr": ""
+    },
+    "refs": {
+      "exitCode": 0,
+      "stdout": "refs/heads/agent/nodebook-embed-nodeslide 316ea91baf91d62593b91181121a94c75a88a168 origin/agent/nodebook-embed-nodeslide\nrefs/heads/clip-gate-two-axis 78660e931c1e8953510543b8def3d870e6597b3a origin/clip-gate-two-axis\nrefs/heads/main 0a3ef965d6a4ba118a72d15aeaf9a5ace6fd9182 origin/main\nrefs/remotes/origin/backup/external-agent-surface-pre-restack-20260719 4a03172665c7dd62a303e7b2e1f8a2b5b9936db7 \nrefs/remotes/origin/clip-gate-two-axis 0a3ef965d6a4ba118a72d15aeaf9a5ace6fd9182 \nrefs/remotes/origin/codex/nodekit-caseflow-consumer bd41762b96ae5c7fb9764ebb454a8cbd18dca013 \nrefs/remotes/origin/codex/react-headless baa2d04290cf15d1094a76bc1cad786ee3920aaa \nrefs/remotes/origin/main b0674b229a3691c09c88fcab1481f2e33342cb21 \nrefs/remotes/origin/nodekit/opportunity-contract 8c570679cedad6e487249a2138e6bf6e10155ae5 \nrefs/remotes/origin/wip/nodekit-caseflow-consumer-v2 c1c4b95fc5d774b74c062720caaab569a9a3ce0e \nrefs/tags/v0.1.0 df5567917425901252252e3adb2efb788ec345e4 \nrefs/tags/v0.2.0 39a9ebfcbaaeef52556bc263d386ea4859f476bb \nrefs/tags/v0.2.1 30f62401744930aed280740530c3ab00445c531b \nrefs/tags/v0.2.2 ec4870300e1ad7ddd74209aada3a47a26779b4bb \n",
+      "stderr": ""
+    },
+    "worktrees": {
+      "exitCode": 0,
+      "stdout": "worktree D:/VSCode Projects/nodeslide\nHEAD 0a3ef965d6a4ba118a72d15aeaf9a5ace6fd9182\nbranch refs/heads/main\n\nworktree D:/VSCode Projects/Ideaflow/consumer-proof-nodeslide\nHEAD 316ea91baf91d62593b91181121a94c75a88a168\nbranch refs/heads/agent/nodebook-embed-nodeslide\n\n",
+      "stderr": ""
+    },
+    "remoteMain": {
+      "exitCode": 0,
+      "stdout": "ref: refs/heads/main\tHEAD\nb0674b229a3691c09c88fcab1481f2e33342cb21\tHEAD\nb0674b229a3691c09c88fcab1481f2e33342cb21\trefs/heads/main\n",
+      "stderr": ""
+    }
+  }
+]

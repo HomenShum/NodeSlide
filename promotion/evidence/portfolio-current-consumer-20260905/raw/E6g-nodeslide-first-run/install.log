@@ -1,0 +1,17 @@
+npm warn skipping integrity check for git dependency ssh://git@github.com/HomenShum/node-platform.git
+npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+
+added 708 packages, and audited 724 packages in 32s
+
+102 packages are looking for funding
+  run `npm fund` for details
+
+7 vulnerabilities (1 moderate, 6 high)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.

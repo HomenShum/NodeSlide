@@ -1,0 +1,44 @@
+[
+  {
+    "file": "ppt/notesSlides/notesSlide1.xml",
+    "paragraphs": [
+      "Illustrative pilot only. Review 100 \u2192 120 \u2192 140 units; reference 00123 remains text.\nDecision: prototype after checking the budget. \u4e2d\u6587\u4ea4\u63a5 \u2014 no external claims.\n\nNodeSlide sources\n[source_d5167a00a50b356528b35c6d9c21afc7] Create a six-slide decision review for a fictional sourcing pilot \u2014 creation brief\nCitation: Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.\n\nmetric,value,unit,source\nmonth_1,100,units,Illustrative test input\nmonth_2,120,units,Illustrative test input\nmonth_3,140,units,Illustrative test input\nDisclaimer: Internal working material",
+      "1"
+    ]
+  },
+  {
+    "file": "ppt/notesSlides/notesSlide2.xml",
+    "paragraphs": [
+      "Narrative role: Context / 02. Composition grammar: process-canvas. Keep the spoken transition focused on \"The cost of waiting is usually hidden in repeated work.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.\n\nNodeSlide sources\n[source_d5167a00a50b356528b35c6d9c21afc7] Create a six-slide decision review for a fictional sourcing pilot \u2014 creation brief\nCitation: Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.\n\nmetric,value,unit,source\nmonth_1,100,units,Illustrative test input\nmonth_2,120,units,Illustrative test input\nmonth_3,140,units,Illustrative test input\nDisclaimer: Internal working material\n\n[source_ee9223cffaa6fc02ab1b4acc811e4abc] Brief success criteria\nCitation: Honor explicit slide-count and presentation constraints in the brief; Use only claims and artifact types supported by the supplied brief and evidence; Validation passes before presentation, export, or publication\nDisclaimer: Internal working material",
+      "2"
+    ]
+  },
+  {
+    "file": "ppt/notesSlides/notesSlide3.xml",
+    "paragraphs": [
+      "Narrative role: Insight / 03. Composition grammar: scene-stage. Keep the spoken transition focused on \"A better outcome starts with a sharper point of view.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.\n\nNodeSlide sources\n[source_d5167a00a50b356528b35c6d9c21afc7] Create a six-slide decision review for a fictional sourcing pilot \u2014 creation brief\nCitation: Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.\n\nmetric,value,unit,source\nmonth_1,100,units,Illustrative test input\nmonth_2,120,units,Illustrative test input\nmonth_3,140,units,Illustrative test input\nDisclaimer: Internal working material\n\n[source_ee9223cffaa6fc02ab1b4acc811e4abc] Brief success criteria\nCitation: Honor explicit slide-count and presentation constraints in the brief; Use only claims and artifact types supported by the supplied brief and evidence; Validation passes before presentation, export, or publication\nDisclaimer: Internal working material",
+      "3"
+    ]
+  },
+  {
+    "file": "ppt/notesSlides/notesSlide4.xml",
+    "paragraphs": [
+      "Narrative role: Approach / 04. Composition grammar: asymmetric-editorial. Keep the spoken transition focused on \"The uploaded values remain an editable chart.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.\n\nNodeSlide sources\n[source_d5167a00a50b356528b35c6d9c21afc7] Create a six-slide decision review for a fictional sourcing pilot \u2014 creation brief\nCitation: Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.\n\nmetric,value,unit,source\nmonth_1,100,units,Illustrative test input\nmonth_2,120,units,Illustrative test input\nmonth_3,140,units,Illustrative test input\nDisclaimer: Internal working material\n\n[source_ee9223cffaa6fc02ab1b4acc811e4abc] Brief success criteria\nCitation: Honor explicit slide-count and presentation constraints in the brief; Use only claims and artifact types supported by the supplied brief and evidence; Validation passes before presentation, export, or publication\nDisclaimer: Internal working material",
+      "4"
+    ]
+  },
+  {
+    "file": "ppt/notesSlides/notesSlide5.xml",
+    "paragraphs": [
+      "Narrative role: Evidence / 05. Composition grammar: scene-stage. Keep the spoken transition focused on \"Define proof before asking for commitment.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.\n\nNodeSlide sources\n[source_d5167a00a50b356528b35c6d9c21afc7] Create a six-slide decision review for a fictional sourcing pilot \u2014 creation brief\nCitation: Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.\n\nmetric,value,unit,source\nmonth_1,100,units,Illustrative test input\nmonth_2,120,units,Illustrative test input\nmonth_3,140,units,Illustrative test input\nDisclaimer: Internal working material\n\n[source_ee9223cffaa6fc02ab1b4acc811e4abc] Brief success criteria\nCitation: Honor explicit slide-count and presentation constraints in the brief; Use only claims and artifact types supported by the supplied brief and evidence; Validation passes before presentation, export, or publication\nDisclaimer: Internal working material",
+      "5"
+    ]
+  },
+  {
+    "file": "ppt/notesSlides/notesSlide6.xml",
+    "paragraphs": [
+      "Narrative role: Close / 07. Composition grammar: evidence-dossier. Keep the spoken transition focused on \"Create an editable, reviewable presentation from this idea\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.\n\nNodeSlide sources\n[source_d5167a00a50b356528b35c6d9c21afc7] Create a six-slide decision review for a fictional sourcing pilot \u2014 creation brief\nCitation: Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.\n\nmetric,value,unit,source\nmonth_1,100,units,Illustrative test input\nmonth_2,120,units,Illustrative test input\nmonth_3,140,units,Illustrative test input\nDisclaimer: Internal working material",
+      "6"
+    ]
+  }
+]

@@ -1,0 +1,73 @@
+{
+  "at": "2026-09-05T11:14:24.768803+00:00",
+  "mode": "EMPTY_BOOTSTRAP_SKIP_PUSH",
+  "freshStateGuards": true,
+  "privateAclVerified": true,
+  "ports": [
+    49676,
+    49690
+  ],
+  "command": [
+    "node",
+    "node_modules/convex/bin/main.js",
+    "dev",
+    "--skip-push",
+    "--local-cloud-port",
+    "49676",
+    "--local-site-port",
+    "49690",
+    "--tail-logs",
+    "disable"
+  ],
+  "sourcePushed": false,
+  "admissionSet": false,
+  "providerCalls": 0,
+  "privateLog": "D:\\ProjectRecovery\\NodeSlide first run 20260905\\private-bootstrap-02\\bootstrap.log",
+  "cliPid": 68060,
+  "listeners": [
+    {
+      "pid": 9012,
+      "address": "0.0.0.0",
+      "port": 49690
+    },
+    {
+      "pid": 9012,
+      "address": "0.0.0.0",
+      "port": 49676
+    }
+  ],
+  "ownedProcessNames": [
+    {
+      "pid": 68060,
+      "name": "node.exe",
+      "created": 1788606864.7728379
+    },
+    {
+      "pid": 54052,
+      "name": "conhost.exe",
+      "created": 1788606864.7851222
+    },
+    {
+      "pid": 9012,
+      "name": "convex-local-backend.exe",
+      "created": 1788606867.9594047
+    }
+  ],
+  "bothListenersOwned": true,
+  "allObservedListenersLoopback": false,
+  "elapsedSeconds": 3.7339999999385327,
+  "cliExitBeforeStop": null,
+  "cleanup": {
+    "method": "WINDOWS_TERMINATE_RECORDED_OWNED_PROCESSES_NO_GRACEFUL_HOOK_CLAIM",
+    "allRecordedProcessesExited": true,
+    "remainingOwnedPids": []
+  },
+  "portsReleased": true,
+  "generatedEnvPresence": true,
+  "generatedLocalConfigPresence": true,
+  "privateLogBytes": 579,
+  "privateLogSha256": "a6259a3ebd0ef3e8313725318379522a1ee92671c9039aa09a9c4f86c2ae861a",
+  "sourceStatus": [
+    " M public/recipelang/edge-data-contract.svg"
+  ]
+}

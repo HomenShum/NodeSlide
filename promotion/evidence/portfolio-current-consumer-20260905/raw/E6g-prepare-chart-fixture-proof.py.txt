@@ -1,0 +1,31 @@
+from pathlib import Path
+import json
+P=Path(__file__).parent
+s=(P/'E6g-nodeslide-browser-first-use.mjs').read_text(encoding='utf-8')
+s=s.replace('E6g-nodeslide-browser-first-use-01','E6g-nodeslide-chart-fixture-01').replace('browser-first-use-01','browser-chart-fixture-01')
+s=s.replace('NodeSlide local handoff — illustrative sourcing pilot','NodeSlide local handoff — structured chart fixture')
+old='Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.'
+new=old+'\n\nmetric,value,unit,source\nmonth_1,100,units,Illustrative test input\nmonth_2,120,units,Illustrative test input\nmonth_3,140,units,Illustrative test input'
+s=s.replace(".fill('"+old+"')",'.fill('+json.dumps(new)+')')
+s=s.replace("const {expect}=req('playwright/test');","const {expect}=req('playwright/test');\nconst JSZip=req('jszip');")
+anchor="  report.status='PASS_CREATE_EDIT_RELOAD';"
+newblock="""  await page.getByLabel('Export deck',{exact:true}).click();
+  const pending=page.waitForEvent('download',{timeout:30000});
+  await page.getByTestId('export-pptx').click();
+  const download=await pending;
+  const file=path.join(privateRoot,'chart-fixture.pptx');
+  await download.saveAs(file);
+  const bytes=await fs.readFile(file);const zip=await JSZip.loadAsync(bytes);
+  const chartNames=Object.keys(zip.files).filter(n=>/^ppt\\/charts\\/chart\\d+\\.xml$/.test(n));
+  const chartXml=await Promise.all(chartNames.map(n=>zip.file(n).async('string')));
+  await fs.copyFile(file,path.join(O,'actual-chart-fixture.pptx'));
+  await fs.writeFile(path.join(O,'actual-chart-parts.json'),JSON.stringify(chartXml,null,2)+'\\n');
+  report.chartExport={bytes:bytes.length,charts:chartNames.length,failure:await download.failure(),values:chartXml.map(s=>[...s.matchAll(/<c:v>(.*?)<\\/c:v>/g)].map(m=>m[1])),nativeOfficeOpened:false};
+  await page.getByRole('button',{name:'Next slide',exact:true}).click();
+  await page.getByRole('button',{name:'Next slide',exact:true}).click();
+  await page.getByRole('button',{name:'Next slide',exact:true}).click();
+  await capture('05-chart-slide');
+  report.status='STRUCTURED_CHART_FIXTURE_OBSERVED';"""
+assert anchor in s;s=s.replace(anchor,newblock)
+with (P/'E6g-nodeslide-chart-fixture-proof.mjs').open('x',encoding='utf-8',newline='\n') as f:f.write(s)
+print('Prepared same UI journey with the existing supported CSV shape; original unmet natural-language request retained.')

@@ -1,0 +1,22 @@
+from pathlib import Path
+import os,json,subprocess,psutil,time,hashlib
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=Path('D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02')
+runtime=json.loads((P/'E6g-nodeslide-first-run/local-loopback-runtime.json').read_text(encoding='utf-8'))
+owner=psutil.Process(runtime['nativePid']);assert owner.create_time()==runtime['nativeProcessCreated']
+listeners=[c for c in psutil.net_connections(kind='tcp') if c.status==psutil.CONN_LISTEN and c.laddr.port in [49676,49690]]
+assert {c.laddr.port for c in listeners}=={49676,49690} and all(c.pid==owner.pid and c.laddr.ip=='127.0.0.1' for c in listeners)
+config=json.loads((R/'.convex/local/default/config.json').read_text(encoding='utf-8'))
+assert config['deploymentName']=='anonymous-agent' and config.get('cloudProjectId') is None and config['ports']=={'cloud':49676,'site':49690}
+env=dict(os.environ)
+for key in list(env):
+    upper=key.upper()
+    if any(x in upper for x in ['OPENAI','ANTHROPIC','GEMINI','GOOGLE_API','CONVEX','VITE_','PLAYWRIGHT_BASE_URL']) or upper.endswith(('_API_KEY','_ACCESS_TOKEN','_SECRET')):env.pop(key)
+env.update({'CONVEX_SELF_HOSTED_URL':'http://127.0.0.1:49676','CONVEX_SELF_HOSTED_ADMIN_KEY':config['adminKey'],'CONVEX_DEPLOYMENT':'','CONVEX_AGENT_MODE':'anonymous'})
+log=O/'multiline-source-push.log';start=time.monotonic()
+with log.open('xb') as target:
+    result=subprocess.run(['node','node_modules/convex/bin/main.js','dev','--once','--tail-logs','disable'],cwd=R,env=env,stdin=subprocess.DEVNULL,stdout=target,stderr=subprocess.STDOUT,timeout=300,creationflags=subprocess.CREATE_NO_WINDOW)
+record={'exitCode':result.returncode,'seconds':time.monotonic()-start,'target':'EXISTING_OWNED_LOOPBACK_49676','privateLogSha256':hashlib.sha256(log.read_bytes()).hexdigest(),'privateLogBytes':log.stat().st_size,'providerCalls':0}
+(P/'E6g-nodeslide-multiline-local-push.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8',newline='\n')
+print(json.dumps(record));raise SystemExit(result.returncode)

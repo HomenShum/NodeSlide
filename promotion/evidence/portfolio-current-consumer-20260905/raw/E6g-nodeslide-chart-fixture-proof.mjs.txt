@@ -1,0 +1,87 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {fileURLToPath} from 'node:url';
+const P=path.dirname(fileURLToPath(import.meta.url));
+const R='D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905';
+const req=createRequire(path.join(R,'package.json'));
+const {chromium}=req('playwright');
+const {expect}=req('playwright/test');
+const JSZip=req('jszip');
+const O=path.join(P,'E6g-nodeslide-chart-fixture-01');
+const privateRoot='D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02/browser-chart-fixture-01';
+await fs.mkdir(O);await fs.mkdir(privateRoot);
+const runtime=JSON.parse(await fs.readFile(path.join(P,'E6g-nodeslide-first-run/vite-runtime.json'),'utf8'));
+const origin=runtime.url;
+const report={at:new Date().toISOString(),proof:'NODESLIDE_CURRENT_DETERMINISTIC_FIRST_RUN_01',surface:'Current source Vite app and fresh loopback Convex backend',viewport:{width:1440,height:960},steps:[],errors:[],blockedExternal:[],captures:[],fullGrade:null};
+const browser=await chromium.launch();
+const context=await browser.newContext({viewport:report.viewport,acceptDownloads:true,serviceWorkers:'block'});
+await context.route('**/*',route=>{
+  const url=new URL(route.request().url());
+  if(['http:','https:'].includes(url.protocol)&&!['127.0.0.1','localhost'].includes(url.hostname)){
+    report.blockedExternal.push(url.origin+url.pathname);return route.abort();
+  }
+  return route.continue();
+});
+await context.tracing.start({screenshots:true,snapshots:true,sources:true});
+const page=await context.newPage();page.setDefaultTimeout(30000);
+page.on('pageerror',e=>report.errors.push({kind:'pageerror',message:e.message}));
+page.on('console',m=>{if(m.type()==='error')report.errors.push({kind:'console',message:m.text()});});
+async function capture(name){
+  await page.evaluate(()=>document.fonts.ready);
+  await page.screenshot({path:path.join(O,name+'.png')});
+  await fs.writeFile(path.join(privateRoot,name+'.html'),await page.content());
+  const dom=await page.evaluate(()=>({text:document.body.innerText,viewport:{width:innerWidth,height:innerHeight},overflow:document.documentElement.scrollWidth-innerWidth,fonts:{geist:document.fonts.check('14px "Geist Variable"'),fraunces:document.fonts.check('24px "Fraunces Variable"')},controls:[...document.querySelectorAll('button,input,textarea,select,[role="tab"]')].map(e=>({tag:e.tagName,testid:e.getAttribute('data-testid'),label:e.getAttribute('aria-label'),text:e.textContent?.trim().slice(0,180),value:e instanceof HTMLInputElement||e instanceof HTMLTextAreaElement||e instanceof HTMLSelectElement?e.value:undefined,box:(()=>{let r=e.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height};})()}))}));
+  await fs.writeFile(path.join(O,name+'.json'),JSON.stringify(dom,null,2)+'\n');report.captures.push(name);
+}
+try{
+  await page.goto(origin,{waitUntil:'domcontentloaded'});
+  await page.getByTestId('nodeslide-landing').waitFor();
+  await capture('01-landing');
+  report.steps.push({name:'landing',status:'PASS',defaultModel:await page.getByTestId('landing-model-select').inputValue()});
+  await page.getByTestId('landing-model-select').selectOption('deterministic');
+  await expect(page.getByTestId('landing-privacy-cue')).toContainText('No external model egress');
+  await page.getByLabel('Presentation brief').fill("Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.\n\nmetric,value,unit,source\nmonth_1,100,units,Illustrative test input\nmonth_2,120,units,Illustrative test input\nmonth_3,140,units,Illustrative test input");
+  await capture('02-deterministic-brief');
+  await page.getByLabel('Create presentation',{exact:true}).click();
+  await page.getByTestId('nodeslide-studio').waitFor({timeout:120000});
+  await page.getByTestId('slide-canvas').waitFor();
+  report.steps.push({name:'deterministic-create',status:'PASS'});
+  await capture('03-created-editor');
+  const version=()=>page.locator('.ns-version-label').textContent().then(s=>Number(s.match(/v(\d+)/)?.[1]));
+  const previous=await version();
+  await page.getByTestId('deck-title').fill('NodeSlide local handoff — structured chart fixture');
+  await page.getByTestId('deck-title').press('Enter');
+  await expect.poll(version).toBe(previous+1);
+  await page.reload({waitUntil:'domcontentloaded'});
+  await page.getByTestId('nodeslide-studio').waitFor();
+  await expect(page.getByTestId('deck-title')).toHaveValue('NodeSlide local handoff — structured chart fixture');
+  await expect.poll(version).toBe(previous+1);
+  report.steps.push({name:'title-edit-reload',status:'PASS',previousVersion:previous,reloadedVersion:await version()});
+  await capture('04-reloaded-editor');
+  await fs.writeFile(path.join(privateRoot,'deck-location.json'),JSON.stringify({url:page.url()},null,2));
+  await context.storageState({path:path.join(privateRoot,'storage-state.json')});
+  await page.getByLabel('Export deck',{exact:true}).click();
+  const pending=page.waitForEvent('download',{timeout:30000});
+  await page.getByTestId('export-pptx').click();
+  const download=await pending;
+  const file=path.join(privateRoot,'chart-fixture.pptx');
+  await download.saveAs(file);
+  const bytes=await fs.readFile(file);const zip=await JSZip.loadAsync(bytes);
+  const chartNames=Object.keys(zip.files).filter(n=>/^ppt\/charts\/chart\d+\.xml$/.test(n));
+  const chartXml=await Promise.all(chartNames.map(n=>zip.file(n).async('string')));
+  await fs.copyFile(file,path.join(O,'actual-chart-fixture.pptx'));
+  await fs.writeFile(path.join(O,'actual-chart-parts.json'),JSON.stringify(chartXml,null,2)+'\n');
+  report.chartExport={bytes:bytes.length,charts:chartNames.length,failure:await download.failure(),values:chartXml.map(s=>[...s.matchAll(/<c:v>(.*?)<\/c:v>/g)].map(m=>m[1])),nativeOfficeOpened:false};
+  await page.getByRole('button',{name:'Next slide',exact:true}).click();
+  await page.getByRole('button',{name:'Next slide',exact:true}).click();
+  await page.getByRole('button',{name:'Next slide',exact:true}).click();
+  await capture('05-chart-slide');
+  report.status='STRUCTURED_CHART_FIXTURE_OBSERVED';
+}catch(e){report.status='FAILED';report.failure=String(e.stack??e);await capture('failure').catch(()=>{});process.exitCode=1;}
+finally{
+  await context.tracing.stop({path:path.join(privateRoot,'trace.zip')});
+  await context.close();await browser.close();
+  await fs.writeFile(path.join(O,'report.json'),JSON.stringify(report,null,2)+'\n');
+  console.log(JSON.stringify(report));
+}

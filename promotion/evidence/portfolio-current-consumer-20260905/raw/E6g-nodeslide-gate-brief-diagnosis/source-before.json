@@ -1,0 +1,13 @@
+{
+  "src/domains/nodeslide/NodeSlideStudio.tsx": "445543c7c74cc0dee458d013820db0b8204f82e330da2a19439ef4c387b5d980",
+  "src/domains/nodeslide/components/NodeSlideLanding.tsx": "9aae636a95736c4ad0b77dc6a8e230db0fcffdf3e149d1b64847aeb52e534918",
+  "src/domains/nodeslide/inspector/InspectorPanel.tsx": "4d359e1169c974badd72580c457a7de0ed4400d02ade47334b814ed9662c7de8",
+  "src/domains/nodeslide/inspector/DeckCiStatus.tsx": "1c951d7f13afb6708bd7be7d91f5201a551b2453f92c1b978badd8f8a273dbd5",
+  "src/domains/nodeslide/inspector/TraceInspector.tsx": "b58d0b98bcb7232bd1c26036cb623289b32277d9910c4991fe381dee6ce73da8",
+  "convex/nodeslideDeckCi.ts": "5c5210fa4cc02f6865d98e88b7af74878c802d0a1a86954b1960a9215bcdab65",
+  "convex/lib/nodeslideDeckCi.ts": "121a32dce11590cc1e717e9af1845287d00de6662c407396fd508015d93d8a9a",
+  "convex/lib/nodeslideDeckDiversity.ts": "a0ab19373d038063113b34c7d1f12554ee0cfd908eaf4b8ed9d6b26ee04da859",
+  "convex/lib/nodeslideValidation.ts": "3e12421df9a46706621db41eaf4ac1888d99a93cf11f7937d5a27fcee407e5da",
+  "convex/lib/nodeslideSeed.ts": "0d0facf4d23b03f6d0fab1dfe1bc165071102dba868fdfd8ac5fb82c254ab6eb",
+  "convex/nodeslideAgent.ts": "f12b985055f414b1b9515b8098390df7ab72dabfd78ddc0dc8d2fef98e483e25"
+}

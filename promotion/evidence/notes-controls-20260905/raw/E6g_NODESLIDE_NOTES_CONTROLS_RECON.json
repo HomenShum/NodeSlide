@@ -1,0 +1,384 @@
+{
+  "at": "2026-09-05T17:38:38.543071+00:00",
+  "mode": "Builder",
+  "proof": "NODESLIDE-NOTES-CONTROLS-01",
+  "status": "SOURCE_AND_CURRENT_BEFORE_RECON_COMPLETE_PROPOSED_BOUNDED_LAYOUT_REPAIR",
+  "head": "8177142416b6a6f59df057d0e5ab25df08db93ec",
+  "sourceBindings": [
+    {
+      "path": "src/domains/nodeslide/components/SlideCanvas.tsx",
+      "bytes": 29440,
+      "sha256": "6e6252fa8ee2e306a5c3d9cf0f8108317817a76336e1c983529e8520b07083ba"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslide.css",
+      "bytes": 85818,
+      "sha256": "7320997f03a9a057b91fb91033d5027d381c67dfe0c4fa538a94f02d81f4ccda"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslideV3.css",
+      "bytes": 174065,
+      "sha256": "a62e73f9959bd21cafe74d326169950ead29e0c1d1d491606dcb7b36177edad9"
+    }
+  ],
+  "currentBefore": [
+    {
+      "path": "E6g-nodeslide-notes-before-01/1024-100-open-boundary.png",
+      "sha256": "1bffb645e3be105f37d80e61a1208143aea4a762c720275f33c86cf40bd7a242",
+      "bytes": 67190
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1024-100-open.json",
+      "sha256": "2dab8dad20d102817db9cde7aae5a10a1cd795cba608bec563e3453236704d4c",
+      "bytes": 4995
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1024-100-open.png",
+      "sha256": "9c7a58ca4d104c3e339e2e2d5eb942107bfc2c2e966eaf72e124b5cb14ba2c8e",
+      "bytes": 64820
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1440-100-closed-boundary.png",
+      "sha256": "b25f80fa17388d9ebc6c03e095643c9742edab76367802e375216d15e52817c5",
+      "bytes": 143072
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1440-100-closed.json",
+      "sha256": "ff8920a07596fd0a0ffcc918091b7ddb6811e12a0021baf5130d8a859e1f77c8",
+      "bytes": 7420
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1440-100-closed.png",
+      "sha256": "d8f9b422bba99486f5c3ba141d56a0578201f2b0f399248f41767c89ae057a4e",
+      "bytes": 139367
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1440-100-open-boundary.png",
+      "sha256": "d035e2ce3f8c1b5b3b5c8232673f7eba8b381a5b2febeea92f250c2bea4f3bb4",
+      "bytes": 149917
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1440-100-open.json",
+      "sha256": "e3746ac11f20ebbb9f28b7afd86d1d34c2ab463aa77a32b404995e02766feb16",
+      "bytes": 7169
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1440-100-open.png",
+      "sha256": "3ab7a8ff77516b7feb13a166fb1e745dc6b63353b0fb830787960651238befed",
+      "bytes": 108465
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1440-200-open-boundary.png",
+      "sha256": "01884374c606e497ea8dd54c605ac0945db36c55f6f16940377a11f645075bd8",
+      "bytes": 191781
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1440-200-open.json",
+      "sha256": "f0714d1ee2a7471827d369f48c02f2f781b6a3a7c832b444691109b158b4ff84",
+      "bytes": 7165
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1440-200-open.png",
+      "sha256": "094cc8acb2f38804b0134ec5ad758e3b009a571dcfd8f2250f57a7b44581eeba",
+      "bytes": 152283
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1920-100-open-boundary.png",
+      "sha256": "318092f5aceea9cd2f8db40c34e6a889824cdd9f1308287bad9faef89ae94bd2",
+      "bytes": 174633
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1920-100-open.json",
+      "sha256": "8c3ef7a3b20390259fcd6daef60755597c2ef01648475f3b5503fb78ca48c7b5",
+      "bytes": 7175
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/1920-100-open.png",
+      "sha256": "6b93c47f8159aea5e98d2b82fb6d984cfabed8b87beb0257ec71fb3ac2442d1d",
+      "bytes": 132170
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/320-100-open-boundary.png",
+      "sha256": "f21bef26589d8bcfc45059e29cb2bab1accc5786b20e98b58fc3a9295fc4f88e",
+      "bytes": 42356
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/320-100-open.json",
+      "sha256": "146198d5791d4895ddd5caac1be20a73a214a1fa503ad9d78f78a86409ddeeef",
+      "bytes": 6557
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/320-100-open.png",
+      "sha256": "17309cd0e5d8727702b5897414c1ce3d5773ac1852e4cb88201baee31d3fc65e",
+      "bytes": 39037
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/390-100-closed-boundary.png",
+      "sha256": "53eff403469a46835c0474e67060071287f5d35a31246d063073dee27d2f82b0",
+      "bytes": 41973
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/390-100-closed.json",
+      "sha256": "2d308d84be96272049b618e00e000cd745e1e2532a2d9f2d663eb368dc5a5f25",
+      "bytes": 5881
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/390-100-closed.png",
+      "sha256": "16aeedff61c6fcb088272483f8b40c9a35a3753378d7a92fd7912c1570c6e46a",
+      "bytes": 38720
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/390-100-open-boundary.png",
+      "sha256": "f2e1f54682999f3741426b185c38834c7146e2fbfb2700f4b183caae1ec00353",
+      "bytes": 48081
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/390-100-open.json",
+      "sha256": "ec8953cdaed4de73e2d5609a0a055b009a0d14ac3218e56b156359c85494bc81",
+      "bytes": 6574
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/390-100-open.png",
+      "sha256": "aad158362a773f2285145e6e525085e7c3ea070ad2d148b0b91b2daccbc19791",
+      "bytes": 44704
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/390-200-open-boundary.png",
+      "sha256": "92a0e30d9c0000cb1915538d0d612d2065702fc92a34196da1727b871eb03621",
+      "bytes": 64265
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/390-200-open.json",
+      "sha256": "2d34fe89610899002038929e3b5e1f3fce60686ddfae78b718b6c05ac17feafc",
+      "bytes": 6572
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/390-200-open.png",
+      "sha256": "9e7f87322dd8e7cd0d980f844107fb516c73f8e65e337566d6a0039e9d32f99a",
+      "bytes": 59474
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/768-100-open-boundary.png",
+      "sha256": "53980c3d64a5f3d2bb0c1d12e376e7fbe2f2696f750120ebc563fa2fa7b98bf3",
+      "bytes": 57247
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/768-100-open.json",
+      "sha256": "5b23145f61182a1e13eaff7dd56d84b4ef36cbedb0e4600726605ab33d3da84d",
+      "bytes": 4984
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/768-100-open.png",
+      "sha256": "5f1c5703f6170921985d69ba4e21c4573deae3dcdd768f472bd1f1cf53754a37",
+      "bytes": 54322
+    },
+    {
+      "path": "E6g-nodeslide-notes-before-01/report.json",
+      "sha256": "bc14ea12f0ca14d99cf304bf273500a3761a2035aed37d3a4c17992a045059ef",
+      "bytes": 52741
+    }
+  ],
+  "cells": [
+    {
+      "name": "320-100-open",
+      "width": 320,
+      "height": 844,
+      "textPercent": 100,
+      "notesPagerOverlapAreaPx2": 4041.25,
+      "notesZoomOverlapAreaPx2": 5920,
+      "textareaPagerOverlapAreaPx2": 3131.96875,
+      "textareaZoomOverlapAreaPx2": 4588,
+      "pagerZoomOverlapAreaPx2": 1081.25,
+      "visibleEnabledCenterHitFailures": [
+        "Next slide"
+      ],
+      "hiddenPanExcluded": true,
+      "stageSelectorMissing": true
+    },
+    {
+      "name": "390-100-open",
+      "width": 390,
+      "height": 844,
+      "textPercent": 100,
+      "notesPagerOverlapAreaPx2": 4041.25,
+      "notesZoomOverlapAreaPx2": 7320.0,
+      "textareaPagerOverlapAreaPx2": 3131.96875,
+      "textareaZoomOverlapAreaPx2": 5673.0,
+      "pagerZoomOverlapAreaPx2": 381.25,
+      "visibleEnabledCenterHitFailures": [],
+      "hiddenPanExcluded": true,
+      "stageSelectorMissing": true
+    },
+    {
+      "name": "390-100-closed",
+      "width": 390,
+      "height": 844,
+      "textPercent": 100,
+      "notesPagerOverlapAreaPx2": 3839.1875,
+      "notesZoomOverlapAreaPx2": 6954.0,
+      "textareaPagerOverlapAreaPx2": null,
+      "textareaZoomOverlapAreaPx2": null,
+      "pagerZoomOverlapAreaPx2": 381.25,
+      "visibleEnabledCenterHitFailures": [
+        "Presenter notes25 words"
+      ],
+      "hiddenPanExcluded": true,
+      "stageSelectorMissing": true
+    },
+    {
+      "name": "768-100-open",
+      "width": 768,
+      "height": 960,
+      "textPercent": 100,
+      "notesPagerOverlapAreaPx2": 4041.25,
+      "notesZoomOverlapAreaPx2": 14880,
+      "textareaPagerOverlapAreaPx2": 3131.96875,
+      "textareaZoomOverlapAreaPx2": 11532,
+      "pagerZoomOverlapAreaPx2": 0,
+      "visibleEnabledCenterHitFailures": [],
+      "hiddenPanExcluded": true,
+      "stageSelectorMissing": true
+    },
+    {
+      "name": "1024-100-open",
+      "width": 1024,
+      "height": 960,
+      "textPercent": 100,
+      "notesPagerOverlapAreaPx2": 4041.25,
+      "notesZoomOverlapAreaPx2": 20000,
+      "textareaPagerOverlapAreaPx2": 3131.96875,
+      "textareaZoomOverlapAreaPx2": 15500,
+      "pagerZoomOverlapAreaPx2": 0,
+      "visibleEnabledCenterHitFailures": [],
+      "hiddenPanExcluded": true,
+      "stageSelectorMissing": true
+    },
+    {
+      "name": "1440-100-open",
+      "width": 1440,
+      "height": 960,
+      "textPercent": 100,
+      "notesPagerOverlapAreaPx2": 4041.25,
+      "notesZoomOverlapAreaPx2": 15520,
+      "textareaPagerOverlapAreaPx2": 3131.96875,
+      "textareaZoomOverlapAreaPx2": 12028,
+      "pagerZoomOverlapAreaPx2": 0,
+      "visibleEnabledCenterHitFailures": [],
+      "hiddenPanExcluded": true,
+      "stageSelectorMissing": true
+    },
+    {
+      "name": "1440-100-closed",
+      "width": 1440,
+      "height": 960,
+      "textPercent": 100,
+      "notesPagerOverlapAreaPx2": 3839.1875,
+      "notesZoomOverlapAreaPx2": 14744,
+      "textareaPagerOverlapAreaPx2": null,
+      "textareaZoomOverlapAreaPx2": null,
+      "pagerZoomOverlapAreaPx2": 0,
+      "visibleEnabledCenterHitFailures": [
+        "Presenter notes25 words"
+      ],
+      "hiddenPanExcluded": true,
+      "stageSelectorMissing": true
+    },
+    {
+      "name": "1920-100-open",
+      "width": 1920,
+      "height": 960,
+      "textPercent": 100,
+      "notesPagerOverlapAreaPx2": 4041.25,
+      "notesZoomOverlapAreaPx2": 25120,
+      "textareaPagerOverlapAreaPx2": 3131.96875,
+      "textareaZoomOverlapAreaPx2": 19468,
+      "pagerZoomOverlapAreaPx2": 0,
+      "visibleEnabledCenterHitFailures": [],
+      "hiddenPanExcluded": true,
+      "stageSelectorMissing": true
+    },
+    {
+      "name": "390-200-open",
+      "width": 390,
+      "height": 844,
+      "textPercent": 200,
+      "notesPagerOverlapAreaPx2": 5360.625,
+      "notesZoomOverlapAreaPx2": 7320.0,
+      "textareaPagerOverlapAreaPx2": 4154.484375,
+      "textareaZoomOverlapAreaPx2": 5673.0,
+      "pagerZoomOverlapAreaPx2": 1700.625,
+      "visibleEnabledCenterHitFailures": [
+        "Next slide"
+      ],
+      "hiddenPanExcluded": true,
+      "stageSelectorMissing": true
+    },
+    {
+      "name": "1440-200-open",
+      "width": 1440,
+      "height": 960,
+      "textPercent": 200,
+      "notesPagerOverlapAreaPx2": 5360.625,
+      "notesZoomOverlapAreaPx2": 15520,
+      "textareaPagerOverlapAreaPx2": 4154.484375,
+      "textareaZoomOverlapAreaPx2": 12028,
+      "pagerZoomOverlapAreaPx2": 0,
+      "visibleEnabledCenterHitFailures": [],
+      "hiddenPanExcluded": true,
+      "stageSelectorMissing": true
+    }
+  ],
+  "directlyViewedCurrentPixels": [
+    "390-100-open-boundary.png",
+    "390-200-open-boundary.png",
+    "1440-100-open-boundary.png"
+  ],
+  "historicalPixelsViewedSeparately": [
+    "E6g-nodeslide-responsive-first-use-02/editor-390x844.png",
+    "E6g-nodeslide-responsive-first-use-02/editor-390x844-text200.png",
+    "E6g-nodeslide-responsive-first-use-02/editor-1440x960.png"
+  ],
+  "currentErrors": [],
+  "blockedOrigins": [],
+  "causalChain": [
+    "A presenter types notes while moving between slides or changing canvas zoom. Controls cover typed text and can cover one another.",
+    "SlideCanvas renders viewport, pager, conditional notes and zoom as sibling children of the same canvas panel; the notes are an in-flow implicit grid row.",
+    "nodeslide.css:926 establishes a positioned, clipped grid panel; nodeslide.css:1252 takes pager/zoom out of flow with position:absolute. Their containing block includes the notes.",
+    "nodeslideV3.css:1866 allocates only the viewport row explicitly; nodeslideV3.css:1926/1931 anchors both groups at bottom:0 rather than allocating separate space.",
+    "Zoom inherits left:50% and translateX(-50%) from nodeslide.css:1265 while V3 also sets right:12px. Phone V3:5201 re-enables the pager. No shared flow layout prevents the two intrinsic groups from colliding."
+  ],
+  "recommendedOwners": [
+    "src/domains/nodeslide/components/SlideCanvas.tsx",
+    "src/domains/nodeslide/nodeslide.css",
+    "src/domains/nodeslide/nodeslideV3.css"
+  ],
+  "recommendation": "Put the existing pager and zoom groups in one plain in-flow control-row wrapper directly after the canvas viewport; place the conditional notes strip after that row. Give the panel explicit viewport/control/notes rows (and existing metadata row where visible). Use a wrapping flex row, normal-flow groups and a single owned reset of position/insets/transform. Preserve all current handlers and note lifecycle.",
+  "implementationConstraints": [
+    "No measured note-height React state, guessed bottom offsets, z-index workaround, dependency, public API or timer.",
+    "Remove or replace competing owned positioning rules instead of stacking another late override.",
+    "Use content-driven row/group height and preserve readable Fit/value/count labels at text200; wrapping may produce two rows.",
+    "Keep visible previous/next boundary disabling, current slide identity/count, 40..120 zoom range and Fit=65 behavior.",
+    "Keep slide.id notes remount, version-keyed textarea, exact Unicode/line breaks and existing save-on-blur.",
+    "Keep hidden pan control hidden in this skin; test existing Space/pan only where applicable. Do not count its zero box as a visible failed control.",
+    "Do not expand into navigation, graph density, backend/notes durability policy, provider, export or native Office."
+  ],
+  "proofPlan": [
+    "Preserve the ten current before cells and three labelled boundary PNGs. Correct only future stage measurement selector from .ns-slide-stage to actual .ns-canvas-stage; prior missing measurement stays recorded.",
+    "Repeat same six normal widths 320/390/768/1024/1440/1920, text200 at390/1440 and collapsed390/1440. Capture DOM, console and pixels per cell before resizing.",
+    "Require non-overlapping notes/control group rectangles and actual rendered enabled-control hit targets. Check full label ink bounds; a textarea center hit alone cannot prove its last lines are uncovered.",
+    "Use native keyboard and pointer: enter exact multiline Unicode notes, blur via Next, return Previous and reload to verify same slide ID/current notes; repeat first/last disabled boundaries and collapsed/open toggles.",
+    "Burst sequence zoom out/in/Fit then slide back/forward and notes toggle; sustained one-minute repeated navigation/notes editing confirms identities, current values, no duplicate save or stale note overwrite.",
+    "Exercise viewport scroll, vertical textarea resize, no-notes/read-only state and one landscape-height cell if the layout otherwise risks consuming all canvas height. Preserve canvas/inspector neighbors outside the declared expected row-height shift.",
+    "Run relevant existing component/navigation/notes scenarios and normal required check once after exact source freeze. Retain any inherited timing failures; do not raise deadlines or add skips.",
+    "Independent bounded after replay should cover representative390 text200 and1440 normal plus the original320 blocked-Next case. No whole-grade claim."
+  ],
+  "limitations": [
+    "Read-only source and retained browser-evidence review; no browser/runtime/test rerun by this reviewer.",
+    "No raw full HTML or private browser capability content inspected or copied.",
+    "Fresh proof stage selector was missing; existing notes/control pixels and measured geometry remain valid.",
+    "Rectangle overlap is an objective layout signal; only directly viewed captures substantiate the stated pixel appearance."
+  ],
+  "finalCriterionScores": null,
+  "dimensionScores": null,
+  "sourceEdits": false
+}

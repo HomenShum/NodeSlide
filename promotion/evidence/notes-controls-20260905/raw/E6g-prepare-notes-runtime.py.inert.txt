@@ -1,0 +1,30 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+
+P = Path(__file__).parent
+R = Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O = Path('D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02/notes-runtime-01')
+T = P / 'E6g-nodeslide-notes-runtime'
+assert not O.exists() and not T.exists()
+assert subprocess.check_output(['git', '--no-optional-locks', 'rev-parse', 'HEAD'], cwd=R).decode().strip() == '8177142416b6a6f59df057d0e5ab25df08db93ec'
+assert not subprocess.check_output(['git', '--no-optional-locks', 'status', '--porcelain'], cwd=R).strip()
+for name in ['local-loopback-runtime.json', 'vite-runtime.json']:
+    old = json.loads((P / 'E6g-nodeslide-readiness-runtime' / name).read_text(encoding='utf-8'))
+    assert old.get('cleanup') and old.get('stoppedAt')
+O.mkdir()
+T.mkdir()
+for kind in ['loopback', 'vite']:
+    source = (P / ('E6g-run-readiness-' + kind + '.py')).read_text(encoding='utf-8')
+    source = source.replace('/readiness-runtime-01', '/notes-runtime-01').replace('E6g-nodeslide-readiness-runtime/', 'E6g-nodeslide-notes-runtime/')
+    source = source.replace("['git','status','--porcelain=v1']", "['git','--no-optional-locks','status','--porcelain=v1']")
+    (P / ('E6g-run-notes-' + kind + '.py')).write_text(source, encoding='utf-8', newline='\n')
+owners = ['src/domains/nodeslide/components/SlideCanvas.tsx', 'src/domains/nodeslide/nodeslide.css', 'src/domains/nodeslide/nodeslideV3.css']
+rows = []
+for name in owners:
+    b = (R / name).read_bytes()
+    rows.append({'path': name, 'bytes': len(b), 'sha256': hashlib.sha256(b).hexdigest()})
+record = {'proof': 'NODESLIDE-NOTES-CONTROLS-01', 'stage': 'Current-source before observation only; no source repair authorized by this receipt', 'head': '8177142416b6a6f59df057d0e5ab25df08db93ec', 'ownerSource': rows, 'ports': [49676,49690,53146], 'privateChild': str(O), 'constraints': ['Same preserved synthetic database and browser capability context; no original dirty checkout touched', 'Generated anonymous config only, in process; no provider or production credentials', 'Native127.0.0.1 verified before local source push; provider calls zero', 'Fresh phase logs and precise PID creation-time custody; existing4173/4174 untouched', 'Separate current DOM/styles/pixels before source changes; no whole UI grade from DOM alone']}
+(T / 'plan.json').write_text(json.dumps(record, indent=2) + '\n', encoding='utf-8', newline='\n')
+print(json.dumps(record))

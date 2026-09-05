@@ -1,0 +1,7 @@
+{
+  "cause": "Observed enlarged Fit text rectangle height32 exceeds fixed button27 and extends2.5px above/below. Fixed group40 also cannot own a growing label.",
+  "change": "Use auto heights with existing normal minimums27/40. Root viewed actual390 doubled-text orange3px boundary before this adjustment.",
+  "priorBytes": "Reconstructed from exact inverse of this two-rule patch and matched the previously frozen stage1 SHA; not a separately captured pre-edit file.",
+  "stage1Sha256": "79485a5fd4f952b6b496e4fcd7d1f86ca52afd6abf2ef932f9e424f4ba735761",
+  "stage2Sha256": "5175702b66ddf1f91f0e379c45e3a1d3078accb8aca02bab4345c5132d3618ad"
+}

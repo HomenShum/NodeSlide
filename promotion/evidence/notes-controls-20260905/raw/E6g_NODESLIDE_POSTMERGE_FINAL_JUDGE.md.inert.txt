@@ -1,0 +1,26 @@
+# NodeSlide post-merge and public-build judgment
+
+**VERIFIED_POSTMERGE_FUNCTIONAL_INTEGRATION_AND_PUBLIC_BUILD_IDENTITY.** Full product readiness remains held.
+
+**Re your request:** make each repository ready for developer/user handoff with independent judging — the reviewed NodeSlide checkpoint is now verified after its normal merge, and its public deployment identity has been independently read. This is a source/integration checkpoint with explicit remaining product limits.
+
+PR185 was squash-merged as `8177142416b6a6f59df057d0e5ab25df08db93ec`, single parent `b0674b229a3691c09c88fcab1481f2e33342cb21`, exact reviewed tree `d3cd10cda45900c5d32e35dfe99c591b1cf0ea1f`. That identical tree carries all 797 previously verified committed bindings. The initial merge-commit attempt was rejected under main's existing linear-history rule; normal squash satisfied that rule. No admin override or policy change was observed.
+
+GitHub's existing `delete_branch_on_merge=true` policy is enabled. Its timeline records merge at 16:54:08Z and remote head deletion one second later; the remote ref now returns404. Local source branch `054b69b` and ancestor `974c262` remain available. No branch-deletion tool was called by this reviewer, and no working/dist stability guard was imposed during the separate diagnostic work.
+
+| Actual main-push workflow/check | Result |
+|---|---|
+| [CI](https://github.com/HomenShum/NodeSlide/actions/runs/33979285298) | **SUCCESS:** app/packages, MCP and actual NodeRoom/NodeAgent packed consumer. App includes 2,823 root tests, seven skips, 42 workspace tests, builds, package/external-agent consumers and Chromium mount smoke. |
+| [Benchmark gates](https://github.com/HomenShum/NodeSlide/actions/runs/33979285292) | **SUCCESS:** 504 gate tests/39 files with five skips; missing-evidence lane correctly asserts exit2 and **UNSCORED**. PR-only/supplied/live lanes are skipped by existing event rules. |
+| [Conformance](https://github.com/HomenShum/NodeSlide/actions/runs/33979285650) | **SUCCESS:** repository manifest/contracts/source rules, retaining preview lifecycle. |
+| [Automatic production workflow](https://github.com/HomenShum/NodeSlide/actions/runs/33979732651/job/101342685246) | **SUCCESS:** exact-main gates, Convex source identity, Vercel READY, immutable/canonical bundle checks, clean live mount and rendered unknown-share404. Failure-only rollback skipped. |
+
+The NodeRoom job consumed packages built from actual merged NodeSlide `8177142416b6a6f59df057d0e5ab25df08db93ec` with NodeRoom `8177142416b6a6f59df057d0e5ab25df08db93ec`. Its receipt preserves the existing fixture-authorization, in-memory ledger and API-lifecycle scope. It does not certify mounted React studio, production ActorProof/membership, durable persistence, presenter or PPTX behavior. This is separate from earlier release-pin proof.
+
+Existing repository automation launched production after successful main CI; the reviewer did not dispatch it or read credentials. Its Vercel READY observation occurred at17:09:57Z, after the merge, and all live gates completed before17:10:05Z.
+
+An independent unauthenticated [public HTML fetch](https://nodeslide.vercel.app/) at17:11:48Z returned HTTP200, `nodeslide-build-sha=8177142416b6a6f59df057d0e5ab25df08db93ec`, and the concrete text **reviewable presentations, built from a brief**. The response SHA256 is `93b1ad446046a5c7241562800076a7c82a917e41faf058f56ef0dc36e631db41`, exactly matching the workflow's live-identity record. Its entry asset is `/assets/index-DF2Crd4h.js`. The preserved17:06:29Z response still identified baseline `b0674b2`, so the observed transition is explicit. This supports a deployed-source/public-content claim; no feature journey, provider, Office or visual-grade claim follows from raw HTML.
+
+The latest ordinary Windows full check still failed on the NodeBook six-kind60-second deadline, while Linux passes. The slow phase remains unestablished. GitGuardian's latest source-PR check is **NOT_SCANNED/NEUTRAL** due PR size, and no replacement postmerge scan is observed. Existing notes/control and enlarged navigation/footer/density defects, missing device/human/performance coverage and live authoring/native Office/provider acceptance remain held. Full dimension grades stay **null**.
+
+Raw Git/API records, all seven executed job logs, branch-policy/timeline evidence, package receipts, production steps and public before/after bytes are indexed in [the machine judgment](E6g_NODESLIDE_POSTMERGE_FINAL_JUDGE.json). Earlier failed-head, Windows-failure and merge-method rejection receipts remain unchanged.

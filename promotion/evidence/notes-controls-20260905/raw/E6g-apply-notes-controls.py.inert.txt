@@ -1,0 +1,55 @@
+from pathlib import Path
+import hashlib
+import json
+import subprocess
+
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=P/'E6g-nodeslide-notes-source-before'
+assert not O.exists()
+assert not subprocess.check_output(['git','--no-optional-locks','status','--porcelain'],cwd=R).strip()
+runtime=json.loads((P/'E6g-nodeslide-notes-runtime/plan.json').read_text(encoding='utf-8'))
+recon=P/'E6g_NODESLIDE_NOTES_CONTROLS_RECON.json'
+assert hashlib.sha256(recon.read_bytes()).hexdigest()=='c8bdc7465b67522eb9ecadbfb4337759b59f719eb824ded4b8dfd2193db71aff'
+O.mkdir()
+owners=[row['path']for row in runtime['ownerSource']]+['HANDOFF.md']
+for name in owners:
+    target=O/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes((R/name).read_bytes())
+for name,args in [('index.bin',['ls-files','--stage','-z']),('refs.bin',['show-ref']),('head.bin',['rev-parse','HEAD'])]:
+    (O/name).write_bytes(subprocess.check_output(['git','--no-optional-locks',*args],cwd=R))
+f=R/owners[0];s=f.read_text(encoding='utf-8')
+a=s.index('      <div className="ns-slide-stepper"')
+b=s.index('      {/* Presenter notes',a)
+c=s.index('      <div className="ns-zoom-controls"',b)
+d=s.index('    </section>',c)
+pager=s[a:b].rstrip();notes=s[b:c].rstrip();zoom=s[c:d].rstrip()
+def indent(text):return '\n'.join('  '+line if line else '' for line in text.splitlines())
+new='      <div className="ns-canvas-controls">\n'+indent(pager)+'\n\n'+indent(zoom)+'\n      </div>\n\n'+notes+'\n'
+f.write_text(s[:a]+new+s[d:],encoding='utf-8',newline='\n')
+f=R/owners[1];s=f.read_text(encoding='utf-8')
+start=s.index('.ns-zoom-controls,\n.ns-slide-stepper {');end=s.index('.ns-zoom-controls button,',start)
+old=s[start:end]
+common=old[:old.index('.ns-zoom-controls {')]
+for line in ['  bottom: 14px;\n','  position: absolute;\n','  z-index: 8;\n']:
+    assert line in common;common=common.replace(line,'')
+common=common.replace('  display: flex;\n','  display: flex;\n  flex: 0 0 auto;\n')
+row='.ns-canvas-controls {\n  align-items: center;\n  display: flex;\n  flex-wrap: wrap;\n  gap: 8px;\n  justify-content: space-between;\n  min-width: 0;\n  padding: 4px 12px;\n}\n\n'
+s=s[:start]+row+common+s[end:]
+mobile='  .ns-zoom-controls {\n    bottom: 9px;\n  }\n'
+assert s.count(mobile)==1;s=s.replace(mobile,'')
+f.write_text(s,encoding='utf-8',newline='\n')
+f=R/owners[2];s=f.read_text(encoding='utf-8')
+for old in ['.nodeslide-studio .ns-slide-stepper {\n  bottom: 0;\n  left: 12px;\n}\n\n','.nodeslide-studio .ns-zoom-controls {\n  bottom: 0;\n  right: 12px;\n}\n\n']:
+    assert s.count(old)==1;s=s.replace(old,'')
+old='.nodeslide-studio .ns-zoom-controls .ns-zoom-value {\n';start=s.index(old);end=s.index('\n}',start)
+part=s[start:end];assert '  min-width: 38px;'in part
+s=s[:start]+part.replace('  min-width: 38px;','  min-width: 38px;\n  width: auto;')+s[end:]
+old='.nodeslide-studio .ns-zoom-controls .ns-fit-button {\n';start=s.index(old);end=s.index('\n}',start)
+part=s[start:end];s=s[:start]+part+'\n  width: auto;'+s[end:]
+f.write_text(s,encoding='utf-8',newline='\n')
+rows=[]
+for name in owners[:3]:
+    before=(O/name).read_bytes();after=(R/name).read_bytes()
+    rows.append({'path':name,'beforeSha256':hashlib.sha256(before).hexdigest(),'afterSha256':hashlib.sha256(after).hexdigest()})
+(O/'repair.json').write_text(json.dumps({'proof':'NODESLIDE-NOTES-CONTROLS-01','source':rows,'change':'One in-flow wrapping controls row before notes; old absolute offsets/transform removed; zoom/Fit width follows actual label content at enlarged text. No handler/state/data changes.','planAddendum':'Existing source component test discovery found no SlideCanvas/notes/keyboard tests; use actual browser scenarios and one normal repository check, not a static CSS-mirroring test.'},indent=2)+'\n',encoding='utf-8',newline='\n')
+print(json.dumps(rows))

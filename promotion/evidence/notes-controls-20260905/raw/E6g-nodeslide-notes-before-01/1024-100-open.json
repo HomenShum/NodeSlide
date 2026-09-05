@@ -1,0 +1,223 @@
+{
+  "viewport": {
+    "width": 1024,
+    "height": 960
+  },
+  "overflow": 0,
+  "bodyText": "N\nNodeSlide\n/\nv3\nEdit\nOverview\nCompare\n01\nCreate a six-slide decision review for a fictional sourcing pilot\nverified\nSLIDE JOB\nIllustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text. Decision: prototype after checking the budget. 中文交接 — no external claims.\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\n1 / 6\nPresenter notes\n25 words\n55%\nFit",
+  "regions": [
+    {
+      "selector": ".ns-slide-stage",
+      "missing": true
+    },
+    {
+      "selector": ".ns-canvas-viewport",
+      "box": {
+        "x": 0,
+        "y": 123,
+        "width": 1024,
+        "height": 716.5,
+        "right": 1024,
+        "bottom": 839.5
+      },
+      "position": "static",
+      "bottom": "auto",
+      "minHeight": "0px",
+      "padding": "0px",
+      "overflow": "auto",
+      "display": "block",
+      "fontSize": "16px",
+      "zIndex": "auto"
+    },
+    {
+      "selector": ".ns-slide-stepper",
+      "box": {
+        "x": 12,
+        "y": 920,
+        "width": 101.03125,
+        "height": 40,
+        "right": 113.03125,
+        "bottom": 960
+      },
+      "position": "absolute",
+      "bottom": "0px",
+      "minHeight": "0px",
+      "padding": "3px",
+      "overflow": "visible",
+      "display": "flex",
+      "fontSize": "16px",
+      "zIndex": "8"
+    },
+    {
+      "selector": ".ns-notes-strip",
+      "box": {
+        "x": 0,
+        "y": 839.5,
+        "width": 1024,
+        "height": 120.5,
+        "right": 1024,
+        "bottom": 960
+      },
+      "position": "static",
+      "bottom": "auto",
+      "minHeight": "auto",
+      "padding": "7px 12px 9px",
+      "overflow": "visible",
+      "display": "grid",
+      "fontSize": "16px",
+      "zIndex": "auto"
+    },
+    {
+      "selector": ".ns-notes-strip textarea",
+      "box": {
+        "x": 12,
+        "y": 874.5,
+        "width": 1000,
+        "height": 76.5,
+        "right": 1012,
+        "bottom": 951
+      },
+      "position": "static",
+      "bottom": "auto",
+      "minHeight": "auto",
+      "padding": "8px 10px",
+      "overflow": "auto",
+      "display": "block",
+      "fontSize": "13px",
+      "zIndex": "auto"
+    },
+    {
+      "selector": ".ns-zoom-controls",
+      "box": {
+        "x": 262,
+        "y": 920,
+        "width": 500,
+        "height": 40,
+        "right": 762,
+        "bottom": 960
+      },
+      "position": "absolute",
+      "bottom": "0px",
+      "minHeight": "0px",
+      "padding": "3px",
+      "overflow": "visible",
+      "display": "flex",
+      "fontSize": "16px",
+      "zIndex": "8"
+    }
+  ],
+  "controls": [
+    {
+      "label": "Previous slide",
+      "box": {
+        "x": 15,
+        "y": 926.5,
+        "width": 28,
+        "height": 27,
+        "right": 43,
+        "bottom": 953.5
+      },
+      "disabled": true,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Next slide",
+      "box": {
+        "x": 82.03125,
+        "y": 926.5,
+        "width": 28,
+        "height": 27,
+        "right": 110.03125,
+        "bottom": 953.5
+      },
+      "disabled": false,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Presenter notes25 words",
+      "box": {
+        "x": 12,
+        "y": 847.5,
+        "width": 1000,
+        "height": 21,
+        "right": 1012,
+        "bottom": 868.5
+      },
+      "disabled": false,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Presenter notes for Create a six-slide decision review for a fictional sourcing pilot",
+      "box": {
+        "x": 12,
+        "y": 874.5,
+        "width": 1000,
+        "height": 76.5,
+        "right": 1012,
+        "bottom": 951
+      },
+      "disabled": false,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Toggle pan tool",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "disabled": false,
+      "centerHit": false,
+      "inViewport": true
+    },
+    {
+      "label": "Zoom out",
+      "box": {
+        "x": 265,
+        "y": 926.5,
+        "width": 28,
+        "height": 27,
+        "right": 293,
+        "bottom": 953.5
+      },
+      "disabled": false,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Zoom in",
+      "box": {
+        "x": 331,
+        "y": 926.5,
+        "width": 28,
+        "height": 27,
+        "right": 359,
+        "bottom": 953.5
+      },
+      "disabled": false,
+      "centerHit": true,
+      "inViewport": true
+    },
+    {
+      "label": "Fit slide to workspace",
+      "box": {
+        "x": 363,
+        "y": 926.5,
+        "width": 28,
+        "height": 27,
+        "right": 391,
+        "bottom": 953.5
+      },
+      "disabled": false,
+      "centerHit": true,
+      "inViewport": true
+    }
+  ]
+}

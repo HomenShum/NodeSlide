@@ -1,0 +1,1253 @@
+{
+  "schemaVersion": 1,
+  "mode": "Builder",
+  "verdict": "VERIFIED_POSTMERGE_FUNCTIONAL_INTEGRATION_AND_PUBLIC_BUILD_IDENTITY",
+  "completeProductReadiness": false,
+  "originalRequest": "Make individual repositories ready for developer/user handoff, using independent planner-worker-judge verification and explicit visual, responsive and interaction grades.",
+  "scope": "Independent immutable Git/API inspection and two unauthenticated public HTML reads. No local test/build/browser suite, candidate edit, branch deletion, deployment dispatch, credential read, provider call or Office operation by reviewer.",
+  "reviewerContext": "Nonauthor of application fixes; independent reviewer context reused. Earlier raw failures and narrower judgments remain unchanged.",
+  "at": "2026-09-05T17:16:09.140903+00:00",
+  "merge": {
+    "pr": "https://github.com/HomenShum/NodeSlide/pull/185",
+    "state": "MERGED",
+    "mergedAt": "2026-09-05T16:54:08Z",
+    "commit": "8177142416b6a6f59df057d0e5ab25df08db93ec",
+    "tree": "d3cd10cda45900c5d32e35dfe99c591b1cf0ea1f",
+    "singleParent": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+    "method": "squash",
+    "reviewedTreeExact": true,
+    "sourceHead": "054b69bebb369beb8a0ae20960a2e9c488388c1d",
+    "sourceFirstCommit": "974c262379869d51f9a3bc4fbe975911c6986aa8",
+    "currentRemoteMain": "8177142416b6a6f59df057d0e5ab25df08db93ec",
+    "all797PreviouslyReviewedBlobIdentitiesCarryThroughIdenticalTree": true,
+    "priorJudgment": "E6g_NODESLIDE_MARKDOWN_SHARED_FINAL_JUDGE.json"
+  },
+  "mergePolicy": {
+    "allowMergeCommitAtRepositoryLevel": true,
+    "allowSquashMerge": true,
+    "protectedMainRequiresLinearHistory": true,
+    "adminEnforcement": true,
+    "firstMergeMethodRejectionPreserved": "E6g-nodeslide-shared-integration/policy.json priorRootToolAttempt: merge commits not allowed",
+    "correction": "Normal permitted squash with one parent; no rule change or admin override observed"
+  },
+  "branchDisposition": {
+    "deleteBranchOnMerge": true,
+    "remoteHeadLookup": "404 Not Found",
+    "timelineHeadRefDeletedAt": "2026-09-05T16:54:09Z",
+    "timelineMergedAt": "2026-09-05T16:54:08Z",
+    "outcome": "Remote source branch removed immediately after merge, consistent with enabled automatic branch deletion.",
+    "attributionLimit": "Timeline and policy establish timing/outcome; no reviewer branch-delete tool was called.",
+    "localSourceRef": "054b69bebb369beb8a0ae20960a2e9c488388c1d",
+    "firstCommitRetainedAsAncestor": true,
+    "candidateFollowOnRefAtObservation": "codex/nodeslide-readiness-follow-on-20260905",
+    "workingOrDistStabilityNotClaimed": true
+  },
+  "normalPostmergeRuns": [
+    {
+      "id": 33979732651,
+      "name": "Deploy production - 8177142416b6a6f59df057d0e5ab25df08db93ec",
+      "event": "workflow_run",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 33979285650,
+      "name": "Node Platform conformance",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 33979285292,
+      "name": "NodeSlide benchmark gates",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 33979285298,
+      "name": "CI",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "functionalResults": {
+    "app": {
+      "jobId": 101341452993,
+      "status": "success",
+      "actualTestSummary": [
+        " ✓ src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx (5 tests) 1805ms",
+        " Test Files  316 passed (316)",
+        "      Tests  2823 passed | 7 skipped (2830)",
+        " Test Files  1 passed (1)",
+        "      Tests  11 passed (11)",
+        " Test Files  1 passed (1)",
+        "      Tests  5 passed (5)",
+        " Test Files  1 passed (1)",
+        "      Tests  7 passed (7)",
+        " Test Files  4 passed (4)",
+        "      Tests  19 passed (19)"
+      ],
+      "packedConsumer": {
+        "ok": true,
+        "proposalVersion": 1,
+        "acceptedVersion": 2,
+        "authorizationBound": true,
+        "headless": true,
+        "typesChecked": true,
+        "rendered": true,
+        "cssExported": true,
+        "httpAdapter": true,
+        "migrationCount": 2,
+        "packedComponentMounted": true,
+        "registrySource": true,
+        "cliPlan": true,
+        "agentProposal": true
+      },
+      "externalAgentMcp": {
+        "ok": true,
+        "proof": "external-agent-and-mcp-tarball-consumer",
+        "packages": [
+          "@nodeslide/external-agent@0.2.2",
+          "@nodeslide/recipelang@0.2.2",
+          "nodeslide-mcp@0.2.2"
+        ],
+        "commands": [
+          "--help",
+          "inspect",
+          "propose",
+          "apply",
+          "recipelang verify-alignment",
+          "nodeslide-mcp --help"
+        ],
+        "resultingDeckVersion": 2,
+        "recipeAlignmentPassed": true
+      },
+      "browserSmoke": "PASS for actual build mount/zero errors; CI deployment guard is allowed, so this is not real-backend authoring proof"
+    },
+    "mcp": {
+      "jobId": 101341453117,
+      "status": "success",
+      "tests": 19,
+      "files": 4,
+      "typesBuildPassed": true
+    },
+    "gateUnit": {
+      "jobId": 101341453075,
+      "status": "success",
+      "testsPassed": 504,
+      "testsSkipped": 5,
+      "filesPassed": 39
+    },
+    "conformance": {
+      "jobId": 101341454075,
+      "status": "success",
+      "scope": "manifest/contracts/source rules, preview lifecycle"
+    },
+    "absenceLane": {
+      "jobId": 101341453123,
+      "status": "success",
+      "underlyingExpectedExitCode": 2,
+      "uxBench": "UNSCORED",
+      "tasteBench": "UNSCORED",
+      "meaning": "Proves missing evidence is explicitly unscored, not that user journeys scored well"
+    },
+    "nodeRoomConsumer": {
+      "jobId": 101342251553,
+      "status": "success",
+      "checkedOutNodeSlide": "8177142416b6a6f59df057d0e5ab25df08db93ec",
+      "checkedOutNodeRoom": "8177142416b6a6f59df057d0e5ab25df08db93ec",
+      "package": {
+        "name": "@nodeslide/testing",
+        "version": "0.2.2",
+        "inputKind": "packed-artifact",
+        "integritySha256": "184f1761238c642cb0fe4a93db4a2f3fe1abd13d774793dcd2ed6d5bf0f73bee",
+        "entrypoint": "@nodeslide/testing/dist/index.js"
+      },
+      "scope": {
+        "repositoryPort": true,
+        "proposalReviewAccept": true,
+        "compareAndSwap": true,
+        "versions": true,
+        "inMemoryReceiptLedger": true,
+        "legacyPermissionCallback": false,
+        "fixtureAuthorizationEvidenceBinding": true,
+        "authorizationBoundReceipts": true,
+        "frozenOperationAuthorizationRequests": true,
+        "existingNodeAgentRuntime": true,
+        "agentProposalStayedUnapplied": true,
+        "sameRepositoryReread": true,
+        "portableSnapshotRoundTrip": true,
+        "durableReceiptPersistence": false,
+        "packageReload": false,
+        "productionAuthorization": false,
+        "productionCreate": false,
+        "manualArtifactEdit": false,
+        "productionBackend": false,
+        "sameSnapshotMemoryAndConvex": false,
+        "durableRoomActivity": false,
+        "mountedReactStudio": false,
+        "presenter": false,
+        "pptxExport": false,
+        "exportedSnapshotRevalidation": false
+      },
+      "authorizationMode": "deterministic-preverified-fixture"
+    }
+  },
+  "conditionalSkips": {
+    "PR corpus and runner gate": "pull_request-only; this is main push",
+    "Supplied evidence lane": "explicit workflow_dispatch evidence input required",
+    "Fixed live UXBench and TasteBench": "schedule or qualifying workflow_dispatch required",
+    "deploymentRollback": "deployment and live gates succeeded, so failure-only rollback skipped"
+  },
+  "automaticDeployment": {
+    "runId": 33979732651,
+    "jobId": 101342685246,
+    "deploymentId": 6283538469,
+    "event": "workflow_run after successful main push CI",
+    "dispatchedByReviewer": false,
+    "existingReviewedWorkflow": ".github/workflows/deploy-production.yml at merge commit",
+    "status": "success",
+    "deploymentEnvironmentStatus": "success",
+    "deploymentEnvironmentCreatedAt": "2026-09-05T17:03:00Z",
+    "jobCompletedAt": "2026-09-05T17:10:05Z",
+    "convexSourceIdentityObservedInRawJob": "8177142416b6a6f59df057d0e5ab25df08db93ec",
+    "vercelReadyObservedInRawJob": true,
+    "vercelReadyGateTime": "2026-09-05T17:09:57Z",
+    "canonicalAndImmutableBundleIdentityGates": "PASS",
+    "liveBrowserMountGate": "PASS in automated workflow",
+    "shareRefusalGate": "PASS: unknown share routes return rendered404 rather than invocation failure",
+    "rollbackTriggered": false,
+    "credentialValuesReadByReviewer": false,
+    "proofRung": "Backend/READY/live-browser checks supported by actual workflow log and source; public canonical HTML/source identity independently re-fetched by reviewer."
+  },
+  "publicContent": {
+    "before": {
+      "at": "2026-09-05T17:06:29.808046+00:00",
+      "request": {
+        "method": "GET",
+        "url": "https://nodeslide.vercel.app/",
+        "authentication": false,
+        "cookies": false,
+        "redirectsFollowed": false,
+        "javascriptExecuted": false,
+        "maxBytes": 2097152
+      },
+      "status": 200,
+      "url": "https://nodeslide.vercel.app/",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8",
+        "Date": "Sat, 05 Sep 2026 17:06:31 GMT",
+        "ETag": "\"f307fae81be48378d7318ce8ffbbd4c4\"",
+        "Cache-Control": "public, max-age=0, must-revalidate",
+        "Age": "0",
+        "X-Vercel-Cache": "MISS"
+      },
+      "bytes": 1338,
+      "sha256": "565a7a221f8e0368b9a789364631299763158cd14bc28483928e41dbc51f66b1",
+      "expectedCommit": "8177142416b6a6f59df057d0e5ab25df08db93ec",
+      "actualBuildIdentity": [
+        "b0674b229a3691c09c88fcab1481f2e33342cb21"
+      ],
+      "exactExpectedBuildIdentity": false,
+      "concreteContentSignal": "reviewable presentations, built from a brief",
+      "contentSignalPresent": true,
+      "entryAssets": [
+        "/assets/index-fNZhkc_l.js"
+      ],
+      "scope": "Raw public HTML and source metadata only; no user actions, provider, authorization, Office, pixel or backend correctness proof."
+    },
+    "after": {
+      "at": "2026-09-05T17:11:48.349497+00:00",
+      "request": {
+        "method": "GET",
+        "url": "https://nodeslide.vercel.app/",
+        "authentication": false,
+        "cookies": false,
+        "redirectsFollowed": false,
+        "javascriptExecuted": false,
+        "maxBytes": 2097152
+      },
+      "status": 200,
+      "url": "https://nodeslide.vercel.app/",
+      "headers": {
+        "Content-Type": "text/html; charset=utf-8",
+        "Date": "Sat, 05 Sep 2026 17:11:50 GMT",
+        "ETag": "\"ed0c08c94dad64b80385700deb87c79d\"",
+        "Cache-Control": "public, max-age=0, must-revalidate",
+        "Age": "0",
+        "X-Vercel-Cache": "MISS"
+      },
+      "bytes": 1338,
+      "sha256": "93b1ad446046a5c7241562800076a7c82a917e41faf058f56ef0dc36e631db41",
+      "expectedCommit": "8177142416b6a6f59df057d0e5ab25df08db93ec",
+      "actualBuildIdentity": [
+        "8177142416b6a6f59df057d0e5ab25df08db93ec"
+      ],
+      "exactExpectedBuildIdentity": true,
+      "concreteContentSignal": "reviewable presentations, built from a brief",
+      "contentSignalPresent": true,
+      "entryAssets": [
+        "/assets/index-DF2Crd4h.js"
+      ],
+      "scope": "Raw public HTML and source metadata only; no user actions, provider, authorization, Office, pixel or backend correctness proof."
+    },
+    "afterHtmlShaMatchesActualDeploymentLiveIdentityLog": true,
+    "contentUrl": "https://nodeslide.vercel.app/",
+    "permittedClaim": "The reviewed merge commit8177142 was deployed by existing automation, and the public site now serves that build identity plus the concrete landing content.",
+    "notClaimed": [
+      "Live structured-brief/deck authoring replay",
+      "Provider correctness",
+      "Native Office behavior",
+      "Backend authorization correctness",
+      "Visual/responsive/interaction/performance/human acceptance"
+    ]
+  },
+  "remainingHolds": {
+    "localWindowsNodeBook": "Latest ordinary full check fails184.375s on the existing60s six-kind deadline; phase unestablished. Shared Linux pass and deployment do not erase it.",
+    "gitGuardian": "Source PR head054 check101338751116 was NEUTRAL/NOT_SCANNED for PR size. No replacement postmerge GitGuardian scan appears in observed check runs.",
+    "product": "Notes/control overlap and enlarged navigation/density/footer clipping; missing device/human/performance coverage; native Office/provider and full live authoring acceptance.",
+    "fullGrades": null
+  },
+  "bodyReview": {
+    "publishedBodySha256": "ea37293f20c8964eb53a08e3b3715b3ae8eb7af8d549bd435b038a21c5309b03",
+    "verdict": "Accurate scoped premerge functional results and explicit Windows/scanner/consumer limits; spacing corrected. Postmerge/deployment acceptance is this separate receipt."
+  },
+  "fraudReview": "No skipped job counted as tested, no UNSCORED benchmark relabeled, no deployment dispatch or branch deletion by reviewer. Public HTML changed from baselineb067 to merge817 and matches the actual deployment log hash; a green workflow alone was not used to establish public content.",
+  "priorFailuresPreserved": [
+    "E6g_NODESLIDE_CURRENT_CONSUMER_SHARED_JUDGE.json",
+    "E6g_NODESLIDE_PUBLICATION_MARKDOWN_FINAL_JUDGE.json",
+    "E6g-nodeslide-shared-integration/policy.json"
+  ],
+  "nextBoundedAction": "Separate diagnostic phase observation for the recurring Windows NodeBook deadline before any source/test repair. No further unchanged CI/build/browser matrix needed for this integration checkpoint.",
+  "rawEvidence": {
+    "files": [
+      {
+        "path": "E6g-nodeslide-postmerge-independent/final-jobs-and-steps.json",
+        "sha256": "f1ddb86f5f5b9641a09f3770564ac022f1d1ee6949c1ebbd83b0a5474a627ae7",
+        "bytes": 25960
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101341452993.log",
+        "sha256": "90537a797ac48d870b46f82494303f756fd87e45a98a7f1ee38fcf51a903d49a",
+        "bytes": 175482
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101341452993.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101341453075.log",
+        "sha256": "7bd6be35242e827a071850ae149ccfcde0ef97a6c7f916f0e5efaa7687caa75e",
+        "bytes": 27530
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101341453075.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101341453117.log",
+        "sha256": "6d9e3e8b6d081ec31d22c24a121371997c77d6b511c9a6ee139213ecccb01625",
+        "bytes": 22303
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101341453117.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101341453123.log",
+        "sha256": "ec9fa8eefe87c48e7900cf604925f0b2f6b77567ac15327ad6d4adc43965da71",
+        "bytes": 29009
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101341453123.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101341454075.log",
+        "sha256": "faeff53e4a1401422c6c1702efaad9a28f9290ce9b3a0b39309902e15b7b35c0",
+        "bytes": 29964
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101341454075.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101342251553.log",
+        "sha256": "f45dafa0de08347c2cb880a40a48cd9cd7ca6b0eb332a985780fc41376722b5b",
+        "bytes": 85652
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101342251553.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101342685246.log",
+        "sha256": "c6676c72c073902f19f0b132ac489aa3322f75a45c54cc272bee5c3b9733a568",
+        "bytes": 186062
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/job-logs/101342685246.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/postmerge-app-package-receipts.json",
+        "sha256": "2f2a9ddc1f7cc0fde2ad3dd9cfe5a82ca3dd615537b9559f80601ffd3f7a3144",
+        "bytes": 831
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/postmerge-log-extracts.json",
+        "sha256": "38762952fe9e2133a49c55987c5900f287f973d42573ce5e1ef36f4b42b488f4",
+        "bytes": 5030
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/postmerge-noderoom-receipt.json",
+        "sha256": "bb3a8f29ff2fcf3e667f74d1431feb2f012846b42e97fbea02a73ca76d33dbfc",
+        "bytes": 10173
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/public-html/after-automatic-deploy.html",
+        "sha256": "93b1ad446046a5c7241562800076a7c82a917e41faf058f56ef0dc36e631db41",
+        "bytes": 1338
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/public-html/after-automatic-deploy.json",
+        "sha256": "802332f22fef808908f76f03e5a1be13b420f9a5b68a2ea7618080ce7104b4f0",
+        "bytes": 1218
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/public-html/before-automatic-deploy.html",
+        "sha256": "565a7a221f8e0368b9a789364631299763158cd14bc28483928e41dbc51f66b1",
+        "bytes": 1338
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/public-html/before-automatic-deploy.json",
+        "sha256": "aac1ff5aa7db0424353c83b3be563c31dab463fde1ea163ed8bdee67b435c6be",
+        "bytes": 1219
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/check-runs.json",
+        "sha256": "fcff4c20f92a8495826179aafb9625a57c6d49b6dd466d96cb34f269568d1727",
+        "bytes": 24655
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/check-runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/commands.json",
+        "sha256": "0dd215ae3e2b9944f0b06524561f84a5d2135e0df6345c80e4055e6bdcd86967",
+        "bytes": 1961
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/deployments.json",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "bytes": 2
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/deployments.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/followup-commands.json",
+        "sha256": "ec2d8c311b2ce2731d65cfdebcc51b4e1ae96782e78aecb54e90b04502d22dd9",
+        "bytes": 573
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/head-ref.json",
+        "sha256": "e2e3c64edab172132f77ce89a0e8c190db1cd30936a096344f45893bd5b75f8a",
+        "bytes": 114
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/head-ref.json.stderr",
+        "sha256": "d2c8985c89b29a842ac4946d13bdbc297709f44f20bb968faf9682664b211db6",
+        "bytes": 25
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/jobs-33979285292.json",
+        "sha256": "7d978e9c39411316bea794f4f636914bcd88e145c26c56b8426f585113d14d2a",
+        "bytes": 7607
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/jobs-33979285292.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/jobs-33979285298.json",
+        "sha256": "7714bd5fae71e9968ff9927e0d6b3146edfe68c756e5e4d06fd4cf819499775f",
+        "bytes": 6151
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/jobs-33979285298.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/jobs-33979285650.json",
+        "sha256": "88deac39c9ed92049804a56d08f48df96001c3714fe75aa8ba1de350f4ed4260",
+        "bytes": 2639
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/jobs-33979285650.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/local-immutable-refs.json",
+        "sha256": "f058c3b992f543f0ddff436c8fe386624e00473b6efa96699f76713e40158084",
+        "bytes": 353
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/log-fetches.json",
+        "sha256": "e59c2dd4d29b794c9a563378051923a71fc5e7e734e47aea52ed600859ff63ef",
+        "bytes": 523
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/main-protection.json",
+        "sha256": "79cae9c2e4ca86ed4b2bab18a6feddf9d55e2945a31ba41bad65adb8c92f1f78",
+        "bytes": 1749
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/main-protection.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/main.json",
+        "sha256": "73ca24693f04783d60431ff29a3053c18e17b87c563e502d39e05a114e05f161",
+        "bytes": 1110257
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/main.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/pr.json",
+        "sha256": "eeb1a69bc41527d2c49f7c714ad204131990b7c5bfb50aadd3a4608c3b04d34c",
+        "bytes": 3187
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/pr.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/remote-commit.json",
+        "sha256": "9e04d885d9518a2f3616070f631c8ada10ccb8638df641bc274b4e563f77fe15",
+        "bytes": 7736
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/remote-commit.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/repo-policy.json",
+        "sha256": "3ca1f090b9c0b71d995cb5ca69c245784b645cb7607da65dbf2a55ae164193a1",
+        "bytes": 5961
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/repo-policy.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/runs.json",
+        "sha256": "216b7d83d55cf23ad7ab529fafe077a0c912e5d092c49ed977f1a0c8bc79da06",
+        "bytes": 45544
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/summary.json",
+        "sha256": "b9a69f06071ce1444174e28e15a28da5ac4a41c3b169060a737921d2cc89a687",
+        "bytes": 3426
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/timeline.json",
+        "sha256": "2a6ff3921025a2a7787cca0803d58f14bcfe8a0298de9cdd2a596b29bed15f89",
+        "bytes": 9072
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-01/timeline.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/check-runs.json",
+        "sha256": "fcff4c20f92a8495826179aafb9625a57c6d49b6dd466d96cb34f269568d1727",
+        "bytes": 24655
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/check-runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/commands.json",
+        "sha256": "a3141ff229582f8ebf6c1cd93b0c80a2eb3b0b16c82a2b6d4ad0f936e7cd0b63",
+        "bytes": 1281
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/deployments.json",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "bytes": 2
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/deployments.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/followup-commands.json",
+        "sha256": "ec2d8c311b2ce2731d65cfdebcc51b4e1ae96782e78aecb54e90b04502d22dd9",
+        "bytes": 573
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/jobs-33979285292.json",
+        "sha256": "7d978e9c39411316bea794f4f636914bcd88e145c26c56b8426f585113d14d2a",
+        "bytes": 7607
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/jobs-33979285292.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/jobs-33979285298.json",
+        "sha256": "2999d28a5ac20773fed4b7ff94d579220d18351a6f2c4cf293cec0a5143a73af",
+        "bytes": 6323
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/jobs-33979285298.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/jobs-33979285650.json",
+        "sha256": "88deac39c9ed92049804a56d08f48df96001c3714fe75aa8ba1de350f4ed4260",
+        "bytes": 2639
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/jobs-33979285650.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/local-immutable-refs.json",
+        "sha256": "f058c3b992f543f0ddff436c8fe386624e00473b6efa96699f76713e40158084",
+        "bytes": 353
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/log-fetches.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "bytes": 3
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/main.json",
+        "sha256": "73ca24693f04783d60431ff29a3053c18e17b87c563e502d39e05a114e05f161",
+        "bytes": 1110257
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/main.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/pr.json",
+        "sha256": "eeb1a69bc41527d2c49f7c714ad204131990b7c5bfb50aadd3a4608c3b04d34c",
+        "bytes": 3187
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/pr.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/remote-commit.json",
+        "sha256": "9e04d885d9518a2f3616070f631c8ada10ccb8638df641bc274b4e563f77fe15",
+        "bytes": 7736
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/remote-commit.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/runs.json",
+        "sha256": "216b7d83d55cf23ad7ab529fafe077a0c912e5d092c49ed977f1a0c8bc79da06",
+        "bytes": 45544
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-02/summary.json",
+        "sha256": "0cebde549d718805397909833207c80e842f33d85a25d82870d96e3413e47521",
+        "bytes": 2856
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/check-runs.json",
+        "sha256": "eac95f9059ae15abff31a60ff60db5abda9f2c0fba24cb401901f68cb85b6db1",
+        "bytes": 27737
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/check-runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/commands.json",
+        "sha256": "a3141ff229582f8ebf6c1cd93b0c80a2eb3b0b16c82a2b6d4ad0f936e7cd0b63",
+        "bytes": 1281
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/deployments.json",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "bytes": 2
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/deployments.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/followup-commands.json",
+        "sha256": "4f18f28e8060849dbd417111e8d5fa052edd6f52327a2c0126a139d66d563440",
+        "bytes": 573
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/jobs-33979285292.json",
+        "sha256": "7d978e9c39411316bea794f4f636914bcd88e145c26c56b8426f585113d14d2a",
+        "bytes": 7607
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/jobs-33979285292.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/jobs-33979285298.json",
+        "sha256": "2a90da2936d0ee821c7437658075a2b4e5a3c31c13b9c03fe6e26db347b841c3",
+        "bytes": 9447
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/jobs-33979285298.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/jobs-33979285650.json",
+        "sha256": "88deac39c9ed92049804a56d08f48df96001c3714fe75aa8ba1de350f4ed4260",
+        "bytes": 2639
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/jobs-33979285650.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/local-immutable-refs.json",
+        "sha256": "f058c3b992f543f0ddff436c8fe386624e00473b6efa96699f76713e40158084",
+        "bytes": 353
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/log-fetches.json",
+        "sha256": "40be57cb2b2ca0876871ab13e4a176933fbff4b634cda43c728f70862863c2d4",
+        "bytes": 164
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/main.json",
+        "sha256": "73ca24693f04783d60431ff29a3053c18e17b87c563e502d39e05a114e05f161",
+        "bytes": 1110257
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/main.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/pr.json",
+        "sha256": "eeb1a69bc41527d2c49f7c714ad204131990b7c5bfb50aadd3a4608c3b04d34c",
+        "bytes": 3187
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/pr.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/remote-commit.json",
+        "sha256": "9e04d885d9518a2f3616070f631c8ada10ccb8638df641bc274b4e563f77fe15",
+        "bytes": 7736
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/remote-commit.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/runs.json",
+        "sha256": "839af8fbf0c0972875fff2f3b6f2181a59cab73bdd6a82eacf0bfe3de5d54189",
+        "bytes": 45544
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-03/summary.json",
+        "sha256": "54c9e5bd37c7535d1746602e42ca5f0e733c32c13ce9283c2c2c5347e67761b5",
+        "bytes": 3288
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/check-runs.json",
+        "sha256": "134fd7984e56545321f4432000f1e6da620d7d2eb01a0fbe1f85a401addfaadb",
+        "bytes": 31300
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/check-runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/commands.json",
+        "sha256": "a3141ff229582f8ebf6c1cd93b0c80a2eb3b0b16c82a2b6d4ad0f936e7cd0b63",
+        "bytes": 1281
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/deployment-status-6283538469.json",
+        "sha256": "999ace9e11c01c209ceca1be633ad97c57ff8f184a0dadc279695ec896fe3d16",
+        "bytes": 4954
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/deployment-status-6283538469.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/deployments.json",
+        "sha256": "97d5a81567bc36a47960222887a4c81532541f04afc889057e7ea7ea0d28882e",
+        "bytes": 3837
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/deployments.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/followup-commands.json",
+        "sha256": "8c6802ddeeba38240aa2df91f75644481746a2f8f21b1c84f461143e1e21da0f",
+        "bytes": 967
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/jobs-33979285292.json",
+        "sha256": "7d978e9c39411316bea794f4f636914bcd88e145c26c56b8426f585113d14d2a",
+        "bytes": 7607
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/jobs-33979285292.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/jobs-33979285298.json",
+        "sha256": "d8fb8d6ba7d144646ec1f5105b9605a3cc7d38c215fbb5f6682a1a3d3bba2a14",
+        "bytes": 9901
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/jobs-33979285298.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/jobs-33979285650.json",
+        "sha256": "88deac39c9ed92049804a56d08f48df96001c3714fe75aa8ba1de350f4ed4260",
+        "bytes": 2639
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/jobs-33979285650.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/jobs-33979732651.json",
+        "sha256": "643155c3d7035951463b4c6d532a33ea3f7334b19a85bb53bd28fca9352bd47f",
+        "bytes": 4596
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/jobs-33979732651.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/local-immutable-refs.json",
+        "sha256": "f058c3b992f543f0ddff436c8fe386624e00473b6efa96699f76713e40158084",
+        "bytes": 353
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/log-fetches.json",
+        "sha256": "c266883a53483080b185435b028eb6efe7a901a00469d65da921ba4337b1c99c",
+        "bytes": 136
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/main.json",
+        "sha256": "73ca24693f04783d60431ff29a3053c18e17b87c563e502d39e05a114e05f161",
+        "bytes": 1110257
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/main.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/pr.json",
+        "sha256": "eeb1a69bc41527d2c49f7c714ad204131990b7c5bfb50aadd3a4608c3b04d34c",
+        "bytes": 3187
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/pr.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/remote-commit.json",
+        "sha256": "9e04d885d9518a2f3616070f631c8ada10ccb8638df641bc274b4e563f77fe15",
+        "bytes": 7736
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/remote-commit.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/runs.json",
+        "sha256": "7d167ffabb2a03b962638d2de167ef04f6accecf3c7b2647843da717d5e55d29",
+        "bytes": 60704
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-04/summary.json",
+        "sha256": "9b3400adc096be555482c60e31e8bfd8d8315f6e3aec1038ba63cad3f3aaee91",
+        "bytes": 8905
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/check-runs.json",
+        "sha256": "134fd7984e56545321f4432000f1e6da620d7d2eb01a0fbe1f85a401addfaadb",
+        "bytes": 31300
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/check-runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/commands.json",
+        "sha256": "a3141ff229582f8ebf6c1cd93b0c80a2eb3b0b16c82a2b6d4ad0f936e7cd0b63",
+        "bytes": 1281
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/deployment-status-6283538469.json",
+        "sha256": "999ace9e11c01c209ceca1be633ad97c57ff8f184a0dadc279695ec896fe3d16",
+        "bytes": 4954
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/deployment-status-6283538469.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/deployments.json",
+        "sha256": "97d5a81567bc36a47960222887a4c81532541f04afc889057e7ea7ea0d28882e",
+        "bytes": 3837
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/deployments.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/followup-commands.json",
+        "sha256": "8c6802ddeeba38240aa2df91f75644481746a2f8f21b1c84f461143e1e21da0f",
+        "bytes": 967
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/jobs-33979285292.json",
+        "sha256": "7d978e9c39411316bea794f4f636914bcd88e145c26c56b8426f585113d14d2a",
+        "bytes": 7607
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/jobs-33979285292.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/jobs-33979285298.json",
+        "sha256": "d8fb8d6ba7d144646ec1f5105b9605a3cc7d38c215fbb5f6682a1a3d3bba2a14",
+        "bytes": 9901
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/jobs-33979285298.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/jobs-33979285650.json",
+        "sha256": "88deac39c9ed92049804a56d08f48df96001c3714fe75aa8ba1de350f4ed4260",
+        "bytes": 2639
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/jobs-33979285650.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/jobs-33979732651.json",
+        "sha256": "dede5609b4ae5a4427dd34d20d71fc9249fa137c7dc3ade74f4c10414c29e338",
+        "bytes": 4768
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/jobs-33979732651.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/local-immutable-refs.json",
+        "sha256": "f058c3b992f543f0ddff436c8fe386624e00473b6efa96699f76713e40158084",
+        "bytes": 353
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/log-fetches.json",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "bytes": 3
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/main.json",
+        "sha256": "73ca24693f04783d60431ff29a3053c18e17b87c563e502d39e05a114e05f161",
+        "bytes": 1110257
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/main.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/pr.json",
+        "sha256": "eeb1a69bc41527d2c49f7c714ad204131990b7c5bfb50aadd3a4608c3b04d34c",
+        "bytes": 3187
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/pr.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/remote-commit.json",
+        "sha256": "9e04d885d9518a2f3616070f631c8ada10ccb8638df641bc274b4e563f77fe15",
+        "bytes": 7736
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/remote-commit.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/runs.json",
+        "sha256": "7d167ffabb2a03b962638d2de167ef04f6accecf3c7b2647843da717d5e55d29",
+        "bytes": 60704
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05/summary.json",
+        "sha256": "df8c19bcd49f1a7caf313e4bcdf9d75b2512ef2d1fb020496d7134c620a25b1e",
+        "bytes": 8758
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-05-console.json",
+        "sha256": "4b6f3bd65da9caee0138c07a4e1e8dc129df2e8a4fafd8e5851ff9bb468a4c63",
+        "bytes": 7055
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/check-runs.json",
+        "sha256": "7fee39f3307fcaa7967b78e3ec9e4900e23a5e6390d68bac244f0840ea3c120d",
+        "bytes": 31321
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/check-runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/commands.json",
+        "sha256": "a3141ff229582f8ebf6c1cd93b0c80a2eb3b0b16c82a2b6d4ad0f936e7cd0b63",
+        "bytes": 1281
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/deployment-status-6283538469.json",
+        "sha256": "9b267ec7811385252bfc6b72ac92455796748bc3efb167aae08cd6ded26536d5",
+        "bytes": 6671
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/deployment-status-6283538469.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/deployments.json",
+        "sha256": "7d3454779c41a6d25c275b3c35d1b98dcc13973cb971ac4685cc7d1675826e57",
+        "bytes": 3837
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/deployments.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/followup-commands.json",
+        "sha256": "8c6802ddeeba38240aa2df91f75644481746a2f8f21b1c84f461143e1e21da0f",
+        "bytes": 967
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/jobs-33979285292.json",
+        "sha256": "7d978e9c39411316bea794f4f636914bcd88e145c26c56b8426f585113d14d2a",
+        "bytes": 7607
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/jobs-33979285292.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/jobs-33979285298.json",
+        "sha256": "d8fb8d6ba7d144646ec1f5105b9605a3cc7d38c215fbb5f6682a1a3d3bba2a14",
+        "bytes": 9901
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/jobs-33979285298.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/jobs-33979285650.json",
+        "sha256": "88deac39c9ed92049804a56d08f48df96001c3714fe75aa8ba1de350f4ed4260",
+        "bytes": 2639
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/jobs-33979285650.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/jobs-33979732651.json",
+        "sha256": "8c7a1e9868572f1b69d74a81e7949547ce51204ae91b7503705960fe5b8551c5",
+        "bytes": 5437
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/jobs-33979732651.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/local-immutable-refs.json",
+        "sha256": "f058c3b992f543f0ddff436c8fe386624e00473b6efa96699f76713e40158084",
+        "bytes": 353
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/log-fetches.json",
+        "sha256": "ff0afea0c004aba70db269785ced2bcb8930d8abde028d4ed7ffd3a90a92f7e6",
+        "bytes": 131
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/main.json",
+        "sha256": "73ca24693f04783d60431ff29a3053c18e17b87c563e502d39e05a114e05f161",
+        "bytes": 1110257
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/main.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/pr.json",
+        "sha256": "eeb1a69bc41527d2c49f7c714ad204131990b7c5bfb50aadd3a4608c3b04d34c",
+        "bytes": 3187
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/pr.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/remote-commit.json",
+        "sha256": "9e04d885d9518a2f3616070f631c8ada10ccb8638df641bc274b4e563f77fe15",
+        "bytes": 7736
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/remote-commit.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/runs.json",
+        "sha256": "3d12919d73d81354a7ba3dace70c536fc2e465f6e490976dedd6f208ce22b5da",
+        "bytes": 60707
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/runs.json.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06/summary.json",
+        "sha256": "375be5ea94a9dd399672f33dbdc84f10ce3d84da0d0e8ffb231103fd614727f3",
+        "bytes": 8906
+      },
+      {
+        "path": "E6g-nodeslide-postmerge-independent/snapshot-06-console.json",
+        "sha256": "df13199a957260ab3ea81a7f253c16374f3d7b7b4dd54b2e16085072859b3872",
+        "bytes": 7165
+      }
+    ],
+    "count": 182,
+    "scripts": [
+      {
+        "path": "E6g-capture-postmerge.py",
+        "sha256": "7c34e140873bfdbe4c351ce6f518ffd1c9a90056acc3631dd195fbae8f945bf0"
+      },
+      {
+        "path": "E6g-read-public-html.py",
+        "sha256": "f41c1e491bbaea20c2b42140f24df232069eb5f7f2318fa20c0560df46c3cde9"
+      },
+      {
+        "path": "E6g-finalize-postmerge-judge.py",
+        "sha256": "47ab73356cc6f3cbfca733d64f324440c62d6d1cd02b3d745de417f09cc06fa7"
+      }
+    ]
+  }
+}

@@ -602,65 +602,26 @@ export function SlideCanvas({
         </div>
       </div>
 
-      <div className="ns-canvas-controls">
-        <div className="ns-slide-stepper" aria-label="Slide navigation">
-          <button
-            type="button"
-            onClick={onPreviousSlide}
-            disabled={slideIndex <= 0}
-            aria-label="Previous slide"
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <span>
-            {slideIndex + 1} / {slideCount}
-          </span>
-          <button
-            type="button"
-            onClick={onNextSlide}
-            disabled={slideIndex >= slideCount - 1}
-            aria-label="Next slide"
-          >
-            <ChevronRight size={16} />
-          </button>
-        </div>
-
-        <div className="ns-zoom-controls" aria-label="Canvas zoom and pan controls">
-          <button
-            type="button"
-            className={`ns-pan-toggle ${panMode ? 'is-active' : ''}`}
-            onClick={() => setPanMode((value) => !value)}
-            aria-pressed={panMode}
-            aria-label="Toggle pan tool"
-            title="Pan tool (hold Space)"
-          >
-            <Hand size={15} />
-          </button>
-          <i />
-          <button
-            type="button"
-            onClick={() => onZoomChange(clampZoom(zoom - 5))}
-            aria-label="Zoom out"
-          >
-            <Minus size={14} />
-          </button>
-          <span className="ns-zoom-value">{zoom}%</span>
-          <button
-            type="button"
-            onClick={() => onZoomChange(clampZoom(zoom + 5))}
-            aria-label="Zoom in"
-          >
-            <Plus size={14} />
-          </button>
-          <button
-            type="button"
-            className="ns-fit-button"
-            onClick={fitSlide}
-            aria-label="Fit slide to workspace"
-          >
-            Fit
-          </button>
-        </div>
+      <div className="ns-slide-stepper" aria-label="Slide navigation">
+        <button
+          type="button"
+          onClick={onPreviousSlide}
+          disabled={slideIndex <= 0}
+          aria-label="Previous slide"
+        >
+          <ChevronLeft size={16} />
+        </button>
+        <span>
+          {slideIndex + 1} / {slideCount}
+        </span>
+        <button
+          type="button"
+          onClick={onNextSlide}
+          disabled={slideIndex >= slideCount - 1}
+          aria-label="Next slide"
+        >
+          <ChevronRight size={16} />
+        </button>
       </div>
 
       {/* Presenter notes belong under the slide, not inside the panel about how the slide looks.
@@ -670,6 +631,43 @@ export function SlideCanvas({
       {onUpdateNotes && !readOnly ? (
         <SlideNotesStrip key={slide.id} slide={slide} onUpdateNotes={onUpdateNotes} />
       ) : null}
+
+      <div className="ns-zoom-controls" aria-label="Canvas zoom and pan controls">
+        <button
+          type="button"
+          className={`ns-pan-toggle ${panMode ? 'is-active' : ''}`}
+          onClick={() => setPanMode((value) => !value)}
+          aria-pressed={panMode}
+          aria-label="Toggle pan tool"
+          title="Pan tool (hold Space)"
+        >
+          <Hand size={15} />
+        </button>
+        <i />
+        <button
+          type="button"
+          onClick={() => onZoomChange(clampZoom(zoom - 5))}
+          aria-label="Zoom out"
+        >
+          <Minus size={14} />
+        </button>
+        <span className="ns-zoom-value">{zoom}%</span>
+        <button
+          type="button"
+          onClick={() => onZoomChange(clampZoom(zoom + 5))}
+          aria-label="Zoom in"
+        >
+          <Plus size={14} />
+        </button>
+        <button
+          type="button"
+          className="ns-fit-button"
+          onClick={fitSlide}
+          aria-label="Fit slide to workspace"
+        >
+          Fit
+        </button>
+      </div>
     </section>
   );
 }

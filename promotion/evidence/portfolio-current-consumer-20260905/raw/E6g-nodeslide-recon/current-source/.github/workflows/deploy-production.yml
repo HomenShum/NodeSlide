@@ -1,0 +1,251 @@
+name: Deploy production
+run-name: Deploy production - ${{ github.event.workflow_run.head_sha || github.sha }}
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: nodeslide-production-deploy
+  cancel-in-progress: false
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  deploy:
+    name: Convex + Vercel + live DOM gate
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
+      (vars.NODESLIDE_PRODUCTION_DEPLOY_ENABLED == 'true' &&
+       github.event_name == 'workflow_run' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: production
+      url: ${{ steps.vercel_deploy.outputs.deployment_url }}
+    env:
+      DEPLOY_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+      PROD_CONVEX_URL: https://agile-stoat-411.convex.cloud
+      PROD_CONVEX_SITE_URL: https://agile-stoat-411.convex.site
+      PROD_WEB_URL: https://nodeslide.vercel.app
+      VITE_GIT_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+    steps:
+      - name: Check out the exact CI-tested main commit
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22
+          package-manager-cache: false
+      - name: Require the current exact main commit and its successful trusted CI run
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$DEPLOY_SHA"
+          node scripts/verify-github-exact-main.mjs "$DEPLOY_SHA"
+      - name: Verify production credentials are configured
+        shell: bash
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          missing=()
+          for name in CONVEX_DEPLOY_KEY VERCEL_TOKEN VERCEL_ORG_ID VERCEL_PROJECT_ID; do
+            if [[ -z "${!name:-}" ]]; then missing+=("$name"); fi
+          done
+          if (( ${#missing[@]} > 0 )); then
+            echo "::error::Missing production secret(s): ${missing[*]}"
+            exit 1
+          fi
+          node scripts/verify-production-secret-scopes.mjs
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Build the production-bound frontend
+        run: npm run build
+        env:
+          VITE_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
+          VITE_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
+      - name: Verify the local frontend carries the exact source identity
+        run: node scripts/verify-built-web-identity.mjs dist/index.html "$DEPLOY_SHA"
+      - name: Run the local built-bundle smoke gate
+        run: node scripts/smoke.mjs
+      - name: Pull and verify the protected Vercel production project binding
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VITE_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
+          VITE_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
+        run: |
+          npx --yes vercel@56.3.2 pull \
+            --yes \
+            --environment=production \
+            --token="$VERCEL_TOKEN"
+          node scripts/verify-vercel-project-binding.mjs .vercel/project.json
+      - name: Build the exact Vercel production artifact
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VITE_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
+          VITE_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
+        run: |
+          npx --yes vercel@56.3.2 build \
+            --prod \
+            --yes \
+            --token="$VERCEL_TOKEN"
+          node scripts/verify-built-web-identity.mjs .vercel/output/static/index.html "$DEPLOY_SHA"
+      - name: Load every emitted serverless function under real node
+        # Ground truth for the function bundle: a cold start is an ESM import,
+        # and an unresolvable specifier fails there, before any handler logic.
+        run: node scripts/verify-function-bundle.mjs --emitted
+      - name: Recheck exact main immediately before production mutation
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/verify-github-exact-main.mjs "$DEPLOY_SHA"
+      - name: Deploy Convex functions to the pinned production deployment
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+        run: |
+          node scripts/write-convex-build-identity.mjs "$DEPLOY_SHA"
+          npx convex deploy --typecheck enable --message "GitHub Actions ${DEPLOY_SHA}"
+      - name: Verify the activated Convex backend carries the exact source identity
+        run: node scripts/verify-convex-build-identity.mjs "$DEPLOY_SHA"
+      - name: Deploy the source commit to Vercel production
+        id: vercel_deploy
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          deployment_log="$(mktemp)"
+          trap 'rm -f "$deployment_log"' EXIT
+          npx --yes vercel@56.3.2 deploy \
+              --prebuilt \
+              --prod \
+              --yes \
+              --non-interactive \
+              --no-color \
+              --archive=tgz \
+              --token="$VERCEL_TOKEN" \
+              --meta "githubCommitSha=$DEPLOY_SHA" 2>&1 | tee "$deployment_log"
+          deployment_url="$(
+            node scripts/extract-vercel-deployment-url.mjs "$deployment_log" "$PROD_WEB_URL"
+          )"
+          if [[ ! "$deployment_url" =~ ^https://[A-Za-z0-9.-]+\.vercel\.app$ ]]; then
+            echo "::error::Vercel CLI did not return a valid deployment URL."
+            exit 1
+          fi
+          echo "deployment_url=$deployment_url" >> "$GITHUB_OUTPUT"
+      - name: Wait until the deployment reports READY
+        # `vercel deploy` normally blocks until ready, but the URL being
+        # printed is not the same claim as the deployment being READY. Ask the
+        # platform explicitly before trusting any live check against it.
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          DEPLOYMENT_URL: ${{ steps.vercel_deploy.outputs.deployment_url }}
+        run: |
+          npx --yes vercel@56.3.2 inspect "$DEPLOYMENT_URL" \
+            --wait \
+            --timeout 5m \
+            --token="$VERCEL_TOKEN"
+      - name: Verify deployment URL and canonical alias serve the gated bundle
+        env:
+          EXPECTED_CONVEX_URL: ${{ env.PROD_CONVEX_URL }}
+          EXPECTED_CONVEX_SITE_URL: ${{ env.PROD_CONVEX_SITE_URL }}
+          DEPLOYMENT_URL: ${{ steps.vercel_deploy.outputs.deployment_url }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          LIVE_SMOKE_RETRY_TIMEOUT_MS: 300000
+          LIVE_SMOKE_DIST_DIR: .vercel/output/static
+        shell: bash
+        run: |
+          immutable_html="$(mktemp)"
+          canonical_html="$(mktemp)"
+          trap 'rm -f "$immutable_html" "$canonical_html"' EXIT
+          npx --yes vercel@56.3.2 curl / \
+            --deployment "$DEPLOYMENT_URL" \
+            --yes \
+            -- \
+            --silent \
+            --show-error \
+            --fail \
+            --output "$immutable_html"
+          node scripts/verify-deployed-html.mjs .vercel/output/static/index.html "$immutable_html"
+          node scripts/live-smoke.mjs "$PROD_WEB_URL"
+          curl \
+            --silent \
+            --show-error \
+            --fail \
+            --location \
+            --max-redirs 0 \
+            --output "$canonical_html" \
+            "$PROD_WEB_URL/"
+          node scripts/verify-deployed-html.mjs .vercel/output/static/index.html "$canonical_html"
+          # Concrete server-rendered content signal from index.html source:
+          # the byte-compare above is stronger, but this line fails readably
+          # if the alias ever serves a shell that is not NodeSlide's.
+          grep -q 'reviewable presentations, built from a brief' "$canonical_html"
+          node scripts/verify-live-web-identity.mjs "$DEPLOY_SHA" "$PROD_WEB_URL/"
+      - name: Verify the live share route answers rather than crashing
+        # The static bundle being correct says nothing about the serverless
+        # function. An unresolvable share slug must return NodeSlide's rendered
+        # refusal, never the platform's FUNCTION_INVOCATION_FAILED page.
+        run: node scripts/verify-live-share-route.mjs "$PROD_WEB_URL"
+      - name: Roll back the Vercel production alias on post-deploy gate failure
+        # Fires only when the deploy itself succeeded but a live gate after it
+        # failed. Scope is honest: `vercel rollback` repoints the production
+        # alias at the previous frontend deployment. The Convex backend
+        # deployed earlier in this job is NOT rolled back — Convex has no
+        # equivalent one-command revert, so a failed run leaves new backend +
+        # old frontend, which is why every Convex change must stay
+        # backward-compatible with the previous frontend.
+        if: failure() && steps.vercel_deploy.outputs.deployment_url != ''
+        shell: bash
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          FAILED_URL: ${{ steps.vercel_deploy.outputs.deployment_url }}
+        run: |
+          echo "::error::Post-deploy gates failed for $FAILED_URL — rolling back the production alias."
+          npx --yes vercel@56.3.2 rollback \
+            --yes \
+            --timeout 5m \
+            --token="$VERCEL_TOKEN"
+          # Confirm the canonical alias no longer serves the failed commit.
+          for attempt in $(seq 1 24); do
+            live_sha="$(curl --silent --fail "$PROD_WEB_URL/" \
+              | grep -o 'name="nodeslide-build-sha" content="[0-9a-f]*"' \
+              | grep -o '[0-9a-f]\{40\}' || true)"
+            if [[ -n "$live_sha" && "$live_sha" != "$DEPLOY_SHA" ]]; then
+              echo "Rollback verified: $PROD_WEB_URL now serves $live_sha (not $DEPLOY_SHA)."
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::Rollback command ran but $PROD_WEB_URL still serves $DEPLOY_SHA."
+          exit 1

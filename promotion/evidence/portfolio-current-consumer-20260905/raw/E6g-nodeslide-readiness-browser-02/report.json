@@ -1,0 +1,314 @@
+{
+  "proof": "NODESLIDE-DECK-CI-DETAIL-01",
+  "at": "2026-09-05T12:50:06.907Z",
+  "cells": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "fail",
+      "round": 0,
+      "tabs": 2,
+      "overflow": 0
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "fail",
+      "round": 1,
+      "tabs": 2
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "fail",
+      "round": 2,
+      "tabs": 2
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "fail",
+      "countsText200": {
+        "text": "1 blocker · 0 warnings",
+        "box": {
+          "x": 30,
+          "y": 507.53125,
+          "right": 275.234375,
+          "bottom": 533.921875
+        },
+        "rects": [
+          {
+            "x": 30,
+            "y": 509.53125,
+            "right": 128.96875,
+            "bottom": 532.53125
+          },
+          {
+            "x": 128.96875,
+            "y": 507.53125,
+            "right": 165.265625,
+            "bottom": 533.53125
+          },
+          {
+            "x": 165.265625,
+            "y": 509.53125,
+            "right": 275.234375,
+            "bottom": 532.53125
+          }
+        ],
+        "scrollWidth": 245,
+        "clientWidth": 245
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "fail",
+      "textPercent": 200,
+      "overflow": 0,
+      "scope": "Computed inspector component text sizes doubled; no whole-page zoom claim"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "pass",
+      "round": 0,
+      "tabs": 2,
+      "overflow": 0
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "pass",
+      "round": 1,
+      "tabs": 2
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "pass",
+      "round": 2,
+      "tabs": 2
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "pass",
+      "countsText200": {
+        "text": "0 blockers · 0 warnings",
+        "box": {
+          "x": 30,
+          "y": 507.53125,
+          "right": 286.234375,
+          "bottom": 533.921875
+        },
+        "rects": [
+          {
+            "x": 30,
+            "y": 509.53125,
+            "right": 139.96875,
+            "bottom": 532.53125
+          },
+          {
+            "x": 139.96875,
+            "y": 507.53125,
+            "right": 176.265625,
+            "bottom": 533.53125
+          },
+          {
+            "x": 176.265625,
+            "y": 509.53125,
+            "right": 286.234375,
+            "bottom": 532.53125
+          }
+        ],
+        "scrollWidth": 256,
+        "clientWidth": 256
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "subject": "pass",
+      "textPercent": 200,
+      "overflow": 0,
+      "scope": "Computed inspector component text sizes doubled; no whole-page zoom claim"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "fail",
+      "round": 0,
+      "tabs": 1,
+      "overflow": 0
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "fail",
+      "round": 1,
+      "tabs": 1
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "fail",
+      "round": 2,
+      "tabs": 1
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "fail",
+      "countsText200": {
+        "text": "1 blocker · 0 warnings",
+        "box": {
+          "x": 1130,
+          "y": 545.21875,
+          "right": 1375.234375,
+          "bottom": 571.609375
+        },
+        "rects": [
+          {
+            "x": 1130,
+            "y": 547.21875,
+            "right": 1228.96875,
+            "bottom": 570.21875
+          },
+          {
+            "x": 1228.96875,
+            "y": 545.21875,
+            "right": 1265.265625,
+            "bottom": 571.21875
+          },
+          {
+            "x": 1265.265625,
+            "y": 547.21875,
+            "right": 1375.234375,
+            "bottom": 570.21875
+          }
+        ],
+        "scrollWidth": 245,
+        "clientWidth": 245
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "fail",
+      "textPercent": 200,
+      "overflow": 0,
+      "scope": "Computed inspector component text sizes doubled; no whole-page zoom claim"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "pass",
+      "round": 0,
+      "tabs": 1,
+      "overflow": 0
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "pass",
+      "round": 1,
+      "tabs": 1
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "pass",
+      "round": 2,
+      "tabs": 1
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "pass",
+      "countsText200": {
+        "text": "0 blockers · 0 warnings",
+        "box": {
+          "x": 1130,
+          "y": 545.21875,
+          "right": 1386.234375,
+          "bottom": 571.609375
+        },
+        "rects": [
+          {
+            "x": 1130,
+            "y": 547.21875,
+            "right": 1239.96875,
+            "bottom": 570.21875
+          },
+          {
+            "x": 1239.96875,
+            "y": 545.21875,
+            "right": 1276.265625,
+            "bottom": 571.21875
+          },
+          {
+            "x": 1276.265625,
+            "y": 547.21875,
+            "right": 1386.234375,
+            "bottom": 570.21875
+          }
+        ],
+        "scrollWidth": 256,
+        "clientWidth": 256
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "subject": "pass",
+      "textPercent": 200,
+      "overflow": 0,
+      "scope": "Computed inspector component text sizes doubled; no whole-page zoom claim"
+    }
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "grade": null,
+  "status": "PASS_NORMAL_ACTUAL_UI_WITH_TEXT200_OBSERVATIONS"
+}

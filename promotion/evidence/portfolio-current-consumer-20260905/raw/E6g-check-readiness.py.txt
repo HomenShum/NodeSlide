@@ -1,0 +1,18 @@
+from pathlib import Path
+import json,subprocess,os,time,hashlib
+P=Path(__file__).parent;R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905');O=P/'E6g-nodeslide-readiness-check-01';O.mkdir()
+plan=json.loads((P/'E6g-nodeslide-readiness-source-before/plan.json').read_text(encoding='utf-8'));paths=[e['path'] for e in plan['owners']];hashes={n:hashlib.sha256((R/n).read_bytes()).hexdigest() for n in paths}
+env=dict(os.environ)
+for key in list(env):
+    u=key.upper()
+    if any(x in u for x in ['OPENAI','ANTHROPIC','GEMINI','GOOGLE_API','CONVEX','VITE_','PLAYWRIGHT_BASE_URL']) or u.endswith(('_API_KEY','_ACCESS_TOKEN','_SECRET')):env.pop(key)
+env.update({'TEMP':'D:/ProjectRecovery/NodeSlide first run 20260905/temp','TMP':'D:/ProjectRecovery/NodeSlide first run 20260905/temp','CONVEX_AGENT_MODE':'anonymous'})
+records=[]
+commands=[('targeted',['npx','vitest','run','src/domains/nodeslide/inspector/TraceInspector.test.ts','src/domains/nodeslide/inspector/TraceInspector.test.tsx','src/domains/nodeslide/inspector/InspectorPanel.test.ts','src/domains/nodeslide/inspector/DeckCiStatus.test.tsx']),('normal-check',['npm','run','check'])]
+for label,args in commands:
+    start=time.monotonic()
+    with (O/(label+'.log')).open('xb') as log:r=subprocess.run(['cmd.exe','/d','/c',*args],cwd=R,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=900,creationflags=subprocess.CREATE_NO_WINDOW)
+    records.append({'label':label,'command':args,'exitCode':r.returncode,'seconds':time.monotonic()-start,'log':label+'.log'})
+    (O/'commands.json').write_text(json.dumps({'commands':records,'sourceHashes':hashes,'sourceUnchanged':all(hashlib.sha256((R/n).read_bytes()).hexdigest()==h for n,h in hashes.items())},indent=2)+'\n',encoding='utf-8',newline='\n')
+    if r.returncode:break
+print(json.dumps(records))

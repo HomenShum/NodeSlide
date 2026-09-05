@@ -1,0 +1,56 @@
+{
+  "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "indexUnchangedDuringReviewFreeze": true,
+  "refsUnchangedDuringReviewFreeze": true,
+  "rootFrozenFourOwnersMatch": true,
+  "namedProtectedSourceUnchangedAgainstHead": [
+    "src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx",
+    "src/domains/nodeslide/components/NodeBookWorkspacePanel.tsx",
+    "vite.config.ts",
+    "convex/_generated/api.js",
+    "convex/lib/nodeslideCreateScale.ts",
+    "convex/lib/nodeslideCreationTraceTiming.ts",
+    "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx",
+    "src/domains/nodeslide/inspector/AiInspector.tsx",
+    "src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx"
+  ],
+  "candidateBindings": {
+    ".gitattributes": {
+      "sha256": "e9c61ffa7486f3134f5deae7d81103be5a8eacc3dfbbe4296c09df5d45d7d2f5",
+      "bytes": 1056,
+      "headSha256": "267cb2c97a87920fe158d3177afc824d71b31d8d7692aea1064b26bd6592dbd4",
+      "sameLfContentAsHead": false
+    },
+    "scripts/tests/workspace-build-depth.test.mjs": {
+      "sha256": "98e1cc0d259199f01c4b92e2b539a06aa32889e72e7857a1b35a815f0185a40e",
+      "bytes": 3134,
+      "headSha256": "7e5e141b90b3f1c9973bc6db1af62c18dd97cef255577b246855569a725b9674",
+      "sameLfContentAsHead": false
+    },
+    "scripts/tests/code-tours.test.mjs": {
+      "sha256": "20358217a7c89ee0af06778ae7d27f82e9b5b771e7e0ddeec4f63a52c97e38eb",
+      "bytes": 902,
+      "headSha256": "f7e898ef82230da28be0f9e2861eb4c4a94bc46e937907d4b1735c0db83106b8",
+      "sameLfContentAsHead": false
+    },
+    "scripts/tests/playwright-trace.test.mjs": {
+      "sha256": "6d58b0fa95c609cc91ab7cecbf032c5136b3c63654454c71824b1b32adbc3b9f",
+      "bytes": 8493,
+      "headSha256": "c7ba6afd85c80466f68c622e4bfda7ab027e56978d62f5f533e7684385e42de7",
+      "sameLfContentAsHead": false
+    },
+    ".tours/03-debug-and-recovery.tour": {
+      "sha256": "0cda9fd05c121f5dc60edeb3af2f78fb30a28e3e14ce6b0316ae88dece912a84",
+      "bytes": 3704,
+      "headSha256": "33df49d1ff3bf1ea7bae328af2d47257919d09c6ea99531d0a64467f10ed716e",
+      "sameLfContentAsHead": false
+    },
+    "convex/_generated/api.d.ts": {
+      "sha256": "4d4c28b2dc659c14c57b71777a108df3168e86f5e1c90f61e7624a9a39a7b12e",
+      "bytes": 19134,
+      "headSha256": "81ebbed53bccea826969ef418502cbfd93e0e39530458491464f0d8e66582a15",
+      "sameLfContentAsHead": false
+    }
+  },
+  "scope": "Root independently owns local backend and generated build artifacts. No credentials, environment file, DB or live backend contents read; no global filesystem immutability assertion."
+}

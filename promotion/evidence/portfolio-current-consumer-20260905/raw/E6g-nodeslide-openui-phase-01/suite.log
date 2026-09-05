@@ -1,0 +1,523 @@
+
+ RUN  v4.1.10 D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905
+
+stderr | convex/lib/nodeslideCreationCritique.test.ts > NodeSlide creation quality report > flags repetitive text-only compositions even when geometry is clean
+NodeSlide deck diversity gate: Only 3 distinct composition families used (minimum: 4) (no alternates available)
+
+stderr | convex/lib/nodeslideSeed.test.ts > NodeSlide seed > discloses illustrative brief content so a generated deck is publishable
+NodeSlide deck diversity gate: Slides 4 and 5 are near-duplicates (similarity: 0.95) (no alternates available)
+
+stderr | convex/lib/nodeslideSeed.test.ts > NodeSlide seed > keeps a CFO decision metric clear of its explanation in the rendered stat panel
+NodeSlide deck diversity gate (after 6 passes): Slides 4 and 5 are near-duplicates (similarity: 0.99)
+
+ ✓ scripts/tests/nodeslide-trust-surface-runtime-probe.test.mjs (49 tests) 1385ms
+     ✓ derives the authorless expectation from the census, never from a second hand list  622ms
+     ✓ resolves every reach plan entry against the live census — no stale exemptions  654ms
+ ✓ src/domains/nodeslide/signature/signature.test.ts (18 tests) 1089ms
+     ✓ processes 200 slides inside the default budget and rejects the declared 201st before slide scans  673ms
+stderr | convex/lib/nodeslideSeed.test.ts > NodeSlide seed > keeps qualitative success criteria as text instead of manufacturing numeric chart data
+NodeSlide deck diversity gate: Slides 4 and 5 are near-duplicates (similarity: 0.99) (no alternates available)
+
+ ❯ scripts/immutable-upgrade-consumer-core.test.mjs (3 tests | 1 failed) 2300ms
+     ✓ requires a strict SemVer precedence increase 16ms
+     ✓ typechecks and executes an isolated installed package  2275ms
+     × rejects a valid npm tarball whose declaration passes but runtime entry is broken 6ms
+ ✓ scripts/tests/function-bundle-gate.test.mjs (10 tests) 2310ms
+     ✓ accepts a bundle whose handler links under Node  448ms
+     ✓ reproduces the production failure from an emitted bundle  344ms
+     ✓ refuses to pass when there is no build to inspect  620ms
+ ✓ scripts/artifact-atlas-v3-pptx-receipt.test.mjs (11 tests) 1928ms
+     ✓ integration-verifies the actual deck, candidate, recipe, composition, and embedded assets  398ms
+     ✓ rejects a mutation to an unanchored numeric fact  300ms
+     ✓ rejects release-gate tampering and stale V2 museum footers  329ms
+ ✓ scripts/build-atlas-v3-native.test.mjs (18 tests) 2617ms
+     ✓ emits the native parts the deck claims  594ms
+     ✓ emits a REAL c:dateAx time axis, so progression.timeline is satisfiable at all  411ms
+     ✓ binds evidence claims to external source relationships, not decorative text  310ms
+     ✓ emits a REAL p:timing build sequence for motion, not a poster frame  309ms
+     ✓ emits N-1 transitions for N states — the first is visible at slide entry  456ms
+     ✓ keeps every emitted slide part tag-balanced  496ms
+ ✓ convex/lib/nodeslideVariationHarness.test.ts (23 tests) 1047ms
+stderr | convex/lib/nodeslideSeed.test.ts > NodeSlide seed > finishes an exact 72-slide transaction program without collapsing to twelve pages
+NodeSlide deck diversity gate (after 12 passes): Slides 15 and 16 are near-duplicates (similarity: 0.92); Slides 21 and 22 are near-duplicates (similarity: 0.92); Slides 39 and 40 are near-duplicates (similarity: 0.98); Slides 41 and 42 are near-duplicates (similarity: 0.97); Slides 44 and 45 are near-duplicates (similarity: 0.98); Slides 45 and 46 are near-duplicates (similarity: 0.98); Slides 50 and 51 are near-duplicates (similarity: 1.00); Slides 51 and 52 are near-duplicates (similarity: 1.00); Slides 54 and 55 are near-duplicates (similarity: 0.99); Slides 59 and 60 are near-duplicates (similarity: 0.99); Slides 64 and 65 are near-duplicates (similarity: 0.92); Slides 16 and 19 are a repeated composition (similarity: 1.00); Slides 19 and 21 are a repeated composition (similarity: 1.00); Slides 22 and 24 are a repeated composition (similarity: 0.92); Slides 24 and 27 are a repeated composition (similarity: 0.92); Slides 40 and 44 are a repeated composition (similarity: 1.00); Slides 42 and 49 are a repeated composition (similarity: 0.96); Slides 46 and 50 are a repeated composition (similarity: 0.98); Slides 49 and 54 are a repeated composition (similarity: 0.99); Slides 52 and 56 are a repeated composition (similarity: 1.00); Slides 27 and 57 are a repeated composition (similarity: 1.00); Slides 55 and 59 are a repeated composition (similarity: 1.00); Slides 57 and 61 are a repeated composition (similarity: 0.92); Slides 53 and 63 are a repeated composition (similarity: 0.94); Slides 61 and 64 are a repeated composition (similarity: 0.92); Slides 65 and 69 are a repeated composition (similarity: 1.00); Slides 69 and 71 are a repeated composition (similarity: 0.92)
+
+stderr | convex/lib/nodeslideSeed.test.ts > NodeSlide seed > refuses publication when a provider repeats the same qualitative scene across 12 slides
+NodeSlide deck diversity gate: Slides 1 and 2 are near-duplicates (similarity: 0.82); Slides 7 and 10 are a repeated composition (similarity: 0.99); Only 3 distinct composition families used (minimum: 4) (no alternates available)
+
+stderr | convex/lib/nodeslideSeed.test.ts > NodeSlide seed > turns the 'governance threshold' metaphor into a visibly evolving scene, not one progress rail
+NodeSlide deck diversity gate (after 7 passes): Slides 3 and 4 are near-duplicates (similarity: 0.97)
+
+ ✓ scripts/tests/nodeslide-trust-surface-census.test.mjs (62 tests) 3529ms
+     ✓ fails when a corpus entry carries no verdict  622ms
+     ✓ fails when an entry claims a detector that does not exist  649ms
+     ✓ fails when an entry claims "detected" but names no detector  364ms
+     ✓ fails when two entries share an id  436ms
+     ✓ passes every static clause with no surface left not-run  513ms
+     ✓ enumerates every kind the shipped surfaces actually use  547ms
+stderr | convex/lib/nodeslideSeed.test.ts > NodeSlide seed > turns the 'research signal' metaphor into a visibly evolving scene, not one progress rail
+NodeSlide deck diversity gate (after 7 passes): Slides 3 and 4 are near-duplicates (similarity: 0.98)
+
+stderr | convex/lib/nodeslideSeed.test.ts > NodeSlide seed > keeps default success guidance qualitative when no evidence is supplied
+NodeSlide deck diversity gate: Slides 4 and 5 are near-duplicates (similarity: 0.99) (no alternates available)
+
+stderr | convex/lib/nodeslideSeed.test.ts > NodeSlide seed > persists creation attachments as user-supplied sources linked to deck elements
+NodeSlide deck diversity gate (after 7 passes): Slides 3 and 4 are near-duplicates (similarity: 0.98)
+
+ ✓ scripts/tests/pptx-declared-static-intent.test.mjs (30 tests) 3277ms
+     ✓ exit 3 is distinguishable from exit 2 without reading a single word of prose  628ms
+     ✓ through the CLI, an undeclared static deck exits 2  682ms
+     ✓ and the CLI exits 1 on it — never 3, and never a silent pass  364ms
+     ✓ without its declaration the same deck FAILS — the marker is not self-authorising  349ms
+ ✓ convex/lib/nodeslideSeed.test.ts (30 tests) 2289ms
+     ✓ finishes an exact 72-slide transaction program without collapsing to twelve pages  1497ms
+ ✓ src/domains/nodeslide/signature/signatureBounds.test.ts (10 tests) 731ms
+     ✓ bounds token output to retained evidence under adversarial distinct-value input  544ms
+ ✓ scripts/tests/nodeslide-benchmark-gate.test.mjs (7 tests) 296ms
+ ✓ convex/lib/nodeslideJobJournal.test.ts (3 tests) 556ms
+     ✓ does not silently overwrite a reused entry id and enforces the model bound  531ms
+ ✓ convex/nodeslideAgentRecovery.test.ts (3 tests) 330ms
+ ✓ convex/nodeslideSessions.test.ts (10 tests) 4741ms
+     ✓ detects append-only tampering and enforces the bounded transition journal  4497ms
+ ✓ src/domains/nodeslide/inspector/DataInspector.evidence.test.tsx (12 tests) 925ms
+     ✓ lists citing elements per source and selects one on click (claim -> source -> element)  442ms
+ ✓ convex/nodeslidePptxCreate.test.ts (11 tests) 1321ms
+     ✓ parses a real archive and hands the snapshot to createImportedDeckInternal  371ms
+ ✓ src/domains/nodeslide/publicSurface/shareProjection.test.ts (14 tests) 4896ms
+     ✓ stops after the projected slide budget and says how many are left  4754ms
+ ✓ convex/lib/nodeslideCreationCritique.test.ts (42 tests) 4312ms
+     ✓ keeps the visual-logic report bounded during a recurring 100-deck portfolio review  3379ms
+ ✓ convex/lib/nodeslideReleaseSecurity.test.ts (34 tests) 2742ms
+ ✓ packages/cli/src/installer.test.ts (8 tests) 500ms
+ ✓ src/domains/nodeslide/atlas/AtlasGallery.test.tsx (13 tests) 1984ms
+     ✓ narrows to the architecture archetype when the builder describes the job  518ms
+ ✓ convex/nodeslideRetention.test.ts (13 tests) 3505ms
+     ✓ refuses on the byte envelope and writes nothing  387ms
+     ✓ refuses on the record envelope and writes nothing  1064ms
+     ✓ stops a batch whose total exceeds the shared budget, coherently, and drains the rest next run  474ms
+     ✓ skips and records one oversized deck while the healthy decks around it are still erased  526ms
+ ✓ src/domains/nodeslide/components/ArtifactLabDialog.test.tsx (2 tests) 744ms
+     ✓ switches among all three evidence modes  553ms
+ ✓ convex/nodeslideDataRights.scenario.test.ts (10 tests) 3494ms
+     ✓ refuses a workspace one record over the ceiling, and deletes nothing  1084ms
+     ✓ erases a workspace sitting exactly on the record ceiling, completely  1014ms
+ ✓ src/domains/nodeslide/inspector/JsonInspector.test.tsx (22 tests) 1888ms
+     ✓ does not claim a candidate when the proposal lane fails closed  503ms
+ ✓ convex/nodeslideUploadExtraction.test.ts (4 tests) 488ms
+     ✓ turns an approved PDF into an agent-readable source with a page-bound preview  421ms
+ ✓ src/domains/nodeslide/inspector/VersionsInspector.directionChange.test.tsx (6 tests) 600ms
+     ✓ warns instead of restoring when the version predates the active direction  356ms
+ ✓ src/domains/nodeslide/components/ApproverReviewView.test.tsx (7 tests) 1375ms
+     ✓ gates on a pasted capability and never reads it from the URL  661ms
+stderr | shared/nodeslideArtifactSpec.test.ts > production ArtifactSpec compiler > retains graph direction and endpoint bindings from production materialization
+NodeSlide deck diversity gate: Only 3 distinct composition families used (minimum: 4) (no alternates available)
+
+ ✓ convex/lib/nodeslidePdfExtraction.test.ts (3 tests) 307ms
+ ✓ shared/nodeslideArtifactSpec.test.ts (10 tests) 365ms
+ ✓ convex/lib/nodeslideRenderRepairLoop.test.ts (10 tests) 413ms
+ ✓ convex/lib/nodeslideCompositionFanout.test.ts (10 tests) 433ms
+ ✓ src/domains/nodeslide/components/NodeSlideLanding.stagedWait.test.tsx (4 tests) 798ms
+     ✓ advances honest stage copy on elapsed time with a visible timer  332ms
+stderr | convex/lib/nodeslideAuthoredArtifact.test.ts > model-authored production ArtifactSpec adapter > materializes all six native geometry families as grouped editable production elements
+NodeSlide deck diversity gate (after 6 passes): Composition family "diagram-dominant" dominates 67% of the deck (threshold: 60%); Only 3 distinct composition families used (minimum: 4)
+
+ ✓ src/domains/nodeslide/slidelang/pptxImport.test.ts (7 tests) 393ms
+ ✓ convex/lib/nodeslideLiveRenderRepair.test.ts (3 tests) 401ms
+stderr | convex/lib/nodeslideAuthoredArtifact.test.ts > model-authored production ArtifactSpec adapter > preserves authored graph identity, narrative job, and truth through projection
+NodeSlide deck diversity gate (after 6 passes): Slides 4 and 5 are near-duplicates (similarity: 0.95)
+
+stderr | src/domains/nodeslide/slidelang/artifactSpecExport.test.ts > ArtifactSpec export gate > exports native waterfall marks as semantic HTML and editable PowerPoint shapes
+NodeSlide deck diversity gate (after 6 passes): Slides 4 and 5 are near-duplicates (similarity: 0.99)
+
+ ✓ convex/lib/nodeslideAuthoredArtifact.test.ts (13 tests) 366ms
+ ✓ src/domains/nodeslide/slidelang/artifactSpecExport.test.ts (3 tests) 511ms
+ ✓ src/domains/nodeslide/slidelang/slidelang.test.ts (28 tests) 508ms
+ ✓ convex/lib/nodeslideTasteMismatch.test.ts (4 tests) 362ms
+ ✓ src/domains/nodeslide/inspector/TraceWaterfall.test.tsx (25 tests) 3285ms
+     ✓ loads only the selected visual capture and overlays its exact evidence region  635ms
+     ✓ keeps the newest visual capture selected when an older request resolves last  408ms
+     ✓ shows failed and empty visual evidence without inventing captured steps  321ms
+     ✓ renders an exact persisted PDF region on the selected geometry-controlled page  342ms
+ ✓ convex/nodeslideDuplicateDeck.test.ts (3 tests) 351ms
+ ✓ convex/nodeslideDeckCi.test.ts (6 tests) 553ms
+ ✓ convex/nodeslideUploads.scenario.test.ts (17 tests) 491ms
+ ✓ src/domains/nodeslide/session/AgentSessionProvider.test.tsx (8 tests) 576ms
+     ✓ shares controls and attachments across landing, create, and editor and restores them  316ms
+ ✓ packages/react/src/reactSurface.test.tsx (13 tests) 1191ms
+ ✓ src/domains/nodeslide/inspector/DeckCiStatus.test.tsx (13 tests) 433ms
+ ✓ src/domains/nodeslide/openui/OpenUiMaterialWorkbench.test.tsx (4 tests) 621ms
+     ✓ routes the allowlisted OpenUI action into exactly one unapplied proposal  420ms
+stderr | shared/nodeslideLongformComposition.test.ts > long-form artifact composition > keeps a four-stage approval chain on one left-to-right row
+NodeSlide deck diversity gate (after 4 passes): Slides 3 and 4 are near-duplicates (similarity: 0.86)
+
+ ✓ src/domains/nodeslide/inspector/AiInspector.consentPosture.test.tsx (3 tests) 888ms
+     ✓ labels web egress as per-send and carries the current answer in aria-pressed  563ms
+ ✓ scripts/tests/nodeslide-uxbench.test.mjs (10 tests) 187ms
+ ✓ src/domains/nodeslide/inspector/AiInspector.proposalOrigin.test.tsx (5 tests) 1013ms
+     ✓ publishes deterministic-fallback authorship as an attribute on the variation card  436ms
+stderr | shared/nodeslideLongformComposition.test.ts > long-form artifact composition > keeps a centered executive scene legible with three transaction evidence claims
+NodeSlide deck diversity gate: Slides 5 and 6 are near-duplicates (similarity: 0.99) (no alternates available)
+
+ ✓ shared/nodeslideLongformComposition.test.ts (5 tests) 276ms
+ ✓ convex/lib/nodeslideArtifactPresence.test.ts (5 tests) 287ms
+ ✓ src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx (5 tests) 4083ms
+     ✓ lets a reviewer navigate deck ? slide ? elements and render the canonical graph artifact  420ms
+     ✓ renders all six portable NodeBook visual kinds inside the real NodeSlide host mount  3586ms
+ ✓ shared/nodeslideGeometryChecks.test.ts (5 tests) 217ms
+ ✓ scripts/tests/nodeslide-roadshow-anchors.test.tsx (2 tests) 1077ms
+     ✓ matches the element-selection chip the recorder waits for  741ms
+     ✓ reports the multi-slide chip as absent rather than letting a recorder time out on it  334ms
+ ✓ convex/lib/nodeslideModelPicker.test.tsx (1 test) 721ms
+     ✓ renders every offered agent model plus the deterministic fallback when opened  717ms
+ ✓ convex/nodeslideScopedMemory.test.ts (6 tests) 162ms
+ ✓ src/domains/nodeslide/inspector/AiInspector.advancedPopover.test.tsx (3 tests) 1689ms
+     ✓ keeps advanced controls out of the way until the footer trigger opens them  613ms
+     ✓ controls inside the popover still fire: policy selects and provider flip  752ms
+     ✓ closes from the labelled close button and restores the trigger state  322ms
+stderr | convex/lib/nodeslideCreationTraceTiming.test.ts > NodeSlide creation trace timing > persists action-observed elapsed time for a real created deck
+NodeSlide deck diversity gate: Slides 4 and 5 are near-duplicates (similarity: 0.99) (no alternates available)
+
+ ✓ src/domains/nodeslide/inspector/DesignInspectorImageSearch.test.tsx (8 tests) 3246ms
+     ✓ sends the exact consent receipt and fills alt text plus credit on selection  644ms
+     ✓ rejects a result whose thumbnail is outside the exact Openverse API allowlist  481ms
+     ✓ fails closed when the licensed raster cannot be embedded  472ms
+     ✓ surfaces search failures honestly instead of an empty grid  315ms
+     ✓ labels BYOK-generated assets as illustrative and non-evidentiary  772ms
+ ✓ convex/nodeslideSignatures.test.ts (3 tests) 171ms
+ ✓ convex/lib/nodeslideCreationTraceTiming.test.ts (7 tests) 163ms
+stderr | convex/lib/nodeslideGymArtifactEvidence.test.ts > NodeGym owner-authorized artifact projection > projects only digest-bound structure and numeric facts
+NodeSlide deck diversity gate (after 6 passes): Slides 4 and 5 are near-duplicates (similarity: 0.99)
+
+stderr | convex/lib/nodeslideGymArtifactEvidence.test.ts > NodeGym owner-authorized artifact projection > fails closed when compiler or persisted render lineage is forged
+NodeSlide deck diversity gate (after 6 passes): Slides 4 and 5 are near-duplicates (similarity: 0.99)
+
+stderr | convex/lib/nodeslideGymArtifactEvidence.test.ts > NodeGym owner-authorized artifact projection > invalidates the whole authored group after chart or text edits
+NodeSlide deck diversity gate (after 6 passes): Slides 4 and 5 are near-duplicates (similarity: 0.99)
+
+stderr | convex/lib/nodeslideGymArtifactEvidence.test.ts > NodeGym owner-authorized artifact projection > rejects a caller-selected source alias absent from persisted authored provenance
+NodeSlide deck diversity gate (after 6 passes): Slides 4 and 5 are near-duplicates (similarity: 0.99)
+
+ ✓ src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx (4 tests) 1377ms
+     ✓ opens the visual material lab from the live composer button  1266ms
+stderr | convex/lib/nodeslideGymArtifactEvidence.test.ts > NodeGym owner-authorized artifact projection > accepts a Gym alias only when a digest-verified bound attachment contains that identity
+NodeSlide deck diversity gate (after 6 passes): Slides 4 and 5 are near-duplicates (similarity: 0.99)
+
+ ✓ convex/lib/nodeslideGymArtifactEvidence.test.ts (5 tests) 150ms
+stderr | convex/lib/nodeslideCreationCompletion.test.ts > NodeSlide creation completion boundary > turns a misaligned risk chart into an explicit evidence gap instead of aborting creation
+NodeSlide deck diversity gate (after 7 passes): Slides 3 and 4 are near-duplicates (similarity: 0.97)
+
+stderr | convex/lib/nodeslideCreationCompletion.test.ts > NodeSlide creation completion boundary > quarantines a risk matrix with missing axis anchors instead of aborting creation
+NodeSlide deck diversity gate (after 7 passes): Slides 3 and 4 are near-duplicates (similarity: 0.97)
+
+ ✓ scripts/tests/nodeslide-tastebench.test.mjs (6 tests) 205ms
+ ✓ convex/lib/nodeslideCreationCompletion.test.ts (4 tests) 240ms
+ ✓ convex/nodeslideDeckGrants.scenario.test.ts (3 tests) 241ms
+stderr | shared/nodeslideLayoutScenarios.test.ts > NodeSlide layout scenarios (measured stacking + collision gate) > materializes a long-copy slide (600-char body + 3 bullets + chart) with zero collisions
+NodeSlide deck diversity gate: Slides 3 and 4 are near-duplicates (similarity: 0.98) (no alternates available)
+
+stderr | convex/lib/nodeslideSyntheticCreationFault.test.ts > development-only synthetic creation repair demo > proves the real second provider pass repairs the materialized chart omission
+NodeSlide deck diversity gate: Only 3 distinct composition families used (minimum: 4) (no alternates available)
+
+ ✓ convex/lib/nodeslideCandidate.test.ts (4 tests) 209ms
+ ✓ convex/lib/nodeslideDeckCi.test.ts (10 tests) 212ms
+stderr | shared/nodeslideLayoutScenarios.test.ts > NodeSlide layout scenarios (measured stacking + collision gate) > regression: opening slide with a visual no longer collides body and bullets (shipped bug)
+NodeSlide deck diversity gate (after 6 passes): Slides 3 and 4 are near-duplicates (similarity: 0.98)
+
+ ✓ shared/nodeslideSignatureApply.test.ts (16 tests) 183ms
+ ✓ shared/nodeslideLayoutScenarios.test.ts (3 tests) 211ms
+ ✓ convex/lib/nodeslideVariationUi.test.tsx (3 tests) 391ms
+stderr | convex/lib/nodeslideSyntheticCreationFault.test.ts > development-only synthetic creation repair demo > keeps the visibly faulted pass when revision fails instead of faking a repair
+NodeSlide deck diversity gate: Only 3 distinct composition families used (minimum: 4) (no alternates available)
+
+ ✓ convex/lib/nodeslideSyntheticCreationFault.test.ts (5 tests) 260ms
+stdout | api/share.http.test.ts > the share route over real HTTP > returns the published deck as HTML a reader can consume without JavaScript
+[share-projection] published: status=200 bytes=14954 visible-body-text-chars=2526
+
+ ✓ scripts/tests/pptx-playback-canary.test.mjs (25 tests) 316ms
+stdout | api/share.http.test.ts > the share route over real HTTP > refuses a slug the publication query does not resolve
+[share-projection] revoked: status=404 bytes=2008 visible-body-text-chars=161
+
+stderr | convex/nodeslideArtifactSpec.test.ts > NodeSlide owner-only Gym ArtifactSpec endpoint > denies another capability, returns redacted evidence, and rejects forged lineage
+NodeSlide deck diversity gate (after 6 passes): Slides 4 and 5 are near-duplicates (similarity: 0.99)
+
+ ✓ convex/lib/nodeslideGymShadow.test.ts (3 tests) 152ms
+ ✓ api/share.http.test.ts (2 tests) 153ms
+ ✓ convex/lib/nodeslideAdmission.test.ts (29 tests) 332ms
+ ✓ convex/nodeslideArtifactSpec.test.ts (1 test) 215ms
+ ✓ convex/lib/nodeslideGoogleSlidesRuntime.test.ts (9 tests) 141ms
+ ✓ packages/recipelang/src/recipelang.scenario.test.ts (7 tests) 155ms
+ ✓ src/domains/nodeslide/components/SlideRenderer.charts.test.tsx (7 tests) 193ms
+ ✓ src/domains/nodeslide/components/SlideRenderer.images.test.tsx (3 tests) 273ms
+ ✓ scripts/node-gym-runner-core.test.mjs (17 tests) 171ms
+ ✓ scripts/tests/nodeslide-taste-judge.test.mjs (4 tests) 124ms
+ ✓ src/domains/nodeslide/components/NodeBookArtifactPanel.test.tsx (2 tests) 318ms
+ ✓ convex/lib/nodeslideSignatureProfiles.test.ts (3 tests) 178ms
+ ✓ src/domains/nodeslide/components/DeploymentUpdateBoundary.test.tsx (2 tests) 281ms
+ ✓ scripts/tests/nodeslide-journey-proof.test.mjs (4 tests) 130ms
+ ✓ scripts/tests/code-tours.test.mjs (1 test) 203ms
+ ✓ convex/lib/nodeslideEditPlanner.test.ts (20 tests) 162ms
+ ✓ shared/nodeslidePatch.test.ts (46 tests) 128ms
+ ✓ src/domains/nodeslide/components/DeleteDeckDialog.test.tsx (6 tests) 420ms
+stderr | shared/nodeslideArchetypes.test.ts > NodeSlide slide archetypes (variety + anti-monotony + geometry gate) > materializes a structured process as editable nodes and connectors
+NodeSlide deck diversity gate (after 6 passes): Slides 4 and 5 are near-duplicates (similarity: 0.99)
+
+ ✓ src/domains/nodeslide/inspector/ExportMyDataAction.test.tsx (9 tests) 406ms
+ ✓ shared/nodeslidePptxLinkPlanner.test.ts (6 tests) 168ms
+ ✓ shared/nodeslideArchetypes.test.ts (5 tests) 131ms
+ ✓ convex/lib/nodeslideStoryContext.test.ts (7 tests) 145ms
+ ✓ packages/convex/component/repository.test.ts (5 tests) 578ms
+     ✓ mounts isolated tables and runs initialize -> proposal -> accept -> reread  436ms
+ ✓ convex/lib/nodeslideSemanticEvaluation.test.ts (9 tests) 117ms
+ ✓ src/domains/nodeslide/integrations/googleSlides/googleSlides.test.ts (16 tests) 123ms
+ ✓ scripts/tests/docs-citations.test.mjs (5 tests) 122ms
+ ✓ convex/lib/nodeslideDeckRepl.test.ts (9 tests) 174ms
+ ✓ shared/nodeslideReferenceKnowledge.test.ts (14 tests) 109ms
+ ✓ src/domains/nodeslide/openui/openUiMaterialAgentInteractions.test.ts (11 tests) 127ms
+ ✓ convex/lib/nodeslideReviewUi.test.tsx (14 tests) 724ms
+ ✓ convex/lib/nodeslideEvidenceCapture.test.ts (31 tests) 92ms
+ ✓ src/domains/nodeslide/inspector/AiInspector.composerSeed.test.tsx (5 tests) 4505ms
+     ✓ seeds the composer when a pattern is chosen after mount  592ms
+     ✓ seeds again when the SAME pattern is chosen twice  1446ms
+     ✓ leaves a draft alone when no pattern is chosen  1777ms
+     ✓ never clears a draft with an empty pattern  452ms
+ ✓ convex/lib/nodeslideAgenticTelemetry.test.ts (3 tests) 115ms
+ ✓ convex/lib/nodeslideDeckFork.test.ts (2 tests) 148ms
+ ✓ scripts/tests/pptx-transition-normalize.test.mjs (16 tests) 176ms
+ ✓ convex/lib/nodeslidePreferenceEtl.test.ts (20 tests) 93ms
+ ✓ shared/nodeslideAtlas.test.ts (69 tests) 196ms
+ ✓ convex/lib/nodeslideDeckCiAuthoringQuality.test.ts (2 tests) 106ms
+ ✓ convex/lib/nodeslideExecutionTrace.test.ts (6 tests) 114ms
+ ✓ scripts/build-atlas-native-pptx.test.mjs (6 tests) 103ms
+ ✓ convex/lib/nodeslideLiveDeckRepl.test.ts (3 tests) 87ms
+ ✓ convex/lib/nodeslideSemanticEvaluation.patch.test.ts (3 tests) 146ms
+ ✓ convex/lib/nodeslideEditShadowPlanner.test.ts (6 tests) 89ms
+ ✓ src/domains/nodeslide/inspector/TraceInspector.test.tsx (26 tests) 184ms
+ ✓ src/domains/nodeslide/signature/packs/packs.test.ts (13 tests) 101ms
+ ✓ scripts/production-deployment-identity.test.mjs (13 tests) 80ms
+ ✓ convex/lib/nodeslideDurableSessionState.test.ts (4 tests) 64ms
+ ✓ convex/lib/nodeslideEditShadowAction.test.ts (8 tests) 249ms
+ ✓ convex/lib/nodeslidePreferenceRetention.test.ts (6 tests) 93ms
+ ✓ convex/nodeslidePptxSync.test.ts (6 tests) 101ms
+ ✓ convex/lib/nodeslideShadowComparison.test.ts (6 tests) 98ms
+ ✓ convex/lib/nodeslideManagedKernel.test.ts (10 tests) 71ms
+ ✓ convex/lib/nodeslideAgenticAction.test.ts (8 tests) 120ms
+ ✓ scripts/artifact-atlas-coverage.test.mjs (12 tests) 54ms
+ ✓ src/lib/sessionIdentity.entropy.test.ts (7 tests) 57ms
+ ✓ scripts/artifact-atlas.test.mjs (6 tests) 67ms
+ ✓ convex/nodeslideBudgetEnforcement.test.ts (17 tests) 196ms
+ ✓ scripts/tests/nodeslide-benchmark-producer.test.mjs (6 tests) 51ms
+ ✓ scripts/artifact-atlas-v3.test.mjs (22 tests) 57ms
+ ✓ shared/nodeslideAuthoringQuality.test.ts (2 tests) 55ms
+ ✓ convex/lib/nodeslideStoryBench.test.ts (11 tests) 68ms
+ ✓ convex/lib/nodeslideSourceRefresh.test.ts (7 tests) 57ms
+ ✓ convex/lib/nodeslideImageSearch.test.ts (12 tests) 60ms
+ ✓ scripts/immutable-package-set.test.ts (4 tests) 73ms
+ ✓ convex/lib/nodeslideJobState.test.ts (20 tests) 37ms
+ ✓ scripts/deck-gym.test.mjs (6 tests) 56ms
+ ✓ scripts/tests/dedupe-media.test.mjs (8 tests) 41ms
+ ✓ scripts/node-gym-semantics.test.mjs (17 tests) 51ms
+ ✓ convex/lib/nodeslideAnalysisKernel.test.ts (9 tests) 38ms
+ ✓ src/domains/nodeslide/integrations/externalChangeSet.test.ts (8 tests) 46ms
+ ✓ shared/nodeslidePptxLink.test.ts (4 tests) 49ms
+ ✓ scripts/tests/nodeslide-authoring-meta.test.mjs (3 tests) 51ms
+ ✓ convex/lib/nodeslideProvider.test.ts (31 tests) 65ms
+ ✓ src/domains/nodeslide/components/SlideRenderer.math.test.tsx (5 tests) 156ms
+ ✓ convex/lib/nodeslideTraceUi.test.tsx (5 tests) 102ms
+ ✓ convex/lib/nodeslideSync.test.ts (7 tests) 39ms
+ ✓ convex/lib/nodeslideEditorShellUi.test.tsx (16 tests) 68ms
+ ✓ convex/lib/nodeslideRoutedEditPlanner.test.ts (7 tests) 72ms
+ ✓ packages/cli/src/generate.model-effort.test.ts (4 tests) 41ms
+ ✓ shared/nodeslideAuthoringPolicy.test.ts (4 tests) 41ms
+ ✓ convex/lib/nodeslideErrorRedaction.test.ts (15 tests) 40ms
+ ✓ scripts/tests/nodeslide-competitive-benchmark.test.mjs (3 tests) 23ms
+ ✓ convex/lib/nodeslideConsentUi.test.tsx (6 tests) 80ms
+ ✓ convex/lib/nodeslideEditVerifyAction.test.ts (3 tests) 69ms
+ ✓ convex/lib/nodeslideAuthority.test.ts (4 tests) 42ms
+ ✓ src/domains/nodeslide/slidelang/jsonSpec.test.ts (10 tests) 50ms
+ ✓ src/domains/nodeslide/inspector/AgentThread.test.tsx (12 tests) 51ms
+ ✓ scripts/tests/motion-gate.test.mjs (32 tests) 25ms
+ ✓ convex/lib/nodeslideReadContext.test.ts (6 tests) 75ms
+ ✓ convex/nodeslideUploads.test.ts (11 tests) 28ms
+ ✓ scripts/tests/emit-atlas-receipts-preference.test.mjs (6 tests) 26ms
+ ✓ src/domains/nodeslide/components/StudioToolbar.test.tsx (1 test) 17ms
+ ✓ convex/lib/nodeslideRoutedProposeEdit.test.ts (1 test) 50ms
+ ✓ src/domains/nodeslide/slidelang/jsonEdit.test.ts (7 tests) 46ms
+ ✓ convex/lib/nodeslideBudgetedProvider.test.ts (7 tests) 25ms
+ ✓ src/domains/nodeslide/components/NodeSlideMemoryDialog.test.tsx (1 test) 18ms
+ ✓ shared/nodeslideAuthoringWorkflow.test.ts (2 tests) 25ms
+ ✓ scripts/build-artifact-arena-capabilities.test.mjs (2 tests) 20ms
+ ✓ scripts/nodeslide-founder-roadshow-lib.test.mjs (21 tests) 34ms
+ ✓ convex/lib/nodeslideSourceRevision.test.ts (5 tests) 24ms
+ ✓ packages/react-headless/src/reactHeadless.test.tsx (2 tests) 101ms
+ ✓ scripts/production-workflows.test.mjs (4 tests) 25ms
+ ✓ src/domains/nodeslide/openui/openUiMaterials.test.ts (6 tests) 25ms
+ ✓ convex/nodeslideRunBudget.test.ts (14 tests) 25ms
+ ✓ src/domains/nodeslide/components/shell/editorActions.test.ts (11 tests) 17ms
+ ✓ scripts/tests/artifact-distinctness.test.mjs (27 tests) 20ms
+ ✓ convex/nodeslideBudgetLedger.test.ts (8 tests) 18ms
+ ✓ convex/nodeslideGoogleAuth.test.ts (5 tests) 22ms
+ ✓ packages/testing/src/memoryRepository.test.ts (15 tests) 34ms
+ ✓ src/domains/nodeslide/components/shell/EditorFeedback.test.tsx (6 tests) 101ms
+ ✓ shared/nodeslideLayers.test.ts (2 tests) 30ms
+ ✓ scripts/production-fixture-retention.test.mjs (7 tests) 14ms
+ ✓ convex/lib/nodeslideClaimEvidenceReceipt.test.ts (5 tests) 24ms
+ ✓ src/domains/nodeslide/components/PublicationDialog.test.tsx (1 test) 13ms
+ ✓ src/domains/nodeslide/nodeslideV3.test.ts (21 tests) 13ms
+ ✓ src/domains/nodeslide/components/SlideRenderer.typography.test.tsx (1 test) 54ms
+ ✓ convex/lib/nodeslideAgenticControls.test.ts (4 tests) 17ms
+ ✓ scripts/artifact-atlas-v2-issue-ledger.test.mjs (2 tests) 18ms
+ ✓ src/domains/nodeslide/inspector/DesignInspector.test.tsx (6 tests) 21ms
+ ✓ convex/lib/nodeslidePropagation.test.ts (1 test) 20ms
+ ✓ packages/gym-core/src/routing.test.ts (8 tests) 22ms
+ ✓ convex/nodeslideBudgetWiring.test.ts (16 tests) 67ms
+ ✓ scripts/artifact-atlas-attribution.test.mjs (6 tests) 18ms
+ ✓ convex/nodeslideModelPricing.test.ts (22 tests) 18ms
+ ✓ src/domains/nodeslide/integrations/googleSlides/googleSlidesTransport.scenario.test.ts (17 tests) 22ms
+ ✓ shared/nodeslideClaimProof.test.ts (20 tests) 24ms
+ ✓ shared/nodeslideArtifactRegistry.test.ts (8 tests) 24ms
+ ✓ scripts/tests/longform-compression-core.test.mjs (16 tests) 19ms
+ ✓ src/domains/nodeslide/session/agentSessionState.test.ts (11 tests) 20ms
+ ✓ scripts/tests/nodeslide-atlas-topology-gate.test.mjs (21 tests) 14ms
+ ✓ shared/nodeslideMotionEvidence.test.ts (7 tests) 18ms
+ ✓ shared/nodeslideJourneyProof.test.ts (4 tests) 21ms
+ ✓ scripts/artifact-atlas-v2.test.mjs (5 tests) 25ms
+ ✓ packages/client-http/src/httpAdapter.test.ts (4 tests) 46ms
+ ✓ shared/nodeslideAtlasReceipts.test.ts (13 tests) 27ms
+ ✓ convex/nodeslideAgentEvidenceWiring.test.ts (8 tests) 28ms
+ ✓ shared/nodeslideAccessPolicy.test.ts (7 tests) 20ms
+ ✓ src/domains/nodeslide/components/OwnerCapabilityRecoveryDialog.test.tsx (2 tests) 21ms
+ ✓ convex/lib/nodeslideDataAttachment.test.ts (6 tests) 24ms
+ ✓ scripts/tests/asset-provenance.test.mjs (17 tests) 17ms
+ ✓ scripts/tests/playwright-trace.test.mjs (12 tests | 5 skipped) 24ms
+ ✓ src/domains/nodeslide/components/nodeBookGraphProjection.test.ts (7 tests) 24ms
+ ✓ convex/lib/nodeslideDesignPlan.test.ts (3 tests) 18ms
+ ✓ shared/nodeslideEvidence.test.ts (18 tests) 15ms
+ ✓ packages/react-headless/src/deckNavigation.test.tsx (11 tests) 63ms
+ ✓ convex/lib/nodeslideAssistantStream.test.ts (9 tests) 14ms
+ ✓ convex/lib/nodeslideErasureContract.test.ts (12 tests) 15ms
+ ✓ packages/backend/src/authorization.test.ts (7 tests) 12ms
+ ✓ convex/lib/nodeslideGoogleOAuth.test.ts (7 tests) 16ms
+ ✓ scripts/tests/artifact-fidelity.test.mjs (13 tests) 9ms
+ ✓ scripts/refresh-artifact-atlas-v2-specs.test.mjs (1 test) 16ms
+ ✓ convex/lib/nodeslideAutoRoutingPolicy.test.ts (27 tests) 19ms
+ ✓ scripts/tests/nodeslide-reference-authority.test.mjs (4 tests) 17981ms
+     ✓ lets the immutable NodeKit verifier authorize an owned-reference candidate  3840ms
+     ✓ blocks a plain local Mobbin PASS when the candidate commit has no signed external run  2174ms
+     ✓ keeps one immutable authority receipt across retry bursts and sustained worker retries  11949ms
+ ✓ scripts/artifact-spec-core.test.mjs (4 tests) 13ms
+ ✓ convex/lib/nodeslideUploadPolicy.test.ts (11 tests) 16ms
+ ✓ shared/nodeslideSessionGrant.test.ts (12 tests) 13ms
+ ✓ scripts/nodeslide-conformance.test.mjs (15 tests) 13ms
+ ✓ convex/lib/nodeslideRoomReady.test.ts (17 tests) 10ms
+ ✓ shared/nodeslideArtifactGeometry.test.ts (4 tests) 10ms
+ ✓ shared/nodeslideSlideCount.test.ts (18 tests) 10ms
+ ✓ src/domains/nodeslide/editorStateIntegrity.test.ts (13 tests) 11ms
+ ✓ shared/nodeslideSemanticIssues.test.ts (6 tests) 12ms
+ ✓ convex/lib/nodeslideDeckScopeAccess.test.ts (5 tests) 14ms
+ ✓ shared/nodeslideGym.test.ts (4 tests) 14ms
+ ✓ scripts/tests/evidence-binding.test.mjs (17 tests) 13ms
+ ✓ scripts/model-fleet-receipt-core.test.mjs (8 tests) 14ms
+ ✓ packages/gym-core/src/index.test.ts (5 tests) 17ms
+ ✓ scripts/tests/trace-provenance.test.mjs (13 tests) 13ms
+ ✓ shared/nodeslideLayoutMetrics.test.ts (12 tests) 14ms
+ ✓ convex/lib/nodeslideRoutingReceipt.test.ts (10 tests) 11ms
+ ✓ convex/nodeslideAgentMemoryWiring.test.ts (12 tests) 19ms
+ ✓ scripts/tests/workspace-build-depth.test.mjs (2 tests) 10ms
+ ✓ shared/nodeslideDeckDirection.test.ts (14 tests) 12ms
+ ✓ packages/react-headless/src/proposalReview.test.ts (5 tests) 15ms
+ ✓ scripts/tests/nodeslide-motion-evidence-integration.test.mjs (3 tests) 11ms
+ ✓ scripts/build-recipelang-reference.test.mjs (2 tests) 11ms
+ ✓ scripts/tests/semantic-primacy.test.mjs (18 tests) 14ms
+ ✓ shared/nodeslideProposalOrigin.test.ts (5 tests) 11ms
+ ✓ packages/react-headless/src/ssr.test.tsx (1 test) 15ms
+ ✓ shared/nodeslideDurableSession.test.ts (3 tests) 12ms
+ ✓ convex/lib/nodeslideSourceLineage.test.ts (6 tests | 1 skipped) 12ms
+ ✓ convex/nodeslideDerivedErasure.test.ts (22 tests) 13ms
+ ✓ convex/lib/nodeslidePublishApprovalPolicy.test.ts (8 tests) 10ms
+ ✓ packages/convex/src/convexAdapter.test.ts (6 tests) 17ms
+ ✓ convex/lib/nodeslideJobValidators.test.ts (2 tests) 12ms
+ ✓ convex/lib/nodeslideProviderConsent.test.ts (2 tests) 11ms
+ ✓ convex/lib/nodeslideProviderJson.test.ts (3 tests) 14ms
+ ✓ convex/lib/nodeslideAccess.test.ts (2 tests) 11ms
+ ✓ scripts/tests/knockout-primacy.test.mjs (11 tests) 7ms
+ ✓ convex/lib/nodeslideArtifactArena.test.ts (4 tests) 9ms
+ ✓ src/domains/nodeslide/nodeslideUserError.test.ts (5 tests) 9ms
+ ✓ scripts/tests/claim-trace-binding.test.mjs (11 tests) 11ms
+ ✓ convex/nodeslideGoogleSlidesRuntime.test.ts (7 tests) 14ms
+ ✓ convex/lib/nodeslideQuota.test.ts (3 tests) 10ms
+ ✓ convex/lib/nodeslideWorkflowCandidate.test.ts (2 tests) 12ms
+ ✓ scripts/tests/nodeslide-benchmark-workflow.test.mjs (3 tests) 9ms
+ ✓ src/domains/nodeslide/session/studioMount.test.ts (5 tests) 8ms
+ ✓ scripts/tests/nodeslide-landing-a11y.test.mjs (7 tests) 9ms
+ ✓ convex/lib/nodeslideRoutingPolicy.test.ts (6 tests) 10ms
+ ✓ api/share.test.ts (5 tests) 7ms
+ ✓ convex/lib/nodeslideIds.test.ts (4 tests) 8ms
+ ✓ scripts/node-gym-ui-evidence-core.test.mjs (4 tests) 7ms
+ ✓ convex/lib/nodeslidePatchOperationWire.test.ts (2 tests) 6ms
+ ✓ convex/nodeslideJobWorkflow.test.ts (4 tests) 7ms
+ ✓ scripts/tests/knockout-surgery.test.mjs (8 tests) 8ms
+ ✓ packages/convex/src/governance.test.ts (2 tests) 7ms
+ ✓ scripts/node-gym-redaction-core.test.mjs (3 tests) 9ms
+ ✓ convex/lib/nodeslideMultiAgent.test.ts (9 tests) 12ms
+ ✓ shared/nodeslideAttachments.test.ts (2 tests) 7ms
+ ✓ packages/gym-core/src/checkpoint.test.ts (4 tests) 10ms
+ ✓ scripts/verify-deployed-html.test.ts (4 tests) 7ms
+ ✓ convex/lib/nodeslideDeckDiversity.test.ts (1 test) 7ms
+ ✓ scripts/tests/deck-reference-corpus.test.mjs (3 tests) 8ms
+ ✓ scripts/tests/motion-oracle.test.mjs (14 tests) 13ms
+ ✓ convex/lib/nodeslideCreationTelemetry.test.ts (4 tests) 9ms
+ ✓ scripts/model-capability-ledger.test.mjs (2 tests) 6ms
+ ✓ convex/lib/nodeslideCreateScale.test.ts (2 tests) 6ms
+ ✓ convex/workflows.test.ts (5 tests) 8ms
+ ✓ scripts/convex-log-capture-core.test.mjs (8 tests) 7ms
+ ✓ scripts/extract-vercel-deployment-url.test.ts (3 tests) 7ms
+ ✓ convex/lib/nodeslideAddedImageUrl.test.ts (5 tests) 7ms
+ ✓ src/domains/nodeslide/components/overlayPrimitives.test.ts (1 test) 6ms
+ ✓ src/domains/nodeslide/clientArtifactAuthorship.test.ts (1 test) 7ms
+ ✓ convex/lib/nodeslideData.test.ts (1 test) 5ms
+ ✓ src/domains/nodeslide/uiContract.test.ts (10 tests) 15ms
+ ✓ convex/nodeslideJobSeam.test.ts (11 tests) 17ms
+ ✓ scripts/vercel-openverse-csp.test.ts (1 test) 5ms
+ ✓ convex/lib/nodeslideMutationContract.test.ts (1 test) 4ms
+ ✓ packages/engine/src/migrations.test.ts (2 tests) 7ms
+ ✓ convex/nodeslideJobControl.test.ts (7 tests) 4ms
+ ✓ convex/lib/nodeslideMemory.test.ts (2 tests) 6ms
+ ✓ convex/lib/nodeslideProductionLogging.test.ts (1 test) 5ms
+ ✓ src/domains/nodeslide/components/ProjectDialog.consent.test.ts (4 tests) 7ms
+ ✓ convex/nodeslideSourceRefresh.test.ts (3 tests) 5ms
+ ✓ convex/lib/nodeslideOtlp.test.ts (2 tests) 4ms
+ ✓ src/domains/nodeslide/components/NodeSlideConnectionsDialog.test.ts (3 tests) 4ms
+ ✓ convex/lib/nodeslideModelFleetProbe.test.ts (5 tests) 7ms
+ ✓ src/lib/sessionImageGeneration.test.ts (3 tests) 8ms
+ ✓ convex/nodeslideJobRuntime.test.ts (12 tests | 1 skipped) 5ms
+ ✓ src/domains/nodeslide/inspector/TraceInspector.test.ts (3 tests) 4ms
+ ✓ convex/nodeslideCreateRunIdentity.test.ts (3 tests) 4ms
+ ✓ src/domains/nodeslide/inspector/InspectorPanel.test.ts (6 tests) 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/immutable-upgrade-consumer-core.test.mjs > immutable install and upgrade consumer gates > rejects a valid npm tarball whose declaration passes but runtime entry is broken
+AssertionError: expected undefined to be truthy
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ scripts/immutable-upgrade-consumer-core.test.mjs:94:22
+     92|     async () => {
+     93|       const npmCli = process.env.npm_execpath;
+     94|       expect(npmCli).toBeTruthy();
+       |                      ^
+     95|       const sandbox = await mkdtemp(path.join(os.tmpdir(), 'nodeslide-…
+     96|       try {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 315 passed (316)
+      Tests  1 failed | 2811 passed | 7 skipped (2819)
+   Start at  04:47:07
+   Duration  21.34s (transform 114.11s, setup 0ms, import 285.64s, tests 124.23s, environment 85.19s)
+
+JSON report written to C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6g-nodeslide-openui-phase-01/suite.json

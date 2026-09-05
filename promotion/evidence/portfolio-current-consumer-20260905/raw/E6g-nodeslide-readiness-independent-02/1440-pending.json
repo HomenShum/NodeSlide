@@ -1,0 +1,12 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "dom": {
+    "text": "Deck checks · v3Deck CICheckingChecking this deck version. Results are pending.",
+    "version": "3",
+    "state": "loading"
+  },
+  "errors": []
+}

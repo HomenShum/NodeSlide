@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-05T11:09:43.959442+00:00",
+  "command": [
+    "npm",
+    "run",
+    "build"
+  ],
+  "exitCode": 0,
+  "seconds": 95.20400000002701,
+  "log": "build.log",
+  "isolatedTemporaryRoot": "D:\\ProjectRecovery\\NodeSlide first run 20260905\\temp",
+  "environment": "Inherited provider/Convex/Vite/base URL credential names removed without value output; no original env file read."
+}

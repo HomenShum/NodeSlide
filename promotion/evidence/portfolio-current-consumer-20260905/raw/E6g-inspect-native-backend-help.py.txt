@@ -1,0 +1,15 @@
+from pathlib import Path
+import os,json,subprocess,hashlib
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+config=json.loads((R/'.convex/local/default/config.json').read_text(encoding='utf-8'))
+version=config['backendVersion']
+assert isinstance(version,str) and version and all(c.isalnum() or c in '.-_' for c in version)
+binary=Path(os.environ['LOCALAPPDATA'])/'convex/binaries'/version/'convex-local-backend.exe'
+assert binary.is_file()
+out=P/'E6g-nodeslide-first-run/native-backend-help.log'
+with out.open('xb') as log:p=subprocess.run([str(binary),'--help'],stdout=log,stderr=subprocess.STDOUT,timeout=20,creationflags=subprocess.CREATE_NO_WINDOW)
+text=out.read_text(encoding='utf-8')
+receipt={'version':version,'binarySha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'exitCode':p.returncode,'log':out.name,'logSha256':hashlib.sha256(out.read_bytes()).hexdigest(),'selectionIsAnonymous':config.get('deploymentName')=='anonymous-agent','ports':config['ports'],'adminKey':'NOT_OUTPUT','helpLines':text.splitlines()}
+with (P/'E6g-nodeslide-first-run/native-backend-help.json').open('x',encoding='utf-8',newline='\n') as f:f.write(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps(receipt))

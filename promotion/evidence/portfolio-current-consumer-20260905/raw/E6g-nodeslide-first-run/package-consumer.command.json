@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-05T11:11:19.152028+00:00",
+  "command": [
+    "npm",
+    "run",
+    "packages:consumer:smoke"
+  ],
+  "exitCode": 0,
+  "seconds": 30.54599999997299,
+  "log": "package-consumer.log",
+  "isolatedTemporaryRoot": "D:\\ProjectRecovery\\NodeSlide first run 20260905\\temp",
+  "environment": "Inherited provider/Convex/Vite/base URL credential names removed without value output; no original env file read."
+}

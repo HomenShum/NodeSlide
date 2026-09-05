@@ -1,0 +1,573 @@
+{
+  "status": "ALL_INITIAL_MATCHES_ARE_SUBSTRINGS_INSIDE_LONGER_WORDS",
+  "count": 94,
+  "rows": [
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "243dffb37846a08fccc74fdd67515f8e205b4498f2afe35a38e315fd0bda4500",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "eb0769fb65f6b74e7ecd63b616e8ef3bb8571de1a5163b5468dbd2c425f02035",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "672662fdef73f978801ba0d75bc429bf9c142204e557ca72e64045a030b52f42",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "601835ea12ed958d543cad961dabd9332ed209ca730b44ed8c412d573f62ec41",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "b02c369b43b7a7202861d1236174d95b440647f2089209413106d7ad0ba1abf7",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "ef893449bcbe2cf3c4290674cbba790f58202b08d4eabcac91bde4f605b94462",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "c72d2a384d220a9167894cc965d187051970839f3a642358d9434dfc1a92c198",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "243dffb37846a08fccc74fdd67515f8e205b4498f2afe35a38e315fd0bda4500",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "eb0769fb65f6b74e7ecd63b616e8ef3bb8571de1a5163b5468dbd2c425f02035",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "672662fdef73f978801ba0d75bc429bf9c142204e557ca72e64045a030b52f42",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "601835ea12ed958d543cad961dabd9332ed209ca730b44ed8c412d573f62ec41",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "b02c369b43b7a7202861d1236174d95b440647f2089209413106d7ad0ba1abf7",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "ef893449bcbe2cf3c4290674cbba790f58202b08d4eabcac91bde4f605b94462",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "c72d2a384d220a9167894cc965d187051970839f3a642358d9434dfc1a92c198",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-first-run/source-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/holdings-before.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "243dffb37846a08fccc74fdd67515f8e205b4498f2afe35a38e315fd0bda4500",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "eb0769fb65f6b74e7ecd63b616e8ef3bb8571de1a5163b5468dbd2c425f02035",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "672662fdef73f978801ba0d75bc429bf9c142204e557ca72e64045a030b52f42",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "601835ea12ed958d543cad961dabd9332ed209ca730b44ed8c412d573f62ec41",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "b02c369b43b7a7202861d1236174d95b440647f2089209413106d7ad0ba1abf7",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "ef893449bcbe2cf3c4290674cbba790f58202b08d4eabcac91bde4f605b94462",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "c72d2a384d220a9167894cc965d187051970839f3a642358d9434dfc1a92c198",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "243dffb37846a08fccc74fdd67515f8e205b4498f2afe35a38e315fd0bda4500",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "243dffb37846a08fccc74fdd67515f8e205b4498f2afe35a38e315fd0bda4500",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "243dffb37846a08fccc74fdd67515f8e205b4498f2afe35a38e315fd0bda4500",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "243dffb37846a08fccc74fdd67515f8e205b4498f2afe35a38e315fd0bda4500",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "243dffb37846a08fccc74fdd67515f8e205b4498f2afe35a38e315fd0bda4500",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "243dffb37846a08fccc74fdd67515f8e205b4498f2afe35a38e315fd0bda4500",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "eb0769fb65f6b74e7ecd63b616e8ef3bb8571de1a5163b5468dbd2c425f02035",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "eb0769fb65f6b74e7ecd63b616e8ef3bb8571de1a5163b5468dbd2c425f02035",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "eb0769fb65f6b74e7ecd63b616e8ef3bb8571de1a5163b5468dbd2c425f02035",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "eb0769fb65f6b74e7ecd63b616e8ef3bb8571de1a5163b5468dbd2c425f02035",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "eb0769fb65f6b74e7ecd63b616e8ef3bb8571de1a5163b5468dbd2c425f02035",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "eb0769fb65f6b74e7ecd63b616e8ef3bb8571de1a5163b5468dbd2c425f02035",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "672662fdef73f978801ba0d75bc429bf9c142204e557ca72e64045a030b52f42",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "672662fdef73f978801ba0d75bc429bf9c142204e557ca72e64045a030b52f42",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "672662fdef73f978801ba0d75bc429bf9c142204e557ca72e64045a030b52f42",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "672662fdef73f978801ba0d75bc429bf9c142204e557ca72e64045a030b52f42",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "672662fdef73f978801ba0d75bc429bf9c142204e557ca72e64045a030b52f42",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "672662fdef73f978801ba0d75bc429bf9c142204e557ca72e64045a030b52f42",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "601835ea12ed958d543cad961dabd9332ed209ca730b44ed8c412d573f62ec41",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "601835ea12ed958d543cad961dabd9332ed209ca730b44ed8c412d573f62ec41",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "601835ea12ed958d543cad961dabd9332ed209ca730b44ed8c412d573f62ec41",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "601835ea12ed958d543cad961dabd9332ed209ca730b44ed8c412d573f62ec41",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "601835ea12ed958d543cad961dabd9332ed209ca730b44ed8c412d573f62ec41",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "601835ea12ed958d543cad961dabd9332ed209ca730b44ed8c412d573f62ec41",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "b02c369b43b7a7202861d1236174d95b440647f2089209413106d7ad0ba1abf7",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "b02c369b43b7a7202861d1236174d95b440647f2089209413106d7ad0ba1abf7",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "b02c369b43b7a7202861d1236174d95b440647f2089209413106d7ad0ba1abf7",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "b02c369b43b7a7202861d1236174d95b440647f2089209413106d7ad0ba1abf7",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "b02c369b43b7a7202861d1236174d95b440647f2089209413106d7ad0ba1abf7",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "b02c369b43b7a7202861d1236174d95b440647f2089209413106d7ad0ba1abf7",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "ef893449bcbe2cf3c4290674cbba790f58202b08d4eabcac91bde4f605b94462",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "ef893449bcbe2cf3c4290674cbba790f58202b08d4eabcac91bde4f605b94462",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "ef893449bcbe2cf3c4290674cbba790f58202b08d4eabcac91bde4f605b94462",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "ef893449bcbe2cf3c4290674cbba790f58202b08d4eabcac91bde4f605b94462",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "ef893449bcbe2cf3c4290674cbba790f58202b08d4eabcac91bde4f605b94462",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "ef893449bcbe2cf3c4290674cbba790f58202b08d4eabcac91bde4f605b94462",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "c72d2a384d220a9167894cc965d187051970839f3a642358d9434dfc1a92c198",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "c72d2a384d220a9167894cc965d187051970839f3a642358d9434dfc1a92c198",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "c72d2a384d220a9167894cc965d187051970839f3a642358d9434dfc1a92c198",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "c72d2a384d220a9167894cc965d187051970839f3a642358d9434dfc1a92c198",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "c72d2a384d220a9167894cc965d187051970839f3a642358d9434dfc1a92c198",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "c72d2a384d220a9167894cc965d187051970839f3a642358d9434dfc1a92c198",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "6d70e0d003bcb64899a783e3482e4991a61d14ede3295e644fe40c72bc49445c",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "d/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "eea89a82c1d4e890224baca2468cad259bc91184ca0ce886ec7c1fbdf56e3a6b",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "243dffb37846a08fccc74fdd67515f8e205b4498f2afe35a38e315fd0bda4500",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "4e26ffc1c9af5dd1a9edc087acd3654155f9636515bca520630fd28700b71eda",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "eb0769fb65f6b74e7ecd63b616e8ef3bb8571de1a5163b5468dbd2c425f02035",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "340c5f2b7dedcd0328dc8ca7b3f7509db0198f7acad48a75638018e2796bd3a2",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "672662fdef73f978801ba0d75bc429bf9c142204e557ca72e64045a030b52f42",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "812207a0d94df1e3633d2e2fcced71283b79c8050abd33ffe088427d26f4d6b1",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "601835ea12ed958d543cad961dabd9332ed209ca730b44ed8c412d573f62ec41",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "482291031f4eb7ec20706b6744d74fd23d29a0cfac069ada178b0cf9bae17bd4",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "b02c369b43b7a7202861d1236174d95b440647f2089209413106d7ad0ba1abf7",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "efa11c70217de576d6365ae00515b8c08df41894a34ffc9e861e1294f082411d",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "ef893449bcbe2cf3c4290674cbba790f58202b08d4eabcac91bde4f605b94462",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "b6355df62fc80e3044cebe6b0951c62ecab15cb09d09e597582d587fffc2b23f",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    },
+    {
+      "path": "E6g-nodeslide-recon/remote-tree.json",
+      "candidateSha256": "c72d2a384d220a9167894cc965d187051970839f3a642358d9434dfc1a92c198",
+      "prefixIsInsideLongerWord": true,
+      "precedingWordFragment": "s/ri"
+    }
+  ],
+  "originalScanPreserved": true,
+  "credentialValuesPrinted": false,
+  "correction": "Require a non-token boundary before credential prefixes, preserving detection for standalone credential shapes."
+}

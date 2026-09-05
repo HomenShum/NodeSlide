@@ -1,0 +1,20 @@
+{
+  "command": [
+    "cmd.exe",
+    "/d",
+    "/c",
+    "npm",
+    "exec",
+    "--",
+    "vitest",
+    "run",
+    "convex/lib/nodeslideAdmission.test.ts",
+    "--reporter=verbose",
+    "--reporter=json",
+    "--outputFile.json=C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-multiline-independent-01\\admission-tests.json"
+  ],
+  "cwd": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "exitCode": 0,
+  "elapsedMs": 4359,
+  "scope": "One existing admission test file through installed npm exec; no added filter, timeout, retry or source change. Provider mocked by existing test; durable mutations/ledger stand-ins do not prove quota, actual DB or load performance."
+}

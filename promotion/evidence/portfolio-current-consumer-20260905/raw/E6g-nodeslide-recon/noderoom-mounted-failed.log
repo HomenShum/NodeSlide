@@ -1,0 +1,1071 @@
+NodeSlide packed consumer	UNKNOWN STEP	﻿2026-08-29T23:23:57.7119089Z Current runner version: '2.336.0'
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7142613Z ##[group]Runner Image Provisioner
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7143889Z Hosted Compute Agent
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7144435Z Version: 20260819.586
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7145455Z Commit: 3cc4a88dfa507ef76119ad1bb3eccc6378bb2b76
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7146169Z Build Date: 2026-08-18T23:20:18Z
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7146825Z Worker ID: {38a791bd-1e58-4911-8ec0-7d6846b71435}
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7147485Z Azure Region: westus3
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7148039Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7149501Z ##[group]Operating System
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7150130Z Ubuntu
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7150666Z 24.04.4
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7151171Z LTS
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7151688Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7152229Z ##[group]Runner Image
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7152800Z Image: ubuntu-24.04
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7153469Z Version: 20260823.283.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7154674Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260823.283/images/ubuntu/Ubuntu2404-Readme.md
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7156161Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260823.283
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7157046Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7158203Z ##[group]GITHUB_TOKEN Permissions
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7160074Z Contents: read
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7160651Z Metadata: read
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7161245Z Packages: read
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7161770Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7164084Z Secret source: Actions
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7165088Z Prepare workflow directory
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7491662Z Prepare all required actions
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:57.7540849Z Getting action download info
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:58.0482803Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:58.1745681Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:58.3494226Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.2285263Z Complete job name: NodeSlide packed consumer
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3252762Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3254506Z with:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3255294Z   ref: 2b3e5bd718b80747f32257a8b8af5f15e2310699
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3256279Z   path: noderoom
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3257056Z   repository: HomenShum/NodeRoom
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3265169Z   token: ***
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3265940Z   ssh-strict: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3266713Z   ssh-user: git
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3267497Z   persist-credentials: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3268353Z   clean: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3269088Z   sparse-checkout-cone-mode: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3269941Z   fetch-depth: 1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3270675Z   fetch-tags: false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3271433Z   show-progress: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3272192Z   lfs: false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3272970Z   submodules: false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3273785Z   set-safe-directory: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3274654Z   allow-unsafe-pr-checkout: false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.3275888Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.4257629Z Syncing repository: HomenShum/NodeRoom
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.4260112Z ##[group]Getting Git version info
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.4261326Z Working directory is '/home/runner/work/NodeRoom/NodeRoom/noderoom'
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.4263305Z [command]/usr/bin/git version
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.5783284Z git version 2.55.0
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.5804099Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.5814821Z Temporarily overriding HOME='/home/runner/work/_temp/80d77dcf-a5d5-458b-b277-a7491f5287be' before making global git config changes
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.5818773Z Adding repository directory to the temporary git global config as a safe directory
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.5821977Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NodeRoom/NodeRoom/noderoom
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.6178713Z ##[group]Determining repository object format
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.6181208Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.6182457Z ##[group]Initializing the repository
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:23:59.6186595Z [command]/usr/bin/git init /home/runner/work/NodeRoom/NodeRoom/noderoom
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2189981Z hint: Using 'master' as the name for the initial branch. This default branch name
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2192163Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2194523Z hint: to use in all of your new repositories, which will suppress this warning,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2196449Z hint: call:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2197313Z hint:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2198401Z hint: 	git config --global init.defaultBranch <name>
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2199714Z hint:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2201560Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2204492Z hint: 'development'. The just-created branch can be renamed via this command:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2207123Z hint:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2208107Z hint: 	git branch -m <name>
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2209184Z hint:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2210526Z hint: Disable this message with "git config set advice.defaultBranchName false"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2212768Z Initialized empty Git repository in /home/runner/work/NodeRoom/NodeRoom/noderoom/.git/
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2216719Z [command]/usr/bin/git remote add origin https://github.com/HomenShum/NodeRoom
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2251640Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2253569Z ##[group]Disabling automatic garbage collection
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2256157Z [command]/usr/bin/git config --local gc.auto 0
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2283708Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2285209Z ##[group]Setting up auth
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2286263Z Removing SSH command configuration
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2288733Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2315149Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2635143Z Removing HTTP extra header
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2641780Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2669292Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2839426Z Removing includeIf entries pointing to credentials config files
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2844500Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.2869908Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.3052984Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-5916a9ff-9580-4d6e-bfc5-39484f08751f.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.3085865Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/NodeRoom/NodeRoom/noderoom/.git.path /home/runner/work/_temp/git-credentials-5916a9ff-9580-4d6e-bfc5-39484f08751f.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.3111244Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/NodeRoom/NodeRoom/noderoom/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-5916a9ff-9580-4d6e-bfc5-39484f08751f.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.3139597Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/noderoom/.git.path /github/runner_temp/git-credentials-5916a9ff-9580-4d6e-bfc5-39484f08751f.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.3165796Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/noderoom/.git/worktrees/*.path /github/runner_temp/git-credentials-5916a9ff-9580-4d6e-bfc5-39484f08751f.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.3185847Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.3187458Z ##[group]Fetching the repository
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:00.3191665Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin 2b3e5bd718b80747f32257a8b8af5f15e2310699
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:14.4180753Z From https://github.com/HomenShum/NodeRoom
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:14.4181337Z  * branch            2b3e5bd718b80747f32257a8b8af5f15e2310699 -> FETCH_HEAD
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:14.4190711Z [command]/usr/bin/git rev-parse --verify --quiet 2b3e5bd718b80747f32257a8b8af5f15e2310699^{object}
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:14.4213285Z 2b3e5bd718b80747f32257a8b8af5f15e2310699
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:14.4217474Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:14.4218185Z ##[group]Determining the checkout info
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:14.4218870Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:14.4223381Z [command]/usr/bin/git sparse-checkout disable
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:14.4267769Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:14.4291071Z ##[group]Checking out the ref
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:14.4295767Z [command]/usr/bin/git checkout --progress --force 2b3e5bd718b80747f32257a8b8af5f15e2310699
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.1607470Z Updating files:  68% (4359/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.1671371Z Updating files:  69% (4380/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.3516417Z Updating files:  70% (4443/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.3610987Z Updating files:  71% (4507/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.3931785Z Updating files:  72% (4570/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.3989201Z Updating files:  73% (4634/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4122206Z Updating files:  74% (4697/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4298619Z Updating files:  75% (4761/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4349399Z Updating files:  76% (4824/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4386398Z Updating files:  77% (4888/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4519565Z Updating files:  77% (4903/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4553318Z Updating files:  78% (4951/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4791193Z Updating files:  79% (5015/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4825205Z Updating files:  80% (5078/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4867554Z Updating files:  81% (5142/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4899946Z Updating files:  82% (5205/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4933872Z Updating files:  83% (5269/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.4983993Z Updating files:  84% (5332/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5037424Z Updating files:  85% (5395/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5069093Z Updating files:  86% (5459/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5099588Z Updating files:  87% (5522/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5136013Z Updating files:  88% (5586/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5162096Z Updating files:  89% (5649/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5203877Z Updating files:  90% (5713/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5256681Z Updating files:  91% (5776/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5292575Z Updating files:  92% (5840/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5326193Z Updating files:  93% (5903/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5353724Z Updating files:  94% (5967/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5382371Z Updating files:  95% (6030/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5413027Z Updating files:  96% (6094/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5442950Z Updating files:  97% (6157/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5478394Z Updating files:  98% (6221/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5508001Z Updating files:  99% (6284/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5508622Z Updating files: 100% (6347/6347)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5509056Z Updating files: 100% (6347/6347), done.
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5591407Z Note: switching to '2b3e5bd718b80747f32257a8b8af5f15e2310699'.
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5591753Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5591947Z You are in 'detached HEAD' state. You can look around, make experimental
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5592398Z changes and commit them, and you can discard any commits you make in this
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5593016Z state without impacting any branches by switching back to a branch.
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5593277Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5593473Z If you want to create a new branch to retain commits you create, you may
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5593913Z do so (now or later) by using -c with the switch command. Example:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5594189Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5594312Z   git switch -c <new-branch-name>
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5594482Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5594583Z Or undo this operation with:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5594741Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5594831Z   git switch -
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5595147Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5595347Z Turn off this advice by setting config variable advice.detachedHead to false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5595638Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5596223Z HEAD is now at 2b3e5bd fix: restore vendor/nodegraph-live — deleted by junction fallout, committed unnoticed
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5644329Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5683646Z [command]/usr/bin/git log -1 --format=%H
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5707031Z 2b3e5bd718b80747f32257a8b8af5f15e2310699
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5880820Z ##[group]Run sha="$(node -p 'require("./noderoom/vendor/nodeslide/release-lock.json").nodeSlideCommit')"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5881676Z [36;1msha="$(node -p 'require("./noderoom/vendor/nodeslide/release-lock.json").nodeSlideCommit')"[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5882316Z [36;1mecho "sha=$sha" >> "$GITHUB_OUTPUT"[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5909133Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:16.5909496Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6167732Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6168111Z with:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6168321Z   repository: HomenShum/NodeSlide
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6168600Z   ref: a88fb57f111db82e9334d68fa7611a51ed54c3c1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6168874Z   path: nodeslide
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6171267Z   token: ***
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6171470Z   ssh-strict: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6171676Z   ssh-user: git
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6171884Z   persist-credentials: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6172117Z   clean: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6172327Z   sparse-checkout-cone-mode: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6172579Z   fetch-depth: 1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6172785Z   fetch-tags: false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6173186Z   show-progress: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6173391Z   lfs: false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6173593Z   submodules: false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6173810Z   set-safe-directory: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6174053Z   allow-unsafe-pr-checkout: false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6174301Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6973751Z Syncing repository: HomenShum/NodeSlide
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6978308Z ##[group]Getting Git version info
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.6978990Z Working directory is '/home/runner/work/NodeRoom/NodeRoom/nodeslide'
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7015945Z [command]/usr/bin/git version
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7048150Z git version 2.55.0
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7066234Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7075561Z Temporarily overriding HOME='/home/runner/work/_temp/1359cca3-99b4-4816-886f-3a3b9ec799a4' before making global git config changes
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7076862Z Adding repository directory to the temporary git global config as a safe directory
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7080994Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NodeRoom/NodeRoom/nodeslide
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7107795Z ##[group]Determining repository object format
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7109375Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7109958Z ##[group]Initializing the repository
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7114223Z [command]/usr/bin/git init /home/runner/work/NodeRoom/NodeRoom/nodeslide
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7143949Z hint: Using 'master' as the name for the initial branch. This default branch name
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7145005Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7146012Z hint: to use in all of your new repositories, which will suppress this warning,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7146779Z hint: call:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7147179Z hint:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7147775Z hint: 	git config --global init.defaultBranch <name>
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7148364Z hint:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7148916Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7150043Z hint: 'development'. The just-created branch can be renamed via this command:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7150754Z hint:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7151155Z hint: 	git branch -m <name>
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7151628Z hint:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7152239Z hint: Disable this message with "git config set advice.defaultBranchName false"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7153397Z Initialized empty Git repository in /home/runner/work/NodeRoom/NodeRoom/nodeslide/.git/
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7155339Z [command]/usr/bin/git remote add origin https://github.com/HomenShum/NodeSlide
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7179140Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7179790Z ##[group]Disabling automatic garbage collection
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7183459Z [command]/usr/bin/git config --local gc.auto 0
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7205757Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7206336Z ##[group]Setting up auth
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7206768Z Removing SSH command configuration
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7211028Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7235664Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7406518Z Removing HTTP extra header
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7412229Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7437674Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7610269Z Removing includeIf entries pointing to credentials config files
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7616378Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7642789Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7817904Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-8a65584a-90d7-4b46-b243-4692edae40ff.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7847347Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/NodeRoom/NodeRoom/nodeslide/.git.path /home/runner/work/_temp/git-credentials-8a65584a-90d7-4b46-b243-4692edae40ff.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7870479Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/NodeRoom/NodeRoom/nodeslide/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-8a65584a-90d7-4b46-b243-4692edae40ff.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7892776Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/nodeslide/.git.path /github/runner_temp/git-credentials-8a65584a-90d7-4b46-b243-4692edae40ff.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7915665Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/nodeslide/.git/worktrees/*.path /github/runner_temp/git-credentials-8a65584a-90d7-4b46-b243-4692edae40ff.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7935351Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7935754Z ##[group]Fetching the repository
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:18.7941587Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin a88fb57f111db82e9334d68fa7611a51ed54c3c1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1406630Z From https://github.com/HomenShum/NodeSlide
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1407148Z  * branch            a88fb57f111db82e9334d68fa7611a51ed54c3c1 -> FETCH_HEAD
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1415234Z [command]/usr/bin/git rev-parse --verify --quiet a88fb57f111db82e9334d68fa7611a51ed54c3c1^{object}
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1436726Z a88fb57f111db82e9334d68fa7611a51ed54c3c1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1439811Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1440395Z ##[group]Determining the checkout info
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1441049Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1445755Z [command]/usr/bin/git sparse-checkout disable
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1477559Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1499615Z ##[group]Checking out the ref
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1503811Z [command]/usr/bin/git checkout --progress --force a88fb57f111db82e9334d68fa7611a51ed54c3c1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1959869Z Note: switching to 'a88fb57f111db82e9334d68fa7611a51ed54c3c1'.
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1960370Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1960725Z You are in 'detached HEAD' state. You can look around, make experimental
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1961733Z changes and commit them, and you can discard any commits you make in this
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1962409Z state without impacting any branches by switching back to a branch.
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1962798Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1963253Z If you want to create a new branch to retain commits you create, you may
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1963938Z do so (now or later) by using -c with the switch command. Example:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1964306Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1964472Z   git switch -c <new-branch-name>
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1964730Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1964868Z Or undo this operation with:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1965103Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1965226Z   git switch -
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1965394Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1965672Z Turn off this advice by setting config variable advice.detachedHead to false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1966069Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1966309Z HEAD is now at a88fb57 Prepare reproducible NodeSlide v0.2.2 (#35)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.1968226Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.2002384Z [command]/usr/bin/git log -1 --format=%H
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.2022533Z a88fb57f111db82e9334d68fa7611a51ed54c3c1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.2172127Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.2172501Z with:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.2172696Z   node-version: 22
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.2173285Z   cache: npm
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.2173628Z   cache-dependency-path: noderoom/package-lock.json
+NodeSlide packed consumer	UNKNOWN STEP	nodeslide/package-lock.json
+NodeSlide packed consumer	UNKNOWN STEP	
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.2174037Z   check-latest: false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.2176362Z   token: ***
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.2176574Z   package-manager-cache: true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.2176821Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.3587876Z Found in cache @ /opt/hostedtoolcache/node/22.23.2/x64
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:20.3591184Z ##[group]Environment details
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:23.5872705Z node: v22.23.2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:23.5873234Z npm: 10.9.8
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:23.5873546Z yarn: 1.22.22
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:23.5874626Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:23.5892015Z [command]/opt/hostedtoolcache/node/22.23.2/x64/bin/npm config get cache
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:23.8165797Z /home/runner/.npm
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:24.0321347Z npm cache is not found
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:24.0426599Z ##[group]Run npm ci
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:24.0426866Z [36;1mnpm ci[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:24.0489651Z shell: /usr/bin/bash -e {0}
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:24.0489930Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:26.8961150Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:28.3143729Z npm warn deprecated source-map@0.8.0-beta.0: The work that was done in this beta branch won't be included in future versions
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:28.3189165Z npm warn deprecated lodash.isequal@4.5.0: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:28.9847263Z npm warn deprecated lucia@3.2.2: This package has been deprecated. Please see https://lucia-auth.com/lucia-v3/migrate.
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:42.9730587Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:42.9731630Z added 943 packages, and audited 946 packages in 19s
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:42.9732130Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:42.9732460Z 229 packages are looking for funding
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:42.9733312Z   run `npm fund` for details
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:42.9744124Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:42.9744712Z found 0 vulnerabilities
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:43.0141161Z ##[group]Run npm ci
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:43.0141426Z [36;1mnpm ci[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:43.0141647Z [36;1mnpm run packages:build[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:43.0163501Z shell: /usr/bin/bash -e {0}
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:43.0163769Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:46.5534430Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3656991Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3657733Z added 533 packages, and audited 547 packages in 11s
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3658126Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3658365Z 88 packages are looking for funding
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3658767Z   run `npm fund` for details
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3923904Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3925062Z 15 vulnerabilities (7 moderate, 7 high, 1 critical)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3925865Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3926203Z To address issues that do not require attention, run:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3926652Z   npm audit fix
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3926842Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3927281Z To address all issues (including breaking changes), run:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3927772Z   npm audit fix --force
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3927977Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.3928151Z Run `npm audit` for details.
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.5062496Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.5063463Z > nodeslide@0.1.0 packages:build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.5066172Z > npm run build --workspace @nodeslide/contracts && npm run build --workspace @nodeslide/engine && npm run build --workspace @nodeslide/backend && npm run build --workspace @nodeslide/testing && npm run build --workspace @nodeslide/agent && npm run build --workspace @nodeslide/client-http && npm run build --workspace @nodeslide/react-headless && npm run build --workspace @nodeslide/react && npm run build --workspace @nodeslide/convex && npm run build --workspace @nodeslide/registry && npm run build --workspace @nodeslide/cli && npm run build --workspace @nodeslide/external-agent && npm run build --workspace nodeslide-mcp
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.5068153Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.6178110Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.6179035Z > @nodeslide/contracts@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.6179838Z > tsup src/index.ts --format esm --dts --clean --sourcemap
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.6180286Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.8872669Z [34mCLI[39m Building entry: src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.8883429Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.8884230Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.8923044Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.8935594Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.8945009Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.9142272Z [32mESM[39m [1mdist/index.js     [22m[32m11.95 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.9143305Z [32mESM[39m [1mdist/index.js.map [22m[32m41.91 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:54.9144260Z [32mESM[39m ⚡️ Build success in 20ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:55.1603497Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.5636606Z [32mDTS[39m ⚡️ Build success in 1404ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.5637476Z [32mDTS[39m [1mdist/index.d.ts [22m[32m41.04 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.6936315Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.6936926Z > @nodeslide/engine@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.6937540Z > tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/contracts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.6937879Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.9642930Z [34mCLI[39m Building entry: src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.9651586Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.9653111Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.9690376Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.9702465Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:56.9712090Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:57.0229393Z [32mESM[39m [1mdist/index.js     [22m[32m151.94 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:57.0230137Z [32mESM[39m [1mdist/index.js.map [22m[32m358.07 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:57.0230722Z [32mESM[39m ⚡️ Build success in 51ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:57.2462020Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.4327479Z [32mDTS[39m ⚡️ Build success in 2187ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.4331680Z [32mDTS[39m [1mdist/index.d.ts [22m[32m18.78 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.5682001Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.5682700Z > @nodeslide/backend@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.5683562Z > tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/contracts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.5683952Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.8381393Z [34mCLI[39m Building entry: src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.8390567Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.8392031Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.8429128Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.8441324Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.8451110Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.8664458Z [32mESM[39m [1mdist/index.js     [22m[32m14.35 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.8665103Z [32mESM[39m [1mdist/index.js.map [22m[32m35.04 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:24:59.8666026Z [32mESM[39m ⚡️ Build success in 22ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:00.1116633Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.5237417Z [32mDTS[39m ⚡️ Build success in 1413ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.5238286Z [32mDTS[39m [1mdist/index.d.ts [22m[32m13.31 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.6557062Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.6557738Z > @nodeslide/testing@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.6559171Z > tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/backend --external @nodeslide/contracts --external @nodeslide/engine
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.6560111Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.9265748Z [34mCLI[39m Building entry: src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.9275572Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.9276924Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.9314544Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.9326856Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.9336459Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.9566893Z [32mESM[39m [1mdist/index.js     [22m[32m35.85 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.9567755Z [32mESM[39m [1mdist/index.js.map [22m[32m65.90 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:01.9568186Z [32mESM[39m ⚡️ Build success in 23ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:02.2052810Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.4668159Z [32mDTS[39m ⚡️ Build success in 2262ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.4675909Z [32mDTS[39m [1mdist/index.d.ts [22m[32m4.40 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.6128823Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.6129397Z > @nodeslide/agent@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.6130211Z > tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/backend --external @nodeslide/contracts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.6130713Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.8818343Z [34mCLI[39m Building entry: src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.8828537Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.8829336Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.8868133Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.8880811Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.8891115Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.9058617Z [32mESM[39m [1mdist/index.js     [22m[32m2.98 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.9084273Z [32mESM[39m [1mdist/index.js.map [22m[32m7.66 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:04.9093779Z [32mESM[39m ⚡️ Build success in 17ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:05.1530954Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.5624879Z [32mDTS[39m ⚡️ Build success in 1410ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.5626782Z [32mDTS[39m [1mdist/index.d.ts [22m[32m3.04 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.7050880Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.7051531Z > @nodeslide/client-http@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.7052230Z > tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/backend --external @nodeslide/contracts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.7052649Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.9787764Z [34mCLI[39m Building entry: src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.9798028Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.9798971Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.9838369Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.9851014Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:06.9860966Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:07.0027667Z [32mESM[39m [1mdist/index.js     [22m[32m7.04 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:07.0029048Z [32mESM[39m [1mdist/index.js.map [22m[32m15.24 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:07.0029932Z [32mESM[39m ⚡️ Build success in 17ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:07.2506463Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:08.7057665Z [32mDTS[39m ⚡️ Build success in 1456ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:08.7058533Z [32mDTS[39m [1mdist/index.d.ts [22m[32m3.39 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:08.8441773Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:08.8442579Z > @nodeslide/react-headless@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:08.8444002Z > tsup src/index.ts --format esm --dts --clean --sourcemap --external react --external react/jsx-runtime --external @nodeslide/backend --external @nodeslide/contracts --external @nodeslide/engine
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:08.8444639Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:09.1148615Z [34mCLI[39m Building entry: src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:09.1158243Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:09.1159631Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:09.1197964Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:09.1210157Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:09.1220120Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:09.1412385Z [32mESM[39m [1mdist/index.js     [22m[32m8.93 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:09.1413962Z [32mESM[39m [1mdist/index.js.map [22m[32m19.75 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:09.1414970Z [32mESM[39m ⚡️ Build success in 20ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:09.3904213Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.5421059Z [32mDTS[39m ⚡️ Build success in 2152ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.5428346Z [32mDTS[39m [1mdist/index.d.ts [22m[32m5.12 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.6789909Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.6790555Z > @nodeslide/react@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.6791672Z > tsup src/index.ts --format esm --dts --clean --sourcemap --external react --external react/jsx-runtime --external @nodeslide/backend --external @nodeslide/contracts --external @nodeslide/react-headless
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.6792432Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.9509312Z [34mCLI[39m Building entry: src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.9519272Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.9520141Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.9557329Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.9570091Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.9580137Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.9816308Z [32mESM[39m [1mdist/index.js     [22m[32m24.66 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.9817233Z [32mESM[39m [1mdist/index.js.map [22m[32m41.89 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:11.9817915Z [32mESM[39m ⚡️ Build success in 24ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:12.2269373Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:14.7778209Z [32mDTS[39m ⚡️ Build success in 2551ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:14.7779030Z [32mDTS[39m [1mdist/index.d.ts [22m[32m6.13 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:14.9167044Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:14.9167656Z > @nodeslide/convex@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:14.9168137Z > npm run build:client && npm run build:component
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:14.9168411Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.0325768Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.0326379Z > @nodeslide/convex@0.2.2 build:client
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.0329357Z > tsup src/index.ts src/capabilityHost.ts src/react.tsx src/component.ts src/componentSchema.ts --format esm --dts --clean --sourcemap --external react --external react/jsx-runtime --external convex --external convex/browser --external convex/server --external convex/values --external @nodeslide/backend --external @nodeslide/contracts --external @nodeslide/engine --external @nodeslide/react --external @nodeslide/react-headless
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.0331857Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3049548Z [34mCLI[39m Building entry: src/capabilityHost.ts, src/component.ts, src/componentSchema.ts, src/index.ts, src/react.tsx
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3072205Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3072997Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3099261Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3108949Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3133850Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3364763Z [32mESM[39m [1mdist/capabilityHost.js      [22m[32m333.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3366402Z [32mESM[39m [1mdist/index.js               [22m[32m968.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3367743Z [32mESM[39m [1mdist/react.js               [22m[32m2.74 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3368910Z [32mESM[39m [1mdist/componentSchema.js     [22m[32m2.00 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3369969Z [32mESM[39m [1mdist/component.js           [22m[32m4.56 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3371105Z [32mESM[39m [1mdist/chunk-U3H4RHYN.js      [22m[32m5.02 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3372208Z [32mESM[39m [1mdist/chunk-3QWBEMVX.js      [22m[32m6.97 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3373516Z [32mESM[39m [1mdist/capabilityHost.js.map  [22m[32m71.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3374629Z [32mESM[39m [1mdist/react.js.map           [22m[32m5.67 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3375726Z [32mESM[39m [1mdist/componentSchema.js.map [22m[32m4.31 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3377044Z [32mESM[39m [1mdist/index.js.map           [22m[32m71.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3378110Z [32mESM[39m [1mdist/component.js.map       [22m[32m10.80 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3379236Z [32mESM[39m [1mdist/chunk-U3H4RHYN.js.map  [22m[32m13.57 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3380257Z [32mESM[39m [1mdist/chunk-3QWBEMVX.js.map  [22m[32m16.95 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.3381158Z [32mESM[39m ⚡️ Build success in 25ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:15.5896321Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:19.5762725Z [32mDTS[39m ⚡️ Build success in 3986ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:19.5764288Z [32mDTS[39m [1mdist/component.d.ts       [22m[32m2.63 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:19.5765511Z [32mDTS[39m [1mdist/componentSchema.d.ts [22m[32m176.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:19.5766731Z [32mDTS[39m [1mdist/react.d.ts           [22m[32m1.18 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:19.5767896Z [32mDTS[39m [1mdist/index.d.ts           [22m[32m7.26 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:19.5769043Z [32mDTS[39m [1mdist/capabilityHost.d.ts  [22m[32m5.45 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:19.7483850Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:19.7484702Z > @nodeslide/convex@0.2.2 build:component
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:19.7485396Z > tsc -p tsconfig.component.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:19.7485707Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:21.9021941Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:21.9022573Z > @nodeslide/registry@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:21.9023414Z > tsup src/index.ts --format esm --dts --clean --sourcemap --platform node
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:21.9023813Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:22.1750314Z [34mCLI[39m Building entry: src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:22.1759787Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:22.1760407Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:22.1797737Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:22.1809905Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:22.1819850Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:22.1981949Z [32mESM[39m [1mdist/index.js     [22m[32m2.58 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:22.1982992Z [32mESM[39m [1mdist/index.js.map [22m[32m4.87 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:22.1983816Z [32mESM[39m ⚡️ Build success in 17ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:22.4486903Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.5560838Z [32mDTS[39m ⚡️ Build success in 1108ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.5561372Z [32mDTS[39m [1mdist/index.d.ts [22m[32m1.13 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.6899814Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.6900641Z > @nodeslide/cli@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.6901662Z > tsup src/index.ts src/cli.ts --format esm --dts --clean --sourcemap --platform node --external @nodeslide/registry
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.6902137Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9586423Z [34mCLI[39m Building entry: src/cli.ts, src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9596683Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9597506Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9635040Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9643415Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9652587Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9883279Z [32mESM[39m [1mdist/cli.js                [22m[32m3.70 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9884790Z [32mESM[39m [1mdist/index.js              [22m[32m640.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9886353Z [32mESM[39m [1mdist/chunk-5JPW4JHG.js     [22m[32m24.37 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9887558Z [32mESM[39m [1mdist/cli.js.map            [22m[32m7.06 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9888603Z [32mESM[39m [1mdist/index.js.map          [22m[32m71.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9889746Z [32mESM[39m [1mdist/chunk-5JPW4JHG.js.map [22m[32m46.60 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:23.9890680Z [32mESM[39m ⚡️ Build success in 23ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:24.2349583Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.0748588Z [32mDTS[39m ⚡️ Build success in 1840ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.0749447Z [32mDTS[39m [1mdist/cli.d.ts   [22m[32m20.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.0750405Z [32mDTS[39m [1mdist/index.d.ts [22m[32m4.34 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.2256550Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.2257275Z > @nodeslide/external-agent@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.2258616Z > tsup src/index.ts src/cli.ts --format esm --platform node --dts --clean --sourcemap
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.2259173Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5038988Z [34mCLI[39m Building entry: src/cli.ts, src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5049414Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5050779Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5090975Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5098898Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5108561Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5668531Z [32mESM[39m [1mdist/index.js              [22m[32m654.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5669752Z [32mESM[39m [1mdist/cli.js                [22m[32m6.93 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5670937Z [32mESM[39m [1mdist/chunk-QWMUERCR.js     [22m[32m202.84 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5672100Z [32mESM[39m [1mdist/index.js.map          [22m[32m71.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5673575Z [32mESM[39m [1mdist/cli.js.map            [22m[32m12.06 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5674816Z [32mESM[39m [1mdist/chunk-QWMUERCR.js.map [22m[32m449.06 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.5675817Z [32mESM[39m ⚡️ Build success in 56ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:26.7937262Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.3515551Z [32mDTS[39m ⚡️ Build success in 2559ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.3518719Z [32mDTS[39m [1mdist/cli.d.ts   [22m[32m20.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.3519368Z [32mDTS[39m [1mdist/index.d.ts [22m[32m14.17 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.4954664Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.4955507Z > nodeslide-mcp@0.2.2 build
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.4956219Z > tsup src/index.ts --format esm --platform node --dts --clean --sourcemap
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.4956563Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.7678640Z [34mCLI[39m Building entry: src/index.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.7681754Z [34mCLI[39m Using tsconfig: tsconfig.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.7682106Z [34mCLI[39m tsup v8.5.1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.7717506Z [34mCLI[39m Target: es2022
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.7730391Z [34mCLI[39m Cleaning output folder
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.7741018Z [34mESM[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.8413108Z [32mESM[39m [1mdist/index.js     [22m[32m236.00 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.8414353Z [32mESM[39m [1mdist/index.js.map [22m[32m516.58 KB[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:29.8415256Z [32mESM[39m ⚡️ Build success in 68ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:30.0574970Z [34mDTS[39m Build start
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:33.3095380Z [32mDTS[39m ⚡️ Build success in 3253ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:33.3096139Z [32mDTS[39m [1mdist/index.d.ts [22m[32m20.00 B[39m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:33.3551788Z ##[group]Run npm run packages:consumer:smoke
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:33.3552128Z [36;1mnpm run packages:consumer:smoke[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:33.3574048Z shell: /usr/bin/bash -e {0}
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:33.3574313Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:33.4497008Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:33.4497624Z > nodeslide@0.1.0 packages:consumer:smoke
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:33.4498200Z > node scripts/package-consumer-smoke.mjs
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:33.4498395Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:43.9574638Z {"ok":true,"proposalVersion":1,"acceptedVersion":2,"authorizationBound":true,"headless":true,"typesChecked":true,"rendered":true,"cssExported":true,"httpAdapter":true,"migrationCount":2,"packedComponentMounted":true,"registrySource":true,"cliPlan":true,"agentProposal":true}
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.0501433Z ##[group]Run mkdir -p "$RUNNER_TEMP/nodeslide-packages"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.0501839Z [36;1mmkdir -p "$RUNNER_TEMP/nodeslide-packages"[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.0502345Z [36;1mnpm pack --workspace @nodeslide/contracts --pack-destination "$RUNNER_TEMP/nodeslide-packages"[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.0503226Z [36;1mnpm pack --workspace @nodeslide/engine --pack-destination "$RUNNER_TEMP/nodeslide-packages"[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.0504082Z [36;1mnpm pack --workspace @nodeslide/backend --pack-destination "$RUNNER_TEMP/nodeslide-packages"[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.0504700Z [36;1mnpm pack --workspace @nodeslide/testing --pack-destination "$RUNNER_TEMP/nodeslide-packages"[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.0526841Z shell: /usr/bin/bash -e {0}
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.0527106Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3209534Z npm notice
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3212423Z npm notice 📦  @nodeslide/contracts@0.2.2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3213200Z npm notice Tarball Contents
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3215173Z npm notice 42.0kB dist/index.d.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3215725Z npm notice 12.2kB dist/index.js
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3216240Z npm notice 42.9kB dist/index.js.map
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3216759Z npm notice 395B package.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3217212Z npm notice Tarball Details
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3217758Z npm notice name: @nodeslide/contracts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3218261Z npm notice version: 0.2.2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3218819Z npm notice filename: nodeslide-contracts-0.2.2.tgz
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3219412Z npm notice package size: 22.3 kB
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3219908Z npm notice unpacked size: 97.6 kB
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3220684Z npm notice shasum: f20f9f88145b191db046f97ef71b1954a9a65458
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3221457Z npm notice integrity: sha512-VtW2OFl6LGasg[...]uGAiNN2+xXi/w==
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3222019Z npm notice total files: 4
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3223154Z nodeslide-contracts-0.2.2.tgz
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.3223588Z npm notice
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6189437Z npm notice
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6191687Z npm notice 📦  @nodeslide/engine@0.2.2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6192239Z npm notice Tarball Contents
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6193835Z npm notice 19.2kB dist/index.d.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6194327Z npm notice 155.6kB dist/index.js
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6194812Z npm notice 366.7kB dist/index.js.map
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6195281Z npm notice 485B package.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6195703Z npm notice Tarball Details
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6196176Z npm notice name: @nodeslide/engine
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6196563Z npm notice version: 0.2.2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6196878Z npm notice filename: nodeslide-engine-0.2.2.tgz
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6197219Z npm notice package size: 116.2 kB
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6198544Z npm notice unpacked size: 542.0 kB
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6199187Z npm notice shasum: d35d8354b62a6891cf1f55a0291a137e5a0537d1
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6199958Z npm notice integrity: sha512-Lrn+gDOMrq2C3[...]UGpaSzo1+9//w==
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6200394Z npm notice total files: 4
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6200764Z npm notice
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.6201917Z nodeslide-engine-0.2.2.tgz
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8925674Z npm notice
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8928275Z npm notice 📦  @nodeslide/backend@0.2.2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8928615Z npm notice Tarball Contents
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8930997Z npm notice 13.6kB dist/index.d.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8931615Z npm notice 14.7kB dist/index.js
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8932147Z npm notice 35.9kB dist/index.js.map
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8932615Z npm notice 486B package.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8933163Z npm notice Tarball Details
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8933675Z npm notice name: @nodeslide/backend
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8934183Z npm notice version: 0.2.2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8934767Z npm notice filename: nodeslide-backend-0.2.2.tgz
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8935321Z npm notice package size: 13.8 kB
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8936224Z npm notice unpacked size: 64.7 kB
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8937008Z npm notice shasum: 3e1987ec7b2dda571c176449c3f4c0b3c8c829e2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8937590Z npm notice integrity: sha512-aSH8BgdCMorf1[...]QaGt24hwnHSKQ==
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8937947Z npm notice total files: 4
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8938610Z npm notice
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:44.8939304Z nodeslide-backend-0.2.2.tgz
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1562588Z npm notice
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1565311Z npm notice 📦  @nodeslide/testing@0.2.2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1565654Z npm notice Tarball Contents
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1567711Z npm notice 4.5kB dist/index.d.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1568288Z npm notice 36.7kB dist/index.js
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1568811Z npm notice 67.5kB dist/index.js.map
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1569313Z npm notice 614B package.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1569986Z npm notice Tarball Details
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1570596Z npm notice name: @nodeslide/testing
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1571176Z npm notice version: 0.2.2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1571801Z npm notice filename: nodeslide-testing-0.2.2.tgz
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1572491Z npm notice package size: 23.0 kB
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1573587Z npm notice unpacked size: 109.3 kB
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1574359Z npm notice shasum: ccb21097af4b7a79bd4b263ab0c4540948ebc38c
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1575257Z npm notice integrity: sha512-YbgwF6pVhL5Pz[...]bGeKB0erOWzyg==
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1575953Z npm notice total files: 4
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1576400Z nodeslide-testing-0.2.2.tgz
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1576892Z npm notice
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1685545Z ##[group]Run npm run nodeslide:consumer:proof
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1685898Z [36;1mnpm run nodeslide:consumer:proof[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1707220Z shell: /usr/bin/bash -e {0}
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1707490Z env:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1707799Z   NODESLIDE_PACKAGE_ARTIFACT: /home/runner/work/_temp/nodeslide-packages
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.1708169Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.2601374Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.2602133Z > noderoom@0.1.1 nodeslide:consumer:proof
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.2602980Z > tsx scripts/nodeslide-consumer-proof.ts
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:45.2603346Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.1927849Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.1928480Z added 4 packages in 461ms
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2356197Z {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2356979Z   "schemaVersion": "noderoom.nodeslide-consumer-proof/v3",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2357687Z   "passed": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2358028Z   "package": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2358341Z     "name": "@nodeslide/testing",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2358707Z     "version": "0.2.2",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2359190Z     "inputKind": "packed-artifact",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2359927Z     "integritySha256": "de6a428f86300008154c69e74106f7595f499e22fa93ab0e544a6a2fe8fa3a02",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2360722Z     "entrypoint": "@nodeslide/testing/dist/index.js"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2361158Z   },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2361448Z   "host": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2361798Z     "application": "NodeRoom",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2362210Z     "runtimeChanged": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2362715Z     "repositoryAuthorizationProtocol": "operation-v1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2363596Z     "authorizationMode": "deterministic-preverified-fixture",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2364697Z     "authAuthority": "preverified fixture; production ActorProof and room-membership policy not executed",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2365607Z     "actorProofValidated": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2366108Z     "roomMembershipValidated": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2366577Z     "productionPolicyExecuted": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2367073Z     "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2367513Z     "roles": [
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2367821Z       "noderoom:host"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2368142Z     ],
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2368424Z     "permissions": [
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2368756Z       "nodeslide:read",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2369098Z       "nodeslide:propose",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2369440Z       "nodeslide:write",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2369802Z       "nodeslide:approve",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2370191Z       "nodeslide:export"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2370518Z     ],
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2370862Z     "authorizationChecks": 25,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2371274Z     "authorizationActions": [
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2371668Z       "deck.read",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2371987Z       "patch.apply",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2372330Z       "proposal.create",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2372700Z       "proposal.accept",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2373233Z       "proposal.reject",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2373603Z       "versions.list",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2373960Z       "receipt.store"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2374292Z     ],
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2374643Z     "authorizationEvidence": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2374991Z       "issuer": "NodeRoom",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2375302Z       "policyId": "noderoom.actor-proof-membership",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2375616Z       "policyVersion": "1"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2375837Z     }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2376023Z   },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2376207Z   "lifecycle": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2376474Z     "proposalVersion": 1,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2376716Z     "acceptedVersion": 2,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2377073Z     "conformanceReceiptId": "receipt:patch:noderoom:conformance:2",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2377461Z     "reviewedProposalStatus": "ready",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2378070Z     "acceptedStatus": "accepted",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2378330Z     "acceptedReceipt": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2378638Z       "id": "receipt:patch:noderoom:accepted:3",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2378959Z       "deckId": "deck:noderoom:cas",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2379229Z       "deckVersion": 2,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2379489Z       "operation": "proposal.accepted",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2379934Z       "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2380268Z       "patchId": "patch:noderoom:accepted",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2380574Z       "traceId": "trace:noderoom:accepted",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2380862Z       "recordedAt": 1700000001037,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2381104Z       "attributes": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2381329Z         "source": "agent"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2381545Z       },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2381912Z       "authorization": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2382214Z         "schemaVersion": "nodeslide.authorization/v1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2382565Z         "id": "authorization:proposal.accept:4",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2383296Z         "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2383837Z         "deckId": "deck:noderoom:cas",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2384322Z         "action": "proposal.accept",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2384761Z         "resource": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2385139Z           "kind": "proposal",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2385589Z           "id": "patch:noderoom:accepted"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2386011Z         },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2386387Z         "authorizedAt": 1700000001036,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2386778Z         "evidence": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2387219Z           "issuer": "NodeRoom",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2387738Z           "policyId": "noderoom.actor-proof-membership",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2388250Z           "policyVersion": "1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2388913Z           "evidenceId": "noderoom-authz:proposal.accept:patch:noderoom:accepted"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2389525Z         }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2389833Z       }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2390123Z     },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2390453Z     "staleStatus": "stale",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2390865Z     "staleReceipt": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2391323Z       "id": "receipt:patch:noderoom:stale:4",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2391859Z       "deckId": "deck:noderoom:cas",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2392271Z       "deckVersion": 2,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2392697Z       "operation": "proposal.stale",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2393405Z       "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2393795Z       "patchId": "patch:noderoom:stale",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2394089Z       "traceId": "trace:noderoom:stale",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2394372Z       "recordedAt": 1700000001039,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2394620Z       "attributes": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2394850Z         "source": "agent"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2395201Z       },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2395484Z       "authorization": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2395933Z         "schemaVersion": "nodeslide.authorization/v1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2396548Z         "id": "authorization:proposal.accept:5",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2397096Z         "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2397438Z         "deckId": "deck:noderoom:cas",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2397719Z         "action": "proposal.accept",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2397976Z         "resource": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2398199Z           "kind": "proposal",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2398466Z           "id": "patch:noderoom:stale"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2398718Z         },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2398940Z         "authorizedAt": 1700000001038,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2399190Z         "evidence": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2399422Z           "issuer": "NodeRoom",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2399747Z           "policyId": "noderoom.actor-proof-membership",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2400075Z           "policyVersion": "1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2400456Z           "evidenceId": "noderoom-authz:proposal.accept:patch:noderoom:stale"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2400806Z         }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2400988Z       }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2401167Z     },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2401358Z     "finalVersion": 2,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2401577Z     "versions": [
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2402043Z       1,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2402240Z       2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2402426Z     ],
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2402637Z     "receiptOperations": [
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2403134Z       "proposal.created",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2403489Z       "proposal.created",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2403834Z       "proposal.accepted",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2404195Z       "proposal.stale"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2404662Z     ],
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2405026Z     "acceptanceReplayWasIdempotent": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2405466Z     "authorizationSpine": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2405865Z       "protocol": "operation-v1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2406272Z       "directPatchReceipt": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2406734Z         "id": "receipt:patch:noderoom:direct:1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2407246Z         "deckId": "deck:noderoom:authorization",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2407698Z         "deckVersion": 2,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2408100Z         "operation": "patch.applied",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2408626Z         "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2409185Z         "patchId": "patch:noderoom:direct",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2409669Z         "traceId": "trace:noderoom:direct",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2410134Z         "recordedAt": 1700000001010,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2410532Z         "attributes": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2410870Z           "source": "agent"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2411218Z         },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2411546Z         "authorization": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2412040Z           "schemaVersion": "nodeslide.authorization/v1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2412598Z           "id": "authorization:patch.apply:1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2413283Z           "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2413821Z           "deckId": "deck:noderoom:authorization",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2414331Z           "action": "patch.apply",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2414750Z           "resource": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2415113Z             "kind": "patch",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2415540Z             "id": "patch:noderoom:direct"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2415966Z           },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2416345Z           "authorizedAt": 1700000001009,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2416772Z           "evidence": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2417177Z             "issuer": "NodeRoom",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2417715Z             "policyId": "noderoom.actor-proof-membership",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2418277Z             "policyVersion": "1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2418936Z             "evidenceId": "noderoom-authz:patch.apply:patch:noderoom:direct"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2419517Z           }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2419804Z         }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2420110Z       },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2420493Z       "rejectedProposalStatus": "rejected",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2420967Z       "rejectedProposalReceipt": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2421506Z         "id": "receipt:patch:noderoom:rejected:3",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2422081Z         "deckId": "deck:noderoom:authorization",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2422548Z         "deckVersion": 2,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2423140Z         "operation": "proposal.rejected",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2423680Z         "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2424199Z         "patchId": "patch:noderoom:rejected",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2424706Z         "traceId": "trace:noderoom:rejected",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2425191Z         "recordedAt": 1700000001015,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2425615Z         "attributes": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2425962Z           "source": "agent"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2426329Z         },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2426636Z         "authorization": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2427119Z           "schemaVersion": "nodeslide.authorization/v1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2427727Z           "id": "authorization:proposal.reject:3",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2428314Z           "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2428897Z           "deckId": "deck:noderoom:authorization",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2429413Z           "action": "proposal.reject",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2429839Z           "resource": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2430237Z             "kind": "proposal",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2430719Z             "id": "patch:noderoom:rejected"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2431383Z           },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2431759Z           "authorizedAt": 1700000001014,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2432169Z           "evidence": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2432559Z             "issuer": "NodeRoom",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2433206Z             "policyId": "noderoom.actor-proof-membership",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2433760Z             "policyVersion": "1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2434601Z             "evidenceId": "noderoom-authz:proposal.reject:patch:noderoom:rejected"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2435221Z           }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2435508Z         }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2435798Z       },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2436223Z       "storedAuditReceipt": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2436743Z         "id": "custom-receipt:noderoom:consumer-audit",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2437299Z         "deckId": "deck:noderoom:authorization",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2437772Z         "deckVersion": 2,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2438266Z         "operation": "custom",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2438782Z         "traceId": "trace:noderoom:consumer-audit",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2439315Z         "recordedAt": 1700000001016,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2439722Z         "attributes": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2440224Z           "purpose": "cross-repository-authorization-proof"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2440741Z         },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2441149Z         "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2441623Z         "authorization": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2442121Z           "schemaVersion": "nodeslide.authorization/v1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2442680Z           "id": "authorization:receipt.store:4",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2443443Z           "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2444001Z           "deckId": "deck:noderoom:authorization",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2444527Z           "action": "receipt.store",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2444944Z           "resource": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2445308Z             "kind": "receipt",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2445826Z             "id": "custom-receipt:noderoom:consumer-audit"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2446300Z           },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2446677Z           "authorizedAt": 1700000001017,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2447082Z           "evidence": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2447447Z             "issuer": "NodeRoom",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2447988Z             "policyId": "noderoom.actor-proof-membership",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2448555Z             "policyVersion": "1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2449318Z             "evidenceId": "noderoom-authz:receipt.store:custom-receipt:noderoom:consumer-audit"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2449999Z           }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2450276Z         }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2450557Z       },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2450931Z       "authorizationReceiptOperations": [
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2451402Z         "patch.applied",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2451787Z         "proposal.created",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2452167Z         "proposal.rejected",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2452555Z         "custom"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2452976Z       ],
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2453349Z       "legacyPermissionCallback": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2453841Z       "frozenOperationRequests": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2454381Z       "allRepositoryActionsObserved": true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2454821Z     },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2455115Z     "nodeAgent": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2455564Z       "model": "nodeslide-consumer-scripted-model",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2456000Z       "stopReason": "done",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2456241Z       "steps": 2,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2480410Z       "toolTrace": [
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2480733Z         "nodeslide_propose_text"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2481006Z       ],
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2481276Z       "proposalStayedUnapplied": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2481576Z       "acceptedVersion": 2,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2481822Z       "receipt": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2482102Z         "id": "receipt:patch:noderoom:nodeagent:2",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2482443Z         "deckId": "deck:noderoom:nodeagent",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2482725Z         "deckVersion": 2,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2484307Z         "operation": "proposal.accepted",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2484644Z         "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2485174Z         "patchId": "patch:noderoom:nodeagent",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2485494Z         "traceId": "trace:noderoom:nodeagent",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2485795Z         "recordedAt": 1700000001027,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2486065Z         "attributes": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2486300Z           "source": "agent"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2486533Z         },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2486958Z         "authorization": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2487446Z           "schemaVersion": "nodeslide.authorization/v1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2487812Z           "id": "authorization:proposal.accept:5",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2488165Z           "principalId": "user:noderoom-consumer",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2488614Z           "deckId": "deck:noderoom:nodeagent",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2489078Z           "action": "proposal.accept",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2489478Z           "resource": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2489948Z             "kind": "proposal",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2490476Z             "id": "patch:noderoom:nodeagent"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2490999Z           },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2491432Z           "authorizedAt": 1700000001026,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2491932Z           "evidence": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2492397Z             "issuer": "NodeRoom",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2493141Z             "policyId": "noderoom.actor-proof-membership",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2493738Z             "policyVersion": "1",
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2494511Z             "evidenceId": "noderoom-authz:proposal.accept:patch:noderoom:nodeagent"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2495220Z           }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2495533Z         }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2495845Z       },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2496238Z       "adapterStatusMessages": [
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2496881Z         "NodeAgent created a NodeSlide proposal for host review."
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2497497Z       ],
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2497958Z       "sameRepositoryRereadPreservedEdit": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2498622Z       "portableSnapshotRoundTrip": true
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2499104Z     }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2499434Z   },
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2499767Z   "scope": {
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2500156Z     "repositoryPort": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2500661Z     "proposalReviewAccept": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2501149Z     "compareAndSwap": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2501574Z     "versions": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2501964Z     "inMemoryReceiptLedger": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2502492Z     "legacyPermissionCallback": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2502986Z     "fixtureAuthorizationEvidenceBinding": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2503357Z     "authorizationBoundReceipts": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2503695Z     "frozenOperationAuthorizationRequests": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2504034Z     "existingNodeAgentRuntime": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2504342Z     "agentProposalStayedUnapplied": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2504657Z     "sameRepositoryReread": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2504950Z     "portableSnapshotRoundTrip": true,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2505375Z     "durableReceiptPersistence": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2505809Z     "packageReload": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2506160Z     "productionAuthorization": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2506442Z     "productionCreate": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2506756Z     "manualArtifactEdit": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2507114Z     "productionBackend": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2507526Z     "sameSnapshotMemoryAndConvex": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2507990Z     "durableRoomActivity": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2508466Z     "mountedReactStudio": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2508804Z     "presenter": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2509171Z     "pptxExport": false,
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2509623Z     "exportedSnapshotRevalidation": false
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2510039Z   }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2510371Z }
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2712364Z ##[group]Run npm run nodeslide:mounted:release:proof -- --json-out nodeslide-mounted-release-proof.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2713453Z [36;1mnpm run nodeslide:mounted:release:proof -- --json-out nodeslide-mounted-release-proof.json[0m
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2735283Z shell: /usr/bin/bash -e {0}
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2735665Z env:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2735946Z   NODESLIDE_ROOT: /home/runner/work/NodeRoom/NodeRoom/nodeslide
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.2736282Z ##[endgroup]
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.3656679Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.3657917Z > noderoom@0.1.1 nodeslide:mounted:release:proof
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.3659639Z > tsx scripts/nodeslide-mounted-release-proof.ts --lock vendor/nodeslide/release-lock.json --json-out nodeslide-mounted-release-proof.json
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.3660842Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.6973139Z /home/runner/work/NodeRoom/NodeRoom/noderoom/scripts/nodeslide-mounted-release-proof.ts:531
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.6974474Z   throw new Error(`NodeSlide mounted release proof failed: ${message}`);
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.6975357Z         ^
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.6975656Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.6977598Z Error: NodeSlide mounted release proof failed: @nodeslide/engine root dependency pin mismatch: expected file:vendor/nodeslide/nodeslide-engine-0.2.2.tgz, received undefined
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.6979630Z     at fail (/home/runner/work/NodeRoom/NodeRoom/noderoom/scripts/nodeslide-mounted-release-proof.ts:531:9)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.6981231Z     at requireEqual (/home/runner/work/NodeRoom/NodeRoom/noderoom/scripts/nodeslide-mounted-release-proof.ts:511:28)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.6983088Z     at <anonymous> (/home/runner/work/NodeRoom/NodeRoom/noderoom/scripts/nodeslide-mounted-release-proof.ts:97:3)
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.6983973Z 
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.6994942Z Node.js v22.23.2
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.7125446Z ##[error]Process completed with exit code 1.
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.7234803Z Post job cleanup.
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8025701Z [command]/usr/bin/git version
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8060905Z git version 2.55.0
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8103235Z Temporarily overriding HOME='/home/runner/work/_temp/ef1479b5-00d7-4db6-956d-c86102fe3c0e' before making global git config changes
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8104044Z Adding repository directory to the temporary git global config as a safe directory
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8107812Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NodeRoom/NodeRoom/nodeslide
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8137646Z Removing SSH command configuration
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8144698Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8174093Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8355940Z Removing HTTP extra header
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8361922Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8394180Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8569524Z Removing includeIf entries pointing to credentials config files
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8576509Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8602311Z includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/nodeslide/.git.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8603510Z includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/nodeslide/.git/worktrees/*.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8604347Z includeif.gitdir:/github/workspace/nodeslide/.git.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8605067Z includeif.gitdir:/github/workspace/nodeslide/.git/worktrees/*.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8610802Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/nodeslide/.git.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8631958Z /home/runner/work/_temp/git-credentials-8a65584a-90d7-4b46-b243-4692edae40ff.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8641615Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/nodeslide/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-8a65584a\-90d7\-4b46\-b243\-4692edae40ff\.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8671398Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/nodeslide/.git/worktrees/*.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8691031Z /home/runner/work/_temp/git-credentials-8a65584a-90d7-4b46-b243-4692edae40ff.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8699688Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/nodeslide/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-8a65584a\-90d7\-4b46\-b243\-4692edae40ff\.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8733495Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/nodeslide/.git.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8752304Z /github/runner_temp/git-credentials-8a65584a-90d7-4b46-b243-4692edae40ff.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8760312Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/nodeslide/.git.path \/github\/runner_temp\/git\-credentials\-8a65584a\-90d7\-4b46\-b243\-4692edae40ff\.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8786457Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/nodeslide/.git/worktrees/*.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8804559Z /github/runner_temp/git-credentials-8a65584a-90d7-4b46-b243-4692edae40ff.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8812087Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/nodeslide/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-8a65584a\-90d7\-4b46\-b243\-4692edae40ff\.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.8841747Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.9020236Z Removing credentials config '/home/runner/work/_temp/git-credentials-8a65584a-90d7-4b46-b243-4692edae40ff.config'
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:46.9178430Z Post job cleanup.
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0010739Z [command]/usr/bin/git version
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0052104Z git version 2.55.0
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0085775Z Temporarily overriding HOME='/home/runner/work/_temp/b96ddc14-2dc6-4b05-9318-314f66675dba' before making global git config changes
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0087196Z Adding repository directory to the temporary git global config as a safe directory
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0090329Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NodeRoom/NodeRoom/noderoom
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0118959Z Removing SSH command configuration
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0126217Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0157030Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0354943Z Removing HTTP extra header
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0359738Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0390751Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0578052Z Removing includeIf entries pointing to credentials config files
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0584638Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0607181Z includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/noderoom/.git.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0607912Z includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/noderoom/.git/worktrees/*.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0608446Z includeif.gitdir:/github/workspace/noderoom/.git.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0609190Z includeif.gitdir:/github/workspace/noderoom/.git/worktrees/*.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0615509Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/noderoom/.git.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0636286Z /home/runner/work/_temp/git-credentials-5916a9ff-9580-4d6e-bfc5-39484f08751f.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0646575Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/noderoom/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-5916a9ff\-9580\-4d6e\-bfc5\-39484f08751f\.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0679305Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/noderoom/.git/worktrees/*.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0700972Z /home/runner/work/_temp/git-credentials-5916a9ff-9580-4d6e-bfc5-39484f08751f.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0716079Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/NodeRoom/NodeRoom/noderoom/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-5916a9ff\-9580\-4d6e\-bfc5\-39484f08751f\.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0746026Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/noderoom/.git.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0765585Z /github/runner_temp/git-credentials-5916a9ff-9580-4d6e-bfc5-39484f08751f.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0771206Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/noderoom/.git.path \/github\/runner_temp\/git\-credentials\-5916a9ff\-9580\-4d6e\-bfc5\-39484f08751f\.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0798891Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/noderoom/.git/worktrees/*.path
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0817551Z /github/runner_temp/git-credentials-5916a9ff-9580-4d6e-bfc5-39484f08751f.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0826308Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/noderoom/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-5916a9ff\-9580\-4d6e\-bfc5\-39484f08751f\.config
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.0853908Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.1035408Z Removing credentials config '/home/runner/work/_temp/git-credentials-5916a9ff-9580-4d6e-bfc5-39484f08751f.config'
+NodeSlide packed consumer	UNKNOWN STEP	2026-08-29T23:25:47.1161322Z Cleaning up orphan processes

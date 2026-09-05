@@ -1,0 +1,35 @@
+{
+  "scope": "one timing-only Vite plugin prepended; all original plugins preserve relative order",
+  "sameTestObject": true,
+  "sameResolveObject": true,
+  "sameServerObject": true,
+  "sameBuildObject": true,
+  "originalExplicitTestConfig": {
+    "exclude": [
+      "**/node_modules/**",
+      "**/.git/**",
+      "**/.claude/**",
+      "packages/external-agent/**",
+      "mcp/**",
+      "tests/e2e/**"
+    ]
+  },
+  "changedTopLevelKeys": [
+    "plugins"
+  ],
+  "originalPluginNames": [
+    "vite:react-babel",
+    "vite:react-refresh",
+    "@tailwindcss/vite:scan",
+    "@tailwindcss/vite:generate:serve",
+    "@tailwindcss/vite:generate:build"
+  ],
+  "targets": [
+    "src/domains/nodeslide/inspector/AiInspector.tsx",
+    "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx"
+  ],
+  "noTimeoutRetryWorkerPoolConcurrencyChanges": true,
+  "noPrewarmStaticImportOrMock": true,
+  "observer": "MutationObserver only, no added polling timer; buffered writes after test",
+  "sourceMap": "instrumented modules return map:null; diagnostic stack source positions may shift, raw transformed bytes retained"
+}

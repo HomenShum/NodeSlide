@@ -1,0 +1,21 @@
+import fs from 'node:fs/promises';import path from 'node:path';import{createRequire}from'node:module';import{fileURLToPath}from'node:url';
+const P=path.dirname(fileURLToPath(import.meta.url));const req=createRequire('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/package.json');const{chromium}=req('playwright');
+const base='D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02';const origin=path.join(base,'browser-first-use-01');const{url}=JSON.parse(await fs.readFile(path.join(origin,'deck-location.json'),'utf8'));
+const O=path.join(P,'E6g-nodeslide-readiness-before-04');await fs.mkdir(O);const privateRoot=path.join(base,'readiness-before-04');await fs.mkdir(privateRoot);
+const browser=await chromium.launch();const report={scope:'Actual failed deck, current local source; boundary overlays only, no product edit',cells:[],errors:[]};
+try{for(const viewport of [{width:390,height:844}]){
+ const context=await browser.newContext({viewport,storageState:path.join(origin,'storage-state.json'),serviceWorkers:'block'});await context.route('**/*',r=>{const u=new URL(r.request().url());return ['http:','https:'].includes(u.protocol)&&u.hostname!=='127.0.0.1'?r.abort():r.continue();});const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));await page.goto(url);await page.getByTestId('slide-canvas').waitFor();await page.getByTestId('inspector').waitFor({state:'attached'});
+ if(!await page.getByRole('button',{name:/Deck CI .*Open Trace/}).isVisible()){
+   const button=page.getByRole('button',{name:/Open inspector/i});if(await button.count())await button.click();
+ }
+ await page.getByTestId('inspector-tab-ai').click();await page.getByRole('button',{name:/Deck CI .*Open Trace/}).waitFor();
+ for(const state of ['badge','trace']){
+  if(state==='trace'){await page.getByRole('button',{name:/Deck CI .*Open Trace/}).click();await page.locator('.ns-trace-inspector .ns-validation-summary').first().waitFor();}
+  await page.evaluate(()=>document.fonts.ready);
+  const name=`${viewport.width}-${state}`;await page.screenshot({path:path.join(O,name+'.png')});await fs.writeFile(path.join(privateRoot,name+'.html'),await page.content());
+  const dom=await page.evaluate(()=>({text:document.body.innerText,overflow:document.documentElement.scrollWidth-innerWidth,controls:[...document.querySelectorAll('button')].map(e=>({name:e.getAttribute('aria-label'),text:e.textContent}))}));await fs.writeFile(path.join(O,name+'.json'),JSON.stringify(dom,null,2)+'\n');
+  await page.evaluate(({state})=>{const target=document.querySelector(state==='badge'?'.ns-deck-ci-status':'.ns-validation-summary');if(!target)throw Error('Observed boundary absent');target.style.outline='3px solid #d20c39';const r=target.getBoundingClientRect();const label=document.createElement('div');label.id='proof-boundary';label.textContent=state==='badge'?'A — Deck CI failure entry':'B — Misleading readiness detail';Object.assign(label.style,{position:'fixed',top:Math.max(0,r.top-25)+'px',left:Math.max(0,r.left)+'px',background:'#d20c39',color:'white',padding:'3px 6px',font:'12px sans-serif',zIndex:'999999',pointerEvents:'none'});document.body.append(label);},{state});
+  await page.screenshot({path:path.join(O,name+'-boundary.png')});await page.evaluate(()=>{document.querySelector('#proof-boundary')?.remove();for(const e of document.querySelectorAll('[style]'))if(e.style.outline==='rgb(210, 12, 57) solid 3px')e.style.outline='';});report.cells.push({viewport,state,name});
+ }
+ await context.close();
+}}catch(e){report.failure=String(e.stack??e);process.exitCode=1;}finally{await browser.close();await fs.writeFile(path.join(O,'report.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report));}

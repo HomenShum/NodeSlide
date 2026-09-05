@@ -1,0 +1,80 @@
+{
+  "verdict": "ASYNC_BOUNDARY_OBSERVED_FULL_SUITE_FAILURE_NOT_CLOSED",
+  "scope": "Separate follow-on diagnosis; no expansion or edit to the six-path portability candidate. Exactly one unchanged existing test replay.",
+  "repoHead": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "symptom": "Full normal check02 failed AiInspector.openUiWiring.test.tsx:86 after 1641 ms total test execution; inner workbench absent while real outer panel and Suspense loading DOM existed.",
+  "boundary": {
+    "buttonStateAndOuterPanel": "The real opener action succeeded and ai-material-workbench exists in captured failure DOM. The test had passed its preceding aria-pressed=true assertion before reaching line86.",
+    "module": "AiInspector.tsx:118 uses React.lazy around the actual OpenUiMaterialWorkbench dynamic import; the workbench imports @openuidev/react-lang plus its UI/material dependencies.",
+    "render": "AiInspector.tsx:1109 keeps the inner lab behind Suspense while the chunk/promise is unresolved or its render has not committed. Raw failure contains ns-openui-loading and Loading visual lab.",
+    "budget": "No timeout argument is supplied to waitFor at test line86. Installed @testing-library/dom configuration sets asyncUtilTimeout=1000; no local override found in the bounded source/test/config search. This is a test wait budget, not a measured product SLA.",
+    "uncertainty": "Existing log does not timestamp import start/resolution, module evaluation, event-loop delay or React commit. It cannot distinguish dependency transform/import contention from React scheduling or a persistent import defect on the failing run."
+  },
+  "unchangedReplay": {
+    "passed": 1,
+    "unmatchedSiblingsNotRun": 3,
+    "durationMs": 577.4243999999999,
+    "command": {
+      "command": [
+        "C:\\nvm4w\\nodejs\\node.EXE",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx",
+        "-t",
+        "opens the visual material lab from the live composer button",
+        "--reporter=verbose",
+        "--reporter=json",
+        "--outputFile.json=C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-openui-follow-on-01\\targeted.json"
+      ],
+      "cwd": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+      "exitCode": 0,
+      "elapsedMs": 4408,
+      "sourceUnchanged": true,
+      "scope": "Exactly one unchanged existing test. Unmatched sibling tests are NOT_RUN, not new source skips. No timeout/retry/config changes or provider calls; child environment names sanitized without values."
+    },
+    "sourceBindings": {
+      "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx": {
+        "sha256": "eaa74dec3ad9d202fd3af8328d3cfd1b3ac876c686bb629350c705fd379ccb1d",
+        "bytes": 4755
+      },
+      "src/domains/nodeslide/inspector/AiInspector.tsx": {
+        "sha256": "d254af21c5486763d11ebf0cd3f6bac2f30252a8973a1d77e448cb63be1b1353",
+        "bytes": 99000
+      },
+      "src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx": {
+        "sha256": "a6da3f550fb33e18bfad668ebfea116db1f2294aafbfff62e99fb45a6460e66a",
+        "bytes": 9361
+      },
+      "vite.config.ts": {
+        "sha256": "13cb07a5bffdaec276a3e2fda34469c4ef982c3a4a1e78bf1b80f9147c7c3e48",
+        "bytes": 3306
+      },
+      "node_modules/@testing-library/dom/dist/config.js": {
+        "sha256": "3627f6265cccd26604777602d7249788c2347a273bdd1cae41719c790f2c5a7a",
+        "bytes": 2526
+      },
+      "node_modules/@testing-library/dom/dist/wait-for.js": {
+        "sha256": "7ead4a09f15329a1bb9fb175f8af64757bcae28b6f49b62981bdbe1bc6dea391",
+        "bytes": 6734
+      }
+    },
+    "negativeResultLimit": "This isolated pass cannot erase the full-suite failure or prove a 1000 ms cold-load bound under full-suite contention."
+  },
+  "disposition": {
+    "fullNormalCheck": "FAILED / NOT_READY",
+    "currentPortabilitySource": "Accepted independently; do not edit its paths to address this lazy UI failure.",
+    "runtimeFix": "None justified yet by this evidence. No timeout increase, skip, static import/prewarming of the lab, global concurrency change or mocked successful mount.",
+    "nextBoundedObservation": [
+      "On a permitted reproduction of the same normal suite, preserve exact sources and existing budgets.",
+      "Add external read-only instrumentation for this one module/test: real click timestamp, dynamic import requested/resolved/error, loading fallback/inner mount timestamps and process event-loop delay.",
+      "Classify the first stage exceeding its current wait budget, then propose one source or harness correction grounded in that measured boundary.",
+      "Retain the exact cold lazy-edge assertion and real button/inner-workbench verification; do not declare whole-check closure until the unchanged normal command actually passes."
+    ]
+  },
+  "custody": "All six named source/installed test-runtime inputs unchanged before/after targeted replay. No source/config/index/ref edits, backend/provider or native Office calls. Other three tests were intentionally outside the selected replay, not newly skipped in source.",
+  "evidenceManifest": {
+    "path": "E6g-nodeslide-openui-follow-on-01/manifest.json",
+    "sha256": "658e0ad2ba2cbda7ced022f4f8633a040f59c0434f075a248fd074a581829aad"
+  },
+  "fullScores": null
+}

@@ -1,0 +1,12 @@
+{
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "dom": {
+    "text": "Deck checks · v3Deck CIUnavailableChecks are unavailable for this deck version.",
+    "version": "3",
+    "state": "unavailable"
+  },
+  "errors": []
+}

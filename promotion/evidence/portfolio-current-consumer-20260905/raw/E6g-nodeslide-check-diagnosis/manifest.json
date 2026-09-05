@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "root": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-check-diagnosis",
+  "files": {
+    "E6g-diagnose-nodeslide-check.py": {
+      "sha256": "c069a25c78e6a28aef22cc5d466aa70dea50556376503d8319a194d843bfcb82",
+      "bytes": 2878
+    },
+    "E6g-nodeslide-check-path-probe.mjs": {
+      "sha256": "711bf9ee9d5b20fc7446d9aef67800680ae6dc1ae73cd001c243ecddff01e67e",
+      "bytes": 4327
+    },
+    "E6g-nodeslide-tour-eol-probe.mjs": {
+      "sha256": "52faf5946f0af7d860e9d6b1ab7ccc824229afb91c447b2a585359150cc9db53",
+      "bytes": 2997
+    },
+    "final-custody.json": {
+      "sha256": "1f0631445574d321ad0ff10445001a616c3585ef6a193cf1d33f2306acd4695e",
+      "bytes": 1457
+    },
+    "original-full-check.log": {
+      "sha256": "c9d1a45f28b47a7d0796b0b17b001ffca7832f8f7ee2dd53074240df28763230",
+      "bytes": 5522
+    },
+    "path-and-discovery-causality.json": {
+      "sha256": "307c70d541b521e24e2ce4ab8dd50b60a83d2c5368855d367f487b3d5657eda4",
+      "bytes": 2779
+    },
+    "source-after-targeted.json": {
+      "sha256": "8ca5450ce1ad1a1ca5bdfed2e0ccaf5b52d9546b02f92512df1761d1616a58af",
+      "bytes": 1066455
+    },
+    "source-before.json": {
+      "sha256": "8ca5450ce1ad1a1ca5bdfed2e0ccaf5b52d9546b02f92512df1761d1616a58af",
+      "bytes": 1066455
+    },
+    "targeted-custody.json": {
+      "sha256": "350abe4dd03262a8762437b0868947b66a3c8c98d27347e5f5fc52dcffecec73",
+      "bytes": 178
+    },
+    "tour-line-ending-causality.json": {
+      "sha256": "dc6ebf99a79b021e110270443bce4dbc215c1f0ae0020bc857d52f11c642fff6",
+      "bytes": 6466
+    },
+    "unchanged-targeted-command.json": {
+      "sha256": "ae6319caa64671f20c6c6c5912840f1705fc1834ad9336ae1836ec76d89c7621",
+      "bytes": 787
+    },
+    "unchanged-targeted.json": {
+      "sha256": "5355e4f4952162c328358d4280f88d14c6d2b7aaab05126535b431e00f95908f",
+      "bytes": 9461
+    },
+    "unchanged-targeted.log": {
+      "sha256": "cbeaa69b9c294319474d27023627db3a71dd4ec6607a81d696ba9682f25ead4b",
+      "bytes": 5034
+    },
+    "discovery-only paths # and space/not-trace.zip": {
+      "sha256": "e712a11229834d3bb88e9ef004b8d0c18ad6b98d7d4a1f68b8d062f23c506db5",
+      "bytes": 33
+    },
+    "discovery-only paths # and space/trace.zip": {
+      "sha256": "e712a11229834d3bb88e9ef004b8d0c18ad6b98d7d4a1f68b8d062f23c506db5",
+      "bytes": 33
+    },
+    "discovery-only paths # and space/nested folder/deeper/trace.zip": {
+      "sha256": "e712a11229834d3bb88e9ef004b8d0c18ad6b98d7d4a1f68b8d062f23c506db5",
+      "bytes": 33
+    },
+    "source-before/.gitattributes": {
+      "sha256": "d444ed3e7b2a6c881e9ab1da2199a90cd0b664d86fc26eb0abe323642f18029b",
+      "bytes": 1038
+    },
+    "source-before/package-lock.json": {
+      "sha256": "e618b0ed6230eafd91ffbdbe124bd7df38e550311db8879a0dd409b027bd3ab9",
+      "bytes": 427605
+    },
+    "source-before/package.json": {
+      "sha256": "bdd1fc9f3da93bb84d443dae994436c41aa97f67045df6b82a54bb99dc96c9a7",
+      "bytes": 12415
+    },
+    "source-before/vite.config.ts": {
+      "sha256": "13cb07a5bffdaec276a3e2fda34469c4ef982c3a4a1e78bf1b80f9147c7c3e48",
+      "bytes": 3306
+    },
+    "source-before/.tours/01-primary-user-flow.tour": {
+      "sha256": "a6c7b0b8bf5b4032eb4f3fa8f7f6f2e2a61d2ea9bf38df93c81d27a08855cc2f",
+      "bytes": 6523
+    },
+    "source-before/.tours/02-agent-execution.tour": {
+      "sha256": "c4d9dc23f4f2702426704c3e7b1c8c499c74bd5eaf2cf86d0a214a0c8897f012",
+      "bytes": 4420
+    },
+    "source-before/.tours/03-debug-and-recovery.tour": {
+      "sha256": "bf4fab658b2e0b7647d6e088e72ee6e57d479a1954dc71c220d50ba0636fe3e1",
+      "bytes": 3756
+    },
+    "source-before/packages/convex/package.json": {
+      "sha256": "928c1ba3389307ded7afb6911c60c8e7947e403cabfd0e3f0834933fa8d9117a",
+      "bytes": 1664
+    },
+    "source-before/scripts/build-code-tours.mjs": {
+      "sha256": "25ea26f2f0b7ac3c82634e39656a1d5428893c6c760b2a5402457e570d777324",
+      "bytes": 17917
+    },
+    "source-before/scripts/tests/code-tours.test.mjs": {
+      "sha256": "f7e898ef82230da28be0f9e2861eb4c4a94bc46e937907d4b1735c0db83106b8",
+      "bytes": 886
+    },
+    "source-before/scripts/tests/playwright-trace.test.mjs": {
+      "sha256": "c7ba6afd85c80466f68c622e4bfda7ab027e56978d62f5f533e7684385e42de7",
+      "bytes": 8082
+    },
+    "source-before/scripts/tests/workspace-build-depth.test.mjs": {
+      "sha256": "7e5e141b90b3f1c9973bc6db1af62c18dd97cef255577b246855569a725b9674",
+      "bytes": 3118
+    },
+    "source-before/src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx": {
+      "sha256": "da16f0bc2f919c6a0fd3543b4a69e67802b40d7bca671c387bb74d13d9010cea",
+      "bytes": 10664
+    },
+    "source-before/src/domains/nodeslide/components/NodeBookWorkspacePanel.tsx": {
+      "sha256": "31b4001cf6999d0836538b914f00d3c5098b536b1dddbf04d1208e5aac932d78",
+      "bytes": 10684
+    }
+  },
+  "count": 30
+}

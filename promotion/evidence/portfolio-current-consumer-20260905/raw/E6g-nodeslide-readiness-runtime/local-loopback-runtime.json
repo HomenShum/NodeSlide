@@ -1,0 +1,69 @@
+{
+  "at": "2026-09-05T12:27:16.954052+00:00",
+  "status": "READY_FOR_DETERMINISTIC_BROWSER_PROOF",
+  "ports": [
+    49676,
+    49690
+  ],
+  "sourcePushed": true,
+  "admissionSet": true,
+  "providerCalls": 0,
+  "backendTarget": "EXISTING_SYNTHETIC_CANDIDATE_LOOPBACK_ONLY",
+  "privateLogs": "D:\\ProjectRecovery\\NodeSlide first run 20260905\\private-bootstrap-02\\readiness-runtime-01",
+  "nativeSecretAndAdminKey": "IN_MEMORY_ONLY_NOT_OUTPUT",
+  "nativePid": 64736,
+  "nativeProcessCreated": 1788611236.9570389,
+  "listeners": [
+    {
+      "pid": 64736,
+      "address": "127.0.0.1",
+      "port": 49690
+    },
+    {
+      "pid": 64736,
+      "address": "127.0.0.1",
+      "port": 49676
+    }
+  ],
+  "verifiedOwnedLoopback": true,
+  "source-push": {
+    "exitCode": 0,
+    "seconds": 10.984000000054948,
+    "privateLogBytes": 148,
+    "privateLogSha256": "b1cd191fab8a93157edf2a8493d19c2e382c78254c1e1cd703158c8ef5371c09"
+  },
+  "creation-admission": {
+    "exitCode": 0,
+    "seconds": 0.3910000000614673,
+    "privateLogBytes": 47,
+    "privateLogSha256": "aea86e16be29e339953255fbec1c84f6412589f5bd7a79003f7e66ce83d7d3a4"
+  },
+  "cleanup": {
+    "method": "WINDOWS_TERMINATE_EXACT_RECORDED_NATIVE_PID",
+    "ownedProcessExited": true,
+    "portsReleased": true
+  },
+  "sourceStatus": [
+    " M .gitattributes",
+    " M .tours/01-primary-user-flow.tour",
+    " M .tours/02-agent-execution.tour",
+    " M .tours/03-debug-and-recovery.tour",
+    " M convex/_generated/api.d.ts",
+    " M convex/lib/nodeslideAdmission.test.ts",
+    " M convex/lib/nodeslideValidators.ts",
+    " M docs/START_HERE.md",
+    " M docs/codebase/CONCERNS.md",
+    " M docs/codebase/INTEGRATIONS.md",
+    " M promotion/PROMOTION_LOG.md",
+    " M public/recipelang/edge-data-contract.svg",
+    " M scripts/tests/code-tours.test.mjs",
+    " M scripts/tests/playwright-trace.test.mjs",
+    " M scripts/tests/workspace-build-depth.test.mjs",
+    " M src/domains/nodeslide/inspector/DeckCiStatus.css",
+    " M src/domains/nodeslide/inspector/InspectorPanel.test.ts",
+    " M src/domains/nodeslide/inspector/InspectorPanel.tsx",
+    " M src/domains/nodeslide/inspector/TraceInspector.test.tsx",
+    " M src/domains/nodeslide/inspector/TraceInspector.tsx"
+  ],
+  "stoppedAt": "2026-09-05T13:27:29.017720+00:00"
+}

@@ -1,0 +1,31 @@
+{
+  "scope": "Tracked test/spec source excluding tests/e2e; declaration/reference scan, not dynamic execution or exhaustive dependency proof.",
+  "files": 321,
+  "pattern": "New-Object\\s+-ComObject|Excel\\.Application|PowerPoint\\.Application|win32com|\\bsoffice(?:\\.exe)?\\b|\\blibreoffice\\b|nodeslide-motion-canary",
+  "matches": [
+    {
+      "path": "scripts/tests/pptx-playback-canary.test.mjs",
+      "line": 377,
+      "text": "  // It was never ours. `scripts/build-atlas-v3-native.mjs` emits zero <p:transition>; LibreOffice's",
+      "sha256": "2e5338cda39f4a500814d041d849db4f930d0f3f8c56a6c5f42d8fa88d9eebaa"
+    },
+    {
+      "path": "scripts/tests/pptx-transition-normalize.test.mjs",
+      "line": 29,
+      "text": "/** Exactly what LibreOffice Impress's PPTX filter writes onto every slide it exports. */",
+      "sha256": "1349462177f8958ef837b03768b16cdc25297b0e09db6ff805372f7ba257347e"
+    },
+    {
+      "path": "scripts/tests/pptx-transition-normalize.test.mjs",
+      "line": 42,
+      "text": "  it('removes the LibreOffice injection and the wrapper that only held it', () => {",
+      "sha256": "1349462177f8958ef837b03768b16cdc25297b0e09db6ff805372f7ba257347e"
+    },
+    {
+      "path": "shared/nodeslideAtlas.test.ts",
+      "line": 756,
+      "text": " * Measured by round-tripping the real deck through LibreOffice twice (pptx->pptx and",
+      "sha256": "06daae4c7bc86d85c3fcd71c250b81a75e924fb59a53f41d2d321b333adff95b"
+    }
+  ]
+}

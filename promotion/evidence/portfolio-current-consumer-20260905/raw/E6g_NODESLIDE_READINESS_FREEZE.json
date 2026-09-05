@@ -1,0 +1,533 @@
+{
+  "proof": "NODESLIDE-DECK-CI-DETAIL-01",
+  "at": "2026-09-05T14:54:58.991761+00:00",
+  "status": "FROZEN_FOR_NONAUTHOR_SOURCE_AND_PIXEL_JUDGMENT",
+  "repo": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "baseHead": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "source": [
+    {
+      "path": "convex/lib/nodeslideTraceUi.test.tsx",
+      "sha256": "a463eef53d1904cb485f5bbf645c09afab1db70226b55164829d7c73830db72c",
+      "bytes": 6383
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/DeckCiStatus.css",
+      "sha256": "78ee214d7c185a639f0f104b925f7ca8be3ae29cbe1703bfb5c0406f7345fade",
+      "bytes": 1581
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/InspectorPanel.test.ts",
+      "sha256": "61ce55333d09579b5cfbb8e3f98e0e7d505a897ee20722af0d6a50d4abf6eef1",
+      "bytes": 7877
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/InspectorPanel.tsx",
+      "sha256": "aae48f4f88369fba10ff1316d32f00cd3e9054cf490335577b03eba837d19137",
+      "bytes": 31637
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/TraceInspector.test.tsx",
+      "sha256": "9dc3e620a3481d7a92a98f916ccffc0b3d0fe4b160b00ce8c68facdb3c5dcc3a",
+      "bytes": 24663
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/TraceInspector.tsx",
+      "sha256": "83584eea5fd9bd230dc519ec5fd5d1e7395a7a626d137e81cef0c358391c0dad",
+      "bytes": 56359
+    }
+  ],
+  "sourceDigest": "e612c4db17477009f1f0e1623fda781cdd577788c392d1db4c7a7645b98ae422",
+  "artifacts": [
+    {
+      "path": "E6g-capture-readiness-before-02.mjs",
+      "sha256": "f35f473ceb987a1039356ea9bf1f1a5810ef1e2940d52c2717c23a0e980cbc92",
+      "bytes": 3845
+    },
+    {
+      "path": "E6g-capture-readiness-before-03.mjs",
+      "sha256": "e4b86f3ad683b1c5d5ab4031af870bd39cab1bafc16f46e02754415195b987b3",
+      "bytes": 3796
+    },
+    {
+      "path": "E6g-capture-readiness-before-04.mjs",
+      "sha256": "a00c04d59a1e6de7e6107619031f53d5030dfca019135ed9f37245a6481a934a",
+      "bytes": 3814
+    },
+    {
+      "path": "E6g-capture-readiness-before.mjs",
+      "sha256": "a28a8583b34214513949adbfb118829ce660c15ddd49685779e20e3f70a91cd5",
+      "bytes": 3559
+    },
+    {
+      "path": "E6g-check-readiness-02.py",
+      "sha256": "2d488123326eb1380c3282f65c7c7d801cb2a3b8a99d7141eda50fc1e7e8951f",
+      "bytes": 1951
+    },
+    {
+      "path": "E6g-check-readiness.py",
+      "sha256": "59c6d7505bf968a2e2afdcbe34cbb7de998efc02efdbc11360d2089cc8ac2fd4",
+      "bytes": 1871
+    },
+    {
+      "path": "E6g-fix-readiness-test-copy.py",
+      "sha256": "70df3aacf5c10f667ad290e15ef374b35e9459449af08d04e8999ca7513ab510",
+      "bytes": 2379
+    },
+    {
+      "path": "E6g-nodeslide-counts-before/1440-fail-normal.json",
+      "sha256": "faa217a6edbfd9cdf418741c8681c7f2dd4195b7eb92b587d4778050c8114b1a",
+      "bytes": 5121
+    },
+    {
+      "path": "E6g-nodeslide-counts-before/1440-fail-normal.png",
+      "sha256": "796b99988d053241fec70b7b831bfcdfd9a022759d7da73246f849a085e28a9f",
+      "bytes": 164175
+    },
+    {
+      "path": "E6g-nodeslide-counts-before/1440-fail-text200.json",
+      "sha256": "bf92c6d1c43ba8b4a1b7bf2ff99a468fcd6431504349acbf2261bccf07826227",
+      "bytes": 5154
+    },
+    {
+      "path": "E6g-nodeslide-counts-before/1440-fail-text200.png",
+      "sha256": "63df1599d845f14563bf6be33c3c24d310ffa1ab77dcbe9ab9749f2a2e0d2404",
+      "bytes": 181307
+    },
+    {
+      "path": "E6g-nodeslide-counts-before/390-fail-normal.json",
+      "sha256": "0eb4c455909d0fb6470f7a24a3c4f596cb050375bebbce5f3d1343ad666aaabd",
+      "bytes": 4531
+    },
+    {
+      "path": "E6g-nodeslide-counts-before/390-fail-normal.png",
+      "sha256": "e35fa64f41fb308d4be2f4a675ba3580563b1ffcb4c9ecc278089c64de718fb5",
+      "bytes": 56677
+    },
+    {
+      "path": "E6g-nodeslide-counts-before/390-fail-text200.json",
+      "sha256": "f948d38087fef468ab0e9f0614c041d39d001e363058ca7cdce1a5a63444da99",
+      "bytes": 4566
+    },
+    {
+      "path": "E6g-nodeslide-counts-before/390-fail-text200.png",
+      "sha256": "9e09fc2ee0386d9836b9ba36463299ca9931d8b373c61bc47d555c2a1d915b92",
+      "bytes": 82821
+    },
+    {
+      "path": "E6g-nodeslide-counts-before/report.json",
+      "sha256": "1d919c4bff30cb268f6e5a0c7f7b994801fb82686ae3286d14e49fda5eadc3b4",
+      "bytes": 1051
+    },
+    {
+      "path": "E6g-nodeslide-counts-before.mjs",
+      "sha256": "2126eca55f85d37e03a6a298c7a99184a6ece32ecdc3819e05b1b7fc66af09db",
+      "bytes": 5876
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before/1440-badge.json",
+      "sha256": "a03019bdbc3a6de621db21a6a28b4dc89093efdb3905a73241f03ffc612e389b",
+      "bytes": 11448
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before/1440-badge.png",
+      "sha256": "c251086b0edc755426c1526ccde80443ca4daf2b8fbb222404a02cb5f4a391de",
+      "bytes": 108442
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before/report.json",
+      "sha256": "657614c295899fe6be0e3deae5fe534520ab6fff9d9d2c6543f226c8fa5393f6",
+      "bytes": 505
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-02/1440-badge-boundary.png",
+      "sha256": "8836603d0e22cd323e6b3768ea4b6726c9fea9b121cca7b9c57e9e8d768ef8ec",
+      "bytes": 147812
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-02/1440-badge.json",
+      "sha256": "5bfc0c5b0037b48021067d881bd10f0c5397f7f4a95b0f64797e0c5630dbb468",
+      "bytes": 14342
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-02/1440-badge.png",
+      "sha256": "457daf34cf5e4cfcf880fd02001694d9f233d3dcb97dd949e904fc3f0ac86d7f",
+      "bytes": 146592
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-02/1440-trace-boundary.png",
+      "sha256": "0b818ce42cd36f8abcc03a489461ce54f91745d389da4f16b6bb7f2c4b58b56f",
+      "bytes": 163309
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-02/1440-trace.json",
+      "sha256": "c5b14c460d91d39cc79cb3e19c1ac71c91b59beb61f9d6368b39d008ce462867",
+      "bytes": 15845
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-02/1440-trace.png",
+      "sha256": "a4ebe833fca29210b68d9af6e1c36f64eab49a50b9f028cb0e6a05fbca032287",
+      "bytes": 161457
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-02/report.json",
+      "sha256": "64c8c8906c5072834244c5afc7a9844cf9e420055015df1423b78a4f7de28e99",
+      "bytes": 697
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-03/report.json",
+      "sha256": "9940c4b1ae64bda324adc23ea3dbbfcde51f0fdc29ddf97cc88604daaa55f383",
+      "bytes": 599
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-04/390-badge-boundary.png",
+      "sha256": "d2c1ac5128f2ffc01783eb82bceb770edfee713a1bdf608fc36cdcf670e8771a",
+      "bytes": 48332
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-04/390-badge.json",
+      "sha256": "d9cf70ece303b3e41c26e1d8c3f318228eadbf64feaf253bff28cb15d2fd077c",
+      "bytes": 13698
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-04/390-badge.png",
+      "sha256": "41a1d1abc72925fa9cedb89b1f70fdda31aab02618c018e972958816c09d10b4",
+      "bytes": 47250
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-04/390-trace-boundary.png",
+      "sha256": "02a148e9fa8281d4711c27c9456b96e4f3d9859797cb8ed45f3254e902f40e3a",
+      "bytes": 58757
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-04/390-trace.json",
+      "sha256": "5a511245dfa12f9a0d20df42a0a8c4c704a280d1d120874b314bae4b5fd726fd",
+      "bytes": 15161
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-04/390-trace.png",
+      "sha256": "9257c1a163a89df96760b9c80677f275b06da72fa054fc976f29b49febae9d60",
+      "bytes": 56989
+    },
+    {
+      "path": "E6g-nodeslide-readiness-before-04/report.json",
+      "sha256": "36b7b66bd65f407a3228f9e80dc5bdac9a1f42881ed33687a49467e97a65f29f",
+      "bytes": 404
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/1440-fail-normal.json",
+      "sha256": "faa217a6edbfd9cdf418741c8681c7f2dd4195b7eb92b587d4778050c8114b1a",
+      "bytes": 5121
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/1440-fail-normal.png",
+      "sha256": "796b99988d053241fec70b7b831bfcdfd9a022759d7da73246f849a085e28a9f",
+      "bytes": 164175
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/1440-fail-text200.json",
+      "sha256": "c88a077af498c2ff0f93da26503959427d611171f369d0e84b1087d57a5c4896",
+      "bytes": 5123
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/1440-fail-text200.png",
+      "sha256": "f4c0e65bf39e5b82fc4dd06646ac003a2f5b0bb5e5e6b0d6d5f02e58fd04a9b6",
+      "bytes": 179763
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/1440-pass-normal.json",
+      "sha256": "b8afdb307a0094869d61d2b886143994c2915729171539ab526cf18489309cbe",
+      "bytes": 5019
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/1440-pass-normal.png",
+      "sha256": "3c726e38b29d59b5db63dc5e484193b1b272602a33b5d37ff51c21b0c426860f",
+      "bytes": 162074
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/1440-pass-text200.json",
+      "sha256": "7afdbafc72eef97a0da43ce9c467bfa968161f94ce32b66235e3223b3406dae1",
+      "bytes": 5020
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/1440-pass-text200.png",
+      "sha256": "7e22f9adeef8e359235be140dab826525d0736b83615340f70f0a96c972e51bc",
+      "bytes": 181252
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/390-fail-normal.json",
+      "sha256": "0eb4c455909d0fb6470f7a24a3c4f596cb050375bebbce5f3d1343ad666aaabd",
+      "bytes": 4531
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/390-fail-normal.png",
+      "sha256": "e35fa64f41fb308d4be2f4a675ba3580563b1ffcb4c9ecc278089c64de718fb5",
+      "bytes": 56677
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/390-fail-text200.json",
+      "sha256": "85717c1f68c040667cb825a3c7e2ed7e07805e08154c29824df74c5f4c7d0ae1",
+      "bytes": 4535
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/390-fail-text200.png",
+      "sha256": "a1587503d80851f156928eacc64ec78a38a610965741f11a24ae490f958f0b47",
+      "bytes": 81672
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/390-pass-normal.json",
+      "sha256": "42b4b05faa71ab3a14f3a8d80ba8f695b5ac319490aa26eec2fd27acc7cbadbf",
+      "bytes": 4432
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/390-pass-normal.png",
+      "sha256": "7014f8801d081951b760d6cfccf7c137d03107e76b69c2505deec9b42fe6b4c2",
+      "bytes": 56884
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/390-pass-text200.json",
+      "sha256": "d90365dd1772dc54fb4e2d6368e085d9e270c9736a0b96b66eebffe899a67fc7",
+      "bytes": 4434
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/390-pass-text200.png",
+      "sha256": "121847dc7c8b98cc2661f1d8b4154f340d36cbdde0e87ce9589fba3d2631b533",
+      "bytes": 81061
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-01/report.json",
+      "sha256": "2bf2ae4311c13a15355a9b9ed06711594781a1991bf9bd326f25564ca3f3d1e4",
+      "bytes": 3047
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/1440-fail-normal.json",
+      "sha256": "faa217a6edbfd9cdf418741c8681c7f2dd4195b7eb92b587d4778050c8114b1a",
+      "bytes": 5121
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/1440-fail-normal.png",
+      "sha256": "796b99988d053241fec70b7b831bfcdfd9a022759d7da73246f849a085e28a9f",
+      "bytes": 164175
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/1440-fail-text200.json",
+      "sha256": "9b8e21b1b40d57a4f0cf4d25c86a574a3711b3e330457af7d2051cc54dd21a4b",
+      "bytes": 5124
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/1440-fail-text200.png",
+      "sha256": "d7e8e1a33f416f0645ce9dc757f31c092172ac8de539d68f035f5cc38b198adc",
+      "bytes": 177812
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/1440-pass-normal.json",
+      "sha256": "b8afdb307a0094869d61d2b886143994c2915729171539ab526cf18489309cbe",
+      "bytes": 5019
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/1440-pass-normal.png",
+      "sha256": "3c726e38b29d59b5db63dc5e484193b1b272602a33b5d37ff51c21b0c426860f",
+      "bytes": 162074
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/1440-pass-text200.json",
+      "sha256": "291edd4756649f1ec60705705e4263b0f4fde952861c45a0c204a67ff2fbfbbc",
+      "bytes": 5022
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/1440-pass-text200.png",
+      "sha256": "a2da13611c8a13bd6700af2742aab8f8baef57d9f289985f865a4064df221e3a",
+      "bytes": 181090
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/390-fail-normal.json",
+      "sha256": "0eb4c455909d0fb6470f7a24a3c4f596cb050375bebbce5f3d1343ad666aaabd",
+      "bytes": 4531
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/390-fail-normal.png",
+      "sha256": "e35fa64f41fb308d4be2f4a675ba3580563b1ffcb4c9ecc278089c64de718fb5",
+      "bytes": 56677
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/390-fail-text200.json",
+      "sha256": "de9506986d8377d382d04601f8ec2e909a0c4a227d57464d1e3ed453eeacee3f",
+      "bytes": 4534
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/390-fail-text200.png",
+      "sha256": "60d5b4baf8a970e97ed5d5850fa862c056ea2273a1f5580d85ca56379ed1c0f0",
+      "bytes": 79651
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/390-pass-normal.json",
+      "sha256": "42b4b05faa71ab3a14f3a8d80ba8f695b5ac319490aa26eec2fd27acc7cbadbf",
+      "bytes": 4432
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/390-pass-normal.png",
+      "sha256": "7014f8801d081951b760d6cfccf7c137d03107e76b69c2505deec9b42fe6b4c2",
+      "bytes": 56884
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/390-pass-text200.json",
+      "sha256": "0d299ffe14559e5a024e51f56f887b87e522b38b7dcb6938a4bd0dca8cc8de0f",
+      "bytes": 4436
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/390-pass-text200.png",
+      "sha256": "ec9cd1eb848334639f9717bee2b130d79caf24b87ed41cc23ad4fe19ca987f6b",
+      "bytes": 81203
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02/report.json",
+      "sha256": "04f480287da7aae577069958ab2b389f7957eb924581a60eba60ff8b4bfcbed8",
+      "bytes": 6419
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser-02.mjs",
+      "sha256": "fb01ba51793e3c94cdd1563f834a45ad4e996f45ad699c933ce49a039a09bfb2",
+      "bytes": 6408
+    },
+    {
+      "path": "E6g-nodeslide-readiness-browser.mjs",
+      "sha256": "441c87f66f32f1630e68b547bf37aad538c9449158d3378469503bc86f48a771",
+      "bytes": 5454
+    },
+    {
+      "path": "E6g-nodeslide-readiness-check-01/commands.json",
+      "sha256": "12c1d6badca5efdd783a2bd98276201f427377e741437c7adf6db567613e6086",
+      "bytes": 1382
+    },
+    {
+      "path": "E6g-nodeslide-readiness-check-01/normal-check.log",
+      "sha256": "88d20b6b8999bd98a7695c4b3e20e0931847dc161c5e65f38b188fb80613cec3",
+      "bytes": 18390
+    },
+    {
+      "path": "E6g-nodeslide-readiness-check-01/targeted.log",
+      "sha256": "8e717f4f64eb70307caf05e7e2913571d5d27bd067efa3203c4788d3db8e03fc",
+      "bytes": 299
+    },
+    {
+      "path": "E6g-nodeslide-readiness-check-02/commands.json",
+      "sha256": "9b674b643c8479d71a1b15d2a28357fe7ea43cf526b6036a1e95163bd6b47ee7",
+      "bytes": 1543
+    },
+    {
+      "path": "E6g-nodeslide-readiness-check-02/normal-check.log",
+      "sha256": "36a73ced19a684b33f94a6074fa7ab6ce30c4841680d70f938ca358c4fbfab91",
+      "bytes": 21908
+    },
+    {
+      "path": "E6g-nodeslide-readiness-check-02/targeted.log",
+      "sha256": "c568f15bec5b2588de45c0344ef69b639d1162afc48997f12f7d1088a805ff75",
+      "bytes": 299
+    },
+    {
+      "path": "E6g-nodeslide-readiness-runtime/local-loopback-runtime.json",
+      "sha256": "e34ace942b16694cbe8e05478d67c37e74f38594fc2eea996f97a8155730afd4",
+      "bytes": 2284
+    },
+    {
+      "path": "E6g-nodeslide-readiness-runtime/plan.json",
+      "sha256": "b26d3d8896d8e3d7e2d4d80e984d1d73d07bf4dfc8464135f24b60a4fb0d6af9",
+      "bytes": 794
+    },
+    {
+      "path": "E6g-nodeslide-readiness-runtime/vite-runtime.json",
+      "sha256": "9041dfb8f3bd73457a7ec61f9b155e7b54ddf2af4b9a9de5a29e10d53c0e1470",
+      "bytes": 456
+    },
+    {
+      "path": "E6g-nodeslide-readiness-source-before/plan.json",
+      "sha256": "bf38e67fd72e231297eec172eabb45135d7df17fab21435c4b4962ab60bbd218",
+      "bytes": 3383
+    },
+    {
+      "path": "E6g-nodeslide-readiness-source-before/src/domains/nodeslide/inspector/DeckCiStatus.css",
+      "sha256": "2576081baee7f3771d3e7a73ecc73b929e65fe7f4444be2be1ab3c5a865640cf",
+      "bytes": 1993
+    },
+    {
+      "path": "E6g-nodeslide-readiness-source-before/src/domains/nodeslide/inspector/InspectorPanel.test.ts",
+      "sha256": "b6a0b307eaa709a282e444f62a4879b5a7f38d4a847436f8e4df49e85984c5d3",
+      "bytes": 4016
+    },
+    {
+      "path": "E6g-nodeslide-readiness-source-before/src/domains/nodeslide/inspector/InspectorPanel.tsx",
+      "sha256": "4d359e1169c974badd72580c457a7de0ed4400d02ade47334b814ed9662c7de8",
+      "bytes": 31229
+    },
+    {
+      "path": "E6g-nodeslide-readiness-source-before/src/domains/nodeslide/inspector/TraceInspector.test.tsx",
+      "sha256": "c58fcecf3e25e6798036707ad04400cb36b1cb5fc158c2afb3cc00739c04660d",
+      "bytes": 22977
+    },
+    {
+      "path": "E6g-nodeslide-readiness-source-before/src/domains/nodeslide/inspector/TraceInspector.tsx",
+      "sha256": "b58d0b98bcb7232bd1c26036cb623289b32277d9910c4991fe381dee6ce73da8",
+      "bytes": 54912
+    },
+    {
+      "path": "E6g-nodeslide-readiness-test-copy-before/amendment.json",
+      "sha256": "14673a469b467c2f46b3d88633710c0fc24628a61e2d7aab6045b3b0998c3b67",
+      "bytes": 780
+    },
+    {
+      "path": "E6g-nodeslide-readiness-test-copy-before/nodeslideTraceUi.test.tsx",
+      "sha256": "3f96daa1f43e677af2554bf8d9e583db184e2ee12857ea14516475fedbdacec6",
+      "bytes": 6319
+    },
+    {
+      "path": "E6g-readiness-amendments.json",
+      "sha256": "4812725483128ae5de3296fd110faf656692c729dd8f8d697414de1266b7a58e",
+      "bytes": 1400
+    }
+  ],
+  "artifactCount": 89,
+  "commands": [
+    {
+      "label": "targeted",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/domains/nodeslide/inspector/TraceInspector.test.ts",
+        "src/domains/nodeslide/inspector/TraceInspector.test.tsx",
+        "src/domains/nodeslide/inspector/InspectorPanel.test.ts",
+        "src/domains/nodeslide/inspector/DeckCiStatus.test.tsx",
+        "convex/lib/nodeslideTraceUi.test.tsx"
+      ],
+      "exitCode": 0,
+      "seconds": 5.547000000020489,
+      "log": "targeted.log"
+    },
+    {
+      "label": "normal-check",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "seconds": 145.85899999993853,
+      "log": "normal-check.log"
+    }
+  ],
+  "realBrowser": "Two actual retained synthetic decks, current version3, pass/fail at390x844 and1440x960; three native Tab/Enter entry/reload rounds each. Twelve actual journeys, eight current captures. No model call or backend fixture substitution.",
+  "scenarioBoundary": "Current/stale/cross-deck/pending/null and warn/pass component branches are SSR scenarios. They do not certify rendered state transitions. Judge may add isolated explicitly labelled rendered fixtures without changing source.",
+  "limitations": [
+    "No full-product visual, accessibility, responsiveness or interaction grade.",
+    "Doubled inspector-font counts are now fully visible; enlarged navigation/density/footer clipping and notes/pager overlap remain.",
+    "Native Office, real model-provider use and complete user/device coverage are unrun.",
+    "Prior OpenUI/NodeBook timing failures remain preserved; the final normal check is a single passing run.",
+    "No changes to backend thresholds, export gates, quality scores or historical validation booleans."
+  ],
+  "ownedRuntime": "Both readiness supervisors expired normally; recorded process exit and port release receipts are bound. Original4173/4174 untouched.",
+  "rootViewedCurrentPixels": [
+    "E6g-nodeslide-readiness-browser-02/390-fail-text200.png",
+    "E6g-nodeslide-readiness-browser-02/1440-fail-text200.png",
+    "E6g-nodeslide-readiness-browser-02/390-pass-normal.png",
+    "E6g-nodeslide-readiness-browser-02/1440-fail-normal.png"
+  ]
+}

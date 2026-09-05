@@ -1,0 +1,17 @@
+{
+  "command": [
+    "C:\\nvm4w\\nodejs\\node.EXE",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "scripts/tests/workspace-build-depth.test.mjs",
+    "scripts/tests/code-tours.test.mjs",
+    "src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx",
+    "--reporter=verbose",
+    "--reporter=json",
+    "--outputFile.json=C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-check-diagnosis\\unchanged-targeted.json"
+  ],
+  "cwd": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "exitCode": 1,
+  "elapsedMs": 4453,
+  "scope": "Only original three failing files; no timeout, retry, skip, config, or test modifications."
+}

@@ -1,0 +1,64 @@
+{
+  "at": "2026-09-05T11:17:23.315810+00:00",
+  "status": "READY_FOR_DETERMINISTIC_BROWSER_PROOF",
+  "ports": [
+    49676,
+    49690
+  ],
+  "sourcePushed": true,
+  "admissionSet": true,
+  "providerCalls": 0,
+  "backendTarget": "NEW_CANDIDATE_LOOPBACK_ONLY",
+  "privateLogs": "D:\\ProjectRecovery\\NodeSlide first run 20260905\\private-bootstrap-02",
+  "nativeSecretAndAdminKey": "IN_MEMORY_ONLY_NOT_OUTPUT",
+  "nativePid": 19104,
+  "nativeProcessCreated": 1788607043.31928,
+  "listeners": [
+    {
+      "pid": 19104,
+      "address": "127.0.0.1",
+      "port": 49676
+    },
+    {
+      "pid": 19104,
+      "address": "127.0.0.1",
+      "port": 49690
+    }
+  ],
+  "verifiedOwnedLoopback": true,
+  "source-push": {
+    "exitCode": 0,
+    "seconds": 14.733999999938533,
+    "privateLogBytes": 14723,
+    "privateLogSha256": "32550ebdb296fe35a2e862f0ae890bb2e0bea817fcdc5b621d73b6778cd4370f"
+  },
+  "creation-admission": {
+    "exitCode": 0,
+    "seconds": 0.4220000000204891,
+    "privateLogBytes": 47,
+    "privateLogSha256": "aea86e16be29e339953255fbec1c84f6412589f5bd7a79003f7e66ce83d7d3a4"
+  },
+  "cleanup": {
+    "method": "WINDOWS_TERMINATE_EXACT_RECORDED_NATIVE_PID",
+    "ownedProcessExited": true,
+    "portsReleased": true
+  },
+  "sourceStatus": [
+    " M .gitattributes",
+    " M .tours/01-primary-user-flow.tour",
+    " M .tours/02-agent-execution.tour",
+    " M .tours/03-debug-and-recovery.tour",
+    " M convex/_generated/api.d.ts",
+    " M convex/lib/nodeslideAdmission.test.ts",
+    " M convex/lib/nodeslideValidators.ts",
+    " M docs/START_HERE.md",
+    " M docs/codebase/CONCERNS.md",
+    " M docs/codebase/INTEGRATIONS.md",
+    " M promotion/PROMOTION_LOG.md",
+    " M public/recipelang/edge-data-contract.svg",
+    " M scripts/tests/code-tours.test.mjs",
+    " M scripts/tests/playwright-trace.test.mjs",
+    " M scripts/tests/workspace-build-depth.test.mjs"
+  ],
+  "stoppedAt": "2026-09-05T12:17:39.230800+00:00"
+}

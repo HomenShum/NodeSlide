@@ -1,0 +1,40 @@
+{
+  "text": "Slide 1 of 6: Create a six-slide decision review for a fictional sourcing pilot\nCreate an editable, reviewable presentation from this idea\n\nOPENING / 01\n\na signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\n\na signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\n\na signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\n\na signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\n\na signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\n\na signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\n\nNODESLIDE · SOURCE-AWARE · EDITABLE\n\n01\n\nSources\nCreate a six-slide decision review for a fictional sourcing pilot — creation brief\n\nCreate a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.\n\nSource ID\nsource_3acc3aa444ea8506995c798cc70fb28c\nType\ninternal\nRetrieved\n1788607528040\nDisclaimer\nInternal working material\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\n← Previous\n1 / 6\nNext →",
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "overflow": 0,
+  "focused": {
+    "tag": "BODY",
+    "label": null
+  },
+  "controls": [
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Previous slide",
+      "text": "← Previous",
+      "fontSize": "14.4px",
+      "box": {
+        "x": 577.5,
+        "y": 914,
+        "width": 102.71875,
+        "height": 34
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Next slide",
+      "text": "Next →",
+      "fontSize": "14.4px",
+      "box": {
+        "x": 784.21875,
+        "y": 914,
+        "width": 78.28125,
+        "height": 34
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+name: Node Platform conformance
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  node-platform:
+    uses: HomenShum/NodeKit/.github/workflows/repo-conformance.yml@5c9aa6443ca8e61dc8886fbf0a0b4a7b72858e63 # Node 24 action pins

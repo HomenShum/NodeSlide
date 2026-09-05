@@ -1,0 +1,13 @@
+Command: python E6g-finalize-multiline-judge.py --repo <current candidate> --packet <central packet>
+Exit code: 1
+Traceback (most recent call last):
+  File "C:\Users\hshum\.codex\worktrees\5dba\nodebench-ai\docs\plans\portfolio-recovery-20260904\E6g-finalize-multiline-judge.py", line 65, in <module>
+    assert 'assertNodeSlideCreateAdmission' in anchors['256']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+Exact source inspection:
+256: export async function validateNodeSlidePreviewAdmission(args: {
+299: export function nodeslideCreatePublicError(code: NodeSlideCreateErrorCode, message: string) {
+
+The guessed assertion name was wrong. The source anchor and citation shift were correct. No candidate file was changed.

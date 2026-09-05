@@ -1,0 +1,34 @@
+{
+  "commands": [
+    {
+      "label": "targeted",
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/domains/nodeslide/inspector/TraceInspector.test.ts",
+        "src/domains/nodeslide/inspector/TraceInspector.test.tsx",
+        "src/domains/nodeslide/inspector/InspectorPanel.test.ts",
+        "src/domains/nodeslide/inspector/DeckCiStatus.test.tsx",
+        "convex/lib/nodeslideTraceUi.test.tsx"
+      ],
+      "exitCode": 0,
+      "seconds": 5.547000000020489,
+      "log": "targeted.log"
+    },
+    {
+      "label": "normal-check",
+      "command": [
+        "npm",
+        "run",
+        "check"
+      ],
+      "exitCode": 0,
+      "seconds": 145.85899999993853,
+      "log": "normal-check.log"
+    }
+  ],
+  "targetedPassed": 60,
+  "targetedFiles": 5,
+  "scope": "Root raw logs independently inspected and hash-verified; reviewer did not repeat completed suites. The earlier reader failed its digest assertion before any test subprocess."
+}

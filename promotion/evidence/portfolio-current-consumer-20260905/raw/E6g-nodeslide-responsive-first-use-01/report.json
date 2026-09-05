@@ -1,0 +1,175 @@
+{
+  "at": "2026-09-05T11:34:48.965Z",
+  "proof": "NODESLIDE_CURRENT_DETERMINISTIC_FIRST_RUN_01",
+  "cells": [
+    {
+      "name": "landing-360x800",
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "editor-360x800",
+      "viewport": {
+        "width": 360,
+        "height": 800
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "landing-390x844",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "editor-390x844",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "landing-768x1024",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "editor-768x1024",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "landing-1024x768",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "editor-1024x768",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "landing-1440x960",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "editor-1440x960",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "landing-1920x1080",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "editor-1920x1080",
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "textPercent": 100,
+      "overflow": 0,
+      "errors": []
+    },
+    {
+      "name": "editor-390x844-text200",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "textPercent": 200,
+      "overflow": 0,
+      "notesVisible": false,
+      "notesReachedByNativeTab": false,
+      "tabCount": 0,
+      "focus": null,
+      "errors": []
+    },
+    {
+      "name": "editor-1440x960-text200",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "textPercent": 200,
+      "overflow": 0,
+      "notesVisible": false,
+      "notesReachedByNativeTab": false,
+      "tabCount": 0,
+      "focus": null,
+      "errors": []
+    }
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "fullGrades": null,
+  "resizeProtocol": "One exact viewport per new context; DOM, console and pixels captured before closing it. Text enlargement is computed font sizing, not OS zoom.",
+  "jsonExport": {
+    "bytes": 80922,
+    "sha256": "a7f5fa1d928fd6a6314d138d5eced53411567d4fb1e7c187de1a793aef2280e4",
+    "keys": [
+      "deck",
+      "slides",
+      "elements",
+      "sources"
+    ],
+    "notesPresent": true,
+    "downloadFailure": null
+  },
+  "htmlOpened": {
+    "title": "NodeSlide local handoff — illustrative sourcing pilot",
+    "bodyTextLength": 1472
+  },
+  "status": "RESPONSIVE_AND_ACTUAL_JSON_HTML_OBSERVED"
+}

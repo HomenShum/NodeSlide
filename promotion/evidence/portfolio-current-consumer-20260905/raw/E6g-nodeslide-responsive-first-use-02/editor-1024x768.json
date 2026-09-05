@@ -1,0 +1,1457 @@
+{
+  "text": "N\nNodeSlide\n/\nv3\nEdit\nOverview\nCompare\n01\nCreate a six-slide decision review for a fictional sourcing pilot\nverified\nSLIDE JOB\nIllustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text. Decision: prototype after checking the budget. 中文交接 — no external claims.\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\n1 / 6\nPresenter notes\n25 words\n55%\nFit",
+  "viewport": {
+    "width": 1024,
+    "height": 768
+  },
+  "overflow": 0,
+  "focused": {
+    "tag": "BODY",
+    "label": null
+  },
+  "controls": [
+    {
+      "tag": "BUTTON",
+      "testid": "new-deck-trigger",
+      "label": "Create or open a NodeSlide deck",
+      "text": "NNodeSlide",
+      "fontSize": "16px",
+      "box": {
+        "x": 14,
+        "y": 12.5,
+        "width": 101.65625,
+        "height": 26
+      }
+    },
+    {
+      "tag": "INPUT",
+      "testid": "deck-title",
+      "label": "Deck title",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 138.734375,
+        "y": 12,
+        "width": 153,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Open slide navigator",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 338.734375,
+        "y": 10.5,
+        "width": 30,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Undo",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Redo",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Switch to dark theme",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 735,
+        "y": 10.5,
+        "width": 30,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Language and clarity: English",
+      "text": "EN",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Reset demo view",
+      "text": "Reset demo",
+      "fontSize": "12px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "share",
+      "label": "Share deck",
+      "text": "Share",
+      "fontSize": "13px",
+      "box": {
+        "x": 773,
+        "y": 9.5,
+        "width": 41,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "present",
+      "label": "Present deck",
+      "text": "Present",
+      "fontSize": "13px",
+      "box": {
+        "x": 822,
+        "y": 9.5,
+        "width": 40,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Export deck",
+      "text": "Export",
+      "fontSize": "13px",
+      "box": {
+        "x": 870,
+        "y": 9.5,
+        "width": 64,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Open command palette",
+      "text": "CommandsK",
+      "fontSize": "16px",
+      "box": {
+        "x": 942,
+        "y": 10.5,
+        "width": 30,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Open inspector",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 980,
+        "y": 10.5,
+        "width": 30,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Expand slide navigator",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 1: Create a six-slide decision review for a fictional sourcing pilot",
+      "text": "1",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 2: The moment to solve",
+      "text": "2",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 3: The decisive insight",
+      "text": "3",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 4: How the approach works",
+      "text": "4",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 5: What success looks like",
+      "text": "5",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 6: The decision",
+      "text": "6",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Slides",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Outline",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Layers",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Opening / 011",
+      "fontSize": "10px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "label": "Slide 1: Create a six-slide decision review for a fictional sourcing pilot",
+      "text": "Create an editable, reviewable presentation from this ideaOPENING / 01NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE01",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Create a six-slide decision review for a fictional sourcing pilot",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 1 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Context / 021",
+      "fontSize": "10px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "label": "Slide 2: The moment to solve",
+      "text": "CONTEXT / 02The cost of waiting is usually hidden in repeated work.FrictionConsequenceDecision windowFrame the current reality for Decision-",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "The moment to solve",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 2 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Insight / 031",
+      "fontSize": "10px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_3d0d1cd479afab8466feef118761c736",
+      "label": "Slide 3: The decisive insight",
+      "text": "INSIGHT / 03A better outcome starts with a sharper point of view.Create a six-slide decision review for a fictional sourcing pilot. All data",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "The decisive insight",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 3 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Approach / 041",
+      "fontSize": "10px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "label": "Slide 4: How the approach works",
+      "text": "APPROACH / 04Turn the idea into a sequence people can understand and own.Connect intent, action, and feedback in one visible operating path ",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "How the approach works",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 4 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Evidence / 051",
+      "fontSize": "10px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "label": "Slide 5: What success looks like",
+      "text": "EVIDENCE / 05Define proof before asking for commitment.Use the brief’s success criteria as qualitative review questions until measured evide",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "What success looks like",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 5 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Close / 071",
+      "fontSize": "10px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "label": "Slide 6: The decision",
+      "text": "CLOSE / 07Create an editable, reviewable presentation from this idea01  Agree the outcome02  Name the owner03  Set the next checkpointNODESL",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "The decision",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 6 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Add slide",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Edit",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 20,
+        "y": 58.5,
+        "width": 45.796875,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Overview",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 66.796875,
+        "y": 58.5,
+        "width": 77.171875,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Compare",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 144.96875,
+        "y": 58.5,
+        "width": 75.375,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Previous slide",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 15,
+        "y": 734.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Next slide",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 82.03125,
+        "y": 734.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Presenter notes25 words",
+      "fontSize": "16px",
+      "box": {
+        "x": 12,
+        "y": 655.5,
+        "width": 1000,
+        "height": 21
+      }
+    },
+    {
+      "tag": "TEXTAREA",
+      "testid": null,
+      "label": "Presenter notes for Create a six-slide decision review for a fictional sourcing pilot",
+      "text": "Illustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text.\nDecision: prototype after checking the budget. 中文交接 — n",
+      "fontSize": "13px",
+      "box": {
+        "x": 12,
+        "y": 682.5,
+        "width": 1000,
+        "height": 76.5
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Toggle pan tool",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Zoom out",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 265,
+        "y": 734.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Zoom in",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 331,
+        "y": 734.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Fit slide to workspace",
+      "text": "Fit",
+      "fontSize": "12px",
+      "box": {
+        "x": 363,
+        "y": 734.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Close Artifact Lab",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Artifact Gallery",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Model Compare",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Harness Compare",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    }
+  ]
+}

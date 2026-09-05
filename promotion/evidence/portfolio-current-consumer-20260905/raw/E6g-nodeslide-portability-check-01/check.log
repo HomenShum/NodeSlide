@@ -1,0 +1,117 @@
+
+> nodeslide@0.1.0 check
+> npm run lint && npm run typecheck && npm run test && npm run build
+
+
+> nodeslide@0.1.0 lint
+> biome check .
+
+Checked 1074 files in 432ms. No fixes applied.
+
+> nodeslide@0.1.0 typecheck
+> tsc -b && npm run typecheck --workspaces --if-present
+
+
+> @nodeslide/agent@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/backend@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/cli@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/client-http@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/contracts@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/convex@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/engine@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/external-agent@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodekit/gym-core@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/react@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/react-headless@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/recipelang@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/registry@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/testing@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> nodeslide-mcp@0.2.2 typecheck
+> tsc --noEmit
+
+
+> nodeslide@0.1.0 test
+> vitest run && npm run test --workspaces --if-present
+
+
+ RUN  v4.1.10 D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905
+
+CodeTours no longer match the source they point at:
+  .tours/03-debug-and-recovery.tour
+Run: node scripts/build-code-tours.mjs
+ ❯ scripts/tests/code-tours.test.mjs (1 test | 1 failed) 163ms
+     × regenerates identically from the current source 161ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/tests/code-tours.test.mjs > the committed CodeTours still point at the code they describe > regenerates identically from the current source
+AssertionError: expected [Function] to not throw an error but 'Error: Command failed: C:\nvm4w\nodej…' was thrown
+
+- Expected:
+undefined
+
++ Received:
+"Error: Command failed: C:\\nvm4w\\nodejs\\node.exe scripts/build-code-tours.mjs --check
+CodeTours no longer match the source they point at:
+  .tours/03-debug-and-recovery.tour
+Run: node scripts/build-code-tours.mjs
+"
+
+ ❯ scripts/tests/code-tours.test.mjs:19:11
+     17|         encoding: 'utf8',
+     18|       }),
+     19|     ).not.toThrow();
+       |           ^
+     20|   });
+     21| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 315 passed (316)
+      Tests  1 failed | 2811 passed | 7 skipped (2819)
+   Start at  04:21:21
+   Duration  21.75s (transform 108.34s, setup 0ms, import 284.83s, tests 135.46s, environment 87.12s)
+

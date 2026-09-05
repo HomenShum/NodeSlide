@@ -10,7 +10,7 @@
     },
     {
       "file": "convex/lib/nodeslideValidators.ts",
-      "line": 298,
+      "line": 299,
       "description": "**Failure 1: the request is refused.**\n\nEvery refusal carries a machine-readable `code` alongside its sentence, so the browser can branch on the code and still have something honest to show a human.\n\nGrep for a code you saw in a `ConvexError` and you land on the exact refusal."
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "file": "scripts/tests/workspace-build-depth.test.mjs",
-      "line": 46,
+      "line": 47,
       "description": "**Failure 4: the build, on Windows.**\n\n`npm run build` used to die at the eleventh workspace with `'tsup' is not recognized`, although tsup was installed. It was not a missing tool: each nested `npm run` prepends about 1.4 KB of `.bin` paths to PATH, and a fourth level crossed the ~8,191-character ceiling `cmd.exe` will expand — past which cmd.exe hands the child an empty PATH and *nothing* resolves.\n\nThe header comment above has the full measurement. This test fails if anyone reintroduces the nesting."
     }
   ]

@@ -1,0 +1,77 @@
+from pathlib import Path
+import datetime,hashlib,json,re,subprocess
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+T=R/'promotion/evidence/portfolio-current-consumer-20260905'
+O=P/'E6g-nodeslide-publication-01'
+assert not T.exists() and not O.exists(),'Publication already exists; do not overwrite.'
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+def jread(n): return json.loads((P/n).read_text(encoding='utf-8'))
+def git(*args): return subprocess.check_output(['git',*args],cwd=R)
+for n in ['E6g_NODESLIDE_PORTABILITY_SOURCE_JUDGE.json','E6g_NODESLIDE_MULTILINE_FINAL_JUDGE.json','E6g_NODESLIDE_READINESS_FINAL_JUDGE.json']:
+    assert (P/n).is_file(),n
+    # Parent inspects the precise verdict separately; this guard prevents absent review.
+    assert 'APPROVED' in (P/n).read_text(encoding='utf-8'),n
+assert git('rev-parse','HEAD').decode().strip()=='b0674b229a3691c09c88fcab1481f2e33342cb21'
+assert not git('diff','--cached','--name-only').strip()
+expected={n:x['sha256'] for n,x in jread('E6g_NODESLIDE_PORTABILITY_SOURCE_JUDGE.json')['sourcePaths'].items()}
+for n in ['E6g_NODESLIDE_MULTILINE_FINAL_FREEZE.json','E6g_NODESLIDE_READINESS_FREEZE.json']:
+    expected.update({x['path']:x['sha256'] for x in jread(n)['source']})
+assert len(expected)==19
+for n,h in expected.items(): assert sha(R/n)==h,n
+expected['HANDOFF.md']=sha(R/'HANDOFF.md')
+sources=[]
+for n,h in sorted(expected.items()):
+    sources.append({'path':n,'rawSha256':h,'gitBlobSha1':git('hash-object','--path',n,n).decode().strip()})
+excluded_prefixes=('E6g-publication','E6g-publish-nodeslide','E6g-portable','E6g_NODESLIDE_PUBLICATION')
+roots=[x for x in P.iterdir() if x.name.startswith('E6g') and not x.name.startswith(excluded_prefixes) and 'publication' not in x.name.lower() and not (x.is_dir() and x.name.startswith('E6g-nodeslide-readiness-independent'))]
+files={f for x in roots for f in (x.rglob('*') if x.is_dir() else [x]) if f.is_file()}
+for entry in jread('E6g-nodeslide-readiness-independent-manifest.json')['artifacts']:
+    p=P/entry['path'];assert sha(p)==entry['sha256'],entry['path'];files.add(p)
+files=sorted(files)
+secret=re.compile(rb'sk-(?:proj-|svcacct-)?[A-Za-z0-9_-]{24,}|gh[pousr]_[A-Za-z0-9]{25,}|github_pat_[A-Za-z0-9_]{25,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}')
+findings=[]
+for p in files:
+    if p.suffix.lower() in ['.png','.jpg','.pptx','.zip','.tgz','.gz','.bin']:continue
+    data=p.read_bytes()
+    hits=list(secret.finditer(data))
+    if hits:findings.append({'path':p.relative_to(P).as_posix(),'candidateCount':len(hits),'candidateHashes':sorted({hashlib.sha256(m.group()).hexdigest() for m in hits})})
+O.mkdir()
+(O/'credential-shape-scan.json').write_text(json.dumps({'files':len(files),'findings':findings,'valuesPrinted':False},indent=2)+'\n',encoding='utf-8',newline='\n')
+assert not findings,'Credential-shaped candidate requires bounded inspection; no payload copied.'
+T.mkdir(parents=True)
+(T/'.gitattributes').write_bytes(b'* -text\n')
+(T/'README.md').write_bytes((P/'E6g-portable-readme-template.md').read_bytes())
+(T/'verify.py').write_bytes((P/'E6g-portable-verify-template.py').read_bytes())
+mapping=[]
+code={'.ts','.tsx','.js','.jsx','.mjs','.cjs','.mts','.cts','.py','.ps1','.sh','.html','.css'}
+for p in files:
+    original=p.relative_to(P).as_posix()
+    target='raw/'+original+('.txt' if p.suffix.lower() in code else '')
+    q=T/target;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(p.read_bytes())
+    assert sha(q)==sha(p)
+    mapping.append({'original':original,'path':target,'sha256':sha(q),'bytes':q.stat().st_size})
+(T/'raw-copy-map.json').write_text(json.dumps({'schema':'portfolio-exact-copy-map/v1','copies':mapping,'privateStateIncluded':False},indent=2)+'\n',encoding='utf-8',newline='\n')
+payloads=[{'path':x.relative_to(T).as_posix(),'sha256':sha(x),'bytes':x.stat().st_size} for x in sorted(T.rglob('*')) if x.is_file()]
+manifest={'schema':'portfolio-portable-proof/v1','at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source':sources,'payloads':payloads,'privateStateIncluded':False,'fullProductGrade':None}
+(T/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8',newline='\n')
+run=subprocess.run(['python',str(T/'verify.py')],cwd=R,capture_output=True)
+(O/'verify.log').write_bytes(run.stdout+run.stderr)
+assert run.returncode==0,'Portable verifier failed.'
+# Verify local links only in authored entrypoints; historical records retain original locations.
+links=[]
+for p in [R/'HANDOFF.md',T/'README.md']:
+    for link in re.findall(r'\]\(([^)]+)\)',p.read_text(encoding='utf-8')):
+        if re.match(r'^[a-z]+://',link) or link.startswith('#'):continue
+        target=(p.parent/link.split('#')[0]).resolve()
+        links.append({'from':p.relative_to(R).as_posix(),'target':link,'exists':target.exists()})
+assert all(x['exists'] for x in links),'An authored entry link is broken.'
+(O/'links.json').write_text(json.dumps(links,indent=2)+'\n',encoding='utf-8',newline='\n')
+current=[R/x['path'] for x in sources]+[x for x in T.rglob('*') if x.is_file()]
+frozen=[]
+for p in sorted(current):
+    n=p.relative_to(R).as_posix()
+    frozen.append({'path':n,'sha256':sha(p),'bytes':p.stat().st_size,'gitBlobSha1':git('hash-object','--path',n,n).decode().strip()})
+receipt={'proof':'NODESLIDE-CURRENT-CONSUMER-PUBLICATION-01','status':'WORKING_PACKET_FROZEN_FOR_INDEPENDENT_PUBLICATION_JUDGE','at':manifest['at'],'repo':str(R),'baseHead':git('rev-parse','HEAD').decode().strip(),'sourceCount':len(sources),'rawCopies':len(mapping),'rawBytes':sum(x['bytes'] for x in mapping),'payloads':len(payloads),'frozen':frozen,'manifestSha256':sha(T/'manifest.json'),'candidateDigest':hashlib.sha256(json.dumps(frozen,sort_keys=True,separators=(',',':')).encode()).hexdigest(),'allAuthoredLinksExist':True,'currentIndexUnstaged':not bool(git('diff','--cached','--name-only').strip()),'holds':jread('E6g-publication-plan.json')['holds']}
+(P/'E6g_NODESLIDE_PUBLICATION_RECEIPT.json').write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8',newline='\n')
+print(json.dumps({k:receipt[k] for k in ['sourceCount','rawCopies','rawBytes','payloads','manifestSha256','candidateDigest']}))

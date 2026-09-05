@@ -1,0 +1,36 @@
+{
+  "at": "2026-09-05T11:25:25.100Z",
+  "proof": "NODESLIDE_CURRENT_DETERMINISTIC_FIRST_RUN_01",
+  "surface": "Current source Vite app and fresh loopback Convex backend",
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "steps": [
+    {
+      "name": "landing",
+      "status": "PASS",
+      "defaultModel": "moonshotai/kimi-k3"
+    },
+    {
+      "name": "deterministic-create",
+      "status": "PASS"
+    },
+    {
+      "name": "title-edit-reload",
+      "status": "PASS",
+      "previousVersion": 1,
+      "reloadedVersion": 2
+    }
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "captures": [
+    "01-landing",
+    "02-deterministic-brief",
+    "03-created-editor",
+    "04-reloaded-editor"
+  ],
+  "fullGrade": null,
+  "status": "PASS_CREATE_EDIT_RELOAD"
+}

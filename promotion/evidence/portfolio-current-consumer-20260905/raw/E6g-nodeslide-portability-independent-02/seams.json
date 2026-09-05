@@ -1,0 +1,116 @@
+{
+  "scope": "Actual current source function bodies executed with declared read-only Node/VM facade; no test assertions or time limits changed. Git checkout filters executed read-only, not a fresh full clone.",
+  "node": "v22.22.2",
+  "checks": [
+    {
+      "name": "finds no workspace build script that starts a fourth nested npm level",
+      "status": "PASS",
+      "input": "scripts/tests/workspace-build-depth.test.mjs"
+    },
+    {
+      "name": "still builds both halves of @nodeslide/convex — flattening must not drop one",
+      "status": "PASS",
+      "input": "scripts/tests/workspace-build-depth.test.mjs"
+    },
+    {
+      "name": "regenerates identically from the current source",
+      "status": "PASS",
+      "input": "scripts/tests/code-tours.test.mjs"
+    },
+    {
+      "name": "missing-root",
+      "status": "PASS",
+      "actual": [],
+      "scope": "Actual function; actual central-only filesystem"
+    },
+    {
+      "name": "empty-root",
+      "status": "PASS",
+      "actual": [],
+      "scope": "Actual function; actual central-only filesystem"
+    },
+    {
+      "name": "nested-space-and-hash",
+      "status": "PASS",
+      "actual": [
+        ".tmp\\a space #\\deep\\trace.zip",
+        ".tmp\\z\\trace.zip"
+      ],
+      "scope": "Actual function; actual central-only filesystem"
+    },
+    {
+      "name": "root-is-file",
+      "status": "PASS",
+      "error": {
+        "code": "ENOTDIR",
+        "message": "ENOTDIR: not a directory, scandir 'C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-portability-independent-02\\discovery-cases\\root-is-file\\.tmp'"
+      },
+      "scope": "Actual function; actual central-only filesystem"
+    },
+    {
+      "name": "permission-denied",
+      "status": "PASS",
+      "error": {
+        "code": "EACCES",
+        "message": "diagnostic injected root permission denial"
+      },
+      "scope": "Actual function; declared error injected at filesystem seam"
+    },
+    {
+      "name": "nested-disappeared",
+      "status": "PASS",
+      "error": {
+        "code": "ENOENT",
+        "message": "diagnostic injected child removal"
+      },
+      "scope": "Actual function; declared error injected at filesystem seam"
+    }
+  ],
+  "checkCount": 9,
+  "filters": [
+    {
+      "path": ".tours/01-primary-user-flow.tour",
+      "autocrlf": "true",
+      "filterReturnsExactLfHeadBytes": true,
+      "sha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97"
+    },
+    {
+      "path": ".tours/01-primary-user-flow.tour",
+      "autocrlf": "false",
+      "filterReturnsExactLfHeadBytes": true,
+      "sha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97"
+    },
+    {
+      "path": ".tours/02-agent-execution.tour",
+      "autocrlf": "true",
+      "filterReturnsExactLfHeadBytes": true,
+      "sha256": "a274bb90a62570133e66eddd157c63e4408b6938eeb103e7b16c7d455d3eef75"
+    },
+    {
+      "path": ".tours/02-agent-execution.tour",
+      "autocrlf": "false",
+      "filterReturnsExactLfHeadBytes": true,
+      "sha256": "a274bb90a62570133e66eddd157c63e4408b6938eeb103e7b16c7d455d3eef75"
+    },
+    {
+      "path": ".tours/03-debug-and-recovery.tour",
+      "autocrlf": "true",
+      "filterReturnsExactLfHeadBytes": true,
+      "sha256": "33df49d1ff3bf1ea7bae328af2d47257919d09c6ea99531d0a64467f10ed716e"
+    },
+    {
+      "path": ".tours/03-debug-and-recovery.tour",
+      "autocrlf": "false",
+      "filterReturnsExactLfHeadBytes": true,
+      "sha256": "33df49d1ff3bf1ea7bae328af2d47257919d09c6ea99531d0a64467f10ed716e"
+    }
+  ],
+  "sourceHashes": {
+    "scripts/tests/workspace-build-depth.test.mjs": "98e1cc0d259199f01c4b92e2b539a06aa32889e72e7857a1b35a815f0185a40e",
+    "scripts/tests/code-tours.test.mjs": "20358217a7c89ee0af06778ae7d27f82e9b5b771e7e0ddeec4f63a52c97e38eb",
+    "scripts/tests/playwright-trace.test.mjs": "6d58b0fa95c609cc91ab7cecbf032c5136b3c63654454c71824b1b32adbc3b9f"
+  },
+  "traceFunction": "function realTraces() {\n  let entries;\n  try {\n    entries = readdirSync('.tmp', { withFileTypes: true });\n  } catch (error) {\n    if (error.code === 'ENOENT') return [];\n    throw error;\n  }\n  const traces = [];\n  function visit(directory, children) {\n    for (const entry of children) {\n      const path = join(directory, entry.name);\n      if (entry.isDirectory()) visit(path, readdirSync(path, { withFileTypes: true }));\n      else if (entry.isFile() && entry.name === 'trace.zip') traces.push(path);\n    }\n  }\n  visit('.tmp', entries);\n  return traces.sort();\n}\n\n",
+  "actualRepoTmpExists": false,
+  "providerCalls": 0
+}

@@ -1,0 +1,11 @@
+from pathlib import Path
+import json,datetime
+p=Path(__file__).parent
+s=(p/'E6g-bootstrap-nodeslide-local.py').read_text(encoding='utf-8')
+s=s.replace('private-bootstrap-01','private-bootstrap-02').replace("for p in ['.env','.env.local','.convex']","for p in ['.env','.env.local']")
+s=s.replace("(R/'.convex').mkdir();protect(R/'.convex')","assert (R/'.convex').is_dir() and not list((R/'.convex').iterdir())\nprotect(R/'.convex')")
+s=s.replace('ports=[54821,54822]','ports=[]\nwhile len(ports)<2:\n    with socket.socket() as probe:\n        probe.bind(("127.0.0.1",0))\n        port=probe.getsockname()[1]\n        if port not in ports:ports.append(port)')
+s=s.replace('local-bootstrap-01.json','local-bootstrap-02.json')
+with (p/'E6g-bootstrap-nodeslide-local-02.py').open('x',encoding='utf-8',newline='\n') as f:f.write(s)
+d={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'command':'E6g-bootstrap-nodeslide-local.py','stage':'port preflight before subprocess launch','result':'WinError10013 binding explicit54821; no backend started, source pushed or admission set','createdPaths':['D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-01','.convex empty candidate directory'],'acl':'current user and SYSTEM only verified before failure','next':'New exclusive attempt02 uses OS-assigned bindable ports; existing empty owned directory is guarded and retained.','retryPreparation':'Initial nested shell-quote attempt failed at PowerShell parsing; no backend command dispatched.'}
+with (p/'E6g-nodeslide-first-run/local-bootstrap-preflight-failure.json').open('x',encoding='utf-8',newline='\n') as f:f.write(json.dumps(d,indent=2)+'\n')

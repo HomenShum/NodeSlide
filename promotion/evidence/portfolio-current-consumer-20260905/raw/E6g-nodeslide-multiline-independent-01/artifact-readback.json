@@ -1,0 +1,193 @@
+{
+  "rootArtifactsExact": [
+    {
+      "path": "E6g-nodeslide-multiline-before/convex/lib/nodeslideAdmission.test.ts",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-before/convex/lib/nodeslideValidators.ts",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-before/plan.json",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/01-landing.json",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/01-landing.png",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/02-deterministic-brief.json",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/02-deterministic-brief.png",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/03-created-editor.json",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/03-created-editor.png",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/04-reloaded-editor.json",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/04-reloaded-editor.png",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/05-chart-slide.json",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/05-chart-slide.png",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/actual-chart-fixture.pptx",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/actual-chart-parts.json",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/deck.json",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/report.json",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-local-push.json",
+      "exact": true
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser.mjs",
+      "exact": true
+    },
+    {
+      "path": "E6g_NODESLIDE_GATE_BRIEF_DIAGNOSIS.json",
+      "exact": true
+    }
+  ],
+  "sourceFreezeSha256": "5d109ab88e23415cc190fb29f461a7d5ab9855c5f6a27c65655bfb72712af561",
+  "input": {
+    "sameOriginalSubmittedText": true,
+    "fiveLfPreserved": true,
+    "promptSha256": "5bf5fc54790dccee2b95b67a7e33f1d6c28f0c2c0d2d2a5a22d9bef3c48c3e54"
+  },
+  "json": {
+    "sha256": "55a659d90a84afb05519e7eda483406670b2f0299a68f308f7cc24b3ce836b6e",
+    "chartCount": 1,
+    "labels": [
+      "Month 1",
+      "Month 2",
+      "Month 3"
+    ],
+    "values": [
+      100,
+      120,
+      140
+    ],
+    "genericUnit": "value",
+    "exactCurrentUnicodeTitle": true,
+    "version": 3,
+    "exactCurrentMultilineUnicodeNotes": true
+  },
+  "pptx": {
+    "sha256": "96f14a7e1911d566692ca5bc543dfeb1bbfcbd79481c7babff333c35bdf6043c",
+    "nativeChartCount": 1,
+    "chartXmlSha256": "9dfa4c3487886b5475d8dec33655439b9e34104ae11c7b1cf84463bc4c8a6787",
+    "labels": [
+      "Month 1",
+      "Month 2",
+      "Month 3"
+    ],
+    "numericValues": [
+      100.0,
+      120.0,
+      140.0
+    ],
+    "linkedActualSlide": [
+      {
+        "slide": "ppt/slides/slide4.xml",
+        "chart": "ppt/charts/chart1.xml",
+        "relationshipId": "rId1"
+      }
+    ],
+    "notesParts": 6,
+    "exactUserNotesPrefixPresent": true,
+    "appendedExistingSourceNotes": true,
+    "embeddings": [
+      {
+        "path": "ppt/embeddings/Microsoft_Excel_Worksheet1.xlsx",
+        "sha256": "8192d21ed1d5557fb80466574f4ff10094a3b45a0eaca3df1b08ffc84d654ca7",
+        "bytes": 16792
+      }
+    ],
+    "nativeOfficeOpened": false
+  },
+  "pngAndSidecarBindings": [
+    {
+      "name": "01-landing",
+      "width": 1440,
+      "height": 960,
+      "pngSha256": "f929a5a14e03dc2cdf47e740a76af5b89ae4ac433bc22089b8aa8a1cec880cac",
+      "domSha256": "d9ea83d716d09e80f8c39d650bc6be173df6c09f3afbd33b0af96ce00c5e61b9",
+      "overflowReportedByCapturedDom": 0
+    },
+    {
+      "name": "02-deterministic-brief",
+      "width": 1440,
+      "height": 960,
+      "pngSha256": "e60df63c3103ab11ed56536ea2daf9eb04cabd2208b7a0511b3960299b65b91a",
+      "domSha256": "55ba02e5d8c63418f564aa4f8cf5ac823ff4c7726735b06f5076c2b730753dd8",
+      "overflowReportedByCapturedDom": 0
+    },
+    {
+      "name": "03-created-editor",
+      "width": 1440,
+      "height": 960,
+      "pngSha256": "3f71423dfbe63f66de96b1509811a8f3f20e852012baf191407ce27a1d1ff641",
+      "domSha256": "5a1a09858eba2f046726f2eb1ad7416a3f45f7da87a3410d82ab25fa34297226",
+      "overflowReportedByCapturedDom": 0
+    },
+    {
+      "name": "04-reloaded-editor",
+      "width": 1440,
+      "height": 960,
+      "pngSha256": "6982bcdae945c12cfe0106fa67c6f98f1b4efb513128d37bb529a2f0b8d04fc8",
+      "domSha256": "bcc83e68480b841bd4955647318e1637428c76fd7e7bc0d20e7b52ded750f99b",
+      "overflowReportedByCapturedDom": 0
+    },
+    {
+      "name": "05-chart-slide",
+      "width": 1440,
+      "height": 960,
+      "pngSha256": "bfb65bfeefc782f20f4388bad04a802838493f30969adbf81b047931cfee0677",
+      "domSha256": "d5f16a36946a0470b5e150067f8f32a44829d4407f306f02274e27dc19576102",
+      "overflowReportedByCapturedDom": 0
+    }
+  ],
+  "directlyViewed": [
+    "before/05-chart-slide.png",
+    "after/05-chart-slide.png",
+    "after/02-deterministic-brief.png"
+  ],
+  "limits": [
+    "No native PowerPoint edit/readback or rendering certificate.",
+    "Reported console/external counts are from preserved browser recorder; no second runtime request.",
+    "Generic value unit and source-column fidelity limitation unchanged."
+  ]
+}

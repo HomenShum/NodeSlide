@@ -1,0 +1,132 @@
+[
+  {
+    "path": "node_modules/convex/package.json",
+    "bytes": 9122,
+    "sha256": "c8a1da2881ddaadee73147a551a37a7ebe4163f04e48601fef13db51c460183b"
+  },
+  {
+    "path": "node_modules/convex/src/cli/dev.ts",
+    "bytes": 10879,
+    "sha256": "ce9b5363a4cf859c89fd832b82f90bbd046c48aef6f108987f48fc8b2002aa00"
+  },
+  {
+    "path": "node_modules/convex/src/cli/init.ts",
+    "bytes": 1918,
+    "sha256": "3c94070dda13e5a9422e765ad6043abf903ec8bb4f8057cc346ae0af01661c4e"
+  },
+  {
+    "path": "node_modules/convex/src/cli/configure.ts",
+    "bytes": 23977,
+    "sha256": "aa92429ba01e6f9c73ed79a1fe7576a4d2d17ef4d6b4ca09934489f3c10d9c59"
+  },
+  {
+    "path": "node_modules/convex/src/cli/lib/deploymentSelection.ts",
+    "bytes": 32037,
+    "sha256": "7b50fc64c5e2ca129afdc32b6934e5b44f3e39596137947a0400af2d2348d945"
+  },
+  {
+    "path": "node_modules/convex/src/cli/lib/localDeployment/anonymous.ts",
+    "bytes": 16010,
+    "sha256": "243b7c1c837d8ce43fd8a9755076b032c835f11bab08759521d399f4f4e10192"
+  },
+  {
+    "path": "node_modules/convex/src/cli/lib/localDeployment/filePaths.ts",
+    "bytes": 13890,
+    "sha256": "567cf63421fd3ffc12444f399b6491565f7594d1d7b03e71703b9c3fee75f366"
+  },
+  {
+    "path": "node_modules/convex/src/cli/lib/localDeployment/run.ts",
+    "bytes": 13586,
+    "sha256": "2a3c3d48afdae93db6580e3c2a087d84ce58a321b5c5f4d6c79f5c202d5016cd"
+  },
+  {
+    "path": "node_modules/convex/src/cli/lib/localDeployment/utils.ts",
+    "bytes": 2683,
+    "sha256": "e4ac574557b44ec7ed7533e713e5fd3a5c7c22394013463e033cb725f224570a"
+  },
+  {
+    "path": "node_modules/convex/src/cli/lib/utils/utils.ts",
+    "bytes": 42439,
+    "sha256": "7fb0209dbce377e1ef1f184bbfbcaad725fc0895836fd417d5b9a5788879860c"
+  },
+  {
+    "path": "node_modules/convex/src/cli/env.ts",
+    "bytes": 8362,
+    "sha256": "0a86e0cca07b7e71fac776f779755e674b1597aedf0016d885c3b15d274d9988"
+  },
+  {
+    "path": "node_modules/convex/src/cli/lib/dev.ts",
+    "bytes": 21868,
+    "sha256": "fb488d4d8d35b53bd3401bccddc105a47e34f7aacc32f0bd5680ed17dad5295c"
+  },
+  {
+    "path": "node_modules/convex/src/bundler/context.ts",
+    "bytes": 6921,
+    "sha256": "2c1f9a5eef24ab9138281200086b516935207caeb0d63cfbe411705889727f73"
+  },
+  {
+    "path": "convex/crons.ts",
+    "bytes": 1026,
+    "sha256": "40894e9dd4ba58979d3a81895f8cd3d698f429e46e13d4e9ffa699447fe86626"
+  },
+  {
+    "path": "convex/nodeslide.ts",
+    "bytes": 223752,
+    "sha256": "7f00acd7231024577628b24eb1917fd7a3f45920a0246f10e0f9c5eb8bbfb555"
+  },
+  {
+    "path": "convex/nodeslideSourceRefresh.ts",
+    "bytes": 27689,
+    "sha256": "7ac155faa970b999f12b04f49b2a66c2e451463e9adf095118cd72675e6fc4c0"
+  },
+  {
+    "path": "convex/nodeslideAgent.ts",
+    "bytes": 102690,
+    "sha256": "f12b985055f414b1b9515b8098390df7ab72dabfd78ddc0dc8d2fef98e483e25"
+  },
+  {
+    "path": "convex/nodeslideJobs.ts",
+    "bytes": 70152,
+    "sha256": "0bc76422db0138bad0be120a10813ec85d79d183b7ffde3e3945a6e4c9039689"
+  },
+  {
+    "path": "package.json",
+    "bytes": 12415,
+    "sha256": "bdd1fc9f3da93bb84d443dae994436c41aa97f67045df6b82a54bb99dc96c9a7"
+  },
+  {
+    "path": "vite.config.ts",
+    "bytes": 3306,
+    "sha256": "13cb07a5bffdaec276a3e2fda34469c4ef982c3a4a1e78bf1b80f9147c7c3e48"
+  },
+  {
+    "path": "mcp/package.json",
+    "bytes": 1139,
+    "sha256": "e04ff9986554045cf9d6fb6dd14379a9524fe553f089fc98e1e94c56b2a6907e"
+  },
+  {
+    "path": "scripts/tests/pptx-declared-static-intent.test.mjs",
+    "bytes": 23632,
+    "sha256": "d786e63f7d2f669a93c492cebceadec81cd3fea73c4ece25b9509b5f67c9249b"
+  },
+  {
+    "path": "scripts/nodeslide-pptx-playback-canary.mjs",
+    "bytes": 10588,
+    "sha256": "9446201572b0c6b8c486ca6764bd7ec3bc65d2efdfcb2fe7da807edff3bdaa47"
+  },
+  {
+    "path": "scripts/tests/playwright-trace.test.mjs",
+    "bytes": 8082,
+    "sha256": "c7ba6afd85c80466f68c622e4bfda7ab027e56978d62f5f533e7684385e42de7"
+  },
+  {
+    "path": "scripts/immutable-upgrade-consumer-core.test.mjs",
+    "bytes": 6157,
+    "sha256": "3ca1157abdb324578e38f79be2c5ff2f8faab4e2f3dcd8a56cd357f97cab474d"
+  },
+  {
+    "path": "node_modules/convex/src/cli/lib/api.ts",
+    "bytes": 31799,
+    "sha256": "48be6e549f8d1569f4b8f3f20393248dcb3c2470d36d4e99f0b11b45591fe08a"
+  }
+]

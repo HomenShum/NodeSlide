@@ -1,0 +1,10 @@
+{
+  "exitCode": 1,
+  "cause": "Independent VM assertion adapter compared an outer-realm empty array to a VM-realm expected empty array with deepStrictEqual; source logic never reached a mismatch. Both operands must be normalized at the test adapter seam.",
+  "command": [
+    "node",
+    "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-review-portability-seams.mjs",
+    "D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905",
+    "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-portability-independent-01"
+  ]
+}

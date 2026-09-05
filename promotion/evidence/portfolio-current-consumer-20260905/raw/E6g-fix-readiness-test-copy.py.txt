@@ -1,0 +1,25 @@
+from pathlib import Path
+import hashlib,json,datetime
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+n='convex/lib/nodeslideTraceUi.test.tsx'
+before=(R/n).read_bytes()
+O=P/'E6g-nodeslide-readiness-test-copy-before'
+O.mkdir()
+(O/'nodeslideTraceUi.test.tsx').write_bytes(before)
+amendment={'proof':'NODESLIDE-DECK-CI-DETAIL-01','at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'acceptedBy':'root','additionalOwner':n,'beforeSha256':hashlib.sha256(before).hexdigest(),'cause':'The existing current-v7 versus selected-v1 scenario still expects the two old headings. Normal check01 reaches and fails that exact assertion after the intended scope-label correction. The user job, versions, ordering and remaining assertions stay unchanged.','change':'Update two expected headings to their explicit core-validation scope and assert that narrower receipts do not claim publish ready.','observedFailure':'E6g-nodeslide-readiness-check-01/normal-check.log','noRuntimeChange':True}
+(O/'amendment.json').write_text(json.dumps(amendment,indent=2)+'\n',encoding='utf-8',newline='\n')
+s=before.decode('utf-8').replace('\r\n','\n')
+for old,new in [('Current deck validation: passed','Latest recorded core validation: passed'),('Selected trace validation: passed','Selected trace core validation: passed')]:
+    assert s.count(old)==1,old
+    s=s.replace(old,new)
+needle="    expect(markup).toContain('Deck v1');\n"
+assert s.count(needle)==1
+s=s.replace(needle,needle+"    expect(markup).not.toContain('publish ready');\n")
+(R/n).write_text(s,encoding='utf-8',newline='\n')
+check=(P/'E6g-check-readiness.py').read_text(encoding='utf-8')
+check=check.replace("E6g-nodeslide-readiness-check-01","E6g-nodeslide-readiness-check-02")
+check=check.replace("paths=[e['path'] for e in plan['owners']]","paths=[e['path'] for e in plan['owners']]+['convex/lib/nodeslideTraceUi.test.tsx']")
+check=check.replace("'src/domains/nodeslide/inspector/DeckCiStatus.test.tsx']","'src/domains/nodeslide/inspector/DeckCiStatus.test.tsx','convex/lib/nodeslideTraceUi.test.tsx']")
+with (P/'E6g-check-readiness-02.py').open('x',encoding='utf-8',newline='\n') as f:f.write(check)
+print(json.dumps({'owner':n,'beforeSha256':amendment['beforeSha256'],'afterSha256':hashlib.sha256((R/n).read_bytes()).hexdigest()}))

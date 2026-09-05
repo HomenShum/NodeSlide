@@ -1,0 +1,54 @@
+import { readFileSync, readdirSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+const [repo, output] = process.argv.slice(2).map(p=>resolve(p));
+mkdirSync(output,{recursive:true});
+const hashes={}; const checks=[];
+const readSource=p=>{const b=readFileSync(join(repo,p)); hashes[p]=createHash('sha256').update(b).digest('hex'); return b.toString('utf8');};
+const candidates=['scripts/tests/workspace-build-depth.test.mjs','scripts/tests/code-tours.test.mjs'];
+for(const p of candidates) {
+  let text=readSource(p).replace(/^import .*?;\r?\n/gm,'').replaceAll('import.meta.url','__metaUrl');
+  const context={__metaUrl:pathToFileURL(join(repo,p)).href,fileURLToPath,URL,join,readdirSync,readFileSync,execFileSync,process,
+    describe:(_name,fn)=>fn(),it:(name,fn)=>{fn(); checks.push({name,status:'PASS',input:p});},
+    expect:value=>({toEqual:expected=>assert.deepEqual(JSON.parse(JSON.stringify(value)),JSON.parse(JSON.stringify(expected))),toMatch:re=>assert.match(value,re),not:{toThrow:()=>assert.doesNotThrow(value)}})};
+  vm.runInNewContext(text,context,{filename:p,timeout:10000});
+}
+const trace=readSource('scripts/tests/playwright-trace.test.mjs');
+const start=trace.indexOf('function realTraces() {');
+const end=trace.indexOf('/** Build a synthetic',start);
+assert(start>=0&&end>start);
+const functionBody=trace.slice(start,end);
+function caseRun(name,prepare,expected,inject) {
+  const root=join(output,'discovery-cases',name); mkdirSync(root,{recursive:true}); prepare?.(root);
+  const read=(p,options)=>{if(inject)inject(p); return readdirSync(join(root,p),options);};
+  let actual,error;
+  try { actual=Array.from(vm.runInNewContext(functionBody+'\nrealTraces();',{readdirSync:read,join},{timeout:5000})); }
+  catch(e){error={code:e.code,message:e.message};}
+  if(typeof expected==='string')assert.equal(error?.code,expected);
+  else assert.deepEqual(actual,expected);
+  checks.push({name,status:'PASS',actual,error,scope:inject?'Actual function; declared error injected at filesystem seam':'Actual function; actual central-only filesystem'});
+}
+caseRun('missing-root',null,[]);
+caseRun('empty-root',root=>mkdirSync(join(root,'.tmp')),[]);
+caseRun('nested-space-and-hash',root=>{
+  for(const d of ['.tmp/z','.tmp/a space #/deep','.tmp/trace.zip'])mkdirSync(join(root,d),{recursive:true});
+  for(const p of ['.tmp/z/trace.zip','.tmp/a space #/deep/trace.zip','.tmp/trace.zip/not-a-trace.zip'])writeFileSync(join(root,p),'DIAGNOSTIC NAME ONLY; NOT A TRACE');
+},[join('.tmp','a space #','deep','trace.zip'),join('.tmp','z','trace.zip')].sort());
+caseRun('root-is-file',root=>writeFileSync(join(root,'.tmp'),'DIAGNOSTIC'), 'ENOTDIR');
+caseRun('permission-denied',null,'EACCES',()=>{throw Object.assign(Error('diagnostic injected root permission denial'),{code:'EACCES'});});
+caseRun('nested-disappeared',root=>mkdirSync(join(root,'.tmp','child'),{recursive:true}),'ENOENT',p=>{if(p!=='.tmp')throw Object.assign(Error('diagnostic injected child removal'),{code:'ENOENT'});});
+const tours=['.tours/01-primary-user-flow.tour','.tours/02-agent-execution.tour','.tours/03-debug-and-recovery.tour'];
+const filters=[];
+for(const path of tours) for(const autocrlf of ['true','false']) {
+  const actual=execFileSync('git',['--no-optional-locks','-c',`core.autocrlf=${autocrlf}`,'cat-file','--filters',`--path=${path}`,`HEAD:${path}`],{cwd:repo});
+  const head=execFileSync('git',['--no-optional-locks','show',`HEAD:${path}`],{cwd:repo});
+  assert(actual.equals(head)); assert(!actual.includes(Buffer.from('\r\n')));
+  filters.push({path,autocrlf,filterReturnsExactLfHeadBytes:true,sha256:createHash('sha256').update(actual).digest('hex')});
+}
+const result={scope:'Actual current source function bodies executed with declared read-only Node/VM facade; no test assertions or time limits changed. Git checkout filters executed read-only, not a fresh full clone.',node:process.version,checks,checkCount:checks.length,filters,sourceHashes:hashes,traceFunction:functionBody,actualRepoTmpExists:existsSync(join(repo,'.tmp')),providerCalls:0};
+writeFileSync(join(output,'seams.json'),JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify({checkCount:checks.length,passed:checks.every(c=>c.status==='PASS'),filterChecks:filters.length}));

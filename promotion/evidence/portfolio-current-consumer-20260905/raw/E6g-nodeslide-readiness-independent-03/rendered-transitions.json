@@ -1,0 +1,327 @@
+{
+  "scope": "Actual InspectorPanel/TraceInspector in isolated normal Chromium with labelled synthetic prop states; no backend, real deck, provider, or production claim.",
+  "checks": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "round": 0,
+      "name": "fail",
+      "state": "fail",
+      "version": 3,
+      "blocker": true,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "round": 0,
+      "name": "pending",
+      "state": "loading",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "round": 0,
+      "name": "null",
+      "state": "unavailable",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "round": 0,
+      "name": "stale",
+      "state": "unavailable",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "round": 0,
+      "name": "cross-deck",
+      "state": "unavailable",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "round": 0,
+      "name": "warn",
+      "state": "warn",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "round": 0,
+      "name": "pass",
+      "state": "pass",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "round": 0,
+      "name": "version-change",
+      "state": "unavailable",
+      "version": 4,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "round": 0,
+      "name": "current-new",
+      "state": "fail",
+      "version": 4,
+      "blocker": true,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "round": 0,
+      "name": "fail",
+      "state": "fail",
+      "version": 3,
+      "blocker": true,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "round": 0,
+      "name": "pending",
+      "state": "loading",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "round": 0,
+      "name": "null",
+      "state": "unavailable",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "round": 0,
+      "name": "stale",
+      "state": "unavailable",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "round": 0,
+      "name": "cross-deck",
+      "state": "unavailable",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "round": 0,
+      "name": "warn",
+      "state": "warn",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "round": 0,
+      "name": "pass",
+      "state": "pass",
+      "version": 3,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "round": 0,
+      "name": "version-change",
+      "state": "unavailable",
+      "version": 4,
+      "blocker": false,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "round": 0,
+      "name": "current-new",
+      "state": "fail",
+      "version": 4,
+      "blocker": true,
+      "aiAndTraceAgree": true,
+      "motion": {
+        "animation": "none",
+        "transition": "0s"
+      }
+    }
+  ],
+  "errors": [],
+  "network": [],
+  "captures": [
+    "390-pending",
+    "390-stale",
+    "390-warn",
+    "390-current-new",
+    "1440-pending",
+    "1440-stale",
+    "1440-warn",
+    "1440-current-new"
+  ],
+  "fullGrades": null,
+  "motionKnockouts": [
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "oldAnimation": "ns-deck-ci-pulse",
+      "currentAnimation": "none",
+      "scope": "Exact old stylesheet inserted and removed only in this synthetic page; source unchanged"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "oldAnimation": "ns-deck-ci-pulse",
+      "currentAnimation": "none",
+      "scope": "Exact old stylesheet inserted and removed only in this synthetic page; source unchanged"
+    }
+  ],
+  "verdict": "PASS_SCOPED_RENDERED_FIXTURE_TRANSITIONS"
+}

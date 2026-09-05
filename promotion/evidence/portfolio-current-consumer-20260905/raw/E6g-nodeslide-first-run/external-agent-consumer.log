@@ -1,0 +1,5 @@
+
+> nodeslide@0.1.0 proof:external-agent
+> node scripts/smoke-external-agent-package.mjs
+
+{"ok":true,"proof":"external-agent-and-mcp-tarball-consumer","packages":["@nodeslide/external-agent@0.2.2","@nodeslide/recipelang@0.2.2","nodeslide-mcp@0.2.2"],"commands":["--help","inspect","propose","apply","recipelang verify-alignment","nodeslide-mcp --help"],"resultingDeckVersion":2,"recipeAlignmentPassed":true}

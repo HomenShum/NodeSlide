@@ -1,0 +1,97 @@
+from pathlib import Path
+import argparse, hashlib, json, datetime, re
+from PIL import Image
+ap=argparse.ArgumentParser();ap.add_argument('--packet',required=True);a=ap.parse_args();P=Path(a.packet)
+def j(p):return json.loads(p.read_text(encoding='utf-8-sig'))
+def sha(b):return hashlib.sha256(b).hexdigest()
+def write(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+f=j(P/'E6g_NODESLIDE_READINESS_FREEZE.json');R=Path(f['repo'])
+assert sha((P/'E6g_NODESLIDE_READINESS_FREEZE.json').read_bytes())=='62bfbfc14b4ff4ab0cc29b80f487a8e56914d9cede931c027ba0e3bc5fcdc184'
+for x in f['source']:assert sha((R/x['path']).read_bytes())==x['sha256']
+for x in f['artifacts']:assert sha((P/x['path']).read_bytes())==x['sha256']
+raw=j(P/'E6g-nodeslide-readiness-browser-02/report.json')
+assert raw['status']=='PASS_NORMAL_ACTUAL_UI_WITH_TEXT200_OBSERVATIONS'
+assert not raw['errors'] and not raw['blockedExternal']
+journeys=[x for x in raw['cells'] if 'round' in x];assert len(journeys)==12
+counts=[x for x in raw['cells'] if 'countsText200' in x];assert len(counts)==4
+for x in counts:
+    c=x['countsText200'];assert c['scrollWidth']<=c['clientWidth']+1
+    assert all(r['x']>=c['box']['x']-1 and r['right']<=c['box']['right']+1 and r['y']>=c['box']['y']-1 and r['bottom']<=c['box']['bottom']+1 for r in c['rects'])
+captures=[]
+for p in sorted((P/'E6g-nodeslide-readiness-browser-02').glob('*.png')):
+    side=j(p.with_suffix('.json'));dims=Image.open(p).size
+    assert dims==(side['viewport']['width'],side['viewport']['height'])
+    assert side['details'][0]['version']=='3'
+    captures.append({'path':p.relative_to(P).as_posix(),'sha256':sha(p.read_bytes()),'sidecarSha256':sha(p.with_suffix('.json').read_bytes()),'viewport':side['viewport']})
+assert len(captures)==8
+functional=j(P/'E6g-nodeslide-readiness-independent-02/rendered-transitions.json')
+styled=j(P/'E6g-nodeslide-readiness-independent-03/rendered-transitions.json')
+for x,n in [(functional,54),(styled,18)]:
+    assert x['verdict']=='PASS_SCOPED_RENDERED_FIXTURE_TRANSITIONS' and len(x['checks'])==n
+    assert not x['errors'] and not x['network']
+assert len(styled['motionKnockouts'])==2
+for i in (1,2,3):assert j(P/f'E6g-nodeslide-readiness-independent-0{i}/custody-result.json')['unchanged']
+assert j(P/'E6g-nodeslide-readiness-independent-source/custody.json')['unchanged']
+log=(P/'E6g-nodeslide-readiness-check-02/normal-check.log').read_text(encoding='utf-8-sig')
+assert 'Test Files  316 passed (316)' in log and 'Tests  2823 passed | 7 skipped (2830)' in log
+sources=[]
+for d in ['E6g-nodeslide-readiness-independent-01','E6g-nodeslide-readiness-independent-02','E6g-nodeslide-readiness-independent-03','E6g-nodeslide-readiness-independent-source']:
+    for p in sorted((P/d).rglob('*')):
+        if p.is_file() and 'vite-cache' not in p.parts:
+            sources.append({'path':p.relative_to(P).as_posix(),'sha256':sha(p.read_bytes()),'bytes':p.stat().st_size})
+for name in ['E6g-review-readiness-transitions.mjs','E6g-review-readiness-source.py','E6g-finalize-readiness-judge.py']:
+    p=P/name;sources.append({'path':name,'sha256':sha(p.read_bytes()),'bytes':p.stat().st_size})
+manifest=P/'E6g-nodeslide-readiness-independent-manifest.json';write(manifest,{'artifacts':sources,'selfExcluded':True,'judgmentsExcluded':True,'excluded':'Vite generated dependency caches; loaded-input hash receipts are retained. No private original runtime or browser state copied.'})
+limits=[
+ 'Six-source NODESLIDE-DECK-CI-DETAIL-01 approval only. Publication/HANDOFF work is outside this freeze and is not reviewed by this source judgment.',
+ 'Original 4173/4174 and stopped root loopback supervisors were neither restarted nor queried. Reviewer synthetic host used 4976 and closed.',
+ 'Twelve root journeys use two retained actual synthetic decks and native Tab/Enter from a deliberately focused AI tab; they are not full-page keyboard navigation or assistive-technology coverage.',
+ 'Two-width actual product captures cover normal text and doubling computed inspector font sizes only, not browser/OS zoom, other browsers, devices or all seven widths.',
+ 'Mounted-component transition fixtures are explicitly synthetic. The first successful host omitted studio CSS and proves DOM/state only. The later host includes studio CSS; its desktop panel layout clips content in the incomplete host, so desktop fixture screenshots are not accepted visual evidence. The actual product desktop screenshots support the scoped visual claim.',
+ 'The 54 repeated plus 18 supplementary transitions prove tested React prop/state replacement without stale messages; they do not prove concurrent backend ordering, sustained load or performance.',
+ 'Enlarged navigation, density controls and sticky footer still clip; notes/pager overlap remains visible. The fixed count row does not close those defects.',
+ 'Current normal check passed once. Earlier OpenUI/NodeBook timing failures remain historical evidence, not erased or declared stable.',
+ 'No native Office, model provider, production deployment, complete responsive/accessibility audit or human acceptance is certified. Whole criterion/dimension/product grades remain null.'
+]
+report={'proof':'NODESLIDE-DECK-CI-DETAIL-01','mode':'Builder','at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'verdict':'APPROVED_SCOPED_DECK_CI_DETAIL_SOURCE_AND_PRODUCT_PROOF','requestTrace':'Make each repo ready for usage and handoff, with visual/responsive/interaction standards: an author can now open the current failed deck check and see the actual reason instead of mistaking a narrower passed receipt for overall readiness.',
+ 'reviewer':'/root/provider_ci_closure_judge','implementationAuthor':'/root','reviewerReusedAcrossPortfolio':True,'nonauthor':True,
+ 'repo':str(R),'baseHead':f['baseHead'],'source':f['source'],'sourceDigest':f['sourceDigest'],'freezeSha256':'62bfbfc14b4ff4ab0cc29b80f487a8e56914d9cede931c027ba0e3bc5fcdc184','frozenArtifactsExact':89,
+ 'causalChain':['Studio queried the broader current Deck CI but passed it only toward AI. Trace substituted ordinary core validation and called it publish ready.', 'InspectorPanel now checks deck identity and version once, forwarding the same eligible result to AI and Trace.', 'Trace always renders current-version Deck CI detail even with no traces. Pending/unavailable remove prior checks and settled counts; real non-info check messages are shown unchanged.', 'Historical core validation and sticky footer now explicitly state core/recorded version scope without changing stored booleans or export policy.', 'The reused count row wraps after actual doubled-text clipping; the loading pulse and keyframes are removed.'],
+ 'sourceReview':{'runtimeOwners':3,'testOwners':3,'newDependencies':0,'backendOrExportPolicyChanged':False,'singleIdentityVersionFilter':True,'loadingSuppressesDetails':True,'historicalReceiptsRetained':True,'sixBeforeSourcesExactHead':True,'whitespaceCheckExit':0,'copyOnlySixthTestAmendmentVerified':True},
+ 'rootCommands':{'targeted':{'files':5,'testsPassed':60,'exitCode':0,'log':'E6g-nodeslide-readiness-check-02/targeted.log'},'normal':{'rootFiles':316,'rootTestsPassed':2823,'rootTestsSkipped':7,'workspaceTestsPassed':42,'workspaceBuilds':15,'lintTypechecksRootBuildPassed':True,'exitCode':0,'seconds':145.85899999993853,'log':'E6g-nodeslide-readiness-check-02/normal-check.log'},'rawLogsIndependentlyRead':True,'reviewerRepeatedSuites':False},
+ 'actualProductEvidence':{'executor':'/root','scriptIndependentlyRead':True,'journeys':12,'decks':2,'statuses':['fail','pass'],'currentVersion':3,'viewports':[{'width':390,'height':844},{'width':1440,'height':960}],'normalCaptures':4,'inspectorFont200Captures':4,'countRangesFullyInsideBoxes':4,'captures':captures,'recordedConsoleErrors':0,'blockedExternalRequests':0},
+ 'independentMountedComponentEvidence':{'functionalTransitions':54,'styledSupplementTransitions':18,'rounds':{'functional':3,'styled':1},'states':['fail','pending','null','stale','cross-deck','warn','pass','version-change','current-new'],'bothAiAndTraceAgree':True,'eachTransitionHidesIncorrectOldMessage':True,'noAgentTracesStillShowsChecks':True,'oldCssMotionKnockouts':styled['motionKnockouts'],'consoleErrors':0,'externalRequests':0,'sourceIndexRefsUnchanged':True,'reports':['E6g-nodeslide-readiness-independent-02/rendered-transitions.json','E6g-nodeslide-readiness-independent-03/rendered-transitions.json'],'visualScope':'Fixture chrome differs from product. Phone pending visibly inspected; desktop fixture layout is incomplete and excluded from visual acceptance.'},
+ 'pixelsDirectlyInspected':['E6g-nodeslide-readiness-before-02/1440-trace-boundary.png','E6g-nodeslide-readiness-before-04/390-trace-boundary.png','E6g-nodeslide-counts-before/1440-fail-text200.png','E6g-nodeslide-readiness-browser-02/390-fail-normal.png','E6g-nodeslide-readiness-browser-02/390-fail-text200.png','E6g-nodeslide-readiness-browser-02/1440-pass-normal.png','E6g-nodeslide-readiness-browser-02/1440-fail-text200.png','E6g-nodeslide-readiness-browser-02/390-pass-normal.png','E6g-nodeslide-readiness-independent-03/390-pending.png'],
+ 'failuresRetained':['Root first detail/phone probes: lazy opening, unmounted/hidden inspector; corrected selectors retained alongside failures.', 'Root normal check01 failed existing old-heading expectations; sixth test owner updates two strings and adds no-publish-ready assertion, without changing scenario/versions.', 'Reviewer host01 omitted standard Vite React refresh preamble and failed before mount with $RefreshSig$ undefined. Exact old wrapper and failed report retained.', 'Reviewer host02 passed functional DOM checks but omitted studio CSS; raw screenshots and script retained. Host03 adds those actual styles and verifies exact prior loading pulse in page-only knockout; its incomplete desktop host layout limits visual claims.', 'Reviewer source reader first used unsorted JSON serialization from the previous freeze and aborted before any proposed test. Actual generator uses sort_keys=True; failed reader and assertion retained, corrected readback passed.'],
+ 'limits':limits,'findingsBlockingThisSlice':[],'fullGrades':None,'criterionFinalScores':None,'dimensionScores':None,'deployed':False,'providerCalls':0,
+ 'evidenceManifest':{'path':manifest.name,'sha256':sha(manifest.read_bytes()),'artifacts':len(sources)}}
+write(P/'E6g_NODESLIDE_READINESS_FINAL_JUDGE.json',report)
+md='''Builder — approved the bounded Deck CI detail repair.
+
+**Re your request:** make each repo ready for usage and handoff, including visual, responsive and interaction standards — an author opening a failed deck check can now see its current version and actual blocker. A narrower passed core receipt no longer says the deck is “publish ready.”
+
+The frozen six-source digest is `e612c4db17477009f1f0e1623fda781cdd577788c392d1db4c7a7645b98ae422` on base `b0674b229a3691c09c88fcab1481f2e33342cb21`. All six source hashes and 89 raw artifact bindings match. The six preserved before sources match HEAD exactly. No source, index or ref was changed by this reviewer. [Source readback](E6g-nodeslide-readiness-independent-source/custody.json).
+
+The cause was a missing data connection: Studio evaluated broader Deck CI, but Trace displayed only ordinary validation and described it as overall readiness. The patch filters identity/version once in InspectorPanel and supplies that same result to AI and Trace. It displays the actual blocker/warning text, separates pending and unavailable states, and keeps the latest and selected core receipts explicitly historical/scoped. The sticky footer states the core version and directs the author to Deck CI. No stored validation, quality threshold, backend or export rule changed. [Exact six-path diff](E6g-nodeslide-readiness-independent-source/six-path.diff).
+
+Verification supports that scope:
+
+- I read the actual browser script, DOM records and current screenshots. Twelve native Tab/Enter entry/reload journeys cover the retained failing and passing version-3 decks at 390×844 and 1440×960. The failure panel names the near-duplicate slide compositions; the passing panel reports zero blockers/warnings. Recorded console and external-request counts are zero. [Actual product report](E6g-nodeslide-readiness-browser-02/report.json).
+- Four normal and four doubled-inspector-font captures bind to their exact DOM/viewport records. All four enlarged count text ranges fit their owning boxes. I viewed the labelled clipping before and current after pixels. This is component text scaling, not a browser/OS zoom certificate.
+- Independent normal-Chromium component fixtures passed **54 repeated state transitions**, then **18 supplementary transitions with actual studio styles**. Both mounted AI and Trace panels agree through failure, pending, missing, stale, cross-deck, warning, pass and version replacement. Incorrect old messages disappear, and the check section remains available without any agent run. [Transition report](E6g-nodeslide-readiness-independent-02/rendered-transitions.json).
+- Two exact-old-stylesheet knockouts restore the loading pulse in the synthetic page; removing that stylesheet restores `animation: none`. No candidate stylesheet was edited. [Stylesheet supplement](E6g-nodeslide-readiness-independent-03/rendered-transitions.json).
+- Root's five targeted files passed **60 tests**. Its ordinary `npm run check` passed in **145.859 seconds**: 316 root files, 2,823 tests passed and seven skipped, then 42 workspace tests, lint/typechecks, 15 workspace builds and the root build. I inspected those raw logs rather than repeating completed suites. [Command readback](E6g-nodeslide-readiness-independent-source/root-command-readback.json).
+
+The six files contain three runtime/style owners and three test owners. The sixth owner's change is only two expected scope labels plus an assertion prohibiting “publish ready”; its original failed assertion and accepted amendment are retained. There are no new dependencies or backend policies.
+
+The independent fixtures are deliberately labelled synthetic. Host 01 failed before mount because its custom HTML omitted Vite's React refresh preamble; that failure and wrapper are preserved. Host 02's first successful screenshots omitted studio CSS and count only as DOM/state proof. Host 03 adds the actual styles; its phone pending state is visibly correct, but the incomplete desktop host clips its panel, so those desktop fixture pixels are excluded from visual acceptance. Actual product desktop pixels supply the visual evidence. A separate reader's wrong digest-serialization assumption also failed before running any tests and is retained. [Raw evidence manifest](E6g-nodeslide-readiness-independent-manifest.json).
+
+Remaining limits are material. Enlarged inspector navigation, density controls and sticky footer still clip; notes/pager overlap remains visible. The fixed count row does not close those issues. Native keyboard proof starts from a focused AI tab, not the beginning of the whole page. No other widths/browser engines, screen reader, sustained load, native Office, model provider or production behavior is certified. Earlier OpenUI/NodeBook timing failures remain preserved; one successful ordinary check does not prove stability.
+
+Both original proof supervisors were already stopped; I did not restart or query them, or touch 4173/4174. The independent host used 4976 and closed. Reviewer context is reused across portfolio work, and I did not author this patch. Publication and the new HANDOFF are outside this source freeze and require their own byte review.
+
+Final verdict: **APPROVED_SCOPED_DECK_CI_DETAIL_SOURCE_AND_PRODUCT_PROOF**. No finding blocks this named slice. All final criterion scores, dimension grades and whole-product readiness remain **null**. [Machine-readable judgment](E6g_NODESLIDE_READINESS_FINAL_JUDGE.json).
+'''
+(P/'E6g_NODESLIDE_READINESS_FINAL_JUDGE.md').write_text(md,encoding='utf-8',newline='\n')
+print(json.dumps({'verdict':report['verdict'],'jsonSha256':sha((P/'E6g_NODESLIDE_READINESS_FINAL_JUDGE.json').read_bytes()),'markdownSha256':sha((P/'E6g_NODESLIDE_READINESS_FINAL_JUDGE.md').read_bytes()),'manifestSha256':sha(manifest.read_bytes()),'artifacts':len(sources)}))

@@ -18,7 +18,7 @@ one product defect Wave 3 fixed.
 **Why:** `createDeckFromBrief` admits a create only if
 `NODESLIDE_PUBLIC_CREATION=true`, or a durable job row exists, or both
 `NODESLIDE_PREVIEW_ACCESS_CODE` and `NODESLIDE_PREVIEW_ADMISSION_SUBJECT` are
-set in the Convex environment (`convex/lib/nodeslideValidators.ts:255` (`validateNodeSlidePreviewAdmission`)).
+set in the Convex environment (`convex/lib/nodeslideValidators.ts:256` (`validateNodeSlidePreviewAdmission`)).
 `npx convex dev` sets none of the three, and there is no `.env.example` — though
 the README links one.
 

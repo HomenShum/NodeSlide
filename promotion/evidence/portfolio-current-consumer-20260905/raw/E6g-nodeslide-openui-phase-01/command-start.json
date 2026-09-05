@@ -1,0 +1,15 @@
+{
+  "command": [
+    "C:\\nvm4w\\nodejs\\node.EXE",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "--config",
+    "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-openui-phase-01\\instrumented.config.mts",
+    "--reporter=default",
+    "--reporter=json",
+    "--outputFile.json=C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-openui-phase-01\\suite.json"
+  ],
+  "cwd": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "at": "2026-09-05T11:47:06.719963+00:00",
+  "claim": "Instrumented original root Vitest suite only, not ordinary npm check. No filters, new limits, workers, pools, concurrency or retries. Environment-name sanitization/temp selection matches previous normal check runner."
+}

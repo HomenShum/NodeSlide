@@ -1407,19 +1407,19 @@
     },
     {
       "original": "E6g-nodeslide-multiline-citation-before/docs/codebase/CONCERNS.md",
-      "path": "raw/E6g-nodeslide-multiline-citation-before/docs/codebase/CONCERNS.md",
+      "path": "raw/E6g-nodeslide-multiline-citation-before/docs/codebase/CONCERNS.md.txt",
       "sha256": "000d3a9c5f5ffed6c7b48329fd508ee2b45dbbe5ed894734fa42c7cc063b7478",
       "bytes": 8542
     },
     {
       "original": "E6g-nodeslide-multiline-citation-before/docs/codebase/INTEGRATIONS.md",
-      "path": "raw/E6g-nodeslide-multiline-citation-before/docs/codebase/INTEGRATIONS.md",
+      "path": "raw/E6g-nodeslide-multiline-citation-before/docs/codebase/INTEGRATIONS.md.txt",
       "sha256": "51aa739e07f2e61594064d3aa8ab02a8c51125d435241f3a555b3515b6e81fac",
       "bytes": 5407
     },
     {
       "original": "E6g-nodeslide-multiline-citation-before/docs/START_HERE.md",
-      "path": "raw/E6g-nodeslide-multiline-citation-before/docs/START_HERE.md",
+      "path": "raw/E6g-nodeslide-multiline-citation-before/docs/START_HERE.md.txt",
       "sha256": "2310a099f22b314c2634922ef0e5ab324d9eedbca9f513558a1dbf1c9d1cb0b7",
       "bytes": 20433
     },
@@ -1437,7 +1437,7 @@
     },
     {
       "original": "E6g-nodeslide-multiline-citation-before/promotion/PROMOTION_LOG.md",
-      "path": "raw/E6g-nodeslide-multiline-citation-before/promotion/PROMOTION_LOG.md",
+      "path": "raw/E6g-nodeslide-multiline-citation-before/promotion/PROMOTION_LOG.md.txt",
       "sha256": "5045754805141c8376058d3c9c98001f4ddb865866a5887ed23481bf3d26afbd",
       "bytes": 18665
     },
@@ -3417,37 +3417,37 @@
     },
     {
       "original": "E6g-nodeslide-recon/current-source/docs/codebase/CONCERNS.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/docs/codebase/CONCERNS.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/docs/codebase/CONCERNS.md.txt",
       "sha256": "000d3a9c5f5ffed6c7b48329fd508ee2b45dbbe5ed894734fa42c7cc063b7478",
       "bytes": 8542
     },
     {
       "original": "E6g-nodeslide-recon/current-source/docs/codebase/TESTING.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/docs/codebase/TESTING.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/docs/codebase/TESTING.md.txt",
       "sha256": "474dde76d94b2e48e168a7349499d5be70e7db1e4474a48e6f83a92f7b83f110",
       "bytes": 4140
     },
     {
       "original": "E6g-nodeslide-recon/current-source/docs/design.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/docs/design.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/docs/design.md.txt",
       "sha256": "de3a0f8d097c29d3c48cdf1c8f70153a8c79d679f1fed893b754e9798b0da822",
       "bytes": 4328
     },
     {
       "original": "E6g-nodeslide-recon/current-source/docs/ECOSYSTEM.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/docs/ECOSYSTEM.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/docs/ECOSYSTEM.md.txt",
       "sha256": "918c213c8f475e6f9ff76c8b13c9e11711c5cd719c2920c846a382e04da77456",
       "bytes": 15453
     },
     {
       "original": "E6g-nodeslide-recon/current-source/docs/NEXT_SESSION.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/docs/NEXT_SESSION.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/docs/NEXT_SESSION.md.txt",
       "sha256": "7cf791aa1a2a0050a97702393226bc102731560625669a3d5ce35de6ee90dba1",
       "bytes": 21214
     },
     {
       "original": "E6g-nodeslide-recon/current-source/docs/START_HERE.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/docs/START_HERE.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/docs/START_HERE.md.txt",
       "sha256": "2310a099f22b314c2634922ef0e5ab324d9eedbca9f513558a1dbf1c9d1cb0b7",
       "bytes": 20433
     },
@@ -3471,13 +3471,13 @@
     },
     {
       "original": "E6g-nodeslide-recon/current-source/packages/cli/README.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/packages/cli/README.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/packages/cli/README.md.txt",
       "sha256": "b65548fac4260d7ff1a917d91bc399cbe939856c85f31931a2a014352afccf78",
       "bytes": 3737
     },
     {
       "original": "E6g-nodeslide-recon/current-source/packages/convex/README.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/packages/convex/README.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/packages/convex/README.md.txt",
       "sha256": "460d0115c89556611ed0d6550e01a4cca13a150d1fa5eb2511bb62d5a8eeef0d",
       "bytes": 2634
     },
@@ -3489,7 +3489,7 @@
     },
     {
       "original": "E6g-nodeslide-recon/current-source/packages/external-agent/README.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/packages/external-agent/README.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/packages/external-agent/README.md.txt",
       "sha256": "c2be1be774318f505c464ff03f648a542ecbe4a99309f18eab4d7cbb63b01858",
       "bytes": 1794
     },
@@ -3501,13 +3501,13 @@
     },
     {
       "original": "E6g-nodeslide-recon/current-source/packages/react/README.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/packages/react/README.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/packages/react/README.md.txt",
       "sha256": "d7a03748bbc567511ce8f7e17bbf763633a96e887dafdef5d67c226e6ea80315",
       "bytes": 2291
     },
     {
       "original": "E6g-nodeslide-recon/current-source/packages/README.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/packages/README.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/packages/README.md.txt",
       "sha256": "a9cf7a882e313cf6b598bea240bd3ba5084a1967819f5d8d6d7aa5e1197858f3",
       "bytes": 7037
     },
@@ -3519,31 +3519,31 @@
     },
     {
       "original": "E6g-nodeslide-recon/current-source/promotion/PRODUCT_GOAL.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/promotion/PRODUCT_GOAL.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/promotion/PRODUCT_GOAL.md.txt",
       "sha256": "a4c7f5ff9861cfb59048e4aadbd1723edcf5d2fe3c79d76ae4a8b48c825bc196",
       "bytes": 9132
     },
     {
       "original": "E6g-nodeslide-recon/current-source/promotion/PRODUCT_JOURNEYS.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/promotion/PRODUCT_JOURNEYS.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/promotion/PRODUCT_JOURNEYS.md.txt",
       "sha256": "331f9d3ff88bde73a8ca2bc4163e7bf0819b38701bcd595ffae56825c9065543",
       "bytes": 8904
     },
     {
       "original": "E6g-nodeslide-recon/current-source/promotion/PROMOTION_LOG.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/promotion/PROMOTION_LOG.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/promotion/PROMOTION_LOG.md.txt",
       "sha256": "5045754805141c8376058d3c9c98001f4ddb865866a5887ed23481bf3d26afbd",
       "bytes": 18665
     },
     {
       "original": "E6g-nodeslide-recon/current-source/promotion/WIG_REVIEW.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/promotion/WIG_REVIEW.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/promotion/WIG_REVIEW.md.txt",
       "sha256": "0e7460bdb75419c8e7f8466fd9daffc90b22a758c1f6a77adf3692c9c0084741",
       "bytes": 11713
     },
     {
       "original": "E6g-nodeslide-recon/current-source/README.md",
-      "path": "raw/E6g-nodeslide-recon/current-source/README.md",
+      "path": "raw/E6g-nodeslide-recon/current-source/README.md.txt",
       "sha256": "895c9b1e3c2287c83a3c8452ca4eacea6e03ac593c84a33b5104433255ca495e",
       "bytes": 38094
     },
@@ -4503,7 +4503,7 @@
     },
     {
       "original": "E6g_NODESLIDE_CHECK_DIAGNOSIS.md",
-      "path": "raw/E6g_NODESLIDE_CHECK_DIAGNOSIS.md",
+      "path": "raw/E6g_NODESLIDE_CHECK_DIAGNOSIS.md.txt",
       "sha256": "ddd023cc110f17a0c3f16f7da17e08dafa68ffc20a0f3c2b5b48a622bc0b223e",
       "bytes": 5284
     },
@@ -4515,13 +4515,13 @@
     },
     {
       "original": "E6g_NODESLIDE_CURRENT_RECON.md",
-      "path": "raw/E6g_NODESLIDE_CURRENT_RECON.md",
+      "path": "raw/E6g_NODESLIDE_CURRENT_RECON.md.txt",
       "sha256": "f745d5dbe0bac1e49ed8a9da88e82fe3fd3f120f84e02a8709bd7eaf3ac3953d",
       "bytes": 10281
     },
     {
       "original": "E6g_NODESLIDE_FIRST_RUN_AUTHORIZATION.md",
-      "path": "raw/E6g_NODESLIDE_FIRST_RUN_AUTHORIZATION.md",
+      "path": "raw/E6g_NODESLIDE_FIRST_RUN_AUTHORIZATION.md.txt",
       "sha256": "8104e521b3460f0c1a3d83982f54c1a4ebe3fcbc3a10e5e97fe33387cb286de3",
       "bytes": 1701
     },
@@ -4533,7 +4533,7 @@
     },
     {
       "original": "E6g_NODESLIDE_GATE_BRIEF_DIAGNOSIS.md",
-      "path": "raw/E6g_NODESLIDE_GATE_BRIEF_DIAGNOSIS.md",
+      "path": "raw/E6g_NODESLIDE_GATE_BRIEF_DIAGNOSIS.md.txt",
       "sha256": "ea90affaaf77a35ff7bf104bfe7f732790970fcf20ec5c87224073af5306835b",
       "bytes": 10909
     },
@@ -4545,13 +4545,13 @@
     },
     {
       "original": "E6g_NODESLIDE_LOCAL_BACKEND_PREREQUISITES.md",
-      "path": "raw/E6g_NODESLIDE_LOCAL_BACKEND_PREREQUISITES.md",
+      "path": "raw/E6g_NODESLIDE_LOCAL_BACKEND_PREREQUISITES.md.txt",
       "sha256": "a08909858922fc9a8566086dd5ba874be8aa1c92de610402c77017ec67461122",
       "bytes": 7207
     },
     {
       "original": "E6g_NODESLIDE_LOOPBACK_BACKEND_PLAN.md",
-      "path": "raw/E6g_NODESLIDE_LOOPBACK_BACKEND_PLAN.md",
+      "path": "raw/E6g_NODESLIDE_LOOPBACK_BACKEND_PLAN.md.txt",
       "sha256": "cf9f139326084c1880a977992b3b9406afb16e062c4afc31aac9e624325a480b",
       "bytes": 2623
     },
@@ -4569,7 +4569,7 @@
     },
     {
       "original": "E6g_NODESLIDE_MULTILINE_FINAL_JUDGE.md",
-      "path": "raw/E6g_NODESLIDE_MULTILINE_FINAL_JUDGE.md",
+      "path": "raw/E6g_NODESLIDE_MULTILINE_FINAL_JUDGE.md.txt",
       "sha256": "56373010b720eb16ce9a75f0a5c80073fedfe659de4979607ebcfcf9b36c74e3",
       "bytes": 4790
     },
@@ -4587,7 +4587,7 @@
     },
     {
       "original": "E6g_NODESLIDE_OPENUI_FOLLOW_ON_DIAGNOSIS.md",
-      "path": "raw/E6g_NODESLIDE_OPENUI_FOLLOW_ON_DIAGNOSIS.md",
+      "path": "raw/E6g_NODESLIDE_OPENUI_FOLLOW_ON_DIAGNOSIS.md.txt",
       "sha256": "209376483cb9300c284e02e9cf3cb82636fa3320739fa48111a2ed6fea60d417",
       "bytes": 2993
     },
@@ -4599,7 +4599,7 @@
     },
     {
       "original": "E6g_NODESLIDE_OPENUI_PHASE_DIAGNOSIS.md",
-      "path": "raw/E6g_NODESLIDE_OPENUI_PHASE_DIAGNOSIS.md",
+      "path": "raw/E6g_NODESLIDE_OPENUI_PHASE_DIAGNOSIS.md.txt",
       "sha256": "386ef754908a94388aea325632c35aee02a51838a4241b3a7611151f9cebc2f0",
       "bytes": 4250
     },
@@ -4611,7 +4611,7 @@
     },
     {
       "original": "E6g_NODESLIDE_PORTABILITY_SOURCE_JUDGE.md",
-      "path": "raw/E6g_NODESLIDE_PORTABILITY_SOURCE_JUDGE.md",
+      "path": "raw/E6g_NODESLIDE_PORTABILITY_SOURCE_JUDGE.md.txt",
       "sha256": "c19acee6239a335d1608f5e91e86867416e1f406faa6bbf1cc6e62b040f34565",
       "bytes": 3678
     },
@@ -4623,7 +4623,7 @@
     },
     {
       "original": "E6g_NODESLIDE_READINESS_FINAL_JUDGE.md",
-      "path": "raw/E6g_NODESLIDE_READINESS_FINAL_JUDGE.md",
+      "path": "raw/E6g_NODESLIDE_READINESS_FINAL_JUDGE.md.txt",
       "sha256": "d0fe1c294e3b6c70ae00b6a98406b186d9cfdce5551452fd3afb26dd6e36a6e3",
       "bytes": 5476
     },

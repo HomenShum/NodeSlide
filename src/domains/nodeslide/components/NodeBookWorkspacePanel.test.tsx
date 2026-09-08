@@ -12,6 +12,7 @@ import {
   NodeSlideNodeBookWorkspacePanel,
   projectNodeSlideWorkspaceToNodeBook,
 } from './NodeBookWorkspacePanel';
+import { NODEBOOK_PORTABLE_ARTIFACT_FIXTURES } from './nodeBookPortableArtifactFixtures';
 
 afterEach(cleanup);
 beforeAll(() => {
@@ -167,85 +168,19 @@ describe('NodeSlide full shared NodeBook workspace', () => {
   it('renders all six portable NodeBook visual kinds inside the real NodeSlide host mount', async () => {
     const workspace = workspaceFixture();
     const rootId = `deck:${workspace.deck.id}`;
-    const sources = [
-      [
-        'mindmap',
-        'structured-json',
-        JSON.stringify({
-          schemaVersion: 'nodekit.diagram/v1',
-          diagramType: 'mindmap',
-          nodes: [
-            { id: 'root', label: 'Decision' },
-            { id: 'proof', label: 'Proof', parentId: 'root' },
-          ],
-          edges: [{ id: 'edge', from: 'root', to: 'proof' }],
-          groups: [],
-          layout: { direction: 'LR', seed: 'proof' },
-        }),
-      ],
-      [
-        'flow',
-        'structured-json',
-        JSON.stringify({
-          schemaVersion: 'nodekit.diagram/v1',
-          diagramType: 'flow',
-          nodes: [
-            { id: 'draft', label: 'Draft' },
-            { id: 'review', label: 'Review' },
-          ],
-          edges: [{ id: 'edge', from: 'draft', to: 'review' }],
-          groups: [],
-          layout: { direction: 'LR', seed: 'proof' },
-        }),
-      ],
-      [
-        'chart',
-        'vega-lite-json',
-        JSON.stringify({
-          data: { values: [{ label: 'Proof', value: 8 }] },
-          mark: 'bar',
-          encoding: {
-            x: { field: 'label', type: 'nominal' },
-            y: { field: 'value', type: 'quantitative' },
-          },
-        }),
-      ],
-      [
-        'drawio',
-        'drawio-xml',
-        '<mxGraphModel><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="a" value="Evidence" vertex="1" parent="1"><mxGeometry x="20" y="20" width="120" height="50"/></mxCell></root></mxGraphModel>',
-      ],
-      ['mermaid', 'mermaid', 'flowchart LR\nEvidence-->Decision'],
-      [
-        'infographic',
-        'infographic-json',
-        JSON.stringify({
-          schemaVersion: 'nodekit.infographic/v1',
-          canvas: { width: 960, columns: 2 },
-          theme: {
-            background: '#f8fafc',
-            surface: '#ffffff',
-            text: '#0f172a',
-            muted: '#64748b',
-            accent: '#2563eb',
-          },
-          title: 'Evidence brief',
-          sections: [{ id: 'metric', type: 'metric', title: 'Reviewed', value: 42 }],
-        }),
-      ],
-    ] as const;
     // The six plugins are independent and the scenario is explicitly bounded to
     // the portable-format contract, so warm them concurrently like a host would.
     const portableArtifacts: NodeBookArtifact[] = await Promise.all(
-      sources.map(async ([kind, format, payload]) => {
+      NODEBOOK_PORTABLE_ARTIFACT_FIXTURES.map(async (fixture) => {
+        const { artifactId, format, kind, payload, title } = fixture;
         const canonical = await (await loadArtifactPlugin(kind)).validatePayload(payload);
         return {
           workspaceId: workspace.deck.id,
           rootId,
-          artifactId: `portable-${kind}`,
+          artifactId,
           kind,
           format,
-          title: `Portable ${kind}`,
+          title,
           canonicalVersion: 1,
           contentHash: sha256Hex(canonical),
           payload,
@@ -258,12 +193,23 @@ describe('NodeSlide full shared NodeBook workspace', () => {
         portableArtifacts={portableArtifacts}
       />,
     );
-    expect(
-      projectNodeSlideWorkspaceToNodeBook(workspace, portableArtifacts).artifacts.map(
-        (artifact) => artifact.kind,
-      ),
-    ).toEqual(
+    const projectedArtifacts = projectNodeSlideWorkspaceToNodeBook(
+      workspace,
+      portableArtifacts,
+    ).artifacts;
+    expect(projectedArtifacts.map((artifact) => artifact.kind)).toEqual(
       expect.arrayContaining(['mindmap', 'flow', 'chart', 'drawio', 'mermaid', 'infographic']),
+    );
+    expect(
+      projectedArtifacts
+        .filter(({ artifactId }) => artifactId.startsWith('portable-'))
+        .map(({ artifactId, contentHash, payload }) => ({ artifactId, contentHash, payload })),
+    ).toEqual(
+      portableArtifacts.map(({ artifactId, contentHash, payload }) => ({
+        artifactId,
+        contentHash,
+        payload,
+      })),
     );
     for (let index = 0; index < portableArtifacts.length; index += 1) {
       required(

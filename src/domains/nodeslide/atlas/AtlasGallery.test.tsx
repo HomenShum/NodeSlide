@@ -1,14 +1,35 @@
 // @vitest-environment jsdom
 import { readFileSync } from 'node:fs';
 import '@testing-library/jest-dom/vitest';
-import { cleanup, render, screen, within } from '@testing-library/react';
+import { cleanup, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import { NODESLIDE_ATLAS_RECEIPT_PROJECTION } from '../../../../shared/nodeslideAtlasReceipts';
 import { NODESLIDE_ATLAS_ARCHETYPES } from '../../../../shared/nodeslideAtlasRegistry';
+import { NODEBOOK_PORTABLE_ARTIFACT_FIXTURES } from '../components/nodeBookPortableArtifactFixtures';
 import { AtlasGallery } from './AtlasGallery';
 
 afterEach(cleanup);
+beforeAll(() => {
+  Object.defineProperty(SVGElement.prototype, 'getComputedTextLength', {
+    configurable: true,
+    value() {
+      return (this.textContent?.length ?? 0) * 7;
+    },
+  });
+  Object.defineProperty(SVGElement.prototype, 'getBBox', {
+    configurable: true,
+    value() {
+      return { x: 0, y: 0, width: (this.textContent?.length ?? 0) * 7, height: 16 };
+    },
+  });
+  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+    configurable: true,
+    value() {
+      return { measureText: (value: string) => ({ width: value.length * 7 }) };
+    },
+  });
+});
 
 describe('Atlas Gallery: a builder looking for the right slide', () => {
   it('opens on the gallery with every archetype listed', () => {
@@ -123,6 +144,33 @@ describe('Atlas Gallery: a builder looking for the right slide', () => {
       'No arena receipts recorded yet.',
     );
   });
+
+  it('lets a reviewer inspect all six real NodeBook renderers in the demo mode', async () => {
+    const user = userEvent.setup();
+    const view = render(<AtlasGallery />);
+
+    await user.click(screen.getByTestId('atlas-mode-nodebook-formats'));
+    expect(screen.getByTestId('atlas-nodebook-formats')).toBeInTheDocument();
+    expect(screen.getByText('Integration demo')).toBeInTheDocument();
+
+    await waitFor(
+      () => {
+        for (const fixture of NODEBOOK_PORTABLE_ARTIFACT_FIXTURES) {
+          const card = screen.getByTestId(`atlas-nodebook-format-${fixture.kind}`);
+          expect(within(card).getByText(fixture.title)).toBeInTheDocument();
+          expect(
+            card.querySelector(
+              `[data-nodebook-artifact-kind="${fixture.kind}"] [data-nodebook-artifact-rendered] svg`,
+            ),
+          ).toBeTruthy();
+        }
+        expect(
+          view.container.querySelectorAll('[data-nodebook-artifact-rendered] svg'),
+        ).toHaveLength(NODEBOOK_PORTABLE_ARTIFACT_FIXTURES.length);
+      },
+      { timeout: 15_000 },
+    );
+  }, 60_000);
 
   it('returns to the gallery after visiting a compare mode', async () => {
     const user = userEvent.setup();

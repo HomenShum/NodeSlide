@@ -20,9 +20,11 @@ import {
   NODESLIDE_ATLAS_SOURCE_POLICIES,
   searchAtlasArchetypes,
 } from '../../../../shared/nodeslideAtlasRegistry';
+import { NodeSlideNodeBookArtifactPanel } from '../components/NodeBookArtifactPanel';
+import { NODEBOOK_PORTABLE_ARTIFACT_FIXTURES } from '../components/nodeBookPortableArtifactFixtures';
 import './atlasGallery.css';
 
-type AtlasMode = 'gallery' | 'model-compare' | 'harness-compare';
+type AtlasMode = 'gallery' | 'model-compare' | 'harness-compare' | 'nodebook-formats';
 
 const MODES: readonly { id: AtlasMode; label: string; hint: string }[] = [
   { id: 'gallery', label: 'Artifact Gallery', hint: 'Browse every archetype the Atlas catalogues' },
@@ -31,6 +33,11 @@ const MODES: readonly { id: AtlasMode; label: string; hint: string }[] = [
     id: 'harness-compare',
     label: 'Harness Compare',
     hint: 'Did the model improve, or the harness?',
+  },
+  {
+    id: 'nodebook-formats',
+    label: 'NodeBook formats · Demo',
+    hint: 'Render six portable NodeBook formats through the production adapter',
   },
 ];
 
@@ -204,10 +211,43 @@ export function AtlasGallery() {
             {selected ? <ArchetypeDetail archetype={selected} /> : <p>Select an archetype.</p>}
           </aside>
         </div>
+      ) : mode === 'nodebook-formats' ? (
+        <NodeBookFormatsMode />
       ) : (
         <CompareMode mode={mode} />
       )}
     </main>
+  );
+}
+
+function NodeBookFormatsMode() {
+  return (
+    <section className="atlas__formats" data-testid="atlas-nodebook-formats">
+      <header className="atlas__formats-intro">
+        <span className="atlas__demo-label">Integration demo</span>
+        <h2>NodeBook formats</h2>
+        <p>
+          Six portable artifacts rendered by the same NodeBook adapter used inside the NodeSlide
+          workspace.
+        </p>
+      </header>
+
+      <div className="atlas__format-grid">
+        {NODEBOOK_PORTABLE_ARTIFACT_FIXTURES.map((fixture) => (
+          <article
+            key={fixture.artifactId}
+            className="atlas__format-card"
+            data-testid={`atlas-nodebook-format-${fixture.kind}`}
+          >
+            <header className="atlas__format-card-header">
+              <h3>{fixture.title}</h3>
+              <code>{fixture.format}</code>
+            </header>
+            <NodeSlideNodeBookArtifactPanel deckId="atlas-formats-demo" {...fixture} version={1} />
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -292,7 +332,7 @@ function ArchetypeDetail({ archetype }: { archetype: AtlasArchetype }) {
  * `artifact-arena-v1`, so it still reports nothing — but for the true reason rather than the
  * blanket "no receipts recorded yet" this surface used to show while 84 sat in the same repo.
  */
-function CompareMode({ mode }: { mode: Exclude<AtlasMode, 'gallery'> }) {
+function CompareMode({ mode }: { mode: Exclude<AtlasMode, 'gallery' | 'nodebook-formats'> }) {
   const isModel = mode === 'model-compare';
   const standings = useMemo(() => atlasRecipeStandings(), []);
   const { totals, meta } = NODESLIDE_ATLAS_RECEIPT_PROJECTION;

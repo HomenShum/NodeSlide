@@ -315,6 +315,75 @@
   color: var(--color-error, #b04030);
 }
 
+.atlas__formats {
+  padding: 24px 28px 36px;
+}
+
+.atlas__formats-intro {
+  max-width: 680px;
+  margin-bottom: 20px;
+}
+
+.atlas__demo-label {
+  display: inline-block;
+  margin-bottom: 6px;
+  color: var(--color-accent, #c76d54);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atlas__formats-intro h2,
+.atlas__format-card h3 {
+  margin: 0;
+  font-family: var(--font-serif, Georgia, serif);
+  font-weight: 500;
+}
+
+.atlas__formats-intro h2 {
+  font-size: 22px;
+}
+
+.atlas__formats-intro p {
+  margin: 5px 0 0;
+  color: var(--color-text-secondary, #6d635a);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.atlas__format-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr));
+  gap: 14px;
+}
+
+.atlas__format-card {
+  min-width: 0;
+  padding: 16px;
+  overflow: auto;
+  background: var(--color-surface, #fdfcfa);
+  border: 1px solid var(--color-border, #e0d9d1);
+}
+
+.atlas__format-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.atlas__format-card h3 {
+  font-size: 17px;
+}
+
+.atlas__format-card code {
+  color: var(--color-text-muted, #8d8279);
+  font-size: 10px;
+}
+
 .atlas__empty {
   margin: 48px auto;
   max-width: 620px;

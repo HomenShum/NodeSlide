@@ -1,0 +1,229 @@
+{
+  "schemaVersion": "nodeslide.production-scenarios/v1",
+  "description": "Five end-to-end jobs that a person or coding agent must finish before NodeSlide is production-ready.",
+  "requiredDomains": ["research", "finance", "startup", "operating", "governance"],
+  "sharedAcceptance": {
+    "jobCompletion": [
+      "brief_fidelity",
+      "source_truth",
+      "narrative_progression",
+      "visual_metaphor_progression",
+      "composition_diversity",
+      "editable_export",
+      "public_or_private_distribution",
+      "receipt_integrity"
+    ],
+    "deliveryFiles": ["pptx", "html", "nodeslide.json", "receipt.json"],
+    "minimumDistinctSilhouettes": 4,
+    "maximumAdjacentSilhouetteSimilarity": 0.82,
+    "mustFailClosedOn": [
+      "missing_required_source",
+      "invented_numeric_claim",
+      "unresolved_placeholder",
+      "requested_slide_count_mismatch",
+      "failed_diversity_gate",
+      "incomplete_export"
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "research-evidence-to-decision",
+      "domain": "research",
+      "persona": "Research lead preparing a cross-functional decision review",
+      "jobToFinish": "Turn a mixed-quality evidence set into a decision, with uncertainty and source lineage still visible.",
+      "sourceMode": "uploaded-corpus",
+      "brief": "Create an 8-slide evidence synthesis for a research team deciding whether to adopt AI coding agents for a six-week pilot. Use only the supplied papers, internal evaluation notes, and interview excerpts. Separate observed findings from hypotheses; show agreement, contradiction, and unresolved uncertainty; explain the research workflow from discovery through synthesis; end with a bounded pilot decision, owner, success metric, and stop condition.",
+      "acceptance": {
+        "slideCount": 8,
+        "requiredArtifacts": [
+          "evidence-map",
+          "claim-lineage",
+          "uncertainty-range",
+          "decision-gate"
+        ],
+        "narrativeBeats": [
+          "question",
+          "evidence",
+          "contradiction",
+          "uncertainty",
+          "implication",
+          "decision"
+        ],
+        "visualMetaphor": "Scattered observations converge into a calibrated signal, while unresolved evidence remains visibly outside the decision boundary.",
+        "truthRules": [
+          "No claim without a supplied source",
+          "Hypotheses are labeled",
+          "Contradictions are preserved"
+        ],
+        "distribution": "Research review, editable PPTX, and source-aware leave-behind"
+      },
+      "adversarial": [
+        "one source is missing",
+        "two sources conflict",
+        "the same brief is submitted twice"
+      ],
+      "sustained": {
+        "repeatRuns": 20,
+        "mustPreserve": ["source ids", "slide count", "decision owner"]
+      }
+    },
+    {
+      "id": "finance-earnings-decision",
+      "domain": "finance",
+      "persona": "CFO preparing a board and investor-relations pre-read",
+      "jobToFinish": "Explain whether growth quality is strengthening without laundering assumptions into observed performance.",
+      "sourceMode": "bounded-web-and-upload",
+      "brief": "Create an 8-slide board and investor-relations briefing from an uploaded earnings release, filed presentation, and management transcript. Reconcile revenue growth, margins, cash generation, and forward guidance; distinguish GAAP, non-GAAP, observed, and forward-looking values; show base, upside, and downside implications; end with two operating decisions and the evidence required at the next checkpoint.",
+      "acceptance": {
+        "slideCount": 8,
+        "requiredArtifacts": [
+          "source-bound-chart",
+          "metric-bridge",
+          "scenario-table",
+          "risk-sensitivity"
+        ],
+        "narrativeBeats": [
+          "tension",
+          "evidence",
+          "economics",
+          "outlook",
+          "sensitivity",
+          "decision"
+        ],
+        "visualMetaphor": "A financial signal is progressively reconciled from reported result to decision-quality outlook.",
+        "truthRules": [
+          "Every number has a source and unit",
+          "Non-GAAP values are labeled",
+          "Missing guidance is never synthesized"
+        ],
+        "distribution": "Board pre-read, presenter view, editable PPTX, and immutable share"
+      },
+      "adversarial": [
+        "a table total does not reconcile",
+        "guidance is absent",
+        "a source URL redirects to an oversized body"
+      ],
+      "sustained": {
+        "repeatRuns": 12,
+        "mustPreserve": ["numeric facts", "units", "forward-looking labels"]
+      }
+    },
+    {
+      "id": "startup-seed-narrative",
+      "domain": "startup",
+      "persona": "Founder preparing a seed meeting and a partner-forwardable deck",
+      "jobToFinish": "Make the opportunity retellable without inventing traction or collapsing into a generic pitch template.",
+      "sourceMode": "founder-brief-and-labeled-synthetic-fixture",
+      "brief": "Create a 10-slide seed deck for a fictional industrial software startup. Show the costly status quo, the product's evidence chain, one customer workflow, labeled synthetic traction, the initial market wedge, defensibility, use of funds, and a memorable ask. Every company-specific number must display SYNTHETIC TEST DATA. The product visual should evolve from a noisy machine signal into an accountable maintenance decision.",
+      "acceptance": {
+        "slideCount": 10,
+        "requiredArtifacts": [
+          "problem-scene",
+          "product-workflow",
+          "synthetic-traction-chart",
+          "wedge-map",
+          "funding-ask"
+        ],
+        "narrativeBeats": [
+          "pain",
+          "failed-status-quo",
+          "product",
+          "proof",
+          "wedge",
+          "defensibility",
+          "ask"
+        ],
+        "visualMetaphor": "Noise becomes one traceable maintenance decision, then scales into a repeatable operating loop.",
+        "truthRules": [
+          "Synthetic numbers are labeled on-slide",
+          "No generic TAM claim",
+          "No fake customer logos or quotes"
+        ],
+        "distribution": "Live investor meeting, editable PPTX, and partner-forwardable share"
+      },
+      "adversarial": [
+        "traction data is empty",
+        "the prompt asks to remove the synthetic label",
+        "the same slide structure is requested repeatedly"
+      ],
+      "sustained": { "repeatRuns": 20, "mustPreserve": ["synthetic labels", "ask", "wedge"] }
+    },
+    {
+      "id": "operating-quarterly-review",
+      "domain": "operating",
+      "persona": "COO running a quarterly operating review",
+      "jobToFinish": "Move a leadership team from scattered metrics and exceptions to owned interventions.",
+      "sourceMode": "uploaded-operating-pack",
+      "brief": "Create a 9-slide quarterly operating review from the supplied KPI export, initiative register, customer escalation log, and capacity plan. Start with the operating tension, explain what changed and why, distinguish signal from noise, show where the plan is off track, connect interventions to owners and leading indicators, and end with the next 30-day operating cadence. Preserve exact metric definitions and do not convert missing values to zero.",
+      "acceptance": {
+        "slideCount": 9,
+        "requiredArtifacts": [
+          "kpi-trend",
+          "variance-waterfall",
+          "bottleneck-map",
+          "owner-timeline",
+          "decision-log"
+        ],
+        "narrativeBeats": ["tension", "change", "cause", "constraint", "intervention", "cadence"],
+        "visualMetaphor": "A constrained operating flow is diagnosed, relieved, and converted into an owned cadence.",
+        "truthRules": [
+          "Missing is distinct from zero",
+          "Metric definitions remain exact",
+          "Every action has an owner and checkpoint"
+        ],
+        "distribution": "Leadership review, team follow-up, editable PPTX, and durable decision log"
+      },
+      "adversarial": [
+        "two KPI definitions collide",
+        "an initiative has no owner",
+        "a burst of duplicate create requests arrives"
+      ],
+      "sustained": {
+        "repeatRuns": 52,
+        "mustPreserve": ["metric definitions", "owners", "decision history"]
+      }
+    },
+    {
+      "id": "governance-release-gate",
+      "domain": "governance",
+      "persona": "Risk committee deciding whether an AI system may enter production",
+      "jobToFinish": "Turn a framework, evidence register, and residual risks into one governed release decision.",
+      "sourceMode": "bounded-web-and-upload",
+      "brief": "Create a 9-slide executive risk-committee decision deck operationalizing the NIST AI Risk Management Framework. Preserve GOVERN as cross-cutting and MAP, MEASURE, and MANAGE as an iterative system. Distinguish model performance from residual risk; bind every release claim to evidence; show exceptions and control owners; end with approve, conditionally approve, or stop, plus the next checkpoint. Do not invent regulatory obligations.",
+      "acceptance": {
+        "slideCount": 9,
+        "requiredArtifacts": [
+          "governance-system",
+          "risk-matrix",
+          "control-evidence-table",
+          "exception-path",
+          "release-gate"
+        ],
+        "narrativeBeats": [
+          "stakes",
+          "system",
+          "evidence",
+          "residual-risk",
+          "exception",
+          "decision"
+        ],
+        "visualMetaphor": "Evidence accumulates around a guarded threshold that changes from open question to controlled release state.",
+        "truthRules": [
+          "Framework functions retain their meaning",
+          "No invented obligation",
+          "A failed control cannot produce a green release state"
+        ],
+        "distribution": "Committee pre-read, decision meeting, editable control artifact, and immutable share"
+      },
+      "adversarial": [
+        "one mandatory control fails",
+        "evidence is stale",
+        "the provider times out after partial generation"
+      ],
+      "sustained": {
+        "repeatRuns": 24,
+        "mustPreserve": ["control owners", "exceptions", "approval state"]
+      }
+    }
+  ]
+}

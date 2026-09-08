@@ -17,6 +17,7 @@ describe('NodeSlide inspector shell state', () => {
     expect(INSPECTOR_TABS.map(({ id }) => id)).toEqual([
       'ai',
       'design',
+      'nodebook',
       'comments',
       'versions',
       'data',
@@ -39,7 +40,11 @@ describe('NodeSlide inspector shell state', () => {
       'Evidence',
       'Trace',
     ]);
-    expect(MORE_INSPECTOR_TABS.map(({ label }) => label)).toEqual(['Versions', 'JSON']);
+    expect(MORE_INSPECTOR_TABS.map(({ label }) => label)).toEqual([
+      'NodeBook',
+      'Versions',
+      'JSON',
+    ]);
     expect(source).toContain('data-testid="inspector-more"');
     expect(source).toContain('<DropdownMenuContent');
     expect(source).toContain('<DropdownMenuItem');
@@ -80,6 +85,7 @@ describe('NodeSlide inspector shell state', () => {
     expect(source).toContain('rememberInspectorTab(mountedTabsRef.current, activeTab)');
     expect(source).toContain("mountedTabsRef.current.has('ai')");
     expect(source).toContain("mountedTabsRef.current.has('json')");
+    expect(source).toContain("mountedTabsRef.current.has('nodebook')");
     expect(source).toContain('hidden={activeTab !== id}');
     // The old single-panel wrapper keyed off activeTab; if it comes back, retention is gone.
     expect(source).not.toContain("{activeTab === 'ai' ? (");

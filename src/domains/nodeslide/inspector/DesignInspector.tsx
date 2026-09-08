@@ -41,6 +41,8 @@ import {
   nodeSlideImageAspect,
 } from '../../../lib/sessionImageGeneration';
 import { NODESLIDE_TASTE_PACKS, type NodeSlideTastePackId } from '../signature/packs/index';
+import { NodeSlideNodeBookArtifactPanel } from '../components/NodeBookArtifactPanel';
+import { projectSelectedGraphToNodeBook } from '../components/nodeBookGraphProjection';
 import { TasteProfileCard } from './TasteProfileCard';
 
 interface DesignInspectorProps {
@@ -202,6 +204,7 @@ export function DesignInspector({
   }
 
   const editable = selectedElements.filter((element) => !element.locked);
+  const nodeBookProjection = projectSelectedGraphToNodeBook(slide, slideElements, selectedElements);
   const patchStyle = (properties: SlideElement['style'], label: string) => {
     const operations: PatchOperation[] = editable.map((element) => ({
       op: 'update_style',
@@ -233,6 +236,33 @@ export function DesignInspector({
           </span>
         ) : null}
       </section>
+
+      {nodeBookProjection.status !== 'none' ? (
+        <section
+          className="ns-inspector-section ns-nodebook-artifact-preview"
+          aria-label="NodeBook structured artifact preview"
+        >
+          <div className="ns-section-title-row">
+            <div>
+              <span className="ns-eyebrow">Shared NodeBook</span>
+              <h2>Structured diagram</h2>
+            </div>
+            <span className="ns-kind-pill">
+              {nodeBookProjection.status === 'ready' ? nodeBookProjection.graphKind : 'invalid'}
+            </span>
+          </div>
+          {nodeBookProjection.status === 'ready' ? (
+            <NodeSlideNodeBookArtifactPanel
+              deckId={slide.deckId}
+              {...nodeBookProjection.artifact}
+            />
+          ) : (
+            <p role="alert" className="ns-nodebook-artifact-error">
+              {nodeBookProjection.message}
+            </p>
+          )}
+        </section>
+      ) : null}
 
       <CollapsibleInspectorSection
         id="content"

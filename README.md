@@ -256,6 +256,18 @@ npx convex dev     # one-time: provisions a Convex deployment, writes .env.local
 npm run dev        # vite + convex dev (concurrently) — open the printed localhost URL
 ```
 
+For an HTTPS phone check, keep the web server running and expose its bounded Vite port with a
+temporary tunnel. The desktop landing derives its **Open on phone** QR from that HTTPS origin;
+the QR always opens the safe NodeSlide root and never forwards private deck capability state.
+
+```bash
+npm run dev:web
+cloudflared tunnel --url http://127.0.0.1:5180 --no-autoupdate
+```
+
+Quick tunnels are temporary and have no uptime guarantee. Use the printed HTTPS URL only for the
+current test session; production remains [nodeslide.vercel.app](https://nodeslide.vercel.app).
+
 The **deterministic path needs no API keys** and produces a complete, reproducible deck. For live model runs, set `OPENROUTER_API_KEY` in Convex (`npx convex env set OPENROUTER_API_KEY …`) or bring your own key (BYOK). See [`.env.example`](.env.example).
 
 ```bash

@@ -7,6 +7,7 @@ import {
   LoaderCircle,
   Paperclip,
   PlugZap,
+  QrCode,
   Shapes,
   ShieldCheck,
   Sparkles,
@@ -99,6 +100,11 @@ export function NodeSlideLanding({
   const providerMode: NodeSlideBriefProviderMode =
     generation === 'deterministic' ? 'deterministic' : nodeSlideProviderModeForModel(generation);
   const selectedModel = generation === 'deterministic' ? null : nodeSlideAgentModel(generation);
+  // The handoff intentionally excludes query/hash state. Deck ownership is a browser-held
+  // capability, and forwarding a private deck/share route to a QR service would leak context
+  // without making the phone an authorized editor. The root URL is the honest phone entrypoint.
+  const phoneHandoffUrl = new URL('/', window.location.origin).toString();
+  const phoneQrImageUrl = `https://quickchart.io/qr?size=440&margin=2&text=${encodeURIComponent(phoneHandoffUrl)}`;
 
   const start = () => {
     const nextPrompt = prompt.trim();
@@ -191,6 +197,23 @@ export function NodeSlideLanding({
           <strong>NodeSlide</strong>
         </a>
         <div className="ns-landing-header-actions">
+          <details className="ns-landing-phone-handoff" data-testid="nodeslide-phone-handoff">
+            <summary>
+              <QrCode size={14} aria-hidden="true" /> Open on phone
+            </summary>
+            <div className="ns-landing-phone-card">
+              <img
+                alt={`QR code for ${phoneHandoffUrl}`}
+                data-testid="nodeslide-phone-qr"
+                referrerPolicy="no-referrer"
+                src={phoneQrImageUrl}
+              />
+              <div>
+                <strong>Scan with your phone</strong>
+                <span>Opens NodeSlide home. Private deck access stays on this device.</span>
+              </div>
+            </div>
+          </details>
           <button className="ns-landing-lab" type="button" onClick={() => setArtifactLabOpen(true)}>
             <Shapes size={14} /> Artifact Lab
           </button>

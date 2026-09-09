@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import assert from 'node:assert/strict';
 /**
  * CI runtime smoke gate.
  *
@@ -103,6 +104,41 @@ async function main() {
 
   const browser = await chromium.launch();
   try {
+    // This is a separate public-body assertion. Static content must never count
+    // as React mounting; the original runtime selectors below remain required.
+    const noJsContext = await browser.newContext({ javaScriptEnabled: false });
+    let publicIntro;
+    try {
+      const noJs = await noJsContext.newPage();
+      await noJs.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
+      const summary = noJs.getByTestId('nodeslide-public-summary');
+      assert.equal(await summary.locator('h1').count(), 1);
+      assert.equal(await summary.locator('h1').innerText(), 'What presentation should we build?');
+      publicIntro = await summary.locator('.ns-landing-intro').innerText();
+      assert.match(await summary.innerText(), /Enable JavaScript to create, edit, present/);
+      assert.equal(await noJs.locator(SELECTOR).count(), 0);
+      assert.equal(
+        await noJs.locator('link[rel="canonical"]').getAttribute('href'),
+        'https://nodeslide.vercel.app/',
+      );
+      assert.equal(
+        await noJs.locator('meta[property="og:url"]').getAttribute('content'),
+        'https://nodeslide.vercel.app/',
+      );
+      const robots = await fetch(`${BASE_URL}/robots.txt`);
+      assert.equal(robots.status, 200);
+      assert.match(robots.headers.get('content-type') ?? '', /text\/plain/);
+      assert.match(await robots.text(), /Sitemap: https:\/\/nodeslide\.vercel\.app\/sitemap\.xml/);
+      const sitemap = await fetch(`${BASE_URL}/sitemap.xml`);
+      assert.equal(sitemap.status, 200);
+      assert.match(sitemap.headers.get('content-type') ?? '', /xml/);
+      assert.deepEqual((await sitemap.text()).match(/<loc>[^<]+<\/loc>/g), [
+        '<loc>https://nodeslide.vercel.app/</loc>',
+      ]);
+    } finally {
+      await noJsContext.close();
+    }
+
     const page = await browser.newPage();
     /** @type {string[]} */
     const pageErrors = [];
@@ -125,6 +161,14 @@ async function main() {
     await page.waitForTimeout(500);
 
     const failures = [];
+    if (await page.getByTestId('nodeslide-public-summary').count()) {
+      failures.push('the static public summary was not replaced by the application.');
+    }
+    if (await page.locator('.ns-landing-sample').count()) {
+      if ((await page.locator('.ns-landing-intro').innerText()) !== publicIntro) {
+        failures.push('the static and interactive public introductions differ.');
+      }
+    }
     if (!selectorFound) {
       failures.push(
         `neither ".ns-landing-sample" nor "[data-testid=deployment-configuration-error]" appeared within ${SELECTOR_TIMEOUT_MS}ms — React did not mount (blank page).`,

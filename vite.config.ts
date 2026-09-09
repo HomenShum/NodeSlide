@@ -1,10 +1,38 @@
 import { URL, fileURLToPath } from 'node:url';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { configDefaults, defineConfig } from 'vitest/config';
+import { NodeSlideLandingIntro } from './src/domains/nodeslide/components/NodeSlideLandingIntro';
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    {
+      name: 'nodeslide-public-intro',
+      transformIndexHtml(html) {
+        const marker = '<!--nodeslide-public-intro-->';
+        if (html.split(marker).length !== 2) {
+          throw new Error('Expected exactly one NodeSlide public intro marker.');
+        }
+        const intro = renderToStaticMarkup(createElement(NodeSlideLandingIntro));
+        return html.replace(
+          marker,
+          `<main class="nodeslide-studio ns-landing" data-testid="nodeslide-public-summary">
+  <header class="ns-landing-header">
+    <a class="ns-landing-brand" href="/" aria-label="NodeSlide home"><span aria-hidden="true"></span><strong>NodeSlide</strong></a>
+  </header>
+  <section class="ns-landing-main" aria-labelledby="nodeslide-landing-title">
+    ${intro}
+    <noscript><p>Enable JavaScript to create, edit, present, or export a deck.</p></noscript>
+  </section>
+</main>`,
+        );
+      },
+    },
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

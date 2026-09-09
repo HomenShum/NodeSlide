@@ -7145,7 +7145,13 @@
 
 @media (max-width: 699px) {
   .nodeslide-studio .ns-landing-header {
+    flex-wrap: wrap;
+    gap: 12px;
     padding: 15px 17px;
+  }
+
+  .nodeslide-studio .ns-landing-header-actions {
+    flex-wrap: wrap;
   }
 
   .nodeslide-studio .ns-landing-connect {
@@ -7157,6 +7163,18 @@
   .nodeslide-studio .ns-landing-connect svg {
     height: 15px;
     width: 15px;
+  }
+
+  .nodeslide-studio .ns-landing-lab,
+  .nodeslide-studio .ns-landing-connect,
+  .nodeslide-studio .ns-landing-open {
+    min-height: 44px;
+    min-width: 44px;
+    padding-inline: 10px;
+  }
+
+  .nodeslide-studio .ns-landing-header-actions svg {
+    flex-shrink: 0;
   }
 
   .nodeslide-studio .ns-connections-body {

@@ -27,6 +27,7 @@ import {
 import type { NodeSlideDataAttachment } from '../../../../shared/nodeslideAttachments';
 import { ArtifactLabDialog } from './ArtifactLabDialog';
 import { NodeSlideConnectionsDialog } from './NodeSlideConnectionsDialog';
+import { NodeSlideLandingIntro } from './NodeSlideLandingIntro';
 import {
   type CreateDeckAdmissionRequest,
   NODESLIDE_NEBIUS_BRIEF_CONSENT,
@@ -224,14 +225,7 @@ export function NodeSlideLanding({
       />
 
       <section className="ns-landing-main" aria-labelledby="nodeslide-landing-title">
-        <div className="ns-landing-intro">
-          <span className="ns-eyebrow">Decks that stay editable</span>
-          <h1 id="nodeslide-landing-title">What presentation should we build?</h1>
-          <p>
-            Start with an idea, a structured spec, or evidence. NodeSlide turns it into a reviewable
-            deck—not a stack of static images.
-          </p>
-        </div>
+        <NodeSlideLandingIntro />
 
         <form className="ns-landing-composer" onSubmit={submit}>
           <label className="ns-sr-only" htmlFor="nodeslide-landing-prompt">

@@ -15,7 +15,7 @@
     },
     {
       "file": "src/domains/nodeslide/components/NodeSlideLanding.tsx",
-      "line": 103,
+      "line": 104,
       "description": "**The primary user action.**\n\nThis is where a free-form paragraph becomes a structured request. The person typed one sentence; the generator needs an audience, a purpose and success criteria, so `start` supplies sensible defaults rather than interrogating the user with a form.\n\nEverything downstream can therefore assume a complete request shape. Note `route: 'free'` — it is the only route this release accepts, and the server rejects the others."
     },
     {

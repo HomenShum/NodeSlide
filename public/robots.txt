@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nodeslide.vercel.app/sitemap.xml

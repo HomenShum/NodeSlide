@@ -14,6 +14,26 @@
   ],
   "headers": [
     {
+      "source": "/",
+      "has": [{ "type": "query", "key": "deck" }],
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "query", "key": "share" }],
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "query", "key": "approve" }],
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "query", "key": "present" }],
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {

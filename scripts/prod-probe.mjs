@@ -171,7 +171,7 @@ try {
     await page
       .getByLabel('Presentation brief')
       .fill(
-        'Create a concise six-slide operational readiness review with a clear decision, a small editable chart, and source-safe claims. This is an automated synthetic production probe.',
+        'Create a concise six-slide operational readiness review with a clear decision, a small editable chart, and source-safe claims. This is an automated synthetic production probe. Synthetic example: top scorers were Alpha 42 and Beta 61.',
       );
     creationSubmitted = true;
     await page.getByLabel('Create presentation').click();

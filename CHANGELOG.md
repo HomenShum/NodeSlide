@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Presentation composer
+
+- Kept the native model selector and dropdown arrow inside the phone composer,
+  including enlarged text, while preserving the model icon, keyboard focus,
+  complete dropdown options, and the Create button.
+
 ### Runtime
 
 - Added a complete `nodeslide generate` transaction: hosted creation,

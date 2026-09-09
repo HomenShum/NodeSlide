@@ -52,6 +52,7 @@ import {
 } from '../../shared/nodeslideLayoutMetrics';
 import { inferNodeSlideRequestedSlideCount } from '../../shared/nodeslideSlideCount';
 import {
+  NODESLIDE_CANONICAL_AUTHORED_ARTIFACT_VERSION,
   type NodeSlideAuthoredArtifactReceipt,
   type NodeSlideAuthoredArtifactSpec,
   NodeSlideAuthoredArtifactValidationError,
@@ -670,6 +671,43 @@ export function deterministicBriefSpec(
     inferNodeSlideRequestedSlideCount(cleanTitle, brief.prompt) ?? 7,
     success,
   );
+  const artifactOptions = nodeSlideAuthoredArtifactValidationOptions(
+    nodeSlideAuthoredArtifactSourceInventory(brief, attachments),
+  );
+  for (const [index, slide] of spec.slides.entries()) {
+    if (!slide.chart) continue;
+    const chart = slide.chart;
+    const minimum = Math.min(0, ...chart.values);
+    const maximum = Math.max(0, ...chart.values);
+    const compiled = compileNodeSlideAuthoredArtifact(
+      {
+        schemaVersion: NODESLIDE_CANONICAL_AUTHORED_ARTIFACT_VERSION,
+        id: `brief-chart-${index + 1}`,
+        kind: 'chart',
+        narrativeJob: 'Compare the values supplied in the creation brief.',
+        claimIds: [],
+        sourceIds: ['brief:prompt'],
+        provenance: {
+          truthState: 'derived',
+          rationale: 'Parsed from the supplied brief; example values are not measured evidence.',
+          sourceRefs: ['brief:prompt'],
+        },
+        payload: {
+          unit: chart.unit ?? 'value',
+          xAxis: { labels: chart.labels },
+          yAxis: { min: minimum, max: maximum > minimum ? maximum : minimum + 1 },
+          series: [{ id: 'supplied-values', values: chart.values }],
+        },
+      },
+      artifactOptions,
+    );
+    Object.assign(slide, compiled.planned, {
+      artifactSpec: compiled.spec,
+      authoredArtifactSpec: compiled.spec,
+      authoredArtifactCompilation: compiled.receipt,
+      ...(compiled.geometry ? { authoredArtifactGeometry: compiled.geometry } : {}),
+    });
+  }
   spec.designPlans = buildNodeSlideDesignPlans({
     slides: spec.slides,
     ...(spec.storySpec ? { storySpec: spec.storySpec } : {}),
@@ -3356,6 +3394,8 @@ function coercePlannedSlide(
     ...(video ? { video } : {}),
     ...(compositionMode ? { compositionMode } : {}),
     ...(authoredArtifact ? { authoredArtifactCompilation: authoredArtifact.receipt } : {}),
+    // Revalidate this canonical input when a critique result is normalized again.
+    ...(authoredArtifact ? { artifactSpec: authoredArtifact.spec } : {}),
     ...(authoredArtifact ? { authoredArtifactSpec: authoredArtifact.spec } : {}),
     ...(authoredArtifact?.geometry ? { authoredArtifactGeometry: authoredArtifact.geometry } : {}),
   };

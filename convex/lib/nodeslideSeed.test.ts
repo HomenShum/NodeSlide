@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { NODESLIDE_ARTIFACT_SPEC_VERSION } from '../../shared/nodeslideArtifactRegistry.js';
 import { overflowIssueDrafts } from '../../shared/nodeslideGeometryChecks.js';
 import { estimateTextHeight } from '../../shared/nodeslideLayoutMetrics.js';
 import { validateSnapshot } from '../../src/domains/nodeslide/slidelang/validation';
@@ -14,6 +13,68 @@ import {
 import { validateNodeSlideSnapshot } from './nodeslideValidation';
 
 describe('NodeSlide seed', () => {
+  it('retains source-bound chart values through repeated normalization without trusting cached receipts', () => {
+    const brief = {
+      prompt:
+        'Create exactly six slides. Synthetic example: top scorers were Alpha 42 and Beta 61.',
+      audience: 'Release reviewer',
+      purpose: 'Inspect supplied examples',
+      successCriteria: ['Keep the evidence boundary'],
+    };
+    let spec = deterministicBriefSpec('Synthetic review', brief);
+    const first = spec.slides.find((slide) => slide.chart);
+    const firstArtifact = first?.artifactSpec;
+    if (firstArtifact?.kind !== 'chart') throw new Error('Expected a canonical chart');
+    expect(firstArtifact.payload.series).toEqual([{ id: 'supplied-values', values: [42, 61] }]);
+    expect(first?.artifactSpec?.provenance).toMatchObject({
+      truthState: 'derived',
+      sourceRefs: ['brief:prompt'],
+    });
+    for (let pass = 0; pass < 10; pass += 1) {
+      spec = coerceBriefSpec(spec, 'Synthetic review', brief);
+      const chart = spec.slides.find((slide) => slide.chart);
+      expect(chart?.artifactSpec).toEqual(first?.artifactSpec);
+      expect(chart?.authoredArtifactSpec).toEqual(first?.artifactSpec);
+      expect(chart?.authoredArtifactCompilation?.status).toBe('passed');
+    }
+    const forged = structuredClone(spec);
+    const forgedChart = forged.slides.find((slide) => slide.artifactSpec);
+    if (!forgedChart?.artifactSpec) throw new Error('Expected a supplied chart');
+    forgedChart.artifactSpec.provenance.truthState = 'observed';
+    expect(() => coerceBriefSpec(forged, 'Synthetic review', brief)).toThrow(
+      /truth|evidence|source/i,
+    );
+    const cachedOnly = {
+      ...forged,
+      slides: forged.slides.map(({ artifactSpec: _input, ...slide }) => slide),
+    };
+    const uncached = coerceBriefSpec(cachedOnly, 'Synthetic review', brief);
+    expect(
+      uncached.slides.find((slide) => slide.chart)?.authoredArtifactCompilation,
+    ).toBeUndefined();
+  });
+
+  it("keeps a reviewer's zero values exact and leaves a chart request with no values unfilled", () => {
+    const brief = {
+      prompt: 'Create six slides with an editable chart.',
+      audience: 'Reviewer',
+      purpose: 'Inspect inputs',
+      successCriteria: ['Do not invent figures'],
+    };
+    const missing = deterministicBriefSpec('Missing data', brief);
+    expect(missing.slides.some((slide) => slide.chart || slide.artifactSpec)).toBe(false);
+    const zero = deterministicBriefSpec('Zero values', {
+      ...brief,
+      prompt: `${brief.prompt} Synthetic example: top scorers were Alpha 0 and Beta 0.`,
+    });
+    const chart = zero.slides.find((slide) => slide.chart);
+    expect(chart?.chart?.values).toEqual([0, 0]);
+    const artifact = chart?.artifactSpec;
+    if (artifact?.kind !== 'chart') throw new Error('Expected a canonical zero chart');
+    expect(artifact.payload.series).toEqual([{ id: 'supplied-values', values: [0, 0] }]);
+    expect(artifact.payload.yAxis).toEqual({ min: 0, max: 1 });
+  });
+
   it('preserves a validated composition intent when a long-form committee page crosses the provider boundary', () => {
     const brief = {
       prompt: 'Build exactly 1 slide with a distinct downside composition.',

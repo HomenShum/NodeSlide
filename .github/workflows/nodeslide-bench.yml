@@ -148,6 +148,7 @@ jobs:
       github.event_name == 'schedule' ||
       (github.event_name == 'workflow_dispatch' && inputs.evidence_path == '')
     runs-on: ubuntu-latest
+    environment: production
     timeout-minutes: 35
     continue-on-error: ${{ github.event_name == 'workflow_dispatch' && inputs.enforce != true }}
     env:

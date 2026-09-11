@@ -4,6 +4,8 @@
 
 ### Presentation composer
 
+- Kept the phone header actions visible and reachable, with wrapping rows
+  and 44px action targets, including enlarged text.
 - Kept the native model selector and dropdown arrow inside the phone composer,
   including enlarged text, while preserving the model icon, keyboard focus,
   complete dropdown options, and the Create button.

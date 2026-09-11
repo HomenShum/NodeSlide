@@ -125,6 +125,13 @@ async function main() {
         await noJs.locator('meta[property="og:url"]').getAttribute('content'),
         'https://nodeslide.vercel.app/',
       );
+      assert.equal(
+        await noJs.locator('meta[property="og:image"]').getAttribute('content'),
+        'https://nodeslide.vercel.app/social-preview.png',
+      );
+      const socialPreview = await fetch(`${BASE_URL}/social-preview.png`);
+      assert.equal(socialPreview.status, 200);
+      assert.match(socialPreview.headers.get('content-type') ?? '', /image\/png/);
       const robots = await fetch(`${BASE_URL}/robots.txt`);
       assert.equal(robots.status, 200);
       assert.match(robots.headers.get('content-type') ?? '', /text\/plain/);

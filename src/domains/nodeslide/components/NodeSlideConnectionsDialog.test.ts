@@ -17,7 +17,7 @@ const env = {
 };
 
 describe('NodeSlide coding-agent connection config', () => {
-  it('points MCP clients at the running app\'s own Convex deployment when it is known', () => {
+  it("points MCP clients at the running app's own Convex deployment when it is known", () => {
     // The deckId + ownerAccessKey this dialog hands out live in whatever deployment
     // VITE_CONVEX_URL points at in that build (production: agile-stoat-411, not
     // parity-studio's blissful-pig-998) — see the comment on NODESLIDE_CONVEX_URL.

@@ -56,7 +56,7 @@ export function resolveNodeslideConvexUrl(viteConvexUrl: string | undefined): st
   return viteConvexUrl?.trim() || 'https://blissful-pig-998.convex.cloud';
 }
 export const NODESLIDE_CONVEX_URL = resolveNodeslideConvexUrl(
-  import.meta.env.VITE_CONVEX_URL as string | undefined,
+  import.meta.env['VITE_CONVEX_URL'] as string | undefined,
 );
 
 /**

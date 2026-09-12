@@ -39,7 +39,25 @@ type ClientKind = 'claude' | 'codex';
 
 export const NODESLIDE_MCP_PACKAGE =
   'https://parity-studio.vercel.app/downloads/parity-studio-mcp-0.4.0.tgz';
-export const NODESLIDE_CONVEX_URL = 'https://blissful-pig-998.convex.cloud';
+
+/**
+ * The MCP package's nodeslide.* tools (get_deck, list_slides, accept_patch, propose_edit, ...)
+ * are owner-gated by the deckId + ownerAccessKey this dialog hands out for the deck the user
+ * has open right now — a deck created by, and stored in, the Convex deployment this running
+ * app talks to (VITE_CONVEX_URL, production https://agile-stoat-411.convex.cloud per
+ * .github/workflows/deploy-production.yml). parity-studio ships an equivalent nodeslide.ts /
+ * nodeslideAgent.ts on its own Convex deployment (blissful-pig-998) for its own staging
+ * decks, but that deployment does not hold this user's deck or access key — Convex
+ * deployments do not share data. Deriving from VITE_CONVEX_URL keeps the MCP client pointed
+ * at the same deployment the dialog itself is talking to; the parity-studio literal survives
+ * only as a documented fallback for a build where VITE_CONVEX_URL is unset.
+ */
+export function resolveNodeslideConvexUrl(viteConvexUrl: string | undefined): string {
+  return viteConvexUrl?.trim() || 'https://blissful-pig-998.convex.cloud';
+}
+export const NODESLIDE_CONVEX_URL = resolveNodeslideConvexUrl(
+  import.meta.env['VITE_CONVEX_URL'] as string | undefined,
+);
 
 /**
  * The closed dialog mounts nothing. That was already true, and it now also

@@ -1,0 +1,4 @@
+Generated hero visual: Codex image generation, 2026-07-31, no external source.
+Product architecture and CLI delivery contract: D:/VSCode Projects/nodeslide/README.md and packages/cli/src/generate.ts.
+Production scenarios: D:/VSCode Projects/nodeslide/benchmarks/production-scenarios/v1/scenarios.json.
+Live QA findings: D:/VSCode Projects/nodeslide/output/live-test/pr160-live-qa-2026-07-31/ and .qa/memory/findings.jsonl.

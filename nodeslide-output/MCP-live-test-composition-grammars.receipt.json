@@ -1,0 +1,142 @@
+{
+  "deckId": "deck_ms82gg67_368a79d38765e020367107d2cfa148b6",
+  "slideCount": 7,
+  "execution": "hosted",
+  "publishedUrl": "https://nodeslide.vercel.app/s/share-4cac226454afcdd197d40c5376c94b1033e1",
+  "files": {
+    "pptx": "D:\\VSCode Projects\\nodeslide\\nodeslide-output\\MCP-live-test-composition-grammars.pptx",
+    "html": "D:\\VSCode Projects\\nodeslide\\nodeslide-output\\MCP-live-test-composition-grammars.html",
+    "snapshot": "D:\\VSCode Projects\\nodeslide\\nodeslide-output\\MCP-live-test-composition-grammars.nodeslide.json",
+    "receipt": "D:\\VSCode Projects\\nodeslide\\nodeslide-output\\MCP-live-test-composition-grammars.receipt.json"
+  },
+  "storySpec": {
+    "narrativeJob": "Move one AI system to a governed release decision",
+    "audienceNeed": "Help Chief risk officer and model risk committee move one AI system to a governed release decision.",
+    "memorableTakeaway": "Move one AI system to a governed release decision",
+    "proofObligations": [
+      {
+        "id": "success-1",
+        "claim": "Keep GOVERN cross-cutting",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-2",
+        "claim": "Show the release gate",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-3",
+        "claim": "Name one decision metric",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      }
+    ],
+    "pacing": [
+      {
+        "phase": "orient",
+        "slideCount": 1,
+        "intent": "Establish the audience tension and central promise."
+      },
+      {
+        "phase": "build",
+        "slideCount": 2,
+        "intent": "Develop the causal argument with distinct visual jobs."
+      },
+      {
+        "phase": "prove",
+        "slideCount": 3,
+        "intent": "Resolve proof obligations with inspectable artifacts."
+      },
+      {
+        "phase": "decide",
+        "slideCount": 1,
+        "intent": "Close with a decision, owner, and next checkpoint."
+      }
+    ],
+    "sceneContinuity": {
+      "motif": "threshold line",
+      "progression": [
+        "threshold line 1: orient",
+        "threshold line 2: tension",
+        "threshold line 3: hint",
+        "threshold line 4: reveal",
+        "threshold line 5: prove",
+        "threshold line 6: resolve",
+        "threshold line 7: resolve"
+      ]
+    },
+    "visualMetaphor": {
+      "kind": "threshold",
+      "subject": "a guarded threshold",
+      "transformation": "move from exposed uncertainty to controlled passage"
+    },
+    "revealPacing": [
+      {
+        "beat": "orient",
+        "intensity": 24
+      },
+      {
+        "beat": "tension",
+        "intensity": 39
+      },
+      {
+        "beat": "hint",
+        "intensity": 54
+      },
+      {
+        "beat": "reveal",
+        "intensity": 70
+      },
+      {
+        "beat": "prove",
+        "intensity": 85
+      },
+      {
+        "beat": "resolve",
+        "intensity": 100
+      },
+      {
+        "beat": "resolve",
+        "intensity": 76
+      }
+    ],
+    "emotionalArc": {
+      "shape": "rise-climax-release",
+      "intensity": [
+        24,
+        39,
+        54,
+        70,
+        85,
+        100,
+        76
+      ]
+    },
+    "compositionPlan": [
+      "statement",
+      "comparison",
+      "diagram-dominant",
+      "stat-dominant",
+      "chart-dominant",
+      "media-dominant",
+      "split"
+    ]
+  }
+}

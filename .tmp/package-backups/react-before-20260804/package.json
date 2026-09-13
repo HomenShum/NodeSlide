@@ -1,0 +1,75 @@
+{
+  "name": "@nodebook/react",
+  "version": "0.1.3",
+  "private": true,
+  "type": "module",
+  "files": [
+    "dist",
+    "src/styles.css"
+  ],
+  "sideEffects": [
+    "./src/styles.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./runtime": {
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js",
+      "default": "./dist/runtime.js"
+    },
+    "./sanitize-svg": {
+      "types": "./dist/sanitizeArtifactSvg.d.ts",
+      "import": "./dist/sanitizeArtifactSvg.js",
+      "default": "./dist/sanitizeArtifactSvg.js"
+    },
+    "./plugins/mermaid": {
+      "types": "./dist/plugins/mermaid.client.d.ts",
+      "import": "./dist/plugins/mermaid.client.js",
+      "default": "./dist/plugins/mermaid.client.js"
+    },
+    "./plugins/vega-lite": {
+      "types": "./dist/plugins/vegaLite.client.d.ts",
+      "import": "./dist/plugins/vegaLite.client.js",
+      "default": "./dist/plugins/vegaLite.client.js"
+    },
+    "./plugins/structured-diagram": {
+      "types": "./dist/plugins/structuredDiagram.client.d.ts",
+      "import": "./dist/plugins/structuredDiagram.client.js",
+      "default": "./dist/plugins/structuredDiagram.client.js"
+    },
+    "./plugins/drawio": {
+      "types": "./dist/plugins/drawio.client.d.ts",
+      "import": "./dist/plugins/drawio.client.js",
+      "default": "./dist/plugins/drawio.client.js"
+    },
+    "./plugins/infographic": {
+      "types": "./dist/plugins/infographic.client.d.ts",
+      "import": "./dist/plugins/infographic.client.js",
+      "default": "./dist/plugins/infographic.client.js"
+    },
+    "./styles.css": "./src/styles.css"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nodebook/contracts": "0.1.3",
+    "@nodebook/core": "0.1.3",
+    "@nodebook/model": "0.1.3",
+    "mermaid": "11.12.2",
+    "pako": "^2.1.0",
+    "vega": "^6",
+    "vega-lite": "^6"
+  },
+  "peerDependencies": {
+    "react": ">=18 <20"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

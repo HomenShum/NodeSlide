@@ -1,0 +1,541 @@
+[
+  {
+    "sourceClaimId": "offer-price",
+    "sourceSlideIndexes": [
+      2,
+      6,
+      70
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      1,
+      2,
+      12
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "agreement-8k-2025-08-04",
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "staar-termination-fee",
+    "sourceSlideIndexes": [
+      9
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      2,
+      11
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "reduced-termination-fee",
+    "sourceSlideIndexes": [
+      9
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      2,
+      11
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "alcon-regulatory-fee",
+    "sourceSlideIndexes": [
+      9
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      2,
+      11
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "2024-sales",
+    "sourceSlideIndexes": [
+      27
+    ],
+    "criticality": "supporting",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      5
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "staar-2024-10k",
+      "sec-companyfacts-staar"
+    ]
+  },
+  {
+    "sourceClaimId": "q2-2025-sales",
+    "sourceSlideIndexes": [
+      29,
+      30,
+      57
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      5,
+      8
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "staar-2025-q2-10q",
+      "sec-companyfacts-staar"
+    ]
+  },
+  {
+    "sourceClaimId": "q2-2025-sales-decline",
+    "sourceSlideIndexes": [
+      29,
+      57
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      5,
+      8
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "staar-2025-q2-10q"
+    ]
+  },
+  {
+    "sourceClaimId": "q2-china-sales",
+    "sourceSlideIndexes": [
+      31,
+      57,
+      63
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      5,
+      8,
+      10
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "staar-2025-q2-10q"
+    ]
+  },
+  {
+    "sourceClaimId": "2026e-sales",
+    "sourceSlideIndexes": [
+      36,
+      40
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      6
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "2030e-sales",
+    "sourceSlideIndexes": [
+      36,
+      40
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      6
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "public-comps-range",
+    "sourceSlideIndexes": [
+      45
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      7
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "precedents-range",
+    "sourceSlideIndexes": [
+      46
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      7
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "dcf-range",
+    "sourceSlideIndexes": [
+      47,
+      48
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      7,
+      8
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "dcf-discount-rate",
+    "sourceSlideIndexes": [
+      48
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      7,
+      8
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "prior-offer",
+    "sourceSlideIndexes": [
+      8,
+      62
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      2,
+      10
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "citi-contingent-fee",
+    "sourceSlideIndexes": [
+      50,
+      65
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      7,
+      10
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "offer-premium",
+    "sourceSlideIndexes": [
+      7
+    ],
+    "criticality": "supporting",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      2
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "vote-threshold",
+    "sourceSlideIndexes": [
+      67
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      11
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "business-scale",
+    "sourceSlideIndexes": [
+      18
+    ],
+    "criticality": "background",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      4
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16",
+      "staar-2024-10k"
+    ]
+  },
+  {
+    "sourceClaimId": "regional-sales-change",
+    "sourceSlideIndexes": [
+      21,
+      23
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      4,
+      5
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "staar-2025-q2-10q"
+    ]
+  },
+  {
+    "sourceClaimId": "h1-2025-sales",
+    "sourceSlideIndexes": [
+      30
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      5
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "staar-2025-q2-10q"
+    ]
+  },
+  {
+    "sourceClaimId": "q2-gross-margin",
+    "sourceSlideIndexes": [
+      32
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      5,
+      8
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "staar-2025-q2-10q"
+    ]
+  },
+  {
+    "sourceClaimId": "q2-operating-loss",
+    "sourceSlideIndexes": [
+      33
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      5,
+      8
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "staar-2025-q2-10q"
+    ]
+  },
+  {
+    "sourceClaimId": "standalone-liquidity",
+    "sourceSlideIndexes": [
+      34
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      5,
+      8
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "staar-2025-q2-10q"
+    ]
+  },
+  {
+    "sourceClaimId": "projection-growth-assumption",
+    "sourceSlideIndexes": [
+      35,
+      41
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      6,
+      8
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "citi-forecast-reliance",
+    "sourceSlideIndexes": [
+      51,
+      64
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      7,
+      10
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "fairness-not-vote-recommendation",
+    "sourceSlideIndexes": [
+      50,
+      51
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      7,
+      10
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "broadwood-opposition",
+    "sourceSlideIndexes": [
+      65
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      10
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16",
+      "broadwood-opposition-2025-09-24"
+    ]
+  },
+  {
+    "sourceClaimId": "regulatory-clearances",
+    "sourceSlideIndexes": [
+      10,
+      68,
+      69
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      2,
+      11
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16",
+      "agreement-8k-2025-08-04"
+    ]
+  },
+  {
+    "sourceClaimId": "alcon-funding-representation",
+    "sourceSlideIndexes": [
+      52,
+      53
+    ],
+    "criticality": "supporting",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      9
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16",
+      "agreement-8k-2025-08-04"
+    ]
+  },
+  {
+    "sourceClaimId": "attributed-board-rationale",
+    "sourceSlideIndexes": [
+      11,
+      16,
+      17
+    ],
+    "criticality": "supporting",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      1,
+      3
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16"
+    ]
+  },
+  {
+    "sourceClaimId": "open-diligence-boundary",
+    "sourceSlideIndexes": [
+      5,
+      41,
+      61,
+      68,
+      69,
+      70
+    ],
+    "criticality": "decision-critical",
+    "disposition": "retained_compressed",
+    "targetSlideIndexes": [
+      1,
+      8,
+      11,
+      12
+    ],
+    "rationale": "The claim answers a frozen decision question or supports a decision-critical conclusion.",
+    "preservedEvidenceRefs": [
+      "definitive-proxy-2025-09-16",
+      "staar-2025-q2-10q"
+    ]
+  }
+]

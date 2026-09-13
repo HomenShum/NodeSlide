@@ -1,0 +1,2068 @@
+{
+  "title": "STAAR Surgical / Alcon — 12-slide opportunity memo",
+  "narrative": [
+    "Orient the decision",
+    "Reconcile evidence",
+    "Stress downside",
+    "Conclude conditionally"
+  ],
+  "slides": [
+    {
+      "title": "Recommendation and requested decision",
+      "section": "Memo / 01",
+      "headline": "Recommendation and requested decision",
+      "body": "Alcon offered $28.00 in cash per STAAR share. $28 cash vs. standalone, forecast, and China risk. Gate: China, forecast bridge, and clearances.",
+      "bullets": [
+        "Alcon offered $28.00 in cash per STAAR share.",
+        "$28 cash vs. standalone, forecast, and China risk.",
+        "Gate: China, forecast bridge, and clearances."
+      ],
+      "diagram": {
+        "kind": "process",
+        "direction": "vertical",
+        "nodes": [
+          {
+            "id": "evidence",
+            "label": "Recommendation and requested decision",
+            "kind": "system"
+          },
+          {
+            "id": "condition",
+            "label": "Evidence gate: Recommendation and requested decision",
+            "kind": "decision"
+          },
+          {
+            "id": "decision",
+            "label": "Decision on recommendation and requested decision",
+            "kind": "milestone"
+          }
+        ],
+        "edges": [
+          {
+            "from": "evidence",
+            "to": "condition"
+          },
+          {
+            "from": "condition",
+            "to": "decision"
+          }
+        ]
+      },
+      "authoredArtifactCompilation": {
+        "schemaVersion": "nodeslide.production-authored-artifact-receipt/v2",
+        "authoredSpecVersion": "nodeslide.artifact-spec/v1",
+        "acceptedSpecVersion": "nodeslide.artifact-spec/v1",
+        "artifactId": "staar-graph-1",
+        "kind": "graph",
+        "sourceRefs": [
+          "brief:prompt"
+        ],
+        "authoredSpecDigest": "sha256:400c99d8d7eca0c62b31deb57c5ba90c207b29f98d276ad99e01b901721b1f44",
+        "renderHandle": "nodeslide-render:sha256:9fe5e2856d825f415bd8ecb9f58b776d5188d03905d4be9760acf3f13a355a47",
+        "renderLineage": {
+          "baseInputDigest": "sha256:4fa8bcf06b326be927cbc6af7d91513afbff3fb4c73385ac1147108e6f38cfc6",
+          "candidateSpecDigest": "sha256:400c99d8d7eca0c62b31deb57c5ba90c207b29f98d276ad99e01b901721b1f44",
+          "materializationDigest": "sha256:337f4971a9c52aab3dbf238490666fae05bbeca6dc8dd360ebec48d5104b59fe",
+          "projectionDigest": "sha256:8700141d1d496ffe28fec4cfe890d24dd0f8f32270641c8eecfd7036beb4bfc5",
+          "baseImmutable": true
+        },
+        "typedRecovery": {
+          "status": "not-required",
+          "mode": "none",
+          "operations": []
+        },
+        "compiler": "nodeslide-canonical-artifact-adapter/2.0.0",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        },
+        "repairIssues": [],
+        "status": "passed",
+        "receiptDigest": "sha256:d7178642be11498f1bf5d90155ab1ab9c28b2a933d6e07ec16ed8c545d4eb8b6"
+      },
+      "authoredArtifactSpec": {
+        "claimIds": [
+          "attributed-board-rationale",
+          "offer-price",
+          "open-diligence-boundary"
+        ],
+        "id": "staar-graph-1",
+        "kind": "graph",
+        "narrativeJob": "Make slide 1's graph relationship inspectable and editable.",
+        "payload": {
+          "directed": true,
+          "direction": "vertical",
+          "edges": [
+            {
+              "directed": true,
+              "from": "evidence",
+              "id": "edge-1",
+              "to": "condition"
+            },
+            {
+              "directed": true,
+              "from": "condition",
+              "id": "edge-2",
+              "to": "decision"
+            }
+          ],
+          "graphKind": "process",
+          "nodes": [
+            {
+              "id": "evidence",
+              "kind": "system",
+              "label": "Recommendation and requested decision"
+            },
+            {
+              "id": "condition",
+              "kind": "decision",
+              "label": "Evidence gate: Recommendation and requested decision"
+            },
+            {
+              "id": "decision",
+              "kind": "milestone",
+              "label": "Decision on recommendation and requested decision"
+            }
+          ]
+        },
+        "provenance": {
+          "assumptions": [],
+          "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+          "sourceRefs": [
+            "brief:prompt"
+          ],
+          "status": "derived",
+          "truthState": "derived"
+        },
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "sourceIds": [
+          "brief:prompt"
+        ]
+      }
+    },
+    {
+      "title": "Transaction terms",
+      "section": "Memo / 02",
+      "headline": "Transaction terms",
+      "body": "STAAR's standard termination fee was $43.425 million. The qualifying window-shop termination fee was $14.475 million. Alcon's regulatory termination fee was $72.375 million.",
+      "bullets": [
+        "STAAR's standard termination fee was $43.425 million.",
+        "The qualifying window-shop termination fee was $14.475 million.",
+        "Alcon's regulatory termination fee was $72.375 million."
+      ]
+    },
+    {
+      "title": "Core strategic thesis",
+      "section": "Memo / 03",
+      "headline": "Core strategic thesis",
+      "body": "$58/share in April 2024 preceded the $28 agreement. $28 was approximately 59% above STAAR's 90-day VWAP and 51% above its August 4, 2025 close. H1 2025 sales were $86.909 million versus $176.361 million, down 50.7%.",
+      "bullets": [
+        "$58/share in April 2024 preceded the $28 agreement.",
+        "$28 was approximately 59% above STAAR's 90-day VWAP and 51% above its August 4, 2025 close.",
+        "H1 2025 sales were $86.909 million versus $176.361 million, down 50.7%."
+      ]
+    },
+    {
+      "title": "Company and market",
+      "section": "Memo / 04",
+      "headline": "Company and market",
+      "body": "STAAR reported more than 3 million ICLs sold in over 75 countries. Q2 2025 APAC sales fell 69%; EMEA rose 11% and Americas rose 10%.",
+      "bullets": [
+        "STAAR reported more than 3 million ICLs sold in over 75 countries.",
+        "Q2 2025 APAC sales fell 69%; EMEA rose 11% and Americas rose 10%."
+      ],
+      "metric": "3 risks",
+      "metricLabel": "rare→likely likelihood · minor→critical impact",
+      "authoredArtifactCompilation": {
+        "schemaVersion": "nodeslide.production-authored-artifact-receipt/v2",
+        "authoredSpecVersion": "nodeslide.artifact-spec/v1",
+        "acceptedSpecVersion": "nodeslide.artifact-spec/v1",
+        "artifactId": "staar-risk-matrix-4",
+        "kind": "risk-matrix",
+        "sourceRefs": [
+          "brief:prompt"
+        ],
+        "authoredSpecDigest": "sha256:7574d8ec32423e69b36a70e4005576749bd3e99f4af203e1ea110f2252a6ee2a",
+        "geometryVersion": "nodeslide.artifact-geometry/v1",
+        "geometryDigest": "sha256:b57be1f7bceb71205b5e7de5ccc4b790b6e3dc07409e6ef1316e54acb65b2fc0",
+        "renderHandle": "nodeslide-render:sha256:f168dfe5a8c5eb7ee242d163592d6e10b463ba57bfd7ace493a894ddfc7c0324",
+        "renderLineage": {
+          "baseInputDigest": "sha256:4a225310bcda626b74c753ad38b669b1a5fb0f02eae5baf83a3c0c1fb52fbfe6",
+          "candidateSpecDigest": "sha256:7574d8ec32423e69b36a70e4005576749bd3e99f4af203e1ea110f2252a6ee2a",
+          "materializationDigest": "sha256:8714bc84959f55ce33b928a5a5113a6419fef250e488e0668b3c83ea36501d2b",
+          "projectionDigest": "sha256:8700141d1d496ffe28fec4cfe890d24dd0f8f32270641c8eecfd7036beb4bfc5",
+          "baseImmutable": true
+        },
+        "typedRecovery": {
+          "status": "not-required",
+          "mode": "none",
+          "operations": []
+        },
+        "compiler": "nodeslide-canonical-artifact-adapter/2.0.0",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        },
+        "repairIssues": [],
+        "status": "passed",
+        "receiptDigest": "sha256:5836924ad092e7ca311954833089ccc3cb5f5d5167510aedf7ebcfffca2aba60"
+      },
+      "authoredArtifactSpec": {
+        "claimIds": [
+          "business-scale",
+          "regional-sales-change"
+        ],
+        "id": "staar-risk-matrix-4",
+        "kind": "risk-matrix",
+        "narrativeJob": "Make slide 4's risk-matrix relationship inspectable and editable.",
+        "payload": {
+          "impactAxis": {
+            "high": "critical",
+            "low": "minor"
+          },
+          "likelihoodAxis": {
+            "high": "likely",
+            "low": "rare"
+          },
+          "risks": [
+            {
+              "id": "primary-4",
+              "impact": 5,
+              "label": "Market",
+              "likelihood": 4
+            },
+            {
+              "id": "evidence-4",
+              "impact": 4,
+              "label": "Evidence",
+              "likelihood": 3
+            },
+            {
+              "id": "decision-4",
+              "impact": 4,
+              "label": "Decision",
+              "likelihood": 2
+            }
+          ]
+        },
+        "provenance": {
+          "assumptions": [],
+          "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+          "sourceRefs": [
+            "brief:prompt"
+          ],
+          "status": "derived",
+          "truthState": "derived"
+        },
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "sourceIds": [
+          "brief:prompt"
+        ]
+      },
+      "authoredArtifactGeometry": {
+        "schemaVersion": "nodeslide.artifact-geometry/v1",
+        "artifactId": "staar-risk-matrix-4",
+        "kind": "risk-matrix",
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 100,
+          "height": 100
+        },
+        "marks": {
+          "likelihoodAxis": {
+            "high": "likely",
+            "low": "rare"
+          },
+          "impactAxis": {
+            "high": "critical",
+            "low": "minor"
+          },
+          "risks": [
+            {
+              "id": "primary-4",
+              "label": "Market",
+              "x": 92,
+              "y": 8,
+              "radius": 8,
+              "likelihood": 4,
+              "impact": 5
+            },
+            {
+              "id": "evidence-4",
+              "label": "Evidence",
+              "x": 71.53589838486225,
+              "y": 24.156921938165297,
+              "radius": 6.928203230275509,
+              "likelihood": 3,
+              "impact": 4
+            },
+            {
+              "id": "decision-4",
+              "label": "Decision",
+              "x": 50,
+              "y": 23.39411254969542,
+              "radius": 5.656854249492381,
+              "likelihood": 2,
+              "impact": 4
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "Historical financial profile",
+      "section": "Memo / 05",
+      "headline": "Historical financial profile",
+      "body": "2024 net sales were $313.901 million. Q2 2025 net sales were $44.320 million, down 55.2% year over year. Q2 2025 net sales declined 55.2% year over year.",
+      "bullets": [
+        "2024 net sales were $313.901 million.",
+        "Q2 2025 net sales were $44.320 million, down 55.2% year over year.",
+        "Q2 2025 net sales declined 55.2% year over year."
+      ],
+      "chart": {
+        "labels": [
+          "2024 net sales",
+          "Q2 2024",
+          "Q2 2025"
+        ],
+        "values": [
+          313.901,
+          99.005,
+          44.32
+        ],
+        "unit": "USD millions"
+      },
+      "authoredArtifactCompilation": {
+        "schemaVersion": "nodeslide.production-authored-artifact-receipt/v2",
+        "authoredSpecVersion": "nodeslide.artifact-spec/v1",
+        "acceptedSpecVersion": "nodeslide.artifact-spec/v1",
+        "artifactId": "staar-chart-5",
+        "kind": "chart",
+        "sourceRefs": [
+          "brief:prompt"
+        ],
+        "authoredSpecDigest": "sha256:e06eb63c9b4df39a3e0e02a6d8495be5c813f8b3306066904e0ddd1e1902ce92",
+        "renderHandle": "nodeslide-render:sha256:e7fe423c2c8ea2fe033b5d52a01fd412ee3cba6bb1077b146cfc85dc2b3c616c",
+        "renderLineage": {
+          "baseInputDigest": "sha256:5bd83645fa38a00f4c4fab81bed6ca9307927001dd85c36f2b75076ee6ae9bbb",
+          "candidateSpecDigest": "sha256:e06eb63c9b4df39a3e0e02a6d8495be5c813f8b3306066904e0ddd1e1902ce92",
+          "materializationDigest": "sha256:ccb66be29cbabf73e9185b3c191e0583128089a8f418d7b4af377fd520481963",
+          "projectionDigest": "sha256:48995d23c826b52b752c27a3a306a85ec363a0d5fac3091be16e7a4c96ec7abb",
+          "baseImmutable": true
+        },
+        "typedRecovery": {
+          "status": "not-required",
+          "mode": "none",
+          "operations": []
+        },
+        "compiler": "nodeslide-canonical-artifact-adapter/2.0.0",
+        "projection": {
+          "primitive": "chart",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "native",
+          "knownFidelityDifferences": []
+        },
+        "repairIssues": [],
+        "status": "passed",
+        "receiptDigest": "sha256:229dcfdd5b3c420a074a25f96d70e229137cb6f2bad07ebc1f9bb336423f2a13"
+      },
+      "authoredArtifactSpec": {
+        "claimIds": [
+          "2024-sales",
+          "q2-2025-sales",
+          "q2-2025-sales-decline"
+        ],
+        "id": "staar-chart-5",
+        "kind": "chart",
+        "narrativeJob": "Make slide 5's chart relationship inspectable and editable.",
+        "payload": {
+          "series": [
+            {
+              "id": "reported-or-derived",
+              "values": [
+                313.901,
+                99.005,
+                44.32
+              ]
+            }
+          ],
+          "unit": "USD millions",
+          "xAxis": {
+            "labels": [
+              "2024 net sales",
+              "Q2 2024",
+              "Q2 2025"
+            ]
+          },
+          "yAxis": {
+            "max": 360.98615,
+            "min": 0
+          }
+        },
+        "provenance": {
+          "assumptions": [],
+          "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+          "sourceRefs": [
+            "brief:prompt"
+          ],
+          "status": "derived",
+          "truthState": "derived"
+        },
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "sourceIds": [
+          "brief:prompt"
+        ]
+      }
+    },
+    {
+      "title": "Forecast and principal drivers",
+      "section": "Memo / 06",
+      "headline": "Forecast and principal drivers",
+      "body": "2026E net sales: $340 million. 2030E net sales: $495 million. Final case: approximately 10% annual sales growth from 2027.",
+      "bullets": [
+        "2026E net sales: $340 million.",
+        "2030E net sales: $495 million.",
+        "Final case: approximately 10% annual sales growth from 2027."
+      ],
+      "chart": {
+        "labels": [
+          "2026E",
+          "2030E"
+        ],
+        "values": [
+          340,
+          495
+        ],
+        "unit": "USD millions"
+      },
+      "authoredArtifactCompilation": {
+        "schemaVersion": "nodeslide.production-authored-artifact-receipt/v2",
+        "authoredSpecVersion": "nodeslide.artifact-spec/v1",
+        "acceptedSpecVersion": "nodeslide.artifact-spec/v1",
+        "artifactId": "staar-chart-6",
+        "kind": "chart",
+        "sourceRefs": [
+          "brief:prompt"
+        ],
+        "authoredSpecDigest": "sha256:5196b2463319694c8fb7e3e6da5efa0c5c235567e694ba5adefa372656ac1629",
+        "renderHandle": "nodeslide-render:sha256:205ddb64f90ef6f55a2213685d3ca4229f89316e7850ef9997331d02f15e28f0",
+        "renderLineage": {
+          "baseInputDigest": "sha256:be810b82d4e2f6b90f90d7b42dcf206193879033cfc01271584170f3cfb037a4",
+          "candidateSpecDigest": "sha256:5196b2463319694c8fb7e3e6da5efa0c5c235567e694ba5adefa372656ac1629",
+          "materializationDigest": "sha256:886d6ab774491c1cc0a45c4c0821310892e854d617f70e2eebccea7a190e27e8",
+          "projectionDigest": "sha256:48995d23c826b52b752c27a3a306a85ec363a0d5fac3091be16e7a4c96ec7abb",
+          "baseImmutable": true
+        },
+        "typedRecovery": {
+          "status": "not-required",
+          "mode": "none",
+          "operations": []
+        },
+        "compiler": "nodeslide-canonical-artifact-adapter/2.0.0",
+        "projection": {
+          "primitive": "chart",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "native",
+          "knownFidelityDifferences": []
+        },
+        "repairIssues": [],
+        "status": "passed",
+        "receiptDigest": "sha256:ec8a6f08d8786b02695441e0cbce63df04e280285c4213cb19c4c11c4ac0268a"
+      },
+      "authoredArtifactSpec": {
+        "claimIds": [
+          "2026e-sales",
+          "2030e-sales",
+          "projection-growth-assumption"
+        ],
+        "id": "staar-chart-6",
+        "kind": "chart",
+        "narrativeJob": "Make slide 6's chart relationship inspectable and editable.",
+        "payload": {
+          "series": [
+            {
+              "id": "reported-or-derived",
+              "values": [
+                340,
+                495
+              ]
+            }
+          ],
+          "unit": "USD millions",
+          "xAxis": {
+            "labels": [
+              "2026E",
+              "2030E"
+            ]
+          },
+          "yAxis": {
+            "max": 569.25,
+            "min": 0
+          }
+        },
+        "provenance": {
+          "assumptions": [],
+          "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+          "sourceRefs": [
+            "brief:prompt"
+          ],
+          "status": "derived",
+          "truthState": "derived"
+        },
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "sourceIds": [
+          "brief:prompt"
+        ]
+      }
+    },
+    {
+      "title": "Valuation",
+      "section": "Memo / 07",
+      "headline": "Valuation",
+      "body": "Public comps: $16.35-$23.80 per share. Precedents: $17.15-$30.80 per share. DCF: $17.70-$37.50 per share.",
+      "bullets": [
+        "Public comps: $16.35-$23.80 per share.",
+        "Precedents: $17.15-$30.80 per share.",
+        "DCF: $17.70-$37.50 per share."
+      ],
+      "chart": {
+        "labels": [
+          "Public comps low",
+          "Public comps high",
+          "Offer",
+          "DCF high"
+        ],
+        "values": [
+          16.35,
+          23.8,
+          28,
+          37.5
+        ],
+        "unit": "USD/share"
+      },
+      "authoredArtifactCompilation": {
+        "schemaVersion": "nodeslide.production-authored-artifact-receipt/v2",
+        "authoredSpecVersion": "nodeslide.artifact-spec/v1",
+        "acceptedSpecVersion": "nodeslide.artifact-spec/v1",
+        "artifactId": "staar-comparison-7",
+        "kind": "comparison",
+        "sourceRefs": [
+          "brief:prompt"
+        ],
+        "authoredSpecDigest": "sha256:cdc430448903701ef815358e5963efd4836d6cacc1aa3c230f4f3004f10c196b",
+        "renderHandle": "nodeslide-render:sha256:52e7dc6f7427e0d11c2f292a4cf5650316ef0a2e9c994cdcb5436995eaefd829",
+        "renderLineage": {
+          "baseInputDigest": "sha256:662b2ca977951c3ea28587262dde4e14f3bcdf96fa6db739d1619606ae9938d7",
+          "candidateSpecDigest": "sha256:cdc430448903701ef815358e5963efd4836d6cacc1aa3c230f4f3004f10c196b",
+          "materializationDigest": "sha256:f45bd7822dad864e14269bb0d013b5612b167bfd40ca4b17c40fb429caaf2c6d",
+          "projectionDigest": "sha256:d71597eea4bc8e4c5fea56f000d4a57600ce0a3cfae839364aa95439330ce0da",
+          "baseImmutable": true
+        },
+        "typedRecovery": {
+          "status": "not-required",
+          "mode": "none",
+          "operations": []
+        },
+        "compiler": "nodeslide-canonical-artifact-adapter/2.0.0",
+        "projection": {
+          "primitive": "chart",
+          "mode": "semantic-adapter",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": [
+            "The first compatible metric is charted; the complete cohort table remains in the spec."
+          ]
+        },
+        "repairIssues": [],
+        "status": "passed",
+        "receiptDigest": "sha256:d4238d0c4c7ecf130a607c3e8ce7c93d3ac5f1a771dba862ac468111ee935794"
+      },
+      "authoredArtifactSpec": {
+        "claimIds": [
+          "dcf-range",
+          "precedents-range",
+          "public-comps-range"
+        ],
+        "id": "staar-comparison-7",
+        "kind": "comparison",
+        "narrativeJob": "Make slide 7's comparison relationship inspectable and editable.",
+        "payload": {
+          "cohorts": [
+            {
+              "id": "Public comps low",
+              "plotted": true,
+              "status": "observed",
+              "values": {
+                "value": 16.35
+              }
+            },
+            {
+              "id": "Public comps high",
+              "plotted": true,
+              "status": "observed",
+              "values": {
+                "value": 23.8
+              }
+            },
+            {
+              "id": "Offer",
+              "plotted": true,
+              "status": "observed",
+              "values": {
+                "value": 28
+              }
+            },
+            {
+              "id": "DCF high",
+              "plotted": true,
+              "status": "observed",
+              "values": {
+                "value": 37.5
+              }
+            }
+          ],
+          "metrics": [
+            {
+              "id": "value",
+              "unit": "USD/share"
+            }
+          ]
+        },
+        "provenance": {
+          "assumptions": [],
+          "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+          "sourceRefs": [
+            "brief:prompt"
+          ],
+          "status": "derived",
+          "truthState": "derived"
+        },
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "sourceIds": [
+          "brief:prompt"
+        ]
+      }
+    },
+    {
+      "title": "Downside and sensitivities",
+      "section": "Memo / 08",
+      "headline": "Downside and sensitivities",
+      "body": "The DCF used discount rates of 13.4% to 14.6%. China sales: $5.299M versus $63.519M. Q2 2025 gross margin declined to 74.0% from 79.2% a year earlier.",
+      "bullets": [
+        "The DCF used discount rates of 13.4% to 14.6%.",
+        "China sales: $5.299M versus $63.519M.",
+        "Q2 2025 gross margin declined to 74.0% from 79.2% a year earlier."
+      ],
+      "metric": "3 risks",
+      "metricLabel": "rare→likely likelihood · minor→critical impact",
+      "authoredArtifactCompilation": {
+        "schemaVersion": "nodeslide.production-authored-artifact-receipt/v2",
+        "authoredSpecVersion": "nodeslide.artifact-spec/v1",
+        "acceptedSpecVersion": "nodeslide.artifact-spec/v1",
+        "artifactId": "staar-risk-matrix-8",
+        "kind": "risk-matrix",
+        "sourceRefs": [
+          "brief:prompt"
+        ],
+        "authoredSpecDigest": "sha256:88358dedaadb66810cbb7633168d5b609166837c41ca34cfe6c6edfb3b74669f",
+        "geometryVersion": "nodeslide.artifact-geometry/v1",
+        "geometryDigest": "sha256:84ed0a0f28163afef162c8a2352e161669236ad522fa835aa2f101ea264ae697",
+        "renderHandle": "nodeslide-render:sha256:8aeca198e03e3ca88d0d52a9c0fb9508d920ab4db1635be39bf47a977cbf11b9",
+        "renderLineage": {
+          "baseInputDigest": "sha256:86ad56c876531c113926e53eb255cb0025fe1e02617bdc37a122e8f22373c6b3",
+          "candidateSpecDigest": "sha256:88358dedaadb66810cbb7633168d5b609166837c41ca34cfe6c6edfb3b74669f",
+          "materializationDigest": "sha256:d8d5f880ae108514eadf56ceed017939dadb0ddd8ba7397d1c29bcd17a2ff029",
+          "projectionDigest": "sha256:8700141d1d496ffe28fec4cfe890d24dd0f8f32270641c8eecfd7036beb4bfc5",
+          "baseImmutable": true
+        },
+        "typedRecovery": {
+          "status": "not-required",
+          "mode": "none",
+          "operations": []
+        },
+        "compiler": "nodeslide-canonical-artifact-adapter/2.0.0",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        },
+        "repairIssues": [],
+        "status": "passed",
+        "receiptDigest": "sha256:246f7358b6bb6519f9d835d9580fd0948a8f04e0008c33b2b4897a69c1a51ed0"
+      },
+      "authoredArtifactSpec": {
+        "claimIds": [
+          "dcf-discount-rate",
+          "q2-china-sales",
+          "q2-gross-margin"
+        ],
+        "id": "staar-risk-matrix-8",
+        "kind": "risk-matrix",
+        "narrativeJob": "Make slide 8's risk-matrix relationship inspectable and editable.",
+        "payload": {
+          "impactAxis": {
+            "high": "critical",
+            "low": "minor"
+          },
+          "likelihoodAxis": {
+            "high": "likely",
+            "low": "rare"
+          },
+          "risks": [
+            {
+              "id": "primary-8",
+              "impact": 5,
+              "label": "Downside",
+              "likelihood": 4
+            },
+            {
+              "id": "evidence-8",
+              "impact": 4,
+              "label": "Evidence",
+              "likelihood": 3
+            },
+            {
+              "id": "decision-8",
+              "impact": 4,
+              "label": "Decision",
+              "likelihood": 2
+            }
+          ]
+        },
+        "provenance": {
+          "assumptions": [],
+          "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+          "sourceRefs": [
+            "brief:prompt"
+          ],
+          "status": "derived",
+          "truthState": "derived"
+        },
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "sourceIds": [
+          "brief:prompt"
+        ]
+      },
+      "authoredArtifactGeometry": {
+        "schemaVersion": "nodeslide.artifact-geometry/v1",
+        "artifactId": "staar-risk-matrix-8",
+        "kind": "risk-matrix",
+        "frame": {
+          "x": 0,
+          "y": 0,
+          "width": 100,
+          "height": 100
+        },
+        "marks": {
+          "likelihoodAxis": {
+            "high": "likely",
+            "low": "rare"
+          },
+          "impactAxis": {
+            "high": "critical",
+            "low": "minor"
+          },
+          "risks": [
+            {
+              "id": "primary-8",
+              "label": "Downside",
+              "x": 92,
+              "y": 8,
+              "radius": 8,
+              "likelihood": 4,
+              "impact": 5
+            },
+            {
+              "id": "evidence-8",
+              "label": "Evidence",
+              "x": 71.53589838486225,
+              "y": 24.156921938165297,
+              "radius": 6.928203230275509,
+              "likelihood": 3,
+              "impact": 4
+            },
+            {
+              "id": "decision-8",
+              "label": "Decision",
+              "x": 50,
+              "y": 23.39411254969542,
+              "radius": 5.656854249492381,
+              "likelihood": 2,
+              "impact": 4
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "Financing and capitalization",
+      "section": "Memo / 09",
+      "headline": "Financing and capitalization",
+      "body": "Alcon represented that available funds cover the merger consideration, fees, and expenses. Cash and available-for-sale investments totaled $189.883 million at June 27, 2025. Q2 2025 operating loss was 67.6% of sales versus 12.0% operating income a year earlier.",
+      "bullets": [
+        "Alcon represented that available funds cover the merger consideration, fees, and expenses.",
+        "Cash and available-for-sale investments totaled $189.883 million at June 27, 2025.",
+        "Q2 2025 operating loss was 67.6% of sales versus 12.0% operating income a year earlier."
+      ],
+      "diagram": {
+        "kind": "process",
+        "direction": "vertical",
+        "nodes": [
+          {
+            "id": "evidence",
+            "label": "Financing and capitalization",
+            "kind": "system"
+          },
+          {
+            "id": "condition",
+            "label": "Evidence gate: Financing and capitalization",
+            "kind": "decision"
+          },
+          {
+            "id": "decision",
+            "label": "Decision on financing and capitalization",
+            "kind": "milestone"
+          }
+        ],
+        "edges": [
+          {
+            "from": "evidence",
+            "to": "condition"
+          },
+          {
+            "from": "condition",
+            "to": "decision"
+          }
+        ]
+      },
+      "authoredArtifactCompilation": {
+        "schemaVersion": "nodeslide.production-authored-artifact-receipt/v2",
+        "authoredSpecVersion": "nodeslide.artifact-spec/v1",
+        "acceptedSpecVersion": "nodeslide.artifact-spec/v1",
+        "artifactId": "staar-graph-9",
+        "kind": "graph",
+        "sourceRefs": [
+          "brief:prompt"
+        ],
+        "authoredSpecDigest": "sha256:18d7def69790ba24b9fc74b608ee2405d2c20ecd30bdc69d8f2b94829566f0f4",
+        "renderHandle": "nodeslide-render:sha256:d7e2b99ac9e672f6479efaf46b079a2f7e306c835e18d7563c2859a080d76f84",
+        "renderLineage": {
+          "baseInputDigest": "sha256:71aab3be7d13eff19762de0dbda7f3b477cde5a9b3c9c7d8e6d04b3715b0d54f",
+          "candidateSpecDigest": "sha256:18d7def69790ba24b9fc74b608ee2405d2c20ecd30bdc69d8f2b94829566f0f4",
+          "materializationDigest": "sha256:6750c6b621bd66718417a00e7311af8f4101a103e39e6a28e28e8a2ad94cf1f3",
+          "projectionDigest": "sha256:8700141d1d496ffe28fec4cfe890d24dd0f8f32270641c8eecfd7036beb4bfc5",
+          "baseImmutable": true
+        },
+        "typedRecovery": {
+          "status": "not-required",
+          "mode": "none",
+          "operations": []
+        },
+        "compiler": "nodeslide-canonical-artifact-adapter/2.0.0",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        },
+        "repairIssues": [],
+        "status": "passed",
+        "receiptDigest": "sha256:cf93287f8288abc71eb1dc4fb578602cf43f033f96847d53ae87f3f8c2c9c460"
+      },
+      "authoredArtifactSpec": {
+        "claimIds": [
+          "alcon-funding-representation",
+          "q2-operating-loss",
+          "standalone-liquidity"
+        ],
+        "id": "staar-graph-9",
+        "kind": "graph",
+        "narrativeJob": "Make slide 9's graph relationship inspectable and editable.",
+        "payload": {
+          "directed": true,
+          "direction": "vertical",
+          "edges": [
+            {
+              "directed": true,
+              "from": "evidence",
+              "id": "edge-1",
+              "to": "condition"
+            },
+            {
+              "directed": true,
+              "from": "condition",
+              "id": "edge-2",
+              "to": "decision"
+            }
+          ],
+          "graphKind": "process",
+          "nodes": [
+            {
+              "id": "evidence",
+              "kind": "system",
+              "label": "Financing and capitalization"
+            },
+            {
+              "id": "condition",
+              "kind": "decision",
+              "label": "Evidence gate: Financing and capitalization"
+            },
+            {
+              "id": "decision",
+              "kind": "milestone",
+              "label": "Decision on financing and capitalization"
+            }
+          ]
+        },
+        "provenance": {
+          "assumptions": [],
+          "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+          "sourceRefs": [
+            "brief:prompt"
+          ],
+          "status": "derived",
+          "truthState": "derived"
+        },
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "sourceIds": [
+          "brief:prompt"
+        ]
+      }
+    },
+    {
+      "title": "Principal risks",
+      "section": "Memo / 10",
+      "headline": "Principal risks",
+      "body": "Citi fee: $26.6M of roughly $30.6M depended on closing. Citi: forecasts unverified; assumptions not opined. Citi assessed fairness; it did not recommend a stockholder vote.",
+      "bullets": [
+        "Citi fee: $26.6M of roughly $30.6M depended on closing.",
+        "Citi: forecasts unverified; assumptions not opined.",
+        "Citi assessed fairness; it did not recommend a stockholder vote."
+      ]
+    },
+    {
+      "title": "Outstanding diligence and conditions",
+      "section": "Memo / 11",
+      "headline": "Outstanding diligence and conditions",
+      "body": "Majority threshold: 24,677,062 shares. Closing requires HSR and antitrust clearances. Broadwood: 27.3% ownership; opposed the merger.",
+      "bullets": [
+        "Majority threshold: 24,677,062 shares.",
+        "Closing requires HSR and antitrust clearances.",
+        "Broadwood: 27.3% ownership; opposed the merger."
+      ],
+      "diagram": {
+        "kind": "process",
+        "direction": "vertical",
+        "nodes": [
+          {
+            "id": "evidence",
+            "label": "Outstanding diligence and conditions",
+            "kind": "system"
+          },
+          {
+            "id": "condition",
+            "label": "Evidence gate: Outstanding diligence and conditions",
+            "kind": "decision"
+          },
+          {
+            "id": "decision",
+            "label": "Decision on outstanding diligence and conditions",
+            "kind": "milestone"
+          }
+        ],
+        "edges": [
+          {
+            "from": "evidence",
+            "to": "condition"
+          },
+          {
+            "from": "condition",
+            "to": "decision"
+          }
+        ]
+      },
+      "authoredArtifactCompilation": {
+        "schemaVersion": "nodeslide.production-authored-artifact-receipt/v2",
+        "authoredSpecVersion": "nodeslide.artifact-spec/v1",
+        "acceptedSpecVersion": "nodeslide.artifact-spec/v1",
+        "artifactId": "staar-graph-11",
+        "kind": "graph",
+        "sourceRefs": [
+          "brief:prompt"
+        ],
+        "authoredSpecDigest": "sha256:40800d50ea2a92221a1d9e89dd42b14edcb962203b9c29cf32e1dee39ebce7c9",
+        "renderHandle": "nodeslide-render:sha256:2a809b27dd45e3c88a33636a788f693ee93f36ded0d81a05a3f8586d4025edf7",
+        "renderLineage": {
+          "baseInputDigest": "sha256:a71ae5c021474405ba085d9ff502d581d02b1553e9380d22317f2a9afe210711",
+          "candidateSpecDigest": "sha256:40800d50ea2a92221a1d9e89dd42b14edcb962203b9c29cf32e1dee39ebce7c9",
+          "materializationDigest": "sha256:a1f7ad9535cef23e8814449a3e0f8ff2c3935197413225267555aac4affac70d",
+          "projectionDigest": "sha256:8700141d1d496ffe28fec4cfe890d24dd0f8f32270641c8eecfd7036beb4bfc5",
+          "baseImmutable": true
+        },
+        "typedRecovery": {
+          "status": "not-required",
+          "mode": "none",
+          "operations": []
+        },
+        "compiler": "nodeslide-canonical-artifact-adapter/2.0.0",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        },
+        "repairIssues": [],
+        "status": "passed",
+        "receiptDigest": "sha256:a6eb6ff66aa89f3f3e6f6f43f3eef86d65d9364c472865b9288fb2118a0f5db1"
+      },
+      "authoredArtifactSpec": {
+        "claimIds": [
+          "broadwood-opposition",
+          "regulatory-clearances",
+          "vote-threshold"
+        ],
+        "id": "staar-graph-11",
+        "kind": "graph",
+        "narrativeJob": "Make slide 11's graph relationship inspectable and editable.",
+        "payload": {
+          "directed": true,
+          "direction": "vertical",
+          "edges": [
+            {
+              "directed": true,
+              "from": "evidence",
+              "id": "edge-1",
+              "to": "condition"
+            },
+            {
+              "directed": true,
+              "from": "condition",
+              "id": "edge-2",
+              "to": "decision"
+            }
+          ],
+          "graphKind": "process",
+          "nodes": [
+            {
+              "id": "evidence",
+              "kind": "system",
+              "label": "Outstanding diligence and conditions"
+            },
+            {
+              "id": "condition",
+              "kind": "decision",
+              "label": "Evidence gate: Outstanding diligence and conditions"
+            },
+            {
+              "id": "decision",
+              "kind": "milestone",
+              "label": "Decision on outstanding diligence and conditions"
+            }
+          ]
+        },
+        "provenance": {
+          "assumptions": [],
+          "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+          "sourceRefs": [
+            "brief:prompt"
+          ],
+          "status": "derived",
+          "truthState": "derived"
+        },
+        "schemaVersion": "nodeslide.artifact-spec/v1",
+        "sourceIds": [
+          "brief:prompt"
+        ]
+      }
+    },
+    {
+      "title": "Decision summary and appendix links",
+      "section": "Memo / 12",
+      "headline": "Decision summary + appendix",
+      "body": "No new claim is introduced during compression; this page points back to accepted long-deck evidence.",
+      "bullets": [
+        "Approve only with the stated conditions and linked diligence owners"
+      ]
+    }
+  ],
+  "storySpec": {
+    "narrativeJob": "compress the accepted decision structure without changing its interpretation",
+    "audienceNeed": "Help Transaction approval committee compress the accepted decision structure without changing its interpretation.",
+    "memorableTakeaway": "compress the accepted decision structure without changing its interpretation",
+    "proofObligations": [
+      {
+        "id": "success-1",
+        "claim": "Preserve exact transaction terms and critical numbers",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-2",
+        "claim": "Expose downside, conflicts, and unresolved diligence",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-3",
+        "claim": "Keep every material claim source-grounded",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      }
+    ],
+    "pacing": [
+      {
+        "phase": "orient",
+        "slideCount": 1,
+        "intent": "Establish the audience tension and central promise."
+      },
+      {
+        "phase": "build",
+        "slideCount": 4,
+        "intent": "Develop the causal argument with distinct visual jobs."
+      },
+      {
+        "phase": "prove",
+        "slideCount": 6,
+        "intent": "Resolve proof obligations with inspectable artifacts."
+      },
+      {
+        "phase": "decide",
+        "slideCount": 1,
+        "intent": "Close with a decision, owner, and next checkpoint."
+      }
+    ],
+    "sceneContinuity": {
+      "motif": "signal pulse",
+      "progression": [
+        "signal pulse 1: orient",
+        "signal pulse 2: orient",
+        "signal pulse 3: tension",
+        "signal pulse 4: tension",
+        "signal pulse 5: hint",
+        "signal pulse 6: hint",
+        "signal pulse 7: reveal",
+        "signal pulse 8: reveal",
+        "signal pulse 9: prove",
+        "signal pulse 10: prove",
+        "signal pulse 11: resolve",
+        "signal pulse 12: resolve"
+      ]
+    },
+    "visualMetaphor": {
+      "kind": "signal",
+      "subject": "a signal emerging from noise",
+      "transformation": "separate weak noise from decision-grade evidence"
+    },
+    "revealPacing": [
+      {
+        "beat": "orient",
+        "intensity": 24
+      },
+      {
+        "beat": "orient",
+        "intensity": 32
+      },
+      {
+        "beat": "tension",
+        "intensity": 39
+      },
+      {
+        "beat": "tension",
+        "intensity": 47
+      },
+      {
+        "beat": "hint",
+        "intensity": 54
+      },
+      {
+        "beat": "hint",
+        "intensity": 62
+      },
+      {
+        "beat": "reveal",
+        "intensity": 70
+      },
+      {
+        "beat": "reveal",
+        "intensity": 77
+      },
+      {
+        "beat": "prove",
+        "intensity": 85
+      },
+      {
+        "beat": "prove",
+        "intensity": 92
+      },
+      {
+        "beat": "resolve",
+        "intensity": 100
+      },
+      {
+        "beat": "resolve",
+        "intensity": 76
+      }
+    ],
+    "sceneStates": [
+      {
+        "index": 0,
+        "stage": "establish",
+        "progress": 0.083,
+        "intensity": 24,
+        "framing": "wide",
+        "subjectState": "noise fills the field"
+      },
+      {
+        "index": 1,
+        "stage": "establish",
+        "progress": 0.167,
+        "intensity": 32,
+        "framing": "wide",
+        "subjectState": "noise fills the field"
+      },
+      {
+        "index": 2,
+        "stage": "pressure",
+        "progress": 0.25,
+        "intensity": 39,
+        "framing": "split",
+        "subjectState": "a weak pulse separates from noise"
+      },
+      {
+        "index": 3,
+        "stage": "pressure",
+        "progress": 0.333,
+        "intensity": 47,
+        "framing": "split",
+        "subjectState": "a weak pulse separates from noise"
+      },
+      {
+        "index": 4,
+        "stage": "approach",
+        "progress": 0.417,
+        "intensity": 54,
+        "framing": "focused",
+        "subjectState": "the trace begins to converge"
+      },
+      {
+        "index": 5,
+        "stage": "approach",
+        "progress": 0.5,
+        "intensity": 62,
+        "framing": "focused",
+        "subjectState": "the trace begins to converge"
+      },
+      {
+        "index": 6,
+        "stage": "crossing",
+        "progress": 0.583,
+        "intensity": 70,
+        "framing": "focused",
+        "subjectState": "one coherent signal is revealed"
+      },
+      {
+        "index": 7,
+        "stage": "crossing",
+        "progress": 0.667,
+        "intensity": 77,
+        "framing": "focused",
+        "subjectState": "one coherent signal is revealed"
+      },
+      {
+        "index": 8,
+        "stage": "proof",
+        "progress": 0.75,
+        "intensity": 85,
+        "framing": "close",
+        "subjectState": "the signal is calibrated against evidence"
+      },
+      {
+        "index": 9,
+        "stage": "proof",
+        "progress": 0.833,
+        "intensity": 92,
+        "framing": "close",
+        "subjectState": "the signal is calibrated against evidence"
+      },
+      {
+        "index": 10,
+        "stage": "release",
+        "progress": 0.917,
+        "intensity": 100,
+        "framing": "wide",
+        "subjectState": "the decision-grade signal remains visible"
+      },
+      {
+        "index": 11,
+        "stage": "release",
+        "progress": 1,
+        "intensity": 76,
+        "framing": "wide",
+        "subjectState": "the decision-grade signal remains visible"
+      }
+    ],
+    "emotionalArc": {
+      "shape": "rise-climax-release",
+      "intensity": [
+        24,
+        32,
+        39,
+        47,
+        54,
+        62,
+        70,
+        77,
+        85,
+        92,
+        100,
+        76
+      ]
+    },
+    "compositionPlan": [
+      "statement",
+      "comparison",
+      "diagram-dominant",
+      "stat-dominant",
+      "chart-dominant",
+      "media-dominant",
+      "split",
+      "statement",
+      "comparison",
+      "diagram-dominant",
+      "stat-dominant",
+      "chart-dominant"
+    ]
+  },
+  "materialInventory": {
+    "materials": [
+      {
+        "id": "material-brief",
+        "kind": "brief",
+        "status": "available",
+        "title": "Creation brief",
+        "provenance": "brief",
+        "detail": "User-supplied narrative intent; usable as context, not independent external proof."
+      },
+      {
+        "id": "material-web-references",
+        "kind": "web-reference",
+        "status": "available",
+        "title": "7 referenced web sources",
+        "provenance": "brief",
+        "detail": "URLs were supplied in the brief; they are references, not screenshot captures."
+      }
+    ],
+    "availableKinds": [
+      "brief",
+      "web-reference"
+    ],
+    "constructibleKinds": [],
+    "blockedKinds": []
+  },
+  "designPlans": [
+    {
+      "slideIndex": 0,
+      "narrativeJob": "orient: Recommendation and requested decision",
+      "semanticArchetype": "diagram-dominant",
+      "dominantVisualCenter": "diagram",
+      "requiredArtifacts": [
+        "diagram"
+      ],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/diagram-dominant/1-horizontal-process",
+        "nodeslide-ref/diagram-dominant/2-vertical-system-stack",
+        "nodeslide-ref/diagram-dominant/3-architecture-with-boundary",
+        "nodeslide-ref/diagram-dominant/4-timeline-with-decision"
+      ],
+      "density": "balanced",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make diagram the visual center for the orient beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    },
+    {
+      "slideIndex": 1,
+      "narrativeJob": "orient: Transaction terms",
+      "semanticArchetype": "comparison",
+      "dominantVisualCenter": "comparison",
+      "requiredArtifacts": [],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/comparison/1-two-position-contrast",
+        "nodeslide-ref/comparison/2-three-lens-comparison",
+        "nodeslide-ref/comparison/3-weighted-choice",
+        "nodeslide-ref/comparison/4-criteria-matrix"
+      ],
+      "density": "balanced",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make comparison the visual center for the orient beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    },
+    {
+      "slideIndex": 2,
+      "narrativeJob": "tension: Core strategic thesis",
+      "semanticArchetype": "split",
+      "dominantVisualCenter": "headline",
+      "requiredArtifacts": [],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/split/1-argument-and-support",
+        "nodeslide-ref/split/2-claim-with-formula",
+        "nodeslide-ref/split/3-text-and-evidence-rail",
+        "nodeslide-ref/split/4-offset-editorial"
+      ],
+      "density": "balanced",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make headline the visual center for the tension beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    },
+    {
+      "slideIndex": 3,
+      "narrativeJob": "tension: Company and market",
+      "semanticArchetype": "stat-dominant",
+      "dominantVisualCenter": "metric",
+      "requiredArtifacts": [],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/stat-dominant/1-hero-number",
+        "nodeslide-ref/stat-dominant/2-metric-with-interpretation",
+        "nodeslide-ref/stat-dominant/3-three-stat-rhythm",
+        "nodeslide-ref/stat-dominant/4-metric-and-trend"
+      ],
+      "density": "balanced",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make metric the visual center for the tension beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    },
+    {
+      "slideIndex": 4,
+      "narrativeJob": "hint: Historical financial profile",
+      "semanticArchetype": "chart-dominant",
+      "dominantVisualCenter": "chart",
+      "requiredArtifacts": [
+        "numeric-series"
+      ],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/chart-dominant/1-wide-chart",
+        "nodeslide-ref/chart-dominant/2-chart-with-insight-rail",
+        "nodeslide-ref/chart-dominant/3-chart-with-callout",
+        "nodeslide-ref/chart-dominant/4-small-multiple-comparison"
+      ],
+      "density": "balanced",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make chart the visual center for the hint beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    },
+    {
+      "slideIndex": 5,
+      "narrativeJob": "hint: Forecast and principal drivers",
+      "semanticArchetype": "chart-dominant",
+      "dominantVisualCenter": "chart",
+      "requiredArtifacts": [
+        "numeric-series"
+      ],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/chart-dominant/1-wide-chart",
+        "nodeslide-ref/chart-dominant/2-chart-with-insight-rail",
+        "nodeslide-ref/chart-dominant/3-chart-with-callout",
+        "nodeslide-ref/chart-dominant/4-small-multiple-comparison"
+      ],
+      "density": "balanced",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make chart the visual center for the hint beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    },
+    {
+      "slideIndex": 6,
+      "narrativeJob": "reveal: Valuation",
+      "semanticArchetype": "chart-dominant",
+      "dominantVisualCenter": "chart",
+      "requiredArtifacts": [
+        "numeric-series"
+      ],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/chart-dominant/1-wide-chart",
+        "nodeslide-ref/chart-dominant/2-chart-with-insight-rail",
+        "nodeslide-ref/chart-dominant/3-chart-with-callout",
+        "nodeslide-ref/chart-dominant/4-small-multiple-comparison"
+      ],
+      "density": "balanced",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make chart the visual center for the reveal beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    },
+    {
+      "slideIndex": 7,
+      "narrativeJob": "reveal: Downside and sensitivities",
+      "semanticArchetype": "stat-dominant",
+      "dominantVisualCenter": "metric",
+      "requiredArtifacts": [],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/stat-dominant/1-hero-number",
+        "nodeslide-ref/stat-dominant/2-metric-with-interpretation",
+        "nodeslide-ref/stat-dominant/3-three-stat-rhythm",
+        "nodeslide-ref/stat-dominant/4-metric-and-trend"
+      ],
+      "density": "balanced",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make metric the visual center for the reveal beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    },
+    {
+      "slideIndex": 8,
+      "narrativeJob": "prove: Financing and capitalization",
+      "semanticArchetype": "diagram-dominant",
+      "dominantVisualCenter": "diagram",
+      "requiredArtifacts": [
+        "diagram"
+      ],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/diagram-dominant/1-horizontal-process",
+        "nodeslide-ref/diagram-dominant/2-vertical-system-stack",
+        "nodeslide-ref/diagram-dominant/3-architecture-with-boundary",
+        "nodeslide-ref/diagram-dominant/4-timeline-with-decision"
+      ],
+      "density": "dense",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make diagram the visual center for the prove beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    },
+    {
+      "slideIndex": 9,
+      "narrativeJob": "prove: Principal risks",
+      "semanticArchetype": "comparison",
+      "dominantVisualCenter": "comparison",
+      "requiredArtifacts": [],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/comparison/1-two-position-contrast",
+        "nodeslide-ref/comparison/2-three-lens-comparison",
+        "nodeslide-ref/comparison/3-weighted-choice",
+        "nodeslide-ref/comparison/4-criteria-matrix"
+      ],
+      "density": "balanced",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make comparison the visual center for the prove beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    },
+    {
+      "slideIndex": 10,
+      "narrativeJob": "resolve: Outstanding diligence and conditions",
+      "semanticArchetype": "diagram-dominant",
+      "dominantVisualCenter": "diagram",
+      "requiredArtifacts": [
+        "diagram"
+      ],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/diagram-dominant/1-horizontal-process",
+        "nodeslide-ref/diagram-dominant/2-vertical-system-stack",
+        "nodeslide-ref/diagram-dominant/3-architecture-with-boundary",
+        "nodeslide-ref/diagram-dominant/4-timeline-with-decision"
+      ],
+      "density": "balanced",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make diagram the visual center for the resolve beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    },
+    {
+      "slideIndex": 11,
+      "narrativeJob": "resolve: Decision summary + appendix",
+      "semanticArchetype": "statement",
+      "dominantVisualCenter": "headline",
+      "requiredArtifacts": [],
+      "requiredMaterialIds": [],
+      "referenceIds": [
+        "nodeslide-ref/statement/1-single-thesis",
+        "nodeslide-ref/statement/2-asymmetric-thesis",
+        "nodeslide-ref/statement/3-thesis-with-proof-line",
+        "nodeslide-ref/statement/4-closing-decision"
+      ],
+      "density": "sparse",
+      "compositionIntent": "Continue the signal pulse; use a signal emerging from noise to separate weak noise from decision-grade evidence. Make headline the visual center for the resolve beat.",
+      "forbiddenPatterns": [
+        "more than one dominant visual",
+        "decorative evidence without provenance",
+        "repeated card-grid silhouette"
+      ]
+    }
+  ],
+  "compositionFanout": [
+    {
+      "id": "composition/1/canonical",
+      "slideIndex": 0,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/diagram-dominant/1-horizontal-process",
+      "score": 118,
+      "overlapCount": 0,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": true
+    },
+    {
+      "id": "composition/1/mirrored",
+      "slideIndex": 0,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/diagram-dominant/2-vertical-system-stack",
+      "score": 102,
+      "overlapCount": 0,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/1/visual-focus",
+      "slideIndex": 0,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/diagram-dominant/3-architecture-with-boundary",
+      "score": 72,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/2/canonical",
+      "slideIndex": 1,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/comparison/1-two-position-contrast",
+      "score": 68,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": true
+    },
+    {
+      "id": "composition/2/mirrored",
+      "slideIndex": 1,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/comparison/2-three-lens-comparison",
+      "score": -934,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/2/visual-focus",
+      "slideIndex": 1,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/comparison/3-weighted-choice",
+      "score": -160,
+      "overlapCount": 19,
+      "outOfBoundsCount": 1,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/3/canonical",
+      "slideIndex": 2,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/split/1-argument-and-support",
+      "score": 56,
+      "overlapCount": 4,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/3/mirrored",
+      "slideIndex": 2,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/split/2-claim-with-formula",
+      "score": 70,
+      "overlapCount": 4,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": true
+    },
+    {
+      "id": "composition/3/visual-focus",
+      "slideIndex": 2,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/split/3-text-and-evidence-rail",
+      "score": -4,
+      "overlapCount": 9,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/4/canonical",
+      "slideIndex": 3,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/stat-dominant/1-hero-number",
+      "score": 46,
+      "overlapCount": 6,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": true
+    },
+    {
+      "id": "composition/4/mirrored",
+      "slideIndex": 3,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/stat-dominant/2-metric-with-interpretation",
+      "score": 30,
+      "overlapCount": 6,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/4/visual-focus",
+      "slideIndex": 3,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/stat-dominant/3-three-stat-rhythm",
+      "score": -72,
+      "overlapCount": 15,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/5/canonical",
+      "slideIndex": 4,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/chart-dominant/1-wide-chart",
+      "score": 74.5,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.325,
+      "selected": true
+    },
+    {
+      "id": "composition/5/mirrored",
+      "slideIndex": 4,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/chart-dominant/2-chart-with-insight-rail",
+      "score": 72.5,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.325,
+      "selected": false
+    },
+    {
+      "id": "composition/5/visual-focus",
+      "slideIndex": 4,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/chart-dominant/3-chart-with-callout",
+      "score": -42.418,
+      "overlapCount": 14,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.37908,
+      "selected": false
+    },
+    {
+      "id": "composition/6/canonical",
+      "slideIndex": 5,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/chart-dominant/1-wide-chart",
+      "score": 74.5,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.325,
+      "selected": true
+    },
+    {
+      "id": "composition/6/mirrored",
+      "slideIndex": 5,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/chart-dominant/2-chart-with-insight-rail",
+      "score": 88.5,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.325,
+      "selected": false
+    },
+    {
+      "id": "composition/6/visual-focus",
+      "slideIndex": 5,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/chart-dominant/3-chart-with-callout",
+      "score": -40.418,
+      "overlapCount": 13,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.37908,
+      "selected": false
+    },
+    {
+      "id": "composition/7/canonical",
+      "slideIndex": 6,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/chart-dominant/1-wide-chart",
+      "score": 88.5,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.325,
+      "selected": true
+    },
+    {
+      "id": "composition/7/mirrored",
+      "slideIndex": 6,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/chart-dominant/2-chart-with-insight-rail",
+      "score": 72.5,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.325,
+      "selected": false
+    },
+    {
+      "id": "composition/7/visual-focus",
+      "slideIndex": 6,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/chart-dominant/3-chart-with-callout",
+      "score": -52.418,
+      "overlapCount": 14,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.37908,
+      "selected": false
+    },
+    {
+      "id": "composition/8/canonical",
+      "slideIndex": 7,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/stat-dominant/1-hero-number",
+      "score": 32,
+      "overlapCount": 6,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": true
+    },
+    {
+      "id": "composition/8/mirrored",
+      "slideIndex": 7,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/stat-dominant/2-metric-with-interpretation",
+      "score": 30,
+      "overlapCount": 6,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/8/visual-focus",
+      "slideIndex": 7,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/stat-dominant/3-three-stat-rhythm",
+      "score": -62,
+      "overlapCount": 15,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/9/canonical",
+      "slideIndex": 8,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/diagram-dominant/1-horizontal-process",
+      "score": 35.886,
+      "overlapCount": 6,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.194312,
+      "selected": true
+    },
+    {
+      "id": "composition/9/mirrored",
+      "slideIndex": 8,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/diagram-dominant/2-vertical-system-stack",
+      "score": -950.114,
+      "overlapCount": 6,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.194312,
+      "selected": false
+    },
+    {
+      "id": "composition/9/visual-focus",
+      "slideIndex": 8,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/diagram-dominant/3-architecture-with-boundary",
+      "score": -33.92,
+      "overlapCount": 12,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.104,
+      "selected": false
+    },
+    {
+      "id": "composition/10/canonical",
+      "slideIndex": 9,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/comparison/1-two-position-contrast",
+      "score": 82,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": true
+    },
+    {
+      "id": "composition/10/mirrored",
+      "slideIndex": 9,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/comparison/2-three-lens-comparison",
+      "score": 66,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/10/visual-focus",
+      "slideIndex": 9,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/comparison/3-weighted-choice",
+      "score": -24,
+      "overlapCount": 11,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/11/canonical",
+      "slideIndex": 10,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/diagram-dominant/1-horizontal-process",
+      "score": 35.886,
+      "overlapCount": 6,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.194312,
+      "selected": true
+    },
+    {
+      "id": "composition/11/mirrored",
+      "slideIndex": 10,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/diagram-dominant/2-vertical-system-stack",
+      "score": -966.114,
+      "overlapCount": 6,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.194312,
+      "selected": false
+    },
+    {
+      "id": "composition/11/visual-focus",
+      "slideIndex": 10,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/diagram-dominant/3-architecture-with-boundary",
+      "score": -23.92,
+      "overlapCount": 12,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0.104,
+      "selected": false
+    },
+    {
+      "id": "composition/12/canonical",
+      "slideIndex": 11,
+      "variant": "canonical",
+      "referenceId": "nodeslide-ref/statement/1-single-thesis",
+      "score": 68,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    },
+    {
+      "id": "composition/12/mirrored",
+      "slideIndex": 11,
+      "variant": "mirrored",
+      "referenceId": "nodeslide-ref/statement/2-asymmetric-thesis",
+      "score": 82,
+      "overlapCount": 3,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": true
+    },
+    {
+      "id": "composition/12/visual-focus",
+      "slideIndex": 11,
+      "variant": "visual-focus",
+      "referenceId": "nodeslide-ref/statement/3-thesis-with-proof-line",
+      "score": -16,
+      "overlapCount": 10,
+      "outOfBoundsCount": 0,
+      "dominantArea": 0,
+      "selected": false
+    }
+  ],
+  "deckDiversity": {
+    "score": 0.47692726513574846,
+    "passes": true,
+    "distinctFamilies": 6,
+    "nearDuplicatePairs": []
+  }
+}

@@ -1,0 +1,321 @@
+{"kind":"deck","id":"pr/o1eaut","name":"Deck"}
+{"kind":"layout","layoutId":"b197ba5f-c5d3-47c3-91b9-cf767649293c","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"9629a571-efc6-48f9-96ac-47df1d0e1d16","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/znwfyj","slide":1,"title":"PRODUCT DECISION DECK","textShapes":6}
+{"kind":"shape","id":"sh/fmhgfi9o","slide":1,"bbox":[0,0,620,720]}
+{"kind":"textbox","id":"sh/el8z6ds3","slide":1,"text":"PRODUCT DECISION DECK","textPreview":"PRODUCT DECISION DECK","textChars":21,"textLines":1,"bbox":[66,54,320,24]}
+{"kind":"textbox","id":"sh/psjilsr6","slide":1,"text":"NodeSlide","textPreview":"NodeSlide","textChars":9,"textLines":1,"bbox":[66,126,520,82]}
+{"kind":"textbox","id":"sh/orqhc7al","slide":1,"text":"From signal to\ndefensible decision","textPreview":"From signal to | defensible decision","textChars":34,"textLines":2,"bbox":[66,202,520,150]}
+{"kind":"textbox","id":"sh/3qh0j290","slide":1,"text":"A production case for research, finance, startup, operating, and governance work.","textPreview":"A production case for research, finance, startup, operating, and governance work.","textChars":81,"textLines":1,"bbox":[70,385,430,92]}
+{"kind":"shape","id":"sh/2p8zaxsf","slide":1,"bbox":[70,522,210,6]}
+{"kind":"textbox","id":"sh/5wfy98bm","slide":1,"text":"The deck is not done when it renders.\nIt is done when the decision job finishes.","textPreview":"The deck is not done when it renders. | It is done when the decision job finishes.","textChars":80,"textLines":2,"bbox":[70,548,470,72]}
+{"kind":"textbox","id":"sh/4v6h03a1","slide":1,"text":"2026 · REFERENCE DECK","textPreview":"2026 · REFERENCE DECK","textChars":21,"textLines":1,"bbox":[70,665,300,18]}
+{"kind":"image","id":"im/dsnitony","slide":1,"name":"","alt":"Scattered evidence converges through a trust threshold into reusable decision paths","bbox":[0,0,1280,720]}
+{"kind":"notes","id":"nt/znwfyj","slide":1,"text":""}
+{"kind":"slide","id":"sl/9osg98","slide":2,"title":"THE GAP","textShapes":13}
+{"kind":"textbox","id":"sh/3yhs3y14","slide":2,"text":"THE GAP","textPreview":"THE GAP","textChars":7,"textLines":1,"bbox":[64,34,420,26]}
+{"kind":"textbox","id":"sh/4zqtc3ip","slide":2,"text":"Plausible slides are not decision-ready","textPreview":"Plausible slides are not decision-ready","textChars":39,"textLines":1,"bbox":[64,70,1110,78]}
+{"kind":"shape","id":"sh/p0za58za","slide":2,"bbox":[64,678,1152,1]}
+{"kind":"textbox","id":"sh/q18bed0v","slide":2,"text":"NODESLIDE  /  SIGNAL → DECISION","textPreview":"NODESLIDE  /  SIGNAL → DECISION","textChars":31,"textLines":1,"bbox":[64,684,580,20]}
+{"kind":"textbox","id":"sh/r21s7yhg","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1160,684,56,20]}
+{"kind":"textbox","id":"sh/c3atg3i1","slide":2,"text":"A prompt can produce fluent copy and still fail the job.","textPreview":"A prompt can produce fluent copy and still fail the job.","textChars":56,"textLines":1,"bbox":[64,158,620,42]}
+{"kind":"shape","id":"sh/d4ja98z6","slide":2,"bbox":[100,384,16,16]}
+{"kind":"shape","id":"sh/65or290r","slide":2,"bbox":[116,391,86,2]}
+{"kind":"shape","id":"sh/76xsve1w","slide":2,"bbox":[218,436,16,16]}
+{"kind":"shape","id":"sh/bu9c36xg","slide":2,"bbox":[234,443,86,2]}
+{"kind":"shape","id":"sh/q9gvalwv","slide":2,"bbox":[336,384,16,16]}
+{"kind":"shape","id":"sh/dwru5gfm","slide":2,"bbox":[352,391,86,2]}
+{"kind":"shape","id":"sh/cvidcbe1","slide":2,"bbox":[454,436,16,16]}
+{"kind":"shape","id":"sh/36pcz6xk","slide":2,"bbox":[470,443,86,2]}
+{"kind":"textbox","id":"sh/25gv61wz","slide":2,"text":"PLAUSIBLE","textPreview":"PLAUSIBLE","textChars":9,"textLines":1,"bbox":[72,510,470,40]}
+{"kind":"shape","id":"sh/p87u1gfa","slide":2,"bbox":[560,238,190,318]}
+{"kind":"textbox","id":"sh/o7yd8bep","slide":2,"text":"THE\nMISSING\nMIDDLE","textPreview":"THE | MISSING | MIDDLE","textChars":18,"textLines":3,"bbox":[584,274,142,152]}
+{"kind":"textbox","id":"sh/f2pcvmx8","slide":2,"text":"truth\nstory\nreview\ncompletion","textPreview":"truth | story | review | completion","textChars":29,"textLines":4,"bbox":[598,442,114,86]}
+{"kind":"shape","id":"sh/e1wb2hwn","slide":2,"bbox":[760,397,170,1]}
+{"kind":"textbox","id":"sh/ixwveh0f","slide":2,"text":"DECISION-READY","textPreview":"DECISION-READY","textChars":14,"textLines":1,"bbox":[914,510,300,40]}
+{"kind":"textbox","id":"sh/jy5wnmh0","slide":2,"text":"Source-bound","textPreview":"Source-bound","textChars":12,"textLines":1,"bbox":[900,278,240,30]}
+{"kind":"textbox","id":"sh/4zedgril","slide":2,"text":"Narrative advances","textPreview":"Narrative advances","textChars":18,"textLines":1,"bbox":[930,328,260,30]}
+{"kind":"textbox","id":"sh/50nepwz6","slide":2,"text":"Visually legible","textPreview":"Visually legible","textChars":16,"textLines":1,"bbox":[900,378,240,30]}
+{"kind":"textbox","id":"sh/61wvi10r","slide":2,"text":"Exported + owned","textPreview":"Exported + owned","textChars":16,"textLines":1,"bbox":[930,428,260,30]}
+{"kind":"notes","id":"nt/9osg98","slide":2,"text":""}
+{"kind":"slide","id":"sl/m5togn","slide":3,"title":"PRODUCTION SCENARIOS","textShapes":21}
+{"kind":"textbox","id":"sh/s3ylsn21","slide":3,"text":"PRODUCTION SCENARIOS","textPreview":"PRODUCTION SCENARIOS","textChars":20,"textLines":1,"bbox":[64,34,420,26]}
+{"kind":"textbox","id":"sh/rip4zilw","slide":3,"text":"One engine must finish five different jobs","textPreview":"One engine must finish five different jobs","textChars":42,"textLines":1,"bbox":[64,70,1110,78]}
+{"kind":"shape","id":"sh/qhg3qdkb","slide":3,"bbox":[64,678,1152,1]}
+{"kind":"textbox","id":"sh/18rm5s3y","slide":3,"text":"NODESLIDE  /  SIGNAL → DECISION","textPreview":"NODESLIDE  /  SIGNAL → DECISION","textChars":31,"textLines":1,"bbox":[64,684,580,20]}
+{"kind":"textbox","id":"sh/07ilwn2d","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1160,684,56,20]}
+{"kind":"textbox","id":"sh/f6943ils","slide":3,"text":"The truth constraint changes by domain. The completion contract does not.","textPreview":"The truth constraint changes by domain. The completion contract does not.","textChars":73,"textLines":1,"bbox":[64,154,850,36]}
+{"kind":"shape","id":"sh/e503udk7","slide":3,"bbox":[64,240,174,8]}
+{"kind":"textbox","id":"sh/pcbm9cju","slide":3,"text":"RESEARCH","textPreview":"RESEARCH","textChars":8,"textLines":1,"bbox":[64,270,190,30]}
+{"kind":"textbox","id":"sh/ob250729","slide":3,"text":"Contradiction\n+ uncertainty","textPreview":"Contradiction | + uncertainty","textChars":27,"textLines":2,"bbox":[64,316,184,76]}
+{"kind":"shape","id":"sh/uh0z6x0b","slide":3,"bbox":[64,432,174,1]}
+{"kind":"textbox","id":"sh/vi9gz2hw","slide":3,"text":"Brief fidelity\nSource truth\nStory progression\nEditable delivery","textPreview":"Brief fidelity | Source truth | Story progression | Editable delivery","textChars":63,"textLines":4,"bbox":[64,450,190,112]}
+{"kind":"shape","id":"sh/wjih87ih","slide":3,"bbox":[292,240,174,8]}
+{"kind":"textbox","id":"sh/hkby1cz2","slide":3,"text":"FINANCE","textPreview":"FINANCE","textChars":7,"textLines":1,"bbox":[292,270,190,30]}
+{"kind":"textbox","id":"sh/ilkzaxgn","slide":3,"text":"Units +\nreconciliation","textPreview":"Units + | reconciliation","textChars":22,"textLines":2,"bbox":[292,316,184,76]}
+{"kind":"shape","id":"sh/jmtg32h8","slide":3,"bbox":[292,432,174,1]}
+{"kind":"textbox","id":"sh/4n2hc7yd","slide":3,"text":"Brief fidelity\nSource truth\nStory progression\nEditable delivery","textPreview":"Brief fidelity | Source truth | Story progression | Editable delivery","textChars":63,"textLines":4,"bbox":[292,450,190,112]}
+{"kind":"shape","id":"sh/5oby5czy","slide":3,"bbox":[520,240,174,8]}
+{"kind":"textbox","id":"sh/ypgfyd03","slide":3,"text":"STARTUP","textPreview":"STARTUP","textChars":7,"textLines":1,"bbox":[520,270,190,30]}
+{"kind":"textbox","id":"sh/zqpgriho","slide":3,"text":"Retellable\nwithout fiction","textPreview":"Retellable | without fiction","textChars":26,"textLines":2,"bbox":[520,316,184,76]}
+{"kind":"shape","id":"sh/3u5wzexg","slide":3,"bbox":[520,432,174,1]}
+{"kind":"textbox","id":"sh/2tcv69gv","slide":3,"text":"Brief fidelity\nSource truth\nStory progression\nEditable delivery","textPreview":"Brief fidelity | Source truth | Story progression | Editable delivery","textChars":63,"textLines":4,"bbox":[520,450,190,112]}
+{"kind":"shape","id":"sh/pwne1ofm","slide":3,"bbox":[748,240,174,8]}
+{"kind":"textbox","id":"sh/oved8jy1","slide":3,"text":"OPERATING","textPreview":"OPERATING","textChars":9,"textLines":1,"bbox":[748,270,190,30]}
+{"kind":"textbox","id":"sh/f6lcvuxk","slide":3,"text":"Owner +\ncheckpoint","textPreview":"Owner + | checkpoint","textChars":18,"textLines":2,"bbox":[748,316,184,76]}
+{"kind":"shape","id":"sh/e5cv2pgz","slide":3,"bbox":[748,432,174,1]}
+{"kind":"textbox","id":"sh/1s3ux4fa","slide":3,"text":"Brief fidelity\nSource truth\nStory progression\nEditable delivery","textPreview":"Brief fidelity | Source truth | Story progression | Editable delivery","textChars":63,"textLines":4,"bbox":[748,450,190,112]}
+{"kind":"shape","id":"sh/grud4zy5","slide":3,"bbox":[976,240,174,8]}
+{"kind":"textbox","id":"sh/z2pw7yxo","slide":3,"text":"GOVERNANCE","textPreview":"GOVERNANCE","textChars":10,"textLines":1,"bbox":[976,270,190,30]}
+{"kind":"textbox","id":"sh/y1gvetg3","slide":3,"text":"Evidence-bound\nrelease state","textPreview":"Evidence-bound | release state","textChars":28,"textLines":2,"bbox":[976,316,184,76]}
+{"kind":"shape","id":"sh/w7qtsvel","slide":3,"bbox":[976,432,174,1]}
+{"kind":"textbox","id":"sh/h8za10v6","slide":3,"text":"Brief fidelity\nSource truth\nStory progression\nEditable delivery","textPreview":"Brief fidelity | Source truth | Story progression | Editable delivery","textChars":63,"textLines":4,"bbox":[976,450,190,112]}
+{"kind":"textbox","id":"sh/u58rqlwf","slide":3,"text":"Same gate. Different evidence.","textPreview":"Same gate. Different evidence.","textChars":30,"textLines":1,"bbox":[64,590,1110,52]}
+{"kind":"notes","id":"nt/m5togn","slide":3,"text":""}
+{"kind":"slide","id":"sl/961std","slide":4,"title":"SCENARIO 01 · RESEARCH","textShapes":13}
+{"kind":"textbox","id":"sh/fepwbqtk","slide":4,"text":"SCENARIO 01 · RESEARCH","textPreview":"SCENARIO 01 · RESEARCH","textChars":22,"textLines":1,"bbox":[64,34,420,26]}
+{"kind":"textbox","id":"sh/0fyx4ba5","slide":4,"text":"Research must preserve disagreement","textPreview":"Research must preserve disagreement","textChars":35,"textLines":1,"bbox":[64,70,1110,78]}
+{"kind":"shape","id":"sh/1g7edgbq","slide":4,"bbox":[64,678,1152,1]}
+{"kind":"textbox","id":"sh/q9wvy1s3","slide":4,"text":"NODESLIDE  /  SIGNAL → DECISION","textPreview":"NODESLIDE  /  SIGNAL → DECISION","textChars":31,"textLines":1,"bbox":[64,684,580,20]}
+{"kind":"textbox","id":"sh/ra5w76t8","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1160,684,56,20]}
+{"kind":"textbox","id":"sh/sbed0bat","slide":4,"text":"Synthesis is not consensus. The unresolved edge stays visible.","textPreview":"Synthesis is not consensus. The unresolved edge stays visible.","textChars":62,"textLines":1,"bbox":[64,154,760,38]}
+{"kind":"shape","id":"sh/dcne9gbe","slide":4,"bbox":[76,252,20,20]}
+{"kind":"textbox","id":"sh/a50fa5s7","slide":4,"text":"PAPER SET","textPreview":"PAPER SET","textChars":9,"textLines":1,"bbox":[110,244,170,36]}
+{"kind":"shape","id":"sh/b69wjats","slide":4,"bbox":[264,262,166,94]}
+{"kind":"shape","id":"sh/3upkz290","slide":4,"bbox":[76,346,20,20]}
+{"kind":"textbox","id":"sh/itgj6xsf","slide":4,"text":"EVAL NOTES","textPreview":"EVAL NOTES","textChars":10,"textLines":1,"bbox":[110,338,170,36]}
+{"kind":"shape","id":"sh/5w721cr6","slide":4,"bbox":[264,356,166,1]}
+{"kind":"shape","id":"sh/4vy187al","slide":4,"bbox":[76,440,20,20]}
+{"kind":"textbox","id":"sh/ripk3m9w","slide":4,"text":"INTERVIEWS","textPreview":"INTERVIEWS","textChars":10,"textLines":1,"bbox":[110,432,170,36]}
+{"kind":"shape","id":"sh/qxgjahsb","slide":4,"bbox":[264,356,166,94]}
+{"kind":"shape","id":"sh/dkr25cr2","slide":4,"bbox":[430,268,190,176]}
+{"kind":"textbox","id":"sh/sjy1c7ah","slide":4,"text":"CLAIM\nMAP","textPreview":"CLAIM | MAP","textChars":9,"textLines":2,"bbox":[470,308,110,76]}
+{"kind":"shape","id":"sh/zm9k7m98","slide":4,"bbox":[620,356,160,1]}
+{"kind":"shape","id":"sh/el03ehsn","slide":4,"bbox":[790,250,330,212]}
+{"kind":"textbox","id":"sh/ahkn6lcv","slide":4,"text":"PILOT DECISION","textPreview":"PILOT DECISION","textChars":14,"textLines":1,"bbox":[824,282,260,30]}
+{"kind":"textbox","id":"sh/bit4fqtg","slide":4,"text":"Adopt for six weeks","textPreview":"Adopt for six weeks","textChars":19,"textLines":1,"bbox":[824,326,260,44]}
+{"kind":"textbox","id":"sh/wj258vu1","slide":4,"text":"Owner · metric · stop condition","textPreview":"Owner · metric · stop condition","textChars":31,"textLines":1,"bbox":[824,390,260,28]}
+{"kind":"shape","id":"sh/xkvmh0b6","slide":4,"bbox":[970,492,220,70]}
+{"kind":"textbox","id":"sh/mdkn2lcj","slide":4,"text":"UNRESOLVED\n2 conflicting claims","textPreview":"UNRESOLVED | 2 conflicting claims","textChars":31,"textLines":2,"bbox":[990,502,180,48]}
+{"kind":"notes","id":"nt/961std","slide":4,"text":""}
+{"kind":"slide","id":"sl/j4mqwb","slide":5,"title":"SCENARIO 02 · FINANCE","textShapes":15}
+{"kind":"textbox","id":"sh/pkvqdcjq","slide":5,"text":"SCENARIO 02 · FINANCE","textPreview":"SCENARIO 02 · FINANCE","textChars":21,"textLines":1,"bbox":[64,34,420,26]}
+{"kind":"textbox","id":"sh/2h4r2h0z","slide":5,"text":"Finance needs a bridge, not decoration","textPreview":"Finance needs a bridge, not decoration","textChars":38,"textLines":1,"bbox":[64,70,1110,78]}
+{"kind":"shape","id":"sh/3id8bm1k","slide":5,"bbox":[64,678,1152,1]}
+{"kind":"textbox","id":"sh/cn698rih","slide":5,"text":"NODESLIDE  /  SIGNAL → DECISION","textPreview":"NODESLIDE  /  SIGNAL → DECISION","textChars":31,"textLines":1,"bbox":[64,684,580,20]}
+{"kind":"textbox","id":"sh/dofqhwj2","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1160,684,56,20]}
+{"kind":"textbox","id":"sh/qlor6h0b","slide":5,"text":"Every number keeps its unit, source, and status as it becomes an outlook.","textPreview":"Every number keeps its unit, source, and status as it becomes an outlook.","textChars":73,"textLines":1,"bbox":[64,154,870,38]}
+{"kind":"shape","id":"sh/rmx8fm1w","slide":5,"bbox":[76,404,116,150]}
+{"kind":"textbox","id":"sh/0b69cbid","slide":5,"text":"REPORTED","textPreview":"REPORTED","textChars":8,"textLines":1,"bbox":[72,566,124,28]}
+{"kind":"shape","id":"sh/lcfalgjy","slide":5,"bbox":[226,344,116,210]}
+{"kind":"textbox","id":"sh/pgzuhsrq","slide":5,"text":"NON-GAAP","textPreview":"NON-GAAP","textChars":8,"textLines":1,"bbox":[222,566,124,28]}
+{"kind":"shape","id":"sh/ovqd8na5","slide":5,"bbox":[376,429,116,125]}
+{"kind":"textbox","id":"sh/nuhcfi9k","slide":5,"text":"ASSUMPTION","textPreview":"ASSUMPTION","textChars":10,"textLines":1,"bbox":[372,566,124,28]}
+{"kind":"shape","id":"sh/2tov6dsf","slide":5,"bbox":[526,279,116,275]}
+{"kind":"textbox","id":"sh/xkzu5sr2","slide":5,"text":"OUTLOOK","textPreview":"OUTLOOK","textChars":7,"textLines":1,"bbox":[522,566,124,28]}
+{"kind":"shape","id":"sh/cjqdc7ah","slide":5,"bbox":[64,554,630,2]}
+{"kind":"shape","id":"sh/bihc329w","slide":5,"bbox":[760,230,430,334]}
+{"kind":"textbox","id":"sh/ah8vaxsb","slide":5,"text":"RECONCILIATION GATE","textPreview":"RECONCILIATION GATE","textChars":19,"textLines":1,"bbox":[798,260,300,24]}
+{"kind":"textbox","id":"sh/dofu98bi","slide":5,"text":"Observed ≠ forward-looking","textPreview":"Observed ≠ forward-looking","textChars":26,"textLines":1,"bbox":[798,306,340,40]}
+{"kind":"shape","id":"sh/sn6t03ax","slide":5,"bbox":[807,385,10,10]}
+{"kind":"textbox","id":"sh/47adg3it","slide":5,"text":"Units survive","textPreview":"Units survive","textChars":13,"textLines":1,"bbox":[832,376,280,28]}
+{"kind":"shape","id":"sh/58jup8je","slide":5,"bbox":[807,425,10,10]}
+{"kind":"textbox","id":"sh/i58vet03","slide":5,"text":"Totals reconcile","textPreview":"Totals reconcile","textChars":16,"textLines":1,"bbox":[832,416,280,28]}
+{"kind":"shape","id":"sh/j6hcny18","slide":5,"bbox":[807,465,10,10]}
+{"kind":"textbox","id":"sh/svadkni5","slide":5,"text":"Missing ≠ zero","textPreview":"Missing ≠ zero","textChars":14,"textLines":1,"bbox":[832,456,280,28]}
+{"kind":"shape","id":"sh/twjetszq","slide":5,"bbox":[807,505,10,10]}
+{"kind":"textbox","id":"sh/69svid0z","slide":5,"text":"Guidance is labeled","textPreview":"Guidance is labeled","textChars":19,"textLines":1,"bbox":[832,496,280,28]}
+{"kind":"notes","id":"nt/j4mqwb","slide":5,"text":""}
+{"kind":"slide","id":"sl/w58ct3","slide":6,"title":"SCENARIO 03 · STARTUP","textShapes":11}
+{"kind":"textbox","id":"sh/ut4rmp03","slide":6,"text":"SCENARIO 03 · STARTUP","textPreview":"SCENARIO 03 · STARTUP","textChars":21,"textLines":1,"bbox":[64,34,420,26]}
+{"kind":"textbox","id":"sh/hwfax4zu","slide":6,"text":"A startup story must become retellable","textPreview":"A startup story must become retellable","textChars":38,"textLines":1,"bbox":[64,70,1110,78]}
+{"kind":"shape","id":"sh/gvm9ozi9","slide":6,"bbox":[64,678,1152,1]}
+{"kind":"textbox","id":"sh/7qdsrahs","slide":6,"text":"NODESLIDE  /  SIGNAL → DECISION","textPreview":"NODESLIDE  /  SIGNAL → DECISION","textChars":31,"textLines":1,"bbox":[64,684,580,20]}
+{"kind":"textbox","id":"sh/m54ri507","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1160,684,56,20]}
+{"kind":"textbox","id":"sh/9svatkzi","slide":6,"text":"The shape changes as belief compounds; the synthetic label never disappears.","textPreview":"The shape changes as belief compounds; the synthetic label never disappears.","textChars":76,"textLines":1,"bbox":[64,154,870,38]}
+{"kind":"shape","id":"sh/8rm9kfid","slide":6,"bbox":[82,518,120,56]}
+{"kind":"textbox","id":"sh/z2t8nahg","slide":6,"text":"PAIN","textPreview":"PAIN","textChars":4,"textLines":1,"bbox":[82,526,120,30]}
+{"kind":"shape","id":"sh/y1kre50v","slide":6,"bbox":[202,491,34,55]}
+{"kind":"shape","id":"sh/ofuhofu5","slide":6,"bbox":[248,452,150,78]}
+{"kind":"textbox","id":"sh/9g3ihkba","slide":6,"text":"PRODUCT","textPreview":"PRODUCT","textChars":7,"textLines":1,"bbox":[248,460,150,30]}
+{"kind":"shape","id":"sh/mtczmpcz","slide":6,"bbox":[398,427,30,64]}
+{"kind":"shape","id":"sh/nul0fadk","slide":6,"bbox":[440,372,160,110]}
+{"kind":"textbox","id":"sh/0ruhkfut","slide":6,"text":"PROOF","textPreview":"PROOF","textChars":5,"textLines":1,"bbox":[440,380,160,30]}
+{"kind":"shape","id":"sh/1s3idkve","slide":6,"bbox":[600,362,34,65]}
+{"kind":"shape","id":"sh/epszi5cn","slide":6,"bbox":[646,290,180,144]}
+{"kind":"textbox","id":"sh/zq1gbad8","slide":6,"text":"WEDGE","textPreview":"WEDGE","textChars":5,"textLines":1,"bbox":[646,298,180,30]}
+{"kind":"shape","id":"sh/knehwzud","slide":6,"bbox":[826,301,40,61]}
+{"kind":"shape","id":"sh/lonip4bi","slide":6,"bbox":[878,208,260,186]}
+{"kind":"textbox","id":"sh/t4ji943m","slide":6,"text":"ASK","textPreview":"ASK","textChars":3,"textLines":1,"bbox":[878,216,260,30]}
+{"kind":"shape","id":"sh/s3ahgzmh","slide":6,"bbox":[420,548,370,48]}
+{"kind":"textbox","id":"sh/72107ulw","slide":6,"text":"SYNTHETIC TEST DATA · ALWAYS VISIBLE","textPreview":"SYNTHETIC TEST DATA · ALWAYS VISIBLE","textChars":36,"textLines":1,"bbox":[438,556,334,30]}
+{"kind":"notes","id":"nt/w58ct3","slide":6,"text":""}
+{"kind":"slide","id":"sl/59nhly","slide":7,"title":"SCENARIO 04 · OPERATING","textShapes":16}
+{"kind":"textbox","id":"sh/be5ovadc","slide":7,"text":"SCENARIO 04 · OPERATING","textPreview":"SCENARIO 04 · OPERATING","textChars":23,"textLines":1,"bbox":[64,34,420,26]}
+{"kind":"textbox","id":"sh/cfe5ofex","slide":7,"text":"Operating reviews must expose the constraint","textPreview":"Operating reviews must expose the constraint","textChars":44,"textLines":1,"bbox":[64,70,1110,78]}
+{"kind":"shape","id":"sh/xgn6xkvi","slide":7,"bbox":[64,678,1152,1]}
+{"kind":"textbox","id":"sh/29cni5wv","slide":7,"text":"NODESLIDE  /  SIGNAL → DECISION","textPreview":"NODESLIDE  /  SIGNAL → DECISION","textChars":31,"textLines":1,"bbox":[64,684,580,20]}
+{"kind":"textbox","id":"sh/na54radg","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1160,684,56,20]}
+{"kind":"textbox","id":"sh/obe5kfe1","slide":7,"text":"Metrics matter when they point to an owned intervention and the next cadence.","textPreview":"Metrics matter when they point to an owned intervention and the next cadence.","textChars":77,"textLines":1,"bbox":[64,154,900,38]}
+{"kind":"shape","id":"sh/pcnmtkvm","slide":7,"bbox":[70,268,180,80]}
+{"kind":"textbox","id":"sh/m5gnu9wz","slide":7,"text":"DEMAND","textPreview":"DEMAND","textChars":6,"textLines":1,"bbox":[70,290,180,34]}
+{"kind":"shape","id":"sh/76po3edk","slide":7,"bbox":[258,308,54,1]}
+{"kind":"shape","id":"sh/jq507yho","slide":7,"bbox":[320,268,180,80]}
+{"kind":"textbox","id":"sh/ypcjet03","slide":7,"text":"CAPACITY","textPreview":"CAPACITY","textChars":8,"textLines":1,"bbox":[320,290,180,34]}
+{"kind":"shape","id":"sh/lsni9ozu","slide":7,"bbox":[508,308,54,1]}
+{"kind":"shape","id":"sh/kre1gji9","slide":7,"bbox":[570,248,190,120]}
+{"kind":"textbox","id":"sh/7u50byhk","slide":7,"text":"BOTTLENECK","textPreview":"BOTTLENECK","textChars":10,"textLines":1,"bbox":[570,270,190,34]}
+{"kind":"shape","id":"sh/6twjit0f","slide":7,"bbox":[768,308,54,1]}
+{"kind":"shape","id":"sh/twnid8zq","slide":7,"bbox":[830,268,180,80]}
+{"kind":"textbox","id":"sh/8ve1k3i5","slide":7,"text":"INTERVENTION","textPreview":"INTERVENTION","textChars":12,"textLines":1,"bbox":[830,290,180,34]}
+{"kind":"shape","id":"sh/vyp0fihw","slide":7,"bbox":[1010,307,126,3]}
+{"kind":"shape","id":"sh/uxgjmd0b","slide":7,"bbox":[1136,298,20,20]}
+{"kind":"textbox","id":"sh/qpkvu1ov","slide":7,"text":"30-DAY\nCADENCE","textPreview":"30-DAY | CADENCE","textChars":14,"textLines":2,"bbox":[1040,372,170,66]}
+{"kind":"textbox","id":"sh/bqtc365g","slide":7,"text":"OWNER","textPreview":"OWNER","textChars":5,"textLines":1,"bbox":[98,500,220,24]}
+{"kind":"textbox","id":"sh/cr2dwb6l","slide":7,"text":"COO","textPreview":"COO","textChars":3,"textLines":1,"bbox":[98,530,250,38]}
+{"kind":"textbox","id":"sh/dsbu5gn6","slide":7,"text":"LEADING SIGNAL","textPreview":"LEADING SIGNAL","textChars":14,"textLines":1,"bbox":[428,500,220,24]}
+{"kind":"textbox","id":"sh/210vq1oj","slide":7,"text":"Cycle time","textPreview":"Cycle time","textChars":10,"textLines":1,"bbox":[428,530,250,38]}
+{"kind":"textbox","id":"sh/329czm54","slide":7,"text":"CHECKPOINT","textPreview":"CHECKPOINT","textChars":10,"textLines":1,"bbox":[758,500,220,24]}
+{"kind":"textbox","id":"sh/o32dsr6p","slide":7,"text":"Weekly","textPreview":"Weekly","textChars":6,"textLines":1,"bbox":[758,530,250,38]}
+{"kind":"notes","id":"nt/59nhly","slide":7,"text":""}
+{"kind":"slide","id":"sl/90vjev","slide":8,"title":"SCENARIO 05 · GOVERNANCE","textShapes":14}
+{"kind":"textbox","id":"sh/gripgryl","slide":8,"text":"SCENARIO 05 · GOVERNANCE","textPreview":"SCENARIO 05 · GOVERNANCE","textChars":24,"textLines":1,"bbox":[64,34,420,26]}
+{"kind":"textbox","id":"sh/vq9onmh0","slide":8,"text":"Governance culminates in a visible release state","textPreview":"Governance culminates in a visible release state","textChars":48,"textLines":1,"bbox":[64,70,1110,78]}
+{"kind":"shape","id":"sh/up07ehgf","slide":8,"bbox":[64,678,1152,1]}
+{"kind":"textbox","id":"sh/tor6lczu","slide":8,"text":"NODESLIDE  /  SIGNAL → DECISION","textPreview":"NODESLIDE  /  SIGNAL → DECISION","textChars":31,"textLines":1,"bbox":[64,684,580,20]}
+{"kind":"textbox","id":"sh/8nipc7y9","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1160,684,56,20]}
+{"kind":"textbox","id":"sh/7m9oj2h4","slide":8,"text":"A failed control cannot hide behind a green quality badge.","textPreview":"A failed control cannot hide behind a green quality badge.","textChars":58,"textLines":1,"bbox":[64,154,760,38]}
+{"kind":"shape","id":"sh/6lg7ahgj","slide":8,"bbox":[94,264,170,62]}
+{"kind":"textbox","id":"sh/l076hczy","slide":8,"text":"MAP","textPreview":"MAP","textChars":3,"textLines":1,"bbox":[94,278,170,30]}
+{"kind":"shape","id":"sh/kzyp87yd","slide":8,"bbox":[272,295,198,60]}
+{"kind":"shape","id":"sh/id832l47","slide":8,"bbox":[94,354,170,62]}
+{"kind":"textbox","id":"sh/3eh4bq5c","slide":8,"text":"MEASURE","textPreview":"MEASURE","textChars":7,"textLines":1,"bbox":[94,368,170,30]}
+{"kind":"shape","id":"sh/4fq54vmx","slide":8,"bbox":[272,355,198,30]}
+{"kind":"shape","id":"sh/50zmdgni","slide":8,"bbox":[94,444,170,62]}
+{"kind":"textbox","id":"sh/u9o3y14v","slide":8,"text":"MANAGE","textPreview":"MANAGE","textChars":6,"textLines":1,"bbox":[94,458,170,30]}
+{"kind":"shape","id":"sh/vah4765g","slide":8,"bbox":[272,355,198,120]}
+{"kind":"shape","id":"sh/gbql0bm1","slide":8,"bbox":[428,244,250,226]}
+{"kind":"textbox","id":"sh/hczm9gnm","slide":8,"text":"GOVERN","textPreview":"GOVERN","textChars":6,"textLines":1,"bbox":[458,274,190,36]}
+{"kind":"textbox","id":"sh/65o3u14z","slide":8,"text":"cross-cutting\nowners · policy\nexceptions · evidence","textPreview":"cross-cutting | owners · policy | exceptions · evidence","textChars":51,"textLines":3,"bbox":[468,334,170,92]}
+{"kind":"shape","id":"sh/76x4365k","slide":8,"bbox":[752,214,10,330]}
+{"kind":"textbox","id":"sh/bqt0v2lc","slide":8,"text":"TRUST\nGATE","textPreview":"TRUST | GATE","textChars":10,"textLines":2,"bbox":[700,334,110,72]}
+{"kind":"shape","id":"sh/apkj2xkr","slide":8,"bbox":[842,240,340,246]}
+{"kind":"textbox","id":"sh/xcv2xc32","slide":8,"text":"DECISION STATE","textPreview":"DECISION STATE","textChars":14,"textLines":1,"bbox":[878,270,220,24]}
+{"kind":"textbox","id":"sh/wbm1472h","slide":8,"text":"CONDITIONALLY\nAPPROVE","textPreview":"CONDITIONALLY | APPROVE","textChars":21,"textLines":2,"bbox":[878,320,270,80]}
+{"kind":"textbox","id":"sh/jedkz2l8","slide":8,"text":"2 controls due · owner named\nnext checkpoint · 14 days","textPreview":"2 controls due · owner named | next checkpoint · 14 days","textChars":54,"textLines":2,"bbox":[878,420,260,48]}
+{"kind":"notes","id":"nt/90vjev","slide":8,"text":""}
+{"kind":"slide","id":"sl/q3s1y5","slide":9,"title":"SYSTEM ARCHITECTURE","textShapes":17}
+{"kind":"textbox","id":"sh/k3y1kv25","slide":9,"text":"SYSTEM ARCHITECTURE","textPreview":"SYSTEM ARCHITECTURE","textChars":19,"textLines":1,"bbox":[64,34,420,26]}
+{"kind":"textbox","id":"sh/z2pkbq1k","slide":9,"text":"Three front doors, one governed deck program","textPreview":"Three front doors, one governed deck program","textChars":44,"textLines":1,"bbox":[64,70,1110,78]}
+{"kind":"shape","id":"sh/y1gjilkf","slide":9,"bbox":[64,678,1152,1]}
+{"kind":"textbox","id":"sh/x0729gju","slide":9,"text":"NODESLIDE  /  SIGNAL → DECISION","textPreview":"NODESLIDE  /  SIGNAL → DECISION","textChars":31,"textLines":1,"bbox":[64,684,580,20]}
+{"kind":"textbox","id":"sh/czy1gb29","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1160,684,56,20]}
+{"kind":"textbox","id":"sh/bepk761o","slide":9,"text":"UI, CLI, and MCP converge before any mutation becomes durable.","textPreview":"UI, CLI, and MCP converge before any mutation becomes durable.","textChars":62,"textLines":1,"bbox":[64,154,820,38]}
+{"kind":"shape","id":"sh/adgje1k3","slide":9,"bbox":[78,250,150,64]}
+{"kind":"textbox","id":"sh/hwb2lkjy","slide":9,"text":"UI","textPreview":"UI","textChars":2,"textLines":1,"bbox":[78,266,150,30]}
+{"kind":"shape","id":"sh/wv2lsf2d","slide":9,"bbox":[238,282,192,74]}
+{"kind":"shape","id":"sh/yps7udkb","slide":9,"bbox":[78,354,150,64]}
+{"kind":"textbox","id":"sh/zq183i1w","slide":9,"text":"CLI","textPreview":"CLI","textChars":3,"textLines":1,"bbox":[78,370,150,30]}
+{"kind":"shape","id":"sh/krapwn21","slide":9,"bbox":[238,356,192,30]}
+{"kind":"shape","id":"sh/lsjq5sjm","slide":9,"bbox":[78,458,150,64]}
+{"kind":"textbox","id":"sh/a187qdkz","slide":9,"text":"MCP","textPreview":"MCP","textChars":3,"textLines":1,"bbox":[78,474,150,30]}
+{"kind":"shape","id":"sh/b2hozi1k","slide":9,"bbox":[238,356,192,134]}
+{"kind":"shape","id":"sh/c3aps325","slide":9,"bbox":[420,244,320,232]}
+{"kind":"textbox","id":"sh/xojq18jq","slide":9,"text":"CANONICAL PROGRAM","textPreview":"CANONICAL PROGRAM","textChars":17,"textLines":1,"bbox":[454,274,250,24]}
+{"kind":"textbox","id":"sh/uxc72x0j","slide":9,"text":"DeckSnapshot","textPreview":"DeckSnapshot","textChars":12,"textLines":1,"bbox":[454,316,252,42]}
+{"kind":"textbox","id":"sh/vyl8b21o","slide":9,"text":"typed elements\nsource bindings\nversion + scope","textPreview":"typed elements | source bindings | version + scope","textChars":46,"textLines":3,"bbox":[454,374,250,76]}
+{"kind":"shape","id":"sh/r2d43uhg","slide":9,"bbox":[750,356,166,1]}
+{"kind":"shape","id":"sh/614nup0v","slide":9,"bbox":[930,228,280,264]}
+{"kind":"textbox","id":"sh/d4fm54z6","slide":9,"text":"ONE MUTATION PATH","textPreview":"ONE MUTATION PATH","textChars":17,"textLines":1,"bbox":[960,260,220,28]}
+{"kind":"textbox","id":"sh/s3m5wzil","slide":9,"text":"propose","textPreview":"propose","textChars":7,"textLines":1,"bbox":[976,314,188,28]}
+{"kind":"textbox","id":"sh/f6x47ehc","slide":9,"text":"validate","textPreview":"validate","textChars":8,"textLines":1,"bbox":[976,358,188,28]}
+{"kind":"textbox","id":"sh/e5ony90r","slide":9,"text":"review","textPreview":"review","textChars":6,"textLines":1,"bbox":[976,402,188,28]}
+{"kind":"textbox","id":"sh/18fm94zi","slide":9,"text":"accept","textPreview":"accept","textChars":6,"textLines":1,"bbox":[976,446,188,28]}
+{"kind":"textbox","id":"sh/07650jix","slide":9,"text":"Source · README / EXTERNAL_AGENT_ACCESS","textPreview":"Source · README / EXTERNAL_AGENT_ACCESS","textChars":39,"textLines":1,"bbox":[64,632,600,20]}
+{"kind":"notes","id":"nt/q3s1y5","slide":9,"text":""}
+{"kind":"slide","id":"sl/hg2d8l","slide":10,"title":"PROOF MODEL","textShapes":12}
+{"kind":"textbox","id":"sh/jqpc7yxo","slide":10,"text":"PROOF MODEL","textPreview":"PROOF MODEL","textChars":11,"textLines":1,"bbox":[64,34,420,26]}
+{"kind":"textbox","id":"sh/krid03y9","slide":10,"text":"Trust is a chain of independently checkable receipts","textPreview":"Trust is a chain of independently checkable receipts","textChars":52,"textLines":1,"bbox":[64,70,1110,78]}
+{"kind":"shape","id":"sh/5sru98fe","slide":10,"bbox":[64,678,1152,1]}
+{"kind":"textbox","id":"sh/6d0v2dgz","slide":10,"text":"NODESLIDE  /  SIGNAL → DECISION","textPreview":"NODESLIDE  /  SIGNAL → DECISION","textChars":31,"textLines":1,"bbox":[64,684,580,20]}
+{"kind":"textbox","id":"sh/7e9cbixk","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1160,684,56,20]}
+{"kind":"textbox","id":"sh/sfid43y5","slide":10,"text":"The UI badge is never the authority. The artifact and receipt are.","textPreview":"The UI badge is never the authority. The artifact and receipt are.","textChars":66,"textLines":1,"bbox":[64,154,850,38]}
+{"kind":"shape","id":"sh/tgrud8fq","slide":10,"bbox":[92,292,64,64]}
+{"kind":"textbox","id":"sh/mhwbq9gv","slide":10,"text":"SOURCE","textPreview":"SOURCE","textChars":6,"textLines":1,"bbox":[70,382,110,30]}
+{"kind":"shape","id":"sh/ni5czexg","slide":10,"bbox":[162,324,112,1]}
+{"kind":"shape","id":"sh/3up4zu9c","slide":10,"bbox":[322,292,64,64]}
+{"kind":"textbox","id":"sh/itg3qpsr","slide":10,"text":"CLAIM","textPreview":"CLAIM","textChars":5,"textLines":1,"bbox":[300,382,110,30]}
+{"kind":"shape","id":"sh/5w7m14ri","slide":10,"bbox":[392,324,112,1]}
+{"kind":"shape","id":"sh/4vylszax","slide":10,"bbox":[552,292,64,64]}
+{"kind":"textbox","id":"sh/vq54va90","slide":10,"text":"ARTIFACT","textPreview":"ARTIFACT","textChars":8,"textLines":1,"bbox":[530,382,110,30]}
+{"kind":"shape","id":"sh/upw3m5sv","slide":10,"bbox":[622,324,112,1]}
+{"kind":"shape","id":"sh/hsnmxkr6","slide":10,"bbox":[782,292,64,64]}
+{"kind":"textbox","id":"sh/grelofal","slide":10,"text":"RENDER","textPreview":"RENDER","textChars":6,"textLines":1,"bbox":[760,382,110,30]}
+{"kind":"shape","id":"sh/725kra94","slide":10,"bbox":[852,324,112,1]}
+{"kind":"shape","id":"sh/61c3i5sj","slide":10,"bbox":[1012,292,64,64]}
+{"kind":"textbox","id":"sh/axcnu5cb","slide":10,"text":"EXPORT","textPreview":"EXPORT","textChars":6,"textLines":1,"bbox":[990,382,110,30]}
+{"kind":"shape","id":"sh/byl43adw","slide":10,"bbox":[250,486,780,86]}
+{"kind":"textbox","id":"sh/wzu5wfuh","slide":10,"text":"digest · model · cost · tokens · validation · version · publication","textPreview":"digest · model · cost · tokens · validation · version · publication","textChars":67,"textLines":1,"bbox":[284,507,712,36]}
+{"kind":"textbox","id":"sh/x03m50v2","slide":10,"text":"Receipt completeness is the proof surface agents can reason over.","textPreview":"Receipt completeness is the proof surface agents can reason over.","textChars":65,"textLines":1,"bbox":[284,548,712,24]}
+{"kind":"notes","id":"nt/hg2d8l","slide":10,"text":""}
+{"kind":"slide","id":"sl/rn40mx","slide":11,"title":"THE GATE","textShapes":24}
+{"kind":"textbox","id":"sh/t0rm14r6","slide":11,"text":"THE GATE","textPreview":"THE GATE","textChars":8,"textLines":1,"bbox":[64,34,420,26]}
+{"kind":"textbox","id":"sh/6xg3q98v","slide":11,"text":"Production readiness must fail closed","textPreview":"Production readiness must fail closed","textChars":37,"textLines":1,"bbox":[64,70,1110,78]}
+{"kind":"shape","id":"sh/7yp4ze9g","slide":11,"bbox":[64,678,1152,1]}
+{"kind":"textbox","id":"sh/kvylozqp","slide":11,"text":"NODESLIDE  /  SIGNAL → DECISION","textPreview":"NODESLIDE  /  SIGNAL → DECISION","textChars":31,"textLines":1,"bbox":[64,684,580,20]}
+{"kind":"textbox","id":"sh/lw7mx4ra","slide":11,"text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[1160,684,56,20]}
+{"kind":"textbox","id":"sh/ytg3mp8j","slide":11,"text":"The latest live run proved the remaining gap: the artifact completed, the brief did not.","textPreview":"The latest live run proved the remaining gap: the artifact completed, the brief did not.","textChars":88,"textLines":1,"bbox":[64,154,990,38]}
+{"kind":"textbox","id":"sh/jupkvu94","slide":11,"text":"CONTRACT","textPreview":"CONTRACT","textChars":8,"textLines":1,"bbox":[72,230,300,24]}
+{"kind":"textbox","id":"sh/wrelkzqt","slide":11,"text":"EXPECTED","textPreview":"EXPECTED","textChars":8,"textLines":1,"bbox":[520,230,220,24]}
+{"kind":"textbox","id":"sh/xsn2tkre","slide":11,"text":"OBSERVED","textPreview":"OBSERVED","textChars":8,"textLines":1,"bbox":[810,230,280,24]}
+{"kind":"shape","id":"sh/dwfa54ry","slide":11,"bbox":[64,324,1150,1]}
+{"kind":"textbox","id":"sh/sb69czad","slide":11,"text":"Requested slide count","textPreview":"Requested slide count","textChars":21,"textLines":1,"bbox":[72,274,400,46]}
+{"kind":"textbox","id":"sh/rax83u9s","slide":11,"text":"6","textPreview":"6","textChars":1,"textLines":1,"bbox":[520,274,220,46]}
+{"kind":"textbox","id":"sh/q94rapsn","slide":11,"text":"Produced 7","textPreview":"Produced 7","textChars":10,"textLines":1,"bbox":[810,274,300,46]}
+{"kind":"shape","id":"sh/58vq14r2","slide":11,"bbox":[1158,290,14,14]}
+{"kind":"shape","id":"sh/47m98zah","slide":11,"bbox":[64,386,1150,1]}
+{"kind":"textbox","id":"sh/36d8zu9w","slide":11,"text":"Supporting points","textPreview":"Supporting points","textChars":17,"textLines":1,"bbox":[72,336,400,46]}
+{"kind":"textbox","id":"sh/i54r6psb","slide":11,"text":"Exactly 2","textPreview":"Exactly 2","textChars":9,"textLines":1,"bbox":[520,336,220,46]}
+{"kind":"textbox","id":"sh/h4vqxkrq","slide":11,"text":"Drifted","textPreview":"Drifted","textChars":7,"textLines":1,"bbox":[810,336,300,46]}
+{"kind":"shape","id":"sh/g3m94fa5","slide":11,"bbox":[1158,352,14,14]}
+{"kind":"shape","id":"sh/8zq10jmd","slide":11,"bbox":[64,448,1150,1]}
+{"kind":"textbox","id":"sh/t0zi9o3y","slide":11,"text":"Composition","textPreview":"Composition","textChars":11,"textLines":1,"bbox":[72,398,400,46]}
+{"kind":"textbox","id":"sh/6x8zy947","slide":11,"text":"Distinct","textPreview":"Distinct","textChars":8,"textLines":1,"bbox":[520,398,220,46]}
+{"kind":"textbox","id":"sh/7yh07e5s","slide":11,"text":"Improved","textPreview":"Improved","textChars":8,"textLines":1,"bbox":[810,398,300,46]}
+{"kind":"shape","id":"sh/kvqhwzmh","slide":11,"bbox":[1158,414,14,14]}
+{"kind":"shape","id":"sh/lwzi54nm","slide":11,"bbox":[64,510,1150,1]}
+{"kind":"textbox","id":"sh/yt8zu94b","slide":11,"text":"Metaphor progression","textPreview":"Metaphor progression","textChars":20,"textLines":1,"bbox":[72,460,400,46]}
+{"kind":"textbox","id":"sh/juh03e5w","slide":11,"text":"Visible change","textPreview":"Visible change","textChars":14,"textLines":1,"bbox":[520,460,220,46]}
+{"kind":"textbox","id":"sh/4ra183ml","slide":11,"text":"Rail repeated","textPreview":"Rail repeated","textChars":13,"textLines":1,"bbox":[810,460,300,46]}
+{"kind":"shape","id":"sh/5s3ih836","slide":11,"bbox":[1158,476,14,14]}
+{"kind":"shape","id":"sh/fm547258","slide":11,"bbox":[64,572,1150,1]}
+{"kind":"textbox","id":"sh/elw3exon","slide":11,"text":"Quality state","textPreview":"Quality state","textChars":13,"textLines":1,"bbox":[72,522,400,46]}
+{"kind":"textbox","id":"sh/1onm9cne","slide":11,"text":"Fail closed","textPreview":"Fail closed","textChars":11,"textLines":1,"bbox":[520,522,220,46]}
+{"kind":"textbox","id":"sh/0nelg76t","slide":11,"text":"Badge stayed green","textPreview":"Badge stayed green","textChars":18,"textLines":1,"bbox":[810,522,300,46]}
+{"kind":"shape","id":"sh/nq54b254","slide":11,"bbox":[1158,538,14,14]}
+{"kind":"shape","id":"sh/2pw3ihoz","slide":11,"bbox":[790,606,424,42]}
+{"kind":"textbox","id":"sh/ps7mdcna","slide":11,"text":"READY = JOB COMPLETE × TRUTH × VISUAL PROOF","textPreview":"READY = JOB COMPLETE × TRUTH × VISUAL PROOF","textChars":43,"textLines":1,"bbox":[806,612,392,28]}
+{"kind":"notes","id":"nt/rn40mx","slide":11,"text":""}
+{"kind":"slide","id":"sl/cmyu45","slide":12,"title":"DECISION","textShapes":17}
+{"kind":"shape","id":"sh/ad0zq58b","slide":12,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/ve90za9w","slide":12,"text":"DECISION","textPreview":"DECISION","textChars":8,"textLines":1,"bbox":[64,48,260,24]}
+{"kind":"textbox","id":"sh/8bihofq5","slide":12,"text":"Pilot the jobs.\nDo not ship the illusion.","textPreview":"Pilot the jobs. | Do not ship the illusion.","textChars":41,"textLines":2,"bbox":[64,100,680,126]}
+{"kind":"textbox","id":"sh/9crixkrq","slide":12,"text":"Release each domain only when its complete job, truth rules, visual progression, export, and receipt pass together.","textPreview":"Release each domain only when its complete job, truth rules, visual progression, export, and receipt pass together.","textChars":115,"textLines":1,"bbox":[66,250,620,92]}
+{"kind":"textbox","id":"sh/mpgzm5sz","slide":12,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[70,398,48,34]}
+{"kind":"textbox","id":"sh/na90va9k","slide":12,"text":"Research + governance","textPreview":"Research + governance","textChars":21,"textLines":1,"bbox":[132,398,270,34]}
+{"kind":"textbox","id":"sh/s7210zq9","slide":12,"text":"prove evidence and fail-closed decisions","textPreview":"prove evidence and fail-closed decisions","textChars":40,"textLines":1,"bbox":[410,398,470,34]}
+{"kind":"textbox","id":"sh/t8bi94ru","slide":12,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[70,472,48,34]}
+{"kind":"textbox","id":"sh/l4byhsja","slide":12,"text":"Finance + operating","textPreview":"Finance + operating","textChars":19,"textLines":1,"bbox":[132,472,270,34]}
+{"kind":"textbox","id":"sh/k32x8ni5","slide":12,"text":"prove numbers, owners, and cadence","textPreview":"prove numbers, owners, and cadence","textChars":34,"textLines":1,"bbox":[410,472,470,34]}
+{"kind":"textbox","id":"sh/z2twfi1k","slide":12,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[70,546,48,34]}
+{"kind":"textbox","id":"sh/y1kf6d0z","slide":12,"text":"Startup + agent distribution","textPreview":"Startup + agent distribution","textChars":28,"textLines":1,"bbox":[132,546,270,34]}
+{"kind":"textbox","id":"sh/x0bed8je","slide":12,"text":"prove retellability and repeat use","textPreview":"prove retellability and repeat use","textChars":34,"textLines":1,"bbox":[410,546,470,34]}
+{"kind":"shape","id":"sh/cz2x4nit","slide":12,"bbox":[930,244,280,300]}
+{"kind":"textbox","id":"sh/by9wbi18","slide":12,"text":"OWNER","textPreview":"OWNER","textChars":5,"textLines":1,"bbox":[970,274,200,28]}
+{"kind":"textbox","id":"sh/qx0f2d0n","slide":12,"text":"Product +\nEngineering","textPreview":"Product + | Engineering","textChars":21,"textLines":2,"bbox":[958,318,224,72]}
+{"kind":"shape","id":"sh/hwvypcji","slide":12,"bbox":[972,408,196,2]}
+{"kind":"textbox","id":"sh/wvmxg7ix","slide":12,"text":"NEXT CHECKPOINT","textPreview":"NEXT CHECKPOINT","textChars":15,"textLines":1,"bbox":[970,426,200,24]}
+{"kind":"textbox","id":"sh/gzuhcbq9","slide":12,"text":"5 held-out decks\nall gates green","textPreview":"5 held-out decks | all gates green","textChars":32,"textLines":2,"bbox":[970,458,200,58]}
+{"kind":"textbox","id":"sh/h03ilg7u","slide":12,"text":"MAKE THE DECISION ARTIFACT THE PRODUCT.","textPreview":"MAKE THE DECISION ARTIFACT THE PRODUCT.","textChars":39,"textLines":1,"bbox":[64,654,760,28]}
+{"kind":"image","id":"im/oval4rat","slide":12,"name":"","alt":"Scattered evidence converges through a trust threshold into reusable decision paths","bbox":[0,0,1280,720]}
+{"kind":"notes","id":"nt/cmyu45","slide":12,"text":""}

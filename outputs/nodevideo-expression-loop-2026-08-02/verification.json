@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "nodeslide.expression-loop-proof/v1",
+  "approvedSpec": "D:\\VSCode Projects\\NodeVideo\\evidence\\youtube-expression-loop-2026-08-02\\approved-explanation.json",
+  "approvedSpecDigest": "sha256:e2ab0d8037c24594b6639ce5ad249fb8b47f7f635b2914e8d878f9cd36a955bb",
+  "generatedAt": "2026-08-02T12:33:28.670Z",
+  "slideCount": 5,
+  "diversity": {
+    "score": 0.4015332026419206,
+    "passes": true,
+    "distinctFamilies": 4,
+    "nearDuplicatePairs": []
+  },
+  "validation": {
+    "publishOk": true,
+    "cleanOk": true,
+    "issues": []
+  },
+  "unsupportedClaimMatches": [],
+  "prohibitedBenchmarkPercentagesAbsent": true,
+  "prohibitedBenchmarkMatches": {
+    "plannedSlides": [],
+    "snapshot": [],
+    "html": [],
+    "pptx": []
+  },
+  "editableElementCount": 73,
+  "speakerNotes": [
+    {
+      "slideIndex": 1,
+      "narrationDigest": "sha256:ba081800b01c8520385ecb9a74a026a2c7bf81d788c1bf49c9f6a0c7c93f2d39",
+      "notesDigest": "sha256:14422268fb7ea05976709cb46ea6dc6d66733445b5362c84139e8216ae01f500",
+      "evidenceArtifactIds": [
+        "docs/architecture.md:5-18",
+        "docs/architecture.md:64-71"
+      ]
+    },
+    {
+      "slideIndex": 2,
+      "narrationDigest": "sha256:0983489e5c87b610f980a1e8e669d632dec5776cb28ffd890468258b659cb856",
+      "notesDigest": "sha256:2a28e671e61d1ae1e689b8d3cb5de75ef4167a2cb32d28399fcf6c0248e830a6",
+      "evidenceArtifactIds": [
+        "docs/architecture.md:36-71",
+        "docs/architecture.md:149-161"
+      ]
+    },
+    {
+      "slideIndex": 3,
+      "narrationDigest": "sha256:62fb0cd795f238d0de242d658ee40a1f957cf6500b036e062acb1c498c75d98c",
+      "notesDigest": "sha256:7063e810e29a1c06eeb5039c7c05149b409e3980d6ae3f0a15373f7313a7b8d9",
+      "evidenceArtifactIds": [
+        "docs/architecture.md:149-161",
+        "convex/caseflow.ts:462-561",
+        "convex/lib/durability.ts:78-203",
+        "src/lib/browser-edit-plan-compiler.ts:399-543",
+        "scripts/workers/edit-plan-renderer.mjs:5-80"
+      ]
+    },
+    {
+      "slideIndex": 4,
+      "narrationDigest": "sha256:31c3b9b0d8d512cf5e8e879a47dc0f859d51b9ac4452b7908ca0286eb18eef85",
+      "notesDigest": "sha256:c8463e89fa1f4960b3bebcab4cc5e3d8335603172d2d893864daf3c73a1aa71e",
+      "evidenceArtifactIds": [
+        "convex/caseflow.ts:246-396",
+        "convex/caseflow.ts:462-561",
+        "tests/unit/browser-ffmpeg.test.ts:118-180"
+      ]
+    },
+    {
+      "slideIndex": 5,
+      "narrationDigest": "sha256:2a8c907e174734286181ad34007bee435fabeb412bda48d15ac3c91b8dbb6678",
+      "notesDigest": "sha256:3b0120afd6507febd0b119a45f320afa54c24edc653160a394adb0dbc6218113",
+      "evidenceArtifactIds": [
+        "targeted-test-receipt.json",
+        "docs/strict-editorial-audit.md:8-45"
+      ]
+    }
+  ],
+  "artifacts": {
+    "snapshotPath": "D:\\VSCode Projects\\nodeslide\\outputs\\nodevideo-expression-loop-2026-08-02\\nodevideo-expression-loop.nodeslide.json",
+    "htmlPath": "D:\\VSCode Projects\\nodeslide\\outputs\\nodevideo-expression-loop-2026-08-02\\nodevideo-expression-loop.html",
+    "pptxPath": "D:\\VSCode Projects\\nodeslide\\outputs\\nodevideo-expression-loop-2026-08-02\\nodevideo-expression-loop.pptx",
+    "browserDir": "D:\\VSCode Projects\\nodeslide\\outputs\\nodevideo-expression-loop-2026-08-02\\browser",
+    "pptxDir": "D:\\VSCode Projects\\nodeslide\\outputs\\nodevideo-expression-loop-2026-08-02\\pptx-render",
+    "montagePath": "D:\\VSCode Projects\\nodeslide\\outputs\\nodevideo-expression-loop-2026-08-02\\montage.png",
+    "pptxMontagePath": "D:\\VSCode Projects\\nodeslide\\outputs\\nodevideo-expression-loop-2026-08-02\\pptx-montage.png"
+  },
+  "browserDigests": [
+    "sha256:28f27049e11c77cd1c1c91c82def2f40a3a59143f303355a5b7e76f1763fd850",
+    "sha256:0d4cc290a09473abb8b069d9c026534a4f5647e128087fd970942f4419eca469",
+    "sha256:49abcef5f8e58f612f35ac331d73aae6a357b4578da89e8b358f135335497bc0",
+    "sha256:1d12892886b5fb38925148ac0f4f39b14e6eb268de8a9533b7cb9a55e569c981",
+    "sha256:507df495ebb489d062651f1b236b34c4b791b732b3060f732fc3e11c2b031335"
+  ],
+  "pptxImages": [
+    "slide-1.png",
+    "slide-2.png",
+    "slide-3.png",
+    "slide-4.png",
+    "slide-5.png"
+  ]
+}

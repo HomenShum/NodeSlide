@@ -1,0 +1,1016 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/hg2d8l",
+    "id": "hg2d8l",
+    "slide": 10,
+    "layoutId": "9629a571-efc6-48f9-96ac-47df1d0e1d16",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "b197ba5f-c5d3-47c3-91b9-cf767649293c",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#07101F",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "+mn-lt"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "9629a571-efc6-48f9-96ac-47df1d0e1d16",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "b197ba5f-c5d3-47c3-91b9-cf767649293c",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "b197ba5f-c5d3-47c3-91b9-cf767649293c",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/jqpc7yxo",
+      "id": "1",
+      "bbox": [
+        64,
+        34,
+        420,
+        26
+      ],
+      "geometry": "rect",
+      "text": "PROOF MODEL",
+      "textPreview": "PROOF MODEL",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 14,
+        "typeface": "+mn-lt",
+        "color": "#5ED7E8",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "PROOF MODEL"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "PROOF MODEL",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "color": "#5ED7E8",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "PROOF MODEL",
+              "fontSize": 14,
+              "color": "#5ED7E8",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/krid03y9",
+      "id": "2",
+      "bbox": [
+        64,
+        70,
+        1110,
+        78
+      ],
+      "geometry": "rect",
+      "text": "Trust is a chain of independently checkable receipts",
+      "textPreview": "Trust is a chain of independently checkable receipts",
+      "resolvedFontSize": 42,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 42,
+        "typeface": "+mn-lt",
+        "color": "#FFFAF0",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Trust is a chain of independently checkable receipts"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Trust is a chain of independently checkable receipts",
+          "resolvedTextStyle": {
+            "fontSize": 42,
+            "color": "#FFFAF0",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Trust is a chain of independently checkable receipts",
+              "fontSize": 42,
+              "color": "#FFFAF0",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5sru98fe",
+      "id": "3",
+      "bbox": [
+        64,
+        678,
+        1152,
+        1
+      ],
+      "geometry": "rect",
+      "fillColor": "#24344D",
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6d0v2dgz",
+      "id": "4",
+      "bbox": [
+        64,
+        684,
+        580,
+        20
+      ],
+      "geometry": "rect",
+      "text": "NODESLIDE  /  SIGNAL → DECISION",
+      "textPreview": "NODESLIDE  /  SIGNAL → DECISION",
+      "resolvedFontSize": 11,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 11,
+        "typeface": "+mn-lt",
+        "color": "#9AA8BB",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "NODESLIDE  /  SIGNAL → DECISION"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "NODESLIDE  /  SIGNAL → DECISION",
+          "resolvedTextStyle": {
+            "fontSize": 11,
+            "color": "#9AA8BB",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "NODESLIDE  /  SIGNAL → DECISION",
+              "fontSize": 11,
+              "color": "#9AA8BB",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/7e9cbixk",
+      "id": "5",
+      "bbox": [
+        1160,
+        684,
+        56,
+        20
+      ],
+      "geometry": "rect",
+      "text": "10",
+      "textPreview": "10",
+      "resolvedFontSize": 11,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 11,
+        "typeface": "+mn-lt",
+        "color": "#FFB45B",
+        "bold": true,
+        "alignment": "right",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "10"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "10",
+          "resolvedTextStyle": {
+            "fontSize": 11,
+            "color": "#FFB45B",
+            "bold": true,
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "10",
+              "fontSize": 11,
+              "color": "#FFB45B",
+              "bold": true,
+              "alignment": "right"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sfid43y5",
+      "id": "6",
+      "bbox": [
+        64,
+        154,
+        850,
+        38
+      ],
+      "geometry": "rect",
+      "text": "The UI badge is never the authority. The artifact and receipt are.",
+      "textPreview": "The UI badge is never the authority. The artifact and receipt are.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 21,
+        "typeface": "+mn-lt",
+        "color": "#9AA8BB",
+        "alignment": "left",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "The UI badge is never the authority. The artifact and receipt are."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "The UI badge is never the authority. The artifact and receipt are.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "color": "#9AA8BB",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "The UI badge is never the authority. The artifact and receipt are.",
+              "fontSize": 21,
+              "color": "#9AA8BB",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/tgrud8fq",
+      "id": "7",
+      "bbox": [
+        92,
+        292,
+        64,
+        64
+      ],
+      "geometry": "ellipse",
+      "fillColor": "#5ED7E8",
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/mhwbq9gv",
+      "id": "8",
+      "bbox": [
+        70,
+        382,
+        110,
+        30
+      ],
+      "geometry": "rect",
+      "text": "SOURCE",
+      "textPreview": "SOURCE",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 15,
+        "typeface": "+mn-lt",
+        "color": "#5ED7E8",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "SOURCE"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "SOURCE",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "color": "#5ED7E8",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "SOURCE",
+              "fontSize": 15,
+              "color": "#5ED7E8",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ni5czexg",
+      "id": "9",
+      "bbox": [
+        162,
+        324,
+        112,
+        1
+      ],
+      "geometry": "line",
+      "lineColor": "#24344D",
+      "lineWidth": 3
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3up4zu9c",
+      "id": "10",
+      "bbox": [
+        322,
+        292,
+        64,
+        64
+      ],
+      "geometry": "ellipse",
+      "fillColor": "#FFFAF0",
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/itg3qpsr",
+      "id": "11",
+      "bbox": [
+        300,
+        382,
+        110,
+        30
+      ],
+      "geometry": "rect",
+      "text": "CLAIM",
+      "textPreview": "CLAIM",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 15,
+        "typeface": "+mn-lt",
+        "color": "#FFFAF0",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "CLAIM"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "CLAIM",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "color": "#FFFAF0",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "CLAIM",
+              "fontSize": 15,
+              "color": "#FFFAF0",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5w7m14ri",
+      "id": "12",
+      "bbox": [
+        392,
+        324,
+        112,
+        1
+      ],
+      "geometry": "line",
+      "lineColor": "#24344D",
+      "lineWidth": 3
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4vylszax",
+      "id": "13",
+      "bbox": [
+        552,
+        292,
+        64,
+        64
+      ],
+      "geometry": "ellipse",
+      "fillColor": "#FFB45B",
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vq54va90",
+      "id": "14",
+      "bbox": [
+        530,
+        382,
+        110,
+        30
+      ],
+      "geometry": "rect",
+      "text": "ARTIFACT",
+      "textPreview": "ARTIFACT",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 15,
+        "typeface": "+mn-lt",
+        "color": "#FFB45B",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ARTIFACT"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ARTIFACT",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "color": "#FFB45B",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ARTIFACT",
+              "fontSize": 15,
+              "color": "#FFB45B",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/upw3m5sv",
+      "id": "15",
+      "bbox": [
+        622,
+        324,
+        112,
+        1
+      ],
+      "geometry": "line",
+      "lineColor": "#24344D",
+      "lineWidth": 3
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/hsnmxkr6",
+      "id": "16",
+      "bbox": [
+        782,
+        292,
+        64,
+        64
+      ],
+      "geometry": "ellipse",
+      "fillColor": "#FF6B57",
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/grelofal",
+      "id": "17",
+      "bbox": [
+        760,
+        382,
+        110,
+        30
+      ],
+      "geometry": "rect",
+      "text": "RENDER",
+      "textPreview": "RENDER",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 15,
+        "typeface": "+mn-lt",
+        "color": "#FF6B57",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "RENDER"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "RENDER",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "color": "#FF6B57",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "RENDER",
+              "fontSize": 15,
+              "color": "#FF6B57",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/725kra94",
+      "id": "18",
+      "bbox": [
+        852,
+        324,
+        112,
+        1
+      ],
+      "geometry": "line",
+      "lineColor": "#24344D",
+      "lineWidth": 3
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/61c3i5sj",
+      "id": "19",
+      "bbox": [
+        1012,
+        292,
+        64,
+        64
+      ],
+      "geometry": "ellipse",
+      "fillColor": "#7BD39A",
+      "lineWidth": 0
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/axcnu5cb",
+      "id": "20",
+      "bbox": [
+        990,
+        382,
+        110,
+        30
+      ],
+      "geometry": "rect",
+      "text": "EXPORT",
+      "textPreview": "EXPORT",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 15,
+        "typeface": "+mn-lt",
+        "color": "#7BD39A",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "EXPORT"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "EXPORT",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "color": "#7BD39A",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "EXPORT",
+              "fontSize": 15,
+              "color": "#7BD39A",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 21,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/byl43adw",
+      "id": "21",
+      "bbox": [
+        250,
+        486,
+        780,
+        86
+      ],
+      "geometry": "roundRect",
+      "fillColor": "#0D1B31",
+      "lineColor": "#24344D",
+      "lineWidth": 1
+    },
+    {
+      "order": 22,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wzu5wfuh",
+      "id": "22",
+      "bbox": [
+        284,
+        507,
+        712,
+        36
+      ],
+      "geometry": "rect",
+      "text": "digest · model · cost · tokens · validation · version · publication",
+      "textPreview": "digest · model · cost · tokens · validation · version · publication",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 20,
+        "typeface": "+mn-lt",
+        "color": "#FFFAF0",
+        "bold": true,
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "digest · model · cost · tokens · validation · version · publication"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "digest · model · cost · tokens · validation · version · publication",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "color": "#FFFAF0",
+            "bold": true,
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "digest · model · cost · tokens · validation · version · publication",
+              "fontSize": 20,
+              "color": "#FFFAF0",
+              "bold": true,
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 23,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/x03m50v2",
+      "id": "23",
+      "bbox": [
+        284,
+        548,
+        712,
+        24
+      ],
+      "geometry": "rect",
+      "text": "Receipt completeness is the proof surface agents can reason over.",
+      "textPreview": "Receipt completeness is the proof surface agents can reason over.",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "anchor": 2,
+        "fontSize": 15,
+        "typeface": "+mn-lt",
+        "color": "#5ED7E8",
+        "alignment": "center",
+        "verticalAlignment": "middle",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Receipt completeness is the proof surface agents can reason over."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Receipt completeness is the proof surface agents can reason over.",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "color": "#5ED7E8",
+            "alignment": "center"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Receipt completeness is the proof surface agents can reason over.",
+              "fontSize": 15,
+              "color": "#5ED7E8",
+              "alignment": "center"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

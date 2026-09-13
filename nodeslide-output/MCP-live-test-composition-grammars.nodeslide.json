@@ -1,0 +1,3318 @@
+{
+  "deck": {
+    "brief": {
+      "audience": "Chief risk officer and model risk committee",
+      "prompt": "Show a risk committee how the NIST AI RMF governance loop moves one AI system to a governed release decision, with GOVERN cross-cutting MAP, MEASURE, and MANAGE, a release gate, and a success metric.",
+      "purpose": "Move one AI system to a governed release decision",
+      "successCriteria": [
+        "Keep GOVERN cross-cutting",
+        "Show the release gate",
+        "Name one decision metric"
+      ]
+    },
+    "createdAt": 1785449371824,
+    "id": "deck_ms82gg67_368a79d38765e020367107d2cfa148b6",
+    "projectId": "project_nodeslide_ms82gg67_3d900cb37f3e24bc4cac0c845f5d96fe",
+    "schemaVersion": "nodeslide.slidelang/v1",
+    "shareSlug": "share-2653b0d293acd3c78636903486c9fbad25dd",
+    "slideOrder": [
+      "slide_46bd5bd8a837ecf506dfe8d49fbacd09",
+      "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "slide_645903725691a2f13e9334506ff9a6e7",
+      "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "slide_73680a4212025c1128eb12e823eee3b6"
+    ],
+    "status": "ready",
+    "theme": {
+      "colors": {
+        "accent": "#B44A2D",
+        "accentSoft": "#F2DED3",
+        "border": "#DED7CC",
+        "canvas": "#F7F4ED",
+        "ink": "#26221D",
+        "insight": "#E5E9D6",
+        "insightInk": "#34452C",
+        "muted": "#756B61",
+        "trace": "#7566A8"
+      },
+      "defaultRadius": 18,
+      "id": "editorial-signal",
+      "mode": "light",
+      "name": "Editorial Signal",
+      "spacingUnit": 8,
+      "typography": {
+        "body": "Geist Variable",
+        "data": "JetBrains Mono Variable",
+        "display": "Fraunces Variable"
+      }
+    },
+    "title": "MCP live test: composition grammars",
+    "toolchainVersion": "local-slidelang-adapter/1.1.0",
+    "updatedAt": 1785449371824,
+    "version": 1
+  },
+  "slides": [
+    {
+      "archetype": "statement",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms82gg67_368a79d38765e020367107d2cfa148b6",
+      "elementOrder": [
+        "element_ad038fa37e0ccf34d172395e95bcf968",
+        "element_5f60e8b9b274d4b4ee14db0402bec11c",
+        "element_87c7c3b44d7a9c41ae4750ecec40dc77",
+        "element_2410b20d2b09927464f9350fd53958a1",
+        "element_6fb976be4c44784ff18e33f10dcf8273",
+        "element_2686559755edefbdc8ed849594a4946d",
+        "element_a07e85949c0d0762f3f6f22b3afd5875"
+      ],
+      "id": "slide_46bd5bd8a837ecf506dfe8d49fbacd09",
+      "notes": "Narrative role: Opening / 01. Composition grammar: full-bleed-thesis. Keep the spoken transition focused on \"Move one AI system to a governed release decision\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Opening / 01",
+      "title": "MCP live test: composition grammars",
+      "version": 1
+    },
+    {
+      "archetype": "diagram-dominant",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms82gg67_368a79d38765e020367107d2cfa148b6",
+      "elementOrder": [
+        "element_d66625c0f692523df5493005627e1416",
+        "element_ab45c6e2a4ed21cd9963487edec89756",
+        "element_45cf8859b871a0e904ddd5e4c176d6d5",
+        "element_365d4619a8661206902a93a9a98313b1",
+        "element_70988530dc5cd5e5736cc8cb87184362",
+        "element_a4868b27dc631190a612672f5b4b0e43",
+        "element_25a0ac268ef0883f18b9da1b74d601cc",
+        "element_2948adf9d33239b28452118ebf919808",
+        "element_69bf4a0d34e7df7513707148be47ed95",
+        "element_120a229c5fc6ef7a4f5f3eeb472ee75b",
+        "element_0bc33447ffca0e97c6c2409c6d08f521",
+        "element_6a90a5ce997ca5ede00468a450d80e55",
+        "element_86cb1819110b5a583ce44fa9870e2e88",
+        "element_9ded573f50b846951b1e5f3fc7a747fd",
+        "element_371c999dce8638b66d6e0bac50da9814",
+        "element_f1739d261f8f9f3bffcca6c43acc47cc",
+        "element_cc3081a49dcb4252bd89c020bc7d34ed",
+        "element_5acc3b313f2024069117f02722f24935",
+        "element_3cdf43657d1134c431fa5fc31cab0dad"
+      ],
+      "id": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "notes": "Narrative role: Context / 02. Composition grammar: process-canvas. Keep the spoken transition focused on \"GOVERN is cross-cutting: it surrounds MAP, MEASURE, MANAGE, A RELEASE GATE, A SUCCESS METRIC.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Context / 02",
+      "title": "The governance loop",
+      "version": 1
+    },
+    {
+      "archetype": "comparison",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms82gg67_368a79d38765e020367107d2cfa148b6",
+      "elementOrder": [
+        "element_0110893386fa7bad15ae958f46111734",
+        "element_e38c7b4fe22f8625d269ccefafd16d2a",
+        "element_783d39cbe5136ba41cb8727d7bcb7a59",
+        "element_c7e3969f1a6ffc5d5d03e8de7bbdb64e",
+        "element_ade2dafb3607de8658d173d14cd71f6a",
+        "element_76b3739fe518556da6b3f1eb0861eb8a",
+        "element_37042fea6a730a7a713967df0ca394b9",
+        "element_282f6c8395ead2230629fab8b949fa5e",
+        "element_e46b2dd1ebf7b63725de8e0ad0899fbb",
+        "element_6a07b9fa4971c3296cb3247d1416ef40",
+        "element_b19770290dbaefc3f4aadf7ed1fd238b",
+        "element_2684536f9b4d3ea18bfd0ee87b6f8f8d",
+        "element_9f0e186643bcdc933075c302ace2dd75",
+        "element_0f60c82abd5d021b12c57d834c6e8200"
+      ],
+      "id": "slide_645903725691a2f13e9334506ff9a6e7",
+      "notes": "Narrative role: Insight / 03. Composition grammar: comparison-field. Keep the spoken transition focused on \"A better outcome starts with a sharper point of view.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Insight / 03",
+      "title": "The decisive insight",
+      "version": 1
+    },
+    {
+      "archetype": "split",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms82gg67_368a79d38765e020367107d2cfa148b6",
+      "elementOrder": [
+        "element_40ddf380770daa92ad6ccb9cb5923610",
+        "element_2e1ea7101567fea4cc328866ac38ee0d",
+        "element_9fc0c5618e95451b33939c0b2cc1d2d8",
+        "element_843efc00699ef0e365a47eddfff5ea5e",
+        "element_67c0f63c06e859f9b0f0b9ada79a145d",
+        "element_6d53cef24595157b0becfdae2017338b",
+        "element_6cfae5527b8cb7432a71209956e50d4f",
+        "element_1c1087b494a614e13f88a1c89c81043b",
+        "element_64eca536fbe605d1e5efa808a00fba92",
+        "element_e4b15bbc9b44663a425eba3c88465f29",
+        "element_6610065fba460028790cdb4a5d6ced41"
+      ],
+      "id": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "notes": "Narrative role: Approach / 04. Composition grammar: asymmetric-editorial. Keep the spoken transition focused on \"Turn the idea into a sequence people can understand and own.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Approach / 04",
+      "title": "How the approach works",
+      "version": 1
+    },
+    {
+      "archetype": "chart-dominant",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms82gg67_368a79d38765e020367107d2cfa148b6",
+      "elementOrder": [
+        "element_68bb4c24164553e1e90406b668fec52f",
+        "element_6e96979fcbbf35508095006ebf609a4c",
+        "element_a8999791e390b55ff8ce6913854e7de3",
+        "element_850199ec48f209a4d3796cebcef71b3b",
+        "element_6dec50a284bfa4360572914f1adabd03",
+        "element_25415de6d67c2446d28bb5a67d401c92",
+        "element_5ce662cc0de79b84a9de2f02675aeb10",
+        "element_c23ac257640578d303b58fd27b851537",
+        "element_abb289b30dc41c7d8cd340d94cc579e0",
+        "element_6ad00e6d9f199033d41a98d339c31f3c",
+        "element_f6818dd212574a7dc04e6bc29eea1013",
+        "element_c37b2a80ad280ab43bd73d537fd38c22",
+        "element_f8b25c2613815c93030b8f062485286d",
+        "element_47f3bc00354e2fa795bd4e5f417aa62e"
+      ],
+      "id": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "notes": "Narrative role: Evidence / 05. Keep the spoken transition focused on “Define proof before asking for commitment.”\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Evidence / 05",
+      "title": "What success looks like",
+      "version": 1
+    },
+    {
+      "archetype": "diagram-dominant",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms82gg67_368a79d38765e020367107d2cfa148b6",
+      "elementOrder": [
+        "element_24faff1f453d47c418485caf0ee740ac",
+        "element_a41963663e1399c153164b4c9b21d3cc",
+        "element_f00681bccc334f014c300f841383eae0",
+        "element_1ea34ed0c8fac392d37afda34b14cd44",
+        "element_cd2e6ceba27cd58b36ad43531fd240b7",
+        "element_8ffc204c7dc12e73e3af42a9ccd3a6a0",
+        "element_9fab09a133bbb1eca62b59c68892d87a",
+        "element_226c0bb53cb89f441d536e04a30306c2",
+        "element_914362c182938c6ac87f2df73f9fbe60",
+        "element_26a37b312c2e9f4f1bdcf780b231be91",
+        "element_0b84ff9e48391c9e48757a7aef8598a2",
+        "element_2b0f0d2a8db01a2130484d69310bba47"
+      ],
+      "id": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "notes": "Narrative role: Delivery / 06. Composition grammar: process-canvas. Keep the spoken transition focused on \"Start narrow, learn quickly, and preserve room to adapt.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Delivery / 06",
+      "title": "A practical path forward",
+      "version": 1
+    },
+    {
+      "archetype": "split",
+      "background": "#F7F4ED",
+      "deckId": "deck_ms82gg67_368a79d38765e020367107d2cfa148b6",
+      "elementOrder": [
+        "element_1d5da05c6fd387f444e5f3145e61dfc2",
+        "element_1e389de4311c7f0c5c225f2601c2c988",
+        "element_47645c83367c34d5ab0c3fbf5411927d",
+        "element_7a036e162be9abd6ac2578278b97d189",
+        "element_3347ebfc2a57f8818b71e8e8920a1569",
+        "element_fac3ae5d5b20b60d7361b2baafd51715",
+        "element_b30fe2e8da42fc0d7acf52df8ed4bbfe",
+        "element_198082100924bdc26dc50707ec9de69e",
+        "element_2a813b2301488dbf7cd9ea2536fbb461",
+        "element_2ee8a63e8e55b5a601914ee61268fbe4",
+        "element_3bbdd28fa6a5fe8b33b585d25a5c977a",
+        "element_f5491720115add522beb828eeb06e9e7"
+      ],
+      "id": "slide_73680a4212025c1128eb12e823eee3b6",
+      "notes": "Narrative role: Close / 07. Composition grammar: evidence-dossier. Keep the spoken transition focused on \"Move one AI system to a governed release decision\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Close / 07",
+      "title": "The decision",
+      "version": 1
+    }
+  ],
+  "elements": [
+    {
+      "bbox": {
+        "height": 0.3627,
+        "width": 0.86,
+        "x": 0.07,
+        "y": 0.3187
+      },
+      "content": "Move one AI system to a governed release decision",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ad038fa37e0ccf34d172395e95bcf968",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "title",
+      "rotation": 0,
+      "slideId": "slide_46bd5bd8a837ecf506dfe8d49fbacd09",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 64,
+        "fontWeight": 620,
+        "letterSpacing": -1.2,
+        "lineHeight": 1.02
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.006,
+        "width": 0.12,
+        "x": 0.07,
+        "y": 0.7013
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_5f60e8b9b274d4b4ee14db0402bec11c",
+      "kind": "shape",
+      "locked": true,
+      "name": "Accent underline",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_46bd5bd8a837ecf506dfe8d49fbacd09",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.4,
+        "x": 0.07,
+        "y": 0.06
+      },
+      "content": "OPENING / 01",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_87c7c3b44d7a9c41ae4750ecec40dc77",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_46bd5bd8a837ecf506dfe8d49fbacd09",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 1: orient; emotional intensity 24 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.1171,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_2410b20d2b09927464f9350fd53958a1",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_46bd5bd8a837ecf506dfe8d49fbacd09",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.28,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "Decision threshold; the story signal has reached 14 percent of the gate",
+      "bbox": {
+        "height": 0.044,
+        "width": 0.006,
+        "x": 0.884,
+        "y": 0.097
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6fb976be4c44784ff18e33f10dcf8273",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story transformation · move from exposed uncertainty to controlled passage",
+      "role": "story_motif_threshold_marker",
+      "rotation": 0,
+      "slideId": "slide_46bd5bd8a837ecf506dfe8d49fbacd09",
+      "sourceIds": [],
+      "style": {
+        "fill": "#34452C",
+        "opacity": 0.38,
+        "radius": 3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_2686559755edefbdc8ed849594a4946d",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_46bd5bd8a837ecf506dfe8d49fbacd09",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "01",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a07e85949c0d0762f3f6f22b3afd5875",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_46bd5bd8a837ecf506dfe8d49fbacd09",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.4,
+        "x": 0.07,
+        "y": 0.06
+      },
+      "content": "CONTEXT / 02",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d66625c0f692523df5493005627e1416",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.12,
+        "width": 0.82,
+        "x": 0.07,
+        "y": 0.14
+      },
+      "content": "GOVERN is cross-cutting: it surrounds MAP, MEASURE, MANAGE, A RELEASE GATE, A SUCCESS METRIC.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ab45c6e2a4ed21cd9963487edec89756",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 32,
+        "fontWeight": 600,
+        "lineHeight": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "from": "seq-1",
+        "graphKind": "process",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "seq-2"
+      },
+      "bbox": {
+        "height": 0.024,
+        "width": 0.1453,
+        "x": 0.1367,
+        "y": 0.513
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_45cf8859b871a0e904ddd5e4c176d6d5",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge",
+      "role": "diagram_edge",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "from": "seq-2",
+        "graphKind": "process",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "seq-3"
+      },
+      "bbox": {
+        "height": 0.024,
+        "width": 0.1453,
+        "x": 0.282,
+        "y": 0.513
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_365d4619a8661206902a93a9a98313b1",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge",
+      "role": "diagram_edge",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "from": "seq-3",
+        "graphKind": "process",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "seq-4"
+      },
+      "bbox": {
+        "height": 0.024,
+        "width": 0.1453,
+        "x": 0.4273,
+        "y": 0.513
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_70988530dc5cd5e5736cc8cb87184362",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge",
+      "role": "diagram_edge",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "from": "seq-4",
+        "graphKind": "process",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "seq-5"
+      },
+      "bbox": {
+        "height": 0.024,
+        "width": 0.1453,
+        "x": 0.5727,
+        "y": 0.513
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a4868b27dc631190a612672f5b4b0e43",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge",
+      "role": "diagram_edge",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "from": "seq-5",
+        "graphKind": "process",
+        "label": "evidence",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "gate"
+      },
+      "bbox": {
+        "height": 0.024,
+        "width": 0.1453,
+        "x": 0.718,
+        "y": 0.513
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_25a0ac268ef0883f18b9da1b74d601cc",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge: evidence",
+      "role": "diagram_edge",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "graphKind": "process",
+        "nodeId": "govern",
+        "nodeKind": "system",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.1,
+        "width": 0.86,
+        "x": 0.07,
+        "y": 0.31
+      },
+      "content": "GOVERN",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_2948adf9d33239b28452118ebf919808",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: GOVERN",
+      "role": "diagram_cross_cutting",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#E5E9D6",
+        "fontFamily": "Geist Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 12,
+        "radius": 18,
+        "stroke": "#B44A2D",
+        "strokeWidth": 2,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "graphKind": "process",
+        "nodeId": "seq-1",
+        "nodeKind": "step",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.1333,
+        "x": 0.07,
+        "y": 0.455
+      },
+      "content": "MAP",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_69bf4a0d34e7df7513707148be47ed95",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: MAP",
+      "role": "diagram_step",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "graphKind": "process",
+        "nodeId": "seq-2",
+        "nodeKind": "step",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.1333,
+        "x": 0.2153,
+        "y": 0.455
+      },
+      "content": "MEASURE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_120a229c5fc6ef7a4f5f3eeb472ee75b",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: MEASURE",
+      "role": "diagram_step",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "graphKind": "process",
+        "nodeId": "seq-3",
+        "nodeKind": "step",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.1333,
+        "x": 0.3607,
+        "y": 0.455
+      },
+      "content": "MANAGE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_0bc33447ffca0e97c6c2409c6d08f521",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: MANAGE",
+      "role": "diagram_step",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "graphKind": "process",
+        "nodeId": "seq-4",
+        "nodeKind": "step",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.1333,
+        "x": 0.506,
+        "y": 0.455
+      },
+      "content": "A RELEASE GATE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6a90a5ce997ca5ede00468a450d80e55",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: A RELEASE GATE",
+      "role": "diagram_step",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 13,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "graphKind": "process",
+        "nodeId": "seq-5",
+        "nodeKind": "step",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.1333,
+        "x": 0.6513,
+        "y": 0.455
+      },
+      "content": "A SUCCESS METRIC",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_86cb1819110b5a583ce44fa9870e2e88",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: A SUCCESS METRIC",
+      "role": "diagram_step",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 12,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fdcdba1f56d6d8faee954f41da379169",
+        "graphKind": "process",
+        "nodeId": "gate",
+        "nodeKind": "decision",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.1333,
+        "x": 0.7967,
+        "y": 0.455
+      },
+      "content": "Release Gate",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_9ded573f50b846951b1e5f3fc7a747fd",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: Release Gate",
+      "role": "diagram_decision",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#E5E9D6",
+        "fontFamily": "Geist Variable",
+        "fontSize": 13,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#B44A2D",
+        "strokeWidth": 2,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.12,
+        "width": 0.79,
+        "x": 0.07,
+        "y": 0.6546
+      },
+      "content": "The GOVERN function sets culture, accountability, and structure around MAP, MEASURE, MANAGE, A RELEASE GATE, A SUCCESS METRIC, which operate iteratively from inventory entry through retirement.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_371c999dce8638b66d6e0bac50da9814",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 2: tension; emotional intensity 39 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.2343,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_f1739d261f8f9f3bffcca6c43acc47cc",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.39,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "Decision threshold; the story signal has reached 29 percent of the gate",
+      "bbox": {
+        "height": 0.044,
+        "width": 0.006,
+        "x": 0.884,
+        "y": 0.097
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_cc3081a49dcb4252bd89c020bc7d34ed",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story transformation · move from exposed uncertainty to controlled passage",
+      "role": "story_motif_threshold_marker",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [],
+      "style": {
+        "fill": "#34452C",
+        "opacity": 0.39,
+        "radius": 3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_5acc3b313f2024069117f02722f24935",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "02",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3cdf43657d1134c431fa5fc31cab0dad",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_a7e684b917b0fa120792f84bf3b771d7",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.4,
+        "x": 0.07,
+        "y": 0.065
+      },
+      "content": "INSIGHT / 03",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_0110893386fa7bad15ae958f46111734",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.14,
+        "width": 0.79,
+        "x": 0.07,
+        "y": 0.15
+      },
+      "content": "A better outcome starts with a sharper point of view.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_e38c7b4fe22f8625d269ccefafd16d2a",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 36,
+        "fontWeight": 620,
+        "letterSpacing": -0.4,
+        "lineHeight": 1.05
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.08,
+        "width": 0.2667,
+        "x": 0.07,
+        "y": 0.35
+      },
+      "content": "01",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_783d39cbe5136ba41cb8727d7bcb7a59",
+      "kind": "text",
+      "locked": false,
+      "name": "Column 1 number",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 22,
+        "fontWeight": 720
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.34,
+        "width": 0.2667,
+        "x": 0.07,
+        "y": 0.43
+      },
+      "content": "Keep GOVERN cross-cutting",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_c7e3969f1a6ffc5d5d03e8de7bbdb64e",
+      "kind": "text",
+      "locked": false,
+      "name": "Column 1 text",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 540,
+        "lineHeight": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.42,
+        "width": 0.002,
+        "x": 0.3517,
+        "y": 0.35
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ade2dafb3607de8658d173d14cd71f6a",
+      "kind": "shape",
+      "locked": true,
+      "name": "Column divider 1",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [],
+      "style": {
+        "fill": "#DED7CC",
+        "radius": 0
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.08,
+        "width": 0.2667,
+        "x": 0.3667,
+        "y": 0.35
+      },
+      "content": "02",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_76b3739fe518556da6b3f1eb0861eb8a",
+      "kind": "text",
+      "locked": false,
+      "name": "Column 2 number",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 22,
+        "fontWeight": 720
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.34,
+        "width": 0.2667,
+        "x": 0.3667,
+        "y": 0.43
+      },
+      "content": "Show the release gate",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_37042fea6a730a7a713967df0ca394b9",
+      "kind": "text",
+      "locked": false,
+      "name": "Column 2 text",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 540,
+        "lineHeight": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.42,
+        "width": 0.002,
+        "x": 0.6483,
+        "y": 0.35
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_282f6c8395ead2230629fab8b949fa5e",
+      "kind": "shape",
+      "locked": true,
+      "name": "Column divider 2",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [],
+      "style": {
+        "fill": "#DED7CC",
+        "radius": 0
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.08,
+        "width": 0.2667,
+        "x": 0.6633,
+        "y": 0.35
+      },
+      "content": "03",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_e46b2dd1ebf7b63725de8e0ad0899fbb",
+      "kind": "text",
+      "locked": false,
+      "name": "Column 3 number",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 22,
+        "fontWeight": 720
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.34,
+        "width": 0.2667,
+        "x": 0.6633,
+        "y": 0.43
+      },
+      "content": "Name one decision metric",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6a07b9fa4971c3296cb3247d1416ef40",
+      "kind": "text",
+      "locked": false,
+      "name": "Column 3 text",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 17,
+        "fontWeight": 540,
+        "lineHeight": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 3: hint; emotional intensity 54 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.3514,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b19770290dbaefc3f4aadf7ed1fd238b",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.54,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "Decision threshold; the story signal has reached 43 percent of the gate",
+      "bbox": {
+        "height": 0.044,
+        "width": 0.006,
+        "x": 0.884,
+        "y": 0.097
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_2684536f9b4d3ea18bfd0ee87b6f8f8d",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story transformation · move from exposed uncertainty to controlled passage",
+      "role": "story_motif_threshold_marker",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [],
+      "style": {
+        "fill": "#34452C",
+        "opacity": 0.54,
+        "radius": 3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_9f0e186643bcdc933075c302ace2dd75",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "03",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_0f60c82abd5d021b12c57d834c6e8200",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_645903725691a2f13e9334506ff9a6e7",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.4,
+        "x": 0.07,
+        "y": 0.065
+      },
+      "content": "APPROACH / 04",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_40ddf380770daa92ad6ccb9cb5923610",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.3,
+        "width": 0.42,
+        "x": 0.5,
+        "y": 0.16
+      },
+      "content": "Turn the idea into a sequence people can understand and own.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_2e1ea7101567fea4cc328866ac38ee0d",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 42,
+        "fontWeight": 620,
+        "letterSpacing": -0.6,
+        "lineHeight": 1.05
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.15,
+        "width": 0.42,
+        "x": 0.5,
+        "y": 0.52
+      },
+      "content": "Connect intent, action, and feedback in one visible operating path so the audience can see both the destination and the mechanics.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_9fc0c5618e95451b33939c0b2cc1d2d8",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 18,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.3,
+        "width": 0.38,
+        "x": 0.06,
+        "y": 0.26
+      },
+      "content": "accepted change = proposal ∩ authorized scope",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_843efc00699ef0e365a47eddfff5ea5e",
+      "kind": "math",
+      "locked": false,
+      "math": {
+        "description": "Only the authorized portion of a proposal may be accepted.",
+        "display": "accepted change = proposal ∩ authorized scope",
+        "displayMode": "block",
+        "expression": "accepted change = proposal ∩ authorized scope",
+        "sourceId": "source_c0be97c8348813d0b4639475c8dd170a",
+        "syntax": "plain",
+        "variables": []
+      },
+      "name": "Editable formula",
+      "role": "formula",
+      "rotation": 0,
+      "slideId": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#34452C",
+        "fill": "#E5E9D6",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 30,
+        "fontWeight": 720,
+        "lineHeight": 1.15,
+        "padding": 20,
+        "radius": 18,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.0311,
+        "width": 0.42,
+        "x": 0.5,
+        "y": 0.69
+      },
+      "content": "01  Align on intent",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_67c0f63c06e859f9b0f0b9ada79a145d",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 1",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.0311,
+        "width": 0.42,
+        "x": 0.5,
+        "y": 0.7511
+      },
+      "content": "02  Execute the critical moves",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6d53cef24595157b0becfdae2017338b",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 2",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.0311,
+        "width": 0.42,
+        "x": 0.5,
+        "y": 0.8122
+      },
+      "content": "03  Review measurable outcomes",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6cfae5527b8cb7432a71209956e50d4f",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 3",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 4: reveal; emotional intensity 70 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.4686,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_1c1087b494a614e13f88a1c89c81043b",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.7,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "Decision threshold; the story signal has reached 57 percent of the gate",
+      "bbox": {
+        "height": 0.044,
+        "width": 0.006,
+        "x": 0.884,
+        "y": 0.097
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_64eca536fbe605d1e5efa808a00fba92",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story transformation · move from exposed uncertainty to controlled passage",
+      "role": "story_motif_threshold_marker",
+      "rotation": 0,
+      "slideId": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "sourceIds": [],
+      "style": {
+        "fill": "#34452C",
+        "opacity": 0.7,
+        "radius": 3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_e4b15bbc9b44663a425eba3c88465f29",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "04",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6610065fba460028790cdb4a5d6ced41",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_738b9d0e42dd2ae30178e721b47e4cff",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.83,
+        "width": 0.008,
+        "x": 0.035,
+        "y": 0.065
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_68bb4c24164553e1e90406b668fec52f",
+      "kind": "shape",
+      "locked": true,
+      "name": "Accent rail",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 8
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 5: prove; emotional intensity 85 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.5857,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6e96979fcbbf35508095006ebf609a4c",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.85,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "Decision threshold; the story signal has reached 71 percent of the gate",
+      "bbox": {
+        "height": 0.044,
+        "width": 0.006,
+        "x": 0.884,
+        "y": 0.097
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a8999791e390b55ff8ce6913854e7de3",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story transformation · move from exposed uncertainty to controlled passage",
+      "role": "story_motif_threshold_marker",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [],
+      "style": {
+        "fill": "#34452C",
+        "opacity": 0.85,
+        "radius": 3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.48,
+        "x": 0.07,
+        "y": 0.065
+      },
+      "content": "EVIDENCE / 05",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_850199ec48f209a4d3796cebcef71b3b",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2,
+        "width": 0.76,
+        "x": 0.07,
+        "y": 0.15
+      },
+      "content": "Define proof before asking for commitment.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6dec50a284bfa4360572914f1adabd03",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 620,
+        "letterSpacing": -0.8,
+        "lineHeight": 1.04
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2,
+        "width": 0.3,
+        "x": 0.07,
+        "y": 0.4
+      },
+      "content": "Use the brief’s success criteria as explicit evaluation signals, with assumptions clearly separated from measured evidence.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_25415de6d67c2446d28bb5a67d401c92",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.0867,
+        "width": 0.3,
+        "x": 0.07,
+        "y": 0.62
+      },
+      "content": "01  Keep GOVERN cross-cutting",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_5ce662cc0de79b84a9de2f02675aeb10",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 1",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.0867,
+        "width": 0.3,
+        "x": 0.07,
+        "y": 0.7167
+      },
+      "content": "02  Show the release gate",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_c23ac257640578d303b58fd27b851537",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 2",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.0867,
+        "width": 0.3,
+        "x": 0.07,
+        "y": 0.8133
+      },
+      "content": "03  Name one decision metric",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_abb289b30dc41c7d8cd340d94cc579e0",
+      "kind": "text",
+      "locked": false,
+      "name": "Key point 3",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 560,
+        "lineHeight": 1.2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "authoredArtifactBinding": {
+        "artifactId": "deterministic-success-signals",
+        "claimIds": [],
+        "kind": "chart",
+        "narrativeJob": "Show the brief-defined success signals as an explicit evaluation checklist.",
+        "projection": {
+          "browserContract": "semantic",
+          "editability": "native",
+          "knownFidelityDifferences": [],
+          "mode": "native",
+          "pptxContract": "editable",
+          "primitive": "chart"
+        },
+        "rationale": "Each equal-height bar represents one success criterion supplied in the brief.",
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "sourceIds": [
+          "source_c0be97c8348813d0b4639475c8dd170a"
+        ],
+        "specDigest": "sha256:de58eb6f18e63dbb3d85c78242826f58c0df6d931a50f93395352656ff87a8a0",
+        "truthState": "derived"
+      },
+      "bbox": {
+        "height": 0.15,
+        "width": 0.34,
+        "x": 0.56,
+        "y": 0.41
+      },
+      "content": "3 signals",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6ad00e6d9f199033d41a98d339c31f3c",
+      "kind": "text",
+      "locked": false,
+      "name": "Primary metric",
+      "role": "metric",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#34452C",
+        "fill": "#E5E9D6",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 43,
+        "fontWeight": 720,
+        "lineHeight": 1,
+        "padding": 20,
+        "radius": 18
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.09,
+        "width": 0.29,
+        "x": 0.59,
+        "y": 0.6
+      },
+      "content": "agreed measures of a successful outcome",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_f6818dd212574a7dc04e6bc29eea1013",
+      "kind": "text",
+      "locked": false,
+      "name": "Metric label",
+      "role": "caption",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 15,
+        "fontWeight": 500,
+        "lineHeight": 1.25,
+        "textAlign": "center"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "authoredArtifactBinding": {
+        "artifactId": "deterministic-success-signals",
+        "claimIds": [],
+        "kind": "chart",
+        "narrativeJob": "Show the brief-defined success signals as an explicit evaluation checklist.",
+        "projection": {
+          "browserContract": "semantic",
+          "editability": "native",
+          "knownFidelityDifferences": [],
+          "mode": "native",
+          "pptxContract": "editable",
+          "primitive": "chart"
+        },
+        "rationale": "Each equal-height bar represents one success criterion supplied in the brief.",
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "sourceIds": [
+          "source_c0be97c8348813d0b4639475c8dd170a"
+        ],
+        "specDigest": "sha256:de58eb6f18e63dbb3d85c78242826f58c0df6d931a50f93395352656ff87a8a0",
+        "truthState": "derived"
+      },
+      "bbox": {
+        "height": 0.17,
+        "width": 0.5,
+        "x": 0.42,
+        "y": 0.72
+      },
+      "chart": {
+        "chartType": "bar",
+        "labels": [
+          "S1",
+          "S2",
+          "S3"
+        ],
+        "series": [
+          {
+            "color": "#B44A2D",
+            "name": "Signal",
+            "values": [
+              1,
+              1,
+              1
+            ]
+          }
+        ],
+        "sourceId": "source_c0be97c8348813d0b4639475c8dd170a",
+        "unit": "defined"
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_c37b2a80ad280ab43bd73d537fd38c22",
+      "kind": "chart",
+      "locked": false,
+      "name": "Evidence chart",
+      "role": "evidence",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "padding": 14,
+        "radius": 18
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_f8b25c2613815c93030b8f062485286d",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "05",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_47f3bc00354e2fa795bd4e5f417aa62e",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_db6be93b2108af2c8c8fbcfbd5254256",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.4,
+        "x": 0.07,
+        "y": 0.06
+      },
+      "content": "DELIVERY / 06",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_24faff1f453d47c418485caf0ee740ac",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.12,
+        "width": 0.82,
+        "x": 0.07,
+        "y": 0.14
+      },
+      "content": "Start narrow, learn quickly, and preserve room to adapt.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a41963663e1399c153164b4c9b21d3cc",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 32,
+        "fontWeight": 600,
+        "lineHeight": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fd4034535e72b1dba64ad027a98a691b",
+        "from": "evidence-1",
+        "graphKind": "architecture",
+        "label": "then",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "evidence-2"
+      },
+      "bbox": {
+        "height": 0.024,
+        "width": 0.295,
+        "x": 0.205,
+        "y": 0.568
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_f00681bccc334f014c300f841383eae0",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge: then",
+      "role": "diagram_edge",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fd4034535e72b1dba64ad027a98a691b",
+        "from": "evidence-2",
+        "graphKind": "architecture",
+        "label": "unlocks",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "claim"
+      },
+      "bbox": {
+        "height": 0.024,
+        "width": 0.295,
+        "x": 0.5,
+        "y": 0.568
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_1ea34ed0c8fac392d37afda34b14cd44",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge: unlocks",
+      "role": "diagram_edge",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fd4034535e72b1dba64ad027a98a691b",
+        "graphKind": "architecture",
+        "nodeId": "evidence-1",
+        "nodeKind": "system",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.27,
+        "x": 0.07,
+        "y": 0.51
+      },
+      "content": "Launch the smallest credible move",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_cd2e6ceba27cd58b36ad43531fd240b7",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: Launch the smallest credible move",
+      "role": "diagram_system",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 12,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fd4034535e72b1dba64ad027a98a691b",
+        "graphKind": "architecture",
+        "nodeId": "evidence-2",
+        "nodeKind": "system",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.27,
+        "x": 0.365,
+        "y": 0.51
+      },
+      "content": "Review evidence with stakeholders",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_8ffc204c7dc12e73e3af42a9ccd3a6a0",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: Review evidence with stakeholders",
+      "role": "diagram_system",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 12,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_fd4034535e72b1dba64ad027a98a691b",
+        "graphKind": "architecture",
+        "nodeId": "claim",
+        "nodeKind": "decision",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.14,
+        "width": 0.27,
+        "x": 0.66,
+        "y": 0.51
+      },
+      "content": "Start narrow, learn quickly, and preserve room to adapt.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_9fab09a133bbb1eca62b59c68892d87a",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: Start narrow, learn quickly, and preserve room to adapt.",
+      "role": "diagram_decision",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [
+        "source_c0be97c8348813d0b4639475c8dd170a"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#E5E9D6",
+        "fontFamily": "Geist Variable",
+        "fontSize": 12,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#B44A2D",
+        "strokeWidth": 2,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.12,
+        "width": 0.79,
+        "x": 0.07,
+        "y": 0.6546
+      },
+      "content": "Sequence the work into a focused launch, an evidence review, and a deliberate scale decision with named ownership at every step. Source evidence must be captured before publication.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_226c0bb53cb89f441d536e04a30306c2",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 6: resolve; emotional intensity 100 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.7029,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_914362c182938c6ac87f2df73f9fbe60",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 1,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "Decision threshold; the story signal has reached 86 percent of the gate",
+      "bbox": {
+        "height": 0.044,
+        "width": 0.006,
+        "x": 0.884,
+        "y": 0.097
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_26a37b312c2e9f4f1bdcf780b231be91",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story transformation · move from exposed uncertainty to controlled passage",
+      "role": "story_motif_threshold_marker",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [],
+      "style": {
+        "fill": "#34452C",
+        "opacity": 1,
+        "radius": 3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_0b84ff9e48391c9e48757a7aef8598a2",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "06",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_2b0f0d2a8db01a2130484d69310bba47",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_1d8e3054a39f4f08edb052989dc2368a",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.4,
+        "x": 0.07,
+        "y": 0.065
+      },
+      "content": "CLOSE / 07",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_1d5da05c6fd387f444e5f3145e61dfc2",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.14,
+        "width": 0.79,
+        "x": 0.07,
+        "y": 0.15
+      },
+      "content": "Move one AI system to a governed release decision",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_1e389de4311c7f0c5c225f2601c2c988",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 36,
+        "fontWeight": 620,
+        "letterSpacing": -0.4,
+        "lineHeight": 1.05
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.32,
+        "width": 0.27,
+        "x": 0.07,
+        "y": 0.35
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_47645c83367c34d5ab0c3fbf5411927d",
+      "kind": "shape",
+      "locked": false,
+      "name": "Evidence card 1",
+      "role": "evidence_card",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "fill": "#E5E9D6",
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.28,
+        "width": 0.23,
+        "x": 0.09,
+        "y": 0.37
+      },
+      "content": "01  Record release, release with controls, or hold",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_7a036e162be9abd6ac2578278b97d189",
+      "kind": "text",
+      "locked": false,
+      "name": "Evidence 1",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#34452C",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.25
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.32,
+        "width": 0.27,
+        "x": 0.365,
+        "y": 0.35
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3347ebfc2a57f8818b71e8e8920a1569",
+      "kind": "shape",
+      "locked": false,
+      "name": "Evidence card 2",
+      "role": "evidence_card",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "fill": "#E5E9D6",
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.28,
+        "width": 0.23,
+        "x": 0.385,
+        "y": 0.37
+      },
+      "content": "02  Name the owner",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_fac3ae5d5b20b60d7361b2baafd51715",
+      "kind": "text",
+      "locked": false,
+      "name": "Evidence 2",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#34452C",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.25
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.32,
+        "width": 0.27,
+        "x": 0.66,
+        "y": 0.35
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b30fe2e8da42fc0d7acf52df8ed4bbfe",
+      "kind": "shape",
+      "locked": false,
+      "name": "Evidence card 3",
+      "role": "evidence_card",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "fill": "#E5E9D6",
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.28,
+        "width": 0.23,
+        "x": 0.68,
+        "y": 0.37
+      },
+      "content": "03  Set the next checkpoint",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_198082100924bdc26dc50707ec9de69e",
+      "kind": "text",
+      "locked": false,
+      "name": "Evidence 3",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [
+        "source_bb9b2075226a198b6860261e6083c479"
+      ],
+      "style": {
+        "color": "#34452C",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.25
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "threshold line 7: resolve; emotional intensity 76 of 100",
+      "bbox": {
+        "height": 0.008,
+        "width": 0.82,
+        "x": 0.07,
+        "y": 0.115
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_2a813b2301488dbf7cd9ea2536fbb461",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story continuity · threshold line",
+      "role": "story_motif_threshold",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.76,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "Decision threshold; the story signal has reached 100 percent of the gate",
+      "bbox": {
+        "height": 0.044,
+        "width": 0.006,
+        "x": 0.884,
+        "y": 0.097
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_2ee8a63e8e55b5a601914ee61268fbe4",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story transformation · move from exposed uncertainty to controlled passage",
+      "role": "story_motif_threshold_marker",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [],
+      "style": {
+        "fill": "#34452C",
+        "opacity": 0.76,
+        "radius": 3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3bbdd28fa6a5fe8b33b585d25a5c977a",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "07",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_f5491720115add522beb828eeb06e9e7",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_73680a4212025c1128eb12e823eee3b6",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    }
+  ],
+  "sources": [
+    {
+      "citation": "Show a risk committee how the NIST AI RMF governance loop moves one AI system to a governed release decision, with GOVERN cross-cutting MAP, MEASURE, and MANAGE, a release gate, and a success metric.",
+      "deckId": "deck_ms82gg67_368a79d38765e020367107d2cfa148b6",
+      "id": "source_bb9b2075226a198b6860261e6083c479",
+      "license": "Internal working material",
+      "retrievedAt": 1785449371824,
+      "sourceType": "internal",
+      "title": "MCP live test: composition grammars — creation brief"
+    },
+    {
+      "citation": "Keep GOVERN cross-cutting; Show the release gate; Name one decision metric",
+      "deckId": "deck_ms82gg67_368a79d38765e020367107d2cfa148b6",
+      "id": "source_c0be97c8348813d0b4639475c8dd170a",
+      "license": "Internal working material",
+      "retrievedAt": 1785449371824,
+      "sourceType": "note",
+      "title": "Brief success criteria"
+    }
+  ]
+}

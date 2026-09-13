@@ -1,0 +1,2349 @@
+{
+  "deck": {
+    "schemaVersion": "nodeslide.slidelang/v1",
+    "toolchainVersion": "local-slidelang-adapter/1.1.0",
+    "id": "benchmark-staar-alcon-executive",
+    "projectId": "benchmark-longform-compression-v1",
+    "title": "STAAR Surgical / Alcon — 4-slide executive readout",
+    "brief": {
+      "prompt": "Create exactly 4 slides from the frozen pre-vote source bundle only. https://www.sec.gov/Archives/edgar/data/718937/000119312525173090/d30729d8k.htm https://www.sec.gov/Archives/edgar/data/718937/000119312525204396/d72691ddefm14a.htm https://www.sec.gov/Archives/edgar/data/718937/000095017025058179/2024-10k_ars.pdf https://www.sec.gov/Archives/edgar/data/718937/000095017025103982/staa-20250627.htm https://data.sec.gov/api/xbrl/companyfacts/CIK0000718937.json https://www.sec.gov/Archives/edgar/data/718937/000121390025095514/ea0259891-dfan14a_broadwood.htm https://www.sec.gov/Archives/edgar/data/718937/000119312525218827/d911579dex991.htm",
+      "audience": "Executive decision makers",
+      "purpose": "compress the accepted decision structure without changing its interpretation",
+      "successCriteria": [
+        "Preserve exact transaction terms and critical numbers",
+        "Expose downside, conflicts, and unresolved diligence",
+        "Keep every material claim source-grounded"
+      ]
+    },
+    "theme": {
+      "id": "quiet-precision",
+      "name": "Quiet Precision",
+      "mode": "light",
+      "colors": {
+        "canvas": "#F4F7F8",
+        "ink": "#17242B",
+        "muted": "#60727B",
+        "accent": "#287A8D",
+        "accentSoft": "#DCECF0",
+        "insight": "#DDEDE8",
+        "insightInk": "#15554E",
+        "trace": "#4E6E8E",
+        "border": "#CFDCE0"
+      },
+      "typography": {
+        "display": "Geist Variable",
+        "body": "Geist Variable",
+        "data": "JetBrains Mono Variable"
+      },
+      "defaultRadius": 8,
+      "spacingUnit": 8
+    },
+    "slideOrder": [
+      "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "slide_5877b1515b38100fdc4eb02f615af647",
+      "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "slide_3cec95bbca387effc508b070591c12d4"
+    ],
+    "version": 1,
+    "status": "ready",
+    "shareSlug": "staar-surgical-alcon-4-slide-executive-readout-0eqi2d1",
+    "createdAt": 1785542400000,
+    "updatedAt": 1785542400000
+  },
+  "slides": [
+    {
+      "id": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "Decision",
+      "section": "Readout / 01",
+      "archetype": "diagram-dominant",
+      "notes": "Narrative role: Readout / 01. Composition grammar: process-canvas. Keep the spoken transition focused on \"Decision\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "background": "#F4F7F8",
+      "elementOrder": [
+        "element_998249f3fa5d031f5e793596b009ad12",
+        "element_d49028fa9db845aeb4c8a39535e312d7",
+        "element_a0cc1efa30a7794cb85d337f0e4d3b97",
+        "element_2e46d07ba4d9912aab09466776405267",
+        "element_b3c14e9c9499d0359ad8504bebe04351",
+        "element_bfeb8df3bfd492b9d9c484808f6507a4",
+        "element_306e0eb1b4746ac11b78090aaf0bcbed",
+        "element_8fdd10364381d0e2aa59c005d5f91dd6",
+        "element_eafdcbb9e968494f09a8d236fe7613d5",
+        "element_19b1c90be8179675eaa2d061dfae3151",
+        "element_28098588b3a17d4e85ef08fbe6797401",
+        "element_789fa7d6267c4c80325ccef27d7fc79e",
+        "element_ad6a3f742a0ba9186cd229bc7b143773",
+        "element_2c2fe636f68b34559e861d8b85cc3f21",
+        "element_a7986abdad28ee8b567911c527aba904",
+        "element_3bf6abc39d5a6d86efa82e1a13189f2b"
+      ],
+      "version": 1
+    },
+    {
+      "id": "slide_5877b1515b38100fdc4eb02f615af647",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "Economics",
+      "section": "Readout / 02",
+      "archetype": "comparison",
+      "notes": "Narrative role: Readout / 02. Composition grammar: scene-stage. Keep the spoken transition focused on \"Economics\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "background": "#F4F7F8",
+      "elementOrder": [
+        "element_85df859a867e14899065ecbe5c6c33cd",
+        "element_4e502a820b0f30d4f621b78e4782371b",
+        "element_d272558e06e2829d382b216762d3f886",
+        "element_ea2788c8d74a0924aaf2b98cb17962c7",
+        "element_18a6e298dbafe50f1752d1a1aee9b1c2",
+        "element_75e05cf495a7b0733cf628806a33f165",
+        "element_6c0055620b7d64c653b37c525b848de6",
+        "element_c9b5cb768945b2e92c062e5d56e68db5",
+        "element_7897b70f477c0a1db9bdea95d2899c8f",
+        "element_f9aaf8a26aa7beecb066f575c6952d81",
+        "element_662a79d77cb7498c8a8383f59f83a3ad",
+        "element_08372799a7fb3a3935e35bb1010ab553",
+        "element_b8286fb8ce6d022971f518ab470d3263"
+      ],
+      "version": 1
+    },
+    {
+      "id": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "Downside",
+      "section": "Readout / 03",
+      "archetype": "stat-dominant",
+      "notes": "Narrative role: Readout / 03. Composition grammar: risk-field. Keep the spoken transition focused on \"Downside\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "background": "#F4F7F8",
+      "elementOrder": [
+        "element_9aa639aa30ec16dbb71586e52a04c831",
+        "element_39fb6eab090a68ee614b4be9495d4dbd",
+        "element_239baaab8d8d9faa9b23ef6ca9cda7a5",
+        "element_87101340667b784b0e5e1ed81c1fb5db",
+        "element_c1252b872347e38ae49cb478873c01cb",
+        "element_f252ccfec1adc7b76a7d905a32787b71",
+        "element_aa0e959a5606f5e4e6af2c9e00c0013d",
+        "element_ce6a807f87312321c435f62198dc5403",
+        "element_6e45274bdd198fcb456079783c46f277",
+        "element_b86c0c7e62ccc541e1f0e8ae83a56060",
+        "element_0c488db3c524e85c15698b0145321d0f",
+        "element_62bbefe948fc1a58073d3d978781d71a",
+        "element_c97c9d3057e279e82a3124e1886cf92d",
+        "element_62e9b85a1a83f2fb5e2403ba3ecf0270",
+        "element_e7f2b13dfc5dcf42968cff0f96be67f5",
+        "element_4e82b9b4f18714f3bb0cf97c51a3b80b"
+      ],
+      "version": 1
+    },
+    {
+      "id": "slide_3cec95bbca387effc508b070591c12d4",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "Conditions to proceed",
+      "section": "Readout / 04",
+      "archetype": "diagram-dominant",
+      "notes": "Narrative role: Readout / 04. Composition grammar: decision-gate. Keep the spoken transition focused on \"Conditions to proceed\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "background": "#F4F7F8",
+      "elementOrder": [
+        "element_967330ed45e04f8d319cd8ba80a663cc",
+        "element_5445f7b5d60b68fd0d1e3f987dc0b698",
+        "element_a4cdc16e2166f65ae1d78b156fbb0bbd",
+        "element_7fc56a222e0f3685dae167832324e70d",
+        "element_b50cd7a80fbccf5c0365ef70cee1628e",
+        "element_c2ce45ca21969e927e7ae420c73dc873",
+        "element_bb976eafcfda66863fcd0c7eb4ae471c",
+        "element_ea0e3ac9f785a5fdd01fb0f05a451d82",
+        "element_763cf62fc725de220ff5d91a6ee3fc14"
+      ],
+      "version": 1
+    }
+  ],
+  "elements": [
+    {
+      "name": "Section label",
+      "kind": "text",
+      "role": "section",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.06,
+        "width": 0.4,
+        "height": 0.07
+      },
+      "rotation": 0,
+      "content": "READOUT / 01",
+      "style": {
+        "color": "#287A8D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "sourceIds": [],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_998249f3fa5d031f5e793596b009ad12",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Headline",
+      "kind": "text",
+      "role": "headline",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.14,
+        "width": 0.82,
+        "height": 0.08
+      },
+      "rotation": 0,
+      "content": "Decision",
+      "style": {
+        "color": "#17242B",
+        "fontFamily": "Geist Variable",
+        "fontSize": 32,
+        "fontWeight": 600,
+        "lineHeight": 1.1
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d49028fa9db845aeb4c8a39535e312d7",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Diagram edge",
+      "kind": "connector",
+      "role": "diagram_edge",
+      "bbox": {
+        "x": 0.4458,
+        "y": 0.3488,
+        "width": 0.1083,
+        "height": 0.024
+      },
+      "rotation": 90,
+      "style": {
+        "color": "#4E6E8E",
+        "strokeWidth": 2
+      },
+      "artifactBinding": {
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "artifactId": "staar-graph-1",
+        "role": "graph-edge",
+        "graphKind": "process",
+        "from": "evidence",
+        "to": "condition"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-graph-1",
+        "kind": "graph",
+        "narrativeJob": "Make slide 1's graph relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "offer-price",
+          "open-diligence-boundary",
+          "vote-threshold"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:ba86d3ff74b71cbd18dc55a070846e35b7d8168b6d35176ccc6e3161df92bf47",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a0cc1efa30a7794cb85d337f0e4d3b97",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Diagram edge",
+      "kind": "connector",
+      "role": "diagram_edge",
+      "bbox": {
+        "x": 0.4458,
+        "y": 0.4572,
+        "width": 0.1083,
+        "height": 0.024
+      },
+      "rotation": 90,
+      "style": {
+        "color": "#4E6E8E",
+        "strokeWidth": 2
+      },
+      "artifactBinding": {
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "artifactId": "staar-graph-1",
+        "role": "graph-edge",
+        "graphKind": "process",
+        "from": "condition",
+        "to": "decision"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-graph-1",
+        "kind": "graph",
+        "narrativeJob": "Make slide 1's graph relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "offer-price",
+          "open-diligence-boundary",
+          "vote-threshold"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:ba86d3ff74b71cbd18dc55a070846e35b7d8168b6d35176ccc6e3161df92bf47",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_2e46d07ba4d9912aab09466776405267",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Diagram node: Decision",
+      "kind": "shape",
+      "role": "diagram_system",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.27,
+        "width": 0.86,
+        "height": 0.0733
+      },
+      "rotation": 0,
+      "content": "Decision",
+      "style": {
+        "fill": "#DCECF0",
+        "stroke": "#CFDCE0",
+        "strokeWidth": 1,
+        "color": "#17242B",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 8,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "artifactBinding": {
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "artifactId": "staar-graph-1",
+        "role": "graph-node",
+        "graphKind": "process",
+        "nodeId": "evidence",
+        "nodeKind": "system"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-graph-1",
+        "kind": "graph",
+        "narrativeJob": "Make slide 1's graph relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "offer-price",
+          "open-diligence-boundary",
+          "vote-threshold"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:ba86d3ff74b71cbd18dc55a070846e35b7d8168b6d35176ccc6e3161df92bf47",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b3c14e9c9499d0359ad8504bebe04351",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Diagram node: Evidence gate: Decision",
+      "kind": "shape",
+      "role": "diagram_decision",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.3783,
+        "width": 0.86,
+        "height": 0.0733
+      },
+      "rotation": 0,
+      "content": "Evidence gate: Decision",
+      "style": {
+        "fill": "#DDEDE8",
+        "stroke": "#287A8D",
+        "strokeWidth": 2,
+        "color": "#17242B",
+        "fontFamily": "Geist Variable",
+        "fontSize": 12,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 8,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "artifactBinding": {
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "artifactId": "staar-graph-1",
+        "role": "graph-node",
+        "graphKind": "process",
+        "nodeId": "condition",
+        "nodeKind": "decision"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-graph-1",
+        "kind": "graph",
+        "narrativeJob": "Make slide 1's graph relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "offer-price",
+          "open-diligence-boundary",
+          "vote-threshold"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:ba86d3ff74b71cbd18dc55a070846e35b7d8168b6d35176ccc6e3161df92bf47",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_bfeb8df3bfd492b9d9c484808f6507a4",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Diagram node: Decision on decision",
+      "kind": "shape",
+      "role": "diagram_milestone",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.4867,
+        "width": 0.86,
+        "height": 0.0733
+      },
+      "rotation": 0,
+      "content": "Decision on decision",
+      "style": {
+        "fill": "#DDEDE8",
+        "stroke": "#CFDCE0",
+        "strokeWidth": 1,
+        "color": "#17242B",
+        "fontFamily": "Geist Variable",
+        "fontSize": 12,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 8,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "artifactBinding": {
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "artifactId": "staar-graph-1",
+        "role": "graph-node",
+        "graphKind": "process",
+        "nodeId": "decision",
+        "nodeKind": "milestone"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-graph-1",
+        "kind": "graph",
+        "narrativeJob": "Make slide 1's graph relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "offer-price",
+          "open-diligence-boundary",
+          "vote-threshold"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:ba86d3ff74b71cbd18dc55a070846e35b7d8168b6d35176ccc6e3161df92bf47",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_306e0eb1b4746ac11b78090aaf0bcbed",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Body copy",
+      "kind": "text",
+      "role": "body",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.59,
+        "width": 0.79,
+        "height": 0.11
+      },
+      "rotation": 0,
+      "content": "Alcon offered $28.00 in cash per STAAR share. Majority threshold: 24,677,062 shares. Gate: China, forecast bridge, and clearances.",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44",
+        "source_c36d3d0e2b311e549ec7f1595dadf989",
+        "source_a6816ffe9774bdd3f76bf722930c5d37",
+        "source_14071431e0a33df55e30ef1ba0b7a54b",
+        "source_6b4367028e7ffba94addb95ff96e164c",
+        "source_71b327d222b7fb2904dbe4b3e4622960",
+        "source_a7550dc96759f06d7b39b8f399c55b5e",
+        "source_3fa3fc2b68c1d4e1588deee6772f8c2e"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_8fdd10364381d0e2aa59c005d5f91dd6",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_noise",
+      "bbox": {
+        "x": 0.69,
+        "y": 0.066,
+        "width": 0.015,
+        "height": 0.015
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.555,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 25 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_eafdcbb9e968494f09a8d236fe7613d5",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_noise",
+      "bbox": {
+        "x": 0.735,
+        "y": 0.112,
+        "width": 0.011,
+        "height": 0.011
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.455,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 25 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_19b1c90be8179675eaa2d061dfae3151",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_noise",
+      "bbox": {
+        "x": 0.77,
+        "y": 0.071,
+        "width": 0.009,
+        "height": 0.009
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.355,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 25 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_28098588b3a17d4e85ef08fbe6797401",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_wave",
+      "bbox": {
+        "x": 0.798,
+        "y": 0.065,
+        "width": 0.0925,
+        "height": 0.0925
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.27,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 25 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_789fa7d6267c4c80325ccef27d7fc79e",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_wave",
+      "bbox": {
+        "x": 0.8235,
+        "y": 0.0905,
+        "width": 0.0574,
+        "height": 0.0574
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.365,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 25 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ad6a3f742a0ba9186cd229bc7b143773",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_core",
+      "bbox": {
+        "x": 0.846,
+        "y": 0.113,
+        "width": 0.037,
+        "height": 0.037
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#287A8D",
+        "opacity": 0.34,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 25 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_2c2fe636f68b34559e861d8b85cc3f21",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Deck footer",
+      "kind": "text",
+      "role": "footer",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.93,
+        "width": 0.72,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a7986abdad28ee8b567911c527aba904",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Page number",
+      "kind": "text",
+      "role": "page_number",
+      "bbox": {
+        "x": 0.88,
+        "y": 0.92,
+        "width": 0.06,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "01",
+      "style": {
+        "color": "#287A8D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3bf6abc39d5a6d86efa82e1a13189f2b",
+      "slideId": "slide_009f3a3e030f51442d9ae2b955291a2c",
+      "version": 1
+    },
+    {
+      "name": "Story scene field · the trace begins to converge",
+      "kind": "shape",
+      "role": "story_scene_field",
+      "bbox": {
+        "x": 0.27,
+        "y": 0.14,
+        "width": 0.46,
+        "height": 0.34
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.22,
+        "radius": 12
+      },
+      "altText": "the trace begins to converge; dominant approach scene",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_85df859a867e14899065ecbe5c6c33cd",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_noise",
+      "bbox": {
+        "x": 0.3121,
+        "y": 0.2284,
+        "width": 0.0256,
+        "height": 0.036
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.43,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_4e502a820b0f30d4f621b78e4782371b",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_noise",
+      "bbox": {
+        "x": 0.389,
+        "y": 0.3388,
+        "width": 0.0188,
+        "height": 0.0264
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.353,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d272558e06e2829d382b216762d3f886",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_noise",
+      "bbox": {
+        "x": 0.4488,
+        "y": 0.2404,
+        "width": 0.0154,
+        "height": 0.0216
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.275,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ea2788c8d74a0924aaf2b98cb17962c7",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_wave",
+      "bbox": {
+        "x": 0.488,
+        "y": 0.214,
+        "width": 0.1794,
+        "height": 0.252
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.34,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_18a6e298dbafe50f1752d1a1aee9b1c2",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_wave",
+      "bbox": {
+        "x": 0.5359,
+        "y": 0.2812,
+        "width": 0.1112,
+        "height": 0.1562
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.45,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_75e05cf495a7b0733cf628806a33f165",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "kind": "shape",
+      "role": "story_scene_signal_core",
+      "bbox": {
+        "x": 0.5786,
+        "y": 0.3412,
+        "width": 0.0718,
+        "height": 0.1008
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#287A8D",
+        "opacity": 0.62,
+        "radius": 999
+      },
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6c0055620b7d64c653b37c525b848de6",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Section label",
+      "kind": "text",
+      "role": "section",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.065,
+        "width": 0.3,
+        "height": 0.07
+      },
+      "rotation": 0,
+      "content": "READOUT / 02",
+      "style": {
+        "color": "#287A8D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "sourceIds": [],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_c9b5cb768945b2e92c062e5d56e68db5",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Headline",
+      "kind": "text",
+      "role": "headline",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.57,
+        "width": 0.5,
+        "height": 0.16
+      },
+      "rotation": 0,
+      "content": "Economics",
+      "style": {
+        "color": "#17242B",
+        "fontFamily": "Geist Variable",
+        "fontSize": 38,
+        "fontWeight": 650,
+        "lineHeight": 1.04,
+        "letterSpacing": -0.5
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_7897b70f477c0a1db9bdea95d2899c8f",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Supporting context",
+      "kind": "text",
+      "role": "body",
+      "bbox": {
+        "x": 0.56,
+        "y": 0.58,
+        "width": 0.39,
+        "height": 0.2
+      },
+      "rotation": 0,
+      "content": "Q2 2025 net sales were $44.320 million, down 55.2% year over year. Cash and available-for-sale investments totaled $189.883 million at June 27, 2025.",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 450,
+        "lineHeight": 1.38
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44",
+        "source_c36d3d0e2b311e549ec7f1595dadf989",
+        "source_a6816ffe9774bdd3f76bf722930c5d37",
+        "source_14071431e0a33df55e30ef1ba0b7a54b",
+        "source_6b4367028e7ffba94addb95ff96e164c",
+        "source_71b327d222b7fb2904dbe4b3e4622960",
+        "source_a7550dc96759f06d7b39b8f399c55b5e",
+        "source_3fa3fc2b68c1d4e1588deee6772f8c2e"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_f9aaf8a26aa7beecb066f575c6952d81",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Decisive point",
+      "kind": "text",
+      "role": "takeaway",
+      "bbox": {
+        "x": 0.56,
+        "y": 0.8,
+        "width": 0.39,
+        "height": 0.15
+      },
+      "rotation": 0,
+      "content": "$28 was approximately 59% above STAAR's 90-day VWAP and 51% above its August 4, 2025 close.",
+      "style": {
+        "color": "#15554E",
+        "fill": "#DDEDE8",
+        "fontFamily": "Geist Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "lineHeight": 1.25,
+        "padding": 12,
+        "radius": 8
+      },
+      "sourceIds": [
+        "source_96c236625073d51bece5880fe9590ca7",
+        "source_c36d3d0e2b311e549ec7f1595dadf989",
+        "source_a6816ffe9774bdd3f76bf722930c5d37",
+        "source_14071431e0a33df55e30ef1ba0b7a54b",
+        "source_6b4367028e7ffba94addb95ff96e164c",
+        "source_71b327d222b7fb2904dbe4b3e4622960",
+        "source_a7550dc96759f06d7b39b8f399c55b5e",
+        "source_3fa3fc2b68c1d4e1588deee6772f8c2e"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_662a79d77cb7498c8a8383f59f83a3ad",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Deck footer",
+      "kind": "text",
+      "role": "footer",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.93,
+        "width": 0.72,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_08372799a7fb3a3935e35bb1010ab553",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Page number",
+      "kind": "text",
+      "role": "page_number",
+      "bbox": {
+        "x": 0.88,
+        "y": 0.92,
+        "width": 0.06,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "02",
+      "style": {
+        "color": "#287A8D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b8286fb8ce6d022971f518ab470d3263",
+      "slideId": "slide_5877b1515b38100fdc4eb02f615af647",
+      "version": 1
+    },
+    {
+      "name": "Risk field low-low",
+      "kind": "shape",
+      "role": "artifact_risk_field",
+      "bbox": {
+        "x": 0.661,
+        "y": 0.51,
+        "width": 0.284,
+        "height": 0.344
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.16,
+        "radius": 3
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_9aa639aa30ec16dbb71586e52a04c831",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk field high-low",
+      "kind": "shape",
+      "role": "artifact_risk_field",
+      "bbox": {
+        "x": 0.371,
+        "y": 0.51,
+        "width": 0.284,
+        "height": 0.344
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.24,
+        "radius": 3
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_39fb6eab090a68ee614b4be9495d4dbd",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk field low-high",
+      "kind": "shape",
+      "role": "artifact_risk_field",
+      "bbox": {
+        "x": 0.661,
+        "y": 0.16,
+        "width": 0.284,
+        "height": 0.344
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.28,
+        "radius": 3
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_239baaab8d8d9faa9b23ef6ca9cda7a5",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk field high-high",
+      "kind": "shape",
+      "role": "artifact_risk_field",
+      "bbox": {
+        "x": 0.371,
+        "y": 0.16,
+        "width": 0.284,
+        "height": 0.344
+      },
+      "rotation": 0,
+      "style": {
+        "fill": "#DCECF0",
+        "opacity": 0.42,
+        "radius": 3
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_87101340667b784b0e5e1ed81c1fb5db",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk axis: rare",
+      "kind": "text",
+      "role": "artifact_risk_axis",
+      "bbox": {
+        "x": 0.785,
+        "y": 0.875,
+        "width": 0.16,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "RARE",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "letterSpacing": 0.8,
+        "textAlign": "left"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-risk-matrix-3",
+        "kind": "risk-matrix",
+        "narrativeJob": "Make slide 3's risk-matrix relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "prior-offer",
+          "projection-growth-assumption",
+          "q2-china-sales"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:9a6076c56cf02a5f1339251011b2163547d4ee4b90e513243bf90bfccdb8f8b3",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "groupId": "group_0799b3e67b939bd09f4a4647e498a8d4",
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_c1252b872347e38ae49cb478873c01cb",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk axis: likely",
+      "kind": "text",
+      "role": "artifact_risk_axis",
+      "bbox": {
+        "x": 0.365,
+        "y": 0.875,
+        "width": 0.16,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "LIKELY",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "letterSpacing": 0.8,
+        "textAlign": "right"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-risk-matrix-3",
+        "kind": "risk-matrix",
+        "narrativeJob": "Make slide 3's risk-matrix relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "prior-offer",
+          "projection-growth-assumption",
+          "q2-china-sales"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:9a6076c56cf02a5f1339251011b2163547d4ee4b90e513243bf90bfccdb8f8b3",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "groupId": "group_0799b3e67b939bd09f4a4647e498a8d4",
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_f252ccfec1adc7b76a7d905a32787b71",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk axis: minor",
+      "kind": "text",
+      "role": "artifact_risk_axis",
+      "bbox": {
+        "x": 0.773,
+        "y": 0.78,
+        "width": 0.16,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "MINOR",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "letterSpacing": 0.8,
+        "textAlign": "left"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-risk-matrix-3",
+        "kind": "risk-matrix",
+        "narrativeJob": "Make slide 3's risk-matrix relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "prior-offer",
+          "projection-growth-assumption",
+          "q2-china-sales"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:9a6076c56cf02a5f1339251011b2163547d4ee4b90e513243bf90bfccdb8f8b3",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "groupId": "group_0799b3e67b939bd09f4a4647e498a8d4",
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_aa0e959a5606f5e4e6af2c9e00c0013d",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk axis: critical",
+      "kind": "text",
+      "role": "artifact_risk_axis",
+      "bbox": {
+        "x": 0.773,
+        "y": 0.178,
+        "width": 0.16,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "CRITICAL",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "letterSpacing": 0.8,
+        "textAlign": "left"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-risk-matrix-3",
+        "kind": "risk-matrix",
+        "narrativeJob": "Make slide 3's risk-matrix relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "prior-offer",
+          "projection-growth-assumption",
+          "q2-china-sales"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:9a6076c56cf02a5f1339251011b2163547d4ee4b90e513243bf90bfccdb8f8b3",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "groupId": "group_0799b3e67b939bd09f4a4647e498a8d4",
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ce6a807f87312321c435f62198dc5403",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk marker: Downside",
+      "kind": "shape",
+      "role": "artifact_risk_marker",
+      "bbox": {
+        "x": 0.373,
+        "y": 0.176,
+        "width": 0.12,
+        "height": 0.08
+      },
+      "rotation": 0,
+      "content": "Downside",
+      "style": {
+        "fill": "#287A8D",
+        "stroke": "#15554E",
+        "strokeWidth": 1,
+        "color": "#F4F7F8",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 700,
+        "padding": 5,
+        "radius": 999,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "altText": "Downside; likelihood 4; impact 5",
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-risk-matrix-3",
+        "kind": "risk-matrix",
+        "narrativeJob": "Make slide 3's risk-matrix relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "prior-offer",
+          "projection-growth-assumption",
+          "q2-china-sales"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:9a6076c56cf02a5f1339251011b2163547d4ee4b90e513243bf90bfccdb8f8b3",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "groupId": "group_0799b3e67b939bd09f4a4647e498a8d4",
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6e45274bdd198fcb456079783c46f277",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk marker: Evidence",
+      "kind": "shape",
+      "role": "artifact_risk_marker",
+      "bbox": {
+        "x": 0.4701,
+        "y": 0.2931,
+        "width": 0.12,
+        "height": 0.08
+      },
+      "rotation": 0,
+      "content": "Evidence",
+      "style": {
+        "fill": "#287A8D",
+        "stroke": "#15554E",
+        "strokeWidth": 1,
+        "color": "#F4F7F8",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 700,
+        "padding": 5,
+        "radius": 999,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "altText": "Evidence; likelihood 3; impact 4",
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-risk-matrix-3",
+        "kind": "risk-matrix",
+        "narrativeJob": "Make slide 3's risk-matrix relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "prior-offer",
+          "projection-growth-assumption",
+          "q2-china-sales"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:9a6076c56cf02a5f1339251011b2163547d4ee4b90e513243bf90bfccdb8f8b3",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "groupId": "group_0799b3e67b939bd09f4a4647e498a8d4",
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b86c0c7e62ccc541e1f0e8ae83a56060",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk marker: Decision",
+      "kind": "shape",
+      "role": "artifact_risk_marker",
+      "bbox": {
+        "x": 0.595,
+        "y": 0.2918,
+        "width": 0.12,
+        "height": 0.08
+      },
+      "rotation": 0,
+      "content": "Decision",
+      "style": {
+        "fill": "#287A8D",
+        "stroke": "#15554E",
+        "strokeWidth": 1,
+        "color": "#F4F7F8",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 700,
+        "padding": 5,
+        "radius": 999,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "altText": "Decision; likelihood 2; impact 4",
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "authoredArtifactBinding": {
+        "schemaVersion": "nodeslide.authored-artifact-binding/v1",
+        "artifactId": "staar-risk-matrix-3",
+        "kind": "risk-matrix",
+        "narrativeJob": "Make slide 3's risk-matrix relationship inspectable and editable.",
+        "truthState": "derived",
+        "rationale": "Values and relationships are bounded by the frozen pre-vote source bundle.",
+        "claimIds": [
+          "prior-offer",
+          "projection-growth-assumption",
+          "q2-china-sales"
+        ],
+        "sourceIds": [
+          "source_8f601cca21fbea50859ddbe481db8b44"
+        ],
+        "specDigest": "sha256:9a6076c56cf02a5f1339251011b2163547d4ee4b90e513243bf90bfccdb8f8b3",
+        "projection": {
+          "primitive": "diagram",
+          "mode": "native",
+          "browserContract": "semantic",
+          "pptxContract": "editable",
+          "editability": "grouped-editable",
+          "knownFidelityDifferences": []
+        }
+      },
+      "groupId": "group_0799b3e67b939bd09f4a4647e498a8d4",
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_0c488db3c524e85c15698b0145321d0f",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Section label",
+      "kind": "text",
+      "role": "section",
+      "bbox": {
+        "x": 0.06,
+        "y": 0.15,
+        "width": 0.25,
+        "height": 0.07
+      },
+      "rotation": 0,
+      "content": "READOUT / 03",
+      "style": {
+        "color": "#287A8D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "sourceIds": [],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_62bbefe948fc1a58073d3d978781d71a",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk thesis",
+      "kind": "text",
+      "role": "headline",
+      "bbox": {
+        "x": 0.06,
+        "y": 0.23,
+        "width": 0.25,
+        "height": 0.25
+      },
+      "rotation": 0,
+      "content": "Downside",
+      "style": {
+        "color": "#17242B",
+        "fontFamily": "Geist Variable",
+        "fontSize": 36,
+        "fontWeight": 620,
+        "lineHeight": 1.05,
+        "letterSpacing": -0.6
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_c97c9d3057e279e82a3124e1886cf92d",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Risk implication",
+      "kind": "text",
+      "role": "body",
+      "bbox": {
+        "x": 0.06,
+        "y": 0.54,
+        "width": 0.25,
+        "height": 0.23
+      },
+      "rotation": 0,
+      "content": "China sales: $5.299M versus $63.519M. Final case: approximately 10% annual sales growth from 2027. $58/share in April 2024 preceded the $28 agreement.",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "Geist Variable",
+        "fontSize": 15,
+        "fontWeight": 440,
+        "lineHeight": 1.3
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44",
+        "source_c36d3d0e2b311e549ec7f1595dadf989",
+        "source_a6816ffe9774bdd3f76bf722930c5d37",
+        "source_14071431e0a33df55e30ef1ba0b7a54b",
+        "source_6b4367028e7ffba94addb95ff96e164c",
+        "source_71b327d222b7fb2904dbe4b3e4622960",
+        "source_a7550dc96759f06d7b39b8f399c55b5e",
+        "source_3fa3fc2b68c1d4e1588deee6772f8c2e"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_62e9b85a1a83f2fb5e2403ba3ecf0270",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Deck footer",
+      "kind": "text",
+      "role": "footer",
+      "bbox": {
+        "x": 0.21,
+        "y": 0.93,
+        "width": 0.72,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_e7f2b13dfc5dcf42968cff0f96be67f5",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Page number",
+      "kind": "text",
+      "role": "page_number",
+      "bbox": {
+        "x": 0.06,
+        "y": 0.92,
+        "width": 0.06,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "03",
+      "style": {
+        "color": "#287A8D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_4e82b9b4f18714f3bb0cf97c51a3b80b",
+      "slideId": "slide_9358de388eb7f3fc1ff3f25fa567273d",
+      "version": 1
+    },
+    {
+      "name": "Decision gate",
+      "kind": "shape",
+      "role": "artifact_decision_gate",
+      "bbox": {
+        "x": 0.05,
+        "y": 0.11,
+        "width": 0.34,
+        "height": 0.76
+      },
+      "rotation": 0,
+      "content": "DECIDE\nWITH CONDITIONS",
+      "style": {
+        "fill": "#287A8D",
+        "color": "#F4F7F8",
+        "fontFamily": "Geist Variable",
+        "fontSize": 32,
+        "fontWeight": 720,
+        "lineHeight": 1.08,
+        "padding": 24,
+        "radius": 18,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44",
+        "source_c36d3d0e2b311e549ec7f1595dadf989",
+        "source_a6816ffe9774bdd3f76bf722930c5d37",
+        "source_14071431e0a33df55e30ef1ba0b7a54b",
+        "source_6b4367028e7ffba94addb95ff96e164c",
+        "source_71b327d222b7fb2904dbe4b3e4622960",
+        "source_a7550dc96759f06d7b39b8f399c55b5e",
+        "source_3fa3fc2b68c1d4e1588deee6772f8c2e"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_967330ed45e04f8d319cd8ba80a663cc",
+      "slideId": "slide_3cec95bbca387effc508b070591c12d4",
+      "version": 1
+    },
+    {
+      "name": "Section label",
+      "kind": "text",
+      "role": "section",
+      "bbox": {
+        "x": 0.47,
+        "y": 0.09,
+        "width": 0.44,
+        "height": 0.07
+      },
+      "rotation": 0,
+      "content": "READOUT / 04",
+      "style": {
+        "color": "#287A8D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "sourceIds": [],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_5445f7b5d60b68fd0d1e3f987dc0b698",
+      "slideId": "slide_3cec95bbca387effc508b070591c12d4",
+      "version": 1
+    },
+    {
+      "name": "Decision thesis",
+      "kind": "text",
+      "role": "headline",
+      "bbox": {
+        "x": 0.47,
+        "y": 0.18,
+        "width": 0.46,
+        "height": 0.24
+      },
+      "rotation": 0,
+      "content": "Conditions to proceed",
+      "style": {
+        "color": "#17242B",
+        "fontFamily": "Geist Variable",
+        "fontSize": 38,
+        "fontWeight": 650,
+        "lineHeight": 1.04,
+        "letterSpacing": -0.6
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a4cdc16e2166f65ae1d78b156fbb0bbd",
+      "slideId": "slide_3cec95bbca387effc508b070591c12d4",
+      "version": 1
+    },
+    {
+      "name": "Decision context",
+      "kind": "text",
+      "role": "body",
+      "bbox": {
+        "x": 0.47,
+        "y": 0.43,
+        "width": 0.46,
+        "height": 0.17
+      },
+      "rotation": 0,
+      "content": "Closing requires HSR and antitrust clearances. Broadwood: 27.3% ownership; opposed the merger. Citi: forecasts unverified; assumptions not opined.",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 440,
+        "lineHeight": 1.32
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44",
+        "source_c36d3d0e2b311e549ec7f1595dadf989",
+        "source_a6816ffe9774bdd3f76bf722930c5d37",
+        "source_14071431e0a33df55e30ef1ba0b7a54b",
+        "source_6b4367028e7ffba94addb95ff96e164c",
+        "source_71b327d222b7fb2904dbe4b3e4622960",
+        "source_a7550dc96759f06d7b39b8f399c55b5e",
+        "source_3fa3fc2b68c1d4e1588deee6772f8c2e"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_7fc56a222e0f3685dae167832324e70d",
+      "slideId": "slide_3cec95bbca387effc508b070591c12d4",
+      "version": 1
+    },
+    {
+      "name": "Decision condition 1",
+      "kind": "shape",
+      "role": "decision_condition",
+      "bbox": {
+        "x": 0.47,
+        "y": 0.62,
+        "width": 0.46,
+        "height": 0.078
+      },
+      "rotation": 0,
+      "content": "01  Closing requires HSR and antitrust clearances.",
+      "style": {
+        "fill": "#DDEDE8",
+        "color": "#15554E",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "padding": 9,
+        "radius": 5,
+        "verticalAlign": "middle"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44",
+        "source_c36d3d0e2b311e549ec7f1595dadf989",
+        "source_a6816ffe9774bdd3f76bf722930c5d37",
+        "source_14071431e0a33df55e30ef1ba0b7a54b",
+        "source_6b4367028e7ffba94addb95ff96e164c",
+        "source_71b327d222b7fb2904dbe4b3e4622960",
+        "source_a7550dc96759f06d7b39b8f399c55b5e",
+        "source_3fa3fc2b68c1d4e1588deee6772f8c2e"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b50cd7a80fbccf5c0365ef70cee1628e",
+      "slideId": "slide_3cec95bbca387effc508b070591c12d4",
+      "version": 1
+    },
+    {
+      "name": "Decision condition 2",
+      "kind": "shape",
+      "role": "decision_condition",
+      "bbox": {
+        "x": 0.47,
+        "y": 0.715,
+        "width": 0.46,
+        "height": 0.078
+      },
+      "rotation": 0,
+      "content": "02  Broadwood: 27.3% ownership; opposed the merger.",
+      "style": {
+        "fill": "#DCECF0",
+        "color": "#15554E",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "padding": 9,
+        "radius": 5,
+        "verticalAlign": "middle"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44",
+        "source_c36d3d0e2b311e549ec7f1595dadf989",
+        "source_a6816ffe9774bdd3f76bf722930c5d37",
+        "source_14071431e0a33df55e30ef1ba0b7a54b",
+        "source_6b4367028e7ffba94addb95ff96e164c",
+        "source_71b327d222b7fb2904dbe4b3e4622960",
+        "source_a7550dc96759f06d7b39b8f399c55b5e",
+        "source_3fa3fc2b68c1d4e1588deee6772f8c2e"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_c2ce45ca21969e927e7ae420c73dc873",
+      "slideId": "slide_3cec95bbca387effc508b070591c12d4",
+      "version": 1
+    },
+    {
+      "name": "Decision condition 3",
+      "kind": "shape",
+      "role": "decision_condition",
+      "bbox": {
+        "x": 0.47,
+        "y": 0.81,
+        "width": 0.46,
+        "height": 0.078
+      },
+      "rotation": 0,
+      "content": "03  Citi: forecasts unverified; assumptions not opined.",
+      "style": {
+        "fill": "#DCECF0",
+        "color": "#15554E",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "padding": 9,
+        "radius": 5,
+        "verticalAlign": "middle"
+      },
+      "sourceIds": [
+        "source_8f601cca21fbea50859ddbe481db8b44",
+        "source_c36d3d0e2b311e549ec7f1595dadf989",
+        "source_a6816ffe9774bdd3f76bf722930c5d37",
+        "source_14071431e0a33df55e30ef1ba0b7a54b",
+        "source_6b4367028e7ffba94addb95ff96e164c",
+        "source_71b327d222b7fb2904dbe4b3e4622960",
+        "source_a7550dc96759f06d7b39b8f399c55b5e",
+        "source_3fa3fc2b68c1d4e1588deee6772f8c2e"
+      ],
+      "locked": false,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_bb976eafcfda66863fcd0c7eb4ae471c",
+      "slideId": "slide_3cec95bbca387effc508b070591c12d4",
+      "version": 1
+    },
+    {
+      "name": "Deck footer",
+      "kind": "text",
+      "role": "footer",
+      "bbox": {
+        "x": 0.07,
+        "y": 0.93,
+        "width": 0.72,
+        "height": 0.035
+      },
+      "rotation": 0,
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "style": {
+        "color": "#60727B",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ea0e3ac9f785a5fdd01fb0f05a451d82",
+      "slideId": "slide_3cec95bbca387effc508b070591c12d4",
+      "version": 1
+    },
+    {
+      "name": "Page number",
+      "kind": "text",
+      "role": "page_number",
+      "bbox": {
+        "x": 0.88,
+        "y": 0.92,
+        "width": 0.06,
+        "height": 0.05
+      },
+      "rotation": 0,
+      "content": "04",
+      "style": {
+        "color": "#287A8D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "sourceIds": [],
+      "locked": true,
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_763cf62fc725de220ff5d91a6ee3fc14",
+      "slideId": "slide_3cec95bbca387effc508b070591c12d4",
+      "version": 1
+    }
+  ],
+  "sources": [
+    {
+      "id": "source_8f601cca21fbea50859ddbe481db8b44",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "STAAR Surgical / Alcon — 4-slide executive readout — creation brief",
+      "sourceType": "internal",
+      "retrievedAt": 1785542400000,
+      "citation": "Create exactly 4 slides from the frozen pre-vote source bundle only. https://www.sec.gov/Archives/edgar/data/718937/000119312525173090/d30729d8k.htm https://www.sec.gov/Archives/edgar/data/718937/000119312525204396/d72691ddefm14a.htm https://www.sec.gov/Archives/edgar/data/718937/000095017025058179/2024-10k_ars.pdf https://www.sec.gov/Archives/edgar/data/718937/000095017025103982/staa-20250627.htm https://data.sec.gov/api/xbrl/companyfacts/CIK0000718937.json https://www.sec.gov/Archives/edgar/data/718937/000121390025095514/ea0259891-dfan14a_broadwood.htm https://www.sec.gov/Archives/edgar/data/718937/000119312525218827/d911579dex991.htm",
+      "license": "Internal working material"
+    },
+    {
+      "id": "source_96c236625073d51bece5880fe9590ca7",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "Brief success criteria",
+      "sourceType": "note",
+      "retrievedAt": 1785542400000,
+      "citation": "Preserve exact transaction terms and critical numbers; Expose downside, conflicts, and unresolved diligence; Keep every material claim source-grounded",
+      "license": "Internal working material"
+    },
+    {
+      "id": "source_c36d3d0e2b311e549ec7f1595dadf989",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "sec.gov · supplied source 1",
+      "url": "https://www.sec.gov/Archives/edgar/data/718937/000119312525173090/d30729d8k.htm",
+      "sourceType": "url",
+      "retrievedAt": 1785542400000,
+      "citation": "https://www.sec.gov/Archives/edgar/data/718937/000119312525173090/d30729d8k.htm",
+      "license": "User-supplied linked evidence; verify reuse rights before external publication."
+    },
+    {
+      "id": "source_a6816ffe9774bdd3f76bf722930c5d37",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "sec.gov · supplied source 2",
+      "url": "https://www.sec.gov/Archives/edgar/data/718937/000119312525204396/d72691ddefm14a.htm",
+      "sourceType": "url",
+      "retrievedAt": 1785542400000,
+      "citation": "https://www.sec.gov/Archives/edgar/data/718937/000119312525204396/d72691ddefm14a.htm",
+      "license": "User-supplied linked evidence; verify reuse rights before external publication."
+    },
+    {
+      "id": "source_14071431e0a33df55e30ef1ba0b7a54b",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "sec.gov · supplied source 3",
+      "url": "https://www.sec.gov/Archives/edgar/data/718937/000095017025058179/2024-10k_ars.pdf",
+      "sourceType": "url",
+      "retrievedAt": 1785542400000,
+      "citation": "https://www.sec.gov/Archives/edgar/data/718937/000095017025058179/2024-10k_ars.pdf",
+      "license": "User-supplied linked evidence; verify reuse rights before external publication."
+    },
+    {
+      "id": "source_6b4367028e7ffba94addb95ff96e164c",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "sec.gov · supplied source 4",
+      "url": "https://www.sec.gov/Archives/edgar/data/718937/000095017025103982/staa-20250627.htm",
+      "sourceType": "url",
+      "retrievedAt": 1785542400000,
+      "citation": "https://www.sec.gov/Archives/edgar/data/718937/000095017025103982/staa-20250627.htm",
+      "license": "User-supplied linked evidence; verify reuse rights before external publication."
+    },
+    {
+      "id": "source_71b327d222b7fb2904dbe4b3e4622960",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "data.sec.gov · supplied source 5",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000718937.json",
+      "sourceType": "url",
+      "retrievedAt": 1785542400000,
+      "citation": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000718937.json",
+      "license": "User-supplied linked evidence; verify reuse rights before external publication."
+    },
+    {
+      "id": "source_a7550dc96759f06d7b39b8f399c55b5e",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "sec.gov · supplied source 6",
+      "url": "https://www.sec.gov/Archives/edgar/data/718937/000121390025095514/ea0259891-dfan14a_broadwood.htm",
+      "sourceType": "url",
+      "retrievedAt": 1785542400000,
+      "citation": "https://www.sec.gov/Archives/edgar/data/718937/000121390025095514/ea0259891-dfan14a_broadwood.htm",
+      "license": "User-supplied linked evidence; verify reuse rights before external publication."
+    },
+    {
+      "id": "source_3fa3fc2b68c1d4e1588deee6772f8c2e",
+      "deckId": "benchmark-staar-alcon-executive",
+      "title": "sec.gov · supplied source 7",
+      "url": "https://www.sec.gov/Archives/edgar/data/718937/000119312525218827/d911579dex991.htm",
+      "sourceType": "url",
+      "retrievedAt": 1785542400000,
+      "citation": "https://www.sec.gov/Archives/edgar/data/718937/000119312525218827/d911579dex991.htm",
+      "license": "User-supplied linked evidence; verify reuse rights before external publication."
+    }
+  ]
+}

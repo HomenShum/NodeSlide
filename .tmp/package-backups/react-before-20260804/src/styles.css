@@ -1,0 +1,61 @@
+[data-nodebook-surface="artifact"] {
+  box-sizing: border-box;
+  contain: content;
+  min-width: 0;
+}
+
+[data-nodebook-surface="artifact"] [data-nodebook-artifact-rendered] > svg {
+  display: block;
+  height: auto;
+  max-width: 100%;
+}
+
+[data-nodebook-surface="workspace"] {
+  --nodebook-border: color-mix(in srgb, currentColor 18%, transparent);
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(180px, 0.75fr) minmax(260px, 1.25fr) minmax(260px, 1fr);
+  min-height: 320px;
+  overflow: hidden;
+}
+
+[data-nodebook-surface="workspace"] > [role="status"],
+[data-nodebook-surface="workspace"] > [role="alert"] {
+  grid-column: 1 / -1;
+  padding: 8px 12px;
+}
+
+[data-nodebook-pane] {
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: auto;
+  padding: 12px;
+}
+
+[data-nodebook-pane="outline"],
+[data-nodebook-pane="editor"] {
+  border-inline-end: 1px solid var(--nodebook-border);
+}
+
+[data-nodebook-pane="outline"] button,
+[data-nodebook-graph-neighbors] button {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  display: block;
+  inline-size: 100%;
+  padding-block: 6px;
+  text-align: start;
+}
+
+[data-nodebook-pane="editor"] textarea {
+  box-sizing: border-box;
+  min-block-size: 220px;
+  resize: vertical;
+  inline-size: 100%;
+}
+
+@media (max-width: 760px) {
+  [data-nodebook-surface="workspace"] { grid-template-columns: 1fr; }
+  [data-nodebook-pane="outline"], [data-nodebook-pane="editor"] { border-inline-end: 0; border-block-end: 1px solid var(--nodebook-border); }
+}

@@ -1,0 +1,7 @@
+Communication job: By the end, product, engineering, and functional leaders should approve a gated production pilot because NodeSlide can turn evidence into an editable decision artifact, but only when job completion and visual truth fail closed.
+
+Narrative arc: plausible output -> five real jobs -> governed architecture -> proof and failure modes -> production gate -> owned rollout.
+
+Visual system: near-black indigo, warm ivory, coral/amber signal, cyan provenance, green verified state. The signature metaphor transforms from scattered source particles to structured paths, a trust threshold, and finally a fan-out into institutional memory. Adjacent slides must use different silhouettes.
+
+No externally sourced claims are used. Product claims are derived from the NodeSlide repository README, CLI implementation, production scenario manifest, and the live QA evidence captured on 2026-07-31.

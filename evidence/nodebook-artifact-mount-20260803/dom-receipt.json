@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "nodeslide.nodebook-dom-receipt/v1",
+  "viewport": { "width": 1440, "height": 900 },
+  "hostCount": 1,
+  "renderedArtifactCount": 1,
+  "structuredDiagramSvgCount": 1,
+  "workspaceMatchesActiveDeck": true,
+  "selectedSlide": 2,
+  "selectedNode": "Friction",
+  "artifactAlerts": 0,
+  "console": { "errors": 0, "warnings": 0 },
+  "capture": {
+    "tool": "Playwright MCP",
+    "routePattern": "http://127.0.0.1:5180/?deck=<proof-deck>",
+    "steps": [
+      "Click the second slide thumbnail",
+      "Click the first Diagram node in the slide canvas",
+      "Read [data-nodebook-host=nodeslide], [data-nodebook-artifact-rendered], the preview SVG, alerts, selected slide, and selected node",
+      "Read browser console messages at error level",
+      "Capture the 1440x900 viewport"
+    ],
+    "screenshotSha256": "68dc615207abe5a908a6344dfc5497d74a4b2f8ef78ebe09ee57a3d086d456bb"
+  },
+  "observedAt": "2026-08-04",
+  "observation": "After navigating from slide 1 to slide 2 and selecting a canonical graph node, the packed NodeBook structured diagram rendered inside the existing Design inspector."
+}

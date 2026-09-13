@@ -1,0 +1,830 @@
+[
+  {
+    "slideIndex": 1,
+    "narrativeRole": "Cover",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 2,
+    "narrativeRole": "Executive summary and requested decision",
+    "evidenceRelationships": [
+      "offer-price"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 3,
+    "narrativeRole": "Executive summary and requested decision",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "risk-matrix"
+    ],
+    "requiredArtifact": "risk-matrix",
+    "selectedArtifact": "risk-matrix",
+    "textOnlyPermitted": false,
+    "reason": "The executive summary and requested decision evidence requires an editable risk-matrix relationship."
+  },
+  {
+    "slideIndex": 4,
+    "narrativeRole": "Executive summary and requested decision",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 5,
+    "narrativeRole": "Executive summary and requested decision",
+    "evidenceRelationships": [
+      "open-diligence-boundary"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 6,
+    "narrativeRole": "Transaction overview and key terms",
+    "evidenceRelationships": [
+      "offer-price"
+    ],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The transaction overview and key terms evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 7,
+    "narrativeRole": "Transaction overview and key terms",
+    "evidenceRelationships": [
+      "offer-premium"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 8,
+    "narrativeRole": "Transaction overview and key terms",
+    "evidenceRelationships": [
+      "prior-offer"
+    ],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The transaction overview and key terms evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 9,
+    "narrativeRole": "Transaction overview and key terms",
+    "evidenceRelationships": [
+      "staar-termination-fee",
+      "reduced-termination-fee",
+      "alcon-regulatory-fee"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 10,
+    "narrativeRole": "Transaction overview and key terms",
+    "evidenceRelationships": [
+      "regulatory-clearances"
+    ],
+    "eligibleArtifacts": [
+      "risk-matrix"
+    ],
+    "requiredArtifact": "risk-matrix",
+    "selectedArtifact": "risk-matrix",
+    "textOnlyPermitted": false,
+    "reason": "The transaction overview and key terms evidence requires an editable risk-matrix relationship."
+  },
+  {
+    "slideIndex": 11,
+    "narrativeRole": "Strategic rationale",
+    "evidenceRelationships": [
+      "attributed-board-rationale"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 12,
+    "narrativeRole": "Strategic rationale",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The strategic rationale evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 13,
+    "narrativeRole": "Strategic rationale",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The strategic rationale evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 14,
+    "narrativeRole": "Strategic rationale",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 15,
+    "narrativeRole": "Strategic rationale",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 16,
+    "narrativeRole": "Strategic rationale",
+    "evidenceRelationships": [
+      "attributed-board-rationale"
+    ],
+    "eligibleArtifacts": [
+      "risk-matrix"
+    ],
+    "requiredArtifact": "risk-matrix",
+    "selectedArtifact": "risk-matrix",
+    "textOnlyPermitted": false,
+    "reason": "The strategic rationale evidence requires an editable risk-matrix relationship."
+  },
+  {
+    "slideIndex": 17,
+    "narrativeRole": "Strategic rationale",
+    "evidenceRelationships": [
+      "attributed-board-rationale"
+    ],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The strategic rationale evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 18,
+    "narrativeRole": "Company and market overview",
+    "evidenceRelationships": [
+      "business-scale"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 19,
+    "narrativeRole": "Company and market overview",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The company and market overview evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 20,
+    "narrativeRole": "Company and market overview",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 21,
+    "narrativeRole": "Company and market overview",
+    "evidenceRelationships": [
+      "regional-sales-change"
+    ],
+    "eligibleArtifacts": [
+      "risk-matrix"
+    ],
+    "requiredArtifact": "risk-matrix",
+    "selectedArtifact": "risk-matrix",
+    "textOnlyPermitted": false,
+    "reason": "The company and market overview evidence requires an editable risk-matrix relationship."
+  },
+  {
+    "slideIndex": 22,
+    "narrativeRole": "Company and market overview",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 23,
+    "narrativeRole": "Company and market overview",
+    "evidenceRelationships": [
+      "regional-sales-change"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 24,
+    "narrativeRole": "Company and market overview",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The company and market overview evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 25,
+    "narrativeRole": "Company and market overview",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 26,
+    "narrativeRole": "Historical operating performance",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 27,
+    "narrativeRole": "Historical operating performance",
+    "evidenceRelationships": [
+      "2024-sales"
+    ],
+    "eligibleArtifacts": [
+      "chart"
+    ],
+    "requiredArtifact": "chart",
+    "selectedArtifact": "chart",
+    "textOnlyPermitted": false,
+    "reason": "The historical operating performance evidence requires an editable chart relationship."
+  },
+  {
+    "slideIndex": 28,
+    "narrativeRole": "Historical operating performance",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 29,
+    "narrativeRole": "Historical operating performance",
+    "evidenceRelationships": [
+      "q2-2025-sales",
+      "q2-2025-sales-decline"
+    ],
+    "eligibleArtifacts": [
+      "chart"
+    ],
+    "requiredArtifact": "chart",
+    "selectedArtifact": "chart",
+    "textOnlyPermitted": false,
+    "reason": "The historical operating performance evidence requires an editable chart relationship."
+  },
+  {
+    "slideIndex": 30,
+    "narrativeRole": "Historical operating performance",
+    "evidenceRelationships": [
+      "q2-2025-sales",
+      "h1-2025-sales"
+    ],
+    "eligibleArtifacts": [
+      "chart"
+    ],
+    "requiredArtifact": "chart",
+    "selectedArtifact": "chart",
+    "textOnlyPermitted": false,
+    "reason": "The historical operating performance evidence requires an editable chart relationship."
+  },
+  {
+    "slideIndex": 31,
+    "narrativeRole": "Historical operating performance",
+    "evidenceRelationships": [
+      "q2-china-sales"
+    ],
+    "eligibleArtifacts": [
+      "chart"
+    ],
+    "requiredArtifact": "chart",
+    "selectedArtifact": "chart",
+    "textOnlyPermitted": false,
+    "reason": "The historical operating performance evidence requires an editable chart relationship."
+  },
+  {
+    "slideIndex": 32,
+    "narrativeRole": "Historical operating performance",
+    "evidenceRelationships": [
+      "q2-gross-margin"
+    ],
+    "eligibleArtifacts": [
+      "waterfall"
+    ],
+    "requiredArtifact": "waterfall",
+    "selectedArtifact": "waterfall",
+    "textOnlyPermitted": false,
+    "reason": "The historical operating performance evidence requires an editable waterfall relationship."
+  },
+  {
+    "slideIndex": 33,
+    "narrativeRole": "Historical operating performance",
+    "evidenceRelationships": [
+      "q2-operating-loss"
+    ],
+    "eligibleArtifacts": [
+      "comparison"
+    ],
+    "requiredArtifact": "comparison",
+    "selectedArtifact": "comparison",
+    "textOnlyPermitted": false,
+    "reason": "The historical operating performance evidence requires an editable comparison relationship."
+  },
+  {
+    "slideIndex": 34,
+    "narrativeRole": "Historical operating performance",
+    "evidenceRelationships": [
+      "standalone-liquidity"
+    ],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The historical operating performance evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 35,
+    "narrativeRole": "Management projections and model drivers",
+    "evidenceRelationships": [
+      "projection-growth-assumption"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 36,
+    "narrativeRole": "Management projections and model drivers",
+    "evidenceRelationships": [
+      "2026e-sales",
+      "2030e-sales"
+    ],
+    "eligibleArtifacts": [
+      "chart"
+    ],
+    "requiredArtifact": "chart",
+    "selectedArtifact": "chart",
+    "textOnlyPermitted": false,
+    "reason": "The management projections and model drivers evidence requires an editable chart relationship."
+  },
+  {
+    "slideIndex": 37,
+    "narrativeRole": "Management projections and model drivers",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "chart"
+    ],
+    "requiredArtifact": "chart",
+    "selectedArtifact": "chart",
+    "textOnlyPermitted": false,
+    "reason": "The management projections and model drivers evidence requires an editable chart relationship."
+  },
+  {
+    "slideIndex": 38,
+    "narrativeRole": "Management projections and model drivers",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "chart"
+    ],
+    "requiredArtifact": "chart",
+    "selectedArtifact": "chart",
+    "textOnlyPermitted": false,
+    "reason": "The management projections and model drivers evidence requires an editable chart relationship."
+  },
+  {
+    "slideIndex": 39,
+    "narrativeRole": "Management projections and model drivers",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "chart"
+    ],
+    "requiredArtifact": "chart",
+    "selectedArtifact": "chart",
+    "textOnlyPermitted": false,
+    "reason": "The management projections and model drivers evidence requires an editable chart relationship."
+  },
+  {
+    "slideIndex": 40,
+    "narrativeRole": "Management projections and model drivers",
+    "evidenceRelationships": [
+      "2026e-sales",
+      "2030e-sales"
+    ],
+    "eligibleArtifacts": [
+      "waterfall"
+    ],
+    "requiredArtifact": "waterfall",
+    "selectedArtifact": "waterfall",
+    "textOnlyPermitted": false,
+    "reason": "The management projections and model drivers evidence requires an editable waterfall relationship."
+  },
+  {
+    "slideIndex": 41,
+    "narrativeRole": "Management projections and model drivers",
+    "evidenceRelationships": [
+      "projection-growth-assumption",
+      "open-diligence-boundary"
+    ],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The management projections and model drivers evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 42,
+    "narrativeRole": "Management projections and model drivers",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "risk-matrix"
+    ],
+    "requiredArtifact": "risk-matrix",
+    "selectedArtifact": "risk-matrix",
+    "textOnlyPermitted": false,
+    "reason": "The management projections and model drivers evidence requires an editable risk-matrix relationship."
+  },
+  {
+    "slideIndex": 43,
+    "narrativeRole": "Management projections and model drivers",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 44,
+    "narrativeRole": "Valuation analyses",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 45,
+    "narrativeRole": "Valuation analyses",
+    "evidenceRelationships": [
+      "public-comps-range"
+    ],
+    "eligibleArtifacts": [
+      "comparison"
+    ],
+    "requiredArtifact": "comparison",
+    "selectedArtifact": "comparison",
+    "textOnlyPermitted": false,
+    "reason": "The valuation analyses evidence requires an editable comparison relationship."
+  },
+  {
+    "slideIndex": 46,
+    "narrativeRole": "Valuation analyses",
+    "evidenceRelationships": [
+      "precedents-range"
+    ],
+    "eligibleArtifacts": [
+      "comparison"
+    ],
+    "requiredArtifact": "comparison",
+    "selectedArtifact": "comparison",
+    "textOnlyPermitted": false,
+    "reason": "The valuation analyses evidence requires an editable comparison relationship."
+  },
+  {
+    "slideIndex": 47,
+    "narrativeRole": "Valuation analyses",
+    "evidenceRelationships": [
+      "dcf-range"
+    ],
+    "eligibleArtifacts": [
+      "comparison"
+    ],
+    "requiredArtifact": "comparison",
+    "selectedArtifact": "comparison",
+    "textOnlyPermitted": false,
+    "reason": "The valuation analyses evidence requires an editable comparison relationship."
+  },
+  {
+    "slideIndex": 48,
+    "narrativeRole": "Valuation analyses",
+    "evidenceRelationships": [
+      "dcf-range",
+      "dcf-discount-rate"
+    ],
+    "eligibleArtifacts": [
+      "comparison"
+    ],
+    "requiredArtifact": "comparison",
+    "selectedArtifact": "comparison",
+    "textOnlyPermitted": false,
+    "reason": "The valuation analyses evidence requires an editable comparison relationship."
+  },
+  {
+    "slideIndex": 49,
+    "narrativeRole": "Valuation analyses",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "comparison"
+    ],
+    "requiredArtifact": "comparison",
+    "selectedArtifact": "comparison",
+    "textOnlyPermitted": false,
+    "reason": "The valuation analyses evidence requires an editable comparison relationship."
+  },
+  {
+    "slideIndex": 50,
+    "narrativeRole": "Valuation analyses",
+    "evidenceRelationships": [
+      "citi-contingent-fee",
+      "fairness-not-vote-recommendation"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 51,
+    "narrativeRole": "Valuation analyses",
+    "evidenceRelationships": [
+      "citi-forecast-reliance",
+      "fairness-not-vote-recommendation"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 52,
+    "narrativeRole": "Sources, uses, financing, and capital structure",
+    "evidenceRelationships": [
+      "alcon-funding-representation"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 53,
+    "narrativeRole": "Sources, uses, financing, and capital structure",
+    "evidenceRelationships": [
+      "alcon-funding-representation"
+    ],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The sources, uses, financing, and capital structure evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 54,
+    "narrativeRole": "Sources, uses, financing, and capital structure",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The sources, uses, financing, and capital structure evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 55,
+    "narrativeRole": "Sources, uses, financing, and capital structure",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 56,
+    "narrativeRole": "Sources, uses, financing, and capital structure",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 57,
+    "narrativeRole": "Sensitivities and downside scenarios",
+    "evidenceRelationships": [
+      "q2-2025-sales",
+      "q2-2025-sales-decline",
+      "q2-china-sales"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 58,
+    "narrativeRole": "Sensitivities and downside scenarios",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 59,
+    "narrativeRole": "Sensitivities and downside scenarios",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The sensitivities and downside scenarios evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 60,
+    "narrativeRole": "Sensitivities and downside scenarios",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 61,
+    "narrativeRole": "Sensitivities and downside scenarios",
+    "evidenceRelationships": [
+      "open-diligence-boundary"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 62,
+    "narrativeRole": "Key risks and counterarguments",
+    "evidenceRelationships": [
+      "prior-offer"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 63,
+    "narrativeRole": "Key risks and counterarguments",
+    "evidenceRelationships": [
+      "q2-china-sales"
+    ],
+    "eligibleArtifacts": [
+      "risk-matrix"
+    ],
+    "requiredArtifact": "risk-matrix",
+    "selectedArtifact": "risk-matrix",
+    "textOnlyPermitted": false,
+    "reason": "The key risks and counterarguments evidence requires an editable risk-matrix relationship."
+  },
+  {
+    "slideIndex": 64,
+    "narrativeRole": "Key risks and counterarguments",
+    "evidenceRelationships": [
+      "citi-forecast-reliance"
+    ],
+    "eligibleArtifacts": [
+      "risk-matrix"
+    ],
+    "requiredArtifact": "risk-matrix",
+    "selectedArtifact": "risk-matrix",
+    "textOnlyPermitted": false,
+    "reason": "The key risks and counterarguments evidence requires an editable risk-matrix relationship."
+  },
+  {
+    "slideIndex": 65,
+    "narrativeRole": "Key risks and counterarguments",
+    "evidenceRelationships": [
+      "citi-contingent-fee",
+      "broadwood-opposition"
+    ],
+    "eligibleArtifacts": [
+      "risk-matrix"
+    ],
+    "requiredArtifact": "risk-matrix",
+    "selectedArtifact": "risk-matrix",
+    "textOnlyPermitted": false,
+    "reason": "The key risks and counterarguments evidence requires an editable risk-matrix relationship."
+  },
+  {
+    "slideIndex": 66,
+    "narrativeRole": "Key risks and counterarguments",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 67,
+    "narrativeRole": "Process, approvals, and outstanding diligence",
+    "evidenceRelationships": [
+      "vote-threshold"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 68,
+    "narrativeRole": "Process, approvals, and outstanding diligence",
+    "evidenceRelationships": [
+      "regulatory-clearances",
+      "open-diligence-boundary"
+    ],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The process, approvals, and outstanding diligence evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 69,
+    "narrativeRole": "Process, approvals, and outstanding diligence",
+    "evidenceRelationships": [
+      "regulatory-clearances",
+      "open-diligence-boundary"
+    ],
+    "eligibleArtifacts": [
+      "graph"
+    ],
+    "requiredArtifact": "graph",
+    "selectedArtifact": "graph",
+    "textOnlyPermitted": false,
+    "reason": "The process, approvals, and outstanding diligence evidence requires an editable graph relationship."
+  },
+  {
+    "slideIndex": 70,
+    "narrativeRole": "Recommendation",
+    "evidenceRelationships": [
+      "offer-price",
+      "open-diligence-boundary"
+    ],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 71,
+    "narrativeRole": "Source register and appendix index",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  },
+  {
+    "slideIndex": 72,
+    "narrativeRole": "Source register and appendix index",
+    "evidenceRelationships": [],
+    "eligibleArtifacts": [],
+    "textOnlyPermitted": true,
+    "reason": "This page is a cover, transition, recommendation, or source register where a native quantitative artifact is not required."
+  }
+]

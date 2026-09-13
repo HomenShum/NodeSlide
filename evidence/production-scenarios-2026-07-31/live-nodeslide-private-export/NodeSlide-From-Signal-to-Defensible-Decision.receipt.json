@@ -1,0 +1,186 @@
+{
+  "deckId": "deck_ms9ef7ha_da197558a890a43b1b8848041b87eea2",
+  "slideCount": 8,
+  "execution": "hosted",
+  "publishedUrl": null,
+  "files": {
+    "pptx": "D:\\VSCode Projects\\nodeslide\\evidence\\production-scenarios-2026-07-31\\live-nodeslide-private-export\\NodeSlide-From-Signal-to-Defensible-Decision.pptx",
+    "html": "D:\\VSCode Projects\\nodeslide\\evidence\\production-scenarios-2026-07-31\\live-nodeslide-private-export\\NodeSlide-From-Signal-to-Defensible-Decision.html",
+    "snapshot": "D:\\VSCode Projects\\nodeslide\\evidence\\production-scenarios-2026-07-31\\live-nodeslide-private-export\\NodeSlide-From-Signal-to-Defensible-Decision.nodeslide.json",
+    "receipt": "D:\\VSCode Projects\\nodeslide\\evidence\\production-scenarios-2026-07-31\\live-nodeslide-private-export\\NodeSlide-From-Signal-to-Defensible-Decision.receipt.json"
+  },
+  "storySpec": {
+    "narrativeJob": "Decide whether NodeSlide is ready for five production deck workflows",
+    "audienceNeed": "Help Product, engineering, and functional leaders evaluating NodeSlide for production decide whether NodeSlide is ready for five production deck workflows.",
+    "memorableTakeaway": "Decide whether NodeSlide is ready for five production deck workflows",
+    "proofObligations": [
+      {
+        "id": "proof-1",
+        "claim": "Show the requested diagram as an inspectable artifact.",
+        "requiredMaterialKinds": [
+          "diagram"
+        ],
+        "materialIds": [
+          "material-diagram"
+        ],
+        "fulfillment": "constructible"
+      },
+      {
+        "id": "success-1",
+        "claim": "Exactly 12 slides",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-2",
+        "claim": "Five production scenarios are distinct",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-3",
+        "claim": "One transforming signal-to-decision metaphor",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-4",
+        "claim": "At least six silhouettes",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-5",
+        "claim": "Brief drift and visual monotony are surfaced honestly",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      },
+      {
+        "id": "success-6",
+        "claim": "PPTX HTML snapshot receipt and public share complete",
+        "requiredMaterialKinds": [
+          "brief"
+        ],
+        "materialIds": [
+          "material-brief"
+        ],
+        "fulfillment": "supported"
+      }
+    ],
+    "pacing": [
+      {
+        "phase": "orient",
+        "slideCount": 1,
+        "intent": "Establish the audience tension and central promise."
+      },
+      {
+        "phase": "build",
+        "slideCount": 2,
+        "intent": "Develop the causal argument with distinct visual jobs."
+      },
+      {
+        "phase": "prove",
+        "slideCount": 3,
+        "intent": "Resolve proof obligations with inspectable artifacts."
+      },
+      {
+        "phase": "decide",
+        "slideCount": 1,
+        "intent": "Close with a decision, owner, and next checkpoint."
+      }
+    ],
+    "sceneContinuity": {
+      "motif": "threshold line",
+      "progression": [
+        "threshold line 1: orient",
+        "threshold line 2: tension",
+        "threshold line 3: hint",
+        "threshold line 4: reveal",
+        "threshold line 5: prove",
+        "threshold line 6: resolve",
+        "threshold line 7: resolve"
+      ]
+    },
+    "visualMetaphor": {
+      "kind": "threshold",
+      "subject": "a guarded threshold",
+      "transformation": "move from exposed uncertainty to controlled passage"
+    },
+    "revealPacing": [
+      {
+        "beat": "orient",
+        "intensity": 24
+      },
+      {
+        "beat": "tension",
+        "intensity": 39
+      },
+      {
+        "beat": "hint",
+        "intensity": 54
+      },
+      {
+        "beat": "reveal",
+        "intensity": 70
+      },
+      {
+        "beat": "prove",
+        "intensity": 85
+      },
+      {
+        "beat": "resolve",
+        "intensity": 100
+      },
+      {
+        "beat": "resolve",
+        "intensity": 76
+      }
+    ],
+    "emotionalArc": {
+      "shape": "rise-climax-release",
+      "intensity": [
+        24,
+        39,
+        54,
+        70,
+        85,
+        100,
+        76
+      ]
+    },
+    "compositionPlan": [
+      "statement",
+      "comparison",
+      "diagram-dominant",
+      "stat-dominant",
+      "chart-dominant",
+      "media-dominant",
+      "split"
+    ]
+  }
+}

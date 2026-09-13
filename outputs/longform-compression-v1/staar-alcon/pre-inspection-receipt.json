@@ -1,0 +1,19 @@
+{
+  "benchmarkId": "nodeslide-longform-compression-v1",
+  "caseId": "staar-alcon-pre-vote-2025-09-26",
+  "deckDigests": {
+    "long": "sha256:9b844fcceec0a5f930791d6639aafc1c4a1ecf6add97e3a4ba19adc4f0ff4732",
+    "short": "sha256:0e8668b9404f65cd16083178699737cf005a5935766156374e620f1bc720a5b7",
+    "executive": "sha256:9dd4deada8efcc61fd58e1c5f34422445629b3a9397b06144984ab4475b0d038"
+  },
+  "counts": {
+    "long": 72,
+    "short": 12,
+    "executive": 4
+  },
+  "passed": false,
+  "failures": [
+    "Browser/PPTX renders have not been inspected page by page.",
+    "Critical-fact render reconciliation is pending."
+  ]
+}

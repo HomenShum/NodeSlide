@@ -6,12 +6,17 @@
 
 > NodeSlide turns a prompt, a structured brief, or raw data into a presentation you can *inspect and defend* — a canonical structured document that compiles to editable slides, where every change (human or agent) flows through one validated mutation path.
 
-> **Here to work on the code?** Read **[docs/START_HERE.md](docs/START_HERE.md)** first.
-> It follows one real user action — typing a brief and pressing Create — through
-> every file it touches, in the order the machine runs them, with line numbers.
-> Then `docs/codebase/` (stack, structure, architecture, conventions,
-> integrations, testing, concerns) and `.tours/` for the same three walks inside
-> VS Code.
+**Developers and coding agents — start with your task**
+
+| Your task | Start here |
+|---|---|
+| Configure and run the app | [Quickstart](#quickstart) |
+| Follow Create through the code | [Code walkthrough](docs/START_HERE.md) |
+| Use offline CLI/MCP or host-backed MCP | [External-agent access](docs/EXTERNAL_AGENT_ACCESS.md) |
+| Find implementation files | [Architecture](#architecture) |
+
+The walkthrough follows one brief-to-Create action through its files.
+Continue with `docs/codebase/` and `.tours/` for codebase maps and VS Code walks.
 
 > **Repository status (2026-07-22):** NodeSlide is a standalone product repo with
 > exact-commit CI, Convex/Vercel deployment gates, production probes, and packed

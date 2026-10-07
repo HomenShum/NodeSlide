@@ -4,12 +4,7 @@
   "problem": "AI edits to a deck arrive as silent overwrites, so the author cannot inspect what changed or defend the result. README: 'never a silent overwrite'.",
   "wedge": "Every AI edit is a scoped, validated, receipted proposal flowing through one validated mutation path, rather than a direct write to the document.",
   "primaryJob": "Turn a prompt, a structured brief, or raw data into a presentation the author can inspect and defend.",
-  "inputs": [
-    "founder_brief",
-    "structured_brief",
-    "attached_csv",
-    "uploaded_images"
-  ],
+  "inputs": ["founder_brief", "structured_brief", "attached_csv", "uploaded_images"],
   "primaryArtifact": "A canonical structured document that compiles to editable slides, with a Trace receipt recording the actual model or disclosed deterministic origin for each plan.",
   "rejectedAlternatives": [
     {
@@ -27,11 +22,7 @@
   ],
   "successCondition": "Every change, human or agent, flows through one validated mutation path, and the author can point at any element and say where it came from.",
   "authorityLimits": {
-    "read": [
-      "founder brief text",
-      "attached CSV sources",
-      "uploaded images and their credits"
-    ],
+    "read": ["founder brief text", "attached CSV sources", "uploaded images and their credits"],
     "propose": [
       "slide content changes",
       "structured primitive insertions",

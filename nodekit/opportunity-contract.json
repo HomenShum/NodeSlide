@@ -10,7 +10,7 @@
     "attached_csv",
     "uploaded_images"
   ],
-  "primaryArtifact": "A canonical structured document that compiles to editable slides, with a Trace receipt attributing each plan to the live model.",
+  "primaryArtifact": "A canonical structured document that compiles to editable slides, with a Trace receipt recording the actual model or disclosed deterministic origin for each plan.",
   "rejectedAlternatives": [
     {
       "alternative": "Let the agent write directly into slide state.",

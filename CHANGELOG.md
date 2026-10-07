@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Developer and agent handoff
+
+- Added a README-derived NodeKit opportunity contract describing the author,
+  reviewable edit proposals, source inputs and authority limits. Inferred
+  alternatives and open questions remain explicitly unverified.
+- Recorded actual model or disclosed deterministic plan origin, matching the
+  existing deterministic path. Source review only; current PR checks pending,
+  with no new runtime or benchmark claim.
+
 ### Public site
 
 - Added a 1200×630 social preview image with Open Graph image and Twitter card

@@ -8,8 +8,12 @@
   reviewable edit proposals, source inputs and authority limits. Inferred
   alternatives and open questions remain explicitly unverified.
 - Recorded actual model or disclosed deterministic plan origin, matching the
-  existing deterministic path. Source review only; current PR checks pending,
-  with no new runtime or benchmark claim.
+  existing deterministic path. Merged through [PR #175](https://github.com/HomenShum/NodeSlide/pull/175)
+  at `088ce4e569ed5b9bfd6192b772e5e8a513d08422`.
+- App lint/typecheck/test/build, MCP, conformance, corpus, gate tests and packed
+  consumer checks passed on PR head `b836e9dc562ad88cfe27d9bf20d0b9cc3fc0456e`.
+  The consumer proof used a scripted model. No new runtime, benchmark or live
+  deployment result is asserted.
 
 ### Public site
 

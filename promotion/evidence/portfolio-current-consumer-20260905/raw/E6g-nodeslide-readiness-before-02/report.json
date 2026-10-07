@@ -1,0 +1,23 @@
+{
+  "scope": "Actual failed deck, current local source; boundary overlays only, no product edit",
+  "cells": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "state": "badge",
+      "name": "1440-badge"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "state": "trace",
+      "name": "1440-trace"
+    }
+  ],
+  "errors": [],
+  "failure": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('inspector-tab-ai')\u001b[22m\n\n    at C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-capture-readiness-before-02.mjs:7:495"
+}

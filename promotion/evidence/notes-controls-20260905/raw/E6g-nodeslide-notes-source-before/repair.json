@@ -1,0 +1,22 @@
+{
+  "proof": "NODESLIDE-NOTES-CONTROLS-01",
+  "source": [
+    {
+      "path": "src/domains/nodeslide/components/SlideCanvas.tsx",
+      "beforeSha256": "6e6252fa8ee2e306a5c3d9cf0f8108317817a76336e1c983529e8520b07083ba",
+      "afterSha256": "028175b149f251a2bcf094e518f28e68834b9ed942a118e4b8cc449f94a8fe87"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslide.css",
+      "beforeSha256": "7320997f03a9a057b91fb91033d5027d381c67dfe0c4fa538a94f02d81f4ccda",
+      "afterSha256": "059f3f5bdf23ca38e24e133be5870304049fc1a140334dabbfe337145a980ee7"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslideV3.css",
+      "beforeSha256": "a62e73f9959bd21cafe74d326169950ead29e0c1d1d491606dcb7b36177edad9",
+      "afterSha256": "79485a5fd4f952b6b496e4fcd7d1f86ca52afd6abf2ef932f9e424f4ba735761"
+    }
+  ],
+  "change": "One in-flow wrapping controls row before notes; old absolute offsets/transform removed; zoom/Fit width follows actual label content at enlarged text. No handler/state/data changes.",
+  "planAddendum": "Existing source component test discovery found no SlideCanvas/notes/keyboard tests; use actual browser scenarios and one normal repository check, not a static CSS-mirroring test."
+}

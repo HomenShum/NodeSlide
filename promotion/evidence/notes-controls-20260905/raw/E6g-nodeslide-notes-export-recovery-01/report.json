@@ -1,0 +1,29 @@
+{
+  "proof": "NODESLIDE-NOTES-CONTROLS-01",
+  "startedAt": "2026-09-05T17:51:14.245Z",
+  "reason": "Prior test notes removed the required illustrative disclosure. Actual export was refused; restore disclosed original note plus latest new note without changing product/gate or rerunning passed interactions.",
+  "files": [
+    {
+      "path": "recovered.json",
+      "bytes": 81055,
+      "sha256": "98e76c1dc3458b31093f54feacae88258ed3df1729e1fdcabf514bd41ec0fb0b"
+    },
+    {
+      "path": "recovered.pptx",
+      "bytes": 137331,
+      "sha256": "e38d3c43a41962ef31a73ce624e0a72ac6496d9b9a48e1d2772766f3caebedab"
+    }
+  ],
+  "errors": [],
+  "blockedOrigins": [],
+  "priorFilesExact": true,
+  "fullGrades": null,
+  "restoredNote": "Illustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text.\nDecision: prototype after checking the budget. 中文交接 — no external claims.\nNotes handoff 320 round 4: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+  "versions": {
+    "before": 15,
+    "after": 16
+  },
+  "sourceUnchanged": true,
+  "status": "PASS_DISCLOSURE_REPAIR_AND_ACTUAL_EXPORT_RECOVERY",
+  "finishedAt": "2026-09-05T17:51:17.494Z"
+}

@@ -1,0 +1,21 @@
+{
+  "proof": "NODESLIDE-DECK-CI-DETAIL-01",
+  "acceptedBy": "root",
+  "amendments": [
+    {
+      "owner": "src/domains/nodeslide/inspector/InspectorPanel.tsx",
+      "cause": "The actual sticky footer repeats a broad all-checks-passed claim from the same narrower core receipt.",
+      "change": "Show the recorded core version and core scope in all footer outcomes. Existing exact before desktop/phone pixels bind this owner.",
+      "reviewer": "provider_ci_closure_judge"
+    },
+    {
+      "owner": "src/domains/nodeslide/inspector/DeckCiStatus.css",
+      "cause": "Actual doubled inspector text clips counts under the existing single-line/ellipsis styles at both390 and1440. New detail reuses this exact component.",
+      "change": "Allow existing status row/count text to wrap within its width. Preserve the six normal state meanings and ordinary geometry when content fits.",
+      "before": ["E6g-nodeslide-counts-before/390-fail-text200.png", "E6g-nodeslide-counts-before/1440-fail-text200.png"],
+      "actualLabelled3pxBeforeViewedByRoot": true
+    }
+  ],
+  "unrelatedObservedHolds": ["Enlarged inspector navigation and density controls overflow; outside this check detail slice.", "Existing sticky footer height clips enlarged text; recorded separately unless it prevents the named check entry/detail flow.", "Existing notes/pager overlap remains open."],
+  "noNewSourceOwner": true
+}

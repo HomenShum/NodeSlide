@@ -1,0 +1,118 @@
+{
+  "at": "2026-09-05T18:01:40.907799+00:00",
+  "mode": "Builder",
+  "verdict": "APPROVED_SCOPED_NOTES_CONTROLS_SOURCE_AND_OPERATOR_PROOF_WITH_RECORDED_HOLDS",
+  "reOriginalRequest": "Make each individual repo ready for usage and handoff, including visual, responsive and interaction standards; use planner-worker-judge.",
+  "reviewer": "Reused independent nonauthor judge; no candidate edits or browser/suite/runtime reruns in this judgment.",
+  "baseHead": "8177142416b6a6f59df057d0e5ab25df08db93ec",
+  "baseTree": "d3cd10cda45900c5d32e35dfe99c591b1cf0ea1f",
+  "branch": "codex/nodeslide-readiness-follow-on-20260905",
+  "source": [
+    {
+      "path": "src/domains/nodeslide/components/SlideCanvas.tsx",
+      "bytes": 29610,
+      "sha256": "028175b149f251a2bcf094e518f28e68834b9ed942a118e4b8cc449f94a8fe87",
+      "gitBlobSha1": "8b0a2fc1cfd30404b6bc7499732d03e240f39c12"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslide.css",
+      "bytes": 85806,
+      "sha256": "059f3f5bdf23ca38e24e133be5870304049fc1a140334dabbfe337145a980ee7",
+      "gitBlobSha1": "99ba256e35b537668ed8535e31766fc4dd7b0db2"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslideV3.css",
+      "bytes": 174014,
+      "sha256": "5175702b66ddf1f91f0e379c45e3a1d3078accb8aca02bab4345c5132d3618ad",
+      "gitBlobSha1": "4526bb2960078fa4265440d1b1a4a122342b6260"
+    }
+  ],
+  "sourceDigest": "d0897d7e375deed16b4c722810ae21b4f05ff0c8248361e8c7b848903a377394",
+  "freeze": {
+    "path": "E6g_NODESLIDE_NOTES_CONTROLS_FREEZE.json",
+    "sha256": "4948960a7435b3f25018582eb3f5c303fb938f129800fccf94a04dee038a42e7",
+    "artifacts": 151,
+    "artifactBytes": 8878149
+  },
+  "observations": {
+    "sourceAndSavedGeometryChecks": 28,
+    "independentExportAndActionEvidenceChecks": 31,
+    "finalFrozenCustodyChecks": 165,
+    "currentBeforeCells": 10,
+    "currentAfterCells": 11,
+    "recordedNativeSteps": 15,
+    "noteRevisionRounds": 12,
+    "nativeActionCells": 3,
+    "actualExportFiles": 5,
+    "ordinaryRootTestsPassed": 2823,
+    "ordinaryRootTestsSkipped": 7,
+    "ordinaryRootFilesPassed": 316,
+    "ordinaryWorkspaceTestsPassed": 42,
+    "ordinaryCheckExit": 0,
+    "ordinaryCheckSeconds": 150.96899999992456
+  },
+  "causalClosure": {
+    "symptom": "Notes, navigation and zoom occupied the same bottom area. Original320 Next and enlarged390 Next center hits failed; collapsed notes toggles were covered.",
+    "cause": "Absolutely positioned control groups were anchored to the panel including the notes, and zoom retained a competing centering offset.",
+    "change": "One wrapping in-flow control row, unchanged existing control groups, notes after the row; old absolute offsets removed at their owners. Content width and auto/minimum heights prevent enlarged Fit clipping.",
+    "evidence": "Actual current-before geometry and labelled PNGs show the defect. Eleven current-after cells show unobstructed rendered controls, label bounds and row separation with exact source bindings. No reconstructed before screen or altered gate.",
+    "functionalPreservation": "Complete group JSX and the rest of handlers/notes lifecycle match before after grouping. Same slide IDs, count, note keys/save-on-blur and zoom behavior.",
+    "exportRefusal": "Original action report remains FAILED at final PPTX wait because replacement note removed illustrative disclosure. Actual failure page states missing disclosure and blocked export.",
+    "exportRecovery": "Restore original disclosure plus latest note, deck15\u219216 and first-slide14\u219215; actual JSON/PPTX download and parsed slide1 notes preserve exact text. Earlier3 files, other5 slides, elements and sources unchanged.",
+    "normalCheck": "One unchanged ordinary npm run check passed; no retry, timeout raise, new mock or skip."
+  },
+  "directPixelViews": [
+    "E6g-nodeslide-notes-before-01/390-100-open-boundary.png",
+    "E6g-nodeslide-notes-before-01/390-200-open-boundary.png",
+    "E6g-nodeslide-notes-before-01/1440-100-open-boundary.png",
+    "E6g-nodeslide-notes-after-02/390-100-open.png",
+    "E6g-nodeslide-notes-after-02/320-200-open.png",
+    "E6g-nodeslide-notes-after-02/1440-100-open.png",
+    "E6g-nodeslide-notes-export-recovery-01/1440-recovered-export.png"
+  ],
+  "scopeBoundaries": [
+    "Full UI, criterion and dimension grades remain null. This approval is for the stated notes/control layout and recorded isolated operator proof.",
+    "Earlier ordinary Windows NodeBook timeout remains causally unresolved despite this current passing check.",
+    "Existing enlarged header/banner/slide/inspector clipping, textarea vertical-resize/short-height behavior and full native accessibility/device/platform coverage are not closed.",
+    "Twelve note rounds are bounded repetition, not sustained one-minute, multi-user or scale validation. Note input uses Playwright fill; navigation, blur, reverse Tab/Enter and other named actions are real browser events.",
+    "Text200 uses explicit computed-font doubling. Reload restores normal styles, so enlarged reload/OS/browser zoom are not certified.",
+    "Actual JSON and parsed PPTX notes proved; native Office rendering, provider behavior and production/deployment readiness not exercised by this slice.",
+    "After02 desktop inspector was loading; recovery screenshot supplies actual settled inspector but no broader inspector regression matrix.",
+    "First stage Fit failure and hash-matched inverse reconstruction are retained and disclosed. Before stage selector was missing, corrected for after; hidden pan control is excluded.",
+    "Known Vite large-chunk warning is retained. Normal shared CI and portable publication acceptance are later boundaries."
+  ],
+  "reviewerCorrections": "Retained offline guard-reader serialization mismatch and corrected exact show-ref reader; retained initial export report newline-description correction after raw XML confirmed ordinary CRLF. No product change or rerun resulted.",
+  "fraudChecks": {
+    "weakenedTestsOrPolicy": false,
+    "scopeExpansion": false,
+    "falseFullGrade": false,
+    "failedEvidenceErased": false,
+    "runtimeOrSecretAccessByJudge": false
+  },
+  "finalCriterionScores": null,
+  "dimensionScores": null,
+  "readyForBoundedPublicationPreparation": true,
+  "deploymentVerifiedForThisSlice": false,
+  "evidence": [
+    {
+      "path": "E6g-nodeslide-notes-source-independent/source-check.json",
+      "sha256": "8b503ff6c2617cfa810e434fdd24c54a30d534df451823d002ccdb88b5e810fc"
+    },
+    {
+      "path": "E6g-nodeslide-notes-export-independent/report.json",
+      "sha256": "c832d20e8883c923adeb5333e41c47636d8c0552ac2d34347af358c8a69b912a"
+    },
+    {
+      "path": "E6g-nodeslide-notes-final-independent/final-guard.json",
+      "sha256": "72296647470ac7e68b7512addbd48d44227fd6ce4e5eaad7bed871d48f4e5ea2"
+    },
+    {
+      "path": "E6g-nodeslide-notes-check-01/command.json",
+      "sha256": "26ea9bc5769141516c4691251000626ed2cc2e87a9a7ccc7c6c525f2854c7f04"
+    },
+    {
+      "path": "E6g-nodeslide-notes-check-01/normal-check.log",
+      "sha256": "4dd0f39f027c6f592b1bca0c6501622cb5ca535b689b1dfb77942bfa037d61de"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "3 · When it goes wrong",
+  "description": "Three things fail differently — the request is refused, the worker dies, the build breaks — and each has its own recovery. Read this before debugging anything here.",
+  "steps": [
+    {
+      "file": "src/main.tsx",
+      "line": 30,
+      "description": "**Failure 0: no backend.**\n\nA missing or malformed `VITE_CONVEX_URL` renders this panel rather than a blank page. If you see it, run `npx convex dev` — it provisions an anonymous local deployment and writes the variable into `.env.local`."
+    },
+    {
+      "file": "convex/lib/nodeslideValidators.ts",
+      "line": 298,
+      "description": "**Failure 1: the request is refused.**\n\nEvery refusal carries a machine-readable `code` alongside its sentence, so the browser can branch on the code and still have something honest to show a human.\n\nGrep for a code you saw in a `ConvexError` and you land on the exact refusal."
+    },
+    {
+      "file": "src/domains/nodeslide/nodeslideUserError.ts",
+      "line": 3,
+      "description": "**One place decides what a user sees.**\n\nInternal detail does not leak past here. The studio shows the result in a toast *and* an inline `role=\"alert\"`, and — this matters — the typed input is preserved. A failed action never clears the composer."
+    },
+    {
+      "file": "convex/nodeslide.ts",
+      "line": 3348,
+      "description": "**Failure 2: the worker died mid-run.**\n\nAn agent run holds a lease. This mutation finds runs whose `leaseExpiresAt` has passed and fails them honestly, so a crashed action stops spinning in the UI instead of hanging forever.\n\n'Honestly' is the operative word: it marks them failed with a reason rather than quietly deleting them."
+    },
+    {
+      "file": "convex/crons.ts",
+      "line": 7,
+      "description": "**Recovery is scheduled, not hoped for.**\n\nEvery two minutes. That number is the worst case a user waits to be told their run died.\n\nThe other crons here prune expired traces, shadow comparisons and evidence captures — the retention story, on the same schedule mechanism."
+    },
+    {
+      "file": "convex/nodeslideJobs.ts",
+      "line": 738,
+      "description": "**Failure 3: the user wants to try again.**\n\n`retry` and `cancel` operate on the durable job row, so they work after a page reload and after the original action's process is long gone."
+    },
+    {
+      "file": "convex/nodeslideJobRunner.ts",
+      "line": 24,
+      "description": "**Where progress comes from.**\n\nThe runner calls `checkpointInternal` as it goes. Progress only ever moves forward (`Math.max(row.progress, args.progress)`), so a retried step cannot make the bar jump backwards."
+    },
+    {
+      "file": "convex/nodeslideAgentRecovery.test.ts",
+      "line": 18,
+      "description": "**The test that proves recovery.**\n\nIt asserts the streams are actually interrupted, not merely that the row status changed — the failure mode is a run marked failed whose stream is still open."
+    },
+    {
+      "file": "scripts/tests/workspace-build-depth.test.mjs",
+      "line": 46,
+      "description": "**Failure 4: the build, on Windows.**\n\n`npm run build` used to die at the eleventh workspace with `'tsup' is not recognized`, although tsup was installed. It was not a missing tool: each nested `npm run` prepends about 1.4 KB of `.bin` paths to PATH, and a fourth level crossed the ~8,191-character ceiling `cmd.exe` will expand — past which cmd.exe hands the child an empty PATH and *nothing* resolves.\n\nThe header comment above has the full measurement. This test fails if anyone reintroduces the nesting."
+    }
+  ]
+}

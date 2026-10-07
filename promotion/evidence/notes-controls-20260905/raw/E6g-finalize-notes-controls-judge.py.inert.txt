@@ -1,0 +1,91 @@
+from pathlib import Path
+import datetime,hashlib,json,re,subprocess
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=P/'E6g-nodeslide-notes-final-independent';O.mkdir(exist_ok=True)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+load=lambda p:json.loads(p.read_text(encoding='utf-8'))
+def git(*args,input=None):return subprocess.check_output(['git','--no-optional-locks',*args],cwd=R,input=input)
+F=P/'E6g_NODESLIDE_NOTES_CONTROLS_FREEZE.json'
+assert sha(F)=='4948960a7435b3f25018582eb3f5c303fb938f129800fccf94a04dee038a42e7'
+f=load(F);sourcecheck=load(P/'E6g-nodeslide-notes-source-independent/source-check.json');exportcheck=load(P/'E6g-nodeslide-notes-export-independent/report.json')
+checkdir=P/'E6g-nodeslide-notes-check-01';command=load(checkdir/'command.json');log=(checkdir/'normal-check.log').read_text(encoding='utf-8')
+checks=[]
+def check(n,v):checks.append({'name':n,'passed':bool(v)})
+for a in f['artifacts']:
+    p=P/a['path'];check('frozen raw artifact: '+a['path'],p.stat().st_size==a['bytes'] and sha(p)==a['sha256'])
+check('artifact count and byte sum exact',len(f['artifacts'])==151 and sum(a['bytes'] for a in f['artifacts'])==8878149)
+for e in f['source']:
+    p=R/e['path'];check('working and actual Git-filtered source: '+e['path'],p.stat().st_size==e['bytes'] and sha(p)==e['sha256'] and git('hash-object','--path='+e['path'],'--stdin',input=p.read_bytes()).decode().strip()==e['gitBlobSha1'])
+check('source digest exact recorded canonical serialization',hashlib.sha256(json.dumps(f['source'],sort_keys=True,separators=(',',':')).encode()).hexdigest()==f['sourceDigest'])
+check('reviewed exact three-file working diff and unchanged staged index',set(git('diff','--name-only').decode().splitlines())=={s['path'] for s in f['source']} and not git('diff','--cached','--name-only').strip())
+B=P/'E6g-nodeslide-notes-source-before'
+check('HEAD/show-ref/index entries unchanged after normal check',git('rev-parse','HEAD')==(B/'head.bin').read_bytes() and git('show-ref')==(B/'refs.bin').read_bytes() and git('ls-files','--stage','-z')==(B/'index.bin').read_bytes())
+check('HANDOFF remains exact before publication',sha(R/'HANDOFF.md')==sha(B/'HANDOFF.md')==command['source']['HANDOFF.md'])
+check('independent source28 and export31 read checks pass',sourcecheck['passed'] and len(sourcecheck['checks'])==28 and exportcheck['passed'] and len(exportcheck['checks'])==31)
+check('ordinary npm command, exit0 and complete log exact',command['command']==['npm','run','check'] and command['exitCode']==0 and sha(checkdir/'normal-check.log')==command['logSha256'])
+check('ordinary complete lint/typecheck/root test/workspace/build steps observed',all(x in log for x in ['Checked 1074 files','tsc -b && npm run typecheck --workspaces --if-present','Test Files  316 passed (316)','Tests  2823 passed | 7 skipped (2830)','Tests  11 passed (11)','Tests  5 passed (5)','Tests  7 passed (7)','Tests  19 passed (19)','✓ built in 28.50s']))
+check('ordinary check exact three current source bytes',all(command['source'][s['path']]==s['sha256']==sha(R/s['path']) for s in f['source']))
+runtime=P/'E6g-nodeslide-notes-runtime'
+local=load(runtime/'local-loopback-runtime.json');vite=load(runtime/'vite-runtime.json')
+check('owned runtime cleanup reports process exit and port release',local['cleanup']['ownedProcessExited'] and local['cleanup']['portsReleased'] and vite['cleanup']['allRecordedProcessesExited'] and vite['cleanup']['portReleased'])
+check('freeze bytes unchanged through final readback',sha(F)=='4948960a7435b3f25018582eb3f5c303fb938f129800fccf94a04dee038a42e7')
+guard={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'passed':all(x['passed'] for x in checks),'checks':checks,'source':f['source'],'freezeSha256':sha(F),'artifacts':f['artifacts']}
+(O/'final-guard.json').write_text(json.dumps(guard,indent=2)+'\n',encoding='utf-8',newline='\n')
+assert guard['passed'],[x for x in checks if not x['passed']]
+record={
+ 'at':guard['at'],'mode':'Builder','verdict':'APPROVED_SCOPED_NOTES_CONTROLS_SOURCE_AND_OPERATOR_PROOF_WITH_RECORDED_HOLDS',
+ 'reOriginalRequest':'Make each individual repo ready for usage and handoff, including visual, responsive and interaction standards; use planner-worker-judge.',
+ 'reviewer':'Reused independent nonauthor judge; no candidate edits or browser/suite/runtime reruns in this judgment.',
+ 'baseHead':f['baseHead'],'baseTree':f['baseTree'],'branch':f['branch'],'source':f['source'],'sourceDigest':f['sourceDigest'],
+ 'freeze':{'path':F.name,'sha256':sha(F),'artifacts':151,'artifactBytes':8878149},
+ 'observations':{'sourceAndSavedGeometryChecks':28,'independentExportAndActionEvidenceChecks':31,'finalFrozenCustodyChecks':len(checks),'currentBeforeCells':10,'currentAfterCells':11,'recordedNativeSteps':15,'noteRevisionRounds':12,'nativeActionCells':3,'actualExportFiles':5,'ordinaryRootTestsPassed':2823,'ordinaryRootTestsSkipped':7,'ordinaryRootFilesPassed':316,'ordinaryWorkspaceTestsPassed':42,'ordinaryCheckExit':0,'ordinaryCheckSeconds':command['elapsedSeconds']},
+ 'causalClosure':{
+  'symptom':'Notes, navigation and zoom occupied the same bottom area. Original320 Next and enlarged390 Next center hits failed; collapsed notes toggles were covered.',
+  'cause':'Absolutely positioned control groups were anchored to the panel including the notes, and zoom retained a competing centering offset.',
+  'change':'One wrapping in-flow control row, unchanged existing control groups, notes after the row; old absolute offsets removed at their owners. Content width and auto/minimum heights prevent enlarged Fit clipping.',
+  'evidence':'Actual current-before geometry and labelled PNGs show the defect. Eleven current-after cells show unobstructed rendered controls, label bounds and row separation with exact source bindings. No reconstructed before screen or altered gate.',
+  'functionalPreservation':'Complete group JSX and the rest of handlers/notes lifecycle match before after grouping. Same slide IDs, count, note keys/save-on-blur and zoom behavior.',
+  'exportRefusal':'Original action report remains FAILED at final PPTX wait because replacement note removed illustrative disclosure. Actual failure page states missing disclosure and blocked export.',
+  'exportRecovery':'Restore original disclosure plus latest note, deck15→16 and first-slide14→15; actual JSON/PPTX download and parsed slide1 notes preserve exact text. Earlier3 files, other5 slides, elements and sources unchanged.',
+  'normalCheck':'One unchanged ordinary npm run check passed; no retry, timeout raise, new mock or skip.'
+ },
+ 'directPixelViews':['E6g-nodeslide-notes-before-01/390-100-open-boundary.png','E6g-nodeslide-notes-before-01/390-200-open-boundary.png','E6g-nodeslide-notes-before-01/1440-100-open-boundary.png','E6g-nodeslide-notes-after-02/390-100-open.png','E6g-nodeslide-notes-after-02/320-200-open.png','E6g-nodeslide-notes-after-02/1440-100-open.png','E6g-nodeslide-notes-export-recovery-01/1440-recovered-export.png'],
+ 'scopeBoundaries':[
+  'Full UI, criterion and dimension grades remain null. This approval is for the stated notes/control layout and recorded isolated operator proof.',
+  'Earlier ordinary Windows NodeBook timeout remains causally unresolved despite this current passing check.',
+  'Existing enlarged header/banner/slide/inspector clipping, textarea vertical-resize/short-height behavior and full native accessibility/device/platform coverage are not closed.',
+  'Twelve note rounds are bounded repetition, not sustained one-minute, multi-user or scale validation. Note input uses Playwright fill; navigation, blur, reverse Tab/Enter and other named actions are real browser events.',
+  'Text200 uses explicit computed-font doubling. Reload restores normal styles, so enlarged reload/OS/browser zoom are not certified.',
+  'Actual JSON and parsed PPTX notes proved; native Office rendering, provider behavior and production/deployment readiness not exercised by this slice.',
+  'After02 desktop inspector was loading; recovery screenshot supplies actual settled inspector but no broader inspector regression matrix.',
+  'First stage Fit failure and hash-matched inverse reconstruction are retained and disclosed. Before stage selector was missing, corrected for after; hidden pan control is excluded.',
+  'Known Vite large-chunk warning is retained. Normal shared CI and portable publication acceptance are later boundaries.'
+ ],
+ 'reviewerCorrections':'Retained offline guard-reader serialization mismatch and corrected exact show-ref reader; retained initial export report newline-description correction after raw XML confirmed ordinary CRLF. No product change or rerun resulted.',
+ 'fraudChecks':{'weakenedTestsOrPolicy':False,'scopeExpansion':False,'falseFullGrade':False,'failedEvidenceErased':False,'runtimeOrSecretAccessByJudge':False},
+ 'finalCriterionScores':None,'dimensionScores':None,'readyForBoundedPublicationPreparation':True,'deploymentVerifiedForThisSlice':False,
+ 'evidence':[{'path':'E6g-nodeslide-notes-source-independent/source-check.json','sha256':sha(P/'E6g-nodeslide-notes-source-independent/source-check.json')},{'path':'E6g-nodeslide-notes-export-independent/report.json','sha256':sha(P/'E6g-nodeslide-notes-export-independent/report.json')},{'path':'E6g-nodeslide-notes-final-independent/final-guard.json','sha256':sha(O/'final-guard.json')},{'path':'E6g-nodeslide-notes-check-01/command.json','sha256':sha(checkdir/'command.json')},{'path':'E6g-nodeslide-notes-check-01/normal-check.log','sha256':sha(checkdir/'normal-check.log')}]
+}
+j=P/'E6g_NODESLIDE_NOTES_CONTROLS_FINAL_JUDGE.json';j.write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8',newline='\n')
+m=P/'E6g_NODESLIDE_NOTES_CONTROLS_FINAL_JUDGE.md';m.write_text('''# Notes and canvas controls: final source judgment
+
+**APPROVED for the scoped layout repair and recorded operator proof, with the holds below.** Mode: Builder.
+
+**Re your request:** make every repository ready for usage and handoff, including responsive visual and interaction standards, using planner-worker-judge. A presenter can now use the reviewed controls without covering the note editor in the captured states. This approves the bounded three-owner repair; full repository grades remain open.
+
+The candidate is based on merged `8177142416b6a6f59df057d0e5ab25df08db93ec`. Its three source hashes/Git-filtered blobs and all **151 artifacts / 8,878,149 bytes** match the frozen packet. HEAD, refs, index entries and prior HANDOFF remain unchanged. Source digest: `d0897d7e375deed16b4c722810ae21b4f05ff0c8248361e8c7b848903a377394`.
+
+The repair removes the actual cause: navigation and zoom were positioned over notes at the panel bottom. A normal-flow wrapping row now owns both unchanged control groups. Notes follow it, and existing shrinking viewport/auto rows reserve their space. The extra Fit adjustment replaces measured fixed-height clipping with content height and the existing minimum sizes. Complete JSX groups, handlers, note keys/save-on-blur, slide count and zoom behavior are preserved. No dependency, state, provider or export-policy change was introduced.
+
+Independent review passes **28 source/saved-geometry checks and 31 export/action-evidence checks**, followed by exact final custody verification. Ten genuine current-before states retain covered notes and failed Next/toggle hits. Eleven after states retain rendered target hits, readable label bounds, no page overflow and separated notes/control groups. I directly viewed three current before PNGs, three after PNGs and the actual settled recovery screenshot. I did not rerun the browser or suite.
+
+The recorded browser proof contains 12 consecutive note revisions and three zoom/toggle/reload/navigation bundles across desktop, phone and enlarged320. Exact multiline Unicode text survives blur→Next→Previous, reverse Tab/Enter and reload. The original script remains **FAILED** at the final PPTX wait: its replacement note removed the required illustrative disclosure, and the actual page correctly refused export. Recovery restored the original disclosure plus latest note, advancing deck15→16, and downloaded the current JSON/PPTX. Both ZIPs pass CRC and all40 XML/relationship parts parse; the actual first slide's notes body contains the exact note before appended provenance. All three earlier files, other five slides, elements and sources remain unchanged. No native Office rendering is claimed.
+
+The single ordinary `npm run check` **passed in150.969s**: lint, app/workspace typechecks, 316 root test files / 2,823 tests with seven existing skips, 42 workspace tests, package builds and Vite. The original Windows NodeBook timeout is still unexplained; a passing run is not a causal repair. Large-chunk build advisories remain in the raw log. Owned runtime receipts record process exit and port release.
+
+Remaining limits are explicit: enlarged header/slide/inspector clipping, textarea resize/short-height behavior, sustained or multi-user load, accessibility/platform/device/browser zoom, provider/production and full grades are unproved. Text200 is computed-font doubling; reload resets it. The bounded 12-round test is not a one-minute endurance test. The loading inspector in after02 cannot certify settled parity; the later recovery PNG supplies settled content only. The first Fit failure, missing original stage selector, hash-matched reconstructed stage1 CSS and offline reviewer reader corrections remain preserved. No erased failure or weakened gate was found.
+
+The source is ready for bounded publication preparation and later normal shared CI. [Structured verdict](E6g_NODESLIDE_NOTES_CONTROLS_FINAL_JUDGE.json), [frozen source/artifacts](E6g_NODESLIDE_NOTES_CONTROLS_FREEZE.json), [final byte guard](E6g-nodeslide-notes-final-independent/final-guard.json), [independent file parsing](E6g-nodeslide-notes-export-independent/report.json), [ordinary command](E6g-nodeslide-notes-check-01/command.json), [recovery PNG](E6g-nodeslide-notes-export-recovery-01/1440-recovered-export.png).
+''',encoding='utf-8',newline='\n')
+print(json.dumps({'verdict':record['verdict'],'jsonSha256':sha(j),'mdSha256':sha(m),'finalGuardChecks':len(checks),'sourceGuardClosed':True}))

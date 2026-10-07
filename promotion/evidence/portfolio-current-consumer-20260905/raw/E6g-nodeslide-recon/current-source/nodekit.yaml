@@ -1,0 +1,67 @@
+schemaVersion: nodekit.repo/v1
+repository: HomenShum/NodeSlide
+lifecycle: preview
+support: active
+role: domain-application
+commandProfile: application
+
+canonicalFor:
+  - nodeslide.deck
+  - nodeslide.deck-patch
+  - nodeslide.presentation-sync
+  # Two-way Google Slides sync. This was undeclared here while the code lived only in the
+  # development monorepo, which is why a board review concluded the capability did not exist.
+  # It is a real integration, not a label: convex/nodeslideGoogleAuth.ts runs the OAuth
+  # authorization-code + PKCE flow against accounts.google.com and oauth2.googleapis.com under
+  # the single narrow scope https://www.googleapis.com/auth/drive.file, and
+  # src/domains/nodeslide/integrations/googleSlides/adapter.ts calls
+  # https://slides.googleapis.com/v1/presentations to read and batchUpdate the remote deck.
+  # Every remote write is planned, reviewed, executed, then read back and verified against the
+  # stored three-way baseline; conflicts stop before any mutation.
+  # NodeKit now registers nodeslide.presentation-sync to NodeSlide, so the manifest carries the
+  # canonical claim and its concrete contract declaration instead of leaving shipped code
+  # unclassified.
+
+consumes:
+  - nodeplatform.repo-contract
+  - nodeplatform.environment
+  - nodeagent.agent-run
+  - nodeagent.policy-context
+  - nodeagent.proposal-review
+  - nodeagent.trace-workpaper
+  - nodetrace.trace-ui-store
+  - proofloop.certification
+  - agentic-ui-qa.flight-recorder
+
+commands:
+  dev: { script: dev, mode: service }
+  demo: { script: demo, mode: service }
+  doctor: { script: doctor, mode: finite }
+  check: { script: check, mode: finite }
+  proof: { script: proof, mode: finite }
+
+noKey:
+  status: partial
+  command: npm run demo
+  externalAccountsRequired: 1
+  disclosure: Model keys are optional, but the full authoritative workflow still requires a Convex deployment.
+
+environment:
+  contractVersion: nodeplatform.env/v1
+  status: migration-planned
+
+proof:
+  command: npm run proof
+  receiptSchema: nodeslide.conformance/v1
+
+contractDeclarations:
+  - concept: nodeslide.deck-patch
+    signature: nodeslide-patch-operation
+    path: shared/nodeslide.ts
+    mode: canonical
+  - concept: nodeslide.presentation-sync
+    signature: nodeslide-presentation-sync-contract
+    path: src/domains/nodeslide/integrations/syncContracts.ts
+    mode: canonical
+
+architectureExceptions: []

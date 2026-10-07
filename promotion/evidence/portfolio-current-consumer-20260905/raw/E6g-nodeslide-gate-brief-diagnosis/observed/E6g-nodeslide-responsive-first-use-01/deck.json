@@ -1,0 +1,2805 @@
+{
+  "deck": {
+    "brief": {
+      "audience": "Decision-makers described in the brief",
+      "prompt": "Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.",
+      "purpose": "Create an editable, reviewable presentation from this idea",
+      "successCriteria": [
+        "Honor explicit slide-count and presentation constraints in the brief",
+        "Use only claims and artifact types supported by the supplied brief and evidence",
+        "Validation passes before presentation, export, or publication"
+      ]
+    },
+    "createdAt": 1788607528040,
+    "id": "deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4",
+    "projectId": "project_nodeslide_mtoaqp9d_4eafe7f4bf0f3d6da737d71ef1706ee9",
+    "schemaVersion": "nodeslide.slidelang/v1",
+    "shareSlug": "share-af3dedfe0c080c7671b62d8cb4252aa8c534",
+    "slideOrder": [
+      "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "slide_3d0d1cd479afab8466feef118761c736",
+      "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c"
+    ],
+    "status": "ready",
+    "theme": {
+      "colors": {
+        "accent": "#B44A2D",
+        "accentSoft": "#F2DED3",
+        "border": "#DED7CC",
+        "canvas": "#F7F4ED",
+        "ink": "#26221D",
+        "insight": "#E5E9D6",
+        "insightInk": "#34452C",
+        "muted": "#756B61",
+        "trace": "#7566A8"
+      },
+      "defaultRadius": 18,
+      "id": "editorial-signal",
+      "mode": "light",
+      "name": "Editorial Signal",
+      "spacingUnit": 8,
+      "typography": {
+        "body": "Geist Variable",
+        "data": "JetBrains Mono Variable",
+        "display": "Fraunces Variable"
+      }
+    },
+    "title": "NodeSlide local handoff — illustrative sourcing pilot",
+    "toolchainVersion": "local-slidelang-adapter/1.1.0",
+    "updatedAt": 1788607888038,
+    "version": 3
+  },
+  "slides": [
+    {
+      "archetype": "statement",
+      "background": "#F7F4ED",
+      "deckId": "deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4",
+      "elementOrder": [
+        "element_3bd938337190117e0bd4b0fe8cc1c66f",
+        "element_100280e39c028ed30ff6559b6b09a6dc",
+        "element_ae7fa060a8b1db5139c185efbf63da59",
+        "element_d3ccdd2123138fae0ad275b42692a3b6",
+        "element_f46031658fc6ff93d20ca49d4573766b",
+        "element_7286a3432e501a159a10e4a75b859b09",
+        "element_9aa56f6605f04f78fcd34266b5a904f4",
+        "element_75fbb74d3b6d1a5262dc8b092897846a",
+        "element_82a649a8b4417c9295938bea3b85e5a9",
+        "element_d04d3d0e6c5e1e1b8333c01a229aa66c",
+        "element_ff89f684bae6c48f7aee20178913076c"
+      ],
+      "id": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "notes": "Illustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text.\nDecision: prototype after checking the budget. 中文交接 — no external claims.",
+      "section": "Opening / 01",
+      "title": "Create a six-slide decision review for a fictional sourcing pilot",
+      "version": 2
+    },
+    {
+      "archetype": "diagram-dominant",
+      "background": "#F7F4ED",
+      "deckId": "deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4",
+      "elementOrder": [
+        "element_3bee2c00c1d407385153bdab1931b852",
+        "element_56720175478d4d35a5a426f6e773c33b",
+        "element_998e62e671e5da309ce9cf950c2aa95d",
+        "element_ce5c2c012a3a5c4c2940504f48e4fc02",
+        "element_8bd567afcb3fac2d043be0e7d01993ef",
+        "element_a3fc2da0461cb1fe719b1c3e15ddc434",
+        "element_5249c86e59cff5447b0cb6e1123ce57b",
+        "element_a302e122c17500ce387181a64a87878f",
+        "element_fb19912f0f857d0de8b946117546bb57",
+        "element_fa1ca9c397de5f0af93e04f6d2ae2a93",
+        "element_5a037912fad8e736df7543d10f7b1b40",
+        "element_4652da30dca5ae0176bb93bdb34efa68",
+        "element_a55caee39d83853e75643d57afe3d908",
+        "element_bc134b3994c7fe1bff0a188488cf953c",
+        "element_46a962e22a80c6b50cf5ded9923ce389",
+        "element_edb524f50cbb01cf14ebdbe2758d51fd"
+      ],
+      "id": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "notes": "Narrative role: Context / 02. Composition grammar: process-canvas. Keep the spoken transition focused on \"The cost of waiting is usually hidden in repeated work.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Context / 02",
+      "title": "The moment to solve",
+      "version": 1
+    },
+    {
+      "archetype": "comparison",
+      "background": "#F7F4ED",
+      "deckId": "deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4",
+      "elementOrder": [
+        "element_7b17631af3f6d6ecca6017e044dbf54a",
+        "element_a2501f534fe28934d60d619c1a51d447",
+        "element_97d5932ac6c1375ffd540822fc22c2aa",
+        "element_b3111d35736cb652247963f9ad7e8394",
+        "element_7fe15fb13b2af4ac45be3a2a89cc9557",
+        "element_75ffabcd081ee461faffcc194478fb63",
+        "element_9774683aadd77ade74400439d5fb6373",
+        "element_ed759f9e083bd57e118bad53ca0946de",
+        "element_50dd7541cc7a76b4b4b7308deae27df6",
+        "element_cd258671c60f4f4c940924ac9017275e",
+        "element_9c095d169a4fb347629f2a8047a4524a",
+        "element_d478efaf9e1b0246273728a8f13f0a43",
+        "element_0522aeb592512fd75b905ec8581234b7"
+      ],
+      "id": "slide_3d0d1cd479afab8466feef118761c736",
+      "notes": "Narrative role: Insight / 03. Composition grammar: scene-stage. Keep the spoken transition focused on \"A better outcome starts with a sharper point of view.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Insight / 03",
+      "title": "The decisive insight",
+      "version": 1
+    },
+    {
+      "archetype": "split",
+      "background": "#F7F4ED",
+      "deckId": "deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4",
+      "elementOrder": [
+        "element_fa3c8b18e9f6a2e239e7164989ed2e44",
+        "element_4f01ba21da6a905e197246bf744eed7f",
+        "element_4cb25e14d22b2784d0b4c18bf693840d",
+        "element_4c2ec43b87c49458b4dbc2a95e232004",
+        "element_add3969b2450946b34e351d17ada7ee5",
+        "element_dcd36ed2a68529de83b10be0bb80e18b",
+        "element_94f4340538fe759c8aa7eaabc07dcdc0",
+        "element_a500eaec294750e6511e93446d50022e",
+        "element_dc8990f8f09e8543ffcf3a3543b33fdf",
+        "element_5529b93c0150291ce3b5dac3d3ad8563",
+        "element_f67e5657ceb0d46c8af9a479701a6e34",
+        "element_b7359a1c37d7f6ad1579de37fc2b57df",
+        "element_8e02599aadda444b918e2970e2047559"
+      ],
+      "id": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "notes": "Narrative role: Approach / 04. Composition grammar: scene-stage. Keep the spoken transition focused on \"Turn the idea into a sequence people can understand and own.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Approach / 04",
+      "title": "How the approach works",
+      "version": 1
+    },
+    {
+      "archetype": "comparison",
+      "background": "#F7F4ED",
+      "deckId": "deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4",
+      "elementOrder": [
+        "element_08148105e79faf6190f174f74b4cb22e",
+        "element_3d8faa149748262b03e3ad21a5af8f2a",
+        "element_48abb187bcfbd20092f677d070b66edc",
+        "element_d4d91142af1744bccfcee0d9c0c573bb",
+        "element_4cdd0517ab2dc50187df5be97445a4a2",
+        "element_f5feaeefc96bc94f76a00a058e79f817",
+        "element_47ba9cf2d22c03ec4fca366dca670b48",
+        "element_d6438d926f922cac02512592e2827f2b",
+        "element_ad09cff7bb5ade35bfa9f6ba4bc235f7",
+        "element_3333e6a8df561bf0f9d081ce885a6a9e",
+        "element_3dffa0e125ea8a82533922e8d7ef6861",
+        "element_eb475dfdc98ba02e5ce164a003b21b1b",
+        "element_3c5fa9a9dc4b36231fb0bc76e80c2a39"
+      ],
+      "id": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "notes": "Narrative role: Evidence / 05. Composition grammar: scene-stage. Keep the spoken transition focused on \"Define proof before asking for commitment.\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Evidence / 05",
+      "title": "What success looks like",
+      "version": 1
+    },
+    {
+      "archetype": "statement",
+      "background": "#F7F4ED",
+      "deckId": "deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4",
+      "elementOrder": [
+        "element_71c4e3286a24f25917f50f81ae5840df",
+        "element_3b09c597187f1de74fb0df642255eab0",
+        "element_b1d3ed697393488a705cb772ea9b47d5",
+        "element_48a72e1b6d156619d44f9ca3fa3d4b8c",
+        "element_39790e5987345feb43a41dbfd286504e",
+        "element_87bfcb51afc6f745166702e62707ff5c",
+        "element_6e14cb1a77798669748777c24fc44a1f",
+        "element_67d7c231ef9fddee89d88f081d35d9e7",
+        "element_5aeb8bbe21918c0217b819a5ffba8ed0",
+        "element_4f81cdad99d291ed8df703af04cae6ee",
+        "element_60c2c07ef17403a70177616525207250",
+        "element_faac9b36634dd099bde425e8c0e955a2",
+        "element_57fa192ef450d137da1532af696b28c4",
+        "element_dc8f8bc6501d546acfef552fa91e8160",
+        "element_6554ad0804bebdcf4daa761e259571fc",
+        "element_cf20e71f3523fe11575c38ab41b9a1b0"
+      ],
+      "id": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "notes": "Narrative role: Close / 07. Composition grammar: evidence-dossier. Keep the spoken transition focused on \"Create an editable, reviewable presentation from this idea\"\n\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.",
+      "section": "Close / 07",
+      "title": "The decision",
+      "version": 1
+    }
+  ],
+  "elements": [
+    {
+      "bbox": {
+        "height": 0.3627,
+        "width": 0.86,
+        "x": 0.07,
+        "y": 0.3187
+      },
+      "content": "Create an editable, reviewable presentation from this idea",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3bd938337190117e0bd4b0fe8cc1c66f",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "title",
+      "rotation": 0,
+      "slideId": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 64,
+        "fontWeight": 620,
+        "letterSpacing": -1.2,
+        "lineHeight": 1.02
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.006,
+        "width": 0.12,
+        "x": 0.81,
+        "y": 0.7013
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_100280e39c028ed30ff6559b6b09a6dc",
+      "kind": "shape",
+      "locked": true,
+      "name": "Accent underline",
+      "role": "decoration",
+      "rotation": 0,
+      "slideId": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.07,
+        "width": 0.4,
+        "x": 0.53,
+        "y": 0.06
+      },
+      "content": "OPENING / 01",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ae7fa060a8b1db5139c185efbf63da59",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story",
+      "bbox": {
+        "height": 0.015,
+        "width": 0.015,
+        "x": 0.295,
+        "y": 0.066
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d3ccdd2123138fae0ad275b42692a3b6",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.597,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story",
+      "bbox": {
+        "height": 0.011,
+        "width": 0.011,
+        "x": 0.254,
+        "y": 0.112
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_f46031658fc6ff93d20ca49d4573766b",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.489,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story",
+      "bbox": {
+        "height": 0.009,
+        "width": 0.009,
+        "x": 0.221,
+        "y": 0.071
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_7286a3432e501a159a10e4a75b859b09",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.382,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story",
+      "bbox": {
+        "height": 0.0884,
+        "width": 0.0884,
+        "x": 0.1119,
+        "y": 0.0667
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_9aa56f6605f04f78fcd34266b5a904f4",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.247,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story",
+      "bbox": {
+        "height": 0.0548,
+        "width": 0.0548,
+        "x": 0.1209,
+        "y": 0.0913
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_75fbb74d3b6d1a5262dc8b092897846a",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.337,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story",
+      "bbox": {
+        "height": 0.0353,
+        "width": 0.0353,
+        "x": 0.1187,
+        "y": 0.113
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_82a649a8b4417c9295938bea3b85e5a9",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_core",
+      "rotation": 0,
+      "slideId": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.34,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.21,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d04d3d0e6c5e1e1b8333c01a229aa66c",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.06,
+        "y": 0.92
+      },
+      "content": "01",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ff89f684bae6c48f7aee20178913076c",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.07,
+        "width": 0.72,
+        "x": 0.14,
+        "y": 0.075
+      },
+      "content": "CONTEXT / 02",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3bee2c00c1d407385153bdab1931b852",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3,
+        "textAlign": "center"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.24445055570833712,
+        "width": 0.42,
+        "x": 0.08,
+        "y": 0.15
+      },
+      "content": "The cost of waiting is usually hidden in repeated work.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_56720175478d4d35a5a426f6e773c33b",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 32,
+        "fontWeight": 600,
+        "lineHeight": 1.1,
+        "textAlign": "center"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_783173ead872aed35db421d0065831d7",
+        "from": "friction",
+        "graphKind": "process",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "consequence"
+      },
+      "bbox": {
+        "height": 0.05,
+        "width": 0.02,
+        "x": 0.24,
+        "y": 0.48
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_998e62e671e5da309ce9cf950c2aa95d",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge",
+      "role": "diagram_edge",
+      "rotation": 90,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [
+        "source_a481aeee6d24a6dc939af76ab92f3cf3"
+      ],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_783173ead872aed35db421d0065831d7",
+        "from": "consequence",
+        "graphKind": "process",
+        "role": "graph-edge",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1",
+        "to": "urgency"
+      },
+      "bbox": {
+        "height": 0.05,
+        "width": 0.02,
+        "x": 0.24,
+        "y": 0.63
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ce5c2c012a3a5c4c2940504f48e4fc02",
+      "kind": "connector",
+      "locked": false,
+      "name": "Diagram edge",
+      "role": "diagram_edge",
+      "rotation": 90,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [
+        "source_a481aeee6d24a6dc939af76ab92f3cf3"
+      ],
+      "style": {
+        "color": "#7566A8",
+        "strokeWidth": 2
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_783173ead872aed35db421d0065831d7",
+        "graphKind": "process",
+        "nodeId": "friction",
+        "nodeKind": "step",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.1,
+        "width": 0.34,
+        "x": 0.08,
+        "y": 0.38
+      },
+      "content": "Friction",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_8bd567afcb3fac2d043be0e7d01993ef",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: Friction",
+      "role": "diagram_step",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [
+        "source_a481aeee6d24a6dc939af76ab92f3cf3"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_783173ead872aed35db421d0065831d7",
+        "graphKind": "process",
+        "nodeId": "consequence",
+        "nodeKind": "step",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.1,
+        "width": 0.34,
+        "x": 0.08,
+        "y": 0.53
+      },
+      "content": "Consequence",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a3fc2da0461cb1fe719b1c3e15ddc434",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: Consequence",
+      "role": "diagram_step",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [
+        "source_a481aeee6d24a6dc939af76ab92f3cf3"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#F2DED3",
+        "fontFamily": "Geist Variable",
+        "fontSize": 13,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "artifactBinding": {
+        "artifactId": "artifact_graph_783173ead872aed35db421d0065831d7",
+        "graphKind": "process",
+        "nodeId": "urgency",
+        "nodeKind": "milestone",
+        "role": "graph-node",
+        "schemaVersion": "nodeslide.production-artifact-binding/v1"
+      },
+      "bbox": {
+        "height": 0.1,
+        "width": 0.34,
+        "x": 0.08,
+        "y": 0.6799999999999999
+      },
+      "content": "Decision window",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_5249c86e59cff5447b0cb6e1123ce57b",
+      "kind": "shape",
+      "locked": false,
+      "name": "Diagram node: Decision window",
+      "role": "diagram_milestone",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [
+        "source_a481aeee6d24a6dc939af76ab92f3cf3"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fill": "#E5E9D6",
+        "fontFamily": "Geist Variable",
+        "fontSize": 13,
+        "fontWeight": 650,
+        "lineHeight": 1.15,
+        "padding": 8,
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1,
+        "textAlign": "center",
+        "verticalAlign": "middle"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.24,
+        "width": 0.38,
+        "x": 0.52,
+        "y": 0.4
+      },
+      "content": "Frame the current reality for Decision-makers described in the brief: what is fragmented today, why it matters now, and where momentum is being lost.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a302e122c17500ce387181a64a87878f",
+      "kind": "text",
+      "locked": false,
+      "name": "Body copy",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 430,
+        "lineHeight": 1.35
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story",
+      "bbox": {
+        "height": 0.015,
+        "width": 0.015,
+        "x": 0.69,
+        "y": 0.066
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_fb19912f0f857d0de8b946117546bb57",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.514,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story",
+      "bbox": {
+        "height": 0.011,
+        "width": 0.011,
+        "x": 0.735,
+        "y": 0.112
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_fa1ca9c397de5f0af93e04f6d2ae2a93",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.421,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story",
+      "bbox": {
+        "height": 0.009,
+        "width": 0.009,
+        "x": 0.77,
+        "y": 0.071
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_5a037912fad8e736df7543d10f7b1b40",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.329,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story",
+      "bbox": {
+        "height": 0.0967,
+        "width": 0.0967,
+        "x": 0.7963,
+        "y": 0.0633
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_4652da30dca5ae0176bb93bdb34efa68",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.293,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story",
+      "bbox": {
+        "height": 0.0599,
+        "width": 0.0599,
+        "x": 0.8227,
+        "y": 0.0897
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a55caee39d83853e75643d57afe3d908",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.393,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story",
+      "bbox": {
+        "height": 0.0387,
+        "width": 0.0387,
+        "x": 0.846,
+        "y": 0.113
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_bc134b3994c7fe1bff0a188488cf953c",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_core",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.43,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.56,
+        "x": 0.22,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_46a962e22a80c6b50cf5ded9923ce389",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1,
+        "textAlign": "center"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "02",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_edb524f50cbb01cf14ebdbe2758d51fd",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "the trace begins to converge; dominant approach scene",
+      "bbox": {
+        "height": 0.44,
+        "width": 0.42,
+        "x": 0.06,
+        "y": 0.28
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_7b17631af3f6d6ecca6017e044dbf54a",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene field · the trace begins to converge",
+      "role": "story_scene_field",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.22,
+        "radius": 18
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "bbox": {
+        "height": 0.051,
+        "width": 0.0231,
+        "x": 0.4165,
+        "y": 0.3844
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a2501f534fe28934d60d619c1a51d447",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.43,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "bbox": {
+        "height": 0.0374,
+        "width": 0.017,
+        "x": 0.3532,
+        "y": 0.5408
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_97d5932ac6c1375ffd540822fc22c2aa",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.353,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "bbox": {
+        "height": 0.0306,
+        "width": 0.0139,
+        "x": 0.3023,
+        "y": 0.4014
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b3111d35736cb652247963f9ad7e8394",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.275,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "bbox": {
+        "height": 0.357,
+        "width": 0.1619,
+        "x": 0.1189,
+        "y": 0.364
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_7fe15fb13b2af4ac45be3a2a89cc9557",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.34,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "bbox": {
+        "height": 0.2213,
+        "width": 0.1004,
+        "x": 0.1372,
+        "y": 0.4592
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_75ffabcd081ee461faffcc194478fb63",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.45,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story",
+      "bbox": {
+        "height": 0.1428,
+        "width": 0.0648,
+        "x": 0.1343,
+        "y": 0.5442
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_9774683aadd77ade74400439d5fb6373",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_core",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.62,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.07,
+        "width": 0.3,
+        "x": 0.64,
+        "y": 0.065
+      },
+      "content": "INSIGHT / 03",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ed759f9e083bd57e118bad53ca0946de",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.3033,
+        "width": 0.4,
+        "x": 0.54,
+        "y": 0.18
+      },
+      "content": "A better outcome starts with a sharper point of view.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_50dd7541cc7a76b4b4b7308deae27df6",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 35,
+        "fontWeight": 650,
+        "letterSpacing": -0.5,
+        "lineHeight": 1.04
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.23,
+        "width": 0.4,
+        "x": 0.54,
+        "y": 0.5183
+      },
+      "content": "Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decis…",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_cd258671c60f4f4c940924ac9017275e",
+      "kind": "text",
+      "locked": false,
+      "name": "Supporting context",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 450,
+        "lineHeight": 1.38
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.12,
+        "width": 0.4,
+        "x": 0.54,
+        "y": 0.77
+      },
+      "content": "Honor explicit slide-count and presentation constraints in the brief",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_9c095d169a4fb347629f2a8047a4524a",
+      "kind": "text",
+      "locked": false,
+      "name": "Decisive point",
+      "role": "takeaway",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [
+        "source_a481aeee6d24a6dc939af76ab92f3cf3"
+      ],
+      "style": {
+        "color": "#34452C",
+        "fill": "#E5E9D6",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 650,
+        "lineHeight": 1.25,
+        "padding": 12,
+        "radius": 18
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.21,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d478efaf9e1b0246273728a8f13f0a43",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.06,
+        "y": 0.92
+      },
+      "content": "03",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_0522aeb592512fd75b905ec8581234b7",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_3d0d1cd479afab8466feef118761c736",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "one coherent signal is revealed; dominant crossing scene",
+      "bbox": {
+        "height": 0.52,
+        "width": 0.46,
+        "x": 0.06,
+        "y": 0.23
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_fa3c8b18e9f6a2e239e7164989ed2e44",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene field · one coherent signal is revealed",
+      "role": "story_scene_field",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.22,
+        "radius": 18
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story",
+      "bbox": {
+        "height": 0.063,
+        "width": 0.0256,
+        "x": 0.1021,
+        "y": 0.3472
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_4f01ba21da6a905e197246bf744eed7f",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.347,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story",
+      "bbox": {
+        "height": 0.0462,
+        "width": 0.0188,
+        "x": 0.179,
+        "y": 0.5404
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_4cb25e14d22b2784d0b4c18bf693840d",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.284,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story",
+      "bbox": {
+        "height": 0.0378,
+        "width": 0.0154,
+        "x": 0.2387,
+        "y": 0.3682
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_4c2ec43b87c49458b4dbc2a95e232004",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.222,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story",
+      "bbox": {
+        "height": 0.4763,
+        "width": 0.1937,
+        "x": 0.2724,
+        "y": 0.3081
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_add3969b2450946b34e351d17ada7ee5",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.387,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story",
+      "bbox": {
+        "height": 0.2953,
+        "width": 0.1201,
+        "x": 0.323,
+        "y": 0.4325
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_dcd36ed2a68529de83b10be0bb80e18b",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.507,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story",
+      "bbox": {
+        "height": 0.1903,
+        "width": 0.0774,
+        "x": 0.3686,
+        "y": 0.5446
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_94f4340538fe759c8aa7eaabc07dcdc0",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_core",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.81,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.07,
+        "width": 0.3,
+        "x": 0.6,
+        "y": 0.065
+      },
+      "content": "APPROACH / 04",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_a500eaec294750e6511e93446d50022e",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.3274,
+        "width": 0.34,
+        "x": 0.6,
+        "y": 0.18
+      },
+      "content": "Turn the idea into a sequence people can understand and own.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_dc8990f8f09e8543ffcf3a3543b33fdf",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 34,
+        "fontWeight": 650,
+        "letterSpacing": -0.5,
+        "lineHeight": 1.04
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2076,
+        "width": 0.34,
+        "x": 0.6,
+        "y": 0.5424
+      },
+      "content": "Connect intent, action, and feedback in one visible operating path so the audience can see both the destination and the mechanics.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_5529b93c0150291ce3b5dac3d3ad8563",
+      "kind": "text",
+      "locked": false,
+      "name": "Supporting context",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 450,
+        "lineHeight": 1.38
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.11,
+        "width": 0.34,
+        "x": 0.6,
+        "y": 0.77
+      },
+      "content": "Align on intent",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_f67e5657ceb0d46c8af9a479701a6e34",
+      "kind": "text",
+      "locked": false,
+      "name": "Decisive point",
+      "role": "takeaway",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [
+        "source_a481aeee6d24a6dc939af76ab92f3cf3"
+      ],
+      "style": {
+        "color": "#34452C",
+        "fill": "#E5E9D6",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 650,
+        "lineHeight": 1.25,
+        "padding": 12,
+        "radius": 18
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b7359a1c37d7f6ad1579de37fc2b57df",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "04",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_8e02599aadda444b918e2970e2047559",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "the signal is calibrated against evidence; dominant proof scene",
+      "bbox": {
+        "height": 0.6,
+        "width": 0.48,
+        "x": 0.46,
+        "y": 0.18
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_08148105e79faf6190f174f74b4cb22e",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene field · the signal is calibrated against evidence",
+      "role": "story_scene_field",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.22,
+        "radius": 18
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story",
+      "bbox": {
+        "height": 0.075,
+        "width": 0.0269,
+        "x": 0.5029,
+        "y": 0.31
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3d8faa149748262b03e3ad21a5af8f2a",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.264,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story",
+      "bbox": {
+        "height": 0.055,
+        "width": 0.0197,
+        "x": 0.5835,
+        "y": 0.54
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_48abb187bcfbd20092f677d070b66edc",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.216,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story",
+      "bbox": {
+        "height": 0.045,
+        "width": 0.0161,
+        "x": 0.6463,
+        "y": 0.335
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d4d91142af1744bccfcee0d9c0c573bb",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.169,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story",
+      "bbox": {
+        "height": 0.6085,
+        "width": 0.218,
+        "x": 0.6755,
+        "y": 0.2465
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_4cdd0517ab2dc50187df5be97445a4a2",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.433,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story",
+      "bbox": {
+        "height": 0.377,
+        "width": 0.1351,
+        "x": 0.7317,
+        "y": 0.4035
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_f5feaeefc96bc94f76a00a058e79f817",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.563,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story",
+      "bbox": {
+        "height": 0.2435,
+        "width": 0.0873,
+        "x": 0.7824,
+        "y": 0.545
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_47ba9cf2d22c03ec4fca366dca670b48",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_core",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 1,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.07,
+        "width": 0.3,
+        "x": 0.06,
+        "y": 0.065
+      },
+      "content": "EVIDENCE / 05",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_d6438d926f922cac02512592e2827f2b",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.2745,
+        "width": 0.34,
+        "x": 0.06,
+        "y": 0.18
+      },
+      "content": "Define proof before asking for commitment.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_ad09cff7bb5ade35bfa9f6ba4bc235f7",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 38,
+        "fontWeight": 650,
+        "letterSpacing": -0.5,
+        "lineHeight": 1.04
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.23,
+        "width": 0.34,
+        "x": 0.06,
+        "y": 0.4895
+      },
+      "content": "Use the brief’s success criteria as qualitative review questions until measured evidence is supplied.",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3333e6a8df561bf0f9d081ce885a6a9e",
+      "kind": "text",
+      "locked": false,
+      "name": "Supporting context",
+      "role": "body",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 450,
+        "lineHeight": 1.38
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.1106,
+        "width": 0.34,
+        "x": 0.06,
+        "y": 0.77
+      },
+      "content": "Honor explicit slide-count and presentation constraints in the brief",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3dffa0e125ea8a82533922e8d7ef6861",
+      "kind": "text",
+      "locked": false,
+      "name": "Decisive point",
+      "role": "takeaway",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [
+        "source_a481aeee6d24a6dc939af76ab92f3cf3"
+      ],
+      "style": {
+        "color": "#34452C",
+        "fill": "#E5E9D6",
+        "fontFamily": "Geist Variable",
+        "fontSize": 14,
+        "fontWeight": 650,
+        "lineHeight": 1.25,
+        "padding": 12,
+        "radius": 18
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_eb475dfdc98ba02e5ce164a003b21b1b",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "05",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3c5fa9a9dc4b36231fb0bc76e80c2a39",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.07,
+        "width": 0.4,
+        "x": 0.07,
+        "y": 0.065
+      },
+      "content": "CLOSE / 07",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_71c4e3286a24f25917f50f81ae5840df",
+      "kind": "text",
+      "locked": false,
+      "name": "Section label",
+      "role": "section",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 15,
+        "fontWeight": 650,
+        "letterSpacing": 1.3
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.14,
+        "width": 0.79,
+        "x": 0.07,
+        "y": 0.15
+      },
+      "content": "Create an editable, reviewable presentation from this idea",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_3b09c597187f1de74fb0df642255eab0",
+      "kind": "text",
+      "locked": false,
+      "name": "Headline",
+      "role": "headline",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#26221D",
+        "fontFamily": "Fraunces Variable",
+        "fontSize": 36,
+        "fontWeight": 620,
+        "letterSpacing": -0.4,
+        "lineHeight": 1.05
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.32,
+        "width": 0.27,
+        "x": 0.07,
+        "y": 0.35
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_b1d3ed697393488a705cb772ea9b47d5",
+      "kind": "shape",
+      "locked": false,
+      "name": "Evidence card 1",
+      "role": "evidence_card",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "fill": "#E5E9D6",
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.28,
+        "width": 0.23,
+        "x": 0.09,
+        "y": 0.37
+      },
+      "content": "01  Agree the outcome",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_48a72e1b6d156619d44f9ca3fa3d4b8c",
+      "kind": "text",
+      "locked": false,
+      "name": "Evidence 1",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#34452C",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.25
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.32,
+        "width": 0.27,
+        "x": 0.365,
+        "y": 0.35
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_39790e5987345feb43a41dbfd286504e",
+      "kind": "shape",
+      "locked": false,
+      "name": "Evidence card 2",
+      "role": "evidence_card",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "fill": "#E5E9D6",
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.28,
+        "width": 0.23,
+        "x": 0.385,
+        "y": 0.37
+      },
+      "content": "02  Name the owner",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_87bfcb51afc6f745166702e62707ff5c",
+      "kind": "text",
+      "locked": false,
+      "name": "Evidence 2",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#34452C",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.25
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.32,
+        "width": 0.27,
+        "x": 0.66,
+        "y": 0.35
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6e14cb1a77798669748777c24fc44a1f",
+      "kind": "shape",
+      "locked": false,
+      "name": "Evidence card 3",
+      "role": "evidence_card",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "fill": "#E5E9D6",
+        "radius": 18,
+        "stroke": "#DED7CC",
+        "strokeWidth": 1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.28,
+        "width": 0.23,
+        "x": 0.68,
+        "y": 0.37
+      },
+      "content": "03  Set the next checkpoint",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_67d7c231ef9fddee89d88f081d35d9e7",
+      "kind": "text",
+      "locked": false,
+      "name": "Evidence 3",
+      "role": "bullet",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [
+        "source_3acc3aa444ea8506995c798cc70fb28c"
+      ],
+      "style": {
+        "color": "#34452C",
+        "fontFamily": "Geist Variable",
+        "fontSize": 16,
+        "fontWeight": 560,
+        "lineHeight": 1.25
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story",
+      "bbox": {
+        "height": 0.015,
+        "width": 0.015,
+        "x": 0.69,
+        "y": 0.066
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_5aeb8bbe21918c0217b819a5ffba8ed0",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.18,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story",
+      "bbox": {
+        "height": 0.011,
+        "width": 0.011,
+        "x": 0.735,
+        "y": 0.112
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_4f81cdad99d291ed8df703af04cae6ee",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.148,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story",
+      "bbox": {
+        "height": 0.009,
+        "width": 0.009,
+        "x": 0.77,
+        "y": 0.071
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_60c2c07ef17403a70177616525207250",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_noise",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.115,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story",
+      "bbox": {
+        "height": 0.13,
+        "width": 0.13,
+        "x": 0.783,
+        "y": 0.05
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_faac9b36634dd099bde425e8c0e955a2",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.48,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story",
+      "bbox": {
+        "height": 0.0806,
+        "width": 0.0806,
+        "x": 0.816,
+        "y": 0.083
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_57fa192ef450d137da1532af696b28c4",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_wave",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [],
+      "style": {
+        "fill": "#F2DED3",
+        "opacity": 0.62,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "altText": "a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story",
+      "bbox": {
+        "height": 0.052,
+        "width": 0.052,
+        "x": 0.846,
+        "y": 0.113
+      },
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_dc8f8bc6501d546acfef552fa91e8160",
+      "kind": "shape",
+      "locked": true,
+      "name": "Story scene · separate weak noise from decision-grade evidence",
+      "role": "story_scene_signal_core",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [],
+      "style": {
+        "fill": "#B44A2D",
+        "opacity": 0.76,
+        "radius": 999
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.035,
+        "width": 0.72,
+        "x": 0.07,
+        "y": 0.93
+      },
+      "content": "NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_6554ad0804bebdcf4daa761e259571fc",
+      "kind": "text",
+      "locked": true,
+      "name": "Deck footer",
+      "role": "footer",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [],
+      "style": {
+        "color": "#756B61",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 10,
+        "fontWeight": 550,
+        "letterSpacing": 1.1
+      },
+      "version": 1,
+      "visible": true
+    },
+    {
+      "bbox": {
+        "height": 0.05,
+        "width": 0.06,
+        "x": 0.88,
+        "y": 0.92
+      },
+      "content": "06",
+      "exportCapabilities": [
+        "web_native",
+        "pptx_editable",
+        "google_importable"
+      ],
+      "id": "element_cf20e71f3523fe11575c38ab41b9a1b0",
+      "kind": "text",
+      "locked": true,
+      "name": "Page number",
+      "role": "page_number",
+      "rotation": 0,
+      "slideId": "slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "sourceIds": [],
+      "style": {
+        "color": "#B44A2D",
+        "fontFamily": "JetBrains Mono Variable",
+        "fontSize": 13,
+        "fontWeight": 700,
+        "textAlign": "right"
+      },
+      "version": 1,
+      "visible": true
+    }
+  ],
+  "sources": [
+    {
+      "citation": "Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.",
+      "deckId": "deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4",
+      "id": "source_3acc3aa444ea8506995c798cc70fb28c",
+      "license": "Internal working material",
+      "retrievedAt": 1788607528040,
+      "sourceType": "internal",
+      "title": "Create a six-slide decision review for a fictional sourcing pilot — creation brief"
+    },
+    {
+      "citation": "Honor explicit slide-count and presentation constraints in the brief; Use only claims and artifact types supported by the supplied brief and evidence; Validation passes before presentation, export, or publication",
+      "deckId": "deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4",
+      "id": "source_a481aeee6d24a6dc939af76ab92f3cf3",
+      "license": "Internal working material",
+      "retrievedAt": 1788607528040,
+      "sourceType": "note",
+      "title": "Brief success criteria"
+    }
+  ]
+}

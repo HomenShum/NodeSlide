@@ -1,0 +1,107 @@
+
+> nodeslide@0.1.0 check
+> npm run lint && npm run typecheck && npm run test && npm run build
+
+
+> nodeslide@0.1.0 lint
+> biome check .
+
+Checked 1074 files in 460ms. No fixes applied.
+
+> nodeslide@0.1.0 typecheck
+> tsc -b && npm run typecheck --workspaces --if-present
+
+
+> @nodeslide/agent@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/backend@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/cli@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/client-http@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/contracts@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/convex@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/engine@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/external-agent@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodekit/gym-core@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/react@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/react-headless@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/recipelang@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/registry@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/testing@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> nodeslide-mcp@0.2.2 typecheck
+> tsc --noEmit
+
+
+> nodeslide@0.1.0 test
+> vitest run && npm run test --workspaces --if-present
+
+
+ RUN  v4.1.10 D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905
+
+ ❯ convex/lib/nodeslideTraceUi.test.tsx (5 tests | 1 failed) 119ms
+     × separates the current deck receipt from an older selected trace receipt 32ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  convex/lib/nodeslideTraceUi.test.tsx > NodeSlide trace validation receipts > separates the current deck receipt from an older selected trace receipt
+AssertionError: expected '<div class="ns-inspector-scroll ns-tr…' to contain 'Current deck validation: passed'
+
+Expected: "Current deck validation: passed"
+Received: "<div class="ns-inspector-scroll ns-trace-inspector "><section class="ns-inspector-section ns-trace-intro ns-trace-header"><div class="ns-section-title-row"><div><span class="ns-eyebrow">Agent activity</span><h2>Run details</h2></div><div class="ns-trace-density" role="tablist" aria-label="Trace detail level"><button class="" type="button" role="tab" id="ns-trace-density-human" aria-selected="false" tabindex="-1" data-testid="trace-density-human"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg>Summary</button><button class="is-active" type="button" role="tab" id="ns-trace-density-pro" aria-selected="true" tabindex="0" data-testid="trace-density-pro"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gauge" aria-hidden="true"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>Timeline</button><button class="" type="button" role="tab" id="ns-trace-density-tech" aria-selected="false" tabindex="-1" data-testid="trace-density-tech"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-braces" aria-hidden="true"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"></path><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"></path></svg>Raw</button></div><button type="button" class="ns-trace-expand" aria-label="Expand trace view" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-maximize2 lucide-maximize-2" aria-hidden="true"><path d="M15 3h6v6"></path><path d="m21 3-7 7"></path><path d="m3 21 7-7"></path><path d="M9 21H3v-6"></path></svg></button></div><p>Provider, work performed, validation, and human approval in one auditable run.</p></section><section class="ns-validation-summary" data-testid="deck-ci-details" aria-label="Deck check details"><h3>Deck checks</h3><output class="ns-deck-ci-status is-unavailable" aria-live="polite" aria-atomic="true" data-state="unavailable" data-trust-surface="failed-state"><span class="ns-deck-ci-status__line"><span class="ns-deck-ci-status__dot" aria-hidden="true"></span><span class="ns-deck-ci-status__name">Deck CI</span><strong>Unavailable</strong></span></output><p>Checks are unavailable for this deck version.</p></section><section class="ns-validation-summary is-ok"><h3><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>Latest recorded core validation: passed</h3><p>Deck v7 · core checks passed. See Deck CI for broader checks.</p></section><label class="ns-trace-picker"><span>Run</span><select><option value="trace-creation" selected="">Created initial deck</option></select><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></label><article class="ns-trace-summary "><header class="ns-trace-banner"><div class="ns-trace-banner-top"><span class="ns-trace-state is-completed"><span class="ns-status-dot ns-status-dot--completed"></span>Completed</span><span class="ns-trace-banner-ver">deck v1</span></div><time class="ns-trace-started-at" dateTime="1970-01-01T00:00:01.000Z" title="12/31/1969, 4:00:01 PM">Started 4:00:01 PM</time><h3 class="ns-trace-run-title">Created initial deck</h3><div class="ns-trace-attrib is-live" title="provider · model · reasoning effort attribution"><span class="ns-trace-attrib-dot"></span><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-cpu" aria-hidden="true"><path d="M12 20v2"></path><path d="M12 2v2"></path><path d="M17 20v2"></path><path d="M17 2v2"></path><path d="M2 12h2"></path><path d="M2 17h2"></path><path d="M2 7h2"></path><path d="M20 12h2"></path><path d="M20 17h2"></path><path d="M20 7h2"></path><path d="M7 20v2"></path><path d="M7 2v2"></path><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="8" y="8" width="8" height="8" rx="1"></rect></svg><span>Automatic model</span></div><div class="ns-trace-kpis" aria-label="Run metrics"><span><small>Run time</small><strong><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock3 lucide-clock-3" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6h4"></path></svg> 1s</strong></span><span><small>Tokens</small><strong>— → —</strong></span><span><small>Cost</small><strong><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dollar-sign" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg> not recorded</strong></span><span><small>Validation</small><strong class="is-pass">Passed</strong></span></div></header><div class="ns-trace-section-label"><span>Execution</span><small>6 auditable records</small></div><div class="ns-trace-timeline-empty"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock3 lucide-clock-3" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6h4"></path></svg><strong>Structured timeline unavailable</strong><p>Legacy runs keep their custody receipt but do not invent span timing.</p><div class="ns-custody-rail" aria-label="Run events"><div class="ns-rail-node " data-node="consent"><button type="button" class="ns-railnode-toggle" aria-expanded="false" aria-label="Authorization — expand"><span class="ns-rail-line"><span class="ns-rail-seg is-bot" style="--ns-seg:var(--ns-trace-human)"></span><span class="ns-rail-marker is-human" style="--ns-seg:var(--ns-trace-human)"></span></span><span class="ns-rail-content"><span class="ns-rail-head"><span class="ns-rail-badge is-human"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>Authorization</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ns-rail-chevron" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="ns-rail-summary">Consent requirement not recorded</span></span></button></div><div class="ns-rail-node " data-node="read"><button type="button" class="ns-railnode-toggle" aria-expanded="false" aria-label="Context — expand"><span class="ns-rail-line"><span class="ns-rail-seg is-top " style="--ns-seg:var(--ns-trace-human)"></span><span class="ns-rail-seg is-bot" style="--ns-seg:var(--ns-trace-agent)"></span><span class="ns-rail-marker is-agent" style="--ns-seg:var(--ns-trace-agent)"></span></span><span class="ns-rail-content"><span class="ns-rail-head"><span class="ns-rail-badge is-agent"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>Context</span><span class="ns-rail-chip is-empty" title="planningInputDigest — not sealed">— unsealed</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ns-rail-chevron" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="ns-rail-summary">0 context references read</span></span></button></div><div class="ns-rail-node " data-node="plan"><button type="button" class="ns-railnode-toggle" aria-expanded="false" aria-label="Plan — expand"><span class="ns-rail-line"><span class="ns-rail-seg is-top " style="--ns-seg:var(--ns-trace-agent)"></span><span class="ns-rail-seg is-bot" style="--ns-seg:var(--ns-trace-agent)"></span><span class="ns-rail-marker is-agent" style="--ns-seg:var(--ns-trace-agent)"></span></span><span class="ns-rail-content"><span class="ns-rail-head"><span class="ns-rail-badge is-agent"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-tree" aria-hidden="true"><path d="M8 5h13"></path><path d="M13 12h8"></path><path d="M13 19h8"></path><path d="M3 10a2 2 0 0 0 2 2h3"></path><path d="M3 5v12a2 2 0 0 0 2 2h3"></path></svg>Plan</span><span class="ns-rail-chip is-empty" title="planningSnapshotDigest — not sealed">— unsealed</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ns-rail-chevron" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="ns-rail-summary">1-step plan drafted</span></span></button></div><div class="ns-rail-node " data-node="edits"><button type="button" class="ns-railnode-toggle" aria-expanded="false" aria-label="Actions — expand"><span class="ns-rail-line"><span class="ns-rail-seg is-top " style="--ns-seg:var(--ns-trace-agent)"></span><span class="ns-rail-seg is-bot" style="--ns-seg:var(--ns-trace-agent)"></span><span class="ns-rail-marker is-agent" style="--ns-seg:var(--ns-trace-agent)"></span></span><span class="ns-rail-content"><span class="ns-rail-head"><span class="ns-rail-badge is-agent"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg>Actions</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ns-rail-chevron" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="ns-rail-summary">1 tool call · 1 guardrail</span></span></button></div><div class="ns-rail-node " data-node="validate"><button type="button" class="ns-railnode-toggle" aria-expanded="false" aria-label="Validation — expand"><span class="ns-rail-line"><span class="ns-rail-seg is-top " style="--ns-seg:var(--ns-trace-agent)"></span><span class="ns-rail-seg is-bot" style="--ns-seg:var(--ns-trace-human)"></span><span class="ns-rail-marker is-human" style="--ns-seg:var(--ns-trace-human)"></span></span><span class="ns-rail-content"><span class="ns-rail-head"><span class="ns-rail-badge is-human"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>Validation</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ns-rail-chevron" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="ns-rail-summary">Deterministic validation passed (v1)</span></span></button></div><div class="ns-rail-node " data-node="receipt"><button type="button" class="ns-railnode-toggle" aria-expanded="false" aria-label="Approval — expand"><span class="ns-rail-line"><span class="ns-rail-seg is-top " style="--ns-seg:var(--ns-trace-human)"></span><span class="ns-rail-marker is-human is-terminal" style="--ns-seg:var(--ns-trace-human)"></span></span><span class="ns-rail-content"><span class="ns-rail-head"><span class="ns-rail-badge is-human"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-receipt" aria-hidden="true"><path d="M12 17V7"></path><path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8"></path><path d="M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z"></path></svg>Approval</span><span class="ns-rail-chip is-empty" title="candidateDigest — not sealed">— unsealed</span><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right ns-rail-chevron" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></span><span class="ns-rail-summary">Countersigned</span></span></button></div></div></div><section class="ns-validation-summary is-ok"><h3><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>Selected trace core validation: passed</h3><p>Deck v1 · core checks passed. See Deck CI for broader checks.</p></section></article></div>"
+
+ ❯ convex/lib/nodeslideTraceUi.test.tsx:63:20
+     61|     );
+     62|
+     63|     expect(markup).toContain('Current deck validation: passed');
+       |                    ^
+     64|     expect(markup).toContain('Deck v7');
+     65|     expect(markup).toContain('Selected trace validation: passed');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 315 passed (316)
+      Tests  1 failed | 2822 passed | 7 skipped (2830)
+   Start at  05:52:43
+   Duration  21.82s (transform 105.78s, setup 0ms, import 283.20s, tests 143.70s, environment 86.24s)
+

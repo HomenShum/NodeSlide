@@ -1,0 +1,11 @@
+--- before/.tours/01-primary-user-flow.tour
++++ current/.tours/01-primary-user-flow.tour
+@@ -35,7 +35,7 @@
+     },
+     {
+       "file": "convex/lib/nodeslideValidators.ts",
+-      "line": 255,
++      "line": 256,
+       "description": "**Who is allowed to create a deck.**\n\nThree ways in: the public-creation flag, an existing durable job row, or a preview access code paired with an admission subject.\n\nOn a fresh clone `npx convex dev` sets none of them, so this is where a stranger's first Create fails. That is defect D1 in `promotion/PROMOTION_LOG.md` and concern 1 in `docs/codebase/CONCERNS.md`."
+     },
+     {

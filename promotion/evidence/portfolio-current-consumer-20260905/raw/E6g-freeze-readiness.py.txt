@@ -1,0 +1,28 @@
+from pathlib import Path
+import datetime,hashlib,json,subprocess
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+def item(p,base): return {'path':p.relative_to(base).as_posix(),'sha256':sha(p),'bytes':p.stat().st_size}
+check=json.loads((P/'E6g-nodeslide-readiness-check-02/commands.json').read_text(encoding='utf-8'))
+assert len(check['commands'])==2 and all(c['exitCode']==0 for c in check['commands'])
+assert check['sourceUnchanged']
+source=[]
+for n,h in check['sourceHashes'].items():
+    assert sha(R/n)==h,n
+    source.append(item(R/n,R))
+source.sort(key=lambda x:x['path'])
+folders=sorted(p for p in P.iterdir() if p.is_dir() and (p.name.startswith('E6g-nodeslide-readiness-') or p.name=='E6g-nodeslide-counts-before'))
+files={p for folder in folders for p in folder.rglob('*') if p.is_file()}
+for n in ['E6g-readiness-amendments.json','E6g-fix-readiness-test-copy.py','E6g-check-readiness.py','E6g-check-readiness-02.py','E6g-nodeslide-readiness-browser.mjs','E6g-nodeslide-readiness-browser-02.mjs','E6g-nodeslide-counts-before.mjs','E6g-capture-readiness-before.mjs','E6g-capture-readiness-before-02.mjs','E6g-capture-readiness-before-03.mjs','E6g-capture-readiness-before-04.mjs']:
+    assert (P/n).is_file(),n
+    files.add(P/n)
+artifacts=[item(p,P) for p in sorted(files)]
+digest=hashlib.sha256(json.dumps(source,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+report=json.loads((P/'E6g-nodeslide-readiness-browser-02/report.json').read_text(encoding='utf-8'))
+for n in ['local-loopback-runtime.json','vite-runtime.json']:
+    r=json.loads((P/'E6g-nodeslide-readiness-runtime'/n).read_text(encoding='utf-8'))
+    assert r.get('stoppedAt') and all(r['cleanup'][k] for k in r['cleanup'] if k not in ['method']),n
+result={'proof':'NODESLIDE-DECK-CI-DETAIL-01','at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'FROZEN_FOR_NONAUTHOR_SOURCE_AND_PIXEL_JUDGMENT','repo':str(R),'baseHead':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),'source':source,'sourceDigest':digest,'artifacts':artifacts,'artifactCount':len(artifacts),'commands':check['commands'],'realBrowser':'Two actual retained synthetic decks, current version3, pass/fail at390x844 and1440x960; three native Tab/Enter entry/reload rounds each. Twelve actual journeys, eight current captures. No model call or backend fixture substitution.','scenarioBoundary':'Current/stale/cross-deck/pending/null and warn/pass component branches are SSR scenarios. They do not certify rendered state transitions. Judge may add isolated explicitly labelled rendered fixtures without changing source.','limitations':['No full-product visual, accessibility, responsiveness or interaction grade.','Doubled inspector-font counts are now fully visible; enlarged navigation/density/footer clipping and notes/pager overlap remain.','Native Office, real model-provider use and complete user/device coverage are unrun.','Prior OpenUI/NodeBook timing failures remain preserved; the final normal check is a single passing run.','No changes to backend thresholds, export gates, quality scores or historical validation booleans.'],'ownedRuntime':'Both readiness supervisors expired normally; recorded process exit and port release receipts are bound. Original4173/4174 untouched.','rootViewedCurrentPixels':['E6g-nodeslide-readiness-browser-02/390-fail-text200.png','E6g-nodeslide-readiness-browser-02/1440-fail-text200.png','E6g-nodeslide-readiness-browser-02/390-pass-normal.png','E6g-nodeslide-readiness-browser-02/1440-fail-normal.png']}
+with (P/'E6g_NODESLIDE_READINESS_FREEZE.json').open('x',encoding='utf-8',newline='\n') as f:json.dump(result,f,indent=2);f.write('\n')
+print(json.dumps({'sourceDigest':digest,'sourceCount':len(source),'artifactCount':len(artifacts),'freezeSha256':sha(P/'E6g_NODESLIDE_READINESS_FREEZE.json')}))

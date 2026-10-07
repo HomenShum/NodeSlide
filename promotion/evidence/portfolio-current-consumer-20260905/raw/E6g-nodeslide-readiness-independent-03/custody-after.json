@@ -1,0 +1,37 @@
+{
+  "source": [
+    {
+      "path": "convex/lib/nodeslideTraceUi.test.tsx",
+      "sha256": "a463eef53d1904cb485f5bbf645c09afab1db70226b55164829d7c73830db72c",
+      "bytes": 6383
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/DeckCiStatus.css",
+      "sha256": "78ee214d7c185a639f0f104b925f7ca8be3ae29cbe1703bfb5c0406f7345fade",
+      "bytes": 1581
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/InspectorPanel.test.ts",
+      "sha256": "61ce55333d09579b5cfbb8e3f98e0e7d505a897ee20722af0d6a50d4abf6eef1",
+      "bytes": 7877
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/InspectorPanel.tsx",
+      "sha256": "aae48f4f88369fba10ff1316d32f00cd3e9054cf490335577b03eba837d19137",
+      "bytes": 31637
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/TraceInspector.test.tsx",
+      "sha256": "9dc3e620a3481d7a92a98f916ccffc0b3d0fe4b160b00ce8c68facdb3c5dcc3a",
+      "bytes": 24663
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/TraceInspector.tsx",
+      "sha256": "83584eea5fd9bd230dc519ec5fd5d1e7395a7a626d137e81cef0c358391c0dad",
+      "bytes": 56359
+    }
+  ],
+  "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "index": "7ec471e055fda0d8b7ecad06cc74067163eec5a3563e92ae5ef5fe736748c65a",
+  "refs": "841e485e5adfba369d9f14d30858b7424c43294858f7b7323d153e143c23dfb9"
+}

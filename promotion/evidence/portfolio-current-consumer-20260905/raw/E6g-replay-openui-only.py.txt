@@ -1,0 +1,19 @@
+from pathlib import Path
+import subprocess, json, hashlib, time, shutil, os
+P=Path(__file__).resolve().parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=P/'E6g-nodeslide-openui-follow-on-01'; O.mkdir(exist_ok=True)
+paths=['src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx','src/domains/nodeslide/inspector/AiInspector.tsx','src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx','vite.config.ts','node_modules/@testing-library/dom/dist/config.js','node_modules/@testing-library/dom/dist/wait-for.js']
+def save(name,v): (O/name).write_text(json.dumps(v,indent=2,ensure_ascii=True)+'\n',encoding='utf-8')
+def snap(): return {p:{'sha256':hashlib.sha256((R/p).read_bytes()).hexdigest(),'bytes':(R/p).stat().st_size} for p in paths}
+before=snap(); save('source-before.json',before)
+for p in paths:
+    dest=O/'source-before'/p;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes((R/p).read_bytes())
+for name in ['check.log','check.command.json']:(O/('full-check02-'+name)).write_bytes((P/'E6g-nodeslide-portability-check-02'/name).read_bytes())
+cmd=[shutil.which('node'),'node_modules/vitest/vitest.mjs','run',paths[0],'-t','opens the visual material lab from the live composer button','--reporter=verbose','--reporter=json',f'--outputFile.json={O / "targeted.json"}']
+child={k:v for k,v in os.environ.items() if not any(x in k.upper() for x in ['OPENAI','ANTHROPIC','GEMINI','CONVEX','OPENROUTER','FIRECRAWL','API_KEY','BASE_URL']) and not k.upper().startswith('VITE_')}
+start=time.time()
+with (O/'targeted.log').open('wb') as log:r=subprocess.run(cmd,cwd=R,env=child,stdout=log,stderr=subprocess.STDOUT)
+after=snap();save('source-after.json',after)
+save('command.json',{'command':cmd,'cwd':str(R),'exitCode':r.returncode,'elapsedMs':round((time.time()-start)*1000),'sourceUnchanged':before==after,'scope':'Exactly one unchanged existing test. Unmatched sibling tests are NOT_RUN, not new source skips. No timeout/retry/config changes or provider calls; child environment names sanitized without values.'})
+print(json.dumps({'exitCode':r.returncode,'elapsedMs':round((time.time()-start)*1000),'sourceUnchanged':before==after}))

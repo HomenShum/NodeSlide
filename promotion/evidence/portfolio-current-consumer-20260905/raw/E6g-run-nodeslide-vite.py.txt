@@ -1,0 +1,44 @@
+from pathlib import Path
+import os,subprocess,json,time,socket,datetime,urllib.request
+import psutil
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=Path('D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02')
+backend=json.loads((P/'E6g-nodeslide-first-run/local-loopback-runtime.json').read_text(encoding='utf-8'))
+assert backend['status']=='READY_FOR_DETERMINISTIC_BROWSER_PROOF' and backend['verifiedOwnedLoopback']
+assert psutil.Process(backend['nativePid']).create_time()==backend['nativeProcessCreated']
+with socket.socket() as probe:probe.bind(('127.0.0.1',0));port=probe.getsockname()[1]
+env=dict(os.environ)
+for key in list(env):
+    upper=key.upper()
+    if any(x in upper for x in ['OPENAI','ANTHROPIC','GEMINI','GOOGLE_API','CONVEX','VITE_','PLAYWRIGHT_BASE_URL']) or upper.endswith(('_API_KEY','_ACCESS_TOKEN','_SECRET')):env.pop(key)
+env.update({'VITE_CONVEX_URL':'http://127.0.0.1:49676','VITE_CONVEX_SITE_URL':'http://127.0.0.1:49690'})
+record={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'url':'http://127.0.0.1:'+str(port),'mode':'LOCAL_VITE_DEVELOPMENT','providerCalls':0}
+out=P/'E6g-nodeslide-first-run/vite-runtime.json';assert not out.exists()
+with (O/'vite.log').open('xb') as log:
+    child=subprocess.Popen(['node','node_modules/vite/bin/vite.js','--host','127.0.0.1','--port',str(port),'--strictPort'],cwd=R,env=env,stdout=log,stderr=subprocess.STDOUT,stdin=subprocess.DEVNULL,creationflags=subprocess.CREATE_NO_WINDOW)
+    owner=psutil.Process(child.pid);record.update({'pid':owner.pid,'processCreated':owner.create_time()})
+    try:
+        deadline=time.monotonic()+60
+        while time.monotonic()<deadline:
+            assert child.poll() is None
+            try:
+                with urllib.request.urlopen(record['url'],timeout=2) as response:
+                    if response.status==200:break
+            except (OSError,TimeoutError):time.sleep(0.5)
+        else:raise RuntimeError('Owned Vite server did not become ready')
+        listeners=[{'pid':c.pid,'address':c.laddr.ip,'port':c.laddr.port} for c in psutil.net_connections(kind='tcp') if c.status==psutil.CONN_LISTEN and c.laddr.port==port]
+        assert listeners and all(c['pid']==owner.pid and c['address']=='127.0.0.1' for c in listeners)
+        record.update({'status':'READY','listeners':listeners});out.write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8',newline='\n');print(json.dumps(record),flush=True)
+        deadline=time.monotonic()+3600
+        while time.monotonic()<deadline and not (O/'STOP_VITE').exists():
+            assert child.poll() is None
+            time.sleep(1)
+    finally:
+        owned=owner.children(recursive=True)+[owner] if owner.is_running() else []
+        for p in owned:
+            try:p.terminate()
+            except psutil.NoSuchProcess:pass
+        gone,alive=psutil.wait_procs(owned,timeout=10)
+        record['cleanup']={'allRecordedProcessesExited':not alive,'portReleased':not any(c.status==psutil.CONN_LISTEN and c.laddr.port==port for c in psutil.net_connections(kind='tcp'))}
+        record['stoppedAt']=datetime.datetime.now(datetime.timezone.utc).isoformat();out.write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8',newline='\n');print(json.dumps(record['cleanup']),flush=True)

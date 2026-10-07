@@ -1,0 +1,452 @@
+{
+  "scope": "Bounded source/log/recon custody, excludes this manifest and top-level final reports.",
+  "files": 89,
+  "bytes": 3363870,
+  "artifacts": [
+    {
+      "path": "benchmark-failed.json",
+      "bytes": 5508,
+      "sha256": "8f5d68a32220d987a0583ce62be305a0897144a4d1998963f2d4662fc2b0c5c8"
+    },
+    {
+      "path": "benchmark-failed.json.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "benchmark-failed.log",
+      "bytes": 54885,
+      "sha256": "894feb251a007bb3d4bf5464bb2a653571cc8bc8b7ef349ea4411dc544903ce8"
+    },
+    {
+      "path": "benchmark-failed.log.failure-signals.json",
+      "bytes": 1999,
+      "sha256": "c954b549a5552ebd59019605196a29d65f61818f5f19f75aaa62bba409bf2972"
+    },
+    {
+      "path": "benchmark-failed.log.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "canonical-git-discovery.json",
+      "bytes": 5109,
+      "sha256": "80ad8f8813cbf67c65314d5fff0d1668fb0b26d054941ae5978a7c2fc3dd2b96"
+    },
+    {
+      "path": "ci.yml.runs.json",
+      "bytes": 558,
+      "sha256": "0d546435dc239e5e4cd85e4721c69d0c1c71c2ba9c77838236d6a17e209c530a"
+    },
+    {
+      "path": "ci.yml.runs.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "current-ci.json",
+      "bytes": 8246,
+      "sha256": "e369f00af3f92f896693f6d724db00748cec29f3e78588bd46f4a7f82fefeec7"
+    },
+    {
+      "path": "current-ci.json.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "current-ci.log",
+      "bytes": 477718,
+      "sha256": "312de4385186207e54e225f396a595b4b88a1fbb043c02fdd3107141b787bba8"
+    },
+    {
+      "path": "current-ci.log.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "current-source/.github/workflows/ci.yml",
+      "bytes": 5388,
+      "sha256": "be93aaac1c110d6a3b77349567ed8c576b027fae57a65933acf5709736d6a030"
+    },
+    {
+      "path": "current-source/.github/workflows/deploy-production.yml",
+      "bytes": 11484,
+      "sha256": "46a0b136e066c12a2c7774a6a9a2d5bb4af159a0901e864498d220ac0d01ece8"
+    },
+    {
+      "path": "current-source/.github/workflows/immutable-package-build.yml",
+      "bytes": 3409,
+      "sha256": "c80b1d65b206c8319043f32dfc79e6cca83ee5f30421e9cb420983b5ccfb6922"
+    },
+    {
+      "path": "current-source/.github/workflows/immutable-package-proof.yml",
+      "bytes": 4900,
+      "sha256": "82c2575f3bad9e4499ab4b4f2d47bd9531398169b5e4755fd4127c4fc8cdbc69"
+    },
+    {
+      "path": "current-source/.github/workflows/nightly-production-probe.yml",
+      "bytes": 11365,
+      "sha256": "84d114f600ab98bb4f43ea6ed411a456344c20c14d61def56e889332506fef14"
+    },
+    {
+      "path": "current-source/.github/workflows/node-platform-conformance.yml",
+      "bytes": 267,
+      "sha256": "bee08dbbda2a9d406a1606f66b2689be669c804feddc6b321658c089fe1a2752"
+    },
+    {
+      "path": "current-source/.github/workflows/nodeslide-bench.yml",
+      "bytes": 8789,
+      "sha256": "471d4a03963ee9191a8b3a7a2e81e66eb4cc63bd9030609c331ee8b067d7fed9"
+    },
+    {
+      "path": "current-source/design-dna/rules/nodeslide-agent-visual-logic.yaml",
+      "bytes": 1708,
+      "sha256": "bed7619a6a4e52fe1187babc3c741d6fea6a987e5ad710bd290f0e4901ad62dc"
+    },
+    {
+      "path": "current-source/docs/codebase/CONCERNS.md",
+      "bytes": 8542,
+      "sha256": "000d3a9c5f5ffed6c7b48329fd508ee2b45dbbe5ed894734fa42c7cc063b7478"
+    },
+    {
+      "path": "current-source/docs/codebase/TESTING.md",
+      "bytes": 4140,
+      "sha256": "474dde76d94b2e48e168a7349499d5be70e7db1e4474a48e6f83a92f7b83f110"
+    },
+    {
+      "path": "current-source/docs/design.md",
+      "bytes": 4328,
+      "sha256": "de3a0f8d097c29d3c48cdf1c8f70153a8c79d679f1fed893b754e9798b0da822"
+    },
+    {
+      "path": "current-source/docs/ECOSYSTEM.md",
+      "bytes": 15453,
+      "sha256": "918c213c8f475e6f9ff76c8b13c9e11711c5cd719c2920c846a382e04da77456"
+    },
+    {
+      "path": "current-source/docs/NEXT_SESSION.md",
+      "bytes": 21214,
+      "sha256": "7cf791aa1a2a0050a97702393226bc102731560625669a3d5ce35de6ee90dba1"
+    },
+    {
+      "path": "current-source/docs/START_HERE.md",
+      "bytes": 20433,
+      "sha256": "2310a099f22b314c2634922ef0e5ab324d9eedbca9f513558a1dbf1c9d1cb0b7"
+    },
+    {
+      "path": "current-source/nodekit.yaml",
+      "bytes": 2399,
+      "sha256": "d9b2cf90ed901f38ff26e007ab976ef705ea3241f0e4a9bf73a1baffb4788ec0"
+    },
+    {
+      "path": "current-source/package.json",
+      "bytes": 12415,
+      "sha256": "bdd1fc9f3da93bb84d443dae994436c41aa97f67045df6b82a54bb99dc96c9a7"
+    },
+    {
+      "path": "current-source/packages/cli/package.json",
+      "bytes": 511,
+      "sha256": "cab47db8d63654c9bead1d1714417e9f3e1e2b965aa1fc6c4df7c53ce91942d6"
+    },
+    {
+      "path": "current-source/packages/cli/README.md",
+      "bytes": 3737,
+      "sha256": "b65548fac4260d7ff1a917d91bc399cbe939856c85f31931a2a014352afccf78"
+    },
+    {
+      "path": "current-source/packages/convex/README.md",
+      "bytes": 2634,
+      "sha256": "460d0115c89556611ed0d6550e01a4cca13a150d1fa5eb2511bb62d5a8eeef0d"
+    },
+    {
+      "path": "current-source/packages/engine/package.json",
+      "bytes": 485,
+      "sha256": "90cff20a520ad05700abe1eea55a5ca1f60d9573f6770a1ed6c9634a5dd4e6ed"
+    },
+    {
+      "path": "current-source/packages/external-agent/README.md",
+      "bytes": 1794,
+      "sha256": "c2be1be774318f505c464ff03f648a542ecbe4a99309f18eab4d7cbb63b01858"
+    },
+    {
+      "path": "current-source/packages/react/package.json",
+      "bytes": 837,
+      "sha256": "a04ddecb814a02df4154e001197dae492cd8eb0b13e0070f981d950d8a998b04"
+    },
+    {
+      "path": "current-source/packages/react/README.md",
+      "bytes": 2291,
+      "sha256": "d7a03748bbc567511ce8f7e17bbf763633a96e887dafdef5d67c226e6ea80315"
+    },
+    {
+      "path": "current-source/packages/README.md",
+      "bytes": 7037,
+      "sha256": "a9cf7a882e313cf6b598bea240bd3ba5084a1967819f5d8d6d7aa5e1197858f3"
+    },
+    {
+      "path": "current-source/playwright.config.ts",
+      "bytes": 2225,
+      "sha256": "7a86cfe8ccbbfb15c8b14ba969b95d1e9f4e029268576bcf4c0a5c59e373d379"
+    },
+    {
+      "path": "current-source/promotion/PRODUCT_GOAL.md",
+      "bytes": 9132,
+      "sha256": "a4c7f5ff9861cfb59048e4aadbd1723edcf5d2fe3c79d76ae4a8b48c825bc196"
+    },
+    {
+      "path": "current-source/promotion/PRODUCT_JOURNEYS.md",
+      "bytes": 8904,
+      "sha256": "331f9d3ff88bde73a8ca2bc4163e7bf0819b38701bcd595ffae56825c9065543"
+    },
+    {
+      "path": "current-source/promotion/PROMOTION_LOG.md",
+      "bytes": 18665,
+      "sha256": "5045754805141c8376058d3c9c98001f4ddb865866a5887ed23481bf3d26afbd"
+    },
+    {
+      "path": "current-source/promotion/WIG_REVIEW.md",
+      "bytes": 11713,
+      "sha256": "0e7460bdb75419c8e7f8466fd9daffc90b22a758c1f6a77adf3692c9c0084741"
+    },
+    {
+      "path": "current-source/README.md",
+      "bytes": 38094,
+      "sha256": "895c9b1e3c2287c83a3c8452ca4eacea6e03ac593c84a33b5104433255ca495e"
+    },
+    {
+      "path": "current-source/scripts/nodeslide-conformance-proof.mjs",
+      "bytes": 5599,
+      "sha256": "89c9f784303a8b3fac25c5216b3201faa2af6e78971a6de8ea40a669b75dd0db"
+    },
+    {
+      "path": "current-source/scripts/package-consumer-smoke.mjs",
+      "bytes": 21883,
+      "sha256": "4c9ef8b4d081095c1d748a2bc248a085821091f26b81123d3756734938733ccd"
+    },
+    {
+      "path": "current-source/scripts/prod-probe.mjs",
+      "bytes": 21046,
+      "sha256": "0865c05fd21d67f8cf1acb90cf85911ae7eadadd3c3b9bb7d6691c5d00b52a38"
+    },
+    {
+      "path": "current-source/scripts/smoke-external-agent-package.mjs",
+      "bytes": 10878,
+      "sha256": "af2b8d0c9c2ccbf66a431b83665eabcf491ef8f8dfba9a67aff14f3dea885ab9"
+    },
+    {
+      "path": "current-source/scripts/smoke.mjs",
+      "bytes": 6244,
+      "sha256": "fdb59687d1b4c027bf2d81c308678332804fa59e57905a3b72e412c9502e1005"
+    },
+    {
+      "path": "current-source/src/App.tsx",
+      "bytes": 1265,
+      "sha256": "f71a15ea97cc5895f518d5766ae569bd8e54e77a8ec5503ae05335add11f1871"
+    },
+    {
+      "path": "current-source/src/domains/nodeslide/components/NodeSlideLanding.tsx",
+      "bytes": 20779,
+      "sha256": "9aae636a95736c4ad0b77dc6a8e230db0fcffdf3e149d1b64847aeb52e534918"
+    },
+    {
+      "path": "current-source/src/domains/nodeslide/NodeSlideStudio.tsx",
+      "bytes": 174326,
+      "sha256": "445543c7c74cc0dee458d013820db0b8204f82e330da2a19439ef4c387b5d980"
+    },
+    {
+      "path": "current-source/src/lib/convexEndpoints.ts",
+      "bytes": 1098,
+      "sha256": "7c8a7221c2262a139c0d9d5fe4b9baa968b54f3c2cae69652e7b6803cf10a03d"
+    },
+    {
+      "path": "current-source/src/main.tsx",
+      "bytes": 1611,
+      "sha256": "ca723c8ec8a9bb9191a99dd4c2787f055a6e2b4337d7e85f4e3d06dbfed76c55"
+    },
+    {
+      "path": "current-source/src/styles/tokens.css",
+      "bytes": 5376,
+      "sha256": "b6b1f5b8218a031c2a0e5495f62fcd103cceec52591c7a44c7a05f5ba96907e8"
+    },
+    {
+      "path": "current-source/vite.config.ts",
+      "bytes": 3306,
+      "sha256": "13cb07a5bffdaec276a3e2fda34469c4ef982c3a4a1e78bf1b80f9147c7c3e48"
+    },
+    {
+      "path": "current-vs-local.json",
+      "bytes": 590572,
+      "sha256": "a8483feac53bcd53a9988382f3683dfb77992bd6233a8947e7e00df490e266a0"
+    },
+    {
+      "path": "current-vs-local.json.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "deploy-production.yml.runs.json",
+      "bytes": 604,
+      "sha256": "f2179f4a6b6b7d56a1024731c8d807845a2d984ead62abee2296753f0bcd7432"
+    },
+    {
+      "path": "deploy-production.yml.runs.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "discovery-commands.json",
+      "bytes": 1616,
+      "sha256": "38b8e93ac1f03114f1f2b6048979ddc67983bbbc6a9f099c0cc6092b67d2d61b"
+    },
+    {
+      "path": "holdings-before.json",
+      "bytes": 55982,
+      "sha256": "96560febce017c727a4af7f494ad7640ef2856bf19de3a59713a568f10f4328e"
+    },
+    {
+      "path": "immutable-package-build.yml.runs.json",
+      "bytes": 668,
+      "sha256": "01bf11fe222a9a4822da1c45bad33ab229325a75efe0e16a39b6ec15658e8509"
+    },
+    {
+      "path": "immutable-package-build.yml.runs.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "immutable-package-proof.yml.runs.json",
+      "bytes": 664,
+      "sha256": "d39d3cafc1e0bca4d44771ab3884f0ca374325885747523134338ce7a3bd4997"
+    },
+    {
+      "path": "immutable-package-proof.yml.runs.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "nightly-failed.json",
+      "bytes": 4899,
+      "sha256": "0efffa8cd4ed6d81d60cb03e05ab27b6a732227996fd54bb1dbabff393a70f9f"
+    },
+    {
+      "path": "nightly-failed.json.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "nightly-failed.log",
+      "bytes": 83404,
+      "sha256": "862e5de5ffb593220f5ec074b02bd04fb3a058b2e023448994ddcb1bfe05ff4a"
+    },
+    {
+      "path": "nightly-failed.log.failure-signals.json",
+      "bytes": 774,
+      "sha256": "152d76b50d174f13d71b6811c2f508391b1acaf62397d0a71356e05456c4d1c5"
+    },
+    {
+      "path": "nightly-failed.log.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "node-platform-conformance.yml.runs.json",
+      "bytes": 604,
+      "sha256": "939a23827e979b4f4dd4d70979e2257ca222b488f5dcf454408c16c868f209c0"
+    },
+    {
+      "path": "node-platform-conformance.yml.runs.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "noderoom-mounted-failed.json",
+      "bytes": 5963,
+      "sha256": "8b53f75148fc9155ca88217b8210bf40c5b47ae5aa8c55073912e1b9495fa368"
+    },
+    {
+      "path": "noderoom-mounted-failed.json.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "noderoom-mounted-failed.log",
+      "bytes": 121656,
+      "sha256": "73b8fb8425d51b2623b15a82768d7cbb274fd3de5d82534783d0ad9096e9dcb4"
+    },
+    {
+      "path": "noderoom-mounted-failed.log.failure-signals.json",
+      "bytes": 569,
+      "sha256": "47ad0e88fc6f8736f2f832ba8e68f1300f59da0dd66df54aa51f8e18e6776ad9"
+    },
+    {
+      "path": "noderoom-mounted-failed.log.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prs.json",
+      "bytes": 624,
+      "sha256": "176b24d37cc714ac226f5f313ad811e0b41573618e08c59d63f37c2fb9dafbab"
+    },
+    {
+      "path": "prs.json.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "read-only-custody.json",
+      "bytes": 39586,
+      "sha256": "74a19b7f2d9e6e29ff9e895c47b22f2730fb7a191a28a520a055664530f5796b"
+    },
+    {
+      "path": "remote-commit.json",
+      "bytes": 9620,
+      "sha256": "74e42660591804466a2436e317b604592ef5774525d20794f7de91dd08006996"
+    },
+    {
+      "path": "remote-commit.json.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "remote-tree.json",
+      "bytes": 1354035,
+      "sha256": "472064171a951e48d23d761341cd475d413f93642539fd6eb99c6d3400f6c2ad"
+    },
+    {
+      "path": "remote-tree.json.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "repo.json",
+      "bytes": 356,
+      "sha256": "bdb58404ebc579e5162fd1e2f3444b4d96896bb440ed6c99415acf1b6b37e070"
+    },
+    {
+      "path": "repo.json.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "run-commands.json",
+      "bytes": 2940,
+      "sha256": "2bf8416c99706f323d7f1c50b88e9152f16c6adeb0fe5bf139cd785e18fd616c"
+    },
+    {
+      "path": "runs.json",
+      "bytes": 5394,
+      "sha256": "eae8170625162ada92049f802a1ea9995aef6e5ed898f8eec336dea252727b13"
+    },
+    {
+      "path": "runs.json.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "source-bindings.json",
+      "bytes": 11613,
+      "sha256": "326f8a5f41826c59fbcf683792669c0b49de299fbb7e1ac361268b0f61cb5257"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "proof": "NODESLIDE-DECK-CI-DETAIL-01",
+  "operation": "Restart the exact already-owned synthetic backend/database and same loopback Vite origin for before/after UI proof. Old supervisors stopped and cleanup receipts retained.",
+  "privateChildDirectory": "D:\\ProjectRecovery\\NodeSlide first run 20260905\\private-bootstrap-02\\readiness-runtime-01",
+  "ports": [
+    49676,
+    49690,
+    53146
+  ],
+  "constraints": [
+    "No new credential or provider lookup; read only generated anonymous candidate config in process.",
+    "Native interface127.0.0.1 verified before normal local push/admission.",
+    "Same preserved failed and chart decks; original4173/4174 untouched.",
+    "New phase has separate private logs/public PID-time receipts and one-hour owned supervisor budget."
+  ]
+}

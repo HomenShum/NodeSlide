@@ -1,0 +1,193 @@
+{
+  "verdict": "APPROVED_NARROW_PORTABILITY_SOURCE_FULL_CHECK_NOT_READY",
+  "request": "Independent causal judgment of the exact six-path first-run portability slice; preserve failed full checks and keep UI first-use proof separate.",
+  "repo": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "sourcePaths": {
+    ".gitattributes": {
+      "sha256": "e9c61ffa7486f3134f5deae7d81103be5a8eacc3dfbbe4296c09df5d45d7d2f5",
+      "bytes": 1056,
+      "headSha256": "267cb2c97a87920fe158d3177afc824d71b31d8d7692aea1064b26bd6592dbd4",
+      "sameLfContentAsHead": false
+    },
+    "scripts/tests/workspace-build-depth.test.mjs": {
+      "sha256": "98e1cc0d259199f01c4b92e2b539a06aa32889e72e7857a1b35a815f0185a40e",
+      "bytes": 3134,
+      "headSha256": "7e5e141b90b3f1c9973bc6db1af62c18dd97cef255577b246855569a725b9674",
+      "sameLfContentAsHead": false
+    },
+    "scripts/tests/code-tours.test.mjs": {
+      "sha256": "20358217a7c89ee0af06778ae7d27f82e9b5b771e7e0ddeec4f63a52c97e38eb",
+      "bytes": 902,
+      "headSha256": "f7e898ef82230da28be0f9e2861eb4c4a94bc46e937907d4b1735c0db83106b8",
+      "sameLfContentAsHead": false
+    },
+    "scripts/tests/playwright-trace.test.mjs": {
+      "sha256": "6d58b0fa95c609cc91ab7cecbf032c5136b3c63654454c71824b1b32adbc3b9f",
+      "bytes": 8493,
+      "headSha256": "c7ba6afd85c80466f68c622e4bfda7ab027e56978d62f5f533e7684385e42de7",
+      "sameLfContentAsHead": false
+    },
+    ".tours/03-debug-and-recovery.tour": {
+      "sha256": "0cda9fd05c121f5dc60edeb3af2f78fb30a28e3e14ce6b0316ae88dece912a84",
+      "bytes": 3704,
+      "headSha256": "33df49d1ff3bf1ea7bae328af2d47257919d09c6ea99531d0a64467f10ed716e",
+      "sameLfContentAsHead": false
+    },
+    "convex/_generated/api.d.ts": {
+      "sha256": "4d4c28b2dc659c14c57b71777a108df3168e86f5e1c90f61e7624a9a39a7b12e",
+      "bytes": 19134,
+      "headSha256": "81ebbed53bccea826969ef418502cbfd93e0e39530458491464f0d8e66582a15",
+      "sameLfContentAsHead": false
+    }
+  },
+  "protectedInputs": {
+    "src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx": {
+      "sha256": "da16f0bc2f919c6a0fd3543b4a69e67802b40d7bca671c387bb74d13d9010cea",
+      "bytes": 10664,
+      "headSha256": "da16f0bc2f919c6a0fd3543b4a69e67802b40d7bca671c387bb74d13d9010cea",
+      "sameLfContentAsHead": true
+    },
+    "src/domains/nodeslide/components/NodeBookWorkspacePanel.tsx": {
+      "sha256": "31b4001cf6999d0836538b914f00d3c5098b536b1dddbf04d1208e5aac932d78",
+      "bytes": 10684,
+      "headSha256": "31b4001cf6999d0836538b914f00d3c5098b536b1dddbf04d1208e5aac932d78",
+      "sameLfContentAsHead": true
+    },
+    "vite.config.ts": {
+      "sha256": "13cb07a5bffdaec276a3e2fda34469c4ef982c3a4a1e78bf1b80f9147c7c3e48",
+      "bytes": 3306,
+      "headSha256": "13cb07a5bffdaec276a3e2fda34469c4ef982c3a4a1e78bf1b80f9147c7c3e48",
+      "sameLfContentAsHead": true
+    },
+    "convex/_generated/api.js": {
+      "sha256": "f513058549831e85376f8d19cafaf2a4a770b6eb1b859fb371141f2c9dec0d70",
+      "bytes": 480,
+      "headSha256": "f513058549831e85376f8d19cafaf2a4a770b6eb1b859fb371141f2c9dec0d70",
+      "sameLfContentAsHead": true
+    },
+    "convex/lib/nodeslideCreateScale.ts": {
+      "sha256": "20f56607794de7597fdba4f82dc4912b07eed0a138802f74e3af9bca9ec81908",
+      "bytes": 766,
+      "headSha256": "20f56607794de7597fdba4f82dc4912b07eed0a138802f74e3af9bca9ec81908",
+      "sameLfContentAsHead": true
+    },
+    "convex/lib/nodeslideCreationTraceTiming.ts": {
+      "sha256": "158d751f45ef43702407f5ecc24d424c826eb3774d507f48411f4c4e1dd3b1f3",
+      "bytes": 695,
+      "headSha256": "158d751f45ef43702407f5ecc24d424c826eb3774d507f48411f4c4e1dd3b1f3",
+      "sameLfContentAsHead": true
+    },
+    "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx": {
+      "sha256": "eaa74dec3ad9d202fd3af8328d3cfd1b3ac876c686bb629350c705fd379ccb1d",
+      "bytes": 4755,
+      "headSha256": "eaa74dec3ad9d202fd3af8328d3cfd1b3ac876c686bb629350c705fd379ccb1d",
+      "sameLfContentAsHead": true
+    },
+    "src/domains/nodeslide/inspector/AiInspector.tsx": {
+      "sha256": "d254af21c5486763d11ebf0cd3f6bac2f30252a8973a1d77e448cb63be1b1353",
+      "bytes": 99000,
+      "headSha256": "d254af21c5486763d11ebf0cd3f6bac2f30252a8973a1d77e448cb63be1b1353",
+      "sameLfContentAsHead": true
+    },
+    "src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx": {
+      "sha256": "a6da3f550fb33e18bfad668ebfea116db1f2294aafbfff62e99fb45a6460e66a",
+      "bytes": 9361,
+      "headSha256": "a6da3f550fb33e18bfad668ebfea116db1f2294aafbfff62e99fb45a6460e66a",
+      "sameLfContentAsHead": true
+    }
+  },
+  "causalChecks": {
+    "currentActualFunctionCases": 9,
+    "actualGitCheckoutFilterCases": 6,
+    "allPassed": true,
+    "actualGenerator": "3 tours / 32 steps pass through current child cwd and unchanged generator --check",
+    "traceCases": [
+      "genuine missing root yields []",
+      "empty root yields []",
+      "nested spaces/hash names produce exact sorted trace paths",
+      "root file ENOTDIR propagates",
+      "injected root EACCES propagates",
+      "injected nested removal ENOENT propagates"
+    ],
+    "disclosure": "Actual source bodies executed in read-only VM adapters; direct Node generator and Git filter calls are real. No new candidate tests or assertions written; diagnostic zip names are not real trace evidence.",
+    "gitFilterScope": "Actual checkout filters under core.autocrlf=true and false, not a fresh whole clone."
+  },
+  "scopeReview": {
+    "fileUrl": "Only two native path conversions and imports; original build assertions intact.",
+    "eol": "Only *.tour text eol=lf added to existing policy; exact tour comparison retained.",
+    "finder": "No shell, one discovery pass, native recursion and deterministic sort. Only missing top-level .tmp maps to absence; nested errors propagate.",
+    "tour": "Exactly step 8 line 46 to 47; descriptions/paths and other JSON values unchanged.",
+    "generatedApi": {
+      "addedLines": [
+        "import type * as lib_nodeslideCreateScale from \"../lib/nodeslideCreateScale.js\";",
+        "import type * as lib_nodeslideCreationTraceTiming from \"../lib/nodeslideCreationTraceTiming.js\";",
+        "  \"lib/nodeslideCreateScale\": typeof lib_nodeslideCreateScale;",
+        "  \"lib/nodeslideCreationTraceTiming\": typeof lib_nodeslideCreationTraceTiming;"
+      ],
+      "removedLines": 0,
+      "cause": "Normal local codegen incorporates two already tracked pure helper modules. Neither exports registered Convex functions; api.js and both source modules equal HEAD. No runtime endpoint/authority additions or hand edits certified.",
+      "limits": "Type declaration refresh only; no broader generated API correctness or deployed endpoint claim."
+    }
+  },
+  "fullChecks": {
+    "original": "4 failures / 2808 passes / 7 skips, retained historical",
+    "repair01": "1 moved-tour-line failure / 2811 passes / 7 skips; NodeBook timeout absent",
+    "repair02": "1 lazy OpenUI mount failure / 2811 passes / 7 skips; intended portability and tour checks pass; NodeBook timeout absent",
+    "normalCheckPassed": false,
+    "workspaceTestsReached": false,
+    "buildReachedThroughCheck": false,
+    "separateRootBuild": "Not judged by this source-only receipt"
+  },
+  "findings": [],
+  "residual": [
+    "Current full check is failed and must remain NOT_READY.",
+    "No real .tmp trace exists: five real-trace parser cases remain NOT_RUN, not certified by diagnostic files.",
+    "NodeBook no longer timed out in two normal checks without source/timeout/config changes; original failure remains historical and recurrence risk unproven.",
+    "No live provider, native Office, browser/UI grade or production proof in this review.",
+    "Dependency/API/runtime assertions remain bounded to unchanged source and the four generated type lines."
+  ],
+  "excludedGeneratedWorking": [
+    {
+      "path": ".tours/01-primary-user-flow.tour",
+      "workingSha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97",
+      "headSha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97",
+      "workingBytes": 6451,
+      "headBytes": 6451,
+      "exactBytesEqual": true,
+      "normalizedLfBytesEqual": true,
+      "includedInSixPathSourceScope": false
+    },
+    {
+      "path": ".tours/02-agent-execution.tour",
+      "workingSha256": "a274bb90a62570133e66eddd157c63e4408b6938eeb103e7b16c7d455d3eef75",
+      "headSha256": "a274bb90a62570133e66eddd157c63e4408b6938eeb103e7b16c7d455d3eef75",
+      "workingBytes": 4363,
+      "headBytes": 4363,
+      "exactBytesEqual": true,
+      "normalizedLfBytesEqual": true,
+      "includedInSixPathSourceScope": false
+    },
+    {
+      "path": "public/recipelang/edge-data-contract.svg",
+      "workingSha256": "4fb36773c4d389fc78cb5d337fa743d9f908e66d689f51af5254f4bf65aa5de5",
+      "headSha256": "4fb36773c4d389fc78cb5d337fa743d9f908e66d689f51af5254f4bf65aa5de5",
+      "workingBytes": 3543,
+      "headBytes": 3543,
+      "exactBytesEqual": true,
+      "normalizedLfBytesEqual": true,
+      "includedInSixPathSourceScope": false
+    }
+  ],
+  "rawAdapterFailure": {
+    "path": "E6g-nodeslide-portability-independent-01/failure.json",
+    "cause": "Independent VM assertion adapter compared arrays from different realms; preserved raw failure. Adapter normalization corrected both operands, no candidate source changes."
+  },
+  "evidenceManifest": {
+    "path": "E6g-nodeslide-portability-independent-02/manifest.json",
+    "sha256": "187f69efd942eb8ff2bbf552b999c646321f9584c0d4902f46db4e701d354fdd"
+  },
+  "fullCriterionScores": null,
+  "dimensionScores": null,
+  "reviewer": "Reused independent reviewer context; nonauthor of NodeSlide candidate."
+}

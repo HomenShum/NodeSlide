@@ -1,0 +1,3756 @@
+{
+  "base": "http://127.0.0.1:4906",
+  "startedAt": "2026-08-14T02:04:42.239Z",
+  "commands": [
+    {
+      "label": "lighthouse",
+      "command": "npx --yes lighthouse@13.4.1 http://127.0.0.1:4906 --output=json --output-path=\"C:\\Users\\hshum\\AppData\\Local\\Temp\\claude\\D--VSCode-Projects-cheiron-ai-take-home\\440ef9e9-83bb-4fe6-8676-4fdaaf332f3e\\scratchpad\\limits\\NodeSlide\\repo\\promotion\\evidence\\audit-2026-08-13\\before-dev\\lighthouse.json\" --chrome-flags=\"--headless\"",
+      "exit": 0,
+      "ms": 24026
+    },
+    {
+      "label": "axe",
+      "command": "npx --yes @axe-core/cli@4.13.0 http://127.0.0.1:4906 --save promotion/evidence/audit-2026-08-13/before-dev/axe.json",
+      "exit": 0,
+      "ms": 9197
+    }
+  ],
+  "widths": [
+    {
+      "name": "mobile-390",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "overflows": false,
+      "shot": "landing-mobile-390.png"
+    },
+    {
+      "name": "tablet-768",
+      "width": 768,
+      "height": 1024,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "overflows": false,
+      "shot": "landing-tablet-768.png"
+    },
+    {
+      "name": "desktop-1440",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflows": false,
+      "shot": "landing-desktop-1440.png"
+    },
+    {
+      "surface": "editor",
+      "name": "mobile-390",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "innerWidth": 390,
+      "overflows": false,
+      "shot": "editor-mobile-390.png"
+    },
+    {
+      "surface": "editor",
+      "name": "tablet-768",
+      "width": 768,
+      "height": 1024,
+      "scrollWidth": 768,
+      "innerWidth": 768,
+      "overflows": false,
+      "shot": "editor-tablet-768.png"
+    },
+    {
+      "surface": "editor",
+      "name": "desktop-1440",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflows": false,
+      "shot": "editor-desktop-1440.png"
+    }
+  ],
+  "wig": {
+    "mobile": {
+      "title": "NodeSlide — reviewable presentations, built from a brief",
+      "lang": "en",
+      "meta": {
+        "viewport": "width=device-width, initial-scale=1.0",
+        "colorScheme": "light",
+        "themeColor": null,
+        "description": "Turn a structured brief into an editable, reviewable presentation. Approve scope"
+      },
+      "htmlColorScheme": "normal",
+      "preconnect": [],
+      "skipLink": [],
+      "headings": [
+        {
+          "level": 2,
+          "text": "Artifact Lab"
+        },
+        {
+          "level": 3,
+          "text": "Hero thesis"
+        },
+        {
+          "level": 3,
+          "text": "KPI strip"
+        },
+        {
+          "level": 3,
+          "text": "Multi-series trend"
+        },
+        {
+          "level": 3,
+          "text": "Uncertainty range"
+        },
+        {
+          "level": 3,
+          "text": "Architecture diagram"
+        },
+        {
+          "level": 3,
+          "text": "Request sequence"
+        },
+        {
+          "level": 3,
+          "text": "Research timeline"
+        },
+        {
+          "level": 3,
+          "text": "Screenshot callouts"
+        },
+        {
+          "level": 3,
+          "text": "Claim-source lineage"
+        },
+        {
+          "level": 3,
+          "text": "Quality / cost equation"
+        },
+        {
+          "level": 3,
+          "text": "Code + runtime proof"
+        },
+        {
+          "level": 3,
+          "text": "Risk matrix"
+        },
+        {
+          "level": 1,
+          "text": "What presentation should we build?"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "a",
+          "testid": null,
+          "name": "NodeSlide home",
+          "w": 112.4,
+          "h": 31,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Artifact Lab",
+          "w": 94.9,
+          "h": 52,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "BYOK / Agents",
+          "w": 35,
+          "h": 35,
+          "fontSize": 0,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Open deck",
+          "w": 97.6,
+          "h": 52,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "textarea",
+          "testid": null,
+          "name": "Presentation brief",
+          "w": 342,
+          "h": 116,
+          "fontSize": 15,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": "Describe the presentation you want to make…"
+        },
+        {
+          "tag": "input",
+          "testid": "landing-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Attach data",
+          "w": 95.4,
+          "h": 32,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": "landing-model-select",
+          "name": "Generation model",
+          "w": 248,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": "landing-effort-select",
+          "name": "Reasoning effort",
+          "w": 46,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Create presentation",
+          "w": 40,
+          "h": 40,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "submit",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "World Cup data story",
+          "w": 360,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "AI 2027 scenario",
+          "w": 360,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "AI Fund product narrative",
+          "w": 360,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "landing-explore-sample",
+          "name": "See an example deck",
+          "w": 360,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "controlsUnder24": [
+        {
+          "tag": "input",
+          "testid": "landing-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "controlsUnder44": [
+        {
+          "tag": "a",
+          "testid": null,
+          "name": "NodeSlide home",
+          "w": 112.4,
+          "h": 31,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "BYOK / Agents",
+          "w": 35,
+          "h": 35,
+          "fontSize": 0,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "input",
+          "testid": "landing-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Attach data",
+          "w": 95.4,
+          "h": 32,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": "landing-model-select",
+          "name": "Generation model",
+          "w": 248,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": "landing-effort-select",
+          "name": "Reasoning effort",
+          "w": 46,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Create presentation",
+          "w": 40,
+          "h": 40,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "submit",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "World Cup data story",
+          "w": 360,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "AI 2027 scenario",
+          "w": 360,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "AI Fund product narrative",
+          "w": 360,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "landing-explore-sample",
+          "name": "See an example deck",
+          "w": 360,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "unnamedControls": [
+        {
+          "tag": "input",
+          "testid": "landing-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "textInputsUnder16px": [
+        {
+          "tag": "textarea",
+          "testid": null,
+          "name": "Presentation brief",
+          "w": 342,
+          "h": 116,
+          "fontSize": 15,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": "Describe the presentation you want to make…"
+        },
+        {
+          "tag": "select",
+          "testid": "landing-model-select",
+          "name": "Generation model",
+          "w": 248,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": "landing-effort-select",
+          "name": "Reasoning effort",
+          "w": 46,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        }
+      ],
+      "css": {
+        "rulesSeen": 2744,
+        "transitionAll": 1,
+        "reducedMotionBlocks": 5
+      },
+      "straightEllipsis": 0,
+      "typographicEllipsis": 0,
+      "scrollers": [
+        "label.ns-sr-only",
+        "input.ns-sr-only",
+        "span.ns-sr-only",
+        "span.ns-sr-only"
+      ]
+    },
+    "desktop": {
+      "title": "NodeSlide — reviewable presentations, built from a brief",
+      "lang": "en",
+      "meta": {
+        "viewport": "width=device-width, initial-scale=1.0",
+        "colorScheme": "light",
+        "themeColor": null,
+        "description": "Turn a structured brief into an editable, reviewable presentation. Approve scope"
+      },
+      "htmlColorScheme": "normal",
+      "preconnect": [],
+      "skipLink": [],
+      "headings": [
+        {
+          "level": 2,
+          "text": "Artifact Lab"
+        },
+        {
+          "level": 3,
+          "text": "Hero thesis"
+        },
+        {
+          "level": 3,
+          "text": "KPI strip"
+        },
+        {
+          "level": 3,
+          "text": "Multi-series trend"
+        },
+        {
+          "level": 3,
+          "text": "Uncertainty range"
+        },
+        {
+          "level": 3,
+          "text": "Architecture diagram"
+        },
+        {
+          "level": 3,
+          "text": "Request sequence"
+        },
+        {
+          "level": 3,
+          "text": "Research timeline"
+        },
+        {
+          "level": 3,
+          "text": "Screenshot callouts"
+        },
+        {
+          "level": 3,
+          "text": "Claim-source lineage"
+        },
+        {
+          "level": 3,
+          "text": "Quality / cost equation"
+        },
+        {
+          "level": 3,
+          "text": "Code + runtime proof"
+        },
+        {
+          "level": 3,
+          "text": "Risk matrix"
+        },
+        {
+          "level": 1,
+          "text": "What presentation should we build?"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "a",
+          "testid": null,
+          "name": "NodeSlide home",
+          "w": 112.4,
+          "h": 31,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Artifact Lab",
+          "w": 112.4,
+          "h": 36,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "BYOK / Agents",
+          "w": 128.7,
+          "h": 36,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Open deck",
+          "w": 108.5,
+          "h": 36,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "textarea",
+          "testid": null,
+          "name": "Presentation brief",
+          "w": 724,
+          "h": 122.2,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": "Describe the presentation you want to make…"
+        },
+        {
+          "tag": "input",
+          "testid": "landing-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Attach data",
+          "w": 95.4,
+          "h": 32,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": "landing-model-select",
+          "name": "Generation model",
+          "w": 248,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": "landing-effort-select",
+          "name": "Reasoning effort",
+          "w": 46,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Create presentation",
+          "w": 40,
+          "h": 40,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "submit",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "World Cup data story",
+          "w": 129.2,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "AI 2027 scenario",
+          "w": 106,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "AI Fund product narrative",
+          "w": 150.1,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "landing-explore-sample",
+          "name": "See an example deck",
+          "w": 150.5,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "controlsUnder24": [
+        {
+          "tag": "input",
+          "testid": "landing-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "controlsUnder44": [
+        {
+          "tag": "a",
+          "testid": null,
+          "name": "NodeSlide home",
+          "w": 112.4,
+          "h": 31,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Artifact Lab",
+          "w": 112.4,
+          "h": 36,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "BYOK / Agents",
+          "w": 128.7,
+          "h": 36,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Open deck",
+          "w": 108.5,
+          "h": 36,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "input",
+          "testid": "landing-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Attach data",
+          "w": 95.4,
+          "h": 32,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": "landing-model-select",
+          "name": "Generation model",
+          "w": 248,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": "landing-effort-select",
+          "name": "Reasoning effort",
+          "w": 46,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Create presentation",
+          "w": 40,
+          "h": 40,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "submit",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "World Cup data story",
+          "w": 129.2,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "AI 2027 scenario",
+          "w": 106,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "AI Fund product narrative",
+          "w": 150.1,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "landing-explore-sample",
+          "name": "See an example deck",
+          "w": 150.5,
+          "h": 33,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "unnamedControls": [
+        {
+          "tag": "input",
+          "testid": "landing-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "textInputsUnder16px": [
+        {
+          "tag": "select",
+          "testid": "landing-model-select",
+          "name": "Generation model",
+          "w": 248,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": "landing-effort-select",
+          "name": "Reasoning effort",
+          "w": 46,
+          "h": 31,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgba(0, 0, 0, 0)",
+          "placeholder": null
+        }
+      ],
+      "css": {
+        "rulesSeen": 2744,
+        "transitionAll": 1,
+        "reducedMotionBlocks": 5
+      },
+      "straightEllipsis": 0,
+      "typographicEllipsis": 0,
+      "scrollers": [
+        "label.ns-sr-only",
+        "input.ns-sr-only",
+        "span.ns-sr-only",
+        "span.ns-sr-only"
+      ]
+    },
+    "tabStops": [
+      {
+        "tag": "A",
+        "testid": null,
+        "label": "NodeSlide home",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgb(17, 24, 39)|rgba(0, 0, 0, 0)",
+          "after": "solid|2px|none|rgb(17, 24, 39)|rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "Artifact Lab",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.12)|rgba(255, 255, 255, 0.72)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.12)|rgba(255, 255, 255, 0.72)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "BYOK / Agents",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.12)|rgba(255, 255, 255, 0.72)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.12)|rgba(255, 255, 255, 0.72)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "Open deck",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.12)|rgba(255, 255, 255, 0.72)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.12)|rgba(255, 255, 255, 0.72)"
+        }
+      },
+      {
+        "tag": "TEXTAREA",
+        "testid": null,
+        "label": "",
+        "indicatorOn": "form.ns-landing-composer",
+        "change": {
+          "depth": 1,
+          "before": "none|3px|rgba(15, 23, 42, 0.1) 0px 18px 55px 0px, rgba(15, 23, 42, 0.05) 0px 2px 8px 0px|rgba(15, 23, 42, 0.12",
+          "after": "none|3px|rgba(15, 23, 42, 0.1) 0px 18px 55px 0px, rgba(15, 23, 42, 0.05) 0px 2px 8px 0px|oklab(0.207678 -0.002"
+        }
+      },
+      {
+        "tag": "INPUT",
+        "testid": "landing-file-input",
+        "label": "",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgb(17, 24, 39)|rgba(0, 0, 0, 0)",
+          "after": "solid|2px|none|rgb(17, 24, 39)|rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "Attach data",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.08)|rgb(243, 244, 246)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.08)|rgb(243, 244, 246)"
+        }
+      },
+      {
+        "tag": "SELECT",
+        "testid": "landing-model-select",
+        "label": "Generation model",
+        "indicatorOn": "form.ns-landing-composer",
+        "change": {
+          "depth": 4,
+          "before": "none|3px|rgba(15, 23, 42, 0.1) 0px 18px 55px 0px, rgba(15, 23, 42, 0.05) 0px 2px 8px 0px|rgba(15, 23, 42, 0.12",
+          "after": "none|3px|rgba(15, 23, 42, 0.106) 0px 18.4505px 55.7884px 0px, rgba(56, 42, 51, 0.055) 0px 1.77475px 7.09902px "
+        }
+      },
+      {
+        "tag": "SELECT",
+        "testid": "landing-effort-select",
+        "label": "Reasoning effort",
+        "indicatorOn": "form.ns-landing-composer",
+        "change": {
+          "depth": 4,
+          "before": "none|3px|rgba(15, 23, 42, 0.1) 0px 18px 55px 0px, rgba(15, 23, 42, 0.05) 0px 2px 8px 0px|rgba(15, 23, 42, 0.12",
+          "after": "none|3px|rgba(15, 23, 42, 0.106) 0px 18.4505px 55.7884px 0px, rgba(56, 42, 51, 0.055) 0px 1.77475px 7.09902px "
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "World Cup data story",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.1)|rgba(255, 255, 255, 0.6)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.1)|rgba(255, 255, 255, 0.6)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "AI 2027 scenario",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.1)|rgba(255, 255, 255, 0.6)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.1)|rgba(255, 255, 255, 0.6)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "AI Fund product narrative",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.1)|rgba(255, 255, 255, 0.6)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.1)|rgba(255, 255, 255, 0.6)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": "landing-explore-sample",
+        "label": "See an example deck",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.1)|rgba(255, 255, 255, 0.6)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.1)|rgba(255, 255, 255, 0.6)"
+        }
+      },
+      {
+        "tag": "BODY",
+        "indicatorOn": "n/a"
+      }
+    ],
+    "editor": {
+      "title": "NodeSlide — reviewable presentations, built from a brief",
+      "lang": "en",
+      "meta": {
+        "viewport": "width=device-width, initial-scale=1.0",
+        "colorScheme": "light",
+        "themeColor": null,
+        "description": "Turn a structured brief into an editable, reviewable presentation. Approve scope"
+      },
+      "htmlColorScheme": "normal",
+      "preconnect": [],
+      "skipLink": [],
+      "headings": [
+        {
+          "level": 2,
+          "text": "Artifact Lab"
+        },
+        {
+          "level": 3,
+          "text": "Hero thesis"
+        },
+        {
+          "level": 3,
+          "text": "KPI strip"
+        },
+        {
+          "level": 3,
+          "text": "Multi-series trend"
+        },
+        {
+          "level": 3,
+          "text": "Uncertainty range"
+        },
+        {
+          "level": 3,
+          "text": "Architecture diagram"
+        },
+        {
+          "level": 3,
+          "text": "Request sequence"
+        },
+        {
+          "level": 3,
+          "text": "Research timeline"
+        },
+        {
+          "level": 3,
+          "text": "Screenshot callouts"
+        },
+        {
+          "level": 3,
+          "text": "Claim-source lineage"
+        },
+        {
+          "level": 3,
+          "text": "Quality / cost equation"
+        },
+        {
+          "level": 3,
+          "text": "Code + runtime proof"
+        },
+        {
+          "level": 3,
+          "text": "Risk matrix"
+        }
+      ],
+      "controls": [
+        {
+          "tag": "button",
+          "testid": "new-deck-trigger",
+          "name": "Create or open a NodeSlide deck",
+          "w": 101.7,
+          "h": 26,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "input",
+          "testid": "deck-title",
+          "name": "Deck title",
+          "w": 153,
+          "h": 27,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Undo",
+          "w": 34,
+          "h": 30,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Redo",
+          "w": 34,
+          "h": 30,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Switch to dark theme",
+          "w": 30,
+          "h": 30,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Language and clarity: English",
+          "w": 72.7,
+          "h": 30,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Reset demo view",
+          "w": 72.1,
+          "h": 32,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "share",
+          "name": "Share deck",
+          "w": 80,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "present",
+          "name": "Present deck",
+          "w": 90,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Export deck",
+          "w": 108.7,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Open command palette",
+          "w": 30,
+          "h": 30,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slides",
+          "w": 91,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Outline",
+          "w": 91,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Layers",
+          "w": 91,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Opening / 011",
+          "w": 277,
+          "h": 30,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "slide-thumbnail-slide_63ec172d2b001f994b728db4a39d2412",
+          "name": "Slide 1: Four slides on why a seed-stage diligence memo shou",
+          "w": 116,
+          "h": 65,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Four slides on why a seed-stage diligence memo should stay e",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 1 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Context / 021",
+          "w": 277,
+          "h": 30,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "slide-thumbnail-slide_89ebeeb5c9e18c037af2846b48db9bbd",
+          "name": "Slide 2: The moment to solve",
+          "w": 116,
+          "h": 65,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "The moment to solve",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 2 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Insight / 031",
+          "w": 277,
+          "h": 30,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "slide-thumbnail-slide_9c598e8ad913cab19abe800eb952d217",
+          "name": "Slide 3: The decisive insight",
+          "w": 116,
+          "h": 65,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "The decisive insight",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 3 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Close / 071",
+          "w": 277,
+          "h": 30,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "slide-thumbnail-slide_3164e69fb1dd34f5666ad743399f8da0",
+          "name": "Slide 4: The decision",
+          "w": 116,
+          "h": 65,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "The decision",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 4 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Add slide",
+          "w": 277,
+          "h": 38,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Edit",
+          "w": 45.8,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Overview",
+          "w": 77.2,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Compare",
+          "w": 75.4,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_b77bc4eeaf2e4c88a68332701ae79d71",
+          "name": "Headline, text slide element",
+          "w": 435.8,
+          "h": 103.4,
+          "fontSize": 33.7833,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_d4ff039bbc8c18bb69d82f3eb469248b",
+          "name": "Accent underline, shape slide element, locked",
+          "w": 60.8,
+          "h": 1.7,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_e49df3efdf441391cb91241b0195757d",
+          "name": "Section label, text slide element",
+          "w": 202.7,
+          "h": 20,
+          "fontSize": 7.91797,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_89f3640cff3e26b0abb49e6558a9d222",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 51.3,
+          "h": 13.3,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_d32e673458c0b6bfdb23629e48286357",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 21.9,
+          "h": 6.3,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_138c11c2df1a5f991e61edfbbc2fbae5",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 20.9,
+          "h": 5.4,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_aab44fa95cbd1544040391c47aab9393",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 11.1,
+          "h": 6.3,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_fdab89ec86b579e5d574865057853522",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 10.1,
+          "h": 5.7,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_4da76445e1a6d56f69d01540d5c9c9cf",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 13.2,
+          "h": 7.4,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_98e5b0d84a2c7bce2e928dea58a0ca55",
+          "name": "Deck footer, text slide element, locked",
+          "w": 364.9,
+          "h": 10,
+          "fontSize": 5.27865,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_d2274e97a4592617daf13f32642f8ae6",
+          "name": "Page number, text slide element, locked",
+          "w": 30.4,
+          "h": 14.3,
+          "fontSize": 6.86224,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Previous slide",
+          "w": 28,
+          "h": 27,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Next slide",
+          "w": 28,
+          "h": 27,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Presenter notes46 words",
+          "w": 776,
+          "h": 21,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "textarea",
+          "testid": null,
+          "name": "Presenter notes for Four slides on why a seed-stage diligenc",
+          "w": 776,
+          "h": 76.5,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": "What will you say over this slide?"
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Zoom out",
+          "w": 28,
+          "h": 27,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Zoom in",
+          "w": 28,
+          "h": 27,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Fit slide to workspace",
+          "w": 28,
+          "h": 27,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Resize inspector",
+          "w": 6,
+          "h": 848,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Collapse inspector",
+          "w": 24,
+          "h": 24,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-ai",
+          "name": "AI",
+          "w": 10.4,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-design",
+          "name": "Design",
+          "w": 33.8,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-nodebook",
+          "name": "NodeBook",
+          "w": 52.2,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-comments",
+          "name": "Comments",
+          "w": 53,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-versions",
+          "name": "Versions",
+          "w": 40.8,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-data",
+          "name": "Evidence",
+          "w": 43.2,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-json",
+          "name": "JSON",
+          "w": 26.7,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-trace",
+          "name": "Trace",
+          "w": 25.5,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Deck CI Passed, 0 blockers, 0 warnings. Open Trace",
+          "w": 339,
+          "h": 26.8,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-generate-directions",
+          "name": "Generate 3 directions",
+          "w": 155.5,
+          "h": 26.8,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-suggested-action",
+          "name": "Sharpen the story",
+          "w": 119.2,
+          "h": 26.8,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-suggested-action",
+          "name": "Reduce density",
+          "w": 104.8,
+          "h": 26.8,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "textarea",
+          "testid": null,
+          "name": "AI instruction",
+          "w": 313,
+          "h": 64,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": "Turn this into a crisp executive story..."
+        },
+        {
+          "tag": "button",
+          "testid": "ai-model-select",
+          "name": "Agent model",
+          "w": 110.1,
+          "h": 36,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": null,
+          "name": "Kimi K3 · Moonshot AI · RecommendedGLM 5.2 · Z.ai · OpenRout",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgb(255, 255, 255)",
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-effort-select",
+          "name": "Reasoning effort",
+          "w": 72,
+          "h": 36,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": null,
+          "name": "LightHighUltra",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgb(255, 255, 255)",
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-provider-summary",
+          "name": "Advanced provider, privacy, scope, and editing controls",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-connect-agent",
+          "name": "Connect BYOK model or coding agent",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-web-research-toggle",
+          "name": "Toggle web research",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-memory",
+          "name": "Manage deck memory",
+          "w": 36,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Add read context reference",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Add command",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-open-material-workbench",
+          "name": "Open the visual material tool",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "input",
+          "testid": "ai-data-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-attach-data",
+          "name": "Attach data file",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Expand composer",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-submit",
+          "name": "Propose edit",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "submit",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "validation-status",
+          "name": "Structure, presentation, and cleanup checks passed. Open val",
+          "w": 339,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Dismiss notification",
+          "w": 26,
+          "h": 16,
+          "fontSize": 9,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "controlsUnder24": [
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Four slides on why a seed-stage diligence memo should stay e",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 1 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "The moment to solve",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 2 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "The decisive insight",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 3 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "The decision",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 4 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_d4ff039bbc8c18bb69d82f3eb469248b",
+          "name": "Accent underline, shape slide element, locked",
+          "w": 60.8,
+          "h": 1.7,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_e49df3efdf441391cb91241b0195757d",
+          "name": "Section label, text slide element",
+          "w": 202.7,
+          "h": 20,
+          "fontSize": 7.91797,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_89f3640cff3e26b0abb49e6558a9d222",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 51.3,
+          "h": 13.3,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_d32e673458c0b6bfdb23629e48286357",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 21.9,
+          "h": 6.3,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_138c11c2df1a5f991e61edfbbc2fbae5",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 20.9,
+          "h": 5.4,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_aab44fa95cbd1544040391c47aab9393",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 11.1,
+          "h": 6.3,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_fdab89ec86b579e5d574865057853522",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 10.1,
+          "h": 5.7,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_4da76445e1a6d56f69d01540d5c9c9cf",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 13.2,
+          "h": 7.4,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_98e5b0d84a2c7bce2e928dea58a0ca55",
+          "name": "Deck footer, text slide element, locked",
+          "w": 364.9,
+          "h": 10,
+          "fontSize": 5.27865,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_d2274e97a4592617daf13f32642f8ae6",
+          "name": "Page number, text slide element, locked",
+          "w": 30.4,
+          "h": 14.3,
+          "fontSize": 6.86224,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Presenter notes46 words",
+          "w": 776,
+          "h": 21,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Resize inspector",
+          "w": 6,
+          "h": 848,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-ai",
+          "name": "AI",
+          "w": 10.4,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": null,
+          "name": "Kimi K3 · Moonshot AI · RecommendedGLM 5.2 · Z.ai · OpenRout",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgb(255, 255, 255)",
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": null,
+          "name": "LightHighUltra",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgb(255, 255, 255)",
+          "placeholder": null
+        },
+        {
+          "tag": "input",
+          "testid": "ai-data-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Dismiss notification",
+          "w": 26,
+          "h": 16,
+          "fontSize": 9,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "controlsUnder44": [
+        {
+          "tag": "button",
+          "testid": "new-deck-trigger",
+          "name": "Create or open a NodeSlide deck",
+          "w": 101.7,
+          "h": 26,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "input",
+          "testid": "deck-title",
+          "name": "Deck title",
+          "w": 153,
+          "h": 27,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Undo",
+          "w": 34,
+          "h": 30,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Redo",
+          "w": 34,
+          "h": 30,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Switch to dark theme",
+          "w": 30,
+          "h": 30,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Language and clarity: English",
+          "w": 72.7,
+          "h": 30,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Reset demo view",
+          "w": 72.1,
+          "h": 32,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "share",
+          "name": "Share deck",
+          "w": 80,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "present",
+          "name": "Present deck",
+          "w": 90,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Export deck",
+          "w": 108.7,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Open command palette",
+          "w": 30,
+          "h": 30,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slides",
+          "w": 91,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Outline",
+          "w": 91,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Layers",
+          "w": 91,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Opening / 011",
+          "w": 277,
+          "h": 30,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Four slides on why a seed-stage diligence memo should stay e",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 1 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Context / 021",
+          "w": 277,
+          "h": 30,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "The moment to solve",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 2 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Insight / 031",
+          "w": 277,
+          "h": 30,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "The decisive insight",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 3 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Close / 071",
+          "w": 277,
+          "h": 30,
+          "fontSize": 10,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "The decision",
+          "w": 114,
+          "h": 17,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Slide 4 actions",
+          "w": 20,
+          "h": 20,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Add slide",
+          "w": 277,
+          "h": 38,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Edit",
+          "w": 45.8,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Overview",
+          "w": 77.2,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Compare",
+          "w": 75.4,
+          "h": 26,
+          "fontSize": 12.5,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_d4ff039bbc8c18bb69d82f3eb469248b",
+          "name": "Accent underline, shape slide element, locked",
+          "w": 60.8,
+          "h": 1.7,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_e49df3efdf441391cb91241b0195757d",
+          "name": "Section label, text slide element",
+          "w": 202.7,
+          "h": 20,
+          "fontSize": 7.91797,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_89f3640cff3e26b0abb49e6558a9d222",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 51.3,
+          "h": 13.3,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_d32e673458c0b6bfdb23629e48286357",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 21.9,
+          "h": 6.3,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_138c11c2df1a5f991e61edfbbc2fbae5",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 20.9,
+          "h": 5.4,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_aab44fa95cbd1544040391c47aab9393",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 11.1,
+          "h": 6.3,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_fdab89ec86b579e5d574865057853522",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 10.1,
+          "h": 5.7,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_4da76445e1a6d56f69d01540d5c9c9cf",
+          "name": "Story scene · turn uncertainty into an owned next move, shap",
+          "w": 13.2,
+          "h": 7.4,
+          "fontSize": 16,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_98e5b0d84a2c7bce2e928dea58a0ca55",
+          "name": "Deck footer, text slide element, locked",
+          "w": 364.9,
+          "h": 10,
+          "fontSize": 5.27865,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "div",
+          "testid": "slide-element-element_d2274e97a4592617daf13f32642f8ae6",
+          "name": "Page number, text slide element, locked",
+          "w": 30.4,
+          "h": 14.3,
+          "fontSize": 6.86224,
+          "touchAction": "none",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Previous slide",
+          "w": 28,
+          "h": 27,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Next slide",
+          "w": 28,
+          "h": 27,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Presenter notes46 words",
+          "w": 776,
+          "h": 21,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Zoom out",
+          "w": 28,
+          "h": 27,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Zoom in",
+          "w": 28,
+          "h": 27,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Fit slide to workspace",
+          "w": 28,
+          "h": 27,
+          "fontSize": 12,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Resize inspector",
+          "w": 6,
+          "h": 848,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Collapse inspector",
+          "w": 24,
+          "h": 24,
+          "fontSize": 16,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-ai",
+          "name": "AI",
+          "w": 10.4,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-design",
+          "name": "Design",
+          "w": 33.8,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-nodebook",
+          "name": "NodeBook",
+          "w": 52.2,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-comments",
+          "name": "Comments",
+          "w": 53,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-versions",
+          "name": "Versions",
+          "w": 40.8,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-data",
+          "name": "Evidence",
+          "w": 43.2,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-json",
+          "name": "JSON",
+          "w": 26.7,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "inspector-tab-trace",
+          "name": "Trace",
+          "w": 25.5,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Deck CI Passed, 0 blockers, 0 warnings. Open Trace",
+          "w": 339,
+          "h": 26.8,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-generate-directions",
+          "name": "Generate 3 directions",
+          "w": 155.5,
+          "h": 26.8,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-suggested-action",
+          "name": "Sharpen the story",
+          "w": 119.2,
+          "h": 26.8,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-suggested-action",
+          "name": "Reduce density",
+          "w": 104.8,
+          "h": 26.8,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-model-select",
+          "name": "Agent model",
+          "w": 110.1,
+          "h": 36,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": null,
+          "name": "Kimi K3 · Moonshot AI · RecommendedGLM 5.2 · Z.ai · OpenRout",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgb(255, 255, 255)",
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-effort-select",
+          "name": "Reasoning effort",
+          "w": 72,
+          "h": 36,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": null,
+          "name": "LightHighUltra",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgb(255, 255, 255)",
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-provider-summary",
+          "name": "Advanced provider, privacy, scope, and editing controls",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-connect-agent",
+          "name": "Connect BYOK model or coding agent",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-web-research-toggle",
+          "name": "Toggle web research",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-memory",
+          "name": "Manage deck memory",
+          "w": 36,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Add read context reference",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Add command",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-open-material-workbench",
+          "name": "Open the visual material tool",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "input",
+          "testid": "ai-data-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-attach-data",
+          "name": "Attach data file",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Expand composer",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "ai-submit",
+          "name": "Propose edit",
+          "w": 32,
+          "h": 32,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "submit",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": "validation-status",
+          "name": "Structure, presentation, and cleanup checks passed. Open val",
+          "w": 339,
+          "h": 30,
+          "fontSize": 11,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "button",
+          "testid": null,
+          "name": "Dismiss notification",
+          "w": 26,
+          "h": 16,
+          "fontSize": 9,
+          "touchAction": "auto",
+          "type": "button",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "unnamedControls": [
+        {
+          "tag": "input",
+          "testid": "ai-data-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "textInputsUnder16px": [
+        {
+          "tag": "input",
+          "testid": "deck-title",
+          "name": "Deck title",
+          "w": 153,
+          "h": 27,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": null
+        },
+        {
+          "tag": "textarea",
+          "testid": null,
+          "name": "Presenter notes for Four slides on why a seed-stage diligenc",
+          "w": 776,
+          "h": 76.5,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": "What will you say over this slide?"
+        },
+        {
+          "tag": "textarea",
+          "testid": null,
+          "name": "AI instruction",
+          "w": 313,
+          "h": 64,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "placeholder": "Turn this into a crisp executive story..."
+        },
+        {
+          "tag": "select",
+          "testid": null,
+          "name": "Kimi K3 · Moonshot AI · RecommendedGLM 5.2 · Z.ai · OpenRout",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgb(255, 255, 255)",
+          "placeholder": null
+        },
+        {
+          "tag": "select",
+          "testid": null,
+          "name": "LightHighUltra",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": null,
+          "autocomplete": null,
+          "background": "rgb(255, 255, 255)",
+          "placeholder": null
+        },
+        {
+          "tag": "input",
+          "testid": "ai-data-file-input",
+          "name": "",
+          "w": 1,
+          "h": 1,
+          "fontSize": 13,
+          "touchAction": "auto",
+          "type": "file",
+          "autocomplete": null,
+          "placeholder": null
+        }
+      ],
+      "css": {
+        "rulesSeen": 3085,
+        "transitionAll": 1,
+        "reducedMotionBlocks": 7
+      },
+      "straightEllipsis": 0,
+      "typographicEllipsis": 3,
+      "scrollers": [
+        "input.ns-title-input ns-title-input--v3",
+        "span.ns-sr-only",
+        "button.ns-slide-title-button",
+        "button.ns-slide-title-button",
+        "button.ns-slide-title-button",
+        "span.",
+        "div.ns-inspector-tabs",
+        "span.ns-ai-v3-context-chip is-slide",
+        "select.",
+        "select."
+      ]
+    },
+    "editorTabStops": [
+      {
+        "tag": "BUTTON",
+        "testid": "new-deck-trigger",
+        "label": "Create or open a NodeSlide deck",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgb(17, 24, 39)|rgba(0, 0, 0, 0)",
+          "after": "solid|2px|none|rgb(17, 24, 39)|rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "tag": "INPUT",
+        "testid": "deck-title",
+        "label": "Deck title",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(0, 0, 0, 0)|rgba(0, 0, 0, 0)",
+          "after": "solid|2px|rgba(217, 119, 87, 0.1) 0px 0px 0px 3px|rgba(15, 23, 42, 0.1)|rgb(255, 255, 255)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "Switch to dark theme",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.1)|rgb(255, 255, 255)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.1)|rgb(255, 255, 255)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "Language and clarity: English",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.1)|rgb(255, 255, 255)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.1)|rgb(255, 255, 255)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "Reset demo view",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgb(102, 112, 133)|rgba(0, 0, 0, 0)",
+          "after": "solid|2px|none|rgb(102, 112, 133)|rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": "share",
+        "label": "Share deck",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.1)|rgb(255, 255, 255)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.1)|rgb(255, 255, 255)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": "present",
+        "label": "Present deck",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.1)|rgb(255, 255, 255)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.1)|rgb(255, 255, 255)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "Export deck",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|rgba(15, 23, 42, 0.14) 0px 1px 2px 0px|rgb(158, 80, 56)|rgba(0, 0, 0, 0)",
+          "after": "solid|2px|rgba(15, 23, 42, 0.14) 0px 1px 2px 0px|rgb(158, 80, 56)|rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "Open command palette",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgba(15, 23, 42, 0.1)|rgb(255, 255, 255)",
+          "after": "solid|2px|none|rgba(15, 23, 42, 0.1)|rgb(255, 255, 255)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "Slides",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|rgba(15, 23, 42, 0.08) 0px 1px 3px 0px|rgb(17, 24, 39)|rgb(255, 255, 255)",
+          "after": "solid|2px|rgba(15, 23, 42, 0.08) 0px 1px 3px 0px|rgb(17, 24, 39)|rgb(255, 255, 255)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": null,
+        "label": "Opening / 011",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|none|rgb(75, 85, 99)|rgba(0, 0, 0, 0)",
+          "after": "solid|2px|none|rgb(75, 85, 99)|rgba(0, 0, 0, 0)"
+        }
+      },
+      {
+        "tag": "BUTTON",
+        "testid": "slide-thumbnail-slide_63ec172d2b001f994b728db4a39d2412",
+        "label": "Slide 1: Four slides on why a seed-stage",
+        "indicatorOn": "self",
+        "change": {
+          "depth": 0,
+          "before": "none|3px|rgb(217, 119, 87) 0px 0px 0px 1px, rgba(66, 60, 180, 0.13) 0px 4px 12px 0px|rgb(217, 119, 87)|rgb(255",
+          "after": "solid|2px|rgb(217, 119, 87) 0px 0px 0px 1px, rgba(66, 60, 180, 0.13) 0px 4px 12px 0px|rgb(217, 119, 87)|rgb(25"
+        }
+      }
+    ]
+  },
+  "states": {
+    "empty": {
+      "shot": "landing-desktop-1440.png",
+      "starters": 4,
+      "privacyCue": "Recommended: Kimi K3 via OpenRouter. Create directly; the route, tokens, and cost are recorded in Trace."
+    },
+    "error": {
+      "trigger": "attach pilot-metrics.png (unsupported type)",
+      "shown": true,
+      "text": "Attach a CSV, JSON, TXT, or Markdown file.",
+      "role": "alert",
+      "briefPreserved": true,
+      "shot": "state-error.png"
+    },
+    "loading": {
+      "firstFeedbackMs": 99,
+      "stage": "Reading the brief and evidence…",
+      "shot": "state-loading.png"
+    },
+    "afterCreate": {
+      "outcome": "studio",
+      "elapsedMs": 1003,
+      "shot": "state-after-create.png"
+    },
+    "success": {
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "overflows": false,
+      "shot": "state-success-editor.png"
+    }
+  },
+  "interaction": {
+    "keystrokeMs": {
+      "p50": 16.799999982118607,
+      "p95": 17.099999994039536,
+      "max": 17.400000005960464
+    },
+    "slideSwitchMs": 103
+  },
+  "console": [],
+  "network": [],
+  "finishedAt": "2026-08-14T02:04:58.039Z"
+}

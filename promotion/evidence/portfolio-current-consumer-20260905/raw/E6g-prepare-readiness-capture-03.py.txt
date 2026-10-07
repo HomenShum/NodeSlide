@@ -1,0 +1,6 @@
+from pathlib import Path
+P=Path(__file__).parent
+s=(P/'E6g-capture-readiness-before-02.mjs').read_text(encoding='utf-8').replace('readiness-before-02','readiness-before-03')
+s=s.replace('[{width:1440,height:960},{width:390,height:844}]','[{width:390,height:844}]')
+s=s.replace("await page.getByTestId('inspector-tab-ai').waitFor({state:'attached'});","await page.getByTestId('inspector').waitFor();")
+(P/'E6g-capture-readiness-before-03.mjs').write_text(s,encoding='utf-8',newline='\n')

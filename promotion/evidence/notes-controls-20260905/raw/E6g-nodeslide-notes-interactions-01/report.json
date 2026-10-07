@@ -1,0 +1,229 @@
+{
+  "proof": "NODESLIDE-NOTES-CONTROLS-01",
+  "startedAt": "2026-09-05T17:48:19.360Z",
+  "source": [
+    {
+      "path": "src/domains/nodeslide/components/SlideCanvas.tsx",
+      "sha256": "028175b149f251a2bcf094e518f28e68834b9ed942a118e4b8cc449f94a8fe87"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslide.css",
+      "sha256": "059f3f5bdf23ca38e24e133be5870304049fc1a140334dabbfe337145a980ee7"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslideV3.css",
+      "sha256": "5175702b66ddf1f91f0e379c45e3a1d3078accb8aca02bab4345c5132d3618ad"
+    }
+  ],
+  "steps": [
+    {
+      "cell": {
+        "width": 1440,
+        "height": 960,
+        "textPercent": 100
+      },
+      "round": 1,
+      "note": "Notes handoff 1440 round 1: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 3,
+      "currentVersion": 4,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 1440,
+        "height": 960,
+        "textPercent": 100
+      },
+      "round": 2,
+      "note": "Notes handoff 1440 round 2: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 4,
+      "currentVersion": 5,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 1440,
+        "height": 960,
+        "textPercent": 100
+      },
+      "round": 3,
+      "note": "Notes handoff 1440 round 3: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 5,
+      "currentVersion": 6,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 1440,
+        "height": 960,
+        "textPercent": 100
+      },
+      "round": 4,
+      "note": "Notes handoff 1440 round 4: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 6,
+      "currentVersion": 7,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 1440,
+        "height": 960,
+        "textPercent": 100
+      },
+      "name": "zoom-burst-fit-native-toggle-reload-and-first-last-boundaries",
+      "passed": true
+    },
+    {
+      "cell": {
+        "width": 390,
+        "height": 844,
+        "textPercent": 100
+      },
+      "round": 1,
+      "note": "Notes handoff 390 round 1: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 7,
+      "currentVersion": 8,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 390,
+        "height": 844,
+        "textPercent": 100
+      },
+      "round": 2,
+      "note": "Notes handoff 390 round 2: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 8,
+      "currentVersion": 9,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 390,
+        "height": 844,
+        "textPercent": 100
+      },
+      "round": 3,
+      "note": "Notes handoff 390 round 3: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 9,
+      "currentVersion": 10,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 390,
+        "height": 844,
+        "textPercent": 100
+      },
+      "round": 4,
+      "note": "Notes handoff 390 round 4: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 10,
+      "currentVersion": 11,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 390,
+        "height": 844,
+        "textPercent": 100
+      },
+      "name": "zoom-burst-fit-native-toggle-reload-and-first-last-boundaries",
+      "passed": true
+    },
+    {
+      "cell": {
+        "width": 320,
+        "height": 844,
+        "textPercent": 200
+      },
+      "round": 1,
+      "note": "Notes handoff 320 round 1: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 11,
+      "currentVersion": 12,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 320,
+        "height": 844,
+        "textPercent": 200
+      },
+      "round": 2,
+      "note": "Notes handoff 320 round 2: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 12,
+      "currentVersion": 13,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 320,
+        "height": 844,
+        "textPercent": 200
+      },
+      "round": 3,
+      "note": "Notes handoff 320 round 3: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 13,
+      "currentVersion": 14,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 320,
+        "height": 844,
+        "textPercent": 200
+      },
+      "round": 4,
+      "note": "Notes handoff 320 round 4: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.",
+      "priorVersion": 14,
+      "currentVersion": 15,
+      "nativeReverseTabsToNext": 5,
+      "blurNextPreviousPreserved": true
+    },
+    {
+      "cell": {
+        "width": 320,
+        "height": 844,
+        "textPercent": 200
+      },
+      "name": "zoom-burst-fit-native-toggle-reload-and-first-last-boundaries",
+      "passed": true
+    }
+  ],
+  "files": [
+    {
+      "path": "before.json",
+      "bytes": 80922,
+      "sha256": "a7f5fa1d928fd6a6314d138d5eced53411567d4fb1e7c187de1a793aef2280e4",
+      "expectedNote": "Illustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text.\nDecision: prototype after checking the budget. 中文交接 — no external claims."
+    },
+    {
+      "path": "before.pptx",
+      "bytes": 137200,
+      "sha256": "cbae3988343eac8e31b937cf7f8d63f9e3baa724f5289faf8167c7f3b5f3fc5a",
+      "expectedNote": "Illustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text.\nDecision: prototype after checking the budget. 中文交接 — no external claims."
+    },
+    {
+      "path": "after.json",
+      "bytes": 80880,
+      "sha256": "f392a81579d641ac1beecd437dc1a9c15943e82dd1ed7ed55cfbdcc3e4d0bf6c",
+      "expectedNote": "Notes handoff 320 round 4: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note."
+    }
+  ],
+  "errors": [],
+  "blockedOrigins": [],
+  "fullGrades": null,
+  "status": "FAILED",
+  "failure": "page.waitForEvent: Timeout 15000ms exceeded while waiting for event \"download\"\n=========================== logs ===========================\nwaiting for event \"download\"\n============================================================\n    at saveDownload (C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-notes-controls-interactions.mjs:24:18)\n    at async file:///C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6g-notes-controls-interactions.mjs:60:178",
+  "finishedAt": "2026-09-05T17:48:56.241Z"
+}

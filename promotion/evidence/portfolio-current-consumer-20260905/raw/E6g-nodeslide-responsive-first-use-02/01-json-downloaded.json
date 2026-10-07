@@ -1,0 +1,1938 @@
+{
+  "text": "N\nNodeSlide\n/\nv3\nEN\nReset demo\nShare\nPresent\nExport\nCommands\nSlides\nOutline\nLayers\nOPENING / 01\n1\n01\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\nCreate a six-slide decision review for a fictional sourcing pilot\n1 source · current\nCONTEXT / 02\n1\n02\nCONTEXT / 02\nThe cost of waiting is usually hidden in repeated work.\nFriction\nConsequence\nDecision window\nFrame the current reality for Decision-makers described in the brief: what is fragmented today, why it matters now, and where momentum is being lost.\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n02\nThe moment to solve\n2 sources · current\nINSIGHT / 03\n1\n03\nINSIGHT / 03\nA better outcome starts with a sharper point of view.\nCreate a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decis…\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n03\nThe decisive insight\n2 sources · current\nAPPROACH / 04\n1\n04\nAPPROACH / 04\nTurn the idea into a sequence people can understand and own.\nConnect intent, action, and feedback in one visible operating path so the audience can see both the destination and the mechanics.\nAlign on intent\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n04\nHow the approach works\n2 sources · current\nEVIDENCE / 05\n1\n05\nEVIDENCE / 05\nDefine proof before asking for commitment.\nUse the brief’s success criteria as qualitative review questions until measured evidence is supplied.\nHonor explicit slide-count and presentation constraints in the brief\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n05\nWhat success looks like\n2 sources · current\nCLOSE / 07\n1\n06\nCLOSE / 07\nCreate an editable, reviewable presentation from this idea\n01  Agree the outcome\n02  Name the owner\n03  Set the next checkpoint\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n06\nThe decision\n1 source · current\nAdd slide\nEdit\nOverview\nCompare\n01\nCreate a six-slide decision review for a fictional sourcing pilot\nverified\nSLIDE JOB\nIllustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text. Decision: prototype after checking the budget. 中文交接 — no external claims.\nCreate an editable, reviewable presentation from this idea\nOPENING / 01\nNODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\n01\n1 / 6\nPresenter notes\n25 words\n65%\nFit\nINSPECTOR\nSelection · none\nAI\nDesign\nNodeBook\nComments\nVersions\nEvidence\nJSON\nTrace\nDECK AS CODE\nJSON\n6\n\nThe canonical nodeslide.slidelang/v1 DeckSpec — 6 slides · 82 elements. Select a single element and switch to Selection to edit its JSON; changes create a validated candidate, open Compare, and require Accept or Reject.\n\nDeck\nSlide\nSelection\nLast patch\nCopy\nDownload deck.json\n{\n  \"deck\": {\n    \"brief\": {\n      \"audience\": \"Decision-makers described in the brief\",\n      \"prompt\": \"Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.\",\n      \"purpose\": \"Create an editable, reviewable presentation from this idea\",\n      \"successCriteria\": [\n        \"Honor explicit slide-count and presentation constraints in the brief\",\n        \"Use only claims and artifact types supported by the supplied brief and evidence\",\n        \"Validation passes before presentation, export, or publication\"\n      ]\n    },\n    \"createdAt\": 1788607528040,\n    \"id\": \"deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4\",\n    \"projectId\": \"project_nodeslide_mtoaqp9d_4eafe7f4bf0f3d6da737d71ef1706ee9\",\n    \"schemaVersion\": \"nodeslide.slidelang/v1\",\n    \"shareSlug\": \"share-af3dedfe0c080c7671b62d8cb4252aa8c534\",\n    \"slideOrder\": [\n      \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\"\n    ],\n    \"status\": \"ready\",\n    \"theme\": {\n      \"colors\": {\n        \"accent\": \"#B44A2D\",\n        \"accentSoft\": \"#F2DED3\",\n        \"border\": \"#DED7CC\",\n        \"canvas\": \"#F7F4ED\",\n        \"ink\": \"#26221D\",\n        \"insight\": \"#E5E9D6\",\n        \"insightInk\": \"#34452C\",\n        \"muted\": \"#756B61\",\n        \"trace\": \"#7566A8\"\n      },\n      \"defaultRadius\": 18,\n      \"id\": \"editorial-signal\",\n      \"mode\": \"light\",\n      \"name\": \"Editorial Signal\",\n      \"spacingUnit\": 8,\n      \"typography\": {\n        \"body\": \"Geist Variable\",\n        \"data\": \"JetBrains Mono Variable\",\n        \"display\": \"Fraunces Variable\"\n      }\n    },\n    \"title\": \"NodeSlide local handoff — illustrative sourcing pilot\",\n    \"toolchainVersion\": \"local-slidelang-adapter/1.1.0\",\n    \"updatedAt\": 1788607888038,\n    \"version\": 3\n  },\n  \"slides\": [\n    {\n      \"archetype\": \"statement\",\n      \"background\": \"#F7F4ED\",\n      \"deckId\": \"deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4\",\n      \"elementOrder\": [\n        \"element_3bd938337190117e0bd4b0fe8cc1c66f\",\n        \"element_100280e39c028ed30ff6559b6b09a6dc\",\n        \"element_ae7fa060a8b1db5139c185efbf63da59\",\n        \"element_d3ccdd2123138fae0ad275b42692a3b6\",\n        \"element_f46031658fc6ff93d20ca49d4573766b\",\n        \"element_7286a3432e501a159a10e4a75b859b09\",\n        \"element_9aa56f6605f04f78fcd34266b5a904f4\",\n        \"element_75fbb74d3b6d1a5262dc8b092897846a\",\n        \"element_82a649a8b4417c9295938bea3b85e5a9\",\n        \"element_d04d3d0e6c5e1e1b8333c01a229aa66c\",\n        \"element_ff89f684bae6c48f7aee20178913076c\"\n      ],\n      \"id\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"notes\": \"Illustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text.\\nDecision: prototype after checking the budget. 中文交接 — no external claims.\",\n      \"section\": \"Opening / 01\",\n      \"title\": \"Create a six-slide decision review for a fictional sourcing pilot\",\n      \"version\": 2\n    },\n    {\n      \"archetype\": \"diagram-dominant\",\n      \"background\": \"#F7F4ED\",\n      \"deckId\": \"deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4\",\n      \"elementOrder\": [\n        \"element_3bee2c00c1d407385153bdab1931b852\",\n        \"element_56720175478d4d35a5a426f6e773c33b\",\n        \"element_998e62e671e5da309ce9cf950c2aa95d\",\n        \"element_ce5c2c012a3a5c4c2940504f48e4fc02\",\n        \"element_8bd567afcb3fac2d043be0e7d01993ef\",\n        \"element_a3fc2da0461cb1fe719b1c3e15ddc434\",\n        \"element_5249c86e59cff5447b0cb6e1123ce57b\",\n        \"element_a302e122c17500ce387181a64a87878f\",\n        \"element_fb19912f0f857d0de8b946117546bb57\",\n        \"element_fa1ca9c397de5f0af93e04f6d2ae2a93\",\n        \"element_5a037912fad8e736df7543d10f7b1b40\",\n        \"element_4652da30dca5ae0176bb93bdb34efa68\",\n        \"element_a55caee39d83853e75643d57afe3d908\",\n        \"element_bc134b3994c7fe1bff0a188488cf953c\",\n        \"element_46a962e22a80c6b50cf5ded9923ce389\",\n        \"element_edb524f50cbb01cf14ebdbe2758d51fd\"\n      ],\n      \"id\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"notes\": \"Narrative role: Context / 02. Composition grammar: process-canvas. Keep the spoken transition focused on \\\"The cost of waiting is usually hidden in repeated work.\\\"\\n\\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.\",\n      \"section\": \"Context / 02\",\n      \"title\": \"The moment to solve\",\n      \"version\": 1\n    },\n    {\n      \"archetype\": \"comparison\",\n      \"background\": \"#F7F4ED\",\n      \"deckId\": \"deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4\",\n      \"elementOrder\": [\n        \"element_7b17631af3f6d6ecca6017e044dbf54a\",\n        \"element_a2501f534fe28934d60d619c1a51d447\",\n        \"element_97d5932ac6c1375ffd540822fc22c2aa\",\n        \"element_b3111d35736cb652247963f9ad7e8394\",\n        \"element_7fe15fb13b2af4ac45be3a2a89cc9557\",\n        \"element_75ffabcd081ee461faffcc194478fb63\",\n        \"element_9774683aadd77ade74400439d5fb6373\",\n        \"element_ed759f9e083bd57e118bad53ca0946de\",\n        \"element_50dd7541cc7a76b4b4b7308deae27df6\",\n        \"element_cd258671c60f4f4c940924ac9017275e\",\n        \"element_9c095d169a4fb347629f2a8047a4524a\",\n        \"element_d478efaf9e1b0246273728a8f13f0a43\",\n        \"element_0522aeb592512fd75b905ec8581234b7\"\n      ],\n      \"id\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"notes\": \"Narrative role: Insight / 03. Composition grammar: scene-stage. Keep the spoken transition focused on \\\"A better outcome starts with a sharper point of view.\\\"\\n\\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.\",\n      \"section\": \"Insight / 03\",\n      \"title\": \"The decisive insight\",\n      \"version\": 1\n    },\n    {\n      \"archetype\": \"split\",\n      \"background\": \"#F7F4ED\",\n      \"deckId\": \"deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4\",\n      \"elementOrder\": [\n        \"element_fa3c8b18e9f6a2e239e7164989ed2e44\",\n        \"element_4f01ba21da6a905e197246bf744eed7f\",\n        \"element_4cb25e14d22b2784d0b4c18bf693840d\",\n        \"element_4c2ec43b87c49458b4dbc2a95e232004\",\n        \"element_add3969b2450946b34e351d17ada7ee5\",\n        \"element_dcd36ed2a68529de83b10be0bb80e18b\",\n        \"element_94f4340538fe759c8aa7eaabc07dcdc0\",\n        \"element_a500eaec294750e6511e93446d50022e\",\n        \"element_dc8990f8f09e8543ffcf3a3543b33fdf\",\n        \"element_5529b93c0150291ce3b5dac3d3ad8563\",\n        \"element_f67e5657ceb0d46c8af9a479701a6e34\",\n        \"element_b7359a1c37d7f6ad1579de37fc2b57df\",\n        \"element_8e02599aadda444b918e2970e2047559\"\n      ],\n      \"id\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"notes\": \"Narrative role: Approach / 04. Composition grammar: scene-stage. Keep the spoken transition focused on \\\"Turn the idea into a sequence people can understand and own.\\\"\\n\\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.\",\n      \"section\": \"Approach / 04\",\n      \"title\": \"How the approach works\",\n      \"version\": 1\n    },\n    {\n      \"archetype\": \"comparison\",\n      \"background\": \"#F7F4ED\",\n      \"deckId\": \"deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4\",\n      \"elementOrder\": [\n        \"element_08148105e79faf6190f174f74b4cb22e\",\n        \"element_3d8faa149748262b03e3ad21a5af8f2a\",\n        \"element_48abb187bcfbd20092f677d070b66edc\",\n        \"element_d4d91142af1744bccfcee0d9c0c573bb\",\n        \"element_4cdd0517ab2dc50187df5be97445a4a2\",\n        \"element_f5feaeefc96bc94f76a00a058e79f817\",\n        \"element_47ba9cf2d22c03ec4fca366dca670b48\",\n        \"element_d6438d926f922cac02512592e2827f2b\",\n        \"element_ad09cff7bb5ade35bfa9f6ba4bc235f7\",\n        \"element_3333e6a8df561bf0f9d081ce885a6a9e\",\n        \"element_3dffa0e125ea8a82533922e8d7ef6861\",\n        \"element_eb475dfdc98ba02e5ce164a003b21b1b\",\n        \"element_3c5fa9a9dc4b36231fb0bc76e80c2a39\"\n      ],\n      \"id\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"notes\": \"Narrative role: Evidence / 05. Composition grammar: scene-stage. Keep the spoken transition focused on \\\"Define proof before asking for commitment.\\\"\\n\\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.\",\n      \"section\": \"Evidence / 05\",\n      \"title\": \"What success looks like\",\n      \"version\": 1\n    },\n    {\n      \"archetype\": \"statement\",\n      \"background\": \"#F7F4ED\",\n      \"deckId\": \"deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4\",\n      \"elementOrder\": [\n        \"element_71c4e3286a24f25917f50f81ae5840df\",\n        \"element_3b09c597187f1de74fb0df642255eab0\",\n        \"element_b1d3ed697393488a705cb772ea9b47d5\",\n        \"element_48a72e1b6d156619d44f9ca3fa3d4b8c\",\n        \"element_39790e5987345feb43a41dbfd286504e\",\n        \"element_87bfcb51afc6f745166702e62707ff5c\",\n        \"element_6e14cb1a77798669748777c24fc44a1f\",\n        \"element_67d7c231ef9fddee89d88f081d35d9e7\",\n        \"element_5aeb8bbe21918c0217b819a5ffba8ed0\",\n        \"element_4f81cdad99d291ed8df703af04cae6ee\",\n        \"element_60c2c07ef17403a70177616525207250\",\n        \"element_faac9b36634dd099bde425e8c0e955a2\",\n        \"element_57fa192ef450d137da1532af696b28c4\",\n        \"element_dc8f8bc6501d546acfef552fa91e8160\",\n        \"element_6554ad0804bebdcf4daa761e259571fc\",\n        \"element_cf20e71f3523fe11575c38ab41b9a1b0\"\n      ],\n      \"id\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"notes\": \"Narrative role: Close / 07. Composition grammar: evidence-dossier. Keep the spoken transition focused on \\\"Create an editable, reviewable presentation from this idea\\\"\\n\\nEvidence note: Content is based on the supplied creation brief. Illustrative examples are not independently verified; replace them with measured evidence before external publication.\",\n      \"section\": \"Close / 07\",\n      \"title\": \"The decision\",\n      \"version\": 1\n    }\n  ],\n  \"elements\": [\n    {\n      \"bbox\": {\n        \"height\": 0.3627,\n        \"width\": 0.86,\n        \"x\": 0.07,\n        \"y\": 0.3187\n      },\n      \"content\": \"Create an editable, reviewable presentation from this idea\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_3bd938337190117e0bd4b0fe8cc1c66f\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Headline\",\n      \"role\": \"title\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#26221D\",\n        \"fontFamily\": \"Fraunces Variable\",\n        \"fontSize\": 64,\n        \"fontWeight\": 620,\n        \"letterSpacing\": -1.2,\n        \"lineHeight\": 1.02\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.006,\n        \"width\": 0.12,\n        \"x\": 0.81,\n        \"y\": 0.7013\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_100280e39c028ed30ff6559b6b09a6dc\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Accent underline\",\n      \"role\": \"decoration\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#B44A2D\",\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.07,\n        \"width\": 0.4,\n        \"x\": 0.53,\n        \"y\": 0.06\n      },\n      \"content\": \"OPENING / 01\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_ae7fa060a8b1db5139c185efbf63da59\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Section label\",\n      \"role\": \"section\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 15,\n        \"fontWeight\": 650,\n        \"letterSpacing\": 1.3\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.015,\n        \"width\": 0.015,\n        \"x\": 0.295,\n        \"y\": 0.066\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_d3ccdd2123138fae0ad275b42692a3b6\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.597,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.011,\n        \"width\": 0.011,\n        \"x\": 0.254,\n        \"y\": 0.112\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_f46031658fc6ff93d20ca49d4573766b\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.489,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.009,\n        \"width\": 0.009,\n        \"x\": 0.221,\n        \"y\": 0.071\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_7286a3432e501a159a10e4a75b859b09\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.382,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.0884,\n        \"width\": 0.0884,\n        \"x\": 0.1119,\n        \"y\": 0.0667\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_9aa56f6605f04f78fcd34266b5a904f4\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.247,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.0548,\n        \"width\": 0.0548,\n        \"x\": 0.1209,\n        \"y\": 0.0913\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_75fbb74d3b6d1a5262dc8b092897846a\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.337,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: noise fills the field; establish stage, 17 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.0353,\n        \"width\": 0.0353,\n        \"x\": 0.1187,\n        \"y\": 0.113\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_82a649a8b4417c9295938bea3b85e5a9\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_core\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#B44A2D\",\n        \"opacity\": 0.34,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.035,\n        \"width\": 0.72,\n        \"x\": 0.21,\n        \"y\": 0.93\n      },\n      \"content\": \"NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_d04d3d0e6c5e1e1b8333c01a229aa66c\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Deck footer\",\n      \"role\": \"footer\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#756B61\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 10,\n        \"fontWeight\": 550,\n        \"letterSpacing\": 1.1\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.05,\n        \"width\": 0.06,\n        \"x\": 0.06,\n        \"y\": 0.92\n      },\n      \"content\": \"01\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_ff89f684bae6c48f7aee20178913076c\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Page number\",\n      \"role\": \"page_number\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_db98a4e3cdf139a3e193e53a40ba42f0\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 13,\n        \"fontWeight\": 700,\n        \"textAlign\": \"right\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.07,\n        \"width\": 0.72,\n        \"x\": 0.14,\n        \"y\": 0.075\n      },\n      \"content\": \"CONTEXT / 02\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_3bee2c00c1d407385153bdab1931b852\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Section label\",\n      \"role\": \"section\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 15,\n        \"fontWeight\": 650,\n        \"letterSpacing\": 1.3,\n        \"textAlign\": \"center\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.24445055570833712,\n        \"width\": 0.42,\n        \"x\": 0.08,\n        \"y\": 0.15\n      },\n      \"content\": \"The cost of waiting is usually hidden in repeated work.\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_56720175478d4d35a5a426f6e773c33b\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Headline\",\n      \"role\": \"headline\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#26221D\",\n        \"fontFamily\": \"Fraunces Variable\",\n        \"fontSize\": 32,\n        \"fontWeight\": 600,\n        \"lineHeight\": 1.1,\n        \"textAlign\": \"center\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"artifactBinding\": {\n        \"artifactId\": \"artifact_graph_783173ead872aed35db421d0065831d7\",\n        \"from\": \"friction\",\n        \"graphKind\": \"process\",\n        \"role\": \"graph-edge\",\n        \"schemaVersion\": \"nodeslide.production-artifact-binding/v1\",\n        \"to\": \"consequence\"\n      },\n      \"bbox\": {\n        \"height\": 0.05,\n        \"width\": 0.02,\n        \"x\": 0.24,\n        \"y\": 0.48\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_998e62e671e5da309ce9cf950c2aa95d\",\n      \"kind\": \"connector\",\n      \"locked\": false,\n      \"name\": \"Diagram edge\",\n      \"role\": \"diagram_edge\",\n      \"rotation\": 90,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [\n        \"source_a481aeee6d24a6dc939af76ab92f3cf3\"\n      ],\n      \"style\": {\n        \"color\": \"#7566A8\",\n        \"strokeWidth\": 2\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"artifactBinding\": {\n        \"artifactId\": \"artifact_graph_783173ead872aed35db421d0065831d7\",\n        \"from\": \"consequence\",\n        \"graphKind\": \"process\",\n        \"role\": \"graph-edge\",\n        \"schemaVersion\": \"nodeslide.production-artifact-binding/v1\",\n        \"to\": \"urgency\"\n      },\n      \"bbox\": {\n        \"height\": 0.05,\n        \"width\": 0.02,\n        \"x\": 0.24,\n        \"y\": 0.63\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_ce5c2c012a3a5c4c2940504f48e4fc02\",\n      \"kind\": \"connector\",\n      \"locked\": false,\n      \"name\": \"Diagram edge\",\n      \"role\": \"diagram_edge\",\n      \"rotation\": 90,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [\n        \"source_a481aeee6d24a6dc939af76ab92f3cf3\"\n      ],\n      \"style\": {\n        \"color\": \"#7566A8\",\n        \"strokeWidth\": 2\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"artifactBinding\": {\n        \"artifactId\": \"artifact_graph_783173ead872aed35db421d0065831d7\",\n        \"graphKind\": \"process\",\n        \"nodeId\": \"friction\",\n        \"nodeKind\": \"step\",\n        \"role\": \"graph-node\",\n        \"schemaVersion\": \"nodeslide.production-artifact-binding/v1\"\n      },\n      \"bbox\": {\n        \"height\": 0.1,\n        \"width\": 0.34,\n        \"x\": 0.08,\n        \"y\": 0.38\n      },\n      \"content\": \"Friction\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_8bd567afcb3fac2d043be0e7d01993ef\",\n      \"kind\": \"shape\",\n      \"locked\": false,\n      \"name\": \"Diagram node: Friction\",\n      \"role\": \"diagram_step\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [\n        \"source_a481aeee6d24a6dc939af76ab92f3cf3\"\n      ],\n      \"style\": {\n        \"color\": \"#26221D\",\n        \"fill\": \"#F2DED3\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 14,\n        \"fontWeight\": 650,\n        \"lineHeight\": 1.15,\n        \"padding\": 8,\n        \"radius\": 18,\n        \"stroke\": \"#DED7CC\",\n        \"strokeWidth\": 1,\n        \"textAlign\": \"center\",\n        \"verticalAlign\": \"middle\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"artifactBinding\": {\n        \"artifactId\": \"artifact_graph_783173ead872aed35db421d0065831d7\",\n        \"graphKind\": \"process\",\n        \"nodeId\": \"consequence\",\n        \"nodeKind\": \"step\",\n        \"role\": \"graph-node\",\n        \"schemaVersion\": \"nodeslide.production-artifact-binding/v1\"\n      },\n      \"bbox\": {\n        \"height\": 0.1,\n        \"width\": 0.34,\n        \"x\": 0.08,\n        \"y\": 0.53\n      },\n      \"content\": \"Consequence\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_a3fc2da0461cb1fe719b1c3e15ddc434\",\n      \"kind\": \"shape\",\n      \"locked\": false,\n      \"name\": \"Diagram node: Consequence\",\n      \"role\": \"diagram_step\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [\n        \"source_a481aeee6d24a6dc939af76ab92f3cf3\"\n      ],\n      \"style\": {\n        \"color\": \"#26221D\",\n        \"fill\": \"#F2DED3\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 13,\n        \"fontWeight\": 650,\n        \"lineHeight\": 1.15,\n        \"padding\": 8,\n        \"radius\": 18,\n        \"stroke\": \"#DED7CC\",\n        \"strokeWidth\": 1,\n        \"textAlign\": \"center\",\n        \"verticalAlign\": \"middle\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"artifactBinding\": {\n        \"artifactId\": \"artifact_graph_783173ead872aed35db421d0065831d7\",\n        \"graphKind\": \"process\",\n        \"nodeId\": \"urgency\",\n        \"nodeKind\": \"milestone\",\n        \"role\": \"graph-node\",\n        \"schemaVersion\": \"nodeslide.production-artifact-binding/v1\"\n      },\n      \"bbox\": {\n        \"height\": 0.1,\n        \"width\": 0.34,\n        \"x\": 0.08,\n        \"y\": 0.6799999999999999\n      },\n      \"content\": \"Decision window\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_5249c86e59cff5447b0cb6e1123ce57b\",\n      \"kind\": \"shape\",\n      \"locked\": false,\n      \"name\": \"Diagram node: Decision window\",\n      \"role\": \"diagram_milestone\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [\n        \"source_a481aeee6d24a6dc939af76ab92f3cf3\"\n      ],\n      \"style\": {\n        \"color\": \"#26221D\",\n        \"fill\": \"#E5E9D6\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 13,\n        \"fontWeight\": 650,\n        \"lineHeight\": 1.15,\n        \"padding\": 8,\n        \"radius\": 18,\n        \"stroke\": \"#DED7CC\",\n        \"strokeWidth\": 1,\n        \"textAlign\": \"center\",\n        \"verticalAlign\": \"middle\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.24,\n        \"width\": 0.38,\n        \"x\": 0.52,\n        \"y\": 0.4\n      },\n      \"content\": \"Frame the current reality for Decision-makers described in the brief: what is fragmented today, why it matters now, and where momentum is being lost.\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_a302e122c17500ce387181a64a87878f\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Body copy\",\n      \"role\": \"body\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#756B61\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 16,\n        \"fontWeight\": 430,\n        \"lineHeight\": 1.35\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.015,\n        \"width\": 0.015,\n        \"x\": 0.69,\n        \"y\": 0.066\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_fb19912f0f857d0de8b946117546bb57\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.514,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.011,\n        \"width\": 0.011,\n        \"x\": 0.735,\n        \"y\": 0.112\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_fa1ca9c397de5f0af93e04f6d2ae2a93\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.421,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.009,\n        \"width\": 0.009,\n        \"x\": 0.77,\n        \"y\": 0.071\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_5a037912fad8e736df7543d10f7b1b40\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.329,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.0967,\n        \"width\": 0.0967,\n        \"x\": 0.7963,\n        \"y\": 0.0633\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_4652da30dca5ae0176bb93bdb34efa68\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.293,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.0599,\n        \"width\": 0.0599,\n        \"x\": 0.8227,\n        \"y\": 0.0897\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_a55caee39d83853e75643d57afe3d908\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.393,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: a weak pulse separates from noise; pressure stage, 33 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.0387,\n        \"width\": 0.0387,\n        \"x\": 0.846,\n        \"y\": 0.113\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_bc134b3994c7fe1bff0a188488cf953c\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_core\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#B44A2D\",\n        \"opacity\": 0.43,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.035,\n        \"width\": 0.56,\n        \"x\": 0.22,\n        \"y\": 0.93\n      },\n      \"content\": \"NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_46a962e22a80c6b50cf5ded9923ce389\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Deck footer\",\n      \"role\": \"footer\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#756B61\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 10,\n        \"fontWeight\": 550,\n        \"letterSpacing\": 1.1,\n        \"textAlign\": \"center\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.05,\n        \"width\": 0.06,\n        \"x\": 0.88,\n        \"y\": 0.92\n      },\n      \"content\": \"02\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_edb524f50cbb01cf14ebdbe2758d51fd\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Page number\",\n      \"role\": \"page_number\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_a484a1c29bbf2d8d7bed4f8189f1ffdd\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 13,\n        \"fontWeight\": 700,\n        \"textAlign\": \"right\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"the trace begins to converge; dominant approach scene\",\n      \"bbox\": {\n        \"height\": 0.44,\n        \"width\": 0.42,\n        \"x\": 0.06,\n        \"y\": 0.28\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_7b17631af3f6d6ecca6017e044dbf54a\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene field · the trace begins to converge\",\n      \"role\": \"story_scene_field\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.22,\n        \"radius\": 18\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.051,\n        \"width\": 0.0231,\n        \"x\": 0.4165,\n        \"y\": 0.3844\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_a2501f534fe28934d60d619c1a51d447\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.43,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.0374,\n        \"width\": 0.017,\n        \"x\": 0.3532,\n        \"y\": 0.5408\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_97d5932ac6c1375ffd540822fc22c2aa\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.353,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.0306,\n        \"width\": 0.0139,\n        \"x\": 0.3023,\n        \"y\": 0.4014\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_b3111d35736cb652247963f9ad7e8394\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.275,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.357,\n        \"width\": 0.1619,\n        \"x\": 0.1189,\n        \"y\": 0.364\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_7fe15fb13b2af4ac45be3a2a89cc9557\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.34,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.2213,\n        \"width\": 0.1004,\n        \"x\": 0.1372,\n        \"y\": 0.4592\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_75ffabcd081ee461faffcc194478fb63\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.45,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the trace begins to converge; approach stage, 50 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.1428,\n        \"width\": 0.0648,\n        \"x\": 0.1343,\n        \"y\": 0.5442\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_9774683aadd77ade74400439d5fb6373\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_core\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#B44A2D\",\n        \"opacity\": 0.62,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.07,\n        \"width\": 0.3,\n        \"x\": 0.64,\n        \"y\": 0.065\n      },\n      \"content\": \"INSIGHT / 03\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_ed759f9e083bd57e118bad53ca0946de\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Section label\",\n      \"role\": \"section\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 15,\n        \"fontWeight\": 650,\n        \"letterSpacing\": 1.3\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.3033,\n        \"width\": 0.4,\n        \"x\": 0.54,\n        \"y\": 0.18\n      },\n      \"content\": \"A better outcome starts with a sharper point of view.\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_50dd7541cc7a76b4b4b7308deae27df6\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Headline\",\n      \"role\": \"headline\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#26221D\",\n        \"fontFamily\": \"Fraunces Variable\",\n        \"fontSize\": 35,\n        \"fontWeight\": 650,\n        \"letterSpacing\": -0.5,\n        \"lineHeight\": 1.04\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.23,\n        \"width\": 0.4,\n        \"x\": 0.54,\n        \"y\": 0.5183\n      },\n      \"content\": \"Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decis…\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_cd258671c60f4f4c940924ac9017275e\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Supporting context\",\n      \"role\": \"body\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#756B61\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 14,\n        \"fontWeight\": 450,\n        \"lineHeight\": 1.38\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.12,\n        \"width\": 0.4,\n        \"x\": 0.54,\n        \"y\": 0.77\n      },\n      \"content\": \"Honor explicit slide-count and presentation constraints in the brief\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_9c095d169a4fb347629f2a8047a4524a\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Decisive point\",\n      \"role\": \"takeaway\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [\n        \"source_a481aeee6d24a6dc939af76ab92f3cf3\"\n      ],\n      \"style\": {\n        \"color\": \"#34452C\",\n        \"fill\": \"#E5E9D6\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 16,\n        \"fontWeight\": 650,\n        \"lineHeight\": 1.25,\n        \"padding\": 12,\n        \"radius\": 18\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.035,\n        \"width\": 0.72,\n        \"x\": 0.21,\n        \"y\": 0.93\n      },\n      \"content\": \"NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_d478efaf9e1b0246273728a8f13f0a43\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Deck footer\",\n      \"role\": \"footer\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#756B61\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 10,\n        \"fontWeight\": 550,\n        \"letterSpacing\": 1.1\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.05,\n        \"width\": 0.06,\n        \"x\": 0.06,\n        \"y\": 0.92\n      },\n      \"content\": \"03\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_0522aeb592512fd75b905ec8581234b7\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Page number\",\n      \"role\": \"page_number\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_3d0d1cd479afab8466feef118761c736\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 13,\n        \"fontWeight\": 700,\n        \"textAlign\": \"right\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"one coherent signal is revealed; dominant crossing scene\",\n      \"bbox\": {\n        \"height\": 0.52,\n        \"width\": 0.46,\n        \"x\": 0.06,\n        \"y\": 0.23\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_fa3c8b18e9f6a2e239e7164989ed2e44\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene field · one coherent signal is revealed\",\n      \"role\": \"story_scene_field\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.22,\n        \"radius\": 18\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.063,\n        \"width\": 0.0256,\n        \"x\": 0.1021,\n        \"y\": 0.3472\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_4f01ba21da6a905e197246bf744eed7f\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.347,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.0462,\n        \"width\": 0.0188,\n        \"x\": 0.179,\n        \"y\": 0.5404\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_4cb25e14d22b2784d0b4c18bf693840d\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.284,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.0378,\n        \"width\": 0.0154,\n        \"x\": 0.2387,\n        \"y\": 0.3682\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_4c2ec43b87c49458b4dbc2a95e232004\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.222,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.4763,\n        \"width\": 0.1937,\n        \"x\": 0.2724,\n        \"y\": 0.3081\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_add3969b2450946b34e351d17ada7ee5\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.387,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.2953,\n        \"width\": 0.1201,\n        \"x\": 0.323,\n        \"y\": 0.4325\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_dcd36ed2a68529de83b10be0bb80e18b\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.507,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: one coherent signal is revealed; crossing stage, 67 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.1903,\n        \"width\": 0.0774,\n        \"x\": 0.3686,\n        \"y\": 0.5446\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_94f4340538fe759c8aa7eaabc07dcdc0\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_core\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#B44A2D\",\n        \"opacity\": 0.81,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.07,\n        \"width\": 0.3,\n        \"x\": 0.6,\n        \"y\": 0.065\n      },\n      \"content\": \"APPROACH / 04\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_a500eaec294750e6511e93446d50022e\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Section label\",\n      \"role\": \"section\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 15,\n        \"fontWeight\": 650,\n        \"letterSpacing\": 1.3\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.3274,\n        \"width\": 0.34,\n        \"x\": 0.6,\n        \"y\": 0.18\n      },\n      \"content\": \"Turn the idea into a sequence people can understand and own.\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_dc8990f8f09e8543ffcf3a3543b33fdf\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Headline\",\n      \"role\": \"headline\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#26221D\",\n        \"fontFamily\": \"Fraunces Variable\",\n        \"fontSize\": 34,\n        \"fontWeight\": 650,\n        \"letterSpacing\": -0.5,\n        \"lineHeight\": 1.04\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.2076,\n        \"width\": 0.34,\n        \"x\": 0.6,\n        \"y\": 0.5424\n      },\n      \"content\": \"Connect intent, action, and feedback in one visible operating path so the audience can see both the destination and the mechanics.\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_5529b93c0150291ce3b5dac3d3ad8563\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Supporting context\",\n      \"role\": \"body\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#756B61\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 16,\n        \"fontWeight\": 450,\n        \"lineHeight\": 1.38\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.11,\n        \"width\": 0.34,\n        \"x\": 0.6,\n        \"y\": 0.77\n      },\n      \"content\": \"Align on intent\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_f67e5657ceb0d46c8af9a479701a6e34\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Decisive point\",\n      \"role\": \"takeaway\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [\n        \"source_a481aeee6d24a6dc939af76ab92f3cf3\"\n      ],\n      \"style\": {\n        \"color\": \"#34452C\",\n        \"fill\": \"#E5E9D6\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 16,\n        \"fontWeight\": 650,\n        \"lineHeight\": 1.25,\n        \"padding\": 12,\n        \"radius\": 18\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.035,\n        \"width\": 0.72,\n        \"x\": 0.07,\n        \"y\": 0.93\n      },\n      \"content\": \"NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_b7359a1c37d7f6ad1579de37fc2b57df\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Deck footer\",\n      \"role\": \"footer\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#756B61\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 10,\n        \"fontWeight\": 550,\n        \"letterSpacing\": 1.1\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.05,\n        \"width\": 0.06,\n        \"x\": 0.88,\n        \"y\": 0.92\n      },\n      \"content\": \"04\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_8e02599aadda444b918e2970e2047559\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Page number\",\n      \"role\": \"page_number\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_79096078a4b5bfb1b3e6d87497ad3e37\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 13,\n        \"fontWeight\": 700,\n        \"textAlign\": \"right\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"the signal is calibrated against evidence; dominant proof scene\",\n      \"bbox\": {\n        \"height\": 0.6,\n        \"width\": 0.48,\n        \"x\": 0.46,\n        \"y\": 0.18\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_08148105e79faf6190f174f74b4cb22e\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene field · the signal is calibrated against evidence\",\n      \"role\": \"story_scene_field\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.22,\n        \"radius\": 18\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.075,\n        \"width\": 0.0269,\n        \"x\": 0.5029,\n        \"y\": 0.31\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_3d8faa149748262b03e3ad21a5af8f2a\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.264,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.055,\n        \"width\": 0.0197,\n        \"x\": 0.5835,\n        \"y\": 0.54\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_48abb187bcfbd20092f677d070b66edc\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.216,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.045,\n        \"width\": 0.0161,\n        \"x\": 0.6463,\n        \"y\": 0.335\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_d4d91142af1744bccfcee0d9c0c573bb\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.169,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.6085,\n        \"width\": 0.218,\n        \"x\": 0.6755,\n        \"y\": 0.2465\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_4cdd0517ab2dc50187df5be97445a4a2\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.433,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.377,\n        \"width\": 0.1351,\n        \"x\": 0.7317,\n        \"y\": 0.4035\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_f5feaeefc96bc94f76a00a058e79f817\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.563,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the signal is calibrated against evidence; proof stage, 83 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.2435,\n        \"width\": 0.0873,\n        \"x\": 0.7824,\n        \"y\": 0.545\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_47ba9cf2d22c03ec4fca366dca670b48\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_core\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#B44A2D\",\n        \"opacity\": 1,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.07,\n        \"width\": 0.3,\n        \"x\": 0.06,\n        \"y\": 0.065\n      },\n      \"content\": \"EVIDENCE / 05\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_d6438d926f922cac02512592e2827f2b\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Section label\",\n      \"role\": \"section\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 15,\n        \"fontWeight\": 650,\n        \"letterSpacing\": 1.3\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.2745,\n        \"width\": 0.34,\n        \"x\": 0.06,\n        \"y\": 0.18\n      },\n      \"content\": \"Define proof before asking for commitment.\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_ad09cff7bb5ade35bfa9f6ba4bc235f7\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Headline\",\n      \"role\": \"headline\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#26221D\",\n        \"fontFamily\": \"Fraunces Variable\",\n        \"fontSize\": 38,\n        \"fontWeight\": 650,\n        \"letterSpacing\": -0.5,\n        \"lineHeight\": 1.04\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.23,\n        \"width\": 0.34,\n        \"x\": 0.06,\n        \"y\": 0.4895\n      },\n      \"content\": \"Use the brief’s success criteria as qualitative review questions until measured evidence is supplied.\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_3333e6a8df561bf0f9d081ce885a6a9e\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Supporting context\",\n      \"role\": \"body\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#756B61\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 16,\n        \"fontWeight\": 450,\n        \"lineHeight\": 1.38\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.1106,\n        \"width\": 0.34,\n        \"x\": 0.06,\n        \"y\": 0.77\n      },\n      \"content\": \"Honor explicit slide-count and presentation constraints in the brief\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_3dffa0e125ea8a82533922e8d7ef6861\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Decisive point\",\n      \"role\": \"takeaway\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [\n        \"source_a481aeee6d24a6dc939af76ab92f3cf3\"\n      ],\n      \"style\": {\n        \"color\": \"#34452C\",\n        \"fill\": \"#E5E9D6\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 14,\n        \"fontWeight\": 650,\n        \"lineHeight\": 1.25,\n        \"padding\": 12,\n        \"radius\": 18\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.035,\n        \"width\": 0.72,\n        \"x\": 0.07,\n        \"y\": 0.93\n      },\n      \"content\": \"NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_eb475dfdc98ba02e5ce164a003b21b1b\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Deck footer\",\n      \"role\": \"footer\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#756B61\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 10,\n        \"fontWeight\": 550,\n        \"letterSpacing\": 1.1\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.05,\n        \"width\": 0.06,\n        \"x\": 0.88,\n        \"y\": 0.92\n      },\n      \"content\": \"05\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_3c5fa9a9dc4b36231fb0bc76e80c2a39\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Page number\",\n      \"role\": \"page_number\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_8ec920c169be3b6d9b3d36743a112fb4\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 13,\n        \"fontWeight\": 700,\n        \"textAlign\": \"right\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.07,\n        \"width\": 0.4,\n        \"x\": 0.07,\n        \"y\": 0.065\n      },\n      \"content\": \"CLOSE / 07\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_71c4e3286a24f25917f50f81ae5840df\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Section label\",\n      \"role\": \"section\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 15,\n        \"fontWeight\": 650,\n        \"letterSpacing\": 1.3\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.14,\n        \"width\": 0.79,\n        \"x\": 0.07,\n        \"y\": 0.15\n      },\n      \"content\": \"Create an editable, reviewable presentation from this idea\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_3b09c597187f1de74fb0df642255eab0\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Headline\",\n      \"role\": \"headline\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#26221D\",\n        \"fontFamily\": \"Fraunces Variable\",\n        \"fontSize\": 36,\n        \"fontWeight\": 620,\n        \"letterSpacing\": -0.4,\n        \"lineHeight\": 1.05\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.32,\n        \"width\": 0.27,\n        \"x\": 0.07,\n        \"y\": 0.35\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_b1d3ed697393488a705cb772ea9b47d5\",\n      \"kind\": \"shape\",\n      \"locked\": false,\n      \"name\": \"Evidence card 1\",\n      \"role\": \"evidence_card\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"fill\": \"#E5E9D6\",\n        \"radius\": 18,\n        \"stroke\": \"#DED7CC\",\n        \"strokeWidth\": 1\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.28,\n        \"width\": 0.23,\n        \"x\": 0.09,\n        \"y\": 0.37\n      },\n      \"content\": \"01  Agree the outcome\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_48a72e1b6d156619d44f9ca3fa3d4b8c\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Evidence 1\",\n      \"role\": \"bullet\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#34452C\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 16,\n        \"fontWeight\": 560,\n        \"lineHeight\": 1.25\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.32,\n        \"width\": 0.27,\n        \"x\": 0.365,\n        \"y\": 0.35\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_39790e5987345feb43a41dbfd286504e\",\n      \"kind\": \"shape\",\n      \"locked\": false,\n      \"name\": \"Evidence card 2\",\n      \"role\": \"evidence_card\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"fill\": \"#E5E9D6\",\n        \"radius\": 18,\n        \"stroke\": \"#DED7CC\",\n        \"strokeWidth\": 1\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.28,\n        \"width\": 0.23,\n        \"x\": 0.385,\n        \"y\": 0.37\n      },\n      \"content\": \"02  Name the owner\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_87bfcb51afc6f745166702e62707ff5c\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Evidence 2\",\n      \"role\": \"bullet\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#34452C\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 16,\n        \"fontWeight\": 560,\n        \"lineHeight\": 1.25\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.32,\n        \"width\": 0.27,\n        \"x\": 0.66,\n        \"y\": 0.35\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_6e14cb1a77798669748777c24fc44a1f\",\n      \"kind\": \"shape\",\n      \"locked\": false,\n      \"name\": \"Evidence card 3\",\n      \"role\": \"evidence_card\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"fill\": \"#E5E9D6\",\n        \"radius\": 18,\n        \"stroke\": \"#DED7CC\",\n        \"strokeWidth\": 1\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.28,\n        \"width\": 0.23,\n        \"x\": 0.68,\n        \"y\": 0.37\n      },\n      \"content\": \"03  Set the next checkpoint\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_67d7c231ef9fddee89d88f081d35d9e7\",\n      \"kind\": \"text\",\n      \"locked\": false,\n      \"name\": \"Evidence 3\",\n      \"role\": \"bullet\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [\n        \"source_3acc3aa444ea8506995c798cc70fb28c\"\n      ],\n      \"style\": {\n        \"color\": \"#34452C\",\n        \"fontFamily\": \"Geist Variable\",\n        \"fontSize\": 16,\n        \"fontWeight\": 560,\n        \"lineHeight\": 1.25\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.015,\n        \"width\": 0.015,\n        \"x\": 0.69,\n        \"y\": 0.066\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_5aeb8bbe21918c0217b819a5ffba8ed0\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.18,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.011,\n        \"width\": 0.011,\n        \"x\": 0.735,\n        \"y\": 0.112\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_4f81cdad99d291ed8df703af04cae6ee\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.148,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.009,\n        \"width\": 0.009,\n        \"x\": 0.77,\n        \"y\": 0.071\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_60c2c07ef17403a70177616525207250\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_noise\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.115,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.13,\n        \"width\": 0.13,\n        \"x\": 0.783,\n        \"y\": 0.05\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_faac9b36634dd099bde425e8c0e955a2\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.48,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.0806,\n        \"width\": 0.0806,\n        \"x\": 0.816,\n        \"y\": 0.083\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_57fa192ef450d137da1532af696b28c4\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_wave\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#F2DED3\",\n        \"opacity\": 0.62,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"altText\": \"a signal emerging from noise: the decision-grade signal remains visible; release stage, 100 percent through the story\",\n      \"bbox\": {\n        \"height\": 0.052,\n        \"width\": 0.052,\n        \"x\": 0.846,\n        \"y\": 0.113\n      },\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_dc8f8bc6501d546acfef552fa91e8160\",\n      \"kind\": \"shape\",\n      \"locked\": true,\n      \"name\": \"Story scene · separate weak noise from decision-grade evidence\",\n      \"role\": \"story_scene_signal_core\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"fill\": \"#B44A2D\",\n        \"opacity\": 0.76,\n        \"radius\": 999\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.035,\n        \"width\": 0.72,\n        \"x\": 0.07,\n        \"y\": 0.93\n      },\n      \"content\": \"NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_6554ad0804bebdcf4daa761e259571fc\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Deck footer\",\n      \"role\": \"footer\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#756B61\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 10,\n        \"fontWeight\": 550,\n        \"letterSpacing\": 1.1\n      },\n      \"version\": 1,\n      \"visible\": true\n    },\n    {\n      \"bbox\": {\n        \"height\": 0.05,\n        \"width\": 0.06,\n        \"x\": 0.88,\n        \"y\": 0.92\n      },\n      \"content\": \"06\",\n      \"exportCapabilities\": [\n        \"web_native\",\n        \"pptx_editable\",\n        \"google_importable\"\n      ],\n      \"id\": \"element_cf20e71f3523fe11575c38ab41b9a1b0\",\n      \"kind\": \"text\",\n      \"locked\": true,\n      \"name\": \"Page number\",\n      \"role\": \"page_number\",\n      \"rotation\": 0,\n      \"slideId\": \"slide_d5079c95c5daf2bd4697bb9f2cd7cb5c\",\n      \"sourceIds\": [],\n      \"style\": {\n        \"color\": \"#B44A2D\",\n        \"fontFamily\": \"JetBrains Mono Variable\",\n        \"fontSize\": 13,\n        \"fontWeight\": 700,\n        \"textAlign\": \"right\"\n      },\n      \"version\": 1,\n      \"visible\": true\n    }\n  ],\n  \"sources\": [\n    {\n      \"citation\": \"Create a six-slide decision review for a fictional sourcing pilot. All data are illustrative test inputs: pilot volume 100, 120, and 140 units over three months; budget 2000 dollars. Include an editable chart, clearly label assumptions, and end with the decision to run a small prototype. Do not invent external sources.\",\n      \"deckId\": \"deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4\",\n      \"id\": \"source_3acc3aa444ea8506995c798cc70fb28c\",\n      \"license\": \"Internal working material\",\n      \"retrievedAt\": 1788607528040,\n      \"sourceType\": \"internal\",\n      \"title\": \"Create a six-slide decision review for a fictional sourcing pilot — creation brief\"\n    },\n    {\n      \"citation\": \"Honor explicit slide-count and presentation constraints in the brief; Use only claims and artifact types supported by the supplied brief and evidence; Validation passes before presentation, export, or publication\",\n      \"deckId\": \"deck_mtoaqp9d_8fd3d15eea2300b5c69efdd2aca6e9a4\",\n      \"id\": \"source_a481aeee6d24a6dc939af76ab92f3cf3\",\n      \"license\": \"Internal working material\",\n      \"retrievedAt\": 1788607528040,\n      \"sourceType\": \"note\",\n      \"title\": \"Brief success criteria\"\n    }\n  ]\n}\nStructure, presentation, and cleanup checks passed",
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "overflow": 0,
+  "focused": {
+    "tag": "BUTTON",
+    "label": null
+  },
+  "controls": [
+    {
+      "tag": "BUTTON",
+      "testid": "new-deck-trigger",
+      "label": "Create or open a NodeSlide deck",
+      "text": "NNodeSlide",
+      "fontSize": "16px",
+      "box": {
+        "x": 14,
+        "y": 12.5,
+        "width": 101.65625,
+        "height": 26
+      }
+    },
+    {
+      "tag": "INPUT",
+      "testid": "deck-title",
+      "label": "Deck title",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 138.734375,
+        "y": 12,
+        "width": 153,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Collapse slide navigator",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Undo",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 685.5,
+        "y": 11,
+        "width": 34,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Redo",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 720.5,
+        "y": 11,
+        "width": 34,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Switch to dark theme",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 894.390625,
+        "y": 10.5,
+        "width": 30,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Language and clarity: English",
+      "text": "EN",
+      "fontSize": "13px",
+      "box": {
+        "x": 932.390625,
+        "y": 10.5,
+        "width": 72.703125,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Reset demo view",
+      "text": "Reset demo",
+      "fontSize": "12px",
+      "box": {
+        "x": 1013.09375,
+        "y": 9.5,
+        "width": 72.125,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "share",
+      "label": "Share deck",
+      "text": "Share",
+      "fontSize": "13px",
+      "box": {
+        "x": 1093.21875,
+        "y": 9.5,
+        "width": 80.046875,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "present",
+      "label": "Present deck",
+      "text": "Present",
+      "fontSize": "13px",
+      "box": {
+        "x": 1181.265625,
+        "y": 9.5,
+        "width": 90,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Export deck",
+      "text": "Export",
+      "fontSize": "13px",
+      "box": {
+        "x": 1279.265625,
+        "y": 9.5,
+        "width": 108.734375,
+        "height": 32
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Open command palette",
+      "text": "CommandsK",
+      "fontSize": "16px",
+      "box": {
+        "x": 1396,
+        "y": 10.5,
+        "width": 30,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Collapse slide navigator",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 1: Create a six-slide decision review for a fictional sourcing pilot",
+      "text": "1",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 2: The moment to solve",
+      "text": "2",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 3: The decisive insight",
+      "text": "3",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 4: How the approach works",
+      "text": "4",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 5: What success looks like",
+      "text": "5",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Go to slide 6: The decision",
+      "text": "6",
+      "fontSize": "9px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Slides",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 11,
+        "y": 62,
+        "width": 91,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Outline",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 104,
+        "y": 62,
+        "width": 91,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Layers",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 197,
+        "y": 62,
+        "width": 91,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Opening / 011",
+      "fontSize": "10px",
+      "box": {
+        "x": 11,
+        "y": 109,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_db98a4e3cdf139a3e193e53a40ba42f0",
+      "label": "Slide 1: Create a six-slide decision review for a fictional sourcing pilot",
+      "text": "Create an editable, reviewable presentation from this ideaOPENING / 01NODESLIDE  ·  SOURCE-AWARE  ·  EDITABLE01",
+      "fontSize": "16px",
+      "box": {
+        "x": 44,
+        "y": 151,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Create a six-slide decision review for a fictional sourcing pilot",
+      "fontSize": "13px",
+      "box": {
+        "x": 45,
+        "y": 226,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 1 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 168,
+        "y": 224,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Context / 021",
+      "fontSize": "10px",
+      "box": {
+        "x": 11,
+        "y": 281.5,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_a484a1c29bbf2d8d7bed4f8189f1ffdd",
+      "label": "Slide 2: The moment to solve",
+      "text": "CONTEXT / 02The cost of waiting is usually hidden in repeated work.FrictionConsequenceDecision windowFrame the current reality for Decision-",
+      "fontSize": "16px",
+      "box": {
+        "x": 44,
+        "y": 323.5,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "The moment to solve",
+      "fontSize": "13px",
+      "box": {
+        "x": 45,
+        "y": 398.5,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 2 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 168,
+        "y": 396.5,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Insight / 031",
+      "fontSize": "10px",
+      "box": {
+        "x": 11,
+        "y": 454,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_3d0d1cd479afab8466feef118761c736",
+      "label": "Slide 3: The decisive insight",
+      "text": "INSIGHT / 03A better outcome starts with a sharper point of view.Create a six-slide decision review for a fictional sourcing pilot. All data",
+      "fontSize": "16px",
+      "box": {
+        "x": 44,
+        "y": 496,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "The decisive insight",
+      "fontSize": "13px",
+      "box": {
+        "x": 45,
+        "y": 571,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 3 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 168,
+        "y": 569,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Approach / 041",
+      "fontSize": "10px",
+      "box": {
+        "x": 11,
+        "y": 626.5,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_79096078a4b5bfb1b3e6d87497ad3e37",
+      "label": "Slide 4: How the approach works",
+      "text": "APPROACH / 04Turn the idea into a sequence people can understand and own.Connect intent, action, and feedback in one visible operating path ",
+      "fontSize": "16px",
+      "box": {
+        "x": 44,
+        "y": 668.5,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "How the approach works",
+      "fontSize": "13px",
+      "box": {
+        "x": 45,
+        "y": 743.5,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 4 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 168,
+        "y": 741.5,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Evidence / 051",
+      "fontSize": "10px",
+      "box": {
+        "x": 11,
+        "y": 799,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_8ec920c169be3b6d9b3d36743a112fb4",
+      "label": "Slide 5: What success looks like",
+      "text": "EVIDENCE / 05Define proof before asking for commitment.Use the brief’s success criteria as qualitative review questions until measured evide",
+      "fontSize": "16px",
+      "box": {
+        "x": 44,
+        "y": 841,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "What success looks like",
+      "fontSize": "13px",
+      "box": {
+        "x": 45,
+        "y": 916,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 5 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 168,
+        "y": 914,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Close / 071",
+      "fontSize": "10px",
+      "box": {
+        "x": 11,
+        "y": 971.5,
+        "width": 277,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "slide-thumbnail-slide_d5079c95c5daf2bd4697bb9f2cd7cb5c",
+      "label": "Slide 6: The decision",
+      "text": "CLOSE / 07Create an editable, reviewable presentation from this idea01  Agree the outcome02  Name the owner03  Set the next checkpointNODESL",
+      "fontSize": "16px",
+      "box": {
+        "x": 44,
+        "y": 1013.5,
+        "width": 116,
+        "height": 65
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "The decision",
+      "fontSize": "13px",
+      "box": {
+        "x": 45,
+        "y": 1088.5,
+        "width": 114,
+        "height": 17
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Slide 6 actions",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 168,
+        "y": 1086.5,
+        "width": 20,
+        "height": 20
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Add slide",
+      "fontSize": "13px",
+      "box": {
+        "x": 11,
+        "y": 892,
+        "width": 277,
+        "height": 38
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Edit",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 320,
+        "y": 58.5,
+        "width": 45.796875,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Overview",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 366.796875,
+        "y": 58.5,
+        "width": 77.171875,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Compare",
+      "fontSize": "12.5px",
+      "box": {
+        "x": 444.96875,
+        "y": 58.5,
+        "width": 75.375,
+        "height": 26
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Previous slide",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 315,
+        "y": 926.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Next slide",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 382.03125,
+        "y": 926.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Presenter notes25 words",
+      "fontSize": "16px",
+      "box": {
+        "x": 312,
+        "y": 847.5,
+        "width": 776,
+        "height": 21
+      }
+    },
+    {
+      "tag": "TEXTAREA",
+      "testid": null,
+      "label": "Presenter notes for Create a six-slide decision review for a fictional sourcing pilot",
+      "text": "Illustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text.\nDecision: prototype after checking the budget. 中文交接 — n",
+      "fontSize": "13px",
+      "box": {
+        "x": 312,
+        "y": 874.5,
+        "width": 776,
+        "height": 76.5
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Toggle pan tool",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Zoom out",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 509,
+        "y": 926.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Zoom in",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 575,
+        "y": 926.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Fit slide to workspace",
+      "text": "Fit",
+      "fontSize": "12px",
+      "box": {
+        "x": 607,
+        "y": 926.5,
+        "width": 28,
+        "height": 27
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Resize inspector",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 1097,
+        "y": 52,
+        "width": 6,
+        "height": 908
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Collapse inspector",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 1402,
+        "y": 63,
+        "width": 24,
+        "height": 24
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-ai",
+      "label": null,
+      "text": "AI",
+      "fontSize": "11px",
+      "box": {
+        "x": 1109,
+        "y": 90,
+        "width": 10.375,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-design",
+      "label": null,
+      "text": "Design",
+      "fontSize": "11px",
+      "box": {
+        "x": 1129.375,
+        "y": 90,
+        "width": 33.75,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-nodebook",
+      "label": null,
+      "text": "NodeBook",
+      "fontSize": "11px",
+      "box": {
+        "x": 1184.125,
+        "y": 90,
+        "width": 52.15625,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-comments",
+      "label": null,
+      "text": "Comments",
+      "fontSize": "11px",
+      "box": {
+        "x": 1246.28125,
+        "y": 90,
+        "width": 53,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-versions",
+      "label": null,
+      "text": "Versions",
+      "fontSize": "11px",
+      "box": {
+        "x": 1309.28125,
+        "y": 90,
+        "width": 40.8125,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-data",
+      "label": null,
+      "text": "Evidence",
+      "fontSize": "11px",
+      "box": {
+        "x": 1360.09375,
+        "y": 90,
+        "width": 43.1875,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-json",
+      "label": null,
+      "text": "JSON",
+      "fontSize": "11px",
+      "box": {
+        "x": 1413.28125,
+        "y": 90,
+        "width": 26.671875,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "inspector-tab-trace",
+      "label": null,
+      "text": "Trace",
+      "fontSize": "11px",
+      "box": {
+        "x": 1449.953125,
+        "y": 90,
+        "width": 25.453125,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Deck CI Failed, 1 blocker, 0 warnings. Open Trace",
+      "text": "Deck CIFailed1 blocker · 0 warnings",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-generate-directions",
+      "label": null,
+      "text": "Generate 3 directions",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-suggested-action",
+      "label": null,
+      "text": "Sharpen the story",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-suggested-action",
+      "label": null,
+      "text": "Reduce density",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "INPUT",
+      "testid": null,
+      "label": "Upload files",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "TEXTAREA",
+      "testid": null,
+      "label": "AI instruction",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-model-select",
+      "label": "Agent model",
+      "text": "Kimi K3",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "SELECT",
+      "testid": null,
+      "label": null,
+      "text": "Kimi K3 · Moonshot AI · RecommendedGLM 5.2 · Z.ai · OpenRouterClaude Sonnet 5 · Anthropic · OpenRouterClaude Fable 5 · Anthropic · OpenRoute",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-effort-select",
+      "label": "Reasoning effort",
+      "text": "High",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "SELECT",
+      "testid": null,
+      "label": null,
+      "text": "LightHighUltra",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-provider-summary",
+      "label": "Advanced provider, privacy, scope, and editing controls",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-connect-agent",
+      "label": "Connect BYOK model or coding agent",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-web-research-toggle",
+      "label": "Toggle web research",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-memory",
+      "label": "Manage deck memory",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Add read context reference",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Add command",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-open-material-workbench",
+      "label": "Open the visual material tool",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "INPUT",
+      "testid": "ai-data-file-input",
+      "label": null,
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-attach-data",
+      "label": "Attach data file",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Expand composer",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "ai-submit",
+      "label": "Propose edit",
+      "text": "",
+      "fontSize": "13px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Deck",
+      "fontSize": "11px",
+      "box": {
+        "x": 1113,
+        "y": 308.6875,
+        "width": 46.6875,
+        "height": 25
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 1165.6875,
+        "y": 308.6875,
+        "width": 46.21875,
+        "height": 25
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Selection",
+      "fontSize": "11px",
+      "box": {
+        "x": 1217.90625,
+        "y": 308.6875,
+        "width": 67.5625,
+        "height": 25
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Last patch",
+      "fontSize": "11px",
+      "box": {
+        "x": 1291.46875,
+        "y": 308.6875,
+        "width": 72.5625,
+        "height": 25
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Copy",
+      "fontSize": "12px",
+      "box": {
+        "x": 1113,
+        "y": 341.6875,
+        "width": 53.953125,
+        "height": 28
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Download deck.json",
+      "fontSize": "12px",
+      "box": {
+        "x": 1172.953125,
+        "y": 341.6875,
+        "width": 136.203125,
+        "height": 28
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": "validation-status",
+      "label": "Structure, presentation, and cleanup checks passed. Open validation details.",
+      "text": "Structure, presentation, and cleanup checks passed",
+      "fontSize": "11px",
+      "box": {
+        "x": 1101,
+        "y": 930,
+        "width": 339,
+        "height": 30
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": "Close Artifact Lab",
+      "text": "",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Artifact Gallery",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Model Compare",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Harness Compare",
+      "fontSize": "16px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use slide",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Use recipe",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "Generate with my data",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    },
+    {
+      "tag": "BUTTON",
+      "testid": null,
+      "label": null,
+      "text": "3 variants",
+      "fontSize": "11px",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      }
+    }
+  ]
+}

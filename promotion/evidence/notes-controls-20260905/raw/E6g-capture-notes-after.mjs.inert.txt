@@ -1,0 +1,50 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {fileURLToPath} from 'node:url';
+const P=path.dirname(fileURLToPath(import.meta.url));
+const req=createRequire('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/package.json');
+const {chromium}=req('playwright');
+const {expect}=req('playwright/test');
+const base='D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02';
+const origin=path.join(base,'browser-first-use-01');
+const {url}=JSON.parse(await fs.readFile(path.join(origin,'deck-location.json'),'utf8'));
+const O=path.join(P,'E6g-nodeslide-notes-after-01');
+const privateRoot=path.join(base,'notes-after-01');
+await fs.mkdir(O);await fs.mkdir(privateRoot);
+const browser=await chromium.launch();
+const report={proof:'NODESLIDE-NOTES-CONTROLS-01',stage:'Three-owner current notes layout after; source hashes retained separately',cells:[],errors:[],blockedOrigins:[],grade:null};
+const cells=[...[320,390,768,1024,1440,1920].map(width=>({width,height:width<768?844:960,textPercent:100})),...[320,390,1440].map(width=>({width,height:width<768?844:960,textPercent:200}))];
+async function capture(page,name,cell){
+ await page.evaluate(()=>document.fonts.ready);
+ const dom=await page.evaluate(()=>{
+  const box=e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom};};
+  const selectors=['.ns-canvas-stage','.ns-canvas-viewport','.ns-canvas-controls','.ns-slide-stepper','.ns-notes-strip','.ns-notes-strip textarea','.ns-zoom-controls'];
+  const regions=selectors.map(selector=>{const e=document.querySelector(selector);if(!e)return{selector,missing:true};const s=getComputedStyle(e);return{selector,box:box(e),position:s.position,bottom:s.bottom,minHeight:s.minHeight,padding:s.padding,overflow:s.overflow,display:s.display,fontSize:s.fontSize,zIndex:s.zIndex};});
+  const controls=[...document.querySelectorAll('.ns-slide-stepper button,.ns-notes-strip button,.ns-notes-strip textarea,.ns-zoom-controls button')].map(e=>{const r=box(e);const hit=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{label:e.getAttribute('aria-label')??e.textContent.trim(),box:r,disabled:e.disabled??false,rendered:r.width>0&&r.height>0,centerHit:hit===e||e.contains(hit),inViewport:r.x>=0&&r.y>=0&&r.right<=innerWidth&&r.bottom<=innerHeight};});
+  return{viewport:{width:innerWidth,height:innerHeight},overflow:document.documentElement.scrollWidth-innerWidth,bodyText:document.body.innerText,regions,controls,labels:[...document.querySelectorAll('.ns-zoom-value,.ns-fit-button,.ns-slide-stepper span')].map(e=>{const range=document.createRange();range.selectNodeContents(e);const r=range.getBoundingClientRect();return{text:e.textContent,box:box(e),textBox:{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom}};})};
+ });
+ await fs.writeFile(path.join(O,name+'.json'),JSON.stringify(dom,null,2)+'\n');
+ await fs.writeFile(path.join(privateRoot,name+'.html'),await page.content());
+ await page.screenshot({path:path.join(O,name+'.png')});
+ await page.evaluate(()=>{for(const [selector,label,color]of [['.ns-notes-strip','A: Presenter notes','#d20c39'],['.ns-slide-stepper','B: Slide navigation','#1554c0'],['.ns-zoom-controls','C: Zoom controls','#8a4700']]){const e=document.querySelector(selector);if(!e)continue;e.dataset.proofOutline=e.style.outline;e.style.outline=`3px solid ${color}`;const r=e.getBoundingClientRect();const tag=document.createElement('div');tag.className='proof-boundary-label';tag.textContent=label;Object.assign(tag.style,{position:'fixed',top:Math.max(0,r.top-20)+'px',left:Math.max(0,Math.min(innerWidth-135,r.left))+'px',background:color,color:'white',padding:'2px 4px',font:'12px sans-serif',zIndex:'999999',pointerEvents:'none'});document.body.append(tag);}});
+ await page.screenshot({path:path.join(O,name+'-boundary.png')});
+ await page.evaluate(()=>{for(const e of document.querySelectorAll('[data-proof-outline]')){e.style.outline=e.dataset.proofOutline;delete e.dataset.proofOutline;}document.querySelectorAll('.proof-boundary-label').forEach(e=>e.remove());});
+ report.cells.push({...cell,name,regions:dom.regions,controls:dom.controls,overflow:dom.overflow});
+}
+try{
+ for(const cell of cells){
+  const context=await browser.newContext({viewport:{width:cell.width,height:cell.height},storageState:path.join(origin,'storage-state.json'),serviceWorkers:'block'});
+  await context.route('**/*',route=>{const u=new URL(route.request().url());if(['http:','https:'].includes(u.protocol)&&u.hostname!=='127.0.0.1'){report.blockedOrigins.push(u.origin);return route.abort();}return route.continue();});
+  const page=await context.newPage();page.on('pageerror',e=>report.errors.push({width:cell.width,kind:'pageerror',message:e.message}));page.on('console',m=>{if(m.type()==='error')report.errors.push({width:cell.width,kind:'console',message:m.text()});});
+  await page.goto(url,{waitUntil:'domcontentloaded'});await page.getByTestId('slide-canvas').waitFor();await page.getByTestId('slide-notes-strip').waitFor();
+  const toggle=page.getByRole('button',{name:/Presenter notes/});
+  if(await toggle.getAttribute('aria-expanded')!=='true')await toggle.click();
+  await expect(page.getByLabel(/^Presenter notes for /)).toBeVisible();
+  if(cell.textPercent===200)await page.evaluate(()=>{const all=[...document.querySelectorAll('body,body *')].map(e=>[e,parseFloat(getComputedStyle(e).fontSize)]);for(const [e,size]of all)if(Number.isFinite(size)&&e instanceof HTMLElement)e.style.fontSize=`${size*2}px`;});
+  await capture(page,`${cell.width}-${cell.textPercent}-open`,cell);
+  if(cell.textPercent===100&&[390,1440].includes(cell.width)){await toggle.click();await capture(page,`${cell.width}-100-closed`,cell);}
+  await context.close();
+ }
+}catch(e){report.failure=String(e.stack??e);process.exitCode=1;}
+finally{await browser.close();await fs.writeFile(path.join(O,'report.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({cells:report.cells.length,errors:report.errors.length,blockedOrigins:[...new Set(report.blockedOrigins)],failure:report.failure??null}));}

@@ -1,0 +1,98 @@
+[
+  {
+    "path": "E6g-nodeslide-browser-first-use-01/report.json",
+    "sha256": "44b590853c267ca13fcf36c90573da767b3f4bdc6693efb7478fb846cffa7a4f",
+    "bytes": 773,
+    "copy": "observed/E6g-nodeslide-browser-first-use-01/report.json"
+  },
+  {
+    "path": "E6g-nodeslide-browser-first-use-01/02-deterministic-brief.json",
+    "sha256": "be98b404544b5dfff0f6c10efc01e6c3403c285397fe8916dd809f6c357460ac",
+    "bytes": 15230,
+    "copy": "observed/E6g-nodeslide-browser-first-use-01/02-deterministic-brief.json"
+  },
+  {
+    "path": "E6g-nodeslide-browser-first-use-01/03-created-editor.png",
+    "sha256": "9eccac6d43726d753b3bc1144ae454cec0b21b5f3c8d3f9b1e9f40fe0c35d9a3",
+    "bytes": 111799,
+    "copy": "observed/E6g-nodeslide-browser-first-use-01/03-created-editor.png"
+  },
+  {
+    "path": "E6g-nodeslide-notes-export-01/report.json",
+    "sha256": "15ad6199f38196088ebfbc318e1bf1a01f3d5179dd089512da60e79ca7abb01c",
+    "bytes": 1390,
+    "copy": "observed/E6g-nodeslide-notes-export-01/report.json"
+  },
+  {
+    "path": "E6g-nodeslide-notes-export-01/01-notes-reloaded.json",
+    "sha256": "d12839fb421f19c22a9bd384bfc064609f16947da4405f209f2a29de9824a96e",
+    "bytes": 40400,
+    "copy": "observed/E6g-nodeslide-notes-export-01/01-notes-reloaded.json"
+  },
+  {
+    "path": "E6g-nodeslide-notes-export-01/01-notes-reloaded.png",
+    "sha256": "457daf34cf5e4cfcf880fd02001694d9f233d3dcb97dd949e904fc3f0ac86d7f",
+    "bytes": 146592,
+    "copy": "observed/E6g-nodeslide-notes-export-01/01-notes-reloaded.png"
+  },
+  {
+    "path": "E6g-nodeslide-notes-export-01/02-deck-ci-detail.json",
+    "sha256": "e2ffb68afa1e086eacfbe1944d4efa2cf7402312e1fdf232972f1fb00c726017",
+    "bytes": 43999,
+    "copy": "observed/E6g-nodeslide-notes-export-01/02-deck-ci-detail.json"
+  },
+  {
+    "path": "E6g-nodeslide-notes-export-01/02-deck-ci-detail.png",
+    "sha256": "a4ebe833fca29210b68d9af6e1c36f64eab49a50b9f028cb0e6a05fbca032287",
+    "bytes": 161457,
+    "copy": "observed/E6g-nodeslide-notes-export-01/02-deck-ci-detail.png"
+  },
+  {
+    "path": "E6g-nodeslide-responsive-first-use-01/deck.json",
+    "sha256": "a7f5fa1d928fd6a6314d138d5eced53411567d4fb1e7c187de1a793aef2280e4",
+    "bytes": 80922,
+    "copy": "observed/E6g-nodeslide-responsive-first-use-01/deck.json"
+  },
+  {
+    "path": "E6g-nodeslide-notes-export-01/actual.pptx",
+    "sha256": "3ee7f9c4c5290d797ae8b3ad6f8f0647cd6a991e67034ed7f77fca0239c22032",
+    "bytes": 137200,
+    "copy": "observed/E6g-nodeslide-notes-export-01/actual.pptx"
+  },
+  {
+    "path": "E6g-nodeslide-notes-export-01/actual.html",
+    "sha256": "02905d41ecfbb9bfe084e5951c1730846a3f5ce700c804d9708c2244b52b14e2",
+    "bytes": 89395,
+    "copy": "observed/E6g-nodeslide-notes-export-01/actual.html"
+  },
+  {
+    "path": "E6g-nodeslide-chart-fixture-01/02-deterministic-brief.json",
+    "sha256": "55ba02e5d8c63418f564aa4f8cf5ac823ff4c7726735b06f5076c2b730753dd8",
+    "bytes": 15387,
+    "copy": "observed/E6g-nodeslide-chart-fixture-01/02-deterministic-brief.json"
+  },
+  {
+    "path": "E6g-nodeslide-chart-fixture-01/05-chart-slide.png",
+    "sha256": "582b0e378d8bd53a0985e182013c004e3bc91c055e34f69387060752d4cec6fc",
+    "bytes": 152013,
+    "copy": "observed/E6g-nodeslide-chart-fixture-01/05-chart-slide.png"
+  },
+  {
+    "path": "E6g-nodeslide-chart-fixture-01/report.json",
+    "sha256": "1575759eec4c734f4cfb3d5c4b4e948077ef8fa3b620c27ebab9c9bcc8e9c33a",
+    "bytes": 938,
+    "copy": "observed/E6g-nodeslide-chart-fixture-01/report.json"
+  },
+  {
+    "path": "E6g-nodeslide-chart-json-01/deck.json",
+    "sha256": "e581b89b7e387c4364917f51137b89b48a5bbcee068bc91a8db862c26145a87f",
+    "bytes": 81404,
+    "copy": "observed/E6g-nodeslide-chart-json-01/deck.json"
+  },
+  {
+    "path": "E6g-nodeslide-chart-json-01/schema-readback.json",
+    "sha256": "babbe924d2004e6902904d788f98062b955b6ab66e4384a79721f95b3e23d6e5",
+    "bytes": 1154,
+    "copy": "observed/E6g-nodeslide-chart-json-01/schema-readback.json"
+  }
+]

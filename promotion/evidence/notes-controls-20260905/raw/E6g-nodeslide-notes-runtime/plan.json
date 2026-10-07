@@ -1,0 +1,35 @@
+{
+  "proof": "NODESLIDE-NOTES-CONTROLS-01",
+  "stage": "Current-source before observation only; no source repair authorized by this receipt",
+  "head": "8177142416b6a6f59df057d0e5ab25df08db93ec",
+  "ownerSource": [
+    {
+      "path": "src/domains/nodeslide/components/SlideCanvas.tsx",
+      "bytes": 29440,
+      "sha256": "6e6252fa8ee2e306a5c3d9cf0f8108317817a76336e1c983529e8520b07083ba"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslide.css",
+      "bytes": 85818,
+      "sha256": "7320997f03a9a057b91fb91033d5027d381c67dfe0c4fa538a94f02d81f4ccda"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslideV3.css",
+      "bytes": 174065,
+      "sha256": "a62e73f9959bd21cafe74d326169950ead29e0c1d1d491606dcb7b36177edad9"
+    }
+  ],
+  "ports": [
+    49676,
+    49690,
+    53146
+  ],
+  "privateChild": "D:\\ProjectRecovery\\NodeSlide first run 20260905\\private-bootstrap-02\\notes-runtime-01",
+  "constraints": [
+    "Same preserved synthetic database and browser capability context; no original dirty checkout touched",
+    "Generated anonymous config only, in process; no provider or production credentials",
+    "Native127.0.0.1 verified before local source push; provider calls zero",
+    "Fresh phase logs and precise PID creation-time custody; existing4173/4174 untouched",
+    "Separate current DOM/styles/pixels before source changes; no whole UI grade from DOM alone"
+  ]
+}

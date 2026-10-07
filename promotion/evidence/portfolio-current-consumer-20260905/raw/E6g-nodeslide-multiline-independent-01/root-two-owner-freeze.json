@@ -1,0 +1,213 @@
+{
+  "proof": "NODESLIDE-MULTILINE-BRIEF-01",
+  "at": "2026-09-05T12:08:56.007334+00:00",
+  "status": "SOURCE_AND_ACTUAL_BROWSER_FROZEN_NORMAL_CHECK_RUNNING",
+  "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "source": [
+    {
+      "path": "convex/lib/nodeslideValidators.ts",
+      "sha256": "8a37b1a57278a9689ad4d1aacb11ac4ad9e7bb833a4f5658804ef94c3a7a81cb"
+    },
+    {
+      "path": "convex/lib/nodeslideAdmission.test.ts",
+      "sha256": "d46287d3ac7d9a1a393fe9a4665e2c3413f6155fa46bb30643e4384a7f3e5e29"
+    }
+  ],
+  "sourceDigest": "84040dd6ffab5f6fd734a0e55aaa25b7c7120747494cb2f1ecb8e7c4fd70db30",
+  "artifacts": [
+    {
+      "path": "E6g-nodeslide-multiline-before/convex/lib/nodeslideAdmission.test.ts",
+      "bytes": 19667,
+      "sha256": "b67f65eef7dc0ea8e6e69c57c360f26f924549a5eadd64b1b4f60ecdff6a4a76"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-before/convex/lib/nodeslideValidators.ts",
+      "bytes": 38641,
+      "sha256": "de7bd69e0531bc1081c9196b5e986d6fbefb92459a393bf0e28f7e1163a28075"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-before/plan.json",
+      "bytes": 2360,
+      "sha256": "d5813eb28fe8cdb6a22955f55d7ab6c93f63147682da3aa0bcff6c743e84891b"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/01-landing.json",
+      "bytes": 15103,
+      "sha256": "d9ea83d716d09e80f8c39d650bc6be173df6c09f3afbd33b0af96ce00c5e61b9"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/01-landing.png",
+      "bytes": 180267,
+      "sha256": "f929a5a14e03dc2cdf47e740a76af5b89ae4ac433bc22089b8aa8a1cec880cac"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/02-deterministic-brief.json",
+      "bytes": 15387,
+      "sha256": "55ba02e5d8c63418f564aa4f8cf5ac823ff4c7726735b06f5076c2b730753dd8"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/02-deterministic-brief.png",
+      "bytes": 183962,
+      "sha256": "e60df63c3103ab11ed56536ea2daf9eb04cabd2208b7a0511b3960299b65b91a"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/03-created-editor.json",
+      "bytes": 37606,
+      "sha256": "5a1a09858eba2f046726f2eb1ad7416a3f45f7da87a3410d82ab25fa34297226"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/03-created-editor.png",
+      "bytes": 111014,
+      "sha256": "3f71423dfbe63f66de96b1509811a8f3f20e852012baf191407ce27a1d1ff641"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/04-reloaded-editor.json",
+      "bytes": 36933,
+      "sha256": "bcc83e68480b841bd4955647318e1637428c76fd7e7bc0d20e7b52ded750f99b"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/04-reloaded-editor.png",
+      "bytes": 107705,
+      "sha256": "6982bcdae945c12cfe0106fa67c6f98f1b4efb513128d37bb529a2f0b8d04fc8"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/05-chart-slide.json",
+      "bytes": 37592,
+      "sha256": "d5f16a36946a0470b5e150067f8f32a44829d4407f306f02274e27dc19576102"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/05-chart-slide.png",
+      "bytes": 149966,
+      "sha256": "bfb65bfeefc782f20f4388bad04a802838493f30969adbf81b047931cfee0677"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/actual-chart-fixture.pptx",
+      "bytes": 162615,
+      "sha256": "96f14a7e1911d566692ca5bc543dfeb1bbfcbd79481c7babff333c35bdf6043c"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/actual-chart-parts.json",
+      "bytes": 5046,
+      "sha256": "b97c75f53f747cde14bd3076227c4f99d431708b79f6212a5f85177ac3d8aad0"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/deck.json",
+      "bytes": 83119,
+      "sha256": "55a659d90a84afb05519e7eda483406670b2f0299a68f308f7cc24b3ce836b6e"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser-01/report.json",
+      "bytes": 1672,
+      "sha256": "4c292db9aa13a4c14cdd2329784d66a62483cacd778e71f3ec516f416a5a6bd9"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-local-push.json",
+      "bytes": 221,
+      "sha256": "ed5b3a47243558c356b63c886052d774ccdc5a062e647823d71d7f55456d4ec1"
+    },
+    {
+      "path": "E6g-nodeslide-multiline-browser.mjs",
+      "bytes": 9409,
+      "sha256": "1fa063e9a789fd2a04464978ffa0c8fccffca787cb049b6126b075e5a3d76bd2"
+    },
+    {
+      "path": "E6g_NODESLIDE_GATE_BRIEF_DIAGNOSIS.json",
+      "bytes": 12022,
+      "sha256": "c1139cff23379fae70922d9c9f26aef371ab4e6dd05bae9667b44cceec5d9776"
+    }
+  ],
+  "actual": {
+    "at": "2026-09-05T12:05:50.130Z",
+    "proof": "NODESLIDE-MULTILINE-BRIEF-01",
+    "surface": "Current source Vite app and fresh loopback Convex backend",
+    "viewport": {
+      "width": 1440,
+      "height": 960
+    },
+    "steps": [
+      {
+        "name": "landing",
+        "status": "PASS",
+        "defaultModel": "moonshotai/kimi-k3"
+      },
+      {
+        "name": "deterministic-create",
+        "status": "PASS"
+      },
+      {
+        "name": "title-edit-reload",
+        "status": "PASS",
+        "previousVersion": 1,
+        "reloadedVersion": 2
+      }
+    ],
+    "errors": [],
+    "blockedExternal": [],
+    "captures": [
+      "01-landing",
+      "02-deterministic-brief",
+      "03-created-editor",
+      "04-reloaded-editor",
+      "05-chart-slide"
+    ],
+    "fullGrade": null,
+    "chartExport": {
+      "bytes": 162615,
+      "charts": 1,
+      "failure": null,
+      "values": [
+        [
+          "Signal",
+          "Month 1",
+          "Month 2",
+          "Month 3",
+          "100",
+          "120",
+          "140"
+        ]
+      ],
+      "nativeOfficeOpened": false
+    },
+    "jsonExport": {
+      "bytes": 83119,
+      "newlines": 5,
+      "exactSubmittedPrompt": true,
+      "charts": [
+        {
+          "chartType": "bar",
+          "labels": [
+            "Month 1",
+            "Month 2",
+            "Month 3"
+          ],
+          "series": [
+            {
+              "color": "#B44A2D",
+              "name": "Signal",
+              "values": [
+                100,
+                120,
+                140
+              ]
+            }
+          ],
+          "sourceId": "source_ee9223cffaa6fc02ab1b4acc811e4abc",
+          "unit": "value"
+        }
+      ],
+      "notesPersisted": true,
+      "capabilityScan": "PASS"
+    },
+    "status": "PASS_ACTUAL_CSV_RELOAD_JSON_PPTX"
+  },
+  "focusedAdmission": "33/33 passed before formatter, exact terminal tool output retained; normal full check runs final formatted test",
+  "bounds": "Raw 4000 code points / 8192 bytes unchanged before trim; no new backend trust boundary",
+  "crScope": "Internal CR retained verbatim; CR-only CSV chart unsupported by existing parser. Actual UI CSV uses LF; action scenarios LF/CRLF.",
+  "limits": [
+    "Deterministic prose-only chart interpretation remains unsupported.",
+    "Generic value unit and source-column parser limitations retained.",
+    "No native Office editability/readback was performed.",
+    "Notes footer overlap, enlarged-text clipping and failure detail readiness scope remain open.",
+    "Ordinary full check and independent judge pending; all final grades null."
+  ]
+}

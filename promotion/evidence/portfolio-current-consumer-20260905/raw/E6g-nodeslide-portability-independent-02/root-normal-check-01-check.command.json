@@ -1,0 +1,21 @@
+{
+  "at": "2026-09-05T11:20:44.283681+00:00",
+  "command": [
+    "npm",
+    "run",
+    "check"
+  ],
+  "exitCode": 1,
+  "seconds": 58.93700000003446,
+  "log": "check.log",
+  "isolatedTemporaryRoot": "D:\\ProjectRecovery\\NodeSlide first run 20260905\\temp",
+  "sourceHashes": {
+    "scripts/tests/workspace-build-depth.test.mjs": "98e1cc0d259199f01c4b92e2b539a06aa32889e72e7857a1b35a815f0185a40e",
+    "scripts/tests/code-tours.test.mjs": "20358217a7c89ee0af06778ae7d27f82e9b5b771e7e0ddeec4f63a52c97e38eb",
+    "scripts/tests/playwright-trace.test.mjs": "6d58b0fa95c609cc91ab7cecbf032c5136b3c63654454c71824b1b32adbc3b9f",
+    ".gitattributes": "e9c61ffa7486f3134f5deae7d81103be5a8eacc3dfbbe4296c09df5d45d7d2f5"
+  },
+  "sourceUnchangedDuringCheck": true,
+  "unchangedTimeoutsAndConfiguration": true,
+  "environment": "Inherited provider/Convex/Vite/base URL credential names removed without value output. Only candidate generated loopback bindings exist; no original env file read."
+}

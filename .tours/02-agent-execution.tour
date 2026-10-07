@@ -1,0 +1,57 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "2 · An AI edit, reviewed",
+  "description": "The product thesis, in code: an agent proposes a change, the server checks it against the version of the deck it was written for, and only then does anything move. Includes how a coding agent reaches the same path.",
+  "steps": [
+    {
+      "file": "convex/nodeslideAgent.ts",
+      "line": 481,
+      "description": "**The second, and last, place a model is called.**\n\nNote what the caller must supply: `baseDeckVersion`, `baseSlideVersions`, `baseElementVersions` and a `scope`. The client is stating exactly which version of the deck it is proposing against, and how much of it it is allowed to touch.\n\nThat is what makes the check three steps down possible."
+    },
+    {
+      "file": "convex/nodeslideAgent.ts",
+      "line": 506,
+      "description": "**Cheapest refusals first, again.**\n\nEmpty instruction, over-long instruction, wrong command id, missing provider consent — all rejected before any model call. Same rule as the create path."
+    },
+    {
+      "file": "mcp/src/lib/nodeslideTools.ts",
+      "line": 414,
+      "description": "**A coding agent is a first-class user.**\n\nThis is not a second backend. Each MCP tool validates its arguments with Zod and then calls the *same* Convex function the browser calls.\n\nOne write path means an agent cannot bypass the version check — which is the entire safety argument for letting an agent edit a deck at all."
+    },
+    {
+      "file": "mcp/src/lib/nodeslideTools.ts",
+      "line": 430,
+      "description": "**Read tools declare themselves read-only.**\n\n`readOnlyHint: true`, `destructiveHint: false`, `openWorldHint: false` — these annotations are how the calling agent's host decides whether to ask a human first.\n\nThe description also states what the tool will *not* do: it never returns the owner key."
+    },
+    {
+      "file": "mcp/src/lib/nodeslideTools.ts",
+      "line": 540,
+      "description": "**The write tool proposes; it does not commit.**\n\nIt returns an `unappliedProposalReceipt`. Committing is a *separate* tool — `nodeslide.accept_proposal`, a few lines below — which is described as an 'Explicit review action'.\n\nAn agent can produce a proposal; accepting it is its own deliberate call. That asymmetry is the product, not a limitation of the integration."
+    },
+    {
+      "file": "convex/nodeslide.ts",
+      "line": 1180,
+      "description": "**Where every change enters, whoever made it.**\n\n`applyPatch` (direct), `proposePatch` (review first) and `proposePropagation` (apply an accepted change to matching slides) all normalise into the same shape and all end up at the same check."
+    },
+    {
+      "file": "convex/lib/nodeslidePatches.ts",
+      "line": 659,
+      "description": "**The heart of the system.**\n\nCompare-and-set. The patch recorded the version of everything it touched; this compares those numbers to the database *right now*, inside the same transaction.\n\nEqual → commit and bump. Different → the patch is stored with status `stale` and a human-readable list of exactly what moved.\n\nThis is why two people, or a person and an agent, cannot silently overwrite each other."
+    },
+    {
+      "file": "convex/lib/nodeslidePatches.ts",
+      "line": 708,
+      "description": "**The function to be most careful with.**\n\nThe check above only protects ids that this function reports. Add a new patch operation without teaching this function which ids it touches, and the operation will pass the version check *without being checked*.\n\nIf you add an operation type, this is the second file you edit, and there is no compiler error to remind you."
+    },
+    {
+      "file": "convex/nodeslide.ts",
+      "line": 1224,
+      "description": "**Acceptance is one transaction.**\n\nThe commit, the version bump and the decision record either all land or all roll back. There is no window in which a deck has advanced but its receipt has not."
+    },
+    {
+      "file": "shared/nodeslidePatch.test.ts",
+      "line": 510,
+      "description": "**The test that proves it.**\n\nIf you change anything in `evaluateNodeSlideCas`, this is the test that tells you whether you broke the guarantee. Its siblings above and below cover scope violations, geometry clamping and forged artifact bindings."
+    }
+  ]
+}

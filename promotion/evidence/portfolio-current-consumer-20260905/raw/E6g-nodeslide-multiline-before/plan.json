@@ -1,0 +1,42 @@
+{
+  "proof": "NODESLIDE-MULTILINE-BRIEF-01",
+  "at": "2026-09-05T12:03:21.747651+00:00",
+  "classification": "patch",
+  "owners": [
+    {
+      "path": "convex/lib/nodeslideValidators.ts",
+      "sha256": "de7bd69e0531bc1081c9196b5e986d6fbefb92459a393bf0e28f7e1163a28075"
+    },
+    {
+      "path": "convex/lib/nodeslideAdmission.test.ts",
+      "sha256": "b67f65eef7dc0ea8e6e69c57c360f26f924549a5eadd64b1b4f60ecdff6a4a76"
+    }
+  ],
+  "planAcceptedBy": "root",
+  "cause": "Existing shared single-line normalizer destroys internal CSV line breaks before generation and persistence. Actual input five LF, persisted zero LF, zero charts; intact pure materialization yields one chart.",
+  "contract": "Prompt trims outer whitespace only and preserves internal LF/CRLF/CR, spaces, tabs and Unicode. Raw 4000-code-point/8192-byte limits and blank rejection unchanged. Other fields still collapse whitespace.",
+  "steps": [
+    "Preserve original owner bytes and actual failed CSV input/output.",
+    "Change private existing normalizer format only for prompt.",
+    "Exercise actual create handler across repeated and burst multiline requests plus raw bounds and other-field behavior.",
+    "Push through normal local Convex typecheck/codegen to already owned loopback backend only.",
+    "Repeat actual deterministic CSV browser creation, reload, current notes and JSON/PPTX readback; require exact newline prompt and chart values.",
+    "Run normal npm check/build/consumer checks and independent source/proof judgment; do not infer full readiness."
+  ],
+  "beforeEvidence": [
+    "E6g-nodeslide-chart-fixture-01/02-deterministic-brief.png",
+    "E6g-nodeslide-chart-fixture-01/05-chart-slide.png",
+    "E6g-nodeslide-chart-json-01/deck.json",
+    "E6g-nodeslide-gate-brief-diagnosis/normalization-cause.json"
+  ],
+  "reliability": {
+    "BOUND": "Existing raw input bounds unchanged; no new collection.",
+    "HONEST_STATUS": "Existing Convex invalid_request failures unchanged.",
+    "HONEST_SCORES": "No scores altered.",
+    "TIMEOUT": "No external request or timeout altered.",
+    "SSRF": "No new fetch or URL boundary.",
+    "BOUND_READ": "No external read added.",
+    "ERROR_BOUNDARY": "Existing synchronous validator exception boundary unchanged.",
+    "DETERMINISTIC": "No CAS or hashing changes; preserved input is canonical validated content."
+  }
+}

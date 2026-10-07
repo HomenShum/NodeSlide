@@ -1,0 +1,37 @@
+from pathlib import Path
+P=Path(__file__).parent
+s=(P/'E6g-nodeslide-chart-fixture-proof.mjs').read_text(encoding='utf-8')
+s=s.replace('E6g-nodeslide-chart-fixture-01','E6g-nodeslide-multiline-browser-01').replace('browser-chart-fixture-01','browser-multiline-01').replace('NODESLIDE_CURRENT_DETERMINISTIC_FIRST_RUN_01','NODESLIDE-MULTILINE-BRIEF-01')
+s=s.replace("  await capture('02-deterministic-brief');", "  const submittedPrompt=await page.getByLabel('Presentation brief').inputValue();\n  await capture('02-deterministic-brief');")
+s=s.replace("  await capture('04-reloaded-editor');",r"""  const notes='Illustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text.\nDecision: prototype after checking the budget. 中文交接 — no external claims.';
+  const notesField=page.getByRole('textbox',{name:/Presenter notes for/});
+  if(!await notesField.isVisible())await page.getByRole('button',{name:/Presenter notes/}).click();
+  const notesVersion=await version();await notesField.fill(notes);await notesField.press('Tab');
+  await expect.poll(version).toBe(notesVersion+1);
+  await page.reload({waitUntil:'domcontentloaded'});await page.getByTestId('slide-canvas').waitFor();
+  await expect(page.getByRole('textbox',{name:/Presenter notes for/})).toHaveValue(notes);
+  await capture('04-reloaded-editor');""")
+s=s.replace("  await fs.copyFile(file,path.join(O,'actual-chart-fixture.pptx'));",r"""  expect(chartNames.length).toBe(1);
+  const chartText=chartXml.join('\n');
+  for(const value of ['100','120','140'])expect(chartText).toContain(`<c:v>${value}</c:v>`);
+  const notesParts=Object.keys(zip.files).filter(n=>/^ppt\/notesSlides\/notesSlide\d+\.xml$/.test(n));
+  const notesXml=(await Promise.all(notesParts.map(n=>zip.file(n).async('string')))).join('\n');
+  expect(notesXml).toContain('00123');expect(notesXml).toContain('中文交接');
+  await fs.copyFile(file,path.join(O,'actual-chart-fixture.pptx'));""")
+s=s.replace("  report.status='STRUCTURED_CHART_FIXTURE_OBSERVED';",r"""  await page.getByTestId('inspector-tab-json').click();
+  const jsonPending=page.waitForEvent('download');await page.getByRole('button',{name:'Download deck.json',exact:true}).click();
+  const jsonDownload=await jsonPending;const jsonFile=path.join(privateRoot,'actual-deck.json');await jsonDownload.saveAs(jsonFile);
+  const jsonBytes=await fs.readFile(jsonFile);const jsonText=jsonBytes.toString('utf8');const deck=JSON.parse(jsonText);
+  const storage=await context.storageState();const secrets=storage.origins.flatMap(o=>o.localStorage.flatMap(x=>x.name==='nodeslide.deckAccess.v1'?Object.values(JSON.parse(x.value)):x.name.includes('sessionId')?[x.value]:[]));
+  if(secrets.some(secret=>secret&&jsonText.includes(secret)))throw new Error('Private capability present in exported JSON');
+  expect(deck.deck.brief.prompt).toBe(submittedPrompt);expect((deck.deck.brief.prompt.match(/\n/g)||[]).length).toBe(5);
+  const charts=deck.elements.filter(e=>e.kind==='chart');expect(charts.length).toBe(1);
+  expect(deck.slides.some(slide=>slide.notes===notes)).toBe(true);
+  await fs.copyFile(jsonFile,path.join(O,'deck.json'));
+  report.jsonExport={bytes:jsonBytes.length,newlines:5,exactSubmittedPrompt:true,charts:charts.map(e=>e.chart),notesPersisted:true,capabilityScan:'PASS'};
+  expect(report.errors).toEqual([]);expect(report.blockedExternal).toEqual([]);
+  report.status='PASS_ACTUAL_CSV_RELOAD_JSON_PPTX';""")
+# Inserted snippets are raw Python strings: use exactly one JavaScript escape.
+s=s.replace('\\\\','\\')
+(P/'E6g-nodeslide-multiline-browser.mjs').write_text(s,encoding='utf-8',newline='\n')
+print('Prepared actual CSV create/reload/notes/JSON/PPTX proof')

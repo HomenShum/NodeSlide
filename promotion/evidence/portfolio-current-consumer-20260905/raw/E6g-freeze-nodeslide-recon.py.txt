@@ -1,0 +1,162 @@
+from pathlib import Path
+import datetime, hashlib, json, subprocess, sys
+
+sys.stdout.reconfigure(encoding='utf-8')
+P = Path(r'C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904')
+O = P / 'E6g-nodeslide-recon'
+H = 'b0674b229a3691c09c88fcab1481f2e33342cb21'
+TREE = 'f3262e171240fec8f54ec5f01aa86310a2b30f5c'
+def sha(b): return hashlib.sha256(b).hexdigest()
+def write(path, obj): path.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+commands = []
+def git(repo, *args):
+    argv = ['git', '--no-optional-locks', '-C', str(repo), *args]
+    r = subprocess.run(argv, capture_output=True, timeout=40)
+    commands.append({'argv': argv, 'exitCode': r.returncode, 'stdoutSha256': sha(r.stdout), 'stderr': r.stderr.decode('utf-8', 'replace')})
+    if r.returncode: raise RuntimeError(f'Git read failed: {args!r}: {r.returncode}')
+    return r.stdout
+
+before = json.loads((O / 'holdings-before.json').read_text(encoding='utf-8'))
+discovery = json.loads((O / 'canonical-git-discovery.json').read_text(encoding='utf-8'))
+source = json.loads((O / 'source-bindings.json').read_text(encoding='utf-8'))
+checks = []
+def check(name, passed, detail=None): checks.append({'name': name, 'passed': bool(passed), 'detail': detail})
+after = []
+for saved in before:
+    repo = saved['repo']
+    initial = next(x for x in discovery if x['repo'] == repo)
+    head = git(repo, 'rev-parse', 'HEAD').decode().strip()
+    refs = git(repo, 'for-each-ref', '--format=%(refname) %(objectname) %(upstream:short)')
+    registration = git(repo, 'worktree', 'list', '--porcelain')
+    check(f'{repo}: HEAD unchanged', head == saved['head'])
+    check(f'{repo}: exact refs unchanged', refs.decode() == initial['refs']['stdout'])
+    check(f'{repo}: exact worktree registration unchanged', registration.decode() == initial['worktrees']['stdout'])
+    entry = {'repo': repo, 'head': head, 'refsSha256': sha(refs), 'worktreeRegistrationSha256': sha(registration), 'worktrees': []}
+    for wt in saved['worktrees']:
+        path = wt['worktree']
+        index = git(path, 'ls-files', '--stage', '-z')
+        status = git(path, 'status', '--porcelain=v1', '-z', '--untracked-files=all')
+        matched_args = ['status', '--porcelain=v1', '-z', '--untracked-files=all']
+        if sha(status) != wt['statusSha256']:
+            # Retain alternate read serialization rather than pretending an unequal digest matches.
+            plain = git(path, 'status', '--porcelain=v1', '--untracked-files=all')
+            if sha(plain) == wt['statusSha256']:
+                status, matched_args = plain, ['status', '--porcelain=v1', '--untracked-files=all']
+        check(f'{path}: index bytes unchanged', sha(index) == wt['indexSha256'])
+        check(f'{path}: status metadata unchanged', sha(status) == wt['statusSha256'])
+        entry['worktrees'].append({'worktree': path, 'indexSha256': sha(index), 'statusSha256': sha(status), 'statusArgs': matched_args})
+    remote = git(repo, 'ls-remote', '--symref', 'origin', 'HEAD', 'refs/heads/main').decode()
+    entry['remoteMain'] = remote
+    check(f'{repo}: remote main still frozen commit', f'{H}\trefs/heads/main' in remote)
+    after.append(entry)
+
+R = before[0]['repo']
+verified = []
+for b in source:
+    raw = (O / 'current-source' / b['path']).read_bytes()
+    blob = git(R, 'cat-file', 'blob', b['gitBlob'])
+    ok = raw == blob and sha(raw) == b['sha256'] and len(raw) == b['bytes']
+    verified.append({'path': b['path'], 'gitBlob': b['gitBlob'], 'sha256': sha(raw), 'bytes': len(raw), 'exactGitBlob': ok})
+check('42 named current source copies equal immutable Git blobs', len(verified) == 42 and all(x['exactGitBlob'] for x in verified))
+check('Canonical tree exact', git(R, 'rev-parse', H + '^{tree}').decode().strip() == TREE)
+remote_tree = json.loads((O / 'remote-tree.json').read_text())
+instruction_paths = [x['path'] for x in remote_tree['tree'] if x['path'].split('/')[-1].lower() in ['agents.md', 'claude.md']]
+check('Current full recursive tree contains no AGENTS.md or CLAUDE.md', remote_tree.get('truncated') is False and not instruction_paths, instruction_paths)
+candidate = Path(r'D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+candidate_ref = 'refs/heads/codex/nodeslide-current-consumer-20260905'
+candidate_exists = candidate.exists()
+candidate_ref_listing = git(R, 'for-each-ref', '--format=%(objectname)', candidate_ref).decode().strip()
+check('Proposed candidate path and branch do not already exist', not candidate_exists and not candidate_ref_listing)
+custody = {'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(), 'status': 'PASS' if all(x['passed'] for x in checks) else 'FAIL', 'checks': checks, 'holdingsAfter': after, 'sourceCopies': verified, 'commands': commands, 'limits': ['Index comparison covers git ls-files --stage serialization, not raw .git/index file bytes.', 'Dirty file contents were not read or content-hashed; unchanged status is metadata custody only.', 'No environment file values, workbooks, browser, COM, provider, install, test, build, source/index/ref mutations.']}
+write(O / 'read-only-custody.json', custody)
+
+ci = [
+    {'name': 'NodeSlide normal CI', 'runId': 31770530461, 'head': H, 'status': 'SUCCESS', 'date': '2026-08-14', 'rawLog': 'current-ci.log', 'meaning': 'App/packages and historical NodeRoom/NodeAgent packed consumer jobs passed. Not a fresh full browser or deployed-content certification.'},
+    {'name': 'NodeSlide latest nightly production journey', 'runId': 33958565935, 'head': H, 'status': 'FAILURE', 'date': '2026-09-05', 'rawLog': 'nightly-failed.log', 'passedBeforeFailure': ['landing-live', 'create-deterministic', 'edit-and-commit', 'reload-persisted-edit'], 'failure': 'artifact-and-routing-shadow: canonicalArtifactCount and authoredBindingCount must both be positive safe integers; combined assertion failed.', 'failureCodeCaveat': 'edit-persistence is a message-regex bucket; the preceding edit/reload checks passed. Raw log does not identify which count was missing/invalid, nor prove the underlying producer/storage cause.', 'cleanup': 'retention-cleanup PASS', 'export': 'Not reached in this run.'},
+    {'name': 'NodeSlide latest benchmark gate', 'runId': 33950223500, 'head': H, 'status': 'FAILURE_UNSCORED', 'date': '2026-09-05', 'rawLog': 'benchmark-failed.log', 'failure': 'Missing required live-evidence configuration.', 'missingNamesOnly': ['NODESLIDE_PRODUCTION_URL', 'NODESLIDE_PRODUCTION_CONVEX_URL', 'NODESLIDE_TASTE_JUDGE_OPENROUTER_KEY'], 'meaning': 'UX and Taste are UNSCORED; this is not an observed low visual score.'},
+    {'name': 'NodeRoom immutable mounted NodeSlide consumer', 'runId': 33280884326, 'head': '2b3e5bd718b80747f32257a8b8af5f15e2310699', 'status': 'FAILURE', 'rawLog': 'noderoom-mounted-failed.log', 'failure': '@nodeslide/engine root dependency pin mismatch: expected file:vendor/nodeslide/nodeslide-engine-0.2.2.tgz, received undefined', 'meaning': 'Stops at consumer dependency contract before the full mounted journey. Different consumer head and stronger mounted-release gate than historical NodeSlide producer CI; not evidence that the current NodeSlide engine tarball is broken.'},
+]
+for x in ci:
+    x['repository'] = 'HomenShum/NodeRoom' if x['name'].startswith('NodeRoom') else 'HomenShum/NodeSlide'
+    x['url'] = f"https://github.com/{x['repository']}/actions/runs/{x['runId']}"
+    x['rawLogSha256'] = sha((O / x['rawLog']).read_bytes())
+
+plan = [
+    'Preserve both clones and their registered worktrees. After owner coordination, create only the proposed sibling worktree and codex branch from exact b0674b2, using the existing commit object; do not move main or import dirty branches.',
+    'In that isolated candidate, use the lockfile and CI Node 22 runtime, then npm ci. First inspect any command for native Office/provider requirements; record environment names only and copy no existing environment file.',
+    'Run the documented npm run check once with bounded outer execution and retained raw output. Then run the declared packed consumer and external-agent proofs once. These are local rehearsals; immutable official package production remains the Ubuntu release workflow. The existing package consumer script deletes its temporary directory; retain its output/receipts and do not claim an invented KEEP option.',
+    'Prove the keyless external-agent job using inspect/validate/propose/apply on a disposable deck copy. Bind proposal ID and input/output hashes; reject stale or wrong approval IDs and confirm the original deck remains unchanged. Approval ID is integrity binding, not authenticated human authority.',
+    'For the actual browser job, prepare a fresh isolated local Convex deployment using docs/START_HERE.md. Enable its documented public creation admission only there, and bind the frontend to it. Missing binding/admission is a real blocker, not permission to substitute a fixture or connect to shared production.',
+    'Serve on an explicitly allocated unused port and set PLAYWRIGHT_BASE_URL explicitly. The default Playwright port 4173 is protected and must not be reused. Before submitting a benign synthetic brief, explicitly choose deterministic mode; the current landing initializes a provider model by default. No external model call is part of this proof.',
+    'Named first-run proof: deterministic brief to editable deck, manual edit and presenter notes, reload/resume exact persisted version, JSON and editable PPTX export, then cleanup only that proof-owned deck. Inspect the actual exports without COM. Preserve failures and distinguish probe labels from actual persistence behavior.',
+    'Capture actual DOM, console and pixels at 390 and 1440, then one keyboard/200-percent text pass, including opening notes and export controls. Reproduce the historical notes occlusion before proposing a fix; capture labelled 3px boundaries and protect the slide sequence, canvas and artifact bytes. Additional widths and the other readiness criteria remain explicitly unmeasured.',
+    'Freeze source identity, raw evidence and the smallest observed repair plan for independent judgment. Treat the production ArtifactSpec shadow cause, missing benchmark configuration, and NodeRoom mounted dependency repair as separate owner-bound work; no gate weakening or inherited full-grade claim.'
+]
+report = {
+    'schemaVersion': 1, 'mode': 'Builder', 'verdict': 'READ_ONLY_RECON_COMPLETE_FIRST_RUN_NOT_EXECUTED',
+    'requestTrace': 'Prepare each individual repository for developer/user handoff, including visual, responsiveness and interaction standards, using planner-worker-judge.',
+    'scope': 'Bounded independent current-baseline and first-run reconnaissance only. Reviewer context reused; no NodeSlide implementation authored.',
+    'canonical': {'repository': 'https://github.com/HomenShum/NodeSlide', 'branch': 'main', 'commit': H, 'tree': TREE, 'remoteRechecked': True, 'existingObjectAvailable': True},
+    'holdings': [{'repo': x['repo'], 'head': x['head'], 'branches': x['branches'], 'worktrees': [{k: v for k, v in w.items() if k != 'statusPaths'} for w in x['worktrees']]} for x in before],
+    'preservation': 'E1 custody is historical and retirement remains false. Newer clone is clean but six commits behind; older primary and embedded consumer remain dirty. No branch/worktree deletion, merge, stash, checkout or fetch occurred.',
+    'instructions': {'globalUserRules': 'Applicable; no current remote AGENTS.md/CLAUDE.md in complete 4621-entry tree.', 'sources': ['docs/START_HERE.md', 'docs/codebase/TESTING.md', 'docs/codebase/CONCERNS.md', 'promotion/PRODUCT_GOAL.md', 'promotion/PRODUCT_JOURNEYS.md', 'promotion/WIG_REVIEW.md', 'design-dna/rules/nodeslide-agent-visual-logic.yaml', 'src/styles/tokens.css', 'REPO_READINESS_STANDARD.md (central)']},
+    'entryPoints': {
+        'user': 'src/main.tsx creates the Convex client before App; missing/malformed VITE_CONVEX_URL renders deployment-configuration-error. App defaults to NodeSlideStudio; ?domain=atlas is read-only content behind the same root binding guard.',
+        'documentedSetup': ['npm install', 'npx convex dev --once', 'npx convex env set NODESLIDE_PUBLIC_CREATION true', 'npx convex dev', 'npm run dev:web'],
+        'setupScope': 'Future isolated local deployment only. Not run in reconnaissance. Documentation is not authorization to mutate shared deployment.',
+        'providerGuard': 'Explicitly select deterministic before Create; NodeSlideLanding starts at NODESLIDE_DEFAULT_AGENT_MODEL. No API key is needed for the deterministic local journey.',
+        'agent': 'Packed @nodeslide/external-agent offline CLI: inspect, validate, propose, apply with --approve exact proposal ID; the ID does not authenticate a human.',
+        'consumer': 'npm run packages:consumer:smoke packs and installs actual workspace tarballs in a fresh temporary consumer; script finally deletes that temporary directory.',
+        'developer': 'CI Node 22; npm ci; npm run check = lint + typecheck + tests + build. npm test does not run deployed Playwright journeys. doctor is typecheck, not backend readiness.',
+        'protectedPort': 'PLAYWRIGHT_BASE_URL is mandatory in future proof because default 4173 can reuse the user server.',
+    },
+    'ci': ci,
+    'historicalVisualSignals': {'currentPixelsObserved': False, 'historicalSource': 'promotion/WIG_REVIEW.md at exact current commit', 'notesOcclusion': 'Open major: pager/zoom controls overlap lower presenter-notes area at 390/768/1440 in retained historical measurements. Must reproduce before current attribution or repair.', 'performance': 'Historical throttled Lighthouse report cites 5.05 MB vendor chunk and LCP 12.6 s; not remeasured here.', 'standards': ['Renderable evidence in dominant region; no fabricated quantities or unresolved hero placeholders.', 'Ordered deck sequence remains visible during editing/review and current slide remains dominant.', 'Delivery controls belong in chrome and produce explicit completion artifacts.', 'Central 44-criterion readiness standard retains its 4.5 target; this recon assigns no scores.']},
+    'candidate': {'path': str(candidate), 'branch': candidate_ref.removeprefix('refs/heads/'), 'base': H, 'created': False, 'pathAndRefAbsentAtFreeze': not candidate_exists and not candidate_ref_listing},
+    'namedProof': 'NODESLIDE_CURRENT_DETERMINISTIC_FIRST_RUN_01', 'plan': plan,
+    'remainingUnknowns': ['No dependency installation, local tests/build, browser, local backend or current exported artifact verified in this recon.', 'Production shadow failure does not identify which count failed or whether the underlying cause is producer data, stored binding, or probe/deployment contract mismatch.', 'NodeRoom pin-removal history was supplied by its earlier recon; the exact current mounted failure is independently bound to the GitHub raw log here, not a new full source-history replay.', 'Normal CI inner test counts and historical NodeRoom checkout SHA were not extracted; only actual run/job outcome is claimed.', 'Declared npm run proof step list was not additionally inspected; the first-run plan uses the documented check command, not an unverified broad proof shortcut.', 'No finalized sanitizer artifact from nightly production was downloaded; raw job log is the bounded diagnostic source.', 'Some of the 42 source copies support custody/reference only and were not fully line-reviewed.'],
+    'safety': {'providerCalls': 0, 'browserCalls': 0, 'installTestBuildCalls': 0, 'comCalls': 0, 'sourceEdits': 0, 'indexOrRefWrites': 0, 'environmentValuesRead': 0, 'workbookReads': 0, 'newPacketFilesOnly': True},
+    'custody': {'path': 'E6g-nodeslide-recon/read-only-custody.json', 'sha256': sha((O / 'read-only-custody.json').read_bytes()), 'status': custody['status'], 'passed': sum(x['passed'] for x in checks), 'total': len(checks)},
+    'grading': {'scope': 'RECON_ONLY', 'criterionScores': None, 'fullDimensions': None, 'overall': None, 'productionReadiness': None, 'humanUsage': None},
+    'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+}
+artifacts = []
+for f in sorted(O.rglob('*')):
+    if f.is_file() and f.name != 'manifest.json':
+        raw = f.read_bytes()
+        artifacts.append({'path': f.relative_to(O).as_posix(), 'bytes': len(raw), 'sha256': sha(raw)})
+manifest = {'scope': 'Bounded source/log/recon custody, excludes this manifest and top-level final reports.', 'files': len(artifacts), 'bytes': sum(x['bytes'] for x in artifacts), 'artifacts': artifacts}
+write(O / 'manifest.json', manifest)
+report['artifacts'] = {'manifest': 'E6g-nodeslide-recon/manifest.json', 'sha256': sha((O / 'manifest.json').read_bytes()), 'files': len(artifacts), 'bytes': manifest['bytes'], 'sourceCopies': 42}
+write(P / 'E6g_NODESLIDE_CURRENT_RECON.json', report)
+
+md = f'''# NodeSlide current baseline and first-run plan
+
+Builder. **Decision: start an isolated first-run candidate from canonical main `{H}`.** A developer needs to create, edit, reopen and export a defensible deck before this repository can be handed to a user. For example, a saved edit can survive reload while a separate evidence-binding check fails; the two outcomes must remain distinct. NodeSlide is a reviewable deck editor with versioned proposals, so successful compilation cannot establish that its full user job works.
+
+**Re your request:** make each repository ready for developers and users, with visual, responsiveness and interaction standards and planner-worker-judge review. This packet establishes the current NodeSlide baseline and a concrete next proof. It does not implement or grade it.
+
+- Canonical main is `{H}`, tree `{TREE}`. Both existing clones contain the object. The newer clean clone is six commits behind; the older primary has 15 tracked and 520 untracked changed paths, and its registered embedded consumer has 5 tracked and 6 untracked paths. Preserve them; no whole-branch salvage or retirement follows from this recon. [Raw holdings](E6g-nodeslide-recon/holdings-before.json), [remote discovery](E6g-nodeslide-recon/canonical-git-discovery.json).
+- Normal exact-head CI passed on August 14, including its then-current packed consumer job. This is useful baseline evidence, not a fresh full-user or production certification. [CI 31770530461](https://github.com/HomenShum/NodeSlide/actions/runs/31770530461), [raw log](E6g-nodeslide-recon/current-ci.log).
+- The latest nightly job passes landing, deterministic creation, edit commit and reload persistence, then fails the combined positive canonical-artifact/authored-binding count assertion. Its `edit-persistence` label is a regex error bucket, not a failed prior reload. Cleanup passes; export is not reached. Which count and upstream producer/storage cause failed remains unknown. [Nightly 33958565935](https://github.com/HomenShum/NodeSlide/actions/runs/33958565935), [raw log](E6g-nodeslide-recon/nightly-failed.log), [predicate at lines 292–297](E6g-nodeslide-recon/current-source/scripts/prod-probe.mjs).
+- The scheduled benchmark is **UNSCORED** because its required production URLs and Taste judge credential are unconfigured. No credential values were read and no judge call is proposed. [Run 33950223500](https://github.com/HomenShum/NodeSlide/actions/runs/33950223500), [raw log](E6g-nodeslide-recon/benchmark-failed.log).
+- NodeRoom's later mounted release gate fails before the journey: root `@nodeslide/engine` expects `file:vendor/nodeslide/nodeslide-engine-0.2.2.tgz` and gets `undefined`. This is a consumer dependency contract failure, distinct from the earlier producer smoke. The earlier NodeRoom history traces removed pins, but this bounded pass does not recertify that entire history or tarball. [Run 33280884326](https://github.com/HomenShum/NodeRoom/actions/runs/33280884326), [raw log](E6g-nodeslide-recon/noderoom-mounted-failed.log).
+
+The normal browser entry is `NodeSlideStudio`. It requires a valid Convex binding before the application mounts; even the read-only `?domain=atlas` route passes through that guard. The documented local start is install, initialize a local Convex deployment, enable its public-creation admission, run Convex and `dev:web`. The exact commands and guard are retained in [START_HERE](E6g-nodeslide-recon/current-source/docs/START_HERE.md), [entry module](E6g-nodeslide-recon/current-source/src/main.tsx) and [endpoint resolver](E6g-nodeslide-recon/current-source/src/lib/convexEndpoints.ts). They have not been executed here. The landing defaults to a provider model: **explicitly select deterministic before Create** for the keyless proof. [Current landing owner](E6g-nodeslide-recon/current-source/src/domains/nodeslide/components/NodeSlideLanding.tsx).
+
+The offline developer/agent entry is the packed external-agent CLI: inspect a deck, validate a patch, create a proposal, then apply it with its exact approval ID. That ID binds content but does not establish authenticated human authority. The package consumer smoke uses real tarballs and a fresh consumer; its existing script deletes that temporary consumer, so there is no claimed KEEP option. [Agent contract](E6g-nodeslide-recon/current-source/packages/external-agent/README.md), [package entry points](E6g-nodeslide-recon/current-source/packages/README.md), [consumer script](E6g-nodeslide-recon/current-source/scripts/package-consumer-smoke.mjs).
+
+The proposed worktree is `{candidate.as_posix()}`, branch `codex/nodeslide-current-consumer-20260905`, base `{H}`. Neither path nor ref existed at freeze; neither was created. Named proof: **NODESLIDE_CURRENT_DETERMINISTIC_FIRST_RUN_01**.
+
+''' + '\n\n'.join(f'{i}. {s}' for i, s in enumerate(plan, 1)) + f'''
+
+Current UI standards come from the token owner, executable deck-design rules and the central 44-criterion readiness standard. Historical current-main review records presenter-note occlusion and a costly vendor chunk. These are leads for actual before captures, not current pixel observations or scores. The first proof targets 390/1440 and keyboard/200-percent text; other widths, touch platforms, performance budgets, sustained use and full human usage remain unmeasured. [Historical WIG review](E6g-nodeslide-recon/current-source/promotion/WIG_REVIEW.md), [design rules](E6g-nodeslide-recon/current-source/design-dna/rules/nodeslide-agent-visual-logic.yaml), [central standard](REPO_READINESS_STANDARD.md).
+
+Risk controls are concrete: keep local Convex isolated; never copy the existing environment; explicitly choose deterministic; allocate a new port and set `PLAYWRIGHT_BASE_URL` because the default can reuse protected port 4173; preserve every failed artifact; inspect exported files without native Office; make no production, release or full-grade claim. Official immutable package production is an Ubuntu workflow; a Windows local consumer rehearsal is not that release.
+
+This nonauthor reviewer reused prior portfolio context. There were no browser, provider, COM, install, test or build calls, and no source/index/ref writes. Current complete remote tree contains no AGENTS.md or CLAUDE.md; global user rules and the named source contracts apply. The read-only custody result is **{custody['status']} ({sum(x['passed'] for x in checks)}/{len(checks)})**: exact refs/worktree registration, index-entry bytes, status metadata and all 42 retained source copies were checked. Dirty file contents were deliberately not read, so unchanged status is metadata custody only. [Custody](E6g-nodeslide-recon/read-only-custody.json).
+
+Finalized deliverables are this note, the structured [recon JSON](E6g_NODESLIDE_CURRENT_RECON.json), and a [{len(artifacts)}-file bounded manifest](E6g-nodeslide-recon/manifest.json). Raw CI logs are finalized. Inner CI test-count extraction, the older consumer checkout SHA, additional conformance-step inspection and sanitized nightly artifact download were not completed and are not claimed. No tool or source blocker prevents the proposed isolated first-run; actual local backend readiness remains to be established. All criterion, dimension, overall, production and human-usage grades remain null.
+'''
+(P / 'E6g_NODESLIDE_CURRENT_RECON.md').write_text(md, encoding='utf-8')
+print(json.dumps({'verdict': report['verdict'], 'custody': report['custody'], 'json': str(P / 'E6g_NODESLIDE_CURRENT_RECON.json'), 'jsonSha256': sha((P / 'E6g_NODESLIDE_CURRENT_RECON.json').read_bytes()), 'mdSha256': sha((P / 'E6g_NODESLIDE_CURRENT_RECON.md').read_bytes()), 'manifest': report['artifacts'], 'failedChecks': [x for x in checks if not x['passed']]}, indent=2))

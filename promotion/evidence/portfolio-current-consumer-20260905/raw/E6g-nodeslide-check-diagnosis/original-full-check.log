@@ -1,0 +1,162 @@
+
+> nodeslide@0.1.0 check
+> npm run lint && npm run typecheck && npm run test && npm run build
+
+
+> nodeslide@0.1.0 lint
+> biome check .
+
+Checked 1074 files in 436ms. No fixes applied.
+
+> nodeslide@0.1.0 typecheck
+> tsc -b && npm run typecheck --workspaces --if-present
+
+
+> @nodeslide/agent@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/backend@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/cli@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/client-http@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/contracts@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/convex@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/engine@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/external-agent@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodekit/gym-core@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/react@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/react-headless@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/recipelang@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/registry@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/testing@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> nodeslide-mcp@0.2.2 typecheck
+> tsc --noEmit
+
+
+> nodeslide@0.1.0 test
+> vitest run && npm run test --workspaces --if-present
+
+
+ RUN  v4.1.10 D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905
+
+FIND: Parameter format not correct
+FIND: Parameter format not correct
+ ❯ scripts/tests/workspace-build-depth.test.mjs (2 tests | 2 failed) 9ms
+     × finds no workspace build script that starts a fourth nested npm level 6ms
+     × still builds both halves of @nodeslide/convex — flattening must not drop one 2ms
+ ❯ scripts/tests/code-tours.test.mjs (1 test | 1 failed) 15ms
+     × regenerates identically from the current source 13ms
+ ❯ src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx (5 tests | 1 failed) 68494ms
+     × renders all six portable NodeBook visual kinds inside the real NodeSlide host mount 68030ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/tests/code-tours.test.mjs > the committed CodeTours still point at the code they describe > regenerates identically from the current source
+AssertionError: expected [Function] to not throw an error but 'Error: spawnSync C:\nvm4w\nodejs\node…' was thrown
+
+- Expected:
+undefined
+
++ Received:
+"Error: spawnSync C:\\nvm4w\\nodejs\\node.exe ENOENT"
+
+ ❯ scripts/tests/code-tours.test.mjs:18:11
+     16|         encoding: 'utf8',
+     17|       }),
+     18|     ).not.toThrow();
+       |           ^
+     19|   });
+     20| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  scripts/tests/workspace-build-depth.test.mjs > a stranger runs `npm run build` on Windows from a clean checkout > finds no workspace build script that starts a fourth nested npm level
+Error: ENOENT: no such file or directory, scandir 'D:\VSCode%20Projects\cafecorner_nodebench\nodebench_ai4\.portfolio-worktrees\nodeslide-current-consumer-20260905\packages'
+ ❯ workspaceManifests scripts/tests/workspace-build-depth.test.mjs:32:14
+     30| // The workspaces declared in the root package.json: `packages/*` and …
+     31| const workspaceManifests = () =>
+     32|   readdirSync(join(repoRoot, 'packages'), { withFileTypes: true })
+       |              ^
+     33|     .filter((entry) => entry.isDirectory())
+     34|     .map((entry) => join(repoRoot, 'packages', entry.name, 'package.js…
+ ❯ scripts/tests/workspace-build-depth.test.mjs:48:32
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  scripts/tests/workspace-build-depth.test.mjs > a stranger runs `npm run build` on Windows from a clean checkout > still builds both halves of @nodeslide/convex — flattening must not drop one
+AssertionError: expected '' to match /\btsup\b/
+
+- Expected:
+/\btsup\b/
+
++ Received:
+""
+
+ ❯ scripts/tests/workspace-build-depth.test.mjs:64:19
+     62|     // The client bundle (tsup) and the Convex component types (tsc) a…
+     63|     // separate outputs. Removing the nesting is only safe while both …
+     64|     expect(build).toMatch(/\btsup\b/);
+       |                   ^
+     65|     expect(build).toMatch(/tsc -p tsconfig\.component\.json/);
+     66|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx > NodeSlide full shared NodeBook workspace > renders all six portable NodeBook visual kinds inside the real NodeSlide host mount
+Error: Test timed out in 60000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx:167:3
+    165|   });
+    166|
+    167|   it('renders all six portable NodeBook visual kinds inside the real N…
+       |   ^
+    168|     const workspace = workspaceFixture();
+    169|     const rootId = `deck:${workspace.deck.id}`;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  3 failed | 313 passed (316)
+      Tests  4 failed | 2808 passed | 7 skipped (2819)
+   Start at  03:52:59
+   Duration  101.80s (transform 79.81s, setup 0ms, import 407.82s, tests 176.65s, environment 437.66s)
+

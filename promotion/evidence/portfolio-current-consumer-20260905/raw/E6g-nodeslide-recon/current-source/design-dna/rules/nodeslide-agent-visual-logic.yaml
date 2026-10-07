@@ -1,0 +1,28 @@
+- id: rule-visual-center-requires-signal
+  statement: A dominant visual region must contain a renderable asset or a decision-relevant structured primitive; an unresolved placeholder cannot occupy hero-scale area.
+  mechanismHypothesis: The largest region is read first, so an empty or proxy signal makes the slide's hierarchy contradict its evidence state.
+  confidence: high
+  appliesWhen: [media-dominant, stat-dominant, chart-dominant, diagram-dominant]
+  doesNotApplyWhen: [explicit wireframe workshop, template authoring mode]
+  evidence:
+    - obs-mobbin-canva-presentation-creation-1/f3
+    - obs-mobbin-pitch-editor-1/f2
+- id: rule-sequence-visible-during-edit
+  statement: Editing and review surfaces should retain an ordered deck sequence while giving the active slide the largest region.
+  mechanismHypothesis: Persistent neighboring scenes let humans and agents judge continuity without leaving the current edit.
+  confidence: high
+  appliesWhen: [deck-editor, review, recurring-edit]
+  doesNotApplyWhen: [full-screen-presenter]
+  evidence:
+    - obs-mobbin-canva-presentation-creation-1/f4
+    - obs-mobbin-pitch-editor-1/f3
+    - obs-mobbin-pitch-editor-1/f5
+- id: rule-completion-outside-content
+  statement: Publish, share, and present actions should remain in application chrome and produce explicit completion artifacts.
+  mechanismHypothesis: Separating delivery actions from authored content prevents slide elements from being mistaken for controls and makes completion inspectable.
+  confidence: high
+  appliesWhen: [creation, edit, distribution]
+  doesNotApplyWhen: [static exported deck]
+  evidence:
+    - obs-mobbin-canva-presentation-creation-1/f5
+    - obs-mobbin-pitch-editor-1/f4

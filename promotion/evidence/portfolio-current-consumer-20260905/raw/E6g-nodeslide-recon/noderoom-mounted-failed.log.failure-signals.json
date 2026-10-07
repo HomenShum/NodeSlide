@@ -1,0 +1,18 @@
+[
+  {
+    "line": 173,
+    "text": "shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}"
+  },
+  {
+    "line": 1000,
+    "text": "Error: NodeSlide mounted release proof failed: @nodeslide/engine root dependency pin mismatch: expected file:vendor/nodeslide/nodeslide-engine-0.2.2.tgz, received undefined"
+  },
+  {
+    "line": 1001,
+    "text": "    at fail (/home/runner/work/NodeRoom/NodeRoom/noderoom/scripts/nodeslide-mounted-release-proof.ts:531:9)"
+  },
+  {
+    "line": 1006,
+    "text": "##[error]Process completed with exit code 1."
+  }
+]

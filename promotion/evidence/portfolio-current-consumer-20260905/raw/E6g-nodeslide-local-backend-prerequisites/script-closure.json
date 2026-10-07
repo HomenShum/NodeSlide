@@ -1,0 +1,173 @@
+{
+  "package.json": {
+    "dev": "concurrently -n vite,convex -c blue,magenta \"vite\" \"convex dev\"",
+    "dev:web": "vite",
+    "dev:backend": "convex dev",
+    "demo": "npm run dev:web",
+    "doctor": "npm run typecheck",
+    "check": "npm run lint && npm run typecheck && npm run test && npm run build",
+    "nodeslide:generate": "npm run build --workspace @nodeslide/cli && node packages/cli/dist/cli.js generate",
+    "proof": "node scripts/nodeslide-conformance-proof.mjs",
+    "proof:external-agent": "node scripts/smoke-external-agent-package.mjs",
+    "probe:model-fleet:prod": "convex run nodeslideModelProbe:runFleet --prod",
+    "probe:free-router:prod": "convex run nodeslideModelProbe:runFreeRouterFleet --prod",
+    "probe:free-router:structured:prod": "convex run nodeslideModelProbe:runFreeRouterStructured --prod",
+    "capture:model-fleet:prod": "node scripts/capture-model-fleet-probe.mjs",
+    "capture:free-router:prod": "node scripts/capture-model-fleet-probe.mjs --function runFreeRouterFleet --schema nodeslide.free-router-fleet-probe/v1 --output artifacts/model-fleet/free-router-fleet-probe.json",
+    "capture:free-router:structured:prod": "node scripts/capture-model-fleet-probe.mjs --function runFreeRouterStructured --schema nodeslide.free-router-structured-probe/v1 --output artifacts/model-fleet/free-router-structured-probe.json",
+    "deck-gym:validate": "node scripts/deck-gym.mjs validate",
+    "deck-gym:matrix": "node scripts/deck-gym.mjs matrix",
+    "deck-gym:free:validate": "node scripts/deck-gym.mjs validate --harness benchmarks/deck-gym/free-router-v1/harness.json",
+    "deck-gym:free:matrix": "node scripts/deck-gym.mjs matrix --harness benchmarks/deck-gym/free-router-v1/harness.json",
+    "deck-gym:run": "node scripts/run-deck-gym.mjs",
+    "deck-gym:render": "node scripts/deck-gym.mjs render",
+    "deck-gym:evaluate": "node scripts/deck-gym.mjs evaluate",
+    "deck-gym:tournament": "node scripts/deck-gym.mjs tournament",
+    "deck-gym:model-ledger": "node scripts/build-model-capability-ledger.mjs",
+    "node-gym:validate": "node scripts/node-gym.mjs validate",
+    "node-gym:matrix": "node scripts/node-gym.mjs matrix",
+    "node-gym:run": "node scripts/run-node-gym.mjs",
+    "artifact-atlas:validate": "node scripts/artifact-atlas.mjs validate",
+    "artifact-atlas:matrix": "node scripts/artifact-atlas.mjs matrix",
+    "artifact-atlas:gallery": "node scripts/artifact-atlas.mjs gallery",
+    "artifact-atlas:v2": "node scripts/build-artifact-atlas-v2.mjs",
+    "artifact-atlas:v2:finalize": "node scripts/finalize-artifact-atlas-v2.mjs",
+    "artifact-atlas:v2:test": "vitest run scripts/artifact-atlas-v2.test.mjs",
+    "artifact-atlas:v3:finalize": "node scripts/finalize-artifact-atlas-v3.mjs",
+    "artifact-arena:plan": "node scripts/run-artifact-arena.mjs",
+    "artifact-arena:render": "node scripts/render-artifact-arena.mjs",
+    "artifact-arena:capabilities": "node scripts/build-artifact-arena-capabilities.mjs",
+    "artifact-arena:curate": "node scripts/curate-artifact-arena.mjs",
+    "artifact-arena:tournament": "node scripts/build-artifact-arena-tournament.mjs",
+    "diagnostics:convex-logs:prod": "node scripts/capture-convex-logs.mjs",
+    "proof:nodeslide": "node scripts/nodeslide-proof.mjs",
+    "proof:nodeslide:w1": "node scripts/nodeslide-signature-proof.mjs",
+    "proof:nodeslide:w2": "node scripts/nodeslide-signature-apply-proof.mjs",
+    "proof:nodeslide:w3": "node scripts/nodeslide-variation-proof.mjs",
+    "proof:nodeslide:w4": "node scripts/nodeslide-preference-proof.mjs",
+    "proof:nodeslide:w5": "node scripts/nodeslide-taste-pack-proof.mjs",
+    "proof:nodeslide:agentic": "node scripts/nodeslide-agentic-proof.mjs",
+    "proof:nodeslide:agentic:local": "node scripts/nodeslide-agentic-local-switch-proof.mjs",
+    "proof:nodeslide:ui": "node scripts/nodeslide-agent-operability-proof.mjs",
+    "proof:nodeslide:hero": "node scripts/nodeslide-production-hero-proof.mjs",
+    "proof:nodeslide:journey": "node scripts/nodeslide-journey-proof.mjs",
+    "proof:nodeslide:journey:gif": "node scripts/nodeslide-journey-gif.mjs",
+    "nodeslide:authoring:meta": "node scripts/nodeslide-authoring-meta.mjs",
+    "lint:nodeslide-agent-ui": "node scripts/nodeslide-agent-ui-linter.mjs",
+    "lint:nodeslide-trust-surfaces": "node scripts/nodeslide-trust-surface-census.mjs",
+    "probe:trust-surfaces": "node scripts/nodeslide-trust-surface-runtime-probe.mjs",
+    "probe:trust-surfaces:selftest": "node scripts/nodeslide-trust-surface-runtime-probe.mjs --selftest",
+    "atlas:topology-gate": "node scripts/nodeslide-atlas-topology-gate.mjs --map scripts/lib/atlas-vocabulary-atlas-v2.json",
+    "atlas:motion-gate": "node scripts/nodeslide-motion-gate.mjs",
+    "atlas:motion-canary": "node scripts/nodeslide-motion-canary.mjs",
+    "atlas:playback-canary": "node scripts/nodeslide-pptx-playback-canary.mjs --pptx outputs/atlas-v3-native/nodeslide-artifact-atlas-v3-native.pptx --intent benchmarks/artifact-atlas/v2/atlas.motion-intent.json",
+    "atlas:playback-canary:undeclared": "node scripts/nodeslide-pptx-playback-canary.mjs --pptx outputs/atlas-v3-native/nodeslide-artifact-atlas-v3-native.pptx",
+    "atlas:playback-canary:roundtrip": "node scripts/nodeslide-pptx-playback-canary.mjs --pptx outputs/atlas-v3-native/roundtrip-ppt.pptx",
+    "atlas:roundtrip": "node scripts/build-atlas-roundtrip.mjs",
+    "atlas:roundtrip:check": "node scripts/build-atlas-roundtrip.mjs --check",
+    "atlas:fidelity-gate": "node scripts/nodeslide-artifact-fidelity-gate.mjs",
+    "atlas:asset-gate": "node scripts/nodeslide-asset-gate.mjs",
+    "atlas:distinctness-gate": "node scripts/nodeslide-artifact-distinctness-gate.mjs",
+    "atlas:knockout-canary": "node scripts/nodeslide-knockout-canary.mjs",
+    "claim-gate": "node scripts/nodeslide-claim-gate.mjs --manifest qa/claims/coding-agent-builds-slides.json",
+    "nodeslide:bench": "node scripts/nodeslide-benchmark-gate.mjs --mode evidence",
+    "nodeslide:bench:pr": "node scripts/nodeslide-benchmark-gate.mjs --mode pr",
+    "nodeslide:bench:evidence": "node scripts/nodeslide-benchmark-gate.mjs --mode evidence",
+    "nodeslide:bench:produce-live": "playwright test tests/e2e/nodeslide-benchmark-producer.live.spec.ts --retries=0 --workers=1",
+    "nodeslide:bench:taste-judge": "node scripts/nodeslide-taste-judge.mjs",
+    "nodeslide:bench:competitive": "node scripts/nodeslide-competitive-benchmark.mjs",
+    "test:nodeslide-gates": "vitest run scripts/tests",
+    "artifacts:build": "npm run packages:build && node scripts/build-immutable-package-set.mjs",
+    "proof:install-upgrade": "node scripts/immutable-install-upgrade-proof.mjs",
+    "codegen": "convex codegen",
+    "build": "npm run packages:build && npm run recipelang:reference && tsc -b && vite build",
+    "vercel-build": "npm run packages:build:hosted && npm run recipelang:reference && tsc --noEmit -p tsconfig.vercel.json && vite build",
+    "packages:build": "npm run build --workspace @nodekit/gym-core && npm run build --workspace @nodeslide/contracts && npm run build --workspace @nodeslide/engine && npm run build --workspace @nodeslide/backend && npm run build --workspace @nodeslide/testing && npm run build --workspace @nodeslide/agent && npm run build --workspace @nodeslide/client-http && npm run build --workspace @nodeslide/react-headless && npm run build --workspace @nodeslide/react && npm run build --workspace @nodeslide/convex && npm run build --workspace @nodeslide/registry && npm run build --workspace @nodeslide/recipelang && npm run build --workspace @nodeslide/cli && npm run build --workspace @nodeslide/external-agent && npm run build --workspace nodeslide-mcp",
+    "packages:build:hosted": "npm run build --workspace @nodekit/gym-core && npm run build --workspace @nodeslide/contracts && npm run build --workspace @nodeslide/engine && npm run build --workspace @nodeslide/backend && npm run build --workspace @nodeslide/testing && npm run build --workspace @nodeslide/agent && npm run build --workspace @nodeslide/client-http && npm run build --workspace @nodeslide/react-headless && npm run build --workspace @nodeslide/react && npm run build --workspace @nodeslide/convex && npm run build --workspace @nodeslide/registry && npm run build --workspace @nodeslide/recipelang && npm run build --workspace @nodeslide/cli && npm run build --workspace @nodeslide/external-agent",
+    "recipelang:build": "npm run build --workspace @nodeslide/recipelang",
+    "recipelang:reference": "node scripts/build-recipelang-reference.mjs",
+    "recipelang:reference:check": "node scripts/build-recipelang-reference.mjs --check",
+    "tours": "node scripts/build-code-tours.mjs",
+    "tours:check": "node scripts/build-code-tours.mjs --check",
+    "recipelang:proof": "npm run build --workspace @nodeslide/recipelang && node packages/recipelang/dist/cli.js render benchmarks/recipelang/edge-data-contract.recipe.yaml --format html --out artifacts/recipelang/edge-data-contract.html",
+    "packages:consumer:smoke": "node scripts/package-consumer-smoke.mjs",
+    "proof:node-gym-portability": "npm run build --workspace @nodekit/gym-core && node scripts/node-gym-portability-proof.mjs --report artifacts/node-gym/node-gym-core-portability-proof.json",
+    "preview": "vite preview",
+    "typecheck": "tsc -b && npm run typecheck --workspaces --if-present",
+    "verify:function-bundle": "node scripts/verify-function-bundle.mjs --source",
+    "verify:function-bundle:emitted": "node scripts/verify-function-bundle.mjs --emitted",
+    "verify:live-share": "node scripts/verify-live-share-route.mjs",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "test": "vitest run && npm run test --workspaces --if-present",
+    "test:watch": "vitest",
+    "atlas:receipts": "node scripts/emit-atlas-receipts.mjs",
+    "atlas:receipts:check": "node scripts/emit-atlas-receipts.mjs --check"
+  },
+  "packages/agent/package.json": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/backend --external @nodeslide/contracts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "packages/backend/package.json": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/contracts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "packages/cli/package.json": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "packages/client-http/package.json": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/backend --external @nodeslide/contracts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "packages/contracts/package.json": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "packages/convex/package.json": {
+    "build": "tsup src/index.ts src/capabilityHost.ts src/react.tsx src/component.ts src/componentSchema.ts --format esm --dts --clean --sourcemap --external react --external react/jsx-runtime --external convex --external convex/browser --external convex/server --external convex/values --external @nodeslide/backend --external @nodeslide/contracts --external @nodeslide/engine --external @nodeslide/react --external @nodeslide/react-headless && tsc -p tsconfig.component.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "packages/engine/package.json": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/contracts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "packages/external-agent/package.json": {
+    "build": "tsup src/index.ts src/cli.ts --format esm --platform node --dts --clean --sourcemap",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run --config vitest.config.ts"
+  },
+  "packages/gym-core/package.json": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src/index.test.ts"
+  },
+  "packages/react/package.json": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external react --external react/jsx-runtime --external @nodeslide/backend --external @nodeslide/contracts --external @nodeslide/react-headless",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "packages/react-headless/package.json": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external react --external react/jsx-runtime --external @nodeslide/backend --external @nodeslide/contracts --external @nodeslide/engine",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "packages/recipelang/package.json": {
+    "build": "tsup src/index.ts src/cli.ts --format esm --platform node --dts --clean --sourcemap",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run --passWithNoTests"
+  },
+  "packages/registry/package.json": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --platform node",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "packages/testing/package.json": {
+    "build": "tsup src/index.ts --format esm --dts --clean --sourcemap --external @nodeslide/backend --external @nodeslide/contracts --external @nodeslide/engine",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "mcp/package.json": {
+    "build": "tsup src/index.ts --format esm --platform node --dts --clean --sourcemap",
+    "dev": "tsup src/index.ts --format esm --platform node --dts --sourcemap --watch",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  }
+}

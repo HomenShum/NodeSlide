@@ -1,0 +1,58 @@
+{
+  "metrics": {
+    "importStartToResolveMs": 741.3305,
+    "importResolveToInnerDomObservationMs": 27.4989,
+    "waitStartToResolutionMs": 714.4234,
+    "innerBeforeNominalDeadlineMs": 294.2598,
+    "clickStartToInnerDomObservationMs": 835.6712,
+    "waitTimeoutMs": 1000
+  },
+  "target": [
+    {
+      "file": "D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx",
+      "name": "AiInspector OpenUI visual-material wiring opens the visual material lab from the live composer button",
+      "status": "passed",
+      "durationMs": 1266.0816999999997
+    }
+  ],
+  "failures": [
+    {
+      "file": "D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/scripts/immutable-upgrade-consumer-core.test.mjs",
+      "name": "immutable install and upgrade consumer gates rejects a valid npm tarball whose declaration passes but runtime entry is broken",
+      "durationMs": 5.804700000000139,
+      "failureMessages": [
+        "AssertionError: expected undefined to be truthy\n    at D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/scripts/immutable-upgrade-consumer-core.test.mjs:94:22\n    at file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:302:11\n    at file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:1903:26\n    at file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:2326:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:2323:10)\n    at file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:2305:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:2272:10)\n    at file:///D:/VSCode%20Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/@vitest/runner/dist/chunk-artifact.js:2955:64"
+      ]
+    }
+  ],
+  "transformationBindings": [
+    {
+      "relative": "src/domains/nodeslide/inspector/AiInspector.tsx",
+      "sourceExact": true,
+      "transformedExact": true,
+      "sourceSha256": "d254af21c5486763d11ebf0cd3f6bac2f30252a8973a1d77e448cb63be1b1353",
+      "transformedSha256": "007a3f9198b5c0071f9a2cf16892110b6c7c6f367d80b9252ee42f1756e1eace",
+      "plannedRawSha256": "0a37a904b410bebd5563a3d0ea5c10095afe5009acb6bc018e4847b5437cb463",
+      "plannedCopyEolDifference": "Python planned-copy write used CRLF; actual Vite code is LF. Only newline decoding reconstructs the actual recorded transform hash. Both byte versions retained; executed wrapper unchanged."
+    },
+    {
+      "relative": "src/domains/nodeslide/inspector/AiInspector.tsx",
+      "sourceExact": true,
+      "transformedExact": true,
+      "sourceSha256": "d254af21c5486763d11ebf0cd3f6bac2f30252a8973a1d77e448cb63be1b1353",
+      "transformedSha256": "007a3f9198b5c0071f9a2cf16892110b6c7c6f367d80b9252ee42f1756e1eace",
+      "plannedRawSha256": "0a37a904b410bebd5563a3d0ea5c10095afe5009acb6bc018e4847b5437cb463",
+      "plannedCopyEolDifference": "Python planned-copy write used CRLF; actual Vite code is LF. Only newline decoding reconstructs the actual recorded transform hash. Both byte versions retained; executed wrapper unchanged."
+    },
+    {
+      "relative": "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx",
+      "sourceExact": true,
+      "transformedExact": true,
+      "sourceSha256": "eaa74dec3ad9d202fd3af8328d3cfd1b3ac876c686bb629350c705fd379ccb1d",
+      "transformedSha256": "40399152122b3a9189b661f326e31da46236b83cdd1561e60d3762d1fef9502d",
+      "plannedRawSha256": "ed89f4214c7904597def2c5a6b12db156a55332ba7b7fa861ec5b6bb0ed5577e",
+      "plannedCopyEolDifference": "Python planned-copy write used CRLF; actual Vite code is LF. Only newline decoding reconstructs the actual recorded transform hash. Both byte versions retained; executed wrapper unchanged."
+    }
+  ],
+  "scope": "One instrumented original root Vitest invocation. No full check, workspace test scripts, build or second suite invocation."
+}

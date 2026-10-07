@@ -1,0 +1,14 @@
+
+ RUN  v4.1.10 D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905
+
+ ✓ src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx > AiInspector OpenUI visual-material wiring > opens the visual material lab from the live composer button 577ms
+ ↓ src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx > AiInspector OpenUI visual-material wiring > hides the opener entirely when the host supplies no proposal lane
+ ↓ src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx > AiInspector OpenUI visual-material wiring > reaches the workbench through a dynamic import, not a static one
+ ↓ src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx > AiInspector OpenUI visual-material wiring > keeps the host wiring in InspectorPanel so the prop is actually supplied
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 3 skipped (4)
+   Start at  04:32:57
+   Duration  3.84s (transform 547ms, setup 0ms, import 2.25s, tests 578ms, environment 861ms)
+
+JSON report written to C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6g-nodeslide-openui-follow-on-01/targeted.json

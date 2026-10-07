@@ -1,0 +1,53 @@
+{
+  "proof": "NODESLIDE-DECK-CI-DETAIL-01",
+  "classification": "patch",
+  "at": "2026-09-05T12:34:28.123853+00:00",
+  "planAcceptedBy": "root",
+  "userJob": "An author clicks a failed deck check to decide what needs correction before sharing. The reason and current deck version must be visible; a narrower passed structural receipt must not imply all checks passed.",
+  "cause": "Studio evaluates latest broader Deck CI; InspectorPanel forwards it only to AI. Trace receives ordinary validation only and labels its publishOk as publish ready. Current three/four near-duplicate layout blocker is absent from the opened detail.",
+  "owners": [
+    {
+      "path": "src/domains/nodeslide/inspector/InspectorPanel.tsx",
+      "sha256": "4d359e1169c974badd72580c457a7de0ed4400d02ade47334b814ed9662c7de8"
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/TraceInspector.tsx",
+      "sha256": "b58d0b98bcb7232bd1c26036cb623289b32277d9910c4991fe381dee6ce73da8"
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/TraceInspector.test.tsx",
+      "sha256": "c58fcecf3e25e6798036707ad04400cb36b1cb5fc158c2afb3cc00739c04660d"
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/InspectorPanel.test.ts",
+      "sha256": "b6a0b307eaa709a282e444f62a4879b5a7f38d4a847436f8e4df49e85984c5d3"
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/DeckCiStatus.css",
+      "sha256": "2576081baee7f3771d3e7a73ecc73b929e65fe7f4444be2be1ab3c5a865640cf"
+    }
+  ],
+  "before": [
+    "E6g-nodeslide-readiness-before-02/1440-badge-boundary.png",
+    "E6g-nodeslide-readiness-before-02/1440-trace-boundary.png",
+    "E6g-nodeslide-readiness-before-04/390-badge-boundary.png",
+    "E6g-nodeslide-readiness-before-04/390-trace-boundary.png"
+  ],
+  "scope": [
+    "Filter Deck CI against current workspace deck identity/version once in InspectorPanel and forward the same current result/loading state to AI and Trace.",
+    "Render real blocker/warning messages and check version in Trace with existing DeckCiStatus and existing section styles; loading/unavailable states never inherit pass/check details.",
+    "Rename narrower validation copy to core/recorded scope and remove publish-ready wording; retain raw booleans, historical receipt details and existing export policy.",
+    "Remove existing status-dot loading pulse per trust-surfaces no-motion rule; no new animation, dependency, backend gate or quality-score change.",
+    "Use scenario component tests plus actual same-deck desktop/phone native keyboard entry, scrolling, pass/fail/reload proof. Fixture loading/unavailable/stale/cross-deck/burst/repeated-state evidence must remain distinct from real backend cases.",
+    "Run relevant tests, normal full check and independent source/pixel judgment. Numeric-only generated doc/tour updates if the existing checked citations move, preserving before bytes first."
+  ],
+  "nonGoals": [
+    "No change to diversity threshold, export gate, provider flow, notes layout or CSV parser.",
+    "No full visual/product/native Office grade from this slice."
+  ],
+  "failedBeforeProbes": [
+    "Initial desktop probe caught lazy inspector opening; preserved.",
+    "Phone probes waited for unmounted tab then CSS-hidden collapsed aside; preserved.",
+    "Corrected phone probe waits for attached inspector then uses native visible Open inspector; actual before04 passes."
+  ]
+}

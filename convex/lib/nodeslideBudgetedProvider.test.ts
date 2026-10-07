@@ -15,6 +15,7 @@ import {
   nodeSlideBudgetHasActiveReservation,
   nodeSlideProviderBudgetId,
   nodeSlideProviderCallId,
+  nodeSlideStateRetryBackoffMs,
 } from './nodeslideBudgetedProvider';
 import type { NodeSlideCompletion } from './nodeslideProvider';
 import { callNodeSlideFreeJson } from './nodeslideProvider';
@@ -129,6 +130,24 @@ describe('NodeSlide budgeted provider adapter', () => {
     });
     expect(large - small).toBeGreaterThanOrEqual(20_000);
     expect(small).toBeGreaterThan(providerRequest.systemPrompt.length * 2);
+  });
+
+  it('spaces stale-state retries with a growing, capped backoff schedule', () => {
+    const schedule = Array.from({ length: 8 }, (_, attempt) =>
+      nodeSlideStateRetryBackoffMs(attempt),
+    );
+    // 50ms base, doubling per attempt: 50, 100, 200, 400, 800, then capped.
+    expect(schedule[0]).toBe(50);
+    for (let i = 1; i < schedule.length; i += 1) {
+      expect(schedule[i]).toBeGreaterThanOrEqual(schedule[i - 1]);
+    }
+    expect(schedule[1]).toBeGreaterThan(schedule[0]);
+    expect(schedule[4]).toBe(800);
+    // Cap holds no matter how many attempts, and hostile inputs stay sane.
+    expect(schedule[7]).toBe(1_000);
+    expect(nodeSlideStateRetryBackoffMs(1_000)).toBe(1_000);
+    expect(nodeSlideStateRetryBackoffMs(-3)).toBe(50);
+    expect(nodeSlideStateRetryBackoffMs(2.9)).toBe(200);
   });
 
   it('delivers a budget-derived ceiling to the wire through the provider-call seam', async () => {

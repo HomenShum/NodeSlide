@@ -68,6 +68,28 @@ action releases.
 
 ## Main-branch deployment (H3)
 
+### Public landing HTML
+
+The initial HTML and interactive landing share `NodeSlideLandingIntro`. Vite
+renders that public introduction into the root; React replaces it with the
+composer when JavaScript starts. `scripts/smoke.mjs` separately checks the
+no-JavaScript introduction and the original React runtime selectors. Static
+text cannot satisfy the runtime gate. Creating and editing still require
+JavaScript and the configured backend.
+
+The canonical URL and one-URL sitemap cover only the home page. Root URLs with
+`deck`, `share`, `approve`, or `present` queries receive a Vercel `noindex,
+nofollow` header; the existing `/s/:shareSlug` projection retains its separate
+noindex/no-store policy. Robots rules and canonical tags are not access control.
+Private decks, capability links and the separate atlas query are not added to
+the sitemap. A rich social image and network-specific preview are not certified.
+
+After a managed Ready release, verify the actual home body heading, source
+stamp, robots/sitemap MIME and root query headers on the canonical host.
+Local Vite preview does not execute Vercel header rules. Compare fresh JavaScript
+and no-JavaScript browser states at phone and desktop widths; retain provider,
+full UI and ranking limits separately from this public-body check.
+
 With `NODESLIDE_PRODUCTION_DEPLOY_ENABLED=true`,
 `.github/workflows/deploy-production.yml` starts only after the `CI` workflow
 passes for a trusted push to `main`. A manual dispatch is also accepted only

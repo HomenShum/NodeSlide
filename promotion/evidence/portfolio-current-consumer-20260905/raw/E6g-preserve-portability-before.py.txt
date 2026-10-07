@@ -1,0 +1,18 @@
+from pathlib import Path
+import hashlib,json,subprocess,datetime
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=P/'E6g-nodeslide-portability-before'
+O.mkdir(exist_ok=False)
+paths=['scripts/tests/workspace-build-depth.test.mjs','scripts/tests/code-tours.test.mjs','scripts/tests/playwright-trace.test.mjs','.gitattributes']
+tours=subprocess.check_output(['git','ls-files','.tours'],cwd=R).decode('utf-8').splitlines()
+assert len(tours)==3
+record={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'plan':'E6g_NODESLIDE_CHECK_DIAGNOSIS.json','planSha256':'86d251b95f7d410e40b6d35651bcb870ceddd7c9cbd0f6f02faa1213316c915c','classification':'PATCH_VERIFICATION_PORTABILITY','proof':'NODESLIDE_WINDOWS_CHECK_PORTABILITY_01','owners':paths,'tourWorkingByteNormalizationOnly':tours,'files':{}}
+assert hashlib.sha256((P/record['plan']).read_bytes()).hexdigest()==record['planSha256']
+for name in paths+tours:
+    data=(R/name).read_bytes();base=subprocess.check_output(['git','show','HEAD:'+name],cwd=R)
+    assert data.replace(b'\r\n',b'\n')==base,name
+    target=O/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(data)
+    record['files'][name]={'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data),'gitBlob':subprocess.check_output(['git','rev-parse','HEAD:'+name],cwd=R).decode().strip()}
+with (O/'plan-acceptance.json').open('x',encoding='utf-8',newline='\n') as f:f.write(json.dumps(record,indent=2)+'\n')
+print(json.dumps({'preserved':len(record['files']),'proof':record['proof']}))

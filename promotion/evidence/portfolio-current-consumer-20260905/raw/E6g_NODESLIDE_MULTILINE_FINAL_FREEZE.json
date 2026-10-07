@@ -1,0 +1,148 @@
+{
+  "proof": "NODESLIDE-MULTILINE-BRIEF-01",
+  "at": "2026-09-05T12:16:15.764992+00:00",
+  "status": "FINAL_SOURCE_AND_PROOF_FROZEN_FOR_NONAUTHOR_JUDGE",
+  "source": [
+    {
+      "path": "convex/lib/nodeslideValidators.ts",
+      "sha256": "8a37b1a57278a9689ad4d1aacb11ac4ad9e7bb833a4f5658804ef94c3a7a81cb"
+    },
+    {
+      "path": "convex/lib/nodeslideAdmission.test.ts",
+      "sha256": "d46287d3ac7d9a1a393fe9a4665e2c3413f6155fa46bb30643e4384a7f3e5e29"
+    },
+    {
+      "path": ".tours/01-primary-user-flow.tour",
+      "sha256": "55be812065e25dbe438af99928d8470bc0bc934fa7760a7f06f8d47ba516592c"
+    },
+    {
+      "path": ".tours/03-debug-and-recovery.tour",
+      "sha256": "b91ff8afb9391d3de56a7188aaa7590463edb8e7201c4deaaafe7f32daf87a9b"
+    },
+    {
+      "path": "docs/codebase/CONCERNS.md",
+      "sha256": "2860a435ccad27f8314d133a10b542bb1f9437a7a9eb67ef1faf5879285142f3"
+    },
+    {
+      "path": "docs/codebase/INTEGRATIONS.md",
+      "sha256": "9ae7964e4379f023605bb2a9605b44e3781eda471ff143480c40b7fe0b4ff88f"
+    },
+    {
+      "path": "docs/START_HERE.md",
+      "sha256": "2613bebffe1c2f331c2eb8092d18a8010109e8251e16a359271cabd7de619249"
+    },
+    {
+      "path": "promotion/PROMOTION_LOG.md",
+      "sha256": "e145ed08ace4f8a94dedc9357a63ab23c0cb50ddf0e8519a135e9f0b6fc4d682"
+    }
+  ],
+  "sourceDigest": "a14ed41a1ae8a4b397673594cf90e637f25233b37bc87a4f60b18ee684f3892d",
+  "initialFreeze": {
+    "path": "E6g_NODESLIDE_MULTILINE_FREEZE.json",
+    "sha256": "5d109ab88e23415cc190fb29f461a7d5ab9855c5f6a27c65655bfb72712af561",
+    "allBindingsExact": true
+  },
+  "additionalArtifacts": [
+    {
+      "path": "E6g-nodeslide-multiline-citation-before/.tours/01-primary-user-flow.tour",
+      "sha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97",
+      "bytes": 6451
+    },
+    {
+      "path": "E6g-nodeslide-multiline-citation-before/.tours/03-debug-and-recovery.tour",
+      "sha256": "0cda9fd05c121f5dc60edeb3af2f78fb30a28e3e14ce6b0316ae88dece912a84",
+      "bytes": 3704
+    },
+    {
+      "path": "E6g-nodeslide-multiline-citation-before/docs/codebase/CONCERNS.md",
+      "sha256": "000d3a9c5f5ffed6c7b48329fd508ee2b45dbbe5ed894734fa42c7cc063b7478",
+      "bytes": 8542
+    },
+    {
+      "path": "E6g-nodeslide-multiline-citation-before/docs/codebase/INTEGRATIONS.md",
+      "sha256": "51aa739e07f2e61594064d3aa8ab02a8c51125d435241f3a555b3515b6e81fac",
+      "bytes": 5407
+    },
+    {
+      "path": "E6g-nodeslide-multiline-citation-before/docs/START_HERE.md",
+      "sha256": "2310a099f22b314c2634922ef0e5ab324d9eedbca9f513558a1dbf1c9d1cb0b7",
+      "bytes": 20433
+    },
+    {
+      "path": "E6g-nodeslide-multiline-citation-before/generator.log",
+      "sha256": "34911f3e2747fb53dcd9db2d55cf5c34001cb14469379c058252ee8303d1a8a3",
+      "bytes": 47
+    },
+    {
+      "path": "E6g-nodeslide-multiline-citation-before/plan.json",
+      "sha256": "2afc2e8ac99c6e4e89c4d03dc275555ab95c98b175c22f1eb4b7293dbf55944f",
+      "bytes": 951
+    },
+    {
+      "path": "E6g-nodeslide-multiline-citation-before/promotion/PROMOTION_LOG.md",
+      "sha256": "5045754805141c8376058d3c9c98001f4ddb865866a5887ed23481bf3d26afbd",
+      "bytes": 18665
+    },
+    {
+      "path": "E6g-nodeslide-multiline-check-01/check.command.json",
+      "sha256": "2b8bcaa6231a8bdada9ff25c50d7744834d05820426c8afb350421d1dcda423c",
+      "bytes": 1416
+    },
+    {
+      "path": "E6g-nodeslide-multiline-check-01/check.log",
+      "sha256": "d4c021d66e795a7ae6b033cb821b63eab66b21eef7a3b2600258f6f8c0233139",
+      "bytes": 19192
+    },
+    {
+      "path": "E6g-nodeslide-multiline-check-02/check.command.json",
+      "sha256": "1ae74c5dc5af1244b7659770736dafbac5752020cc0f904344d6aff9bd4cf903",
+      "bytes": 1926
+    },
+    {
+      "path": "E6g-nodeslide-multiline-check-02/check.log",
+      "sha256": "75e095c7f2b4848948f19c1116b1f5326b6ab7e5f9094fb615af128ca18edba7",
+      "bytes": 21908
+    }
+  ],
+  "normalCheck": {
+    "at": "2026-09-05T12:11:46.473209+00:00",
+    "command": [
+      "npm",
+      "run",
+      "check"
+    ],
+    "exitCode": 0,
+    "seconds": 138.0779999999795,
+    "log": "check.log",
+    "isolatedTemporaryRoot": "D:\\ProjectRecovery\\NodeSlide first run 20260905\\temp",
+    "sourceHashes": {
+      "scripts/tests/workspace-build-depth.test.mjs": "98e1cc0d259199f01c4b92e2b539a06aa32889e72e7857a1b35a815f0185a40e",
+      "scripts/tests/code-tours.test.mjs": "20358217a7c89ee0af06778ae7d27f82e9b5b771e7e0ddeec4f63a52c97e38eb",
+      "scripts/tests/playwright-trace.test.mjs": "6d58b0fa95c609cc91ab7cecbf032c5136b3c63654454c71824b1b32adbc3b9f",
+      ".gitattributes": "e9c61ffa7486f3134f5deae7d81103be5a8eacc3dfbbe4296c09df5d45d7d2f5",
+      "convex/lib/nodeslideValidators.ts": "8a37b1a57278a9689ad4d1aacb11ac4ad9e7bb833a4f5658804ef94c3a7a81cb",
+      "convex/lib/nodeslideAdmission.test.ts": "d46287d3ac7d9a1a393fe9a4665e2c3413f6155fa46bb30643e4384a7f3e5e29",
+      "convex/_generated/api.d.ts": "4d4c28b2dc659c14c57b71777a108df3168e86f5e1c90f61e7624a9a39a7b12e",
+      ".tours/03-debug-and-recovery.tour": "b91ff8afb9391d3de56a7188aaa7590463edb8e7201c4deaaafe7f32daf87a9b",
+      ".tours/01-primary-user-flow.tour": "55be812065e25dbe438af99928d8470bc0bc934fa7760a7f06f8d47ba516592c",
+      "docs/codebase/CONCERNS.md": "2860a435ccad27f8314d133a10b542bb1f9437a7a9eb67ef1faf5879285142f3",
+      "docs/codebase/INTEGRATIONS.md": "9ae7964e4379f023605bb2a9605b44e3781eda471ff143480c40b7fe0b4ff88f",
+      "docs/START_HERE.md": "2613bebffe1c2f331c2eb8092d18a8010109e8251e16a359271cabd7de619249",
+      "promotion/PROMOTION_LOG.md": "e145ed08ace4f8a94dedc9357a63ab23c0cb50ddf0e8519a135e9f0b6fc4d682"
+    },
+    "sourceUnchangedDuringCheck": true,
+    "unchangedTimeoutsAndConfiguration": true,
+    "environment": "Inherited provider/Convex/Vite/base URL credential names removed without value output. Only candidate generated loopback bindings exist; no original env file read."
+  },
+  "rootSuite": {
+    "filesPassed": 316,
+    "testsPassed": 2816,
+    "testsSkipped": 7
+  },
+  "workspaceTestsAndBuild": "PASS_THROUGH_NORMAL_NPM_CHECK",
+  "failuresRetained": "Earlier normal run failed two exact-line metadata checks now corrected plus inherited lazy OpenUI wait. Current full check passes without lazy source/timeout/concurrency changes; this does not prove timing stability.",
+  "sourceScope": "Two runtime/test owners, two generated tours and four numeric doc citations. Six prior portability owners overlap one tour and remain separately judged.",
+  "deployed": false,
+  "providerCalls": 0,
+  "fullGrades": null
+}

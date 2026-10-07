@@ -1,0 +1,65 @@
+from pathlib import Path
+import subprocess, json, hashlib, shutil, difflib
+P=Path(__file__).resolve().parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=P/'E6g-nodeslide-portability-independent-02'
+def h(b):return hashlib.sha256(b).hexdigest()
+def save(p,v):p.write_text(json.dumps(v,indent=2,ensure_ascii=True)+'\n',encoding='utf-8')
+def load(p):return json.loads(p.read_text(encoding='utf-8-sig'))
+def git(*a):return subprocess.check_output(['git','--no-optional-locks',*a],cwd=R)
+paths=['.gitattributes','scripts/tests/workspace-build-depth.test.mjs','scripts/tests/code-tours.test.mjs','scripts/tests/playwright-trace.test.mjs','.tours/03-debug-and-recovery.tour','convex/_generated/api.d.ts']
+protected=['src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx','src/domains/nodeslide/components/NodeBookWorkspacePanel.tsx','vite.config.ts','convex/_generated/api.js','convex/lib/nodeslideCreateScale.ts','convex/lib/nodeslideCreationTraceTiming.ts','src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx','src/domains/nodeslide/inspector/AiInspector.tsx','src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx']
+startIndex=git('ls-files','--stage','-z');startRefs=git('show-ref')
+bindings={}
+for p in paths+protected:
+    raw=(R/p).read_bytes(); old=git('show',f'HEAD:{p}'); dest=O/'source-current'/p;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw)
+    bindings[p]={'sha256':h(raw),'bytes':len(raw),'headSha256':h(old),'sameLfContentAsHead':raw.replace(b'\r\n',b'\n')==old.replace(b'\r\n',b'\n')}
+assert all(bindings[p]['sameLfContentAsHead'] for p in protected)
+rootHashes=load(P/'E6g-nodeslide-portability-check-02/check.command.json')['sourceHashes']
+assert all(bindings[p]['sha256']==v for p,v in rootHashes.items())
+tour='.tours/03-debug-and-recovery.tour';before=json.loads(git('show',f'HEAD:{tour}'));after=json.loads((R/tour).read_bytes())
+differences=[]
+for i,(a,b) in enumerate(zip(before['steps'],after['steps'])):
+    if a!=b:differences.append({'step':i,'before':a,'after':b})
+assert len(differences)==1 and differences[0]['before']['line']==46 and differences[0]['after']['line']==47
+assert {k:v for k,v in differences[0]['before'].items() if k!='line'}=={k:v for k,v in differences[0]['after'].items() if k!='line'}
+comparison=[]
+for p in ['.tours/01-primary-user-flow.tour','.tours/02-agent-execution.tour','public/recipelang/edge-data-contract.svg']:
+    raw=(R/p).read_bytes();old=git('show',f'HEAD:{p}')
+    dest=O/'excluded-generated-working'/p;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw)
+    comparison.append({'path':p,'workingSha256':h(raw),'headSha256':h(old),'workingBytes':len(raw),'headBytes':len(old),'exactBytesEqual':raw==old,'normalizedLfBytesEqual':raw.replace(b'\r\n',b'\n')==old.replace(b'\r\n',b'\n'),'includedInSixPathSourceScope':False})
+assert all(x['normalizedLfBytesEqual'] for x in comparison)
+apipath='convex/_generated/api.d.ts';old=git('show',f'HEAD:{apipath}').decode();current=(R/apipath).read_text(encoding='utf-8');delta=list(difflib.unified_diff(old.splitlines(),current.splitlines()))
+adds=[s[1:] for s in delta if s.startswith('+') and not s.startswith('+++')];removes=[s for s in delta if s.startswith('-') and not s.startswith('---')]
+assert len(adds)==4 and not removes
+assert all('nodeslideCreateScale' in s or 'nodeslideCreationTraceTiming' in s for s in adds)
+seams=load(O/'seams.json');assert seams['checkCount']==9 and len(seams['filters'])==6
+sourceDiff=git('diff','--text','--',*paths);(O/'candidate-six-path.diff').write_bytes(sourceDiff)
+for suffix in ['01','02']:
+    for f in ['check.command.json','check.log']:(O/f'root-normal-check-{suffix}-{f}').write_bytes((P/f'E6g-nodeslide-portability-check-{suffix}'/f).read_bytes())
+(O/'executed-probe.mjs').write_bytes((P/'E6g-review-portability-seams.mjs').read_bytes())
+save(O/'source-bindings.json',bindings);save(O/'excluded-generated.json',comparison)
+save(O/'final-custody.json',{'head':git('rev-parse','HEAD').decode().strip(),'indexUnchangedDuringReviewFreeze':git('ls-files','--stage','-z')==startIndex,'refsUnchangedDuringReviewFreeze':git('show-ref')==startRefs,'rootFrozenFourOwnersMatch':True,'namedProtectedSourceUnchangedAgainstHead':protected,'candidateBindings':{p:bindings[p] for p in paths},'scope':'Root independently owns local backend and generated build artifacts. No credentials, environment file, DB or live backend contents read; no global filesystem immutability assertion.'})
+manifest={str(f.relative_to(O)).replace('\\','/'):{'sha256':h(f.read_bytes()),'bytes':f.stat().st_size} for f in O.rglob('*') if f.is_file() and f.name!='manifest.json'}
+save(O/'manifest.json',{'count':len(manifest),'files':manifest})
+report={'verdict':'APPROVED_NARROW_PORTABILITY_SOURCE_FULL_CHECK_NOT_READY','request':'Independent causal judgment of the exact six-path first-run portability slice; preserve failed full checks and keep UI first-use proof separate.','repo':str(R),'head':git('rev-parse','HEAD').decode().strip(),'sourcePaths':{p:bindings[p] for p in paths},'protectedInputs':{p:bindings[p] for p in protected},'causalChecks':{'currentActualFunctionCases':9,'actualGitCheckoutFilterCases':6,'allPassed':True,'actualGenerator':'3 tours / 32 steps pass through current child cwd and unchanged generator --check','traceCases':['genuine missing root yields []','empty root yields []','nested spaces/hash names produce exact sorted trace paths','root file ENOTDIR propagates','injected root EACCES propagates','injected nested removal ENOENT propagates'],'disclosure':'Actual source bodies executed in read-only VM adapters; direct Node generator and Git filter calls are real. No new candidate tests or assertions written; diagnostic zip names are not real trace evidence.','gitFilterScope':'Actual checkout filters under core.autocrlf=true and false, not a fresh whole clone.'},'scopeReview':{'fileUrl':'Only two native path conversions and imports; original build assertions intact.','eol':'Only *.tour text eol=lf added to existing policy; exact tour comparison retained.','finder':'No shell, one discovery pass, native recursion and deterministic sort. Only missing top-level .tmp maps to absence; nested errors propagate.','tour':'Exactly step 8 line 46 to 47; descriptions/paths and other JSON values unchanged.','generatedApi':{'addedLines':adds,'removedLines':0,'cause':'Normal local codegen incorporates two already tracked pure helper modules. Neither exports registered Convex functions; api.js and both source modules equal HEAD. No runtime endpoint/authority additions or hand edits certified.','limits':'Type declaration refresh only; no broader generated API correctness or deployed endpoint claim.'}},'fullChecks':{'original':'4 failures / 2808 passes / 7 skips, retained historical','repair01':'1 moved-tour-line failure / 2811 passes / 7 skips; NodeBook timeout absent','repair02':'1 lazy OpenUI mount failure / 2811 passes / 7 skips; intended portability and tour checks pass; NodeBook timeout absent','normalCheckPassed':False,'workspaceTestsReached':False,'buildReachedThroughCheck':False,'separateRootBuild':'Not judged by this source-only receipt'},'findings':[],'residual':['Current full check is failed and must remain NOT_READY.','No real .tmp trace exists: five real-trace parser cases remain NOT_RUN, not certified by diagnostic files.','NodeBook no longer timed out in two normal checks without source/timeout/config changes; original failure remains historical and recurrence risk unproven.','No live provider, native Office, browser/UI grade or production proof in this review.','Dependency/API/runtime assertions remain bounded to unchanged source and the four generated type lines.'],'excludedGeneratedWorking':comparison,'rawAdapterFailure':{'path':'E6g-nodeslide-portability-independent-01/failure.json','cause':'Independent VM assertion adapter compared arrays from different realms; preserved raw failure. Adapter normalization corrected both operands, no candidate source changes.'},'evidenceManifest':{'path':'E6g-nodeslide-portability-independent-02/manifest.json','sha256':h((O/'manifest.json').read_bytes())},'fullCriterionScores':None,'dimensionScores':None,'reviewer':'Reused independent reviewer context; nonauthor of NodeSlide candidate.'}
+save(P/'E6g_NODESLIDE_PORTABILITY_SOURCE_JUDGE.json',report)
+md='''**APPROVED_NARROW_PORTABILITY_SOURCE_FULL_CHECK_NOT_READY.** The six-path patch fixes the reproduced Windows filesystem and tour-checkout defects without relaxing checks. The current normal check still fails in a separate lazy OpenUI mount test.
+
+**Re your request:** execute repository readiness with independent judgement — the scoped source repair is accepted; whole-repository readiness is not.
+
+The candidate remains on `b0674b229a3691c09c88fcab1481f2e33342cb21`. [Exact six-path hashes and raw diff](E6g-nodeslide-portability-independent-02/source-bindings.json) bind `.gitattributes`, the three test files, the generated debug tour and `convex/_generated/api.d.ts`. [Full structured judgement](E6g_NODESLIDE_PORTABILITY_SOURCE_JUDGE.json) records every scope and limitation.
+
+- The two URL conversions now produce native paths in the actual folder containing spaces. The original two workspace assertions and actual child generator pass. No nested-build guard was weakened.
+- The LF rule covers `.tour` checkout bytes. Six actual Git filter checks, with autocrlf true and false across all three tours, return exact LF HEAD bytes. This proves the filtering boundary, not an entire fresh clone. The regenerated debug-tour change is solely step 8 line 46 to 47 after an import shifted its real target; descriptions and other JSON values remain identical.
+- Native trace discovery passes missing-root, empty-root, nested path, ENOTDIR, injected permission-denial and nested-removal cases. Only genuine top-level absence returns an empty list; other errors propagate. Diagnostic file names do not count as real traces. Five existing real-trace parser cases remain not run because this candidate has no `.tmp` traces.
+- The generated API delta adds exactly two type imports and two module-map entries for unchanged pure helpers already in HEAD. The runtime `api.js`, helper modules and browser sources are unchanged. This adds no runtime registration or access authority and does not certify the entire API graph.
+
+[Independent seam evidence](E6g-nodeslide-portability-independent-02/seams.json) records 9 passing source cases and 6 passing Git-filter cases. The existing assertions were executed through a declared read-only VM facade, with the real generator spawned normally. An initial reviewer adapter failed on cross-realm empty-array identity; its [raw failure](E6g-nodeslide-portability-independent-01/failure.json) is retained and only that adapter was corrected.
+
+Both repaired full runs remain raw failures. Check01 reached 2,811 passes and 7 skips, failing only the genuinely moved tour reference. After normal regeneration, check02 reached the same counts but failed `AiInspector.openUiWiring.test.tsx:86` while the lazy lab was still loading. The original NodeBook timeout did not recur in either normal run; no NodeBook source, time limit or global worker configuration changed. The normal check still has not reached workspace tests or build; separate root commands cannot relabel it passed.
+
+[Excluded generated bytes](E6g-nodeslide-portability-independent-02/excluded-generated.json) confirm the first two tour files and normal-build RecipeLang SVG equal HEAD after LF normalization. Current working bytes are preserved as evidence and excluded from this six-path source scope. [Custody](E6g-nodeslide-portability-independent-02/final-custody.json) records exact protected inputs and unchanged Git entries/refs at the review freeze. Root owns the isolated backend and generated build outputs; no private environment, database, model, native Office, source/index/ref write or UI matrix was used by this reviewer. All full grades remain null.
+'''
+(P/'E6g_NODESLIDE_PORTABILITY_SOURCE_JUDGE.md').write_text(md,encoding='utf-8')
+print(json.dumps({'reportSha256':h((P/'E6g_NODESLIDE_PORTABILITY_SOURCE_JUDGE.json').read_bytes()),'verdict':report['verdict'],'evidenceFiles':len(manifest),'excludedGenerated':comparison},ensure_ascii=True))

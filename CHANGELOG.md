@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+### Public site
+
+- Added a 1200×630 social preview image with Open Graph image and Twitter card
+  metadata, so a shared link identifies the app before it is opened.
+
+### Presentation composer
+
+- Kept the phone header actions visible and reachable, with wrapping rows
+  and 44px action targets, including enlarged text.
+- Kept the native model selector and dropdown arrow inside the phone composer,
+  including enlarged text, while preserving the model icon, keyboard focus,
+  complete dropdown options, and the Create button.
+
 ### Runtime
 
 - Added a complete `nodeslide generate` transaction: hosted creation,

@@ -38,8 +38,11 @@ describe('production GitHub workflow configuration', () => {
       path.join(workflowDirectory, 'node-platform-conformance.yml'),
       'utf8',
     );
+    // Same pinned commit; the owning repository was renamed node-platform ->
+    // NodeKit (NodeKit ebfe529, 2026-08-10) and reusable-workflow `uses:` refs
+    // do not follow the rename. Was 'HomenShum/node-platform/...' at this SHA.
     expect(conformance).toContain(
-      'HomenShum/node-platform/.github/workflows/repo-conformance.yml@5c9aa6443ca8e61dc8886fbf0a0b4a7b72858e63',
+      'HomenShum/NodeKit/.github/workflows/repo-conformance.yml@5c9aa6443ca8e61dc8886fbf0a0b4a7b72858e63',
     );
   });
 
@@ -107,6 +110,18 @@ describe('production GitHub workflow configuration', () => {
     expect(appearsBefore(workflow, 'vercel@56.3.2 deploy', 'verify-live-web-identity.mjs')).toBe(
       true,
     );
+
+    // Post-deploy gate: explicit READY wait, a server-rendered content
+    // signal, and an automatic frontend rollback that fails closed.
+    expect(workflow).toContain('--wait');
+    expect(workflow).toContain("grep -q 'reviewable presentations, built from a brief'");
+    expect(workflow).toContain("if: failure() && steps.vercel_deploy.outputs.deployment_url != ''");
+    expect(workflow).toContain('vercel@56.3.2 rollback');
+    expect(appearsBefore(workflow, 'vercel@56.3.2 deploy', 'vercel@56.3.2 inspect')).toBe(true);
+    expect(appearsBefore(workflow, 'verify-live-share-route.mjs', 'vercel@56.3.2 rollback')).toBe(
+      true,
+    );
+    expect(workflow).toContain('still serves $DEPLOY_SHA');
 
     const jobEnvironment = workflow.slice(
       workflow.indexOf('    env:'),

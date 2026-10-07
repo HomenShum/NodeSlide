@@ -1,0 +1,15 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime
+P=Path(__file__).parent;R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905');sha=lambda b:hashlib.sha256(b).hexdigest()
+initial=P/'E6g_NODESLIDE_MULTILINE_FREEZE.json';original=json.loads(initial.read_text(encoding='utf-8'))
+for e in original['source']:assert sha((R/e['path']).read_bytes())==e['sha256']
+for e in original['artifacts']:assert sha((P/e['path']).read_bytes())==e['sha256']
+paths=['convex/lib/nodeslideValidators.ts','convex/lib/nodeslideAdmission.test.ts','.tours/01-primary-user-flow.tour','.tours/03-debug-and-recovery.tour','docs/codebase/CONCERNS.md','docs/codebase/INTEGRATIONS.md','docs/START_HERE.md','promotion/PROMOTION_LOG.md']
+source=[{'path':n,'sha256':sha((R/n).read_bytes())} for n in paths]
+artifacts=[]
+for folder in ['E6g-nodeslide-multiline-citation-before','E6g-nodeslide-multiline-check-01','E6g-nodeslide-multiline-check-02']:
+    for f in sorted((P/folder).rglob('*')):
+        if f.is_file():artifacts.append({'path':f.relative_to(P).as_posix(),'sha256':sha(f.read_bytes()),'bytes':f.stat().st_size})
+check=json.loads((P/'E6g-nodeslide-multiline-check-02/check.command.json').read_text(encoding='utf-8'));assert check['exitCode']==0 and check['sourceUnchangedDuringCheck']
+r={'proof':'NODESLIDE-MULTILINE-BRIEF-01','at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'FINAL_SOURCE_AND_PROOF_FROZEN_FOR_NONAUTHOR_JUDGE','source':source,'sourceDigest':sha(json.dumps(source,separators=(',',':')).encode()),'initialFreeze':{'path':initial.name,'sha256':sha(initial.read_bytes()),'allBindingsExact':True},'additionalArtifacts':artifacts,'normalCheck':check,'rootSuite':{'filesPassed':316,'testsPassed':2816,'testsSkipped':7},'workspaceTestsAndBuild':'PASS_THROUGH_NORMAL_NPM_CHECK','failuresRetained':'Earlier normal run failed two exact-line metadata checks now corrected plus inherited lazy OpenUI wait. Current full check passes without lazy source/timeout/concurrency changes; this does not prove timing stability.','sourceScope':'Two runtime/test owners, two generated tours and four numeric doc citations. Six prior portability owners overlap one tour and remain separately judged.','deployed':False,'providerCalls':0,'fullGrades':None}
+(P/'E6g_NODESLIDE_MULTILINE_FINAL_FREEZE.json').write_text(json.dumps(r,indent=2)+'\n',encoding='utf-8',newline='\n');print(json.dumps({'sourceDigest':r['sourceDigest'],'sourcePaths':len(source),'artifactCount':len(artifacts),'normalCheckSeconds':check['seconds']}))

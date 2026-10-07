@@ -1,0 +1,122 @@
+import { start as __phaseStart, emit as __phaseEmit, finish as __phaseFinish, waitStart as __phaseWaitStart } from 'virtual:portfolio-openui-phase';
+import { getConfig as __phaseGetConfig } from '@testing-library/dom';
+// @vitest-environment jsdom
+
+import { readFileSync } from 'node:fs';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { afterEach, describe, expect, it } from 'vitest';
+import { buildGoldenNodeSlide } from '../../../../convex/lib/nodeslideSeed';
+import type { PatchOperation } from '../../../../shared/nodeslide';
+import { AiInspector } from './AiInspector';
+
+/**
+ * A COPY IS NOT A PORT.
+ *
+ * `src/domains/nodeslide/openui/*` can be present, exported, typechecked and unit-tested while
+ * being unreachable by a human — because the two things that make it reachable live in a
+ * different file: the `lazy(() => import('../openui/OpenUiMaterialWorkbench'))` edge and the
+ * composer button that flips `materialWorkbenchOpen`. Delete either one and every other test in
+ * this port still passes. That is the failure this file exists to make impossible.
+ *
+ * It checks the wire twice, on purpose:
+ *
+ *   1. by driving the real component — click the button, assert the lab mounts. This is the
+ *      claim that matters, and it fails if the button, the state, or the section is removed.
+ *   2. by reading this module's own source text for the dynamic-import edge. The rendered test
+ *      alone would still pass if someone "simplified" the lazy import into a static one, which
+ *      would silently pull `@openuidev/react-lang` into the initial bundle for every visitor.
+ *      The same technique guards App.tsx's AtlasGallery split in `AtlasGallery.test.tsx`.
+ */
+
+const { snapshot } = buildGoldenNodeSlide('ai-openui-wiring-test', 2_000);
+const slide = (() => {
+  const first = snapshot.slides[0];
+  if (!first) throw new Error('Golden seed produced no slides');
+  return first;
+})();
+
+function renderInspector(
+  onProposeOpenUiMaterial?: (operations: PatchOperation[], summary: string) => Promise<void>,
+) {
+  return render(
+    <AiInspector
+      deck={snapshot.deck}
+      slide={slide}
+      selectedElements={[]}
+      patches={[]}
+      traces={[]}
+      variations={[]}
+      variationsLoading={false}
+      isSubmitting={false}
+      variationBusy={false}
+      variationGenerating={false}
+      variationError={null}
+      previewedVariationId={null}
+      {...(onProposeOpenUiMaterial ? { onProposeOpenUiMaterial } : {})}
+      onPropose={() => undefined}
+      onAccept={() => undefined}
+      onReject={() => undefined}
+      onGenerateVariations={() => undefined}
+      onPreviewVariation={() => undefined}
+      onAcceptVariation={() => undefined}
+      onRejectVariation={() => undefined}
+    />,
+  );
+}
+
+afterEach(() => { __phaseFinish(); cleanup(); });
+
+describe('AiInspector OpenUI visual-material wiring', () => {
+  it('opens the visual material lab from the live composer button', async () => {
+    __phaseStart(document);
+    const user = userEvent.setup();
+    renderInspector(async () => undefined);
+
+    expect(screen.queryByTestId('ai-material-workbench')).toBeNull();
+
+    const opener = screen.getByTestId('ai-open-material-workbench');
+    expect(opener.getAttribute('aria-pressed')).toBe('false');
+    __phaseEmit('click-start');
+    await user.click(opener);
+    __phaseEmit('click-returned');
+
+    const panel = await screen.findByTestId('ai-material-workbench');
+    expect(panel).toBeTruthy();
+    expect(screen.getByTestId('ai-open-material-workbench').getAttribute('aria-pressed')).toBe(
+      'true',
+    );
+
+    // The lab itself arrives through Suspense, so it is asserted after the boundary resolves.
+    __phaseWaitStart(__phaseGetConfig().asyncUtilTimeout);
+    try {
+      await waitFor(() => expect(screen.getByTestId('openui-visual-workbench')).toBeTruthy());
+      __phaseEmit('wait-resolved');
+    } catch (error) { __phaseEmit('wait-rejected', { name: error?.name }); throw error; }
+    finally { __phaseEmit('wait-settled'); }
+    expect(screen.getByTestId('openui-visual-workbench').getAttribute('data-verification')).toBe(
+      'unverified_scenario',
+    );
+  });
+
+  it('hides the opener entirely when the host supplies no proposal lane', () => {
+    renderInspector();
+    expect(screen.queryByTestId('ai-open-material-workbench')).toBeNull();
+    expect(screen.queryByTestId('ai-material-workbench')).toBeNull();
+  });
+
+  it('reaches the workbench through a dynamic import, not a static one', () => {
+    const source = readFileSync('src/domains/nodeslide/inspector/AiInspector.tsx', 'utf8');
+    expect(source).toContain("import('../openui/OpenUiMaterialWorkbench')");
+    expect(source).toContain('lazy(() =>');
+    expect(source).toContain('data-testid="ai-open-material-workbench"');
+    // A static top-level import of the workbench would defeat the split.
+    expect(source).not.toMatch(/^import .*OpenUiMaterialWorkbench.*from/m);
+  });
+
+  it('keeps the host wiring in InspectorPanel so the prop is actually supplied', () => {
+    const panelSource = readFileSync('src/domains/nodeslide/inspector/InspectorPanel.tsx', 'utf8');
+    expect(panelSource).toContain('onProposeOpenUiMaterial');
+    expect(panelSource).toContain('__openui_visual_material__');
+  });
+});

@@ -1,0 +1,487 @@
+
+> nodeslide@0.1.0 check
+> npm run lint && npm run typecheck && npm run test && npm run build
+
+
+> nodeslide@0.1.0 lint
+> biome check .
+
+Checked 1074 files in 447ms. No fixes applied.
+
+> nodeslide@0.1.0 typecheck
+> tsc -b && npm run typecheck --workspaces --if-present
+
+
+> @nodeslide/agent@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/backend@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/cli@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/client-http@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/contracts@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/convex@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/engine@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/external-agent@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodekit/gym-core@0.1.0 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/react@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/react-headless@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/recipelang@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/registry@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> @nodeslide/testing@0.2.2 typecheck
+> tsc --noEmit -p tsconfig.json
+
+
+> nodeslide-mcp@0.2.2 typecheck
+> tsc --noEmit
+
+
+> nodeslide@0.1.0 test
+> vitest run && npm run test --workspaces --if-present
+
+
+ RUN  v4.1.10 D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905
+
+ ❯ src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx (4 tests | 1 failed) 1758ms
+     × opens the visual material lab from the live composer button 1633ms
+CodeTours no longer match the source they point at:
+  .tours/01-primary-user-flow.tour
+  .tours/03-debug-and-recovery.tour
+Run: node scripts/build-code-tours.mjs
+ ❯ scripts/tests/code-tours.test.mjs (1 test | 1 failed) 132ms
+     × regenerates identically from the current source 130ms
+ ❯ scripts/tests/docs-citations.test.mjs (5 tests | 1 failed) 129ms
+     × asserts the cited lines contain what the citation says they contain 60ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/tests/code-tours.test.mjs > the committed CodeTours still point at the code they describe > regenerates identically from the current source
+AssertionError: expected [Function] to not throw an error but 'Error: Command failed: C:\nvm4w\nodej…' was thrown
+
+- Expected:
+undefined
+
++ Received:
+"Error: Command failed: C:\\nvm4w\\nodejs\\node.exe scripts/build-code-tours.mjs --check
+CodeTours no longer match the source they point at:
+  .tours/01-primary-user-flow.tour
+  .tours/03-debug-and-recovery.tour
+Run: node scripts/build-code-tours.mjs
+"
+
+ ❯ scripts/tests/code-tours.test.mjs:19:11
+     17|         encoding: 'utf8',
+     18|       }),
+     19|     ).not.toThrow();
+       |           ^
+     20|   });
+     21| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  scripts/tests/docs-citations.test.mjs > documentation citations > asserts the cited lines contain what the citation says they contain
+AssertionError: expected [ …(4) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "docs/codebase/CONCERNS.md:21: convex/lib/nodeslideValidators.ts:255 does not contain \"validateNodeSlidePreviewAdmission\"",
++   "docs/codebase/INTEGRATIONS.md:44: convex/lib/nodeslideValidators.ts:255 does not contain \"validateNodeSlidePreviewAdmission\"",
++   "docs/START_HERE.md:167: convex/lib/nodeslideValidators.ts:255 does not contain \"validateNodeSlidePreviewAdmission\"",
++   "promotion/PROMOTION_LOG.md:73: convex/lib/nodeslideValidators.ts:255 does not contain \"validateNodeSlidePreviewAdmission\"",
++ ]
+
+ ❯ scripts/tests/docs-citations.test.mjs:154:19
+    152|       }
+    153|     }
+    154|     expect(wrong).toEqual([]);
+       |                   ^
+    155|   });
+    156|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx > AiInspector OpenUI visual-material wiring > opens the visual material lab from the live composer button
+TestingLibraryElementError: Unable to find an element by: [data-testid="openui-visual-workbench"]
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"ns-inspector-scroll ns-ai-inspector ns-ai-v3-shell"[39m
+    [36m>[39m
+      [36m<section[39m
+        [33maria-labelledby[39m=[32m"_r_0_-context-heading"[39m
+        [33mclass[39m=[32m"ns-ai-v3-context"[39m
+        [33mdata-testid[39m=[32m"ai-context-header"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"ns-ai-v3-context-heading"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"ns-eyebrow"[39m
+            [33mid[39m=[32m"_r_0_-context-heading"[39m
+          [36m>[39m
+            [0mContext[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"ns-ai-v3-context-policy"[39m
+          [36m>[39m
+            [0mRead context · locked write scope[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-label[39m=[32m"Active AI context"[39m
+          [33mclass[39m=[32m"ns-ai-v3-context-chips"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"ns-ai-v3-context-chip is-slide"[39m
+          [36m>[39m
+            [0mSlide [0m
+            [0m01[0m
+            [0m ·[0m
+            [0m [0m
+            [0mStories with structure[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<p[39m
+          [33mclass[39m=[32m"ns-ai-v3-context-note"[39m
+        [36m>[39m
+          [0mScoped context by default; explicit @ references are additive.[0m
+        [36m</p>[39m
+      [36m</section>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"ns-ai-v3-review-scroll"[39m
+        [33mdata-testid[39m=[32m"ai-review-scroll"[39m
+      [36m>[39m
+        [36m<section[39m
+          [33mclass[39m=[32m"ns-ai-v3-chat-turn is-agent ns-ai-v3-welcome"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33maria-hidden[39m=[32m"true"[39m
+            [33mclass[39m=[32m"ns-ai-v3-agent-mark"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"lucide lucide-sparkles"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"14"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"14"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M20 2v4"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M22 4h-4"[39m
+              [36m/>[39m
+              [36m<circle[39m
+                [33mcx[39m=[32m"4"[39m
+                [33mcy[39m=[32m"20"[39m
+                [33mr[39m=[32m"2"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+          [36m</span>[39m
+          [36m<div>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"ns-eyebrow"[39m
+            [36m>[39m
+              [0mNodeSlide[0m
+            [36m</span>[39m
+            [36m<strong>[39m
+              [0mWhat should we change?[0m
+            [36m</strong>[39m
+            [36m<p>[39m
+              [0mDescribe the outcome. I’ll return a scoped, validated patch for review before anything changes.[0m
+            [36m</p>[39m
+          [36m</div>[39m
+        [36m</section>[39m
+      [36m</div>[39m
+      [36m<section[39m
+        [33mclass[39m=[32m"ns-ai-material-tool"[39m
+        [33mdata-testid[39m=[32m"ai-material-workbench"[39m
+      [36m>[39m
+        [36m<header>[39m
+          [36m<span>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"lucide lucide-layers"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"12"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"12"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0m Visual material[0m
+          [36m</span>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Close visual material tool"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"lucide lucide-x"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"12"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"12"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M18 6 6 18"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"m6 6 12 12"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+          [36m</button>[39m
+        [36m</header>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"ns-openui-loading"[39m
+        [36m>[39m
+          [0mLoading visual lab…[0m
+        [36m</div>[39m
+      [36m</section>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"ns-ai-composer ns-ai-v3-composer "[39m
+        ...
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"ns-inspector-scroll ns-ai-inspector ns-ai-v3-shell"[39m
+      [36m>[39m
+        [36m<section[39m
+          [33maria-labelledby[39m=[32m"_r_0_-context-heading"[39m
+          [33mclass[39m=[32m"ns-ai-v3-context"[39m
+          [33mdata-testid[39m=[32m"ai-context-header"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"ns-ai-v3-context-heading"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"ns-eyebrow"[39m
+              [33mid[39m=[32m"_r_0_-context-heading"[39m
+            [36m>[39m
+              [0mContext[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"ns-ai-v3-context-policy"[39m
+            [36m>[39m
+              [0mRead context · locked write scope[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33maria-label[39m=[32m"Active AI context"[39m
+            [33mclass[39m=[32m"ns-ai-v3-context-chips"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"ns-ai-v3-context-chip is-slide"[39m
+            [36m>[39m
+              [0mSlide [0m
+              [0m01[0m
+              [0m ·[0m
+              [0m [0m
+              [0mStories with structure[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"ns-ai-v3-context-note"[39m
+          [36m>[39m
+            [0mScoped context by default; explicit @ references are additive.[0m
+          [36m</p>[39m
+        [36m</section>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"ns-ai-v3-review-scroll"[39m
+          [33mdata-testid[39m=[32m"ai-review-scroll"[39m
+        [36m>[39m
+          [36m<section[39m
+            [33mclass[39m=[32m"ns-ai-v3-chat-turn is-agent ns-ai-v3-welcome"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"ns-ai-v3-agent-mark"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"lucide lucide-sparkles"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"14"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"14"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M20 2v4"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M22 4h-4"[39m
+                [36m/>[39m
+                [36m<circle[39m
+                  [33mcx[39m=[32m"4"[39m
+                  [33mcy[39m=[32m"20"[39m
+                  [33mr[39m=[32m"2"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+            [36m</span>[39m
+            [36m<div>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"ns-eyebrow"[39m
+              [36m>[39m
+                [0mNodeSlide[0m
+              [36m</span>[39m
+              [36m<strong>[39m
+                [0mWhat should we change?[0m
+              [36m</strong>[39m
+              [36m<p>[39m
+                [0mDescribe the outcome. I’ll return a scoped, validated patch for review before anything changes.[0m
+              [36m</p>[39m
+            [36m</div>[39m
+          [36m</section>[39m
+        [36m</div>[39m
+        [36m<section[39m
+          [33mclass[39m=[32m"ns-ai-material-tool"[39m
+          [33mdata-testid[39m=[32m"ai-material-workbench"[39m
+        [36m>[39m
+          [36m<header>[39m
+            [36m<span>[39m
+              [36m<svg[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"lucide lucide-layers"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"12"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"12"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+              [0m Visual material[0m
+            [36m</span>[39m
+            [36m<button[39m
+              [33maria-label[39m=[32m"Close visual material tool"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"lucide lucide-x"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"12"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"12"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M18 6 6 18"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"m6 6 12 12"[39m
+                [36m/>[39m
+              [36m</svg>[39...
+ ❯ waitForWrapper node_modules/@testing-library/dom/dist/wait-for.js:163:27
+ ❯ src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx:86:11
+     84|
+     85|     // The lab itself arrives through Suspense, so it is asserted afte…
+     86|     await waitFor(() => expect(screen.getByTestId('openui-visual-workb…
+       |           ^
+     87|     expect(screen.getByTestId('openui-visual-workbench').getAttribute(…
+     88|       'unverified_scenario',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  3 failed | 313 passed (316)
+      Tests  3 failed | 2813 passed | 7 skipped (2823)
+   Start at  05:08:23
+   Duration  22.90s (transform 126.44s, setup 0ms, import 309.01s, tests 134.56s, environment 87.40s)
+

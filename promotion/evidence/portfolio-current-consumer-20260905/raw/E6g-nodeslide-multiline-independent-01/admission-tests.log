@@ -1,0 +1,43 @@
+
+ RUN  v4.1.10 D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905
+
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide private-preview admission > returns the same safe failure for a missing or wrong access code 5ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide private-preview admission > fails closed when server admission settings are incomplete 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide private-preview admission > derives a stable one-way quota subject without exposing admission values 1ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create action admission boundary > keeps an analyst's pasted CSV chart through repeated and concurrent deterministic creates 15ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create action admission boundary > refuses a direct create with no per-submission identity before quota or provider work 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create action admission boundary > allows quota-bound public launch creation without a manual access code 2ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create action admission boundary > does no provider or database work for a missing access code 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create action admission boundary > does no provider or database work for a wrong access code 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create action admission boundary > keeps deterministic briefs out of the provider and access codes out of persistence 2ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create action admission boundary > routes the selected named model and uploaded evidence through the consented path 83ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > preserves internal "\n", indentation and Unicode in an author's brief 1ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > preserves internal "\r\n", indentation and Unicode in an author's brief 1ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > preserves internal "\r", indentation and Unicode in an author's brief 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > accepts exact character/count boundaries 1ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit title count 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit prompt count 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit audience count 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit purpose count 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit successCriteria count 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit successCriteria item count 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit successCriteria total count 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit title bytes 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit prompt bytes 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit audience bytes 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit purpose bytes 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck bounds > rejects an over-limit successCriteria item bytes 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide provider consent contract > defaults safely to a deterministic-only provider choice 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide provider consent contract > requires exact, mode-bound consent for OpenRouter 1ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide provider consent contract > requires exact consent and keeps unqualified Nebius routes unavailable 1ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide provider consent contract > never invokes the provider callback in deterministic mode 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide provider consent contract > invokes the provider only after validated OpenRouter consent 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck attachment boundary > normalizes bounded uploaded evidence for creation 0ms
+ ✓ convex/lib/nodeslideAdmission.test.ts > NodeSlide create-deck attachment boundary > rejects duplicate names and over-count attachment sets 0ms
+
+ Test Files  1 passed (1)
+      Tests  33 passed (33)
+   Start at  05:19:16
+   Duration  2.67s (transform 516ms, setup 0ms, import 2.33s, tests 117ms, environment 0ms)
+
+JSON report written to C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904/E6g-nodeslide-multiline-independent-01/admission-tests.json

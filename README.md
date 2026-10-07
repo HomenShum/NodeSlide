@@ -6,6 +6,18 @@
 
 > NodeSlide turns a prompt, a structured brief, or raw data into a presentation you can *inspect and defend* — a canonical structured document that compiles to editable slides, where every change (human or agent) flows through one validated mutation path.
 
+**Developers and coding agents — start with your task**
+
+| Your task | Start here |
+|---|---|
+| Configure and run the app | [Quickstart](#quickstart) |
+| Follow Create through the code | [Code walkthrough](docs/START_HERE.md) |
+| Use offline CLI/MCP or host-backed MCP | [External-agent access](docs/EXTERNAL_AGENT_ACCESS.md) |
+| Find implementation files | [Architecture](#architecture) |
+
+The walkthrough follows one brief-to-Create action through its files.
+Continue with `docs/codebase/` and `.tours/` for codebase maps and VS Code walks.
+
 > **Repository status (2026-07-22):** NodeSlide is a standalone product repo with
 > exact-commit CI, Convex/Vercel deployment gates, production probes, and packed
 > consumer proofs. The test corpus changes with the product, so this README does
@@ -18,7 +30,9 @@
 
 ## Watch the full journey — 2 min 26 s, recorded live on production
 
-https://github.com/HomenShum/NodeSlide/raw/main/docs/demo/nodeslide-demo-final.mp4
+<img src="docs/demo/nodeslide-demo-hero.gif" alt="NodeSlide full journey at 6x speed: brief in, six slides generated live by Kimi K3, structured elements clicked, a validated agent edit accepted, PowerPoint exported" width="940">
+
+*The GIF above is the full committed demo recording ([`docs/demo/nodeslide-demo-final.mp4`](https://github.com/HomenShum/NodeSlide/raw/main/docs/demo/nodeslide-demo-final.mp4), 2 min 26 s) played at 6× — derived with ffmpeg, not re-staged. Watch the mp4 for real pacing.*
 
 Six acts at [nodeslide.vercel.app](https://nodeslide.vercel.app), captured by a fail-closed recorder (every scene asserts real product state before its caption; a failed assert aborts the take — zero seeded or fabricated state):
 
@@ -246,6 +260,9 @@ Capability honesty is the product, so it's the README too. As of 2026-07-22:
 - [**Product Requirements (PRD)**](docs/PRD.md) — problem, user, workflow, why structured authoring wins, trust surface, launch requirements, metrics, wedge.
 - [**Technical Design (TDD)**](docs/TDD.md) — architecture, canonical schema, agent execution, mutation protocol, validation/repair, rendering/export/publishing, MCP seam, verification.
 
+- [**Product journeys**](promotion/PRODUCT_JOURNEYS.md) — the six workflows (J0–J5) a stranger is expected to complete unaided, each with its persona, steps, done condition, and browser evidence.
+- [**Promotion log**](promotion/PROMOTION_LOG.md) — the open defect ledger, every entry carrying a reproduction, plus the baseline scorecard that stays honest about what is not yet ready.
+
 ## Quickstart
 
 ```bash
@@ -253,10 +270,13 @@ git clone https://github.com/HomenShum/NodeSlide
 cd NodeSlide
 npm install
 npx convex dev     # one-time: provisions a Convex deployment, writes .env.local, generates convex/_generated/
+npx convex env set NODESLIDE_PUBLIC_CREATION true   # opens deck creation on this deployment
 npm run dev        # vite + convex dev (concurrently) — open the printed localhost URL
 ```
 
-The **deterministic path needs no API keys** and produces a complete, reproducible deck. For live model runs, set `OPENROUTER_API_KEY` in Convex (`npx convex env set OPENROUTER_API_KEY …`) or bring your own key (BYOK). See [`.env.example`](.env.example).
+**The `convex env set` line is not optional.** Deck creation is admission-gated, and a fresh deployment has no admission configured, so **Create presentation** fails with `preview_not_configured` until one of three things is true: `NODESLIDE_PUBLIC_CREATION=true` (above — the right choice for local and self-hosted), a durable create job already authorized the request, or both `NODESLIDE_PREVIEW_ACCESS_CODE` and `NODESLIDE_PREVIEW_ADMISSION_SUBJECT` are set for a code-gated private preview. All three are Convex deployment variables set with `npx convex env set`; none of them live in a `.env` file, which is why this repository ships no `.env.example`.
+
+Past that, the **deterministic path needs no API keys** and produces a complete, reproducible deck. For live model runs, set `OPENROUTER_API_KEY` in Convex (`npx convex env set OPENROUTER_API_KEY …`) or bring your own key (BYOK).
 
 ```bash
 npm test            # current Vitest + workspace suites; no frozen count in docs

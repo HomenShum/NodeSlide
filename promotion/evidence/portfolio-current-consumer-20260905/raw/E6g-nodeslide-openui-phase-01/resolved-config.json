@@ -1,0 +1,121 @@
+{
+  "root": "D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905",
+  "mode": "test",
+  "plugins": [
+    "vite:optimized-deps",
+    "vite:watch-package-data",
+    "vite:pre-alias",
+    "alias",
+    "portfolio-openui-phase-timing",
+    "vite:react-babel",
+    "vite:react-refresh",
+    "@tailwindcss/vite:scan",
+    "@tailwindcss/vite:generate:serve",
+    "vitest",
+    "vitest:meta-env-replacer",
+    "vitest:css-disable",
+    "vitest:resolve-core",
+    "vite:modulepreload-polyfill",
+    "vite:resolve",
+    "vite:html-inline-proxy",
+    "vite:css",
+    "vite:esbuild",
+    "vite:json",
+    "vite:wasm-helper",
+    "vite:worker",
+    "vite:asset",
+    "vitest:normalize-optimizer",
+    "vitest:environments-module-runner",
+    "vite:wasm-fallback",
+    "vite:define",
+    "vite:css-post",
+    "vite:worker-import-meta-url",
+    "vite:asset-import-meta-url",
+    "vite:dynamic-import-vars",
+    "vite:import-glob",
+    "vitest:css-empty-post",
+    "vitest:coverage-transform",
+    "vitest:mocks",
+    "vitest:automock",
+    "vitest:normalize-url",
+    "vite:client-inject",
+    "vite:css-analysis",
+    "vite:import-analysis"
+  ],
+  "test": {
+    "exclude": [
+      "**/node_modules/**",
+      "**/.git/**",
+      "**/.claude/**",
+      "packages/external-agent/**",
+      "mcp/**",
+      "tests/e2e/**"
+    ],
+    "deps": {
+      "moduleDirectories": [
+        "/node_modules/"
+      ]
+    },
+    "server": {
+      "deps": {}
+    }
+  },
+  "aliases": [
+    {
+      "find": "@",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\src"
+    },
+    {
+      "find": "@nodeslide/agent",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages\\agent\\src\\index.ts"
+    },
+    {
+      "find": "@nodeslide/backend",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages\\backend\\src\\index.ts"
+    },
+    {
+      "find": "@nodeslide/cli",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages\\cli\\src\\index.ts"
+    },
+    {
+      "find": "@nodeslide/client-http",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages\\client-http\\src\\index.ts"
+    },
+    {
+      "find": "@nodeslide/contracts",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages\\contracts\\src\\index.ts"
+    },
+    {
+      "find": "@nodeslide/convex",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages\\convex\\src\\index.ts"
+    },
+    {
+      "find": "@nodeslide/engine",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages\\engine\\src\\index.ts"
+    },
+    {
+      "find": "@nodeslide/react",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages\\react\\src\\index.ts"
+    },
+    {
+      "find": "@nodeslide/react-headless",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages\\react-headless\\src\\index.ts"
+    },
+    {
+      "find": "@nodeslide/registry",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages\\registry\\src\\index.ts"
+    },
+    {
+      "find": "@nodeslide/testing",
+      "replacement": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905\\packages\\testing\\src\\index.ts"
+    },
+    {
+      "find": {},
+      "replacement": "/@fs/D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/vite/dist/client/env.mjs"
+    },
+    {
+      "find": {},
+      "replacement": "/@fs/D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905/node_modules/vite/dist/client/client.mjs"
+    }
+  ]
+}

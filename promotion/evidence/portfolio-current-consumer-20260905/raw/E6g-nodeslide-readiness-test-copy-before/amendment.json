@@ -1,0 +1,11 @@
+{
+  "proof": "NODESLIDE-DECK-CI-DETAIL-01",
+  "at": "2026-09-05T14:51:29.600179+00:00",
+  "acceptedBy": "root",
+  "additionalOwner": "convex/lib/nodeslideTraceUi.test.tsx",
+  "beforeSha256": "3f96daa1f43e677af2554bf8d9e583db184e2ee12857ea14516475fedbdacec6",
+  "cause": "The existing current-v7 versus selected-v1 scenario still expects the two old headings. Normal check01 reaches and fails that exact assertion after the intended scope-label correction. The user job, versions, ordering and remaining assertions stay unchanged.",
+  "change": "Update two expected headings to their explicit core-validation scope and assert that narrower receipts do not claim publish ready.",
+  "observedFailure": "E6g-nodeslide-readiness-check-01/normal-check.log",
+  "noRuntimeChange": true
+}

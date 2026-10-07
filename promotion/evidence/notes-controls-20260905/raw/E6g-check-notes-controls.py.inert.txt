@@ -1,0 +1,17 @@
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,time
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=P/'E6g-nodeslide-notes-check-01';O.mkdir()
+names=['src/domains/nodeslide/components/SlideCanvas.tsx','src/domains/nodeslide/nodeslide.css','src/domains/nodeslide/nodeslideV3.css','HANDOFF.md']
+bindings={n:hashlib.sha256((R/n).read_bytes()).hexdigest()for n in names}
+env=dict(os.environ)
+for key in list(env):
+    u=key.upper()
+    if any(x in u for x in ['OPENAI','ANTHROPIC','GEMINI','GOOGLE_API','CONVEX','VITE_','PLAYWRIGHT_BASE_URL'])or u.endswith(('_API_KEY','_ACCESS_TOKEN','_SECRET')):env.pop(key)
+env.update({'TEMP':'D:/ProjectRecovery/NodeSlide first run 20260905/temp','TMP':'D:/ProjectRecovery/NodeSlide first run 20260905/temp','CONVEX_AGENT_MODE':'anonymous'})
+start=time.monotonic();at=datetime.datetime.now(datetime.timezone.utc).isoformat()
+with (O/'normal-check.log').open('xb')as log:
+    run=subprocess.run(['cmd.exe','/d','/c','npm','run','check'],cwd=R,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=900,creationflags=subprocess.CREATE_NO_WINDOW)
+d={'startedAt':at,'finishedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'command':['npm','run','check'],'cwd':str(R),'exitCode':run.returncode,'elapsedSeconds':time.monotonic()-start,'timeoutSeconds':900,'source':bindings,'sourceUnchanged':all(hashlib.sha256((R/n).read_bytes()).hexdigest()==s for n,s in bindings.items()),'environmentPolicy':'Remove inherited provider/Convex/Vite overrides without printing values; ordinary npm lifecycle unchanged; no retry or timeout increase','logSha256':hashlib.sha256((O/'normal-check.log').read_bytes()).hexdigest()}
+(O/'command.json').write_text(json.dumps(d,indent=2)+'\n',encoding='utf-8',newline='\n');print(json.dumps(d))

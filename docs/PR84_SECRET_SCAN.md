@@ -46,8 +46,8 @@ that one previously-known fixture was gone, and that was generalised.
 
 | location | value | why it is not a secret |
 |---|---|---|
-| `convex/lib/nodeslideGoogleSlidesRuntime.ts:196` | `tokenType = 'Bearer'` | an auth *scheme* name, defined in RFC 6750 |
-| `convex/nodeslideGoogleAuth.ts:27` | `GOOGLE_TOKEN_URL = https://oauth2.googleapis.com/token` | Google's public documented endpoint |
+| `convex/lib/nodeslideGoogleSlidesRuntime.ts:196` (`tokenType: 'Bearer'`) | `tokenType = 'Bearer'` | an auth *scheme* name, defined in RFC 6750 |
+| `convex/nodeslideGoogleAuth.ts:27` (`GOOGLE_TOKEN_URL`) | `GOOGLE_TOKEN_URL = https://oauth2.googleapis.com/token` | Google's public documented endpoint |
 | `package-lock.json` ×4 | `sha512-…` | npm **integrity hashes**, which are published content digests |
 
 The remaining 36 are in `*.test.ts` files and every one is a dictionary-word placeholder —
@@ -56,7 +56,7 @@ Nothing that is opaque, high-entropy, or provider-shaped appears anywhere in the
 
 ## The two lines to confirm, ranked
 
-**1 — `convex/lib/nodeslideSourceRevision.test.ts:67`** — highest confidence.
+**1 — `convex/lib/nodeslideSourceRevision.test.ts:79-83` (`URL cannot contain credentials`)** — highest confidence.
 
 ```ts
 buildNodeSlideSourceRevision({
@@ -66,11 +66,11 @@ buildNodeSlideSourceRevision({
 ```
 
 This is the canonical *"username and password in URL"* detector firing on **the negative test for the
-security control that rejects credentials in URLs.** The assertion on the very next line is the
+security control that rejects credentials in URLs.** The assertion closing that range is the
 proof: the code refuses this input, and the test exists to prove the refusal. The host is
 `example.com` (RFC 2606, reserved) and the credential is the literal words `user` and `secret`.
 
-**2 — `convex/lib/nodeslideGoogleOAuth.test.ts:65` and `:75`** — `clientSecret: 'secret'`.
+**2 — the two `clientSecret: 'secret'` fixtures in `convex/lib/nodeslideGoogleOAuth.test.ts`.** Deliberately uncited by line: step 1 below replaced that literal, so no line in the file holds it today.
 **REFUTED BY EXPERIMENT 2026-07-27. This ranking was wrong.**
 
 I reasoned that a Google-client-secret detector was matching the dictionary word `secret`, and that

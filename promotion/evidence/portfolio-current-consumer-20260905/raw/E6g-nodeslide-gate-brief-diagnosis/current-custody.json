@@ -1,0 +1,277 @@
+{
+  "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "status": " M .gitattributes\n M .tours/01-primary-user-flow.tour\n M .tours/02-agent-execution.tour\n M .tours/03-debug-and-recovery.tour\n M convex/_generated/api.d.ts\n M public/recipelang/edge-data-contract.svg\n M scripts/tests/code-tours.test.mjs\n M scripts/tests/playwright-trace.test.mjs\n M scripts/tests/workspace-build-depth.test.mjs\n",
+  "scope": "Relevant source bytes checked; root owns concurrent first-run metadata/generated updates. No assertion that the entire candidate is clean or frozen.",
+  "checks": [
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslide.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideDurableSession.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideAuthoringPolicy.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideJourneyProof.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideAuthoringQuality.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideSlideCount.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideSemanticIssues.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideArtifactRegistry.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideArtifactSpec.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideLayoutMetrics.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideGeometryChecks.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "src/domains/nodeslide/slidelang/utils.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "src/domains/nodeslide/slidelang/provenance.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "src/domains/nodeslide/slidelang/html.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideArtifactPresence.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslidePatch.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideIds.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideCandidate.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideDeckDiversity.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideSemanticEvaluation.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideSignature.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideSignatureApply.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideValidation.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideDeckCi.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideArchetypes.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideAttachments.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "shared/nodeslideArtifactGeometry.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideAuthoredArtifact.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslidePatches.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideCompositionFanout.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideStoryContext.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideCompositionGrammars.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideDesignPlan.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideSeed.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "src/domains/nodeslide/NodeSlideStudio.tsx",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "src/domains/nodeslide/components/NodeSlideLanding.tsx",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "src/domains/nodeslide/inspector/InspectorPanel.tsx",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "src/domains/nodeslide/inspector/DeckCiStatus.tsx",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "src/domains/nodeslide/inspector/TraceInspector.tsx",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/nodeslideDeckCi.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/nodeslideAgent.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "node_modules/convex/dist/esm/values/base64.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "node_modules/convex/dist/esm/common/index.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "node_modules/convex/dist/esm/values/value.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "node_modules/convex/dist/esm/values/validators.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "node_modules/convex/dist/esm/values/validator.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "node_modules/convex/dist/esm/values/errors.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "node_modules/convex/dist/esm/values/compare_utf8.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "node_modules/convex/dist/esm/values/compare.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "node_modules/convex/dist/esm/values/size.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "node_modules/convex/dist/esm/values/index.js",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideValidators.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/lib/nodeslideCreationCritique.ts",
+      "pass": true
+    },
+    {
+      "check": "current source exact",
+      "path": "convex/nodeslide.ts",
+      "pass": true
+    }
+  ]
+}

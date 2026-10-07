@@ -1,0 +1,5 @@
+from pathlib import Path
+P=Path(__file__).parent
+s=(P/'E6g-check-nodeslide-multiline.py').read_text(encoding='utf-8').replace('E6g-nodeslide-multiline-check-01','E6g-nodeslide-multiline-check-02')
+s=s.replace("'.tours/03-debug-and-recovery.tour']","'.tours/03-debug-and-recovery.tour','.tours/01-primary-user-flow.tour','docs/codebase/CONCERNS.md','docs/codebase/INTEGRATIONS.md','docs/START_HERE.md','promotion/PROMOTION_LOG.md']")
+(P/'E6g-check-nodeslide-multiline-02.py').write_text(s,encoding='utf-8',newline='\n')

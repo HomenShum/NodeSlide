@@ -1,0 +1,9 @@
+from pathlib import Path
+P=Path(__file__).parent
+s=(P/'E6g-nodeslide-readiness-browser.mjs').read_text(encoding='utf-8').replace('E6g-nodeslide-readiness-browser-01','E6g-nodeslide-readiness-browser-02').replace("'readiness-browser-01'","'readiness-browser-02'")
+old=" const scaled=await capture(page,"
+new=""" const countProof=await page.getByTestId('deck-ci-details').locator('.ns-deck-ci-status__counts').evaluate(e=>{const r=e.getBoundingClientRect();const walker=document.createTreeWalker(e,NodeFilter.SHOW_TEXT);const rects=[];while(walker.nextNode()){const range=document.createRange();range.selectNodeContents(walker.currentNode);for(const b of range.getClientRects())if(b.width>0&&b.height>0)rects.push({x:b.x,y:b.y,right:b.right,bottom:b.bottom});}return{text:e.textContent,box:{x:r.x,y:r.y,right:r.right,bottom:r.bottom},rects,scrollWidth:e.scrollWidth,clientWidth:e.clientWidth};});
+ expect(countProof.rects.length).toBeGreaterThan(0);expect(countProof.scrollWidth).toBeLessThanOrEqual(countProof.clientWidth+1);expect(countProof.rects.every(r=>r.x>=countProof.box.x-1&&r.right<=countProof.box.right+1&&r.y>=countProof.box.y-1&&r.bottom<=countProof.box.bottom+1)).toBe(true);report.cells.push({viewport,subject:subject.kind,countsText200:countProof});
+ const scaled=await capture(page,"""
+assert old in s;s=s.replace(old,new)
+(P/'E6g-nodeslide-readiness-browser-02.mjs').write_text(s,encoding='utf-8',newline='\n')

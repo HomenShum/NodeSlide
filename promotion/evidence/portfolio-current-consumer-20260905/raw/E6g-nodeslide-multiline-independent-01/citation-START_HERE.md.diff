@@ -1,0 +1,11 @@
+--- before/docs/START_HERE.md
++++ current/docs/START_HERE.md
+@@ -164,7 +164,7 @@
+    name the job whose deck it claims to produce is refused for free.
+ 3. **Admission and quota.** Either `NODESLIDE_PUBLIC_CREATION=true`, or an
+    existing job row, or a preview access code — see
+-   `validateNodeSlidePreviewAdmission` in `convex/lib/nodeslideValidators.ts:255` (`validateNodeSlidePreviewAdmission`).
++   `validateNodeSlidePreviewAdmission` in `convex/lib/nodeslideValidators.ts:256` (`validateNodeSlidePreviewAdmission`).
+    Then a per-session and global rate limit.
+ 
+ Content validation lives next door in `convex/lib/nodeslideValidators.ts`:

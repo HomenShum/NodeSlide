@@ -1,0 +1,65 @@
+{
+  "count": 15,
+  "files": {
+    "command.json": {
+      "sha256": "f5e489868f80326da22e3c598de4ad1dafb0538cce739d035f4b42aec5504d01",
+      "bytes": 900
+    },
+    "executed-runner.py": {
+      "sha256": "7a7918152b6eccc40ebfb54a3b86a0d52dfcdbab2cdca15b060ed6feee1113ad",
+      "bytes": 2235
+    },
+    "full-check02-causal-signals.json": {
+      "sha256": "151740d26df252f15e31cbd80a68cb788e5a52f7ca34ec614cb3ff208584671c",
+      "bytes": 1166
+    },
+    "full-check02-check.command.json": {
+      "sha256": "8810e0adb8908141e9aa3a87f76da3d0eac6fcb91af406e3f6ebfe6b890cfd89",
+      "bytes": 983
+    },
+    "full-check02-check.log": {
+      "sha256": "2205310941c9b164695e6c3fc0955cd5acbcf80ef4c4ceed289b10e56da8ae25",
+      "bytes": 16919
+    },
+    "source-after.json": {
+      "sha256": "6ee103c4b4e531445c037ca5f7fc42f00b6b1d47d08afeb4f4bc997e52638795",
+      "bytes": 988
+    },
+    "source-before.json": {
+      "sha256": "6ee103c4b4e531445c037ca5f7fc42f00b6b1d47d08afeb4f4bc997e52638795",
+      "bytes": 988
+    },
+    "targeted.json": {
+      "sha256": "89f128f452a23274a6c1ac3878453c0383bf1f54c7eaaa962113015a0924c555",
+      "bytes": 2092
+    },
+    "targeted.log": {
+      "sha256": "9716ddcc31bea037154a8e6978c7d527f8e26306dcd36d813c50dbaf8e4d0d4c",
+      "bytes": 1207
+    },
+    "source-before/vite.config.ts": {
+      "sha256": "13cb07a5bffdaec276a3e2fda34469c4ef982c3a4a1e78bf1b80f9147c7c3e48",
+      "bytes": 3306
+    },
+    "source-before/node_modules/@testing-library/dom/dist/config.js": {
+      "sha256": "3627f6265cccd26604777602d7249788c2347a273bdd1cae41719c790f2c5a7a",
+      "bytes": 2526
+    },
+    "source-before/node_modules/@testing-library/dom/dist/wait-for.js": {
+      "sha256": "7ead4a09f15329a1bb9fb175f8af64757bcae28b6f49b62981bdbe1bc6dea391",
+      "bytes": 6734
+    },
+    "source-before/src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx": {
+      "sha256": "eaa74dec3ad9d202fd3af8328d3cfd1b3ac876c686bb629350c705fd379ccb1d",
+      "bytes": 4755
+    },
+    "source-before/src/domains/nodeslide/inspector/AiInspector.tsx": {
+      "sha256": "d254af21c5486763d11ebf0cd3f6bac2f30252a8973a1d77e448cb63be1b1353",
+      "bytes": 99000
+    },
+    "source-before/src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx": {
+      "sha256": "a6da3f550fb33e18bfad668ebfea116db1f2294aafbfff62e99fb45a6460e66a",
+      "bytes": 9361
+    }
+  }
+}

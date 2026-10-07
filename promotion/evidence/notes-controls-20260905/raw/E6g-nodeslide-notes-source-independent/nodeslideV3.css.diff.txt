@@ -1,0 +1,42 @@
+--- retained before/src/domains/nodeslide/nodeslideV3.css
++++ current/src/domains/nodeslide/nodeslideV3.css
+@@ -1920,17 +1920,8 @@
+   border: 0;
+   box-shadow: none;
+   color: var(--ns-ink2);
+-  height: 40px;
+-}
+-
+-.nodeslide-studio .ns-slide-stepper {
+-  bottom: 0;
+-  left: 12px;
+-}
+-
+-.nodeslide-studio .ns-zoom-controls {
+-  bottom: 0;
+-  right: 12px;
++  height: auto;
++  min-height: 40px;
+ }
+ 
+ .nodeslide-studio .ns-slide-stepper button,
+@@ -1949,6 +1940,7 @@
+   font-family: "JetBrains Mono", ui-monospace, monospace;
+   font-size: 10px;
+   min-width: 38px;
++  width: auto;
+   text-align: center;
+ }
+ 
+@@ -1957,8 +1949,11 @@
+   border: 1px solid var(--ns-line-c);
+   border-radius: 6px;
+   font-size: 12px;
++  height: auto;
+   margin-left: 4px;
++  min-height: 27px;
+   padding: 4px 10px;
++  width: auto;
+ }
+ 
+ /* Overview and compare --------------------------------------------------- */

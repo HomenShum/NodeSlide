@@ -1,0 +1,353 @@
+{
+  "at": "2026-09-05T17:55:57.325470+00:00",
+  "status": "PARSED_EXPORT_AND_NATIVE_EVIDENCE_VERIFIED_PENDING_ORDINARY_CHECK",
+  "passed": true,
+  "checks": [
+    {
+      "name": "exact export bytes: E6g-nodeslide-notes-interactions-01/before.json",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "exact export bytes: E6g-nodeslide-notes-interactions-01/before.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "exact export bytes: E6g-nodeslide-notes-interactions-01/after.json",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "exact export bytes: E6g-nodeslide-notes-export-recovery-01/recovered.json",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "exact export bytes: E6g-nodeslide-notes-export-recovery-01/recovered.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "all JSON notes preserve exact Unicode and LF text",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "same deck/slide identities and six-slide order",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "deck versions 3 to15 to16, source slide revisions separately retained",
+      "passed": true,
+      "detail": {
+        "slideVersions": [
+          2,
+          14,
+          15
+        ]
+      }
+    },
+    {
+      "name": "other five slides/elements/sources exact across updates",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "JSON changed fields only notes/version timestamps",
+      "passed": true,
+      "detail": [
+        "/deck/updatedAt",
+        "/deck/version",
+        "/slides/0/notes",
+        "/slides/0/version"
+      ]
+    },
+    {
+      "name": "valid zip CRC: before.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "first actual slide relates to one notes part: before.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "actual slide-notes body present: before.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "every note line exact and ordered before provenance: before.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "entire parsed note text exact before appended provenance: before.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "six actual slides and six note parts: before.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "valid zip CRC: recovered.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "first actual slide relates to one notes part: recovered.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "actual slide-notes body present: recovered.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "every note line exact and ordered before provenance: recovered.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "entire parsed note text exact before appended provenance: recovered.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "six actual slides and six note parts: recovered.pptx",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "twelve native edit/navigation rounds have consecutive versions",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "three actual zoom/toggle/reload/boundary steps pass",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "original failed proof is retained without relabeling",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "degraded refusal disclosed in actual page record",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "recovery uses original disclosure plus last note and increments one deck version",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "recovery DOM binds exact note and version16",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "settled inspector visible in recovery record",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "errors/egress empty and grades null",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "actual three runtime source bindings unchanged",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "files": [
+    {
+      "file": "E6g-nodeslide-notes-interactions-01/before.pptx",
+      "bytes": 137200,
+      "sha256": "cbae3988343eac8e31b937cf7f8d63f9e3baa724f5289faf8167c7f3b5f3fc5a",
+      "zipEntries": 59,
+      "xmlAndRelsParsed": 40,
+      "slide1NotesRelationship": "ppt/notesSlides/notesSlide1.xml",
+      "exactNoteLines": 2,
+      "inheritedRawCrCrLf": false,
+      "notesPartSha256": "e6e2def34ef62cb85ea3de4245eec82dc42bd105337dd91e48aa60df9d2acdf7"
+    },
+    {
+      "file": "E6g-nodeslide-notes-export-recovery-01/recovered.pptx",
+      "bytes": 137331,
+      "sha256": "e38d3c43a41962ef31a73ce624e0a72ac6496d9b9a48e1d2772766f3caebedab",
+      "zipEntries": 59,
+      "xmlAndRelsParsed": 40,
+      "slide1NotesRelationship": "ppt/notesSlides/notesSlide1.xml",
+      "exactNoteLines": 4,
+      "inheritedRawCrCrLf": false,
+      "notesPartSha256": "cb56819edebceaf7536c463aa36b943cf308accf33c2dedc7c87fdb13b5c3b90"
+    }
+  ],
+  "source": [
+    {
+      "path": "src/domains/nodeslide/components/SlideCanvas.tsx",
+      "sha256": "028175b149f251a2bcf094e518f28e68834b9ed942a118e4b8cc449f94a8fe87"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslide.css",
+      "sha256": "059f3f5bdf23ca38e24e133be5870304049fc1a140334dabbfe337145a980ee7"
+    },
+    {
+      "path": "src/domains/nodeslide/nodeslideV3.css",
+      "sha256": "5175702b66ddf1f91f0e379c45e3a1d3078accb8aca02bab4345c5132d3618ad"
+    }
+  ],
+  "jsonChangedPaths": [
+    "/deck/updatedAt",
+    "/deck/version",
+    "/slides/0/notes",
+    "/slides/0/version"
+  ],
+  "evidence": [
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/1440-100-actions.json",
+      "sha256": "133cfb1fc6a134644b607a610d009dc1f14020e734d87afde1827e93a80f0b90",
+      "bytes": 5067
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/1440-100-actions.png",
+      "sha256": "92485b0dc153ed9956e4ff8b482d6495e70ffd189325b91cc44d0394b65f8432",
+      "bytes": 150890
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/1440-reloaded.json",
+      "sha256": "fb4bf0b4efd8922fc1f5491e7c72411fe0616f90a685fea1edcdffa73f644951",
+      "bytes": 14382
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/1440-reloaded.png",
+      "sha256": "ab9b3f87bc5a6de404fb9f3b7cb30003736f959265be1c225d19f046b357c796",
+      "bytes": 146205
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/320-200-actions.json",
+      "sha256": "44d8fc79caae14d0ebbfa3adb013f8b305a630ebfd6f6a9d1506e704a00c6417",
+      "bytes": 3475
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/320-200-actions.png",
+      "sha256": "b5403ae7fb12cc5600dd6a8b819a1eab945e9159fdc43302073b2316a2f001b9",
+      "bytes": 46329
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/320-reloaded.json",
+      "sha256": "d1a7efaf7cb92f5597d2eff7a5968b48ce4b5b157645116f5ad01a38f85768b0",
+      "bytes": 11690
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/320-reloaded.png",
+      "sha256": "0be883f1b4e50f45ec0fddc16b9b560b11ed44559c67439fa2d9e54def4ce567",
+      "bytes": 38080
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/390-100-actions.json",
+      "sha256": "fb7fa965c8fd5c28cd13b5e844b96ff91a340185b7547fe6f650cbd614831da6",
+      "bytes": 3475
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/390-100-actions.png",
+      "sha256": "4260c9b696c7485f9e4f82e5e25da2b0723c4ab851010f78b5cdc9b979051246",
+      "bytes": 45067
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/390-reloaded.json",
+      "sha256": "95a33a69ac1698688bb4482598b97620ac045e9fb165b515cf04fc2accada1e1",
+      "bytes": 11690
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/390-reloaded.png",
+      "sha256": "2a86e908245038fc7bb723e7ee8f932aa5f95647a1244c7ec0faea72ea321094",
+      "bytes": 44895
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/after.json",
+      "sha256": "f392a81579d641ac1beecd437dc1a9c15943e82dd1ed7ed55cfbdcc3e4d0bf6c",
+      "bytes": 80880
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/before.json",
+      "sha256": "a7f5fa1d928fd6a6314d138d5eced53411567d4fb1e7c187de1a793aef2280e4",
+      "bytes": 80922
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/before.pptx",
+      "sha256": "cbae3988343eac8e31b937cf7f8d63f9e3baa724f5289faf8167c7f3b5f3fc5a",
+      "bytes": 137200
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/failure.json",
+      "sha256": "735125838367ebb11c7020503e17759eaf663c89fad4d8a66727ae38ffd09920",
+      "bytes": 107807
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/failure.png",
+      "sha256": "379fdba52ccf8b498d5ca4295cd5f610a191e6afb46da7dad683e8c2fd4a1967",
+      "bytes": 173603
+    },
+    {
+      "path": "E6g-nodeslide-notes-interactions-01/report.json",
+      "sha256": "13e0a80b99099a4ee2d87df122e92895de0aaa7ab65a9c0b5dbf8728e37c0cbd",
+      "bytes": 7781
+    },
+    {
+      "path": "E6g-nodeslide-notes-export-recovery-01/1440-recovered-export.json",
+      "sha256": "6878fa69096612b657809e6f8f37d04b04707afac8d458cc483226a5394d56d1",
+      "bytes": 4114
+    },
+    {
+      "path": "E6g-nodeslide-notes-export-recovery-01/1440-recovered-export.png",
+      "sha256": "082da90048586df5e9d8137b54daeddc6665a98b046c9d2414bd56c515265936",
+      "bytes": 156112
+    },
+    {
+      "path": "E6g-nodeslide-notes-export-recovery-01/recovered.json",
+      "sha256": "98e76c1dc3458b31093f54feacae88258ed3df1729e1fdcabf514bd41ec0fb0b",
+      "bytes": 81055
+    },
+    {
+      "path": "E6g-nodeslide-notes-export-recovery-01/recovered.pptx",
+      "sha256": "e38d3c43a41962ef31a73ce624e0a72ac6496d9b9a48e1d2772766f3caebedab",
+      "bytes": 137331
+    },
+    {
+      "path": "E6g-nodeslide-notes-export-recovery-01/report.json",
+      "sha256": "4740e4538c018229d8b85f7868f97ab6d122e0ff0041b3b721a37b829425775d",
+      "bytes": 1234
+    },
+    {
+      "path": "E6g-notes-controls-interactions.mjs",
+      "sha256": "57c790c4cdb65a1e4bf326bcf66ec4793988c406a1a12194cf591b675f11a39e",
+      "bytes": 9968
+    },
+    {
+      "path": "E6g-notes-export-recovery.mjs",
+      "sha256": "3ad00fb118055d16722c52043d65d715e7e1633e1e4d52bafa393793c143d702",
+      "bytes": 5937
+    }
+  ],
+  "reviewerActions": "Read-only JSON and ZIP/XML parsing, source/hash checks and actual recovery PNG viewing; no runtime/browser/Office or suite rerun.",
+  "limits": [
+    "JSON and parsed PPTX note text are exact before the appended provenance. Serialized XML uses CRLF, normalized to LF by the XML parser; no native Office paragraph/rendering claim. Initial reviewer prose misread terminal-rendered CRCRLF; raw bytes showed ordinary CRLF and the report was corrected, with prior report retained.",
+    "Native test uses real blur through pointer Next and real reverse Tab/Enter navigation; note entry uses Playwright fill, not manual typing.",
+    "Twelve rounds and three action bundles are a bounded burst/repetition proof, not a one-minute sustained or scale benchmark.",
+    "Text200 is explicit per-element computed-font doubling before actions; reload starts normal style and therefore does not prove enlarged reload layout.",
+    "No native Office rendering, production/provider, live-user durability beyond this isolated backend, textarea resize/short-height or complete readiness grade."
+  ],
+  "finalAcceptance": null
+}

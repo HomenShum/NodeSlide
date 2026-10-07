@@ -1,0 +1,20 @@
+from pathlib import Path
+import hashlib,json,subprocess
+P=Path(__file__).parent;R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=P/'E6g-nodeslide-multiline-citation-before';O.mkdir()
+paths=['.tours/01-primary-user-flow.tour','.tours/03-debug-and-recovery.tour','docs/codebase/CONCERNS.md','docs/codebase/INTEGRATIONS.md','docs/START_HERE.md','promotion/PROMOTION_LOG.md']
+before={}
+for n in paths:
+    b=(R/n).read_bytes();d=O/n;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(b);before[n]=hashlib.sha256(b).hexdigest()
+plan={'proof':'NODESLIDE-MULTILINE-BRIEF-01','amendment':'Root accepts exact derived tour regeneration and numeric citation correction required by the inserted prompt-format argument. Full-check failures retained. No prose/policy changes.','before':before,'fullCheckEvidence':'E6g-nodeslide-multiline-check-01/check.log'}
+(O/'plan.json').write_text(json.dumps(plan,indent=2)+'\n',encoding='utf-8',newline='\n')
+for n in paths[2:]:
+    s=(R/n).read_text(encoding='utf-8');assert 'convex/lib/nodeslideValidators.ts:255' in s
+    (R/n).write_text(s.replace('convex/lib/nodeslideValidators.ts:255','convex/lib/nodeslideValidators.ts:256'),encoding='utf-8',newline='\n')
+with (O/'generator.log').open('xb') as log:subprocess.run(['node','scripts/build-code-tours.mjs'],cwd=R,stdout=log,stderr=subprocess.STDOUT,check=True)
+for n in paths[:2]:
+    old=json.loads((O/n).read_text(encoding='utf-8'));new=json.loads((R/n).read_text(encoding='utf-8'))
+    for a in [old,new]:
+        for step in a['steps']:step.pop('line',None)
+    assert old==new,n
+print(json.dumps({'numericOnly':True,'paths':paths}))

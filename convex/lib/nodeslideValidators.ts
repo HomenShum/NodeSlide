@@ -78,6 +78,7 @@ export function validateNodeSlideCreateDeckFields(
     input.brief.prompt,
     'prompt',
     NODESLIDE_CREATE_DECK_LIMITS.prompt,
+    'multiline',
   );
   const audience = boundedCreateText(
     input.brief.audience,
@@ -307,6 +308,7 @@ function boundedCreateText(
   value: string,
   label: string,
   limits: { maxCharacters: number; maxBytes: number },
+  format: 'single-line' | 'multiline' = 'single-line',
 ): string {
   if (countCodePoints(value) > limits.maxCharacters || utf8ByteLength(value) > limits.maxBytes) {
     throw nodeslideCreatePublicError(
@@ -314,7 +316,7 @@ function boundedCreateText(
       `${label} exceeds the private-preview size limit.`,
     );
   }
-  const clean = value.replace(/\s+/g, ' ').trim();
+  const clean = format === 'multiline' ? value.trim() : value.replace(/\s+/g, ' ').trim();
   if (!clean) {
     throw nodeslideCreatePublicError('invalid_request', `${label} is required.`);
   }

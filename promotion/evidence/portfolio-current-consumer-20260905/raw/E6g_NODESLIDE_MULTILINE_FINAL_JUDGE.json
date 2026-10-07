@@ -1,0 +1,262 @@
+{
+  "proof": "NODESLIDE-MULTILINE-BRIEF-01",
+  "mode": "Builder",
+  "at": "2026-09-05T12:29:21.608304+00:00",
+  "verdict": "APPROVED_SCOPED_MULTILINE_BRIEF_SOURCE_AND_ACTUAL_EXPORT_PROOF",
+  "requestTrace": "Make each repo ready for usage and handoff with visual, responsive and interaction standards; this bounded review closes loss of an analyst's pasted chart data before saving/exporting.",
+  "reviewer": "/root/provider_ci_closure_judge",
+  "implementationAuthor": "/root",
+  "reviewerReuseDisclosed": true,
+  "candidate": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "baseTree": "f3262e171240fec8f54ec5f01aa86310a2b30f5c",
+  "source": [
+    {
+      "path": "convex/lib/nodeslideValidators.ts",
+      "sha256": "8a37b1a57278a9689ad4d1aacb11ac4ad9e7bb833a4f5658804ef94c3a7a81cb"
+    },
+    {
+      "path": "convex/lib/nodeslideAdmission.test.ts",
+      "sha256": "d46287d3ac7d9a1a393fe9a4665e2c3413f6155fa46bb30643e4384a7f3e5e29"
+    },
+    {
+      "path": ".tours/01-primary-user-flow.tour",
+      "sha256": "55be812065e25dbe438af99928d8470bc0bc934fa7760a7f06f8d47ba516592c"
+    },
+    {
+      "path": ".tours/03-debug-and-recovery.tour",
+      "sha256": "b91ff8afb9391d3de56a7188aaa7590463edb8e7201c4deaaafe7f32daf87a9b"
+    },
+    {
+      "path": "docs/codebase/CONCERNS.md",
+      "sha256": "2860a435ccad27f8314d133a10b542bb1f9437a7a9eb67ef1faf5879285142f3"
+    },
+    {
+      "path": "docs/codebase/INTEGRATIONS.md",
+      "sha256": "9ae7964e4379f023605bb2a9605b44e3781eda471ff143480c40b7fe0b4ff88f"
+    },
+    {
+      "path": "docs/START_HERE.md",
+      "sha256": "2613bebffe1c2f331c2eb8092d18a8010109e8251e16a359271cabd7de619249"
+    },
+    {
+      "path": "promotion/PROMOTION_LOG.md",
+      "sha256": "e145ed08ace4f8a94dedc9357a63ab23c0cb50ddf0e8519a135e9f0b6fc4d682"
+    }
+  ],
+  "sourceDigest": "a14ed41a1ae8a4b397673594cf90e637f25233b37bc87a4f60b18ee684f3892d",
+  "freeze": {
+    "path": "E6g_NODESLIDE_MULTILINE_FINAL_FREEZE.json",
+    "sha256": "17b00efab75d0ccb4a5a2aed72b6ea3e26534a3fee6f37d5c078ab0b097a8a89"
+  },
+  "scope": "One private validator helper and existing admission scenarios; two generated numeric tour anchors and four numeric documentation citations. Prior six-path portability slice is separately judged and overlaps one tour.",
+  "causalChain": [
+    "The submitted textarea had five LF separators and an intact metric CSV.",
+    "The shared single-line sanitizer collapsed internal separators before persistence and deterministic parsing.",
+    "The persisted historical brief had zero LF and the chart disappeared.",
+    "Only the prompt now uses outer trim; raw codepoint/UTF8 limits and all other field normalization remain unchanged.",
+    "The same submitted text persists exactly and yields one native chart with Month 1/2/3 and 100/120/140 through JSON and PPTX."
+  ],
+  "independentChecks": {
+    "pure": {
+      "passed": 14,
+      "compilerInputs": 34,
+      "oldNormalizerKnockout": true,
+      "report": "E6g-nodeslide-multiline-independent-01/pure-replay.json"
+    },
+    "admission": {
+      "passed": 33,
+      "failed": 0,
+      "commandReceipt": "E6g-nodeslide-multiline-independent-01/admission-command.json"
+    },
+    "artifactReadback": "E6g-nodeslide-multiline-independent-01/artifact-readback.json",
+    "initialCustody": {
+      "namedSources": 35,
+      "sourceIndexRefsExact": true
+    },
+    "finalCustody": {
+      "before": {
+        "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+        "indexEntriesSha256": "7ec471e055fda0d8b7ecad06cc74067163eec5a3563e92ae5ef5fe736748c65a",
+        "refsSha256": "841e485e5adfba369d9f14d30858b7424c43294858f7b7323d153e143c23dfb9"
+      },
+      "after": {
+        "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+        "indexEntriesSha256": "7ec471e055fda0d8b7ecad06cc74067163eec5a3563e92ae5ef5fe736748c65a",
+        "refsSha256": "841e485e5adfba369d9f14d30858b7424c43294858f7b7323d153e143c23dfb9"
+      },
+      "unchanged": true,
+      "source": [
+        {
+          "path": "convex/lib/nodeslideValidators.ts",
+          "sha256": "8a37b1a57278a9689ad4d1aacb11ac4ad9e7bb833a4f5658804ef94c3a7a81cb"
+        },
+        {
+          "path": "convex/lib/nodeslideAdmission.test.ts",
+          "sha256": "d46287d3ac7d9a1a393fe9a4665e2c3413f6155fa46bb30643e4384a7f3e5e29"
+        },
+        {
+          "path": ".tours/01-primary-user-flow.tour",
+          "sha256": "55be812065e25dbe438af99928d8470bc0bc934fa7760a7f06f8d47ba516592c"
+        },
+        {
+          "path": ".tours/03-debug-and-recovery.tour",
+          "sha256": "b91ff8afb9391d3de56a7188aaa7590463edb8e7201c4deaaafe7f32daf87a9b"
+        },
+        {
+          "path": "docs/codebase/CONCERNS.md",
+          "sha256": "2860a435ccad27f8314d133a10b542bb1f9437a7a9eb67ef1faf5879285142f3"
+        },
+        {
+          "path": "docs/codebase/INTEGRATIONS.md",
+          "sha256": "9ae7964e4379f023605bb2a9605b44e3781eda471ff143480c40b7fe0b4ff88f"
+        },
+        {
+          "path": "docs/START_HERE.md",
+          "sha256": "2613bebffe1c2f331c2eb8092d18a8010109e8251e16a359271cabd7de619249"
+        },
+        {
+          "path": "promotion/PROMOTION_LOG.md",
+          "sha256": "e145ed08ace4f8a94dedc9357a63ab23c0cb50ddf0e8519a135e9f0b6fc4d682"
+        }
+      ],
+      "sourceDigest": "a14ed41a1ae8a4b397673594cf90e637f25233b37bc87a4f60b18ee684f3892d",
+      "finalFreezeSha256": "17b00efab75d0ccb4a5a2aed72b6ea3e26534a3fee6f37d5c078ab0b097a8a89",
+      "additionalArtifactsExact": 12,
+      "citations": [
+        {
+          "path": ".tours/01-primary-user-flow.tour",
+          "only": "validator anchor 255 -> 256",
+          "step": 6,
+          "exactOtherBytes": true
+        },
+        {
+          "path": ".tours/03-debug-and-recovery.tour",
+          "only": "validator anchor 298 -> 299",
+          "step": 1,
+          "exactOtherBytes": true
+        },
+        {
+          "path": "docs/codebase/CONCERNS.md",
+          "only": "validator anchor 255 -> 256",
+          "occurrences": 1,
+          "exactOtherBytes": true
+        },
+        {
+          "path": "docs/codebase/INTEGRATIONS.md",
+          "only": "validator anchor 255 -> 256",
+          "occurrences": 1,
+          "exactOtherBytes": true
+        },
+        {
+          "path": "docs/START_HERE.md",
+          "only": "validator anchor 255 -> 256",
+          "occurrences": 1,
+          "exactOtherBytes": true
+        },
+        {
+          "path": "promotion/PROMOTION_LOG.md",
+          "only": "validator anchor 255 -> 256",
+          "occurrences": 1,
+          "exactOtherBytes": true
+        }
+      ],
+      "actualAnchorLines": {
+        "256": "export async function validateNodeSlidePreviewAdmission(args: {",
+        "299": "export function nodeslideCreatePublicError(code: NodeSlideCreateErrorCode, message: string) {"
+      },
+      "diffCheckExit": 0
+    }
+  },
+  "actualBrowserProof": {
+    "executor": "/root",
+    "reviewedScriptAndRawArtifacts": true,
+    "rootArtifactsExact": 20,
+    "viewport": {
+      "width": 1440,
+      "height": 960
+    },
+    "savedLf": 5,
+    "chartCount": 1,
+    "chartValues": [
+      100,
+      120,
+      140
+    ],
+    "chartLabels": [
+      "Month 1",
+      "Month 2",
+      "Month 3"
+    ],
+    "jsonSha256": "55a659d90a84afb05519e7eda483406670b2f0299a68f308f7cc24b3ce836b6e",
+    "pptxSha256": "96f14a7e1911d566692ca5bc543dfeb1bbfcbd79481c7babff333c35bdf6043c",
+    "nativeChartLinkedFromSlide4": true,
+    "unicodeNotesAndTitlePersisted": true,
+    "finalDeckVersion": 3,
+    "directlyViewed": [
+      "E6g-nodeslide-chart-fixture-01/05-chart-slide.png",
+      "E6g-nodeslide-multiline-browser-01/05-chart-slide.png",
+      "E6g-nodeslide-multiline-browser-01/02-deterministic-brief.png"
+    ],
+    "recordedConsoleErrors": 0,
+    "recordedExternalRequests": 0,
+    "reviewerRuntimeRequests": 0
+  },
+  "ordinaryFullCheck": {
+    "executor": "/root",
+    "rawLogIndependentlyRead": true,
+    "command": "npm run check",
+    "exitCode": 0,
+    "seconds": 138.0779999999795,
+    "rootFilesPassed": 316,
+    "rootTestsPassed": 2816,
+    "rootTestsSkipped": 7,
+    "workspaceTestsPassed": 42,
+    "workspaceBuildsPassed": 15,
+    "typechecksAndRootBuildPassed": true,
+    "largeChunkWarningRetained": true,
+    "log": "E6g-nodeslide-multiline-check-02/check.log"
+  },
+  "backendReliabilityReview": {
+    "BOUND": "Existing raw 4000-codepoint/8192-byte checks run before trim; exact and over-limit negatives pass. No collection added.",
+    "HONEST_STATUS": "Existing invalid_request errors/route behavior unchanged.",
+    "HONEST_SCORES": "No score or gate policy changed.",
+    "TIMEOUT": "No external operation or budget path changed; no broader timeout certificate.",
+    "SSRF": "No URL or fetch path changed.",
+    "BOUND_READ": "No external body read changed.",
+    "ERROR_BOUNDARY": "Existing thrown validation failures and handling unchanged.",
+    "DETERMINISTIC": "No hashing/CAS policy changed; exact normalized prompt now retains intended separators."
+  },
+  "newDependencies": 0,
+  "newPublicApis": 0,
+  "newConfigKnobs": 0,
+  "retainedFailures": [
+    "E6g-nodeslide-multiline-check-01: two citation failures and inherited OpenUI wait failure; untouched historical raw log.",
+    "Independent artifact reader initially assumed relative chart relationship, then one paragraph per note line. Both reader assertions are preserved with old scripts and corrected without changing app or artifacts.",
+    "An auxiliary reader attempted to parse an empty ZIP directory entry; tool failure retained. Subsequent XML/.rels-only inspection succeeded.",
+    "The finalizer initially asserted a guessed admission function name at the correct line 256. Reading that exact line showed validateNodeSlidePreviewAdmission; the reader assertion was corrected and the failed finalizer retained."
+  ],
+  "limits": [
+    "This accepts the eight-path multiline slice and supplied local browser/export proof, not whole-repository readiness or deployment.",
+    "Reviewer is a reused nonauthor across portfolio reviews. Independent pure/admission/artifact replay was performed; no second browser/backend execution was requested.",
+    "Actual browser proof is deterministic local source at 1440x960 with an owned loopback backend; no provider calls. Production, mobile, installed-consumer and native Office operation are not certified.",
+    "LF and CRLF CSV chart creation are proven. Bare CR is preserved but the existing parser does not recognize CR-only CSV.",
+    "The special metric CSV parser still uses generic unit value and does not establish source-column fidelity or prose-only chart inference. No general CSV support claim.",
+    "Native PPTX chart XML and slide relationship are verified; no native PowerPoint editing/rendering test was run.",
+    "The actual screenshots still show notes/footer crowding. Separate gate-detail disclosure and broader responsive/readability work remain open; all final criterion and dimension grades stay null.",
+    "One successful ordinary check does not establish timing stability. Earlier OpenUI and NodeBook timing failures remain preserved.",
+    "Repeated/concurrent action tests use existing mutation/ledger/provider stand-ins and do not establish durable quota correctness, sustained load, or external-provider reliability.",
+    "Before and after use distinct local synthetic deck instances/versions; visual review is functional comparison, not exact pixel-diff regression."
+  ],
+  "findingsBlockingThisSlice": [],
+  "fullGrades": null,
+  "criterionFinalScores": null,
+  "dimensionScores": null,
+  "deployed": false,
+  "providerCalls": 0,
+  "evidenceManifest": {
+    "path": "E6g-nodeslide-multiline-independent-01/judge-evidence-manifest.json",
+    "sha256": "a7c3b264b9af4a3a58ec69ab485c9226a6f9388e52bb9d49ac0d0bcf0e68e8e5",
+    "files": 29
+  }
+}

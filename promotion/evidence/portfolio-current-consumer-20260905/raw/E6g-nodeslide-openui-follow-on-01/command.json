@@ -1,0 +1,18 @@
+{
+  "command": [
+    "C:\\nvm4w\\nodejs\\node.EXE",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx",
+    "-t",
+    "opens the visual material lab from the live composer button",
+    "--reporter=verbose",
+    "--reporter=json",
+    "--outputFile.json=C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-openui-follow-on-01\\targeted.json"
+  ],
+  "cwd": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "exitCode": 0,
+  "elapsedMs": 4408,
+  "sourceUnchanged": true,
+  "scope": "Exactly one unchanged existing test. Unmatched sibling tests are NOT_RUN, not new source skips. No timeout/retry/config changes or provider calls; child environment names sanitized without values."
+}

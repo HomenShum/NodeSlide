@@ -1,0 +1,172 @@
+{
+  "schemaVersion": "portfolio.bounded-causal-diagnosis/v1",
+  "at": "2026-09-05T11:54:21.271518+00:00",
+  "mode": "Builder",
+  "verdict": "GATE_SCOPE_AND_MULTILINE_LOSS_CAUSALLY_IDENTIFIED_NO_IMPLEMENTATION",
+  "requestTrace": "Make each repo ready for developer/user handoff with visual, responsive and interaction standards; diagnose the actual NodeSlide first-use gate contradiction and unmet chart brief.",
+  "candidate": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "scope": "Read-only product diagnosis from observed synthetic deck and exact current source; nonauthor context reuse disclosed.",
+  "findings": [
+    {
+      "id": "NODESLIDE_GATE_DETAILS_SCOPE_MISMATCH",
+      "priority": "P1",
+      "observed": "Actual v3 failed Deck CI badge leads to Trace saying current validation passed and publish ready.",
+      "cause": "NodeSlideStudio queries evaluateLatest; InspectorPanel passes Deck CI only to AiInspector and routes its click to Trace. Trace receives workspace.validations without Deck CI. ValidationSummary promotes that narrower publishOk field to an unqualified readiness phrase.",
+      "exactBlocker": {
+        "code": "deck_composition_diversity_failed",
+        "message": "The final materialized deck repeats composition geometry: Slides 3 and 4 are near-duplicates (similarity: 0.98)"
+      },
+      "smallestRepair": "Pass the existing current Deck CI receipt/loading state to Trace; show the actual blocker and affected slide positions beside explicitly scoped structural validation. Reserve overall readiness language for a current, matching full gate result. Keep fail/loading/unavailable distinct; do not suppress or lower the diversity gate.",
+      "references": [
+        "src/domains/nodeslide/NodeSlideStudio.tsx:736",
+        "src/domains/nodeslide/inspector/InspectorPanel.tsx:552",
+        "src/domains/nodeslide/inspector/InspectorPanel.tsx:710",
+        "src/domains/nodeslide/inspector/TraceInspector.tsx:1419",
+        "convex/lib/nodeslideDeckCi.ts:327",
+        "convex/lib/nodeslideValidation.ts:258"
+      ]
+    },
+    {
+      "id": "NODESLIDE_DETERMINISTIC_BRIEF_LIMIT",
+      "priority": "P1",
+      "observed": "The explicit illustrative 100/120/140 chart request becomes a generic six-slide deck with no chart in either canonical JSON or actual PPTX.",
+      "cause": "Landing inserts generic purpose/audience; deterministicBriefSpec prefers purpose for opening and closing and emits a fixed narrative scaffold. Primitive generation recognizes special metric CSV/top-scorer phrases, not the supplied prose sequence. Deterministic creation skips the provider critique report.",
+      "smallestRepair": "Preserve the original unmet prose request and disclose the currently recognized data shape. The real CSV-append attempt also failed at normalization; repair that separate prompt seam before another UI/export proof. Do not invent NLP chart parsing or auto-dispatch a provider.",
+      "references": [
+        "src/domains/nodeslide/components/NodeSlideLanding.tsx:103",
+        "convex/lib/nodeslideSeed.ts:574",
+        "convex/lib/nodeslideSeed.ts:1052",
+        "convex/lib/nodeslideSeed.ts:1106",
+        "convex/lib/nodeslideSeed.ts:1149",
+        "convex/lib/nodeslideCreationCritique.ts:1425",
+        "convex/lib/nodeslideValidators.ts:247"
+      ]
+    },
+    {
+      "id": "NODESLIDE_MULTILINE_PROMPT_DESTROYED",
+      "priority": "P1",
+      "observed": "The exact supported CSV was submitted through the actual landing UI, but its five line breaks were flattened and the actual persisted deck/PPTX still contained zero charts.",
+      "cause": "validateNodeSlideCreateDeckFields sends prompt through the common single-line boundedCreateText helper, which collapses all whitespace. nodeslideAgent consumes that returned brief before deterministic generation. The line-oriented CSV parser consequently finds no standalone header.",
+      "proof": {
+        "textareaNewlines": 5,
+        "normalizedNewlines": 0,
+        "persistedNewlines": 0,
+        "normalizedEqualsPersistedPrompt": true,
+        "textareaCharacterCount": 472,
+        "textareaUtf8Bytes": 472
+      },
+      "smallestRepair": "Treat only brief.prompt as bounded multiline content. Preserve internal whitespace and Unicode, normalize CRLF/CR to LF if that is the declared contract, trim only outer whitespace, reject blank-only input, retain raw 4000-code-point and 8192-byte ceilings and all other field normalization. Do not split/reconstruct CSV in downstream renderers or add a chart-specific regex exception.",
+      "references": [
+        "convex/lib/nodeslideValidators.ts:73",
+        "convex/lib/nodeslideValidators.ts:306",
+        "convex/nodeslideAgent.ts:1823",
+        "convex/nodeslideAgent.ts:1853",
+        "convex/lib/nodeslideSeed.ts:1149"
+      ]
+    }
+  ],
+  "replay": {
+    "path": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-gate-brief-diagnosis\\offline-pure-replay.json",
+    "sha256": "a490364b82c3389a3792beabc8f5c1c90e25a4314c9d213c463a119904ef611d",
+    "inputSha256": "a7f5fa1d928fd6a6314d138d5eced53411567d4fb1e7c187de1a793aef2280e4",
+    "validationOk": true,
+    "publishOk": true,
+    "deckCiStatus": "fail",
+    "blockerCount": 1,
+    "existingSimilarityMetric": 0.98,
+    "metricIsNotPortfolioGrade": true
+  },
+  "exports": {
+    "pptxSha256": "3ee7f9c4c5290d797ae8b3ad6f8f0647cd6a991e67034ed7f77fca0239c22032",
+    "slides": 6,
+    "charts": 0,
+    "notesParts": 6,
+    "exactCurrentNoteLinesPresent": true,
+    "htmlSha256": "02905d41ecfbb9bfe084e5951c1730846a3f5ce700c804d9708c2244b52b14e2",
+    "htmlCurrentNoteLinesPresent": true
+  },
+  "sourceBindings": {
+    "count": 54,
+    "path": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-gate-brief-diagnosis\\source-bindings.json",
+    "sha256": "4c0efc21b2a5d052a9d534167534be4633fc2852efc89bf8f4593f7b3a047d58",
+    "allCurrentExact": true
+  },
+  "observedBindings": {
+    "count": 16,
+    "path": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-gate-brief-diagnosis\\observed-bindings.json",
+    "sha256": "7b376c7a7cd2c316437ce211b25960b4286cf5ea0583c934a03e8e326983f152"
+  },
+  "supportedInput": {
+    "csvPath": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-gate-brief-diagnosis\\supported-metrics.csv",
+    "csvSha256": "a460d7f1d2759a9f5c10bc11b56548357311498151d70fba4f80dc7fd4c019aa",
+    "attachmentPath": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-gate-brief-diagnosis\\supported-attachment.json",
+    "contract": {
+      "title": "nonempty, maximum 180 characters/540 UTF-8 bytes, unique case-insensitive",
+      "format": "csv",
+      "content": "normalized nonempty text, per-file 24000 UTF-8 bytes; at most 3 attachments/60000 total bytes"
+    },
+    "expectedPlannedChart": {
+      "slideIndex": 3,
+      "title": "Uploaded comparison",
+      "chart": {
+        "labels": [
+          "Month 1",
+          "Month 2",
+          "Month 3"
+        ],
+        "values": [
+          100,
+          120,
+          140
+        ],
+        "unit": "value"
+      }
+    },
+    "replayScope": "Original pure plan retained; new offline materializer cause proof is supplemental. Real CSV-append creation failed. Attachment UI path remains untested.",
+    "status": "CSV_HEADER_SUPPORTED_BY_PARSER_BUT_INLINE_UI_PROMPT_PATH_BROKEN"
+  },
+  "nextProof": [
+    "Freeze both actual failing journeys and current source before editing.",
+    "Capture labelled boundaries for the failed Deck CI→Trace detail and multiline input→chart output jobs.",
+    "Make a bounded prompt-only multiline normalization repair; keep single-line metadata and all input size/admission/provider gates unchanged.",
+    "Verify LF/CRLF/CR, internal spacing/Unicode, blank input and raw character/byte overlimits through actual validator and deterministic materialization; include exact old-normalizer knockout.",
+    "Through ordinary owned local UI, resubmit the exact original brief plus CSV, reload and export; independently verify canonical chart and actual PPTX chart values, labels and current notes. Keep original prose-only request unmet.",
+    "In a separate closed UI scope, pass current Deck CI details/loading into Trace and use explicitly scoped validation/readiness wording, without suppressing the existing layout blocker."
+  ],
+  "limitations": [
+    "No new browser, backend request, provider/model call, dependency install, application build, native Office call, or candidate source/index/ref mutation. Only existing pure modules were compiled in memory for offline evaluation.",
+    "The offline Deck CI replay uses the exported v3 snapshot and exact current evaluator bytes. It is not a captured Convex response; agreement with the displayed count/status and deterministic evaluateLatest source supports the causal attribution.",
+    "Original CSV parser result was a planned spec only. A later separate pure materializer replay proves chart survival only for intact multiline input and the attachment path; the actual CSV-append UI journey failed. Neither pure result proves a repaired persisted/exported chart.",
+    "Metric CSV primitive parsing uses the first literal metric,value,unit,source header, at most the following 100 lines, simple comma splitting and first eight finite numeric rows for generic charts; it is not a general RFC CSV parser. The generic chart unit is value; source-column text is not consumed by this parser.",
+    "The original natural-language chart request remains unmet. CSV is an explicitly different supported input and does not retroactively satisfy the original request.",
+    "Root owns concurrent responsive first-use evidence. Current notes-control overlap and doubled-content clipping are separate recorded observations, not evaluated or graded here.",
+    "No full readiness, human usage, native PowerPoint compatibility, deployment, production quality, or 44-criterion score is inferred. Full grades stay null and the 4.5 target stays unchanged.",
+    "Reviewer context is reused across portfolio slices; this reviewer did not author NodeSlide product changes. Earlier failed read probes were missing guessed file paths only; no product command or test failure was hidden.",
+    "Root real CSV-append counterexample supersedes any implication that pure parser support is already usable through the landing textarea. The original pure receipt is retained without promoting it to a user-journey pass."
+  ],
+  "fullGrades": null,
+  "overall": null,
+  "humanUsage": null,
+  "target": 4.5,
+  "normalizationReplay": {
+    "path": "C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-nodeslide-gate-brief-diagnosis\\normalization-cause.json",
+    "sha256": "6e117121c0accca50264ea9c049e2bcb9306a4edd4b2eb5cfd36f72b29b789d5",
+    "trace": {
+      "textareaNewlines": 5,
+      "normalizedNewlines": 0,
+      "persistedNewlines": 0,
+      "normalizedEqualsPersistedPrompt": true,
+      "textareaCharacterCount": 472,
+      "textareaUtf8Bytes": 472
+    },
+    "actualInputSha256": "e581b89b7e387c4364917f51137b89b48a5bbcee068bc91a8db862c26145a87f",
+    "intactPlannedChartCount": 1,
+    "normalizedPlannedChartCount": 0,
+    "intactMaterializedChartCount": 1,
+    "normalizedMaterializedChartCount": 0,
+    "actualPersistedChartCount": 0,
+    "attachmentMaterializedChartCount": 1,
+    "scope": "Actual input/output plus pure causality; no repaired UI journey yet"
+  }
+}

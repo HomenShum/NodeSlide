@@ -1,0 +1,278 @@
+{
+  "proof": "NODESLIDE-DECK-CI-DETAIL-01",
+  "mode": "Builder",
+  "at": "2026-09-05T15:14:18.889226+00:00",
+  "verdict": "APPROVED_SCOPED_DECK_CI_DETAIL_SOURCE_AND_PRODUCT_PROOF",
+  "requestTrace": "Make each repo ready for usage and handoff, with visual/responsive/interaction standards: an author can now open the current failed deck check and see the actual reason instead of mistaking a narrower passed receipt for overall readiness.",
+  "reviewer": "/root/provider_ci_closure_judge",
+  "implementationAuthor": "/root",
+  "reviewerReusedAcrossPortfolio": true,
+  "nonauthor": true,
+  "repo": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "baseHead": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "source": [
+    {
+      "path": "convex/lib/nodeslideTraceUi.test.tsx",
+      "sha256": "a463eef53d1904cb485f5bbf645c09afab1db70226b55164829d7c73830db72c",
+      "bytes": 6383
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/DeckCiStatus.css",
+      "sha256": "78ee214d7c185a639f0f104b925f7ca8be3ae29cbe1703bfb5c0406f7345fade",
+      "bytes": 1581
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/InspectorPanel.test.ts",
+      "sha256": "61ce55333d09579b5cfbb8e3f98e0e7d505a897ee20722af0d6a50d4abf6eef1",
+      "bytes": 7877
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/InspectorPanel.tsx",
+      "sha256": "aae48f4f88369fba10ff1316d32f00cd3e9054cf490335577b03eba837d19137",
+      "bytes": 31637
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/TraceInspector.test.tsx",
+      "sha256": "9dc3e620a3481d7a92a98f916ccffc0b3d0fe4b160b00ce8c68facdb3c5dcc3a",
+      "bytes": 24663
+    },
+    {
+      "path": "src/domains/nodeslide/inspector/TraceInspector.tsx",
+      "sha256": "83584eea5fd9bd230dc519ec5fd5d1e7395a7a626d137e81cef0c358391c0dad",
+      "bytes": 56359
+    }
+  ],
+  "sourceDigest": "e612c4db17477009f1f0e1623fda781cdd577788c392d1db4c7a7645b98ae422",
+  "freezeSha256": "62bfbfc14b4ff4ab0cc29b80f487a8e56914d9cede931c027ba0e3bc5fcdc184",
+  "frozenArtifactsExact": 89,
+  "causalChain": [
+    "Studio queried the broader current Deck CI but passed it only toward AI. Trace substituted ordinary core validation and called it publish ready.",
+    "InspectorPanel now checks deck identity and version once, forwarding the same eligible result to AI and Trace.",
+    "Trace always renders current-version Deck CI detail even with no traces. Pending/unavailable remove prior checks and settled counts; real non-info check messages are shown unchanged.",
+    "Historical core validation and sticky footer now explicitly state core/recorded version scope without changing stored booleans or export policy.",
+    "The reused count row wraps after actual doubled-text clipping; the loading pulse and keyframes are removed."
+  ],
+  "sourceReview": {
+    "runtimeOwners": 3,
+    "testOwners": 3,
+    "newDependencies": 0,
+    "backendOrExportPolicyChanged": false,
+    "singleIdentityVersionFilter": true,
+    "loadingSuppressesDetails": true,
+    "historicalReceiptsRetained": true,
+    "sixBeforeSourcesExactHead": true,
+    "whitespaceCheckExit": 0,
+    "copyOnlySixthTestAmendmentVerified": true
+  },
+  "rootCommands": {
+    "targeted": {
+      "files": 5,
+      "testsPassed": 60,
+      "exitCode": 0,
+      "log": "E6g-nodeslide-readiness-check-02/targeted.log"
+    },
+    "normal": {
+      "rootFiles": 316,
+      "rootTestsPassed": 2823,
+      "rootTestsSkipped": 7,
+      "workspaceTestsPassed": 42,
+      "workspaceBuilds": 15,
+      "lintTypechecksRootBuildPassed": true,
+      "exitCode": 0,
+      "seconds": 145.85899999993853,
+      "log": "E6g-nodeslide-readiness-check-02/normal-check.log"
+    },
+    "rawLogsIndependentlyRead": true,
+    "reviewerRepeatedSuites": false
+  },
+  "actualProductEvidence": {
+    "executor": "/root",
+    "scriptIndependentlyRead": true,
+    "journeys": 12,
+    "decks": 2,
+    "statuses": [
+      "fail",
+      "pass"
+    ],
+    "currentVersion": 3,
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 1440,
+        "height": 960
+      }
+    ],
+    "normalCaptures": 4,
+    "inspectorFont200Captures": 4,
+    "countRangesFullyInsideBoxes": 4,
+    "captures": [
+      {
+        "path": "E6g-nodeslide-readiness-browser-02/1440-fail-normal.png",
+        "sha256": "796b99988d053241fec70b7b831bfcdfd9a022759d7da73246f849a085e28a9f",
+        "sidecarSha256": "faa217a6edbfd9cdf418741c8681c7f2dd4195b7eb92b587d4778050c8114b1a",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "path": "E6g-nodeslide-readiness-browser-02/1440-fail-text200.png",
+        "sha256": "d7e8e1a33f416f0645ce9dc757f31c092172ac8de539d68f035f5cc38b198adc",
+        "sidecarSha256": "9b8e21b1b40d57a4f0cf4d25c86a574a3711b3e330457af7d2051cc54dd21a4b",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "path": "E6g-nodeslide-readiness-browser-02/1440-pass-normal.png",
+        "sha256": "3c726e38b29d59b5db63dc5e484193b1b272602a33b5d37ff51c21b0c426860f",
+        "sidecarSha256": "b8afdb307a0094869d61d2b886143994c2915729171539ab526cf18489309cbe",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "path": "E6g-nodeslide-readiness-browser-02/1440-pass-text200.png",
+        "sha256": "a2da13611c8a13bd6700af2742aab8f8baef57d9f289985f865a4064df221e3a",
+        "sidecarSha256": "291edd4756649f1ec60705705e4263b0f4fde952861c45a0c204a67ff2fbfbbc",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "path": "E6g-nodeslide-readiness-browser-02/390-fail-normal.png",
+        "sha256": "e35fa64f41fb308d4be2f4a675ba3580563b1ffcb4c9ecc278089c64de718fb5",
+        "sidecarSha256": "0eb4c455909d0fb6470f7a24a3c4f596cb050375bebbce5f3d1343ad666aaabd",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      {
+        "path": "E6g-nodeslide-readiness-browser-02/390-fail-text200.png",
+        "sha256": "60d5b4baf8a970e97ed5d5850fa862c056ea2273a1f5580d85ca56379ed1c0f0",
+        "sidecarSha256": "de9506986d8377d382d04601f8ec2e909a0c4a227d57464d1e3ed453eeacee3f",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      {
+        "path": "E6g-nodeslide-readiness-browser-02/390-pass-normal.png",
+        "sha256": "7014f8801d081951b760d6cfccf7c137d03107e76b69c2505deec9b42fe6b4c2",
+        "sidecarSha256": "42b4b05faa71ab3a14f3a8d80ba8f695b5ac319490aa26eec2fd27acc7cbadbf",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        }
+      },
+      {
+        "path": "E6g-nodeslide-readiness-browser-02/390-pass-text200.png",
+        "sha256": "ec9cd1eb848334639f9717bee2b130d79caf24b87ed41cc23ad4fe19ca987f6b",
+        "sidecarSha256": "0d299ffe14559e5a024e51f56f887b87e522b38b7dcb6938a4bd0dca8cc8de0f",
+        "viewport": {
+          "width": 390,
+          "height": 844
+        }
+      }
+    ],
+    "recordedConsoleErrors": 0,
+    "blockedExternalRequests": 0
+  },
+  "independentMountedComponentEvidence": {
+    "functionalTransitions": 54,
+    "styledSupplementTransitions": 18,
+    "rounds": {
+      "functional": 3,
+      "styled": 1
+    },
+    "states": [
+      "fail",
+      "pending",
+      "null",
+      "stale",
+      "cross-deck",
+      "warn",
+      "pass",
+      "version-change",
+      "current-new"
+    ],
+    "bothAiAndTraceAgree": true,
+    "eachTransitionHidesIncorrectOldMessage": true,
+    "noAgentTracesStillShowsChecks": true,
+    "oldCssMotionKnockouts": [
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "oldAnimation": "ns-deck-ci-pulse",
+        "currentAnimation": "none",
+        "scope": "Exact old stylesheet inserted and removed only in this synthetic page; source unchanged"
+      },
+      {
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        },
+        "oldAnimation": "ns-deck-ci-pulse",
+        "currentAnimation": "none",
+        "scope": "Exact old stylesheet inserted and removed only in this synthetic page; source unchanged"
+      }
+    ],
+    "consoleErrors": 0,
+    "externalRequests": 0,
+    "sourceIndexRefsUnchanged": true,
+    "reports": [
+      "E6g-nodeslide-readiness-independent-02/rendered-transitions.json",
+      "E6g-nodeslide-readiness-independent-03/rendered-transitions.json"
+    ],
+    "visualScope": "Fixture chrome differs from product. Phone pending visibly inspected; desktop fixture layout is incomplete and excluded from visual acceptance."
+  },
+  "pixelsDirectlyInspected": [
+    "E6g-nodeslide-readiness-before-02/1440-trace-boundary.png",
+    "E6g-nodeslide-readiness-before-04/390-trace-boundary.png",
+    "E6g-nodeslide-counts-before/1440-fail-text200.png",
+    "E6g-nodeslide-readiness-browser-02/390-fail-normal.png",
+    "E6g-nodeslide-readiness-browser-02/390-fail-text200.png",
+    "E6g-nodeslide-readiness-browser-02/1440-pass-normal.png",
+    "E6g-nodeslide-readiness-browser-02/1440-fail-text200.png",
+    "E6g-nodeslide-readiness-browser-02/390-pass-normal.png",
+    "E6g-nodeslide-readiness-independent-03/390-pending.png"
+  ],
+  "failuresRetained": [
+    "Root first detail/phone probes: lazy opening, unmounted/hidden inspector; corrected selectors retained alongside failures.",
+    "Root normal check01 failed existing old-heading expectations; sixth test owner updates two strings and adds no-publish-ready assertion, without changing scenario/versions.",
+    "Reviewer host01 omitted standard Vite React refresh preamble and failed before mount with $RefreshSig$ undefined. Exact old wrapper and failed report retained.",
+    "Reviewer host02 passed functional DOM checks but omitted studio CSS; raw screenshots and script retained. Host03 adds those actual styles and verifies exact prior loading pulse in page-only knockout; its incomplete desktop host layout limits visual claims.",
+    "Reviewer source reader first used unsorted JSON serialization from the previous freeze and aborted before any proposed test. Actual generator uses sort_keys=True; failed reader and assertion retained, corrected readback passed."
+  ],
+  "limits": [
+    "Six-source NODESLIDE-DECK-CI-DETAIL-01 approval only. Publication/HANDOFF work is outside this freeze and is not reviewed by this source judgment.",
+    "Original 4173/4174 and stopped root loopback supervisors were neither restarted nor queried. Reviewer synthetic host used 4976 and closed.",
+    "Twelve root journeys use two retained actual synthetic decks and native Tab/Enter from a deliberately focused AI tab; they are not full-page keyboard navigation or assistive-technology coverage.",
+    "Two-width actual product captures cover normal text and doubling computed inspector font sizes only, not browser/OS zoom, other browsers, devices or all seven widths.",
+    "Mounted-component transition fixtures are explicitly synthetic. The first successful host omitted studio CSS and proves DOM/state only. The later host includes studio CSS; its desktop panel layout clips content in the incomplete host, so desktop fixture screenshots are not accepted visual evidence. The actual product desktop screenshots support the scoped visual claim.",
+    "The 54 repeated plus 18 supplementary transitions prove tested React prop/state replacement without stale messages; they do not prove concurrent backend ordering, sustained load or performance.",
+    "Enlarged navigation, density controls and sticky footer still clip; notes/pager overlap remains visible. The fixed count row does not close those defects.",
+    "Current normal check passed once. Earlier OpenUI/NodeBook timing failures remain historical evidence, not erased or declared stable.",
+    "No native Office, model provider, production deployment, complete responsive/accessibility audit or human acceptance is certified. Whole criterion/dimension/product grades remain null."
+  ],
+  "findingsBlockingThisSlice": [],
+  "fullGrades": null,
+  "criterionFinalScores": null,
+  "dimensionScores": null,
+  "deployed": false,
+  "providerCalls": 0,
+  "evidenceManifest": {
+    "path": "E6g-nodeslide-readiness-independent-manifest.json",
+    "sha256": "8c14ef4215c87c24a811e2e5286337a44ac35b99cfe31a20d5e4a5380cff2519",
+    "artifacts": 91
+  }
+}

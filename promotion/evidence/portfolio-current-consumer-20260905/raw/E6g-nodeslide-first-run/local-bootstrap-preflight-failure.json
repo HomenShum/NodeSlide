@@ -1,0 +1,13 @@
+{
+  "at": "2026-09-05T11:14:21.808058+00:00",
+  "command": "E6g-bootstrap-nodeslide-local.py",
+  "stage": "port preflight before subprocess launch",
+  "result": "WinError10013 binding explicit54821; no backend started, source pushed or admission set",
+  "createdPaths": [
+    "D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-01",
+    ".convex empty candidate directory"
+  ],
+  "acl": "current user and SYSTEM only verified before failure",
+  "next": "New exclusive attempt02 uses OS-assigned bindable ports; existing empty owned directory is guarded and retained.",
+  "retryPreparation": "Initial nested shell-quote attempt failed at PowerShell parsing; no backend command dispatched."
+}

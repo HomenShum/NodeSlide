@@ -1,0 +1,23 @@
+{
+  "at": "2026-09-05T12:18:01.436723+00:00",
+  "requests": [
+    {
+      "runtime": "local-loopback-runtime.json",
+      "recordedPid": 19104,
+      "recordedProcessCreated": 1788607043.31928,
+      "identityVerifiedOrAlreadyExited": true,
+      "runningAtRequest": false,
+      "stopMarkerWritten": false
+    },
+    {
+      "runtime": "vite-runtime.json",
+      "recordedPid": 18688,
+      "recordedProcessCreated": 1788607410.749946,
+      "identityVerifiedOrAlreadyExited": true,
+      "runningAtRequest": true,
+      "stopMarkerWritten": true
+    }
+  ],
+  "original4173And4174": "UNTOUCHED",
+  "secrets": "NOT_OUTPUT"
+}

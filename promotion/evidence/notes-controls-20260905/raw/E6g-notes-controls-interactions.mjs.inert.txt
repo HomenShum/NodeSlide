@@ -1,0 +1,65 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {fileURLToPath} from 'node:url';
+import {createHash} from 'node:crypto';
+const P=path.dirname(fileURLToPath(import.meta.url));
+const R='D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905';
+const req=createRequire(path.join(R,'package.json'));const {chromium}=req('playwright');const {expect}=req('playwright/test');const JSZip=req('jszip');
+const base='D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02';
+const O=path.join(P,'E6g-nodeslide-notes-interactions-01');const priv=path.join(base,'notes-interactions-01');await fs.mkdir(O);await fs.mkdir(priv);
+const {url}=JSON.parse(await fs.readFile(path.join(base,'browser-first-use-01/deck-location.json'),'utf8'));
+const storage=JSON.parse(await fs.readFile(path.join(base,'browser-first-use-01/storage-state.json'),'utf8'));
+const secrets=[];for(const origin of storage.origins)for(const item of origin.localStorage){if(item.name.includes('sessionId'))secrets.push(item.value);if(item.name==='nodeslide.deckAccess.v1')secrets.push(...Object.values(JSON.parse(item.value)));}
+const safe=s=>secrets.reduce((value,secret)=>secret?value.replaceAll(secret,'[PRIVATE_SESSION]'):value,String(s));
+const hash=b=>createHash('sha256').update(b).digest('hex');
+const report={proof:'NODESLIDE-NOTES-CONTROLS-01',startedAt:new Date().toISOString(),source:[],steps:[],files:[],errors:[],blockedOrigins:[],fullGrades:null};
+for(const name of ['src/domains/nodeslide/components/SlideCanvas.tsx','src/domains/nodeslide/nodeslide.css','src/domains/nodeslide/nodeslideV3.css'])report.source.push({path:name,sha256:hash(await fs.readFile(path.join(R,name)))});
+const browser=await chromium.launch();let lastNote='';let beforeNote='';let page;
+async function settled(p){await p.getByTestId('slide-canvas').waitFor();await p.getByTestId('slide-notes-strip').waitFor();}
+async function openNotes(p){const toggle=p.getByRole('button',{name:/Presenter notes/});if(await toggle.getAttribute('aria-expanded')!=='true')await toggle.click();await expect(p.getByLabel(/^Presenter notes for /)).toBeVisible();}
+async function capture(p,name){await p.evaluate(()=>document.fonts.ready);await p.screenshot({path:path.join(O,name+'.png')});await fs.writeFile(path.join(priv,name+'.html'),await p.content());const d=await p.evaluate(()=>({bodyText:document.body.innerText,focus:document.activeElement?.getAttribute('aria-label')??document.activeElement?.textContent,overflow:document.documentElement.scrollWidth-innerWidth,viewport:{width:innerWidth,height:innerHeight},notes:document.querySelector('.ns-notes-strip textarea')?.value,controls:[...document.querySelectorAll('.ns-canvas-controls button,.ns-notes-strip button,.ns-notes-strip textarea')].map(e=>{const r=e.getBoundingClientRect();const h=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return{label:e.getAttribute('aria-label')??e.textContent,width:r.width,height:r.height,centerHit:e===h||e.contains(h),inViewport:r.x>=0&&r.y>=0&&r.right<=innerWidth&&r.bottom<=innerHeight};})}));await fs.writeFile(path.join(O,name+'.json'),safe(JSON.stringify(d,null,2))+'\n');}
+async function saveDownload(p,format,name,expectedNote){
+ if(format==='json'){await p.getByTestId('inspector-tab-json').click();}else{await p.getByLabel('Export deck',{exact:true}).click();await p.getByTestId('export-pptx').waitFor();}
+ const promise=p.waitForEvent('download',{timeout:15000});
+ await (format==='json'?p.getByRole('button',{name:'Download deck.json',exact:true}):p.getByTestId('export-pptx')).click();
+ const download=await promise;const file=path.join(priv,name+'.'+format);await download.saveAs(file);const b=await fs.readFile(file);let contents;
+ if(format==='json'){contents=b.toString('utf8');const parsed=JSON.parse(contents);expect(parsed.slides[0].notes).toBe(expectedNote);}else{const zip=await JSZip.loadAsync(b);contents=(await Promise.all(Object.keys(zip.files).filter(n=>n.endsWith('.xml')&&!zip.files[n].dir).map(n=>zip.file(n).async('string')))).join('\n');expect(contents).toContain(expectedNote.split('\n')[0]);}
+ expect(secrets.some(s=>s&&contents.includes(s))).toBe(false);expect(await download.failure()).toBeNull();await fs.copyFile(file,path.join(O,name+'.'+format));report.files.push({path:name+'.'+format,bytes:b.length,sha256:hash(b),expectedNote});
+ if(format==='json')await p.getByTestId('inspector-tab-ai').click();
+}
+async function newContext(viewport){const c=await browser.newContext({storageState:storage,viewport,acceptDownloads:true,serviceWorkers:'block'});await c.route('**/*',r=>{const u=new URL(r.request().url());if(['http:','https:'].includes(u.protocol)&&u.hostname!=='127.0.0.1'){report.blockedOrigins.push(u.origin);return r.abort();}return r.continue();});page=await c.newPage();page.setDefaultTimeout(30000);page.on('pageerror',e=>report.errors.push(safe(e.message)));page.on('console',m=>{if(m.type()==='error')report.errors.push(safe(m.text()));});await page.goto(url,{waitUntil:'domcontentloaded'});await settled(page);await openNotes(page);return c;}
+try{
+ for(const cell of [{width:1440,height:960,textPercent:100},{width:390,height:844,textPercent:100},{width:320,height:844,textPercent:200}]){
+  const c=await newContext({width:cell.width,height:cell.height});
+  const notes=()=>page.getByLabel(/^Presenter notes for /);const version=()=>page.locator('.ns-version-label').textContent().then(t=>Number(t.match(/v(\d+)/)?.[1]));
+  if(!beforeNote){beforeNote=await notes().inputValue();await saveDownload(page,'json','before',beforeNote);await saveDownload(page,'pptx','before',beforeNote);}
+  if(cell.textPercent===200)await page.evaluate(()=>{const a=[...document.querySelectorAll('body,body *')].map(e=>[e,parseFloat(getComputedStyle(e).fontSize)]);for(const[e,size]of a)if(Number.isFinite(size)&&e instanceof HTMLElement)e.style.fontSize=`${size*2}px`;});
+  const previous=page.getByRole('button',{name:'Previous slide',exact:true});const next=page.getByRole('button',{name:'Next slide',exact:true});
+  await expect(previous).toBeDisabled();
+  for(let round=1;round<=4;round++){
+   lastNote=`Notes handoff ${cell.width} round ${round}: 00123 stays text; 中文交接.\nPresenter decision: compare the next slide, then return to this note.`;
+   const priorVersion=await version();await notes().fill(lastNote);
+   // A real click triggers blur and navigation together; do not wait away this boundary.
+   await next.click();await expect(page.locator('.ns-slide-stepper')).toContainText('2 / 6');
+   await previous.click();await expect(page.locator('.ns-slide-stepper')).toContainText('1 / 6');await openNotes(page);
+   await expect(notes()).toHaveValue(lastNote);await expect.poll(version).toBe(priorVersion+1);
+   await notes().focus();let tabs=0;while(!await next.evaluate(e=>e===document.activeElement)&&tabs<40){await page.keyboard.press('Shift+Tab');tabs++;}expect(tabs).toBeLessThan(40);await page.keyboard.press('Enter');await expect(page.locator('.ns-slide-stepper')).toContainText('2 / 6');await previous.click();await openNotes(page);await expect(notes()).toHaveValue(lastNote);
+   report.steps.push({cell,round,note:lastNote,priorVersion,currentVersion:await version(),nativeReverseTabsToNext:tabs,blurNextPreviousPreserved:true});
+  }
+  const zoom=page.locator('.ns-zoom-value');const originalZoom=parseInt(await zoom.textContent(),10);
+  for(let n=0;n<3;n++)await page.getByRole('button',{name:'Zoom in',exact:true}).click();await expect(zoom).toHaveText(`${originalZoom+15}%`);
+  for(let n=0;n<3;n++)await page.getByRole('button',{name:'Zoom out',exact:true}).click();await expect(zoom).toHaveText(`${originalZoom}%`);
+  await page.getByRole('button',{name:'Fit slide to workspace',exact:true}).focus();await page.keyboard.press('Enter');await expect(zoom).toHaveText('65%');
+  const toggle=page.getByRole('button',{name:/Presenter notes/});await toggle.focus();await page.keyboard.press('Enter');await expect(toggle).toHaveAttribute('aria-expanded','false');await page.keyboard.press('Enter');await expect(toggle).toHaveAttribute('aria-expanded','true');
+  await capture(page,`${cell.width}-${cell.textPercent}-actions`);
+  await page.reload({waitUntil:'domcontentloaded'});await settled(page);await openNotes(page);await expect(notes()).toHaveValue(lastNote);
+  for(let i=0;i<5;i++)await next.click();await expect(page.locator('.ns-slide-stepper')).toContainText('6 / 6');await expect(next).toBeDisabled();for(let i=0;i<5;i++)await previous.click();await expect(previous).toBeDisabled();await openNotes(page);await expect(notes()).toHaveValue(lastNote);
+  report.steps.push({cell,name:'zoom-burst-fit-native-toggle-reload-and-first-last-boundaries',passed:true});await capture(page,`${cell.width}-reloaded`);await c.close();
+ }
+ const c=await newContext({width:1440,height:960});await expect(page.getByLabel(/^Presenter notes for /)).toHaveValue(lastNote);await saveDownload(page,'json','after',lastNote);await saveDownload(page,'pptx','after',lastNote);await capture(page,'1440-final-export');await c.close();
+ for(const row of report.files)expect(hash(await fs.readFile(path.join(O,row.path)))).toBe(row.sha256);
+ for(const row of report.source)expect(hash(await fs.readFile(path.join(R,row.path)))).toBe(row.sha256);
+ expect(report.errors).toEqual([]);expect(report.blockedOrigins).toEqual([]);report.status='PASS_BOUNDED_NATIVE_ACTIONS_AND_ACTUAL_FILES';
+}catch(e){report.status='FAILED';report.failure=safe(e.stack??e);if(page&&!page.isClosed())await capture(page,'failure').catch(()=>{});process.exitCode=1;}
+finally{await browser.close();report.finishedAt=new Date().toISOString();await fs.writeFile(path.join(O,'report.json'),safe(JSON.stringify(report,null,2))+'\n');console.log(JSON.stringify({status:report.status,steps:report.steps.length,files:report.files.length,errors:report.errors.length,failure:report.failure??null}));}

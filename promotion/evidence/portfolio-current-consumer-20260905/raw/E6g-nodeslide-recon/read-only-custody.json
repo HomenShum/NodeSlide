@@ -1,0 +1,1266 @@
+{
+  "recordedAt": "2026-09-05T10:43:49.810909+00:00",
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide: HEAD unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide: exact refs unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide: exact worktree registration unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/NodeSlide: index bytes unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/NodeSlide: status metadata unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide: remote main still frozen commit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:\\VSCode Projects\\nodeslide: HEAD unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:\\VSCode Projects\\nodeslide: exact refs unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:\\VSCode Projects\\nodeslide: exact worktree registration unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:/VSCode Projects/nodeslide: index bytes unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:/VSCode Projects/nodeslide: status metadata unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:/VSCode Projects/Ideaflow/consumer-proof-nodeslide: index bytes unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:/VSCode Projects/Ideaflow/consumer-proof-nodeslide: status metadata unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "D:\\VSCode Projects\\nodeslide: remote main still frozen commit",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "42 named current source copies equal immutable Git blobs",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Canonical tree exact",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "Current full recursive tree contains no AGENTS.md or CLAUDE.md",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "Proposed candidate path and branch do not already exist",
+      "passed": true,
+      "detail": null
+    }
+  ],
+  "holdingsAfter": [
+    {
+      "repo": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+      "head": "b112cffddaafe08ddbbfabc54a4dd8e6e9c4b10e",
+      "refsSha256": "464559a6759ce9b1816daeb4f2fdcb150752069c8333783c1cb5da8a9764cf6e",
+      "worktreeRegistrationSha256": "cc95e4c08ab13f642f23ab5d4fdeda80f05eb53655094a9995d0b4625d89e9e8",
+      "worktrees": [
+        {
+          "worktree": "D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/NodeSlide",
+          "indexSha256": "74ac63e03136c1944f7984956e986c811b730f0facd70cfac02f046c22523ab0",
+          "statusSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "statusArgs": [
+            "status",
+            "--porcelain=v1",
+            "-z",
+            "--untracked-files=all"
+          ]
+        }
+      ],
+      "remoteMain": "ref: refs/heads/main\tHEAD\nb0674b229a3691c09c88fcab1481f2e33342cb21\tHEAD\nb0674b229a3691c09c88fcab1481f2e33342cb21\trefs/heads/main\n"
+    },
+    {
+      "repo": "D:\\VSCode Projects\\nodeslide",
+      "head": "0a3ef965d6a4ba118a72d15aeaf9a5ace6fd9182",
+      "refsSha256": "162612a3154e221bb497d99942ec2cce10de8ca78f6f2aa13ff36f4261d0e4cf",
+      "worktreeRegistrationSha256": "c1aad9c1475781dea0d1d2d1a9633c389287afa5431e7fbd5c19f722b63555ab",
+      "worktrees": [
+        {
+          "worktree": "D:/VSCode Projects/nodeslide",
+          "indexSha256": "f4ca163428f6a46528a8a2e0201252775a2ac615c4e7c576d38b10c5662079d3",
+          "statusSha256": "ef3c0054b8ea6bf9794e9f0513a06828b49a7f7770a8010dbc5af3be0fd6e964",
+          "statusArgs": [
+            "status",
+            "--porcelain=v1",
+            "-z",
+            "--untracked-files=all"
+          ]
+        },
+        {
+          "worktree": "D:/VSCode Projects/Ideaflow/consumer-proof-nodeslide",
+          "indexSha256": "1628ef8e00cf0dc69364e2e390fa1c21bc6902f17d14e6d4e906e68622f60aaa",
+          "statusSha256": "d3e46681900fd2076d43330c243a7d589d7e82ee2bdb2c0847db0d22ee3fe13d",
+          "statusArgs": [
+            "status",
+            "--porcelain=v1",
+            "-z",
+            "--untracked-files=all"
+          ]
+        }
+      ],
+      "remoteMain": "ref: refs/heads/main\tHEAD\nb0674b229a3691c09c88fcab1481f2e33342cb21\tHEAD\nb0674b229a3691c09c88fcab1481f2e33342cb21\trefs/heads/main\n"
+    }
+  ],
+  "sourceCopies": [
+    {
+      "path": "README.md",
+      "gitBlob": "1e2f06342c76575cb85b5ec28d7a70660895bf62",
+      "sha256": "895c9b1e3c2287c83a3c8452ca4eacea6e03ac593c84a33b5104433255ca495e",
+      "bytes": 38094,
+      "exactGitBlob": true
+    },
+    {
+      "path": "docs/START_HERE.md",
+      "gitBlob": "fec3108ce5a4f65ad76083135ed3a2d6c3690fca",
+      "sha256": "2310a099f22b314c2634922ef0e5ab324d9eedbca9f513558a1dbf1c9d1cb0b7",
+      "bytes": 20433,
+      "exactGitBlob": true
+    },
+    {
+      "path": "docs/codebase/CONCERNS.md",
+      "gitBlob": "6c8c777ab1c74dd4eb51d0f14caea2569c013dd1",
+      "sha256": "000d3a9c5f5ffed6c7b48329fd508ee2b45dbbe5ed894734fa42c7cc063b7478",
+      "bytes": 8542,
+      "exactGitBlob": true
+    },
+    {
+      "path": "docs/codebase/TESTING.md",
+      "gitBlob": "3d7464d0eb82eb532b9298ff77f98257d4c80eaa",
+      "sha256": "474dde76d94b2e48e168a7349499d5be70e7db1e4474a48e6f83a92f7b83f110",
+      "bytes": 4140,
+      "exactGitBlob": true
+    },
+    {
+      "path": "docs/design.md",
+      "gitBlob": "8234a4f03ade636ef2f5b9439c0f6ca7e64455d9",
+      "sha256": "de3a0f8d097c29d3c48cdf1c8f70153a8c79d679f1fed893b754e9798b0da822",
+      "bytes": 4328,
+      "exactGitBlob": true
+    },
+    {
+      "path": "package.json",
+      "gitBlob": "90d6eafd75d9dc3619bd7ea795e2bca816f0dc0c",
+      "sha256": "bdd1fc9f3da93bb84d443dae994436c41aa97f67045df6b82a54bb99dc96c9a7",
+      "bytes": 12415,
+      "exactGitBlob": true
+    },
+    {
+      "path": "vite.config.ts",
+      "gitBlob": "2372ef8bbb25156a3856c4fbe9064d887d5ae0ba",
+      "sha256": "13cb07a5bffdaec276a3e2fda34469c4ef982c3a4a1e78bf1b80f9147c7c3e48",
+      "bytes": 3306,
+      "exactGitBlob": true
+    },
+    {
+      "path": "playwright.config.ts",
+      "gitBlob": "27f59bf02b97a40a277bc726afa6e72fad467d28",
+      "sha256": "7a86cfe8ccbbfb15c8b14ba969b95d1e9f4e029268576bcf4c0a5c59e373d379",
+      "bytes": 2225,
+      "exactGitBlob": true
+    },
+    {
+      "path": "src/App.tsx",
+      "gitBlob": "1b82eb696770f8f4b7a369c23bb79621775c90ea",
+      "sha256": "f71a15ea97cc5895f518d5766ae569bd8e54e77a8ec5503ae05335add11f1871",
+      "bytes": 1265,
+      "exactGitBlob": true
+    },
+    {
+      "path": "src/main.tsx",
+      "gitBlob": "b4a5f67022e7689d7b2fd5c308c3792a92833b34",
+      "sha256": "ca723c8ec8a9bb9191a99dd4c2787f055a6e2b4337d7e85f4e3d06dbfed76c55",
+      "bytes": 1611,
+      "exactGitBlob": true
+    },
+    {
+      "path": "packages/README.md",
+      "gitBlob": "c98e7d2b1daf77f7538839e026aba53ff4ae76c2",
+      "sha256": "a9cf7a882e313cf6b598bea240bd3ba5084a1967819f5d8d6d7aa5e1197858f3",
+      "bytes": 7037,
+      "exactGitBlob": true
+    },
+    {
+      "path": "packages/cli/README.md",
+      "gitBlob": "929a4599d9bec053b3de6acb92f598b29402ca31",
+      "sha256": "b65548fac4260d7ff1a917d91bc399cbe939856c85f31931a2a014352afccf78",
+      "bytes": 3737,
+      "exactGitBlob": true
+    },
+    {
+      "path": "packages/react/README.md",
+      "gitBlob": "8e871ce9e610ca1c12449d7d454f20c5f9a116f6",
+      "sha256": "d7a03748bbc567511ce8f7e17bbf763633a96e887dafdef5d67c226e6ea80315",
+      "bytes": 2291,
+      "exactGitBlob": true
+    },
+    {
+      "path": "packages/convex/README.md",
+      "gitBlob": "6c163d60bc4f7d3da5bfd5f5a15f41fde329518e",
+      "sha256": "460d0115c89556611ed0d6550e01a4cca13a150d1fa5eb2511bb62d5a8eeef0d",
+      "bytes": 2634,
+      "exactGitBlob": true
+    },
+    {
+      "path": "promotion/PRODUCT_GOAL.md",
+      "gitBlob": "3fb7ce25e19cbc2e0362618bd0ab9304d88a4c91",
+      "sha256": "a4c7f5ff9861cfb59048e4aadbd1723edcf5d2fe3c79d76ae4a8b48c825bc196",
+      "bytes": 9132,
+      "exactGitBlob": true
+    },
+    {
+      "path": "promotion/PRODUCT_JOURNEYS.md",
+      "gitBlob": "faa3e2822f387e5f3fbe169bdda5bbd213c41642",
+      "sha256": "331f9d3ff88bde73a8ca2bc4163e7bf0819b38701bcd595ffae56825c9065543",
+      "bytes": 8904,
+      "exactGitBlob": true
+    },
+    {
+      "path": "promotion/WIG_REVIEW.md",
+      "gitBlob": "06e796b883e22f89e4ec1a9de2ad24b045ac3122",
+      "sha256": "0e7460bdb75419c8e7f8466fd9daffc90b22a758c1f6a77adf3692c9c0084741",
+      "bytes": 11713,
+      "exactGitBlob": true
+    },
+    {
+      "path": "nodekit.yaml",
+      "gitBlob": "0fed6570285d265bcb7dfb64b70a81d3fcf86458",
+      "sha256": "d9b2cf90ed901f38ff26e007ab976ef705ea3241f0e4a9bf73a1baffb4788ec0",
+      "bytes": 2399,
+      "exactGitBlob": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "gitBlob": "2c7b47dd640c8612c5497aafd2337f6011bc589e",
+      "sha256": "be93aaac1c110d6a3b77349567ed8c576b027fae57a65933acf5709736d6a030",
+      "bytes": 5388,
+      "exactGitBlob": true
+    },
+    {
+      "path": ".github/workflows/deploy-production.yml",
+      "gitBlob": "1bd03c6ea3c64ea45e2820a1b7a6b2ec8fed721b",
+      "sha256": "46a0b136e066c12a2c7774a6a9a2d5bb4af159a0901e864498d220ac0d01ece8",
+      "bytes": 11484,
+      "exactGitBlob": true
+    },
+    {
+      "path": ".github/workflows/immutable-package-build.yml",
+      "gitBlob": "d8e9c0a969c4faf271cc2983d2d6083120cde8e6",
+      "sha256": "c80b1d65b206c8319043f32dfc79e6cca83ee5f30421e9cb420983b5ccfb6922",
+      "bytes": 3409,
+      "exactGitBlob": true
+    },
+    {
+      "path": ".github/workflows/immutable-package-proof.yml",
+      "gitBlob": "727abd1f89c5814e99a5c4e0978532be0063e3f7",
+      "sha256": "82c2575f3bad9e4499ab4b4f2d47bd9531398169b5e4755fd4127c4fc8cdbc69",
+      "bytes": 4900,
+      "exactGitBlob": true
+    },
+    {
+      "path": ".github/workflows/nightly-production-probe.yml",
+      "gitBlob": "1b26be026edf4bd4f23e828db52216afc14dd4c0",
+      "sha256": "84d114f600ab98bb4f43ea6ed411a456344c20c14d61def56e889332506fef14",
+      "bytes": 11365,
+      "exactGitBlob": true
+    },
+    {
+      "path": ".github/workflows/node-platform-conformance.yml",
+      "gitBlob": "6cdd3580008fa3d330049041d83f7f0b0af174d0",
+      "sha256": "bee08dbbda2a9d406a1606f66b2689be669c804feddc6b321658c089fe1a2752",
+      "bytes": 267,
+      "exactGitBlob": true
+    },
+    {
+      "path": ".github/workflows/nodeslide-bench.yml",
+      "gitBlob": "1e473d427fa8cccc73aae345e8b4344c594bd1ac",
+      "sha256": "471d4a03963ee9191a8b3a7a2e81e66eb4cc63bd9030609c331ee8b067d7fed9",
+      "bytes": 8789,
+      "exactGitBlob": true
+    },
+    {
+      "path": "src/lib/convexEndpoints.ts",
+      "gitBlob": "82e5e78fccaf3a55475beda7e48bfb93b078e6b2",
+      "sha256": "7c8a7221c2262a139c0d9d5fe4b9baa968b54f3c2cae69652e7b6803cf10a03d",
+      "bytes": 1098,
+      "exactGitBlob": true
+    },
+    {
+      "path": "scripts/nodeslide-conformance-proof.mjs",
+      "gitBlob": "2d8ecef9b12c02af88cd9ee015cc11cae3120d71",
+      "sha256": "89c9f784303a8b3fac25c5216b3201faa2af6e78971a6de8ea40a669b75dd0db",
+      "bytes": 5599,
+      "exactGitBlob": true
+    },
+    {
+      "path": "scripts/package-consumer-smoke.mjs",
+      "gitBlob": "e54444debb1e7ffd77e02cd89f3279e7ed7b4093",
+      "sha256": "4c9ef8b4d081095c1d748a2bc248a085821091f26b81123d3756734938733ccd",
+      "bytes": 21883,
+      "exactGitBlob": true
+    },
+    {
+      "path": "scripts/smoke-external-agent-package.mjs",
+      "gitBlob": "53071200e4bc8450a69adfa1701993fdc55757df",
+      "sha256": "af2b8d0c9c2ccbf66a431b83665eabcf491ef8f8dfba9a67aff14f3dea885ab9",
+      "bytes": 10878,
+      "exactGitBlob": true
+    },
+    {
+      "path": "scripts/smoke.mjs",
+      "gitBlob": "4f89d49553a549e7e9874eaebf8781523fa0f35b",
+      "sha256": "fdb59687d1b4c027bf2d81c308678332804fa59e57905a3b72e412c9502e1005",
+      "bytes": 6244,
+      "exactGitBlob": true
+    },
+    {
+      "path": "scripts/prod-probe.mjs",
+      "gitBlob": "5cb2680f84a47db6eac5f76a4b4808887cedfc47",
+      "sha256": "0865c05fd21d67f8cf1acb90cf85911ae7eadadd3c3b9bb7d6691c5d00b52a38",
+      "bytes": 21046,
+      "exactGitBlob": true
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "gitBlob": "743bdc58fdf01b42e11ce813cd24c292a07eeb47",
+      "sha256": "7cf791aa1a2a0050a97702393226bc102731560625669a3d5ce35de6ee90dba1",
+      "bytes": 21214,
+      "exactGitBlob": true
+    },
+    {
+      "path": "docs/ECOSYSTEM.md",
+      "gitBlob": "3f8568a948400afab7805d0605bf694f4aafc715",
+      "sha256": "918c213c8f475e6f9ff76c8b13c9e11711c5cd719c2920c846a382e04da77456",
+      "bytes": 15453,
+      "exactGitBlob": true
+    },
+    {
+      "path": "packages/external-agent/README.md",
+      "gitBlob": "38bb95df2713a5028e59a2934070cf2195add95c",
+      "sha256": "c2be1be774318f505c464ff03f648a542ecbe4a99309f18eab4d7cbb63b01858",
+      "bytes": 1794,
+      "exactGitBlob": true
+    },
+    {
+      "path": "packages/cli/package.json",
+      "gitBlob": "051c4770886e1a92805ce68664c15308c316457e",
+      "sha256": "cab47db8d63654c9bead1d1714417e9f3e1e2b965aa1fc6c4df7c53ce91942d6",
+      "bytes": 511,
+      "exactGitBlob": true
+    },
+    {
+      "path": "packages/react/package.json",
+      "gitBlob": "39b2d3e1ab67d8f3e7fdcc49751ecdfc486c48da",
+      "sha256": "a04ddecb814a02df4154e001197dae492cd8eb0b13e0070f981d950d8a998b04",
+      "bytes": 837,
+      "exactGitBlob": true
+    },
+    {
+      "path": "packages/engine/package.json",
+      "gitBlob": "00ff091582fcbc80e2cf186cb4b3e921b0c35592",
+      "sha256": "90cff20a520ad05700abe1eea55a5ca1f60d9573f6770a1ed6c9634a5dd4e6ed",
+      "bytes": 485,
+      "exactGitBlob": true
+    },
+    {
+      "path": "design-dna/rules/nodeslide-agent-visual-logic.yaml",
+      "gitBlob": "f34e059bfa6b46c6b3acd6f35d33a766d9e16abe",
+      "sha256": "bed7619a6a4e52fe1187babc3c741d6fea6a987e5ad710bd290f0e4901ad62dc",
+      "bytes": 1708,
+      "exactGitBlob": true
+    },
+    {
+      "path": "src/styles/tokens.css",
+      "gitBlob": "5e6e0177f00771356a73ad419698efd04295f3c5",
+      "sha256": "b6b1f5b8218a031c2a0e5495f62fcd103cceec52591c7a44c7a05f5ba96907e8",
+      "bytes": 5376,
+      "exactGitBlob": true
+    },
+    {
+      "path": "src/domains/nodeslide/components/NodeSlideLanding.tsx",
+      "gitBlob": "f48e27d38c6167d1eb758a14ca4df6483b571d96",
+      "sha256": "9aae636a95736c4ad0b77dc6a8e230db0fcffdf3e149d1b64847aeb52e534918",
+      "bytes": 20779,
+      "exactGitBlob": true
+    },
+    {
+      "path": "src/domains/nodeslide/NodeSlideStudio.tsx",
+      "gitBlob": "512919e49c0e6d50fa1b4363d2abff628c8a1ca6",
+      "sha256": "445543c7c74cc0dee458d013820db0b8204f82e330da2a19439ef4c387b5d980",
+      "bytes": 174326,
+      "exactGitBlob": true
+    },
+    {
+      "path": "promotion/PROMOTION_LOG.md",
+      "gitBlob": "e5554450b0782f97875508af5fce7a8b14b05456",
+      "sha256": "5045754805141c8376058d3c9c98001f4ddb865866a5887ed23481bf3d26afbd",
+      "bytes": 18665,
+      "exactGitBlob": true
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "6218868e46d7d1b1b252b1b4341b5f90c07b744427a40d0c6f2e8d2420272153",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "for-each-ref",
+        "--format=%(refname) %(objectname) %(upstream:short)"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "464559a6759ce9b1816daeb4f2fdcb150752069c8333783c1cb5da8a9764cf6e",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "worktree",
+        "list",
+        "--porcelain"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "cc95e4c08ab13f642f23ab5d4fdeda80f05eb53655094a9995d0b4625d89e9e8",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/NodeSlide",
+        "ls-files",
+        "--stage",
+        "-z"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "74ac63e03136c1944f7984956e986c811b730f0facd70cfac02f046c22523ab0",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/NodeSlide",
+        "status",
+        "--porcelain=v1",
+        "-z",
+        "--untracked-files=all"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "ls-remote",
+        "--symref",
+        "origin",
+        "HEAD",
+        "refs/heads/main"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "22abcd139a0fb69acb3147780a587957d13e0f7dab6590daeb29194827e9fb4d",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\nodeslide",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "17bd2c1519aca40212b44d6f8a00b7097206257c1fbab62b23e6df466e5f4447",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\nodeslide",
+        "for-each-ref",
+        "--format=%(refname) %(objectname) %(upstream:short)"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "162612a3154e221bb497d99942ec2cce10de8ca78f6f2aa13ff36f4261d0e4cf",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\nodeslide",
+        "worktree",
+        "list",
+        "--porcelain"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "c1aad9c1475781dea0d1d2d1a9633c389287afa5431e7fbd5c19f722b63555ab",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:/VSCode Projects/nodeslide",
+        "ls-files",
+        "--stage",
+        "-z"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "f4ca163428f6a46528a8a2e0201252775a2ac615c4e7c576d38b10c5662079d3",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:/VSCode Projects/nodeslide",
+        "status",
+        "--porcelain=v1",
+        "-z",
+        "--untracked-files=all"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "ef3c0054b8ea6bf9794e9f0513a06828b49a7f7770a8010dbc5af3be0fd6e964",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:/VSCode Projects/Ideaflow/consumer-proof-nodeslide",
+        "ls-files",
+        "--stage",
+        "-z"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "1628ef8e00cf0dc69364e2e390fa1c21bc6902f17d14e6d4e906e68622f60aaa",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:/VSCode Projects/Ideaflow/consumer-proof-nodeslide",
+        "status",
+        "--porcelain=v1",
+        "-z",
+        "--untracked-files=all"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "d3e46681900fd2076d43330c243a7d589d7e82ee2bdb2c0847db0d22ee3fe13d",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\nodeslide",
+        "ls-remote",
+        "--symref",
+        "origin",
+        "HEAD",
+        "refs/heads/main"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "22abcd139a0fb69acb3147780a587957d13e0f7dab6590daeb29194827e9fb4d",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "1e2f06342c76575cb85b5ec28d7a70660895bf62"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "895c9b1e3c2287c83a3c8452ca4eacea6e03ac593c84a33b5104433255ca495e",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "fec3108ce5a4f65ad76083135ed3a2d6c3690fca"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "2310a099f22b314c2634922ef0e5ab324d9eedbca9f513558a1dbf1c9d1cb0b7",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "6c8c777ab1c74dd4eb51d0f14caea2569c013dd1"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "000d3a9c5f5ffed6c7b48329fd508ee2b45dbbe5ed894734fa42c7cc063b7478",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "3d7464d0eb82eb532b9298ff77f98257d4c80eaa"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "474dde76d94b2e48e168a7349499d5be70e7db1e4474a48e6f83a92f7b83f110",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "8234a4f03ade636ef2f5b9439c0f6ca7e64455d9"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "de3a0f8d097c29d3c48cdf1c8f70153a8c79d679f1fed893b754e9798b0da822",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "90d6eafd75d9dc3619bd7ea795e2bca816f0dc0c"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "bdd1fc9f3da93bb84d443dae994436c41aa97f67045df6b82a54bb99dc96c9a7",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "2372ef8bbb25156a3856c4fbe9064d887d5ae0ba"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "13cb07a5bffdaec276a3e2fda34469c4ef982c3a4a1e78bf1b80f9147c7c3e48",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "27f59bf02b97a40a277bc726afa6e72fad467d28"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "7a86cfe8ccbbfb15c8b14ba969b95d1e9f4e029268576bcf4c0a5c59e373d379",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "1b82eb696770f8f4b7a369c23bb79621775c90ea"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "f71a15ea97cc5895f518d5766ae569bd8e54e77a8ec5503ae05335add11f1871",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "b4a5f67022e7689d7b2fd5c308c3792a92833b34"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "ca723c8ec8a9bb9191a99dd4c2787f055a6e2b4337d7e85f4e3d06dbfed76c55",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "c98e7d2b1daf77f7538839e026aba53ff4ae76c2"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "a9cf7a882e313cf6b598bea240bd3ba5084a1967819f5d8d6d7aa5e1197858f3",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "929a4599d9bec053b3de6acb92f598b29402ca31"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "b65548fac4260d7ff1a917d91bc399cbe939856c85f31931a2a014352afccf78",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "8e871ce9e610ca1c12449d7d454f20c5f9a116f6"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "d7a03748bbc567511ce8f7e17bbf763633a96e887dafdef5d67c226e6ea80315",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "6c163d60bc4f7d3da5bfd5f5a15f41fde329518e"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "460d0115c89556611ed0d6550e01a4cca13a150d1fa5eb2511bb62d5a8eeef0d",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "3fb7ce25e19cbc2e0362618bd0ab9304d88a4c91"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "a4c7f5ff9861cfb59048e4aadbd1723edcf5d2fe3c79d76ae4a8b48c825bc196",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "faa3e2822f387e5f3fbe169bdda5bbd213c41642"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "331f9d3ff88bde73a8ca2bc4163e7bf0819b38701bcd595ffae56825c9065543",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "06e796b883e22f89e4ec1a9de2ad24b045ac3122"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "0e7460bdb75419c8e7f8466fd9daffc90b22a758c1f6a77adf3692c9c0084741",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "0fed6570285d265bcb7dfb64b70a81d3fcf86458"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "d9b2cf90ed901f38ff26e007ab976ef705ea3241f0e4a9bf73a1baffb4788ec0",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "2c7b47dd640c8612c5497aafd2337f6011bc589e"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "be93aaac1c110d6a3b77349567ed8c576b027fae57a65933acf5709736d6a030",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "1bd03c6ea3c64ea45e2820a1b7a6b2ec8fed721b"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "46a0b136e066c12a2c7774a6a9a2d5bb4af159a0901e864498d220ac0d01ece8",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "d8e9c0a969c4faf271cc2983d2d6083120cde8e6"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "c80b1d65b206c8319043f32dfc79e6cca83ee5f30421e9cb420983b5ccfb6922",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "727abd1f89c5814e99a5c4e0978532be0063e3f7"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "82c2575f3bad9e4499ab4b4f2d47bd9531398169b5e4755fd4127c4fc8cdbc69",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "1b26be026edf4bd4f23e828db52216afc14dd4c0"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "84d114f600ab98bb4f43ea6ed411a456344c20c14d61def56e889332506fef14",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "6cdd3580008fa3d330049041d83f7f0b0af174d0"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "bee08dbbda2a9d406a1606f66b2689be669c804feddc6b321658c089fe1a2752",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "1e473d427fa8cccc73aae345e8b4344c594bd1ac"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "471d4a03963ee9191a8b3a7a2e81e66eb4cc63bd9030609c331ee8b067d7fed9",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "82e5e78fccaf3a55475beda7e48bfb93b078e6b2"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "7c8a7221c2262a139c0d9d5fe4b9baa968b54f3c2cae69652e7b6803cf10a03d",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "2d8ecef9b12c02af88cd9ee015cc11cae3120d71"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "89c9f784303a8b3fac25c5216b3201faa2af6e78971a6de8ea40a669b75dd0db",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "e54444debb1e7ffd77e02cd89f3279e7ed7b4093"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "4c9ef8b4d081095c1d748a2bc248a085821091f26b81123d3756734938733ccd",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "53071200e4bc8450a69adfa1701993fdc55757df"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "af2b8d0c9c2ccbf66a431b83665eabcf491ef8f8dfba9a67aff14f3dea885ab9",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "4f89d49553a549e7e9874eaebf8781523fa0f35b"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "fdb59687d1b4c027bf2d81c308678332804fa59e57905a3b72e412c9502e1005",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "5cb2680f84a47db6eac5f76a4b4808887cedfc47"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "0865c05fd21d67f8cf1acb90cf85911ae7eadadd3c3b9bb7d6691c5d00b52a38",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "743bdc58fdf01b42e11ce813cd24c292a07eeb47"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "7cf791aa1a2a0050a97702393226bc102731560625669a3d5ce35de6ee90dba1",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "3f8568a948400afab7805d0605bf694f4aafc715"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "918c213c8f475e6f9ff76c8b13c9e11711c5cd719c2920c846a382e04da77456",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "38bb95df2713a5028e59a2934070cf2195add95c"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "c2be1be774318f505c464ff03f648a542ecbe4a99309f18eab4d7cbb63b01858",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "051c4770886e1a92805ce68664c15308c316457e"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "cab47db8d63654c9bead1d1714417e9f3e1e2b965aa1fc6c4df7c53ce91942d6",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "39b2d3e1ab67d8f3e7fdcc49751ecdfc486c48da"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "a04ddecb814a02df4154e001197dae492cd8eb0b13e0070f981d950d8a998b04",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "00ff091582fcbc80e2cf186cb4b3e921b0c35592"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "90cff20a520ad05700abe1eea55a5ca1f60d9573f6770a1ed6c9634a5dd4e6ed",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "f34e059bfa6b46c6b3acd6f35d33a766d9e16abe"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "bed7619a6a4e52fe1187babc3c741d6fea6a987e5ad710bd290f0e4901ad62dc",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "5e6e0177f00771356a73ad419698efd04295f3c5"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "b6b1f5b8218a031c2a0e5495f62fcd103cceec52591c7a44c7a05f5ba96907e8",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "f48e27d38c6167d1eb758a14ca4df6483b571d96"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "9aae636a95736c4ad0b77dc6a8e230db0fcffdf3e149d1b64847aeb52e534918",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "512919e49c0e6d50fa1b4363d2abff628c8a1ca6"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "445543c7c74cc0dee458d013820db0b8204f82e330da2a19439ef4c387b5d980",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "cat-file",
+        "blob",
+        "e5554450b0782f97875508af5fce7a8b14b05456"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "5045754805141c8376058d3c9c98001f4ddb865866a5887ed23481bf3d26afbd",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "rev-parse",
+        "b0674b229a3691c09c88fcab1481f2e33342cb21^{tree}"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "8512d47ef269b19b845cd9bec5e2ca8cfc879798f7274fb9a9ba47f67a0da8da",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "--no-optional-locks",
+        "-C",
+        "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\NodeSlide",
+        "for-each-ref",
+        "--format=%(objectname)",
+        "refs/heads/codex/nodeslide-current-consumer-20260905"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr": ""
+    }
+  ],
+  "limits": [
+    "Index comparison covers git ls-files --stage serialization, not raw .git/index file bytes.",
+    "Dirty file contents were not read or content-hashed; unchanged status is metadata custody only.",
+    "No environment file values, workbooks, browser, COM, provider, install, test, build, source/index/ref mutations."
+  ]
+}

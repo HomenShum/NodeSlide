@@ -1,0 +1,3 @@
+{
+  "cause": "Reviewer compared for-each-ref refname/objectname serialization to preserved git show-ref objectname/refname bytes. Root original E6g-apply-notes-controls.py explicitly records show-ref. Corrected reader uses exact recorded command; no source or refs mutation."
+}

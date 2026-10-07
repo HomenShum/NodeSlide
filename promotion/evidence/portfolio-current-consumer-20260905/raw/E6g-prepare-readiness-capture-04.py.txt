@@ -1,0 +1,4 @@
+from pathlib import Path
+P=Path(__file__).parent
+s=(P/'E6g-capture-readiness-before-03.mjs').read_text(encoding='utf-8').replace('readiness-before-03','readiness-before-04').replace("getByTestId('inspector').waitFor();","getByTestId('inspector').waitFor({state:'attached'});")
+(P/'E6g-capture-readiness-before-04.mjs').write_text(s,encoding='utf-8',newline='\n')

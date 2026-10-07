@@ -1,0 +1,33 @@
+{
+  "sourceAndInstalledInputs": 61,
+  "allUnchanged": true,
+  "changed": [],
+  "generatorReadInputs": 20,
+  "allGeneratorReadInputsUnchanged": true,
+  "indexUnchanged": true,
+  "refsUnchanged": true,
+  "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+  "extraBindings": {
+    ".gitattributes": {
+      "sha256": "d444ed3e7b2a6c881e9ab1da2199a90cd0b664d86fc26eb0abe323642f18029b",
+      "bytes": 1038,
+      "headBlobSha256": "267cb2c97a87920fe158d3177afc824d71b31d8d7692aea1064b26bd6592dbd4"
+    },
+    ".tours/01-primary-user-flow.tour": {
+      "sha256": "a6c7b0b8bf5b4032eb4f3fa8f7f6f2e2a61d2ea9bf38df93c81d27a08855cc2f",
+      "bytes": 6523,
+      "headBlobSha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97"
+    },
+    ".tours/02-agent-execution.tour": {
+      "sha256": "c4d9dc23f4f2702426704c3e7b1c8c499c74bd5eaf2cf86d0a214a0c8897f012",
+      "bytes": 4420,
+      "headBlobSha256": "a274bb90a62570133e66eddd157c63e4408b6938eeb103e7b16c7d455d3eef75"
+    },
+    ".tours/03-debug-and-recovery.tour": {
+      "sha256": "bf4fab658b2e0b7647d6e088e72ee6e57d479a1954dc71c220d50ba0636fe3e1",
+      "bytes": 3756,
+      "headBlobSha256": "33df49d1ff3bf1ea7bae328af2d47257919d09c6ea99531d0a64467f10ed716e"
+    }
+  },
+  "boundary": "Only named source, tours, installed NodeBook files, Git entries and refs. Root concurrently owns ordinary generated dist build; no all-filesystem immutability claim."
+}

@@ -1,0 +1,68 @@
+from pathlib import Path
+import os, subprocess, json, time, datetime, hashlib, socket
+import psutil
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=Path('D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-01')
+PW='C:/Users/hshum/.cache/codex-runtimes/codex-primary-runtime/dependencies/native/powershell/pwsh.exe'
+assert not O.exists()
+assert all(not (R/p).exists() for p in ['.env','.env.local','.convex'])
+assert not (Path.home()/'.convex/anonymous-convex-backend-state/anonymous-agent').exists()
+assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=R).decode().strip()=='b0674b229a3691c09c88fcab1481f2e33342cb21'
+def protect(path,directory=True):
+    target=str(path).replace("'","''")
+    inherit="'ContainerInherit,ObjectInherit','None'," if directory else ''
+    script="$p='"+target+"'; $sid=[System.Security.Principal.WindowsIdentity]::GetCurrent().User; $a=Get-Acl -LiteralPath $p; $a.SetAccessRuleProtection($true,$false); $a.AddAccessRule([System.Security.AccessControl.FileSystemAccessRule]::new($sid,'FullControl',"+inherit+"'Allow')); $a.AddAccessRule([System.Security.AccessControl.FileSystemAccessRule]::new([System.Security.Principal.SecurityIdentifier]::new('S-1-5-18'),'FullControl',"+inherit+"'Allow')); Set-Acl -LiteralPath $p -AclObject $a; $v=Get-Acl -LiteralPath $p; if(-not $v.AreAccessRulesProtected -or @($v.Access).Count -ne 2){throw 'Private bootstrap ACL verification failed'}"
+    subprocess.run([PW,'-NoProfile','-Command',script],check=True,capture_output=True,creationflags=subprocess.CREATE_NO_WINDOW)
+O.mkdir();protect(O)
+(R/'.convex').mkdir();protect(R/'.convex')
+ports=[54821,54822]
+for port in ports:
+    with socket.socket() as s:s.bind(('127.0.0.1',port))
+assert not any(c.status==psutil.CONN_LISTEN and c.laddr.port in ports for c in psutil.net_connections(kind='tcp'))
+env=dict(os.environ)
+for key in list(env):
+    upper=key.upper()
+    if any(x in upper for x in ['OPENAI','ANTHROPIC','GEMINI','GOOGLE_API','CONVEX','VITE_','PLAYWRIGHT_BASE_URL']) or upper.endswith(('_API_KEY','_ACCESS_TOKEN','_SECRET')):env.pop(key)
+env.update({'CONVEX_AGENT_MODE':'anonymous','TEMP':'D:/ProjectRecovery/NodeSlide first run 20260905/temp','TMP':'D:/ProjectRecovery/NodeSlide first run 20260905/temp'})
+cmd=['node','node_modules/convex/bin/main.js','dev','--skip-push','--local-cloud-port',str(ports[0]),'--local-site-port',str(ports[1]),'--tail-logs','disable']
+record={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'mode':'EMPTY_BOOTSTRAP_SKIP_PUSH','freshStateGuards':True,'privateAclVerified':True,'ports':ports,'command':cmd,'sourcePushed':False,'admissionSet':False,'providerCalls':0,'privateLog':str(O/'bootstrap.log')}
+owned={};listeners=[];start=time.monotonic()
+with (O/'bootstrap.log').open('xb') as log:
+    child=subprocess.Popen(cmd,cwd=R,env=env,stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW)
+    parent=psutil.Process(child.pid);owned[parent.pid]=parent
+    record['cliPid']=parent.pid
+    try:
+        while time.monotonic()-start<240:
+            for p in parent.children(recursive=True):owned[p.pid]=p
+            listeners=[{'pid':c.pid,'address':c.laddr.ip,'port':c.laddr.port} for c in psutil.net_connections(kind='tcp') if c.status==psutil.CONN_LISTEN and c.laddr.port in ports]
+            if {r['port'] for r in listeners}==set(ports):break
+            if child.poll() is not None:break
+            time.sleep(0.5)
+        record['listeners']=listeners
+        record['ownedProcessNames']=[{'pid':p.pid,'name':p.name(),'created':p.create_time()} for p in owned.values() if p.is_running()]
+        record['bothListenersOwned']=bool(listeners) and {r['port'] for r in listeners}==set(ports) and all(r['pid'] in owned for r in listeners)
+        record['allObservedListenersLoopback']=bool(listeners) and all(r['address'] in ['127.0.0.1','::1'] for r in listeners)
+        record['elapsedSeconds']=time.monotonic()-start
+        record['cliExitBeforeStop']=child.poll()
+    finally:
+        # Windows terminates only this recorded process tree; it is not a claim
+        # that the CLI's graceful cleanup hook ran. No source has been pushed.
+        try:
+            for p in parent.children(recursive=True):owned[p.pid]=p
+        except psutil.NoSuchProcess:pass
+        for p in reversed(list(owned.values())):
+            try:p.terminate()
+            except psutil.NoSuchProcess:pass
+        gone,alive=psutil.wait_procs(list(owned.values()),timeout=10)
+        record['cleanup']={'method':'WINDOWS_TERMINATE_RECORDED_OWNED_PROCESSES_NO_GRACEFUL_HOOK_CLAIM','allRecordedProcessesExited':not alive,'remainingOwnedPids':[p.pid for p in alive]}
+        record['portsReleased']=not any(c.status==psutil.CONN_LISTEN and c.laddr.port in ports for c in psutil.net_connections(kind='tcp'))
+if (R/'.env.local').exists():protect(R/'.env.local',False)
+record['generatedEnvPresence']=(R/'.env.local').exists()
+record['generatedLocalConfigPresence']=(R/'.convex/local/default/config.json').exists()
+record['privateLogBytes']=(O/'bootstrap.log').stat().st_size
+record['privateLogSha256']=hashlib.sha256((O/'bootstrap.log').read_bytes()).hexdigest()
+record['sourceStatus']=subprocess.check_output(['git','status','--porcelain=v1'],cwd=R).decode('utf-8').splitlines()
+out=P/'E6g-nodeslide-first-run/local-bootstrap-01.json'
+with out.open('x',encoding='utf-8',newline='\n') as f:f.write(json.dumps(record,indent=2)+'\n')
+print(json.dumps(record),flush=True)

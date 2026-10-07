@@ -1,0 +1,19 @@
+from pathlib import Path
+import subprocess,json,os,datetime,time,hashlib
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=P/'E6g-nodeslide-portability-check-02';O.mkdir(exist_ok=False)
+temp=Path('D:/ProjectRecovery/NodeSlide first run 20260905/temp');assert temp.is_dir()
+env=dict(os.environ)
+for key in list(env):
+    upper=key.upper()
+    if any(x in upper for x in ['OPENAI','ANTHROPIC','GEMINI','GOOGLE_API','CONVEX','VITE_','PLAYWRIGHT_BASE_URL']) or upper.endswith(('_API_KEY','_ACCESS_TOKEN','_SECRET')):env.pop(key)
+env.update({'TEMP':str(temp),'TMP':str(temp),'CONVEX_AGENT_MODE':'anonymous'})
+paths=['scripts/tests/workspace-build-depth.test.mjs','scripts/tests/code-tours.test.mjs','scripts/tests/playwright-trace.test.mjs','.gitattributes']
+hashes={name:hashlib.sha256((R/name).read_bytes()).hexdigest() for name in paths}
+start=time.monotonic();at=datetime.datetime.now(datetime.timezone.utc).isoformat()
+with (O/'check.log').open('xb') as log:
+    r=subprocess.run(['cmd.exe','/d','/c','npm','run','check'],cwd=R,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=900,creationflags=subprocess.CREATE_NO_WINDOW)
+receipt={'at':at,'command':['npm','run','check'],'exitCode':r.returncode,'seconds':time.monotonic()-start,'log':'check.log','isolatedTemporaryRoot':str(temp),'sourceHashes':hashes,'sourceUnchangedDuringCheck':all(hashlib.sha256((R/name).read_bytes()).hexdigest()==h for name,h in hashes.items()),'unchangedTimeoutsAndConfiguration':True,'environment':'Inherited provider/Convex/Vite/base URL credential names removed without value output. Only candidate generated loopback bindings exist; no original env file read.'}
+with (O/'check.command.json').open('x',encoding='utf-8',newline='\n') as f:f.write(json.dumps(receipt,indent=2)+'\n')
+print(json.dumps(receipt),flush=True)

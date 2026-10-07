@@ -1,0 +1,21 @@
+from pathlib import Path
+import subprocess, json, os, datetime, time, hashlib
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=P/'E6g-nodeslide-first-run'
+temp=Path('D:/ProjectRecovery/NodeSlide first run 20260905/temp')
+temp.mkdir(parents=True,exist_ok=False)
+assert temp.resolve().is_relative_to(Path('D:/ProjectRecovery/NodeSlide first run 20260905').resolve())
+env=dict(os.environ)
+for key in list(env):
+    upper=key.upper()
+    if any(x in upper for x in ['OPENAI','ANTHROPIC','GEMINI','GOOGLE_API','CONVEX','VITE_','PLAYWRIGHT_BASE_URL']) or upper.endswith(('_API_KEY','_ACCESS_TOKEN','_SECRET')):env.pop(key)
+env.update({'TEMP':str(temp),'TMP':str(temp),'CONVEX_AGENT_MODE':'anonymous'})
+start=time.monotonic();at=datetime.datetime.now(datetime.timezone.utc).isoformat()
+with (O/'check.log').open('xb') as log:r=subprocess.run(['cmd.exe','/d','/c','npm','run','check'],cwd=R,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=900,creationflags=subprocess.CREATE_NO_WINDOW)
+receipt={'at':at,'command':['npm','run','check'],'exitCode':r.returncode,'seconds':time.monotonic()-start,'log':'check.log','isolatedTemporaryRoot':str(temp),'liveTests':'Excluded by existing vite config; no config changed','environment':'Inherited provider/Convex/Vite/base URL credential names removed without value output; no original env file read.'}
+(O/'check.command.json').write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8',newline='\n')
+source=json.loads((O/'source-before.json').read_text(encoding='utf-8'))
+changed=[name for name,h in source['files'].items() if not (R/name).is_file() or hashlib.sha256((R/name).read_bytes()).hexdigest()!=h]
+(O/'after-check-source.json').write_text(json.dumps({'head':source['head'],'changedTrackedInputs':changed,'count':len(source['files'])},indent=2)+'\n',encoding='utf-8',newline='\n')
+print(json.dumps({**receipt,'changedTrackedInputCount':len(changed)}),flush=True)

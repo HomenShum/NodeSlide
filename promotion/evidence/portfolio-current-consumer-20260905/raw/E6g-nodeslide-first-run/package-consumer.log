@@ -1,0 +1,5 @@
+
+> nodeslide@0.1.0 packages:consumer:smoke
+> node scripts/package-consumer-smoke.mjs
+
+{"ok":true,"proposalVersion":1,"acceptedVersion":2,"authorizationBound":true,"headless":true,"typesChecked":true,"rendered":true,"cssExported":true,"httpAdapter":true,"migrationCount":2,"packedComponentMounted":true,"registrySource":true,"cliPlan":true,"agentProposal":true}

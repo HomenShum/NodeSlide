@@ -1,0 +1,14 @@
+from pathlib import Path
+import hashlib,json,datetime,subprocess
+P=Path(__file__).parent;R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+sha=lambda b:hashlib.sha256(b).hexdigest()
+paths=['convex/lib/nodeslideValidators.ts','convex/lib/nodeslideAdmission.test.ts']
+source=[{'path':n,'sha256':sha((R/n).read_bytes())} for n in paths]
+artifacts=[]
+for folder in ['E6g-nodeslide-multiline-before','E6g-nodeslide-multiline-browser-01']:
+    for p in sorted((P/folder).rglob('*')):
+        if p.is_file():artifacts.append({'path':p.relative_to(P).as_posix(),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())})
+for name in ['E6g-nodeslide-multiline-local-push.json','E6g-nodeslide-multiline-browser.mjs','E6g_NODESLIDE_GATE_BRIEF_DIAGNOSIS.json']:
+    p=P/name;artifacts.append({'path':name,'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())})
+r={'proof':'NODESLIDE-MULTILINE-BRIEF-01','at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'SOURCE_AND_ACTUAL_BROWSER_FROZEN_NORMAL_CHECK_RUNNING','head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R).decode().strip(),'source':source,'sourceDigest':sha(json.dumps(source,separators=(',',':')).encode()),'artifacts':artifacts,'actual':json.loads((P/'E6g-nodeslide-multiline-browser-01/report.json').read_text(encoding='utf-8')),'focusedAdmission':'33/33 passed before formatter, exact terminal tool output retained; normal full check runs final formatted test','bounds':'Raw 4000 code points / 8192 bytes unchanged before trim; no new backend trust boundary','crScope':'Internal CR retained verbatim; CR-only CSV chart unsupported by existing parser. Actual UI CSV uses LF; action scenarios LF/CRLF.','limits':['Deterministic prose-only chart interpretation remains unsupported.','Generic value unit and source-column parser limitations retained.','No native Office editability/readback was performed.','Notes footer overlap, enlarged-text clipping and failure detail readiness scope remain open.','Ordinary full check and independent judge pending; all final grades null.']}
+(P/'E6g_NODESLIDE_MULTILINE_FREEZE.json').write_text(json.dumps(r,indent=2)+'\n',encoding='utf-8',newline='\n');print(json.dumps({'source':source,'sourceDigest':r['sourceDigest'],'artifacts':len(artifacts)}))

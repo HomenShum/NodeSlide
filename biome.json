@@ -21,6 +21,7 @@
       "evidence/visual-logic-campaign/before",
       "evidence/visual-logic-campaign/after",
       "evidence/visual-logic-campaign/after-rejected-*",
+      "promotion/evidence",
       "contracts",
       "convex/_generated",
       "packages/convex/component/_generated",

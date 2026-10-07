@@ -1,0 +1,413 @@
+diff --git a/convex/lib/nodeslideTraceUi.test.tsx b/convex/lib/nodeslideTraceUi.test.tsx
+index cd4c4d8..2cf4293 100644
+--- a/convex/lib/nodeslideTraceUi.test.tsx
++++ b/convex/lib/nodeslideTraceUi.test.tsx
+@@ -60,10 +60,11 @@ describe('NodeSlide trace validation receipts', () => {
+       <TraceInspector traces={[trace]} validations={[initial, current]} />,
+     );
+ 
+-    expect(markup).toContain('Current deck validation: passed');
++    expect(markup).toContain('Latest recorded core validation: passed');
+     expect(markup).toContain('Deck v7');
+-    expect(markup).toContain('Selected trace validation: passed');
++    expect(markup).toContain('Selected trace core validation: passed');
+     expect(markup).toContain('Deck v1');
++    expect(markup).not.toContain('publish ready');
+     expect(markup).toContain('Run');
+   });
+ 
+diff --git a/src/domains/nodeslide/inspector/DeckCiStatus.css b/src/domains/nodeslide/inspector/DeckCiStatus.css
+index b9e0ed8..02e13b2 100644
+--- a/src/domains/nodeslide/inspector/DeckCiStatus.css
++++ b/src/domains/nodeslide/inspector/DeckCiStatus.css
+@@ -12,15 +12,15 @@
+     border: 0;
+     color: inherit;
+     display: flex;
++    flex-wrap: wrap;
+     font: 600 10px / 1.2 var(--ns-mono, ui-monospace, monospace);
+     gap: 5px;
+     margin: 0;
+     min-height: 26px;
+     min-width: 0;
+-    overflow: hidden;
+     padding: 4px 7px;
+     text-align: left;
+-    white-space: nowrap;
++    white-space: normal;
+     width: 100%;
+   }
+ 
+@@ -58,8 +58,6 @@
+   .nodeslide-studio .ns-deck-ci-status__counts {
+     color: var(--ns-faint);
+     min-width: 0;
+-    overflow: hidden;
+-    text-overflow: ellipsis;
+   }
+ 
+   .nodeslide-studio .ns-deck-ci-status.is-pass {
+@@ -73,20 +71,4 @@
+   .nodeslide-studio .ns-deck-ci-status.is-fail {
+     color: var(--ns-danger);
+   }
+-
+-  .nodeslide-studio .ns-deck-ci-status.is-loading .ns-deck-ci-status__dot {
+-    animation: ns-deck-ci-pulse 1.2s ease-in-out infinite;
+-  }
+-
+-  @media (prefers-reduced-motion: reduce) {
+-    .nodeslide-studio .ns-deck-ci-status.is-loading .ns-deck-ci-status__dot {
+-      animation: none;
+-    }
+-  }
+-}
+-
+-@keyframes ns-deck-ci-pulse {
+-  50% {
+-    opacity: 0.35;
+-  }
+ }
+diff --git a/src/domains/nodeslide/inspector/InspectorPanel.test.ts b/src/domains/nodeslide/inspector/InspectorPanel.test.ts
+index be1788a..56750be 100644
+--- a/src/domains/nodeslide/inspector/InspectorPanel.test.ts
++++ b/src/domains/nodeslide/inspector/InspectorPanel.test.ts
+@@ -1,7 +1,13 @@
+ import { readFileSync } from 'node:fs';
++import { createElement } from 'react';
++import { renderToStaticMarkup } from 'react-dom/server';
+ import { describe, expect, it } from 'vitest';
++import { evaluateNodeSlideDeckCi } from '../../../../convex/lib/nodeslideDeckCi';
++import { buildGoldenNodeSlide } from '../../../../convex/lib/nodeslideSeed';
+ import {
+   INSPECTOR_TABS,
++  InspectorPanel,
++  type InspectorPanelProps,
+   MORE_INSPECTOR_TABS,
+   PRIMARY_INSPECTOR_TABS,
+   inspectorTabAfterKey,
+@@ -12,6 +18,113 @@ import type { InspectorTab } from './types';
+ 
+ const source = readFileSync('src/domains/nodeslide/inspector/InspectorPanel.tsx', 'utf8');
+ 
++describe('An author reviews deck checks through the actual inspector owner', () => {
++  const snapshot = buildGoldenNodeSlide('inspector-readiness-scenario', 100).snapshot;
++  const current = evaluateNodeSlideDeckCi({ snapshot });
++  const slide = snapshot.slides[0];
++  if (!slide) throw new Error('The golden author scenario requires a slide.');
++  const blockerMessage = 'Slides 3 and 4 repeat the same composition.';
++  const noop = () => {};
++  const props: InspectorPanelProps = {
++    workspace: {
++      ...snapshot,
++      comments: [],
++      patches: [],
++      versions: [],
++      traces: [],
++      validations: [],
++      exports: [],
++      presence: [],
++      publication: null,
++    },
++    slide,
++    selectedElements: [],
++    activeTab: 'trace',
++    collapsed: false,
++    width: 340,
++    agentBusy: false,
++    variations: [],
++    variationsLoading: false,
++    variationBusy: false,
++    variationGenerating: false,
++    variationError: null,
++    previewedVariationId: null,
++    activeTastePackId: null,
++    tastePackBusy: false,
++    onTabChange: noop,
++    onToggleCollapsed: noop,
++    onWidthChange: noop,
++    onProposeEdit: noop,
++    onAcceptPatch: noop,
++    onRejectPatch: noop,
++    onGenerateVariations: noop,
++    onPreviewVariation: noop,
++    onAcceptVariation: noop,
++    onRejectVariation: noop,
++    onApplyTastePack: noop,
++    onClearTastePack: noop,
++    onApplyDesignPatch: noop,
++    onAddComment: noop,
++    onReply: noop,
++    onSetCommentStatus: noop,
++    onRestoreVersion: noop,
++  };
++  const fail = {
++    ...current,
++    status: 'fail' as const,
++    blockerCount: 1,
++    severityCounts: { critical: 0, error: 1, warning: 0, info: 0 },
++    checks: [
++      {
++        id: 'duplicate-slides',
++        code: 'deck_composition_diversity_failed',
++        category: 'layout' as const,
++        origin: 'layout_structure_hook' as const,
++        severity: 'error' as const,
++        blocker: true,
++        message: blockerMessage,
++        slideIds: [],
++        elementIds: [],
++        sourceIds: [],
++      },
++    ],
++  };
++
++  it('shows the actual blocker before any agent run exists', () => {
++    const html = renderToStaticMarkup(
++      createElement(InspectorPanel, { ...props, deckCiResult: fail }),
++    );
++    expect(html).toContain('data-state="fail"');
++    expect(html).toContain(blockerMessage);
++    expect(html).toContain(`data-deck-version="${snapshot.deck.version}"`);
++    expect(html).toContain('No agent activity yet');
++    expect(html).not.toContain('publish ready');
++  });
++
++  it.each([
++    { name: 'older version', result: { ...fail, deckVersion: current.deckVersion - 1 } },
++    { name: 'another deck at the same version', result: { ...fail, deckId: 'another-deck' } },
++    { name: 'no returned result', result: null },
++  ])('withholds borrowed readiness for $name', ({ result }) => {
++    const html = renderToStaticMarkup(
++      createElement(InspectorPanel, { ...props, deckCiResult: result }),
++    );
++    expect(html).toContain('data-state="unavailable"');
++    expect(html).toContain('Checks are unavailable for this deck version.');
++    expect(html).not.toContain(blockerMessage);
++    expect(html).not.toContain('No blockers or warnings reported');
++  });
++
++  it('withholds a previously returned blocker while a current check is pending', () => {
++    const html = renderToStaticMarkup(
++      createElement(InspectorPanel, { ...props, deckCiResult: fail, deckCiLoading: true }),
++    );
++    expect(html).toContain('data-state="loading"');
++    expect(html).toContain('Results are pending.');
++    expect(html).not.toContain(blockerMessage);
++  });
++});
++
+ describe('NodeSlide inspector shell state', () => {
+   it('keeps the authoring/review grouping that orders every tab', () => {
+     expect(INSPECTOR_TABS.map(({ id }) => id)).toEqual([
+diff --git a/src/domains/nodeslide/inspector/InspectorPanel.tsx b/src/domains/nodeslide/inspector/InspectorPanel.tsx
+index f89911d..006e818 100644
+--- a/src/domains/nodeslide/inspector/InspectorPanel.tsx
++++ b/src/domains/nodeslide/inspector/InspectorPanel.tsx
+@@ -371,6 +371,11 @@ export function InspectorPanel<CommandId extends string = string>({
+     (comment) => !comment.parentId && comment.status === 'open',
+   ).length;
+   const validation = workspace.validations[0];
++  const currentDeckCiResult =
++    deckCiResult?.deckId === workspace.deck.id &&
++    deckCiResult.deckVersion === workspace.deck.version
++      ? deckCiResult
++      : null;
+ 
+   if (collapsed) {
+     return (
+@@ -549,7 +554,7 @@ export function InspectorPanel<CommandId extends string = string>({
+               slide={slide}
+               selectedElements={selectedElements}
+               selectedSlideIds={selectedSlideIds}
+-              {...(deckCiResult !== undefined ? { deckCiResult } : {})}
++              {...(deckCiResult !== undefined ? { deckCiResult: currentDeckCiResult } : {})}
+               {...(deckCiLoading !== undefined ? { deckCiLoading } : {})}
+               onOpenDeckCiTrace={() => onTabChange('trace')}
+               workspaceElements={workspace.elements}
+@@ -708,6 +713,9 @@ export function InspectorPanel<CommandId extends string = string>({
+         {mountedTabsRef.current.has('trace') ? (
+           <InspectorTabPanel id="trace" activeTab={activeTab} drawerViewport={drawerViewport}>
+             <TraceInspector
++              deckCiResult={currentDeckCiResult}
++              deckCiLoading={deckCiLoading ?? false}
++              deckVersion={workspace.deck.version}
+               traces={workspace.traces}
+               validations={workspace.validations}
+               patches={workspace.patches}
+@@ -790,9 +798,10 @@ function handleInspectorTabKeyDown(
+ }
+ 
+ function validationLabel(validation: NodeSlideWorkspace['validations'][number] | undefined) {
+-  if (!validation) return 'Awaiting validation';
+-  if (!validation.ok) return `${validation.issues.length} structure checks need review`;
+-  if (!validation.publishOk) return `${validation.issues.length} issues block presenting or export`;
+-  if (!validation.cleanOk) return `${validation.issues.length} cleanup warnings`;
+-  return 'Structure, presentation, and cleanup checks passed';
++  if (!validation) return 'Awaiting core validation';
++  const version = `Core validation v${validation.deckVersion}`;
++  if (!validation.ok) return `${version}: ${validation.issues.length} structure issues`;
++  if (!validation.publishOk) return `${version}: ${validation.issues.length} presentation issues`;
++  if (!validation.cleanOk) return `${version}: ${validation.issues.length} cleanup warnings`;
++  return `${version} passed. Review Deck CI.`;
+ }
+diff --git a/src/domains/nodeslide/inspector/TraceInspector.test.tsx b/src/domains/nodeslide/inspector/TraceInspector.test.tsx
+index 4f528bd..8a278a8 100644
+--- a/src/domains/nodeslide/inspector/TraceInspector.test.tsx
++++ b/src/domains/nodeslide/inspector/TraceInspector.test.tsx
+@@ -1,5 +1,7 @@
+ import { renderToStaticMarkup } from 'react-dom/server';
+ import { describe, expect, it, vi } from 'vitest';
++import { evaluateNodeSlideDeckCi } from '../../../../convex/lib/nodeslideDeckCi';
++import { buildGoldenNodeSlide } from '../../../../convex/lib/nodeslideSeed';
+ import type {
+   AgentTrace,
+   DeckPatch,
+@@ -53,6 +55,48 @@ const validationFallback: ValidationResult = {
+   checkedAt: 50,
+ };
+ 
++describe('A reviewer distinguishes deck assessment from historical core receipts', () => {
++  const result = evaluateNodeSlideDeckCi({
++    snapshot: buildGoldenNodeSlide('readiness-copy-scenario', 100).snapshot,
++  });
++  it.each(['pass', 'warn'] as const)(
++    'keeps a %s deck assessment scoped when core validation passed',
++    (status) => {
++      const warning = {
++        id: 'review-source',
++        code: 'source_stale',
++        category: 'evidence' as const,
++        origin: 'semantic' as const,
++        severity: 'warning' as const,
++        blocker: false,
++        message: 'Review the source date before sharing.',
++        slideIds: [],
++        elementIds: [],
++        sourceIds: [],
++      };
++      const html = renderToStaticMarkup(
++        <TraceInspector
++          traces={[]}
++          validations={[validationLive, validationFallback]}
++          deckVersion={result.deckVersion}
++          deckCiResult={{
++            ...result,
++            status,
++            blockerCount: 0,
++            severityCounts: { critical: 0, error: 0, warning: status === 'warn' ? 1 : 0, info: 0 },
++            checks: status === 'warn' ? [warning] : [],
++          }}
++        />,
++      );
++      expect(html).toContain(`data-state="${status}"`);
++      expect(html).toContain('Latest recorded core validation');
++      expect(html).not.toContain('publish ready');
++      if (status === 'warn') expect(html).toContain(warning.message);
++      else expect(html).toContain('No blockers or warnings reported for this version.');
++    },
++  );
++});
++
+ const failedIssues: ValidationIssue[] = [
+   {
+     id: 'iss_scope',
+diff --git a/src/domains/nodeslide/inspector/TraceInspector.tsx b/src/domains/nodeslide/inspector/TraceInspector.tsx
+index 3407832..6386110 100644
+--- a/src/domains/nodeslide/inspector/TraceInspector.tsx
++++ b/src/domains/nodeslide/inspector/TraceInspector.tsx
+@@ -24,6 +24,7 @@ import {
+   X,
+ } from 'lucide-react';
+ import { type CSSProperties, type ReactNode, useMemo, useState } from 'react';
++import type { NodeSlideDeckCiResult } from '../../../../convex/lib/nodeslideDeckCi';
+ import {
+   type AgentTrace,
+   type CandidateValidationReceipt,
+@@ -36,6 +37,7 @@ import {
+   type ValidationResult,
+   nodeSlideReasoningEffort,
+ } from '../../../../shared/nodeslide';
++import { DeckCiStatus } from './DeckCiStatus';
+ import { TraceWaterfall } from './TraceWaterfall';
+ import { nodeSlideScopeLabel } from './scopePresentation';
+ 
+@@ -80,6 +82,9 @@ export type TraceNodeId = 'consent' | 'read' | 'plan' | 'edits' | 'validate' | '
+ type NodeInk = 'human' | 'agent';
+ 
+ interface TraceInspectorProps {
++  deckCiResult?: NodeSlideDeckCiResult | null;
++  deckCiLoading?: boolean;
++  deckVersion?: number;
+   traces: readonly AgentTrace[];
+   validations: readonly ValidationResult[];
+   patches?: readonly DeckPatch[];
+@@ -111,6 +116,9 @@ const NODE_META: Record<TraceNodeId, { label: string; ink: NodeInk; Icon: Lucide
+ // ---------------------------------------------------------------------------
+ 
+ export function TraceInspector({
++  deckCiResult = null,
++  deckCiLoading = false,
++  deckVersion,
+   traces,
+   validations,
+   patches = [],
+@@ -211,8 +219,35 @@ export function TraceInspector({
+         <p>Provider, work performed, validation, and human approval in one auditable run.</p>
+       </section>
+ 
++      <section
++        className="ns-validation-summary"
++        data-testid="deck-ci-details"
++        data-deck-version={deckVersion}
++        aria-label="Deck check details"
++      >
++        <h3>Deck checks{deckVersion !== undefined ? ` · v${deckVersion}` : ''}</h3>
++        <DeckCiStatus result={deckCiResult} loading={deckCiLoading} />
++        {deckCiLoading ? (
++          <p>Checking this deck version. Results are pending.</p>
++        ) : !deckCiResult ? (
++          <p>Checks are unavailable for this deck version.</p>
++        ) : deckCiResult.checks.some((check) => check.severity !== 'info') ? (
++          <ul>
++            {deckCiResult.checks
++              .filter((check) => check.severity !== 'info')
++              .map((check) => (
++                <li key={check.id}>
++                  <strong>{check.blocker ? 'Blocker' : check.severity}</strong>: {check.message}
++                </li>
++              ))}
++          </ul>
++        ) : (
++          <p>No blockers or warnings reported for this version.</p>
++        )}
++      </section>
++
+       {latestValidation ? (
+-        <ValidationSummary validation={latestValidation} label="Current deck validation" />
++        <ValidationSummary validation={latestValidation} label="Latest recorded core validation" />
+       ) : null}
+ 
+       {sorted.length === 0 ? (
+@@ -317,7 +352,10 @@ export function TraceInspector({
+                 </div>
+               )}
+               {traceValidation && traceValidation.id !== latestValidation?.id ? (
+-                <ValidationSummary validation={traceValidation} label="Selected trace validation" />
++                <ValidationSummary
++                  validation={traceValidation}
++                  label="Selected trace core validation"
++                />
+               ) : null}
+             </article>
+           ) : null}
+@@ -1431,7 +1469,8 @@ function ValidationSummary({
+       </h3>
+       <p>
+         Deck v{validation.deckVersion} ·{' '}
+-        {validation.publishOk ? 'publish ready' : 'review before publishing'}
++        {validation.publishOk ? 'core checks passed' : 'core checks need review'}. See Deck CI for
++        broader checks.
+       </p>
+       {validation.issues.length > 0 ? (
+         <ul>

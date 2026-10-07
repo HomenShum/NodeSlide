@@ -7,12 +7,12 @@ steps, inline patch cards, multi-turn — against the live Kimi K3 agent.
 
 | Thread need | Already exists | Where |
 |---|---|---|
-| Durable runs w/ lifecycle | `nodeslide_agent_runs` — status: queued → researching → planning → validating → awaiting_review → completed/failed/cancelled; provider/model; patchId; error | `convex/schema.ts:486` |
-| Turn messages | `nodeslide_agent_messages` — role user/assistant/tool/system, toolName, sourceIds (citations) | `schema.ts:535` |
-| Visible steps | `nodeslide_agent_spans` — name, toolName, status, durationMs, model, tokens, costMicroUsd, parentSpanId | `schema.ts:578` |
-| Reactive reads | `listAgentRuns`, `listAgentMessages`, `listAgentTelemetryPage` | `convex/nodeslide.ts:368/382/396` |
-| Patch accept-in-place | `nodeslide_patches` + existing apply/reject mutations (today's patch card) | `schema.ts:331` |
-| Invocation | `proposeEdit` action (writes run+messages+spans via nodeslide.ts mutations) | `convex/nodeslideAgent.ts:94` |
+| Durable runs w/ lifecycle | `nodeslide_agent_runs` — status: queued → researching → planning → validating → awaiting_review → completed/failed/cancelled; provider/model; patchId; error | `convex/schema.ts:1004` (`nodeslide_agent_runs`) |
+| Turn messages | `nodeslide_agent_messages` — role user/assistant/tool/system, toolName, sourceIds (citations) | `convex/schema.ts:1055` (`nodeslide_agent_messages`) |
+| Visible steps | `nodeslide_agent_spans` — name, toolName, status, durationMs, model, tokens, costMicroUsd, parentSpanId | `convex/schema.ts:1116` (`nodeslide_agent_spans`) |
+| Reactive reads | `listAgentRuns`, `listAgentMessages`, `listAgentTelemetryPage` | `convex/nodeslide.ts:751-787` (`listAgentTelemetryPage`) |
+| Patch accept-in-place | `nodeslide_patches` + existing apply/reject mutations (today's patch card) | `convex/schema.ts:499` (`nodeslide_patches`) |
+| Invocation | `proposeEdit` action (writes run+messages+spans via nodeslide.ts mutations) | `convex/nodeslideAgent.ts:481` (`export const proposeEdit`) |
 | Composer | `ai-elements/prompt-input.tsx` (already adopted) | AiInspector |
 
 **Nothing server-side changes.** The rebuild is a client projection:

@@ -1,0 +1,32 @@
+[
+  {
+    "path": ".tours/01-primary-user-flow.tour",
+    "workingSha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97",
+    "headSha256": "8138a9f8332360c572dc74fed6ed116c25fa2ad9b0f5debba72242e2a3572b97",
+    "workingBytes": 6451,
+    "headBytes": 6451,
+    "exactBytesEqual": true,
+    "normalizedLfBytesEqual": true,
+    "includedInSixPathSourceScope": false
+  },
+  {
+    "path": ".tours/02-agent-execution.tour",
+    "workingSha256": "a274bb90a62570133e66eddd157c63e4408b6938eeb103e7b16c7d455d3eef75",
+    "headSha256": "a274bb90a62570133e66eddd157c63e4408b6938eeb103e7b16c7d455d3eef75",
+    "workingBytes": 4363,
+    "headBytes": 4363,
+    "exactBytesEqual": true,
+    "normalizedLfBytesEqual": true,
+    "includedInSixPathSourceScope": false
+  },
+  {
+    "path": "public/recipelang/edge-data-contract.svg",
+    "workingSha256": "4fb36773c4d389fc78cb5d337fa743d9f908e66d689f51af5254f4bf65aa5de5",
+    "headSha256": "4fb36773c4d389fc78cb5d337fa743d9f908e66d689f51af5254f4bf65aa5de5",
+    "workingBytes": 3543,
+    "headBytes": 3543,
+    "exactBytesEqual": true,
+    "normalizedLfBytesEqual": true,
+    "includedInSixPathSourceScope": false
+  }
+]

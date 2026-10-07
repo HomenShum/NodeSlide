@@ -1,0 +1,126 @@
+[
+  {
+    "path": "current-ci.json",
+    "command": [
+      "gh",
+      "run",
+      "view",
+      "31770530461",
+      "-R",
+      "HomenShum/NodeSlide",
+      "--json",
+      "databaseId,headSha,event,status,conclusion,createdAt,updatedAt,url,jobs,attempt"
+    ],
+    "exitCode": 0,
+    "bytes": 8246,
+    "sha256": "e369f00af3f92f896693f6d724db00748cec29f3e78588bd46f4a7f82fefeec7"
+  },
+  {
+    "path": "current-ci.log",
+    "command": [
+      "gh",
+      "run",
+      "view",
+      "31770530461",
+      "-R",
+      "HomenShum/NodeSlide",
+      "--log"
+    ],
+    "exitCode": 0,
+    "bytes": 477718,
+    "sha256": "312de4385186207e54e225f396a595b4b88a1fbb043c02fdd3107141b787bba8"
+  },
+  {
+    "path": "nightly-failed.json",
+    "command": [
+      "gh",
+      "run",
+      "view",
+      "33958565935",
+      "-R",
+      "HomenShum/NodeSlide",
+      "--json",
+      "databaseId,headSha,event,status,conclusion,createdAt,updatedAt,url,jobs,attempt"
+    ],
+    "exitCode": 0,
+    "bytes": 4899,
+    "sha256": "0efffa8cd4ed6d81d60cb03e05ab27b6a732227996fd54bb1dbabff393a70f9f"
+  },
+  {
+    "path": "nightly-failed.log",
+    "command": [
+      "gh",
+      "run",
+      "view",
+      "33958565935",
+      "-R",
+      "HomenShum/NodeSlide",
+      "--log-failed"
+    ],
+    "exitCode": 0,
+    "bytes": 83404,
+    "sha256": "862e5de5ffb593220f5ec074b02bd04fb3a058b2e023448994ddcb1bfe05ff4a"
+  },
+  {
+    "path": "benchmark-failed.json",
+    "command": [
+      "gh",
+      "run",
+      "view",
+      "33950223500",
+      "-R",
+      "HomenShum/NodeSlide",
+      "--json",
+      "databaseId,headSha,event,status,conclusion,createdAt,updatedAt,url,jobs,attempt"
+    ],
+    "exitCode": 0,
+    "bytes": 5508,
+    "sha256": "8f5d68a32220d987a0583ce62be305a0897144a4d1998963f2d4662fc2b0c5c8"
+  },
+  {
+    "path": "benchmark-failed.log",
+    "command": [
+      "gh",
+      "run",
+      "view",
+      "33950223500",
+      "-R",
+      "HomenShum/NodeSlide",
+      "--log-failed"
+    ],
+    "exitCode": 0,
+    "bytes": 54885,
+    "sha256": "894feb251a007bb3d4bf5464bb2a653571cc8bc8b7ef349ea4411dc544903ce8"
+  },
+  {
+    "path": "noderoom-mounted-failed.json",
+    "command": [
+      "gh",
+      "run",
+      "view",
+      "33280884326",
+      "-R",
+      "HomenShum/NodeRoom",
+      "--json",
+      "databaseId,headSha,event,status,conclusion,createdAt,updatedAt,url,jobs,attempt"
+    ],
+    "exitCode": 0,
+    "bytes": 5963,
+    "sha256": "8b53f75148fc9155ca88217b8210bf40c5b47ae5aa8c55073912e1b9495fa368"
+  },
+  {
+    "path": "noderoom-mounted-failed.log",
+    "command": [
+      "gh",
+      "run",
+      "view",
+      "33280884326",
+      "-R",
+      "HomenShum/NodeRoom",
+      "--log-failed"
+    ],
+    "exitCode": 0,
+    "bytes": 121656,
+    "sha256": "73b8fb8425d51b2623b15a82768d7cbb274fd3de5d82534783d0ad9096e9dcb4"
+  }
+]

@@ -29,8 +29,8 @@ other tabs; it is wordier. The council's reasoning, verbatim: *"The owner's refu
 evidence than the raw control count. The tab has failed as an entry point."* And: *"This is not
 deleting design capability. It deletes a navigation edge that the measured user does not take."*
 
-**Status: NOT IMPLEMENTED as of 2026-07-29.** `'design'` remains in `InspectorTab`
-(`src/domains/nodeslide/inspector/types.ts:1`), in the tab strip (`InspectorPanel.tsx`), and
+**Status: NOT IMPLEMENTED as of 2026-07-29.** `'design'` remains a member of
+`src/domains/nodeslide/inspector/types.ts:1` (`export type InspectorTab`), in the tab strip (`InspectorPanel.tsx`), and
 addressable from the command palette (`NodeSlideStudio.tsx`). Commit `a836c6a` did **not** implement
 this — it reinforced the seven-tab strip, which is precisely the drift this file exists to stop.
 

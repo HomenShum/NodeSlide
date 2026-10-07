@@ -1,0 +1,36 @@
+from pathlib import Path
+import subprocess, json, hashlib, os, time, datetime
+P=Path(__file__).parent
+S=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/NodeSlide')
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O=P/'E6g-nodeslide-first-run'
+base='b0674b229a3691c09c88fcab1481f2e33342cb21'
+branch='codex/nodeslide-current-consumer-20260905'
+sha=lambda b:hashlib.sha256(b).hexdigest()
+def git(root,*args):return subprocess.check_output(['git',*args],cwd=root)
+assert not R.exists() and R.parent.resolve()==Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees').resolve()
+assert git(S,'rev-parse',base+'^{tree}').decode().strip()=='f3262e171240fec8f54ec5f01aa86310a2b30f5c'
+assert not git(S,'status','--porcelain=v1')
+assert subprocess.run(['git','show-ref','--verify','--quiet','refs/heads/'+branch],cwd=S).returncode==1
+O.mkdir(exist_ok=False)
+primary={'head':git(S,'rev-parse','HEAD').decode().strip(),'statusSha256':sha(git(S,'status','--porcelain=v1','-z')),'indexSha256':sha(git(S,'ls-files','--stage','-z')),'refs':git(S,'show-ref').decode(),'worktrees':git(S,'worktree','list','--porcelain').decode()}
+(O/'primary-before.json').write_text(json.dumps(primary,indent=2)+'\n',encoding='utf-8',newline='\n')
+with (O/'worktree-create.log').open('xb') as log:subprocess.run(['git','worktree','add','-b',branch,str(R),base],cwd=S,stdout=log,stderr=subprocess.STDOUT,check=True)
+assert git(S,'rev-parse','HEAD').decode().strip()==primary['head'] and sha(git(S,'ls-files','--stage','-z'))==primary['indexSha256'] and not git(S,'status','--porcelain=v1')
+assert git(R,'rev-parse','HEAD').decode().strip()==base and not git(R,'status','--porcelain=v1')
+files=git(R,'ls-files','-z').decode('utf-8').split('\0')
+textExtensions={'.ts','.tsx','.js','.jsx','.mjs','.cjs','.json','.css','.html','.md','.yaml','.yml','.toml','.sh','.ps1','.py','.txt','.tour','.gitignore','.gitattributes'}
+inputs={}
+for name in files:
+    if not name or Path(name).name.startswith('.env'):continue
+    file=R/name
+    if file.is_file() and (file.suffix in textExtensions or '/' not in name):inputs[name]=sha(file.read_bytes())
+(O/'source-before.json').write_text(json.dumps({'head':base,'files':inputs,'count':len(inputs),'scope':'Tracked text/source/config and root files, excluding all .env names; no ignored local state.'},indent=2)+'\n',encoding='utf-8',newline='\n')
+env=dict(os.environ)
+for key in list(env):
+    if any(x in key.upper() for x in ['OPENAI','ANTHROPIC','GEMINI','GOOGLE_API','CONVEX','VITE_','PLAYWRIGHT_BASE_URL']):env.pop(key)
+start=time.monotonic();at=datetime.datetime.now(datetime.timezone.utc).isoformat()
+with (O/'install.log').open('xb') as log:r=subprocess.run(['cmd.exe','/d','/c','npm','ci'],cwd=R,env=env,stdout=log,stderr=subprocess.STDOUT,timeout=900)
+receipt={'at':at,'source':str(R),'head':base,'branch':branch,'sourceInputCount':len(inputs),'primaryPreserved':True,'command':['npm','ci'],'exitCode':r.returncode,'seconds':time.monotonic()-start,'log':'install.log','environment':'Inherited provider/Convex/Vite/base URL names removed without value output; no env file copied.'}
+(O/'install.command.json').write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8',newline='\n')
+print(json.dumps(receipt),flush=True)

@@ -1,0 +1,96 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import Module, { createRequire } from 'node:module';
+import { execFileSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
+import assert from 'node:assert/strict';
+const [repo, packet, out] = process.argv.slice(2).map(p => path.resolve(p));
+fs.mkdirSync(out, { recursive: true });
+const req = createRequire(path.join(repo, 'package.json'));
+const sha = b => crypto.createHash('sha256').update(b).digest('hex');
+const read = p => JSON.parse(fs.readFileSync(p, 'utf8').replace(/^\uFEFF/, ''));
+const write = (name, value) => fs.writeFileSync(path.join(out, name), JSON.stringify(value, null, 2) + '\n');
+const freeze = read(path.join(packet, 'E6g_NODESLIDE_READINESS_FREEZE.json'));
+const git = (...args) => execFileSync('git', ['--no-optional-locks', '-C', repo, ...args]);
+const source = () => freeze.source.map(f => ({ ...f, sha256: sha(fs.readFileSync(path.join(repo, f.path))) }));
+const custody = () => ({ source: source(), head: git('rev-parse', 'HEAD').toString().trim(), index: sha(git('ls-files', '--stage', '-z')), refs: sha(git('show-ref')) });
+const before = custody(); write('custody-before.json', before);
+assert.deepEqual(before.source, freeze.source);
+assert.equal(sha(fs.readFileSync(path.join(packet, 'E6g_NODESLIDE_READINESS_FREEZE.json'))), '62bfbfc14b4ff4ab0cc29b80f487a8e56914d9cede931c027ba0e3bc5fcdc184');
+for (const f of freeze.artifacts) {
+  const b = fs.readFileSync(path.join(packet, f.path));
+  assert.equal(sha(b), f.sha256, f.path); assert.equal(b.length, f.bytes, f.path);
+}
+write('frozen-artifacts-verified.json', { count: freeze.artifacts.length, exact: true, freezeSha256: sha(fs.readFileSync(path.join(packet, 'E6g_NODESLIDE_READINESS_FREEZE.json'))) });
+const built = await req('esbuild').build({ stdin: { contents: "export { buildGoldenNodeSlide } from './convex/lib/nodeslideSeed';", sourcefile: 'readiness-fixture.ts', resolveDir: repo, loader: 'ts' }, bundle: true, write: false, platform: 'node', format: 'cjs', metafile: true, logLevel: 'silent' });
+const mod = new Module(path.join(out, 'golden-memory.cjs')); mod.filename = path.join(out, 'golden-memory.cjs'); mod.paths = Module._nodeModulePaths(repo); mod._compile(built.outputFiles[0].text, mod.filename);
+const snapshot = mod.exports.buildGoldenNodeSlide('independent-readiness-fixture', 100).snapshot; snapshot.deck.version = 3;
+write('synthetic-snapshot.json', snapshot);
+const entry = `import React,{useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import {InspectorPanel} from './src/domains/nodeslide/inspector/InspectorPanel';
+import './src/styles/tokens.css'; import './src/styles.css'; import './src/tailwind.css';
+const snapshot=${JSON.stringify(snapshot)};
+const msg='Independent fixture: slides 3 and 4 repeat the same composition.';
+const noop=()=>{};
+const base={schemaVersion:'nodeslide.deck-ci.v1',deckId:snapshot.deck.id,deckVersion:3,status:'fail',blockerCount:1,severityCounts:{critical:0,error:1,warning:0,info:0},checks:[{id:'own-blocker',code:'fixture',category:'layout',origin:'layout_structure_hook',severity:'error',blocker:true,message:msg,slideIds:[],elementIds:[],sourceIds:[]}]};
+const states=['fail','pending','null','stale','cross-deck','warn','pass','version-change','current-new'];
+function Demo(){const [name,setName]=useState('fail');const [activeTab,onTabChange]=useState('trace');
+const next=name==='version-change'||name==='current-new'; const deck={...snapshot.deck,version:next?4:3};
+let result={...base};if(name==='null')result=null;
+if(name==='stale')result={...base,deckVersion:2};if(name==='cross-deck')result={...base,deckId:'another-fixture-deck'};
+if(name==='warn')result={...base,status:'warn',blockerCount:0,severityCounts:{critical:0,error:0,warning:1,info:0},checks:[{...base.checks[0],id:'own-warning',blocker:false,severity:'warning',message:'Independent fixture: review the source date.'}]};
+if(name==='pass')result={...base,status:'pass',blockerCount:0,severityCounts:{critical:0,error:0,warning:0,info:0},checks:[]};
+if(name==='current-new')result={...base,deckVersion:4};
+const workspace={...snapshot,deck,comments:[],patches:[],versions:[],traces:[],validations:[],exports:[],presence:[],publication:null};
+const props={workspace,slide:snapshot.slides[0],selectedElements:[],activeTab,onTabChange,collapsed:false,width:340,agentBusy:false,variations:[],variationsLoading:false,variationBusy:false,variationGenerating:false,variationError:null,previewedVariationId:null,activeTastePackId:null,tastePackBusy:false,deckCiResult:result,deckCiLoading:name==='pending',onToggleCollapsed:noop,onWidthChange:noop,onProposeEdit:noop,onAcceptPatch:noop,onRejectPatch:noop,onGenerateVariations:noop,onPreviewVariation:noop,onAcceptVariation:noop,onRejectVariation:noop,onApplyTastePack:noop,onClearTastePack:noop,onApplyDesignPatch:noop,onAddComment:noop,onReply:noop,onSetCommentStatus:noop,onRestoreVersion:noop};
+return <><div id="fixture-controls" style={{background:'#fff',color:'#111',padding:8,position:'relative',zIndex:10000}}><strong>ISOLATED SYNTHETIC COMPONENT FIXTURE — no backend</strong><div>{states.map(s=><button type="button" key={s} onClick={()=>setName(s)}>{s}</button>)}</div></div><div className="nodeslide-studio" style={{height:'calc(100vh - 90px)',position:'relative'}}><InspectorPanel {...props}/></div></>}
+createRoot(document.getElementById('root')).render(<Demo/>);`;
+fs.writeFileSync(path.join(out, 'fixture-entry.tsx'), entry);
+const loaded = new Map();
+const virtualPath = path.join(repo, '__independent_readiness_entry.tsx').replaceAll('\\', '/');
+const plugin = { name: 'isolated-readiness-fixture', enforce: 'pre',
+  resolveId(id) { if (id === '/__independent_readiness_entry.tsx') return virtualPath; },
+  load(id) { if (id === virtualPath) return entry; },
+  transform(code,id) { const p=id.split('?')[0];if (path.isAbsolute(p) && fs.existsSync(p) && fs.statSync(p).isFile()) loaded.set(p, {path:path.relative(repo,p).replaceAll('\\','/'),sha256:sha(fs.readFileSync(p)),bytes:fs.statSync(p).size}); },
+  configureServer(server) { server.middlewares.use(async(req,res,next)=>{if(req.url==='/'){try{res.setHeader('Content-Type','text/html');res.end(await server.transformIndexHtml('/','<!doctype html><html><head><title>Isolated readiness fixture</title></head><body style="margin:0"><div id="root"></div><script type="module" src="/__independent_readiness_entry.tsx"></script></body></html>'));}catch(e){next(e);}}else next();}); }
+};
+const vite = await import(pathToFileURL(req.resolve('vite')).href);
+const {chromium}=req('playwright'), {expect}=req('playwright/test');
+let server,browser;const report={scope:'Actual InspectorPanel/TraceInspector in isolated normal Chromium with labelled synthetic prop states; no backend, real deck, provider, or production claim.',checks:[],errors:[],network:[],captures:[],fullGrades:null};
+try {
+  server=await vite.createServer({configFile:path.join(repo,'vite.config.ts'),root:repo,cacheDir:path.join(out,'vite-cache'),plugins:[plugin],server:{host:'127.0.0.1',port:4976,strictPort:true,fs:{allow:[repo,out]}}}); await server.listen();
+  browser=await chromium.launch();
+  for (const viewport of [{width:390,height:844},{width:1440,height:960}]) {
+    const context=await browser.newContext({viewport,serviceWorkers:'block'});
+    await context.route('**/*',route=>{const u=new URL(route.request().url());if(u.protocol.startsWith('http') && (u.hostname!=='127.0.0.1'||u.port!=='4976')){report.network.push({url:u.origin,path:u.pathname});return route.abort();}return route.continue();});
+    const page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));page.on('console',m=>{if(m.type()==='error')report.errors.push(m.text());});
+    await page.goto('http://127.0.0.1:4976/');
+    const details=page.getByTestId('deck-ci-details');
+    const states=[['fail','fail',3,true],['pending','loading',3,false],['null','unavailable',3,false],['stale','unavailable',3,false],['cross-deck','unavailable',3,false],['warn','warn',3,false],['pass','pass',3,false],['version-change','unavailable',4,false],['current-new','fail',4,true]];
+    for(let round=0;round<3;round++) for(const[name,state,version,blocker]of states) {
+      await page.locator('#fixture-controls').getByRole('button',{name,exact:true}).click();
+      await expect(details.locator('.ns-deck-ci-status')).toHaveAttribute('data-state',state);
+      await expect(details).toHaveAttribute('data-deck-version',String(version));
+      if(blocker)await expect(details).toContainText('Independent fixture: slides 3 and 4');else await expect(details).not.toContainText('Independent fixture: slides 3 and 4');
+      if(name==='warn')await expect(details).toContainText('review the source date');else await expect(details).not.toContainText('review the source date');
+      if(name==='pass')await expect(details).toContainText('No blockers or warnings');else await expect(details).not.toContainText('No blockers or warnings');
+      await expect(page.locator('body')).not.toContainText('publish ready');
+      // Keep both actual panels mounted, then verify the badge receives the same filtered state.
+      await page.getByTestId('inspector-tab-ai').click();
+      await expect(page.locator('#ns-tabpanel-ai').locator('.ns-deck-ci-status')).toHaveAttribute('data-state',state);
+      await page.getByTestId('inspector-tab-trace').click();
+      const motion=await details.locator('.ns-deck-ci-status__dot').evaluate(e=>({animation:getComputedStyle(e).animationName,transition:getComputedStyle(e).transitionDuration}));
+      assert.equal(motion.animation,'none');assert(motion.transition.split(',').every(v=>parseFloat(v)===0));
+      report.checks.push({viewport,round,name,state,version,blocker,aiAndTraceAgree:true,motion});
+      if(round===0&&['pending','stale','warn','current-new'].includes(name)) {
+        const prefix=viewport.width+'-'+name;await page.screenshot({path:path.join(out,prefix+'.png')});fs.writeFileSync(path.join(out,prefix+'.html'),await page.content());
+        const dom=await details.evaluate(e=>({text:e.textContent,version:e.getAttribute('data-deck-version'),state:e.querySelector('.ns-deck-ci-status').getAttribute('data-state')}));write(prefix+'.json',{viewport,dom,errors:[...report.errors]});report.captures.push(prefix);
+      }
+    }
+    await context.close();
+  }
+  assert.deepEqual(report.errors,[]);assert.deepEqual(report.network,[]);report.verdict='PASS_SCOPED_RENDERED_FIXTURE_TRANSITIONS';
+} catch(e){report.verdict='FAILED';report.failure=String(e.stack??e);process.exitCode=1;}
+finally {await browser?.close();await server?.close();write('rendered-transitions.json',report);write('loaded-source-bindings.json',[...loaded.values()].sort((a,b)=>a.path.localeCompare(b.path)));const after=custody();write('custody-after.json',after);write('custody-result.json',{unchanged:JSON.stringify(before)===JSON.stringify(after),allFrozenArtifactsVerified:89});assert.deepEqual(before,after);console.log(JSON.stringify({verdict:report.verdict,checks:report.checks.length,captures:report.captures.length,failure:report.failure,errors:report.errors,loaded:loaded.size}));}

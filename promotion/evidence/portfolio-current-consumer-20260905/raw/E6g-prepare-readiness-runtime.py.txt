@@ -1,0 +1,14 @@
+from pathlib import Path
+import json,hashlib
+P=Path(__file__).parent;O=Path('D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02/readiness-runtime-01')
+O.mkdir();(P/'E6g-nodeslide-readiness-runtime').mkdir()
+for name in ['local-loopback-runtime.json','vite-runtime.json']:
+    r=json.loads((P/'E6g-nodeslide-first-run'/name).read_text(encoding='utf-8'));assert r.get('cleanup') and r.get('stoppedAt')
+for source,target in [('E6g-run-nodeslide-loopback.py','E6g-run-readiness-loopback.py'),('E6g-run-nodeslide-vite.py','E6g-run-readiness-vite.py')]:
+    s=(P/source).read_text(encoding='utf-8').replace("Path('D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02')",f"Path('{O.as_posix()}')").replace('E6g-nodeslide-first-run/','E6g-nodeslide-readiness-runtime/').replace('NEW_CANDIDATE_LOOPBACK_ONLY','EXISTING_SYNTHETIC_CANDIDATE_LOOPBACK_ONLY')
+    # The same origin keeps the existing synthetic deck capability storage bound.
+    if source.endswith('vite.py'):
+        s=s.replace("with socket.socket() as probe:probe.bind(('127.0.0.1',0));port=probe.getsockname()[1]","port=53146\nwith socket.socket() as probe:probe.bind(('127.0.0.1',port))")
+    (P/target).write_text(s,encoding='utf-8',newline='\n')
+d={'proof':'NODESLIDE-DECK-CI-DETAIL-01','operation':'Restart the exact already-owned synthetic backend/database and same loopback Vite origin for before/after UI proof. Old supervisors stopped and cleanup receipts retained.','privateChildDirectory':str(O),'ports':[49676,49690,53146],'constraints':['No new credential or provider lookup; read only generated anonymous candidate config in process.','Native interface127.0.0.1 verified before normal local push/admission.','Same preserved failed and chart decks; original4173/4174 untouched.','New phase has separate private logs/public PID-time receipts and one-hour owned supervisor budget.']}
+(P/'E6g-nodeslide-readiness-runtime/plan.json').write_text(json.dumps(d,indent=2)+'\n',encoding='utf-8',newline='\n');print(json.dumps(d))

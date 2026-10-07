@@ -1,0 +1,78 @@
+[
+  {
+    "line": 221,
+    "text": "##[group]Run missing=()"
+  },
+  {
+    "line": 222,
+    "text": "\u001b[36;1mmissing=()\u001b[0m"
+  },
+  {
+    "line": 223,
+    "text": "\u001b[36;1m[[ -n \"$PLAYWRIGHT_BASE_URL\" ]] || missing+=(NODESLIDE_PRODUCTION_URL)\u001b[0m"
+  },
+  {
+    "line": 224,
+    "text": "\u001b[36;1m[[ -n \"$NODESLIDE_BENCH_CONVEX_URL\" ]] || missing+=(NODESLIDE_PRODUCTION_CONVEX_URL)\u001b[0m"
+  },
+  {
+    "line": 225,
+    "text": "\u001b[36;1m[[ -n \"$OPENROUTER_API_KEY\" ]] || missing+=(NODESLIDE_TASTE_JUDGE_OPENROUTER_KEY)\u001b[0m"
+  },
+  {
+    "line": 226,
+    "text": "\u001b[36;1mif (( ${#missing[@]} > 0 )); then\u001b[0m"
+  },
+  {
+    "line": 227,
+    "text": "\u001b[36;1m  printf 'Missing required live-evidence configuration: %s\\n' \"${missing[*]}\" >&2\u001b[0m"
+  },
+  {
+    "line": 230,
+    "text": "shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}"
+  },
+  {
+    "line": 242,
+    "text": "Missing required live-evidence configuration: NODESLIDE_PRODUCTION_URL NODESLIDE_PRODUCTION_CONVEX_URL NODESLIDE_TASTE_JUDGE_OPENROUTER_KEY"
+  },
+  {
+    "line": 243,
+    "text": "##[error]Process completed with exit code 1."
+  },
+  {
+    "line": 259,
+    "text": "shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}"
+  },
+  {
+    "line": 281,
+    "text": "  \"status\": \"UNSCORED\","
+  },
+  {
+    "line": 285,
+    "text": "      \"status\": \"UNSCORED\","
+  },
+  {
+    "line": 286,
+    "text": "      \"message\": \"UXBench status is UNSCORED across 3 selected fixtures.\","
+  },
+  {
+    "line": 291,
+    "text": "      \"status\": \"UNSCORED\","
+  },
+  {
+    "line": 292,
+    "text": "      \"message\": \"TasteBench status is UNSCORED.\","
+  },
+  {
+    "line": 357,
+    "text": "    \"status\": \"UNSCORED\","
+  },
+  {
+    "line": 362,
+    "text": "    \"status\": \"UNSCORED\","
+  },
+  {
+    "line": 375,
+    "text": "##[error]Process completed with exit code 1."
+  }
+]

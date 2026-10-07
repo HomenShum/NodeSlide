@@ -1,0 +1,444 @@
+Fixed live UXBench and TasteBench	UNKNOWN STEP	﻿2026-09-05T06:35:15.5816822Z Current runner version: '2.337.0'
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5845143Z ##[group]Runner Image Provisioner
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5846501Z Hosted Compute Agent
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5847386Z Version: 20260828.587
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5848347Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5849623Z Build Date: 2026-08-28T16:44:25Z
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5850698Z Worker ID: {12fb296f-4db0-47df-bee8-aea6b9aecef3}
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5852082Z Azure Region: eastus2
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5853058Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5855134Z ##[group]Operating System
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5856226Z Ubuntu
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5857160Z 24.04.4
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5857984Z LTS
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5858765Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5859672Z ##[group]Runner Image
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5860658Z Image: ubuntu-24.04
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5861762Z Version: 20260831.293.1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5863742Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260831.293/images/ubuntu/Ubuntu2404-Readme.md
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5866070Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260831.293
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5868292Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5869944Z ##[group]GITHUB_TOKEN Permissions
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5873127Z Contents: read
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5874033Z Metadata: read
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5874976Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5878527Z Secret source: Actions
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.5880635Z Prepare workflow directory
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.6637564Z Prepare all required actions
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.6706012Z Getting action download info
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:15.8487008Z Download action repository 'actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10' (SHA:df4cb1c069e1874edd31b4311f1884172cec0e10)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.0165972Z Download action repository 'actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38' (SHA:249970729cb0ef3589644e2896645e5dc5ba9c38)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.1358456Z Download action repository 'actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a' (SHA:043fb46d1a93c77aae656e7c1c64a875d1fc6a0a)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3131087Z Complete job name: Fixed live UXBench and TasteBench
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3835471Z ##[group]Run actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3836619Z with:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3837145Z   repository: HomenShum/NodeSlide
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3841221Z   token: ***
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3842286Z   ssh-strict: true
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3842815Z   ssh-user: git
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3843338Z   persist-credentials: true
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3843914Z   clean: true
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3844437Z   sparse-checkout-cone-mode: true
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3845040Z   fetch-depth: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3845542Z   fetch-tags: false
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3846063Z   show-progress: true
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3846585Z   lfs: false
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3847077Z   submodules: false
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3847610Z   set-safe-directory: true
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3848487Z env:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3848984Z   PLAYWRIGHT_BASE_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3849584Z   NODESLIDE_BENCH_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3850159Z   VITE_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3850741Z   NODESLIDE_BENCH_ALLOW_LIVE_WRITE: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3851369Z   NODESLIDE_E2E_LIVE_BACKEND: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3852108Z   NODESLIDE_E2E_MUTATIONS: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3852844Z   NODESLIDE_BENCH_SOURCE_SHA: b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3853960Z   NODESLIDE_BENCH_OUTPUT_DIRECTORY: benchmark-results/live/b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.3854957Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.4859337Z Syncing repository: HomenShum/NodeSlide
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.4861390Z ##[group]Getting Git version info
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.4862312Z Working directory is '/home/runner/work/NodeSlide/NodeSlide'
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.4863463Z [command]/usr/bin/git version
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.4914542Z git version 2.55.0
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.4936333Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.4950176Z Temporarily overriding HOME='/home/runner/work/_temp/4d9f7f2f-31e7-4afd-b6f2-8e936d717cc3' before making global git config changes
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.4952348Z Adding repository directory to the temporary git global config as a safe directory
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.4956383Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NodeSlide/NodeSlide
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5004110Z Deleting the contents of '/home/runner/work/NodeSlide/NodeSlide'
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5008252Z ##[group]Determining repository object format
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5010496Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5011633Z ##[group]Initializing the repository
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5014838Z [command]/usr/bin/git init /home/runner/work/NodeSlide/NodeSlide
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5102212Z hint: Using 'master' as the name for the initial branch. This default branch name
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5103599Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5104611Z hint: to use in all of your new repositories, which will suppress this warning,
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5105570Z hint: call:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5106266Z hint:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5106940Z hint: 	git config --global init.defaultBranch <name>
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5107965Z hint:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5108910Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5110468Z hint: 'development'. The just-created branch can be renamed via this command:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5112071Z hint:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5112798Z hint: 	git branch -m <name>
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5113578Z hint:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5114576Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5116234Z Initialized empty Git repository in /home/runner/work/NodeSlide/NodeSlide/.git/
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5118960Z [command]/usr/bin/git remote add origin https://github.com/HomenShum/NodeSlide
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5198586Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5199820Z ##[group]Disabling automatic garbage collection
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5202401Z [command]/usr/bin/git config --local gc.auto 0
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5233706Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5234881Z ##[group]Setting up auth
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5236183Z Removing SSH command configuration
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5241849Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5273632Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5628920Z Removing HTTP extra header
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5635652Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5670761Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5916639Z Removing includeIf entries pointing to credentials config files
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5924300Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.5960678Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.6220010Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.6262498Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git.path /home/runner/work/_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.6297830Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.6337990Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.6377698Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.6410200Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.6411086Z ##[group]Fetching the repository
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:16.6420058Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b0674b229a3691c09c88fcab1481f2e33342cb21:refs/remotes/origin/main
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0205077Z From https://github.com/HomenShum/NodeSlide
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0206851Z  * [new ref]         b0674b229a3691c09c88fcab1481f2e33342cb21 -> origin/main
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0216884Z [command]/usr/bin/git branch --list --remote origin/main
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0245760Z   origin/main
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0255921Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0282823Z b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0293817Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0295143Z ##[group]Determining the checkout info
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0296498Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0297332Z [command]/usr/bin/git sparse-checkout disable
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0346092Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0375247Z ##[group]Checking out the ref
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:20.0378984Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.0557322Z Updating files:  69% (2704/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.0607057Z Updating files:  70% (2731/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.0629829Z Updating files:  71% (2770/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.0652451Z Updating files:  72% (2809/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.0731279Z Updating files:  73% (2848/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.0972601Z Updating files:  74% (2887/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.1255761Z Updating files:  75% (2926/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.1375319Z Updating files:  76% (2965/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.1489105Z Updating files:  77% (3004/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.1605069Z Updating files:  78% (3043/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.1722742Z Updating files:  79% (3082/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.1844690Z Updating files:  80% (3121/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.1980710Z Updating files:  81% (3160/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2093073Z Updating files:  82% (3199/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2218119Z Updating files:  83% (3238/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2332021Z Updating files:  84% (3277/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2355170Z Updating files:  85% (3316/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2387970Z Updating files:  86% (3355/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2417648Z Updating files:  87% (3394/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2448823Z Updating files:  88% (3433/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2485053Z Updating files:  89% (3472/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2519748Z Updating files:  90% (3511/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2546794Z Updating files:  91% (3550/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2581726Z Updating files:  92% (3589/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2616619Z Updating files:  93% (3628/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2652375Z Updating files:  94% (3667/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2680838Z Updating files:  95% (3706/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2713672Z Updating files:  96% (3745/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2753779Z Updating files:  97% (3784/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2789055Z Updating files:  98% (3823/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2818541Z Updating files:  99% (3862/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2819240Z Updating files: 100% (3901/3901)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2819818Z Updating files: 100% (3901/3901), done.
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2879189Z Switched to a new branch 'main'
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2885536Z branch 'main' set up to track 'origin/main'.
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2929327Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.2978951Z [command]/usr/bin/git log -1 --format=%H
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3005805Z b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3398430Z ##[group]Run actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3399416Z with:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3399780Z   node-version: 22
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3400384Z   cache: npm
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3400781Z   check-latest: false
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3409156Z   token: ***
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3409600Z   package-manager-cache: true
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3410144Z env:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3410523Z   PLAYWRIGHT_BASE_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3411043Z   NODESLIDE_BENCH_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3411692Z   VITE_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3412175Z   NODESLIDE_BENCH_ALLOW_LIVE_WRITE: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3412823Z   NODESLIDE_E2E_LIVE_BACKEND: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3413392Z   NODESLIDE_E2E_MUTATIONS: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3414227Z   NODESLIDE_BENCH_SOURCE_SHA: b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3415815Z   NODESLIDE_BENCH_OUTPUT_DIRECTORY: benchmark-results/live/b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.3417154Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.4877957Z Found in cache @ /opt/hostedtoolcache/node/22.23.2/x64
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.4880600Z ##[group]Environment details
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.8524724Z node: v22.23.2
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.8525256Z npm: 10.9.8
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.8525596Z yarn: 1.22.22
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.8526747Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.8543724Z [command]/opt/hostedtoolcache/node/22.23.2/x64/bin/npm config get cache
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:21.9621372Z /home/runner/.npm
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.0471842Z Cache hit for: node-cache-Linux-x64-npm-c47f0e5907ee5d521b87e9b2ff623dc683fcd9a415c26f16c9d00535a1a6fd9a
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.4251872Z Received 59328062 of 59328062 (100.0%), 171.5 MBs/sec
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.4252575Z Cache Size: ~57 MB (59328062 B)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.4391776Z [command]/usr/bin/tar -xf /home/runner/work/_temp/627b2b57-0e99-4787-8705-ea5fb28b2b9b/cache.tzst -P -C /home/runner/work/NodeSlide/NodeSlide --use-compress-program unzstd
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.5726922Z Cache restored successfully
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.5759670Z Cache restored from key: node-cache-Linux-x64-npm-c47f0e5907ee5d521b87e9b2ff623dc683fcd9a415c26f16c9d00535a1a6fd9a
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.5958421Z ##[group]Run npm ci
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.5958802Z [36;1mnpm ci[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.6009094Z shell: /usr/bin/bash -e {0}
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.6009415Z env:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.6009659Z   PLAYWRIGHT_BASE_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.6009942Z   NODESLIDE_BENCH_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.6010225Z   VITE_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.6010483Z   NODESLIDE_BENCH_ALLOW_LIVE_WRITE: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.6010787Z   NODESLIDE_E2E_LIVE_BACKEND: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.6011069Z   NODESLIDE_E2E_MUTATIONS: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.6011424Z   NODESLIDE_BENCH_SOURCE_SHA: b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.6012299Z   NODESLIDE_BENCH_OUTPUT_DIRECTORY: benchmark-results/live/b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:22.6012800Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:24.8256110Z npm warn skipping integrity check for git dependency ssh://git@github.com/HomenShum/node-platform.git
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:29.1190863Z npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8187008Z 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8188206Z added 712 packages, and audited 728 packages in 27s
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8188726Z 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8189016Z 104 packages are looking for funding
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8189517Z   run `npm fund` for details
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8326765Z 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8327493Z 7 vulnerabilities (1 moderate, 6 high)
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8327875Z 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8328257Z To address issues that do not require attention, run:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8328806Z   npm audit fix
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8329027Z 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8329420Z To address all issues (including breaking changes), run:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8329992Z   npm audit fix --force
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8330239Z 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.8330471Z Run `npm audit` for details.
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9476702Z ##[group]Run missing=()
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9477021Z [36;1mmissing=()[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9477413Z [36;1m[[ -n "$PLAYWRIGHT_BASE_URL" ]] || missing+=(NODESLIDE_PRODUCTION_URL)[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9478005Z [36;1m[[ -n "$NODESLIDE_BENCH_CONVEX_URL" ]] || missing+=(NODESLIDE_PRODUCTION_CONVEX_URL)[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9478835Z [36;1m[[ -n "$OPENROUTER_API_KEY" ]] || missing+=(NODESLIDE_TASTE_JUDGE_OPENROUTER_KEY)[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9479280Z [36;1mif (( ${#missing[@]} > 0 )); then[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9479749Z [36;1m  printf 'Missing required live-evidence configuration: %s\n' "${missing[*]}" >&2[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9480179Z [36;1m  exit 1[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9480403Z [36;1mfi[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9524906Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9525281Z env:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9525512Z   PLAYWRIGHT_BASE_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9525796Z   NODESLIDE_BENCH_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9526110Z   VITE_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9526361Z   NODESLIDE_BENCH_ALLOW_LIVE_WRITE: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9526652Z   NODESLIDE_E2E_LIVE_BACKEND: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9526919Z   NODESLIDE_E2E_MUTATIONS: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9527282Z   NODESLIDE_BENCH_SOURCE_SHA: b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9527880Z   NODESLIDE_BENCH_OUTPUT_DIRECTORY: benchmark-results/live/b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9528366Z   OPENROUTER_API_KEY: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9528623Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9596413Z Missing required live-evidence configuration: NODESLIDE_PRODUCTION_URL NODESLIDE_PRODUCTION_CONVEX_URL NODESLIDE_TASTE_JUDGE_OPENROUTER_KEY
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9607065Z ##[error]Process completed with exit code 1.
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9669754Z ##[group]Run args=(
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9670048Z [36;1margs=([0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9670324Z [36;1m  --out benchmark-results/evidence-live[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9670661Z [36;1m  --case C01[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9670907Z [36;1m  --case E01[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9671146Z [36;1m  --case A05[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9671379Z [36;1m  --enforce[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9671777Z [36;1m)[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9672060Z [36;1mevidence_dir="$NODESLIDE_BENCH_OUTPUT_DIRECTORY"[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9672462Z [36;1mif [[ -d "$evidence_dir" ]]; then[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9672794Z [36;1m  while IFS= read -r manifest; do[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9673110Z [36;1m    args+=(--evidence "$manifest")[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9673663Z [36;1m  done < <(find "$evidence_dir" -maxdepth 1 -type f \( -name '*.manifest.json' -o -name 'e01-judge.json' \) | sort)[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9674195Z [36;1mfi[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9674513Z [36;1mnpm run nodeslide:bench:evidence -- "${args[@]}"[0m
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9712033Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9712399Z env:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9712631Z   PLAYWRIGHT_BASE_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9712907Z   NODESLIDE_BENCH_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9713186Z   VITE_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9713437Z   NODESLIDE_BENCH_ALLOW_LIVE_WRITE: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9713733Z   NODESLIDE_E2E_LIVE_BACKEND: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9714012Z   NODESLIDE_E2E_MUTATIONS: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9714368Z   NODESLIDE_BENCH_SOURCE_SHA: b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9714973Z   NODESLIDE_BENCH_OUTPUT_DIRECTORY: benchmark-results/live/b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:49.9715462Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.0711095Z 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.0712017Z > nodeslide@0.1.0 nodeslide:bench:evidence
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.0713353Z > node scripts/nodeslide-benchmark-gate.mjs --mode evidence --out benchmark-results/evidence-live --case C01 --case E01 --case A05 --enforce
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.0713950Z 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1422515Z {
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1423174Z   "schemaVersion": "nodeslide-benchmark-gate-summary/v1",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1423690Z   "harness": {
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1424053Z     "name": "nodeslide-benchmark-gate",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1424451Z     "version": "1.0.0"
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1424775Z   },
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1425105Z   "lane": "evidence",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1425362Z   "status": "UNSCORED",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1425724Z   "checks": [
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1426081Z     {
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1426756Z       "id": "uxbench",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1427122Z       "status": "UNSCORED",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1427761Z       "message": "UXBench status is UNSCORED across 3 selected fixtures.",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1428361Z       "evidenceRefs": []
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1428723Z     },
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1429005Z     {
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1429380Z       "id": "tastebench",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1429750Z       "status": "UNSCORED",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1430184Z       "message": "TasteBench status is UNSCORED.",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1430602Z       "evidenceRefs": []
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1430934Z     }
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1431230Z   ],
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1431717Z   "comparability": {
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1432116Z     "corpusVersion": "2026-07-15",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1432869Z     "registryDigest": "sha256:b90db01f9acfd7395f40874dd18cc745a99b4f22bbd5fc108459a52192dd00ae",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1433859Z     "registrySourceSha256": "2254643bb268e2affd5a177e8b572818ed3c94b16f1f382354ebaa8a7462c862",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1434541Z     "requestCount": 167,
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1434879Z     "fixtureCount": 20,
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1435221Z     "fixtureIds": [
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1435528Z       "C01",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1435848Z       "C05",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1436056Z       "C06",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1436359Z       "N04",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1436658Z       "E01",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1436940Z       "E06",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1437241Z       "E11",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1437534Z       "V01",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1438054Z       "V07",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1438361Z       "D01",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1438646Z       "D03",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1438928Z       "I02",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1439169Z       "M01",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1439475Z       "T09",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1439769Z       "R01",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1440070Z       "S07",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1440361Z       "Q01",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1440580Z       "P01",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1440907Z       "A03",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1441384Z       "F08"
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1441941Z     ],
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1442408Z     "fixtureDigests": {
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1443315Z       "C01": "sha256:362db3c1749351928f3e944c0842594517ae86743f0f23d7e0fb087458bcf33c",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1444723Z       "C05": "sha256:fdb0092d379477fa9389886f428c6e96c0801b2dada03c4822afce72f9ba1c92",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1447772Z       "C06": "sha256:f89bc1e610d94b9aca0d3402fb9e8f09384a93142429ecdddd7dcf7f6b702fa9",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1448738Z       "N04": "sha256:af3384914dc509179cdf03fca6574c27a2673c02b97fec7ec0c497964238cc35",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1449629Z       "E01": "sha256:9ce29a2198c8efc016f525091ef6079fc25c06df496e2add92bd0c6079f9c16c",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1450627Z       "E06": "sha256:e09a3c9aafd125feec338c1967b834b5785fe7045bf3f7f0e00788b9f349b72b",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1453536Z       "E11": "sha256:93d4c9dfca89d8248e326446bb1d84d535cfd49515dfeef60072c5ecca7c8023",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1455134Z       "V01": "sha256:6a37abe8abcdad050d5f8278541e38abcf500745880d7df271d76b300ec26d88",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1456501Z       "V07": "sha256:91f9be9463c08c48399b508b949ff68f1787733262f109d100ac6ef592614bca",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1457806Z       "D01": "sha256:f8f83463e7eef6b0839258d039774bd783ca62749a4356c264bfa73ea003e456",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1458907Z       "D03": "sha256:d335531141f592f6f3164fd08307415f86164f43021af0979511f814983f4312",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1460058Z       "I02": "sha256:576ed0830bc0bf2406a39cded67b1dc8c0920392fd1d3d8df8a31ca7f8cfc46f",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1461401Z       "M01": "sha256:e47d3dc3bbef397d7385a474a81aba3c85a318454cbb854dcc0506765d98dafc",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1462808Z       "T09": "sha256:1562153b074ae7c345104b112f85c6f4cabd530539f6271f74926954ab98798a",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1464132Z       "R01": "sha256:2246bd00973f638ebb7c9d89d21d5ff5a3c3f906801e4547f4a81db274eb26f3",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1465264Z       "S07": "sha256:57c532be578412dd0af3b9a6cb4069a9aa9645a28eec936f28b0d1fc28758b39",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1466377Z       "Q01": "sha256:a348d2ae753dcb4d98453cc8d02367678f4d2968e98ae60f430916768e313310",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1467885Z       "P01": "sha256:75e299b70c8fb0bfb312b59b3a3385d12a7650ed25bec721f420ea50285226a7",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1469276Z       "A03": "sha256:1c9fcb986cce97b24a9b5f12a4969d04bdd86d45bef7208fafc57df4d5dfd034",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1470676Z       "F08": "sha256:7f17699cddcf02f7c44b0d0eedf969e7bac1188b3ccb1ca1c1a28b95f2b70431"
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1472396Z     },
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1473539Z     "tasteRulesDigest": "sha256:06806cd4f59ddf7fefb6b9607fee535c8265a008c1ef4daf34f7b9e3db75f560",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1474535Z     "schemaDigests": {
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1475625Z       "fixture.schema.json": "sha256:7e3478f9c0cbe1bb15fa4aa679fa274e5127d761bce7deb468c42d8d44de35e8",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1477343Z       "run-artifact.schema.json": "sha256:2dc1819e448304327c4877111e4da58c44995563c88e36f1574d8223009eb9d3",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1479032Z       "run-record.schema.json": "sha256:b2fa104efbfe0c7cf1ed9c7fd585bce484465f04802408ed5e8cc6e61198ee27",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1480904Z       "taste-artifact.schema.json": "sha256:bc7fbac6d2babc6b840a11fecebe2d028c3a33f58956ca4a64c817d6986b9860",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1482953Z       "taste-judge.schema.json": "sha256:824e450e30510172ecbd01a091a85e1de917fe37cc42a69500a65cf8a2856517",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1484743Z       "automation.schema.json": "sha256:4b0896b85acfa7cc0e3d6be52c75affb87db4b9c79f447f02b5db87b2331b303"
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1486048Z     }
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1486514Z   },
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1486971Z   "ux": {
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1487912Z     "status": "UNSCORED",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1489086Z     "reportId": "sha256:96d313e0ca20e0df11c73c90a8389bcdb8d5133f68ed86c009c6089b2cb85922",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1490124Z     "artifactCount": 0
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1490601Z   },
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1491012Z   "taste": {
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1491729Z     "status": "UNSCORED",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1492784Z     "reportId": "sha256:60c3571def688c62f3cedc950f6656ec2bbafd007735b15a5296682eec1d6260",
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1493774Z     "reportCount": 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1494215Z   },
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1494622Z   "artifacts": {
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1495080Z     "uxManifestDigests": [],
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1495730Z     "tasteManifestDigests": []
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1496307Z   },
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1496706Z   "baseline": {
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1497149Z     "provided": false
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1497576Z   },
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1498551Z   "summaryId": "sha256:7a0d3c7b14759f808e6f667943051ca824e540a044d205ab91edbdcd36cbc553"
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1499573Z }
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1606089Z ##[error]Process completed with exit code 1.
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1704020Z ##[group]Run actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1704452Z with:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1704712Z   name: nodeslide-bench-live-33950223500-1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1705030Z   if-no-files-found: warn
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1705293Z   retention-days: 14
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1705626Z   path: benchmark-results/live/
+Fixed live UXBench and TasteBench	UNKNOWN STEP	benchmark-results/evidence-live/
+Fixed live UXBench and TasteBench	UNKNOWN STEP	
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1706015Z   compression-level: 6
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1706278Z   overwrite: false
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1706527Z   include-hidden-files: false
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1706788Z   archive: true
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1707008Z env:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1707257Z   PLAYWRIGHT_BASE_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1707530Z   NODESLIDE_BENCH_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1707808Z   VITE_CONVEX_URL: 
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1708057Z   NODESLIDE_BENCH_ALLOW_LIVE_WRITE: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1708348Z   NODESLIDE_E2E_LIVE_BACKEND: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1708622Z   NODESLIDE_E2E_MUTATIONS: 1
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1709015Z   NODESLIDE_BENCH_SOURCE_SHA: b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1709587Z   NODESLIDE_BENCH_OUTPUT_DIRECTORY: benchmark-results/live/b0674b229a3691c09c88fcab1481f2e33342cb21
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.1710082Z ##[endgroup]
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.3171789Z Multiple search paths detected. Calculating the least common ancestor of all paths
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.3173891Z The least common ancestor is /home/runner/work/NodeSlide/NodeSlide/benchmark-results. This will be the root directory of the artifact
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.3175285Z With the provided path, there will be 6 files uploaded
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.3177536Z Artifact name is valid!
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.3178282Z Root directory input is valid!
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.4914927Z Uploading artifact: nodeslide-bench-live-33950223500-1.zip
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.4954753Z Beginning upload of artifact content to blob storage
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.5602278Z Uploaded bytes 5366
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.5705714Z Finished uploading artifact content to blob storage!
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.5706928Z SHA256 digest of uploaded artifact is 34623157557ae9a659f5afbe882aa18d8a8a8352aeedffea26326c11b213bd32
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.5707824Z Finalizing artifact upload
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.8065697Z Artifact nodeslide-bench-live-33950223500-1 successfully finalized. Artifact ID 9964573349
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.8067444Z Artifact nodeslide-bench-live-33950223500-1 has been successfully uploaded! Final size is 5366 bytes. Artifact ID is 9964573349
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.8070572Z Artifact download URL: https://github.com/HomenShum/NodeSlide/actions/runs/33950223500/artifacts/9964573349
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.8277328Z Post job cleanup.
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9122052Z [command]/usr/bin/git version
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9159893Z git version 2.55.0
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9197308Z Temporarily overriding HOME='/home/runner/work/_temp/fdee0154-053f-48c4-a667-ca6180dec2c0' before making global git config changes
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9198236Z Adding repository directory to the temporary git global config as a safe directory
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9200782Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NodeSlide/NodeSlide
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9234254Z Removing SSH command configuration
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9240495Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9278918Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9527506Z Removing HTTP extra header
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9533005Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9568325Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9809600Z Removing includeIf entries pointing to credentials config files
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9816839Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9844116Z includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git.path
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9844874Z includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git/worktrees/*.path
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9845426Z includeif.gitdir:/github/workspace/.git.path
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9845889Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9852951Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git.path
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9876660Z /home/runner/work/_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9887597Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git.path /home/runner/work/_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9926312Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git/worktrees/*.path
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9949714Z /home/runner/work/_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9958941Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/NodeSlide/NodeSlide/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:50.9992175Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:51.0015517Z /github/runner_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:51.0024640Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:51.0056107Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:51.0078143Z /github/runner_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:51.0088156Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:51.0124326Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:51.0388616Z Removing credentials config '/home/runner/work/_temp/git-credentials-68c84769-ff1d-468f-8b9c-f9ba8560e99f.config'
+Fixed live UXBench and TasteBench	UNKNOWN STEP	2026-09-05T06:35:51.0549343Z Cleaning up orphan processes

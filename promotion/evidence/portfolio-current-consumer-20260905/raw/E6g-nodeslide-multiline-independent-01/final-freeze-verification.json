@@ -1,0 +1,93 @@
+{
+  "before": {
+    "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+    "indexEntriesSha256": "7ec471e055fda0d8b7ecad06cc74067163eec5a3563e92ae5ef5fe736748c65a",
+    "refsSha256": "841e485e5adfba369d9f14d30858b7424c43294858f7b7323d153e143c23dfb9"
+  },
+  "after": {
+    "head": "b0674b229a3691c09c88fcab1481f2e33342cb21",
+    "indexEntriesSha256": "7ec471e055fda0d8b7ecad06cc74067163eec5a3563e92ae5ef5fe736748c65a",
+    "refsSha256": "841e485e5adfba369d9f14d30858b7424c43294858f7b7323d153e143c23dfb9"
+  },
+  "unchanged": true,
+  "source": [
+    {
+      "path": "convex/lib/nodeslideValidators.ts",
+      "sha256": "8a37b1a57278a9689ad4d1aacb11ac4ad9e7bb833a4f5658804ef94c3a7a81cb"
+    },
+    {
+      "path": "convex/lib/nodeslideAdmission.test.ts",
+      "sha256": "d46287d3ac7d9a1a393fe9a4665e2c3413f6155fa46bb30643e4384a7f3e5e29"
+    },
+    {
+      "path": ".tours/01-primary-user-flow.tour",
+      "sha256": "55be812065e25dbe438af99928d8470bc0bc934fa7760a7f06f8d47ba516592c"
+    },
+    {
+      "path": ".tours/03-debug-and-recovery.tour",
+      "sha256": "b91ff8afb9391d3de56a7188aaa7590463edb8e7201c4deaaafe7f32daf87a9b"
+    },
+    {
+      "path": "docs/codebase/CONCERNS.md",
+      "sha256": "2860a435ccad27f8314d133a10b542bb1f9437a7a9eb67ef1faf5879285142f3"
+    },
+    {
+      "path": "docs/codebase/INTEGRATIONS.md",
+      "sha256": "9ae7964e4379f023605bb2a9605b44e3781eda471ff143480c40b7fe0b4ff88f"
+    },
+    {
+      "path": "docs/START_HERE.md",
+      "sha256": "2613bebffe1c2f331c2eb8092d18a8010109e8251e16a359271cabd7de619249"
+    },
+    {
+      "path": "promotion/PROMOTION_LOG.md",
+      "sha256": "e145ed08ace4f8a94dedc9357a63ab23c0cb50ddf0e8519a135e9f0b6fc4d682"
+    }
+  ],
+  "sourceDigest": "a14ed41a1ae8a4b397673594cf90e637f25233b37bc87a4f60b18ee684f3892d",
+  "finalFreezeSha256": "17b00efab75d0ccb4a5a2aed72b6ea3e26534a3fee6f37d5c078ab0b097a8a89",
+  "additionalArtifactsExact": 12,
+  "citations": [
+    {
+      "path": ".tours/01-primary-user-flow.tour",
+      "only": "validator anchor 255 -> 256",
+      "step": 6,
+      "exactOtherBytes": true
+    },
+    {
+      "path": ".tours/03-debug-and-recovery.tour",
+      "only": "validator anchor 298 -> 299",
+      "step": 1,
+      "exactOtherBytes": true
+    },
+    {
+      "path": "docs/codebase/CONCERNS.md",
+      "only": "validator anchor 255 -> 256",
+      "occurrences": 1,
+      "exactOtherBytes": true
+    },
+    {
+      "path": "docs/codebase/INTEGRATIONS.md",
+      "only": "validator anchor 255 -> 256",
+      "occurrences": 1,
+      "exactOtherBytes": true
+    },
+    {
+      "path": "docs/START_HERE.md",
+      "only": "validator anchor 255 -> 256",
+      "occurrences": 1,
+      "exactOtherBytes": true
+    },
+    {
+      "path": "promotion/PROMOTION_LOG.md",
+      "only": "validator anchor 255 -> 256",
+      "occurrences": 1,
+      "exactOtherBytes": true
+    }
+  ],
+  "actualAnchorLines": {
+    "256": "export async function validateNodeSlidePreviewAdmission(args: {",
+    "299": "export function nodeslideCreatePublicError(code: NodeSlideCreateErrorCode, message: string) {"
+  },
+  "diffCheckExit": 0
+}

@@ -1,0 +1,14 @@
+{
+  "at": "2026-09-05T11:27:12.645750+00:00",
+  "derivedTourUpdate": [
+    {
+      "step": 8,
+      "oldLine": 46,
+      "newLine": 47
+    }
+  ],
+  "tourDescriptionsUnchanged": true,
+  "normalLocalConvexCodegen": "Adds imports/type entries for two already tracked lib modules; no hand edits or runtime module changes. Preserved as first-run generated delta, independently review before publication.",
+  "failedCheck": "E6g-nodeslide-portability-check-01/check.log",
+  "result": "315/316files2811pass1movedtourlinefail7skip; previous NodeBook full-suite timeout did not recur without changing configuration."
+}

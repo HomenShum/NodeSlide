@@ -27,6 +27,7 @@ import {
 import type { NodeSlideDataAttachment } from '../../../../shared/nodeslideAttachments';
 import { ArtifactLabDialog } from './ArtifactLabDialog';
 import { NodeSlideConnectionsDialog } from './NodeSlideConnectionsDialog';
+import { NodeSlideLandingIntro } from './NodeSlideLandingIntro';
 import {
   type CreateDeckAdmissionRequest,
   NODESLIDE_NEBIUS_BRIEF_CONSENT,
@@ -187,7 +188,12 @@ export function NodeSlideLanding({
     >
       <header className="ns-landing-header">
         <a className="ns-landing-brand" href="/" aria-label="NodeSlide home">
-          <span aria-hidden="true">N</span>
+          {/* The mark is drawn by CSS, not typed here: as a text node it counts
+              as the link's visible text, and "N NodeSlide" is not contained in
+              the accessible name "NodeSlide home", which is what
+              label-content-name-mismatch fails on (a voice-control user saying
+              the visible words does not hit the link). */}
+          <span aria-hidden="true" />
           <strong>NodeSlide</strong>
         </a>
         <div className="ns-landing-header-actions">
@@ -219,14 +225,7 @@ export function NodeSlideLanding({
       />
 
       <section className="ns-landing-main" aria-labelledby="nodeslide-landing-title">
-        <div className="ns-landing-intro">
-          <span className="ns-eyebrow">Decks that stay editable</span>
-          <h1 id="nodeslide-landing-title">What presentation should we build?</h1>
-          <p>
-            Start with an idea, a structured spec, or evidence. NodeSlide turns it into a reviewable
-            deck—not a stack of static images.
-          </p>
-        </div>
+        <NodeSlideLandingIntro />
 
         <form className="ns-landing-composer" onSubmit={submit}>
           <label className="ns-sr-only" htmlFor="nodeslide-landing-prompt">
@@ -267,6 +266,7 @@ export function NodeSlideLanding({
           ) : null}
           <input
             ref={fileInputRef}
+            aria-label="Attach data files"
             className="ns-sr-only"
             data-testid="landing-file-input"
             type="file"

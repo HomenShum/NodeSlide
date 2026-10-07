@@ -1,0 +1,12 @@
+from pathlib import Path
+import json,psutil,datetime
+P=Path(__file__).parent;O=Path('D:/ProjectRecovery/NodeSlide first run 20260905/private-bootstrap-02')
+rows=[]
+for name,pidKey,timeKey,marker in [('local-loopback-runtime.json','nativePid','nativeProcessCreated','STOP_LOOPBACK'),('vite-runtime.json','pid','processCreated','STOP_VITE')]:
+    r=json.loads((P/'E6g-nodeslide-first-run'/name).read_text(encoding='utf-8'))
+    try:current=psutil.Process(r[pidKey]);assert current.create_time()==r[timeKey];running=True
+    except psutil.NoSuchProcess:running=False
+    if running:(O/marker).write_text('Owned first-run proof complete; supervisor may stop its recorded process.\n',encoding='utf-8',newline='\n')
+    rows.append({'runtime':name,'recordedPid':r[pidKey],'recordedProcessCreated':r[timeKey],'identityVerifiedOrAlreadyExited':True,'runningAtRequest':running,'stopMarkerWritten':running})
+d={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'requests':rows,'original4173And4174':'UNTOUCHED','secrets':'NOT_OUTPUT'}
+(P/'E6g-nodeslide-first-run/stop-request.json').write_text(json.dumps(d,indent=2)+'\n',encoding='utf-8',newline='\n');print(json.dumps(d))

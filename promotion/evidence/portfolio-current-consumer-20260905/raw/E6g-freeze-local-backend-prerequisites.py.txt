@@ -1,0 +1,122 @@
+from pathlib import Path
+import datetime, hashlib, json, re, subprocess
+
+P = Path(r'C:/Users/hshum/.codex/worktrees/5dba/nodebench-ai/docs/plans/portfolio-recovery-20260904')
+R = Path(r'D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O = P / 'E6g-nodeslide-local-backend-prerequisites'
+O.mkdir(exist_ok=False)
+def sha(b): return hashlib.sha256(b).hexdigest()
+def save(p, obj): p.write_text(json.dumps(obj, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+selected = {
+ 'node_modules/convex/package.json': [(1, 20)],
+ 'node_modules/convex/src/cli/dev.ts': [(154, 202), (230, 301)],
+ 'node_modules/convex/src/cli/init.ts': [(1, 63)],
+ 'node_modules/convex/src/cli/configure.ts': [(216, 289)],
+ 'node_modules/convex/src/cli/lib/deploymentSelection.ts': [(536, 607), (672, 684), (765, 835), (929, 936)],
+ 'node_modules/convex/src/cli/lib/localDeployment/anonymous.ts': [(97, 184), (276, 331)],
+ 'node_modules/convex/src/cli/lib/localDeployment/filePaths.ts': [(75, 157), (204, 225)],
+ 'node_modules/convex/src/cli/lib/localDeployment/run.ts': [(63, 160), (357, 397), (403, 446)],
+ 'node_modules/convex/src/cli/lib/localDeployment/utils.ts': [(7, 82)],
+ 'node_modules/convex/src/cli/lib/utils/utils.ts': [(717, 735)],
+ 'node_modules/convex/src/cli/env.ts': [(60, 133)],
+ 'node_modules/convex/src/cli/lib/dev.ts': [(134, 158)],
+ 'node_modules/convex/src/bundler/context.ts': [(120, 146), (157, 187)],
+ 'convex/crons.ts': [(1, 50)],
+ 'convex/nodeslide.ts': [(3347, 3435)],
+ 'convex/nodeslideSourceRefresh.ts': [(253, 331)],
+ 'convex/nodeslideAgent.ts': [(1799, 1816), (1990, 2020)],
+ 'convex/nodeslideJobs.ts': [(283, 303)],
+ 'package.json': [(1, 19)],
+ 'vite.config.ts': [(40, 51)],
+ 'mcp/package.json': [(1, 20)],
+ 'scripts/tests/pptx-declared-static-intent.test.mjs': [(31, 57), (81, 106)],
+ 'scripts/nodeslide-pptx-playback-canary.mjs': [(1, 45)],
+ 'scripts/tests/playwright-trace.test.mjs': [(1, 25)],
+ 'scripts/immutable-upgrade-consumer-core.test.mjs': [(110, 149)],
+}
+bindings, excerpts = [], []
+for rel, ranges in selected.items():
+    raw = (R / rel).read_bytes()
+    lines = raw.decode('utf-8').splitlines()
+    bindings.append({'path': rel, 'bytes': len(raw), 'sha256': sha(raw)})
+    for start, end in ranges:
+        excerpts.append({'path': rel, 'sourceSha256': sha(raw), 'startLine': start, 'endLine': min(end, len(lines)), 'text': '\n'.join(lines[start-1:end])})
+save(O / 'source-bindings.json', bindings)
+save(O / 'source-excerpts.json', excerpts)
+pkg = json.loads((R / 'node_modules/convex/package.json').read_text())
+project = json.loads((R / 'package.json').read_text())
+scripts = {'package.json': project['scripts']}
+for f in list((R / 'packages').glob('*/package.json')) + [R / 'mcp/package.json']:
+    scripts[f.relative_to(R).as_posix()] = json.loads(f.read_text()).get('scripts', {})
+save(O / 'script-closure.json', scripts)
+git = subprocess.run(['git', '--no-optional-locks', '-C', str(R), 'rev-parse', 'HEAD'], capture_output=True, check=True)
+tracked = subprocess.run(['git', '--no-optional-locks', '-C', str(R), 'ls-files', '-z'], capture_output=True, check=True).stdout.decode().split('\0')
+native = re.compile(r'New-Object\s+-ComObject|Excel\.Application|PowerPoint\.Application|win32com|\bsoffice(?:\.exe)?\b|\blibreoffice\b|nodeslide-motion-canary', re.I)
+test_files = [x for x in tracked if re.search(r'\.(?:test|spec)\.[cm]?[jt]sx?$', x) and not x.startswith('tests/e2e/') and (R/x).is_file()]
+hits = []
+for rel in test_files:
+    raw = (R / rel).read_bytes()
+    for line, text in enumerate(raw.decode('utf-8', 'replace').splitlines(), 1):
+        if native.search(text): hits.append({'path': rel, 'line': line, 'text': text, 'sha256': sha(raw)})
+save(O / 'native-office-test-source-scan.json', {'scope': 'Tracked test/spec source excluding tests/e2e; declaration/reference scan, not dynamic execution or exhaustive dependency proof.', 'files': len(test_files), 'pattern': native.pattern, 'matches': hits})
+cli_bin = pkg.get('bin', {}).get('convex') if isinstance(pkg.get('bin'), dict) else pkg.get('bin')
+guards = [
+ 'Run only in the newly created candidate. Confirm .env, .env.local and .convex/local/default are absent before FIRST bootstrap; no existing state may be renamed, deleted, copied or reused to satisfy this condition.',
+ 'Also require absence of the resolved legacy ~/.convex/anonymous-convex-backend-state/anonymous-agent directory. Agent mode uses the fixed anonymous-agent name; the storage resolver can reuse a matching legacy directory even after the chooser calls it new.',
+ 'Use a subprocess-local environment that removes CONVEX_DEPLOY_KEY, CONVEX_DEPLOYMENT_TOKEN, CONVEX_DEPLOYMENT, CONVEX_SELF_HOSTED_URL, CONVEX_SELF_HOSTED_ADMIN_KEY, CONVEX_PROVISION_HOST and stale frontend binding variables without printing their values. Set CONVEX_AGENT_MODE=anonymous. Require CONVEX_ALLOW_ANONYMOUS not false. Do not mutate the parent shell/global configuration or copy provider keys.',
+ 'Do not pass --configure, --local, --cloud, --prod, --deployment, --deployment-name, --team, --project, --dev-deployment, --url, --admin-key or an existing --env-file. The configured environment wins before anonymous fallback; --configure bypasses normal selection.',
+ 'Select two different free valid ports explicitly. --local-cloud-port and --local-site-port are installed supported hidden options; requested-port conflict fails rather than silently changing that requested port. Reserve proof ownership and verify actual PID/listener addresses after start because port discovery has an ordinary time-of-check gap.',
+ 'Keep raw bootstrap output private. The installed verbose native-launch command contains its generated instance secret; do not enable or publish verbose logs. New credentials/state belong only to the isolated local deployment.',
+]
+commands = [
+ {'purpose': 'Start empty backend with explicit ports before source push; supervise as a persistent owned process', 'argv': ['node', 'node_modules/convex/' + cli_bin.lstrip('./'), 'dev', '--skip-push', '--local-cloud-port', '<CLOUD_PORT>', '--local-site-port', '<SITE_PORT>', '--tail-logs', 'disable'], 'notes': 'Omit --once: skip-push bypasses the routine that normally flushes/exits; adding --once does not establish one-shot lifetime. No --typecheck disable or codegen override. CLI initialization can still create/update generated setup/AI guidance files; capture exact before/after tracked input hashes.'},
+ {'purpose': 'After actual loopback-only owned listeners verified, stop that bootstrap with supported SIGINT and verify only its child exits; then normal source push/watch', 'argv': ['node', 'node_modules/convex/' + cli_bin.lstrip('./'), 'dev', '--local-cloud-port', '<CLOUD_PORT>', '--local-site-port', '<SITE_PORT>', '--tail-logs', 'disable'], 'notes': 'Same candidate and sanitized child environment. Only the freshly generated local selection/config may now be present. Keep normal typecheck and codegen behavior.'},
+ {'purpose': 'Set the one public-creation admission flag on this fresh anonymous backend', 'argv': ['node', 'node_modules/convex/' + cli_bin.lstrip('./'), 'env', 'set', 'NODESLIDE_PUBLIC_CREATION', 'true'], 'notes': 'Same candidate and sanitized selection environment, after verifying generated target is the anonymous local deployment. With an owned backend already running this reuses it; otherwise env set starts and stops an ephemeral saved local backend in finally. Never use env list or read keys.'},
+]
+result = {
+ 'schemaVersion': 1, 'mode': 'Builder', 'verdict': 'SUPPORTED_BOOTSTRAP_WITH_REQUIRED_RUNTIME_BIND_AND_CLEANUP_CHECKS',
+ 'requestTrace': 'Prepare an isolated, usable developer/user environment without affecting existing shared projects.',
+ 'candidate': str(R), 'head': git.stdout.decode().strip(), 'installedConvexVersion': pkg['version'], 'cliBin': cli_bin,
+ 'freshSelectionGuards': guards, 'supportedCommands': commands,
+ 'loopbackGap': 'Installed CLI returns http://127.0.0.1:<port> but runLocalBackend passes no bind/listen-host argument to the native binary. Neither its default listening interfaces nor loopback-only binding is proven by this source inspection. Inspect both owned native listeners before any source push/admission; if any wildcard/LAN binding is seen, stop only owned child and inspect supported native help/options. No unverified bind flag is invented.',
+ 'lifetime': {'init': 'convex init explicitly flushes/exits with cleanup and no push, but exposes no port options.', 'normalOnce': 'convex dev --once performs normal push and reaches devAgainstDeployment flushAndExit, which invokes registered child cleanup.', 'skipPush': 'skip-push omits devAgainstDeployment; its spawned child remains referenced. Treat as supervised persistent bootstrap, irrespective of --once.', 'cleanup': 'SIGINT handler calls flushAndExit; registered native cleanup issues p.kill(SIGTERM) to the child object. It does not await child exit or prove both sockets are released. Windows force-terminating a parent is not equivalent to a graceful SIGINT proof. Retain owned PID handles and verify actual exit/ports; do not terminate unrelated processes.'},
+ 'backendGuards': {'creation': 'NODESLIDE_PUBLIC_CREATION=true admits the documented public-launch subject instead of preview-code admission. It does not choose a model; explicit deterministic selection is still required.', 'crons': ['2-minute stale-run recovery fails abandoned local runs; it does not restart a provider.', 'Three hourly prune jobs remove expired local trace/comparison/evidence records.', '15-minute opted-in source scan only claims enabled due schedules, bounded by DUE_BATCH and daily caps; refresh action requires FIRECRAWL_API_KEY before fetching. A fresh empty DB with no imported schedules has no due source work.', '30-minute retention removes only marked expired production-probe workspaces.'], 'limit': 'Fresh local state and no source subscriptions/uploads/provider keys are necessary assumptions. This inspection does not certify every backend function or a future populated database.'},
+ 'npmCheckNativeOffice': {'command': project['scripts']['check'], 'testCommand': project['scripts']['test'], 'status': 'NO_NATIVE_OFFICE_DISPATCH_FOUND_IN_BOUNDED_DECLARED_CHECK_REVIEW', 'trackedTestFilesScanned': len(test_files), 'patternMatches': hits, 'evidence': 'Vite config excludes tests/e2e; workspace test scripts invoke Vitest. The PPTX static-intent subprocess runs the JSZip/OOXML structural canary, whose source explicitly distinguishes the separate native PowerPoint motion canary. The retained trace test reads .tmp traces via find; scratch gate tests spawn Node. No native Excel/PowerPoint executable/COM dispatch was found in these inspected check owners.', 'limit': 'Static review only; no additional test execution or universal transitive dependency no-side-effect guarantee. Root owns the already running unchanged npm check.'},
+ 'unexecuted': ['No Convex CLI invocation or native backend start', 'No config/credential/environment value reads or writes', 'No browser/provider/COM/install/test/build commands', 'No candidate source/index/ref changes'],
+ 'sourceBindingCount': len(bindings), 'evidenceDirectory': 'E6g-nodeslide-local-backend-prerequisites', 'recordedAt': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'grades': {'criterion': None, 'overall': None, 'production': None},
+}
+invariant = all(sha((R/b['path']).read_bytes()) == b['sha256'] for b in bindings)
+result['namedSourcesUnchangedDuringInspection'] = invariant
+save(P / 'E6g_NODESLIDE_LOCAL_BACKEND_PREREQUISITES.json', result)
+md = '''# NodeSlide local backend prerequisites
+
+Builder. **Use the installed Convex 1.42.3 anonymous path with explicit ports, then verify the native listeners before pushing source.** A developer needs a new private local deck database; silently selecting an old cloud project or legacy local database would defeat that isolation. The CLI's anonymous fallback and native server lifetime must therefore be checked separately.
+
+**Re your request:** prepare a usable handoff environment without disturbing existing projects. This is the source-bound prerequisite decision; no backend command was run.
+
+''' + '\n\n'.join('- ' + x for x in guards) + '''
+
+The supported command arguments are below. Run through an owned subprocess with the guarded child environment and candidate working directory; replace the two port placeholders with distinct verified free ports. These are instructions for the root executor, not commands executed by this reviewer.
+
+'''
+for c in commands:
+    md += c['purpose'] + ':\n\n```text\n' + ' '.join(c['argv']) + '\n```\n\n' + c['notes'] + '\n\n'
+md += '''The native bind boundary is still **unverified**. The installed launcher returns a loopback URL but passes no listen-interface option. The root should inspect actual addresses for both owned native listeners before source push/admission. If localhost-only binding is not observed, stop only that owned child and inspect its supported help; do not infer safety from the printed URL or invent a flag.
+
+`init` is an explicit one-shot cleanup path with no port controls. Normal `dev --once` performs a push and invokes cleanup. `dev --skip-push` skips that exit-owning routine, so `--once` beside it is not a reliable process-lifetime claim. Graceful SIGINT runs registered cleanup; native cleanup sends SIGTERM to its own child but does not await process exit. Confirm owned-child termination and both released ports. Force-killing a parent on Windows does not establish the same cleanup behavior.
+
+`env set` uses the same deployment selection resolver. With the verified fresh anonymous selection it targets the saved local backend and starts an ephemeral backend only if needed, then attempts cleanup in `finally`. Read no credential values and do not use broad `env list`. The admission flag admits creation; it does not select deterministic mode. Explicit deterministic selection remains mandatory before Create.
+
+The six application crons consist of stale-run failure recovery, three expiration pruners, opted-in source refresh and probe retention. The refresh scan only schedules enabled due records and the action checks its Firecrawl credential before fetching. A fresh database with no imported schedules has no due source work; this is a scoped fresh-state argument, not a promise about arbitrary existing data.
+
+The declared `npm run check` is lint, typecheck, tests and build. Its Vitest config excludes deployed Playwright e2e; workspace scripts run Vitest. The inspected PPTX subprocess checks ZIP/OOXML structure with JavaScript, separate from the native PowerPoint motion canary. No native Office dispatch was found in the bounded declared-owner/test-source review. This is static evidence; the root's unchanged running check remains the execution oracle, and no extra check was launched here.
+
+Exact source hashes, line excerpts, workspace script closure and the native-pattern test scan are retained under [prerequisite evidence](E6g-nodeslide-local-backend-prerequisites/source-bindings.json). The [structured receipt](E6g_NODESLIDE_LOCAL_BACKEND_PREREQUISITES.json) names all constraints and lifetime differences. No environment values, config credentials, workbooks, live listeners or backend binary were inspected. No source/index/ref edits occurred; all grades remain null.
+'''
+(P / 'E6g_NODESLIDE_LOCAL_BACKEND_PREREQUISITES.md').write_text(md, encoding='utf-8')
+manifest = []
+for f in sorted(O.iterdir()):
+    if f.is_file(): manifest.append({'path': f.name, 'sha256': sha(f.read_bytes()), 'bytes': f.stat().st_size})
+save(O / 'manifest.json', manifest)
+print(json.dumps({'json': str(P/'E6g_NODESLIDE_LOCAL_BACKEND_PREREQUISITES.json'), 'sha256': sha((P/'E6g_NODESLIDE_LOCAL_BACKEND_PREREQUISITES.json').read_bytes()), 'sources': len(bindings), 'sourcesUnchanged': invariant, 'nativeTestFiles': len(test_files), 'nativeMatches': hits, 'cliBin': cli_bin}, indent=2))

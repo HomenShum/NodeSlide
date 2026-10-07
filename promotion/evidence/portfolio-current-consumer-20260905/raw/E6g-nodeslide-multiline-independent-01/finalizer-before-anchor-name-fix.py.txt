@@ -1,0 +1,172 @@
+from pathlib import Path
+import argparse, hashlib, json, subprocess, datetime, re, difflib
+
+ap = argparse.ArgumentParser()
+ap.add_argument('--repo', required=True)
+ap.add_argument('--packet', required=True)
+a = ap.parse_args()
+R, P = Path(a.repo), Path(a.packet)
+O = P / 'E6g-nodeslide-multiline-independent-01'
+def sha(b): return hashlib.sha256(b).hexdigest()
+def readj(p): return json.loads(p.read_text(encoding='utf-8-sig'))
+def writej(p, x): p.write_text(json.dumps(x, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
+def git(*args): return subprocess.check_output(['git', '--no-optional-locks', '-C', str(R), *args])
+def snap():
+    return {'head': git('rev-parse', 'HEAD').decode().strip(),
+            'indexEntriesSha256': sha(git('ls-files', '--stage', '-z')),
+            'refsSha256': sha(git('show-ref'))}
+before = snap()
+freeze_path = P / 'E6g_NODESLIDE_MULTILINE_FINAL_FREEZE.json'
+freeze = readj(freeze_path)
+assert before['head'] == 'b0674b229a3691c09c88fcab1481f2e33342cb21'
+assert len(freeze['source']) == 8
+assert sha(json.dumps(freeze['source'], separators=(',', ':')).encode()) == freeze['sourceDigest']
+assert freeze['sourceDigest'] == 'a14ed41a1ae8a4b397673594cf90e637f25233b37bc87a4f60b18ee684f3892d'
+for f in freeze['source']:
+    assert sha((R / f['path']).read_bytes()) == f['sha256'], f['path']
+for f in freeze['additionalArtifacts']:
+    b = (P / f['path']).read_bytes()
+    assert len(b) == f['bytes'] and sha(b) == f['sha256'], f['path']
+assert sha((P / freeze['initialFreeze']['path']).read_bytes()) == freeze['initialFreeze']['sha256']
+initial = readj(P / freeze['initialFreeze']['path'])
+assert freeze['source'][:2] == initial['source']
+
+changes = []
+for f in freeze['source'][2:]:
+    path = f['path']
+    old = (P / 'E6g-nodeslide-multiline-citation-before' / path).read_bytes()
+    new = (R / path).read_bytes()
+    if path.endswith('.tour'):
+        oj, nj = json.loads(old), json.loads(new)
+        allowed = (255, 256) if path.startswith('.tours/01') else (298, 299)
+        changed = []
+        for i, (o, n) in enumerate(zip(oj['steps'], nj['steps'])):
+            if o != n:
+                assert o['line'] == allowed[0] and n['line'] == allowed[1]
+                assert o['file'] == 'convex/lib/nodeslideValidators.ts'
+                oc = dict(o); oc['line'] = n['line']
+                assert oc == n
+                changed.append(i)
+        assert len(changed) == 1
+        oc = json.loads(old); oc['steps'][changed[0]]['line'] = allowed[1]
+        assert oc == nj
+        assert old.replace(('"line": ' + str(allowed[0])).encode(), ('"line": ' + str(allowed[1])).encode()) == new
+        changes.append({'path': path, 'only': f'validator anchor {allowed[0]} -> {allowed[1]}', 'step': changed[0], 'exactOtherBytes': True})
+    else:
+        token = b'nodeslideValidators.ts:255'
+        # Markdown file citations use either colon syntax or #L syntax.
+        if token not in old: token = b'nodeslideValidators.ts#L255'
+        assert old.count(token) >= 1, path
+        assert old.replace(token, token.replace(b'255', b'256')) == new, path
+        changes.append({'path': path, 'only': 'validator anchor 255 -> 256', 'occurrences': old.count(token), 'exactOtherBytes': True})
+    (O / ('citation-' + Path(path).name + '.diff')).write_text(''.join(difflib.unified_diff(old.decode('utf-8').splitlines(True), new.decode('utf-8').splitlines(True), fromfile='before/' + path, tofile='current/' + path)), encoding='utf-8', newline='\n')
+source_lines = (R / 'convex/lib/nodeslideValidators.ts').read_text(encoding='utf-8').splitlines()
+anchors = {str(n): source_lines[n - 1] for n in (256, 299)}
+assert 'assertNodeSlideCreateAdmission' in anchors['256']
+assert 'nodeslideCreatePublicError' in anchors['299']
+check = subprocess.run(['git', '--no-optional-locks', '-C', str(R), 'diff', '--check', '--', *[f['path'] for f in freeze['source']]], capture_output=True)
+(O / 'final-scope-diff-check.log').write_bytes(check.stdout + check.stderr)
+assert check.returncode == 0
+(O / 'final-eight-path.diff').write_bytes(git('diff', '--', *[f['path'] for f in freeze['source']]))
+normal = readj(P / 'E6g-nodeslide-multiline-check-02/check.command.json')
+assert normal['exitCode'] == 0
+normal_log = (P / 'E6g-nodeslide-multiline-check-02/check.log').read_text(encoding='utf-8-sig')
+plain = re.sub(r'\x1b\[[0-9;]*m', '', normal_log)
+assert re.search(r'Test Files\s+316 passed', plain)
+assert re.search(r'Tests\s+2816 passed.*7 skipped', plain)
+admission = readj(O / 'admission-tests.json')
+assert admission['numPassedTests'] == 33 and admission['numFailedTests'] == 0
+pure = readj(O / 'pure-replay.json')
+assert len(pure['checks']) == 14 and all(x['status'] == 'PASS' for x in pure['checks'])
+after = snap()
+assert before == after
+for f in freeze['source']:
+    assert sha((R / f['path']).read_bytes()) == f['sha256']
+custody = {'before': before, 'after': after, 'unchanged': True,
+           'source': freeze['source'], 'sourceDigest': freeze['sourceDigest'],
+           'finalFreezeSha256': sha(freeze_path.read_bytes()), 'additionalArtifactsExact': len(freeze['additionalArtifacts']),
+           'citations': changes, 'actualAnchorLines': anchors, 'diffCheckExit': check.returncode}
+writej(O / 'final-freeze-verification.json', custody)
+manifest = []
+for f in sorted(O.rglob('*')):
+    if f.is_file() and f.name != 'judge-evidence-manifest.json':
+        b = f.read_bytes(); manifest.append({'path': f.relative_to(P).as_posix(), 'bytes': len(b), 'sha256': sha(b)})
+for name in ('E6g-review-multiline-pure.mjs', 'E6g-review-multiline-artifacts.py', 'E6g-finalize-multiline-judge.py'):
+    b = (P / name).read_bytes(); manifest.append({'path': name, 'bytes': len(b), 'sha256': sha(b)})
+writej(O / 'judge-evidence-manifest.json', {'files': manifest, 'selfExcluded': True, 'finalJudgmentsExcluded': True})
+limits = [
+    'This accepts the eight-path multiline slice and supplied local browser/export proof, not whole-repository readiness or deployment.',
+    'Reviewer is a reused nonauthor across portfolio reviews. Independent pure/admission/artifact replay was performed; no second browser/backend execution was requested.',
+    'Actual browser proof is deterministic local source at 1440x960 with an owned loopback backend; no provider calls. Production, mobile, installed-consumer and native Office operation are not certified.',
+    'LF and CRLF CSV chart creation are proven. Bare CR is preserved but the existing parser does not recognize CR-only CSV.',
+    'The special metric CSV parser still uses generic unit value and does not establish source-column fidelity or prose-only chart inference. No general CSV support claim.',
+    'Native PPTX chart XML and slide relationship are verified; no native PowerPoint editing/rendering test was run.',
+    'The actual screenshots still show notes/footer crowding. Separate gate-detail disclosure and broader responsive/readability work remain open; all final criterion and dimension grades stay null.',
+    'One successful ordinary check does not establish timing stability. Earlier OpenUI and NodeBook timing failures remain preserved.',
+    'Repeated/concurrent action tests use existing mutation/ledger/provider stand-ins and do not establish durable quota correctness, sustained load, or external-provider reliability.',
+    'Before and after use distinct local synthetic deck instances/versions; visual review is functional comparison, not exact pixel-diff regression.',
+]
+report = {
+    'proof': 'NODESLIDE-MULTILINE-BRIEF-01', 'mode': 'Builder', 'at': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'verdict': 'APPROVED_SCOPED_MULTILINE_BRIEF_SOURCE_AND_ACTUAL_EXPORT_PROOF',
+    'requestTrace': 'Make each repo ready for usage and handoff with visual, responsive and interaction standards; this bounded review closes loss of an analyst\'s pasted chart data before saving/exporting.',
+    'reviewer': '/root/provider_ci_closure_judge', 'implementationAuthor': '/root', 'reviewerReuseDisclosed': True,
+    'candidate': str(R), 'head': before['head'], 'baseTree': 'f3262e171240fec8f54ec5f01aa86310a2b30f5c',
+    'source': freeze['source'], 'sourceDigest': freeze['sourceDigest'], 'freeze': {'path': freeze_path.name, 'sha256': sha(freeze_path.read_bytes())},
+    'scope': 'One private validator helper and existing admission scenarios; two generated numeric tour anchors and four numeric documentation citations. Prior six-path portability slice is separately judged and overlaps one tour.',
+    'causalChain': ['The submitted textarea had five LF separators and an intact metric CSV.', 'The shared single-line sanitizer collapsed internal separators before persistence and deterministic parsing.', 'The persisted historical brief had zero LF and the chart disappeared.', 'Only the prompt now uses outer trim; raw codepoint/UTF8 limits and all other field normalization remain unchanged.', 'The same submitted text persists exactly and yields one native chart with Month 1/2/3 and 100/120/140 through JSON and PPTX.'],
+    'independentChecks': {'pure': {'passed': 14, 'compilerInputs': 34, 'oldNormalizerKnockout': True, 'report': 'E6g-nodeslide-multiline-independent-01/pure-replay.json'},
+        'admission': {'passed': 33, 'failed': 0, 'commandReceipt': 'E6g-nodeslide-multiline-independent-01/admission-command.json'},
+        'artifactReadback': 'E6g-nodeslide-multiline-independent-01/artifact-readback.json',
+        'initialCustody': {'namedSources': 35, 'sourceIndexRefsExact': True}, 'finalCustody': custody},
+    'actualBrowserProof': {'executor': '/root', 'reviewedScriptAndRawArtifacts': True, 'rootArtifactsExact': 20, 'viewport': {'width': 1440, 'height': 960},
+        'savedLf': 5, 'chartCount': 1, 'chartValues': [100,120,140], 'chartLabels': ['Month 1','Month 2','Month 3'],
+        'jsonSha256': '55a659d90a84afb05519e7eda483406670b2f0299a68f308f7cc24b3ce836b6e',
+        'pptxSha256': '96f14a7e1911d566692ca5bc543dfeb1bbfcbd79481c7babff333c35bdf6043c',
+        'nativeChartLinkedFromSlide4': True, 'unicodeNotesAndTitlePersisted': True, 'finalDeckVersion': 3,
+        'directlyViewed': ['E6g-nodeslide-chart-fixture-01/05-chart-slide.png','E6g-nodeslide-multiline-browser-01/05-chart-slide.png','E6g-nodeslide-multiline-browser-01/02-deterministic-brief.png'],
+        'recordedConsoleErrors': 0, 'recordedExternalRequests': 0, 'reviewerRuntimeRequests': 0},
+    'ordinaryFullCheck': {'executor': '/root', 'rawLogIndependentlyRead': True, 'command': 'npm run check', 'exitCode': 0, 'seconds': normal['seconds'], 'rootFilesPassed':316,'rootTestsPassed':2816,'rootTestsSkipped':7,'workspaceTestsPassed':42,'workspaceBuildsPassed':15,'typechecksAndRootBuildPassed':True,'largeChunkWarningRetained':True,'log':'E6g-nodeslide-multiline-check-02/check.log'},
+    'backendReliabilityReview': {'BOUND': 'Existing raw 4000-codepoint/8192-byte checks run before trim; exact and over-limit negatives pass. No collection added.',
+       'HONEST_STATUS': 'Existing invalid_request errors/route behavior unchanged.', 'HONEST_SCORES':'No score or gate policy changed.',
+       'TIMEOUT':'No external operation or budget path changed; no broader timeout certificate.', 'SSRF':'No URL or fetch path changed.',
+       'BOUND_READ':'No external body read changed.', 'ERROR_BOUNDARY':'Existing thrown validation failures and handling unchanged.',
+       'DETERMINISTIC':'No hashing/CAS policy changed; exact normalized prompt now retains intended separators.'},
+    'newDependencies':0,'newPublicApis':0,'newConfigKnobs':0,
+    'retainedFailures': ['E6g-nodeslide-multiline-check-01: two citation failures and inherited OpenUI wait failure; untouched historical raw log.',
+        'Independent artifact reader initially assumed relative chart relationship, then one paragraph per note line. Both reader assertions are preserved with old scripts and corrected without changing app or artifacts.',
+        'An auxiliary reader attempted to parse an empty ZIP directory entry; tool failure retained. Subsequent XML/.rels-only inspection succeeded.'],
+    'limits': limits, 'findingsBlockingThisSlice': [], 'fullGrades':None,'criterionFinalScores':None,'dimensionScores':None,'deployed':False,'providerCalls':0,
+    'evidenceManifest': {'path':'E6g-nodeslide-multiline-independent-01/judge-evidence-manifest.json', 'sha256':sha((O/'judge-evidence-manifest.json').read_bytes()), 'files':len(manifest)}
+}
+writej(P / 'E6g_NODESLIDE_MULTILINE_FINAL_JUDGE.json', report)
+md = f'''Builder — approved the bounded multiline brief repair.
+
+**Re your request:** make each repo ready for usage and handoff, including visual and interaction standards — this review verifies that an analyst can paste structured chart data, save the brief, reload the deck, and export the same chart.
+
+An analyst's five-line-break CSV previously became one line before saving. That destroyed the structure the deterministic chart parser needs. The private validator now trims only the prompt's outer whitespace; its original raw 4,000-codepoint and 8,192-byte limits remain enforced before trimming. Other fields retain their single-line normalization. [Actual-code replay and old-normalizer knockout](E6g-nodeslide-multiline-independent-01/pure-replay.json) confirm that this is the causal repair.
+
+The final eight-path source digest is `{freeze['sourceDigest']}` on base `{before['head']}`. I verified all eight working hashes and twelve supplemental artifact hashes. Two tours change only validator line anchors (255→256 and 298→299); four documents change only 255→256. Their other bytes are exact. The earlier portability change in tour 03 remains a separate, already reviewed slice. [Final bindings and metadata diff](E6g-nodeslide-multiline-independent-01/final-freeze-verification.json).
+
+Independent verification completed:
+
+- **14 actual-code checks passed**, with 34 compiler inputs bound. They cover LF/CRLF/CR preservation, indentation/Unicode, exact and excessive raw bounds, unchanged single-line fields, and restoring the old sanitizer in memory to reproduce loss of the chart.
+- **33 admission tests passed** through the existing npm/Vitest command. The action scenario includes four sequential and three concurrent deterministic creates; its existing stand-ins are explicitly limited. [Command and scope](E6g-nodeslide-multiline-independent-01/admission-command.json).
+- I independently read the actual root browser recorder and exported artifacts, and viewed the real before/after chart and submitted-brief PNGs. The saved brief retains the exact original five LF separators; JSON and native PPTX contain one chart with Month 1/2/3 and 100/120/140. The chart relationship points from slide 4 to the actual chart XML. Current Unicode title and multiline notes survive reload and export, with the existing appended source notes. [Readback](E6g-nodeslide-multiline-independent-01/artifact-readback.json).
+- The root's ordinary **`npm run check` passed** in 138.078 seconds: 316 root files, 2,816 passing tests and seven skips, followed by 42 workspace tests, typechecks, all 15 workspace builds and the root build. I read its raw log; I did not repeat the whole suite. [Normal command receipt](E6g-nodeslide-multiline-check-02/check.command.json).
+
+All 35 inputs, index entries and refs remained exact during my bounded replay. The final supplemental read also preserved the eight source hashes, index entries and refs. No candidate edits, backend requests, provider calls, credential reads, commits or staging were performed by this reviewer. Reviewer context is reused across portfolio reviews; I did not author this repair.
+
+The earlier failed normal run is preserved, including its two corrected citation failures and inherited lazy OpenUI timeout. The successful current check does not establish timing stability. My own artifact-reader failures are also retained: a valid package-absolute chart relationship and multiline notes stored in one paragraph initially violated reader assumptions. Correcting those readers required no app or artifact change. [Independent evidence manifest](E6g-nodeslide-multiline-independent-01/judge-evidence-manifest.json).
+
+This approval has explicit limits:
+
+- LF/CRLF CSV charts are verified. Bare CR is retained but CR-only CSV parsing remains unsupported. Generic `value` units, source-column fidelity and prose-only chart inference are unchanged.
+- Browser evidence is one local deterministic 1440×960 flow, executed by root and independently inspected here. No second browser run, native PowerPoint editing/rendering, installed-consumer, production, provider, mobile or sustained-load certification is made.
+- Before/after use distinct synthetic deck instances; the comparison establishes visible behavior, not exact pixel identity. Notes/footer crowding and separate gate-detail disclosure remain open. Large build chunks and prior timing failures remain disclosed.
+- Full criterion scores, dimension grades and whole-product readiness remain **null**.
+
+The named proof is complete for these frozen bytes. Final verdict: **APPROVED_SCOPED_MULTILINE_BRIEF_SOURCE_AND_ACTUAL_EXPORT_PROOF**. [Machine-readable judgment](E6g_NODESLIDE_MULTILINE_FINAL_JUDGE.json).
+'''
+(P / 'E6g_NODESLIDE_MULTILINE_FINAL_JUDGE.md').write_text(md, encoding='utf-8', newline='\n')
+print(json.dumps({'verdict':report['verdict'], 'jsonSha256':sha((P/'E6g_NODESLIDE_MULTILINE_FINAL_JUDGE.json').read_bytes()), 'markdownSha256':sha((P/'E6g_NODESLIDE_MULTILINE_FINAL_JUDGE.md').read_bytes()), 'sourceDigest':freeze['sourceDigest'], 'evidenceFiles':len(manifest)}))

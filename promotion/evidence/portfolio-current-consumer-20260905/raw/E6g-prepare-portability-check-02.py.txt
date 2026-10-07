@@ -1,0 +1,23 @@
+from pathlib import Path
+import json,subprocess,hashlib,datetime
+P=Path(__file__).parent
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+tour='.tours/03-debug-and-recovery.tour'
+before=json.loads(subprocess.check_output(['git','show','HEAD:'+tour],cwd=R))
+after=json.loads((R/tour).read_text(encoding='utf-8'))
+changes=[]
+for i,(a,b) in enumerate(zip(before['steps'],after['steps'])):
+    if a!=b:
+        assert a['file']=='scripts/tests/workspace-build-depth.test.mjs' and b['line']==a['line']+1
+        normalized=dict(b);normalized['line']=a['line'];assert a==normalized
+        changes.append({'step':i,'oldLine':a['line'],'newLine':b['line']})
+assert len(changes)==1 and len(before['steps'])==len(after['steps'])
+api='convex/_generated/api.d.ts'
+O=P/'E6g-nodeslide-generated-first-run';O.mkdir(exist_ok=False)
+(O/'api-before.d.ts.txt').write_bytes(subprocess.check_output(['git','show','HEAD:'+api],cwd=R))
+(O/'api-after.d.ts.txt').write_bytes((R/api).read_bytes())
+record={'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'derivedTourUpdate':changes,'tourDescriptionsUnchanged':True,'normalLocalConvexCodegen':'Adds imports/type entries for two already tracked lib modules; no hand edits or runtime module changes. Preserved as first-run generated delta, independently review before publication.','failedCheck':'E6g-nodeslide-portability-check-01/check.log','result':'315/316files2811pass1movedtourlinefail7skip; previous NodeBook full-suite timeout did not recur without changing configuration.'}
+(O/'derived-inputs.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8',newline='\n')
+s=(P/'E6g-check-nodeslide-portability.py').read_text(encoding='utf-8').replace('E6g-nodeslide-portability-check-01','E6g-nodeslide-portability-check-02')
+with (P/'E6g-check-nodeslide-portability-02.py').open('x',encoding='utf-8',newline='\n') as f:f.write(s)
+print(json.dumps(record))

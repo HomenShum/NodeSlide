@@ -1,0 +1,66 @@
+from pathlib import Path
+import json,hashlib
+P=Path(__file__).resolve().parent;O=P/'E6g-nodeslide-openui-phase-01'
+def load(name):return json.loads((O/name).read_text(encoding='utf-8-sig'))
+def h(b):return hashlib.sha256(b).hexdigest()
+def save(path,v):path.write_text(json.dumps(v,indent=2,ensure_ascii=True)+'\n',encoding='utf-8')
+before=load('source-before.json');after=load('source-after.json');assert before==after
+suite=load('suite.json');records=[json.loads(s) for s in (O/'phases.jsonl').read_text(encoding='utf-8').splitlines() if s.strip()];assert len(records)==1
+record=records[0];events={e['phase']:e for e in record['events']}
+assert 'wait-resolved' in events and 'wait-rejected' not in events
+elapsed=lambda a,b:round(events[b]['monoMs']-events[a]['monoMs'],4)
+metrics={'importStartToResolveMs':elapsed('import-start','import-resolved'),'importResolveToInnerDomObservationMs':elapsed('import-resolved','inner-commit-observed'),'waitStartToResolutionMs':elapsed('wait-start','wait-resolved'),'innerBeforeNominalDeadlineMs':round(events['wait-start']['nominalDeadlineMonoMs']-events['inner-commit-observed']['monoMs'],4),'clickStartToInnerDomObservationMs':elapsed('click-start','inner-commit-observed'),'waitTimeoutMs':events['wait-start']['timeoutMs']}
+assert metrics['waitTimeoutMs']==1000 and metrics['innerBeforeNominalDeadlineMs']>0
+failures=[{'file':r['name'],'name':a['fullName'],'durationMs':a.get('duration'),'failureMessages':a.get('failureMessages',[])} for r in suite['testResults'] for a in r['assertionResults'] if a['status']=='failed']
+target=[{'file':r['name'],'name':a['fullName'],'status':a['status'],'durationMs':a.get('duration')} for r in suite['testResults'] for a in r['assertionResults'] if 'opens the visual material lab from the live composer button' in a['fullName']];assert len(target)==1 and target[0]['status']=='passed'
+transforms=load('actual-transforms.json');checks=[]
+for t in transforms:
+    planned=(O/'transformed-planned'/t['relative']).read_bytes()
+    executed=planned.replace(b'\r\n',b'\n')
+    dest=O/'transformed-executed'/t['relative'];dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(executed)
+    checks.append({'relative':t['relative'],'sourceExact':t['sourceSha256']==before['files'][t['relative']]['sha256'],'transformedExact':t['transformedSha256']==h(executed),'sourceSha256':t['sourceSha256'],'transformedSha256':t['transformedSha256'],'plannedRawSha256':h(planned),'plannedCopyEolDifference':'Python planned-copy write used CRLF; actual Vite code is LF. Only newline decoding reconstructs the actual recorded transform hash. Both byte versions retained; executed wrapper unchanged.'})
+assert all(c['sourceExact'] and c['transformedExact'] for c in checks)
+assert set(c['relative'] for c in checks)=={'src/domains/nodeslide/inspector/AiInspector.tsx','src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx'}
+delta=load('config-delta.json');assert all(delta[k] for k in ['sameTestObject','sameResolveObject','sameServerObject','sameBuildObject','noTimeoutRetryWorkerPoolConcurrencyChanges','noPrewarmStaticImportOrMock'])
+assert delta['changedTopLevelKeys']==['plugins']
+save(O/'phase-analysis.json',{'metrics':metrics,'target':target,'failures':failures,'transformationBindings':checks,'scope':'One instrumented original root Vitest invocation. No full check, workspace test scripts, build or second suite invocation.'})
+(O/'executed-runner.py').write_bytes((P/'E6g-instrument-openui-phase.py').read_bytes())
+manifest={str(f.relative_to(O)).replace('\\','/'):{'sha256':h(f.read_bytes()),'bytes':f.stat().st_size} for f in O.rglob('*') if f.is_file() and f.name!='manifest.json'}
+save(O/'manifest.json',{'count':len(manifest),'files':manifest})
+report={
+ 'verdict':'DIAGNOSTIC_TARGET_PASSED_NPM_LIFECYCLE_CONTEXT_NOT_PRESERVED',
+ 'request':'Run exactly one external timing-instrumented original root Vitest suite, measure the lazy module/React boundary, keep existing limits and source unchanged, and stop if the target does not fail.',
+ 'repoHead':before['head'],'command':load('command-start.json'),'commandResult':load('command-result.json'),
+ 'configuration':delta,'resolvedConfigEvidence':'E6g-nodeslide-openui-phase-01/resolved-config.json','npmContextCorrection':load('npm-context-disposition.json'),
+ 'sourceBindings':before['files'],'transformationBindings':checks,'timeline':record['events'],'metrics':metrics,
+ 'result':{'target':target[0],'rootSuiteExitCode':1,'rootSuiteCounts':{'total':suite['numTotalTests'],'passed':suite['numPassedTests'],'failed':suite['numFailedTests'],'skipped':suite['numPendingTests']},'failures':failures,'failureClassification':'The one failed consumer case is caused by missing npm_execpath in this direct-node diagnostic, not a new product defect. It fails before its npm tarball work.','ordinaryNpmCheck':'Not run here; prior ordinary check02 remains failed. Direct-node diagnostic did not preserve npm lifecycle context, so it is not an exact ordinary-environment reproduction.'},
+ 'causalInterpretation':{'observed':'In this passing target, module import resolution took 741.3305 ms and DOM-observed inner insertion followed 27.4989 ms later. The inner was observed 294.2598 ms before the nominal unchanged 1000 ms deadline. The measured lazy interval was dominated by import resolution, not the subsequent observed React/DOM arrival.','doesNotEstablish':'The prior failed run has no phase timings. This passing instrumented run cannot identify its cause, establish cold-cache or sustained performance, or prove a permanent latency guarantee. Import resolution includes transform/queue/link/evaluation work and does not isolate those costs. Missing npm_execpath made a different consumer case fail before its intended work, which changes suite workload and further limits timing comparability.','instrumentationLimits':'MutationObserver records delivery after DOM insertion, not an internal React commit timestamp. Nominal deadline is calculated immediately before unchanged waitFor, not read from its internal timer. Diagnostic imports/observer and module transformation may perturb scheduling. Events are buffered with no added polling timer and flushed only afterEach. Instrumented stack line numbers may shift because map:null is used.','harnessFailure':'Parent identified the missing npm lifecycle context. Independent source and presence-only environment checks confirm process.env.npm_execpath is required before tarball creation. This diagnostic did not invoke npm, and normal check02 did not fail this test. No source repair is needed for this artifact.'},
+ 'disposition':{'stopAfterThisSingleSuite':True,'sourceRepairRecommended':False,'timeoutSkipRetryWorkerConcurrencyChangesRecommended':False,'wholeRepoReady':False,'approvedPortabilityJudgementUnchanged':True,'originalFailedEvidenceUnchanged':True,'nextDecision':'Do not infer a runtime or immutable-consumer repair from this run. If future reproduction is separately authorized, preserve npm lifecycle context through the normal npm command before treating it as equivalent. No extra suite run is performed here.'},
+ 'custody':{'14NamedInputsUnchanged':before['files']==after['files'],'indexUnchanged':before['index']==after['index'],'refsUnchanged':before['refs']==after['refs'],'noRepoSourceConfigIndexRefEdits':True,'distOrBackendTouchedByReviewer':False,'boundary':'Root owns the concurrent Vite browser/backend; the diagnostic never runs build, codegen, provider or backend commands. No original environment/credential file is opened or published. Ordinary root tests may create their normal temporary outputs using the same isolated temp root as check02.'},
+ 'evidenceManifest':{'path':'E6g-nodeslide-openui-phase-01/manifest.json','sha256':h((O/'manifest.json').read_bytes())},'finalCriterionScores':None,'dimensionScores':None,
+}
+save(P/'E6g_NODESLIDE_OPENUI_PHASE_DIAGNOSIS.json',report)
+md='''**OpenUI passed in this diagnostic, but the wrapper did not preserve npm lifecycle context. Its timestamps are useful observations; they do not close the original normal-suite failure.**
+
+**Re your request:** measure the module-load versus React-arrival boundary before changing NodeSlide. One external wrapper extended the exact current Vite config with one timing plugin; the original test, timeout, worker, retry and concurrency settings remained intact.
+
+| Actual phase | Measured interval |
+|---|---:|
+| Dynamic import starts → resolves | 741.33 ms |
+| Import resolves → inner DOM insertion observed | 27.50 ms |
+| Existing wait starts → resolves | 714.42 ms |
+| Inner insertion observed before nominal deadline | 294.26 ms |
+| Existing wait budget | 1,000 ms |
+
+The [raw timestamp stream](E6g-nodeslide-openui-phase-01/phases.jsonl) records the real click, import start/resolution, outer panel, loading fallback, inner workbench, wait start/deadline and successful wait. This run's delay was dominated by the promise that loads the module. The small subsequent interval does not support changing React state or the component to address the historical failure. Import time combines Vite transformation/queueing, module linking and evaluation; these costs are not separately resolved here.
+
+The instrumented **root suite still failed**: 2,811 passes, 1 failure and 7 skips. That failure is a diagnostic harness artifact. `scripts/immutable-upgrade-consumer-core.test.mjs:94` requires `process.env.npm_execpath`, but this diagnostic invoked Node directly and lacked that lifecycle variable. The test failed before creating its tarball fixture; normal check02 did not fail this owner. Parent identified this distinction, and the [source/context check](E6g-nodeslide-openui-phase-01/npm-context-disposition.json) confirms it. No repository repair is warranted. [Full raw log](E6g-nodeslide-openui-phase-01/suite.log) and [structured result](E6g-nodeslide-openui-phase-01/suite.json) remain failed and preserved. This is **not an ordinary `npm run check`** or an exact normal-environment reproduction. No workspace test scripts or build ran.
+
+[Config delta](E6g-nodeslide-openui-phase-01/config-delta.json) and [actual transform bindings](E6g-nodeslide-openui-phase-01/phase-analysis.json) prove only the two named module bodies were transformed: `AiInspector.tsx` and its wiring test. Original plugin relative order, test exclusions, resolution, server and build configuration remain identical. The helper observed DOM insertions with MutationObserver, added no polling timer, and buffered timestamps until afterEach. The import stayed dynamic; no preload, renderer mock, static import, retry or time-limit change was introduced.
+
+The failed historical run lacks these phase timestamps. This passing instrumented run cannot establish that run's root cause or close whole-suite reliability. Missing npm lifecycle context also removed a consumer test's intended workload, further limiting timing comparison. MutationObserver timestamps are observations after insertion, not internal React commit timestamps; the deadline is nominal immediately before the original wait call. Instrumentation can perturb scheduling. The task stops after this one suite, as requested, with no further reproduction or proposed application repair. A future separately authorized equivalent run would need the normal npm lifecycle context.
+
+[Source and Git custody](E6g-nodeslide-openui-phase-01/command-result.json) confirms all 14 named inputs, index entries and refs unchanged. Exact planned/transformed bytes, wrapper, timing helper, command and raw artifacts are [manifest-bound](E6g-nodeslide-openui-phase-01/manifest.json). The first report-writer assertion is also retained: Python saved planned copies as CRLF while Vite transformed LF. LF-only decoding reconstructs the exact runtime transform hashes; original planned bytes and both executed copies remain preserved. The actual wrapper was not changed or rerun. The separate approved portability judgment remains unchanged. No source/config/index/ref, dist or backend edits, build/codegen/provider/native Office invocation or visual-grade claim was made. All final grades remain null.
+'''
+(P/'E6g_NODESLIDE_OPENUI_PHASE_DIAGNOSIS.md').write_text(md,encoding='utf-8')
+print(json.dumps({'sha256':h((P/'E6g_NODESLIDE_OPENUI_PHASE_DIAGNOSIS.json').read_bytes()),'metrics':metrics,'manifestFiles':len(manifest),'transformRecords':len(checks)},ensure_ascii=True))

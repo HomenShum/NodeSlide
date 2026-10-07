@@ -1,0 +1,84 @@
+{
+  "at": "2026-09-05T12:05:50.130Z",
+  "proof": "NODESLIDE-MULTILINE-BRIEF-01",
+  "surface": "Current source Vite app and fresh loopback Convex backend",
+  "viewport": {
+    "width": 1440,
+    "height": 960
+  },
+  "steps": [
+    {
+      "name": "landing",
+      "status": "PASS",
+      "defaultModel": "moonshotai/kimi-k3"
+    },
+    {
+      "name": "deterministic-create",
+      "status": "PASS"
+    },
+    {
+      "name": "title-edit-reload",
+      "status": "PASS",
+      "previousVersion": 1,
+      "reloadedVersion": 2
+    }
+  ],
+  "errors": [],
+  "blockedExternal": [],
+  "captures": [
+    "01-landing",
+    "02-deterministic-brief",
+    "03-created-editor",
+    "04-reloaded-editor",
+    "05-chart-slide"
+  ],
+  "fullGrade": null,
+  "chartExport": {
+    "bytes": 162615,
+    "charts": 1,
+    "failure": null,
+    "values": [
+      [
+        "Signal",
+        "Month 1",
+        "Month 2",
+        "Month 3",
+        "100",
+        "120",
+        "140"
+      ]
+    ],
+    "nativeOfficeOpened": false
+  },
+  "jsonExport": {
+    "bytes": 83119,
+    "newlines": 5,
+    "exactSubmittedPrompt": true,
+    "charts": [
+      {
+        "chartType": "bar",
+        "labels": [
+          "Month 1",
+          "Month 2",
+          "Month 3"
+        ],
+        "series": [
+          {
+            "color": "#B44A2D",
+            "name": "Signal",
+            "values": [
+              100,
+              120,
+              140
+            ]
+          }
+        ],
+        "sourceId": "source_ee9223cffaa6fc02ab1b4acc811e4abc",
+        "unit": "value"
+      }
+    ],
+    "notesPersisted": true,
+    "capabilityScan": "PASS"
+  },
+  "status": "PASS_ACTUAL_CSV_RELOAD_JSON_PPTX"
+}

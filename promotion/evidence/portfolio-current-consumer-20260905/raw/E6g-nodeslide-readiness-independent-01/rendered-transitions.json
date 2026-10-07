@@ -1,0 +1,12 @@
+{
+  "scope": "Actual InspectorPanel/TraceInspector in isolated normal Chromium with labelled synthetic prop states; no backend, real deck, provider, or production claim.",
+  "checks": [],
+  "errors": [
+    "$RefreshSig$ is not defined"
+  ],
+  "network": [],
+  "captures": [],
+  "fullGrades": null,
+  "verdict": "FAILED",
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#fixture-controls').getByRole('button', { name: 'fail', exact: true })\u001b[22m\n\n    at C:\\Users\\hshum\\.codex\\worktrees\\5dba\\nodebench-ai\\docs\\plans\\portfolio-recovery-20260904\\E6g-review-readiness-transitions.mjs:73:85"
+}

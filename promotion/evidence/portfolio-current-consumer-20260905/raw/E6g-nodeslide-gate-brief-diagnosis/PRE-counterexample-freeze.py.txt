@@ -1,0 +1,120 @@
+from pathlib import Path
+import json, hashlib, subprocess, zipfile, re, sys, shutil
+from datetime import datetime, timezone
+from xml.etree import ElementTree as ET
+sys.stdout.reconfigure(encoding='utf-8')
+P=Path(__file__).resolve().parent
+O=P/'E6g-nodeslide-gate-brief-diagnosis'
+R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+def write(p,j): p.write_text(json.dumps(j,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+replay=json.loads((O/'offline-pure-replay.json').read_text(encoding='utf-8'))
+before=json.loads((O/'source-before.json').read_text(encoding='utf-8'))
+source={x['path']:x['sha256'] for x in replay['sourceBindings']}
+source.update(before)
+for f in ['convex/lib/nodeslideValidators.ts','convex/lib/nodeslideCreationCritique.ts','convex/nodeslide.ts']:
+ source[f]=sha(R/f)
+checks=[]
+for f,h in source.items():
+ checks.append({'check':'current source exact','path':f,'pass':sha(R/f)==h})
+ target=O/'source'/f;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(R/f,target)
+write(O/'source-bindings.json',[{'path':f,'sha256':h,'bytes':(R/f).stat().st_size} for f,h in sorted(source.items())])
+head=subprocess.check_output(['git','--no-optional-locks','rev-parse','HEAD'],cwd=R,text=True).strip()
+status=subprocess.check_output(['git','--no-optional-locks','status','--porcelain=v1'],cwd=R,text=True)
+write(O/'current-custody.json',{'head':head,'status':status,'scope':'Relevant source bytes checked; root owns concurrent first-run metadata/generated updates. No assertion that the entire candidate is clean or frozen.','checks':checks})
+assert all(c['pass'] for c in checks)
+names=[
+'E6g-nodeslide-browser-first-use-01/report.json',
+'E6g-nodeslide-browser-first-use-01/02-deterministic-brief.json',
+'E6g-nodeslide-browser-first-use-01/03-created-editor.png',
+'E6g-nodeslide-notes-export-01/report.json',
+'E6g-nodeslide-notes-export-01/01-notes-reloaded.json',
+'E6g-nodeslide-notes-export-01/01-notes-reloaded.png',
+'E6g-nodeslide-notes-export-01/02-deck-ci-detail.json',
+'E6g-nodeslide-notes-export-01/02-deck-ci-detail.png',
+'E6g-nodeslide-responsive-first-use-01/deck.json',
+'E6g-nodeslide-notes-export-01/nodeslide-local-handoff-illustrative-sourcing-pilot.pptx',
+'E6g-nodeslide-notes-export-01/nodeslide-local-handoff-illustrative-sourcing-pilot.html']
+bindings=[]
+for n in names:
+ p=P/n
+ if not p.is_file():
+  matches=list((P/'E6g-nodeslide-notes-export-01').rglob(Path(n).name))
+  assert len(matches)==1,(n,matches)
+  p=matches[0];n=p.relative_to(P).as_posix()
+ target=O/'observed'/n;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,target)
+ bindings.append({'path':n,'sha256':sha(p),'bytes':p.stat().st_size,'copy':target.relative_to(O).as_posix()})
+assert sha(P/'E6g-nodeslide-responsive-first-use-01/deck.json')==replay['input']['sha256']
+write(O/'observed-bindings.json',bindings)
+deck=json.loads((P/'E6g-nodeslide-responsive-first-use-01/deck.json').read_text(encoding='utf-8'))
+notes=deck['slides'][0]['notes']
+pptx=P/next(x['path'] for x in bindings if x['path'].endswith('.pptx'))
+html=P/next(x['path'] for x in bindings if x['path'].endswith('.html'))
+with zipfile.ZipFile(pptx) as z:
+ slides=[n for n in z.namelist() if re.fullmatch(r'ppt/slides/slide\d+\.xml',n)]
+ charts=[n for n in z.namelist() if re.fullmatch(r'ppt/charts/chart\d+\.xml',n)]
+ note_parts=[n for n in z.namelist() if re.fullmatch(r'ppt/notesSlides/notesSlide\d+\.xml',n)]
+ texts=['\n'.join(n.text or '' for n in ET.fromstring(z.read(name)).iter() if n.tag.endswith('}t')) for name in note_parts]
+ # PowerPoint appends its slide-number field. Compare the original two note lines,
+ # rather than equating the whole notes part with author text.
+ note_match=any(all(line in t for line in notes.splitlines()) for t in texts)
+ export={'pptxSha256':sha(pptx),'slides':len(slides),'charts':len(charts),'notesParts':len(note_parts),'exactCurrentNoteLinesPresent':note_match,'htmlSha256':sha(html),'htmlCurrentNoteLinesPresent':all(line in html.read_text(encoding='utf-8') for line in notes.splitlines())}
+assert export['slides']==6 and export['charts']==0 and export['notesParts']==6 and note_match and export['htmlCurrentNoteLinesPresent']
+write(O/'independent-export-readback.json',export)
+csv=replay['supportedCsv']['input'];(O/'supported-metrics.csv').write_text(csv+'\n',encoding='utf-8')
+write(O/'supported-attachment.json',{'title':'Illustrative pilot metrics.csv','format':'csv','content':csv})
+limitations=[
+'No new browser, backend request, provider/model call, dependency install, application build, native Office call, or candidate source/index/ref mutation. Only existing pure modules were compiled in memory for offline evaluation.',
+'The offline Deck CI replay uses the exported v3 snapshot and exact current evaluator bytes. It is not a captured Convex response; agreement with the displayed count/status and deterministic evaluateLatest source supports the causal attribution.',
+'Supported CSV output is a planned spec only. It does not prove a persisted chart, PPTX chart, source-binding fidelity, or a full successful user journey.',
+'Metric CSV primitive parsing uses the first literal metric,value,unit,source header, at most the following 100 lines, simple comma splitting and first eight finite numeric rows for generic charts; it is not a general RFC CSV parser. The generic chart unit is value; source-column text is not consumed by this parser.',
+'The original natural-language chart request remains unmet. CSV is an explicitly different supported input and does not retroactively satisfy the original request.',
+'Root owns concurrent responsive first-use evidence. Current notes-control overlap and doubled-content clipping are separate recorded observations, not evaluated or graded here.',
+'No full readiness, human usage, native PowerPoint compatibility, deployment, production quality, or 44-criterion score is inferred. Full grades stay null and the 4.5 target stays unchanged.',
+'Reviewer context is reused across portfolio slices; this reviewer did not author NodeSlide product changes. Earlier failed read probes were missing guessed file paths only; no product command or test failure was hidden.']
+findings=[
+{'id':'NODESLIDE_GATE_DETAILS_SCOPE_MISMATCH','priority':'P1','observed':'Actual v3 failed Deck CI badge leads to Trace saying current validation passed and publish ready.','cause':'NodeSlideStudio queries evaluateLatest; InspectorPanel passes Deck CI only to AiInspector and routes its click to Trace. Trace receives workspace.validations without Deck CI. ValidationSummary promotes that narrower publishOk field to an unqualified readiness phrase.','exactBlocker':{'code':replay['deckCi']['checks'][0]['code'],'message':replay['deckCi']['checks'][0]['message']},'smallestRepair':'Pass the existing current Deck CI receipt/loading state to Trace; show the actual blocker and affected slide positions beside explicitly scoped structural validation. Reserve overall readiness language for a current, matching full gate result. Keep fail/loading/unavailable distinct; do not suppress or lower the diversity gate.','references':['src/domains/nodeslide/NodeSlideStudio.tsx:736','src/domains/nodeslide/inspector/InspectorPanel.tsx:552','src/domains/nodeslide/inspector/InspectorPanel.tsx:710','src/domains/nodeslide/inspector/TraceInspector.tsx:1419','convex/lib/nodeslideDeckCi.ts:327','convex/lib/nodeslideValidation.ts:258']},
+{'id':'NODESLIDE_DETERMINISTIC_BRIEF_LIMIT','priority':'P1','observed':'The explicit illustrative 100/120/140 chart request becomes a generic six-slide deck with no chart in either canonical JSON or actual PPTX.','cause':'Landing inserts generic purpose/audience; deterministicBriefSpec prefers purpose for opening and closing and emits a fixed narrative scaffold. Primitive generation recognizes special metric CSV/top-scorer phrases, not the supplied prose sequence. Deterministic creation skips the provider critique report.','smallestRepair':'First verify the already-supported CSV path through a new explicitly labelled deterministic UI creation and actual chart export. Preserve the original unmet prose request. Handoff should state the supported shape and units/provenance limits. A later product patch should expose missing requested primitives without auto-dispatching a provider or pretending generic content fulfills the request.','references':['src/domains/nodeslide/components/NodeSlideLanding.tsx:103','convex/lib/nodeslideSeed.ts:574','convex/lib/nodeslideSeed.ts:1052','convex/lib/nodeslideSeed.ts:1106','convex/lib/nodeslideSeed.ts:1149','convex/lib/nodeslideCreationCritique.ts:1425','convex/lib/nodeslideValidators.ts:247']}
+]
+report={'schemaVersion':'portfolio.bounded-causal-diagnosis/v1','at':datetime.now(timezone.utc).isoformat(),'mode':'Builder','verdict':'TWO_PRODUCT_LIMITS_CAUSALLY_IDENTIFIED_NO_IMPLEMENTATION','requestTrace':'Make each repo ready for developer/user handoff with visual, responsive and interaction standards; diagnose the actual NodeSlide first-use gate contradiction and unmet chart brief.','candidate':str(R),'head':head,'scope':'Read-only product diagnosis from observed synthetic deck and exact current source; nonauthor context reuse disclosed.','findings':findings,'replay':{'path':str(O/'offline-pure-replay.json'),'sha256':sha(O/'offline-pure-replay.json'),'inputSha256':replay['input']['sha256'],'validationOk':True,'publishOk':True,'deckCiStatus':'fail','blockerCount':1,'existingSimilarityMetric':0.98,'metricIsNotPortfolioGrade':True},'exports':export,'sourceBindings':{'count':len(source),'path':str(O/'source-bindings.json'),'sha256':sha(O/'source-bindings.json'),'allCurrentExact':True},'observedBindings':{'count':len(bindings),'path':str(O/'observed-bindings.json'),'sha256':sha(O/'observed-bindings.json')},'supportedInput':{'csvPath':str(O/'supported-metrics.csv'),'csvSha256':sha(O/'supported-metrics.csv'),'attachmentPath':str(O/'supported-attachment.json'),'contract':{'title':'nonempty, maximum 180 characters/540 UTF-8 bytes, unique case-insensitive','format':'csv','content':'normalized nonempty text, per-file 24000 UTF-8 bytes; at most 3 attachments/60000 total bytes'},'expectedPlannedChart':replay['supportedCsv']['charts'][0],'replayScope':'pure planned spec only'},'nextProof':['Keep original v3 snapshot and failed/readiness PNGs immutable.','Capture labelled before boundary around current failed badge and Trace validation text before any UI repair.','Implement only current-gate detail wiring and precise readiness wording; preserve structural validation and all existing gates.','Replay same-version failed/current pass/loading/unavailable/stale transitions, click and keyboard details; inspect actual pixels at phone and desktop sizes.','Separately create from original illustrative brief plus supported CSV in the owned deterministic local backend; independently reopen JSON/PPTX to verify 100/120/140, editability, notes and actual chart count. No provider fallback.'],'limitations':limitations,'fullGrades':None,'overall':None,'humanUsage':None,'target':4.5}
+write(P/'E6g_NODESLIDE_GATE_BRIEF_DIAGNOSIS.json',report)
+md=f'''Builder. **Decision:** fix the meaning and contents of the existing readiness detail surface first. Keep the diversity failure visible. Exercise the supported CSV path separately before proposing any new natural-language parser.
+
+**Re your request:** each repository should be usable and handoff-ready, with visual and interaction evidence. This review traced two failures in a new author's actual NodeSlide journey; it did not modify the product.
+
+A person preparing a fictional sourcing review asked for an editable chart using illustrative volumes 100, 120 and 140. Their six-slide deck saved and reloaded, including updated title and Unicode notes, but the editor said “Deck CI Failed · 1 blocker.” Opening the detail screen said “Current deck validation: passed” and “publish ready.” The two screens answer different questions without explaining the difference. A passing structural check must not hide a separate current layout blocker.
+
+- The exact exported v3 snapshot ({replay['input']['sha256']}) reproduces both results offline: ordinary validation has zero issues and `publishOk=true`; the full Deck CI result fails `deck_composition_diversity_failed` because slides 3 and 4 have near-duplicate geometry (existing gate similarity 0.98). This metric is not a portfolio grade. See [raw pure replay](E6g-nodeslide-gate-brief-diagnosis/offline-pure-replay.json).
+- The cause is current UI wiring, not evidence of a broken backend. [NodeSlideStudio.tsx]({R.as_posix()}/src/domains/nodeslide/NodeSlideStudio.tsx:736) queries the authoritative latest Deck CI. [InspectorPanel.tsx]({R.as_posix()}/src/domains/nodeslide/inspector/InspectorPanel.tsx:552) passes it only to AI, then routes the badge click to Trace. Trace receives narrower validation records at line 710 and [TraceInspector.tsx]({R.as_posix()}/src/domains/nodeslide/inspector/TraceInspector.tsx:1419) calls their `publishOk` “publish ready.” The full result is never supplied to that detail component.
+- These are distinct gates by design. [nodeslideDeckCi.ts]({R.as_posix()}/convex/lib/nodeslideDeckCi.ts:327) adds deck composition checks beyond [nodeslideValidation.ts]({R.as_posix()}/convex/lib/nodeslideValidation.ts:258). Existing export/present handlers use the narrower validation at [NodeSlideStudio.tsx]({R.as_posix()}/src/domains/nodeslide/NodeSlideStudio.tsx:2335); this report does not invent a policy that all local exports must be blocked by every layout finding. The immediate repair is truthful detail and scope.
+- The exported JSON has 6 slides and 82 elements: 34 text, 46 shapes and 2 connectors, with no chart. Independent ZIP/XML inspection confirms the actual PPTX has 6 slides, 6 notes parts and 0 charts; both PPTX and HTML preserve the current note lines. [Independent export readback](E6g-nodeslide-gate-brief-diagnosis/independent-export-readback.json) binds the files.
+- Generic prose has a separate upstream cause. [Landing]({R.as_posix()}/src/domains/nodeslide/components/NodeSlideLanding.tsx:103) supplies a generic purpose/audience, and [deterministicBriefSpec]({R.as_posix()}/convex/lib/nodeslideSeed.ts:574) uses that purpose for opening and closing. Its chart parser recognizes metric CSV or a specific top-scorer phrase, not the requested natural-language monthly sequence. [Deterministic critique]({R.as_posix()}/convex/lib/nodeslideCreationCritique.ts:1425) skips the quality report and provider revision. An unchanged CSV input becoming a chart would not retrospectively satisfy the original prose request.
+
+The smallest repair stays in the existing Inspector/Trace owners: carry current Deck CI status, loading and exact blocker details into Trace, distinguish structural validation from overall readiness, and retain fail/loading/unavailable/stale states. Do not lower diversity thresholds, remove the failing badge, manufacture an intentional-series exemption, dispatch a model, or label generated placeholders as measured evidence. A separate generator fix needs its own accepted scope and before proof.
+
+The currently supported metric input is [supported-metrics.csv](E6g-nodeslide-gate-brief-diagnosis/supported-metrics.csv):
+
+```csv
+{csv}
+```
+
+It may be appended as literal lines to the brief, or supplied through the existing inline attachment contract [supported-attachment.json](E6g-nodeslide-gate-brief-diagnosis/supported-attachment.json). That contract is `{{title, format: "csv", content}}`, maximum 3 files, 24,000 bytes per file and 60,000 total; title must be unique ignoring case and at most 180 characters/540 UTF-8 bytes. [nodeslideAgent.ts]({R.as_posix()}/convex/nodeslideAgent.ts:1853) appends normalized attachment content to the generation brief. No new parser or endpoint is needed for this bounded proof.
+
+The pure replay produces a planned chart on slide index 3 with labels Month 1, Month 2, Month 3 and exact values 100, 120, 140. The existing generic parser sets its unit to **value**, ignores the source column when extracting this primitive, takes at most 100 lines after the literal header and at most 8 chart values, and does simple comma splitting. It is not general CSV ingestion or proof of source/units fidelity. Root still needs the real deterministic create→edit→reload→PPTX reopen journey for this alternate input.
+
+Next sequence:
+
+1. Keep the original unmet request, exported v3 data and contradictory PNGs immutable.
+2. Capture labelled before boundaries around the badge and actual Trace detail before the minimal UI repair.
+3. Wire the same current receipt into that detail surface and qualify readiness text; preserve every existing check.
+4. Verify failed/pass/loading/unavailable and stale-version cases, native click/keyboard navigation and actual phone/desktop pixels.
+5. Separately exercise the supported illustrative CSV through real local creation and reopen JSON/PPTX; verify exact series, notes and actual editable chart count without provider dispatch.
+
+This diagnosis binds {len(source)} source files and {len(bindings)} observed artifacts. The actual failed-badge, passed-Trace and created-editor PNGs were viewed. Existing source bytes were unchanged at the final check; root owns separate generated/metadata changes in this working tree. The offline functions were compiled only in memory, with no app build, browser, backend request, provider, native Office or source/index/ref mutation. Missing guessed file-path read probes remain in the tool history and were resolved by file discovery; no product failure was discarded.
+
+The original mobile notes/control overlap and doubled-text clipping remain separate root-recorded findings. This is a reused nonauthor reviewer context. No production, native PowerPoint, full readiness, human-usage or 44-criterion grade is claimed; all full grades remain null and the 4.5 target remains unchanged. [Structured diagnosis](E6g_NODESLIDE_GATE_BRIEF_DIAGNOSIS.json).
+'''
+(P/'E6g_NODESLIDE_GATE_BRIEF_DIAGNOSIS.md').write_text(md,encoding='utf-8')
+files=[{'path':p.relative_to(O).as_posix(),'sha256':sha(p),'bytes':p.stat().st_size} for p in sorted(O.rglob('*')) if p.is_file() and p.name!='manifest.json']
+write(O/'manifest.json',{'files':files,'count':len(files),'bytes':sum(x['bytes'] for x in files),'excludes':['manifest.json','external diagnosis MD/JSON']})
+print(json.dumps({'verdict':report['verdict'],'json':str(P/'E6g_NODESLIDE_GATE_BRIEF_DIAGNOSIS.json'),'sha256':sha(P/'E6g_NODESLIDE_GATE_BRIEF_DIAGNOSIS.json'),'sources':len(source),'observed':len(bindings),'artifacts':len(files),'manifestSha256':sha(O/'manifest.json')},indent=2))

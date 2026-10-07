@@ -1,0 +1,30 @@
+from pathlib import Path
+import subprocess, hashlib, json, time, shutil, sys
+
+P = Path(__file__).resolve().parent
+R = Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905')
+O = P / 'E6g-nodeslide-check-diagnosis'
+O.mkdir(exist_ok=True)
+def sha(data): return hashlib.sha256(data).hexdigest()
+def put(name, value): (O / name).write_text(json.dumps(value, indent=2, ensure_ascii=True)+'\n', encoding='utf-8')
+def git(*args): return subprocess.check_output(['git','--no-optional-locks',*args], cwd=R)
+paths = ['scripts/tests/workspace-build-depth.test.mjs','scripts/tests/code-tours.test.mjs','scripts/tests/playwright-trace.test.mjs','scripts/build-code-tours.mjs','src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx','src/domains/nodeslide/components/NodeBookWorkspacePanel.tsx','vite.config.ts','package.json','package-lock.json','packages/convex/package.json']
+paths += [str(f.relative_to(R)).replace('\\','/') for d in ['node_modules/@nodebook/react/dist','node_modules/@nodebook/core/dist','node_modules/@nodebook/model/dist','node_modules/@nodebook/contracts/dist'] for f in (R/d).rglob('*') if f.is_file()]
+def snapshot():
+    return {'head':git('rev-parse','HEAD').decode().strip(),'refs':git('show-ref').decode(),'indexTree':git('ls-files','--stage','-z').hex(),'files':{p:{'sha256':sha((R/p).read_bytes()),'bytes':(R/p).stat().st_size} for p in paths}}
+before=snapshot()
+put('source-before.json',before)
+for p in paths[:10]:
+    target=O/'source-before'/p
+    target.parent.mkdir(parents=True,exist_ok=True)
+    target.write_bytes((R/p).read_bytes())
+shutil.copyfile(P/'E6g-nodeslide-first-run/check.log', O/'original-full-check.log')
+cmd=[shutil.which('node'), 'node_modules/vitest/vitest.mjs','run','scripts/tests/workspace-build-depth.test.mjs','scripts/tests/code-tours.test.mjs','src/domains/nodeslide/components/NodeBookWorkspacePanel.test.tsx','--reporter=verbose','--reporter=json',f'--outputFile.json={O / "unchanged-targeted.json"}']
+start=time.time()
+with (O/'unchanged-targeted.log').open('wb') as log:
+    run=subprocess.run(cmd,cwd=R,stdout=log,stderr=subprocess.STDOUT)
+put('unchanged-targeted-command.json',{'command':cmd,'cwd':str(R),'exitCode':run.returncode,'elapsedMs':round((time.time()-start)*1000),'scope':'Only original three failing files; no timeout, retry, skip, config, or test modifications.'})
+after=snapshot()
+put('source-after-targeted.json',after)
+put('targeted-custody.json',{'unchanged':before==after,'sourceBindings':len(paths),'head':after['head'],'changed':[p for p in paths if before['files'][p]!=after['files'][p]],'indexUnchanged':before['indexTree']==after['indexTree'],'refsUnchanged':before['refs']==after['refs']})
+print(json.dumps({'exitCode':run.returncode,'elapsedMs':round((time.time()-start)*1000),'unchanged':before==after,'output':str(O)}))

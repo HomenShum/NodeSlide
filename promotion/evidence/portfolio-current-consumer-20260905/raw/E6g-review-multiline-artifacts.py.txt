@@ -1,0 +1,64 @@
+from pathlib import Path
+import json,hashlib,subprocess,time,os,zipfile,xml.etree.ElementTree as ET,posixpath
+P=Path(__file__).resolve().parent;R=Path('D:/VSCode Projects/cafecorner_nodebench/nodebench_ai4/.portfolio-worktrees/nodeslide-current-consumer-20260905');O=P/'E6g-nodeslide-multiline-independent-01';B=P/'E6g-nodeslide-multiline-browser-01'
+def h(b):return hashlib.sha256(b).hexdigest()
+def save(n,v):(O/n).write_text(json.dumps(v,indent=2,ensure_ascii=True)+'\n',encoding='utf-8')
+def load(p):return json.loads(p.read_text(encoding='utf-8-sig'))
+def git(*a):return subprocess.check_output(['git','--no-optional-locks',*a],cwd=R)
+freezeRaw=(P/'E6g_NODESLIDE_MULTILINE_FREEZE.json').read_bytes();freeze=json.loads(freezeRaw);(O/'root-two-owner-freeze.json').write_bytes(freezeRaw)
+for p in freeze['source']:assert h((R/p['path']).read_bytes())==p['sha256']
+artifactChecks=[]
+for row in freeze['artifacts']:
+    raw=(P/row['path']).read_bytes();artifactChecks.append({'path':row['path'],'exact':h(raw)==row['sha256'] and len(raw)==row['bytes']})
+assert all(x['exact'] for x in artifactChecks)
+pure=load(O/'pure-replay.json');sourceBefore={p['path']:{'sha256':h((R/p['path']).read_bytes()),'bytes':(R/p['path']).stat().st_size} for p in pure['sourceBindings']}
+sourceBefore['convex/lib/nodeslideAdmission.test.ts']={'sha256':h((R/'convex/lib/nodeslideAdmission.test.ts').read_bytes()),'bytes':(R/'convex/lib/nodeslideAdmission.test.ts').stat().st_size}
+before={'files':sourceBefore,'index':git('ls-files','--stage','-z').hex(),'refs':git('show-ref').decode(),'head':git('rev-parse','HEAD').decode().strip()};save('custody-before.json',before)
+deck=load(B/'deck.json');input=load(B/'02-deterministic-brief.json');prompt=next(c['value'] for c in input['controls'] if c['tag']=='TEXTAREA')
+oldInput=load(P/'E6g-nodeslide-chart-fixture-01/02-deterministic-brief.json');oldPrompt=next(c['value'] for c in oldInput['controls'] if c['tag']=='TEXTAREA')
+assert prompt==oldPrompt==deck['deck']['brief']['prompt'];assert prompt.count('\n')==5
+charts=[e for e in deck['elements'] if e['kind']=='chart'];assert len(charts)==1
+expectedLabels=['Month 1','Month 2','Month 3'];expectedNumbers=[100,120,140]
+assert charts[0]['chart']['labels']==expectedLabels and charts[0]['chart']['series'][0]['values']==expectedNumbers
+notes='Illustrative pilot only. Review 100 → 120 → 140 units; reference 00123 remains text.\nDecision: prototype after checking the budget. 中文交接 — no external claims.'
+assert any(s.get('notes')==notes for s in deck['slides']);assert deck['deck']['title']=='NodeSlide local handoff — structured chart fixture';assert deck['deck']['version']==3
+ns={'c':'http://schemas.openxmlformats.org/drawingml/2006/chart','a':'http://schemas.openxmlformats.org/drawingml/2006/main','r':'http://schemas.openxmlformats.org/officeDocument/2006/relationships','rel':'http://schemas.openxmlformats.org/package/2006/relationships'}
+pptx=B/'actual-chart-fixture.pptx'
+with zipfile.ZipFile(pptx) as z:
+    names=z.namelist();chartNames=[n for n in names if n.startswith('ppt/charts/chart') and n.endswith('.xml') and '/_rels/' not in n];assert len(chartNames)==1
+    chartName=chartNames[0];chartBytes=z.read(chartName);root=ET.fromstring(chartBytes);series=root.findall('.//c:barChart/c:ser',ns);assert len(series)==1
+    def points(base):return [p.find('c:v',ns).text for p in sorted(base.findall('.//c:pt',ns),key=lambda p:int(p.attrib['idx']))]
+    labels=points(series[0].find('c:cat',ns));values=[float(s) for s in points(series[0].find('c:val',ns))];assert labels==expectedLabels and values==expectedNumbers
+    links=[]
+    for n in names:
+        if n.startswith('ppt/slides/_rels/slide') and n.endswith('.xml.rels'):
+            for rel in ET.fromstring(z.read(n)):
+                if rel.attrib.get('Type','').endswith('/chart'):
+                    target=posixpath.normpath(posixpath.join('ppt/slides',rel.attrib['Target'])).lstrip('/');slide=n.replace('/_rels/','/').removesuffix('.rels');slideXml=ET.fromstring(z.read(slide))
+                    refs=slideXml.findall('.//c:chart',ns);assert any(c.attrib.get('{'+ns['r']+'}id')==rel.attrib['Id'] for c in refs)
+                    links.append({'slide':slide,'chart':target,'relationshipId':rel.attrib['Id']})
+    assert len(links)==1 and links[0]['chart']==chartName
+    noteNames=[n for n in names if n.startswith('ppt/notesSlides/notesSlide') and n.endswith('.xml')];assert len(noteNames)==6
+    noteParagraphs=[''.join(p.itertext()) for n in noteNames for p in ET.fromstring(z.read(n)).findall('.//a:p',ns)]
+    assert any(p.startswith(notes+'\n\nNodeSlide sources\n') for p in noteParagraphs)
+    embeddings=[]
+    for n in names:
+        if n.startswith('ppt/embeddings/') and n.endswith('.xlsx'):
+            embeddings.append({'path':n,'sha256':h(z.read(n)),'bytes':len(z.read(n))})
+    exportedParts=load(B/'actual-chart-parts.json');assert len(exportedParts)==1 and exportedParts[0].encode()==chartBytes
+pngs=[]
+for name in ['01-landing','02-deterministic-brief','03-created-editor','04-reloaded-editor','05-chart-slide']:
+    raw=(B/(name+'.png')).read_bytes();width=int.from_bytes(raw[16:20],'big');height=int.from_bytes(raw[20:24],'big');side=load(B/(name+'.json'));assert (width,height)==(1440,960)==(side['viewport']['width'],side['viewport']['height'])
+    pngs.append({'name':name,'width':width,'height':height,'pngSha256':h(raw),'domSha256':h((B/(name+'.json')).read_bytes()),'overflowReportedByCapturedDom':side['overflow']})
+save('artifact-readback.json',{'rootArtifactsExact':artifactChecks,'sourceFreezeSha256':h(freezeRaw),'input':{'sameOriginalSubmittedText':True,'fiveLfPreserved':True,'promptSha256':h(prompt.encode())},'json':{'sha256':h((B/'deck.json').read_bytes()),'chartCount':1,'labels':expectedLabels,'values':expectedNumbers,'genericUnit':charts[0]['chart']['unit'],'exactCurrentUnicodeTitle':True,'version':3,'exactCurrentMultilineUnicodeNotes':True},'pptx':{'sha256':h(pptx.read_bytes()),'nativeChartCount':1,'chartXmlSha256':h(chartBytes),'labels':labels,'numericValues':values,'linkedActualSlide':links,'notesParts':len(noteNames),'exactUserNotesPrefixPresent':True,'appendedExistingSourceNotes':True,'embeddings':embeddings,'nativeOfficeOpened':False},'pngAndSidecarBindings':pngs,'directlyViewed':['before/05-chart-slide.png','after/05-chart-slide.png','after/02-deterministic-brief.png'],'limits':['No native PowerPoint edit/readback or rendering certificate.','Reported console/external counts are from preserved browser recorder; no second runtime request.','Generic value unit and source-column fidelity limitation unchanged.']})
+cmd=['cmd.exe','/d','/c','npm','exec','--','vitest','run','convex/lib/nodeslideAdmission.test.ts','--reporter=verbose','--reporter=json',f'--outputFile.json={O / "admission-tests.json"}']
+env=dict(os.environ)
+for k in list(env):
+    u=k.upper()
+    if any(s in u for s in ['OPENAI','ANTHROPIC','GEMINI','GOOGLE_API','CONVEX','VITE_','PLAYWRIGHT_BASE_URL']) or u.endswith(('_API_KEY','_ACCESS_TOKEN','_SECRET')):env.pop(k)
+temp=Path('D:/ProjectRecovery/NodeSlide first run 20260905/temp');assert temp.is_dir();env.update({'TEMP':str(temp),'TMP':str(temp),'CONVEX_AGENT_MODE':'anonymous'})
+start=time.monotonic()
+with (O/'admission-tests.log').open('xb') as log:r=subprocess.run(cmd,cwd=R,env=env,stdout=log,stderr=subprocess.STDOUT,creationflags=subprocess.CREATE_NO_WINDOW)
+save('admission-command.json',{'command':cmd,'cwd':str(R),'exitCode':r.returncode,'elapsedMs':round((time.monotonic()-start)*1000),'scope':'One existing admission test file through installed npm exec; no added filter, timeout, retry or source change. Provider mocked by existing test; durable mutations/ledger stand-ins do not prove quota, actual DB or load performance.'})
+after={'files':{p:{'sha256':h((R/p).read_bytes()),'bytes':(R/p).stat().st_size} for p in sourceBefore},'index':git('ls-files','--stage','-z').hex(),'refs':git('show-ref').decode(),'head':git('rev-parse','HEAD').decode().strip()};save('custody-after.json',after);save('custody-result.json',{'unchanged':before==after,'namedSources':len(sourceBefore),'sourceExact':before['files']==after['files'],'indexExact':before['index']==after['index'],'refsExact':before['refs']==after['refs']});assert before==after
+print(json.dumps({'exitCode':r.returncode,'namedSources':len(sourceBefore),'artifactsVerified':len(artifactChecks),'pngs':len(pngs),'nativeCharts':len(chartNames),'sourceUnchanged':before==after}))

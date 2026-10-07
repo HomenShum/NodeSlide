@@ -1,1 +1,9 @@
-export type InspectorTab = 'ai' | 'design' | 'comments' | 'versions' | 'data' | 'json' | 'trace';
+export type InspectorTab =
+  | 'ai'
+  | 'design'
+  | 'nodebook'
+  | 'comments'
+  | 'versions'
+  | 'data'
+  | 'json'
+  | 'trace';

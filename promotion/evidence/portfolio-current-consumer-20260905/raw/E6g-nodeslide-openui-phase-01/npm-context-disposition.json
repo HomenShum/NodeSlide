@@ -1,0 +1,9 @@
+{
+  "diagnosticCommandStartedWithNodeNotNpm": true,
+  "npmExecpathPresentInCurrentParentEnvironment": false,
+  "actualFailure": "process.env.npm_execpath yielded undefined at assertion line94 before sandbox or tarball creation",
+  "classification": "DIAGNOSTIC_HARNESS_ARTIFACT_NOT_NEW_REPO_FAILURE",
+  "testSourceSha256": "3ca1157abdb324578e38f79be2c5ff2f8faab4e2f3dcd8a56cd357f97cab474d",
+  "normalCheck02DidNotFailThisOwner": true,
+  "noAdditionalSuiteRun": true
+}

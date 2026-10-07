@@ -1,0 +1,10 @@
+{
+  "status": "FAILED_PACKAGING_READ_RESOLVED",
+  "action": "freeze export readback",
+  "reason": "Suggested download filename differs from actual stored file name; no workbook readback claimed from failed attempt.",
+  "actualFiles": [
+    "E6g-nodeslide-notes-export-01/actual.pptx",
+    "E6g-nodeslide-notes-export-01/actual.html"
+  ],
+  "sourceChanges": false
+}

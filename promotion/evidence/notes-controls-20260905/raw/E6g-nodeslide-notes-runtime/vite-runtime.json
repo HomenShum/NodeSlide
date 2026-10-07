@@ -1,0 +1,21 @@
+{
+  "at": "2026-09-05T17:32:33.049481+00:00",
+  "url": "http://127.0.0.1:53146",
+  "mode": "LOCAL_VITE_DEVELOPMENT",
+  "providerCalls": 0,
+  "pid": 44988,
+  "processCreated": 1788629553.054248,
+  "status": "READY",
+  "listeners": [
+    {
+      "pid": 44988,
+      "address": "127.0.0.1",
+      "port": 53146
+    }
+  ],
+  "cleanup": {
+    "allRecordedProcessesExited": true,
+    "portReleased": true
+  },
+  "stoppedAt": "2026-09-05T17:55:24.650311+00:00"
+}

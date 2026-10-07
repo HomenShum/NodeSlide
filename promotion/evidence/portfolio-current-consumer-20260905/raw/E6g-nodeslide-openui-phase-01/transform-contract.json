@@ -1,0 +1,93 @@
+{
+  "sourceBindings": {
+    "src/domains/nodeslide/inspector/AiInspector.tsx": {
+      "sha256": "d254af21c5486763d11ebf0cd3f6bac2f30252a8973a1d77e448cb63be1b1353",
+      "bytes": 99000
+    },
+    "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx": {
+      "sha256": "eaa74dec3ad9d202fd3af8328d3cfd1b3ac876c686bb629350c705fd379ccb1d",
+      "bytes": 4755
+    },
+    "src/domains/nodeslide/openui/OpenUiMaterialWorkbench.tsx": {
+      "sha256": "a6da3f550fb33e18bfad668ebfea116db1f2294aafbfff62e99fb45a6460e66a",
+      "bytes": 9361
+    },
+    "vite.config.ts": {
+      "sha256": "13cb07a5bffdaec276a3e2fda34469c4ef982c3a4a1e78bf1b80f9147c7c3e48",
+      "bytes": 3306
+    },
+    ".gitattributes": {
+      "sha256": "e9c61ffa7486f3134f5deae7d81103be5a8eacc3dfbbe4296c09df5d45d7d2f5",
+      "bytes": 1056
+    },
+    "scripts/tests/code-tours.test.mjs": {
+      "sha256": "20358217a7c89ee0af06778ae7d27f82e9b5b771e7e0ddeec4f63a52c97e38eb",
+      "bytes": 902
+    },
+    "scripts/tests/workspace-build-depth.test.mjs": {
+      "sha256": "98e1cc0d259199f01c4b92e2b539a06aa32889e72e7857a1b35a815f0185a40e",
+      "bytes": 3134
+    },
+    "scripts/tests/playwright-trace.test.mjs": {
+      "sha256": "6d58b0fa95c609cc91ab7cecbf032c5136b3c63654454c71824b1b32adbc3b9f",
+      "bytes": 8493
+    },
+    ".tours/03-debug-and-recovery.tour": {
+      "sha256": "0cda9fd05c121f5dc60edeb3af2f78fb30a28e3e14ce6b0316ae88dece912a84",
+      "bytes": 3704
+    },
+    "convex/_generated/api.d.ts": {
+      "sha256": "4d4c28b2dc659c14c57b71777a108df3168e86f5e1c90f61e7624a9a39a7b12e",
+      "bytes": 19134
+    },
+    "package.json": {
+      "sha256": "bdd1fc9f3da93bb84d443dae994436c41aa97f67045df6b82a54bb99dc96c9a7",
+      "bytes": 12415
+    },
+    "package-lock.json": {
+      "sha256": "e618b0ed6230eafd91ffbdbe124bd7df38e550311db8879a0dd409b027bd3ab9",
+      "bytes": 427605
+    },
+    "node_modules/@testing-library/dom/dist/config.js": {
+      "sha256": "3627f6265cccd26604777602d7249788c2347a273bdd1cae41719c790f2c5a7a",
+      "bytes": 2526
+    },
+    "node_modules/@testing-library/dom/dist/wait-for.js": {
+      "sha256": "7ead4a09f15329a1bb9fb175f8af64757bcae28b6f49b62981bdbe1bc6dea391",
+      "bytes": 6734
+    }
+  },
+  "replacements": {
+    "src/domains/nodeslide/inspector/AiInspector.tsx": [
+      [
+        "const OpenUiMaterialWorkbench = lazy(() =>\n  import('../openui/OpenUiMaterialWorkbench').then((module) => ({\n    default: module.OpenUiMaterialWorkbench,\n  })),\n);",
+        "const OpenUiMaterialWorkbench = lazy(() => {\n  __phaseEmit('import-start');\n  return import('../openui/OpenUiMaterialWorkbench').then((module) => {\n    __phaseEmit('import-resolved');\n    return { default: module.OpenUiMaterialWorkbench };\n  }, (error) => { __phaseEmit('import-rejected', { name: error?.name }); throw error; });\n});"
+      ]
+    ],
+    "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx": [
+      [
+        "afterEach(cleanup);",
+        "afterEach(() => { __phaseFinish(); cleanup(); });"
+      ],
+      [
+        "    const user = userEvent.setup();",
+        "    __phaseStart(document);\n    const user = userEvent.setup();"
+      ],
+      [
+        "    await user.click(opener);",
+        "    __phaseEmit('click-start');\n    await user.click(opener);\n    __phaseEmit('click-returned');"
+      ],
+      [
+        "await waitFor(() => expect(screen.getByTestId('openui-visual-workbench')).toBeTruthy());",
+        "__phaseWaitStart(__phaseGetConfig().asyncUtilTimeout);\n    try {\n      await waitFor(() => expect(screen.getByTestId('openui-visual-workbench')).toBeTruthy());\n      __phaseEmit('wait-resolved');\n    } catch (error) { __phaseEmit('wait-rejected', { name: error?.name }); throw error; }\n    finally { __phaseEmit('wait-settled'); }"
+      ]
+    ]
+  },
+  "imports": {
+    "src/domains/nodeslide/inspector/AiInspector.tsx": "import { emit as __phaseEmit } from 'virtual:portfolio-openui-phase';\n",
+    "src/domains/nodeslide/inspector/AiInspector.openUiWiring.test.tsx": "import { start as __phaseStart, emit as __phaseEmit, finish as __phaseFinish, waitStart as __phaseWaitStart } from 'virtual:portfolio-openui-phase';\nimport { getConfig as __phaseGetConfig } from '@testing-library/dom';\n"
+  },
+  "helperSha256": "a94d0e335f4af10c66b87507e63423f9a51a9b40d4d327ac129742c5e6680278",
+  "wrapperSha256": "3a0778022c663aa00c60d388acbd8072eafdbfb7c96fac69d3bde23047ab6c5b",
+  "exactlyOneRootVitestRun": true
+}

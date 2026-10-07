@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "C:\Users\hshum\.codex\worktrees\5dba\nodebench-ai\docs\plans\portfolio-recovery-20260904\E6g-review-multiline-artifacts.py", line 43, in <module>
+    for line in notes.split('\n'):assert line in noteParagraphs
+                                         ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

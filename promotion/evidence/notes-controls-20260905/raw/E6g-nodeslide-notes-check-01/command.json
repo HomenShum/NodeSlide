@@ -1,0 +1,22 @@
+{
+  "startedAt": "2026-09-05T17:51:50.711810+00:00",
+  "finishedAt": "2026-09-05T17:54:21.685721+00:00",
+  "command": [
+    "npm",
+    "run",
+    "check"
+  ],
+  "cwd": "D:\\VSCode Projects\\cafecorner_nodebench\\nodebench_ai4\\.portfolio-worktrees\\nodeslide-current-consumer-20260905",
+  "exitCode": 0,
+  "elapsedSeconds": 150.96899999992456,
+  "timeoutSeconds": 900,
+  "source": {
+    "src/domains/nodeslide/components/SlideCanvas.tsx": "028175b149f251a2bcf094e518f28e68834b9ed942a118e4b8cc449f94a8fe87",
+    "src/domains/nodeslide/nodeslide.css": "059f3f5bdf23ca38e24e133be5870304049fc1a140334dabbfe337145a980ee7",
+    "src/domains/nodeslide/nodeslideV3.css": "5175702b66ddf1f91f0e379c45e3a1d3078accb8aca02bab4345c5132d3618ad",
+    "HANDOFF.md": "0deca037de21d842415796f240417ccfb6d3cecffd2ff0d30cefbd5216e76f25"
+  },
+  "sourceUnchanged": true,
+  "environmentPolicy": "Remove inherited provider/Convex/Vite overrides without printing values; ordinary npm lifecycle unchanged; no retry or timeout increase",
+  "logSha256": "4dd0f39f027c6f592b1bca0c6501622cb5ca535b689b1dfb77942bfa037d61de"
+}

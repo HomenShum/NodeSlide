@@ -1920,17 +1920,8 @@
   border: 0;
   box-shadow: none;
   color: var(--ns-ink2);
-  height: 40px;
-}
-
-.nodeslide-studio .ns-slide-stepper {
-  bottom: 0;
-  left: 12px;
-}
-
-.nodeslide-studio .ns-zoom-controls {
-  bottom: 0;
-  right: 12px;
+  height: auto;
+  min-height: 40px;
 }
 
 .nodeslide-studio .ns-slide-stepper button,
@@ -1949,6 +1940,7 @@
   font-family: "JetBrains Mono", ui-monospace, monospace;
   font-size: 10px;
   min-width: 38px;
+  width: auto;
   text-align: center;
 }
 
@@ -1957,8 +1949,11 @@
   border: 1px solid var(--ns-line-c);
   border-radius: 6px;
   font-size: 12px;
+  height: auto;
   margin-left: 4px;
+  min-height: 27px;
   padding: 4px 10px;
+  width: auto;
 }
 
 /* Overview and compare --------------------------------------------------- */
@@ -5246,6 +5241,10 @@
   text-decoration: none;
 }
 
+.nodeslide-studio .ns-landing-brand > span::before {
+  content: "N";
+}
+
 .nodeslide-studio .ns-landing-brand > span {
   align-items: center;
   background: var(--ns-accent);
@@ -6638,7 +6637,13 @@
   font-size: 16px;
   line-height: 1.55;
   min-height: 104px;
-  outline: 0;
+  /* No `outline: 0` here. The composer's :focus-within ring is a GROUP ring:
+     it is already on when focus arrives from the textarea, so tabbing textarea
+     -> model select -> effort select changed nothing on screen. Measured in
+     promotion/evidence/audit-2026-08-13/report.json (three stops reporting
+     indicatorOn "form.ns-landing-composer"). The global
+     :where(:focus-visible) rule in src/styles.css has zero specificity, so an
+     `outline: 0` here silently won and the control lost its own ring. */
   padding: 15px 16px 8px;
   resize: none;
   width: 100%;
@@ -6732,7 +6737,13 @@
   color: var(--ns-ink2);
   display: inline-flex;
   gap: 3px;
+  max-width: 100%;
+  min-width: 0;
   padding: 0 7px 0 10px;
+}
+
+.nodeslide-studio .ns-landing-model > svg {
+  flex-shrink: 0;
 }
 
 .nodeslide-studio .ns-landing-model select {
@@ -6742,8 +6753,16 @@
   cursor: pointer;
   font-size: 11px;
   font-weight: 650;
-  outline: 0;
+  min-width: 0;
+  /* No `outline: 0` — see the textarea rule above. Both selects sit inside the
+     same composer, so the group ring cannot distinguish them. */
   padding: 8px 16px 8px 3px;
+  text-overflow: ellipsis;
+}
+
+/* The ring has to clear the pill, or it is drawn under the wrapper's border. */
+.nodeslide-studio .ns-landing-model:has(select:focus-visible) {
+  border-color: color-mix(in srgb, var(--ns-accent) 64%, white);
 }
 
 .nodeslide-studio .ns-landing-model::after {
@@ -7126,7 +7145,13 @@
 
 @media (max-width: 699px) {
   .nodeslide-studio .ns-landing-header {
+    flex-wrap: wrap;
+    gap: 12px;
     padding: 15px 17px;
+  }
+
+  .nodeslide-studio .ns-landing-header-actions {
+    flex-wrap: wrap;
   }
 
   .nodeslide-studio .ns-landing-connect {
@@ -7138,6 +7163,18 @@
   .nodeslide-studio .ns-landing-connect svg {
     height: 15px;
     width: 15px;
+  }
+
+  .nodeslide-studio .ns-landing-lab,
+  .nodeslide-studio .ns-landing-connect,
+  .nodeslide-studio .ns-landing-open {
+    min-height: 44px;
+    min-width: 44px;
+    padding-inline: 10px;
+  }
+
+  .nodeslide-studio .ns-landing-header-actions svg {
+    flex-shrink: 0;
   }
 
   .nodeslide-studio .ns-connections-body {
@@ -7170,8 +7207,24 @@
   }
 
   .nodeslide-studio .ns-landing-composer textarea {
-    font-size: 15px;
+    /* 16px, not 15px: iOS Safari zooms the viewport when a focused input is
+       under 16px, and this is the one control the landing exists for. Measured
+       at 390px in promotion/evidence/audit-2026-08-13/report.json
+       (wig.mobile.textInputsUnder16px). */
+    font-size: 16px;
     min-height: 116px;
+  }
+
+  /* Same reason as the textarea: 11px selects trip iOS's focus zoom. Measured
+     at 390 px in the audit report (wig.mobile.textInputsUnder16px). */
+  .nodeslide-studio .ns-landing-model select {
+    font-size: 16px;
+  }
+
+  /* The submit control was 40x40 at 390 px; the mobile floor is 44. */
+  .nodeslide-studio .ns-landing-send {
+    height: 44px;
+    min-width: 44px;
   }
 
   .nodeslide-studio .ns-landing-composer-bar {
@@ -7475,4 +7528,57 @@
  */
 .nodeslide-studio .ns-inspector-scroll .ns-evidence-coverage :is(span, strong) {
   font-size: var(--ns-font-body);
+}
+
+.nodeslide-studio .ns-nodebook-artifact-preview {
+  display: grid;
+  gap: 10px;
+}
+
+.nodeslide-studio .ns-nodebook-artifact-preview [data-nodebook-host="nodeslide"] {
+  min-width: 0;
+}
+
+.nodeslide-studio .ns-nodebook-artifact-preview [data-nodebook-surface="artifact"] {
+  max-height: 260px;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid var(--ns-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ns-panel) 90%, var(--ns-accent) 10%);
+}
+
+.nodeslide-studio .ns-nodebook-artifact-preview [data-nodebook-artifact-rendered] > svg {
+  max-height: 240px;
+}
+
+.nodeslide-studio .ns-nodebook-artifact-error {
+  margin: 0;
+  color: var(--ns-danger);
+}
+
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-surface="workspace"] {
+  grid-template-columns: 1fr;
+  min-height: 0;
+}
+
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-pane="outline"],
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-pane="editor"] {
+  border-inline-end: 0;
+  border-block-end: 1px solid var(--nodebook-border);
+}
+
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-pane="outline"] {
+  max-height: 240px;
+  overflow: auto;
+}
+
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-pane="editor"] {
+  max-height: 150px;
+  overflow: auto;
+}
+
+.nodeslide-studio [data-nodebook-host="nodeslide-workspace"] [data-nodebook-pane="canvas"] {
+  min-height: 240px;
+  overflow: auto;
 }

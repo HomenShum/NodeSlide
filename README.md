@@ -11,6 +11,8 @@
 <p align="center"><a href="#quickstart">Quickstart</a> · <a href="docs/START_HERE.md">Code&nbsp;walkthrough</a> · <a href="HANDOFF.md">Handoff</a> · <a href="https://nodeslide.vercel.app">Live&nbsp;demo</a> · <a href="https://homenshum.github.io/">All&nbsp;projects</a></p>
 <!-- brand:end -->
 
+# NodeSlide
+
 **Reviewable deck-as-code. Every AI edit is a scoped, validated, receipted proposal — never a silent overwrite.**
 
 [**Live demo →**](https://nodeslide.vercel.app) · React 19 + Convex + Vite · [`agentic-ui-qa`](https://github.com/HomenShum/agentic-ui-qa)-audited · Built for the AI Fund SlideLang EIR Build Challenge

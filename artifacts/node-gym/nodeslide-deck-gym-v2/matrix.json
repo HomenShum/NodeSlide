@@ -1,7 +1,7 @@
 {
   "schemaVersion": "nodekit.gym-matrix/v1",
   "gymVersion": "nodeslide-deck-gym-v2",
-  "configDigest": "sha256:e7aef1f13cccfbe86c11146d4c960ac8b29b2464ed1df2a0235cc77b478b3939",
+  "configDigest": "sha256:57379ad92e0c766a41718c76a4807cec9589ebb89d91d8c0cec89a7daff28903",
   "runCount": 720,
   "pairedComparisonReady": true,
   "promotionAutoApply": false,
@@ -1193,7 +1193,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -1232,7 +1237,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -1271,7 +1281,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -1310,7 +1325,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -1349,7 +1369,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -1388,7 +1413,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -1427,7 +1457,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -1466,7 +1501,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -1505,7 +1545,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -1544,7 +1589,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -1583,7 +1633,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -1622,7 +1677,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -1661,7 +1721,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -1700,7 +1765,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -1739,7 +1809,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -4703,7 +4778,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -4742,7 +4822,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -4781,7 +4866,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -4820,7 +4910,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -4859,7 +4954,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -4898,7 +4998,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -4937,7 +5042,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -4976,7 +5086,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -5015,7 +5130,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -5054,7 +5174,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -5093,7 +5218,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -5132,7 +5262,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -5171,7 +5306,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -5210,7 +5350,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -5249,7 +5394,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -8213,7 +8363,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -8252,7 +8407,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -8291,7 +8451,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -8330,7 +8495,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -8369,7 +8539,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -8408,7 +8583,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -8447,7 +8627,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -8486,7 +8671,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -8525,7 +8715,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -8564,7 +8759,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -8603,7 +8803,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -8642,7 +8847,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -8681,7 +8891,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -8720,7 +8935,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -8759,7 +8979,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -11723,7 +11948,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -11762,7 +11992,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -11801,7 +12036,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -11840,7 +12080,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -11879,7 +12124,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -11918,7 +12168,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -11957,7 +12212,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -11996,7 +12256,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -12035,7 +12300,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -12074,7 +12344,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -12113,7 +12388,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -12152,7 +12432,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -12191,7 +12476,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -12230,7 +12520,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -12269,7 +12564,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -15233,7 +15533,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -15272,7 +15577,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -15311,7 +15621,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -15350,7 +15665,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -15389,7 +15709,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -15428,7 +15753,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -15467,7 +15797,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -15506,7 +15841,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -15545,7 +15885,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -15584,7 +15929,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -15623,7 +15973,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -15662,7 +16017,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -15701,7 +16061,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -15740,7 +16105,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -15779,7 +16149,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -18743,7 +19118,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -18782,7 +19162,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -18821,7 +19206,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -18860,7 +19250,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -18899,7 +19294,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -18938,7 +19338,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -18977,7 +19382,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -19016,7 +19426,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -19055,7 +19470,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -19094,7 +19514,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -19133,7 +19558,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -19172,7 +19602,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -19211,7 +19646,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -19250,7 +19690,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -19289,7 +19734,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -22253,7 +22703,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -22292,7 +22747,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -22331,7 +22791,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -22370,7 +22835,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -22409,7 +22879,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -22448,7 +22923,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -22487,7 +22967,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -22526,7 +23011,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -22565,7 +23055,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -22604,7 +23099,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -22643,7 +23143,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -22682,7 +23187,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -22721,7 +23231,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -22760,7 +23275,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -22799,7 +23319,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -25763,7 +26288,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -25802,7 +26332,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -25841,7 +26376,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "light-director",
@@ -25880,7 +26420,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -25919,7 +26464,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -25958,7 +26508,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "structured-planner",
@@ -25997,7 +26552,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -26036,7 +26596,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -26075,7 +26640,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "bounded-executor",
@@ -26114,7 +26684,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -26153,7 +26728,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -26192,7 +26772,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "repair-specialist",
@@ -26231,7 +26816,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -26270,7 +26860,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",
@@ -26309,7 +26904,12 @@
         "provider": "openrouter",
         "route": "openai/gpt-oss-20b:free",
         "returnedModelRequired": true,
-        "cohort": "small-legacy"
+        "cohort": "small-legacy",
+        "execution": {
+          "disabled": true,
+          "since": "2026-10-10",
+          "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+        }
       },
       "harness": {
         "id": "router-robustness",

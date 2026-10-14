@@ -1,5 +1,15 @@
 import { createHash, randomUUID } from 'node:crypto';
-import { link, lstat, mkdir, realpath, rename, rm, writeFile } from 'node:fs/promises';
+import {
+  link,
+  lstat,
+  mkdir,
+  readFile,
+  readdir,
+  realpath,
+  rename,
+  rm,
+  writeFile,
+} from 'node:fs/promises';
 import path from 'node:path';
 import { validateNodeGymConfig } from './node-gym-config-core.mjs';
 
@@ -85,7 +95,13 @@ export function assertNodeGymMatrixBoundToConfig({ configBytes, config, matrix, 
  * Validates and accounts every immutable attempt receipt for one bound run.
  * Costs and failures are returned once for campaign-wide pre-scheduling sums.
  */
-export function summarizeNodeGymAttemptHistory({ plan, receipts, executor }) {
+export function summarizeNodeGymAttemptHistory({
+  plan,
+  receipts,
+  executor,
+  reservationMicroUsd = nodeGymRunReservationMicroUsd(plan),
+  orphanCharges = [],
+}) {
   if (!plan?.runId) throw new Error('NodeGym history requires a bound run plan.');
   if (!Array.isArray(receipts))
     throw new Error(`NodeGym attempt history is invalid for ${plan.runId}.`);
@@ -94,6 +110,7 @@ export function summarizeNodeGymAttemptHistory({ plan, receipts, executor }) {
   );
   const planDigest = digestJson(plan);
   let spentCostMicroUsd = 0;
+  let reservedUnknownMicroUsd = 0;
   let failures = 0;
   let passedReceipt = null;
 
@@ -125,9 +142,14 @@ export function summarizeNodeGymAttemptHistory({ plan, receipts, executor }) {
       if (nonNegativeNumber(receipt.usage?.[field]) === null)
         throw new Error(`${prefix} has invalid ${field} usage.`);
     }
-    const cost = Number(receipt.usage?.costMicroUsd);
-    if (!Number.isSafeInteger(cost) || cost < 0)
+    const usageCost = Number(receipt.usage?.costMicroUsd);
+    if (!Number.isSafeInteger(usageCost) || usageCost < 0)
       throw new Error(`${prefix} has invalid costMicroUsd usage.`);
+    // The campaign meter is the recorded charge, never the executor's own usage figure. A receipt
+    // written before charges were recorded has no `budget` and is charged the run's full reservation.
+    const charge = nodeGymReceiptCharge(receipt, reservationMicroUsd, prefix);
+    const cost = charge.chargedMicroUsd;
+    if (charge.source === 'reservation') reservedUnknownMicroUsd += cost;
     if (receipt.status === 'passed') {
       if (
         receipt.automatedHardGatesPassed !== true ||
@@ -147,9 +169,19 @@ export function summarizeNodeGymAttemptHistory({ plan, receipts, executor }) {
     if (receipt.status !== 'passed') failures += 1;
   }
 
+  // An attempt directory found without its receipt (the runner itself died mid-attempt) was charged
+  // its reservation when it was set aside; those durable charges belong to the run's spend.
+  for (const orphan of orphanCharges) {
+    spentCostMicroUsd += orphan.budget.chargedMicroUsd;
+    reservedUnknownMicroUsd += orphan.budget.chargedMicroUsd;
+  }
+  if (!Number.isSafeInteger(spentCostMicroUsd))
+    throw new Error(`NodeGym cumulative cost is unsafe for ${plan.runId}.`);
+
   return {
     receipts: ordered,
     spentCostMicroUsd,
+    reservedUnknownMicroUsd,
     failures,
     latestAttempt: ordered.length,
     latestReceipt: ordered.at(-1) ?? null,
@@ -505,6 +537,208 @@ export function validateNodeGymExecutorResult(plan, result, options = {}) {
     artifacts,
     executor: options.executor ?? 'unknown',
   };
+}
+
+/**
+ * The most a single gym run can cost the backend ledger, in micro-USD. This is the per-run hard cap
+ * the production backend binds to every run it meters (`normalizeNodeSlideRunBudget({})` ->
+ * `maxCostMicroUsd`, `shared/nodeslideRunBudget.ts`), mirrored here because this module runs under
+ * plain `node`, which cannot load that TypeScript. `scripts/tests/node-gym-campaign-budget.test.mjs`
+ * fails when the two differ.
+ */
+export const NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD = 1_000_000;
+export const NODE_GYM_LEDGER_RECEIPT_VERSION = 'nodeslide.run-budget-ledger-receipt/v1';
+export const NODE_GYM_ORPHAN_CHARGE_SCHEMA = 'nodekit.gym-orphan-attempt-charge/v1';
+
+/**
+ * What one run reserves against the campaign before it is dispatched: the backend ledger cap that
+ * binds it, not the gym plan's own `budget.maxCostMicroUsd` (which the UI executor never hands to the
+ * backend). Local, `:free` and `openrouter/free` routes issue no metered request and reserve 0.
+ */
+export function nodeGymRunReservationMicroUsd(
+  plan,
+  perRunMaxCostMicroUsd = NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD,
+) {
+  if (!Number.isSafeInteger(perRunMaxCostMicroUsd) || perRunMaxCostMicroUsd < 0)
+    throw new Error('NodeGym per-run reservation must be a non-negative integer.');
+  const model = plan?.model;
+  if (
+    model?.provider === 'local' ||
+    model?.route === 'openrouter/free' ||
+    String(model?.route ?? '').endsWith(':free')
+  )
+    return 0;
+  return perRunMaxCostMicroUsd;
+}
+
+/**
+ * Micro-USD one backend ledger receipt (`nodeslideBudgets.receiptForRun`) says a run cost. Exposure
+ * that is reserved or unreconciled (a dispatch whose outcome never came back) counts: it may still
+ * have been billed, and the ledger itself keeps it inside the cap. Returns null when the receipt is
+ * not a readable ledger receipt.
+ */
+export function nodeGymLedgerReceiptMicroUsd(receipt) {
+  if (receipt?.version !== NODE_GYM_LEDGER_RECEIPT_VERSION) return null;
+  const spend = receipt.spend;
+  const parts = [spend?.actualMicroUsd, spend?.reservedMicroUsd, spend?.unreconciledMicroUsd];
+  if (!parts.every((part) => Number.isSafeInteger(part) && part >= 0)) return null;
+  const total = parts[0] + parts[1] + parts[2];
+  return Number.isSafeInteger(total) ? total : null;
+}
+
+/**
+ * Combines the ledger receipts of every backend run one gym attempt caused. Any run that is named but
+ * unreadable (or no run named at all) makes the whole attempt's usage unknown: returns null.
+ */
+export function combineNodeGymLedgerReceipts(backendRunIds, receiptsByRunId) {
+  if (!Array.isArray(backendRunIds) || backendRunIds.length === 0) return null;
+  let total = 0;
+  for (const runId of new Set(backendRunIds)) {
+    const charged = nodeGymLedgerReceiptMicroUsd(receiptsByRunId?.get?.(runId) ?? null);
+    if (charged === null) return null;
+    total += charged;
+  }
+  return Number.isSafeInteger(total) ? { chargedMicroUsd: total } : null;
+}
+
+/**
+ * The one charge rule for a finished run. A readable backend ledger receipt is the charge. Anything
+ * else — a crash, a timeout, a failure result, a missing or invalid result, no backend run ids, an
+ * unreadable receipt — keeps the run's full reservation: an unknown spend is never a zero.
+ */
+export function nodeGymRunCharge({ reservationMicroUsd, ledgerReceipt }) {
+  if (!Number.isSafeInteger(reservationMicroUsd) || reservationMicroUsd < 0)
+    throw new Error('NodeGym run charge requires a non-negative integer reservation.');
+  const ledger = ledgerReceipt?.chargedMicroUsd;
+  if (Number.isSafeInteger(ledger) && ledger >= 0)
+    return { chargedMicroUsd: ledger, source: 'ledger' };
+  return { chargedMicroUsd: reservationMicroUsd, source: 'reservation' };
+}
+
+/**
+ * Charges one finished attempt. The backend ledger is the meter: a completed executor result names
+ * the backend runs it caused (`backendRunIds`) and `readLedger(ids)` resolves their ledger receipts
+ * (Map of run id -> receipt). A crash, timeout, missing or invalid result, no run ids or any
+ * unreadable receipt keeps the full reservation; a failure result is charged the ledger only when it
+ * names the backend runs the executor had already started. The executor's own `usage.costMicroUsd` and
+ * the Trace inspector text are attribution and never reach this function.
+ */
+export async function chargeNodeGymAttempt({ reservationMicroUsd, result, readLedger }) {
+  const ids = result?.backendRunIds;
+  const named =
+    Array.isArray(ids) &&
+    ids.length > 0 &&
+    ids.length <= 64 &&
+    ids.every((id) => typeof id === 'string' && id.length > 0 && id.length <= 512);
+  let ledgerReceipt = null;
+  if (reservationMicroUsd > 0 && named) {
+    try {
+      ledgerReceipt = combineNodeGymLedgerReceipts(ids, await readLedger(ids));
+    } catch {
+      ledgerReceipt = null;
+    }
+  }
+  return nodeGymRunCharge({ reservationMicroUsd, ledgerReceipt });
+}
+
+/** The charge a stored attempt receipt carries; a receipt from before charges were recorded owes the reservation. */
+export function nodeGymReceiptCharge(receipt, reservationMicroUsd, label = 'NodeGym receipt') {
+  const budget = receipt?.budget;
+  if (budget === undefined) return { chargedMicroUsd: reservationMicroUsd, source: 'reservation' };
+  if (
+    !budget ||
+    !Number.isSafeInteger(budget.chargedMicroUsd) ||
+    budget.chargedMicroUsd < 0 ||
+    !['ledger', 'reservation'].includes(budget.source)
+  )
+    throw new Error(`${label} has an invalid budget charge.`);
+  return { chargedMicroUsd: budget.chargedMicroUsd, source: budget.source };
+}
+
+/** Durable record for an attempt directory that never produced a receipt: it is charged its reservation. */
+export function nodeGymOrphanAttemptCharge({ runId, attempt, reservationMicroUsd }) {
+  return {
+    schemaVersion: NODE_GYM_ORPHAN_CHARGE_SCHEMA,
+    runId,
+    attempt,
+    budget: { chargedMicroUsd: reservationMicroUsd, source: 'reservation' },
+  };
+}
+
+export function assertNodeGymOrphanCharge(value, runId, label = 'NodeGym orphan charge') {
+  if (
+    value?.schemaVersion !== NODE_GYM_ORPHAN_CHARGE_SCHEMA ||
+    value.runId !== runId ||
+    !Number.isSafeInteger(value.attempt) ||
+    value.attempt < 1 ||
+    value.budget?.source !== 'reservation' ||
+    !Number.isSafeInteger(value.budget?.chargedMicroUsd) ||
+    value.budget.chargedMicroUsd < 0
+  )
+    throw new Error(`${label} is invalid for ${runId}.`);
+  return value;
+}
+
+const ORPHAN_ATTEMPT_DIR = /^orphaned-attempt-(\d{3,})-(\d+)$/u;
+const ORPHAN_CHARGE_FILE = /^orphaned-attempt-(\d{3,})-(\d+)\.charge\.json$/u;
+
+/**
+ * The runner itself died mid-attempt: `attempts/attempt-NNN/` exists but no `attempt-NNN.json`
+ * receipt was ever written, so what that attempt spent is unknown. Each such directory is charged the
+ * run's full reservation, durably, and set aside so the attempt number can be re-issued. The charge
+ * file is written first (a crash between the two steps over-charges once, never under-charges) and
+ * a pending charge whose directory has not been renamed yet is reused, so a repeated resume does not
+ * charge the same directory twice.
+ */
+export async function setAsideNodeGymOrphanAttempts({
+  campaignRoot,
+  attemptsDir,
+  runId,
+  orphanAttempts,
+  reservationMicroUsd,
+}) {
+  for (const attempt of [...orphanAttempts].sort((left, right) => left - right)) {
+    const stem = String(attempt).padStart(3, '0');
+    const names = await readdir(attemptsDir);
+    const pending = names
+      .map((name) => ORPHAN_CHARGE_FILE.exec(name))
+      .filter((match) => match && match[1] === stem)
+      .map((match) => Number(match[2]))
+      .find((k) => !names.includes(`orphaned-attempt-${stem}-${k}`));
+    const used = names
+      .flatMap((name) => [ORPHAN_CHARGE_FILE.exec(name), ORPHAN_ATTEMPT_DIR.exec(name)])
+      .filter((match) => match && match[1] === stem)
+      .map((match) => Number(match[2]));
+    const k = pending ?? Math.max(0, ...used) + 1;
+    const chargePath = path.join(attemptsDir, `orphaned-attempt-${stem}-${k}.charge.json`);
+    if (pending === undefined) {
+      const charge = nodeGymOrphanAttemptCharge({ runId, attempt, reservationMicroUsd });
+      await writeNodeGymFileAtomic(
+        campaignRoot,
+        chargePath,
+        `${JSON.stringify(charge, null, 2)}\n`,
+        {
+          exclusive: true,
+          label: 'orphaned attempt charge',
+        },
+      );
+    }
+    await rename(
+      path.join(attemptsDir, `attempt-${stem}`),
+      path.join(attemptsDir, `orphaned-attempt-${stem}-${k}`),
+    );
+  }
+}
+
+/** Every durable orphan charge recorded for one run, validated. */
+export async function loadNodeGymOrphanCharges({ attemptsDir, runId }) {
+  const charges = [];
+  for (const name of await readdir(attemptsDir)) {
+    if (!ORPHAN_CHARGE_FILE.test(name)) continue;
+    const raw = JSON.parse(await readFile(path.join(attemptsDir, name), 'utf8'));
+    charges.push(assertNodeGymOrphanCharge(raw, runId, `NodeGym orphan charge ${name}`));
+  }
+  return charges;
 }
 
 export function shouldStopCampaign(input) {

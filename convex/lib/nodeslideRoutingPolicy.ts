@@ -7,7 +7,7 @@
  * contract unchanged. Keep this file dependency-free.
  *
  * Default policy: the planner is always the requested model. A cheap executor
- * (Gemini 3.5 Flash) is granted ONLY when the planner is a premium model
+ * (Gemini 3.8 Flash) is granted ONLY when the planner is a premium model
  * (Kimi / Claude / GPT) AND the plan contains at least two replace_text
  * operations worth of copy work. Everything else runs single-model.
  * The executor is always advisory: on failure or timeout the planner's own
@@ -16,7 +16,8 @@
 
 export const NODESLIDE_ROUTING_POLICY_VERSION = 'nodeslide.model-routing/v1' as const;
 
-export const NODESLIDE_ROUTING_EXECUTOR_MODEL = 'google/gemini-3.5-flash' as const;
+// Gemini 3.5 Flash was deprecated by Google on 2026-10-08 (requests auto-route to 3.6).
+export const NODESLIDE_ROUTING_EXECUTOR_MODEL = 'google/gemini-3.8-flash' as const;
 
 /** Minimum replace_text operations before splitting copy work to an executor. */
 export const NODESLIDE_ROUTING_MIN_REPLACE_TEXT_OPS = 2 as const;

@@ -3,12 +3,44 @@ import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
 import { chromium } from 'playwright';
+import {
+  createDeckGymCampaignBudget,
+  deckGymBudgetSummary,
+  deckGymWorker,
+  resolveDeckGymMaxTotalCostMicroUsd,
+} from './lib/deck-gym-campaign.mjs';
+import { NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD } from './lib/node-gym-runner-core.mjs';
+import {
+  createNodeSlideBackendClient,
+  readBackendRunIds,
+  readLedgerReceipts,
+} from './lib/nodeslide-backend-runs.mjs';
 
 const matrixPath = path.resolve(option('matrix') ?? 'artifacts/deck-gym/deck-gym-v1/matrix.json');
 const runsDir = path.resolve(option('runs-dir') ?? path.join(path.dirname(matrixPath), 'runs'));
 const baseUrl = productionUrl(option('url') ?? 'https://nodeslide.vercel.app/');
 const requestedConcurrency = positiveInteger(option('concurrency'), 2);
 const limit = positiveInteger(option('limit'), Number.MAX_SAFE_INTEGER);
+// What one run can cost the backend ledger at most (its hard per-run cap, 1 USD by default); every
+// in-flight run is reserved at this worst case. Raise it only for a campaign of long-form decks,
+// whose create budget is higher (`convex/lib/nodeslideCreateScale.ts`).
+const perRunMaxCostMicroUsd = nonNegativeInteger(
+  option('per-run-max-cost-micro-usd'),
+  NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD,
+);
+const budget = createDeckGymCampaignBudget({
+  maxTotalCostMicroUsd: resolveDeckGymMaxTotalCostMicroUsd({
+    explicit: option('max-total-cost-micro-usd'),
+    limit: option('limit') === undefined ? undefined : limit,
+    perRunMaxCostMicroUsd,
+  }),
+  perRunMaxCostMicroUsd,
+});
+const backend = await createNodeSlideBackendClient(
+  option('convex-url') ??
+    process.env.NODE_GYM_PROD_CONVEX_URL ??
+    'https://agile-stoat-411.convex.cloud',
+);
 const resume = !process.argv.includes('--no-resume');
 const matrix = JSON.parse(await readFile(matrixPath, 'utf8'));
 if (matrix?.schemaVersion !== 'nodeslide.deck-gym-matrix/v1' || !Array.isArray(matrix.runs)) {
@@ -41,6 +73,7 @@ const summary = {
   completed: receipts.filter((entry) => entry.status === 'completed').length,
   failed: receipts.filter((entry) => entry.status === 'failed').length,
   skipped: receipts.filter((entry) => entry.status === 'skipped').length,
+  budget: deckGymBudgetSummary(budget),
   concurrency: maxConcurrency,
   productionOrigin: baseUrl.origin,
   receipts,
@@ -49,23 +82,33 @@ await writeJson(path.join(path.dirname(runsDir), 'generation-summary.json'), sum
 console.log(
   `[deck-gym] generation complete: ${summary.completed} completed, ${summary.failed} failed, ${summary.skipped} skipped`,
 );
-if (summary.failed) process.exitCode = 1;
+if (budget.stoppedBy) {
+  console.error(
+    `[deck-gym] campaign stopped by ${budget.stoppedBy}: ${queue.length} run(s) not started (spent ${budget.spentCostMicroUsd} of ${budget.maxTotalCostMicroUsd} micro-USD).`,
+  );
+}
+if (summary.failed || budget.stoppedBy) process.exitCode = 1;
 
-async function worker(workerId) {
-  while (queue.length) {
-    const run = queue.shift();
-    if (!run) return;
-    const runDir = path.join(runsDir, run.runId);
-    const pptxPath = path.join(runDir, 'deck.pptx');
-    const existing = await readJson(path.join(runDir, 'run.json')).catch(() => null);
-    if (resume && (await exists(pptxPath)) && existing?.execution?.status === 'completed') {
-      receipts.push({ runId: run.runId, status: 'skipped', reason: 'resume_artifact_exists' });
-      console.log(`[deck-gym:${workerId}] SKIP ${run.runId}`);
-      continue;
-    }
-    const receipt = await executeRun(workerId, run, runDir);
-    receipts.push(receipt);
-  }
+function worker(workerId) {
+  return deckGymWorker({
+    queue,
+    budget,
+    receipts,
+    isResumable: async (run) => {
+      const runDir = path.join(runsDir, run.runId);
+      const existing = await readJson(path.join(runDir, 'run.json')).catch(() => null);
+      return (
+        resume &&
+        (await exists(path.join(runDir, 'deck.pptx'))) &&
+        existing?.execution?.status === 'completed'
+      );
+    },
+    executeRun: (run) => executeRun(workerId, run, path.join(runsDir, run.runId)),
+    readLedger: (runIds) => readLedgerReceipts({ backend, runIds }),
+    onSkip: (run) => console.log(`[deck-gym:${workerId}] SKIP ${run.runId}`),
+    onStop: (issueCode, run) =>
+      console.error(`[deck-gym:${workerId}] STOP before ${run.runId}: ${issueCode}`),
+  });
 }
 
 async function executeRun(workerId, run, runDir) {
@@ -87,6 +130,7 @@ async function executeRun(workerId, run, runDir) {
     serviceWorkers: 'block',
   });
   const page = await context.newPage();
+  let backendRunIds = [];
   page.on('pageerror', (error) => runtimeErrors.push(`pageerror: ${safeError(error.message)}`));
   page.on('console', (message) => {
     if (message.type() === 'error')
@@ -120,6 +164,7 @@ async function executeRun(workerId, run, runDir) {
     await page.getByTestId('slide-canvas').waitFor({ timeout: 45_000 });
     await page.screenshot({ path: path.join(runDir, 'editor.png'), fullPage: true });
     const trace = await captureTrace(page);
+    backendRunIds = await readBackendRunIds({ page, backend });
 
     await page.getByLabel('Export deck').click();
     await page.getByTestId('export-pptx').waitFor({ timeout: 30_000 });
@@ -148,7 +193,12 @@ async function executeRun(workerId, run, runDir) {
     console.log(
       `[deck-gym:${workerId}] PASS ${run.runId} (${Math.round(execution.durationMs / 1000)}s; ${trace.classification})`,
     );
-    return { runId: run.runId, status: 'completed', durationMs: execution.durationMs };
+    return {
+      runId: run.runId,
+      status: 'completed',
+      durationMs: execution.durationMs,
+      backendRunIds,
+    };
   } catch (error) {
     const failure = safeError(error);
     await page
@@ -166,7 +216,9 @@ async function executeRun(workerId, run, runDir) {
       },
     });
     console.error(`[deck-gym:${workerId}] FAIL ${run.runId}: ${failure}`);
-    return { runId: run.runId, status: 'failed', failure };
+    // The page may already have started a metered job before it failed; ask the ledger anyway.
+    if (!backendRunIds.length) backendRunIds = await readBackendRunIds({ page, backend });
+    return { runId: run.runId, status: 'failed', failure, backendRunIds };
   } finally {
     await context.close();
   }
@@ -209,6 +261,14 @@ async function captureTrace(page) {
 function option(name) {
   const index = process.argv.indexOf(`--${name}`);
   return index >= 0 ? process.argv[index + 1] : undefined;
+}
+
+function nonNegativeInteger(value, fallback) {
+  if (value === undefined) return fallback;
+  const parsed = Number(value);
+  if (!Number.isSafeInteger(parsed) || parsed < 0)
+    throw new Error('--per-run-max-cost-micro-usd must be a non-negative integer.');
+  return parsed;
 }
 
 function positiveInteger(value, fallback) {

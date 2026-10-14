@@ -147,12 +147,17 @@ describe('NodeSlide AI review inspector', () => {
       expect.arrayContaining([
         'Claude Sonnet 5 · Anthropic',
         'Claude Fable 5 · Anthropic',
-        'Gemini 3.5 Flash · Google',
+        'Claude Sonnet 5.5 · Anthropic',
+        'Claude Opus 5.5 · Anthropic',
+        // Gemini 3.5 Flash left the offered set: Google deprecated it on 2026-10-08.
+        'Gemini 3.8 Flash · Google',
         'Gemini 3.1 Pro · Google',
         'GPT-5.6 Sol · OpenAI',
         'GPT-5.6 Terra · OpenAI',
+        'GPT-6.1 Sol · OpenAI',
       ]),
     );
+    expect(modelLabels).not.toContain('Gemini 3.5 Flash · Google');
     expect(markup).not.toMatch(/ai-provider-consent/);
 
     expect(createAiProviderRequest('nebius', false)).toBeNull();

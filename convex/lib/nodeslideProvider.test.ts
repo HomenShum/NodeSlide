@@ -141,7 +141,9 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       expect(matches).toHaveLength(1);
       expect(matches[0]).toMatchObject({
         reasoning: true,
-        cost: { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 0 },
+        // USD per million tokens; was { input: 3, output: 15, cacheRead: 0.3 } on 2026-07-28.
+        // Equals nodeSlideModelPricing('moonshotai/kimi-k3') (convex/nodeslideModelPricing.test.ts).
+        cost: { input: 0.7, output: 15, cacheRead: 0.32, cacheWrite: 0 },
         contextWindow: 1_048_576,
         compat: {
           supportsReasoningEffort: true,
@@ -156,8 +158,12 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     const models = openrouterProviderWithOverrides().getModels();
     for (const id of [
       'anthropic/claude-fable-5',
+      'anthropic/claude-sonnet-5.5',
+      'anthropic/claude-opus-5.5',
       'google/gemini-3.5-flash',
+      'google/gemini-3.8-flash',
       'google/gemini-3.1-pro-preview',
+      'openai/gpt-6.1-sol',
     ]) {
       expect(models.find((model) => model.id === id)).toMatchObject({ reasoning: true });
     }
@@ -622,6 +628,19 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       maxTokens: 256,
     });
     expect(nodeSlideModelProbeProfile('google/gemini-3.1-pro-preview')).toEqual({
+      reasoningEffort: 'low',
+      maxTokens: 256,
+    });
+    // The 2026-10 additions: adaptive thinking counts toward max_tokens, so the Claude 5.5 and
+    // GPT-6.1 probes get Fable's headroom instead of the 64-token default that starves them.
+    for (const id of [
+      'anthropic/claude-sonnet-5.5',
+      'anthropic/claude-opus-5.5',
+      'openai/gpt-6.1-sol',
+    ] as const) {
+      expect(nodeSlideModelProbeProfile(id)).toEqual({ reasoningEffort: 'low', maxTokens: 2_048 });
+    }
+    expect(nodeSlideModelProbeProfile('google/gemini-3.8-flash')).toEqual({
       reasoningEffort: 'low',
       maxTokens: 256,
     });

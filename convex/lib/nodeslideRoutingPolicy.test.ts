@@ -84,7 +84,12 @@ describe('NodeSlide routing policy (B2 orchestrator/worker split)', () => {
     expect(isPremiumNodeSlidePlannerModel('moonshotai/kimi-k3')).toBe(true);
     expect(isPremiumNodeSlidePlannerModel('anthropic/claude-fable-5')).toBe(true);
     expect(isPremiumNodeSlidePlannerModel('openai/gpt-5.6-sol')).toBe(true);
+    // Gemini 3.5 Flash was the executor until Google deprecated it on 2026-10-08; 3.8 replaces it.
+    expect(isPremiumNodeSlidePlannerModel('google/gemini-3.8-flash')).toBe(false);
     expect(isPremiumNodeSlidePlannerModel('google/gemini-3.5-flash')).toBe(false);
+    expect(isPremiumNodeSlidePlannerModel('anthropic/claude-sonnet-5.5')).toBe(true);
+    expect(isPremiumNodeSlidePlannerModel('anthropic/claude-opus-5.5')).toBe(true);
+    expect(isPremiumNodeSlidePlannerModel('openai/gpt-6.1-sol')).toBe(true);
     expect(isPremiumNodeSlidePlannerModel('z-ai/glm-5.2')).toBe(false);
   });
 });

@@ -17,6 +17,7 @@ import {
   type NodeSlideReasoningEffort,
   isNodeSlideAgentModelId,
   nodeSlideAgentModel,
+  nodeSlideEditPatchStructuredOutputMode,
   nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
 
@@ -66,10 +67,11 @@ function nebiusProvider() {
   });
 }
 
-// Kimi K3 is newer than pi-ai's bundled OpenRouter catalog, so we register the
-// current OpenRouter contract explicitly instead of inheriting Moonshot-direct
-// compatibility defaults.
-const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
+// Kimi K3 is registered explicitly so OpenRouter's normalized reasoning contract and our
+// price (pricingAsOf = NODESLIDE_MODEL_PRICING_VERIFIED_AT) win over bundled metadata instead of
+// inheriting Moonshot-direct compatibility defaults. USD per million tokens; the agreement test in
+// convex/nodeslideModelPricing.test.ts asserts these equal nodeSlideModelPricing('moonshotai/kimi-k3').
+export const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
   id: 'moonshotai/kimi-k3',
   name: 'MoonshotAI: Kimi K3',
   api: 'openai-completions',
@@ -77,7 +79,7 @@ const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
   baseUrl: 'https://openrouter.ai/api/v1',
   reasoning: true,
   input: ['text'],
-  cost: { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 0 },
+  cost: { input: 0.7, output: 15, cacheRead: 0.32, cacheWrite: 0 },
   contextWindow: 1_048_576,
   maxTokens: 100_352,
   compat: {
@@ -97,12 +99,37 @@ export const NODESLIDE_OPENROUTER_MODEL_OVERRIDES: readonly Model<'openai-comple
   NODESLIDE_KIMI_K3,
 ];
 
+const OPENROUTER_CHAT_COMPLETIONS_BASE_URL = 'https://openrouter.ai/api/v1';
+
+/**
+ * pi-ai 1.1.0 ships OpenRouter's Claude rows as `anthropic-messages` with base URL
+ * `https://openrouter.ai/api`. This provider speaks OpenRouter's normalized chat-completions
+ * contract for every route (reasoning.effort, max_price, response_format ride in that payload), so a
+ * Claude row left as the bundled catalog has it would be POSTed to `/api/chat/completions`, which is
+ * not an OpenRouter endpoint. Pin such rows to the chat-completions API and `/api/v1`, with the same
+ * compat pi-ai 0.80.6 carried for them (Anthropic cache_control on OpenRouter's reasoning format).
+ */
+function asOpenRouterChatCompletionsRoute(
+  model: ReturnType<ReturnType<typeof openrouterProvider>['getModels']>[number],
+): ReturnType<ReturnType<typeof openrouterProvider>['getModels']>[number] {
+  if (model.api === 'openai-completions') return model;
+  return {
+    ...model,
+    api: 'openai-completions',
+    baseUrl: OPENROUTER_CHAT_COMPLETIONS_BASE_URL,
+    compat: { thinkingFormat: 'openrouter', cacheControlFormat: 'anthropic' },
+  } as typeof model;
+}
+
 export function openrouterProviderWithOverrides() {
   const builtin = openrouterProvider();
   const overridden = new Map(
     NODESLIDE_OPENROUTER_MODEL_OVERRIDES.map((model) => [model.id, model] as const),
   );
-  const models = builtin.getModels().filter((model) => !overridden.has(model.id));
+  const models = builtin
+    .getModels()
+    .filter((model) => !overridden.has(model.id))
+    .map(asOpenRouterChatCompletionsRoute);
   return createProvider({
     id: 'openrouter',
     name: 'OpenRouter',
@@ -377,8 +404,13 @@ export function nodeSlideModelProbeProfile(modelId: NodeSlideAgentModelId): {
     case 'z-ai/glm-5.2':
       return { reasoningEffort: 'high', maxTokens: 512 };
     case 'anthropic/claude-fable-5':
+    case 'anthropic/claude-sonnet-5.5':
+    case 'anthropic/claude-opus-5.5':
+    case 'openai/gpt-6.1-sol':
+      // Adaptive thinking counts toward max_tokens; a one-character reply must survive it.
       return { reasoningEffort: 'low', maxTokens: 2_048 };
     case 'google/gemini-3.5-flash':
+    case 'google/gemini-3.8-flash':
     case 'google/gemini-3.1-pro-preview':
       return { reasoningEffort: 'low', maxTokens: 256 };
     default:
@@ -642,8 +674,12 @@ function preferredStructuredOutputMode(
   // OpenRouter's Gemini route accepts ordinary JSON schemas, but the edit planner's
   // dynamically scoped union is large enough to be rejected before token generation.
   // Keep the exact schema in the prompt and validate it locally; json_object only
-  // changes provider transport, never the accepted NodeSlide contract.
-  if (model === 'google/gemini-3.5-flash' && jsonSchema.name === 'nodeslide_edit_patch') {
+  // changes provider transport, never the accepted NodeSlide contract. The decision is a
+  // catalog flag (`structuredOutputMode`), stated per row, not a model-id literal.
+  if (
+    jsonSchema.name === 'nodeslide_edit_patch' &&
+    nodeSlideEditPatchStructuredOutputMode(model) === 'json_object'
+  ) {
     return 'json_object';
   }
   return 'json_schema';

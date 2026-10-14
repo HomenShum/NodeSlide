@@ -25,6 +25,9 @@ import type { NodeSlideAgentModelId } from './nodeslide';
 export const NODESLIDE_RUN_BUDGET_VERSION = 'nodeslide.run-budget/v1' as const;
 export const NODESLIDE_RUN_BUDGET_STATE_VERSION = 'nodeslide.run-budget-state/v1' as const;
 export const NODESLIDE_RUN_BUDGET_RECEIPT_VERSION = 'nodeslide.run-budget-receipt/v1' as const;
+/** Run-level read model of one budget ledger row (`nodeslideBudgets.receiptForRun`). */
+export const NODESLIDE_RUN_BUDGET_LEDGER_RECEIPT_VERSION =
+  'nodeslide.run-budget-ledger-receipt/v1' as const;
 export const NODESLIDE_MODEL_PRICING_VERSION = 'nodeslide.model-pricing/v1' as const;
 export const NODESLIDE_PRIVATE_DETERMINISTIC_MODEL = 'nodeslide/private-deterministic' as const;
 export const NODESLIDE_MICRO_USD_PER_USD = 1_000_000 as const;
@@ -475,7 +478,16 @@ export type NodeSlideRunBudgetPostflightResult =
  * SOURCE:   https://openrouter.ai/api/v1/models — the provider's own machine
  *           catalog, not a docs page, not a pricing page, not a paste from a
  *           conversation. Every row below was read out of one response body.
- * FETCHED:  2026-07-28T00:00:00Z (see NODESLIDE_MODEL_PRICING_VERIFIED_AT).
+ * FETCHED:  2026-10-14T16:03:00Z (see NODESLIDE_MODEL_PRICING_VERIFIED_AT). Every priced row,
+ *           including the four added by the model refresh, was re-read from that one
+ *           response; the rows that moved are kimi-k3, glm-5.2, gpt-5.6-sol and
+ *           gpt-5.6-terra. The price below is the catalog's listed (cheapest healthy
+ *           endpoint) price and is ALSO the `max_price` routing ceiling sent to
+ *           OpenRouter (`nodeslideBudgetedProvider.ts`), so it bounds both the
+ *           reservation and the bill; a ceiling below every live endpoint would make a
+ *           route unroutable, which is why it is refreshed from the live catalog and
+ *           never typed from memory. GET /api/v1/models/{id}/endpoints, read in the same
+ *           minute, was used to confirm that endpoints exist at or below each ceiling.
  * UNIT:     `pricing.prompt` / `pricing.completion` are USD per single token.
  *           This table stores integer micro-USD per MILLION tokens, so every
  *           value is the catalog string multiplied by 1e12. Integers only: the
@@ -483,10 +495,10 @@ export type NodeSlideRunBudgetPostflightResult =
  *           reservation, which is the one place rounding down is a loan.
  * WINDOWS:  `providerContextWindowTokens` is `context_length`;
  *           `providerMaxOutputTokens` is `top_provider.max_completion_tokens`.
- *           Where the catalog reports `null` for the completion cap — currently
- *           `moonshotai/kimi-k3` only — the context window is the binding
- *           provider limit and is recorded as such. That is read from the same
- *           response, not assumed.
+ *           Where the catalog reports `null` for the completion cap (no row does
+ *           in the 2026-10-14 response; `moonshotai/kimi-k3` did on 2026-07-28) the
+ *           context window is the binding provider limit and is recorded as such.
+ *           That is read from the same response, not assumed.
  *
  * TO RE-VERIFY: fetch the URL, and for each row assert
  *   `pricing.prompt * 1e12 === inputMicroUsdPerMillionTokens` and the same for
@@ -509,7 +521,7 @@ export type NodeSlideRunBudgetPostflightResult =
  *     fallback rather than billing against an unchecked price.
  */
 export const NODESLIDE_MODEL_PRICING_SOURCE_URL = 'https://openrouter.ai/api/v1/models' as const;
-export const NODESLIDE_MODEL_PRICING_VERIFIED_AT = '2026-07-28T00:00:00Z' as const;
+export const NODESLIDE_MODEL_PRICING_VERIFIED_AT = '2026-10-14T16:03:00Z' as const;
 
 type NodeSlideCatalogPricingMetadata =
   | NodeSlidePricedModelMetadata
@@ -567,19 +579,17 @@ export const NODESLIDE_MODEL_PRICING = {
   },
   'moonshotai/kimi-k3': pricedRoute({
     modelId: 'moonshotai/kimi-k3',
-    inputMicroUsdPerMillionTokens: 3_000_000,
+    inputMicroUsdPerMillionTokens: 700_000,
     outputMicroUsdPerMillionTokens: 15_000_000,
     providerContextWindowTokens: 1_048_576,
-    // The catalog reports `top_provider.max_completion_tokens: null` for this
-    // route, so the context window is the provider's binding output limit.
-    providerMaxOutputTokens: 1_048_576,
+    providerMaxOutputTokens: 943_718,
   }),
   'z-ai/glm-5.2': pricedRoute({
     modelId: 'z-ai/glm-5.2',
-    inputMicroUsdPerMillionTokens: 768_600,
-    outputMicroUsdPerMillionTokens: 2_415_600,
+    inputMicroUsdPerMillionTokens: 50_000,
+    outputMicroUsdPerMillionTokens: 7_000_000,
     providerContextWindowTokens: 1_048_576,
-    providerMaxOutputTokens: 131_072,
+    providerMaxOutputTokens: 943_718,
   }),
   'anthropic/claude-sonnet-5': pricedRoute({
     modelId: 'anthropic/claude-sonnet-5',
@@ -595,10 +605,31 @@ export const NODESLIDE_MODEL_PRICING = {
     providerContextWindowTokens: 1_000_000,
     providerMaxOutputTokens: 128_000,
   }),
+  'anthropic/claude-sonnet-5.5': pricedRoute({
+    modelId: 'anthropic/claude-sonnet-5.5',
+    inputMicroUsdPerMillionTokens: 2_000_000,
+    outputMicroUsdPerMillionTokens: 10_000_000,
+    providerContextWindowTokens: 1_000_000,
+    providerMaxOutputTokens: 128_000,
+  }),
+  'anthropic/claude-opus-5.5': pricedRoute({
+    modelId: 'anthropic/claude-opus-5.5',
+    inputMicroUsdPerMillionTokens: 4_000_000,
+    outputMicroUsdPerMillionTokens: 20_000_000,
+    providerContextWindowTokens: 1_000_000,
+    providerMaxOutputTokens: 128_000,
+  }),
   'google/gemini-3.5-flash': pricedRoute({
     modelId: 'google/gemini-3.5-flash',
     inputMicroUsdPerMillionTokens: 1_500_000,
     outputMicroUsdPerMillionTokens: 9_000_000,
+    providerContextWindowTokens: 1_048_576,
+    providerMaxOutputTokens: 65_536,
+  }),
+  'google/gemini-3.8-flash': pricedRoute({
+    modelId: 'google/gemini-3.8-flash',
+    inputMicroUsdPerMillionTokens: 750_000,
+    outputMicroUsdPerMillionTokens: 3_750_000,
     providerContextWindowTokens: 1_048_576,
     providerMaxOutputTokens: 65_536,
   }),
@@ -611,15 +642,24 @@ export const NODESLIDE_MODEL_PRICING = {
   }),
   'openai/gpt-5.6-sol': pricedRoute({
     modelId: 'openai/gpt-5.6-sol',
-    inputMicroUsdPerMillionTokens: 5_000_000,
-    outputMicroUsdPerMillionTokens: 30_000_000,
+    inputMicroUsdPerMillionTokens: 2_000_000,
+    outputMicroUsdPerMillionTokens: 10_000_000,
     providerContextWindowTokens: 1_050_000,
     providerMaxOutputTokens: 128_000,
   }),
   'openai/gpt-5.6-terra': pricedRoute({
     modelId: 'openai/gpt-5.6-terra',
-    inputMicroUsdPerMillionTokens: 1_250_000,
-    outputMicroUsdPerMillionTokens: 7_500_000,
+    inputMicroUsdPerMillionTokens: 2_000_000,
+    outputMicroUsdPerMillionTokens: 12_000_000,
+    providerContextWindowTokens: 1_050_000,
+    providerMaxOutputTokens: 128_000,
+  }),
+  // Priced at the flat tier. OpenRouter lists a higher tier above 272K prompt tokens
+  // (2x input); a NodeSlide prompt is bounded far below that by the read-context limit.
+  'openai/gpt-6.1-sol': pricedRoute({
+    modelId: 'openai/gpt-6.1-sol',
+    inputMicroUsdPerMillionTokens: 2_000_000,
+    outputMicroUsdPerMillionTokens: 10_000_000,
     providerContextWindowTokens: 1_050_000,
     providerMaxOutputTokens: 128_000,
   }),

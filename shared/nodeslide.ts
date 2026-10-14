@@ -89,17 +89,69 @@ export const NODESLIDE_AGENT_MODELS = [
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
   {
+    id: 'anthropic/claude-sonnet-5.5',
+    upstreamId: 'anthropic/claude-sonnet-5.5',
+    provider: 'openrouter',
+    vendor: 'Anthropic',
+    label: 'Claude Sonnet 5.5',
+    description: 'Balanced Claude for agents and professional writing.',
+    costTier: 'premium',
+    bestFor: 'Executive writing and synthesis',
+    productionEnabled: true,
+    // Sampling parameters (temperature/top_p/top_k) are a 400 on Claude 5.5.
+    supportsTemperature: false,
+    supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
+  },
+  {
+    id: 'anthropic/claude-opus-5.5',
+    upstreamId: 'anthropic/claude-opus-5.5',
+    provider: 'openrouter',
+    vendor: 'Anthropic',
+    label: 'Claude Opus 5.5',
+    description: 'Most capable Claude for long-running, high-stakes agent work.',
+    costTier: 'premium',
+    bestFor: 'Complex planning and review',
+    productionEnabled: true,
+    // Sampling parameters are a 400 on Claude 5.5. Opus 5.5 defaults to medium effort on the
+    // vendor side (Opus 5 defaulted to high); NodeSlide never relies on a vendor default because
+    // every request carries an explicit reasoning.effort (NODESLIDE_DEFAULT_REASONING_EFFORT).
+    supportsTemperature: false,
+    supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
+  },
+  {
     id: 'google/gemini-3.5-flash',
     upstreamId: 'google/gemini-3.5-flash',
     provider: 'openrouter',
     vendor: 'Google',
     label: 'Gemini 3.5 Flash',
-    description: 'Latest stable Gemini for sustained agentic and coding tasks.',
+    description: 'Previous Gemini Flash generation; kept so persisted job requests still resolve.',
+    costTier: 'fast',
+    bestFor: 'Fast iteration and large context',
+    // Google deprecated gemini-3.5-flash on 2026-10-08 and auto-routes requests to 3.6, so it is no
+    // longer offered. The row stays because persisted job requests name it (convex validators and
+    // the price table keep the literal).
+    productionEnabled: false,
+    supportsTemperature: true,
+    supportedEfforts: ['low', 'medium', 'high'],
+    structuredOutputMode: 'json_object',
+  },
+  {
+    id: 'google/gemini-3.8-flash',
+    upstreamId: 'google/gemini-3.8-flash',
+    provider: 'openrouter',
+    vendor: 'Google',
+    label: 'Gemini 3.8 Flash',
+    description: 'Current Gemini Flash for sustained agentic and coding tasks.',
     costTier: 'fast',
     bestFor: 'Fast iteration and large context',
     productionEnabled: true,
-    supportsTemperature: true,
+    // Gemini 3.6+ deprecates sampling parameters (ignored today, a future 400): never send temperature.
+    supportsTemperature: false,
+    // thinking_level is low/medium/high on Gemini 3.x Flash; xhigh and max are unsupported.
     supportedEfforts: ['low', 'medium', 'high'],
+    // Same OpenRouter Gemini route as 3.5: the edit planner's scoped union schema is rejected
+    // before generation, so the edit patch uses json_object transport and is validated locally.
+    structuredOutputMode: 'json_object',
   },
   {
     id: 'google/gemini-3.1-pro-preview',
@@ -137,6 +189,20 @@ export const NODESLIDE_AGENT_MODELS = [
     costTier: 'balanced',
     bestFor: 'General professional decks',
     productionEnabled: true,
+    supportsTemperature: false,
+    supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
+  },
+  {
+    id: 'openai/gpt-6.1-sol',
+    upstreamId: 'openai/gpt-6.1-sol',
+    provider: 'openrouter',
+    vendor: 'OpenAI',
+    label: 'GPT-6.1 Sol',
+    description: 'OpenAI flagship for highest-capability production workflows.',
+    costTier: 'premium',
+    bestFor: 'Highest-capability production work',
+    productionEnabled: true,
+    // Sampling parameters are removed (400) on GPT-6.
     supportsTemperature: false,
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
@@ -206,8 +272,9 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Zero-priced OpenRouter route with native structured-output support.',
     costTier: 'free',
     bestFor: 'Free fast iteration and repair',
+    // Absent from the OpenRouter catalog (GET /api/v1/models, 2026-10-10): not a free-router
+    // candidate any more. The row stays for persisted requests and the node-gym matrix identity.
     productionEnabled: false,
-    freeRouterCandidate: true,
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high'],
   },
@@ -225,6 +292,8 @@ export type NodeSlideExternalProvider = (typeof NODESLIDE_AGENT_MODELS)[number][
 export const NODESLIDE_DEFAULT_AGENT_MODEL: NodeSlideAgentModelId = 'moonshotai/kimi-k3';
 export const NODESLIDE_DEFAULT_OPENROUTER_AGENT_MODEL: NodeSlideAgentModelId = 'moonshotai/kimi-k3';
 export const NODESLIDE_NEBIUS_AGENT_MODEL: NodeSlideAgentModelId = 'nebius/zai-org/GLM-5.2';
+/** Default route shown in the bring-your-own-key UI (session BYOK store and Connections dialog). */
+export const NODESLIDE_BYOK_DEFAULT_MODEL: NodeSlideAgentModelId = 'z-ai/glm-5.2';
 
 export const NODESLIDE_REASONING_EFFORTS = [
   { id: 'low', label: 'Light', description: 'Faster responses for straightforward work.' },
@@ -245,6 +314,20 @@ export function nodeSlideReasoningEffort(effortId: NodeSlideReasoningEffort) {
     NODESLIDE_REASONING_EFFORTS.find((effort) => effort.id === effortId) ??
     NODESLIDE_REASONING_EFFORTS[2]
   );
+}
+
+/**
+ * Catalog flag for the edit-patch transport. A row that sets `structuredOutputMode: 'json_object'`
+ * sends the `nodeslide_edit_patch` schema in the prompt and asks the provider only for strict JSON,
+ * because that route rejects the planner's large scoped union before generating a token. Every other
+ * schema, and every row without the flag, keeps native `json_schema`. The result is validated
+ * locally against the same schema either way.
+ */
+export function nodeSlideEditPatchStructuredOutputMode(
+  modelId: NodeSlideAgentModelId,
+): 'json_object' | undefined {
+  const route = nodeSlideAgentModel(modelId);
+  return 'structuredOutputMode' in route ? route.structuredOutputMode : undefined;
 }
 
 export function isNodeSlideAgentModelId(value: unknown): value is NodeSlideAgentModelId {

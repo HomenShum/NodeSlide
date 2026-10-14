@@ -176,7 +176,7 @@ describe('proposeEdit routed attribution (B2)', () => {
       spanModel: NODESLIDE_ROUTING_EXECUTOR_MODEL,
       role: 'tool',
     });
-    expect(String(executorRow?.['message'])).toContain('Executor · Gemini 3.5 Flash');
+    expect(String(executorRow?.['message'])).toContain('Executor · Gemini 3.8 Flash');
 
     const proposal = mutations.find((args) => 'operations' in args && 'traceContext' in args);
     expect(proposal).toBeDefined();

@@ -51,6 +51,33 @@ const MODEL_POLICIES = {
   },
 };
 
+// Rows added by the 2026-10 model refresh. None has a Deck Gym run yet (the frozen v1 matrix
+// carries only kimi-k3, claude-sonnet-5 and gemini-3.5-flash), so each policy states that no role
+// is claimed until a live-route ablation passes; the card reports 0 attempted runs, not a guess.
+function unmeasuredPolicy(slug, label) {
+  return {
+    slug,
+    label,
+    bestRoles: ['no full-deck role until a live-route ablation passes'],
+    avoidRoles: ['full-deck generator', 'fallback authority', 'final taste judge'],
+    scaffolding: ['no-generic-fallback', 'independent route verification'],
+  };
+}
+
+MODEL_POLICIES['anthropic/claude-sonnet-5.5'] = unmeasuredPolicy(
+  'claude-sonnet-5-5',
+  'Claude Sonnet 5.5',
+);
+MODEL_POLICIES['anthropic/claude-opus-5.5'] = unmeasuredPolicy(
+  'claude-opus-5-5',
+  'Claude Opus 5.5',
+);
+MODEL_POLICIES['google/gemini-3.8-flash'] = unmeasuredPolicy(
+  'gemini-3-8-flash',
+  'Gemini 3.8 Flash',
+);
+MODEL_POLICIES['openai/gpt-6.1-sol'] = unmeasuredPolicy('gpt-6-1-sol', 'GPT-6.1 Sol');
+
 export async function buildModelCapabilityLedger({ artifactDir, outputDir }) {
   const matrix = await readJson(path.join(artifactDir, 'matrix.json'));
   const runDirs = await discoverRunDirs(path.join(artifactDir, 'runs'));

@@ -7,7 +7,7 @@
  * table transcribed by hand between them can be wrong by three orders of
  * magnitude without looking wrong. So the catalog values are restated here, in
  * the provider's own units and exactly as the catalog printed them on
- * 2026-07-28, and the test does the conversion itself.
+ * 2026-10-14, and the test does the conversion itself.
  *
  * That is deliberately a SECOND transcription, not an import. Importing the
  * table and asserting it equals itself would pass on any value at all. If these
@@ -20,7 +20,11 @@
  * both transcriptions together when the recorded date gets old.
  */
 import { describe, expect, it } from 'vitest';
-import { NODESLIDE_AGENT_MODELS, type NodeSlideAgentModelId } from '../shared/nodeslide';
+import {
+  NODESLIDE_AGENT_MODELS,
+  type NodeSlideAgentModelId,
+  nodeSlideAgentModel,
+} from '../shared/nodeslide';
 import {
   NODESLIDE_MODEL_PRICING,
   NODESLIDE_MODEL_PRICING_SOURCE_URL,
@@ -31,24 +35,27 @@ import {
   nodeSlidePricingRefusalReason,
   scoreNodeSlideWorstCaseCost,
 } from '../shared/nodeslideRunBudget';
+import { NODESLIDE_KIMI_K3, NODESLIDE_OPENROUTER_MODEL_OVERRIDES } from './lib/nodeslideProvider';
 
 /**
- * Read out of the `data[]` entry for each id on 2026-07-28: `pricing.prompt`,
+ * Read out of the `data[]` entry for each id on 2026-10-14: `pricing.prompt`,
  * `pricing.completion` (USD per token, as strings), `context_length`, and
  * `top_provider.max_completion_tokens`. `null` is recorded as null, not guessed.
  */
-const OPENROUTER_CATALOG_2026_07_28 = {
+const OPENROUTER_CATALOG_2026_10_14 = {
+  // Was 0.000003 / 0.000015 (and maxCompletionTokens null) on 2026-07-28.
   'moonshotai/kimi-k3': {
-    prompt: '0.000003',
+    prompt: '0.0000007',
     completion: '0.000015',
     contextLength: 1_048_576,
-    maxCompletionTokens: null,
+    maxCompletionTokens: 943_718,
   },
+  // Was 0.0000007686 / 0.0000024156 and 131_072 on 2026-07-28.
   'z-ai/glm-5.2': {
-    prompt: '0.0000007686',
-    completion: '0.0000024156',
+    prompt: '0.00000005',
+    completion: '0.000007',
     contextLength: 1_048_576,
-    maxCompletionTokens: 131_072,
+    maxCompletionTokens: 943_718,
   },
   'anthropic/claude-sonnet-5': {
     prompt: '0.000002',
@@ -62,9 +69,27 @@ const OPENROUTER_CATALOG_2026_07_28 = {
     contextLength: 1_000_000,
     maxCompletionTokens: 128_000,
   },
+  'anthropic/claude-sonnet-5.5': {
+    prompt: '0.000002',
+    completion: '0.00001',
+    contextLength: 1_000_000,
+    maxCompletionTokens: 128_000,
+  },
+  'anthropic/claude-opus-5.5': {
+    prompt: '0.000004',
+    completion: '0.00002',
+    contextLength: 1_000_000,
+    maxCompletionTokens: 128_000,
+  },
   'google/gemini-3.5-flash': {
     prompt: '0.0000015',
     completion: '0.000009',
+    contextLength: 1_048_576,
+    maxCompletionTokens: 65_536,
+  },
+  'google/gemini-3.8-flash': {
+    prompt: '0.00000075',
+    completion: '0.00000375',
     contextLength: 1_048_576,
     maxCompletionTokens: 65_536,
   },
@@ -74,15 +99,23 @@ const OPENROUTER_CATALOG_2026_07_28 = {
     contextLength: 1_048_576,
     maxCompletionTokens: 65_536,
   },
+  // Was 0.000005 / 0.00003 on 2026-07-28.
   'openai/gpt-5.6-sol': {
-    prompt: '0.000005',
-    completion: '0.00003',
+    prompt: '0.000002',
+    completion: '0.00001',
     contextLength: 1_050_000,
     maxCompletionTokens: 128_000,
   },
+  // Was 0.00000125 / 0.0000075 on 2026-07-28.
   'openai/gpt-5.6-terra': {
-    prompt: '0.00000125',
-    completion: '0.0000075',
+    prompt: '0.000002',
+    completion: '0.000012',
+    contextLength: 1_050_000,
+    maxCompletionTokens: 128_000,
+  },
+  'openai/gpt-6.1-sol': {
+    prompt: '0.000002',
+    completion: '0.00001',
     contextLength: 1_050_000,
     maxCompletionTokens: 128_000,
   },
@@ -122,19 +155,20 @@ function microUsdPerMillionTokens(usdPerToken: string): number {
 describe('the recorded catalog observation', () => {
   it('names the endpoint and the date it was read', () => {
     expect(NODESLIDE_MODEL_PRICING_SOURCE_URL).toBe('https://openrouter.ai/api/v1/models');
-    expect(NODESLIDE_MODEL_PRICING_VERIFIED_AT).toBe('2026-07-28T00:00:00Z');
+    expect(NODESLIDE_MODEL_PRICING_VERIFIED_AT).toBe('2026-10-14T16:03:00Z');
   });
 
   it('converts the provider unit to the ledger unit without floating-point drift', () => {
     // The route that would have silently lost a micro-USD to `* 1e12`.
     expect(microUsdPerMillionTokens('0.0000007686')).toBe(768_600);
+    expect(microUsdPerMillionTokens('0.0000007')).toBe(700_000);
     expect(microUsdPerMillionTokens('0.000003')).toBe(3_000_000);
     expect(microUsdPerMillionTokens('0.00005')).toBe(50_000_000);
   });
 });
 
 describe('every priced row matches the catalog it claims to come from', () => {
-  for (const [modelId, catalog] of Object.entries(OPENROUTER_CATALOG_2026_07_28)) {
+  for (const [modelId, catalog] of Object.entries(OPENROUTER_CATALOG_2026_10_14)) {
     it(`prices ${modelId} exactly as the catalog published it`, () => {
       const pricing = nodeSlideModelPricing(modelId);
       expect(pricing.kind).toBe('priced');
@@ -258,5 +292,48 @@ describe('worst-case scoring rounds against the run, never in its favour', () =>
     });
     // $10/M in + $50/M out = $60 = 60_000_000 micro-USD.
     expect(scored.totalCostMicroUsd).toBe(60_000_000);
+  });
+});
+
+describe('every pricing source in this repo agrees (Part A rule 6)', () => {
+  it('the hand-typed Kimi K3 Model<> override costs what the price table charges', () => {
+    // Two pricing sources exist for moonshotai/kimi-k3: the ledger table above and the
+    // pi-ai Model<> override that pi-ai uses to price a response (cost.total -> costMicroUsd).
+    // Same transport (OpenRouter), same pricingAsOf (NODESLIDE_MODEL_PRICING_VERIFIED_AT).
+    // Model<> cost is USD per million tokens; the ledger is micro-USD per million tokens.
+    const pricing = nodeSlideModelPricing('moonshotai/kimi-k3');
+    expect(pricing.kind).toBe('priced');
+    if (pricing.kind !== 'priced') return;
+    expect(NODESLIDE_KIMI_K3.provider).toBe('openrouter');
+    expect(Math.round(NODESLIDE_KIMI_K3.cost.input * 1_000_000)).toBe(
+      pricing.inputMicroUsdPerMillionTokens,
+    );
+    expect(Math.round(NODESLIDE_KIMI_K3.cost.output * 1_000_000)).toBe(
+      pricing.outputMicroUsdPerMillionTokens,
+    );
+    expect(NODESLIDE_KIMI_K3.contextWindow).toBe(pricing.providerContextWindowTokens);
+  });
+
+  it('every OpenRouter model override is a priced row that agrees with the table', () => {
+    for (const override of NODESLIDE_OPENROUTER_MODEL_OVERRIDES) {
+      const pricing = nodeSlideModelPricing(override.id);
+      expect(pricing.kind).toBe('priced');
+      if (pricing.kind !== 'priced') continue;
+      expect(Math.round(override.cost.input * 1_000_000)).toBe(
+        pricing.inputMicroUsdPerMillionTokens,
+      );
+      expect(Math.round(override.cost.output * 1_000_000)).toBe(
+        pricing.outputMicroUsdPerMillionTokens,
+      );
+    }
+  });
+
+  it('keeps the Nebius GLM-5.2 hand-typed cost out of every reservation path', () => {
+    // NODESLIDE_NEBIUS_GLM carries a hand-typed 1.4 / 4.4 (not in frontier.json, not on OpenRouter).
+    // The route is productionEnabled:false and its ledger row is 'unknown' (denied), so the
+    // figure cannot reach a reservation. It is verified against the Nebius price list when the
+    // route is enabled (SPEC Part A section A.2.8, R row convex/lib/nodeslideProvider.ts:27).
+    expect(nodeSlideAgentModel('nebius/zai-org/GLM-5.2').productionEnabled).toBe(false);
+    expect(nodeSlideModelPricing('nebius/zai-org/GLM-5.2').kind).toBe('unknown');
   });
 });

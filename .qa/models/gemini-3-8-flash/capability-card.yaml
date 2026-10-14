@@ -32,6 +32,6 @@ required_scaffolding:
 confidence:
   cognitive_behavior: "low — no plan or reasoning traces captured"
   tool_execution: "low — only browser creation and export were observed"
-  artifact_quality: "medium"
+  artifact_quality: "none — no evaluated runs"
   routing_recommendation: "low"
 status: "provisional — requires skill-on versus skill-off ablation"

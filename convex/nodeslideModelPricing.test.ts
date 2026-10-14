@@ -35,7 +35,12 @@ import {
   nodeSlidePricingRefusalReason,
   scoreNodeSlideWorstCaseCost,
 } from '../shared/nodeslideRunBudget';
-import { NODESLIDE_KIMI_K3, NODESLIDE_OPENROUTER_MODEL_OVERRIDES } from './lib/nodeslideProvider';
+import { decideNodeSlideAutoRoute } from './lib/nodeslideAutoRoutingPolicy';
+import {
+  NODESLIDE_KIMI_K3,
+  NODESLIDE_OPENROUTER_MODEL_OVERRIDES,
+  openrouterProviderWithOverrides,
+} from './lib/nodeslideProvider';
 
 /**
  * Read out of the `data[]` entry for each id on 2026-10-14: `pricing.prompt`,
@@ -295,22 +300,66 @@ describe('worst-case scoring rounds against the run, never in its favour', () =>
   });
 });
 
+/**
+ * Part A rule 6: every pricing source in this repo, each with its date, one test, equal
+ * `{inPerM, outPerM}` per (id, OpenRouter transport). The sources:
+ *
+ *   1. the ledger table `NODESLIDE_MODEL_PRICING` (also the reservation quote and the OpenRouter
+ *      `max_price` ceiling), pricingAsOf `NODESLIDE_MODEL_PRICING_VERIFIED_AT` (2026-10-14T16:03Z);
+ *   2. the hand-typed `Model<>` overrides in `nodeslideProvider.ts`, same pricingAsOf;
+ *   3. the provider the dispatcher actually builds (`openrouterProviderWithOverrides`): its rows
+ *      price every response (`usage.cost.total` -> `costMicroUsd`). Its base rows are the bundled
+ *      pi-ai 1.1.0 OpenRouter catalog, which is NOT dated by us and disagreed with the ledger on
+ *      two rows when read on 2026-10-14: moonshotai/kimi-k3 0.5 / 15 (ledger 0.7 / 15) and
+ *      z-ai/glm-5.2 0.171 / 7.2 (ledger 0.05 / 7). The provider therefore prices every ledger-priced
+ *      row at the ledger's rate, and this test is what notices the day that stops being true;
+ *   4. the auto-router estimate (`nodeslideAutoRoutingPolicy.ts`), which read the same pi-ai
+ *      catalog: it caps a job-create request's cost, so an under-estimate admits a route the ledger
+ *      would refuse. It prices ledger-priced routes at the ledger's rate for the same reason.
+ *
+ * Above-threshold tiers (pi-ai lists a higher rate above 200K-272K prompt tokens for gemini-3.1-pro
+ * and the gpt-5.6 / gpt-6.1 rows) are pi-ai-only data the flat ledger does not model; a NodeSlide
+ * prompt is bounded far below the threshold by the read-context limit.
+ */
 describe('every pricing source in this repo agrees (Part A rule 6)', () => {
+  const ledgerPricedOpenRouterRoutes = NODESLIDE_AGENT_MODELS.filter(
+    (model) => model.provider === 'openrouter' && nodeSlideModelPricing(model.id).kind === 'priced',
+  );
+  const perMillion = (usdPerMillion: number) => Math.round(usdPerMillion * 1_000_000);
+  const textOnly = { web: false, longContext: false, image: false, reasoning: false };
+
+  function autoRoute(modelId: NodeSlideAgentModelId, maxUsd: number) {
+    return decideNodeSlideAutoRoute({
+      task: 'compose-deck',
+      capabilities: textOnly,
+      privacy: 'external_if_consented',
+      requestedReasoningEffort: null,
+      deterministicAvailable: true,
+      consent: { providers: ['openrouter'], models: [modelId] },
+      availability: [{ provider: 'openrouter', catalogModelId: modelId, available: true }],
+      expectedInputTokens: 100_000,
+      expectedOutputTokens: 1_000,
+      maxUsd,
+      fallbackPolicy: { mode: 'none' },
+    });
+  }
+
+  it('covers every metered OpenRouter route in the catalog', () => {
+    // A route added to the catalog without a ledger price fails the exhaustiveness test above; this
+    // one fails if the filter above ever silently matches nothing.
+    expect(ledgerPricedOpenRouterRoutes.length).toBeGreaterThanOrEqual(10);
+    expect(ledgerPricedOpenRouterRoutes.map((model) => model.id)).toEqual(
+      expect.arrayContaining(['moonshotai/kimi-k3', 'z-ai/glm-5.2', 'anthropic/claude-sonnet-5.5']),
+    );
+  });
+
   it('the hand-typed Kimi K3 Model<> override costs what the price table charges', () => {
-    // Two pricing sources exist for moonshotai/kimi-k3: the ledger table above and the
-    // pi-ai Model<> override that pi-ai uses to price a response (cost.total -> costMicroUsd).
-    // Same transport (OpenRouter), same pricingAsOf (NODESLIDE_MODEL_PRICING_VERIFIED_AT).
-    // Model<> cost is USD per million tokens; the ledger is micro-USD per million tokens.
     const pricing = nodeSlideModelPricing('moonshotai/kimi-k3');
     expect(pricing.kind).toBe('priced');
     if (pricing.kind !== 'priced') return;
     expect(NODESLIDE_KIMI_K3.provider).toBe('openrouter');
-    expect(Math.round(NODESLIDE_KIMI_K3.cost.input * 1_000_000)).toBe(
-      pricing.inputMicroUsdPerMillionTokens,
-    );
-    expect(Math.round(NODESLIDE_KIMI_K3.cost.output * 1_000_000)).toBe(
-      pricing.outputMicroUsdPerMillionTokens,
-    );
+    expect(perMillion(NODESLIDE_KIMI_K3.cost.input)).toBe(pricing.inputMicroUsdPerMillionTokens);
+    expect(perMillion(NODESLIDE_KIMI_K3.cost.output)).toBe(pricing.outputMicroUsdPerMillionTokens);
     expect(NODESLIDE_KIMI_K3.contextWindow).toBe(pricing.providerContextWindowTokens);
   });
 
@@ -319,13 +368,60 @@ describe('every pricing source in this repo agrees (Part A rule 6)', () => {
       const pricing = nodeSlideModelPricing(override.id);
       expect(pricing.kind).toBe('priced');
       if (pricing.kind !== 'priced') continue;
-      expect(Math.round(override.cost.input * 1_000_000)).toBe(
+      expect(perMillion(override.cost.input)).toBe(pricing.inputMicroUsdPerMillionTokens);
+      expect(perMillion(override.cost.output)).toBe(pricing.outputMicroUsdPerMillionTokens);
+    }
+  });
+
+  it('the provider the dispatcher builds prices every metered route at the ledger rate', () => {
+    const models = new Map(
+      openrouterProviderWithOverrides()
+        .getModels()
+        .map((model) => [model.id, model] as const),
+    );
+    for (const route of ledgerPricedOpenRouterRoutes) {
+      const pricing = nodeSlideModelPricing(route.id);
+      const model = models.get(route.upstreamId);
+      expect(model, `${route.upstreamId} is in the provider`).toBeDefined();
+      if (pricing.kind !== 'priced' || !model) continue;
+      expect(perMillion(model.cost.input), `${route.id} input`).toBe(
         pricing.inputMicroUsdPerMillionTokens,
       );
-      expect(Math.round(override.cost.output * 1_000_000)).toBe(
+      expect(perMillion(model.cost.output), `${route.id} output`).toBe(
         pricing.outputMicroUsdPerMillionTokens,
       );
     }
+  });
+
+  it('the auto-router estimates every metered route at the ledger rate', () => {
+    for (const route of ledgerPricedOpenRouterRoutes) {
+      const pricing = nodeSlideModelPricing(route.id);
+      if (pricing.kind !== 'priced') continue;
+      const decision = autoRoute(route.id, 100);
+      expect(decision.kind, `${route.id} is routable`).toBe('selected');
+      const estimate = decision.costEstimate;
+      expect(estimate.status).toBe('estimated');
+      if (estimate.status !== 'estimated') continue;
+      expect(perMillion(estimate.pricing.inputUsdPerMillionTokens), `${route.id} input`).toBe(
+        pricing.inputMicroUsdPerMillionTokens,
+      );
+      expect(perMillion(estimate.pricing.outputUsdPerMillionTokens), `${route.id} output`).toBe(
+        pricing.outputMicroUsdPerMillionTokens,
+      );
+    }
+  });
+
+  it('kimi-k3 is not admitted on an estimate below the ledger worst case', () => {
+    // Round 1: pi-ai 1.1.0 priced kimi-k3 at 0.5 / 15, so 100k in + 1k out estimated $0.065 while the
+    // ledger's worst case is $0.085, and the auto-router admitted a route the ledger would price higher.
+    const worst = scoreNodeSlideWorstCaseCost({
+      model: 'moonshotai/kimi-k3',
+      inputTokens: 100_000,
+      outputTokens: 1_000,
+    });
+    expect(worst.totalCostMicroUsd).toBe(85_000);
+    expect(autoRoute('moonshotai/kimi-k3', 0.085).kind).toBe('selected');
+    expect(autoRoute('moonshotai/kimi-k3', 0.084999).kind).toBe('refused');
   });
 
   it('keeps the Nebius GLM-5.2 hand-typed cost out of every reservation path', () => {

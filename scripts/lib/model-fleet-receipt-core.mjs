@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 export const NODE_SLIDE_OFFERED_ROUTE_CATALOG = [
   ['moonshotai/kimi-k3', 'openrouter', 'moonshotai/kimi-k3'],
   ['z-ai/glm-5.2', 'openrouter', 'z-ai/glm-5.2'],
@@ -27,6 +29,10 @@ export const NODE_SLIDE_FREE_ROUTE_CATALOG = [
 
 export const EXECUTOR_SPLIT_RECEIPT_SCHEMA = 'nodeslide.executor-split-probe/v1';
 const EXECUTOR_SPLIT_EXECUTOR_MODEL = 'google/gemini-3.8-flash';
+const EXECUTOR_SPLIT_PLANNER_MODEL = 'moonshotai/kimi-k3';
+const EXECUTOR_SPLIT_COMMAND = 'npx convex run nodeslideModelProbe:runExecutorSplit';
+/** Pre-flight ceiling: one planner call and one executor call. A third is a retry or repair call. */
+const EXECUTOR_SPLIT_MAX_REQUESTS = 2;
 
 const CATALOG_BY_SCHEMA = new Map([
   ['nodeslide.model-fleet-probe/v1', NODE_SLIDE_OFFERED_ROUTE_CATALOG],
@@ -136,33 +142,127 @@ function isNormalizedModelIdentity(value) {
 }
 
 /**
- * Acceptance rule for the routed-executor receipt (SPEC Part A, section A.2.8). Accepted only when
- * the turn really split to the new executor, the provider echoed that exact model with non-zero
- * usage, the executor's copy was applied, no budget refusal occurred and the deployment names the
- * tested commit. Returns the failures; an empty list means accepted. Never throws on a bad receipt.
+ * Acceptance rule for the routed-executor receipt (SPEC Part A, sections A.0.3 and A.2.8). Accepted
+ * only when the turn really split to the new executor, the provider echoed that exact model with
+ * non-zero usage, the executor's copy was applied, the ledger shows spend and no refusal, no call was
+ * retried or fell back to another model, and the deployment names the tested commit. Returns the
+ * failures; an empty list means accepted. Never throws on a bad receipt. A rejected receipt is re-run,
+ * never edited.
  */
 export function executorSplitReceiptFailures(receipt, testedCommit) {
-  const failures = [];
   if (!receipt || receipt.schemaVersion !== EXECUTOR_SPLIT_RECEIPT_SCHEMA)
     return ['receipt schema is not nodeslide.executor-split-probe/v1'];
+  const failures = [];
+  const fail = (message) => failures.push(message);
+
+  if (receipt.command !== EXECUTOR_SPLIT_COMMAND) fail(`command is ${receipt.command}`);
+  if (
+    !Array.isArray(receipt.candidateIds) ||
+    !receipt.candidateIds.includes(EXECUTOR_SPLIT_EXECUTOR_MODEL)
+  )
+    fail('candidateIds does not name the executor under test');
+  if (receipt.constantSha256 !== sha256(EXECUTOR_SPLIT_EXECUTOR_MODEL))
+    fail('constantSha256 does not match the executor constant');
+  if (!testedCommit || receipt.testedCommit !== testedCommit)
+    fail(`testedCommit is ${receipt.testedCommit ?? null}`);
+  if (!testedCommit || receipt.buildIdentity?.commitSha !== testedCommit)
+    fail(`buildIdentity.commitSha is ${receipt.buildIdentity?.commitSha ?? null}`);
+  if (typeof receipt.startedAt !== 'string' || Number.isNaN(Date.parse(receipt.startedAt)))
+    fail('startedAt is not a timestamp');
+  if (!receipt.environment || typeof receipt.environment !== 'object')
+    fail('environment is missing');
+
   const routing = receipt.routing ?? {};
   if (routing.reason !== 'split_premium_planner_bulk_copy')
-    failures.push(`routing.reason is ${routing.reason}`);
+    fail(`routing.reason is ${routing.reason}`);
+  if (routing.plannerModel !== EXECUTOR_SPLIT_PLANNER_MODEL)
+    fail(`routing.plannerModel is ${routing.plannerModel}`);
   if (routing.executorModel !== EXECUTOR_SPLIT_EXECUTOR_MODEL)
-    failures.push(`routing.executorModel is ${routing.executorModel}`);
+    fail(`routing.executorModel is ${routing.executorModel}`);
   if (routing.executorOutcome !== 'applied')
-    failures.push(`routing.executorOutcome is ${routing.executorOutcome}`);
-  const executor = (receipt.spans ?? []).find((entry) => entry?.toolName === 'executor');
-  if (!executor) failures.push('no executor span');
-  else {
-    if (executor.responseModel !== EXECUTOR_SPLIT_EXECUTOR_MODEL)
-      failures.push(`executor responseModel is ${executor.responseModel}`);
-    const { inputTokens, outputTokens } = executor.usage ?? {};
-    if (!(inputTokens > 0 || outputTokens > 0)) failures.push('executor usage is zero');
+    fail(`routing.executorOutcome is ${routing.executorOutcome}`);
+
+  const spans = Array.isArray(receipt.spans) ? receipt.spans : [];
+  const rows = Array.isArray(receipt.rows) ? receipt.rows : [];
+  const expected = [
+    ['planner', EXECUTOR_SPLIT_PLANNER_MODEL],
+    ['executor', EXECUTOR_SPLIT_EXECUTOR_MODEL],
+  ];
+  for (const [toolName, model] of expected) {
+    const span = spans.find((entry) => entry?.toolName === toolName);
+    const row = rows.find((entry) => entry?.toolName === toolName);
+    if (!span) fail(`no ${toolName} span`);
+    else {
+      if (span.spanModel !== model) fail(`${toolName} spanModel is ${span.spanModel}`);
+      if (span.responseModel !== model) fail(`${toolName} responseModel is ${span.responseModel}`);
+      const { inputTokens, outputTokens } = span.usage ?? {};
+      if (!(inputTokens > 0 || outputTokens > 0)) fail(`${toolName} usage is zero`);
+    }
+    if (!row) fail(`no ${toolName} row`);
+    else {
+      if (row.requestedModel !== model)
+        fail(`${toolName} row requestedModel is ${row.requestedModel}`);
+      if (row.resolvedModel !== row.requestedModel)
+        fail(`${toolName} row resolvedModel ${row.resolvedModel} differs from requestedModel`);
+      if (row.echoedModel !== model) fail(`${toolName} row echoedModel is ${row.echoedModel}`);
+      if (row.fallbackUsed !== false) fail(`${toolName} row used a fallback`);
+      if (span && row.echoedModel !== span.responseModel) fail(`${toolName} row and span disagree`);
+    }
   }
-  if ((receipt.budget?.refusals ?? ['missing']).length > 0)
-    failures.push('the budget refused a dispatch or is missing');
-  if (!testedCommit || receipt.buildIdentity?.commitSha !== testedCommit)
-    failures.push(`buildIdentity.commitSha is ${receipt.buildIdentity?.commitSha ?? null}`);
+  if (spans.length !== expected.length || rows.length !== expected.length)
+    fail(`receipt has ${spans.length} spans and ${rows.length} rows, not ${expected.length}`);
+  const echoed = [...new Set(rows.map((row) => row?.echoedModel).filter(Boolean))].sort();
+  const reported = Array.isArray(receipt.echoedModels) ? [...receipt.echoedModels].sort() : [];
+  if (JSON.stringify(echoed) !== JSON.stringify(reported))
+    fail('echoedModels does not list the models the rows echoed');
+  if (!reported.includes(EXECUTOR_SPLIT_EXECUTOR_MODEL))
+    fail('echoedModels does not include the executor');
+
+  // A.0.3: `dispatchPolicy` absent or not {maxRetries: 0, crossModelFallback: false} is rejected, and
+  // so is a request count above the pre-flight ceiling. The provider's JSON-repair call is the one
+  // re-dispatch path, so a span that dispatched twice is a retry that ran.
+  const policy = receipt.dispatchPolicy;
+  if (!policy || policy.maxRetries !== 0 || policy.crossModelFallback !== false)
+    fail(
+      `dispatchPolicy is ${JSON.stringify(policy ?? null)}, not maxRetries 0 and no cross-model fallback`,
+    );
+  const dispatches = rows.reduce(
+    (total, row) => total + (Number.isInteger(row?.dispatches) ? row.dispatches : 0),
+    0,
+  );
+
+  // `budget` is the ledger's accounting for the probe: what it authorized, what it settled, and
+  // whether it refused anything.
+  const budget = receipt.budget;
+  if (!budget) fail('budget is missing');
+  else {
+    if (!(Number.isFinite(budget.maxUsd) && budget.maxUsd > 0))
+      fail('budget.maxUsd is not a positive number');
+    if (!(Number.isFinite(budget.estimateUsd) && budget.estimateUsd > 0))
+      fail('budget.estimateUsd shows no reservation');
+    if (!(Number.isFinite(budget.spentUsd) && budget.spentUsd > 0))
+      fail('budget.spentUsd shows no spend');
+    else {
+      if (budget.spentUsd > budget.maxUsd) fail('budget.spentUsd exceeds budget.maxUsd');
+      // The ledger settles the larger of the provider's cost and a token-based recomputation, so it
+      // can exceed the rows, never undercut them.
+      const rowsMicroUsd = spans.reduce((total, span) => total + (span?.costMicroUsd ?? 0), 0);
+      if (Math.round(budget.spentUsd * 1_000_000) < rowsMicroUsd)
+        fail('budget.spentUsd is below the cost the rows report');
+    }
+    if (budget.requests !== dispatches)
+      fail(`budget.requests is ${budget.requests}, rows dispatched ${dispatches}`);
+    if (!(budget.requests <= EXECUTOR_SPLIT_MAX_REQUESTS))
+      fail(
+        `budget.requests is ${budget.requests}, above the pre-flight ceiling of ${EXECUTOR_SPLIT_MAX_REQUESTS}`,
+      );
+    if (budget.stoppedBy !== null) fail(`budget.stoppedBy is ${budget.stoppedBy}`);
+    if (!Array.isArray(budget.refusals) || budget.refusals.length > 0)
+      fail('the budget refused a dispatch or the refusal list is missing');
+  }
   return failures;
+}
+
+function sha256(text) {
+  return `sha256:${createHash('sha256').update(text).digest('hex')}`;
 }

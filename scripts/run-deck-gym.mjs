@@ -7,9 +7,11 @@ import {
   createDeckGymCampaignBudget,
   deckGymBudgetSummary,
   deckGymWorker,
+  recordDeckGymCharge,
+  recordDeckGymReservation,
   resolveDeckGymMaxTotalCostMicroUsd,
+  restoreDeckGymSpend,
 } from './lib/deck-gym-campaign.mjs';
-import { NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD } from './lib/node-gym-runner-core.mjs';
 import {
   createNodeSlideBackendClient,
   readBackendRunIds,
@@ -21,21 +23,6 @@ const runsDir = path.resolve(option('runs-dir') ?? path.join(path.dirname(matrix
 const baseUrl = productionUrl(option('url') ?? 'https://nodeslide.vercel.app/');
 const requestedConcurrency = positiveInteger(option('concurrency'), 2);
 const limit = positiveInteger(option('limit'), Number.MAX_SAFE_INTEGER);
-// What one run can cost the backend ledger at most (its hard per-run cap, 1 USD by default); every
-// in-flight run is reserved at this worst case. Raise it only for a campaign of long-form decks,
-// whose create budget is higher (`convex/lib/nodeslideCreateScale.ts`).
-const perRunMaxCostMicroUsd = nonNegativeInteger(
-  option('per-run-max-cost-micro-usd'),
-  NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD,
-);
-const budget = createDeckGymCampaignBudget({
-  maxTotalCostMicroUsd: resolveDeckGymMaxTotalCostMicroUsd({
-    explicit: option('max-total-cost-micro-usd'),
-    limit: option('limit') === undefined ? undefined : limit,
-    perRunMaxCostMicroUsd,
-  }),
-  perRunMaxCostMicroUsd,
-});
 const backend = await createNodeSlideBackendClient(
   option('convex-url') ??
     process.env.NODE_GYM_PROD_CONVEX_URL ??
@@ -52,6 +39,15 @@ const maxConcurrency = Math.max(
 );
 const runs = matrix.runs.slice(0, limit);
 await mkdir(runsDir, { recursive: true });
+// The cap binds the whole campaign, so what earlier invocations already spent counts before any
+// run is scheduled, whether those runs resume as skipped or are about to be re-run.
+const budget = createDeckGymCampaignBudget({
+  maxTotalCostMicroUsd: resolveDeckGymMaxTotalCostMicroUsd({
+    explicit: option('max-total-cost-micro-usd'),
+    limit: option('limit') === undefined ? undefined : limit,
+  }),
+  spentCostMicroUsd: await restoreDeckGymSpend({ runs, runsDir }),
+});
 
 const browser = await chromium.launch({ headless: true });
 const queue = [...runs];
@@ -105,6 +101,9 @@ function worker(workerId) {
     },
     executeRun: (run) => executeRun(workerId, run, path.join(runsDir, run.runId)),
     readLedger: (runIds) => readLedgerReceipts({ backend, runIds }),
+    recordReservation: (run, reservationMicroUsd) =>
+      recordDeckGymReservation(path.join(runsDir, run.runId), reservationMicroUsd),
+    recordCharge: (run, charge) => recordDeckGymCharge(path.join(runsDir, run.runId), charge),
     onSkip: (run) => console.log(`[deck-gym:${workerId}] SKIP ${run.runId}`),
     onStop: (issueCode, run) =>
       console.error(`[deck-gym:${workerId}] STOP before ${run.runId}: ${issueCode}`),
@@ -261,14 +260,6 @@ async function captureTrace(page) {
 function option(name) {
   const index = process.argv.indexOf(`--${name}`);
   return index >= 0 ? process.argv[index + 1] : undefined;
-}
-
-function nonNegativeInteger(value, fallback) {
-  if (value === undefined) return fallback;
-  const parsed = Number(value);
-  if (!Number.isSafeInteger(parsed) || parsed < 0)
-    throw new Error('--per-run-max-cost-micro-usd must be a non-negative integer.');
-  return parsed;
 }
 
 function positiveInteger(value, fallback) {

@@ -47,7 +47,13 @@ const FORBIDDEN_LEGACY_KEYS = [
   'logprobs',
   'top_logprobs',
   'prefill',
+  // Forced tool choice is a 400 on Sonnet 5.5 and Opus 5.5 (SPEC 1.3), and GPT-6.1 tools need the
+  // Responses API, not Chat Completions. NodeSlide's JSON calls offer no tools, so neither key may appear.
+  'tool_choice',
+  'tools',
 ] as const;
+/** SPEC 1.3: low..max are accepted; `none` and `minimal` are rejected on the new rows. */
+const ACCEPTED_EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'] as const;
 
 interface CapturedRequest {
   url: string;
@@ -85,17 +91,52 @@ function expectNoForbiddenKeys(body: Record<string, unknown>) {
   for (const key of [...FORBIDDEN_SAMPLING_KEYS, ...FORBIDDEN_LEGACY_KEYS]) {
     expect(Object.keys(body), `request must not carry "${key}"`).not.toContain(key);
   }
-  // A disabled reasoning block is a 400 on Opus 5.5 and Sonnet 5.5; effort must be explicit.
+  // Prefill is an assistant turn at the end of the conversation (a 400 on every new row), not a key.
+  const messages = (body['messages'] ?? []) as { role?: string }[];
+  expect(messages.length, 'request carries messages').toBeGreaterThan(0);
+  expect(messages.at(-1)?.role, 'request must not end on an assistant message (prefill)').not.toBe(
+    'assistant',
+  );
+  // A disabled reasoning block is a 400 on Opus 5.5 and Sonnet 5.5; effort must be explicit, and one
+  // the vendors accept.
   const reasoning = body['reasoning'] as { enabled?: boolean; effort?: string } | undefined;
   expect(reasoning?.enabled).toBeUndefined();
-  expect(typeof reasoning?.effort).toBe('string');
+  expect(ACCEPTED_EFFORTS as readonly string[]).toContain(reasoning?.effort);
 }
+
+describe('the forbidden-shape guard itself', () => {
+  // Round 1 (Codex): injecting toolChoice:'required' into the provider left every test passing.
+  // These feed the guard a request that carries each forbidden shape and require it to object.
+  const clean = {
+    model: 'x',
+    messages: [{ role: 'user', content: 'hi' }],
+    reasoning: { effort: 'high' },
+  };
+  it('accepts a clean request', () => {
+    expect(() => expectNoForbiddenKeys(clean)).not.toThrow();
+  });
+  it.each([
+    ['a forced tool_choice', { ...clean, tool_choice: 'required' }],
+    ['an offered tool list', { ...clean, tools: [{ type: 'function' }] }],
+    ['a sampling parameter', { ...clean, temperature: 0 }],
+    [
+      'an assistant prefill turn',
+      { ...clean, messages: [...clean.messages, { role: 'assistant', content: '{' }] },
+    ],
+    ['a disabled reasoning block', { ...clean, reasoning: { enabled: false, effort: 'high' } }],
+    ['effort "none"', { ...clean, reasoning: { effort: 'none' } }],
+    ['effort "minimal"', { ...clean, reasoning: { effort: 'minimal' } }],
+    ['an arbitrary effort string', { ...clean, reasoning: { effort: 'banana' } }],
+  ])('rejects %s', (_label, body) => {
+    expect(() => expectNoForbiddenKeys(body)).toThrow();
+  });
+});
 
 describe('the new catalog rows build refresh-safe requests', () => {
   for (const [label, modelId] of Object.entries(WIRE_ID) as [string, NodeSlideAgentModelId][]) {
     it(`${label}: probe request carries the SPEC 1.2 wire id and none of the forbidden keys`, async () => {
       const route = nodeSlideAgentModel(modelId);
-      // The row must exist (an unknown id silently falls back to the first catalog row).
+      // The row must exist (an unknown id throws: it no longer falls back to the first catalog row).
       expect(route.id).toBe(modelId);
       expect(route.upstreamId).toBe(modelId);
       expect(route.provider).toBe('openrouter');

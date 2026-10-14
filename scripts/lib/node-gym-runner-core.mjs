@@ -553,14 +553,11 @@ export const NODE_GYM_ORPHAN_CHARGE_SCHEMA = 'nodekit.gym-orphan-attempt-charge/
 /**
  * What one run reserves against the campaign before it is dispatched: the backend ledger cap that
  * binds it, not the gym plan's own `budget.maxCostMicroUsd` (which the UI executor never hands to the
- * backend). Local, `:free` and `openrouter/free` routes issue no metered request and reserve 0.
+ * backend). It takes no override: a reservation below the enforced cap would let a campaign dispatch
+ * paid work it has not budgeted for. Local, `:free` and `openrouter/free` routes issue no metered
+ * request and reserve 0.
  */
-export function nodeGymRunReservationMicroUsd(
-  plan,
-  perRunMaxCostMicroUsd = NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD,
-) {
-  if (!Number.isSafeInteger(perRunMaxCostMicroUsd) || perRunMaxCostMicroUsd < 0)
-    throw new Error('NodeGym per-run reservation must be a non-negative integer.');
+export function nodeGymRunReservationMicroUsd(plan) {
   const model = plan?.model;
   if (
     model?.provider === 'local' ||
@@ -568,17 +565,20 @@ export function nodeGymRunReservationMicroUsd(
     String(model?.route ?? '').endsWith(':free')
   )
     return 0;
-  return perRunMaxCostMicroUsd;
+  return NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD;
 }
 
 /**
- * Micro-USD one backend ledger receipt (`nodeslideBudgets.receiptForRun`) says a run cost. Exposure
- * that is reserved or unreconciled (a dispatch whose outcome never came back) counts: it may still
- * have been billed, and the ledger itself keeps it inside the cap. Returns null when the receipt is
- * not a readable ledger receipt.
+ * Micro-USD one backend ledger receipt (`nodeslideBudgets.receiptForRun`) says a run cost. Only a
+ * finalized ledger row is a final figure: a row still `open` belongs to a job that may be running
+ * (a UI timeout does not stop it), so its counters are a floor, not the cost. Exposure that is
+ * reserved or unreconciled (a dispatch whose outcome never came back) counts: it may still have been
+ * billed. Returns null when the receipt is not a readable, finalized ledger receipt; the caller then
+ * keeps the run's full reservation.
  */
 export function nodeGymLedgerReceiptMicroUsd(receipt) {
   if (receipt?.version !== NODE_GYM_LEDGER_RECEIPT_VERSION) return null;
+  if (receipt.status !== 'finalized') return null;
   const spend = receipt.spend;
   const parts = [spend?.actualMicroUsd, spend?.reservedMicroUsd, spend?.unreconciledMicroUsd];
   if (!parts.every((part) => Number.isSafeInteger(part) && part >= 0)) return null;

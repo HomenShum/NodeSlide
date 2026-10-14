@@ -1,12 +1,20 @@
-import type { DeckSnapshot, PatchScope } from '../../shared/nodeslide';
+import { createHash } from 'node:crypto';
+import {
+  type DeckSnapshot,
+  type NodeSlideAgentModelId,
+  type PatchScope,
+  nodeSlideAgentModel,
+} from '../../shared/nodeslide';
 import { NODESLIDE_RUN_BUDGET_BOUNDS } from '../../shared/nodeslideRunBudget';
 import {
   type NodeSlideBudgetLedgerClient,
   createNodeSlideBudgetedEditDispatch,
+  nodeSlideProviderBudgetId,
 } from './nodeslideBudgetedProvider';
 import { type NodeSlideEditPlanningRequest, planNodeSlideEditRouted } from './nodeslideEditPlanner';
 import { nodeslideStableId } from './nodeslideIds';
 import { type NodeSlideProviderTelemetry, callNodeSlideFreeJson } from './nodeslideProvider';
+import { NODESLIDE_ROUTING_EXECUTOR_MODEL } from './nodeslideRoutingPolicy';
 import { buildGoldenNodeSlide } from './nodeslideSeed';
 
 /**
@@ -20,14 +28,23 @@ import { buildGoldenNodeSlide } from './nodeslideSeed';
  * (not the one we asked for) written into the receipt. Create-and-export journeys never reach the
  * executor, so they cannot stand in for this.
  *
- * The receipt is data only. Whether it counts as evidence is decided by `validateExecutorSplitReceipt`
+ * The receipt is data only. Whether it counts as evidence is decided by `executorSplitReceiptFailures`
  * (scripts/lib/model-fleet-receipt-core.mjs), which also compares the build identity with the tested
- * commit, because only the caller knows which commit was tested.
+ * commit, because only the caller knows which commit was tested. It carries the fields Part A rule 3
+ * asks of every receipt (candidate, echoed models, one row per span, revision, constant hash, ledger
+ * accounting, dispatch policy) so that review can reject it on the same grounds as any other.
+ *
+ * One thing the probe cannot prevent is the provider's JSON-repair call: `callNodeSlideFreeJson` may
+ * issue a second completion for the same span. The receipt counts every dispatch, and a run that
+ * made more than one per span is rejected (a retry was enabled) and re-run, never edited.
  */
 export const NODESLIDE_EXECUTOR_SPLIT_PROBE_SCHEMA = 'nodeslide.executor-split-probe/v1' as const;
 
 /** Premium per PREMIUM_PLANNER_PATTERNS (nodeslideRoutingPolicy.ts), so the split is granted. */
 export const NODESLIDE_EXECUTOR_SPLIT_PLANNER_MODEL = 'moonshotai/kimi-k3' as const;
+
+export const NODESLIDE_EXECUTOR_SPLIT_PROBE_COMMAND =
+  'npx convex run nodeslideModelProbe:runExecutorSplit' as const;
 
 export const NODESLIDE_EXECUTOR_SPLIT_DEFAULT_BUDGET_USD = 0.25 as const;
 
@@ -40,8 +57,29 @@ export interface NodeSlideExecutorSplitSpan {
   costMicroUsd: number;
 }
 
+/** Part A rule 3 row: one per span, in the same order as `spans`. */
+export interface NodeSlideExecutorSplitRow {
+  toolName: 'planner' | 'executor';
+  requestedModel: string;
+  /** What the repo's resolver chose for the request. */
+  resolvedModel: string;
+  /** The model string the provider returned; null when it returned none. */
+  echoedModel: string | null;
+  usage: { inputTokens: number; outputTokens: number };
+  costUsd: number;
+  /** True when the provider served a model other than the one requested. */
+  fallbackUsed: boolean;
+  /** Model calls issued for this span: 1, or 2 when the JSON-repair call ran. */
+  dispatches: number;
+}
+
 export interface NodeSlideExecutorSplitProbeReceipt {
   schemaVersion: typeof NODESLIDE_EXECUTOR_SPLIT_PROBE_SCHEMA;
+  command: typeof NODESLIDE_EXECUTOR_SPLIT_PROBE_COMMAND;
+  /** The model under test: the routed copy executor. The planner is a fixture. */
+  candidateIds: string[];
+  echoedModels: string[];
+  rows: NodeSlideExecutorSplitRow[];
   routing: {
     plannerModel: string;
     executorModel: string | null;
@@ -49,12 +87,28 @@ export interface NodeSlideExecutorSplitProbeReceipt {
     executorOutcome: string | null;
   };
   spans: NodeSlideExecutorSplitSpan[];
+  /** The deployment's stamped commit, as the tested revision (the caller compares it to its own). */
+  testedCommit: string | null;
+  /** sha256 of the executor constant (`NODESLIDE_ROUTING_EXECUTOR_MODEL`) this build routes to. */
+  constantSha256: string;
   budget: {
-    maxCostUsd: number;
+    maxUsd: number;
+    /** Sum of the ledger's reservation quotes: the worst case the ledger authorized. */
+    estimateUsd: number;
+    /** The ledger's settled actual spend for the probe's budget. */
+    spentUsd: number;
+    /** Model calls issued across both spans. */
+    requests: number;
+    /** The first ledger refusal, or null; a stop is an incomplete run, never a pass. */
+    stoppedBy: string | null;
     plannedOperations: number;
     refusals: string[];
   };
+  /** `maxRetries` is the count of re-dispatches actually made; the receipt is rejected unless 0. */
+  dispatchPolicy: { maxRetries: number; crossModelFallback: boolean };
   buildIdentity: { schemaVersion: string; commitSha: string | null } | null;
+  startedAt: string;
+  environment: { runtime: string; node: string };
 }
 
 export function executorSplitProbeBudgetUsd(env: Record<string, string | undefined>): number {
@@ -92,12 +146,33 @@ function probeFixture(): { snapshot: DeckSnapshot; scope: PatchScope; slideId: s
   };
 }
 
+/**
+ * Wraps the ledger so the probe can report what the ledger authorized: each reservation's quote is
+ * the worst case it admitted for that call. The wrapper adds nothing to the dispatch.
+ */
+function recordingLedger(ledger: NodeSlideBudgetLedgerClient) {
+  const quotesMicroUsd: number[] = [];
+  const client: NodeSlideBudgetLedgerClient = {
+    ...ledger,
+    reserve: async (args) => {
+      const view = await ledger.reserve(args);
+      if (view.call) quotesMicroUsd.push(view.call.quoteMicroUsd);
+      return view;
+    },
+  };
+  return { client, quotesMicroUsd };
+}
+
+const usd = (microUsd: number) => microUsd / 1_000_000;
+
 export async function runNodeSlideExecutorSplitProbe(args: {
   ledger: NodeSlideBudgetLedgerClient;
   buildIdentity: { schemaVersion: string; commitSha: string | null } | null;
   budgetUsd: number;
   now?: () => number;
 }): Promise<NodeSlideExecutorSplitProbeReceipt> {
+  const now = args.now ?? Date.now;
+  const startedAt = new Date(now()).toISOString();
   const { snapshot, scope, slideId } = probeFixture();
   const slide = snapshot.slides.find((candidate) => candidate.id === slideId);
   if (!slide) throw new Error('The probe deck fixture lost its slide.');
@@ -105,15 +180,16 @@ export async function runNodeSlideExecutorSplitProbe(args: {
   // A fresh run id per invocation: a replayed id would return the recorded result without spending.
   const runId = nodeslideStableId(
     'nsrun_probe_executor_split',
-    String((args.now ?? Date.now)()),
+    String(now()),
     NODESLIDE_EXECUTOR_SPLIT_PLANNER_MODEL,
   );
   const refusals: string[] = [];
+  const ledger = recordingLedger(args.ledger);
   const dispatch = createNodeSlideBudgetedEditDispatch({
     runId,
     budget,
     metered: true,
-    ledger: args.ledger,
+    ledger: ledger.client,
     dispatch: (request, dependencies) =>
       callNodeSlideFreeJson(
         request,
@@ -148,36 +224,61 @@ export async function runNodeSlideExecutorSplitProbe(args: {
       },
     },
   );
-  if (!outcome.ok) {
-    return {
-      schemaVersion: NODESLIDE_EXECUTOR_SPLIT_PROBE_SCHEMA,
-      routing: {
-        plannerModel: NODESLIDE_EXECUTOR_SPLIT_PLANNER_MODEL,
-        executorModel: null,
-        reason: 'planner_failed',
-        executorOutcome: null,
-      },
-      spans: [],
-      budget: { maxCostUsd: args.budgetUsd, plannedOperations: 0, refusals },
-      buildIdentity: args.buildIdentity,
-    };
-  }
-  const routing = outcome.routing;
+  const routing = outcome.ok ? outcome.routing : undefined;
   const spans: NodeSlideExecutorSplitSpan[] = [];
-  const plannerTelemetry = outcome.receipt.providerTelemetry;
-  if (plannerTelemetry) spans.push(span('planner', plannerTelemetry));
-  if (routing?.executorTelemetry) spans.push(span('executor', routing.executorTelemetry));
+  const rows: NodeSlideExecutorSplitRow[] = [];
+  const add = (toolName: 'planner' | 'executor', telemetry: NodeSlideProviderTelemetry) => {
+    spans.push(span(toolName, telemetry));
+    rows.push(row(toolName, telemetry));
+  };
+  if (outcome.ok) {
+    if (outcome.receipt.providerTelemetry) add('planner', outcome.receipt.providerTelemetry);
+    if (routing?.executorTelemetry) add('executor', routing.executorTelemetry);
+  }
+  // The ledger's own books for this probe's budget: what it settled, not what the rows say.
+  const books = await args.ledger.replay({ budgetId: nodeSlideProviderBudgetId(runId) });
+  const requests = rows.reduce((total, entry) => total + entry.dispatches, 0);
+  const echoedModels = [
+    ...new Set(rows.map((entry) => entry.echoedModel).filter((model) => model !== null)),
+  ] as string[];
   return {
     schemaVersion: NODESLIDE_EXECUTOR_SPLIT_PROBE_SCHEMA,
-    routing: {
-      plannerModel: routing?.plannerModel ?? NODESLIDE_EXECUTOR_SPLIT_PLANNER_MODEL,
-      executorModel: routing?.executorModel ?? null,
-      reason: routing?.reason ?? 'not_routed',
-      executorOutcome: routing?.executorOutcome ?? null,
-    },
+    command: NODESLIDE_EXECUTOR_SPLIT_PROBE_COMMAND,
+    candidateIds: [NODESLIDE_ROUTING_EXECUTOR_MODEL],
+    echoedModels,
+    rows,
+    routing: outcome.ok
+      ? {
+          plannerModel: routing?.plannerModel ?? NODESLIDE_EXECUTOR_SPLIT_PLANNER_MODEL,
+          executorModel: routing?.executorModel ?? null,
+          reason: routing?.reason ?? 'not_routed',
+          executorOutcome: routing?.executorOutcome ?? null,
+        }
+      : {
+          plannerModel: NODESLIDE_EXECUTOR_SPLIT_PLANNER_MODEL,
+          executorModel: null,
+          reason: 'planner_failed',
+          executorOutcome: null,
+        },
     spans,
-    budget: { maxCostUsd: args.budgetUsd, plannedOperations: outcome.operations.length, refusals },
+    testedCommit: args.buildIdentity?.commitSha ?? null,
+    constantSha256: `sha256:${createHash('sha256').update(NODESLIDE_ROUTING_EXECUTOR_MODEL).digest('hex')}`,
+    budget: {
+      maxUsd: args.budgetUsd,
+      estimateUsd: usd(ledger.quotesMicroUsd.reduce((total, quote) => total + quote, 0)),
+      spentUsd: usd(books?.budget.actualMicroUsd ?? 0),
+      requests,
+      stoppedBy: refusals[0] ?? null,
+      plannedOperations: outcome.ok ? outcome.operations.length : 0,
+      refusals,
+    },
+    dispatchPolicy: {
+      maxRetries: rows.reduce((total, entry) => total + Math.max(0, entry.dispatches - 1), 0),
+      crossModelFallback: rows.some((entry) => entry.fallbackUsed),
+    },
     buildIdentity: args.buildIdentity,
+    startedAt,
+    environment: { runtime: 'convex-node-action', node: process.version },
   };
 }
 
@@ -191,5 +292,25 @@ function span(
     responseModel: telemetry.actualModel ?? null,
     usage: { inputTokens: telemetry.inputTokens, outputTokens: telemetry.outputTokens },
     costMicroUsd: telemetry.costMicroUsd,
+  };
+}
+
+function row(
+  toolName: 'planner' | 'executor',
+  telemetry: NodeSlideProviderTelemetry,
+): NodeSlideExecutorSplitRow {
+  const requestedModel = telemetry.requestedModel ?? telemetry.model;
+  const echoedModel = telemetry.actualModel ?? null;
+  return {
+    toolName,
+    requestedModel,
+    // `telemetry.model` becomes the echoed model after a call; the resolver's choice is the catalog
+    // row's upstream id for the requested route.
+    resolvedModel: nodeSlideAgentModel(requestedModel as NodeSlideAgentModelId).upstreamId,
+    echoedModel,
+    usage: { inputTokens: telemetry.inputTokens, outputTokens: telemetry.outputTokens },
+    costUsd: usd(telemetry.costMicroUsd),
+    fallbackUsed: echoedModel !== null && echoedModel !== requestedModel,
+    dispatches: telemetry.attempts?.length ?? 1,
   };
 }

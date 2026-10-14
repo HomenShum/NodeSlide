@@ -1,35 +1,39 @@
 /**
- * Candidate-bound executor receipt (SPEC Part A section A.2.8, Codex N1).
+ * Candidate-bound executor receipt (SPEC Part A section A.2.8, Codex N1; rule 3 after round 1).
  *
  * Situation: an operator wants proof that, after Google retired Gemini 3.5 Flash, NodeSlide's routed
  * copy executor really runs Gemini 3.8 Flash. The probe runs one premium-planner edit turn through
  * the real planner, router and reserve-before-dispatch provider. Only the HTTP call is faked here
  * (no provider is contacted, nothing is spent), so these tests prove the plumbing and the
  * acceptance rule; the paid run itself is the operator's.
+ *
+ * Round 1 found the acceptance rule admitted a receipt with no planner span, a wrong executor
+ * identity, a wrong planner and no spend evidence. Each of those is a rejection case below.
  */
 import { nodeSlideBudgetLedgerStubResponse } from '@nodeslide/testing';
 import { describe, expect, it, vi } from 'vitest';
 import { bindNodeSlideBudgetLedgerClient } from '../../convex/lib/nodeslideBudgetedProvider.ts';
 import {
+  NODESLIDE_EXECUTOR_SPLIT_PROBE_COMMAND,
   executorSplitProbeBudgetUsd,
   runNodeSlideExecutorSplitProbe,
 } from '../../convex/lib/nodeslideExecutorSplitProbe.ts';
+import { NODESLIDE_ROUTING_EXECUTOR_MODEL } from '../../convex/lib/nodeslideRoutingPolicy.ts';
 import { buildGoldenNodeSlide } from '../../convex/lib/nodeslideSeed.ts';
 import { executorSplitReceiptFailures } from '../lib/model-fleet-receipt-core.mjs';
 
 const COMMIT = 'a'.repeat(40);
-const attempts = [
-  {
-    attempt: 'initial',
-    attempted: true,
-    settled: true,
-    ambiguous: false,
-    unreconciled: false,
-    elapsedMs: 1,
-  },
-];
+const attempt = (name) => ({
+  attempt: name,
+  attempted: true,
+  settled: true,
+  ambiguous: false,
+  unreconciled: false,
+  elapsedMs: 1,
+});
 const calls = [];
 let executorEchoes = 'google/gemini-3.8-flash';
+let executorAttempts = [attempt('initial')];
 let plannerValue;
 
 vi.mock('../../convex/lib/nodeslideProvider.ts', async (importOriginal) => {
@@ -58,18 +62,36 @@ vi.mock('../../convex/lib/nodeslideProvider.ts', async (importOriginal) => {
           costMicroUsd: isExecutor ? 1_000 : 20_000,
           inputTokens: 120,
           outputTokens: 40,
-          attempts,
+          attempts: isExecutor ? executorAttempts : [attempt('initial')],
         },
       };
     }),
   };
 });
 
+/**
+ * A ledger that keeps books: settle adds the call's actual cost, replay reports the total, as the
+ * real one does. The shared stub always answers zero spend, which would make `budget.spentUsd`
+ * unprovable here.
+ */
 function fakeLedger() {
+  const actualMicroUsd = new Map();
+  const withActual = (response, budgetId) => ({
+    ...response,
+    budget: { ...response.budget, actualMicroUsd: actualMicroUsd.get(budgetId) ?? 0 },
+  });
   const ctx = {
-    runMutation: async (_reference, args) => nodeSlideBudgetLedgerStubResponse(args),
-    // replay: a fresh call id has no prior record
-    runQuery: async () => null,
+    runMutation: async (_reference, args) => {
+      if ('actualMicroUsd' in args)
+        actualMicroUsd.set(
+          args.budgetId,
+          (actualMicroUsd.get(args.budgetId) ?? 0) + args.actualMicroUsd,
+        );
+      return withActual(nodeSlideBudgetLedgerStubResponse(args), args.budgetId);
+    },
+    // A replay of one call id finds no prior record (a fresh call); a replay of the budget reports its books.
+    runQuery: async (_reference, args) =>
+      'callId' in args ? null : withActual(nodeSlideBudgetLedgerStubResponse(args), args.budgetId),
   };
   const names = ['create', 'reserve', 'settle', 'captureTimeout', 'release', 'replay'];
   return bindNodeSlideBudgetLedgerClient(
@@ -106,10 +128,15 @@ async function run() {
   });
 }
 
+async function acceptedReceipt() {
+  executorEchoes = 'google/gemini-3.8-flash';
+  executorAttempts = [attempt('initial')];
+  return await run();
+}
+
 describe('runNodeSlideExecutorSplitProbe', () => {
   it('splits a kimi-k3 plan to gemini-3.8-flash and records what each provider echoed', async () => {
-    executorEchoes = 'google/gemini-3.8-flash';
-    const receipt = await run();
+    const receipt = await acceptedReceipt();
     expect(calls).toEqual(['moonshotai/kimi-k3', 'google/gemini-3.8-flash']);
     expect(receipt.routing).toMatchObject({
       plannerModel: 'moonshotai/kimi-k3',
@@ -125,21 +152,89 @@ describe('runNodeSlideExecutorSplitProbe', () => {
     expect(executorSplitReceiptFailures(receipt, COMMIT)).toEqual([]);
   });
 
+  it('carries the Part A rule 3 fields: candidate, rows, revision, constant hash, ledger books, policy', async () => {
+    const receipt = await acceptedReceipt();
+    expect(receipt.command).toBe(NODESLIDE_EXECUTOR_SPLIT_PROBE_COMMAND);
+    expect(receipt.candidateIds).toEqual([NODESLIDE_ROUTING_EXECUTOR_MODEL]);
+    expect(receipt.echoedModels.sort()).toEqual(['google/gemini-3.8-flash', 'moonshotai/kimi-k3']);
+    expect(receipt.rows).toEqual([
+      {
+        toolName: 'planner',
+        requestedModel: 'moonshotai/kimi-k3',
+        resolvedModel: 'moonshotai/kimi-k3',
+        echoedModel: 'moonshotai/kimi-k3',
+        usage: { inputTokens: 120, outputTokens: 40 },
+        costUsd: 0.02,
+        fallbackUsed: false,
+        dispatches: 1,
+      },
+      {
+        toolName: 'executor',
+        requestedModel: 'google/gemini-3.8-flash',
+        resolvedModel: 'google/gemini-3.8-flash',
+        echoedModel: 'google/gemini-3.8-flash',
+        usage: { inputTokens: 120, outputTokens: 40 },
+        costUsd: 0.001,
+        fallbackUsed: false,
+        dispatches: 1,
+      },
+    ]);
+    expect(receipt.testedCommit).toBe(COMMIT);
+    expect(receipt.constantSha256).toMatch(/^sha256:[0-9a-f]{64}$/u);
+    expect(receipt.dispatchPolicy).toEqual({ maxRetries: 0, crossModelFallback: false });
+    expect(receipt.budget).toMatchObject({
+      maxUsd: 0.25,
+      requests: 2,
+      stoppedBy: null,
+      refusals: [],
+    });
+    // Ledger books, not the rows: settled actual cost, at least what the provider reported.
+    expect(receipt.budget.spentUsd).toBeGreaterThanOrEqual(0.021);
+    expect(receipt.budget.estimateUsd).toBeGreaterThan(0);
+    expect(Number.isNaN(Date.parse(receipt.startedAt))).toBe(false);
+    expect(receipt.environment.runtime).toBe('convex-node-action');
+  });
+
+  it('records the JSON-repair second call and is rejected for it', async () => {
+    executorEchoes = 'google/gemini-3.8-flash';
+    executorAttempts = [attempt('initial'), attempt('repair')];
+    const receipt = await run();
+    expect(receipt.rows.find((row) => row.toolName === 'executor')?.dispatches).toBe(2);
+    expect(receipt.budget.requests).toBe(3);
+    expect(receipt.dispatchPolicy).toEqual({ maxRetries: 1, crossModelFallback: false });
+    expect(executorSplitReceiptFailures(receipt, COMMIT)).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/^dispatchPolicy is /u),
+        'budget.requests is 3, above the pre-flight ceiling of 2',
+      ]),
+    );
+  });
+
   it('is rejected when the provider echoed a different executor than the one requested', async () => {
     executorEchoes = 'google/gemini-3.6-flash';
+    executorAttempts = [attempt('initial')];
     const receipt = await run();
-    expect(executorSplitReceiptFailures(receipt, COMMIT)).toEqual([
-      'executor responseModel is google/gemini-3.6-flash',
-    ]);
+    expect(receipt.rows.find((row) => row.toolName === 'executor')?.fallbackUsed).toBe(true);
+    expect(receipt.dispatchPolicy.crossModelFallback).toBe(true);
+    const failures = executorSplitReceiptFailures(receipt, COMMIT);
+    expect(failures).toEqual(
+      expect.arrayContaining([
+        'executor responseModel is google/gemini-3.6-flash',
+        'executor row used a fallback',
+        'echoedModels does not include the executor',
+      ]),
+    );
   });
 
   it('is rejected when the deployment is not the tested commit', async () => {
-    executorEchoes = 'google/gemini-3.8-flash';
-    const receipt = await run();
+    const receipt = await acceptedReceipt();
     expect(executorSplitReceiptFailures(receipt, 'b'.repeat(40))).toEqual([
+      `testedCommit is ${COMMIT}`,
       `buildIdentity.commitSha is ${COMMIT}`,
     ]);
-    expect(executorSplitReceiptFailures({ ...receipt, buildIdentity: null }, COMMIT)).toEqual([
+    const unstamped = { ...receipt, testedCommit: null, buildIdentity: null };
+    expect(executorSplitReceiptFailures(unstamped, COMMIT)).toEqual([
+      'testedCommit is null',
       'buildIdentity.commitSha is null',
     ]);
   });
@@ -163,6 +258,198 @@ describe('runNodeSlideExecutorSplitProbe', () => {
     expect(failures).toEqual(
       expect.arrayContaining(['routing.reason is single_model', 'no executor span']),
     );
+  });
+});
+
+/**
+ * Round 1 (Codex): a receipt with no planner span, a wrong requested executor spanModel, plannerModel
+ * 'not-the-planner' and no spend evidence returned `[]`. Each mutation below starts from an accepted
+ * receipt and must change the verdict.
+ */
+describe('executorSplitReceiptFailures rejects incomplete or inconsistent evidence', () => {
+  const mutate = (receipt, change) => change(structuredClone(receipt));
+  const cases = [
+    [
+      'no planner span',
+      (r) => {
+        r.spans = r.spans.filter((span) => span.toolName !== 'planner');
+        return r;
+      },
+      'no planner span',
+    ],
+    [
+      'no planner row',
+      (r) => {
+        r.rows = r.rows.filter((row) => row.toolName !== 'planner');
+        return r;
+      },
+      'no planner row',
+    ],
+    [
+      'a wrong requested executor spanModel',
+      (r) => {
+        r.spans.find((span) => span.toolName === 'executor').spanModel = 'google/gemini-3.5-flash';
+        return r;
+      },
+      'executor spanModel is google/gemini-3.5-flash',
+    ],
+    [
+      'a wrong requested executor on the row',
+      (r) => {
+        r.rows.find((row) => row.toolName === 'executor').requestedModel =
+          'google/gemini-3.5-flash';
+        return r;
+      },
+      'executor row requestedModel is google/gemini-3.5-flash',
+    ],
+    [
+      'a resolver that chose another model than was requested',
+      (r) => {
+        r.rows.find((row) => row.toolName === 'executor').resolvedModel = 'z-ai/glm-5.2';
+        return r;
+      },
+      'executor row resolvedModel z-ai/glm-5.2 differs from requestedModel',
+    ],
+    [
+      "plannerModel 'not-the-planner'",
+      (r) => {
+        r.routing.plannerModel = 'not-the-planner';
+        return r;
+      },
+      'routing.plannerModel is not-the-planner',
+    ],
+    [
+      'a planner span on another model',
+      (r) => {
+        r.spans.find((span) => span.toolName === 'planner').spanModel = 'not-the-planner';
+        return r;
+      },
+      'planner spanModel is not-the-planner',
+    ],
+    [
+      'no spend evidence (zero ledger spend)',
+      (r) => {
+        r.budget.spentUsd = 0;
+        return r;
+      },
+      'budget.spentUsd shows no spend',
+    ],
+    [
+      'a ledger that spent less than the rows report',
+      (r) => {
+        r.budget.spentUsd = 0.000001;
+        return r;
+      },
+      'budget.spentUsd is below the cost the rows report',
+    ],
+    [
+      'spend above the ceiling',
+      (r) => {
+        r.budget.spentUsd = r.budget.maxUsd + 1;
+        return r;
+      },
+      'budget.spentUsd exceeds budget.maxUsd',
+    ],
+    [
+      'no reservation recorded',
+      (r) => {
+        r.budget.estimateUsd = 0;
+        return r;
+      },
+      'budget.estimateUsd shows no reservation',
+    ],
+    [
+      'a budget stop',
+      (r) => {
+        r.budget.stoppedBy = 'The hard run budget could not authorize this provider call.';
+        return r;
+      },
+      'budget.stoppedBy is The hard run budget could not authorize this provider call.',
+    ],
+    [
+      'a missing budget',
+      (r) => {
+        r.budget = undefined;
+        return r;
+      },
+      'budget is missing',
+    ],
+    [
+      'a missing dispatch policy',
+      (r) => {
+        r.dispatchPolicy = undefined;
+        return r;
+      },
+      'dispatchPolicy is null, not maxRetries 0 and no cross-model fallback',
+    ],
+    [
+      'retries enabled',
+      (r) => {
+        r.dispatchPolicy = { maxRetries: 1, crossModelFallback: false };
+        return r;
+      },
+      'dispatchPolicy is {"maxRetries":1,"crossModelFallback":false}, not maxRetries 0 and no cross-model fallback',
+    ],
+    [
+      'a request count that disagrees with the rows',
+      (r) => {
+        r.budget.requests = 1;
+        return r;
+      },
+      'budget.requests is 1, rows dispatched 2',
+    ],
+    [
+      'the wrong candidate',
+      (r) => {
+        r.candidateIds = ['google/gemini-3.5-flash'];
+        return r;
+      },
+      'candidateIds does not name the executor under test',
+    ],
+    [
+      'a constant hash of another executor',
+      (r) => {
+        r.constantSha256 = `sha256:${'0'.repeat(64)}`;
+        return r;
+      },
+      'constantSha256 does not match the executor constant',
+    ],
+    [
+      'another command',
+      (r) => {
+        r.command = 'npx convex run nodeslideModelProbe:runFleet';
+        return r;
+      },
+      'command is npx convex run nodeslideModelProbe:runFleet',
+    ],
+    [
+      'a row that no longer matches its span',
+      (r) => {
+        r.rows.find((row) => row.toolName === 'executor').echoedModel = 'google/gemini-3.6-flash';
+        return r;
+      },
+      'executor row echoedModel is google/gemini-3.6-flash',
+    ],
+  ];
+
+  it('accepts the unmutated receipt (so each rejection below is caused by its mutation)', async () => {
+    expect(executorSplitReceiptFailures(await acceptedReceipt(), COMMIT)).toEqual([]);
+  });
+
+  it.each(cases)('rejects %s', async (_label, change, expectedFailure) => {
+    const receipt = mutate(await acceptedReceipt(), change);
+    expect(executorSplitReceiptFailures(receipt, COMMIT)).toContain(expectedFailure);
+  });
+
+  it('never throws on a malformed receipt', () => {
+    for (const bad of [null, undefined, {}, [], 'x', { schemaVersion: 'other' }]) {
+      expect(() => executorSplitReceiptFailures(bad, COMMIT)).not.toThrow();
+      expect(executorSplitReceiptFailures(bad, COMMIT).length).toBeGreaterThan(0);
+    }
+    expect(
+      executorSplitReceiptFailures({ schemaVersion: 'nodeslide.executor-split-probe/v1' }, COMMIT)
+        .length,
+    ).toBeGreaterThan(0);
   });
 });
 

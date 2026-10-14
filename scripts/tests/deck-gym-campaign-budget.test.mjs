@@ -7,17 +7,25 @@
  * the browser page and a fake backend budget ledger, and assert the queue stops before the cap even
  * when two runs are in flight, each reserved at its worst case.
  */
-import { describe, expect, it } from 'vitest';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
+  DECK_GYM_CHARGES_FILE,
   createDeckGymCampaignBudget,
   deckGymBudgetSummary,
   deckGymWorker,
+  recordDeckGymCharge,
+  recordDeckGymReservation,
   resolveDeckGymMaxTotalCostMicroUsd,
+  restoreDeckGymSpend,
 } from '../lib/deck-gym-campaign.mjs';
 import { NODE_GYM_LEDGER_RECEIPT_VERSION } from '../lib/node-gym-runner-core.mjs';
 
 const ledger = (actual) => ({
   version: NODE_GYM_LEDGER_RECEIPT_VERSION,
+  status: 'finalized',
   spend: { actualMicroUsd: actual, reservedMicroUsd: 0, unreconciledMicroUsd: 0 },
 });
 
@@ -35,7 +43,6 @@ describe('deck-gym campaign cap', () => {
     const PER_RUN = 1_000_000;
     const budget = createDeckGymCampaignBudget({
       maxTotalCostMicroUsd: 2_500_000,
-      perRunMaxCostMicroUsd: PER_RUN,
     });
     const queue = Array.from({ length: 6 }, (_, index) => ({ runId: `run-${index + 1}` }));
     const receipts = [];
@@ -112,7 +119,6 @@ describe('deck-gym campaign cap', () => {
   it('keeps the full reservation when the ledger lookup itself throws', async () => {
     const budget = createDeckGymCampaignBudget({
       maxTotalCostMicroUsd: 5_000_000,
-      perRunMaxCostMicroUsd: 1_000_000,
     });
     const receipts = [];
     await deckGymWorker({
@@ -132,7 +138,6 @@ describe('deck-gym campaign cap', () => {
   it('charges a run whose execution throws outright its full reservation', async () => {
     const budget = createDeckGymCampaignBudget({
       maxTotalCostMicroUsd: 5_000_000,
-      perRunMaxCostMicroUsd: 1_000_000,
     });
     const receipts = [];
     await deckGymWorker({
@@ -152,7 +157,6 @@ describe('deck-gym campaign cap', () => {
   it('never charges a resumed (skipped) run and never reserves for it', async () => {
     const budget = createDeckGymCampaignBudget({
       maxTotalCostMicroUsd: 1_000_000,
-      perRunMaxCostMicroUsd: 1_000_000,
     });
     const receipts = [];
     const executed = [];
@@ -176,7 +180,6 @@ describe('deck-gym campaign cap', () => {
   it('refuses to start any run when even one worst case exceeds the cap', async () => {
     const budget = createDeckGymCampaignBudget({
       maxTotalCostMicroUsd: 999_999,
-      perRunMaxCostMicroUsd: 1_000_000,
     });
     const queue = [{ runId: 'run-1' }];
     await deckGymWorker({
@@ -200,36 +203,147 @@ describe('deck-gym cap resolution mirrors node-gym', () => {
       resolveDeckGymMaxTotalCostMicroUsd({
         explicit: undefined,
         limit: 12,
-        perRunMaxCostMicroUsd: 1_000_000,
       }),
     ).toBe(12_000_000);
     expect(() =>
       resolveDeckGymMaxTotalCostMicroUsd({
         explicit: undefined,
         limit: 13,
-        perRunMaxCostMicroUsd: 1_000_000,
       }),
     ).toThrow(/--max-total-cost-micro-usd is required/u);
     expect(() =>
       resolveDeckGymMaxTotalCostMicroUsd({
         explicit: undefined,
         limit: undefined,
-        perRunMaxCostMicroUsd: 1_000_000,
       }),
     ).toThrow(/required/u);
     expect(
       resolveDeckGymMaxTotalCostMicroUsd({
         explicit: '2500000',
         limit: 72,
-        perRunMaxCostMicroUsd: 1_000_000,
       }),
     ).toBe(2_500_000);
     expect(() =>
       resolveDeckGymMaxTotalCostMicroUsd({
         explicit: '-1',
         limit: 1,
-        perRunMaxCostMicroUsd: 1_000_000,
       }),
     ).toThrow(/non-negative integer/u);
+  });
+});
+
+/**
+ * Situation (round 1, Codex): a person runs `deck-gym:run` with a 2 USD cap, it spends 1 USD, they
+ * stop it and run it again to finish. Each process used to start its meter at 0, so the second one
+ * spent another 2 USD under the same cap. These tests run the real restore and the real worker over
+ * real run directories.
+ */
+describe('deck-gym campaign cap binds the whole campaign across invocations', () => {
+  let runsDir;
+  beforeEach(async () => {
+    runsDir = await mkdtemp(path.join(os.tmpdir(), 'deck-gym-budget-'));
+  });
+  afterEach(async () => {
+    await rm(runsDir, { recursive: true, force: true });
+  });
+
+  const charges = async (runId) =>
+    JSON.parse(await readFile(path.join(runsDir, runId, DECK_GYM_CHARGES_FILE), 'utf8')).charges;
+
+  /** One invocation of the runner: restore, then drain the queue with the real worker. */
+  async function invocation({ runs, maxTotalCostMicroUsd, ledgerMicroUsd, resumable = new Set() }) {
+    const budget = createDeckGymCampaignBudget({
+      maxTotalCostMicroUsd,
+      spentCostMicroUsd: await restoreDeckGymSpend({ runs, runsDir }),
+    });
+    const queue = [...runs];
+    const executed = [];
+    await deckGymWorker({
+      queue,
+      budget,
+      receipts: [],
+      isResumable: async (run) => resumable.has(run.runId),
+      executeRun: async (run) => {
+        executed.push(run.runId);
+        return { runId: run.runId, status: 'completed', backendRunIds: [`job-${run.runId}`] };
+      },
+      readLedger: async (ids) => new Map(ids.map((id) => [id, ledger(ledgerMicroUsd)])),
+      recordReservation: (run, reservation) =>
+        recordDeckGymReservation(path.join(runsDir, run.runId), reservation),
+      recordCharge: (run, charge) => recordDeckGymCharge(path.join(runsDir, run.runId), charge),
+    });
+    return { budget, executed };
+  }
+
+  const runIds = (...ids) => ids.map((runId) => ({ runId }));
+
+  it('does not let a second invocation spend a fresh cap: 1,000,000 before plus 2,000,000 after against 2,000,000', async () => {
+    const first = await invocation({
+      runs: runIds('run-1'),
+      maxTotalCostMicroUsd: 2_000_000,
+      ledgerMicroUsd: 1_000_000,
+    });
+    expect(first.budget.spentCostMicroUsd).toBe(1_000_000);
+
+    const second = await invocation({
+      runs: runIds('run-1', 'run-2', 'run-3'),
+      maxTotalCostMicroUsd: 2_000_000,
+      ledgerMicroUsd: 1_000_000,
+      resumable: new Set(['run-1']),
+    });
+    // run-1 was skipped, yet its 1,000,000 counts; run-2 spends the other 1,000,000; run-3 is refused.
+    expect(second.executed).toEqual(['run-2']);
+    expect(second.budget.spentCostMicroUsd).toBe(2_000_000);
+    expect(second.budget.stoppedBy).toBe('campaign_projected_cost_limit_reached');
+  });
+
+  it('keeps the spend of a failed run that is re-run on resume', async () => {
+    await invocation({
+      runs: runIds('run-1'),
+      maxTotalCostMicroUsd: 5_000_000,
+      ledgerMicroUsd: 300_000,
+    });
+    await invocation({
+      runs: runIds('run-1'),
+      maxTotalCostMicroUsd: 5_000_000,
+      ledgerMicroUsd: 400_000,
+    });
+    expect((await charges('run-1')).map((entry) => entry.chargedMicroUsd)).toEqual([
+      300_000, 400_000,
+    ]);
+    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(700_000);
+  });
+
+  it('charges an attempt whose process died before it was charged its full reservation', async () => {
+    await recordDeckGymReservation(path.join(runsDir, 'run-1'), 1_000_000);
+    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(1_000_000);
+    // The re-run adds its own charge on top of the dead attempt's reservation.
+    await invocation({
+      runs: runIds('run-1'),
+      maxTotalCostMicroUsd: 5_000_000,
+      ledgerMicroUsd: 200_000,
+    });
+    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(1_200_000);
+  });
+
+  it('charges a run directory from before charge records one reservation, and writes it down', async () => {
+    const legacyDir = path.join(runsDir, 'run-1');
+    await mkdir(legacyDir, { recursive: true });
+    await writeFile(path.join(legacyDir, 'run.json'), '{}');
+    expect(await restoreDeckGymSpend({ runs: runIds('run-1', 'run-2'), runsDir })).toBe(1_000_000);
+    expect(await charges('run-1')).toEqual([{ chargedMicroUsd: 1_000_000, source: 'reservation' }]);
+    // Idempotent: a second restore does not charge it again, and a re-run cannot erase it.
+    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(1_000_000);
+  });
+
+  it('charges a charges file that cannot be read back one reservation', async () => {
+    const dir = path.join(runsDir, 'run-1');
+    await mkdir(dir, { recursive: true });
+    await writeFile(path.join(dir, DECK_GYM_CHARGES_FILE), '{not json');
+    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(1_000_000);
+  });
+
+  it('charges nothing for a run that has never been started', async () => {
+    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(0);
   });
 });

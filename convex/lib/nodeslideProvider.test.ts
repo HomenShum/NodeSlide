@@ -702,3 +702,37 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     expect(JSON.stringify(result)).not.toContain('secret-456');
   });
 });
+
+describe('unknown model ids fail closed (SPEC Part A rule 10)', () => {
+  // Round 1 (Codex): both ids below resolved to the first catalog row, the paid Nebius GLM route,
+  // and the unguarded probe returned status "passed" for them.
+  it('throws for an id the catalog does not carry instead of resolving to a paid default', () => {
+    expect(() => nodeSlideAgentModel('unknown-paid' as never)).toThrow(/not in the catalog/);
+    expect(() => nodeSlideAgentModel('vendor/model-nobody-sells' as never)).toThrow(
+      /not in the catalog/,
+    );
+  });
+
+  it('resolves a free-looking unknown id to the free router row, never to a paid route', () => {
+    const route = nodeSlideAgentModel('vendor/unlisted-model:free' as never);
+    expect(route.id).toBe('openrouter/free');
+    expect(route.provider).toBe('openrouter');
+    expect(route.provider).not.toBe(nodeSlideAgentModel(NODESLIDE_NEBIUS_AGENT_MODEL).provider);
+  });
+
+  it('the unguarded probe rejects an unknown paid id before any dispatch', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () => completion('{"ok":true}'));
+    await expect(probeNodeSlideModelOnce('unknown-paid' as never, { complete })).rejects.toThrow(
+      /not in the catalog/,
+    );
+    expect(complete).not.toHaveBeenCalled();
+  });
+
+  it('the unguarded probe never sends a free-looking unknown id to a paid provider', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () => completion('{"ok":true}'));
+    await probeNodeSlideModelOnce('unknown:free' as never, { complete });
+    for (const call of complete.mock.calls) {
+      expect(call[0]).toMatchObject({ provider: 'openrouter', model: 'openrouter/free' });
+    }
+  });
+});

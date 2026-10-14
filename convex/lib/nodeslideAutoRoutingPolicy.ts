@@ -7,6 +7,7 @@ import {
   isNodeSlideAgentModelId,
   isNodeSlideReasoningEffort,
 } from '../../shared/nodeslide';
+import { nodeSlideModelPricing } from '../../shared/nodeslideRunBudget';
 
 /**
  * NodeSlide auto-routing policy — `nodeslide.auto-routing/v1`.
@@ -122,6 +123,7 @@ export interface NodeSlideEstimatedCost {
   pricing: {
     source:
       | 'pi-ai-openrouter-catalog'
+      | 'nodeslide-run-budget-ledger'
       | 'nodeslide-nebius-native-catalog'
       | 'nodeslide-deterministic';
     inputUsdPerMillionTokens: number;
@@ -835,15 +837,22 @@ function providerNativeMetadata(catalog: NodeSlideCatalogModel): RoutingModelMet
 
   const model = OPENROUTER_MODELS.get(catalog.upstreamId);
   if (!model) return null;
+  // The run-budget ledger is the repo's price of record (it is also the reservation quote and the
+  // OpenRouter max_price ceiling). The bundled pi-ai catalog is a second, older snapshot that
+  // disagreed with it on two rows (kimi-k3, glm-5.2), so a priced route is estimated at the ledger's
+  // price; pi-ai still supplies capabilities, limits and any above-threshold tier, and prices the
+  // routes the ledger does not (free and dynamic rows).
+  const ledger = nodeSlideModelPricing(catalog.id);
+  const ledgerPriced = ledger.kind === 'priced';
   return {
     input: model.input,
     reasoning: model.reasoning,
     contextWindow: model.contextWindow,
     maxTokens: model.maxTokens,
-    pricingSource: 'pi-ai-openrouter-catalog',
+    pricingSource: ledgerPriced ? 'nodeslide-run-budget-ledger' : 'pi-ai-openrouter-catalog',
     pricing: {
-      input: model.cost.input,
-      output: model.cost.output,
+      input: ledgerPriced ? ledger.inputMicroUsdPerMillionTokens / 1_000_000 : model.cost.input,
+      output: ledgerPriced ? ledger.outputMicroUsdPerMillionTokens / 1_000_000 : model.cost.output,
       tiers: (model.cost.tiers ?? []).map((tier) => ({
         inputTokensAbove: tier.inputTokensAbove,
         input: tier.input,

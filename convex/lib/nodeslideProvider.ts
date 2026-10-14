@@ -20,6 +20,7 @@ import {
   nodeSlideEditPatchStructuredOutputMode,
   nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
+import { nodeSlideModelPricing } from '../../shared/nodeslideRunBudget';
 
 export const NODESLIDE_NEBIUS_PROVIDER = 'nebius' as const;
 /** Backwards-compatible name for the default; requests may select any catalog model. */
@@ -121,6 +122,28 @@ function asOpenRouterChatCompletionsRoute(
   } as typeof model;
 }
 
+/**
+ * The run-budget ledger is the repo's price of record, so a response is priced (`usage.cost.total` ->
+ * `costMicroUsd`) at the ledger's rate: the bundled pi-ai catalog is an older snapshot and disagreed
+ * with it on glm-5.2 (0.171 / 7.2 against 0.05 / 7), which settled a near-ceiling response above the
+ * quote it was reserved at. Only input and output are replaced; cache rates and any above-threshold
+ * tier stay pi-ai's, and rows the ledger does not price (free, dynamic) are untouched.
+ */
+function priceFromLedger<T extends { id: string; cost: { input: number; output: number } }>(
+  model: T,
+): T {
+  const pricing = nodeSlideModelPricing(model.id);
+  if (pricing.kind !== 'priced') return model;
+  return {
+    ...model,
+    cost: {
+      ...model.cost,
+      input: pricing.inputMicroUsdPerMillionTokens / 1_000_000,
+      output: pricing.outputMicroUsdPerMillionTokens / 1_000_000,
+    },
+  };
+}
+
 export function openrouterProviderWithOverrides() {
   const builtin = openrouterProvider();
   const overridden = new Map(
@@ -129,6 +152,7 @@ export function openrouterProviderWithOverrides() {
   const models = builtin
     .getModels()
     .filter((model) => !overridden.has(model.id))
+    .map(priceFromLedger)
     .map(asOpenRouterChatCompletionsRoute);
   return createProvider({
     id: 'openrouter',

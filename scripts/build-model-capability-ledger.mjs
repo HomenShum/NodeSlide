@@ -198,7 +198,13 @@ export function summarizeModel({
     confidence: {
       cognitiveBehavior: 'low — no plan or reasoning traces captured',
       toolExecution: 'low — only browser creation and export were observed',
-      artifactQuality: evaluations.length >= 20 ? 'high' : 'medium',
+      // No evaluated runs is no evidence about artifact quality: report that, not a middling grade.
+      artifactQuality:
+        evaluations.length === 0
+          ? 'none — no evaluated runs'
+          : evaluations.length >= 20
+            ? 'high'
+            : 'medium',
       routingRecommendation: live.length >= 6 ? 'medium' : 'low',
     },
     status: 'provisional — requires skill-on versus skill-off ablation',

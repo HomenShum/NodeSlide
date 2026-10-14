@@ -338,8 +338,26 @@ export function isNodeSlideOfferedAgentModelId(value: unknown): value is NodeSli
   return NODESLIDE_OFFERED_AGENT_MODELS.some((model) => model.id === value);
 }
 
+/** The verified free constant a free-looking unknown id resolves to (Part A rule 10). */
+const NODESLIDE_FREE_FALLBACK_MODEL_ID = 'openrouter/free' as const;
+
+/**
+ * Resolves a catalog id to its route. Cost class is preserved and an unknown id fails closed: an id
+ * the catalog does not carry never becomes a paid default (it used to resolve to the first row, the
+ * paid Nebius GLM route). A free-looking unknown (`:free` suffix) resolves to the free router row;
+ * every other unknown throws. The public Convex validators and `isNodeSlideAgentModelId` reject such
+ * ids at the API boundary first.
+ */
 export function nodeSlideAgentModel(modelId: NodeSlideAgentModelId) {
-  return NODESLIDE_AGENT_MODELS.find((model) => model.id === modelId) ?? NODESLIDE_AGENT_MODELS[0];
+  const route = NODESLIDE_AGENT_MODELS.find((model) => model.id === modelId);
+  if (route) return route;
+  if (typeof modelId === 'string' && (modelId as string).endsWith(':free')) {
+    const free = NODESLIDE_AGENT_MODELS.find(
+      (model) => model.id === NODESLIDE_FREE_FALLBACK_MODEL_ID,
+    );
+    if (free) return free;
+  }
+  throw new Error(`Unknown NodeSlide model "${String(modelId)}": it is not in the catalog.`);
 }
 
 export function nodeSlideModelSupportsReasoningEffort(

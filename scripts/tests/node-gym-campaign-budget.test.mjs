@@ -54,19 +54,13 @@ function ledgerReceipt(actual, { reserved = 0, unreconciled = 0 } = {}) {
 }
 
 /** The campaign loop of `scripts/run-node-gym.mjs`, with a fake executor and a fake backend ledger. */
-async function runCampaign({
-  plans,
-  perRunMaxCostMicroUsd,
-  maxTotalCostMicroUsd,
-  execute,
-  ledger,
-}) {
+async function runCampaign({ plans, maxTotalCostMicroUsd, execute, ledger }) {
   let spentCostMicroUsd = 0;
   let reservedUnknownMicroUsd = 0;
   let stoppedBy = null;
   const dispatched = [];
   for (const plan of plans) {
-    const reservationMicroUsd = nodeGymRunReservationMicroUsd(plan, perRunMaxCostMicroUsd);
+    const reservationMicroUsd = nodeGymRunReservationMicroUsd(plan);
     const circuit = shouldStopCampaign({
       spentCostMicroUsd,
       maxTotalCostMicroUsd,
@@ -108,7 +102,8 @@ describe('the mirrored backend per-run cap cannot drift from the backend', () =>
     expect(nodeGymRunReservationMicroUsd(free('openrouter/free'))).toBe(0);
     expect(nodeGymRunReservationMicroUsd(free('deterministic', 'local'))).toBe(0);
     expect(nodeGymRunReservationMicroUsd(paidPlan('r'))).toBe(1_000_000);
-    expect(nodeGymRunReservationMicroUsd(paidPlan('r'), 180_000)).toBe(180_000);
+    // No override exists: a reservation below the enforced cap cannot be requested.
+    expect(nodeGymRunReservationMicroUsd(paidPlan('r'), 0)).toBe(1_000_000);
   });
 });
 
@@ -116,15 +111,14 @@ describe('a run is charged what the backend ledger recorded, or its full reserva
   it('(a) a crashed run with no readable receipt leaves its full reservation in the meter', async () => {
     const outcome = await runCampaign({
       plans: [paidPlan('run-crash')],
-      perRunMaxCostMicroUsd: 180_000,
       maxTotalCostMicroUsd: 1_000_000,
       execute: async () => {
         throw new Error('executor process killed at its timeout');
       },
       ledger: new Map(),
     });
-    expect(outcome.spentCostMicroUsd).toBe(180_000);
-    expect(outcome.reservedUnknownMicroUsd).toBe(180_000);
+    expect(outcome.spentCostMicroUsd).toBe(1_000_000);
+    expect(outcome.reservedUnknownMicroUsd).toBe(1_000_000);
   });
 
   it('(b) the same failure with a readable ledger receipt is charged the ledger figure', async () => {
@@ -132,7 +126,6 @@ describe('a run is charged what the backend ledger recorded, or its full reserva
     // runs it had already started, so the ledger (not the whole reservation) is the charge.
     const outcome = await runCampaign({
       plans: [paidPlan('run-ledger')],
-      perRunMaxCostMicroUsd: 180_000,
       maxTotalCostMicroUsd: 1_000_000,
       execute: async () => ({ status: 'failed', backendRunIds: ['job-1', 'job-2'] }),
       ledger: new Map([
@@ -184,6 +177,30 @@ describe('a run is charged what the backend ledger recorded, or its full reserva
     expect(charge).toEqual({ chargedMicroUsd: 60_000, source: 'ledger' });
   });
 
+  it('keeps the full reservation while the ledger row is still open: a job outlives a UI timeout', async () => {
+    // The browser gave up (export timed out) but the backend job is still running and still billing.
+    const open = { ...ledgerReceipt(0), status: 'open' };
+    const charge = await chargeNodeGymAttempt({
+      reservationMicroUsd: 1_000_000,
+      result: { status: 'failed', issueCodes: ['pptx_export_timeout'], backendRunIds: ['job-1'] },
+      readLedger: async () => new Map([['job-1', open]]),
+    });
+    expect(charge).toEqual({ chargedMicroUsd: 1_000_000, source: 'reservation' });
+  });
+
+  it('keeps the reservation when any one of several named ledger rows is not finalized', async () => {
+    const charge = await chargeNodeGymAttempt({
+      reservationMicroUsd: 1_000_000,
+      result: { status: 'completed', backendRunIds: ['job-1', 'job-2'] },
+      readLedger: async () =>
+        new Map([
+          ['job-1', ledgerReceipt(10_000)],
+          ['job-2', { ...ledgerReceipt(10_000), status: 'open' }],
+        ]),
+    });
+    expect(charge).toEqual({ chargedMicroUsd: 1_000_000, source: 'reservation' });
+  });
+
   it('charges a zero reservation for a free route even when its result is a failure', async () => {
     const charge = await chargeNodeGymAttempt({
       reservationMicroUsd: 0,
@@ -194,11 +211,13 @@ describe('a run is charged what the backend ledger recorded, or its full reserva
   });
 });
 
-describe('(c) Codex figures: cap 100,000 micro-USD, binding backend cap 180,000', () => {
+// Codex's v4 figures were a 100,000 cap against a run whose binding backend cap was 180,000. The
+// binding cap cannot be chosen (round 1: the per-run flag was removed), so the same scenario now runs
+// at the real 1,000,000 cap; the cap stays 100,000. The refusal is the same and the margin larger.
+describe('(c) cap 100,000 micro-USD against the binding backend cap of 1,000,000', () => {
   it('refuses the first run before dispatch, because its reservation alone exceeds the cap', async () => {
     const outcome = await runCampaign({
       plans: [paidPlan('run-1'), paidPlan('run-2')],
-      perRunMaxCostMicroUsd: 180_000,
       maxTotalCostMicroUsd: 100_000,
       execute: async () => {
         throw new Error('must never be dispatched');
@@ -223,14 +242,14 @@ describe('(c) Codex figures: cap 100,000 micro-USD, binding backend cap 180,000'
         nextRunMaxCostMicroUsd: 0,
       }).stop,
     ).toBe(false);
-    // Under the new rule the crash is charged its 180,000 reservation and the campaign is over.
+    // Under the new rule the crash is charged its reservation and the campaign is over.
     expect(
       shouldStopCampaign({
-        spentCostMicroUsd: 180_000,
+        spentCostMicroUsd: 1_000_000,
         maxTotalCostMicroUsd: 100_000,
         failures: 1,
         maxFailures: 2,
-        nextRunMaxCostMicroUsd: 180_000,
+        nextRunMaxCostMicroUsd: 1_000_000,
       }),
     ).toEqual({ stop: true, issueCode: 'campaign_cost_limit_reached' });
   });
@@ -238,8 +257,7 @@ describe('(c) Codex figures: cap 100,000 micro-USD, binding backend cap 180,000'
   it('a campaign that can afford one run admits it, charges the ledger, and refuses the next on projection', async () => {
     const outcome = await runCampaign({
       plans: [paidPlan('run-1'), paidPlan('run-2'), paidPlan('run-3')],
-      perRunMaxCostMicroUsd: 180_000,
-      maxTotalCostMicroUsd: 400_000,
+      maxTotalCostMicroUsd: 1_200_000,
       execute: async (plan) => ({ status: 'completed', backendRunIds: [`job-${plan.runId}`] }),
       ledger: new Map([
         ['job-run-1', ledgerReceipt(150_000)],
@@ -248,7 +266,7 @@ describe('(c) Codex figures: cap 100,000 micro-USD, binding backend cap 180,000'
     });
     expect(outcome.dispatched).toEqual(['run-1', 'run-2']);
     expect(outcome.spentCostMicroUsd).toBe(300_000);
-    // 300,000 spent + 180,000 reserved for run-3 > 400,000.
+    // 300,000 spent + 1,000,000 reserved for run-3 > 1,200,000.
     expect(outcome.stoppedBy).toBe('campaign_projected_cost_limit_reached');
   });
 });

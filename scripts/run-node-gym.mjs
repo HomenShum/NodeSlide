@@ -12,7 +12,6 @@ import {
 import { buildNodeGymMatrix } from './lib/node-gym-matrix-core.mjs';
 import { redactNodeGymDiagnostic } from './lib/node-gym-redaction-core.mjs';
 import {
-  NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD,
   NODE_GYM_EXECUTOR_RESULT_SCHEMA,
   applyPairSafeLimit,
   assertNodeGymAttemptEvidence,
@@ -62,7 +61,6 @@ Execution:
   --allow-live           Required by the production UI executor
   --campaign-id <id>
   --max-total-cost-micro-usd <n>
-  --per-run-max-cost-micro-usd <n>  Backend ledger cap each run reserves (default 1000000)
   --convex-url <url>     Production Convex deployment the ledger is read from
   --include-disabled     Run models whose gym.json row sets execution.disabled
   --max-failures <n>
@@ -151,16 +149,11 @@ const maxTotalCostMicroUsd = nonNegativeInteger(
 );
 if (maxTotalCostMicroUsd === null)
   throw new Error('An explicit --max-total-cost-micro-usd is required for full execution.');
-const perRunMaxCostMicroUsd = nonNegativeInteger(
-  option('per-run-max-cost-micro-usd'),
-  NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD,
-);
-// The deterministic and recovery executors issue no metered backend request (recovery re-reads a
-// finished campaign's artifacts), so they reserve nothing; the UI executor and any custom script do.
-const reservationFor = (plan) =>
-  ['deterministic', 'recovery'].includes(executor)
-    ? 0
-    : nodeGymRunReservationMicroUsd(plan, perRunMaxCostMicroUsd);
+// A run reserves the backend ledger cap that binds it (1 USD, mirrored in node-gym-runner-core.mjs and
+// pinned to the backend by a test). It is not a flag: a reservation below the enforced cap lets the
+// campaign dispatch paid work it has not budgeted for. Only local, `:free` and `openrouter/free`
+// routes reserve 0, whichever executor runs them.
+const reservationFor = (plan) => nodeGymRunReservationMicroUsd(plan);
 const convexUrl =
   option('convex-url') ??
   process.env.NODE_GYM_PROD_CONVEX_URL ??
@@ -185,7 +178,6 @@ const campaignPlan = {
   selectedRunIds: selected.map((run) => run.runId),
   filters,
   maxTotalCostMicroUsd,
-  perRunMaxCostMicroUsd,
   maxFailures,
   maxAttempts,
   fullMatrixExplicitlyConfirmed: subset === 'all' && fullConfirmed,

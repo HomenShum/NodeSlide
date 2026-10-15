@@ -318,6 +318,25 @@ export function nodeSlideDefaultReasoningEffort(
   return 'defaultEffort' in route ? route.defaultEffort : NODESLIDE_DEFAULT_REASONING_EFFORT;
 }
 
+/**
+ * The effort to show after the model picker changes. An effort still sitting at the previous row's
+ * default follows the new row's default (Opus 5.5 = medium, the rest high); an effort the person
+ * chose is kept when the new row supports it, and falls back to the global default when it does not.
+ */
+export function nodeSlideEffortAfterModelChange(
+  previousModel: NodeSlideAgentModelId,
+  nextModel: NodeSlideAgentModelId,
+  effort: NodeSlideReasoningEffort,
+): NodeSlideReasoningEffort {
+  const carried =
+    effort === nodeSlideDefaultReasoningEffort(previousModel)
+      ? nodeSlideDefaultReasoningEffort(nextModel)
+      : effort;
+  return nodeSlideModelSupportsReasoningEffort(nextModel, carried)
+    ? carried
+    : NODESLIDE_DEFAULT_REASONING_EFFORT;
+}
+
 export function isNodeSlideReasoningEffort(value: unknown): value is NodeSlideReasoningEffort {
   return NODESLIDE_REASONING_EFFORTS.some((effort) => effort.id === value);
 }

@@ -73,6 +73,7 @@ import {
   nodeSlideAgentModel,
   nodeSlideDefaultModelForProviderMode,
   nodeSlideDefaultReasoningEffort,
+  nodeSlideEffortAfterModelChange,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
   unhandledPatchOperation,
@@ -579,9 +580,10 @@ export function AiInspector<CommandId extends string = string>({
     if (!isNodeSlideOfferedAgentModelId(value)) return;
     setProviderModel(value);
     setProviderMode(nodeSlideProviderModeForModel(value));
-    if (!nodeSlideModelSupportsReasoningEffort(value, providerEffort)) {
-      setProviderEffort('high');
-      window.localStorage.setItem('nodeslide.agent-effort', 'high');
+    const nextEffort = nodeSlideEffortAfterModelChange(providerModel, value, providerEffort);
+    if (nextEffort !== providerEffort) {
+      setProviderEffort(nextEffort);
+      window.localStorage.setItem('nodeslide.agent-effort', nextEffort);
     }
     window.localStorage.setItem('nodeslide.agent-model', value);
   };

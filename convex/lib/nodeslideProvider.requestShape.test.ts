@@ -20,6 +20,7 @@ import {
   type NodeSlideAgentModelId,
   nodeSlideAgentModel,
   nodeSlideDefaultReasoningEffort,
+  nodeSlideEffortAfterModelChange,
   nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
 import {
@@ -242,6 +243,25 @@ describe('the new catalog rows build refresh-safe requests', () => {
         'high',
       ),
     ).toMatchObject({ providerEffort: 'high' });
+  });
+
+  it('the model pickers move an untouched effort to the new row default and keep a chosen one', () => {
+    // Untouched (still the previous row's default): follows the new row. Opus 5.5 <-> others.
+    expect(nodeSlideEffortAfterModelChange('moonshotai/kimi-k3', WIRE_ID.opus55, 'high')).toBe(
+      'medium',
+    );
+    expect(nodeSlideEffortAfterModelChange(WIRE_ID.opus55, WIRE_ID.sonnet55, 'medium')).toBe(
+      'high',
+    );
+    // Chosen (not the previous default): kept when the new row supports it.
+    expect(nodeSlideEffortAfterModelChange(WIRE_ID.sonnet55, WIRE_ID.opus55, 'xhigh')).toBe(
+      'xhigh',
+    );
+    expect(nodeSlideEffortAfterModelChange(WIRE_ID.sonnet55, WIRE_ID.opus55, 'low')).toBe('low');
+    // Unsupported on the new row: the global default, as before.
+    expect(nodeSlideEffortAfterModelChange(WIRE_ID.sonnet55, 'moonshotai/kimi-k3', 'xhigh')).toBe(
+      NODESLIDE_DEFAULT_REASONING_EFFORT,
+    );
   });
 
   it('every offered row is a priced, temperature-free-or-declared route', () => {

@@ -21,6 +21,7 @@ import {
   type NodeSlideAgentModelId,
   type NodeSlideReasoningEffort,
   nodeSlideAgentModel,
+  nodeSlideEffortAfterModelChange,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
 } from '../../../../shared/nodeslide';
@@ -301,11 +302,16 @@ export function NodeSlideLanding({
                   onChange={(event) => {
                     const model = event.target.value as 'deterministic' | NodeSlideAgentModelId;
                     setGeneration(model);
-                    if (
-                      model !== 'deterministic' &&
-                      !nodeSlideModelSupportsReasoningEffort(model, reasoningEffort)
-                    ) {
-                      setReasoningEffort('high');
+                    if (model !== 'deterministic') {
+                      setReasoningEffort(
+                        nodeSlideEffortAfterModelChange(
+                          generation === 'deterministic'
+                            ? NODESLIDE_DEFAULT_AGENT_MODEL
+                            : generation,
+                          model,
+                          reasoningEffort,
+                        ),
+                      );
                     }
                     onClearError?.();
                   }}

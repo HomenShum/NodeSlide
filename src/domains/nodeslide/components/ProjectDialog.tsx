@@ -31,6 +31,8 @@ import {
   type NodeSlideReasoningEffort,
   isNodeSlideOfferedAgentModelId,
   nodeSlideAgentModel,
+  nodeSlideDefaultReasoningEffort,
+  nodeSlideEffortAfterModelChange,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
 } from '../../../../shared/nodeslide';
@@ -193,7 +195,7 @@ export function ProjectDialog({
   const [providerModel, setProviderModel] =
     useState<NodeSlideAgentModelId>(initialDraftProviderModel);
   const [providerEffort, setProviderEffort] = useState<NodeSlideReasoningEffort>(
-    initialDraft?.providerEffort ?? NODESLIDE_DEFAULT_REASONING_EFFORT,
+    initialDraft?.providerEffort ?? nodeSlideDefaultReasoningEffort(initialDraftProviderModel),
   );
   const [grantedProviderConsent, setGrantedProviderConsent] =
     useState<NodeSlideBriefProviderConsent | null>(null);
@@ -241,7 +243,9 @@ export function ProjectDialog({
       setPrompt(initialDraft?.prompt ?? '');
       setProviderMode(initialDraftProviderMode);
       setProviderModel(initialDraftProviderModel);
-      setProviderEffort(initialDraft?.providerEffort ?? NODESLIDE_DEFAULT_REASONING_EFFORT);
+      setProviderEffort(
+        initialDraft?.providerEffort ?? nodeSlideDefaultReasoningEffort(initialDraftProviderModel),
+      );
       setAttachments(initialDraft?.attachments ?? []);
       setAttachmentError(null);
     }
@@ -653,9 +657,9 @@ export function ProjectDialog({
                       const model = event.target.value as NodeSlideAgentModelId;
                       setProviderModel(model);
                       setProviderMode(nodeSlideProviderModeForModel(model));
-                      if (!nodeSlideModelSupportsReasoningEffort(model, providerEffort)) {
-                        setProviderEffort('high');
-                      }
+                      setProviderEffort(
+                        nodeSlideEffortAfterModelChange(providerModel, model, providerEffort),
+                      );
                       setGrantedProviderConsent(null);
                     }}
                   >

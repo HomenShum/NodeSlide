@@ -337,6 +337,20 @@ export function nodeSlideEffortAfterModelChange(
     : NODESLIDE_DEFAULT_REASONING_EFFORT;
 }
 
+/**
+ * The effort a composer shows when it restores a saved model: the saved effort when it is a real
+ * effort the model supports, otherwise that model's own default (Opus 5.5 = medium).
+ */
+export function nodeSlideRestoredReasoningEffort(
+  modelId: NodeSlideAgentModelId,
+  savedEffort: unknown,
+): NodeSlideReasoningEffort {
+  return isNodeSlideReasoningEffort(savedEffort) &&
+    nodeSlideModelSupportsReasoningEffort(modelId, savedEffort)
+    ? savedEffort
+    : nodeSlideDefaultReasoningEffort(modelId);
+}
+
 export function isNodeSlideReasoningEffort(value: unknown): value is NodeSlideReasoningEffort {
   return NODESLIDE_REASONING_EFFORTS.some((effort) => effort.id === value);
 }

@@ -352,11 +352,48 @@ describe('deck-gym campaign cap binds the whole campaign across invocations', ()
     expect(await restoreDeckGymSpend({ runsDir })).toBe(1_000_000);
   });
 
-  it('charges a charges file that cannot be read back one reservation', async () => {
-    const dir = path.join(runsDir, 'run-1');
-    await mkdir(dir, { recursive: true });
-    await writeFile(path.join(dir, DECK_GYM_CHARGES_FILE), '{not json');
-    expect(await restoreDeckGymSpend({ runsDir })).toBe(1_000_000);
+  // Before: an unreadable charges file was restored as ONE reservation, so a two-attempt history
+  // (2,000,000 micro-USD) came back as 1,000,000 and, against a 2,000,000 cap, one more paid run was
+  // dispatched (true exposure 3,000,000). The history is unknown, so the campaign refuses instead.
+  describe.each([
+    ['is not valid JSON', (dir) => writeFile(path.join(dir, DECK_GYM_CHARGES_FILE), '{not json')],
+    [
+      'fails the schema',
+      (dir) =>
+        writeFile(
+          path.join(dir, DECK_GYM_CHARGES_FILE),
+          JSON.stringify({ schemaVersion: 'other/v9', charges: [] }),
+        ),
+    ],
+    [
+      'has a negative charge',
+      (dir) =>
+        writeFile(
+          path.join(dir, DECK_GYM_CHARGES_FILE),
+          JSON.stringify({
+            schemaVersion: 'nodeslide.deck-gym-run-charges/v1',
+            charges: [{ chargedMicroUsd: -1, source: 'ledger' }],
+          }),
+        ),
+    ],
+    // Stands in for EACCES / EBUSY: any read error other than ENOENT (here EISDIR).
+    ['cannot be read (not ENOENT)', (dir) => mkdir(path.join(dir, DECK_GYM_CHARGES_FILE))],
+  ])('a charges file that %s', (_name, corrupt) => {
+    it('stops the campaign instead of counting one reservation, and keeps the file', async () => {
+      const dir = path.join(runsDir, 'run-1');
+      await recordDeckGymReservation(dir, 1_000_000);
+      await recordDeckGymReservation(dir, 1_000_000);
+      expect(await restoreDeckGymSpend({ runsDir })).toBe(2_000_000);
+      await rm(path.join(dir, DECK_GYM_CHARGES_FILE));
+      await corrupt(dir);
+
+      await expect(restoreDeckGymSpend({ runsDir })).rejects.toThrow(/spend is unknown/u);
+      // The lost history is not overwritten by a new reservation or charge either.
+      await expect(recordDeckGymReservation(dir, 1_000_000)).rejects.toThrow(/spend is unknown/u);
+      await expect(
+        recordDeckGymCharge(dir, { chargedMicroUsd: 1, source: 'ledger' }),
+      ).rejects.toThrow(/spend is unknown/u);
+    });
   });
 
   it('counts the spend of runs this invocation did not select (a narrower --limit re-run)', async () => {

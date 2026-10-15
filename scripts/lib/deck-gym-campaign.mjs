@@ -68,42 +68,54 @@ const DECK_GYM_CHARGES_SCHEMA = 'nodeslide.deck-gym-run-charges/v1';
  * Every charge one run directory has incurred, oldest first. Append-only in spirit: an attempt writes
  * its reservation before it dispatches and replaces that entry with the ledger figure when it ends,
  * so an attempt whose process died stays charged at its reservation and a re-run adds to it.
- * A file that cannot be read back is one reservation: unknown spend is never a zero.
+ * A file that cannot be read back throws: the history it held is unknown, any figure made up for it
+ * (zero, or one reservation) can be lower than what it held, and every caller either restores spend
+ * or appends to the history, so a made-up figure would admit paid runs past the cap or overwrite the
+ * lost history for good. Only a missing file (`null`) is a run with no charges yet.
  */
 export async function readDeckGymRunCharges(runDir) {
+  const file = path.join(runDir, DECK_GYM_CHARGES_FILE);
   let text;
   try {
-    text = await readFile(path.join(runDir, DECK_GYM_CHARGES_FILE), 'utf8');
+    text = await readFile(file, 'utf8');
   } catch (error) {
     if (error?.code === 'ENOENT') return null;
-    return [{ chargedMicroUsd: NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD, source: 'reservation' }];
+    throw new Error(
+      `Deck Gym charge history ${file} cannot be read (${error?.code ?? error?.message}); spend is unknown, so the campaign stops. Restore the file or remove the run directory deliberately.`,
+      { cause: error },
+    );
   }
+  const unreadable = (why) =>
+    new Error(
+      `Deck Gym charge history ${file} is ${why}; spend is unknown, so the campaign stops. Restore the file or remove the run directory deliberately.`,
+    );
+  let parsed;
   try {
-    const parsed = JSON.parse(text);
-    const charges = parsed?.charges;
-    if (
-      parsed?.schemaVersion !== DECK_GYM_CHARGES_SCHEMA ||
-      !Array.isArray(charges) ||
-      !charges.every(
-        (charge) =>
-          Number.isSafeInteger(charge?.chargedMicroUsd) &&
-          charge.chargedMicroUsd >= 0 &&
-          ['ledger', 'reservation'].includes(charge.source),
-      )
-    )
-      throw new Error('invalid');
-    return charges.map(({ chargedMicroUsd, source }) => ({ chargedMicroUsd, source }));
+    parsed = JSON.parse(text);
   } catch {
-    return [{ chargedMicroUsd: NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD, source: 'reservation' }];
+    throw unreadable('not valid JSON');
   }
+  const charges = parsed?.charges;
+  if (
+    parsed?.schemaVersion !== DECK_GYM_CHARGES_SCHEMA ||
+    !Array.isArray(charges) ||
+    !charges.every(
+      (charge) =>
+        Number.isSafeInteger(charge?.chargedMicroUsd) &&
+        charge.chargedMicroUsd >= 0 &&
+        ['ledger', 'reservation'].includes(charge.source),
+    )
+  )
+    throw unreadable('not a valid charge history');
+  return charges.map(({ chargedMicroUsd, source }) => ({ chargedMicroUsd, source }));
 }
 
 /**
  * The whole history is rewritten on every change, so the rewrite must be atomic: a plain truncating
- * write interrupted partway leaves a file that cannot be read back, which restore charges as ONE
- * reservation however many attempts it held (2,000,000 micro-USD of history came back as 1,000,000
- * and the next run was admitted under the cap). Temp file plus rename leaves either the old history
- * or the new one, never a torn file.
+ * write interrupted partway leaves a file that cannot be read back, and an unreadable history stops
+ * the campaign (it used to come back as ONE reservation, so 2,000,000 micro-USD of history became
+ * 1,000,000 and the next run was admitted under the cap). Temp file plus rename leaves either the old
+ * history or the new one, never a torn file.
  */
 export async function writeDeckGymRunCharges(runDir, charges) {
   await mkdir(runDir, { recursive: true });

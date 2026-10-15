@@ -37,6 +37,10 @@ import type {
   ImageContent,
   TextContent,
 } from '@earendil-works/pi-ai/compat';
+import {
+  isNodeSlideAgentModelId,
+  nodeSlideDefaultReasoningEffort,
+} from '../../../shared/nodeslide.js';
 import { nodeSlideLedgerPricedCost } from '../../../shared/nodeslideRunBudget.js';
 
 /**
@@ -167,7 +171,13 @@ export async function call(opts: CallOptions): Promise<CallResult> {
     ],
   };
 
+  // A NodeSlide catalog row states its own default effort (Opus 5.5 = medium). Left unset, pi-ai
+  // sends 'high' for every managed-effort Claude row, which is not the row's default.
+  const rowEffort = isNodeSlideAgentModelId(opts.modelId)
+    ? nodeSlideDefaultReasoningEffort(opts.modelId)
+    : undefined;
   const result = await pi.complete(model, context, {
+    ...(rowEffort !== undefined ? { effort: rowEffort } : {}),
     ...(opts.signal !== undefined ? { signal: opts.signal } : {}),
     ...(opts.maxTokens !== undefined ? { maxOutputTokens: opts.maxTokens } : {}),
   });

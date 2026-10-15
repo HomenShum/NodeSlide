@@ -54,7 +54,6 @@ import {
   type Deck,
   type DeckPatch,
   NODESLIDE_DEFAULT_AGENT_MODEL,
-  NODESLIDE_DEFAULT_REASONING_EFFORT,
   NODESLIDE_OFFERED_AGENT_MODELS,
   NODESLIDE_REASONING_EFFORTS,
   NODESLIDE_SCOPE_SLIDE_LIMIT,
@@ -76,6 +75,7 @@ import {
   nodeSlideEffortAfterModelChange,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
+  nodeSlideRestoredReasoningEffort,
   unhandledPatchOperation,
 } from '../../../../shared/nodeslide';
 import { nodeSlideProposalOriginAttribute } from '../../../../shared/nodeslideProposalOrigin';
@@ -305,8 +305,9 @@ export function AiInspector<CommandId extends string = string>({
   const [providerModel, setProviderModel] = useState<NodeSlideAgentModelId>(
     offeredInitialProviderModel,
   );
+  const openedWithModel = useRef(offeredInitialProviderModel);
   const [providerEffort, setProviderEffort] = useState<NodeSlideReasoningEffort>(
-    NODESLIDE_DEFAULT_REASONING_EFFORT,
+    nodeSlideDefaultReasoningEffort(offeredInitialProviderModel),
   );
   // Zero-friction consent: an external model is disclosed by the always-visible
   // model pill, so choosing it and sending IS the consent. The consent token is
@@ -369,22 +370,18 @@ export function AiInspector<CommandId extends string = string>({
 
   useEffect(() => {
     const stored = window.localStorage.getItem('nodeslide.agent-model');
-    const storedModel = isNodeSlideOfferedAgentModelId(stored)
-      ? stored
-      : NODESLIDE_DEFAULT_AGENT_MODEL;
+    // The model in force: the saved one, else the one this composer was opened with.
+    const storedModel = isNodeSlideOfferedAgentModelId(stored) ? stored : openedWithModel.current;
     if (isNodeSlideOfferedAgentModelId(stored)) {
       setProviderModel(storedModel);
       setProviderMode(nodeSlideProviderModeForModel(storedModel));
     }
-    const storedEffort = window.localStorage.getItem('nodeslide.agent-effort');
-    if (
-      NODESLIDE_REASONING_EFFORTS.some((effort) => effort.id === storedEffort) &&
-      nodeSlideModelSupportsReasoningEffort(storedModel, storedEffort as NodeSlideReasoningEffort)
-    ) {
-      setProviderEffort(storedEffort as NodeSlideReasoningEffort);
-    } else {
-      setProviderEffort('high');
-    }
+    setProviderEffort(
+      nodeSlideRestoredReasoningEffort(
+        storedModel,
+        window.localStorage.getItem('nodeslide.agent-effort'),
+      ),
+    );
   }, []);
 
   useEffect(() => {

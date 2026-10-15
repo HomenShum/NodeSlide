@@ -22,6 +22,7 @@ import {
   nodeSlideDefaultReasoningEffort,
   nodeSlideEffortAfterModelChange,
   nodeSlideModelSupportsReasoningEffort,
+  nodeSlideRestoredReasoningEffort,
 } from '../../shared/nodeslide';
 import {
   callNodeSlideFreeJson,
@@ -262,6 +263,17 @@ describe('the new catalog rows build refresh-safe requests', () => {
     expect(nodeSlideEffortAfterModelChange(WIRE_ID.sonnet55, 'moonshotai/kimi-k3', 'xhigh')).toBe(
       NODESLIDE_DEFAULT_REASONING_EFFORT,
     );
+  });
+
+  it('a composer restoring a saved model without a saved effort shows that row default', () => {
+    // Before: the inspector fell back to a hard-coded 'high', so a saved Opus 5.5 showed and sent high.
+    expect(nodeSlideRestoredReasoningEffort(WIRE_ID.opus55, null)).toBe('medium');
+    expect(nodeSlideRestoredReasoningEffort(WIRE_ID.sonnet55, null)).toBe('high');
+    expect(nodeSlideRestoredReasoningEffort('moonshotai/kimi-k3', 'not-an-effort')).toBe('high');
+    // A saved effort the row supports is kept; one it does not support falls to the row default.
+    expect(nodeSlideRestoredReasoningEffort(WIRE_ID.opus55, 'xhigh')).toBe('xhigh');
+    expect(nodeSlideRestoredReasoningEffort(WIRE_ID.opus55, 'low')).toBe('low');
+    expect(nodeSlideRestoredReasoningEffort('moonshotai/kimi-k3', 'xhigh')).toBe('high');
   });
 
   it('every offered row is a priced, temperature-free-or-declared route', () => {

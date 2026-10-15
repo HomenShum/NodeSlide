@@ -97,12 +97,37 @@ export const NODESLIDE_OPENROUTER_MODEL_OVERRIDES: readonly Model<'openai-comple
   NODESLIDE_KIMI_K3,
 ];
 
+const OPENROUTER_CHAT_COMPLETIONS_BASE_URL = 'https://openrouter.ai/api/v1';
+
+/**
+ * pi-ai 1.1.0 ships OpenRouter's Claude rows as `anthropic-messages` with base URL
+ * `https://openrouter.ai/api`. This provider speaks OpenRouter's normalized chat-completions
+ * contract for every route (reasoning.effort, max_price, response_format ride in that payload), so a
+ * Claude row left as the bundled catalog has it would be POSTed to `/api/chat/completions`, which is
+ * not an OpenRouter endpoint. Pin such rows to the chat-completions API and `/api/v1`, with the same
+ * compat pi-ai 0.80.6 carried for them (Anthropic cache_control on OpenRouter's reasoning format).
+ */
+function asOpenRouterChatCompletionsRoute(
+  model: ReturnType<ReturnType<typeof openrouterProvider>['getModels']>[number],
+): ReturnType<ReturnType<typeof openrouterProvider>['getModels']>[number] {
+  if (model.api === 'openai-completions') return model;
+  return {
+    ...model,
+    api: 'openai-completions',
+    baseUrl: OPENROUTER_CHAT_COMPLETIONS_BASE_URL,
+    compat: { thinkingFormat: 'openrouter', cacheControlFormat: 'anthropic' },
+  } as typeof model;
+}
+
 export function openrouterProviderWithOverrides() {
   const builtin = openrouterProvider();
   const overridden = new Map(
     NODESLIDE_OPENROUTER_MODEL_OVERRIDES.map((model) => [model.id, model] as const),
   );
-  const models = builtin.getModels().filter((model) => !overridden.has(model.id));
+  const models = builtin
+    .getModels()
+    .filter((model) => !overridden.has(model.id))
+    .map(asOpenRouterChatCompletionsRoute);
   return createProvider({
     id: 'openrouter',
     name: 'OpenRouter',

@@ -478,16 +478,17 @@ export type NodeSlideRunBudgetPostflightResult =
  * SOURCE:   https://openrouter.ai/api/v1/models — the provider's own machine
  *           catalog, not a docs page, not a pricing page, not a paste from a
  *           conversation. Every row below was read out of one response body.
- * FETCHED:  2026-10-14T16:03:00Z (see NODESLIDE_MODEL_PRICING_VERIFIED_AT). Every priced row,
- *           including the four added by the model refresh, was re-read from that one
- *           response; the rows that moved are kimi-k3, glm-5.2, gpt-5.6-sol and
- *           gpt-5.6-terra. The price below is the catalog's listed (cheapest healthy
- *           endpoint) price and is ALSO the `max_price` routing ceiling sent to
- *           OpenRouter (`nodeslideBudgetedProvider.ts`), so it bounds both the
- *           reservation and the bill; a ceiling below every live endpoint would make a
- *           route unroutable, which is why it is refreshed from the live catalog and
- *           never typed from memory. GET /api/v1/models/{id}/endpoints, read in the same
- *           minute, was used to confirm that endpoints exist at or below each ceiling.
+ * FETCHED:  2026-10-14T16:03:00Z (see NODESLIDE_MODEL_PRICING_VERIFIED_AT). The four rows
+ *           added by the model refresh, and gpt-5.6-terra, were read from that one response.
+ *           moonshotai/kimi-k3, z-ai/glm-5.2 and openai/gpt-5.6-sol were re-read and
+ *           deliberately NOT moved off the values they had on main (see their rows).
+ *           The price below is ALSO the `max_price` routing ceiling sent to OpenRouter
+ *           (`nodeslideBudgetedProvider.ts`), so it bounds both the reservation and the
+ *           bill. The /models listing price is the cheapest endpoint's, so a row copied
+ *           from it can sit below most live endpoints and leave a route with one to three
+ *           providers, or none: each row is therefore checked against
+ *           GET /api/v1/models/{id}/endpoints, and the endpoint count at or below the
+ *           ceiling is part of the evidence for changing one.
  * UNIT:     `pricing.prompt` / `pricing.completion` are USD per single token.
  *           This table stores integer micro-USD per MILLION tokens, so every
  *           value is the catalog string multiplied by 1e12. Integers only: the
@@ -577,19 +578,34 @@ export const NODESLIDE_MODEL_PRICING = {
     reason: 'provider_pricing_not_pinned',
     source: 'nebius_private_catalog',
   },
+  // Held at main's ceiling, not the /models listing (0.7 / 15 on 2026-10-14; 0.45 / 16.5 on
+  // 2026-10-15; the spec's 0.64 / 13.5). This is the production default, and the listing is the
+  // cheapest endpoint's price: as `max_price` 0.7 / 15 admitted 3 of 25 endpoints on 2026-10-15
+  // (2 with structured_outputs, which `require_parameters` demands), 0.64 / 13.5 admitted 0, and
+  // main's 3 / 15 admits 21 of 25 (18 with structured_outputs; GET /api/v1/models/moonshotai/kimi-k3/endpoints,
+  // 2026-10-15 23:08 UTC). Window and output cap are main's too.
   'moonshotai/kimi-k3': pricedRoute({
     modelId: 'moonshotai/kimi-k3',
-    inputMicroUsdPerMillionTokens: 700_000,
+    inputMicroUsdPerMillionTokens: 3_000_000,
     outputMicroUsdPerMillionTokens: 15_000_000,
     providerContextWindowTokens: 1_048_576,
-    providerMaxOutputTokens: 943_718,
+    // The catalog reports `top_provider.max_completion_tokens: null` for this
+    // route, so the context window is the provider's binding output limit.
+    providerMaxOutputTokens: 1_048_576,
   }),
+  // Held at main's ceiling, not the /models listing (0.05 / 7 on 2026-10-14, 0.65 / 10 on
+  // 2026-10-15). Used as `max_price`, 0.05 / 7 admitted 0 of 33 endpoints at about 18:30 and 18:49 UTC
+  // on 2026-10-15 and 2 of 33 (1 with structured_outputs, Wafer) at 22:35 and 23:00 UTC, so the
+  // route flaps between unroutable and one provider. Main's 0.7686 / 2.4156 admits 6 of 33 (4 with
+  // structured_outputs: DeepInfra, StreamLake, Baidu, DigitalOcean; GET /api/v1/models/z-ai/glm-5.2/endpoints,
+  // 2026-10-15 23:08 UTC). Window and output cap are main's too: those endpoints cap completions at
+  // 128,000-262,144, not the listing's 943,718.
   'z-ai/glm-5.2': pricedRoute({
     modelId: 'z-ai/glm-5.2',
-    inputMicroUsdPerMillionTokens: 50_000,
-    outputMicroUsdPerMillionTokens: 7_000_000,
+    inputMicroUsdPerMillionTokens: 768_600,
+    outputMicroUsdPerMillionTokens: 2_415_600,
     providerContextWindowTokens: 1_048_576,
-    providerMaxOutputTokens: 943_718,
+    providerMaxOutputTokens: 131_072,
   }),
   'anthropic/claude-sonnet-5': pricedRoute({
     modelId: 'anthropic/claude-sonnet-5',
@@ -640,10 +656,13 @@ export const NODESLIDE_MODEL_PRICING = {
     providerContextWindowTokens: 1_048_576,
     providerMaxOutputTokens: 65_536,
   }),
+  // Held at main's ceiling. OpenRouter's listed price moved from 2 / 10 to 4 / 20 on 2026-10-15, so
+  // 2 / 10 admitted 1 of 7 endpoints (OpenAI) where main's 5 / 30 admits 6 of 7 (all 6 with
+  // structured_outputs; GET /api/v1/models/openai/gpt-5.6-sol/endpoints, 2026-10-15 23:08 UTC).
   'openai/gpt-5.6-sol': pricedRoute({
     modelId: 'openai/gpt-5.6-sol',
-    inputMicroUsdPerMillionTokens: 2_000_000,
-    outputMicroUsdPerMillionTokens: 10_000_000,
+    inputMicroUsdPerMillionTokens: 5_000_000,
+    outputMicroUsdPerMillionTokens: 30_000_000,
     providerContextWindowTokens: 1_050_000,
     providerMaxOutputTokens: 128_000,
   }),
@@ -727,8 +746,9 @@ export function nodeSlideModelPricing(model: string): NodeSlideModelPricingMetad
  *
  * Input and output take the ledger's rate. The cached-read rate is capped at the ledger's input
  * rate, because the quote prices every input token at that rate and a cached token is never worth
- * more than an uncached one: pi-ai's bundled z-ai/glm-5.2 row carries cacheRead 0.162 against a
- * ledger input of 0.05, which would cost a fully cached prompt at 3.24x its quote. The cache-write
+ * more than an uncached one (on 2026-10-14 pi-ai's glm-5.2 row carried cacheRead 0.162 against a
+ * ledger input of 0.05, 3.24x; the ledger input is 0.7686 now, so no row binds today and the cap is
+ * the guard for the day a ledger row falls below its cached rate). The cache-write
  * rate is left alone: Claude and GPT rows bill writes at 1.25x input, which the quote covers because
  * its input estimate is at least MAX_PROVIDER_ATTEMPTS (2x) the bytes actually sent (asserted in
  * convex/nodeslideModelPricing.test.ts). Rows the ledger does not price (free, dynamic, unknown) are

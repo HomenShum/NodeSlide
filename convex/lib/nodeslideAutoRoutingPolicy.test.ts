@@ -187,12 +187,12 @@ describe('NodeSlide fail-closed auto routing policy', () => {
     // The estimate is priced from the run-budget ledger (pricing as of NODESLIDE_MODEL_PRICING_VERIFIED_AT),
     // not from the bundled pi-ai catalog. pi-ai 0.80.6 priced z-ai/glm-5.2 at 0.532 / 1.672 USD per
     // million (1k in + 1k out = 2_204 micro-USD; caps 0.002203 / 0.002204). pi-ai 1.1.0 prices it at
-    // 0.171 / 7.2 (7_371 micro-USD), which the ledger (0.05 / 7) contradicts, so the estimate is the
-    // ledger's 7_050 micro-USD. The one-micro-dollar boundary is preserved: below by 1, exactly
-    // equal, well above.
+    // 0.171 / 7.2 (7_371 micro-USD), which the ledger (0.7686 / 2.4156, main's ceiling: the route that
+    // admits endpoints) contradicts, so the estimate is the ledger's 3_185 micro-USD (769 + 2_416, each rounded up). The
+    // one-micro-dollar boundary is preserved: below by 1, exactly equal, well above.
     it.each([
-      { name: 'one micro-dollar below estimate', cap: 0.007049, kind: 'refused' },
-      { name: 'exactly equal to estimate', cap: 0.00705, kind: 'selected' },
+      { name: 'one micro-dollar below estimate', cap: 0.003184, kind: 'refused' },
+      { name: 'exactly equal to estimate', cap: 0.003185, kind: 'selected' },
       { name: 'well above estimate', cap: 1, kind: 'selected' },
     ] as const)('$name is $kind', ({ cap, kind }) => {
       const decision = decideNodeSlideAutoRoute(input({ maxUsd: cap }));
@@ -200,12 +200,12 @@ describe('NodeSlide fail-closed auto routing policy', () => {
       expect(decision.kind).toBe(kind);
       expect(decision.costEstimate).toMatchObject({
         status: 'estimated',
-        totalMicroUsd: 7_050,
-        totalUsd: 0.00705,
+        totalMicroUsd: 3_185,
+        totalUsd: 0.003185,
         pricing: {
           source: 'nodeslide-run-budget-ledger',
-          inputUsdPerMillionTokens: 0.05,
-          outputUsdPerMillionTokens: 7,
+          inputUsdPerMillionTokens: 0.7686,
+          outputUsdPerMillionTokens: 2.4156,
         },
       });
       if (kind === 'refused') {

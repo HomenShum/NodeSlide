@@ -20,9 +20,8 @@ import {
   type NodeSlideAgentModelId,
   nodeSlideAgentModel,
   nodeSlideDefaultReasoningEffort,
-  nodeSlideEffortAfterModelChange,
+  nodeSlideEffortForModel,
   nodeSlideModelSupportsReasoningEffort,
-  nodeSlideRestoredReasoningEffort,
 } from '../../shared/nodeslide';
 import {
   callNodeSlideFreeJson,
@@ -246,34 +245,25 @@ describe('the new catalog rows build refresh-safe requests', () => {
     ).toMatchObject({ providerEffort: 'high' });
   });
 
-  it('the model pickers move an untouched effort to the new row default and keep a chosen one', () => {
-    // Untouched (still the previous row's default): follows the new row. Opus 5.5 <-> others.
-    expect(nodeSlideEffortAfterModelChange('moonshotai/kimi-k3', WIRE_ID.opus55, 'high')).toBe(
-      'medium',
-    );
-    expect(nodeSlideEffortAfterModelChange(WIRE_ID.opus55, WIRE_ID.sonnet55, 'medium')).toBe(
-      'high',
-    );
-    // Chosen (not the previous default): kept when the new row supports it.
-    expect(nodeSlideEffortAfterModelChange(WIRE_ID.sonnet55, WIRE_ID.opus55, 'xhigh')).toBe(
-      'xhigh',
-    );
-    expect(nodeSlideEffortAfterModelChange(WIRE_ID.sonnet55, WIRE_ID.opus55, 'low')).toBe('low');
-    // Unsupported on the new row: the global default, as before.
-    expect(nodeSlideEffortAfterModelChange(WIRE_ID.sonnet55, 'moonshotai/kimi-k3', 'xhigh')).toBe(
-      NODESLIDE_DEFAULT_REASONING_EFFORT,
-    );
-  });
-
-  it('a composer restoring a saved model without a saved effort shows that row default', () => {
-    // Before: the inspector fell back to a hard-coded 'high', so a saved Opus 5.5 showed and sent high.
-    expect(nodeSlideRestoredReasoningEffort(WIRE_ID.opus55, null)).toBe('medium');
-    expect(nodeSlideRestoredReasoningEffort(WIRE_ID.sonnet55, null)).toBe('high');
-    expect(nodeSlideRestoredReasoningEffort('moonshotai/kimi-k3', 'not-an-effort')).toBe('high');
-    // A saved effort the row supports is kept; one it does not support falls to the row default.
-    expect(nodeSlideRestoredReasoningEffort(WIRE_ID.opus55, 'xhigh')).toBe('xhigh');
-    expect(nodeSlideRestoredReasoningEffort(WIRE_ID.opus55, 'low')).toBe('low');
-    expect(nodeSlideRestoredReasoningEffort('moonshotai/kimi-k3', 'xhigh')).toBe('high');
+  it('a picker with no chosen effort shows the row default; a chosen effort is kept across rows', () => {
+    // Untouched (null): each row's own default, so switching rows follows it. Opus 5.5 = medium.
+    expect(nodeSlideEffortForModel(WIRE_ID.opus55, null)).toBe('medium');
+    expect(nodeSlideEffortForModel(WIRE_ID.sonnet55, null)).toBe('high');
+    expect(nodeSlideEffortForModel('moonshotai/kimi-k3', null)).toBe('high');
+    // Chosen: kept on any row that supports it, including an effort equal to the PREVIOUS row's
+    // default (round 3: Sonnet 5.5 'high' chosen on purpose, then Opus 5.5, used to become 'medium').
+    expect(nodeSlideEffortForModel(WIRE_ID.sonnet55, 'high')).toBe('high');
+    expect(nodeSlideEffortForModel(WIRE_ID.opus55, 'high')).toBe('high');
+    expect(nodeSlideEffortForModel(WIRE_ID.sonnet55, 'medium')).toBe('medium');
+    expect(nodeSlideEffortForModel(WIRE_ID.opus55, 'medium')).toBe('medium');
+    expect(nodeSlideEffortForModel(WIRE_ID.opus55, 'xhigh')).toBe('xhigh');
+    expect(nodeSlideEffortForModel(WIRE_ID.opus55, 'low')).toBe('low');
+    // A chosen effort the row does not support falls to that row's default; the choice itself is
+    // not lost (the picker still holds it), so returning to a supporting row shows it again.
+    expect(nodeSlideEffortForModel('moonshotai/kimi-k3', 'xhigh')).toBe('high');
+    // A stale or foreign saved value is no choice at all.
+    expect(nodeSlideEffortForModel(WIRE_ID.opus55, 'not-an-effort')).toBe('medium');
+    expect(nodeSlideEffortForModel('moonshotai/kimi-k3', 'not-an-effort')).toBe('high');
   });
 
   it('every offered row is a priced, temperature-free-or-declared route', () => {

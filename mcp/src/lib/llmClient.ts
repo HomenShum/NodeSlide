@@ -109,10 +109,27 @@ export function inferProvider(modelId: string): SupportedProvider {
 }
 
 /**
+ * Direct-Anthropic wire ids for the NodeSlide catalog's Claude rows (SPEC section 1.2, `anthropic`
+ * column). The catalog id is the OpenRouter slug (`anthropic/claude-sonnet-5.5`, dotted), which is not
+ * the direct id (`claude-sonnet-5-5`, dashed): stripping the prefix produced `claude-sonnet-5.5`,
+ * which pi-ai's registry does not have, so the call threw before any request. An explicit table, not
+ * string replacement (SPEC A.0.5). Which provider serves the id is still `inferProvider`'s choice.
+ */
+const DIRECT_ANTHROPIC_WIRE_ID: Readonly<Record<string, string>> = {
+  'anthropic/claude-sonnet-5': 'claude-sonnet-5',
+  'anthropic/claude-fable-5': 'claude-fable-5',
+  'anthropic/claude-sonnet-5.5': 'claude-sonnet-5-5',
+  'anthropic/claude-opus-5.5': 'claude-opus-5-5',
+};
+
+/**
  * Strip provider prefix if present so getModel(provider, id) gets the canonical
  * id. e.g. "anthropic/claude-sonnet-4-6" + provider="anthropic" -> "claude-sonnet-4-6".
  */
 function canonicalizeModelId(provider: SupportedProvider, modelId: string): string {
+  if (provider === 'anthropic' && Object.hasOwn(DIRECT_ANTHROPIC_WIRE_ID, modelId)) {
+    return DIRECT_ANTHROPIC_WIRE_ID[modelId] as string;
+  }
   const prefix = `${provider}/`;
   if (modelId.startsWith(prefix)) return modelId.slice(prefix.length);
   return modelId;
@@ -140,7 +157,7 @@ export async function call(opts: CallOptions): Promise<CallResult> {
   // biome-ignore lint/suspicious/noExplicitAny: see comment above
   const registryModel = (pi.getModel as any)(opts.provider, canonicalId);
   // The bundled pi-ai catalog is an older price snapshot than the NodeSlide run-budget ledger
-  // (kimi-k3 0.5 against 0.7, glm-5.2 0.171 against 0.05), so a response on an OpenRouter route the
+  // (kimi-k3 0.5 against 3, glm-5.2 0.171 against 0.7686), so a response on an OpenRouter route the
   // ledger prices is costed at the ledger's rate, the same one the Convex dispatcher uses.
   const pricedModel =
     opts.provider === 'openrouter' && registryModel?.cost

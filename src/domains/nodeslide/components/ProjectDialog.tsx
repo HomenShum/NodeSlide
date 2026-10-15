@@ -24,15 +24,13 @@ import {
 import {
   type CreateDeckRequest,
   NODESLIDE_DEFAULT_AGENT_MODEL,
-  NODESLIDE_DEFAULT_REASONING_EFFORT,
   NODESLIDE_OFFERED_AGENT_MODELS,
   NODESLIDE_REASONING_EFFORTS,
   type NodeSlideAgentModelId,
   type NodeSlideReasoningEffort,
   isNodeSlideOfferedAgentModelId,
   nodeSlideAgentModel,
-  nodeSlideDefaultReasoningEffort,
-  nodeSlideEffortAfterModelChange,
+  nodeSlideEffortForModel,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
 } from '../../../../shared/nodeslide';
@@ -194,9 +192,12 @@ export function ProjectDialog({
     useState<NodeSlideBriefProviderMode>(initialDraftProviderMode);
   const [providerModel, setProviderModel] =
     useState<NodeSlideAgentModelId>(initialDraftProviderModel);
-  const [providerEffort, setProviderEffort] = useState<NodeSlideReasoningEffort>(
-    initialDraft?.providerEffort ?? nodeSlideDefaultReasoningEffort(initialDraftProviderModel),
+  // null until the person picks an effort (or a draft carries one), so an untouched effort follows
+  // each model's default.
+  const [effortChoice, setEffortChoice] = useState<NodeSlideReasoningEffort | null>(
+    initialDraft?.providerEffort ?? null,
   );
+  const providerEffort = nodeSlideEffortForModel(providerModel, effortChoice);
   const [grantedProviderConsent, setGrantedProviderConsent] =
     useState<NodeSlideBriefProviderConsent | null>(null);
   // A consent is only current while the mode it was granted for is still selected.
@@ -224,7 +225,7 @@ export function ProjectDialog({
     setAccessCode('');
     setProviderMode(nodeSlideProviderModeForModel(NODESLIDE_DEFAULT_AGENT_MODEL));
     setProviderModel(NODESLIDE_DEFAULT_AGENT_MODEL);
-    setProviderEffort(NODESLIDE_DEFAULT_REASONING_EFFORT);
+    setEffortChoice(null);
     setGrantedProviderConsent(null);
     setAttachments([]);
     setAttachmentError(null);
@@ -243,9 +244,7 @@ export function ProjectDialog({
       setPrompt(initialDraft?.prompt ?? '');
       setProviderMode(initialDraftProviderMode);
       setProviderModel(initialDraftProviderModel);
-      setProviderEffort(
-        initialDraft?.providerEffort ?? nodeSlideDefaultReasoningEffort(initialDraftProviderModel),
-      );
+      setEffortChoice(initialDraft?.providerEffort ?? null);
       setAttachments(initialDraft?.attachments ?? []);
       setAttachmentError(null);
     }
@@ -254,7 +253,7 @@ export function ProjectDialog({
     setAccessCode('');
     setProviderMode(nodeSlideProviderModeForModel(NODESLIDE_DEFAULT_AGENT_MODEL));
     setProviderModel(NODESLIDE_DEFAULT_AGENT_MODEL);
-    setProviderEffort(NODESLIDE_DEFAULT_REASONING_EFFORT);
+    setEffortChoice(null);
     setGrantedProviderConsent(null);
     setAttachments([]);
     setAttachmentError(null);
@@ -657,9 +656,6 @@ export function ProjectDialog({
                       const model = event.target.value as NodeSlideAgentModelId;
                       setProviderModel(model);
                       setProviderMode(nodeSlideProviderModeForModel(model));
-                      setProviderEffort(
-                        nodeSlideEffortAfterModelChange(providerModel, model, providerEffort),
-                      );
                       setGrantedProviderConsent(null);
                     }}
                   >
@@ -680,7 +676,7 @@ export function ProjectDialog({
                     value={providerEffort}
                     disabled={providerMode === 'deterministic'}
                     onChange={(event) => {
-                      setProviderEffort(event.target.value as NodeSlideReasoningEffort);
+                      setEffortChoice(event.target.value as NodeSlideReasoningEffort);
                       setGrantedProviderConsent(null);
                     }}
                   >

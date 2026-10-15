@@ -319,35 +319,19 @@ export function nodeSlideDefaultReasoningEffort(
 }
 
 /**
- * The effort to show after the model picker changes. An effort still sitting at the previous row's
- * default follows the new row's default (Opus 5.5 = medium, the rest high); an effort the person
- * chose is kept when the new row supports it, and falls back to the global default when it does not.
+ * The effort a picker shows and sends for a model: the person's own choice when the row supports it,
+ * otherwise the row's default (Opus 5.5 = medium, the rest high). `chosen` is `null` until the person
+ * touches the effort picker (or a saved effort is restored), which is how an untouched effort follows
+ * the model while an explicit one, even one equal to the previous row's default, is kept. Anything
+ * that is not a real effort (a stale localStorage value) counts as no choice.
  */
-export function nodeSlideEffortAfterModelChange(
-  previousModel: NodeSlideAgentModelId,
-  nextModel: NodeSlideAgentModelId,
-  effort: NodeSlideReasoningEffort,
-): NodeSlideReasoningEffort {
-  const carried =
-    effort === nodeSlideDefaultReasoningEffort(previousModel)
-      ? nodeSlideDefaultReasoningEffort(nextModel)
-      : effort;
-  return nodeSlideModelSupportsReasoningEffort(nextModel, carried)
-    ? carried
-    : NODESLIDE_DEFAULT_REASONING_EFFORT;
-}
-
-/**
- * The effort a composer shows when it restores a saved model: the saved effort when it is a real
- * effort the model supports, otherwise that model's own default (Opus 5.5 = medium).
- */
-export function nodeSlideRestoredReasoningEffort(
+export function nodeSlideEffortForModel(
   modelId: NodeSlideAgentModelId,
-  savedEffort: unknown,
+  chosen: unknown,
 ): NodeSlideReasoningEffort {
-  return isNodeSlideReasoningEffort(savedEffort) &&
-    nodeSlideModelSupportsReasoningEffort(modelId, savedEffort)
-    ? savedEffort
+  return isNodeSlideReasoningEffort(chosen) &&
+    nodeSlideModelSupportsReasoningEffort(modelId, chosen)
+    ? chosen
     : nodeSlideDefaultReasoningEffort(modelId);
 }
 

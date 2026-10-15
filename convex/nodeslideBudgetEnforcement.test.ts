@@ -222,10 +222,9 @@ describe('a metered dispatch is reserved before it is issued', () => {
       Math.floor((call.providerSafeOutputTokenCeiling as number) / 2),
     );
     // The paired OpenRouter price ceiling is the table's own price for the route:
-    // $0.70/M prompt and $15/M completion (OpenRouter catalog, 2026-10-14; was $3/$15 on
-    // 2026-07-28), expressed in the provider's USD-per-million unit. A wrong table would show up
-    // here as a wrong routing ceiling.
-    expect(complete.mock.calls[0]?.[0].providerMaxPrice).toEqual({ prompt: 0.7, completion: 15 });
+    // $3/M prompt and $15/M completion, expressed in the provider's USD-per-
+    // million unit. A wrong table would show up here as a wrong routing ceiling.
+    expect(complete.mock.calls[0]?.[0].providerMaxPrice).toEqual({ prompt: 3, completion: 15 });
   });
 
   it('tightens the wire ceiling when the cap, not the caller, is the binding limit', async () => {
@@ -233,7 +232,7 @@ describe('a metered dispatch is reserved before it is issued', () => {
     const ledger = realLedgerClient(database);
     const complete = completionStub();
 
-    // Enough for the conservative input estimate at $0.70/M, plus 3_000 micro-USD
+    // Enough for the conservative input estimate at $3/M, plus 3_000 micro-USD
     // of output headroom — which at $15/M buys 200 output tokens, far below the
     // 500 the caller asked for. Derived from the estimator rather than guessed,
     // so the case does not silently stop biting when the estimator changes.
@@ -241,7 +240,7 @@ describe('a metered dispatch is reserved before it is issued', () => {
       './lib/nodeslideBudgetedProvider'
     );
     const estimatedInputTokens = estimateNodeSlideProviderInputTokens(PROVIDER_REQUEST);
-    const capMicroUsd = Math.ceil(estimatedInputTokens * 0.7) + 3_000;
+    const capMicroUsd = estimatedInputTokens * 3 + 3_000;
 
     const result = await callNodeSlideBudgetedJson(
       {

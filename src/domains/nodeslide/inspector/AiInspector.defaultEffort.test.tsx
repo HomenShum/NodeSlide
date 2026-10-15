@@ -9,7 +9,7 @@ import { AiInspector } from './AiInspector';
  * Scenario: a designer opens the AI tab on Claude Opus 5.5 without touching the effort picker. It must
  * show the row's own default (Opus 5.5 = medium, SPEC A.2.8), not a hard-coded 'high' that the next
  * send would use. The restore-from-storage rule is covered in nodeslideProvider.requestShape.test.ts
- * (nodeSlideRestoredReasoningEffort): jsdom's Radix Select echoes an empty value back on a controlled
+ * (nodeSlideEffortForModel): jsdom's Radix Select echoes an empty value back on a controlled
  * change, which hides a restored effort from this DOM.
  */
 const { snapshot } = buildGoldenNodeSlide('ai-default-effort-test', 1_000);

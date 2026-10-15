@@ -537,12 +537,11 @@ describe('the price table landed, so the withholding is over', () => {
     });
 
     const call = database.rows('nodeslide_billable_calls')[0] as Record<string, unknown>;
-    // 10_000 input tokens at $0.70/M = 7_000 micro-USD; 2_000 output at $15/M =
+    // 10_000 input tokens at $3/M = 30_000 micro-USD; 2_000 output at $15/M =
     // 30_000. The quote is the WORST case, computed before dispatch.
-    // (Was $3/M input and 60_000 total on the 2026-07-28 catalog; refreshed 2026-10-14.)
-    expect(call).toMatchObject({ status: 'reserved', quoteMicroUsd: 37_000 });
+    expect(call).toMatchObject({ status: 'reserved', quoteMicroUsd: 60_000 });
     expect(database.rows('nodeslide_run_budgets')[0]).toMatchObject({
-      reservedMicroUsd: 37_000,
+      reservedMicroUsd: 60_000,
       actualMicroUsd: 0,
     });
   });
@@ -620,7 +619,7 @@ describe('receiptForRun is the campaign meter for one run', () => {
 
     expect(receipt.spend).toEqual({
       actualMicroUsd: 0,
-      reservedMicroUsd: 37_000,
+      reservedMicroUsd: 60_000,
       unreconciledMicroUsd: 0,
     });
   });

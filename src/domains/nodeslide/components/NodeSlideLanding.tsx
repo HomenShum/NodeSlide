@@ -15,13 +15,12 @@ import {
 import { type ChangeEvent, type FormEvent, useEffect, useRef, useState } from 'react';
 import {
   NODESLIDE_DEFAULT_AGENT_MODEL,
-  NODESLIDE_DEFAULT_REASONING_EFFORT,
   NODESLIDE_OFFERED_AGENT_MODELS,
   NODESLIDE_REASONING_EFFORTS,
   type NodeSlideAgentModelId,
   type NodeSlideReasoningEffort,
   nodeSlideAgentModel,
-  nodeSlideEffortAfterModelChange,
+  nodeSlideEffortForModel,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
 } from '../../../../shared/nodeslide';
@@ -87,8 +86,11 @@ export function NodeSlideLanding({
   const [generation, setGeneration] = useState<'deterministic' | NodeSlideAgentModelId>(
     NODESLIDE_DEFAULT_AGENT_MODEL,
   );
-  const [reasoningEffort, setReasoningEffort] = useState<NodeSlideReasoningEffort>(
-    NODESLIDE_DEFAULT_REASONING_EFFORT,
+  // null until the person picks an effort, so an untouched effort follows each model's default.
+  const [effortChoice, setEffortChoice] = useState<NodeSlideReasoningEffort | null>(null);
+  const reasoningEffort = nodeSlideEffortForModel(
+    generation === 'deterministic' ? NODESLIDE_DEFAULT_AGENT_MODEL : generation,
+    effortChoice,
   );
   // Zero-friction consent: the external model is disclosed by the composer's model
   // pill, so choosing it and creating IS the consent. The consent token is still
@@ -302,17 +304,6 @@ export function NodeSlideLanding({
                   onChange={(event) => {
                     const model = event.target.value as 'deterministic' | NodeSlideAgentModelId;
                     setGeneration(model);
-                    if (model !== 'deterministic') {
-                      setReasoningEffort(
-                        nodeSlideEffortAfterModelChange(
-                          generation === 'deterministic'
-                            ? NODESLIDE_DEFAULT_AGENT_MODEL
-                            : generation,
-                          model,
-                          reasoningEffort,
-                        ),
-                      );
-                    }
                     onClearError?.();
                   }}
                 >
@@ -345,7 +336,7 @@ export function NodeSlideLanding({
                     data-testid="landing-effort-select"
                     value={reasoningEffort}
                     onChange={(event) => {
-                      setReasoningEffort(event.target.value as NodeSlideReasoningEffort);
+                      setEffortChoice(event.target.value as NodeSlideReasoningEffort);
                       onClearError?.();
                     }}
                   >

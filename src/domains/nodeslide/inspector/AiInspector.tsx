@@ -69,13 +69,13 @@ import {
   type Slide,
   type SlideElement,
   isNodeSlideOfferedAgentModelId,
+  isNodeSlideReasoningEffort,
   nodeSlideAgentModel,
   nodeSlideDefaultModelForProviderMode,
   nodeSlideDefaultReasoningEffort,
-  nodeSlideEffortAfterModelChange,
+  nodeSlideEffortForModel,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
-  nodeSlideRestoredReasoningEffort,
   unhandledPatchOperation,
 } from '../../../../shared/nodeslide';
 import { nodeSlideProposalOriginAttribute } from '../../../../shared/nodeslideProposalOrigin';
@@ -305,10 +305,10 @@ export function AiInspector<CommandId extends string = string>({
   const [providerModel, setProviderModel] = useState<NodeSlideAgentModelId>(
     offeredInitialProviderModel,
   );
-  const openedWithModel = useRef(offeredInitialProviderModel);
-  const [providerEffort, setProviderEffort] = useState<NodeSlideReasoningEffort>(
-    nodeSlideDefaultReasoningEffort(offeredInitialProviderModel),
-  );
+  // null until the person picks an effort (or one is restored from storage), so an untouched effort
+  // follows each model's default.
+  const [effortChoice, setEffortChoice] = useState<NodeSlideReasoningEffort | null>(null);
+  const providerEffort = nodeSlideEffortForModel(providerModel, effortChoice);
   // Zero-friction consent: an external model is disclosed by the always-visible
   // model pill, so choosing it and sending IS the consent. The consent token is
   // still generated and validated server-side on every request — disclosure is
@@ -370,18 +370,12 @@ export function AiInspector<CommandId extends string = string>({
 
   useEffect(() => {
     const stored = window.localStorage.getItem('nodeslide.agent-model');
-    // The model in force: the saved one, else the one this composer was opened with.
-    const storedModel = isNodeSlideOfferedAgentModelId(stored) ? stored : openedWithModel.current;
     if (isNodeSlideOfferedAgentModelId(stored)) {
-      setProviderModel(storedModel);
-      setProviderMode(nodeSlideProviderModeForModel(storedModel));
+      setProviderModel(stored);
+      setProviderMode(nodeSlideProviderModeForModel(stored));
     }
-    setProviderEffort(
-      nodeSlideRestoredReasoningEffort(
-        storedModel,
-        window.localStorage.getItem('nodeslide.agent-effort'),
-      ),
-    );
+    const storedEffort = window.localStorage.getItem('nodeslide.agent-effort');
+    setEffortChoice(isNodeSlideReasoningEffort(storedEffort) ? storedEffort : null);
   }, []);
 
   useEffect(() => {
@@ -577,11 +571,6 @@ export function AiInspector<CommandId extends string = string>({
     if (!isNodeSlideOfferedAgentModelId(value)) return;
     setProviderModel(value);
     setProviderMode(nodeSlideProviderModeForModel(value));
-    const nextEffort = nodeSlideEffortAfterModelChange(providerModel, value, providerEffort);
-    if (nextEffort !== providerEffort) {
-      setProviderEffort(nextEffort);
-      window.localStorage.setItem('nodeslide.agent-effort', nextEffort);
-    }
     window.localStorage.setItem('nodeslide.agent-model', value);
   };
 
@@ -1498,7 +1487,7 @@ export function AiInspector<CommandId extends string = string>({
                       value={providerEffort}
                       onValueChange={(value) => {
                         const effort = value as NodeSlideReasoningEffort;
-                        setProviderEffort(effort);
+                        setEffortChoice(effort);
                         window.localStorage.setItem('nodeslide.agent-effort', effort);
                       }}
                     >

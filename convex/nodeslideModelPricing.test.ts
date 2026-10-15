@@ -50,19 +50,25 @@ import {
  * `top_provider.max_completion_tokens`. `null` is recorded as null, not guessed.
  */
 const OPENROUTER_CATALOG_2026_10_14 = {
-  // Was 0.000003 / 0.000015 (and maxCompletionTokens null) on 2026-07-28.
+  // Unchanged from 2026-07-28 on purpose. The /models listing read 0.0000007 / 0.000015 and 943_718 on
+  // 2026-10-14; as the OpenRouter max_price ceiling that admitted 3 of 25 endpoints on 2026-10-15
+  // (2 with structured_outputs) against 21 of 25 (18) for this row (GET
+  // /api/v1/models/moonshotai/kimi-k3/endpoints, 2026-10-15 23:08 UTC). kimi-k3 is the production default.
   'moonshotai/kimi-k3': {
-    prompt: '0.0000007',
+    prompt: '0.000003',
     completion: '0.000015',
     contextLength: 1_048_576,
-    maxCompletionTokens: 943_718,
+    maxCompletionTokens: null,
   },
-  // Was 0.0000007686 / 0.0000024156 and 131_072 on 2026-07-28.
+  // Unchanged from 2026-07-28 on purpose. The /models listing read 0.00000005 / 0.000007 and 943_718
+  // on 2026-10-14; as the OpenRouter max_price ceiling that admitted 0 of 33 endpoints at about 18:30
+  // and 18:49 UTC and 2 of 33 (1 with structured_outputs) at 22:35 and 23:00 UTC on 2026-10-15, while
+  // this row admits 6 of 33 (4) (GET /api/v1/models/z-ai/glm-5.2/endpoints, 2026-10-15 23:08 UTC).
   'z-ai/glm-5.2': {
-    prompt: '0.00000005',
-    completion: '0.000007',
+    prompt: '0.0000007686',
+    completion: '0.0000024156',
     contextLength: 1_048_576,
-    maxCompletionTokens: 943_718,
+    maxCompletionTokens: 131_072,
   },
   'anthropic/claude-sonnet-5': {
     prompt: '0.000002',
@@ -106,10 +112,12 @@ const OPENROUTER_CATALOG_2026_10_14 = {
     contextLength: 1_048_576,
     maxCompletionTokens: 65_536,
   },
-  // Was 0.000005 / 0.00003 on 2026-07-28.
+  // Unchanged from 2026-07-28 on purpose. The listing moved to 0.000004 / 0.00002 on 2026-10-15
+  // (0.000002 / 0.00001 on 2026-10-14); as the max_price ceiling 2 / 10 admitted 1 of 7 endpoints
+  // against 6 of 7 for this row (GET /api/v1/models/openai/gpt-5.6-sol/endpoints, 2026-10-15 23:08 UTC).
   'openai/gpt-5.6-sol': {
-    prompt: '0.000002',
-    completion: '0.00001',
+    prompt: '0.000005',
+    completion: '0.00003',
     contextLength: 1_050_000,
     maxCompletionTokens: 128_000,
   },
@@ -303,6 +311,86 @@ describe('worst-case scoring rounds against the run, never in its favour', () =>
 });
 
 /**
+ * The ledger price is also the OpenRouter `max_price` ceiling (`nodeslideBudgetedProvider.ts`), and a
+ * request whose ceiling is below every live endpoint is not run ("will prevent your request from
+ * running if the price is not available"). The /models listing price is the CHEAPEST endpoint's, so
+ * a ledger row copied from it leaves a route with one to three providers, or none: glm-5.2 at its
+ * listing (0.05 / 7) admitted 0 of 33 endpoints at about 18:30 UTC on 2026-10-15 and 2 of 33 at 22:35
+ * UTC, and kimi-k3, the production default, at 0.7 / 15 admitted 3 of 25 where its 3 / 15 admits 21.
+ *
+ * For each metered OpenRouter route this records what GET /api/v1/models/{id}/endpoints returned on
+ * 2026-10-15 at 23:08 UTC for the committed ceiling: how many endpoints exist (`of`), how many are at
+ * or below the ceiling on both rates (`admitted`), and how many of those support `structured_outputs`
+ * (`structured`; `require_parameters` demands it on a json_schema request). The test cannot see the
+ * live catalog. It fails the day a ledger row moves without this observation being re-fetched and
+ * re-recorded, or is recorded as a route that one provider outage would make unroutable; the fix is to
+ * re-fetch the endpoints, not to edit these numbers.
+ */
+const OPENROUTER_ADMISSION_2026_10_15 = {
+  'moonshotai/kimi-k3': { of: 25, admitted: 21, structured: 18 },
+  'z-ai/glm-5.2': { of: 33, admitted: 6, structured: 4 },
+  'anthropic/claude-sonnet-5': { of: 10, admitted: 5, structured: 4 },
+  'anthropic/claude-fable-5': { of: 6, admitted: 5, structured: 4 },
+  'anthropic/claude-sonnet-5.5': { of: 8, admitted: 5, structured: 3 },
+  'anthropic/claude-opus-5.5': { of: 11, admitted: 5, structured: 4 },
+  'google/gemini-3.5-flash': { of: 7, admitted: 4, structured: 4 },
+  'google/gemini-3.8-flash': { of: 7, admitted: 4, structured: 4 },
+  'google/gemini-3.1-pro-preview': { of: 6, admitted: 4, structured: 4 },
+  'openai/gpt-5.6-sol': { of: 7, admitted: 6, structured: 6 },
+  'openai/gpt-5.6-terra': { of: 7, admitted: 3, structured: 3 },
+  'openai/gpt-6.1-sol': { of: 8, admitted: 3, structured: 3 },
+} as const;
+
+/** The committed ceiling per route, restated in the listing's own unit (USD per million tokens). */
+const OPENROUTER_CEILING_AT_OBSERVATION = {
+  'moonshotai/kimi-k3': { prompt: 3, completion: 15 },
+  'z-ai/glm-5.2': { prompt: 0.7686, completion: 2.4156 },
+  'anthropic/claude-sonnet-5': { prompt: 2, completion: 10 },
+  'anthropic/claude-fable-5': { prompt: 10, completion: 50 },
+  'anthropic/claude-sonnet-5.5': { prompt: 2, completion: 10 },
+  'anthropic/claude-opus-5.5': { prompt: 4, completion: 20 },
+  'google/gemini-3.5-flash': { prompt: 1.5, completion: 9 },
+  'google/gemini-3.8-flash': { prompt: 0.75, completion: 3.75 },
+  'google/gemini-3.1-pro-preview': { prompt: 2, completion: 12 },
+  'openai/gpt-5.6-sol': { prompt: 5, completion: 30 },
+  'openai/gpt-5.6-terra': { prompt: 2, completion: 12 },
+  'openai/gpt-6.1-sol': { prompt: 2, completion: 10 },
+} as const;
+
+describe('every metered OpenRouter ledger price is a ceiling that still routes', () => {
+  const meteredRoutes = NODESLIDE_AGENT_MODELS.filter(
+    (model) => model.provider === 'openrouter' && nodeSlideModelPricing(model.id).kind === 'priced',
+  );
+
+  it('has an observation for every metered route, and no stray rows', () => {
+    const metered = meteredRoutes.map((model) => model.id).sort();
+    expect(Object.keys(OPENROUTER_ADMISSION_2026_10_15).sort()).toEqual(metered);
+    expect(Object.keys(OPENROUTER_CEILING_AT_OBSERVATION).sort()).toEqual(metered);
+  });
+
+  for (const [modelId, observed] of Object.entries(OPENROUTER_ADMISSION_2026_10_15)) {
+    it(`${modelId} was observed at its committed ceiling with a choice of providers`, () => {
+      const pricing = nodeSlideModelPricing(modelId);
+      expect(pricing.kind).toBe('priced');
+      if (pricing.kind !== 'priced') return;
+      const ceiling =
+        OPENROUTER_CEILING_AT_OBSERVATION[
+          modelId as keyof typeof OPENROUTER_CEILING_AT_OBSERVATION
+        ];
+      // The ceiling the observation was taken at is the ceiling that ships.
+      expect(pricing.inputMicroUsdPerMillionTokens).toBe(Math.round(ceiling.prompt * 1e6));
+      expect(pricing.outputMicroUsdPerMillionTokens).toBe(Math.round(ceiling.completion * 1e6));
+      // At least three endpoints, two of them structured-output capable: one provider outage or
+      // repricing must still leave a provider to route to.
+      expect(observed.admitted).toBeGreaterThanOrEqual(3);
+      expect(observed.structured).toBeGreaterThanOrEqual(2);
+      expect(observed.structured).toBeLessThanOrEqual(observed.admitted);
+      expect(observed.admitted).toBeLessThanOrEqual(observed.of);
+    });
+  }
+});
+
+/**
  * Part A rule 6: every pricing source in this repo, each with its date, one test, equal
  * `{inPerM, outPerM}` per (id, OpenRouter transport). The sources:
  *
@@ -312,23 +400,25 @@ describe('worst-case scoring rounds against the run, never in its favour', () =>
  *   3. the provider the dispatcher actually builds (`openrouterProviderWithOverrides`): its rows
  *      price every response (`usage.cost.total` -> `costMicroUsd`). Its base rows are the bundled
  *      pi-ai 1.1.0 OpenRouter catalog, which is NOT dated by us and disagreed with the ledger on
- *      two rows when read on 2026-10-14: moonshotai/kimi-k3 0.5 / 15 (ledger 0.7 / 15) and
- *      z-ai/glm-5.2 0.171 / 7.2 (ledger 0.05 / 7). The provider therefore prices every ledger-priced
+ *      two rows when read on 2026-10-14: moonshotai/kimi-k3 0.5 / 15 (ledger 3 / 15) and
+ *      z-ai/glm-5.2 0.171 / 7.2 (ledger 0.7686 / 2.4156). The provider therefore prices every ledger-priced
  *      row at the ledger's rate, and this test is what notices the day that stops being true;
  *   4. the auto-router estimate (`nodeslideAutoRoutingPolicy.ts`), which read the same pi-ai
  *      catalog: it caps a job-create request's cost, so an under-estimate admits a route the ledger
  *      would refuse. It prices ledger-priced routes at the ledger's rate for the same reason;
  *   5. the MCP BYOK client (`mcp/src/lib/llmClient.ts`), which called `getModel` on the raw pi-ai
  *      catalog and reported `usage.cost.total` as `costUsd` (kimi-k3 $0.015500 against the ledger's
- *      $0.015700 for 1k in / 1k out, glm-5.2 $0.007371 against $0.007050). It prices OpenRouter
+ *      $0.018000 for 1k in / 1k out, glm-5.2 $0.007371 against $0.0031842). It prices OpenRouter
  *      routes through `nodeSlideLedgerPricedCost`, the function the provider in 3 uses. It carries
  *      no date of its own: it takes the ledger's, `NODESLIDE_MODEL_PRICING_VERIFIED_AT`.
  *
  * Cache rates are part of the agreement, not only input and output: the reservation quote prices
  * every input token at the ledger's input rate, so a cached-read token must not cost more than that
- * (pi-ai's glm-5.2 row said 0.162 against 0.05, which settled 100k cached tokens at 3.24x their
- * quote and left a valid response unreconciled), and a cache-write premium must stay inside the
- * quote's 2x input-estimate headroom (Claude and GPT rows bill writes at 1.25x).
+ * (on 2026-10-14 pi-ai's glm-5.2 row said 0.162 against a ledger 0.05, which settled 100k cached
+ * tokens at 3.24x their quote and left a valid response unreconciled; the ledger input is 0.7686 now,
+ * so the cap binds on no row today and these tests guard the invariant, not a live case), and a
+ * cache-write premium must stay inside the quote's 2x input-estimate headroom (Claude and GPT rows
+ * bill writes at 1.25x).
  *
  * Above-threshold tiers (pi-ai lists a higher rate above 200K-272K prompt tokens for gemini-3.1-pro
  * and the gpt-5.6 / gpt-6.1 rows) are pi-ai-only data the flat ledger does not model; a NodeSlide
@@ -475,7 +565,7 @@ describe('every pricing source in this repo agrees (Part A rule 6)', () => {
         userText: '{}',
       });
 
-    it('the MCP BYOK client costs 1k in / 1k out at the ledger rate (kimi-k3 $0.015700, glm-5.2 $0.007050)', async () => {
+    it('the MCP BYOK client costs 1k in / 1k out at the ledger rate (kimi-k3 $0.018000, glm-5.2 $0.0031842)', async () => {
       usage = { prompt_tokens: 1000, completion_tokens: 1000, total_tokens: 2000 };
       for (const id of mcpRoutes) {
         const result = await mcpCall(id);
@@ -536,15 +626,15 @@ describe('every pricing source in this repo agrees (Part A rule 6)', () => {
 
   it('kimi-k3 is not admitted on an estimate below the ledger worst case', () => {
     // Round 1: pi-ai 1.1.0 priced kimi-k3 at 0.5 / 15, so 100k in + 1k out estimated $0.065 while the
-    // ledger's worst case is $0.085, and the auto-router admitted a route the ledger would price higher.
+    // ledger's worst case is $0.315, and the auto-router admitted a route the ledger would price higher.
     const worst = scoreNodeSlideWorstCaseCost({
       model: 'moonshotai/kimi-k3',
       inputTokens: 100_000,
       outputTokens: 1_000,
     });
-    expect(worst.totalCostMicroUsd).toBe(85_000);
-    expect(autoRoute('moonshotai/kimi-k3', 0.085).kind).toBe('selected');
-    expect(autoRoute('moonshotai/kimi-k3', 0.084999).kind).toBe('refused');
+    expect(worst.totalCostMicroUsd).toBe(315_000);
+    expect(autoRoute('moonshotai/kimi-k3', 0.315).kind).toBe('selected');
+    expect(autoRoute('moonshotai/kimi-k3', 0.314999).kind).toBe('refused');
   });
 
   it('keeps the Nebius GLM-5.2 hand-typed cost out of every reservation path', () => {

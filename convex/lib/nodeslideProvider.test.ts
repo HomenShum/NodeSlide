@@ -141,9 +141,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       expect(matches).toHaveLength(1);
       expect(matches[0]).toMatchObject({
         reasoning: true,
-        // USD per million tokens; was { input: 3, output: 15, cacheRead: 0.3 } on 2026-07-28.
-        // Equals nodeSlideModelPricing('moonshotai/kimi-k3') (convex/nodeslideModelPricing.test.ts).
-        cost: { input: 0.7, output: 15, cacheRead: 0.32, cacheWrite: 0 },
+        cost: { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 0 },
         contextWindow: 1_048_576,
         compat: {
           supportsReasoningEffort: true,

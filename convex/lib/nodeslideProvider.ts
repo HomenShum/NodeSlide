@@ -80,7 +80,7 @@ export const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
   baseUrl: 'https://openrouter.ai/api/v1',
   reasoning: true,
   input: ['text'],
-  cost: { input: 0.7, output: 15, cacheRead: 0.32, cacheWrite: 0 },
+  cost: { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 0 },
   contextWindow: 1_048_576,
   maxTokens: 100_352,
   compat: {
@@ -125,10 +125,10 @@ function asOpenRouterChatCompletionsRoute(
 /**
  * The run-budget ledger is the repo's price of record, so a response is priced (`usage.cost.total` ->
  * `costMicroUsd`) at the ledger's rate: the bundled pi-ai catalog is an older snapshot and disagreed
- * with it on glm-5.2 (0.171 / 7.2 against 0.05 / 7), which settled a near-ceiling response above the
- * quote it was reserved at. `nodeSlideLedgerPricedCost` also caps the cached-read rate at the ledger's
- * input rate (glm-5.2's bundled 0.162 is 3.24x its ledger input of 0.05), so a response served mostly
- * from cache cannot settle above the quote either. Any above-threshold tier stays pi-ai's, and rows
+ * with it on glm-5.2 (0.171 / 7.2 against 0.7686 / 2.4156), so a near-ceiling output-heavy response
+ * would settle above the quote it was reserved at. `nodeSlideLedgerPricedCost` also caps the
+ * cached-read rate at the ledger's input rate, so a response served mostly from cache cannot settle
+ * above the quote either. Any above-threshold tier stays pi-ai's, and rows
  * the ledger does not price (free, dynamic) are untouched.
  */
 function priceFromLedger<

@@ -188,6 +188,8 @@ export function executorSplitReceiptFailures(receipt, testedCommit) {
     ['planner', EXECUTOR_SPLIT_PLANNER_MODEL],
     ['executor', EXECUTOR_SPLIT_EXECUTOR_MODEL],
   ];
+  const microUsd = (usd) => Math.round(usd * 1_000_000);
+  const isCount = (value) => Number.isFinite(value) && value >= 0;
   for (const [toolName, model] of expected) {
     const span = spans.find((entry) => entry?.toolName === toolName);
     const row = rows.find((entry) => entry?.toolName === toolName);
@@ -207,8 +209,36 @@ export function executorSplitReceiptFailures(receipt, testedCommit) {
       if (row.echoedModel !== model) fail(`${toolName} row echoedModel is ${row.echoedModel}`);
       if (row.fallbackUsed !== false) fail(`${toolName} row used a fallback`);
       if (span && row.echoedModel !== span.responseModel) fail(`${toolName} row and span disagree`);
+      // The row is the accounting line for the span: its usage, cost and call count must be present
+      // and must reconcile with the span, otherwise a row stripped of them would pass unseen.
+      const rowUsage = row.usage ?? {};
+      if (!(isCount(rowUsage.inputTokens) && isCount(rowUsage.outputTokens)))
+        fail(`${toolName} row usage is missing`);
+      else if (!(rowUsage.inputTokens > 0 || rowUsage.outputTokens > 0))
+        fail(`${toolName} row usage is zero`);
+      if (!isCount(row.costUsd)) fail(`${toolName} row costUsd is missing`);
+      if (row.dispatches !== 1)
+        fail(`${toolName} row dispatched ${row.dispatches ?? null} times, not exactly once`);
+      if (span) {
+        if (row.requestedModel !== span.spanModel)
+          fail(`${toolName} row requestedModel and span spanModel disagree`);
+        if (
+          rowUsage.inputTokens !== span.usage?.inputTokens ||
+          rowUsage.outputTokens !== span.usage?.outputTokens
+        )
+          fail(`${toolName} row usage and span usage disagree`);
+        if (!isCount(span.costMicroUsd) || microUsd(row.costUsd) !== span.costMicroUsd)
+          fail(`${toolName} row costUsd and span costMicroUsd disagree`);
+      }
     }
   }
+  const toolNames = (entries) =>
+    entries
+      .map((entry) => entry?.toolName)
+      .sort()
+      .join(',');
+  if (toolNames(spans) !== 'executor,planner' || toolNames(rows) !== 'executor,planner')
+    fail('spans and rows are not exactly one planner and one executor');
   if (spans.length !== expected.length || rows.length !== expected.length)
     fail(`receipt has ${spans.length} spans and ${rows.length} rows, not ${expected.length}`);
   const echoed = [...new Set(rows.map((row) => row?.echoedModel).filter(Boolean))].sort();
@@ -219,8 +249,8 @@ export function executorSplitReceiptFailures(receipt, testedCommit) {
     fail('echoedModels does not include the executor');
 
   // A.0.3: `dispatchPolicy` absent or not {maxRetries: 0, crossModelFallback: false} is rejected, and
-  // so is a request count above the pre-flight ceiling. The provider's JSON-repair call is the one
-  // re-dispatch path, so a span that dispatched twice is a retry that ran.
+  // so is a request count above the pre-flight ceiling. The policy is the one the probe enforced
+  // (retries are switched off in the provider call); each row separately must show one dispatch.
   const policy = receipt.dispatchPolicy;
   if (!policy || policy.maxRetries !== 0 || policy.crossModelFallback !== false)
     fail(
@@ -240,18 +270,36 @@ export function executorSplitReceiptFailures(receipt, testedCommit) {
       fail('budget.maxUsd is not a positive number');
     if (!(Number.isFinite(budget.estimateUsd) && budget.estimateUsd > 0))
       fail('budget.estimateUsd shows no reservation');
+    else if (
+      Number.isFinite(budget.maxUsd) &&
+      microUsd(budget.estimateUsd) > microUsd(budget.maxUsd)
+    )
+      fail('budget.estimateUsd exceeds budget.maxUsd');
     if (!(Number.isFinite(budget.spentUsd) && budget.spentUsd > 0))
       fail('budget.spentUsd shows no spend');
     else {
       if (budget.spentUsd > budget.maxUsd) fail('budget.spentUsd exceeds budget.maxUsd');
       // The ledger settles the larger of the provider's cost and a token-based recomputation, so it
       // can exceed the rows, never undercut them.
-      const rowsMicroUsd = spans.reduce((total, span) => total + (span?.costMicroUsd ?? 0), 0);
-      if (Math.round(budget.spentUsd * 1_000_000) < rowsMicroUsd)
+      const spansMicroUsd = spans.reduce((total, span) => total + (span?.costMicroUsd ?? 0), 0);
+      const rowsMicroUsd = rows.reduce(
+        (total, row) => total + (isCount(row?.costUsd) ? microUsd(row.costUsd) : 0),
+        0,
+      );
+      const spentMicroUsd = microUsd(budget.spentUsd);
+      if (spentMicroUsd < Math.max(spansMicroUsd, rowsMicroUsd))
         fail('budget.spentUsd is below the cost the rows report');
+      // A reservation quote is the worst case the ledger authorized for a call, so settled spend
+      // above the summed quotes means the books and the reservations do not reconcile.
+      if (Number.isFinite(budget.estimateUsd) && spentMicroUsd > microUsd(budget.estimateUsd))
+        fail('budget.spentUsd exceeds budget.estimateUsd');
     }
     if (budget.requests !== dispatches)
       fail(`budget.requests is ${budget.requests}, rows dispatched ${dispatches}`);
+    if (budget.requests !== EXECUTOR_SPLIT_MAX_REQUESTS)
+      fail(
+        `budget.requests is ${budget.requests}, not the ${EXECUTOR_SPLIT_MAX_REQUESTS} one planner and one executor request make`,
+      );
     if (!(budget.requests <= EXECUTOR_SPLIT_MAX_REQUESTS))
       fail(
         `budget.requests is ${budget.requests}, above the pre-flight ceiling of ${EXECUTOR_SPLIT_MAX_REQUESTS}`,

@@ -32,6 +32,8 @@ const attempt = (name) => ({
   elapsedMs: 1,
 });
 const calls = [];
+const dispatchPolicies = [];
+let plannerFails = false;
 let executorEchoes = 'google/gemini-3.8-flash';
 let executorAttempts = [attempt('initial')];
 let plannerValue;
@@ -40,9 +42,25 @@ vi.mock('../../convex/lib/nodeslideProvider.ts', async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
-    callNodeSlideFreeJson: vi.fn(async (request) => {
+    callNodeSlideFreeJson: vi.fn(async (request, dependencies) => {
       calls.push(request.model);
+      dispatchPolicies.push(dependencies?.dispatchPolicy);
       const isExecutor = request.jsonSchema?.name === 'nodeslide_copy_execution';
+      // A planner that made two HTTP calls (initial + repair) and still failed.
+      if (plannerFails && !isExecutor)
+        return {
+          ok: false,
+          reason: 'The planner returned invalid JSON.',
+          telemetry: {
+            provider: 'openrouter',
+            requestedModel: request.model,
+            model: request.model,
+            costMicroUsd: 30_000,
+            inputTokens: 200,
+            outputTokens: 80,
+            attempts: [attempt('initial'), attempt('repair')],
+          },
+        };
       return {
         ok: true,
         value: isExecutor
@@ -76,9 +94,15 @@ vi.mock('../../convex/lib/nodeslideProvider.ts', async (importOriginal) => {
  */
 function fakeLedger() {
   const actualMicroUsd = new Map();
+  // The shared stub quotes 1 USD per call, which no 0.25 USD probe could ever authorize; a real
+  // worst-case quote for these two calls is a few cents, so the books here use 50,000 micro-USD.
   const withActual = (response, budgetId) => ({
     ...response,
-    budget: { ...response.budget, actualMicroUsd: actualMicroUsd.get(budgetId) ?? 0 },
+    ...(response.call ? { call: { ...response.call, quoteMicroUsd: 50_000 } } : {}),
+    budget: {
+      ...response.budget,
+      actualMicroUsd: actualMicroUsd.get(budgetId) ?? 0,
+    },
   });
   const ctx = {
     runMutation: async (_reference, args) => {
@@ -102,6 +126,7 @@ function fakeLedger() {
 
 async function run() {
   calls.length = 0;
+  dispatchPolicies.length = 0;
   // The planner reply must name real element ids of the probe deck; the probe builds the same deck.
   const snapshot = buildGoldenNodeSlide('executor-split-probe', 1_700_000_000_000).snapshot;
   const bySlide = new Map();
@@ -129,6 +154,7 @@ async function run() {
 }
 
 async function acceptedReceipt() {
+  plannerFails = false;
   executorEchoes = 'google/gemini-3.8-flash';
   executorAttempts = [attempt('initial')];
   return await run();
@@ -195,27 +221,58 @@ describe('runNodeSlideExecutorSplitProbe', () => {
     expect(receipt.environment.runtime).toBe('convex-node-action');
   });
 
-  it('records the JSON-repair second call and is rejected for it', async () => {
+  it('turns the provider retry off for every paid dispatch and records the enforced policy', async () => {
+    const receipt = await acceptedReceipt();
+    // The policy reaches the provider call; it is not inferred afterwards from what happened.
+    expect(dispatchPolicies).toHaveLength(2);
+    for (const policy of dispatchPolicies) expect(policy?.maxRetries).toBe(0);
+    expect(receipt.dispatchPolicy).toEqual({
+      maxRetries: 0,
+      crossModelFallback: false,
+    });
+  });
+
+  it('rejects a span that nevertheless dispatched twice, and still reports the enforced policy', async () => {
     executorEchoes = 'google/gemini-3.8-flash';
+    plannerFails = false;
     executorAttempts = [attempt('initial'), attempt('repair')];
     const receipt = await run();
     expect(receipt.rows.find((row) => row.toolName === 'executor')?.dispatches).toBe(2);
     expect(receipt.budget.requests).toBe(3);
-    expect(receipt.dispatchPolicy).toEqual({ maxRetries: 1, crossModelFallback: false });
+    // Round 1 derived maxRetries from the observed count; it is the policy that was enforced.
+    expect(receipt.dispatchPolicy).toEqual({
+      maxRetries: 0,
+      crossModelFallback: false,
+    });
     expect(executorSplitReceiptFailures(receipt, COMMIT)).toEqual(
       expect.arrayContaining([
-        expect.stringMatching(/^dispatchPolicy is /u),
+        'executor row dispatched 2 times, not exactly once',
+        'budget.requests is 3, not the 2 one planner and one executor request make',
         'budget.requests is 3, above the pre-flight ceiling of 2',
       ]),
     );
   });
 
+  it('reports the requests a failed planner made instead of zero', async () => {
+    plannerFails = true;
+    executorAttempts = [attempt('initial')];
+    const receipt = await run();
+    expect(receipt.routing.reason).toBe('planner_failed');
+    expect(receipt.rows.map((row) => [row.toolName, row.dispatches])).toEqual([['planner', 2]]);
+    expect(receipt.budget.requests).toBe(2);
+    expect(receipt.budget.stoppedBy).toBe('The planner returned invalid JSON.');
+    expect(executorSplitReceiptFailures(receipt, COMMIT).length).toBeGreaterThan(0);
+  });
+
   it('is rejected when the provider echoed a different executor than the one requested', async () => {
+    plannerFails = false;
     executorEchoes = 'google/gemini-3.6-flash';
     executorAttempts = [attempt('initial')];
     const receipt = await run();
     expect(receipt.rows.find((row) => row.toolName === 'executor')?.fallbackUsed).toBe(true);
-    expect(receipt.dispatchPolicy.crossModelFallback).toBe(true);
+    // The policy is what was enforced (no code path re-dispatches to another model); the echo
+    // mismatch itself is what the row and the validator catch.
+    expect(receipt.dispatchPolicy.crossModelFallback).toBe(false);
     const failures = executorSplitReceiptFailures(receipt, COMMIT);
     expect(failures).toEqual(
       expect.arrayContaining([
@@ -397,6 +454,88 @@ describe('executorSplitReceiptFailures rejects incomplete or inconsistent eviden
         return r;
       },
       'budget.requests is 1, rows dispatched 2',
+    ],
+    [
+      'rows stripped of usage, cost and dispatches with requests 0',
+      (r) => {
+        for (const row of r.rows) {
+          row.usage = undefined;
+          row.costUsd = undefined;
+          row.dispatches = undefined;
+        }
+        r.budget.requests = 0;
+        return r;
+      },
+      'planner row usage is missing',
+    ],
+    [
+      'row dispatches missing (counted as zero before)',
+      (r) => {
+        for (const row of r.rows) row.dispatches = undefined;
+        r.budget.requests = 0;
+        return r;
+      },
+      'executor row dispatched null times, not exactly once',
+    ],
+    [
+      'rows costed at 10 USD each against a ledger that settled 0.021',
+      (r) => {
+        for (const row of r.rows) row.costUsd = 10;
+        return r;
+      },
+      'budget.spentUsd is below the cost the rows report',
+    ],
+    [
+      'rows whose cost disagrees with their spans',
+      (r) => {
+        r.rows.find((row) => row.toolName === 'executor').costUsd = 0.5;
+        return r;
+      },
+      'executor row costUsd and span costMicroUsd disagree',
+    ],
+    [
+      'rows whose usage disagrees with their spans',
+      (r) => {
+        r.rows.find((row) => row.toolName === 'planner').usage = {
+          inputTokens: 1,
+          outputTokens: 1,
+        };
+        return r;
+      },
+      'planner row usage and span usage disagree',
+    ],
+    [
+      'every row at zero dispatches and zero requests',
+      (r) => {
+        for (const row of r.rows) row.dispatches = 0;
+        r.budget.requests = 0;
+        return r;
+      },
+      'budget.requests is 0, not the 2 one planner and one executor request make',
+    ],
+    [
+      'a reservation estimate above the ceiling',
+      (r) => {
+        r.budget.estimateUsd = r.budget.maxUsd + 0.01;
+        return r;
+      },
+      'budget.estimateUsd exceeds budget.maxUsd',
+    ],
+    [
+      'settled spend above the summed reservation quotes',
+      (r) => {
+        r.budget.estimateUsd = 0.005;
+        return r;
+      },
+      'budget.spentUsd exceeds budget.estimateUsd',
+    ],
+    [
+      'two planner spans and no executor span',
+      (r) => {
+        r.spans.find((span) => span.toolName === 'executor').toolName = 'planner';
+        return r;
+      },
+      'spans and rows are not exactly one planner and one executor',
     ],
     [
       'the wrong candidate',

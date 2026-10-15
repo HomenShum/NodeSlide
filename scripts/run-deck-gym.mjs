@@ -40,13 +40,14 @@ const maxConcurrency = Math.max(
 const runs = matrix.runs.slice(0, limit);
 await mkdir(runsDir, { recursive: true });
 // The cap binds the whole campaign, so what earlier invocations already spent counts before any
-// run is scheduled, whether those runs resume as skipped or are about to be re-run.
+// run is scheduled, whether those runs resume as skipped or are about to be re-run, and whether or
+// not `--limit` selected them this time: restore reads every run directory in `runsDir`.
 const budget = createDeckGymCampaignBudget({
   maxTotalCostMicroUsd: resolveDeckGymMaxTotalCostMicroUsd({
     explicit: option('max-total-cost-micro-usd'),
     limit: option('limit') === undefined ? undefined : limit,
   }),
-  spentCostMicroUsd: await restoreDeckGymSpend({ runs, runsDir }),
+  spentCostMicroUsd: await restoreDeckGymSpend({ runsDir }),
 });
 
 const browser = await chromium.launch({ headless: true });

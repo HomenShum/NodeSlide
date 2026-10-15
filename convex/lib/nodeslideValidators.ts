@@ -1,6 +1,5 @@
 import { ConvexError, v } from 'convex/values';
 import {
-  NODESLIDE_DEFAULT_REASONING_EFFORT,
   type NodeSlideAgentModelId,
   type NodeSlideReasoningEffort,
   isNodeSlideAgentModelId,
@@ -8,6 +7,7 @@ import {
   isNodeSlideReasoningEffort,
   nodeSlideAgentModel,
   nodeSlideDefaultModelForProviderMode,
+  nodeSlideDefaultReasoningEffort,
   nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
 import {
@@ -178,7 +178,7 @@ export function validateNodeSlideBriefProviderChoice(
         `The selected model is not available through ${providerName}.`,
       );
     }
-    const selectedEffort = providerEffort ?? NODESLIDE_DEFAULT_REASONING_EFFORT;
+    const selectedEffort = providerEffort ?? nodeSlideDefaultReasoningEffort(selectedModel);
     if (!isNodeSlideReasoningEffort(selectedEffort)) {
       throw nodeslideCreatePublicError(
         'invalid_request',

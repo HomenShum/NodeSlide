@@ -37,6 +37,7 @@ import type {
   ImageContent,
   TextContent,
 } from '@earendil-works/pi-ai/compat';
+import { nodeSlideLedgerPricedCost } from '../../../shared/nodeslideRunBudget.js';
 
 /**
  * pi-ai's Provider type is `KnownProvider | string` (open by design — users
@@ -134,7 +135,14 @@ export async function call(opts: CallOptions): Promise<CallResult> {
   // unknown ids — we surface that as a clear error message to the agent.
   // biome-ignore lint/suspicious/noExplicitAny: see comment above
   const registryModel = (pi.getModel as any)(opts.provider, canonicalId);
-  const model = opts.baseUrl ? { ...registryModel, baseUrl: opts.baseUrl } : registryModel;
+  // The bundled pi-ai catalog is an older price snapshot than the NodeSlide run-budget ledger
+  // (kimi-k3 0.5 against 0.7, glm-5.2 0.171 against 0.05), so a response on an OpenRouter route the
+  // ledger prices is costed at the ledger's rate, the same one the Convex dispatcher uses.
+  const pricedModel =
+    opts.provider === 'openrouter' && registryModel?.cost
+      ? { ...registryModel, cost: nodeSlideLedgerPricedCost(canonicalId, registryModel.cost) }
+      : registryModel;
+  const model = opts.baseUrl ? { ...pricedModel, baseUrl: opts.baseUrl } : pricedModel;
 
   const userContent: (TextContent | ImageContent)[] = [{ type: 'text', text: opts.userText }];
   if (opts.userImage !== undefined) {

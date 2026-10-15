@@ -719,6 +719,35 @@ export function nodeSlideModelPricing(model: string): NodeSlideModelPricingMetad
   };
 }
 
+/**
+ * Re-prices a provider catalog row (USD per million tokens, the shape pi-ai uses) at the ledger's
+ * rate. The ledger is the repo's price of record and the reservation quote is computed from it, so
+ * every dispatcher that turns a response into dollars must agree with it or a valid response can
+ * settle above the quote it was reserved at.
+ *
+ * Input and output take the ledger's rate. The cached-read rate is capped at the ledger's input
+ * rate, because the quote prices every input token at that rate and a cached token is never worth
+ * more than an uncached one: pi-ai's bundled z-ai/glm-5.2 row carries cacheRead 0.162 against a
+ * ledger input of 0.05, which would cost a fully cached prompt at 3.24x its quote. The cache-write
+ * rate is left alone: Claude and GPT rows bill writes at 1.25x input, which the quote covers because
+ * its input estimate is at least MAX_PROVIDER_ATTEMPTS (2x) the bytes actually sent (asserted in
+ * convex/nodeslideModelPricing.test.ts). Rows the ledger does not price (free, dynamic, unknown) are
+ * returned untouched.
+ */
+export function nodeSlideLedgerPricedCost<
+  Cost extends { input: number; output: number; cacheRead: number },
+>(model: string, cost: Cost): Cost {
+  const pricing = nodeSlideModelPricing(model);
+  if (pricing.kind !== 'priced') return cost;
+  const input = pricing.inputMicroUsdPerMillionTokens / 1_000_000;
+  return {
+    ...cost,
+    input,
+    output: pricing.outputMicroUsdPerMillionTokens / 1_000_000,
+    cacheRead: Math.min(cost.cacheRead, input),
+  };
+}
+
 /** True only for pricing a reservation can actually be computed from. */
 export function isNodeSlideScoredPricing(
   pricing: NodeSlideModelPricingMetadata,

@@ -72,6 +72,7 @@ import {
   isNodeSlideOfferedAgentModelId,
   nodeSlideAgentModel,
   nodeSlideDefaultModelForProviderMode,
+  nodeSlideDefaultReasoningEffort,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
   unhandledPatchOperation,
@@ -2093,10 +2094,11 @@ export function createAiProviderRequest(
   mode: AiProviderMode,
   consentGranted: boolean,
   model?: NodeSlideAgentModelId,
-  effort: NodeSlideReasoningEffort = NODESLIDE_DEFAULT_REASONING_EFFORT,
+  requestedEffort?: NodeSlideReasoningEffort,
 ): AiProviderRequest | null {
   if (mode === 'deterministic') return { providerMode: 'deterministic' };
   const selectedModel = model ?? nodeSlideDefaultModelForProviderMode(mode);
+  const effort = requestedEffort ?? nodeSlideDefaultReasoningEffort(selectedModel);
   if (!consentGranted || !nodeSlideModelSupportsReasoningEffort(selectedModel, effort)) return null;
   return {
     providerMode: mode,
@@ -2111,10 +2113,11 @@ export function createAiVariationProviderRequest(
   mode: AiProviderMode,
   consentGranted: boolean,
   model?: NodeSlideAgentModelId,
-  effort: NodeSlideReasoningEffort = NODESLIDE_DEFAULT_REASONING_EFFORT,
+  requestedEffort?: NodeSlideReasoningEffort,
 ): AiVariationProviderRequest | null {
   if (mode === 'deterministic') return { providerMode: 'deterministic' };
   const selectedModel = model ?? nodeSlideDefaultModelForProviderMode(mode);
+  const effort = requestedEffort ?? nodeSlideDefaultReasoningEffort(selectedModel);
   if (!consentGranted || !nodeSlideModelSupportsReasoningEffort(selectedModel, effort)) return null;
   return {
     providerMode: mode,

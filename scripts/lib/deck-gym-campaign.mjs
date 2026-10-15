@@ -9,13 +9,14 @@
  * Trace inspector text, which is attribution), or the full reservation when that figure cannot be
  * read. It is a separate module so the production worker and its test are the same function.
  */
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import {
   NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD,
   combineNodeGymLedgerReceipts,
   nodeGymRunCharge,
   shouldStopCampaign,
+  writeNodeGymFileAtomic,
 } from './node-gym-runner-core.mjs';
 
 export const DECK_GYM_DEFAULT_LIMIT_FOR_UNCAPPED = 12;
@@ -97,12 +98,21 @@ export async function readDeckGymRunCharges(runDir) {
   }
 }
 
+/**
+ * The whole history is rewritten on every change, so the rewrite must be atomic: a plain truncating
+ * write interrupted partway leaves a file that cannot be read back, which restore charges as ONE
+ * reservation however many attempts it held (2,000,000 micro-USD of history came back as 1,000,000
+ * and the next run was admitted under the cap). Temp file plus rename leaves either the old history
+ * or the new one, never a torn file.
+ */
 export async function writeDeckGymRunCharges(runDir, charges) {
   await mkdir(runDir, { recursive: true });
-  await writeFile(
+  await writeNodeGymFileAtomic(
+    runDir,
     path.join(runDir, DECK_GYM_CHARGES_FILE),
     `${JSON.stringify({ schemaVersion: DECK_GYM_CHARGES_SCHEMA, charges }, null, 2)}
 `,
+    { label: 'Deck Gym charge history' },
   );
 }
 
@@ -126,16 +136,25 @@ export async function recordDeckGymCharge(runDir, charge) {
 }
 
 /**
- * What earlier invocations already spent on the runs this invocation may touch. A run directory with
- * a charges file contributes its charges. A directory without one but with anything in it is from an
- * invocation that predates charge records, or from a process that died before writing one: its spend
- * is unknown, so it is charged one reservation, written down now so that re-running the run cannot
- * erase it.
+ * What every earlier invocation already spent in this runs directory, whatever this invocation
+ * selected: `--limit` or a narrower matrix must not make earlier spend disappear, because the cap
+ * binds the whole campaign. A run directory with a charges file contributes its charges. A directory
+ * without one but with anything in it is from an invocation that predates charge records, or from a
+ * process that died before writing one: its spend is unknown, so it is charged one reservation,
+ * written down now so that re-running the run cannot erase it. Only a missing runs directory means
+ * nothing was spent; any other read failure is unknown spend and stops the campaign.
  */
-export async function restoreDeckGymSpend({ runs, runsDir }) {
+export async function restoreDeckGymSpend({ runsDir }) {
+  let entries;
+  try {
+    entries = await readdir(runsDir, { withFileTypes: true });
+  } catch (error) {
+    if (error?.code === 'ENOENT') return 0;
+    throw error;
+  }
   let total = 0;
-  for (const run of runs) {
-    const runDir = path.join(runsDir, run.runId);
+  for (const entry of entries.filter((candidate) => candidate.isDirectory())) {
+    const runDir = path.join(runsDir, entry.name);
     let charges = await readDeckGymRunCharges(runDir);
     if (charges === null) {
       const present = await readdir(runDir).catch(() => []);

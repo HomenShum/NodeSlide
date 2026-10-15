@@ -14,9 +14,13 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   NODESLIDE_AGENT_MODELS,
+  NODESLIDE_DEFAULT_REASONING_EFFORT,
   NODESLIDE_OFFERED_AGENT_MODELS,
+  NODESLIDE_OPENROUTER_EDIT_CONSENT,
   type NodeSlideAgentModelId,
   nodeSlideAgentModel,
+  nodeSlideDefaultReasoningEffort,
+  nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
 import {
   callNodeSlideFreeJson,
@@ -24,10 +28,21 @@ import {
   openrouterProviderWithOverrides,
   probeNodeSlideModelOnce,
 } from './nodeslideProvider';
+import { validateNodeSlideProviderChoice } from './nodeslideProviderConsent';
 import {
   NODESLIDE_ROUTING_EXECUTOR_MODEL,
   resolveNodeSlideRouting,
 } from './nodeslideRoutingPolicy';
+import {
+  NODESLIDE_OPENROUTER_BRIEF_CONSENT,
+  validateNodeSlideBriefProviderChoice,
+} from './nodeslideValidators';
+
+// The first provider call in this file pays for the cold pi-ai catalog/lazy-transport import. It took
+// 6565 ms under a loaded `npm run check` against the 5 s default (round 1, review defect 11), so this
+// file gets an explicit budget instead of depending on machine load. Only the timeout moves; every
+// assertion is unchanged.
+vi.setConfig({ testTimeout: 30_000 });
 
 /** SPEC section 1.2, `openrouter` column. */
 const WIRE_ID = {
@@ -160,9 +175,11 @@ describe('the new catalog rows build refresh-safe requests', () => {
     });
   }
 
-  it('Opus 5.5 never relies on the vendor default effort: every request names one', async () => {
-    // Opus 5.5 defaults to medium on the vendor side (Opus 5 was high). NodeSlide's own default
-    // is 'high' and it is always sent, so the vendor default can never apply.
+  it('Opus 5.5 defaults to its own row effort (medium) and every request names one', async () => {
+    // SPEC A.2.8: Opus 5.5 defaults to medium on the vendor side (Opus 5 was high), "explicit per
+    // row". The catalog row carries defaultEffort 'medium'; the provider sends it explicitly so
+    // the vendor default never applies. (Round 1 asserted 'high' here and locked in the wrong value.)
+    expect(nodeSlideDefaultReasoningEffort(WIRE_ID.opus55)).toBe('medium');
     await callNodeSlideFreeJson({
       systemPrompt: 'Return JSON.',
       userText: '{}',
@@ -172,9 +189,59 @@ describe('the new catalog rows build refresh-safe requests', () => {
     expect(captured.length).toBeGreaterThan(0);
     for (const request of captured) {
       expect(request.body['model']).toBe(WIRE_ID.opus55);
-      expect((request.body['reasoning'] as { effort: string }).effort).toBe('high');
+      expect((request.body['reasoning'] as { effort: string }).effort).toBe('medium');
       expectNoForbiddenKeys(request.body);
     }
+  });
+
+  it('an explicit caller effort is kept as given, Opus 5.5 included', async () => {
+    await callNodeSlideFreeJson({
+      systemPrompt: 'Return JSON.',
+      userText: '{}',
+      maxTokens: 500,
+      model: WIRE_ID.opus55,
+      reasoningEffort: 'high',
+    });
+    expect(captured.length).toBeGreaterThan(0);
+    for (const request of captured) {
+      expect((request.body['reasoning'] as { effort: string }).effort).toBe('high');
+    }
+  });
+
+  it('every defaulting boundary agrees: only Opus 5.5 differs from the global high default', () => {
+    for (const row of NODESLIDE_OFFERED_AGENT_MODELS) {
+      const id = row.id as NodeSlideAgentModelId;
+      const expected = id === WIRE_ID.opus55 ? 'medium' : NODESLIDE_DEFAULT_REASONING_EFFORT;
+      expect(nodeSlideDefaultReasoningEffort(id), id).toBe(expected);
+      expect(nodeSlideModelSupportsReasoningEffort(id, expected), id).toBe(true);
+      // Public create boundary and public edit/variation consent boundary, no caller effort.
+      expect(
+        validateNodeSlideBriefProviderChoice(
+          'openrouter_free',
+          NODESLIDE_OPENROUTER_BRIEF_CONSENT,
+          id,
+        ),
+        `create ${id}`,
+      ).toMatchObject({ providerEffort: expected });
+      expect(
+        validateNodeSlideProviderChoice(
+          'propose_edit',
+          'openrouter_free',
+          NODESLIDE_OPENROUTER_EDIT_CONSENT,
+          id,
+        ),
+        `edit ${id}`,
+      ).toMatchObject({ providerEffort: expected });
+    }
+    // An explicit effort passes through both boundaries untouched.
+    expect(
+      validateNodeSlideBriefProviderChoice(
+        'openrouter_free',
+        NODESLIDE_OPENROUTER_BRIEF_CONSENT,
+        WIRE_ID.opus55,
+        'high',
+      ),
+    ).toMatchObject({ providerEffort: 'high' });
   });
 
   it('every offered row is a priced, temperature-free-or-declared route', () => {

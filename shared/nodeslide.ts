@@ -113,10 +113,11 @@ export const NODESLIDE_AGENT_MODELS = [
     bestFor: 'Complex planning and review',
     productionEnabled: true,
     // Sampling parameters are a 400 on Claude 5.5. Opus 5.5 defaults to medium effort on the
-    // vendor side (Opus 5 defaulted to high); NodeSlide never relies on a vendor default because
-    // every request carries an explicit reasoning.effort (NODESLIDE_DEFAULT_REASONING_EFFORT).
+    // vendor side (Opus 5 defaulted to high; spec A.2.8 "explicit per row"), so the row carries its
+    // own default and every request still names an explicit reasoning.effort.
     supportsTemperature: false,
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
+    defaultEffort: 'medium',
   },
   {
     id: 'google/gemini-3.5-flash',
@@ -305,6 +306,18 @@ export const NODESLIDE_REASONING_EFFORTS = [
 export type NodeSlideReasoningEffort = (typeof NODESLIDE_REASONING_EFFORTS)[number]['id'];
 export const NODESLIDE_DEFAULT_REASONING_EFFORT: NodeSlideReasoningEffort = 'high';
 
+/**
+ * The effort a request gets when the caller names none: the row's own `defaultEffort` when it
+ * declares one (Opus 5.5 = medium), otherwise NODESLIDE_DEFAULT_REASONING_EFFORT. An explicit
+ * caller effort is never routed through here.
+ */
+export function nodeSlideDefaultReasoningEffort(
+  modelId: NodeSlideAgentModelId,
+): NodeSlideReasoningEffort {
+  const route = nodeSlideAgentModel(modelId);
+  return 'defaultEffort' in route ? route.defaultEffort : NODESLIDE_DEFAULT_REASONING_EFFORT;
+}
+
 export function isNodeSlideReasoningEffort(value: unknown): value is NodeSlideReasoningEffort {
   return NODESLIDE_REASONING_EFFORTS.some((effort) => effort.id === value);
 }
@@ -344,14 +357,17 @@ const NODESLIDE_FREE_FALLBACK_MODEL_ID = 'openrouter/free' as const;
 /**
  * Resolves a catalog id to its route. Cost class is preserved and an unknown id fails closed: an id
  * the catalog does not carry never becomes a paid default (it used to resolve to the first row, the
- * paid Nebius GLM route). A free-looking unknown (`:free` suffix) resolves to the free router row;
+ * paid Nebius GLM route). A free-looking unknown (`:free` or `-free` suffix) resolves to the free router row;
  * every other unknown throws. The public Convex validators and `isNodeSlideAgentModelId` reject such
  * ids at the API boundary first.
  */
 export function nodeSlideAgentModel(modelId: NodeSlideAgentModelId) {
   const route = NODESLIDE_AGENT_MODELS.find((model) => model.id === modelId);
   if (route) return route;
-  if (typeof modelId === 'string' && (modelId as string).endsWith(':free')) {
+  if (
+    typeof modelId === 'string' &&
+    ((modelId as string).endsWith(':free') || (modelId as string).endsWith('-free'))
+  ) {
     const free = NODESLIDE_AGENT_MODELS.find(
       (model) => model.id === NODESLIDE_FREE_FALLBACK_MODEL_ID,
     );

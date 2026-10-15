@@ -383,6 +383,44 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     expect(JSON.stringify(result)).not.toContain('still-not-json');
   });
 
+  it('maxRetries 0 makes exactly one completion: no JSON-repair call after malformed JSON', async () => {
+    const complete = vi
+      .fn<NodeSlideCompletion>()
+      .mockResolvedValueOnce(completion('not-json'))
+      .mockResolvedValueOnce(completion('{"operations":[{"op":"replace_text"}]}'));
+
+    const result = await callNodeSlideFreeJson(request, {
+      complete,
+      dispatchPolicy: { maxRetries: 0 },
+    });
+
+    expect(result).toMatchObject({
+      ok: false,
+      telemetry: { attempts: [{ attempt: 'initial' }] },
+    });
+    expect(complete).toHaveBeenCalledTimes(1);
+  });
+
+  it('maxRetries 0 also turns off the schema-compatibility retry', async () => {
+    const complete = vi
+      .fn<NodeSlideCompletion>()
+      .mockResolvedValueOnce(
+        completion('', {
+          stopReason: 'error',
+          errorMessage: 'response_format JSON schema is not supported by this endpoint',
+        }),
+      )
+      .mockResolvedValueOnce(completion('{"operations":[{"op":"replace_text"}]}'));
+
+    const result = await callNodeSlideFreeJson(request, {
+      complete,
+      dispatchPolicy: { maxRetries: 0 },
+    });
+
+    expect(result.ok).toBe(false);
+    expect(complete).toHaveBeenCalledTimes(1);
+  });
+
   it('uses the single repair attempt without native schema mode when a route rejects it', async () => {
     const complete = vi
       .fn<NodeSlideCompletion>()
@@ -718,6 +756,22 @@ describe('unknown model ids fail closed (SPEC Part A rule 10)', () => {
     expect(route.id).toBe('openrouter/free');
     expect(route.provider).toBe('openrouter');
     expect(route.provider).not.toBe(nodeSlideAgentModel(NODESLIDE_NEBIUS_AGENT_MODEL).provider);
+  });
+
+  it('resolves a "-free" suffix to the free router row too, and keeps lookalikes paid-unknown', async () => {
+    // SPEC A.0.10: free-looking is a "-free" OR ":free" suffix. 'foo-free' used to throw.
+    for (const id of ['foo-free', 'vendor/unlisted-model-free']) {
+      const route = nodeSlideAgentModel(id as never);
+      expect(route.id, id).toBe('openrouter/free');
+    }
+    // Only a suffix counts: "free" elsewhere in the id is not free-looking.
+    for (const id of ['free-model', 'vendor/freedom', 'vendor/free-tier-pro'])
+      expect(() => nodeSlideAgentModel(id as never), id).toThrow(/not in the catalog/);
+    const complete = vi.fn<NodeSlideCompletion>(async () => completion('{"ok":true}'));
+    await probeNodeSlideModelOnce('foo-free' as never, { complete });
+    for (const call of complete.mock.calls) {
+      expect(call[0]).toMatchObject({ provider: 'openrouter', model: 'openrouter/free' });
+    }
   });
 
   it('the unguarded probe rejects an unknown paid id before any dispatch', async () => {

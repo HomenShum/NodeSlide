@@ -19,7 +19,8 @@
  * pins the table to a recorded observation. Re-fetch the endpoint and update
  * both transcriptions together when the recorded date gets old.
  */
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { call as callMcpByok } from '../mcp/src/lib/llmClient';
 import {
   NODESLIDE_AGENT_MODELS,
   type NodeSlideAgentModelId,
@@ -39,6 +40,7 @@ import { decideNodeSlideAutoRoute } from './lib/nodeslideAutoRoutingPolicy';
 import {
   NODESLIDE_KIMI_K3,
   NODESLIDE_OPENROUTER_MODEL_OVERRIDES,
+  callNodeSlideFreeJson,
   openrouterProviderWithOverrides,
 } from './lib/nodeslideProvider';
 
@@ -315,7 +317,18 @@ describe('worst-case scoring rounds against the run, never in its favour', () =>
  *      row at the ledger's rate, and this test is what notices the day that stops being true;
  *   4. the auto-router estimate (`nodeslideAutoRoutingPolicy.ts`), which read the same pi-ai
  *      catalog: it caps a job-create request's cost, so an under-estimate admits a route the ledger
- *      would refuse. It prices ledger-priced routes at the ledger's rate for the same reason.
+ *      would refuse. It prices ledger-priced routes at the ledger's rate for the same reason;
+ *   5. the MCP BYOK client (`mcp/src/lib/llmClient.ts`), which called `getModel` on the raw pi-ai
+ *      catalog and reported `usage.cost.total` as `costUsd` (kimi-k3 $0.015500 against the ledger's
+ *      $0.015700 for 1k in / 1k out, glm-5.2 $0.007371 against $0.007050). It prices OpenRouter
+ *      routes through `nodeSlideLedgerPricedCost`, the function the provider in 3 uses. It carries
+ *      no date of its own: it takes the ledger's, `NODESLIDE_MODEL_PRICING_VERIFIED_AT`.
+ *
+ * Cache rates are part of the agreement, not only input and output: the reservation quote prices
+ * every input token at the ledger's input rate, so a cached-read token must not cost more than that
+ * (pi-ai's glm-5.2 row said 0.162 against 0.05, which settled 100k cached tokens at 3.24x their
+ * quote and left a valid response unreconciled), and a cache-write premium must stay inside the
+ * quote's 2x input-estimate headroom (Claude and GPT rows bill writes at 1.25x).
  *
  * Above-threshold tiers (pi-ai lists a higher rate above 200K-272K prompt tokens for gemini-3.1-pro
  * and the gpt-5.6 / gpt-6.1 rows) are pi-ai-only data the flat ledger does not model; a NodeSlide
@@ -391,6 +404,116 @@ describe('every pricing source in this repo agrees (Part A rule 6)', () => {
         pricing.outputMicroUsdPerMillionTokens,
       );
     }
+  });
+
+  it('no cache rate prices a token above what the reservation quote assumed', () => {
+    // The quote's input estimate is bytes x MAX_PROVIDER_ATTEMPTS (2) + overhead, i.e. at least twice
+    // the tokens ever sent, so a write premium up to 2x the input rate still settles inside it.
+    const WRITE_PREMIUM_HEADROOM = 2;
+    const models = new Map(
+      openrouterProviderWithOverrides()
+        .getModels()
+        .map((model) => [model.id, model] as const),
+    );
+    for (const route of ledgerPricedOpenRouterRoutes) {
+      const model = models.get(route.upstreamId);
+      if (!model) throw new Error(`${route.upstreamId} is missing from the provider`);
+      expect(model.cost.cacheRead, `${route.id} cacheRead <= ledger input`).toBeLessThanOrEqual(
+        model.cost.input,
+      );
+      expect(
+        model.cost.cacheWrite,
+        `${route.id} cacheWrite within the quote's headroom`,
+      ).toBeLessThanOrEqual(model.cost.input * WRITE_PREMIUM_HEADROOM);
+    }
+  });
+
+  describe('a response is costed at the ledger rate through both response paths', () => {
+    const originalKey = process.env['OPENROUTER_API_KEY'];
+    let usage: Record<string, unknown> = {};
+    const sse = () =>
+      [
+        'data: {"id":"gen-fake","model":"fake/echo","choices":[{"index":0,"delta":{"role":"assistant","content":"{\\"ok\\":true}"},"finish_reason":null}]}\n\n',
+        `data: ${JSON.stringify({
+          id: 'gen-fake',
+          model: 'fake/echo',
+          choices: [{ index: 0, delta: {}, finish_reason: 'stop' }],
+          usage,
+        })}\n\n`,
+        'data: [DONE]\n\n',
+      ].join('');
+    beforeEach(() => {
+      process.env['OPENROUTER_API_KEY'] = 'sk-or-test-fake-not-a-credential';
+      vi.stubGlobal(
+        'fetch',
+        async () =>
+          new Response(sse(), { status: 200, headers: { 'content-type': 'text/event-stream' } }),
+      );
+    });
+    afterEach(() => {
+      vi.unstubAllGlobals();
+      if (originalKey === undefined) Reflect.deleteProperty(process.env, 'OPENROUTER_API_KEY');
+      else process.env['OPENROUTER_API_KEY'] = originalKey;
+    });
+
+    const ledgerMicroUsd = (id: string, inputTokens: number, outputTokens: number) => {
+      const pricing = nodeSlideModelPricing(id);
+      if (pricing.kind !== 'priced') throw new Error(`${id} is not ledger-priced`);
+      return (
+        (inputTokens * pricing.inputMicroUsdPerMillionTokens +
+          outputTokens * pricing.outputMicroUsdPerMillionTokens) /
+        1_000_000
+      );
+    };
+    // MCP routes by vendor prefix; these are the routes it sends to OpenRouter by id.
+    const mcpRoutes = ['moonshotai/kimi-k3', 'z-ai/glm-5.2'] as const;
+    const mcpCall = (modelId: string) =>
+      callMcpByok({
+        provider: 'openrouter',
+        modelId,
+        systemPrompt: 'Return JSON.',
+        userText: '{}',
+      });
+
+    it('the MCP BYOK client costs 1k in / 1k out at the ledger rate (kimi-k3 $0.015700, glm-5.2 $0.007050)', async () => {
+      usage = { prompt_tokens: 1000, completion_tokens: 1000, total_tokens: 2000 };
+      for (const id of mcpRoutes) {
+        const result = await mcpCall(id);
+        expect(result.costUsd * 1_000_000, id).toBeCloseTo(ledgerMicroUsd(id, 1000, 1000), 6);
+      }
+    });
+
+    it('no response path costs a fully cached prompt above the input rate the quote assumed', async () => {
+      // 100k prompt tokens, all served from cache, 10 output tokens (Codex's replay: glm-5.2 settled
+      // 16,270 micro-USD against a 15,352 quote before the cache cap).
+      usage = {
+        prompt_tokens: 100_000,
+        completion_tokens: 10,
+        total_tokens: 100_010,
+        prompt_tokens_details: { cached_tokens: 100_000 },
+      };
+      for (const route of ledgerPricedOpenRouterRoutes) {
+        const ceiling = Math.ceil(ledgerMicroUsd(route.id, 100_000, 10));
+        const result = await callNodeSlideFreeJson({
+          systemPrompt: 'Return JSON.',
+          userText: '{}',
+          maxTokens: 500,
+          model: route.id,
+          reasoningEffort: (route.supportedEfforts as readonly string[]).includes('low')
+            ? 'low'
+            : 'high',
+        });
+        expect(result.ok, route.id).toBe(true);
+        if (!result.ok) continue;
+        expect(result.telemetry.costMicroUsd, `convex ${route.id}`).toBeLessThanOrEqual(ceiling);
+      }
+      for (const id of mcpRoutes) {
+        const result = await mcpCall(id);
+        expect(result.costUsd * 1_000_000, `mcp ${id}`).toBeLessThanOrEqual(
+          Math.ceil(ledgerMicroUsd(id, 100_000, 10)),
+        );
+      }
+    });
   });
 
   it('the auto-router estimates every metered route at the ledger rate', () => {

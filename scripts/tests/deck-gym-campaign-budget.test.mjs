@@ -7,10 +7,10 @@
  * the browser page and a fake backend budget ledger, and assert the queue stops before the cap even
  * when two runs are in flight, each reserved at its worst case.
  */
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   DECK_GYM_CHARGES_FILE,
   createDeckGymCampaignBudget,
@@ -22,6 +22,22 @@ import {
   restoreDeckGymSpend,
 } from '../lib/deck-gym-campaign.mjs';
 import { NODE_GYM_LEDGER_RECEIPT_VERSION } from '../lib/node-gym-runner-core.mjs';
+
+// Lets one test kill the publish step of an atomic write, the way a killed process would.
+const publish = vi.hoisted(() => ({ failNext: false }));
+vi.mock('node:fs/promises', async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    rename: async (...args) => {
+      if (publish.failNext) {
+        publish.failNext = false;
+        throw new Error('simulated kill while publishing the charge history');
+      }
+      return actual.rename(...args);
+    },
+  };
+});
 
 const ledger = (actual) => ({
   version: NODE_GYM_LEDGER_RECEIPT_VERSION,
@@ -254,7 +270,7 @@ describe('deck-gym campaign cap binds the whole campaign across invocations', ()
   async function invocation({ runs, maxTotalCostMicroUsd, ledgerMicroUsd, resumable = new Set() }) {
     const budget = createDeckGymCampaignBudget({
       maxTotalCostMicroUsd,
-      spentCostMicroUsd: await restoreDeckGymSpend({ runs, runsDir }),
+      spentCostMicroUsd: await restoreDeckGymSpend({ runsDir }),
     });
     const queue = [...runs];
     const executed = [];
@@ -311,39 +327,75 @@ describe('deck-gym campaign cap binds the whole campaign across invocations', ()
     expect((await charges('run-1')).map((entry) => entry.chargedMicroUsd)).toEqual([
       300_000, 400_000,
     ]);
-    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(700_000);
+    expect(await restoreDeckGymSpend({ runsDir })).toBe(700_000);
   });
 
   it('charges an attempt whose process died before it was charged its full reservation', async () => {
     await recordDeckGymReservation(path.join(runsDir, 'run-1'), 1_000_000);
-    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(1_000_000);
+    expect(await restoreDeckGymSpend({ runsDir })).toBe(1_000_000);
     // The re-run adds its own charge on top of the dead attempt's reservation.
     await invocation({
       runs: runIds('run-1'),
       maxTotalCostMicroUsd: 5_000_000,
       ledgerMicroUsd: 200_000,
     });
-    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(1_200_000);
+    expect(await restoreDeckGymSpend({ runsDir })).toBe(1_200_000);
   });
 
   it('charges a run directory from before charge records one reservation, and writes it down', async () => {
     const legacyDir = path.join(runsDir, 'run-1');
     await mkdir(legacyDir, { recursive: true });
     await writeFile(path.join(legacyDir, 'run.json'), '{}');
-    expect(await restoreDeckGymSpend({ runs: runIds('run-1', 'run-2'), runsDir })).toBe(1_000_000);
+    expect(await restoreDeckGymSpend({ runsDir })).toBe(1_000_000);
     expect(await charges('run-1')).toEqual([{ chargedMicroUsd: 1_000_000, source: 'reservation' }]);
     // Idempotent: a second restore does not charge it again, and a re-run cannot erase it.
-    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(1_000_000);
+    expect(await restoreDeckGymSpend({ runsDir })).toBe(1_000_000);
   });
 
   it('charges a charges file that cannot be read back one reservation', async () => {
     const dir = path.join(runsDir, 'run-1');
     await mkdir(dir, { recursive: true });
     await writeFile(path.join(dir, DECK_GYM_CHARGES_FILE), '{not json');
-    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(1_000_000);
+    expect(await restoreDeckGymSpend({ runsDir })).toBe(1_000_000);
+  });
+
+  it('counts the spend of runs this invocation did not select (a narrower --limit re-run)', async () => {
+    // First invocation: two runs, 1,000,000 each, against a 2,000,000 cap.
+    await invocation({
+      runs: runIds('run-1', 'run-2'),
+      maxTotalCostMicroUsd: 2_000_000,
+      ledgerMicroUsd: 1_000_000,
+    });
+    // Second invocation selects only run-3 (a smaller --limit or a narrower matrix). The earlier
+    // 2,000,000 still counts, so run-3 is refused instead of being admitted under a fresh cap.
+    const narrower = await invocation({
+      runs: runIds('run-3'),
+      maxTotalCostMicroUsd: 2_000_000,
+      ledgerMicroUsd: 1_000_000,
+    });
+    expect(narrower.budget.spentCostMicroUsd).toBe(2_000_000);
+    expect(narrower.executed).toEqual([]);
+    expect(narrower.budget.stoppedBy).toBe('campaign_projected_cost_limit_reached');
+  });
+
+  it('keeps the previous history intact when the rewrite is killed before it is published', async () => {
+    const dir = path.join(runsDir, 'run-1');
+    await recordDeckGymReservation(dir, 1_000_000);
+    await recordDeckGymReservation(dir, 1_000_000);
+    expect(await restoreDeckGymSpend({ runsDir })).toBe(2_000_000);
+
+    publish.failNext = true;
+    await expect(recordDeckGymReservation(dir, 1_000_000)).rejects.toThrow(/simulated kill/u);
+
+    // Before: a truncating write that died here left an unreadable file, restored as ONE
+    // reservation (1,000,000 for a 2,000,000 history). Now the old history survives whole and no
+    // temporary file is left behind.
+    expect(await restoreDeckGymSpend({ runsDir })).toBe(2_000_000);
+    expect(await charges('run-1')).toHaveLength(2);
+    expect(await readdir(dir)).toEqual([DECK_GYM_CHARGES_FILE]);
   });
 
   it('charges nothing for a run that has never been started', async () => {
-    expect(await restoreDeckGymSpend({ runs: runIds('run-1'), runsDir })).toBe(0);
+    expect(await restoreDeckGymSpend({ runsDir })).toBe(0);
   });
 });

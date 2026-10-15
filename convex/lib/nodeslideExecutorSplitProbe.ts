@@ -13,7 +13,11 @@ import {
 } from './nodeslideBudgetedProvider';
 import { type NodeSlideEditPlanningRequest, planNodeSlideEditRouted } from './nodeslideEditPlanner';
 import { nodeslideStableId } from './nodeslideIds';
-import { type NodeSlideProviderTelemetry, callNodeSlideFreeJson } from './nodeslideProvider';
+import {
+  type NodeSlideProviderResult,
+  type NodeSlideProviderTelemetry,
+  callNodeSlideFreeJson,
+} from './nodeslideProvider';
 import { NODESLIDE_ROUTING_EXECUTOR_MODEL } from './nodeslideRoutingPolicy';
 import { buildGoldenNodeSlide } from './nodeslideSeed';
 
@@ -34,9 +38,13 @@ import { buildGoldenNodeSlide } from './nodeslideSeed';
  * asks of every receipt (candidate, echoed models, one row per span, revision, constant hash, ledger
  * accounting, dispatch policy) so that review can reject it on the same grounds as any other.
  *
- * One thing the probe cannot prevent is the provider's JSON-repair call: `callNodeSlideFreeJson` may
- * issue a second completion for the same span. The receipt counts every dispatch, and a run that
- * made more than one per span is rejected (a retry was enabled) and re-run, never edited.
+ * The probe turns the provider's second completion off (`maxRetries: 0` reaches
+ * `callNodeSlideFreeJson`, which then makes exactly one request per span: no JSON-repair call, no
+ * schema-compatibility retry) and no code path in the edit planner re-dispatches to another model
+ * (its only fallback is deterministic and issues no request). `dispatchPolicy` in the receipt is
+ * therefore the policy that was enforced, a constant, not a count of what happened; each row's
+ * `dispatches` is the observed count and must be exactly 1 (`executorSplitReceiptFailures`).
+ * Every dispatch is recorded as it returns, so a failed run still reports the requests it made.
  */
 export const NODESLIDE_EXECUTOR_SPLIT_PROBE_SCHEMA = 'nodeslide.executor-split-probe/v1' as const;
 
@@ -47,6 +55,12 @@ export const NODESLIDE_EXECUTOR_SPLIT_PROBE_COMMAND =
   'npx convex run nodeslideModelProbe:runExecutorSplit' as const;
 
 export const NODESLIDE_EXECUTOR_SPLIT_DEFAULT_BUDGET_USD = 0.25 as const;
+
+/** SPEC A.0.3: paid dispatches without a retry or a cross-model fallback. Enforced, then recorded. */
+export const NODESLIDE_EXECUTOR_SPLIT_DISPATCH_POLICY = {
+  maxRetries: 0,
+  crossModelFallback: false,
+} as const;
 
 export interface NodeSlideExecutorSplitSpan {
   toolName: 'planner' | 'executor';
@@ -69,7 +83,7 @@ export interface NodeSlideExecutorSplitRow {
   costUsd: number;
   /** True when the provider served a model other than the one requested. */
   fallbackUsed: boolean;
-  /** Model calls issued for this span: 1, or 2 when the JSON-repair call ran. */
+  /** Model calls issued for this span; the receipt is rejected unless exactly 1. */
   dispatches: number;
 }
 
@@ -104,7 +118,7 @@ export interface NodeSlideExecutorSplitProbeReceipt {
     plannedOperations: number;
     refusals: string[];
   };
-  /** `maxRetries` is the count of re-dispatches actually made; the receipt is rejected unless 0. */
+  /** The policy enforced on every dispatch (not an observed count); rejected unless it is {0, false}. */
   dispatchPolicy: { maxRetries: number; crossModelFallback: boolean };
   buildIdentity: { schemaVersion: string; commitSha: string | null } | null;
   startedAt: string;
@@ -122,7 +136,11 @@ export function executorSplitProbeBudgetUsd(env: Record<string, string | undefin
   return Math.min(NODESLIDE_RUN_BUDGET_BOUNDS.maxCostUsd.default, parsed);
 }
 
-function probeFixture(): { snapshot: DeckSnapshot; scope: PatchScope; slideId: string } {
+function probeFixture(): {
+  snapshot: DeckSnapshot;
+  scope: PatchScope;
+  slideId: string;
+} {
   const snapshot = buildGoldenNodeSlide('executor-split-probe', 1_700_000_000_000).snapshot;
   const bySlide = new Map<string, DeckSnapshot['elements']>();
   for (const element of snapshot.elements) {
@@ -184,6 +202,11 @@ export async function runNodeSlideExecutorSplitProbe(args: {
     NODESLIDE_EXECUTOR_SPLIT_PLANNER_MODEL,
   );
   const refusals: string[] = [];
+  // Every dispatch, recorded as it returns: a failed planner that still made requests is on the books.
+  const dispatched: {
+    toolName: 'planner' | 'executor';
+    telemetry: NodeSlideProviderTelemetry;
+  }[] = [];
   const ledger = recordingLedger(args.ledger);
   const dispatch = createNodeSlideBudgetedEditDispatch({
     runId,
@@ -191,10 +214,12 @@ export async function runNodeSlideExecutorSplitProbe(args: {
     metered: true,
     ledger: ledger.client,
     dispatch: (request, dependencies) =>
-      callNodeSlideFreeJson(
-        request,
-        ...(dependencies?.dispatchPolicy ? [{ dispatchPolicy: dependencies.dispatchPolicy }] : []),
-      ),
+      callNodeSlideFreeJson(request, {
+        dispatchPolicy: {
+          ...dependencies?.dispatchPolicy,
+          maxRetries: NODESLIDE_EXECUTOR_SPLIT_DISPATCH_POLICY.maxRetries,
+        },
+      }),
   });
   const request: NodeSlideEditPlanningRequest = {
     deckId: snapshot.deck.id,
@@ -218,23 +243,24 @@ export async function runNodeSlideExecutorSplitProbe(args: {
     { snapshot, scopedComment: null, request },
     {
       callProvider: async (providerRequest) => {
-        const result = await dispatch(providerRequest);
+        const result: NodeSlideProviderResult = await dispatch(providerRequest);
         if (!result.ok) refusals.push(result.reason);
+        if (result.telemetry) {
+          dispatched.push({
+            toolName:
+              providerRequest.jsonSchema?.name === 'nodeslide_copy_execution'
+                ? 'executor'
+                : 'planner',
+            telemetry: result.telemetry,
+          });
+        }
         return result;
       },
     },
   );
   const routing = outcome.ok ? outcome.routing : undefined;
-  const spans: NodeSlideExecutorSplitSpan[] = [];
-  const rows: NodeSlideExecutorSplitRow[] = [];
-  const add = (toolName: 'planner' | 'executor', telemetry: NodeSlideProviderTelemetry) => {
-    spans.push(span(toolName, telemetry));
-    rows.push(row(toolName, telemetry));
-  };
-  if (outcome.ok) {
-    if (outcome.receipt.providerTelemetry) add('planner', outcome.receipt.providerTelemetry);
-    if (routing?.executorTelemetry) add('executor', routing.executorTelemetry);
-  }
+  const spans = dispatched.map((entry) => span(entry.toolName, entry.telemetry));
+  const rows = dispatched.map((entry) => row(entry.toolName, entry.telemetry));
   // The ledger's own books for this probe's budget: what it settled, not what the rows say.
   const books = await args.ledger.replay({ budgetId: nodeSlideProviderBudgetId(runId) });
   const requests = rows.reduce((total, entry) => total + entry.dispatches, 0);
@@ -272,10 +298,7 @@ export async function runNodeSlideExecutorSplitProbe(args: {
       plannedOperations: outcome.ok ? outcome.operations.length : 0,
       refusals,
     },
-    dispatchPolicy: {
-      maxRetries: rows.reduce((total, entry) => total + Math.max(0, entry.dispatches - 1), 0),
-      crossModelFallback: rows.some((entry) => entry.fallbackUsed),
-    },
+    dispatchPolicy: { ...NODESLIDE_EXECUTOR_SPLIT_DISPATCH_POLICY },
     buildIdentity: args.buildIdentity,
     startedAt,
     environment: { runtime: 'convex-node-action', node: process.version },

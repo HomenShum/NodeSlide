@@ -11,16 +11,16 @@ import { openAICompletionsApi } from '@earendil-works/pi-ai/api/openai-completio
 import { openrouterProvider } from '@earendil-works/pi-ai/providers/openrouter';
 import {
   NODESLIDE_DEFAULT_AGENT_MODEL,
-  NODESLIDE_DEFAULT_REASONING_EFFORT,
   type NodeSlideAgentModelId,
   type NodeSlideExternalProvider,
   type NodeSlideReasoningEffort,
   isNodeSlideAgentModelId,
   nodeSlideAgentModel,
+  nodeSlideDefaultReasoningEffort,
   nodeSlideEditPatchStructuredOutputMode,
   nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
-import { nodeSlideModelPricing } from '../../shared/nodeslideRunBudget';
+import { nodeSlideLedgerPricedCost } from '../../shared/nodeslideRunBudget';
 
 export const NODESLIDE_NEBIUS_PROVIDER = 'nebius' as const;
 /** Backwards-compatible name for the default; requests may select any catalog model. */
@@ -126,22 +126,15 @@ function asOpenRouterChatCompletionsRoute(
  * The run-budget ledger is the repo's price of record, so a response is priced (`usage.cost.total` ->
  * `costMicroUsd`) at the ledger's rate: the bundled pi-ai catalog is an older snapshot and disagreed
  * with it on glm-5.2 (0.171 / 7.2 against 0.05 / 7), which settled a near-ceiling response above the
- * quote it was reserved at. Only input and output are replaced; cache rates and any above-threshold
- * tier stay pi-ai's, and rows the ledger does not price (free, dynamic) are untouched.
+ * quote it was reserved at. `nodeSlideLedgerPricedCost` also caps the cached-read rate at the ledger's
+ * input rate (glm-5.2's bundled 0.162 is 3.24x its ledger input of 0.05), so a response served mostly
+ * from cache cannot settle above the quote either. Any above-threshold tier stays pi-ai's, and rows
+ * the ledger does not price (free, dynamic) are untouched.
  */
-function priceFromLedger<T extends { id: string; cost: { input: number; output: number } }>(
-  model: T,
-): T {
-  const pricing = nodeSlideModelPricing(model.id);
-  if (pricing.kind !== 'priced') return model;
-  return {
-    ...model,
-    cost: {
-      ...model.cost,
-      input: pricing.inputMicroUsdPerMillionTokens / 1_000_000,
-      output: pricing.outputMicroUsdPerMillionTokens / 1_000_000,
-    },
-  };
+function priceFromLedger<
+  T extends { id: string; cost: { input: number; output: number; cacheRead: number } },
+>(model: T): T {
+  return { ...model, cost: nodeSlideLedgerPricedCost(model.id, model.cost) };
 }
 
 export function openrouterProviderWithOverrides() {
@@ -217,6 +210,13 @@ export interface NodeSlideDispatchPolicy {
   maxInputMicroUsdPerMillionTokens?: number;
   /** Provider-routing ceiling in integer micro-USD per million output tokens. */
   maxOutputMicroUsdPerMillionTokens?: number;
+  /**
+   * `0` turns off every second completion for the call: the JSON-repair call and the
+   * structured-output compatibility retry. Absent keeps the default of one retry. It can only
+   * tighten, so no other value exists. The executor-split probe sets it because its receipt is
+   * rejected when a paid retry was enabled (SPEC A.0.3), not merely when one happened to run.
+   */
+  maxRetries?: 0;
 }
 
 export interface NodeSlideJsonSchema {
@@ -456,10 +456,10 @@ export async function callNodeSlideFreeJson(
 ): Promise<NodeSlideProviderResult> {
   const complete = dependencies.complete ?? completeNodeSlideWithPiAi;
   const selectedModel = args.model ?? NODESLIDE_DEFAULT_AGENT_MODEL;
-  const reasoningEffort = args.reasoningEffort ?? NODESLIDE_DEFAULT_REASONING_EFFORT;
   if (!isNodeSlideAgentModelId(selectedModel)) {
     return { ok: false, reason: 'Choose a supported NodeSlide agent model.' };
   }
+  const reasoningEffort = args.reasoningEffort ?? nodeSlideDefaultReasoningEffort(selectedModel);
   if (!nodeSlideModelSupportsReasoningEffort(selectedModel, reasoningEffort)) {
     return {
       ok: false,
@@ -484,8 +484,10 @@ export async function callNodeSlideFreeJson(
   const onTextDelta = dependencies.onTextDelta ?? args.onTextDelta;
 
   try {
-    // Exactly two model calls are possible: the initial completion and one JSON-repair completion.
-    for (let attempt = 0; attempt < 2; attempt += 1) {
+    // At most two model calls: the initial completion and one JSON-repair completion, unless the
+    // dispatch policy turned retries off (`maxRetries: 0`), which leaves exactly one.
+    const maxAttempts = dependencies.dispatchPolicy?.maxRetries === 0 ? 1 : 2;
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
       const repairAttempt = attempt === 1;
       const attemptTelemetry = startAttemptTelemetry(repairAttempt);
       telemetry.attempts?.push(attemptTelemetry);
@@ -545,7 +547,7 @@ export async function callNodeSlideFreeJson(
 
       if (result.stopReason === 'error') {
         if (
-          attempt === 0 &&
+          attempt + 1 < maxAttempts &&
           args.jsonSchema &&
           structuredOutputMode === 'json_schema' &&
           shouldRetryStructuredOutputCompatibility(result)
@@ -583,7 +585,9 @@ export async function callNodeSlideFreeJson(
       }
     }
     return providerFailure(
-      `The ${routeLabel} route returned invalid JSON after one repair attempt.`,
+      maxAttempts === 1
+        ? `The ${routeLabel} route returned invalid JSON and retries were disabled.`
+        : `The ${routeLabel} route returned invalid JSON after one repair attempt.`,
       telemetry,
       hasTelemetry,
     );

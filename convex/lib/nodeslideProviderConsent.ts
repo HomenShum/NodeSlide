@@ -1,5 +1,4 @@
 import {
-  NODESLIDE_DEFAULT_REASONING_EFFORT,
   NODESLIDE_NEBIUS_REVIEW_CONSENT,
   NODESLIDE_NEBIUS_VARIATIONS_CONSENT,
   NODESLIDE_OPENROUTER_EDIT_CONSENT,
@@ -12,6 +11,7 @@ import {
   isNodeSlideReasoningEffort,
   nodeSlideAgentModel,
   nodeSlideDefaultModelForProviderMode,
+  nodeSlideDefaultReasoningEffort,
   nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
 
@@ -100,7 +100,7 @@ export function validateNodeSlideProviderChoice(
       `The selected model is not available through ${providerName}.`,
     );
   }
-  const selectedEffort = providerEffort ?? NODESLIDE_DEFAULT_REASONING_EFFORT;
+  const selectedEffort = providerEffort ?? nodeSlideDefaultReasoningEffort(selectedModel);
   if (!isNodeSlideReasoningEffort(selectedEffort)) {
     throw new NodeSlideProviderConsentError(
       'invalid_request',

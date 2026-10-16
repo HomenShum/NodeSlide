@@ -976,7 +976,11 @@ export const cancelAgentRun = mutation({
       .withIndex('by_stable_id', (query) => query.eq('id', args.runId))
       .unique();
     if (!row || row.deckId !== args.deckId) return null;
-    if (['completed', 'failed', 'cancelled', 'awaiting_review'].includes(row.status)) {
+    if (
+      row.patchId ||
+      row.traceId ||
+      ['completed', 'failed', 'cancelled', 'awaiting_review'].includes(row.status)
+    ) {
       const { _id, _creationTime, ownerDigest: _ownerDigest, ...run } = row;
       return run;
     }
@@ -3087,6 +3091,7 @@ export const advanceAgentRunInternal = internalMutation({
     deckId: v.string(),
     ownerAccessKey: v.string(),
     runId: v.string(),
+    expectedAttempt: v.optional(v.number()),
     status: v.union(
       v.literal('researching'),
       v.literal('planning'),
@@ -3120,6 +3125,7 @@ export const advanceAgentRunInternal = internalMutation({
       .withIndex('by_stable_id', (query) => query.eq('id', args.runId))
       .unique();
     if (!row || row.deckId !== args.deckId) throw new Error('Agent run not found.');
+    if (args.expectedAttempt !== undefined && row.attempt !== args.expectedAttempt) return null;
     if (row.status === 'cancelled' && args.status !== 'cancelled') return null;
     const now = Date.now();
     const terminal = ['completed', 'failed', 'cancelled'].includes(args.status);
@@ -3786,6 +3792,8 @@ export const createFromBriefInternal = internalMutation({
 export const proposeAgentPatchInternal = internalMutation({
   args: {
     ...internalAgentPatchArgs,
+    runId: v.string(),
+    runAttempt: v.number(),
     instruction: v.string(),
     planningInputDigest: v.optional(v.string()),
     planningSnapshotDigest: v.optional(v.string()),
@@ -3809,6 +3817,22 @@ export const proposeAgentPatchInternal = internalMutation({
   },
   handler: async (ctx, args) => {
     await requireOwnerAccess(ctx, args.deckId, args.ownerAccessKey);
+    const run = await ctx.db
+      .query('nodeslide_agent_runs')
+      .withIndex('by_stable_id', (query) => query.eq('id', args.runId))
+      .unique();
+    // Cancellation and publication decide against the same run in this transaction.
+    if (
+      !run ||
+      run.deckId !== args.deckId ||
+      run.ownerDigest !== `actor_${nodeslideContentDigest(args.ownerAccessKey)}` ||
+      run.attempt !== args.runAttempt ||
+      !['queued', 'researching', 'planning', 'validating'].includes(run.status) ||
+      run.patchId ||
+      run.traceId
+    ) {
+      throw new Error('Agent run is unavailable, cancelled, superseded, or already published.');
+    }
     if (args.toolCalls.length > 16) throw new Error('Too many agent tool calls recorded.');
     // A fallback reason without a fallback is a claim the record cannot support, and the
     // absence of a reason on a fallback is the disclosure going missing at the source.
@@ -3898,6 +3922,12 @@ export const proposeAgentPatchInternal = internalMutation({
       ...(proposal.patch.status === 'stale' ? { completedAt: now } : {}),
     };
     await ctx.db.insert('nodeslide_traces', trace);
+    // Leave stream completion and the full awaiting-review checkpoint to the action.
+    await ctx.db.patch(run._id, {
+      patchId: proposal.patch.id,
+      traceId: args.traceId,
+      updatedAt: now,
+    });
     if (args.shadowComparison) {
       try {
         assertNodeSlideShadowComparisonBounds(args.shadowComparison);

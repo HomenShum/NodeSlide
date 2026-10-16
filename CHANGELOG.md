@@ -39,6 +39,10 @@
 
 ### Agent surfaces
 
+- Bound edit proposal publication to the active run and attempt, so cancellation
+  that persists first prevents a new proposal. Publication links its patch and
+  trace atomically; later cancellation preserves the existing proposal and replay.
+  Both hosted and local-candidate edits retain the later stream/review checkpoint.
 - Upgraded `nodeslide.create_deck` from draft creation to the same finished-deck
   transaction used by the CLI.
 - Added safe output-root containment, artifact size limits, public URL delivery,

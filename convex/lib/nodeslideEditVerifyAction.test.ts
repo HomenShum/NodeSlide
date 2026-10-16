@@ -69,8 +69,8 @@ function harness(current: NodeSlideWorkspace) {
     const budgetReply = nodeSlideBudgetLedgerStubResponse(args);
     if (budgetReply !== undefined) return budgetReply;
     if ('buckets' in args) return { ok: true };
-    if ('idempotencyKey' in args) return { created: true, run: { id: 'run-b4-test' } };
-    if ('runId' in args) {
+    if ('idempotencyKey' in args) return { created: true, run: { id: 'run-b4-test', attempt: 1 } };
+    if ('runId' in args && 'status' in args) {
       steps.push({
         status: args.status as string | undefined,
         message: args.message as string | undefined,

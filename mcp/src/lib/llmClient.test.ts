@@ -39,7 +39,10 @@ describe('local MCP client names the NodeSlide row default effort', () => {
   });
 
   it('adds no effort for a model id that is not a NodeSlide row', async () => {
-    await call({ provider: 'anthropic', modelId: 'claude-opus-5-5', ...base });
+    // Was 'claude-opus-5-5' (round 3). That is the direct wire id of the Opus 5.5 row since the
+    // wire-id table (round 4): it is now the same row and gets its default, asserted in
+    // llmClient.wire.test.ts. The id here is a model the catalog does not list.
+    await call({ provider: 'anthropic', modelId: 'claude-haiku-5-5', ...base });
     expect(complete.mock.calls.at(-1)?.[2]).not.toHaveProperty('effort');
   });
 });

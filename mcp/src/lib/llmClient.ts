@@ -190,9 +190,15 @@ export async function call(opts: CallOptions): Promise<CallResult> {
 
   // A NodeSlide catalog row states its own default effort (Opus 5.5 = medium). Left unset, pi-ai
   // sends 'high' for every managed-effort Claude row, which is not the row's default.
-  const rowEffort = isNodeSlideAgentModelId(opts.modelId)
-    ? nodeSlideDefaultReasoningEffort(opts.modelId)
-    : undefined;
+  // Every spelling of a catalog Claude row (the slug, the dashed wire id, either with the provider
+  // prefix) reaches the same wire id, so the default is looked up from that wire id, not the spelling.
+  const row =
+    (opts.provider === 'anthropic'
+      ? Object.keys(DIRECT_ANTHROPIC_WIRE_ID).find(
+          (slug) => DIRECT_ANTHROPIC_WIRE_ID[slug] === canonicalId,
+        )
+      : undefined) ?? opts.modelId;
+  const rowEffort = isNodeSlideAgentModelId(row) ? nodeSlideDefaultReasoningEffort(row) : undefined;
   const result = await pi.complete(model, context, {
     ...(rowEffort !== undefined ? { effort: rowEffort } : {}),
     ...(opts.signal !== undefined ? { signal: opts.signal } : {}),

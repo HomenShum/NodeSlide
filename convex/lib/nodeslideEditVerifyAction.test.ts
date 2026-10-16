@@ -272,7 +272,7 @@ describe('proposeEdit B4 tool loop messages', () => {
             },
             telemetry: {
               provider: 'openrouter',
-              model: 'nvidia/nemotron-3.5-super-vl:free',
+              model: 'google/gemini-3.8-flash',
               inputTokens: 5,
               outputTokens: 3,
               costMicroUsd: 1,
@@ -336,9 +336,8 @@ describe('proposeEdit B4 tool loop messages', () => {
     const executorStep = steps.find((step) => step.toolName === 'executor');
     const verifyStep = steps.find((step) => step.toolName === 'verify');
     expect(plannerStep?.spanModel).toBe('moonshotai/kimi-k3');
-    // Executor moved off Gemini 3.5 Flash (Google deprecated it on 2026-10-08, auto-routed to 3.6) to
-    // the :free route SPEC D2 names (newest on the public OpenRouter list with structured outputs).
-    expect(executorStep?.spanModel).toBe('nvidia/nemotron-3.5-super-vl:free');
+    // Executor moved off Gemini 3.5 Flash: Google deprecated it on 2026-10-08 (auto-routed to 3.6).
+    expect(executorStep?.spanModel).toBe('google/gemini-3.8-flash');
     expect(verifyStep?.message).toContain('shadow snapshot');
   });
 });

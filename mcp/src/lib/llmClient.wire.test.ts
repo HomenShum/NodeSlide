@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { localByokStatus, requireLocalKeys } from './byok.js';
 import { callByModel } from './llmClient.js';
 
 /**
@@ -180,6 +181,57 @@ describe('callByModel sends the row default effort on the OpenAI and Gemini APIs
       expect(body.model).toBe('openrouter/free');
     },
   );
+
+  // SPEC D1: a NodeSlide catalog row is a known id and is never silently rerouted. These three used
+  // to reach OpenRouter as `openrouter/free` (pi-ai's `google` route had no such id, so the free
+  // fallback ran); each is now sent as itself, to OpenRouter.
+  it.each([
+    ['google/gemma-4-26b-a4b-it:free'],
+    ['google/gemma-4-31b-it:free'],
+    ['nvidia/nemotron-3-super-120b-a12b:free'],
+  ])('catalog id %s is sent to OpenRouter as itself, not as the free router', async (model) => {
+    vi.stubEnv('OPENROUTER_API_KEY', 'test-key-not-real');
+    const result = await run(model);
+    expect(result.provider).toBe('openrouter');
+    expect(sent).toHaveLength(1);
+    const { url, body } = sent[0] as Sent;
+    expect(url).toContain('openrouter.ai');
+    expect(body.model).toBe(model);
+  });
+
+  // The key the tool demands before it calls must be the key the call then uses. `vendor-free` once
+  // demanded OPENAI_API_KEY and was sent to OpenRouter; the gemma ids demanded GEMINI_API_KEY.
+  it.each([
+    ['vendor-free'],
+    ['bogus/model:free'],
+    ['openrouter/free'],
+    ['google/gemma-4-26b-a4b-it:free'],
+    ['google/gemma-4-31b-it:free'],
+    ['nvidia/nemotron-3-super-120b-a12b:free'],
+  ])('%s needs the OpenRouter key alone, and only the OpenRouter key', async (model) => {
+    expect(localByokStatus([model]).models[0]).toMatchObject({
+      provider: 'openrouter',
+      envVar: 'OPENROUTER_API_KEY',
+    });
+    // Only an OpenRouter key is set: the check passes and the call goes where the check said.
+    vi.stubEnv('OPENAI_API_KEY', '');
+    vi.stubEnv('GEMINI_API_KEY', '');
+    vi.stubEnv('OPENROUTER_API_KEY', 'test-key-not-real');
+    expect(() => requireLocalKeys([model])).not.toThrow();
+    const result = await run(model);
+    expect(result.provider).toBe('openrouter');
+    expect(sent[0]?.url).toContain('openrouter.ai');
+  });
+
+  it('refuses a free-looking id when only the inferred vendor key is set', () => {
+    vi.stubEnv('OPENAI_API_KEY', 'test-key-not-real');
+    vi.stubEnv('GEMINI_API_KEY', 'test-key-not-real');
+    vi.stubEnv('OPENROUTER_API_KEY', '');
+    expect(() => requireLocalKeys(['vendor-free'])).toThrow(/OPENROUTER_API_KEY/);
+    expect(() => requireLocalKeys(['google/gemma-4-26b-a4b-it:free'])).toThrow(
+      /OPENROUTER_API_KEY/,
+    );
+  });
 
   it.each([['bogus/model'], ['gpt-nonexistent'], ['claude-unknown-9']])(
     '%s is refused before any request',

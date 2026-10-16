@@ -517,7 +517,7 @@ export type NodeSlideRunBudgetPostflightResult =
  *   - `nodeslide/private-deterministic`. It issues no provider request, so a
  *     per-token price for it would be fiction. It is a separate `zero_cost`
  *     constant whose zero is a fact about the route, not a price.
- *   - The six zero-priced dynamic routes. See `NodeSlideDynamicModelPricing`.
+ *   - The five zero-priced dynamic routes. See `NodeSlideDynamicModelPricing`.
  *   - `nebius/zai-org/GLM-5.2`. It is not an OpenRouter route and its price
  *     lives behind a private Nebius endpoint this table's fetch cannot read, so
  *     it is `unknown` and DENIES. Porting the previously recorded Nebius figure
@@ -717,10 +717,6 @@ export const NODESLIDE_MODEL_PRICING = {
   ),
   'nvidia/nemotron-3-super-120b-a12b:free': dynamicRoute(
     'nvidia/nemotron-3-super-120b-a12b:free',
-    'This is a promotional zero-priced tier, not a contracted price; it is denied rather than reserved at zero.',
-  ),
-  'nvidia/nemotron-3.5-super-vl:free': dynamicRoute(
-    'nvidia/nemotron-3.5-super-vl:free',
     'This is a promotional zero-priced tier, not a contracted price; it is denied rather than reserved at zero.',
   ),
   'openai/gpt-oss-20b:free': dynamicRoute(

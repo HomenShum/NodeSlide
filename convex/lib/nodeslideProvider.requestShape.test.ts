@@ -53,10 +53,6 @@ const WIRE_ID = {
   gpt61Sol: 'openai/gpt-6.1-sol',
 } as const satisfies Record<string, NodeSlideAgentModelId>;
 
-/** SPEC D2: the routed executor, the newest :free row with structured outputs (list of 2026-10-16T11:15:06Z). */
-const EXECUTOR_FREE_ID =
-  'nvidia/nemotron-3.5-super-vl:free' as const satisfies NodeSlideAgentModelId;
-
 /** Keys a Claude 5.5 / GPT-6 / Gemini 3.6+ request must never carry (SPEC section 1.3). */
 const FORBIDDEN_SAMPLING_KEYS = ['temperature', 'top_p', 'top_k'] as const;
 const FORBIDDEN_LEGACY_KEYS = [
@@ -107,13 +103,8 @@ afterEach(() => {
   else process.env['OPENROUTER_API_KEY'] = originalKey;
 });
 
-function expectNoForbiddenKeys(
-  body: Record<string, unknown>,
-  // Sampling is a 400 only on the Claude 5.5 / GPT-6 / Gemini 3.6+ ids of SPEC 1.3; the :free
-  // executor is none of them and its catalog row accepts temperature.
-  { sampling = true }: { sampling?: boolean } = {},
-) {
-  for (const key of [...(sampling ? FORBIDDEN_SAMPLING_KEYS : []), ...FORBIDDEN_LEGACY_KEYS]) {
+function expectNoForbiddenKeys(body: Record<string, unknown>) {
+  for (const key of [...FORBIDDEN_SAMPLING_KEYS, ...FORBIDDEN_LEGACY_KEYS]) {
     expect(Object.keys(body), `request must not carry "${key}"`).not.toContain(key);
   }
   // Prefill is an assistant turn at the end of the conversation (a 400 on every new row), not a key.
@@ -315,16 +306,16 @@ describe('Claude rows keep the OpenRouter chat-completions endpoint under pi-ai 
   });
 });
 
-describe('the routed executor (Gemini 3.5 Flash deprecation 2026-10-08; SPEC D2 moves it to a :free route)', () => {
-  it('routes bulk copy to the D2 :free executor and the request names exactly that id', async () => {
+describe('the routed executor (SPEC 2026-10-08 Gemini 3.5 Flash deprecation)', () => {
+  it('routes bulk copy to Gemini 3.8 Flash and the request names exactly that id', async () => {
     const decision = resolveNodeSlideRouting({
       task: 'edit_plan',
       requestedModel: 'moonshotai/kimi-k3',
       replaceTextOps: 3,
     });
     expect(decision.reason).toBe('split_premium_planner_bulk_copy');
-    expect(decision.executorModel).toBe(EXECUTOR_FREE_ID);
-    expect(NODESLIDE_ROUTING_EXECUTOR_MODEL).toBe(EXECUTOR_FREE_ID);
+    expect(decision.executorModel).toBe(WIRE_ID.gemini38Flash);
+    expect(NODESLIDE_ROUTING_EXECUTOR_MODEL).toBe(WIRE_ID.gemini38Flash);
 
     await callNodeSlideFreeJson({
       systemPrompt: 'Rewrite the copy.',
@@ -335,10 +326,9 @@ describe('the routed executor (Gemini 3.5 Flash deprecation 2026-10-08; SPEC D2 
     });
     expect(captured.length).toBeGreaterThan(0);
     for (const request of captured) {
-      expect(request.body['model']).toBe('nvidia/nemotron-3.5-super-vl:free');
+      expect(request.body['model']).toBe('google/gemini-3.8-flash');
       expect(request.body['model']).not.toBe('google/gemini-3.5-flash');
-      expect(request.body['model']).not.toBe('google/gemini-3.8-flash');
-      expectNoForbiddenKeys(request.body, { sampling: false });
+      expectNoForbiddenKeys(request.body);
     }
   });
 

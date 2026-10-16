@@ -5,26 +5,6 @@ import { proposeEdit } from '../nodeslideAgent';
 import { NODESLIDE_ROUTING_EXECUTOR_MODEL } from './nodeslideRoutingPolicy';
 import { buildGoldenNodeSlide } from './nodeslideSeed';
 
-// The ledger denies a zero-priced :free route and the committed executor is one, so its dispatch is
-// refused before it reaches the provider mocked below. This test proves the attribution plumbing, so
-// it prices the executor like the paid route it replaced; the real ledger's answer for it is asserted
-// in convex/nodeslideExecutorSplitProbeBudget.test.ts.
-vi.mock('../../shared/nodeslideRunBudget', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../../shared/nodeslideRunBudget')>();
-  const standIn = (modelId: string) =>
-    modelId === 'nvidia/nemotron-3.5-super-vl:free' ? 'google/gemini-3.8-flash' : modelId;
-  return {
-    ...actual,
-    nodeSlideModelPricing: (modelId: string) =>
-      modelId === 'nvidia/nemotron-3.5-super-vl:free'
-        ? { ...actual.nodeSlideModelPricing(standIn(modelId)), modelId }
-        : actual.nodeSlideModelPricing(modelId),
-    scoreNodeSlideWorstCaseCost: (
-      input: Parameters<typeof actual.scoreNodeSlideWorstCaseCost>[0],
-    ) => actual.scoreNodeSlideWorstCaseCost({ ...input, model: standIn(input.model) }),
-  };
-});
-
 vi.mock('./nodeslideProvider', async (importOriginal) => {
   const actual = await importOriginal<typeof import('./nodeslideProvider')>();
   return {
@@ -196,7 +176,10 @@ describe('proposeEdit routed attribution (B2)', () => {
       spanModel: NODESLIDE_ROUTING_EXECUTOR_MODEL,
       role: 'tool',
     });
-    expect(String(executorRow?.['message'])).toContain('Executor · Nemotron 3.5 Super VL (Free)');
+    // Was 'Executor · Gemini 3.5 Flash': Google deprecated 3.5 Flash on 2026-10-08 (auto-routed to
+    // 3.6) and SPEC A.2.8 moves the executor to 3.8 Flash. The ledger here is the real one (priced
+    // route, admitted), not a stand-in, so this is what production persists.
+    expect(String(executorRow?.['message'])).toContain('Executor · Gemini 3.8 Flash');
 
     const proposal = mutations.find((args) => 'operations' in args && 'traceContext' in args);
     expect(proposal).toBeDefined();

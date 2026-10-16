@@ -2,8 +2,7 @@
  * Candidate-bound executor receipt (SPEC Part A section A.2.8, Codex N1; rule 3 after round 1).
  *
  * Situation: an operator wants proof that, after Google retired Gemini 3.5 Flash, NodeSlide's routed
- * copy executor really runs the model the routing policy now names (SPEC D2: the newest :free route
- * with structured outputs, live-unverified). The probe runs one premium-planner edit turn through
+ * copy executor really runs Gemini 3.8 Flash. The probe runs one premium-planner edit turn through
  * the real planner, router and reserve-before-dispatch provider. Only the HTTP call is faked here
  * (no provider is contacted, nothing is spent), so these tests prove the plumbing and the
  * acceptance rule; the paid run itself is the operator's.
@@ -41,28 +40,6 @@ let plannerFails = false;
 let executorEchoes = EXECUTOR;
 let executorAttempts = [attempt('initial')];
 let plannerValue;
-
-/**
- * The ledger denies a zero-priced :free route (`dynamicRoute`), and the committed executor is one, so
- * the real dispatch never reaches the provider for it. These tests prove the probe's plumbing and the
- * acceptance rule, so they price the executor like the paid route it replaced (gemini-3.8-flash). What
- * the real ledger does with the committed executor is asserted without this stand-in in
- * convex/nodeslideExecutorSplitProbeBudget.test.ts.
- */
-vi.mock('../../shared/nodeslideRunBudget.ts', async (importOriginal) => {
-  const actual = await importOriginal();
-  const standIn = (modelId) =>
-    modelId === 'nvidia/nemotron-3.5-super-vl:free' ? 'google/gemini-3.8-flash' : modelId;
-  return {
-    ...actual,
-    nodeSlideModelPricing: (modelId) =>
-      modelId === 'nvidia/nemotron-3.5-super-vl:free'
-        ? { ...actual.nodeSlideModelPricing(standIn(modelId)), modelId }
-        : actual.nodeSlideModelPricing(modelId),
-    scoreNodeSlideWorstCaseCost: (input) =>
-      actual.scoreNodeSlideWorstCaseCost({ ...input, model: standIn(input.model) }),
-  };
-});
 
 vi.mock('../../convex/lib/nodeslideProvider.ts', async (importOriginal) => {
   const actual = await importOriginal();
@@ -187,7 +164,7 @@ async function acceptedReceipt() {
 }
 
 describe('runNodeSlideExecutorSplitProbe', () => {
-  it('splits a kimi-k3 plan to the committed :free executor and records what each provider echoed', async () => {
+  it('splits a kimi-k3 plan to gemini-3.8-flash and records what each provider echoed', async () => {
     const receipt = await acceptedReceipt();
     expect(calls).toEqual(['moonshotai/kimi-k3', EXECUTOR]);
     expect(receipt.routing).toMatchObject({

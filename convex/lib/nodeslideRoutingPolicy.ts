@@ -7,7 +7,7 @@
  * contract unchanged. Keep this file dependency-free.
  *
  * Default policy: the planner is always the requested model. A cheap executor
- * (the executor above) is granted ONLY when the planner is a premium model
+ * (Gemini 3.8 Flash) is granted ONLY when the planner is a premium model
  * (Kimi / Claude / GPT) AND the plan contains at least two replace_text
  * operations worth of copy work. Everything else runs single-model.
  * The executor is always advisory: on failure or timeout the planner's own
@@ -16,14 +16,12 @@
 
 export const NODESLIDE_ROUTING_POLICY_VERSION = 'nodeslide.model-routing/v1' as const;
 
-// Gemini 3.5 Flash was deprecated by Google on 2026-10-08 (requests auto-route to 3.6). SPEC D2
-// (Homen 2026-10-16: no OpenRouter key exists, so OpenRouter-routed roles move to the newest `:free`
-// model on the public list with the capabilities the role needs) puts the executor on
-// nvidia/nemotron-3.5-super-vl:free (created 2026-10-15; tools and structured outputs; list fetched
-// 2026-10-16T11:15:06Z). live-unverified (no key, Homen 2026-10-16). The run-budget ledger denies
-// zero-priced `:free` routes (`dynamicRoute`, shared/nodeslideRunBudget.ts), so while this is the
-// executor the budgeted dispatch refuses its call and the planner's own copy stands.
-export const NODESLIDE_ROUTING_EXECUTOR_MODEL = 'nvidia/nemotron-3.5-super-vl:free' as const;
+// Gemini 3.5 Flash was deprecated by Google on 2026-10-08 (requests auto-route to 3.6); SPEC A.2.8
+// moves the executor to 3.8 Flash. The role needs a route the run-budget ledger will admit: the
+// ledger denies every zero-priced `:free` route (`dynamicRoute`, shared/nodeslideRunBudget.ts), so a
+// `:free` executor (tried in review round 6: nvidia/nemotron-3.5-super-vl:free, SPEC D2) is refused
+// before dispatch on every edit and the split never runs. live-unverified (no key, Homen 2026-10-16).
+export const NODESLIDE_ROUTING_EXECUTOR_MODEL = 'google/gemini-3.8-flash' as const;
 
 /** Minimum replace_text operations before splitting copy work to an executor. */
 export const NODESLIDE_ROUTING_MIN_REPLACE_TEXT_OPS = 2 as const;

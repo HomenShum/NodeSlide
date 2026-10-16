@@ -97,6 +97,9 @@ export interface CallResult {
  * `model` string and we route correctly.
  */
 export function inferProvider(modelId: string): SupportedProvider {
+  // `:free` / `-free` ids and the free router exist only on OpenRouter, so the key the caller needs
+  // (byok.ts) and the route `call` takes are decided here, once, not by the id's vendor prefix.
+  if (isFreeLookingModelId(modelId)) return 'openrouter';
   if (modelId.startsWith('anthropic/') || modelId.startsWith('claude-')) return 'anthropic';
   if (modelId.startsWith('openai/') || modelId.startsWith('gpt-')) return 'openai';
   if (modelId.startsWith('google/') || modelId.startsWith('gemini-')) return 'google';
@@ -194,8 +197,15 @@ export async function call(opts: CallOptions): Promise<CallResult> {
   const lookup = pi.getModel as any;
   let registryModel = lookup(provider, canonicalId);
   if (!registryModel) {
-    // SPEC A.0.10: an unknown id never becomes a paid default. A free-looking one resolves to the
-    // verified free router; every other unknown throws here, before any request.
+    // SPEC D1: a known id (a NodeSlide catalog row) is never rerouted to another model, so a catalog
+    // id pi-ai cannot serve throws here, before any request. SPEC A.0.10: an unknown id never becomes
+    // a paid default; a free-looking one resolves to the verified free router and every other unknown
+    // throws.
+    if (isNodeSlideAgentModelId(opts.modelId)) {
+      throw new Error(
+        `Model "${opts.modelId}" is in the NodeSlide catalog but pi-ai has no ${provider} route for it; it is not rerouted.`,
+      );
+    }
     if (!isFreeLookingModelId(opts.modelId)) {
       throw new Error(`Unknown model "${opts.modelId}": pi-ai has no ${provider} route for it.`);
     }

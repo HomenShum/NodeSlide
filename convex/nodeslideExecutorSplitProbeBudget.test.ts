@@ -31,31 +31,9 @@ import { buildGoldenNodeSlide } from './lib/nodeslideSeed';
 import * as budgets from './nodeslideBudgets';
 
 const state = vi.hoisted(() => ({
-  /** Price the (zero-priced, :free) committed executor like the paid route it replaced. */
-  executorAsPaid: false,
   calls: [] as string[],
   planner: undefined as unknown,
 }));
-
-const PAID_EXECUTOR = 'google/gemini-3.8-flash';
-
-vi.mock('../shared/nodeslideRunBudget', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../shared/nodeslideRunBudget')>();
-  const standIn = (modelId: string) =>
-    state.executorAsPaid && modelId === 'nvidia/nemotron-3.5-super-vl:free'
-      ? PAID_EXECUTOR
-      : modelId;
-  return {
-    ...actual,
-    nodeSlideModelPricing: (modelId: string) =>
-      standIn(modelId) === modelId
-        ? actual.nodeSlideModelPricing(modelId)
-        : { ...actual.nodeSlideModelPricing(standIn(modelId)), modelId },
-    scoreNodeSlideWorstCaseCost: (
-      input: Parameters<typeof actual.scoreNodeSlideWorstCaseCost>[0],
-    ) => actual.scoreNodeSlideWorstCaseCost({ ...input, model: standIn(input.model) }),
-  };
-});
 
 vi.mock('./lib/nodeslideProvider', async (importOriginal) => {
   const actual = await importOriginal<typeof import('./lib/nodeslideProvider')>();
@@ -220,7 +198,6 @@ describe('the executor probe cap against the real ledger (SPEC D3)', () => {
   });
 
   it('refuses the planner at the old 0.25 USD cap before any request is dispatched', async () => {
-    state.executorAsPaid = false;
     const receipt = await probe(0.25);
     expect(state.calls).toEqual([]);
     expect(receipt.budget.requests).toBe(0);
@@ -228,47 +205,29 @@ describe('the executor probe cap against the real ledger (SPEC D3)', () => {
     expect(receipt.routing.reason).toBe('planner_failed');
   });
 
-  it('reserves the planner at the real ledger quote, 0.408756 USD, and admits it under the default cap', async () => {
-    state.executorAsPaid = false;
+  it('admits planner plus the priced executor under the default cap (0.504014 USD in the Codex replay)', async () => {
     const receipt = await probe(executorSplitProbeBudgetUsd({}));
-    expect(state.calls[0]).toBe('moonshotai/kimi-k3');
-    // 114,252 input / 4,400 output estimated tokens at 3 / 15 USD per million (Codex replay, 2026-10-16).
-    expect(receipt.budget.estimateUsd).toBeCloseTo(0.408756, 6);
+    // The planner goes first; the ledger then admits the executor too (a priced route, unlike a :free one).
+    expect(state.calls).toEqual(['moonshotai/kimi-k3', NODESLIDE_ROUTING_EXECUTOR_MODEL]);
+    expect(receipt.budget.refusals).toEqual([]);
+    expect(receipt.budget.stoppedBy).toBeNull();
+    // 0.408756 planner (114,252 input / 4,400 output estimated tokens at 3 / 15 USD per million) plus
+    // 0.095258 executor (107,010 / 4,000 at gemini-3.8-flash's price), the real-ledger figures Codex replayed.
+    expect(receipt.budget.estimateUsd).toBeCloseTo(0.504014, 6);
     expect(receipt.budget.estimateUsd).toBeGreaterThan(0.25);
     expect(receipt.budget.estimateUsd).toBeLessThanOrEqual(
       NODESLIDE_EXECUTOR_SPLIT_DEFAULT_BUDGET_USD,
     );
   });
-
-  it('keeps the default cap above planner plus a priced executor (0.504014 USD in the Codex replay)', async () => {
-    state.executorAsPaid = true;
-    try {
-      const receipt = await probe(executorSplitProbeBudgetUsd({}));
-      expect(state.calls).toEqual(['moonshotai/kimi-k3', NODESLIDE_ROUTING_EXECUTOR_MODEL]);
-      expect(receipt.budget.refusals).toEqual([]);
-      expect(receipt.budget.stoppedBy).toBeNull();
-      // 0.408756 planner + 0.095258 executor, the real-ledger figures Codex replayed.
-      expect(receipt.budget.estimateUsd).toBeCloseTo(0.504014, 6);
-      expect(receipt.budget.estimateUsd).toBeLessThanOrEqual(
-        NODESLIDE_EXECUTOR_SPLIT_DEFAULT_BUDGET_USD,
-      );
-    } finally {
-      state.executorAsPaid = false;
-    }
-  });
 });
 
-describe('what the real ledger does with the committed executor (SPEC D2: live-unverified)', () => {
-  it('denies the zero-priced :free executor, so no receipt can pass the gate yet', async () => {
-    state.executorAsPaid = false;
+describe('what the real ledger does with the committed executor', () => {
+  it('reserves, sends and records the executor, and the receipt passes the acceptance gate', async () => {
     const receipt = await probe(executorSplitProbeBudgetUsd({}));
-    // The planner runs; the executor is refused before dispatch (a :free tier is never reserved at zero).
-    expect(state.calls).toEqual(['moonshotai/kimi-k3']);
     expect(receipt.routing).toMatchObject({
       executorModel: NODESLIDE_ROUTING_EXECUTOR_MODEL,
-      executorOutcome: 'failed',
+      executorOutcome: 'applied',
     });
-    expect(receipt.budget.stoppedBy).toContain('zero-priced');
-    expect(executorSplitReceiptFailures(receipt, COMMIT)).not.toEqual([]);
+    expect(executorSplitReceiptFailures(receipt, COMMIT)).toEqual([]);
   });
 });

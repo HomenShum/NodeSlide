@@ -158,13 +158,23 @@ const HELD_AT_MAINS_CEILING = {
   },
 } as const;
 
+/**
+ * The ledger-priced routes on which the frozen auto-router (pi-ai catalog price, micro-USD per
+ * million tokens) differs from the ledger, as read from the installed pi-ai 1.1.0 catalog on
+ * 2026-10-16. A row that appears or disappears here is a pricing change someone must look at.
+ */
+const AUTO_ROUTER_DIFFERS_FROM_LEDGER: Record<string, { input: number; output: number }> = {
+  'moonshotai/kimi-k3': { input: 500_000, output: 15_000_000 }, // ledger 3 / 15
+  'openai/gpt-5.6-sol': { input: 2_000_000, output: 10_000_000 }, // ledger 5 / 30
+  'z-ai/glm-5.2': { input: 171_000, output: 7_200_000 }, // ledger 0.7686 / 2.4156
+};
+
 /** The routes the catalog prices at "0" per token. Never a price; always a deny. */
 const OPENROUTER_ZERO_PRICED_ROUTES: readonly NodeSlideAgentModelId[] = [
   'openrouter/free',
   'google/gemma-4-26b-a4b-it:free',
   'google/gemma-4-31b-it:free',
   'nvidia/nemotron-3-super-120b-a12b:free',
-  'nvidia/nemotron-3.5-super-vl:free',
   'openai/gpt-oss-20b:free',
 ];
 
@@ -443,9 +453,11 @@ describe('every metered OpenRouter ledger price is a ceiling that still routes',
  *      two rows when read on 2026-10-14: moonshotai/kimi-k3 0.5 / 15 (ledger 3 / 15) and
  *      z-ai/glm-5.2 0.171 / 7.2 (ledger 0.7686 / 2.4156). The provider therefore prices every ledger-priced
  *      row at the ledger's rate, and this test is what notices the day that stops being true;
- *   4. the auto-router estimate (`nodeslideAutoRoutingPolicy.ts`), which read the same pi-ai
- *      catalog: it caps a job-create request's cost, so an under-estimate admits a route the ledger
- *      would refuse. It prices ledger-priced routes at the ledger's rate for the same reason;
+ *   4. the auto-router estimate (`nodeslideAutoRoutingPolicy.ts`), which reads the same pi-ai
+ *      catalog and is a FROZEN site (SPEC A.2.8): it is not edited here, so it keeps pi-ai's price
+ *      and differs from the ledger on three rows. The divergence is pinned below
+ *      (`AUTO_ROUTER_DIFFERS_FROM_LEDGER`), not asserted equal; it caps only the advisory
+ *      create-routing receipt, and the ledger still reserves the worst case before any dispatch;
  *   5. the MCP BYOK client (`mcp/src/lib/llmClient.ts`), which called `getModel` on the raw pi-ai
  *      catalog and reported `usage.cost.total` as `costUsd` (kimi-k3 $0.015500 against the ledger's
  *      $0.018000 for 1k in / 1k out, glm-5.2 $0.007371 against $0.0031842). It prices OpenRouter
@@ -646,7 +658,16 @@ describe('every pricing source in this repo agrees (Part A rule 6)', () => {
     });
   });
 
-  it('the auto-router estimates every metered route at the ledger rate', () => {
+  // SPEC A.2.8 freezes `nodeslideAutoRoutingPolicy.ts` ("derived from the installed pi-ai catalog"), so
+  // the auto-router is a pricing source this PR enumerates but does not edit: it estimates at the
+  // bundled pi-ai catalog's price, not the ledger's. Round 1 had moved it to the ledger; that edit was
+  // reverted (a frozen site is not edited) and the divergence is pinned here instead, so it can neither
+  // widen nor close unnoticed. Without a pinned row a router estimate below the ledger's worst case
+  // would admit a job-create route the ledger prices higher (kimi-k3: 100k in + 1k out is $0.065 here
+  // against the ledger's $0.315). The router only produces the advisory create-routing receipt; the
+  // ledger still reserves the worst case before any dispatch.
+  it('pins where the frozen auto-router estimate differs from the ledger rate', () => {
+    const differing: Record<string, { input: number; output: number }> = {};
     for (const route of ledgerPricedOpenRouterRoutes) {
       const pricing = nodeSlideModelPricing(route.id);
       if (pricing.kind !== 'priced') continue;
@@ -655,26 +676,17 @@ describe('every pricing source in this repo agrees (Part A rule 6)', () => {
       const estimate = decision.costEstimate;
       expect(estimate.status).toBe('estimated');
       if (estimate.status !== 'estimated') continue;
-      expect(perMillion(estimate.pricing.inputUsdPerMillionTokens), `${route.id} input`).toBe(
-        pricing.inputMicroUsdPerMillionTokens,
-      );
-      expect(perMillion(estimate.pricing.outputUsdPerMillionTokens), `${route.id} output`).toBe(
-        pricing.outputMicroUsdPerMillionTokens,
-      );
+      expect(estimate.pricing.source, `${route.id} source`).toBe('pi-ai-openrouter-catalog');
+      const input = perMillion(estimate.pricing.inputUsdPerMillionTokens);
+      const output = perMillion(estimate.pricing.outputUsdPerMillionTokens);
+      if (
+        input !== pricing.inputMicroUsdPerMillionTokens ||
+        output !== pricing.outputMicroUsdPerMillionTokens
+      ) {
+        differing[route.id] = { input, output };
+      }
     }
-  });
-
-  it('kimi-k3 is not admitted on an estimate below the ledger worst case', () => {
-    // Round 1: pi-ai 1.1.0 priced kimi-k3 at 0.5 / 15, so 100k in + 1k out estimated $0.065 while the
-    // ledger's worst case is $0.315, and the auto-router admitted a route the ledger would price higher.
-    const worst = scoreNodeSlideWorstCaseCost({
-      model: 'moonshotai/kimi-k3',
-      inputTokens: 100_000,
-      outputTokens: 1_000,
-    });
-    expect(worst.totalCostMicroUsd).toBe(315_000);
-    expect(autoRoute('moonshotai/kimi-k3', 0.315).kind).toBe('selected');
-    expect(autoRoute('moonshotai/kimi-k3', 0.314999).kind).toBe('refused');
+    expect(differing).toEqual(AUTO_ROUTER_DIFFERS_FROM_LEDGER);
   });
 
   it('keeps the Nebius GLM-5.2 hand-typed cost out of every reservation path', () => {

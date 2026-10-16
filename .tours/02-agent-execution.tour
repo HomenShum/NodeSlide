@@ -30,7 +30,7 @@
     },
     {
       "file": "convex/nodeslide.ts",
-      "line": 1180,
+      "line": 1184,
       "description": "**Where every change enters, whoever made it.**\n\n`applyPatch` (direct), `proposePatch` (review first) and `proposePropagation` (apply an accepted change to matching slides) all normalise into the same shape and all end up at the same check."
     },
     {
@@ -45,7 +45,7 @@
     },
     {
       "file": "convex/nodeslide.ts",
-      "line": 1224,
+      "line": 1228,
       "description": "**Acceptance is one transaction.**\n\nThe commit, the version bump and the decision record either all land or all roll back. There is no window in which a deck has advanced but its receipt has not."
     },
     {

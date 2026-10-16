@@ -591,6 +591,7 @@ export const proposeEdit = action({
       webResearch: args.webResearch === true,
     });
     const runId = runStart.run.id as string;
+    const runAttempt = runStart.run.attempt as number;
     if (!runStart.created) {
       if (runStart.run.patchId) {
         const current = (await ctx.runQuery(nodeslideInternal.getAgentContextInternal, {
@@ -1180,6 +1181,8 @@ export const proposeEdit = action({
       const proposal = await ctx.runMutation(nodeslideInternal.proposeAgentPatchInternal, {
         id: patchId,
         traceId,
+        runId,
+        runAttempt,
         deckId: args.deckId,
         ownerAccessKey: args.ownerAccessKey,
         baseDeckVersion: args.baseDeckVersion,
@@ -1293,6 +1296,7 @@ export const proposeEdit = action({
           deckId: args.deckId,
           ownerAccessKey: args.ownerAccessKey,
           runId,
+          expectedAttempt: runAttempt,
           status: 'failed',
           error: message.slice(0, 600),
           message: `No deck changes were applied. ${message}`.slice(0, 4000),
@@ -1392,6 +1396,7 @@ export const proposeExternalAgentEdit = action({
       webResearch: false,
     });
     const runId = runStart.run.id as string;
+    const runAttempt = runStart.run.attempt as number;
     if (!runStart.created) {
       if (runStart.run.patchId) {
         const current = (await ctx.runQuery(nodeslideInternal.getAgentContextInternal, {
@@ -1422,6 +1427,8 @@ export const proposeExternalAgentEdit = action({
       const proposal = await ctx.runMutation(nodeslideInternal.proposeAgentPatchInternal, {
         id: patchId,
         traceId,
+        runId,
+        runAttempt,
         deckId: args.deckId,
         ownerAccessKey: args.ownerAccessKey,
         baseDeckVersion: args.baseDeckVersion,
@@ -1470,6 +1477,7 @@ export const proposeExternalAgentEdit = action({
         deckId: args.deckId,
         ownerAccessKey: args.ownerAccessKey,
         runId,
+        expectedAttempt: runAttempt,
         status: 'failed',
         error: agentRunErrorMessage(error).slice(0, 600),
         message: `No deck changes were applied. ${agentRunErrorMessage(error)}`.slice(0, 4000),

@@ -265,6 +265,24 @@ export const NODESLIDE_AGENT_MODELS = [
     supportedEfforts: ['low', 'medium', 'high'],
   },
   {
+    id: 'nvidia/nemotron-3.5-super-vl:free',
+    upstreamId: 'nvidia/nemotron-3.5-super-vl:free',
+    provider: 'openrouter',
+    vendor: 'NVIDIA',
+    label: 'Nemotron 3.5 Super VL (Free)',
+    description:
+      'Zero-priced OpenRouter route with native structured output; the routed copy executor.',
+    costTier: 'free',
+    bestFor: 'Routed copy execution',
+    // Newest :free row on the public OpenRouter list (created 2026-10-15) that advertises tools and
+    // structured outputs (GET /api/v1/models, 2026-10-16T11:15:06Z). SPEC D2 (Homen 2026-10-16) moves
+    // OpenRouter-routed roles to it: live-unverified (no key). Not a free-router candidate and not
+    // offered in the picker; only the routing policy names it.
+    productionEnabled: false,
+    supportsTemperature: true,
+    supportedEfforts: ['low', 'medium', 'high'],
+  },
+  {
     id: 'openai/gpt-oss-20b:free',
     upstreamId: 'openai/gpt-oss-20b:free',
     provider: 'openrouter',

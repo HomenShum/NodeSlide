@@ -92,12 +92,48 @@ export const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
 };
 
 /**
+ * The routed copy executor (SPEC D2). OpenRouter listed it on 2026-10-15, after the bundled pi-ai
+ * 1.1.0 catalog was cut, so `getModel` does not know it and a request for it would throw before any
+ * fetch. Registered like Kimi K3 with the list's own figures (GET /api/v1/models, 2026-10-16T11:15:06Z:
+ * context_length 1,000,000, max_completion_tokens 131,072, zero prices, structured_outputs, tools) and
+ * the compat the bundled sibling `nvidia/nemotron-3.5-lightning:free` ships. Its zero cost is the
+ * free tier's, not a price: the ledger still denies this route (`dynamicRoute`).
+ */
+export const NODESLIDE_NEMOTRON_35_SUPER_VL_FREE: Model<'openai-completions'> = {
+  id: 'nvidia/nemotron-3.5-super-vl:free',
+  name: 'NVIDIA: Nemotron 3.5 Super VL (free)',
+  api: 'openai-completions',
+  provider: 'openrouter',
+  baseUrl: 'https://openrouter.ai/api/v1',
+  reasoning: true,
+  input: ['text', 'image'],
+  cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+  contextWindow: 1_000_000,
+  maxTokens: 131_072,
+  compat: {
+    supportsDeveloperRole: false,
+    thinkingFormat: 'openrouter',
+    supportsStrictMode: true,
+    sendSessionAffinityHeaders: true,
+  },
+};
+
+/**
  * Kimi is newer than the bundled catalog and OpenRouter exposes its reasoning
  * effort through the normalized nested reasoning object. Other routes retain
  * their bundled metadata and receive only efforts they advertise.
  */
 export const NODESLIDE_OPENROUTER_MODEL_OVERRIDES: readonly Model<'openai-completions'>[] = [
   NODESLIDE_KIMI_K3,
+];
+
+/**
+ * Zero-priced routes the bundled catalog does not know. Kept apart from the overrides above because
+ * those are priced rows that must agree with the run-budget ledger table, and a free route has no
+ * ledger price (`dynamicRoute`).
+ */
+export const NODESLIDE_OPENROUTER_FREE_ROUTE_MODELS: readonly Model<'openai-completions'>[] = [
+  NODESLIDE_NEMOTRON_35_SUPER_VL_FREE,
 ];
 
 const OPENROUTER_CHAT_COMPLETIONS_BASE_URL = 'https://openrouter.ai/api/v1';
@@ -140,7 +176,9 @@ function priceFromLedger<
 export function openrouterProviderWithOverrides() {
   const builtin = openrouterProvider();
   const overridden = new Map(
-    NODESLIDE_OPENROUTER_MODEL_OVERRIDES.map((model) => [model.id, model] as const),
+    [...NODESLIDE_OPENROUTER_MODEL_OVERRIDES, ...NODESLIDE_OPENROUTER_FREE_ROUTE_MODELS].map(
+      (model) => [model.id, model] as const,
+    ),
   );
   const models = builtin
     .getModels()
@@ -152,7 +190,11 @@ export function openrouterProviderWithOverrides() {
     name: 'OpenRouter',
     baseUrl: 'https://openrouter.ai/api/v1',
     auth: { apiKey: envApiKeyAuth('OpenRouter API key', ['OPENROUTER_API_KEY']) },
-    models: [...models, ...NODESLIDE_OPENROUTER_MODEL_OVERRIDES],
+    models: [
+      ...models,
+      ...NODESLIDE_OPENROUTER_MODEL_OVERRIDES,
+      ...NODESLIDE_OPENROUTER_FREE_ROUTE_MODELS,
+    ],
     api: openAICompletionsApi(),
   });
 }
@@ -423,6 +465,7 @@ export function nodeSlideModelProbeProfile(modelId: NodeSlideAgentModelId): {
     case 'google/gemma-4-26b-a4b-it:free':
     case 'google/gemma-4-31b-it:free':
     case 'nvidia/nemotron-3-super-120b-a12b:free':
+    case 'nvidia/nemotron-3.5-super-vl:free':
     case 'openai/gpt-oss-20b:free':
       return { reasoningEffort: 'low', maxTokens: 512 };
     case 'z-ai/glm-5.2':

@@ -91,5 +91,12 @@ describe('NodeSlide routing policy (B2 orchestrator/worker split)', () => {
     expect(isPremiumNodeSlidePlannerModel('anthropic/claude-opus-5.5')).toBe(true);
     expect(isPremiumNodeSlidePlannerModel('openai/gpt-6.1-sol')).toBe(true);
     expect(isPremiumNodeSlidePlannerModel('z-ai/glm-5.2')).toBe(false);
+    expect(isPremiumNodeSlidePlannerModel(NODESLIDE_ROUTING_EXECUTOR_MODEL)).toBe(false);
+  });
+
+  it('names the SPEC D2 executor: the newest :free OpenRouter route with structured outputs', () => {
+    // GET https://openrouter.ai/api/v1/models, 2026-10-16T11:15:06Z: created 2026-10-15, zero prices,
+    // supported_parameters include structured_outputs and tools. live-unverified (no key, Homen 2026-10-16).
+    expect(NODESLIDE_ROUTING_EXECUTOR_MODEL).toBe('nvidia/nemotron-3.5-super-vl:free');
   });
 });

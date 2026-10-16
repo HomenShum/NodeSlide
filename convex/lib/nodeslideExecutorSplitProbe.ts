@@ -54,7 +54,15 @@ export const NODESLIDE_EXECUTOR_SPLIT_PLANNER_MODEL = 'moonshotai/kimi-k3' as co
 export const NODESLIDE_EXECUTOR_SPLIT_PROBE_COMMAND =
   'npx convex run nodeslideModelProbe:runExecutorSplit' as const;
 
-export const NODESLIDE_EXECUTOR_SPLIT_DEFAULT_BUDGET_USD = 0.25 as const;
+/**
+ * The cap must cover what the ledger reserves BEFORE the first dispatch: the kimi-k3 planner at
+ * 3 / 15 USD per million tokens (about 114,000 input / 4,400 output estimated tokens, 0.408756 USD)
+ * plus the gemini-3.8-flash executor (0.095258 USD), 0.504014 USD together. The earlier 0.25 USD
+ * default refused the planner's reservation, so the probe never dispatched (SPEC D3, Homen 2026-10-16:
+ * 0.55 USD on dev and on the nightly probe). `convex/nodeslideExecutorSplitProbeBudget.test.ts` checks
+ * this number against the real ledger.
+ */
+export const NODESLIDE_EXECUTOR_SPLIT_DEFAULT_BUDGET_USD = 0.55 as const;
 
 /** SPEC A.0.3: paid dispatches without a retry or a cross-model fallback. Enforced, then recorded. */
 export const NODESLIDE_EXECUTOR_SPLIT_DISPATCH_POLICY = {

@@ -28,7 +28,10 @@ export const NODE_SLIDE_FREE_ROUTE_CATALOG = [
 ].map(([id, provider, upstreamId]) => ({ id, provider, upstreamId }));
 
 export const EXECUTOR_SPLIT_RECEIPT_SCHEMA = 'nodeslide.executor-split-probe/v1';
-const EXECUTOR_SPLIT_EXECUTOR_MODEL = 'google/gemini-3.8-flash';
+// SPEC D2 (Homen 2026-10-16): the newest :free model with structured outputs on the public OpenRouter
+// list. live-unverified (no key). The run-budget ledger denies zero-priced :free routes, so no real
+// receipt can be accepted until the executor has a priced route.
+const EXECUTOR_SPLIT_EXECUTOR_MODEL = 'nvidia/nemotron-3.5-super-vl:free';
 const EXECUTOR_SPLIT_PLANNER_MODEL = 'moonshotai/kimi-k3';
 const EXECUTOR_SPLIT_COMMAND = 'npx convex run nodeslideModelProbe:runExecutorSplit';
 /** Pre-flight ceiling: one planner call and one executor call. A third is a retry or repair call. */

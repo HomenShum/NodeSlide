@@ -2,7 +2,8 @@
  * Candidate-bound executor receipt (SPEC Part A section A.2.8, Codex N1; rule 3 after round 1).
  *
  * Situation: an operator wants proof that, after Google retired Gemini 3.5 Flash, NodeSlide's routed
- * copy executor really runs Gemini 3.8 Flash. The probe runs one premium-planner edit turn through
+ * copy executor really runs the model the routing policy now names (SPEC D2: the newest :free route
+ * with structured outputs, live-unverified). The probe runs one premium-planner edit turn through
  * the real planner, router and reserve-before-dispatch provider. Only the HTTP call is faked here
  * (no provider is contacted, nothing is spent), so these tests prove the plumbing and the
  * acceptance rule; the paid run itself is the operator's.
@@ -22,6 +23,9 @@ import { NODESLIDE_ROUTING_EXECUTOR_MODEL } from '../../convex/lib/nodeslideRout
 import { buildGoldenNodeSlide } from '../../convex/lib/nodeslideSeed.ts';
 import { executorSplitReceiptFailures } from '../lib/model-fleet-receipt-core.mjs';
 
+/** The committed executor id. Every executor figure below follows the constant, never a typed copy. */
+const EXECUTOR = NODESLIDE_ROUTING_EXECUTOR_MODEL;
+
 const COMMIT = 'a'.repeat(40);
 const attempt = (name) => ({
   attempt: name,
@@ -34,9 +38,31 @@ const attempt = (name) => ({
 const calls = [];
 const dispatchPolicies = [];
 let plannerFails = false;
-let executorEchoes = 'google/gemini-3.8-flash';
+let executorEchoes = EXECUTOR;
 let executorAttempts = [attempt('initial')];
 let plannerValue;
+
+/**
+ * The ledger denies a zero-priced :free route (`dynamicRoute`), and the committed executor is one, so
+ * the real dispatch never reaches the provider for it. These tests prove the probe's plumbing and the
+ * acceptance rule, so they price the executor like the paid route it replaced (gemini-3.8-flash). What
+ * the real ledger does with the committed executor is asserted without this stand-in in
+ * convex/nodeslideExecutorSplitProbeBudget.test.ts.
+ */
+vi.mock('../../shared/nodeslideRunBudget.ts', async (importOriginal) => {
+  const actual = await importOriginal();
+  const standIn = (modelId) =>
+    modelId === 'nvidia/nemotron-3.5-super-vl:free' ? 'google/gemini-3.8-flash' : modelId;
+  return {
+    ...actual,
+    nodeSlideModelPricing: (modelId) =>
+      modelId === 'nvidia/nemotron-3.5-super-vl:free'
+        ? { ...actual.nodeSlideModelPricing(standIn(modelId)), modelId }
+        : actual.nodeSlideModelPricing(modelId),
+    scoreNodeSlideWorstCaseCost: (input) =>
+      actual.scoreNodeSlideWorstCaseCost({ ...input, model: standIn(input.model) }),
+  };
+});
 
 vi.mock('../../convex/lib/nodeslideProvider.ts', async (importOriginal) => {
   const actual = await importOriginal();
@@ -149,30 +175,30 @@ async function run() {
   return await runNodeSlideExecutorSplitProbe({
     ledger: fakeLedger(),
     buildIdentity: { schemaVersion: 'nodeslide.convex-build-identity/v1', commitSha: COMMIT },
-    budgetUsd: 0.25,
+    budgetUsd: executorSplitProbeBudgetUsd({}),
   });
 }
 
 async function acceptedReceipt() {
   plannerFails = false;
-  executorEchoes = 'google/gemini-3.8-flash';
+  executorEchoes = EXECUTOR;
   executorAttempts = [attempt('initial')];
   return await run();
 }
 
 describe('runNodeSlideExecutorSplitProbe', () => {
-  it('splits a kimi-k3 plan to gemini-3.8-flash and records what each provider echoed', async () => {
+  it('splits a kimi-k3 plan to the committed :free executor and records what each provider echoed', async () => {
     const receipt = await acceptedReceipt();
-    expect(calls).toEqual(['moonshotai/kimi-k3', 'google/gemini-3.8-flash']);
+    expect(calls).toEqual(['moonshotai/kimi-k3', EXECUTOR]);
     expect(receipt.routing).toMatchObject({
       plannerModel: 'moonshotai/kimi-k3',
-      executorModel: 'google/gemini-3.8-flash',
+      executorModel: EXECUTOR,
       reason: 'split_premium_planner_bulk_copy',
       executorOutcome: 'applied',
     });
     expect(receipt.spans.map((span) => [span.toolName, span.responseModel])).toEqual([
       ['planner', 'moonshotai/kimi-k3'],
-      ['executor', 'google/gemini-3.8-flash'],
+      ['executor', EXECUTOR],
     ]);
     expect(receipt.budget.refusals).toEqual([]);
     expect(executorSplitReceiptFailures(receipt, COMMIT)).toEqual([]);
@@ -182,7 +208,7 @@ describe('runNodeSlideExecutorSplitProbe', () => {
     const receipt = await acceptedReceipt();
     expect(receipt.command).toBe(NODESLIDE_EXECUTOR_SPLIT_PROBE_COMMAND);
     expect(receipt.candidateIds).toEqual([NODESLIDE_ROUTING_EXECUTOR_MODEL]);
-    expect(receipt.echoedModels.sort()).toEqual(['google/gemini-3.8-flash', 'moonshotai/kimi-k3']);
+    expect(receipt.echoedModels.sort()).toEqual([EXECUTOR, 'moonshotai/kimi-k3'].sort());
     expect(receipt.rows).toEqual([
       {
         toolName: 'planner',
@@ -196,9 +222,9 @@ describe('runNodeSlideExecutorSplitProbe', () => {
       },
       {
         toolName: 'executor',
-        requestedModel: 'google/gemini-3.8-flash',
-        resolvedModel: 'google/gemini-3.8-flash',
-        echoedModel: 'google/gemini-3.8-flash',
+        requestedModel: EXECUTOR,
+        resolvedModel: EXECUTOR,
+        echoedModel: EXECUTOR,
         usage: { inputTokens: 120, outputTokens: 40 },
         costUsd: 0.001,
         fallbackUsed: false,
@@ -209,7 +235,7 @@ describe('runNodeSlideExecutorSplitProbe', () => {
     expect(receipt.constantSha256).toMatch(/^sha256:[0-9a-f]{64}$/u);
     expect(receipt.dispatchPolicy).toEqual({ maxRetries: 0, crossModelFallback: false });
     expect(receipt.budget).toMatchObject({
-      maxUsd: 0.25,
+      maxUsd: executorSplitProbeBudgetUsd({}),
       requests: 2,
       stoppedBy: null,
       refusals: [],
@@ -233,7 +259,7 @@ describe('runNodeSlideExecutorSplitProbe', () => {
   });
 
   it('rejects a span that nevertheless dispatched twice, and still reports the enforced policy', async () => {
-    executorEchoes = 'google/gemini-3.8-flash';
+    executorEchoes = EXECUTOR;
     plannerFails = false;
     executorAttempts = [attempt('initial'), attempt('repair')];
     const receipt = await run();
@@ -593,8 +619,10 @@ describe('executorSplitReceiptFailures rejects incomplete or inconsistent eviden
 });
 
 describe('executorSplitProbeBudgetUsd', () => {
-  it('defaults to 0.25 USD and honours NODESLIDE_PROBE_BUDGET_USD', () => {
-    expect(executorSplitProbeBudgetUsd({})).toBe(0.25);
+  it('defaults to 0.55 USD and honours NODESLIDE_PROBE_BUDGET_USD', () => {
+    // Was 0.25 USD, which the real ledger refuses before any dispatch (SPEC D3, 2026-10-16;
+    // convex/nodeslideExecutorSplitProbeBudget.test.ts holds the real-ledger figures).
+    expect(executorSplitProbeBudgetUsd({})).toBe(0.55);
     expect(executorSplitProbeBudgetUsd({ NODESLIDE_PROBE_BUDGET_USD: '0.1' })).toBe(0.1);
   });
   it('refuses an unreadable or non-positive ceiling instead of substituting a larger one', () => {

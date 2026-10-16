@@ -38,6 +38,7 @@ import type {
   TextContent,
 } from '@earendil-works/pi-ai/compat';
 import {
+  type NodeSlideReasoningEffort,
   isNodeSlideAgentModelId,
   nodeSlideDefaultReasoningEffort,
 } from '../../../shared/nodeslide.js';
@@ -130,9 +131,43 @@ function canonicalizeModelId(provider: SupportedProvider, modelId: string): stri
   if (provider === 'anthropic' && Object.hasOwn(DIRECT_ANTHROPIC_WIRE_ID, modelId)) {
     return DIRECT_ANTHROPIC_WIRE_ID[modelId] as string;
   }
+  // An OpenRouter id is the whole slug (`openrouter/free` is a catalog route, not a provider prefix).
+  if (provider === 'openrouter') return modelId;
   const prefix = `${provider}/`;
   if (modelId.startsWith(prefix)) return modelId.slice(prefix.length);
   return modelId;
+}
+
+/** The verified free constant a free-looking unknown id resolves to (SPEC A.0.10). */
+const FREE_ROUTER_MODEL_ID = 'openrouter/free';
+
+function isFreeLookingModelId(modelId: string): boolean {
+  return modelId.endsWith(':free') || modelId.endsWith('-free') || modelId === FREE_ROUTER_MODEL_ID;
+}
+
+/**
+ * The row default effort in the option the model's own API reads. pi-ai's `complete` forwards options
+ * untouched, and each API reads a different one: Anthropic `effort` (the mid-conversation effort
+ * message), the OpenAI Responses API `reasoningEffort`, Gemini `thinking.level`. A name the API does
+ * not read is dropped, which ran GPT and Gemini rows at the vendor default (medium) instead of the
+ * row's (high). `effort` is always passed, as before; the other two are added for their API.
+ */
+function rowEffortOption(api: string, effort: NodeSlideReasoningEffort | undefined) {
+  if (effort === undefined) return {};
+  switch (api) {
+    case 'openai-responses':
+      return { effort, reasoningEffort: effort };
+    case 'google-generative-ai':
+      // Gemini 3.x Flash takes low / medium / high only (the catalog rows never offer more).
+      return effort === 'low' || effort === 'medium' || effort === 'high'
+        ? {
+            effort,
+            thinking: { enabled: true, level: effort.toUpperCase() as 'LOW' | 'MEDIUM' | 'HIGH' },
+          }
+        : { effort };
+    default:
+      return { effort };
+  }
 }
 
 /**
@@ -149,18 +184,32 @@ export async function call(opts: CallOptions): Promise<CallResult> {
   // Keep the sizeable provider catalog off the MCP startup/help path. Offline
   // file tools never pay this import cost; BYOK loads it only at first use.
   const pi = await import('@earendil-works/pi-ai/compat');
-  const canonicalId = canonicalizeModelId(opts.provider, opts.modelId);
+  let provider = opts.provider;
+  let canonicalId = canonicalizeModelId(provider, opts.modelId);
   // pi-ai's getModel is typed against its compile-time MODEL registry, but
   // we accept arbitrary strings at this boundary (env-driven model overrides,
   // per-call user input). Runtime validation inside getModel throws for
   // unknown ids — we surface that as a clear error message to the agent.
   // biome-ignore lint/suspicious/noExplicitAny: see comment above
-  const registryModel = (pi.getModel as any)(opts.provider, canonicalId);
+  const lookup = pi.getModel as any;
+  let registryModel = lookup(provider, canonicalId);
+  if (!registryModel) {
+    // SPEC A.0.10: an unknown id never becomes a paid default. A free-looking one resolves to the
+    // verified free router; every other unknown throws here, before any request.
+    if (!isFreeLookingModelId(opts.modelId)) {
+      throw new Error(`Unknown model "${opts.modelId}": pi-ai has no ${provider} route for it.`);
+    }
+    provider = 'openrouter';
+    canonicalId = FREE_ROUTER_MODEL_ID;
+    registryModel = lookup(provider, canonicalId);
+    if (!registryModel)
+      throw new Error(`The free router "${FREE_ROUTER_MODEL_ID}" is not in pi-ai.`);
+  }
   // The bundled pi-ai catalog is an older price snapshot than the NodeSlide run-budget ledger
   // (kimi-k3 0.5 against 3, glm-5.2 0.171 against 0.7686), so a response on an OpenRouter route the
   // ledger prices is costed at the ledger's rate, the same one the Convex dispatcher uses.
   const pricedModel =
-    opts.provider === 'openrouter' && registryModel?.cost
+    provider === 'openrouter' && registryModel.cost
       ? { ...registryModel, cost: nodeSlideLedgerPricedCost(canonicalId, registryModel.cost) }
       : registryModel;
   const model = opts.baseUrl ? { ...pricedModel, baseUrl: opts.baseUrl } : pricedModel;
@@ -168,7 +217,7 @@ export async function call(opts: CallOptions): Promise<CallResult> {
   const userContent: (TextContent | ImageContent)[] = [{ type: 'text', text: opts.userText }];
   if (opts.userImage !== undefined) {
     if (!model.input.includes('image')) {
-      throw new Error(`pi-ai model ${opts.provider}/${canonicalId} does not support image input`);
+      throw new Error(`pi-ai model ${provider}/${canonicalId} does not support image input`);
     }
     userContent.push({
       type: 'image',
@@ -193,14 +242,14 @@ export async function call(opts: CallOptions): Promise<CallResult> {
   // Every spelling of a catalog Claude row (the slug, the dashed wire id, either with the provider
   // prefix) reaches the same wire id, so the default is looked up from that wire id, not the spelling.
   const row =
-    (opts.provider === 'anthropic'
+    (provider === 'anthropic'
       ? Object.keys(DIRECT_ANTHROPIC_WIRE_ID).find(
           (slug) => DIRECT_ANTHROPIC_WIRE_ID[slug] === canonicalId,
         )
       : undefined) ?? opts.modelId;
   const rowEffort = isNodeSlideAgentModelId(row) ? nodeSlideDefaultReasoningEffort(row) : undefined;
   const result = await pi.complete(model, context, {
-    ...(rowEffort !== undefined ? { effort: rowEffort } : {}),
+    ...rowEffortOption(model.api, rowEffort),
     ...(opts.signal !== undefined ? { signal: opts.signal } : {}),
     ...(opts.maxTokens !== undefined ? { maxOutputTokens: opts.maxTokens } : {}),
   });
@@ -213,7 +262,7 @@ export async function call(opts: CallOptions): Promise<CallResult> {
     costUsd: Number.isFinite(result.usage.cost.total) ? result.usage.cost.total : 0,
     inputTokens: result.usage.input,
     outputTokens: result.usage.output,
-    provider: opts.provider,
+    provider,
     modelUsed: result.model,
     stopReason: result.stopReason,
   };

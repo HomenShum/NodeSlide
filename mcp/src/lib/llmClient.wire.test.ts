@@ -108,6 +108,88 @@ describe('callByModel sends the direct Anthropic wire id and the row default eff
   });
 }, 30_000); // first call cold-imports the pi-ai catalog; the default 5 s timed out on a cold run
 
+/**
+ * Scenario: the same designer picks a GPT-6.1 Sol or Gemini 3.8 Flash row. The row default is `high`.
+ * pi-ai's `complete` reads a different option per API (`reasoningEffort` on the OpenAI Responses API,
+ * `thinking.level` on Gemini) and silently drops the `effort` that only its Anthropic path reads, so
+ * both calls used to go out at the vendor default (medium). The assertion is on the request body.
+ */
+describe('callByModel sends the row default effort on the OpenAI and Gemini APIs too', () => {
+  const sent: Sent[] = [];
+
+  beforeEach(() => {
+    sent.length = 0;
+    vi.stubEnv('OPENAI_API_KEY', 'test-key-not-real');
+    vi.stubEnv('GEMINI_API_KEY', 'test-key-not-real');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+        sent.push({
+          url: String(input instanceof Request ? input.url : input),
+          headers: Object.fromEntries(new Headers(init?.headers)),
+          body: JSON.parse(String(init?.body ?? '{}')) as Body,
+        });
+        return new Response(JSON.stringify({ error: { message: 'stop', code: 400 } }), {
+          status: 400,
+          headers: { 'content-type': 'application/json' },
+        });
+      }),
+    );
+  });
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+  });
+
+  const run = (model: string) =>
+    callByModel({ model, systemPrompt: 's', userText: 'u', maxTokens: 64 });
+
+  it('openai/gpt-6.1-sol goes to the Responses API at reasoning.effort high, with no sampling keys', async () => {
+    await run('openai/gpt-6.1-sol');
+    expect(sent).toHaveLength(1);
+    const { url, body } = sent[0] as Sent;
+    expect(url).toContain('api.openai.com/v1/responses');
+    expect(body.model).toBe('gpt-6.1-sol');
+    expect(body['reasoning']).toMatchObject({ effort: 'high' });
+    expect(FORBIDDEN_KEYS.filter((k) => JSON.stringify(body).includes(`"${k}"`))).toEqual([]);
+  });
+
+  it('google/gemini-3.8-flash goes out with thinkingLevel HIGH and no sampling keys', async () => {
+    await run('google/gemini-3.8-flash');
+    expect(sent).toHaveLength(1);
+    const { url, body } = sent[0] as Sent;
+    expect(url).toContain('generativelanguage.googleapis.com');
+    expect(url).toContain('gemini-3.8-flash');
+    expect(body['generationConfig']).toMatchObject({
+      thinkingConfig: { thinkingLevel: 'HIGH' },
+    });
+    expect(FORBIDDEN_KEYS.filter((k) => JSON.stringify(body).includes(`"${k}"`))).toEqual([]);
+  });
+
+  // SPEC A.0.10: free-looking unknown ids reach the verified free router; every other unknown throws
+  // before any request. `openrouter/free` is a catalog route and used to lose its prefix.
+  it.each([['openrouter/free'], ['bogus/model:free'], ['vendor-free']])(
+    '%s resolves to the free router on OpenRouter',
+    async (model) => {
+      vi.stubEnv('OPENROUTER_API_KEY', 'test-key-not-real');
+      const result = await run(model);
+      expect(result.provider).toBe('openrouter');
+      expect(sent).toHaveLength(1);
+      const { url, body } = sent[0] as Sent;
+      expect(url).toContain('openrouter.ai');
+      expect(body.model).toBe('openrouter/free');
+    },
+  );
+
+  it.each([['bogus/model'], ['gpt-nonexistent'], ['claude-unknown-9']])(
+    '%s is refused before any request',
+    async (model) => {
+      await expect(run(model)).rejects.toThrow(/Unknown model/);
+      expect(sent).toEqual([]);
+    },
+  );
+}, 30_000);
+
 /** The checker above is only worth having if it rejects each shape A.0.6 forbids. */
 describe('wireShapeProblems rejects the shapes SPEC A.0.6 forbids', () => {
   const ok = {

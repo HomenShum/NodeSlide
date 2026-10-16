@@ -680,6 +680,11 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       reasoningEffort: 'low',
       maxTokens: 256,
     });
+    // The routed executor (SPEC D2) is a :free route and takes the free routes' 512-token probe.
+    expect(nodeSlideModelProbeProfile('nvidia/nemotron-3.5-super-vl:free')).toEqual({
+      reasoningEffort: 'low',
+      maxTokens: 512,
+    });
   });
 
   it('returns a sanitized failed receipt when a fleet route times out', async () => {

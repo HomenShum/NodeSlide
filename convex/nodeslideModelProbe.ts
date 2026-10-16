@@ -42,7 +42,7 @@ const generatedInternal: any = internal;
 /**
  * Candidate-bound executor receipt (SPEC Part A, section A.2.8): one premium-planner edit turn split
  * to the routed copy executor through the reserve-before-dispatch provider. Spends real provider
- * money, capped by NODESLIDE_PROBE_BUDGET_USD (default 0.25 USD, planner and executor together).
+ * money, capped by NODESLIDE_PROBE_BUDGET_USD (default 0.55 USD, planner and executor together).
  * Invoke with `npx convex run nodeslideModelProbe:runExecutorSplit`.
  */
 export const runExecutorSplit = internalAction({

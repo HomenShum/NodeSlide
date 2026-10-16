@@ -27,6 +27,7 @@ import {
   nodeSlideAgentModel,
 } from '../shared/nodeslide';
 import {
+  NODESLIDE_HELD_PRICE_VERIFIED_AT,
   NODESLIDE_MODEL_PRICING,
   NODESLIDE_MODEL_PRICING_SOURCE_URL,
   NODESLIDE_MODEL_PRICING_VERIFIED_AT,
@@ -50,26 +51,8 @@ import {
  * `top_provider.max_completion_tokens`. `null` is recorded as null, not guessed.
  */
 const OPENROUTER_CATALOG_2026_10_14 = {
-  // Unchanged from 2026-07-28 on purpose. The /models listing read 0.0000007 / 0.000015 and 943_718 on
-  // 2026-10-14; as the OpenRouter max_price ceiling that admitted 3 of 25 endpoints on 2026-10-15
-  // (2 with structured_outputs) against 21 of 25 (18) for this row (GET
-  // /api/v1/models/moonshotai/kimi-k3/endpoints, 2026-10-15 23:08 UTC). kimi-k3 is the production default.
-  'moonshotai/kimi-k3': {
-    prompt: '0.000003',
-    completion: '0.000015',
-    contextLength: 1_048_576,
-    maxCompletionTokens: null,
-  },
-  // Unchanged from 2026-07-28 on purpose. The /models listing read 0.00000005 / 0.000007 and 943_718
-  // on 2026-10-14; as the OpenRouter max_price ceiling that admitted 0 of 33 endpoints at about 18:30
-  // and 18:49 UTC and 2 of 33 (1 with structured_outputs) at 22:35 and 23:00 UTC on 2026-10-15, while
-  // this row admits 6 of 33 (4) (GET /api/v1/models/z-ai/glm-5.2/endpoints, 2026-10-15 23:08 UTC).
-  'z-ai/glm-5.2': {
-    prompt: '0.0000007686',
-    completion: '0.0000024156',
-    contextLength: 1_048_576,
-    maxCompletionTokens: 131_072,
-  },
+  // moonshotai/kimi-k3, z-ai/glm-5.2 and openai/gpt-5.6-sol are NOT in this table: their rows keep
+  // main's 2026-07-28 values, which this catalog read did not publish. See HELD_AT_MAINS_CEILING.
   'anthropic/claude-sonnet-5': {
     prompt: '0.000002',
     completion: '0.00001',
@@ -112,15 +95,6 @@ const OPENROUTER_CATALOG_2026_10_14 = {
     contextLength: 1_048_576,
     maxCompletionTokens: 65_536,
   },
-  // Unchanged from 2026-07-28 on purpose. The listing moved to 0.000004 / 0.00002 on 2026-10-15
-  // (0.000002 / 0.00001 on 2026-10-14); as the max_price ceiling 2 / 10 admitted 1 of 7 endpoints
-  // against 6 of 7 for this row (GET /api/v1/models/openai/gpt-5.6-sol/endpoints, 2026-10-15 23:08 UTC).
-  'openai/gpt-5.6-sol': {
-    prompt: '0.000005',
-    completion: '0.00003',
-    contextLength: 1_050_000,
-    maxCompletionTokens: 128_000,
-  },
   // Was 0.00000125 / 0.0000075 on 2026-07-28.
   'openai/gpt-5.6-terra': {
     prompt: '0.000002',
@@ -146,12 +120,51 @@ const OPENROUTER_CATALOG_2026_10_14 = {
   >
 >;
 
+/**
+ * Three rows keep main's 2026-07-28 values on purpose (SPEC D3, Homen 2026-10-16). The 2026-10-14
+ * listing did not publish them, so they are not in the table above and their rows do not claim it:
+ * what verified them is GET /api/v1/models/{id}/endpoints on 2026-10-15 at 23:08 UTC, counting the
+ * endpoints at or below the value as a `max_price` ceiling (OPENROUTER_ADMISSION_2026_10_15). `listed`
+ * is what the /models listing read, kept as the evidence the value was not adopted.
+ */
+const HELD_AT_MAINS_CEILING = {
+  // The production default. Listing 0.0000007 / 0.000015 and 943_718 on 2026-10-14: as the ceiling
+  // that admitted 3 of 25 endpoints on 2026-10-15 (2 with structured_outputs) against 21 of 25 (18).
+  'moonshotai/kimi-k3': {
+    prompt: '0.000003',
+    completion: '0.000015',
+    contextLength: 1_048_576,
+    maxCompletionTokens: null,
+    listed: { prompt: '0.0000007', completion: '0.000015' },
+  },
+  // Listing 0.00000005 / 0.000007 and 943_718 on 2026-10-14: as the ceiling that admitted 0 of 33
+  // endpoints at about 18:30 and 18:49 UTC and 2 of 33 (1 structured) at 22:35 and 23:00 UTC on
+  // 2026-10-15, against 6 of 33 (4) for this row.
+  'z-ai/glm-5.2': {
+    prompt: '0.0000007686',
+    completion: '0.0000024156',
+    contextLength: 1_048_576,
+    maxCompletionTokens: 131_072,
+    listed: { prompt: '0.00000005', completion: '0.000007' },
+  },
+  // Listing 0.000002 / 0.00001 on 2026-10-14 (0.000004 / 0.00002 on 2026-10-15): as the ceiling
+  // 2 / 10 admitted 1 of 7 endpoints against 6 of 7 for this row.
+  'openai/gpt-5.6-sol': {
+    prompt: '0.000005',
+    completion: '0.00003',
+    contextLength: 1_050_000,
+    maxCompletionTokens: 128_000,
+    listed: { prompt: '0.000002', completion: '0.00001' },
+  },
+} as const;
+
 /** The routes the catalog prices at "0" per token. Never a price; always a deny. */
 const OPENROUTER_ZERO_PRICED_ROUTES: readonly NodeSlideAgentModelId[] = [
   'openrouter/free',
   'google/gemma-4-26b-a4b-it:free',
   'google/gemma-4-31b-it:free',
   'nvidia/nemotron-3-super-120b-a12b:free',
+  'nvidia/nemotron-3.5-super-vl:free',
   'openai/gpt-oss-20b:free',
 ];
 
@@ -206,6 +219,32 @@ describe('every priced row matches the catalog it claims to come from', () => {
       // to catch: it makes every worst case zero and every reservation unbounded.
       expect(pricing.inputMicroUsdPerMillionTokens).toBeGreaterThan(0);
       expect(pricing.outputMicroUsdPerMillionTokens).toBeGreaterThan(0);
+    });
+  }
+});
+
+describe('the held rows carry the evidence that verified them, not the listing they differ from', () => {
+  for (const [modelId, held] of Object.entries(HELD_AT_MAINS_CEILING)) {
+    it(`labels ${modelId} with its endpoint check of 2026-10-15, not the 2026-10-14 listing`, () => {
+      const pricing = nodeSlideModelPricing(modelId);
+      expect(pricing.kind).toBe('priced');
+      if (pricing.kind !== 'priced') return;
+      expect(pricing.inputMicroUsdPerMillionTokens).toBe(microUsdPerMillionTokens(held.prompt));
+      expect(pricing.outputMicroUsdPerMillionTokens).toBe(
+        microUsdPerMillionTokens(held.completion),
+      );
+      expect(pricing.providerContextWindowTokens).toBe(held.contextLength);
+      expect(pricing.providerMaxOutputTokens).toBe(held.maxCompletionTokens ?? held.contextLength);
+      expect(pricing.source).toBe('openrouter_model_catalog_api');
+      // The label names what verified the value: the per-route endpoints read, at its own time.
+      expect(pricing.sourceUrl).toBe(`${NODESLIDE_MODEL_PRICING_SOURCE_URL}/${modelId}/endpoints`);
+      expect(pricing.verifiedAt).toBe(NODESLIDE_HELD_PRICE_VERIFIED_AT);
+      expect(NODESLIDE_HELD_PRICE_VERIFIED_AT).toBe('2026-10-15T23:08:00Z');
+      expect(pricing.verifiedAt).not.toBe(NODESLIDE_MODEL_PRICING_VERIFIED_AT);
+      // The listing the old label claimed is genuinely cheaper, so that label was false.
+      expect(microUsdPerMillionTokens(held.listed.prompt)).toBeLessThan(
+        microUsdPerMillionTokens(held.prompt),
+      );
     });
   }
 });
@@ -395,7 +434,8 @@ describe('every metered OpenRouter ledger price is a ceiling that still routes',
  * `{inPerM, outPerM}` per (id, OpenRouter transport). The sources:
  *
  *   1. the ledger table `NODESLIDE_MODEL_PRICING` (also the reservation quote and the OpenRouter
- *      `max_price` ceiling), pricingAsOf `NODESLIDE_MODEL_PRICING_VERIFIED_AT` (2026-10-14T16:03Z);
+ *      `max_price` ceiling), pricingAsOf `NODESLIDE_MODEL_PRICING_VERIFIED_AT` (2026-10-14T16:03Z), and
+ *      `NODESLIDE_HELD_PRICE_VERIFIED_AT` (2026-10-15T23:08Z) on the three held rows;
  *   2. the hand-typed `Model<>` overrides in `nodeslideProvider.ts`, same pricingAsOf;
  *   3. the provider the dispatcher actually builds (`openrouterProviderWithOverrides`): its rows
  *      price every response (`usage.cost.total` -> `costMicroUsd`). Its base rows are the bundled

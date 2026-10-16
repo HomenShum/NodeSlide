@@ -730,6 +730,7 @@ export const nodeslideAgentModelValidator = v.union(
   v.literal('google/gemma-4-26b-a4b-it:free'),
   v.literal('google/gemma-4-31b-it:free'),
   v.literal('nvidia/nemotron-3-super-120b-a12b:free'),
+  v.literal('nvidia/nemotron-3.5-super-vl:free'),
   v.literal('openai/gpt-oss-20b:free'),
 );
 

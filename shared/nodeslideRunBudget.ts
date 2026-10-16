@@ -264,8 +264,10 @@ export interface NodeSlidePricedModelMetadata {
   readonly providerContextWindowTokens: number;
   readonly providerMaxOutputTokens: number;
   readonly source: 'openrouter_model_catalog_api';
-  readonly sourceUrl: typeof NODESLIDE_MODEL_PRICING_SOURCE_URL;
-  readonly verifiedAt: typeof NODESLIDE_MODEL_PRICING_VERIFIED_AT;
+  /** Where this row's price was read: the /models listing, or a held row's endpoints evidence. */
+  readonly sourceUrl: string;
+  /** When the price in this row was verified; a held row carries its own date, not the listing's. */
+  readonly verifiedAt: string;
 }
 
 export interface NodeSlideZeroCostModelMetadata {
@@ -481,7 +483,10 @@ export type NodeSlideRunBudgetPostflightResult =
  * FETCHED:  2026-10-14T16:03:00Z (see NODESLIDE_MODEL_PRICING_VERIFIED_AT). The four rows
  *           added by the model refresh, and gpt-5.6-terra, were read from that one response.
  *           moonshotai/kimi-k3, z-ai/glm-5.2 and openai/gpt-5.6-sol were re-read and
- *           deliberately NOT moved off the values they had on main (see their rows).
+ *           deliberately NOT moved off the values they had on main (see their rows). Those
+ *           three rows are not what that response published, so they carry their own
+ *           `verifiedAt` (NODESLIDE_HELD_PRICE_VERIFIED_AT, 2026-10-15T23:08Z) and the
+ *           per-route endpoints URL that verified them, not the listing's date and URL.
  *           The price below is ALSO the `max_price` routing ceiling sent to OpenRouter
  *           (`nodeslideBudgetedProvider.ts`), so it bounds both the reservation and the
  *           bill. The /models listing price is the cheapest endpoint's, so a row copied
@@ -512,7 +517,7 @@ export type NodeSlideRunBudgetPostflightResult =
  *   - `nodeslide/private-deterministic`. It issues no provider request, so a
  *     per-token price for it would be fiction. It is a separate `zero_cost`
  *     constant whose zero is a fact about the route, not a price.
- *   - The five zero-priced dynamic routes. See `NodeSlideDynamicModelPricing`.
+ *   - The six zero-priced dynamic routes. See `NodeSlideDynamicModelPricing`.
  *   - `nebius/zai-org/GLM-5.2`. It is not an OpenRouter route and its price
  *     lives behind a private Nebius endpoint this table's fetch cannot read, so
  *     it is `unknown` and DENIES. Porting the previously recorded Nebius figure
@@ -523,6 +528,16 @@ export type NodeSlideRunBudgetPostflightResult =
  */
 export const NODESLIDE_MODEL_PRICING_SOURCE_URL = 'https://openrouter.ai/api/v1/models' as const;
 export const NODESLIDE_MODEL_PRICING_VERIFIED_AT = '2026-10-14T16:03:00Z' as const;
+/**
+ * The three held rows (kimi-k3, glm-5.2, gpt-5.6-sol) keep main's 2026-07-28 values, which the
+ * 2026-10-14 listing did not publish. What verified them is the endpoint check below, so that is
+ * the date and the source their rows carry (SPEC D3, Homen 2026-10-16).
+ */
+export const NODESLIDE_HELD_PRICE_VERIFIED_AT = '2026-10-15T23:08:00Z' as const;
+const heldPriceEvidence = (modelId: string) => ({
+  sourceUrl: `${NODESLIDE_MODEL_PRICING_SOURCE_URL}/${modelId}/endpoints`,
+  verifiedAt: NODESLIDE_HELD_PRICE_VERIFIED_AT,
+});
 
 type NodeSlideCatalogPricingMetadata =
   | NodeSlidePricedModelMetadata
@@ -535,16 +550,19 @@ function pricedRoute(args: {
   outputMicroUsdPerMillionTokens: number;
   providerContextWindowTokens: number;
   providerMaxOutputTokens: number;
+  /** Set only on a held row, whose price is not the 2026-10-14 listing's. */
+  evidence?: { sourceUrl: string; verifiedAt: string };
 }): NodeSlidePricedModelMetadata {
+  const { evidence, ...row } = args;
   return {
     version: NODESLIDE_MODEL_PRICING_VERSION,
     kind: 'priced',
     currency: 'USD',
     billingUnit: 'million_tokens',
     source: 'openrouter_model_catalog_api',
-    sourceUrl: NODESLIDE_MODEL_PRICING_SOURCE_URL,
-    verifiedAt: NODESLIDE_MODEL_PRICING_VERIFIED_AT,
-    ...args,
+    sourceUrl: evidence?.sourceUrl ?? NODESLIDE_MODEL_PRICING_SOURCE_URL,
+    verifiedAt: evidence?.verifiedAt ?? NODESLIDE_MODEL_PRICING_VERIFIED_AT,
+    ...row,
   };
 }
 
@@ -586,6 +604,7 @@ export const NODESLIDE_MODEL_PRICING = {
   // 2026-10-15 23:08 UTC). Window and output cap are main's too.
   'moonshotai/kimi-k3': pricedRoute({
     modelId: 'moonshotai/kimi-k3',
+    evidence: heldPriceEvidence('moonshotai/kimi-k3'),
     inputMicroUsdPerMillionTokens: 3_000_000,
     outputMicroUsdPerMillionTokens: 15_000_000,
     providerContextWindowTokens: 1_048_576,
@@ -602,6 +621,7 @@ export const NODESLIDE_MODEL_PRICING = {
   // 128,000-262,144, not the listing's 943,718.
   'z-ai/glm-5.2': pricedRoute({
     modelId: 'z-ai/glm-5.2',
+    evidence: heldPriceEvidence('z-ai/glm-5.2'),
     inputMicroUsdPerMillionTokens: 768_600,
     outputMicroUsdPerMillionTokens: 2_415_600,
     providerContextWindowTokens: 1_048_576,
@@ -661,6 +681,7 @@ export const NODESLIDE_MODEL_PRICING = {
   // structured_outputs; GET /api/v1/models/openai/gpt-5.6-sol/endpoints, 2026-10-15 23:08 UTC).
   'openai/gpt-5.6-sol': pricedRoute({
     modelId: 'openai/gpt-5.6-sol',
+    evidence: heldPriceEvidence('openai/gpt-5.6-sol'),
     inputMicroUsdPerMillionTokens: 5_000_000,
     outputMicroUsdPerMillionTokens: 30_000_000,
     providerContextWindowTokens: 1_050_000,
@@ -696,6 +717,10 @@ export const NODESLIDE_MODEL_PRICING = {
   ),
   'nvidia/nemotron-3-super-120b-a12b:free': dynamicRoute(
     'nvidia/nemotron-3-super-120b-a12b:free',
+    'This is a promotional zero-priced tier, not a contracted price; it is denied rather than reserved at zero.',
+  ),
+  'nvidia/nemotron-3.5-super-vl:free': dynamicRoute(
+    'nvidia/nemotron-3.5-super-vl:free',
     'This is a promotional zero-priced tier, not a contracted price; it is denied rather than reserved at zero.',
   ),
   'openai/gpt-oss-20b:free': dynamicRoute(

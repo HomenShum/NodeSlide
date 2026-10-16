@@ -25,12 +25,12 @@
     },
     {
       "file": "convex/nodeslideAgent.ts",
-      "line": 1704,
+      "line": 1712,
       "description": "**The trust boundary.**\n\nAbove this line, values came from a browser and are suspect. Below it, everything is typed and checked.\n\nConvex validates every argument against this `args` object *before* the handler body runs, and rejects any undeclared field. Read the comment on `durableJob` below — declaring that one field was the difference between working durable jobs and every job dying at 35% progress."
     },
     {
       "file": "convex/nodeslideAgent.ts",
-      "line": 1760,
+      "line": 1768,
       "description": "**Why the cheap checks run first.**\n\nBoth checks below are pure string comparisons over arguments already in hand: no database read, no quota, no provider call. A caller that cannot name the job whose deck it claims to produce is refused *for free*.\n\nMoving either check later would turn a free refusal into one that arrives after a paid completion. This ordering is the rule the whole file obeys."
     },
     {
@@ -40,22 +40,22 @@
     },
     {
       "file": "convex/nodeslideAgent.ts",
-      "line": 1882,
+      "line": 1890,
       "description": "**The model is asked for intent, not geometry.**\n\nSlide count, allowed element kinds, and required provenance fields are enforced by this JSON schema — not hoped for in prose. `minItems`/`maxItems` come from the count the user actually asked for.\n\nA model that returns coordinates cannot be checked. A model that returns a typed plan can, and deterministic code turns the plan into positioned elements."
     },
     {
       "file": "convex/nodeslideAgent.ts",
-      "line": 2013,
+      "line": 2021,
       "description": "**A ceiling enforced by code, not by prompt.**\n\nThe dispatch reserves budget against a ledger row keyed by the run id, calls the provider with a hard timeout, and reconciles the spend afterwards.\n\nNote the comment on `timeoutMs`: the create path carries its own wire ceiling because full-deck generation legitimately takes minutes, and the 30-second edit-path default would guarantee a timeout and a silently degraded deck."
     },
     {
       "file": "convex/nodeslideAgent.ts",
-      "line": 2058,
+      "line": 2066,
       "description": "**Fail closed on an ambiguous charge.**\n\nIf the paid call ended without a reconcilable billing receipt, creation stops here. No fallback deck is produced under an unresolved charge.\n\nA provider *failure* is different and does fall back to the deterministic generator. Failure and ambiguity are not the same thing, and this repository refuses to treat them alike."
     },
     {
       "file": "convex/nodeslideAgent.ts",
-      "line": 2150,
+      "line": 2158,
       "description": "**The only write.**\n\nEverything above was computation. This one mutation persists the deck, its slides, its elements and their version clocks in a single transaction.\n\nFrom here on, every change to this deck goes through the version check in tour 2."
     },
     {

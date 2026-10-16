@@ -20,7 +20,7 @@
     },
     {
       "file": "convex/nodeslide.ts",
-      "line": 3348,
+      "line": 3354,
       "description": "**Failure 2: the worker died mid-run.**\n\nAn agent run holds a lease. This mutation finds runs whose `leaseExpiresAt` has passed and fails them honestly, so a crashed action stops spinning in the UI instead of hanging forever.\n\n'Honestly' is the operative word: it marks them failed with a reason rather than quietly deleting them."
     },
     {

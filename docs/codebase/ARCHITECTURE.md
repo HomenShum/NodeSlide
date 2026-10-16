@@ -43,14 +43,14 @@ The browser calls `applyPatch` / `proposePatch` / `acceptPatch` in
 published `@nodeslide/*` packages call the same functions over HTTP.
 
 **Enforced by:** the absence of an alternative. There is no direct table write
-outside `convex/`, and `commitPatch` (`convex/nodeslide.ts:5304` (`commitPatch`)) is the only
+outside `convex/`, and `commitPatch` (`convex/nodeslide.ts:5334` (`commitPatch`)) is the only
 function that advances a version.
 
 ## 4. The model chooses intent inside a bounded schema. Code produces geometry.
 
 The model is never asked to invent pixel positions. It is asked for a typed
 plan — narrative, slide roles, a typed artifact spec — constrained by
-`briefJsonSchema` (`convex/nodeslideAgent.ts:1882` (`briefJsonSchema`)). Deterministic code in
+`briefJsonSchema` (`convex/nodeslideAgent.ts:1890` (`briefJsonSchema`)). Deterministic code in
 `convex/lib/nodeslideSeed.ts` turns that plan into positioned, typed elements.
 
 **Why:** the same brief must be reproducible, validatable and repairable. A
@@ -62,7 +62,7 @@ can.
 Inside `createDeckFromBrief`, every check that can be made from arguments
 already in hand — argument shape, output-identity binding, admission, quota —
 runs *before* the provider call. The comments in
-`convex/nodeslideAgent.ts:1757-1765` (`creationAttemptId`) say so explicitly, and they are worth
+`convex/nodeslideAgent.ts:1765-1773` (`creationAttemptId`) say so explicitly, and they are worth
 reading before you reorder anything there.
 
 The mirror of the same rule: if a paid call ends without a reconcilable billing
@@ -91,7 +91,7 @@ yet — put it there instead.
 ## 8. Crashes are cleaned up on a schedule, not hoped away.
 
 Agent runs hold a lease. `recoverStaleAgentRunsInternal`
-(`convex/nodeslide.ts:3347` (`Fails abandoned active runs honestly`)), run every two minutes by `convex/crons.ts`, fails
+(`convex/nodeslide.ts:3353` (`Fails abandoned active runs honestly`)), run every two minutes by `convex/crons.ts`, fails
 runs whose lease expired. A crashed action therefore stops spinning in the UI
 within two minutes rather than forever.
 

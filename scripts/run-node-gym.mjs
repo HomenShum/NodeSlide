@@ -23,6 +23,7 @@ import {
   assertNodeGymRealPathContained,
   assertNodeGymSafePathSyntax,
   chargeNodeGymAttempt,
+  createNodeGymChildGuard,
   digestJson,
   loadNodeGymOrphanCharges,
   nodeGymReceiptArtifactBindings,
@@ -169,11 +170,15 @@ await assertNodeGymRealPathContained(artifactRoot, campaignRoot, 'campaign artif
 // One invocation at a time per campaign directory, held until exit and taken before any attempt
 // directory is read: the default campaign id is the same for every launch, and a live attempt has no
 // receipt yet, exactly like a dead one, so a second run would set the first run's workspace aside,
-// restore its reservation and dispatch past the cap. A signal exits through process.exit so the
-// 'exit' handler still releases it.
+// restore its reservation and dispatch past the cap. A signal first stops the running executor and
+// waits for it to close, then exits through process.exit so the 'exit' handler releases the lock: on
+// POSIX a child outlives its parent, so exiting first would free the lock under a live executor.
 const releaseCampaignLock = acquireDeckGymCampaignLock(campaignRoot, 'NodeGym');
+const childGuard = createNodeGymChildGuard();
+process.once('exit', childGuard.killNow);
 process.once('exit', releaseCampaignLock);
-for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => process.exit(1));
+for (const signal of ['SIGINT', 'SIGTERM'])
+  process.once(signal, () => void childGuard.stop().finally(() => process.exit(1)));
 
 const campaignPlan = {
   schemaVersion: 'nodekit.gym-campaign-plan/v1',
@@ -590,6 +595,7 @@ async function runProcess(executable, args, timeoutMs, childEnvironment) {
     env: childEnvironment,
     stdio: ['ignore', 'pipe', 'pipe'],
   });
+  childGuard.track(child);
   let stderr = '';
   child.stderr.setEncoding('utf8');
   child.stderr.on('data', (chunk) => {

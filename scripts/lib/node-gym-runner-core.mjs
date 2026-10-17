@@ -916,3 +916,37 @@ function comparisonKeyFromPlan(plan) {
     ].join(':'),
   ].join('::');
 }
+
+/**
+ * Tracks the one executor child a campaign has running so the campaign lock is never released while
+ * it lives. On POSIX a child outlives a parent that exits, so a signal that only reached the parent
+ * used to free `campaign.lock` while the executor kept writing its attempt workspace; the next launch
+ * then took the lock, treated that live workspace as an orphan, set it aside and re-issued the same
+ * attempt path. `stop()` signals the child and resolves only once it has closed, escalating to
+ * SIGKILL after `graceMs`; `killNow()` is the synchronous last resort for an exit path.
+ */
+export function createNodeGymChildGuard({ graceMs = 10_000 } = {}) {
+  let active = null;
+  return {
+    track(child) {
+      active = child;
+      const clear = () => {
+        if (active === child) active = null;
+      };
+      child.once('close', clear);
+      child.once('error', clear);
+    },
+    async stop() {
+      const child = active;
+      if (!child) return;
+      const closed = new Promise((resolve) => child.once('close', resolve));
+      child.kill();
+      const escalate = setTimeout(() => child.kill('SIGKILL'), graceMs);
+      await closed;
+      clearTimeout(escalate);
+    },
+    killNow() {
+      active?.kill('SIGKILL');
+    },
+  };
+}

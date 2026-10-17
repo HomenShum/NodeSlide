@@ -76,7 +76,7 @@ export const DECK_GYM_LOCK_FILE = 'campaign.lock';
  * recorded pid is confirmed dead (no liveness probe on purpose: a wrong guess would admit a second
  * invocation, which is the failure this exists to stop). Release unlinks only a file that still
  * carries this holder's token: if the lock was deleted by hand and another invocation took it, the
- * first holder exiting must not delete the second holder's lock. `label` names the campaign kind in
+ * first holder exiting must not delete the second holder's lock. That narrows the race rather than closing it: a pathname lock has no atomic compare-and-unlink, so a hand deletion plus a new acquire inside the read-to-unlink window (well under a millisecond) can still lose a lock. `label` names the campaign kind in
  * the refusal; node-gym takes the same lock on its campaign directory.
  */
 export function acquireDeckGymCampaignLock(runsDir, label = 'Deck Gym') {

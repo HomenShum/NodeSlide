@@ -10,7 +10,7 @@
  * These tests run the REAL charge rule (`chargeNodeGymAttempt`, `nodeGymRunCharge`) and the REAL
  * stop rule (`shouldStopCampaign`) in campaign order against a fake backend ledger.
  */
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { mkdir, mkdtemp, readdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -24,6 +24,7 @@ import {
   NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD,
   NODE_GYM_LEDGER_RECEIPT_VERSION,
   chargeNodeGymAttempt,
+  createNodeGymChildGuard,
   loadNodeGymOrphanCharges,
   nodeGymRunReservationMicroUsd,
   setAsideNodeGymOrphanAttempts,
@@ -497,5 +498,46 @@ describe('two invocations on one campaign', () => {
     expect(admitted.stderr).not.toMatch(/already running/u);
     expect(await readdir(campaignDir)).toContain('campaign-plan.json');
     expect(await readdir(campaignDir)).not.toContain('campaign.lock');
+  });
+});
+
+/**
+ * Scenario: a supervisor (`kill <pid>`, `docker stop` on PID 1) sends SIGTERM to the campaign parent
+ * only, while a paid executor child is mid-attempt. On POSIX the child outlives the parent, and the
+ * parent's exit handler used to release `campaign.lock` immediately, so a second launch could take the
+ * lock, treat the live workspace as an orphan and re-issue the attempt path the survivor still writes.
+ * The signal path must not release the lock until the child has closed.
+ */
+describe('stopping the executor before the lock is released', () => {
+  const alive = (pid) => {
+    try {
+      process.kill(pid, 0);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+  const sleeper = (script) => spawn(process.execPath, ['-e', script], { stdio: 'ignore' });
+
+  it('resolves only after a running child is dead, and does nothing when none runs', async () => {
+    const guard = createNodeGymChildGuard();
+    await guard.stop();
+    const child = sleeper('setInterval(() => {}, 1000)');
+    guard.track(child);
+    await new Promise((resolve) => child.once('spawn', resolve));
+    await guard.stop();
+    expect(alive(child.pid)).toBe(false);
+  });
+
+  it('escalates to SIGKILL for a child that ignores the first signal', async () => {
+    const guard = createNodeGymChildGuard({ graceMs: 200 });
+    const child = sleeper(
+      "process.on('SIGTERM', () => {}); console.log('x'); setInterval(() => {}, 1000)",
+    );
+    guard.track(child);
+    await new Promise((resolve) => child.once('spawn', resolve));
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    await guard.stop();
+    expect(alive(child.pid)).toBe(false);
   });
 });

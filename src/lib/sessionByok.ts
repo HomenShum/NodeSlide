@@ -1,3 +1,5 @@
+import { NODESLIDE_BYOK_DEFAULT_MODEL } from '../../shared/nodeslide';
+
 export type ByokProvider = 'anthropic' | 'openai' | 'google' | 'openrouter';
 
 export interface SessionByokKey {
@@ -58,9 +60,9 @@ export function clearSessionByok(): void {
 }
 
 export function readSessionByokRouting(): { model: string; baseUrl: string } {
-  if (typeof window === 'undefined') return { model: 'z-ai/glm-5.2', baseUrl: '' };
+  if (typeof window === 'undefined') return { model: NODESLIDE_BYOK_DEFAULT_MODEL, baseUrl: '' };
   return {
-    model: window.sessionStorage.getItem(MODEL_KEY) || 'z-ai/glm-5.2',
+    model: window.sessionStorage.getItem(MODEL_KEY) || NODESLIDE_BYOK_DEFAULT_MODEL,
     baseUrl: window.sessionStorage.getItem(BASE_URL_KEY) || '',
   };
 }

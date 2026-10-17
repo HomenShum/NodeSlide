@@ -22,6 +22,7 @@
  */
 import { v } from 'convex/values';
 import {
+  NODESLIDE_RUN_BUDGET_LEDGER_RECEIPT_VERSION,
   NODESLIDE_RUN_BUDGET_RECEIPT_VERSION,
   type NodeSlideRunBudget,
   type NodeSlideRunBudgetPreflightDenialReason,
@@ -35,6 +36,7 @@ import {
   type QueryCtx,
   internalMutation,
   internalQuery,
+  query,
 } from './_generated/server';
 import {
   NODESLIDE_BILLABLE_CALL_VERSION,
@@ -64,6 +66,7 @@ import {
   reserveNodeSlideBudgetCost,
   settleNodeSlideBudgetCost,
 } from './lib/nodeslideBudgetLedger';
+import { nodeslideStableId } from './lib/nodeslideIds';
 import {
   accountNodeSlideRunBudgetReceipt,
   nodeSlideRunBudgetReceiptDigest,
@@ -506,6 +509,43 @@ export const replay = internalQuery({
     if (!budget) return null;
     const call = args.callId ? await findCall(ctx, args.budgetId, args.callId) : null;
     return present(budget, call ?? undefined);
+  },
+});
+
+/**
+ * What one run cost, read from the hard-budget ledger: the only reservation path
+ * (`convex/lib/nodeslideBudgetedProvider.ts` is the only caller of `reserve`), so
+ * this is the meter a campaign runner can trust, unlike the Trace inspector text,
+ * which is attribution. Keyed by the same opaque id the provider binds,
+ * `nodeSlideProviderBudgetId(runId)` = `nodeslideStableId('nsbudget', runId)` (a
+ * test pins the equality; the provider module is not imported here because it
+ * drags the model SDK into a query bundle).
+ *
+ * Public on purpose: the campaign runner has no owner credential for a run it did
+ * not create. The budget id is a hash of an unguessable run id, and the result is
+ * counters only (no prompt, no deck, no key). `reserved` and `unreconciled`
+ * exposure are returned separately: a dispatch whose outcome never came back may
+ * still have been billed, and the caller must count it.
+ */
+export const receiptForRun = query({
+  args: { runId: v.string() },
+  handler: async (ctx, args) => {
+    if (args.runId.length < 1 || args.runId.length > 512) return null;
+    const budget = await findBudget(ctx, nodeslideStableId('nsbudget', args.runId));
+    if (!budget) return null;
+    return {
+      version: NODESLIDE_RUN_BUDGET_LEDGER_RECEIPT_VERSION,
+      budgetId: budget.id,
+      status: budget.status,
+      cap: { maxCostMicroUsd: budget.budget.maxCostMicroUsd },
+      spend: {
+        actualMicroUsd: budget.actualMicroUsd,
+        reservedMicroUsd: budget.reservedMicroUsd,
+        unreconciledMicroUsd: budget.unreconciledMicroUsd,
+      },
+      revision: budget.revision,
+      stateDigest: budget.stateDigest,
+    };
   },
 });
 

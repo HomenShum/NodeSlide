@@ -24,6 +24,7 @@ import {
 } from './lib/node-gym-task-core.mjs';
 import { buildNodeGymUiEvidenceEnvelope } from './lib/node-gym-ui-evidence-core.mjs';
 import { sanitizeNodeGymArtifactShadowReceipt } from './lib/node-gym-ui-shadow-core.mjs';
+import { createNodeSlideBackendClient, readBackendRunIds } from './lib/nodeslide-backend-runs.mjs';
 import {
   cleanupNodeSlideProductionFixture,
   productionFixtureCleanupDisposition,
@@ -55,6 +56,7 @@ let capturedTrace = null;
 let createdDeckId = '';
 let ownerAccessKey = '';
 let creationSubmitted = false;
+let backendRunIds = [];
 let uiEvidenceInput = null;
 try {
   if (plan.model.provider === 'local') throw new Error('UI executor does not accept local models.');
@@ -140,6 +142,12 @@ try {
     await page.screenshot({ path: browserPath, fullPage: true });
     const trace = await captureTrace(page, plan.model.route);
     capturedTrace = trace;
+    // The backend runs this browser session caused. The runner (not this executor) reads their
+    // budget-ledger receipts to charge the campaign; a failure result deliberately omits them.
+    backendRunIds = await readBackendRunIds({
+      page,
+      backend: await createNodeSlideBackendClient(convexUrl.href),
+    }).catch(() => []);
     await writeFile(path.join(runDir, 'trace.json'), `${JSON.stringify(trace, null, 2)}\n`, {
       mode: 0o600,
     });
@@ -283,6 +291,7 @@ try {
       runId: plan.runId,
       pairingKey: plan.pairingKey,
       status: 'completed',
+      backendRunIds,
       route: {
         mode: routeMode,
         requestedRoute: plan.model.route,
@@ -336,6 +345,14 @@ try {
     };
   }
 } catch (error) {
+  if (creationSubmitted && page && backendRunIds.length === 0) {
+    // Creation was submitted before the failure: name the backend runs it started so the runner
+    // charges the ledger's figure instead of the whole reservation.
+    backendRunIds = await readBackendRunIds({
+      page,
+      backend: await createNodeSlideBackendClient(convexUrl.href),
+    }).catch(() => []);
+  }
   result = failureResult(
     exportTimedOut ? 'artifact-failure' : 'failed',
     [exportTimedOut ? 'pptx_export_timeout' : 'ui_executor_failed'],
@@ -411,6 +428,7 @@ function failureResult(status, issueCodes, failure = null) {
       costMicroUsd: 0,
       repairCount: 0,
     },
+    ...(backendRunIds.length ? { backendRunIds } : {}),
     artifacts: {},
     diagnostics: {
       estimatedTextOverflowCount: 0,

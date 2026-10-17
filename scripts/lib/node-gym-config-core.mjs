@@ -69,6 +69,10 @@ export function validateNodeGymConfig(value) {
       failures.push(`${model.id} must record the returned model.`);
     if (model.cohort === 'pinned-free' && !model.route.endsWith(':free'))
       failures.push(`${model.id} is not a pinned free route.`);
+    if (model.execution !== undefined) {
+      const reason = nodeGymExecutionShapeFailure(model.execution);
+      if (reason) failures.push(`${model?.id ?? '<unknown>'} execution is invalid: ${reason}.`);
+    }
   }
 
   const harnesses = Array.isArray(value?.harnesses) ? value.harnesses : [];
@@ -90,6 +94,60 @@ export function validateNodeGymConfig(value) {
   if (matrixSize !== value?.expectedMatrixSize)
     failures.push(`Expected matrix ${value?.expectedMatrixSize}, computed ${matrixSize}.`);
   return { failures: [...new Set(failures)], matrixSize };
+}
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/u;
+
+/**
+ * `model.execution` is the one switch that stops a model from being run without removing its row
+ * (its `runId`, `comparisonKey` and `harnessPairingKey` key on `model.id`, so deleting the row would
+ * renumber the benchmark's identity). It accepts exactly `{ disabled: true, since, reason }`.
+ */
+function nodeGymExecutionShapeFailure(execution) {
+  if (!execution || typeof execution !== 'object' || Array.isArray(execution))
+    return 'expected an object';
+  const keys = Object.keys(execution).sort().join(',');
+  if (keys !== 'disabled,reason,since') return 'only disabled, since and reason are allowed';
+  if (execution.disabled !== true) return 'disabled must be true';
+  if (typeof execution.since !== 'string' || !ISO_DATE.test(execution.since))
+    return 'since must be an ISO date (YYYY-MM-DD)';
+  if (Number.isNaN(Date.parse(`${execution.since}T00:00:00Z`))) return 'since is not a real date';
+  if (typeof execution.reason !== 'string' || !execution.reason.trim())
+    return 'reason must be a non-empty string';
+  return null;
+}
+
+/**
+ * Splits matrix runs into those the runner may execute and those whose model row is disabled.
+ * Runs before runtime filtering and subset selection (`selectNodeGymSubset` derives its model list
+ * from the runs it receives, so a disabled model then yields no pair). A model named explicitly
+ * while disabled is an error, never a silent empty match.
+ */
+export function partitionDisabledNodeGymRuns({ runs, includeDisabled, requestedModels = [] }) {
+  const isDisabled = (run) => run.model?.execution?.disabled === true;
+  if (includeDisabled) return { runnable: [...runs], skippedDisabled: [] };
+  for (const modelId of requestedModels) {
+    const run = runs.find((candidate) => candidate.model.id === modelId && isDisabled(candidate));
+    if (run) {
+      const { since, reason } = run.model.execution;
+      throw new Error(
+        `Model ${modelId} is disabled since ${since}: ${reason}; pass --include-disabled to run it.`,
+      );
+    }
+  }
+  const runnable = [];
+  const skippedDisabled = [];
+  for (const run of runs) {
+    if (isDisabled(run)) {
+      skippedDisabled.push({
+        runId: run.runId,
+        modelId: run.model.id,
+        since: run.model.execution.since,
+        reason: run.model.execution.reason,
+      });
+    } else runnable.push(run);
+  }
+  return { runnable, skippedDisabled };
 }
 
 export function buildNodeGymMatrixInput(config) {

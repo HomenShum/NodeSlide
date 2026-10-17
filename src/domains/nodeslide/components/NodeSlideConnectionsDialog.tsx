@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { api } from '../../../../convex/_generated/api';
+import { NODESLIDE_BYOK_DEFAULT_MODEL } from '../../../../shared/nodeslide';
 import {
   SESSION_BYOK_KEYS,
   clearSessionByok,
@@ -88,7 +89,10 @@ function NodeSlideConnectionsDialogContent({
     initialFocusRef: firstInputRef,
   });
   const [keys, setKeys] = useState<Record<string, string>>({});
-  const [routing, setRouting] = useState({ model: 'z-ai/glm-5.2', baseUrl: '' });
+  const [routing, setRouting] = useState<{ model: string; baseUrl: string }>({
+    model: NODESLIDE_BYOK_DEFAULT_MODEL,
+    baseUrl: '',
+  });
   const [client, setClient] = useState<ClientKind>('claude');
   const [notice, setNotice] = useState<string | null>(null);
   const [googleBusy, setGoogleBusy] = useState<'connect' | 'disconnect' | null>(null);
@@ -144,7 +148,7 @@ function NodeSlideConnectionsDialogContent({
   const revoke = () => {
     clearSessionByok();
     setKeys({});
-    setRouting({ model: 'z-ai/glm-5.2', baseUrl: '' });
+    setRouting({ model: NODESLIDE_BYOK_DEFAULT_MODEL, baseUrl: '' });
     setNotice('Local connection values revoked from this tab.');
   };
 
@@ -222,7 +226,7 @@ function NodeSlideConnectionsDialogContent({
       ...env,
       PARITY_CONVEX_URL: NODESLIDE_CONVEX_URL,
       PARITY_DASHBOARD: 'disabled',
-      NODESLIDE_BYOK_MODEL: routing.model.trim() || 'z-ai/glm-5.2',
+      NODESLIDE_BYOK_MODEL: routing.model.trim() || NODESLIDE_BYOK_DEFAULT_MODEL,
       ...(routing.baseUrl.trim() ? { NODESLIDE_BYOK_BASE_URL: routing.baseUrl.trim() } : {}),
       ...(ownerAccessKey ? { NODESLIDE_OWNER_ACCESS_KEY: ownerAccessKey } : {}),
     };
@@ -584,7 +588,7 @@ function NodeSlideConnectionsDialogContent({
                   onChange={(event) =>
                     setRouting((current) => ({ ...current, model: event.target.value }))
                   }
-                  placeholder="z-ai/glm-5.2"
+                  placeholder={NODESLIDE_BYOK_DEFAULT_MODEL}
                 />
               </label>
               <label className="is-wide">

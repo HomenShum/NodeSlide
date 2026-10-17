@@ -25,6 +25,9 @@ import type { NodeSlideAgentModelId } from './nodeslide';
 export const NODESLIDE_RUN_BUDGET_VERSION = 'nodeslide.run-budget/v1' as const;
 export const NODESLIDE_RUN_BUDGET_STATE_VERSION = 'nodeslide.run-budget-state/v1' as const;
 export const NODESLIDE_RUN_BUDGET_RECEIPT_VERSION = 'nodeslide.run-budget-receipt/v1' as const;
+/** Run-level read model of one budget ledger row (`nodeslideBudgets.receiptForRun`). */
+export const NODESLIDE_RUN_BUDGET_LEDGER_RECEIPT_VERSION =
+  'nodeslide.run-budget-ledger-receipt/v1' as const;
 export const NODESLIDE_MODEL_PRICING_VERSION = 'nodeslide.model-pricing/v1' as const;
 export const NODESLIDE_PRIVATE_DETERMINISTIC_MODEL = 'nodeslide/private-deterministic' as const;
 export const NODESLIDE_MICRO_USD_PER_USD = 1_000_000 as const;
@@ -261,8 +264,10 @@ export interface NodeSlidePricedModelMetadata {
   readonly providerContextWindowTokens: number;
   readonly providerMaxOutputTokens: number;
   readonly source: 'openrouter_model_catalog_api';
-  readonly sourceUrl: typeof NODESLIDE_MODEL_PRICING_SOURCE_URL;
-  readonly verifiedAt: typeof NODESLIDE_MODEL_PRICING_VERIFIED_AT;
+  /** Where this row's price was read: the /models listing, or a held row's endpoints evidence. */
+  readonly sourceUrl: string;
+  /** When the price in this row was verified; a held row carries its own date, not the listing's. */
+  readonly verifiedAt: string;
 }
 
 export interface NodeSlideZeroCostModelMetadata {
@@ -475,7 +480,20 @@ export type NodeSlideRunBudgetPostflightResult =
  * SOURCE:   https://openrouter.ai/api/v1/models — the provider's own machine
  *           catalog, not a docs page, not a pricing page, not a paste from a
  *           conversation. Every row below was read out of one response body.
- * FETCHED:  2026-07-28T00:00:00Z (see NODESLIDE_MODEL_PRICING_VERIFIED_AT).
+ * FETCHED:  2026-10-14T16:03:00Z (see NODESLIDE_MODEL_PRICING_VERIFIED_AT). The four rows
+ *           added by the model refresh, and gpt-5.6-terra, were read from that one response.
+ *           moonshotai/kimi-k3, z-ai/glm-5.2 and openai/gpt-5.6-sol were re-read and
+ *           deliberately NOT moved off the values they had on main (see their rows). Those
+ *           three rows are not what that response published, so they carry their own
+ *           `verifiedAt` (NODESLIDE_HELD_PRICE_VERIFIED_AT, 2026-10-15T23:08Z) and the
+ *           per-route endpoints URL that verified them, not the listing's date and URL.
+ *           The price below is ALSO the `max_price` routing ceiling sent to OpenRouter
+ *           (`nodeslideBudgetedProvider.ts`), so it bounds both the reservation and the
+ *           bill. The /models listing price is the cheapest endpoint's, so a row copied
+ *           from it can sit below most live endpoints and leave a route with one to three
+ *           providers, or none: each row is therefore checked against
+ *           GET /api/v1/models/{id}/endpoints, and the endpoint count at or below the
+ *           ceiling is part of the evidence for changing one.
  * UNIT:     `pricing.prompt` / `pricing.completion` are USD per single token.
  *           This table stores integer micro-USD per MILLION tokens, so every
  *           value is the catalog string multiplied by 1e12. Integers only: the
@@ -483,10 +501,10 @@ export type NodeSlideRunBudgetPostflightResult =
  *           reservation, which is the one place rounding down is a loan.
  * WINDOWS:  `providerContextWindowTokens` is `context_length`;
  *           `providerMaxOutputTokens` is `top_provider.max_completion_tokens`.
- *           Where the catalog reports `null` for the completion cap — currently
- *           `moonshotai/kimi-k3` only — the context window is the binding
- *           provider limit and is recorded as such. That is read from the same
- *           response, not assumed.
+ *           Where the catalog reports `null` for the completion cap (no row does
+ *           in the 2026-10-14 response; `moonshotai/kimi-k3` did on 2026-07-28) the
+ *           context window is the binding provider limit and is recorded as such.
+ *           That is read from the same response, not assumed.
  *
  * TO RE-VERIFY: fetch the URL, and for each row assert
  *   `pricing.prompt * 1e12 === inputMicroUsdPerMillionTokens` and the same for
@@ -509,7 +527,17 @@ export type NodeSlideRunBudgetPostflightResult =
  *     fallback rather than billing against an unchecked price.
  */
 export const NODESLIDE_MODEL_PRICING_SOURCE_URL = 'https://openrouter.ai/api/v1/models' as const;
-export const NODESLIDE_MODEL_PRICING_VERIFIED_AT = '2026-07-28T00:00:00Z' as const;
+export const NODESLIDE_MODEL_PRICING_VERIFIED_AT = '2026-10-14T16:03:00Z' as const;
+/**
+ * The three held rows (kimi-k3, glm-5.2, gpt-5.6-sol) keep main's 2026-07-28 values, which the
+ * 2026-10-14 listing did not publish. What verified them is the endpoint check below, so that is
+ * the date and the source their rows carry (SPEC D3, Homen 2026-10-16).
+ */
+export const NODESLIDE_HELD_PRICE_VERIFIED_AT = '2026-10-15T23:08:00Z' as const;
+const heldPriceEvidence = (modelId: string) => ({
+  sourceUrl: `${NODESLIDE_MODEL_PRICING_SOURCE_URL}/${modelId}/endpoints`,
+  verifiedAt: NODESLIDE_HELD_PRICE_VERIFIED_AT,
+});
 
 type NodeSlideCatalogPricingMetadata =
   | NodeSlidePricedModelMetadata
@@ -522,16 +550,19 @@ function pricedRoute(args: {
   outputMicroUsdPerMillionTokens: number;
   providerContextWindowTokens: number;
   providerMaxOutputTokens: number;
+  /** Set only on a held row, whose price is not the 2026-10-14 listing's. */
+  evidence?: { sourceUrl: string; verifiedAt: string };
 }): NodeSlidePricedModelMetadata {
+  const { evidence, ...row } = args;
   return {
     version: NODESLIDE_MODEL_PRICING_VERSION,
     kind: 'priced',
     currency: 'USD',
     billingUnit: 'million_tokens',
     source: 'openrouter_model_catalog_api',
-    sourceUrl: NODESLIDE_MODEL_PRICING_SOURCE_URL,
-    verifiedAt: NODESLIDE_MODEL_PRICING_VERIFIED_AT,
-    ...args,
+    sourceUrl: evidence?.sourceUrl ?? NODESLIDE_MODEL_PRICING_SOURCE_URL,
+    verifiedAt: evidence?.verifiedAt ?? NODESLIDE_MODEL_PRICING_VERIFIED_AT,
+    ...row,
   };
 }
 
@@ -565,8 +596,15 @@ export const NODESLIDE_MODEL_PRICING = {
     reason: 'provider_pricing_not_pinned',
     source: 'nebius_private_catalog',
   },
+  // Held at main's ceiling, not the /models listing (0.7 / 15 on 2026-10-14; 0.45 / 16.5 on
+  // 2026-10-15; the spec's 0.64 / 13.5). This is the production default, and the listing is the
+  // cheapest endpoint's price: as `max_price` 0.7 / 15 admitted 3 of 25 endpoints on 2026-10-15
+  // (2 with structured_outputs, which `require_parameters` demands), 0.64 / 13.5 admitted 0, and
+  // main's 3 / 15 admits 21 of 25 (18 with structured_outputs; GET /api/v1/models/moonshotai/kimi-k3/endpoints,
+  // 2026-10-15 23:08 UTC). Window and output cap are main's too.
   'moonshotai/kimi-k3': pricedRoute({
     modelId: 'moonshotai/kimi-k3',
+    evidence: heldPriceEvidence('moonshotai/kimi-k3'),
     inputMicroUsdPerMillionTokens: 3_000_000,
     outputMicroUsdPerMillionTokens: 15_000_000,
     providerContextWindowTokens: 1_048_576,
@@ -574,8 +612,16 @@ export const NODESLIDE_MODEL_PRICING = {
     // route, so the context window is the provider's binding output limit.
     providerMaxOutputTokens: 1_048_576,
   }),
+  // Held at main's ceiling, not the /models listing (0.05 / 7 on 2026-10-14, 0.65 / 10 on
+  // 2026-10-15). Used as `max_price`, 0.05 / 7 admitted 0 of 33 endpoints at about 18:30 and 18:49 UTC
+  // on 2026-10-15 and 2 of 33 (1 with structured_outputs, Wafer) at 22:35 and 23:00 UTC, so the
+  // route flaps between unroutable and one provider. Main's 0.7686 / 2.4156 admits 6 of 33 (4 with
+  // structured_outputs: DeepInfra, StreamLake, Baidu, DigitalOcean; GET /api/v1/models/z-ai/glm-5.2/endpoints,
+  // 2026-10-15 23:08 UTC). Window and output cap are main's too: those endpoints cap completions at
+  // 128,000-262,144, not the listing's 943,718.
   'z-ai/glm-5.2': pricedRoute({
     modelId: 'z-ai/glm-5.2',
+    evidence: heldPriceEvidence('z-ai/glm-5.2'),
     inputMicroUsdPerMillionTokens: 768_600,
     outputMicroUsdPerMillionTokens: 2_415_600,
     providerContextWindowTokens: 1_048_576,
@@ -595,10 +641,31 @@ export const NODESLIDE_MODEL_PRICING = {
     providerContextWindowTokens: 1_000_000,
     providerMaxOutputTokens: 128_000,
   }),
+  'anthropic/claude-sonnet-5.5': pricedRoute({
+    modelId: 'anthropic/claude-sonnet-5.5',
+    inputMicroUsdPerMillionTokens: 2_000_000,
+    outputMicroUsdPerMillionTokens: 10_000_000,
+    providerContextWindowTokens: 1_000_000,
+    providerMaxOutputTokens: 128_000,
+  }),
+  'anthropic/claude-opus-5.5': pricedRoute({
+    modelId: 'anthropic/claude-opus-5.5',
+    inputMicroUsdPerMillionTokens: 4_000_000,
+    outputMicroUsdPerMillionTokens: 20_000_000,
+    providerContextWindowTokens: 1_000_000,
+    providerMaxOutputTokens: 128_000,
+  }),
   'google/gemini-3.5-flash': pricedRoute({
     modelId: 'google/gemini-3.5-flash',
     inputMicroUsdPerMillionTokens: 1_500_000,
     outputMicroUsdPerMillionTokens: 9_000_000,
+    providerContextWindowTokens: 1_048_576,
+    providerMaxOutputTokens: 65_536,
+  }),
+  'google/gemini-3.8-flash': pricedRoute({
+    modelId: 'google/gemini-3.8-flash',
+    inputMicroUsdPerMillionTokens: 750_000,
+    outputMicroUsdPerMillionTokens: 3_750_000,
     providerContextWindowTokens: 1_048_576,
     providerMaxOutputTokens: 65_536,
   }),
@@ -609,8 +676,12 @@ export const NODESLIDE_MODEL_PRICING = {
     providerContextWindowTokens: 1_048_576,
     providerMaxOutputTokens: 65_536,
   }),
+  // Held at main's ceiling. OpenRouter's listed price moved from 2 / 10 to 4 / 20 on 2026-10-15, so
+  // 2 / 10 admitted 1 of 7 endpoints (OpenAI) where main's 5 / 30 admits 6 of 7 (all 6 with
+  // structured_outputs; GET /api/v1/models/openai/gpt-5.6-sol/endpoints, 2026-10-15 23:08 UTC).
   'openai/gpt-5.6-sol': pricedRoute({
     modelId: 'openai/gpt-5.6-sol',
+    evidence: heldPriceEvidence('openai/gpt-5.6-sol'),
     inputMicroUsdPerMillionTokens: 5_000_000,
     outputMicroUsdPerMillionTokens: 30_000_000,
     providerContextWindowTokens: 1_050_000,
@@ -618,8 +689,17 @@ export const NODESLIDE_MODEL_PRICING = {
   }),
   'openai/gpt-5.6-terra': pricedRoute({
     modelId: 'openai/gpt-5.6-terra',
-    inputMicroUsdPerMillionTokens: 1_250_000,
-    outputMicroUsdPerMillionTokens: 7_500_000,
+    inputMicroUsdPerMillionTokens: 2_000_000,
+    outputMicroUsdPerMillionTokens: 12_000_000,
+    providerContextWindowTokens: 1_050_000,
+    providerMaxOutputTokens: 128_000,
+  }),
+  // Priced at the flat tier. OpenRouter lists a higher tier above 272K prompt tokens
+  // (2x input); a NodeSlide prompt is bounded far below that by the read-context limit.
+  'openai/gpt-6.1-sol': pricedRoute({
+    modelId: 'openai/gpt-6.1-sol',
+    inputMicroUsdPerMillionTokens: 2_000_000,
+    outputMicroUsdPerMillionTokens: 10_000_000,
     providerContextWindowTokens: 1_050_000,
     providerMaxOutputTokens: 128_000,
   }),
@@ -676,6 +756,36 @@ export function nodeSlideModelPricing(model: string): NodeSlideModelPricingMetad
     modelId: model,
     reason: 'model_not_cataloged',
     source: 'unrecognized_model',
+  };
+}
+
+/**
+ * Re-prices a provider catalog row (USD per million tokens, the shape pi-ai uses) at the ledger's
+ * rate. The ledger is the repo's price of record and the reservation quote is computed from it, so
+ * every dispatcher that turns a response into dollars must agree with it or a valid response can
+ * settle above the quote it was reserved at.
+ *
+ * Input and output take the ledger's rate. The cached-read rate is capped at the ledger's input
+ * rate, because the quote prices every input token at that rate and a cached token is never worth
+ * more than an uncached one (on 2026-10-14 pi-ai's glm-5.2 row carried cacheRead 0.162 against a
+ * ledger input of 0.05, 3.24x; the ledger input is 0.7686 now, so no row binds today and the cap is
+ * the guard for the day a ledger row falls below its cached rate). The cache-write
+ * rate is left alone: Claude and GPT rows bill writes at 1.25x input, which the quote covers because
+ * its input estimate is at least MAX_PROVIDER_ATTEMPTS (2x) the bytes actually sent (asserted in
+ * convex/nodeslideModelPricing.test.ts). Rows the ledger does not price (free, dynamic, unknown) are
+ * returned untouched.
+ */
+export function nodeSlideLedgerPricedCost<
+  Cost extends { input: number; output: number; cacheRead: number },
+>(model: string, cost: Cost): Cost {
+  const pricing = nodeSlideModelPricing(model);
+  if (pricing.kind !== 'priced') return cost;
+  const input = pricing.inputMicroUsdPerMillionTokens / 1_000_000;
+  return {
+    ...cost,
+    input,
+    output: pricing.outputMicroUsdPerMillionTokens / 1_000_000,
+    cacheRead: Math.min(cost.cacheRead, input),
   };
 }
 

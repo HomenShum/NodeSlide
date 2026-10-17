@@ -37,6 +37,13 @@ import type {
   ImageContent,
   TextContent,
 } from '@earendil-works/pi-ai/compat';
+import {
+  type NodeSlideReasoningEffort,
+  isNodeSlideAgentModelId,
+  isNodeSlideVerifiedFreeModelId,
+  nodeSlideDefaultReasoningEffort,
+} from '../../../shared/nodeslide.js';
+import { nodeSlideLedgerPricedCost } from '../../../shared/nodeslideRunBudget.js';
 
 /**
  * pi-ai's Provider type is `KnownProvider | string` (open by design — users
@@ -91,6 +98,9 @@ export interface CallResult {
  * `model` string and we route correctly.
  */
 export function inferProvider(modelId: string): SupportedProvider {
+  // `:free` / `-free` ids and the free router exist only on OpenRouter, so the key the caller needs
+  // (byok.ts) and the route `call` takes are decided here, once, not by the id's vendor prefix.
+  if (isFreeLookingModelId(modelId)) return 'openrouter';
   if (modelId.startsWith('anthropic/') || modelId.startsWith('claude-')) return 'anthropic';
   if (modelId.startsWith('openai/') || modelId.startsWith('gpt-')) return 'openai';
   if (modelId.startsWith('google/') || modelId.startsWith('gemini-')) return 'google';
@@ -104,13 +114,78 @@ export function inferProvider(modelId: string): SupportedProvider {
 }
 
 /**
+ * Direct-Anthropic wire ids for the NodeSlide catalog's Claude rows (SPEC section 1.2, `anthropic`
+ * column). The catalog id is the OpenRouter slug (`anthropic/claude-sonnet-5.5`, dotted), which is not
+ * the direct id (`claude-sonnet-5-5`, dashed): stripping the prefix produced `claude-sonnet-5.5`,
+ * which pi-ai's registry does not have, so the call threw before any request. An explicit table, not
+ * string replacement (SPEC A.0.5). Which provider serves the id is still `inferProvider`'s choice.
+ */
+const DIRECT_ANTHROPIC_WIRE_ID: Readonly<Record<string, string>> = {
+  'anthropic/claude-sonnet-5': 'claude-sonnet-5',
+  'anthropic/claude-fable-5': 'claude-fable-5',
+  'anthropic/claude-sonnet-5.5': 'claude-sonnet-5-5',
+  'anthropic/claude-opus-5.5': 'claude-opus-5-5',
+};
+
+/**
  * Strip provider prefix if present so getModel(provider, id) gets the canonical
  * id. e.g. "anthropic/claude-sonnet-4-6" + provider="anthropic" -> "claude-sonnet-4-6".
  */
 function canonicalizeModelId(provider: SupportedProvider, modelId: string): string {
+  if (provider === 'anthropic' && Object.hasOwn(DIRECT_ANTHROPIC_WIRE_ID, modelId)) {
+    return DIRECT_ANTHROPIC_WIRE_ID[modelId] as string;
+  }
+  // An OpenRouter id is the whole slug (`openrouter/free` is a catalog route, not a provider prefix).
+  if (provider === 'openrouter') return modelId;
   const prefix = `${provider}/`;
   if (modelId.startsWith(prefix)) return modelId.slice(prefix.length);
   return modelId;
+}
+
+/** The verified free constant a free-looking unknown id resolves to (SPEC A.0.10). */
+const FREE_ROUTER_MODEL_ID = 'openrouter/free';
+
+function isFreeLookingModelId(modelId: string): boolean {
+  return modelId.endsWith(':free') || modelId.endsWith('-free') || modelId === FREE_ROUTER_MODEL_ID;
+}
+
+/**
+ * The row default effort in the option the model's own API reads. pi-ai's `complete` forwards options
+ * untouched, and each API reads a different one: Anthropic `effort` (the mid-conversation effort
+ * message), the OpenAI Responses API `reasoningEffort`, Gemini `thinking.level`. A name the API does
+ * not read is dropped, which ran GPT and Gemini rows at the vendor default (medium) instead of the
+ * row's (high). `effort` is always passed, as before; the other two are added for their API.
+ */
+function rowEffortOption(api: string, effort: NodeSlideReasoningEffort | undefined) {
+  if (effort === undefined) return {};
+  switch (api) {
+    case 'openai-responses':
+      return { effort, reasoningEffort: effort };
+    case 'google-generative-ai':
+      // Gemini 3.x Flash takes low / medium / high only (the catalog rows never offer more).
+      return effort === 'low' || effort === 'medium' || effort === 'high'
+        ? {
+            effort,
+            thinking: { enabled: true, level: effort.toUpperCase() as 'LOW' | 'MEDIUM' | 'HIGH' },
+          }
+        : { effort };
+    default:
+      return { effort };
+  }
+}
+
+/**
+ * Anthropic managed-effort rows (Opus 5.5, Sonnet 5.5) are governed by the top-level
+ * `output_config.effort`. pi-ai 1.1.0 writes a fixed 'high' there and only appends the requested
+ * effort as a trailing effort-only message, which the API applies "from the next user turn"
+ * (migration guide, mid-conversation effort). This call is one user turn with no turn after it, so the
+ * trailing message cannot govern the reply. Writing the row effort into the top-level field makes the
+ * reply run at the row default. A body with no `output_config.effort` (Sonnet 5) is left untouched.
+ */
+function withTopLevelEffort(payload: unknown, effort: NodeSlideReasoningEffort): unknown {
+  const body = payload as { output_config?: { effort?: string } };
+  if (body.output_config?.effort === undefined) return payload;
+  return { ...body, output_config: { ...body.output_config, effort } };
 }
 
 /**
@@ -127,19 +202,47 @@ export async function call(opts: CallOptions): Promise<CallResult> {
   // Keep the sizeable provider catalog off the MCP startup/help path. Offline
   // file tools never pay this import cost; BYOK loads it only at first use.
   const pi = await import('@earendil-works/pi-ai/compat');
-  const canonicalId = canonicalizeModelId(opts.provider, opts.modelId);
+  let provider = opts.provider;
+  let canonicalId = canonicalizeModelId(provider, opts.modelId);
   // pi-ai's getModel is typed against its compile-time MODEL registry, but
   // we accept arbitrary strings at this boundary (env-driven model overrides,
   // per-call user input). Runtime validation inside getModel throws for
   // unknown ids — we surface that as a clear error message to the agent.
   // biome-ignore lint/suspicious/noExplicitAny: see comment above
-  const registryModel = (pi.getModel as any)(opts.provider, canonicalId);
-  const model = opts.baseUrl ? { ...registryModel, baseUrl: opts.baseUrl } : registryModel;
+  const lookup = pi.getModel as any;
+  let registryModel = lookup(provider, canonicalId);
+  if (!registryModel) {
+    // SPEC D1: a known id (a NodeSlide catalog row, or a SPEC 1.2 verified free id) is never rerouted
+    // to another model, so one pi-ai cannot serve throws here, before any request. SPEC A.0.10: an unknown id never becomes
+    // a paid default; a free-looking one resolves to the verified free router and every other unknown
+    // throws.
+    if (isNodeSlideAgentModelId(opts.modelId) || isNodeSlideVerifiedFreeModelId(opts.modelId)) {
+      throw new Error(
+        `Model "${opts.modelId}" is a known NodeSlide id but pi-ai has no ${provider} route for it; it is not rerouted.`,
+      );
+    }
+    if (!isFreeLookingModelId(opts.modelId)) {
+      throw new Error(`Unknown model "${opts.modelId}": pi-ai has no ${provider} route for it.`);
+    }
+    provider = 'openrouter';
+    canonicalId = FREE_ROUTER_MODEL_ID;
+    registryModel = lookup(provider, canonicalId);
+    if (!registryModel)
+      throw new Error(`The free router "${FREE_ROUTER_MODEL_ID}" is not in pi-ai.`);
+  }
+  // The bundled pi-ai catalog is an older price snapshot than the NodeSlide run-budget ledger
+  // (kimi-k3 0.5 against 3, glm-5.2 0.171 against 0.7686), so a response on an OpenRouter route the
+  // ledger prices is costed at the ledger's rate, the same one the Convex dispatcher uses.
+  const pricedModel =
+    provider === 'openrouter' && registryModel.cost
+      ? { ...registryModel, cost: nodeSlideLedgerPricedCost(canonicalId, registryModel.cost) }
+      : registryModel;
+  const model = opts.baseUrl ? { ...pricedModel, baseUrl: opts.baseUrl } : pricedModel;
 
   const userContent: (TextContent | ImageContent)[] = [{ type: 'text', text: opts.userText }];
   if (opts.userImage !== undefined) {
     if (!model.input.includes('image')) {
-      throw new Error(`pi-ai model ${opts.provider}/${canonicalId} does not support image input`);
+      throw new Error(`pi-ai model ${provider}/${canonicalId} does not support image input`);
     }
     userContent.push({
       type: 'image',
@@ -159,7 +262,22 @@ export async function call(opts: CallOptions): Promise<CallResult> {
     ],
   };
 
+  // A NodeSlide catalog row states its own default effort (Opus 5.5 = medium). Left unset, pi-ai
+  // sends 'high' for every managed-effort Claude row, which is not the row's default.
+  // Every spelling of a catalog Claude row (the slug, the dashed wire id, either with the provider
+  // prefix) reaches the same wire id, so the default is looked up from that wire id, not the spelling.
+  const row =
+    (provider === 'anthropic'
+      ? Object.keys(DIRECT_ANTHROPIC_WIRE_ID).find(
+          (slug) => DIRECT_ANTHROPIC_WIRE_ID[slug] === canonicalId,
+        )
+      : undefined) ?? opts.modelId;
+  const rowEffort = isNodeSlideAgentModelId(row) ? nodeSlideDefaultReasoningEffort(row) : undefined;
   const result = await pi.complete(model, context, {
+    ...rowEffortOption(model.api, rowEffort),
+    ...(model.api === 'anthropic-messages' && rowEffort !== undefined
+      ? { onPayload: (payload: unknown) => withTopLevelEffort(payload, rowEffort) }
+      : {}),
     ...(opts.signal !== undefined ? { signal: opts.signal } : {}),
     ...(opts.maxTokens !== undefined ? { maxOutputTokens: opts.maxTokens } : {}),
   });
@@ -172,7 +290,7 @@ export async function call(opts: CallOptions): Promise<CallResult> {
     costUsd: Number.isFinite(result.usage.cost.total) ? result.usage.cost.total : 0,
     inputTokens: result.usage.input,
     outputTokens: result.usage.output,
-    provider: opts.provider,
+    provider,
     modelUsed: result.model,
     stopReason: result.stopReason,
   };

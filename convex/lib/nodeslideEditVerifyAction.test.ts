@@ -272,7 +272,7 @@ describe('proposeEdit B4 tool loop messages', () => {
             },
             telemetry: {
               provider: 'openrouter',
-              model: 'google/gemini-3.5-flash',
+              model: 'google/gemini-3.8-flash',
               inputTokens: 5,
               outputTokens: 3,
               costMicroUsd: 1,
@@ -336,7 +336,8 @@ describe('proposeEdit B4 tool loop messages', () => {
     const executorStep = steps.find((step) => step.toolName === 'executor');
     const verifyStep = steps.find((step) => step.toolName === 'verify');
     expect(plannerStep?.spanModel).toBe('moonshotai/kimi-k3');
-    expect(executorStep?.spanModel).toBe('google/gemini-3.5-flash');
+    // Executor moved off Gemini 3.5 Flash: Google deprecated it on 2026-10-08 (auto-routed to 3.6).
+    expect(executorStep?.spanModel).toBe('google/gemini-3.8-flash');
     expect(verifyStep?.message).toContain('shadow snapshot');
   });
 });

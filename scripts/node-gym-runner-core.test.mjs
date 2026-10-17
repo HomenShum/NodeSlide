@@ -125,6 +125,10 @@ function immutableReceipt(plan, attempt, status, costMicroUsd) {
     automatedHardGatesPassed: status === 'passed',
     issueCodes: status === 'passed' ? [] : ['provider_error'],
     usage: { ...passed.usage, costMicroUsd },
+    // Receipts now record what the campaign was charged (backend ledger figure); the figures these
+    // tests assert are unchanged. A receipt without `budget` is covered in
+    // scripts/tests/node-gym-campaign-budget.test.mjs.
+    budget: { chargedMicroUsd: costMicroUsd, source: 'ledger' },
     attempt,
     recordedAt: `2026-07-22T00:00:0${attempt}.000Z`,
   };

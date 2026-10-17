@@ -89,17 +89,70 @@ export const NODESLIDE_AGENT_MODELS = [
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
   {
+    id: 'anthropic/claude-sonnet-5.5',
+    upstreamId: 'anthropic/claude-sonnet-5.5',
+    provider: 'openrouter',
+    vendor: 'Anthropic',
+    label: 'Claude Sonnet 5.5',
+    description: 'Balanced Claude for agents and professional writing.',
+    costTier: 'premium',
+    bestFor: 'Executive writing and synthesis',
+    productionEnabled: true,
+    // Sampling parameters (temperature/top_p/top_k) are a 400 on Claude 5.5.
+    supportsTemperature: false,
+    supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
+  },
+  {
+    id: 'anthropic/claude-opus-5.5',
+    upstreamId: 'anthropic/claude-opus-5.5',
+    provider: 'openrouter',
+    vendor: 'Anthropic',
+    label: 'Claude Opus 5.5',
+    description: 'Most capable Claude for long-running, high-stakes agent work.',
+    costTier: 'premium',
+    bestFor: 'Complex planning and review',
+    productionEnabled: true,
+    // Sampling parameters are a 400 on Claude 5.5. Opus 5.5 defaults to medium effort on the
+    // vendor side (Opus 5 defaulted to high; spec A.2.8 "explicit per row"), so the row carries its
+    // own default and every request still names an explicit reasoning.effort.
+    supportsTemperature: false,
+    supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
+    defaultEffort: 'medium',
+  },
+  {
     id: 'google/gemini-3.5-flash',
     upstreamId: 'google/gemini-3.5-flash',
     provider: 'openrouter',
     vendor: 'Google',
     label: 'Gemini 3.5 Flash',
-    description: 'Latest stable Gemini for sustained agentic and coding tasks.',
+    description: 'Previous Gemini Flash generation; kept so persisted job requests still resolve.',
+    costTier: 'fast',
+    bestFor: 'Fast iteration and large context',
+    // Google deprecated gemini-3.5-flash on 2026-10-08 and auto-routes requests to 3.6, so it is no
+    // longer offered. The row stays because persisted job requests name it (convex validators and
+    // the price table keep the literal).
+    productionEnabled: false,
+    supportsTemperature: true,
+    supportedEfforts: ['low', 'medium', 'high'],
+    structuredOutputMode: 'json_object',
+  },
+  {
+    id: 'google/gemini-3.8-flash',
+    upstreamId: 'google/gemini-3.8-flash',
+    provider: 'openrouter',
+    vendor: 'Google',
+    label: 'Gemini 3.8 Flash',
+    description: 'Current Gemini Flash for sustained agentic and coding tasks.',
     costTier: 'fast',
     bestFor: 'Fast iteration and large context',
     productionEnabled: true,
-    supportsTemperature: true,
+    // Gemini 3.6+ deprecates sampling parameters (ignored today, a future 400): never send temperature.
+    supportsTemperature: false,
+    // thinking_level is low/medium/high on Gemini 3.x Flash; xhigh and max are unsupported.
     supportedEfforts: ['low', 'medium', 'high'],
+    // Same OpenRouter Gemini route as 3.5: the edit planner's scoped union schema is rejected
+    // before generation, so the edit patch uses json_object transport and is validated locally.
+    structuredOutputMode: 'json_object',
   },
   {
     id: 'google/gemini-3.1-pro-preview',
@@ -137,6 +190,20 @@ export const NODESLIDE_AGENT_MODELS = [
     costTier: 'balanced',
     bestFor: 'General professional decks',
     productionEnabled: true,
+    supportsTemperature: false,
+    supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
+  },
+  {
+    id: 'openai/gpt-6.1-sol',
+    upstreamId: 'openai/gpt-6.1-sol',
+    provider: 'openrouter',
+    vendor: 'OpenAI',
+    label: 'GPT-6.1 Sol',
+    description: 'OpenAI flagship for highest-capability production workflows.',
+    costTier: 'premium',
+    bestFor: 'Highest-capability production work',
+    productionEnabled: true,
+    // Sampling parameters are removed (400) on GPT-6.
     supportsTemperature: false,
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
@@ -206,8 +273,9 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Zero-priced OpenRouter route with native structured-output support.',
     costTier: 'free',
     bestFor: 'Free fast iteration and repair',
+    // Absent from the OpenRouter catalog (GET /api/v1/models, 2026-10-10): not a free-router
+    // candidate any more. The row stays for persisted requests and the node-gym matrix identity.
     productionEnabled: false,
-    freeRouterCandidate: true,
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high'],
   },
@@ -225,6 +293,8 @@ export type NodeSlideExternalProvider = (typeof NODESLIDE_AGENT_MODELS)[number][
 export const NODESLIDE_DEFAULT_AGENT_MODEL: NodeSlideAgentModelId = 'moonshotai/kimi-k3';
 export const NODESLIDE_DEFAULT_OPENROUTER_AGENT_MODEL: NodeSlideAgentModelId = 'moonshotai/kimi-k3';
 export const NODESLIDE_NEBIUS_AGENT_MODEL: NodeSlideAgentModelId = 'nebius/zai-org/GLM-5.2';
+/** Default route shown in the bring-your-own-key UI (session BYOK store and Connections dialog). */
+export const NODESLIDE_BYOK_DEFAULT_MODEL: NodeSlideAgentModelId = 'z-ai/glm-5.2';
 
 export const NODESLIDE_REASONING_EFFORTS = [
   { id: 'low', label: 'Light', description: 'Faster responses for straightforward work.' },
@@ -235,6 +305,35 @@ export const NODESLIDE_REASONING_EFFORTS = [
 ] as const;
 export type NodeSlideReasoningEffort = (typeof NODESLIDE_REASONING_EFFORTS)[number]['id'];
 export const NODESLIDE_DEFAULT_REASONING_EFFORT: NodeSlideReasoningEffort = 'high';
+
+/**
+ * The effort a request gets when the caller names none: the row's own `defaultEffort` when it
+ * declares one (Opus 5.5 = medium), otherwise NODESLIDE_DEFAULT_REASONING_EFFORT. An explicit
+ * caller effort is never routed through here.
+ */
+export function nodeSlideDefaultReasoningEffort(
+  modelId: NodeSlideAgentModelId,
+): NodeSlideReasoningEffort {
+  const route = nodeSlideAgentModel(modelId);
+  return 'defaultEffort' in route ? route.defaultEffort : NODESLIDE_DEFAULT_REASONING_EFFORT;
+}
+
+/**
+ * The effort a picker shows and sends for a model: the person's own choice when the row supports it,
+ * otherwise the row's default (Opus 5.5 = medium, the rest high). `chosen` is `null` until the person
+ * touches the effort picker (or a saved effort is restored), which is how an untouched effort follows
+ * the model while an explicit one, even one equal to the previous row's default, is kept. Anything
+ * that is not a real effort (a stale localStorage value) counts as no choice.
+ */
+export function nodeSlideEffortForModel(
+  modelId: NodeSlideAgentModelId,
+  chosen: unknown,
+): NodeSlideReasoningEffort {
+  return isNodeSlideReasoningEffort(chosen) &&
+    nodeSlideModelSupportsReasoningEffort(modelId, chosen)
+    ? chosen
+    : nodeSlideDefaultReasoningEffort(modelId);
+}
 
 export function isNodeSlideReasoningEffort(value: unknown): value is NodeSlideReasoningEffort {
   return NODESLIDE_REASONING_EFFORTS.some((effort) => effort.id === value);
@@ -247,6 +346,20 @@ export function nodeSlideReasoningEffort(effortId: NodeSlideReasoningEffort) {
   );
 }
 
+/**
+ * Catalog flag for the edit-patch transport. A row that sets `structuredOutputMode: 'json_object'`
+ * sends the `nodeslide_edit_patch` schema in the prompt and asks the provider only for strict JSON,
+ * because that route rejects the planner's large scoped union before generating a token. Every other
+ * schema, and every row without the flag, keeps native `json_schema`. The result is validated
+ * locally against the same schema either way.
+ */
+export function nodeSlideEditPatchStructuredOutputMode(
+  modelId: NodeSlideAgentModelId,
+): 'json_object' | undefined {
+  const route = nodeSlideAgentModel(modelId);
+  return 'structuredOutputMode' in route ? route.structuredOutputMode : undefined;
+}
+
 export function isNodeSlideAgentModelId(value: unknown): value is NodeSlideAgentModelId {
   return NODESLIDE_AGENT_MODELS.some((model) => model.id === value);
 }
@@ -255,8 +368,61 @@ export function isNodeSlideOfferedAgentModelId(value: unknown): value is NodeSli
   return NODESLIDE_OFFERED_AGENT_MODELS.some((model) => model.id === value);
 }
 
+/** The verified free constant a free-looking unknown id resolves to (Part A rule 10). */
+const NODESLIDE_FREE_FALLBACK_MODEL_ID = 'openrouter/free' as const;
+
+/**
+ * The `:free` ids SPEC section 1.2 verified live on OpenRouter (2026-10-10). They are known ids: one the
+ * catalog does not serve is refused, never rerouted to the free router (SPEC D1).
+ */
+const NODESLIDE_VERIFIED_FREE_MODEL_IDS: ReadonlySet<string> = new Set([
+  'apodex/apodex-1.1-mini:free',
+  'dots-studio/dots-3-note-preview:free',
+  'liquid/lfm-2.5-2.6b:free',
+  'nvidia/nemotron-3.5-lightning:free',
+  'thinkingmachines/inkling-small:free',
+  'poolside/laguna-s-2.1:free',
+  'thinkingmachines/inkling:free',
+  'poolside/laguna-xs-2.1:free',
+  'cohere/north-mini-code:free',
+  'nvidia/nemotron-3.5-content-safety:free',
+  'nvidia/nemotron-3-ultra-550b-a55b:free',
+  'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+  'google/gemma-4-26b-a4b-it:free',
+  'google/gemma-4-31b-it:free',
+  'nvidia/nemotron-3-super-120b-a12b:free',
+]);
+
+export function isNodeSlideVerifiedFreeModelId(value: unknown): boolean {
+  return typeof value === 'string' && NODESLIDE_VERIFIED_FREE_MODEL_IDS.has(value);
+}
+
+/**
+ * Resolves a catalog id to its route. Cost class is preserved and an unknown id fails closed: an id
+ * the catalog does not carry never becomes a paid default (it used to resolve to the first row, the
+ * paid Nebius GLM route). A SPEC 1.2 verified free id the catalog does not serve throws (a known id is
+ * never rerouted). A free-looking id in neither the catalog nor SPEC 1.2 (`:free` or `-free` suffix)
+ * resolves to the free router row; every other unknown throws. The public Convex validators and
+ * `isNodeSlideAgentModelId` reject such ids at the API boundary first.
+ */
 export function nodeSlideAgentModel(modelId: NodeSlideAgentModelId) {
-  return NODESLIDE_AGENT_MODELS.find((model) => model.id === modelId) ?? NODESLIDE_AGENT_MODELS[0];
+  const route = NODESLIDE_AGENT_MODELS.find((model) => model.id === modelId);
+  if (route) return route;
+  if (isNodeSlideVerifiedFreeModelId(modelId)) {
+    throw new Error(
+      `NodeSlide model "${String(modelId)}" is a verified free id but is not in the catalog; it is not rerouted.`,
+    );
+  }
+  if (
+    typeof modelId === 'string' &&
+    ((modelId as string).endsWith(':free') || (modelId as string).endsWith('-free'))
+  ) {
+    const free = NODESLIDE_AGENT_MODELS.find(
+      (model) => model.id === NODESLIDE_FREE_FALLBACK_MODEL_ID,
+    );
+    if (free) return free;
+  }
+  throw new Error(`Unknown NodeSlide model "${String(modelId)}": it is not in the catalog.`);
 }
 
 export function nodeSlideModelSupportsReasoningEffort(

@@ -147,12 +147,17 @@ describe('NodeSlide AI review inspector', () => {
       expect.arrayContaining([
         'Claude Sonnet 5 · Anthropic',
         'Claude Fable 5 · Anthropic',
-        'Gemini 3.5 Flash · Google',
+        'Claude Sonnet 5.5 · Anthropic',
+        'Claude Opus 5.5 · Anthropic',
+        // Gemini 3.5 Flash left the offered set: Google deprecated it on 2026-10-08.
+        'Gemini 3.8 Flash · Google',
         'Gemini 3.1 Pro · Google',
         'GPT-5.6 Sol · OpenAI',
         'GPT-5.6 Terra · OpenAI',
+        'GPT-6.1 Sol · OpenAI',
       ]),
     );
+    expect(modelLabels).not.toContain('Gemini 3.5 Flash · Google');
     expect(markup).not.toMatch(/ai-provider-consent/);
 
     expect(createAiProviderRequest('nebius', false)).toBeNull();
@@ -180,6 +185,25 @@ describe('NodeSlide AI review inspector', () => {
     expect(
       createAiProviderRequest('openrouter_free', true, 'anthropic/claude-sonnet-5'),
     ).toMatchObject({ providerModel: 'anthropic/claude-sonnet-5' });
+  });
+
+  it('an omitted effort takes the row default (Opus 5.5 medium); an explicit effort is kept', () => {
+    // SPEC A.2.8: Opus 5.5 defaults to medium, every other row to high. These builders are a
+    // defaulting boundary: they used to default every model to high.
+    for (const [model, effort] of [
+      ['anthropic/claude-opus-5.5', 'medium'],
+      ['anthropic/claude-sonnet-5.5', 'high'],
+    ] as const) {
+      expect(createAiProviderRequest('openrouter_free', true, model)).toMatchObject({
+        providerEffort: effort,
+      });
+      expect(createAiVariationProviderRequest('openrouter_free', true, model)).toMatchObject({
+        providerEffort: effort,
+      });
+    }
+    expect(
+      createAiProviderRequest('openrouter_free', true, 'anthropic/claude-opus-5.5', 'high'),
+    ).toMatchObject({ providerEffort: 'high' });
   });
 
   it('shows extended effort levels only for models whose provider exposes them', () => {

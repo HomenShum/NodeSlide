@@ -6,6 +6,7 @@ import type {
   NodeSlideInstallProfile,
   NodeSlideUiMode,
 } from '@nodeslide/registry';
+import { NODESLIDE_DEFAULT_AGENT_MODEL } from '../../../shared/nodeslide';
 import { generateDeck, resolveGenerateEffort } from './generate';
 import { type NodeSlideInitOptions, runNodeSlideInit, runNodeSlideUpgrade } from './index';
 
@@ -53,8 +54,8 @@ try {
       outputDirectory: pathValue(flags, 'output') ?? process.cwd(),
       clientSessionId:
         pathValue(flags, 'session') ?? `cli-${Date.now()}-${crypto.randomUUID().slice(0, 12)}`,
-      model: pathValue(flags, 'model') ?? 'moonshotai/kimi-k3',
-      effort: effortValue(flags, pathValue(flags, 'model') ?? 'moonshotai/kimi-k3'),
+      model: pathValue(flags, 'model') ?? NODESLIDE_DEFAULT_AGENT_MODEL,
+      effort: effortValue(flags, pathValue(flags, 'model') ?? NODESLIDE_DEFAULT_AGENT_MODEL),
       ...((pathValue(flags, 'access-code') ?? process.env['NODESLIDE_PREVIEW_ACCESS_CODE'])
         ? {
             accessCode:

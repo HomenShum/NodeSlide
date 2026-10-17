@@ -11,14 +11,16 @@ import { openAICompletionsApi } from '@earendil-works/pi-ai/api/openai-completio
 import { openrouterProvider } from '@earendil-works/pi-ai/providers/openrouter';
 import {
   NODESLIDE_DEFAULT_AGENT_MODEL,
-  NODESLIDE_DEFAULT_REASONING_EFFORT,
   type NodeSlideAgentModelId,
   type NodeSlideExternalProvider,
   type NodeSlideReasoningEffort,
   isNodeSlideAgentModelId,
   nodeSlideAgentModel,
+  nodeSlideDefaultReasoningEffort,
+  nodeSlideEditPatchStructuredOutputMode,
   nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
+import { nodeSlideLedgerPricedCost } from '../../shared/nodeslideRunBudget';
 
 export const NODESLIDE_NEBIUS_PROVIDER = 'nebius' as const;
 /** Backwards-compatible name for the default; requests may select any catalog model. */
@@ -66,10 +68,12 @@ function nebiusProvider() {
   });
 }
 
-// Kimi K3 is newer than pi-ai's bundled OpenRouter catalog, so we register the
-// current OpenRouter contract explicitly instead of inheriting Moonshot-direct
-// compatibility defaults.
-const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
+// Kimi K3 is registered explicitly so OpenRouter's normalized reasoning contract and our
+// price (pricingAsOf = the verifiedAt of its ledger row, a held row: NODESLIDE_HELD_PRICE_VERIFIED_AT,
+// 2026-10-15T23:08Z) win over bundled metadata instead of inheriting Moonshot-direct compatibility
+// defaults. USD per million tokens; the agreement test in
+// convex/nodeslideModelPricing.test.ts asserts these equal nodeSlideModelPricing('moonshotai/kimi-k3').
+export const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
   id: 'moonshotai/kimi-k3',
   name: 'MoonshotAI: Kimi K3',
   api: 'openai-completions',
@@ -119,6 +123,21 @@ function asOpenRouterChatCompletionsRoute(
   } as typeof model;
 }
 
+/**
+ * The run-budget ledger is the repo's price of record, so a response is priced (`usage.cost.total` ->
+ * `costMicroUsd`) at the ledger's rate: the bundled pi-ai catalog is an older snapshot and disagreed
+ * with it on glm-5.2 (0.171 / 7.2 against 0.7686 / 2.4156), so a near-ceiling output-heavy response
+ * would settle above the quote it was reserved at. `nodeSlideLedgerPricedCost` also caps the
+ * cached-read rate at the ledger's input rate, so a response served mostly from cache cannot settle
+ * above the quote either. Any above-threshold tier stays pi-ai's, and rows
+ * the ledger does not price (free, dynamic) are untouched.
+ */
+function priceFromLedger<
+  T extends { id: string; cost: { input: number; output: number; cacheRead: number } },
+>(model: T): T {
+  return { ...model, cost: nodeSlideLedgerPricedCost(model.id, model.cost) };
+}
+
 export function openrouterProviderWithOverrides() {
   const builtin = openrouterProvider();
   const overridden = new Map(
@@ -127,6 +146,7 @@ export function openrouterProviderWithOverrides() {
   const models = builtin
     .getModels()
     .filter((model) => !overridden.has(model.id))
+    .map(priceFromLedger)
     .map(asOpenRouterChatCompletionsRoute);
   return createProvider({
     id: 'openrouter',
@@ -191,6 +211,13 @@ export interface NodeSlideDispatchPolicy {
   maxInputMicroUsdPerMillionTokens?: number;
   /** Provider-routing ceiling in integer micro-USD per million output tokens. */
   maxOutputMicroUsdPerMillionTokens?: number;
+  /**
+   * `0` turns off every second completion for the call: the JSON-repair call and the
+   * structured-output compatibility retry. Absent keeps the default of one retry. It can only
+   * tighten, so no other value exists. The executor-split probe sets it because its receipt is
+   * rejected when a paid retry was enabled (SPEC A.0.3), not merely when one happened to run.
+   */
+  maxRetries?: 0;
 }
 
 export interface NodeSlideJsonSchema {
@@ -402,8 +429,13 @@ export function nodeSlideModelProbeProfile(modelId: NodeSlideAgentModelId): {
     case 'z-ai/glm-5.2':
       return { reasoningEffort: 'high', maxTokens: 512 };
     case 'anthropic/claude-fable-5':
+    case 'anthropic/claude-sonnet-5.5':
+    case 'anthropic/claude-opus-5.5':
+    case 'openai/gpt-6.1-sol':
+      // Adaptive thinking counts toward max_tokens; a one-character reply must survive it.
       return { reasoningEffort: 'low', maxTokens: 2_048 };
     case 'google/gemini-3.5-flash':
+    case 'google/gemini-3.8-flash':
     case 'google/gemini-3.1-pro-preview':
       return { reasoningEffort: 'low', maxTokens: 256 };
     default:
@@ -425,10 +457,10 @@ export async function callNodeSlideFreeJson(
 ): Promise<NodeSlideProviderResult> {
   const complete = dependencies.complete ?? completeNodeSlideWithPiAi;
   const selectedModel = args.model ?? NODESLIDE_DEFAULT_AGENT_MODEL;
-  const reasoningEffort = args.reasoningEffort ?? NODESLIDE_DEFAULT_REASONING_EFFORT;
   if (!isNodeSlideAgentModelId(selectedModel)) {
     return { ok: false, reason: 'Choose a supported NodeSlide agent model.' };
   }
+  const reasoningEffort = args.reasoningEffort ?? nodeSlideDefaultReasoningEffort(selectedModel);
   if (!nodeSlideModelSupportsReasoningEffort(selectedModel, reasoningEffort)) {
     return {
       ok: false,
@@ -453,8 +485,10 @@ export async function callNodeSlideFreeJson(
   const onTextDelta = dependencies.onTextDelta ?? args.onTextDelta;
 
   try {
-    // Exactly two model calls are possible: the initial completion and one JSON-repair completion.
-    for (let attempt = 0; attempt < 2; attempt += 1) {
+    // At most two model calls: the initial completion and one JSON-repair completion, unless the
+    // dispatch policy turned retries off (`maxRetries: 0`), which leaves exactly one.
+    const maxAttempts = dependencies.dispatchPolicy?.maxRetries === 0 ? 1 : 2;
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
       const repairAttempt = attempt === 1;
       const attemptTelemetry = startAttemptTelemetry(repairAttempt);
       telemetry.attempts?.push(attemptTelemetry);
@@ -514,7 +548,7 @@ export async function callNodeSlideFreeJson(
 
       if (result.stopReason === 'error') {
         if (
-          attempt === 0 &&
+          attempt + 1 < maxAttempts &&
           args.jsonSchema &&
           structuredOutputMode === 'json_schema' &&
           shouldRetryStructuredOutputCompatibility(result)
@@ -552,7 +586,9 @@ export async function callNodeSlideFreeJson(
       }
     }
     return providerFailure(
-      `The ${routeLabel} route returned invalid JSON after one repair attempt.`,
+      maxAttempts === 1
+        ? `The ${routeLabel} route returned invalid JSON and retries were disabled.`
+        : `The ${routeLabel} route returned invalid JSON after one repair attempt.`,
       telemetry,
       hasTelemetry,
     );
@@ -667,8 +703,12 @@ function preferredStructuredOutputMode(
   // OpenRouter's Gemini route accepts ordinary JSON schemas, but the edit planner's
   // dynamically scoped union is large enough to be rejected before token generation.
   // Keep the exact schema in the prompt and validate it locally; json_object only
-  // changes provider transport, never the accepted NodeSlide contract.
-  if (model === 'google/gemini-3.5-flash' && jsonSchema.name === 'nodeslide_edit_patch') {
+  // changes provider transport, never the accepted NodeSlide contract. The decision is a
+  // catalog flag (`structuredOutputMode`), stated per row, not a model-id literal.
+  if (
+    jsonSchema.name === 'nodeslide_edit_patch' &&
+    nodeSlideEditPatchStructuredOutputMode(model) === 'json_object'
+  ) {
     return 'json_object';
   }
   return 'json_schema';

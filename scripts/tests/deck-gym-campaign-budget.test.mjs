@@ -13,6 +13,8 @@ import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   DECK_GYM_CHARGES_FILE,
+  DECK_GYM_LOCK_FILE,
+  acquireDeckGymCampaignLock,
   createDeckGymCampaignBudget,
   deckGymBudgetSummary,
   deckGymWorker,
@@ -434,5 +436,43 @@ describe('deck-gym campaign cap binds the whole campaign across invocations', ()
 
   it('charges nothing for a run that has never been started', async () => {
     expect(await restoreDeckGymSpend({ runsDir })).toBe(0);
+  });
+});
+
+/**
+ * Scenario: someone starts `deck-gym:run` twice on the same runs directory (a second terminal, a
+ * retry while the first still runs). Each would restore the same balance, create its own in-memory
+ * budget and rewrite the same charge files; replayed, two dispatched runs finalized 1,600,000
+ * micro-USD against a 1,000,000 cap while 800,000 was persisted and both stopped with no cap hit. The
+ * second invocation must be refused before it restores or spends anything.
+ */
+describe('deck-gym campaign lock', () => {
+  let runsDir;
+  beforeEach(async () => {
+    runsDir = await mkdtemp(path.join(os.tmpdir(), 'deck-gym-lock-'));
+  });
+  afterEach(async () => {
+    await rm(runsDir, { recursive: true, force: true });
+  });
+
+  it('refuses the second of two racing invocations and admits one again after the first exits', async () => {
+    const start = async () => {
+      const release = acquireDeckGymCampaignLock(runsDir);
+      await restoreDeckGymSpend({ runsDir });
+      return release;
+    };
+    const outcomes = await Promise.allSettled([start(), start()]);
+    const winners = outcomes.filter((outcome) => outcome.status === 'fulfilled');
+    const refused = outcomes.filter((outcome) => outcome.status === 'rejected');
+    expect(winners).toHaveLength(1);
+    expect(refused).toHaveLength(1);
+    expect(refused[0].reason.message).toMatch(/already running .*"pid":\d+/u);
+    // The lock file is not a run directory: it adds no spend.
+    expect(await restoreDeckGymSpend({ runsDir })).toBe(0);
+
+    winners[0].value();
+    winners[0].value(); // releasing twice is harmless
+    expect(await readdir(runsDir)).not.toContain(DECK_GYM_LOCK_FILE);
+    acquireDeckGymCampaignLock(runsDir)();
   });
 });

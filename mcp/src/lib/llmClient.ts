@@ -175,6 +175,20 @@ function rowEffortOption(api: string, effort: NodeSlideReasoningEffort | undefin
 }
 
 /**
+ * Anthropic managed-effort rows (Opus 5.5, Sonnet 5.5) are governed by the top-level
+ * `output_config.effort`. pi-ai 1.1.0 writes a fixed 'high' there and only appends the requested
+ * effort as a trailing effort-only message, which the API applies "from the next user turn"
+ * (migration guide, mid-conversation effort). This call is one user turn with no turn after it, so the
+ * trailing message cannot govern the reply. Writing the row effort into the top-level field makes the
+ * reply run at the row default. A body with no `output_config.effort` (Sonnet 5) is left untouched.
+ */
+function withTopLevelEffort(payload: unknown, effort: NodeSlideReasoningEffort): unknown {
+  const body = payload as { output_config?: { effort?: string } };
+  if (body.output_config?.effort === undefined) return payload;
+  return { ...body, output_config: { ...body.output_config, effort } };
+}
+
+/**
  * Single completion call. Supports text-only and vision.
  *
  * Error handling per agentic_reliability HONEST_STATUS:
@@ -261,6 +275,9 @@ export async function call(opts: CallOptions): Promise<CallResult> {
   const rowEffort = isNodeSlideAgentModelId(row) ? nodeSlideDefaultReasoningEffort(row) : undefined;
   const result = await pi.complete(model, context, {
     ...rowEffortOption(model.api, rowEffort),
+    ...(model.api === 'anthropic-messages' && rowEffort !== undefined
+      ? { onPayload: (payload: unknown) => withTopLevelEffort(payload, rowEffort) }
+      : {}),
     ...(opts.signal !== undefined ? { signal: opts.signal } : {}),
     ...(opts.maxTokens !== undefined ? { maxOutputTokens: opts.maxTokens } : {}),
   });

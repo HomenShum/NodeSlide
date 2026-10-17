@@ -4,6 +4,7 @@ import path from 'node:path';
 import process from 'node:process';
 import { chromium } from 'playwright';
 import {
+  acquireDeckGymCampaignLock,
   createDeckGymCampaignBudget,
   deckGymBudgetSummary,
   deckGymWorker,
@@ -39,6 +40,11 @@ const maxConcurrency = Math.max(
 );
 const runs = matrix.runs.slice(0, limit);
 await mkdir(runsDir, { recursive: true });
+// Held until exit, before spend is restored: see acquireDeckGymCampaignLock. A signal exits through
+// process.exit so the 'exit' handler still releases it.
+const releaseCampaignLock = acquireDeckGymCampaignLock(runsDir);
+process.once('exit', releaseCampaignLock);
+for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => process.exit(1));
 // The cap binds the whole campaign, so what earlier invocations already spent counts before any
 // run is scheduled, whether those runs resume as skipped or are about to be re-run, and whether or
 // not `--limit` selected them this time: restore reads every run directory in `runsDir`.

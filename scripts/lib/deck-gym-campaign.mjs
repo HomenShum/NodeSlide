@@ -9,6 +9,7 @@
  * Trace inspector text, which is attribution), or the full reservation when that figure cannot be
  * read. It is a separate module so the production worker and its test are the same function.
  */
+import { closeSync, openSync, readFileSync, unlinkSync, writeSync } from 'node:fs';
 import { mkdir, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import {
@@ -58,6 +59,45 @@ export function createDeckGymCampaignBudget({ maxTotalCostMicroUsd, spentCostMic
     spentCostMicroUsd,
     inFlight: 0,
     stoppedBy: null,
+  };
+}
+
+export const DECK_GYM_LOCK_FILE = 'campaign.lock';
+
+/**
+ * One invocation at a time per runs directory. Spend is restored from disk once at start and then
+ * tracked in memory, and each charge rewrites a run's whole history, so two invocations on the same
+ * directory each see an empty balance, can dispatch the same run, and overwrite each other's
+ * charges: replayed, two runs finalized 1,600,000 micro-USD against a 1,000,000 cap and only 800,000
+ * was persisted. The cap cannot hold unless a second invocation never starts. `O_EXCL` creation is
+ * the test-and-set; the file names its holder. Synchronous so an exit or signal handler can release.
+ * A crashed holder leaves the file behind and the next start refuses, naming it: remove it once the
+ * recorded pid is confirmed dead (no liveness probe on purpose: a wrong guess would admit a second
+ * invocation, which is the failure this exists to stop).
+ */
+export function acquireDeckGymCampaignLock(runsDir) {
+  const file = path.join(runsDir, DECK_GYM_LOCK_FILE);
+  let fd;
+  try {
+    fd = openSync(file, 'wx');
+  } catch (error) {
+    if (error?.code !== 'EEXIST') throw error;
+    let holder = 'unknown holder';
+    try {
+      holder = readFileSync(file, 'utf8').trim() || holder;
+    } catch {}
+    throw new Error(
+      `Deck Gym campaign in ${runsDir} is already running (${holder}); a second invocation would restore the same balance and overspend the cap. If that process is dead, delete ${file} and start again.`,
+      { cause: error },
+    );
+  }
+  writeSync(fd, JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() }));
+  let released = false;
+  return function release() {
+    if (released) return;
+    released = true;
+    closeSync(fd);
+    unlinkSync(file);
   };
 }
 

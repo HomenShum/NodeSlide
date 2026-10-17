@@ -37,7 +37,7 @@ function wireShapeProblems(body: Body): string[] {
   return problems;
 }
 
-/** Scenario as above, plus: the reply is governed by the trailing effort-only message. */
+/** Scenario as above, plus: the reply is governed by the top-level effort, set to the row default. */
 describe('callByModel sends the direct Anthropic wire id and the row default effort', () => {
   const sent: Sent[] = [];
 
@@ -86,8 +86,11 @@ describe('callByModel sends the direct Anthropic wire id and the row default eff
     expect(url).toContain('api.anthropic.com');
     expect(body.model).toBe(wireId);
     expect(wireShapeProblems(body)).toEqual([]);
-    // The effort that governs the reply is the effort-only message after the user turn; the
-    // top-level output_config.effort stays pi-ai's own 'high' and does not.
+    // A trailing effort-only message applies only from the NEXT user turn (migration guide, mid-
+    // conversation effort), and this request has none. The reply is governed by the top-level
+    // output_config.effort, which pi-ai hard-codes to 'high' for managed-effort rows; the client
+    // rewrites it to the row default (Opus 5.5 = medium). pi-ai's own trailing message is unchanged.
+    expect(body['output_config']).toEqual({ effort });
     expect(body.messages).toHaveLength(2);
     expect(body.messages[0]?.role).toBe('user');
     expect(body.messages[1]).toEqual({

@@ -475,4 +475,15 @@ describe('deck-gym campaign lock', () => {
     expect(await readdir(runsDir)).not.toContain(DECK_GYM_LOCK_FILE);
     acquireDeckGymCampaignLock(runsDir)();
   });
+
+  it('does not delete a lock another invocation took after the first one lost its file', async () => {
+    const releaseA = acquireDeckGymCampaignLock(runsDir);
+    await rm(path.join(runsDir, DECK_GYM_LOCK_FILE)); // an operator deleted it while A is alive
+    const releaseB = acquireDeckGymCampaignLock(runsDir);
+    releaseA();
+    expect(await readdir(runsDir)).toContain(DECK_GYM_LOCK_FILE);
+    expect(() => acquireDeckGymCampaignLock(runsDir)).toThrow(/already running/u);
+    releaseB();
+    expect(await readdir(runsDir)).not.toContain(DECK_GYM_LOCK_FILE);
+  });
 });

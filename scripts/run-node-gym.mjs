@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { lstat, mkdir, readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { acquireDeckGymCampaignLock } from './lib/deck-gym-campaign.mjs';
 import { buildNodeGymMatrixInput } from './lib/node-gym-config-core.mjs';
 import {
   buildNodeGymPairedDeltaReport,
@@ -165,6 +166,14 @@ await assertNodeGymRealPathContained(root, artifactRoot, 'NodeGym artifact root'
 await assertNodeGymRealPathContained(artifactRoot, campaignRoot, 'campaign artifact directory');
 await mkdir(campaignRoot, { recursive: true });
 await assertNodeGymRealPathContained(artifactRoot, campaignRoot, 'campaign artifact directory');
+// One invocation at a time per campaign directory, held until exit and taken before any attempt
+// directory is read: the default campaign id is the same for every launch, and a live attempt has no
+// receipt yet, exactly like a dead one, so a second run would set the first run's workspace aside,
+// restore its reservation and dispatch past the cap. A signal exits through process.exit so the
+// 'exit' handler still releases it.
+const releaseCampaignLock = acquireDeckGymCampaignLock(campaignRoot, 'NodeGym');
+process.once('exit', releaseCampaignLock);
+for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => process.exit(1));
 
 const campaignPlan = {
   schemaVersion: 'nodekit.gym-campaign-plan/v1',

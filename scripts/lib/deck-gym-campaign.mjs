@@ -9,6 +9,7 @@
  * Trace inspector text, which is attribution), or the full reservation when that figure cannot be
  * read. It is a separate module so the production worker and its test are the same function.
  */
+import { randomUUID } from 'node:crypto';
 import { closeSync, openSync, readFileSync, unlinkSync, writeSync } from 'node:fs';
 import { mkdir, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
@@ -73,9 +74,12 @@ export const DECK_GYM_LOCK_FILE = 'campaign.lock';
  * the test-and-set; the file names its holder. Synchronous so an exit or signal handler can release.
  * A crashed holder leaves the file behind and the next start refuses, naming it: remove it once the
  * recorded pid is confirmed dead (no liveness probe on purpose: a wrong guess would admit a second
- * invocation, which is the failure this exists to stop).
+ * invocation, which is the failure this exists to stop). Release unlinks only a file that still
+ * carries this holder's token: if the lock was deleted by hand and another invocation took it, the
+ * first holder exiting must not delete the second holder's lock. `label` names the campaign kind in
+ * the refusal; node-gym takes the same lock on its campaign directory.
  */
-export function acquireDeckGymCampaignLock(runsDir) {
+export function acquireDeckGymCampaignLock(runsDir, label = 'Deck Gym') {
   const file = path.join(runsDir, DECK_GYM_LOCK_FILE);
   let fd;
   try {
@@ -87,17 +91,22 @@ export function acquireDeckGymCampaignLock(runsDir) {
       holder = readFileSync(file, 'utf8').trim() || holder;
     } catch {}
     throw new Error(
-      `Deck Gym campaign in ${runsDir} is already running (${holder}); a second invocation would restore the same balance and overspend the cap. If that process is dead, delete ${file} and start again.`,
+      `${label} campaign in ${runsDir} is already running (${holder}); a second invocation would restore the same balance and overspend the cap. If that process is dead, delete ${file} and start again.`,
       { cause: error },
     );
   }
-  writeSync(fd, JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString() }));
+  const token = randomUUID();
+  writeSync(fd, JSON.stringify({ pid: process.pid, startedAt: new Date().toISOString(), token }));
   let released = false;
   return function release() {
     if (released) return;
     released = true;
     closeSync(fd);
-    unlinkSync(file);
+    let ownsFile = false;
+    try {
+      ownsFile = JSON.parse(readFileSync(file, 'utf8'))?.token === token;
+    } catch {}
+    if (ownsFile) unlinkSync(file);
   };
 }
 

@@ -10,6 +10,7 @@
  * These tests run the REAL charge rule (`chargeNodeGymAttempt`, `nodeGymRunCharge`) and the REAL
  * stop rule (`shouldStopCampaign`) in campaign order against a fake backend ledger.
  */
+import { spawnSync } from 'node:child_process';
 import { mkdir, mkdtemp, readdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -18,6 +19,7 @@ import {
   NODESLIDE_RUN_BUDGET_LEDGER_RECEIPT_VERSION,
   normalizeNodeSlideRunBudget,
 } from '../../shared/nodeslideRunBudget.ts';
+import { acquireDeckGymCampaignLock } from '../lib/deck-gym-campaign.mjs';
 import {
   NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD,
   NODE_GYM_LEDGER_RECEIPT_VERSION,
@@ -454,5 +456,46 @@ describe('attempt history: legacy receipts and orphaned attempts', () => {
     await expect(loadNodeGymOrphanCharges({ attemptsDir, runId: 'run-1' })).rejects.toThrow(
       /orphan charge/u,
     );
+  });
+});
+
+/**
+ * Scenario: someone starts `node-gym:run` while an earlier launch of the same campaign is still
+ * running (the default campaign id is the same for every launch). The live attempt has no receipt
+ * yet, exactly like a dead one, so a second run used to set its workspace aside, restore its
+ * reservation and re-issue the attempt: replayed, 3,000,000 micro-USD dispatched against a 2,000,000
+ * cap. The second launch must be refused before it reads or writes anything in the campaign.
+ */
+describe('two invocations on one campaign', () => {
+  const campaignDir = path.join(
+    'artifacts',
+    'node-gym',
+    'nodeslide-deck-gym-v2',
+    'campaigns',
+    `lock-test-${process.pid}`,
+  );
+  const launch = () =>
+    spawnSync(
+      process.execPath,
+      ['scripts/run-node-gym.mjs', '--artifact-dir', campaignDir, '--limit', '2'],
+      { encoding: 'utf8' },
+    );
+  afterEach(async () => {
+    await rm(campaignDir, { recursive: true, force: true });
+  });
+
+  it('refuses a launch while the campaign is held, touching nothing, and runs again once it is released', async () => {
+    await mkdir(campaignDir, { recursive: true });
+    const release = acquireDeckGymCampaignLock(campaignDir, 'NodeGym');
+    const refused = launch();
+    expect(refused.status).not.toBe(0);
+    expect(refused.stderr).toMatch(/NodeGym campaign .* is already running/u);
+    expect(await readdir(campaignDir)).toEqual(['campaign.lock']);
+
+    release();
+    const admitted = launch();
+    expect(admitted.stderr).not.toMatch(/already running/u);
+    expect(await readdir(campaignDir)).toContain('campaign-plan.json');
+    expect(await readdir(campaignDir)).not.toContain('campaign.lock');
   });
 });

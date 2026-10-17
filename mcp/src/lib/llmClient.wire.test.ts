@@ -199,6 +199,14 @@ describe('callByModel sends the row default effort on the OpenAI and Gemini APIs
     expect(body.model).toBe(model);
   });
 
+  // SPEC D1 / A.0.10: a SPEC 1.2 verified free id that pi-ai cannot serve is a known id, so it throws
+  // before any request instead of being rerouted to `openrouter/free`.
+  it('verified free id pi-ai has no row for is refused, not rerouted to the free router', async () => {
+    vi.stubEnv('OPENROUTER_API_KEY', 'test-key-not-real');
+    await expect(run('nvidia/nemotron-3.5-content-safety:free')).rejects.toThrow(/not rerouted/);
+    expect(sent).toEqual([]);
+  });
+
   // The key the tool demands before it calls must be the key the call then uses. `vendor-free` once
   // demanded OPENAI_API_KEY and was sent to OpenRouter; the gemma ids demanded GEMINI_API_KEY.
   it.each([

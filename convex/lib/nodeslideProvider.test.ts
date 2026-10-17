@@ -756,6 +756,11 @@ describe('unknown model ids fail closed (SPEC Part A rule 10)', () => {
     expect(route.provider).not.toBe(nodeSlideAgentModel(NODESLIDE_NEBIUS_AGENT_MODEL).provider);
   });
 
+  it('refuses a SPEC 1.2 verified free id the catalog does not serve instead of rerouting it', () => {
+    for (const id of ['nvidia/nemotron-3.5-lightning:free', 'apodex/apodex-1.1-mini:free'])
+      expect(() => nodeSlideAgentModel(id as never), id).toThrow(/not rerouted/);
+  });
+
   it('resolves a "-free" suffix to the free router row too, and keeps lookalikes paid-unknown', async () => {
     // SPEC A.0.10: free-looking is a "-free" OR ":free" suffix. 'foo-free' used to throw.
     for (const id of ['foo-free', 'vendor/unlisted-model-free']) {

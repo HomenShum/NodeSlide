@@ -372,15 +372,47 @@ export function isNodeSlideOfferedAgentModelId(value: unknown): value is NodeSli
 const NODESLIDE_FREE_FALLBACK_MODEL_ID = 'openrouter/free' as const;
 
 /**
+ * The `:free` ids SPEC section 1.2 verified live on OpenRouter (2026-10-10). They are known ids: one the
+ * catalog does not serve is refused, never rerouted to the free router (SPEC D1).
+ */
+const NODESLIDE_VERIFIED_FREE_MODEL_IDS: ReadonlySet<string> = new Set([
+  'apodex/apodex-1.1-mini:free',
+  'dots-studio/dots-3-note-preview:free',
+  'liquid/lfm-2.5-2.6b:free',
+  'nvidia/nemotron-3.5-lightning:free',
+  'thinkingmachines/inkling-small:free',
+  'poolside/laguna-s-2.1:free',
+  'thinkingmachines/inkling:free',
+  'poolside/laguna-xs-2.1:free',
+  'cohere/north-mini-code:free',
+  'nvidia/nemotron-3.5-content-safety:free',
+  'nvidia/nemotron-3-ultra-550b-a55b:free',
+  'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+  'google/gemma-4-26b-a4b-it:free',
+  'google/gemma-4-31b-it:free',
+  'nvidia/nemotron-3-super-120b-a12b:free',
+]);
+
+export function isNodeSlideVerifiedFreeModelId(value: unknown): boolean {
+  return typeof value === 'string' && NODESLIDE_VERIFIED_FREE_MODEL_IDS.has(value);
+}
+
+/**
  * Resolves a catalog id to its route. Cost class is preserved and an unknown id fails closed: an id
  * the catalog does not carry never becomes a paid default (it used to resolve to the first row, the
- * paid Nebius GLM route). A free-looking unknown (`:free` or `-free` suffix) resolves to the free router row;
- * every other unknown throws. The public Convex validators and `isNodeSlideAgentModelId` reject such
- * ids at the API boundary first.
+ * paid Nebius GLM route). A SPEC 1.2 verified free id the catalog does not serve throws (a known id is
+ * never rerouted). A free-looking id in neither the catalog nor SPEC 1.2 (`:free` or `-free` suffix)
+ * resolves to the free router row; every other unknown throws. The public Convex validators and
+ * `isNodeSlideAgentModelId` reject such ids at the API boundary first.
  */
 export function nodeSlideAgentModel(modelId: NodeSlideAgentModelId) {
   const route = NODESLIDE_AGENT_MODELS.find((model) => model.id === modelId);
   if (route) return route;
+  if (isNodeSlideVerifiedFreeModelId(modelId)) {
+    throw new Error(
+      `NodeSlide model "${String(modelId)}" is a verified free id but is not in the catalog; it is not rerouted.`,
+    );
+  }
   if (
     typeof modelId === 'string' &&
     ((modelId as string).endsWith(':free') || (modelId as string).endsWith('-free'))

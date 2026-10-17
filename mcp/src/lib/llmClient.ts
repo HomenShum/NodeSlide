@@ -40,6 +40,7 @@ import type {
 import {
   type NodeSlideReasoningEffort,
   isNodeSlideAgentModelId,
+  isNodeSlideVerifiedFreeModelId,
   nodeSlideDefaultReasoningEffort,
 } from '../../../shared/nodeslide.js';
 import { nodeSlideLedgerPricedCost } from '../../../shared/nodeslideRunBudget.js';
@@ -197,13 +198,13 @@ export async function call(opts: CallOptions): Promise<CallResult> {
   const lookup = pi.getModel as any;
   let registryModel = lookup(provider, canonicalId);
   if (!registryModel) {
-    // SPEC D1: a known id (a NodeSlide catalog row) is never rerouted to another model, so a catalog
-    // id pi-ai cannot serve throws here, before any request. SPEC A.0.10: an unknown id never becomes
+    // SPEC D1: a known id (a NodeSlide catalog row, or a SPEC 1.2 verified free id) is never rerouted
+    // to another model, so one pi-ai cannot serve throws here, before any request. SPEC A.0.10: an unknown id never becomes
     // a paid default; a free-looking one resolves to the verified free router and every other unknown
     // throws.
-    if (isNodeSlideAgentModelId(opts.modelId)) {
+    if (isNodeSlideAgentModelId(opts.modelId) || isNodeSlideVerifiedFreeModelId(opts.modelId)) {
       throw new Error(
-        `Model "${opts.modelId}" is in the NodeSlide catalog but pi-ai has no ${provider} route for it; it is not rerouted.`,
+        `Model "${opts.modelId}" is a known NodeSlide id but pi-ai has no ${provider} route for it; it is not rerouted.`,
       );
     }
     if (!isFreeLookingModelId(opts.modelId)) {

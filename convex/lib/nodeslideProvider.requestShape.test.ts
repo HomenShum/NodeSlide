@@ -381,4 +381,12 @@ describe('the routed executor (SPEC 2026-10-08 Gemini 3.5 Flash deprecation)', (
       true,
     );
   });
+
+  // OpenRouter's public list dropped the :free id on 2026-10-31 (the paid id remains).
+  it('removes nemotron-3-super:free from the free-router candidates but keeps the row', () => {
+    const row = nodeSlideAgentModel('nvidia/nemotron-3-super-120b-a12b:free');
+    expect(row.id).toBe('nvidia/nemotron-3-super-120b-a12b:free');
+    expect(row.productionEnabled).toBe(false);
+    expect('freeRouterCandidate' in row).toBe(false);
+  });
 });

@@ -259,8 +259,9 @@ export const NODESLIDE_AGENT_MODELS = [
     description: 'Zero-priced long-context OpenRouter route with native structured output.',
     costTier: 'free',
     bestFor: 'Free long-context deck planning',
+    // Absent from the OpenRouter catalog (GET /api/v1/models, 2026-10-31; the paid id remains): not a
+    // free-router candidate any more. The row stays for persisted requests, as gpt-oss-20b:free did.
     productionEnabled: false,
-    freeRouterCandidate: true,
     supportsTemperature: true,
     supportedEfforts: ['low', 'medium', 'high'],
   },

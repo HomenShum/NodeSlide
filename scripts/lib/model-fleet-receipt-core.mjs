@@ -19,11 +19,7 @@ export const NODE_SLIDE_FREE_ROUTE_CATALOG = [
   ['openrouter/free', 'openrouter', 'openrouter/free'],
   ['google/gemma-4-26b-a4b-it:free', 'openrouter', 'google/gemma-4-26b-a4b-it:free'],
   ['google/gemma-4-31b-it:free', 'openrouter', 'google/gemma-4-31b-it:free'],
-  [
-    'nvidia/nemotron-3-super-120b-a12b:free',
-    'openrouter',
-    'nvidia/nemotron-3-super-120b-a12b:free',
-  ],
+  // nvidia/nemotron-3-super-120b-a12b:free dropped: absent from the OpenRouter catalog (GET /api/v1/models, 2026-10-31).
   // openai/gpt-oss-20b:free dropped: absent from the OpenRouter catalog (GET /api/v1/models, 2026-10-10).
 ].map(([id, provider, upstreamId]) => ({ id, provider, upstreamId }));
 

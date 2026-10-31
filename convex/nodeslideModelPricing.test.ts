@@ -45,6 +45,11 @@ import {
   openrouterProviderWithOverrides,
 } from './lib/nodeslideProvider';
 
+// The MCP BYOK case below cold-imports pi-ai through mcp/src/lib/llmClient.ts, which timed out at the 5 s
+// default under a loaded `npm run check` (this PR added that case in round 2). Same budget as its siblings,
+// requestShape.test.ts and llmClient.wire.test.ts. Only the timeout moves; every assertion is unchanged.
+vi.setConfig({ testTimeout: 30_000 });
+
 /**
  * Read out of the `data[]` entry for each id on 2026-10-14: `pricing.prompt`,
  * `pricing.completion` (USD per token, as strings), `context_length`, and
@@ -666,6 +671,10 @@ describe('every pricing source in this repo agrees (Part A rule 6)', () => {
   // would admit a job-create route the ledger prices higher (kimi-k3: 100k in + 1k out is $0.065 here
   // against the ledger's $0.315). The router only produces the advisory create-routing receipt; the
   // ledger still reserves the worst case before any dispatch.
+  //
+  // This is NOT the A.0.6 equality: it pins a known disagreement. Closing it needs either an edit to the
+  // frozen auto-router or a change to the ledger prices D3 held, and neither is this PR's to make. It is
+  // listed under "Open for Homen" in the PR body; do not delete this test to make the gap disappear.
   it('pins where the frozen auto-router estimate differs from the ledger rate', () => {
     const differing: Record<string, { input: number; output: number }> = {};
     for (const route of ledgerPricedOpenRouterRoutes) {

@@ -662,6 +662,11 @@ export const NODESLIDE_MODEL_PRICING = {
     providerContextWindowTokens: 1_048_576,
     providerMaxOutputTokens: 65_536,
   }),
+  // Introductory price (SPEC 1.3): Google doubles it to 1.50 / 7.50 on 2027-01-01. This row is both the
+  // reservation quote and the OpenRouter max_price ceiling, so once the doubled price is listed this
+  // ceiling admits 0 endpoints and the executor and the 3.8 picker row fail closed (no overspend, but the
+  // split is unavailable). Follow-up on 2027-01-01: re-read /api/v1/models/google/gemini-3.8-flash/endpoints,
+  // raise this row and its pricing test together, and re-check the 0.55 USD probe cap.
   'google/gemini-3.8-flash': pricedRoute({
     modelId: 'google/gemini-3.8-flash',
     inputMicroUsdPerMillionTokens: 750_000,

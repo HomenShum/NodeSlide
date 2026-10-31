@@ -76,10 +76,21 @@ describe('validateNodeGymConfig accepts execution only as { disabled: true, sinc
     expect(validateNodeGymConfig(config).failures).toEqual([]);
   });
 
+  it('accepts a real leap day', () => {
+    expect(
+      withExecution({ disabled: true, since: '2028-02-29', reason: 'x' }).filter((failure) =>
+        failure.includes('execution'),
+      ),
+    ).toEqual([]);
+  });
+
   it.each([
     ['disabled false', { disabled: false, since: '2026-10-10', reason: 'x' }],
     ['an extra key', { disabled: true, since: '2026-10-10', reason: 'x', note: 'y' }],
     ['a non-ISO date', { disabled: true, since: 'yesterday', reason: 'x' }],
+    ['an impossible date', { disabled: true, since: '2026-02-30', reason: 'x' }],
+    ['Feb 29 in a non-leap year', { disabled: true, since: '2027-02-29', reason: 'x' }],
+    ['month 13', { disabled: true, since: '2026-13-01', reason: 'x' }],
     ['an empty reason', { disabled: true, since: '2026-10-10', reason: '  ' }],
     ['a non-object', true],
   ])('rejects %s', (_label, execution) => {

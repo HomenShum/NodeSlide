@@ -111,7 +111,10 @@ function nodeGymExecutionShapeFailure(execution) {
   if (execution.disabled !== true) return 'disabled must be true';
   if (typeof execution.since !== 'string' || !ISO_DATE.test(execution.since))
     return 'since must be an ISO date (YYYY-MM-DD)';
-  if (Number.isNaN(Date.parse(`${execution.since}T00:00:00Z`))) return 'since is not a real date';
+  // Date.parse normalizes 2026-02-30 to 2026-03-02, so require the exact UTC round-trip.
+  const parsed = new Date(`${execution.since}T00:00:00Z`);
+  if (Number.isNaN(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== execution.since)
+    return 'since is not a real date';
   if (typeof execution.reason !== 'string' || !execution.reason.trim())
     return 'reason must be a non-empty string';
   return null;

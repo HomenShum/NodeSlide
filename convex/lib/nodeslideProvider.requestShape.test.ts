@@ -117,6 +117,9 @@ function expectNoForbiddenKeys(body: Record<string, unknown>) {
   // the vendors accept.
   const reasoning = body['reasoning'] as { enabled?: boolean; effort?: string } | undefined;
   expect(reasoning?.enabled).toBeUndefined();
+  // OpenRouter encodes a thinking budget as reasoning.max_tokens (budget_tokens is a 400 on Claude 5.5,
+  // SPEC 1.3), so effort is the only key the reasoning block may carry.
+  expect(Object.keys(reasoning ?? {}), 'reasoning must carry only effort').toEqual(['effort']);
   expect(ACCEPTED_EFFORTS as readonly string[]).toContain(reasoning?.effort);
 }
 
@@ -140,6 +143,7 @@ describe('the forbidden-shape guard itself', () => {
       { ...clean, messages: [...clean.messages, { role: 'assistant', content: '{' }] },
     ],
     ['a disabled reasoning block', { ...clean, reasoning: { enabled: false, effort: 'high' } }],
+    ['a reasoning token budget', { ...clean, reasoning: { effort: 'medium', max_tokens: 1024 } }],
     ['effort "none"', { ...clean, reasoning: { effort: 'none' } }],
     ['effort "minimal"', { ...clean, reasoning: { effort: 'minimal' } }],
     ['an arbitrary effort string', { ...clean, reasoning: { effort: 'banana' } }],

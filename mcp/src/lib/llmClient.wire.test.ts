@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { localByokStatus, requireLocalKeys } from './byok.js';
-import { callByModel } from './llmClient.js';
+import { call, callByModel } from './llmClient.js';
 
 /**
  * Scenario: a designer runs the local MCP bring-your-own-key edit planner (`planLocalByokEdit` ->
@@ -126,6 +126,12 @@ const DIRECT_FORBIDDEN_KEYS = [
   'thinkingBudget',
   'candidate_count',
   'candidateCount',
+  // Gemini's own sampling keys are camelCase (generationConfig.topP/topK); the walk is recursive, so
+  // they are caught at any depth, as is generationConfig.temperature via FORBIDDEN_KEYS. SPEC 1.3:
+  // sampling on Gemini 3.6+ is deprecated and must be removed. Codex round 6: injecting topP/topK left
+  // all 49 tests green because only the snake_case spellings were listed.
+  'topP',
+  'topK',
   'logprobs',
   'top_logprobs',
   'prefill',
@@ -231,6 +237,21 @@ describe('the direct-provider shape guard itself', () => {
         generationConfig: { ...gem.generationConfig, candidateCount: 2 },
       },
     ],
+    [
+      'generationConfig.topP',
+      'gemini',
+      { ...gem, generationConfig: { ...gem.generationConfig, topP: 0.9 } },
+    ],
+    [
+      'generationConfig.topK',
+      'gemini',
+      { ...gem, generationConfig: { ...gem.generationConfig, topK: 5 } },
+    ],
+    [
+      'generationConfig.temperature',
+      'gemini',
+      { ...gem, generationConfig: { ...gem.generationConfig, temperature: 0 } },
+    ],
     ['a model-turn prefill', 'gemini', { ...gem, contents: [...gem.contents, { role: 'model' }] }],
     [
       'thinkingLevel MINIMAL',
@@ -302,6 +323,28 @@ describe('callByModel sends the row default effort on the OpenAI and Gemini APIs
     });
     expect(directWireProblems('gemini', body)).toEqual([]);
   });
+
+  // Codex round 6: an explicit OpenRouter call to a GPT-6.1 or Gemini 3.8 row went out with no
+  // `reasoning` block, because pi-ai's chat-completions adapter reads `reasoningEffort`, not `effort`.
+  it.each([['openai/gpt-6.1-sol'], ['google/gemini-3.8-flash']])(
+    'explicit OpenRouter call to %s carries the row default reasoning effort high',
+    async (modelId) => {
+      vi.stubEnv('OPENROUTER_API_KEY', 'test-key-not-real');
+      const result = await call({
+        provider: 'openrouter',
+        modelId,
+        systemPrompt: 's',
+        userText: 'u',
+        maxTokens: 64,
+      });
+      expect(result.provider).toBe('openrouter');
+      expect(sent).toHaveLength(1);
+      const { url, body } = sent[0] as Sent;
+      expect(url).toContain('openrouter.ai');
+      expect(body.model).toBe(modelId);
+      expect(body['reasoning']).toEqual({ effort: 'high' });
+    },
+  );
 
   // SPEC A.0.10: free-looking unknown ids reach the verified free router; every other unknown throws
   // before any request. `openrouter/free` is a catalog route and used to lose its prefix.

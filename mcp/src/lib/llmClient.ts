@@ -164,14 +164,15 @@ function isFreeLookingModelId(modelId: string): boolean {
 /**
  * The row default effort in the option the model's own API reads. pi-ai's `complete` forwards options
  * untouched, and each API reads a different one: Anthropic `effort` (the mid-conversation effort
- * message), the OpenAI Responses API `reasoningEffort`, Gemini `thinking.level`. A name the API does
- * not read is dropped, which ran GPT and Gemini rows at the vendor default (medium) instead of the
+ * message), the OpenAI Responses and Chat-completions (OpenRouter) APIs `reasoningEffort`, Gemini
+ * `thinking.level`. A name the API does not read is dropped, which ran GPT and Gemini rows at the vendor default (medium) instead of the
  * row's (high). `effort` is always passed, as before; the other two are added for their API.
  */
 function rowEffortOption(api: string, effort: NodeSlideReasoningEffort | undefined) {
   if (effort === undefined) return {};
   switch (api) {
     case 'openai-responses':
+    case 'openai-completions': // OpenRouter's route for the same rows reads reasoningEffort too
       return { effort, reasoningEffort: effort };
     case 'google-generative-ai':
       // Gemini 3.x Flash takes low / medium / high only (the catalog rows never offer more).

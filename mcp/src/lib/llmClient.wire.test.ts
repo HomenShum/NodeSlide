@@ -138,7 +138,7 @@ const DIRECT_FORBIDDEN_KEYS = [
 ];
 
 function directWireProblems(
-  provider: 'openai' | 'gemini',
+  provider: 'openai' | 'gemini' | 'openrouter',
   body: Record<string, unknown>,
 ): string[] {
   const problems: string[] = [];
@@ -155,7 +155,17 @@ function directWireProblems(
     for (const k of Object.keys((obj ?? {}) as object))
       if (!allowed.includes(k)) problems.push(`${path}.${k} is not an allowed key`);
   };
-  if (provider === 'openai') {
+  if (provider === 'openrouter') {
+    // Chat Completions through OpenRouter (GPT-6.1 / Gemini 3.8 rows): reasoning carries only the
+    // row effort, and the messages do not end on an assistant prefill (SPEC 1.3).
+    const reasoning = body['reasoning'] as { effort?: string } | undefined;
+    keysOutside(reasoning, ['effort'], 'body.reasoning');
+    if (!['low', 'medium', 'high', 'xhigh', 'max'].includes(reasoning?.effort ?? ''))
+      problems.push('reasoning.effort is not low..max');
+    const messages = body['messages'] as { role?: string }[] | undefined;
+    const last = messages?.[messages.length - 1];
+    if (!last || last.role === 'assistant') problems.push('last message is an assistant prefill');
+  } else if (provider === 'openai') {
     const reasoning = body['reasoning'] as { effort?: string } | undefined;
     keysOutside(reasoning, ['effort', 'summary'], 'body.reasoning');
     if (!['low', 'medium', 'high', 'xhigh', 'max'].includes(reasoning?.effort ?? ''))
@@ -196,9 +206,15 @@ describe('the direct-provider shape guard itself', () => {
       thinkingConfig: { includeThoughts: true, thinkingLevel: 'HIGH' },
     },
   };
+  const orr = {
+    model: 'm',
+    messages: [{ role: 'user' }],
+    reasoning: { effort: 'high' },
+  };
   it('accepts the clean bodies', () => {
     expect(directWireProblems('openai', gpt)).toEqual([]);
     expect(directWireProblems('gemini', gem)).toEqual([]);
+    expect(directWireProblems('openrouter', orr)).toEqual([]);
   });
   it.each([
     [
@@ -218,6 +234,20 @@ describe('the direct-provider shape guard itself', () => {
       { ...gpt, input: [...gpt.input, { role: 'assistant' }] },
     ],
     ['a sampling key', 'openai', { ...gpt, temperature: 0 }],
+    ['OpenRouter temperature', 'openrouter', { ...orr, temperature: 0 }],
+    ['OpenRouter top_p', 'openrouter', { ...orr, top_p: 0.9 }],
+    ['OpenRouter top_k', 'openrouter', { ...orr, top_k: 5 }],
+    [
+      'an OpenRouter trailing assistant message',
+      'openrouter',
+      { ...orr, messages: [...orr.messages, { role: 'assistant' }] },
+    ],
+    [
+      'OpenRouter reasoning.max_tokens',
+      'openrouter',
+      { ...orr, reasoning: { effort: 'high', max_tokens: 1 } },
+    ],
+    ['OpenRouter reasoning.enabled:false', 'openrouter', { ...orr, reasoning: { enabled: false } }],
     ['logprobs', 'openai', { ...gpt, logprobs: true }],
     [
       'thinkingBudget',
@@ -343,6 +373,9 @@ describe('callByModel sends the row default effort on the OpenAI and Gemini APIs
       expect(url).toContain('openrouter.ai');
       expect(body.model).toBe(modelId);
       expect(body['reasoning']).toEqual({ effort: 'high' });
+      // Codex round 8: injecting temperature/top_p/top_k or a trailing assistant turn into this
+      // builder left every test green, because only model and reasoning were read.
+      expect(directWireProblems('openrouter', body)).toEqual([]);
     },
   );
 

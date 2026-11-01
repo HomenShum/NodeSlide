@@ -27,14 +27,29 @@ describe('local MCP client names the NodeSlide row default effort', () => {
     });
   });
 
-  it('sends medium for Opus 5.5 and high for the Sonnet 5.5 and Kimi rows', async () => {
+  it('sends medium for Opus 5.5 and high for the Sonnet 5.5 row', async () => {
     for (const [modelId, effort] of [
       ['anthropic/claude-opus-5.5', 'medium'],
       ['anthropic/claude-sonnet-5.5', 'high'],
-      ['moonshotai/kimi-k3', 'high'],
     ] as const) {
       await call({ provider: 'openrouter', modelId, ...base });
       expect(complete.mock.calls.at(-1)?.[2]).toMatchObject({ effort });
+    }
+  });
+
+  // Was: 'moonshotai/kimi-k3' -> { effort: 'high' } (round 3), which applied the row default to every
+  // catalog row. SPEC A.0.4 keeps the rows this refresh does not add (kimi-k3, GPT-5.6, Gemini 3.1 Pro)
+  // on the request main sent, which carries no effort; the byte-level comparison is in
+  // llmClient.wire.test.ts.
+  it('adds no effort for a catalog row this refresh does not add', async () => {
+    for (const modelId of [
+      'moonshotai/kimi-k3',
+      'openai/gpt-5.6-sol',
+      'openai/gpt-5.6-terra',
+      'google/gemini-3.1-pro-preview',
+    ]) {
+      await call({ provider: 'openrouter', modelId, ...base });
+      expect(complete.mock.calls.at(-1)?.[2]).not.toHaveProperty('effort');
     }
   });
 

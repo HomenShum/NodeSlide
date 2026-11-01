@@ -177,6 +177,28 @@ export async function writeDeckGymRunCharges(runDir, charges) {
   );
 }
 
+/**
+ * Each run's charge history is one file in `<runsDir>/<runId>`, read-modify-written by whichever worker
+ * holds that run. Two runs that share a directory (the same runId, or ids that differ only in case on
+ * a case-insensitive filesystem) would lose one worker's reservation or charge to the other's write and
+ * restore less than was spent, so a matrix that repeats an id is refused before anything is dispatched.
+ */
+export function assertUniqueDeckGymRunIds(runs) {
+  const seen = new Map();
+  for (const run of runs) {
+    if (typeof run?.runId !== 'string' || run.runId === '') {
+      throw new Error('Deck Gym matrix has a run without a runId.');
+    }
+    const key = run.runId.toLowerCase();
+    if (seen.has(key)) {
+      throw new Error(
+        `Deck Gym matrix repeats a run directory: "${seen.get(key)}" and "${run.runId}" share one charge history.`,
+      );
+    }
+    seen.set(key, run.runId);
+  }
+}
+
 /** Persist the reservation of an attempt about to be dispatched. */
 export async function recordDeckGymReservation(runDir, reservationMicroUsd) {
   const charges = (await readDeckGymRunCharges(runDir)) ?? [];
@@ -218,7 +240,12 @@ export async function restoreDeckGymSpend({ runsDir }) {
     const runDir = path.join(runsDir, entry.name);
     let charges = await readDeckGymRunCharges(runDir);
     if (charges === null) {
-      const present = await readdir(runDir).catch(() => []);
+      // Only a vanished directory is empty. Any other listing failure (EACCES, EBUSY, EIO) leaves the
+      // run's spend unknown, so it stops the campaign instead of counting as nothing spent.
+      const present = await readdir(runDir).catch((error) => {
+        if (error?.code === 'ENOENT') return [];
+        throw error;
+      });
       if (present.length === 0) continue;
       charges = [
         { chargedMicroUsd: NODE_GYM_BACKEND_RUN_RESERVATION_MICRO_USD, source: 'reservation' },

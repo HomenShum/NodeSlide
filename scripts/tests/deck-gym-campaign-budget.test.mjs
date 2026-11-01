@@ -15,6 +15,7 @@ import {
   DECK_GYM_CHARGES_FILE,
   DECK_GYM_LOCK_FILE,
   acquireDeckGymCampaignLock,
+  assertUniqueDeckGymRunIds,
   createDeckGymCampaignBudget,
   deckGymBudgetSummary,
   deckGymWorker,
@@ -25,12 +26,19 @@ import {
 } from '../lib/deck-gym-campaign.mjs';
 import { NODE_GYM_LEDGER_RECEIPT_VERSION } from '../lib/node-gym-runner-core.mjs';
 
-// Lets one test kill the publish step of an atomic write, the way a killed process would.
-const publish = vi.hoisted(() => ({ failNext: false }));
+// Lets one test kill the publish step of an atomic write, the way a killed process would, and make
+// the listing of one run directory fail the way a permissions or sharing error does.
+const publish = vi.hoisted(() => ({ failNext: false, denyListing: null }));
 vi.mock('node:fs/promises', async (importOriginal) => {
   const actual = await importOriginal();
   return {
     ...actual,
+    readdir: async (...args) => {
+      if (publish.denyListing !== null && String(args[0]) === publish.denyListing) {
+        throw Object.assign(new Error('EACCES: permission denied, scandir'), { code: 'EACCES' });
+      }
+      return actual.readdir(...args);
+    },
     rename: async (...args) => {
       if (publish.failNext) {
         publish.failNext = false;
@@ -354,6 +362,24 @@ describe('deck-gym campaign cap binds the whole campaign across invocations', ()
     expect(await restoreDeckGymSpend({ runsDir })).toBe(1_000_000);
   });
 
+  // Before: `readdir(runDir).catch(() => [])` read any listing failure as an empty directory, so a
+  // prior run directory holding run.json but no charges file was skipped and its spend counted as 0
+  // instead of one reservation (replayed with EACCES: restoreDeckGymSpend returned 0).
+  it('stops the campaign when a prior run directory cannot be listed (EACCES), not counting it as 0', async () => {
+    const runDir = path.join(runsDir, 'run-1');
+    await mkdir(runDir, { recursive: true });
+    await writeFile(path.join(runDir, 'run.json'), '{}');
+    publish.denyListing = runDir;
+    try {
+      await expect(restoreDeckGymSpend({ runsDir })).rejects.toMatchObject({ code: 'EACCES' });
+    } finally {
+      publish.denyListing = null;
+    }
+    // The failure wrote nothing down, and once the directory lists again it is one reservation.
+    expect(await readdir(runDir)).toEqual(['run.json']);
+    expect(await restoreDeckGymSpend({ runsDir })).toBe(1_000_000);
+  });
+
   // Before: an unreadable charges file was restored as ONE reservation, so a two-attempt history
   // (2,000,000 micro-USD) came back as 1,000,000 and, against a 2,000,000 cap, one more paid run was
   // dispatched (true exposure 3,000,000). The history is unknown, so the campaign refuses instead.
@@ -485,5 +511,36 @@ describe('deck-gym campaign lock', () => {
     expect(() => acquireDeckGymCampaignLock(runsDir)).toThrow(/already running/u);
     releaseB();
     expect(await readdir(runsDir)).not.toContain(DECK_GYM_LOCK_FILE);
+  });
+});
+
+// Scenario: an operator hand-edits a matrix and pastes one run twice. Two workers would then hold the
+// same run directory and read-modify-write its one budget-charges.json: one reservation or charge is
+// lost and the next invocation restores less than was spent (replayed: $1.20 spent, $0.60 durable,
+// $2.10 actual against a $2 cap). The matrix is refused before anything is dispatched.
+describe('deck-gym matrix run directories are unique', () => {
+  it('accepts distinct runIds', () => {
+    expect(() => assertUniqueDeckGymRunIds([{ runId: 'a' }, { runId: 'b' }])).not.toThrow();
+  });
+
+  it('refuses a repeated runId and ids that share a directory on a case-insensitive filesystem', () => {
+    expect(() => assertUniqueDeckGymRunIds([{ runId: 'run-1' }, { runId: 'run-1' }])).toThrow(
+      /repeats a run directory/,
+    );
+    expect(() => assertUniqueDeckGymRunIds([{ runId: 'Run-1' }, { runId: 'run-1' }])).toThrow(
+      /repeats a run directory/,
+    );
+  });
+
+  it('refuses a run with no usable runId', () => {
+    expect(() => assertUniqueDeckGymRunIds([{ runId: 'a' }, {}])).toThrow(/without a runId/);
+  });
+
+  it('accepts the committed v1 matrix', async () => {
+    const { readDeckGymConfig, buildDeckGymMatrix } = await import('../lib/deck-gym-core.mjs');
+    const { corpus, harness } = await readDeckGymConfig(process.cwd());
+    const matrix = buildDeckGymMatrix(corpus, harness);
+    expect(matrix.runs).toHaveLength(72);
+    expect(() => assertUniqueDeckGymRunIds(matrix.runs)).not.toThrow();
   });
 });

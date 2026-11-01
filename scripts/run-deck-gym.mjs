@@ -5,6 +5,7 @@ import process from 'node:process';
 import { chromium } from 'playwright';
 import {
   acquireDeckGymCampaignLock,
+  assertUniqueDeckGymRunIds,
   createDeckGymCampaignBudget,
   deckGymBudgetSummary,
   deckGymWorker,
@@ -34,6 +35,7 @@ const matrix = JSON.parse(await readFile(matrixPath, 'utf8'));
 if (matrix?.schemaVersion !== 'nodeslide.deck-gym-matrix/v1' || !Array.isArray(matrix.runs)) {
   throw new Error('Deck Gym matrix is invalid.');
 }
+assertUniqueDeckGymRunIds(matrix.runs);
 const maxConcurrency = Math.max(
   1,
   Math.min(requestedConcurrency, Number(matrix.runs[0]?.budgets?.maxConcurrency ?? 1)),

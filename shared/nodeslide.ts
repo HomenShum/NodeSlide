@@ -392,6 +392,9 @@ const NODESLIDE_VERIFIED_FREE_MODEL_IDS: ReadonlySet<string> = new Set([
   'google/gemma-4-26b-a4b-it:free',
   'google/gemma-4-31b-it:free',
   'nvidia/nemotron-3-super-120b-a12b:free',
+  // OpenRouter recheck 2026-10-31 (SPEC 1.2 supersession): listed on the public list (live-unverified), and
+  // pi-ai has no row for it, so a caller-supplied id must refuse rather than fall to the free router.
+  'recursive/flint-v1.0:free',
 ]);
 
 export function isNodeSlideVerifiedFreeModelId(value: unknown): boolean {

@@ -253,6 +253,89 @@ describe('callByModel sends the row default effort on the OpenAI and Gemini APIs
   );
 }, 30_000);
 
+/**
+ * Scenario: a designer keeps working with the rows this refresh did not touch (the previous-generation
+ * GPT-5.6 rows and the frozen Gemini 3.1 Pro preview). SPEC A.0.4 says their behaviour is as today, so
+ * their request must be exactly the one main's client sent: `pi.complete` with only `maxOutputTokens`,
+ * which is how main's `call()` invoked it. Applying the new rows' effort to them changed the OpenAI
+ * rows from reasoning effort 'none' to 'high' and gave Gemini 3.1 Pro an explicit thinking level.
+ */
+describe('callByModel leaves the requests of rows this refresh does not add byte-identical to main', () => {
+  const sent: Sent[] = [];
+
+  beforeEach(() => {
+    sent.length = 0;
+    vi.stubEnv('OPENAI_API_KEY', 'test-key-not-real');
+    vi.stubEnv('GEMINI_API_KEY', 'test-key-not-real');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+        sent.push({
+          url: String(input instanceof Request ? input.url : input),
+          headers: Object.fromEntries(new Headers(init?.headers)),
+          body: JSON.parse(String(init?.body ?? '{}')) as Body,
+        });
+        return new Response(JSON.stringify({ error: { message: 'stop', code: 400 } }), {
+          status: 400,
+          headers: { 'content-type': 'application/json' },
+        });
+      }),
+    );
+  });
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+  });
+
+  /** What main's `call()` sent: the registry model and `{ maxOutputTokens }`, nothing else. */
+  async function mainRequest(provider: 'openai' | 'google', canonicalId: string): Promise<Sent> {
+    const pi = await import('@earendil-works/pi-ai/compat');
+    // biome-ignore lint/suspicious/noExplicitAny: pi-ai's getModel is typed against its compile-time registry
+    const model = (pi.getModel as any)(provider, canonicalId);
+    sent.length = 0;
+    await pi.complete(
+      model,
+      {
+        systemPrompt: 's',
+        messages: [{ role: 'user', content: [{ type: 'text', text: 'u' }], timestamp: 0 }],
+      },
+      { maxOutputTokens: 64 },
+    );
+    return sent[0] as Sent;
+  }
+
+  it.each([
+    ['openai/gpt-5.6-sol', 'openai', 'gpt-5.6-sol'],
+    ['openai/gpt-5.6-terra', 'openai', 'gpt-5.6-terra'],
+    ['google/gemini-3.1-pro-preview', 'google', 'gemini-3.1-pro-preview'],
+    ['google/gemini-3.5-flash', 'google', 'gemini-3.5-flash'],
+  ] as const)('%s sends the body main sent', async (id, provider, canonicalId) => {
+    const baseline = await mainRequest(provider, canonicalId);
+    sent.length = 0;
+    await callByModel({ model: id, systemPrompt: 's', userText: 'u', maxTokens: 64 });
+    expect(sent).toHaveLength(1);
+    const now = sent[0] as Sent;
+    expect(now.url).toBe(baseline.url);
+    expect(now.body).toEqual(baseline.body);
+    expect(JSON.stringify(now.body)).toBe(JSON.stringify(baseline.body));
+  });
+
+  // SPEC 1.2 supersession (2026-10-31 recheck): Flint is a verified free id with no pi-ai row, so it is
+  // a known id and is refused, never sent as `openrouter/free`.
+  it('recursive/flint-v1.0:free is refused before any request, not rerouted', async () => {
+    vi.stubEnv('OPENROUTER_API_KEY', 'test-key-not-real');
+    await expect(
+      callByModel({
+        model: 'recursive/flint-v1.0:free',
+        systemPrompt: 's',
+        userText: 'u',
+        maxTokens: 64,
+      }),
+    ).rejects.toThrow(/not rerouted/);
+    expect(sent).toEqual([]);
+  });
+}, 30_000);
+
 /** The checker above is only worth having if it rejects each shape A.0.6 forbids. */
 describe('wireShapeProblems rejects the shapes SPEC A.0.6 forbids', () => {
   const ok = {

@@ -128,6 +128,18 @@ const DIRECT_ANTHROPIC_WIRE_ID: Readonly<Record<string, string>> = {
 };
 
 /**
+ * The catalog rows this refresh adds, the only ones `call` sets an effort for (see the use in `call`).
+ * Opus / Sonnet 5.5 need the top-level `output_config.effort`; GPT-6.1 Sol needs an explicit effort
+ * (SPEC 1.3 rejects 'none'); Gemini 3.8 Flash takes `thinkingLevel`.
+ */
+const EFFORT_MANAGED_ROWS = [
+  'anthropic/claude-opus-5.5',
+  'anthropic/claude-sonnet-5.5',
+  'openai/gpt-6.1-sol',
+  'google/gemini-3.8-flash',
+] as const;
+
+/**
  * Strip provider prefix if present so getModel(provider, id) gets the canonical
  * id. e.g. "anthropic/claude-sonnet-4-6" + provider="anthropic" -> "claude-sonnet-4-6".
  */
@@ -262,17 +274,15 @@ export async function call(opts: CallOptions): Promise<CallResult> {
     ],
   };
 
-  // A NodeSlide catalog row states its own default effort (Opus 5.5 = medium). Left unset, pi-ai
-  // sends 'high' for every managed-effort Claude row, which is not the row's default.
-  // Every spelling of a catalog Claude row (the slug, the dashed wire id, either with the provider
-  // prefix) reaches the same wire id, so the default is looked up from that wire id, not the spelling.
-  const row =
-    (provider === 'anthropic'
-      ? Object.keys(DIRECT_ANTHROPIC_WIRE_ID).find(
-          (slug) => DIRECT_ANTHROPIC_WIRE_ID[slug] === canonicalId,
-        )
-      : undefined) ?? opts.modelId;
-  const rowEffort = isNodeSlideAgentModelId(row) ? nodeSlideDefaultReasoningEffort(row) : undefined;
+  // The four rows this refresh adds state their own default effort (Opus 5.5 = medium; GPT-6.1 Sol
+  // rejects 'none'). Left unset, pi-ai sends 'high' for every managed-effort Claude row and 'none'
+  // for GPT-6.1 Sol. Only those rows get an effort: every other row keeps the request it sent before
+  // (SPEC A.0.4). Every spelling of a row (the slug, the dashed wire id, bare or with the provider
+  // prefix) reaches the same wire id, so the row is found from that wire id, not the spelling.
+  const row = EFFORT_MANAGED_ROWS.find(
+    (id) => id === opts.modelId || canonicalizeModelId(provider, id) === canonicalId,
+  );
+  const rowEffort = row !== undefined ? nodeSlideDefaultReasoningEffort(row) : undefined;
   const result = await pi.complete(model, context, {
     ...rowEffortOption(model.api, rowEffort),
     ...(model.api === 'anthropic-messages' && rowEffort !== undefined

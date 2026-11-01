@@ -461,8 +461,10 @@ describe('every metered OpenRouter ledger price is a ceiling that still routes',
  *   4. the auto-router estimate (`nodeslideAutoRoutingPolicy.ts`), which reads the same pi-ai
  *      catalog and is a FROZEN site (SPEC A.2.8): it is not edited here, so it keeps pi-ai's price
  *      and differs from the ledger on three rows. The divergence is pinned below
- *      (`AUTO_ROUTER_DIFFERS_FROM_LEDGER`), not asserted equal; it caps only the advisory
- *      create-routing receipt, and the ledger still reserves the worst case before any dispatch;
+ *      (`AUTO_ROUTER_DIFFERS_FROM_LEDGER`), not asserted equal; the receipt it caps is not only
+ *      advisory (`cost_cap_exceeded` is in ENFORCEABLE_REFUSALS and nodeslideJobs.ts rewrites a
+ *      refused create request to providerMode 'deterministic'), and the ledger still reserves the
+ *      worst case before any dispatch;
  *   5. the MCP BYOK client (`mcp/src/lib/llmClient.ts`), which called `getModel` on the raw pi-ai
  *      catalog and reported `usage.cost.total` as `costUsd` (kimi-k3 $0.015500 against the ledger's
  *      $0.018000 for 1k in / 1k out, glm-5.2 $0.007371 against $0.0031842). It prices OpenRouter
@@ -669,8 +671,13 @@ describe('every pricing source in this repo agrees (Part A rule 6)', () => {
   // reverted (a frozen site is not edited) and the divergence is pinned here instead, so it can neither
   // widen nor close unnoticed. Without a pinned row a router estimate below the ledger's worst case
   // would admit a job-create route the ledger prices higher (kimi-k3: 100k in + 1k out is $0.065 here
-  // against the ledger's $0.315). The router only produces the advisory create-routing receipt; the
-  // ledger still reserves the worst case before any dispatch.
+  // against the ledger's $0.315). The router's receipt is not only advisory: `cost_cap_exceeded` is in
+  // ENFORCEABLE_REFUSALS (nodeslideRoutingReceipt.ts) and nodeslideJobs.ts applies
+  // resolveNodeSlideEnforcedCreateRequest, which turns the create request into providerMode
+  // 'deterministic'. So the pinned divergence can change which create requests run deterministically
+  // (glm-5.2 output is overestimated at 7.2 against the ledger's 2.4156, which can refuse a request the
+  // ledger would admit). No spend is under-reserved: the ledger still reserves the worst case before
+  // any dispatch.
   //
   // This is NOT the A.0.6 equality: it pins a known disagreement. Closing it needs either an edit to the
   // frozen auto-router or a change to the ledger prices D3 held, and neither is this PR's to make. It is

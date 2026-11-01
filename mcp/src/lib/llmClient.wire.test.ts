@@ -113,6 +113,139 @@ describe('callByModel sends the direct Anthropic wire id and the row default eff
 }, 30_000); // first call cold-imports the pi-ai catalog; the default 5 s timed out on a cold run
 
 /**
+ * SPEC 1.3 shapes for the two direct providers, checked on the whole body so an extra key cannot hide
+ * behind a `toMatchObject`. GPT-6.1: reasoning carries only effort (plus the summary pi-ai asks for),
+ * low..max, never `enabled` or a token budget; no sampling/logprob keys; the input does not end on an
+ * assistant turn. Gemini 3.8: thinkingConfig carries only includeThoughts and thinkingLevel
+ * (LOW/MEDIUM/HIGH), never thinkingBudget; no candidateCount or sampling keys; the last content is
+ * not a model turn (prefill is a 400).
+ */
+const DIRECT_FORBIDDEN_KEYS = [
+  ...FORBIDDEN_KEYS,
+  'thinking_budget',
+  'thinkingBudget',
+  'candidate_count',
+  'candidateCount',
+  'logprobs',
+  'top_logprobs',
+  'prefill',
+];
+
+function directWireProblems(
+  provider: 'openai' | 'gemini',
+  body: Record<string, unknown>,
+): string[] {
+  const problems: string[] = [];
+  const walk = (node: unknown, path: string) => {
+    if (Array.isArray(node)) node.forEach((v, i) => walk(v, `${path}[${i}]`));
+    else if (node !== null && typeof node === 'object')
+      for (const [k, v] of Object.entries(node)) {
+        if (DIRECT_FORBIDDEN_KEYS.includes(k)) problems.push(`${path}.${k} is forbidden`);
+        walk(v, `${path}.${k}`);
+      }
+  };
+  walk(body, 'body');
+  const keysOutside = (obj: unknown, allowed: string[], path: string) => {
+    for (const k of Object.keys((obj ?? {}) as object))
+      if (!allowed.includes(k)) problems.push(`${path}.${k} is not an allowed key`);
+  };
+  if (provider === 'openai') {
+    const reasoning = body['reasoning'] as { effort?: string } | undefined;
+    keysOutside(reasoning, ['effort', 'summary'], 'body.reasoning');
+    if (!['low', 'medium', 'high', 'xhigh', 'max'].includes(reasoning?.effort ?? ''))
+      problems.push('reasoning.effort is not low..max');
+    const input = body['input'] as { role?: string }[] | undefined;
+    const last = input?.[input.length - 1];
+    if (!last || last.role === 'assistant')
+      problems.push('last input turn is an assistant prefill');
+  } else {
+    const cfg = body['generationConfig'] as
+      | { thinkingConfig?: { thinkingLevel?: string } }
+      | undefined;
+    keysOutside(
+      cfg?.thinkingConfig,
+      ['includeThoughts', 'thinkingLevel'],
+      'body.generationConfig.thinkingConfig',
+    );
+    if (!['LOW', 'MEDIUM', 'HIGH'].includes(cfg?.thinkingConfig?.thinkingLevel ?? ''))
+      problems.push('thinkingLevel is not LOW/MEDIUM/HIGH');
+    const contents = body['contents'] as { role?: string }[] | undefined;
+    const last = contents?.[contents.length - 1];
+    if (!last || last.role === 'model') problems.push('last content is a model-turn prefill');
+  }
+  return problems;
+}
+
+describe('the direct-provider shape guard itself', () => {
+  // Codex round 5: injecting reasoning.max_tokens, reasoning.enabled:false and a trailing assistant
+  // input into the GPT-6.1 request left every test passing. The guard must object to each shape.
+  const gpt = {
+    model: 'm',
+    reasoning: { effort: 'high', summary: 'auto' },
+    input: [{ role: 'user' }],
+  };
+  const gem = {
+    contents: [{ role: 'user' }],
+    generationConfig: {
+      thinkingConfig: { includeThoughts: true, thinkingLevel: 'HIGH' },
+    },
+  };
+  it('accepts the clean bodies', () => {
+    expect(directWireProblems('openai', gpt)).toEqual([]);
+    expect(directWireProblems('gemini', gem)).toEqual([]);
+  });
+  it.each([
+    [
+      'a reasoning token budget',
+      'openai',
+      { ...gpt, reasoning: { ...gpt.reasoning, max_tokens: 1 } },
+    ],
+    [
+      'a disabled reasoning block',
+      'openai',
+      { ...gpt, reasoning: { ...gpt.reasoning, enabled: false } },
+    ],
+    ['effort none', 'openai', { ...gpt, reasoning: { effort: 'none' } }],
+    [
+      'a trailing assistant input',
+      'openai',
+      { ...gpt, input: [...gpt.input, { role: 'assistant' }] },
+    ],
+    ['a sampling key', 'openai', { ...gpt, temperature: 0 }],
+    ['logprobs', 'openai', { ...gpt, logprobs: true }],
+    [
+      'thinkingBudget',
+      'gemini',
+      {
+        ...gem,
+        generationConfig: {
+          thinkingConfig: { thinkingLevel: 'HIGH', thinkingBudget: 0 },
+        },
+      },
+    ],
+    [
+      'candidateCount',
+      'gemini',
+      {
+        ...gem,
+        generationConfig: { ...gem.generationConfig, candidateCount: 2 },
+      },
+    ],
+    ['a model-turn prefill', 'gemini', { ...gem, contents: [...gem.contents, { role: 'model' }] }],
+    [
+      'thinkingLevel MINIMAL',
+      'gemini',
+      {
+        ...gem,
+        generationConfig: { thinkingConfig: { thinkingLevel: 'MINIMAL' } },
+      },
+    ],
+  ] as const)('rejects %s', (_label, provider, body) => {
+    expect(directWireProblems(provider, body as Record<string, unknown>)).not.toEqual([]);
+  });
+});
+
+/**
  * Scenario: the same designer picks a GPT-6.1 Sol or Gemini 3.8 Flash row. The row default is `high`.
  * pi-ai's `complete` reads a different option per API (`reasoningEffort` on the OpenAI Responses API,
  * `thinking.level` on Gemini) and silently drops the `effort` that only its Anthropic path reads, so
@@ -155,7 +288,7 @@ describe('callByModel sends the row default effort on the OpenAI and Gemini APIs
     expect(url).toContain('api.openai.com/v1/responses');
     expect(body.model).toBe('gpt-6.1-sol');
     expect(body['reasoning']).toMatchObject({ effort: 'high' });
-    expect(FORBIDDEN_KEYS.filter((k) => JSON.stringify(body).includes(`"${k}"`))).toEqual([]);
+    expect(directWireProblems('openai', body)).toEqual([]);
   });
 
   it('google/gemini-3.8-flash goes out with thinkingLevel HIGH and no sampling keys', async () => {
@@ -167,7 +300,7 @@ describe('callByModel sends the row default effort on the OpenAI and Gemini APIs
     expect(body['generationConfig']).toMatchObject({
       thinkingConfig: { thinkingLevel: 'HIGH' },
     });
-    expect(FORBIDDEN_KEYS.filter((k) => JSON.stringify(body).includes(`"${k}"`))).toEqual([]);
+    expect(directWireProblems('gemini', body)).toEqual([]);
   });
 
   // SPEC A.0.10: free-looking unknown ids reach the verified free router; every other unknown throws
@@ -297,7 +430,13 @@ describe('callByModel leaves the requests of rows this refresh does not add byte
       model,
       {
         systemPrompt: 's',
-        messages: [{ role: 'user', content: [{ type: 'text', text: 'u' }], timestamp: 0 }],
+        messages: [
+          {
+            role: 'user',
+            content: [{ type: 'text', text: 'u' }],
+            timestamp: 0,
+          },
+        ],
       },
       { maxOutputTokens: 64 },
     );
@@ -312,7 +451,12 @@ describe('callByModel leaves the requests of rows this refresh does not add byte
   ] as const)('%s sends the body main sent', async (id, provider, canonicalId) => {
     const baseline = await mainRequest(provider, canonicalId);
     sent.length = 0;
-    await callByModel({ model: id, systemPrompt: 's', userText: 'u', maxTokens: 64 });
+    await callByModel({
+      model: id,
+      systemPrompt: 's',
+      userText: 'u',
+      maxTokens: 64,
+    });
     expect(sent).toHaveLength(1);
     const now = sent[0] as Sent;
     expect(now.url).toBe(baseline.url);
@@ -351,7 +495,10 @@ describe('wireShapeProblems rejects the shapes SPEC A.0.6 forbids', () => {
     ['disabled thinking', { ...ok, thinking: { type: 'disabled' } }],
     [
       'an assistant prefill',
-      { ...ok, messages: [...ok.messages, { role: 'assistant', content: '{' }] },
+      {
+        ...ok,
+        messages: [...ok.messages, { role: 'assistant', content: '{' }],
+      },
     ],
   ])('%s', (_name, body) => {
     expect(wireShapeProblems(body)).not.toEqual([]);

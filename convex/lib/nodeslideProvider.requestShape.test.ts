@@ -394,3 +394,51 @@ describe('the routed executor (SPEC 2026-10-08 Gemini 3.5 Flash deprecation)', (
     expect('freeRouterCandidate' in row).toBe(false);
   });
 });
+
+// Codex round 3, defect 1. pi-ai sets `AssistantMessage.model = model.id` (the requested id) and keeps
+// `responseModel` only when the provider's string differs, so a response that names no model used to
+// read back as an echo of the requested one. The executor-split receipt (SPEC A.0.3 `echoedModel`)
+// needs the provider's own string, or null.
+describe('the provider echo is recorded separately from the requested model', () => {
+  const sse = (modelField: string) =>
+    [
+      `data: {"id":"gen-echo"${modelField},"choices":[{"index":0,"delta":{"role":"assistant","content":"{\\"ok\\":true}"},"finish_reason":null}]}\n\n`,
+      `data: {"id":"gen-echo"${modelField},"choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":{"prompt_tokens":3,"completion_tokens":2,"total_tokens":5}}\n\n`,
+      'data: [DONE]\n\n',
+    ].join('');
+  const callWith = async (modelField: string) => {
+    vi.stubGlobal(
+      'fetch',
+      async () =>
+        new Response(sse(modelField), {
+          status: 200,
+          headers: { 'content-type': 'text/event-stream' },
+        }),
+    );
+    const result = await callNodeSlideFreeJson({
+      systemPrompt: 'Return JSON.',
+      userText: '{}',
+      maxTokens: 500,
+      model: WIRE_ID.gemini38Flash,
+    });
+    if (!result.ok) throw new Error(`call failed: ${result.reason}`);
+    return result.telemetry;
+  };
+
+  it('a response with no model field leaves echoedModel absent while actualModel still reads as the requested id', async () => {
+    const telemetry = await callWith('');
+    expect(telemetry.echoedModel).toBeUndefined();
+    // The defect: this is the value the probe used to copy into the receipt.
+    expect(telemetry.actualModel).toBe(WIRE_ID.gemini38Flash);
+  });
+
+  it('a response that echoes exactly the requested id is recorded, though pi-ai drops it', async () => {
+    const telemetry = await callWith(`,"model":"${WIRE_ID.gemini38Flash}"`);
+    expect(telemetry.echoedModel).toBe(WIRE_ID.gemini38Flash);
+  });
+
+  it('a response that names another model records that model', async () => {
+    const telemetry = await callWith(',"model":"google/gemini-3.6-flash"');
+    expect(telemetry.echoedModel).toBe('google/gemini-3.6-flash');
+  });
+});

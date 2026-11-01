@@ -532,6 +532,38 @@ describe('deck-gym matrix run directories are unique', () => {
     );
   });
 
+  // Codex round 3, defect 2: lowercase string comparison does not see path aliases. run-deck-gym.mjs
+  // joins runId onto runsDir, so these three pass the old guard but resolve to one directory / outside.
+  it('refuses runIds that are not one path component, including aliases of another run directory', async () => {
+    const path = await import('node:path');
+    const runsDir = path.resolve('artifacts', 'deck-gym-test', 'runs');
+    for (const runId of [
+      'group/../same',
+      'group\\..\\same',
+      '../../escape',
+      '..',
+      '.',
+      'a/b',
+      'same.',
+      'C:evil',
+      'nul\0byte',
+    ]) {
+      expect(() => assertUniqueDeckGymRunIds([{ runId }]), runId).toThrow(
+        /single safe path component/,
+      );
+    }
+    // The failing replay: the guard accepted ['same','group/../same','../../escape'].
+    const aliases = ['same', 'group/../same', '../../escape'];
+    expect(() => assertUniqueDeckGymRunIds(aliases.map((runId) => ({ runId })))).toThrow(
+      /single safe path component/,
+    );
+    // And the property the guard exists for: every accepted id is its own direct child of runsDir.
+    for (const runId of ['run-1', 'v1.model_a.task-3']) {
+      expect(() => assertUniqueDeckGymRunIds([{ runId }])).not.toThrow();
+      expect(path.dirname(path.resolve(runsDir, runId))).toBe(runsDir);
+    }
+  });
+
   it('refuses a run with no usable runId', () => {
     expect(() => assertUniqueDeckGymRunIds([{ runId: 'a' }, {}])).toThrow(/without a runId/);
   });

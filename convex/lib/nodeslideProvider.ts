@@ -176,6 +176,13 @@ export interface NodeSlideProviderTelemetry {
   actualProvider?: string;
   /** Provider-returned resolved model only; required to qualify production routes. */
   actualModel?: string;
+  /**
+   * The `model` string the provider's response carried, verbatim (SPEC A.0.3 `echoedModel`). Absent
+   * when the provider sent none; never filled from the requested route. `model` and `actualModel`
+   * fall back to the requested id (pi-ai sets `AssistantMessage.model = model.id`), so neither can
+   * prove what the provider ran.
+   */
+  echoedModel?: string;
   responseId?: string;
   /** Present for current model calls; optional keeps persisted and fixture telemetry compatible. */
   reasoningEffort?: NodeSlideReasoningEffort;
@@ -265,6 +272,8 @@ export interface NodeSlideCompletionResult {
   errorMessage?: string;
   provider?: string;
   model?: string;
+  /** The provider response's own `model` string, verbatim; absent when the response carried none. */
+  echoedModel?: string;
   responseId?: string;
   costMicroUsd: number;
   inputTokens: number;
@@ -768,6 +777,7 @@ async function completeNodeSlideWithPiAi(
     ],
   };
   const reasoningDisabled = request.provider === 'openrouter' && model.reasoning === false;
+  let echoedModel: string | undefined;
   const options = {
     signal: request.signal,
     maxTokens: request.maxTokens,
@@ -777,6 +787,13 @@ async function completeNodeSlideWithPiAi(
     ...(reasoningDisabled ? {} : { reasoningEffort: request.reasoningEffort }),
     ...(request.supportsTemperature ? { temperature: 0 } : {}),
     ...(request.provider === 'openrouter' ? { headers: OPENROUTER_ATTRIBUTION_HEADERS } : {}),
+    // pi-ai keeps `AssistantMessage.responseModel` only when the chunk's model differs from the
+    // requested id, so an exact echo is indistinguishable from no echo there. Read the raw chunk.
+    onProviderStreamEvent: (chunk: unknown) => {
+      const echoed = (chunk as { model?: unknown } | null)?.model;
+      if (echoedModel === undefined && typeof echoed === 'string' && echoed.length > 0)
+        echoedModel = echoed;
+    },
     onPayload: (payload: unknown) =>
       nodeSlideProviderPayload(payload, request.jsonSchema, {
         provider: request.provider,
@@ -807,10 +824,13 @@ async function completeNodeSlideWithPiAi(
   } else {
     result = await nodeSlideModels.complete(model, context, options);
   }
-  return completionResult(result);
+  return completionResult(result, echoedModel ?? result.responseModel);
 }
 
-function completionResult(result: AssistantMessage): NodeSlideCompletionResult {
+function completionResult(
+  result: AssistantMessage,
+  echoedModel: string | undefined,
+): NodeSlideCompletionResult {
   const text = result.content
     .filter((block): block is TextContent => block.type === 'text')
     .map((block) => block.text)
@@ -821,6 +841,7 @@ function completionResult(result: AssistantMessage): NodeSlideCompletionResult {
     ...(result.errorMessage ? { errorMessage: result.errorMessage } : {}),
     provider: result.provider,
     model: result.responseModel ?? result.model,
+    ...(echoedModel ? { echoedModel } : {}),
     ...(result.responseId ? { responseId: result.responseId } : {}),
     costMicroUsd: usdToMicroUsd(result.usage.cost.total),
     inputTokens: result.usage.input,
@@ -1032,6 +1053,11 @@ function addTelemetry(
       ? { actualModel: result.model }
       : telemetry.actualModel
         ? { actualModel: telemetry.actualModel }
+        : {}),
+    ...(result.echoedModel
+      ? { echoedModel: result.echoedModel }
+      : telemetry.echoedModel
+        ? { echoedModel: telemetry.echoedModel }
         : {}),
     ...(result.responseId
       ? { responseId: result.responseId }

@@ -68,6 +68,7 @@ vi.mock('./lib/nodeslideProvider', async (importOriginal) => {
             model: request.model,
             actualProvider: 'openrouter',
             actualModel: request.model,
+            echoedModel: request.model,
             costMicroUsd: 1_000,
             inputTokens: 120,
             outputTokens: 40,

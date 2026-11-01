@@ -189,6 +189,15 @@ export function assertUniqueDeckGymRunIds(runs) {
     if (typeof run?.runId !== 'string' || run.runId === '') {
       throw new Error('Deck Gym matrix has a run without a runId.');
     }
+    // runId is joined onto runsDir as a directory name (run-deck-gym.mjs), so it must be exactly one
+    // path component: 'group/../same' resolves onto 'same' and '../../x' leaves runsDir, and either
+    // would put two runs' charge histories in one file or write one outside the campaign directory.
+    // A leading dot rules out '.' and '..'; a trailing dot is dropped by Windows ('same.' is 'same').
+    if (!/^[A-Za-z0-9_-][A-Za-z0-9._-]*$/u.test(run.runId) || run.runId.endsWith('.')) {
+      throw new Error(
+        `Deck Gym matrix runId "${run.runId}" is not a single safe path component (letters, digits, '_', '-', and '.' inside).`,
+      );
+    }
     const key = run.runId.toLowerCase();
     if (seen.has(key)) {
       throw new Error(

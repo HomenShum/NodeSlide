@@ -320,7 +320,7 @@ function span(
   return {
     toolName,
     spanModel: telemetry.requestedModel ?? telemetry.model,
-    responseModel: telemetry.actualModel ?? null,
+    responseModel: telemetry.echoedModel ?? null,
     usage: { inputTokens: telemetry.inputTokens, outputTokens: telemetry.outputTokens },
     costMicroUsd: telemetry.costMicroUsd,
   };
@@ -331,7 +331,7 @@ function row(
   telemetry: NodeSlideProviderTelemetry,
 ): NodeSlideExecutorSplitRow {
   const requestedModel = telemetry.requestedModel ?? telemetry.model;
-  const echoedModel = telemetry.actualModel ?? null;
+  const echoedModel = telemetry.echoedModel ?? null;
   return {
     toolName,
     requestedModel,

@@ -37,6 +37,7 @@ const attempt = (name) => ({
 const calls = [];
 const dispatchPolicies = [];
 let plannerFails = false;
+// null = the provider's response carried no `model` string at all (telemetry.echoedModel absent).
 let executorEchoes = EXECUTOR;
 let executorAttempts = [attempt('initial')];
 let plannerValue;
@@ -80,6 +81,11 @@ vi.mock('../../convex/lib/nodeslideProvider.ts', async (importOriginal) => {
           model: request.model,
           actualProvider: 'openrouter',
           actualModel: isExecutor ? executorEchoes : 'moonshotai/kimi-k3',
+          // `actualModel` falls back to the requested id in the real provider; only `echoedModel` is
+          // the provider's own string, and it is absent when the response carried none.
+          ...((isExecutor ? executorEchoes : 'moonshotai/kimi-k3') === null
+            ? {}
+            : { echoedModel: isExecutor ? executorEchoes : 'moonshotai/kimi-k3' }),
           costMicroUsd: isExecutor ? 1_000 : 20_000,
           inputTokens: 120,
           outputTokens: 40,
@@ -281,6 +287,25 @@ describe('runNodeSlideExecutorSplitProbe', () => {
       expect.arrayContaining([
         'executor responseModel is google/gemini-3.6-flash',
         'executor row used a fallback',
+        'echoedModels does not include the executor',
+      ]),
+    );
+  });
+
+  it('is rejected when the executor response carried no model string (Codex round 3, defect 1)', async () => {
+    // pi-ai fills AssistantMessage.model with the requested id, so a response that names no model used
+    // to read back as an echo of the requested one. The receipt must record null and refuse it.
+    plannerFails = false;
+    executorEchoes = null;
+    executorAttempts = [attempt('initial')];
+    const receipt = await run();
+    const executor = receipt.rows.find((row) => row.toolName === 'executor');
+    expect(executor?.echoedModel).toBeNull();
+    expect(receipt.spans.find((span) => span.toolName === 'executor')?.responseModel).toBeNull();
+    expect(executorSplitReceiptFailures(receipt, COMMIT)).toEqual(
+      expect.arrayContaining([
+        'executor responseModel is null',
+        'executor row echoedModel is null',
         'echoedModels does not include the executor',
       ]),
     );

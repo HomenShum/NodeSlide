@@ -298,7 +298,12 @@
       "provider": "openrouter",
       "route": "openai/gpt-oss-20b:free",
       "returnedModelRequired": true,
-      "cohort": "small-legacy"
+      "cohort": "small-legacy",
+      "execution": {
+        "disabled": true,
+        "since": "2026-10-10",
+        "reason": "unlisted on OpenRouter (GET /api/v1/models, 2026-10-10)"
+      }
     },
     {
       "id": "google/gemma-4-26b-a4b-it:free",

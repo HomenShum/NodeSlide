@@ -11,14 +11,16 @@ import { openAICompletionsApi } from '@earendil-works/pi-ai/api/openai-completio
 import { openrouterProvider } from '@earendil-works/pi-ai/providers/openrouter';
 import {
   NODESLIDE_DEFAULT_AGENT_MODEL,
-  NODESLIDE_DEFAULT_REASONING_EFFORT,
   type NodeSlideAgentModelId,
   type NodeSlideExternalProvider,
   type NodeSlideReasoningEffort,
   isNodeSlideAgentModelId,
   nodeSlideAgentModel,
+  nodeSlideDefaultReasoningEffort,
+  nodeSlideEditPatchStructuredOutputMode,
   nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
+import { nodeSlideLedgerPricedCost } from '../../shared/nodeslideRunBudget';
 
 export const NODESLIDE_NEBIUS_PROVIDER = 'nebius' as const;
 /** Backwards-compatible name for the default; requests may select any catalog model. */
@@ -66,10 +68,12 @@ function nebiusProvider() {
   });
 }
 
-// Kimi K3 is newer than pi-ai's bundled OpenRouter catalog, so we register the
-// current OpenRouter contract explicitly instead of inheriting Moonshot-direct
-// compatibility defaults.
-const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
+// Kimi K3 is registered explicitly so OpenRouter's normalized reasoning contract and our
+// price (pricingAsOf = the verifiedAt of its ledger row, a held row: NODESLIDE_HELD_PRICE_VERIFIED_AT,
+// 2026-10-15T23:08Z) win over bundled metadata instead of inheriting Moonshot-direct compatibility
+// defaults. USD per million tokens; the agreement test in
+// convex/nodeslideModelPricing.test.ts asserts these equal nodeSlideModelPricing('moonshotai/kimi-k3').
+export const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
   id: 'moonshotai/kimi-k3',
   name: 'MoonshotAI: Kimi K3',
   api: 'openai-completions',
@@ -89,12 +93,41 @@ const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
 };
 
 /**
+ * The routed copy executor (SPEC "Homen decisions", 2026-11-06). pi-ai 1.1.0's bundled OpenRouter
+ * catalog has no row for the dated id (only deepseek/deepseek-v4.1-flash and :batch), so the route is
+ * registered here. Cost is the ledger row (USD per million tokens; pricingAsOf =
+ * NODESLIDE_EXECUTOR_PRICE_VERIFIED_AT, 2026-11-06T10:39:31Z, https://openrouter.ai/api/v1/models:
+ * $0.15 in / $0.60 out, cache read $0.003); window and output cap from the same read. The agreement
+ * test in convex/nodeslideModelPricing.test.ts asserts these equal the ledger row.
+ */
+export const NODESLIDE_DEEPSEEK_V41_FLASH_1017: Model<'openai-completions'> = {
+  id: 'deepseek/deepseek-v4.1-flash-1017',
+  name: 'DeepSeek: DeepSeek V4.1 Flash (1017)',
+  api: 'openai-completions',
+  provider: 'openrouter',
+  baseUrl: 'https://openrouter.ai/api/v1',
+  reasoning: true,
+  input: ['text'],
+  cost: { input: 0.15, output: 0.6, cacheRead: 0.003, cacheWrite: 0 },
+  contextWindow: 1_048_576,
+  maxTokens: 393_216,
+  compat: {
+    supportsDeveloperRole: false,
+    supportsReasoningEffort: true,
+    thinkingFormat: 'openrouter',
+    maxTokensField: 'max_tokens',
+  },
+};
+
+/**
  * Kimi is newer than the bundled catalog and OpenRouter exposes its reasoning
- * effort through the normalized nested reasoning object. Other routes retain
- * their bundled metadata and receive only efforts they advertise.
+ * effort through the normalized nested reasoning object; the executor's dated
+ * id is absent from it. Other routes retain their bundled metadata and receive
+ * only efforts they advertise.
  */
 export const NODESLIDE_OPENROUTER_MODEL_OVERRIDES: readonly Model<'openai-completions'>[] = [
   NODESLIDE_KIMI_K3,
+  NODESLIDE_DEEPSEEK_V41_FLASH_1017,
 ];
 
 const OPENROUTER_CHAT_COMPLETIONS_BASE_URL = 'https://openrouter.ai/api/v1';
@@ -119,6 +152,21 @@ function asOpenRouterChatCompletionsRoute(
   } as typeof model;
 }
 
+/**
+ * The run-budget ledger is the repo's price of record, so a response is priced (`usage.cost.total` ->
+ * `costMicroUsd`) at the ledger's rate: the bundled pi-ai catalog is an older snapshot and disagreed
+ * with it on glm-5.2 (0.171 / 7.2 against 0.7686 / 2.4156), so a near-ceiling output-heavy response
+ * would settle above the quote it was reserved at. `nodeSlideLedgerPricedCost` also caps the
+ * cached-read rate at the ledger's input rate, so a response served mostly from cache cannot settle
+ * above the quote either. Any above-threshold tier stays pi-ai's, and rows
+ * the ledger does not price (free, dynamic) are untouched.
+ */
+function priceFromLedger<
+  T extends { id: string; cost: { input: number; output: number; cacheRead: number } },
+>(model: T): T {
+  return { ...model, cost: nodeSlideLedgerPricedCost(model.id, model.cost) };
+}
+
 export function openrouterProviderWithOverrides() {
   const builtin = openrouterProvider();
   const overridden = new Map(
@@ -127,6 +175,7 @@ export function openrouterProviderWithOverrides() {
   const models = builtin
     .getModels()
     .filter((model) => !overridden.has(model.id))
+    .map(priceFromLedger)
     .map(asOpenRouterChatCompletionsRoute);
   return createProvider({
     id: 'openrouter',
@@ -156,6 +205,13 @@ export interface NodeSlideProviderTelemetry {
   actualProvider?: string;
   /** Provider-returned resolved model only; required to qualify production routes. */
   actualModel?: string;
+  /**
+   * The `model` string the provider's response carried, verbatim (SPEC A.0.3 `echoedModel`). Absent
+   * when the provider sent none; never filled from the requested route. `model` and `actualModel`
+   * fall back to the requested id (pi-ai sets `AssistantMessage.model = model.id`), so neither can
+   * prove what the provider ran.
+   */
+  echoedModel?: string;
   responseId?: string;
   /** Present for current model calls; optional keeps persisted and fixture telemetry compatible. */
   reasoningEffort?: NodeSlideReasoningEffort;
@@ -191,6 +247,13 @@ export interface NodeSlideDispatchPolicy {
   maxInputMicroUsdPerMillionTokens?: number;
   /** Provider-routing ceiling in integer micro-USD per million output tokens. */
   maxOutputMicroUsdPerMillionTokens?: number;
+  /**
+   * `0` turns off every second completion for the call: the JSON-repair call and the
+   * structured-output compatibility retry. Absent keeps the default of one retry. It can only
+   * tighten, so no other value exists. The executor-split probe sets it because its receipt is
+   * rejected when a paid retry was enabled (SPEC A.0.3), not merely when one happened to run.
+   */
+  maxRetries?: 0;
 }
 
 export interface NodeSlideJsonSchema {
@@ -238,6 +301,8 @@ export interface NodeSlideCompletionResult {
   errorMessage?: string;
   provider?: string;
   model?: string;
+  /** The provider response's own `model` string, verbatim; absent when the response carried none. */
+  echoedModel?: string;
   responseId?: string;
   costMicroUsd: number;
   inputTokens: number;
@@ -402,8 +467,13 @@ export function nodeSlideModelProbeProfile(modelId: NodeSlideAgentModelId): {
     case 'z-ai/glm-5.2':
       return { reasoningEffort: 'high', maxTokens: 512 };
     case 'anthropic/claude-fable-5':
+    case 'anthropic/claude-sonnet-5.5':
+    case 'anthropic/claude-opus-5.5':
+    case 'openai/gpt-6.1-sol':
+      // Adaptive thinking counts toward max_tokens; a one-character reply must survive it.
       return { reasoningEffort: 'low', maxTokens: 2_048 };
     case 'google/gemini-3.5-flash':
+    case 'google/gemini-3.8-flash':
     case 'google/gemini-3.1-pro-preview':
       return { reasoningEffort: 'low', maxTokens: 256 };
     default:
@@ -425,10 +495,10 @@ export async function callNodeSlideFreeJson(
 ): Promise<NodeSlideProviderResult> {
   const complete = dependencies.complete ?? completeNodeSlideWithPiAi;
   const selectedModel = args.model ?? NODESLIDE_DEFAULT_AGENT_MODEL;
-  const reasoningEffort = args.reasoningEffort ?? NODESLIDE_DEFAULT_REASONING_EFFORT;
   if (!isNodeSlideAgentModelId(selectedModel)) {
     return { ok: false, reason: 'Choose a supported NodeSlide agent model.' };
   }
+  const reasoningEffort = args.reasoningEffort ?? nodeSlideDefaultReasoningEffort(selectedModel);
   if (!nodeSlideModelSupportsReasoningEffort(selectedModel, reasoningEffort)) {
     return {
       ok: false,
@@ -453,8 +523,10 @@ export async function callNodeSlideFreeJson(
   const onTextDelta = dependencies.onTextDelta ?? args.onTextDelta;
 
   try {
-    // Exactly two model calls are possible: the initial completion and one JSON-repair completion.
-    for (let attempt = 0; attempt < 2; attempt += 1) {
+    // At most two model calls: the initial completion and one JSON-repair completion, unless the
+    // dispatch policy turned retries off (`maxRetries: 0`), which leaves exactly one.
+    const maxAttempts = dependencies.dispatchPolicy?.maxRetries === 0 ? 1 : 2;
+    for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
       const repairAttempt = attempt === 1;
       const attemptTelemetry = startAttemptTelemetry(repairAttempt);
       telemetry.attempts?.push(attemptTelemetry);
@@ -514,7 +586,7 @@ export async function callNodeSlideFreeJson(
 
       if (result.stopReason === 'error') {
         if (
-          attempt === 0 &&
+          attempt + 1 < maxAttempts &&
           args.jsonSchema &&
           structuredOutputMode === 'json_schema' &&
           shouldRetryStructuredOutputCompatibility(result)
@@ -552,7 +624,9 @@ export async function callNodeSlideFreeJson(
       }
     }
     return providerFailure(
-      `The ${routeLabel} route returned invalid JSON after one repair attempt.`,
+      maxAttempts === 1
+        ? `The ${routeLabel} route returned invalid JSON and retries were disabled.`
+        : `The ${routeLabel} route returned invalid JSON after one repair attempt.`,
       telemetry,
       hasTelemetry,
     );
@@ -667,8 +741,12 @@ function preferredStructuredOutputMode(
   // OpenRouter's Gemini route accepts ordinary JSON schemas, but the edit planner's
   // dynamically scoped union is large enough to be rejected before token generation.
   // Keep the exact schema in the prompt and validate it locally; json_object only
-  // changes provider transport, never the accepted NodeSlide contract.
-  if (model === 'google/gemini-3.5-flash' && jsonSchema.name === 'nodeslide_edit_patch') {
+  // changes provider transport, never the accepted NodeSlide contract. The decision is a
+  // catalog flag (`structuredOutputMode`), stated per row, not a model-id literal.
+  if (
+    jsonSchema.name === 'nodeslide_edit_patch' &&
+    nodeSlideEditPatchStructuredOutputMode(model) === 'json_object'
+  ) {
     return 'json_object';
   }
   return 'json_schema';
@@ -728,6 +806,7 @@ async function completeNodeSlideWithPiAi(
     ],
   };
   const reasoningDisabled = request.provider === 'openrouter' && model.reasoning === false;
+  let echoedModel: string | undefined;
   const options = {
     signal: request.signal,
     maxTokens: request.maxTokens,
@@ -737,6 +816,13 @@ async function completeNodeSlideWithPiAi(
     ...(reasoningDisabled ? {} : { reasoningEffort: request.reasoningEffort }),
     ...(request.supportsTemperature ? { temperature: 0 } : {}),
     ...(request.provider === 'openrouter' ? { headers: OPENROUTER_ATTRIBUTION_HEADERS } : {}),
+    // pi-ai keeps `AssistantMessage.responseModel` only when the chunk's model differs from the
+    // requested id, so an exact echo is indistinguishable from no echo there. Read the raw chunk.
+    onProviderStreamEvent: (chunk: unknown) => {
+      const echoed = (chunk as { model?: unknown } | null)?.model;
+      if (echoedModel === undefined && typeof echoed === 'string' && echoed.length > 0)
+        echoedModel = echoed;
+    },
     onPayload: (payload: unknown) =>
       nodeSlideProviderPayload(payload, request.jsonSchema, {
         provider: request.provider,
@@ -767,10 +853,13 @@ async function completeNodeSlideWithPiAi(
   } else {
     result = await nodeSlideModels.complete(model, context, options);
   }
-  return completionResult(result);
+  return completionResult(result, echoedModel ?? result.responseModel);
 }
 
-function completionResult(result: AssistantMessage): NodeSlideCompletionResult {
+function completionResult(
+  result: AssistantMessage,
+  echoedModel: string | undefined,
+): NodeSlideCompletionResult {
   const text = result.content
     .filter((block): block is TextContent => block.type === 'text')
     .map((block) => block.text)
@@ -781,6 +870,7 @@ function completionResult(result: AssistantMessage): NodeSlideCompletionResult {
     ...(result.errorMessage ? { errorMessage: result.errorMessage } : {}),
     provider: result.provider,
     model: result.responseModel ?? result.model,
+    ...(echoedModel ? { echoedModel } : {}),
     ...(result.responseId ? { responseId: result.responseId } : {}),
     costMicroUsd: usdToMicroUsd(result.usage.cost.total),
     inputTokens: result.usage.input,
@@ -992,6 +1082,11 @@ function addTelemetry(
       ? { actualModel: result.model }
       : telemetry.actualModel
         ? { actualModel: telemetry.actualModel }
+        : {}),
+    ...(result.echoedModel
+      ? { echoedModel: result.echoedModel }
+      : telemetry.echoedModel
+        ? { echoedModel: telemetry.echoedModel }
         : {}),
     ...(result.responseId
       ? { responseId: result.responseId }

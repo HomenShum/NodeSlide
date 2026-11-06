@@ -54,7 +54,6 @@ import {
   type Deck,
   type DeckPatch,
   NODESLIDE_DEFAULT_AGENT_MODEL,
-  NODESLIDE_DEFAULT_REASONING_EFFORT,
   NODESLIDE_OFFERED_AGENT_MODELS,
   NODESLIDE_REASONING_EFFORTS,
   NODESLIDE_SCOPE_SLIDE_LIMIT,
@@ -70,8 +69,11 @@ import {
   type Slide,
   type SlideElement,
   isNodeSlideOfferedAgentModelId,
+  isNodeSlideReasoningEffort,
   nodeSlideAgentModel,
   nodeSlideDefaultModelForProviderMode,
+  nodeSlideDefaultReasoningEffort,
+  nodeSlideEffortForModel,
   nodeSlideModelSupportsReasoningEffort,
   nodeSlideProviderModeForModel,
   unhandledPatchOperation,
@@ -303,9 +305,10 @@ export function AiInspector<CommandId extends string = string>({
   const [providerModel, setProviderModel] = useState<NodeSlideAgentModelId>(
     offeredInitialProviderModel,
   );
-  const [providerEffort, setProviderEffort] = useState<NodeSlideReasoningEffort>(
-    NODESLIDE_DEFAULT_REASONING_EFFORT,
-  );
+  // null until the person picks an effort (or one is restored from storage), so an untouched effort
+  // follows each model's default.
+  const [effortChoice, setEffortChoice] = useState<NodeSlideReasoningEffort | null>(null);
+  const providerEffort = nodeSlideEffortForModel(providerModel, effortChoice);
   // Zero-friction consent: an external model is disclosed by the always-visible
   // model pill, so choosing it and sending IS the consent. The consent token is
   // still generated and validated server-side on every request — disclosure is
@@ -367,22 +370,12 @@ export function AiInspector<CommandId extends string = string>({
 
   useEffect(() => {
     const stored = window.localStorage.getItem('nodeslide.agent-model');
-    const storedModel = isNodeSlideOfferedAgentModelId(stored)
-      ? stored
-      : NODESLIDE_DEFAULT_AGENT_MODEL;
     if (isNodeSlideOfferedAgentModelId(stored)) {
-      setProviderModel(storedModel);
-      setProviderMode(nodeSlideProviderModeForModel(storedModel));
+      setProviderModel(stored);
+      setProviderMode(nodeSlideProviderModeForModel(stored));
     }
     const storedEffort = window.localStorage.getItem('nodeslide.agent-effort');
-    if (
-      NODESLIDE_REASONING_EFFORTS.some((effort) => effort.id === storedEffort) &&
-      nodeSlideModelSupportsReasoningEffort(storedModel, storedEffort as NodeSlideReasoningEffort)
-    ) {
-      setProviderEffort(storedEffort as NodeSlideReasoningEffort);
-    } else {
-      setProviderEffort('high');
-    }
+    setEffortChoice(isNodeSlideReasoningEffort(storedEffort) ? storedEffort : null);
   }, []);
 
   useEffect(() => {
@@ -578,10 +571,6 @@ export function AiInspector<CommandId extends string = string>({
     if (!isNodeSlideOfferedAgentModelId(value)) return;
     setProviderModel(value);
     setProviderMode(nodeSlideProviderModeForModel(value));
-    if (!nodeSlideModelSupportsReasoningEffort(value, providerEffort)) {
-      setProviderEffort('high');
-      window.localStorage.setItem('nodeslide.agent-effort', 'high');
-    }
     window.localStorage.setItem('nodeslide.agent-model', value);
   };
 
@@ -1498,7 +1487,7 @@ export function AiInspector<CommandId extends string = string>({
                       value={providerEffort}
                       onValueChange={(value) => {
                         const effort = value as NodeSlideReasoningEffort;
-                        setProviderEffort(effort);
+                        setEffortChoice(effort);
                         window.localStorage.setItem('nodeslide.agent-effort', effort);
                       }}
                     >
@@ -2093,10 +2082,11 @@ export function createAiProviderRequest(
   mode: AiProviderMode,
   consentGranted: boolean,
   model?: NodeSlideAgentModelId,
-  effort: NodeSlideReasoningEffort = NODESLIDE_DEFAULT_REASONING_EFFORT,
+  requestedEffort?: NodeSlideReasoningEffort,
 ): AiProviderRequest | null {
   if (mode === 'deterministic') return { providerMode: 'deterministic' };
   const selectedModel = model ?? nodeSlideDefaultModelForProviderMode(mode);
+  const effort = requestedEffort ?? nodeSlideDefaultReasoningEffort(selectedModel);
   if (!consentGranted || !nodeSlideModelSupportsReasoningEffort(selectedModel, effort)) return null;
   return {
     providerMode: mode,
@@ -2111,10 +2101,11 @@ export function createAiVariationProviderRequest(
   mode: AiProviderMode,
   consentGranted: boolean,
   model?: NodeSlideAgentModelId,
-  effort: NodeSlideReasoningEffort = NODESLIDE_DEFAULT_REASONING_EFFORT,
+  requestedEffort?: NodeSlideReasoningEffort,
 ): AiVariationProviderRequest | null {
   if (mode === 'deterministic') return { providerMode: 'deterministic' };
   const selectedModel = model ?? nodeSlideDefaultModelForProviderMode(mode);
+  const effort = requestedEffort ?? nodeSlideDefaultReasoningEffort(selectedModel);
   if (!consentGranted || !nodeSlideModelSupportsReasoningEffort(selectedModel, effort)) return null;
   return {
     providerMode: mode,

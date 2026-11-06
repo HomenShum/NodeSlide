@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { lstat, mkdir, readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { acquireDeckGymCampaignLock } from './lib/deck-gym-campaign.mjs';
 import { buildNodeGymMatrixInput } from './lib/node-gym-config-core.mjs';
 import {
   buildNodeGymPairedDeltaReport,
@@ -21,14 +22,20 @@ import {
   assertNodeGymPassedSemanticEvaluation,
   assertNodeGymRealPathContained,
   assertNodeGymSafePathSyntax,
+  chargeNodeGymAttempt,
+  createNodeGymChildGuard,
   digestJson,
+  loadNodeGymOrphanCharges,
   nodeGymReceiptArtifactBindings,
+  nodeGymRunReservationMicroUsd,
   selectNodeGymSubset,
+  setAsideNodeGymOrphanAttempts,
   shouldStopCampaign,
   summarizeNodeGymAttemptHistory,
   validateNodeGymExecutorResult,
   writeNodeGymFileAtomic,
 } from './lib/node-gym-runner-core.mjs';
+import { selectNodeGymCampaignRuns } from './lib/node-gym-selection-core.mjs';
 import {
   assertNoProtectedFixtureLeakage,
   bindNodeGymRunPlanToFixture,
@@ -38,6 +45,7 @@ import {
   loadNodeGymTaskFixture,
   projectNodeGymProtectedFixtureForEgress,
 } from './lib/node-gym-task-core.mjs';
+import { createNodeSlideBackendClient, readLedgerReceipts } from './lib/nodeslide-backend-runs.mjs';
 
 if (process.argv.includes('--help') || process.argv.includes('-h')) {
   console.log(`Usage: node scripts/run-node-gym.mjs [options]
@@ -55,6 +63,8 @@ Execution:
   --allow-live           Required by the production UI executor
   --campaign-id <id>
   --max-total-cost-micro-usd <n>
+  --convex-url <url>     Production Convex deployment the ledger is read from
+  --include-disabled     Run models whose gym.json row sets execution.disabled
   --max-failures <n>
   --max-attempts <n>
   --source-campaign <path>  Required by recovery executor
@@ -94,24 +104,18 @@ const filters = {
   harnesses: csvOption('harness'),
   repetitions: csvOption('repetition').map(Number),
 };
-const explicitlyFilteredRuns = matrix.runs.filter(
-  (run) =>
-    (!filters.tasks.length || filters.tasks.includes(run.task.id)) &&
-    (!filters.models.length || filters.models.includes(run.model.id)) &&
-    (!filters.harnesses.length || filters.harnesses.includes(run.harness.id)) &&
-    (!filters.repetitions.length || filters.repetitions.includes(run.repetition)),
-);
-const filteredRuns = filterNodeGymRunsForRuntime({
-  runs: explicitlyFilteredRuns,
-  tasks: config.tasks,
+// A model row marked `execution.disabled` stays in the matrix (its identity keys on model.id) but is
+// partitioned out inside the selection, before runtime filtering and subset selection.
+const { selectedRuns, skippedDisabled } = selectNodeGymCampaignRuns({
+  matrix,
+  config,
+  filters,
+  subset,
+  limit: positiveInteger(option('limit'), Number.POSITIVE_INFINITY),
+  includeDisabled: process.argv.includes('--include-disabled'),
   runtime: process.env,
-  explicitTaskIds: filters.tasks,
 });
-if (!filteredRuns.length) throw new Error('Explicit NodeGym selection matched no matrix runs.');
-const selectedEntries = applyPairSafeLimit(
-  selectNodeGymSubset({ ...matrix, runs: filteredRuns }, subset),
-  positiveInteger(option('limit'), Number.POSITIVE_INFINITY),
-).map((run) => {
+const selectedEntries = selectedRuns.map((run) => {
   const task = config.tasks.find((entry) => entry.id === run.task.id);
   if (!task) throw new Error(`Matrix task ${run.task.id} is absent from the gym config.`);
   const loadedFixture = loadNodeGymTaskFixture({ task });
@@ -147,12 +151,34 @@ const maxTotalCostMicroUsd = nonNegativeInteger(
 );
 if (maxTotalCostMicroUsd === null)
   throw new Error('An explicit --max-total-cost-micro-usd is required for full execution.');
+// A run reserves the backend ledger cap that binds it (1 USD, mirrored in node-gym-runner-core.mjs and
+// pinned to the backend by a test). It is not a flag: a reservation below the enforced cap lets the
+// campaign dispatch paid work it has not budgeted for. Only local, `:free` and `openrouter/free`
+// routes reserve 0, whichever executor runs them.
+const reservationFor = (plan) => nodeGymRunReservationMicroUsd(plan);
+const convexUrl =
+  option('convex-url') ??
+  process.env.NODE_GYM_PROD_CONVEX_URL ??
+  'https://agile-stoat-411.convex.cloud';
+let backendClient = null;
 const maxFailures = positiveInteger(option('max-failures'), subset === 'all' ? 6 : 2);
 const maxAttempts = positiveInteger(option('max-attempts'), 2);
 await assertNodeGymRealPathContained(root, artifactRoot, 'NodeGym artifact root');
 await assertNodeGymRealPathContained(artifactRoot, campaignRoot, 'campaign artifact directory');
 await mkdir(campaignRoot, { recursive: true });
 await assertNodeGymRealPathContained(artifactRoot, campaignRoot, 'campaign artifact directory');
+// One invocation at a time per campaign directory, held until exit and taken before any attempt
+// directory is read: the default campaign id is the same for every launch, and a live attempt has no
+// receipt yet, exactly like a dead one, so a second run would set the first run's workspace aside,
+// restore its reservation and dispatch past the cap. A signal first stops the running executor and
+// waits for it to close, then exits through process.exit so the 'exit' handler releases the lock: on
+// POSIX a child outlives its parent, so exiting first would free the lock under a live executor.
+const releaseCampaignLock = acquireDeckGymCampaignLock(campaignRoot, 'NodeGym');
+const childGuard = createNodeGymChildGuard();
+process.once('exit', childGuard.killNow);
+process.once('exit', releaseCampaignLock);
+for (const signal of ['SIGINT', 'SIGTERM'])
+  process.once(signal, () => void childGuard.stop().finally(() => process.exit(1)));
 
 const campaignPlan = {
   schemaVersion: 'nodekit.gym-campaign-plan/v1',
@@ -182,6 +208,7 @@ for (const entry of selectedEntries) assertProtectedOutput(campaignPlan, entry.l
 await writeImmutableJson(path.join(campaignRoot, 'campaign-plan.json'), campaignPlan);
 
 let spentCostMicroUsd = 0;
+let reservedUnknownMicroUsd = 0;
 let failures = 0;
 const summaryRuns = [];
 const semanticEvaluations = new Map();
@@ -201,8 +228,15 @@ for (const entry of selectedEntries) {
   await assertNodeGymRealPathContained(campaignRoot, attemptsDir, 'run artifact directory');
   assertProtectedOutput(plan, entry.loadedFixture);
   await writeImmutableJson(path.join(runDir, 'plan.json'), plan);
-  const history = await loadNodeGymAttemptHistory({ plan, runDir, attemptsDir, executor });
+  const history = await loadNodeGymAttemptHistory({
+    plan,
+    runDir,
+    attemptsDir,
+    executor,
+    reservationMicroUsd: reservationFor(plan),
+  });
   spentCostMicroUsd += history.spentCostMicroUsd;
+  reservedUnknownMicroUsd += history.reservedUnknownMicroUsd;
   failures += history.failures;
   if (!Number.isSafeInteger(spentCostMicroUsd))
     throw new Error('NodeGym campaign cumulative cost exceeds the safe integer range.');
@@ -259,7 +293,7 @@ for (const plan of selected) {
     maxTotalCostMicroUsd,
     failures,
     maxFailures,
-    nextRunMaxCostMicroUsd: projectedRunCostMicroUsd(plan),
+    nextRunMaxCostMicroUsd: reservationFor(plan),
   });
   if (circuit.stop) {
     stoppedBy = circuit.issueCode;
@@ -308,6 +342,7 @@ for (const plan of selected) {
   }));
   const result = await bindArtifacts(rawResult, attemptWorkspace);
   assertProtectedOutput(result, entry.loadedFixture);
+  const charge = await chargeAttempt(plan, result);
   await writeImmutableJson(resultPath, result);
   const semanticEvaluation = evaluateEvidenceBoundNodeGymRun({
     plan,
@@ -336,6 +371,9 @@ for (const plan of selected) {
       semanticEvaluation,
     }),
     attempt,
+    // What this attempt cost the campaign: the backend ledger's figure, or the full reservation
+    // when that figure could not be read. `usage.costMicroUsd` stays above as attribution only.
+    budget: charge,
     attemptEvidence: {
       schemaVersion: 'nodekit.gym-attempt-evidence/v1',
       artifactRoot: path.relative(runDir, attemptWorkspace).replaceAll('\\', '/'),
@@ -358,7 +396,8 @@ for (const plan of selected) {
   await writeImmutableJson(attemptPath, receipt);
   await writeJson(path.join(runDir, 'latest.json'), receipt);
   attemptReceiptCount += 1;
-  spentCostMicroUsd += receipt.usage.costMicroUsd;
+  spentCostMicroUsd += charge.chargedMicroUsd;
+  if (charge.source === 'reservation') reservedUnknownMicroUsd += charge.chargedMicroUsd;
   if (receipt.status !== 'passed') failures += 1;
   summaryRuns.push({
     runId: plan.runId,
@@ -420,6 +459,14 @@ const summary = {
     .length,
   unrun: selected.filter((run) => !completedRunIds.has(run.runId)).map((run) => run.runId),
   spentCostMicroUsd,
+  budget: {
+    maxTotalCostMicroUsd,
+    spentCostMicroUsd,
+    reservedUnknownMicroUsd,
+    stoppedBy,
+  },
+  skippedDisabled,
+  skippedDisabledCount: skippedDisabled.length,
   failureAttempts: failures,
   attemptReceiptCount,
   historicSpentCostMicroUsd,
@@ -548,6 +595,7 @@ async function runProcess(executable, args, timeoutMs, childEnvironment) {
     env: childEnvironment,
     stdio: ['ignore', 'pipe', 'pipe'],
   });
+  childGuard.track(child);
   let stderr = '';
   child.stderr.setEncoding('utf8');
   child.stderr.on('data', (chunk) => {
@@ -620,6 +668,7 @@ async function loadNodeGymAttemptHistory({
   runDir,
   attemptsDir,
   executor: selectedExecutor,
+  reservationMicroUsd,
 }) {
   const entries = await readdir(attemptsDir, { withFileTypes: true });
   const receipts = [];
@@ -650,17 +699,31 @@ async function loadNodeGymAttemptHistory({
     receipts.push(receipt);
   }
   const receiptAttempts = new Set(receipts.map((receipt) => receipt.attempt));
-  if (
-    workspaceAttempts.size !== receiptAttempts.size ||
-    [...workspaceAttempts].some((attempt) => !receiptAttempts.has(attempt))
-  )
+  // A receipt without its workspace is corruption. A workspace without its receipt is the runner
+  // having died mid-attempt: its spend is unknown, so it is charged its reservation and set aside.
+  if ([...receiptAttempts].some((attempt) => !workspaceAttempts.has(attempt)))
     throw new Error(
       `NodeGym immutable attempt workspaces do not match receipts for ${plan.runId}.`,
     );
+  const orphanAttempts = [...workspaceAttempts].filter((attempt) => !receiptAttempts.has(attempt));
+  if (orphanAttempts.length) {
+    await setAsideNodeGymOrphanAttempts({
+      campaignRoot,
+      attemptsDir,
+      runId: plan.runId,
+      orphanAttempts,
+      reservationMicroUsd,
+    });
+    console.warn(
+      `[node-gym] ${plan.runId}: attempt(s) ${orphanAttempts.join(', ')} had no receipt; charged ${reservationMicroUsd} micro-USD each and set aside`,
+    );
+  }
   const history = summarizeNodeGymAttemptHistory({
     plan,
     receipts,
     executor: selectedExecutor,
+    reservationMicroUsd,
+    orphanCharges: await loadNodeGymOrphanCharges({ attemptsDir, runId: plan.runId }),
   });
   const latest = await readOptionalJson(path.join(runDir, 'latest.json'));
   assertNodeGymLatestReceipt(history, latest);
@@ -785,14 +848,16 @@ function executorEnvironment(gymConfig, evaluationFixture, protectedFixture) {
   return environment;
 }
 
-function projectedRunCostMicroUsd(plan) {
-  if (
-    plan.model.provider === 'local' ||
-    plan.model.route === 'openrouter/free' ||
-    plan.model.route.endsWith(':free')
-  )
-    return 0;
-  return plan.budget.maxCostMicroUsd;
+/** Charges one finished attempt to the campaign; the rule lives in node-gym-runner-core.mjs. */
+async function chargeAttempt(plan, result) {
+  return await chargeNodeGymAttempt({
+    reservationMicroUsd: reservationFor(plan),
+    result,
+    readLedger: async (runIds) => {
+      backendClient ??= await createNodeSlideBackendClient(convexUrl);
+      return await readLedgerReceipts({ backend: backendClient, runIds });
+    },
+  });
 }
 
 function assertProtectedOutput(value, loadedFixture) {

@@ -471,11 +471,14 @@ describe('the price table landed, so the withholding is over', () => {
   });
 
   it('exports the complete ledger lifecycle and nothing beyond it', () => {
+    // `receiptForRun` is the one read-only addition (SPEC Part A section A.2.8): the public meter a
+    // campaign runner charges a run from. Every other export is an internal mutation or query.
     expect(Object.keys(budgets).sort()).toEqual([
       'captureTimeout',
       'create',
       'finalize',
       'finalizeForJob',
+      'receiptForRun',
       'release',
       'replay',
       'reserve',
@@ -565,5 +568,69 @@ describe('the price table landed, so the withholding is over', () => {
       }),
     ).rejects.toThrowError(expect.objectContaining({ code: 'budget_exceeded' }));
     expect(database.rows('nodeslide_billable_calls')).toEqual([]);
+  });
+});
+
+describe('receiptForRun is the campaign meter for one run', () => {
+  const RUN_ID = 'nsrun-campaign-meter-1';
+
+  it('uses the same budget id the provider binds for that run id', async () => {
+    const { nodeSlideProviderBudgetId } = await import('./lib/nodeslideBudgetedProvider');
+    const database = new MemoryDatabase();
+    const { ctx } = recordingContext(database);
+    await rawHandler(budgets.create)(ctx, {
+      budgetId: nodeSlideProviderBudgetId(RUN_ID),
+      budget: { maxCostUsd: 2 },
+    });
+
+    const receipt = await rawHandler(budgets.receiptForRun)(readContext(database), {
+      runId: RUN_ID,
+    });
+
+    expect(receipt).toMatchObject({
+      version: 'nodeslide.run-budget-ledger-receipt/v1',
+      budgetId: nodeSlideProviderBudgetId(RUN_ID),
+      status: 'open',
+      cap: { maxCostMicroUsd: 2_000_000 },
+      spend: { actualMicroUsd: 0, reservedMicroUsd: 0, unreconciledMicroUsd: 0 },
+    });
+  });
+
+  it('reports held reservations as spend exposure rather than hiding them', async () => {
+    const { nodeSlideProviderBudgetId } = await import('./lib/nodeslideBudgetedProvider');
+    const database = new MemoryDatabase();
+    const { ctx } = recordingContext(database);
+    const budgetId = nodeSlideProviderBudgetId(RUN_ID);
+    await rawHandler(budgets.create)(ctx, { budgetId, budget: { maxCostUsd: 2 } });
+    const opened = database.rows('nodeslide_run_budgets')[0] as Record<string, unknown>;
+    await rawHandler(budgets.reserve)(ctx, {
+      budgetId,
+      callId: 'call-meter-1',
+      model: 'moonshotai/kimi-k3',
+      estimatedInputTokens: 10_000,
+      requestedMaxOutputTokens: 2_000,
+      expectedRevision: opened.revision,
+      expectedStateDigest: opened.stateDigest,
+    });
+
+    const receipt = (await rawHandler(budgets.receiptForRun)(readContext(database), {
+      runId: RUN_ID,
+    })) as { spend: Record<string, number> };
+
+    expect(receipt.spend).toEqual({
+      actualMicroUsd: 0,
+      reservedMicroUsd: 60_000,
+      unreconciledMicroUsd: 0,
+    });
+  });
+
+  it('answers null for a run that never opened a ledger row, and for a malformed id', async () => {
+    const database = new MemoryDatabase();
+    await expect(
+      rawHandler(budgets.receiptForRun)(readContext(database), { runId: 'never-ran' }),
+    ).resolves.toBeNull();
+    await expect(
+      rawHandler(budgets.receiptForRun)(readContext(database), { runId: '' }),
+    ).resolves.toBeNull();
   });
 });

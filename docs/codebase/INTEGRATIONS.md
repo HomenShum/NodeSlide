@@ -79,7 +79,7 @@ receipt. Note these live in the **Convex** environment, not in `.env.local`;
 
 ## MCP — NodeSlide for coding agents (optional)
 
-- **Where:** `mcp/`, tools registered in `mcp/src/lib/nodeslideTools.ts:414` (`registerNodeSlideTools`).
+- **Where:** `mcp/`, tools registered in `mcp/src/lib/nodeslideTools.ts:417` (`registerNodeSlideTools`).
 - **How it connects:** stdio MCP server that calls the same Convex functions the
   browser calls. Provider keys stay in the MCP process — `nodeslide.byok_status`
   reports presence and never returns a value.

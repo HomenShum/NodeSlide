@@ -176,7 +176,11 @@ describe('proposeEdit routed attribution (B2)', () => {
       spanModel: NODESLIDE_ROUTING_EXECUTOR_MODEL,
       role: 'tool',
     });
-    expect(String(executorRow?.['message'])).toContain('Executor · Gemini 3.5 Flash');
+    // Was 'Executor · Gemini 3.5 Flash': Google deprecated 3.5 Flash on 2026-10-08 (auto-routed to
+    // 3.6) and SPEC A.2.8 moved the executor to 3.8 Flash ('Executor · Gemini 3.8 Flash'); SPEC "Homen
+    // decisions" (2026-11-06) moves it to the paid deepseek/deepseek-v4.1-flash-1017. The ledger here is
+    // the real one (priced route, admitted), not a stand-in, so this is what production persists.
+    expect(String(executorRow?.['message'])).toContain('Executor · DeepSeek V4.1 Flash');
 
     const proposal = mutations.find((args) => 'operations' in args && 'traceContext' in args);
     expect(proposal).toBeDefined();

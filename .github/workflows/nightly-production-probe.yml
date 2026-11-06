@@ -68,6 +68,7 @@ jobs:
           rm -f artifacts/model-fleet/model-fleet-probe.json
           rm -f artifacts/model-fleet/free-router-fleet-probe.json
           rm -f artifacts/model-fleet/free-router-structured-probe.json
+          rm -f artifacts/model-fleet/receipt-*.json
           rm -rf artifacts/close-all-gaps-20260722/acceptance/ui-qa
       - name: Set up Node.js
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
@@ -121,6 +122,17 @@ jobs:
           MODEL_FLEET_PROBE_URL: https://nodeslide.vercel.app/
           MODEL_FLEET_PROBE_WORKFLOW_RUN_URL: ${{ steps.deployed.outputs.url }}
         run: npm run capture:free-router:structured:prod
+      - name: Capture the routed-executor split receipt for a manual operator probe
+        id: executor_split
+        if: always() && github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        env:
+          CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          MODEL_FLEET_PROBE_COMMIT_SHA: ${{ steps.deployed.outputs.sha }}
+          MODEL_FLEET_PROBE_URL: https://nodeslide.vercel.app/
+          MODEL_FLEET_PROBE_WORKFLOW_RUN_URL: ${{ steps.deployed.outputs.url }}
+        run: node scripts/capture-model-fleet-probe.mjs --function runExecutorSplit --schema nodeslide.executor-split-probe/v1 --output artifacts/model-fleet/receipt-${{ steps.deployed.outputs.sha }}.json
       - name: Capture the production UI QA matrix
         id: ui_qa
         if: always() && github.event_name == 'workflow_dispatch'
@@ -153,6 +165,7 @@ jobs:
             artifacts/model-fleet/model-fleet-probe.json
             artifacts/model-fleet/free-router-fleet-probe.json
             artifacts/model-fleet/free-router-structured-probe.json
+            artifacts/model-fleet/receipt-*.json
             artifacts/close-all-gaps-20260722/acceptance/ui-qa
           if-no-files-found: warn
           include-hidden-files: false
@@ -163,10 +176,11 @@ jobs:
           OFFERED_FLEET: ${{ steps.offered_fleet.outcome }}
           FREE_TEXT_FLEET: ${{ steps.free_text_fleet.outcome }}
           FREE_STRUCTURED_FLEET: ${{ steps.free_structured_fleet.outcome }}
+          EXECUTOR_SPLIT: ${{ steps.executor_split.outcome }}
           UI_QA: ${{ steps.ui_qa.outcome }}
         shell: bash
         run: |
-          for outcome in "$OFFERED_FLEET" "$FREE_TEXT_FLEET" "$FREE_STRUCTURED_FLEET" "$UI_QA"; do
+          for outcome in "$OFFERED_FLEET" "$FREE_TEXT_FLEET" "$FREE_STRUCTURED_FLEET" "$EXECUTOR_SPLIT" "$UI_QA"; do
             if [[ "$outcome" != "success" ]]; then
               echo "::error::At least one bounded production evidence matrix is incomplete."
               exit 1

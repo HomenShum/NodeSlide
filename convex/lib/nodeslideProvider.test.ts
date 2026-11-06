@@ -133,7 +133,18 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     const provider = openrouterProviderWithOverrides();
     const models = provider.getModels();
     const overrideIds = NODESLIDE_OPENROUTER_MODEL_OVERRIDES.map((model) => model.id);
-    expect(overrideIds).toEqual(['moonshotai/kimi-k3']);
+    // The executor's dated id joined on 2026-11-06 (SPEC "Homen decisions"): pi-ai 1.1.0 has no row for it.
+    expect(overrideIds).toEqual(['moonshotai/kimi-k3', 'deepseek/deepseek-v4.1-flash-1017']);
+    const expectedCost: Record<string, object> = {
+      'moonshotai/kimi-k3': { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 0 },
+      // OpenRouter public list, 2026-11-06T10:39:31Z.
+      'deepseek/deepseek-v4.1-flash-1017': {
+        input: 0.15,
+        output: 0.6,
+        cacheRead: 0.003,
+        cacheWrite: 0,
+      },
+    };
     for (const override of NODESLIDE_OPENROUTER_MODEL_OVERRIDES) {
       const matches = models.filter((model) => model.id === override.id);
       // Exactly one entry per id: our current definition wins over stale
@@ -141,7 +152,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       expect(matches).toHaveLength(1);
       expect(matches[0]).toMatchObject({
         reasoning: true,
-        cost: { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 0 },
+        cost: expectedCost[override.id],
         contextWindow: 1_048_576,
         compat: {
           supportsReasoningEffort: true,
@@ -156,8 +167,14 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     const models = openrouterProviderWithOverrides().getModels();
     for (const id of [
       'anthropic/claude-fable-5',
+      'anthropic/claude-sonnet-5.5',
+      'anthropic/claude-opus-5.5',
       'google/gemini-3.5-flash',
+      'google/gemini-3.8-flash',
       'google/gemini-3.1-pro-preview',
+      'openai/gpt-6.1-sol',
+      // The executor (Homen 2026-11-06); pi-ai 1.1.0 has no row for it, so this is the override.
+      'deepseek/deepseek-v4.1-flash-1017',
     ]) {
       expect(models.find((model) => model.id === id)).toMatchObject({ reasoning: true });
     }
@@ -375,6 +392,44 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     });
     expect(complete).toHaveBeenCalledTimes(2);
     expect(JSON.stringify(result)).not.toContain('still-not-json');
+  });
+
+  it('maxRetries 0 makes exactly one completion: no JSON-repair call after malformed JSON', async () => {
+    const complete = vi
+      .fn<NodeSlideCompletion>()
+      .mockResolvedValueOnce(completion('not-json'))
+      .mockResolvedValueOnce(completion('{"operations":[{"op":"replace_text"}]}'));
+
+    const result = await callNodeSlideFreeJson(request, {
+      complete,
+      dispatchPolicy: { maxRetries: 0 },
+    });
+
+    expect(result).toMatchObject({
+      ok: false,
+      telemetry: { attempts: [{ attempt: 'initial' }] },
+    });
+    expect(complete).toHaveBeenCalledTimes(1);
+  });
+
+  it('maxRetries 0 also turns off the schema-compatibility retry', async () => {
+    const complete = vi
+      .fn<NodeSlideCompletion>()
+      .mockResolvedValueOnce(
+        completion('', {
+          stopReason: 'error',
+          errorMessage: 'response_format JSON schema is not supported by this endpoint',
+        }),
+      )
+      .mockResolvedValueOnce(completion('{"operations":[{"op":"replace_text"}]}'));
+
+    const result = await callNodeSlideFreeJson(request, {
+      complete,
+      dispatchPolicy: { maxRetries: 0 },
+    });
+
+    expect(result.ok).toBe(false);
+    expect(complete).toHaveBeenCalledTimes(1);
   });
 
   it('uses the single repair attempt without native schema mode when a route rejects it', async () => {
@@ -625,6 +680,19 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       reasoningEffort: 'low',
       maxTokens: 256,
     });
+    // The 2026-10 additions: adaptive thinking counts toward max_tokens, so the Claude 5.5 and
+    // GPT-6.1 probes get Fable's headroom instead of the 64-token default that starves them.
+    for (const id of [
+      'anthropic/claude-sonnet-5.5',
+      'anthropic/claude-opus-5.5',
+      'openai/gpt-6.1-sol',
+    ] as const) {
+      expect(nodeSlideModelProbeProfile(id)).toEqual({ reasoningEffort: 'low', maxTokens: 2_048 });
+    }
+    expect(nodeSlideModelProbeProfile('google/gemini-3.8-flash')).toEqual({
+      reasoningEffort: 'low',
+      maxTokens: 256,
+    });
   });
 
   it('returns a sanitized failed receipt when a fleet route times out', async () => {
@@ -681,5 +749,60 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       failure: 'The Kimi K3 via OpenRouter route was temporarily unavailable.',
     });
     expect(JSON.stringify(result)).not.toContain('secret-456');
+  });
+});
+
+describe('unknown model ids fail closed (SPEC Part A rule 10)', () => {
+  // Round 1 (Codex): both ids below resolved to the first catalog row, the paid Nebius GLM route,
+  // and the unguarded probe returned status "passed" for them.
+  it('throws for an id the catalog does not carry instead of resolving to a paid default', () => {
+    expect(() => nodeSlideAgentModel('unknown-paid' as never)).toThrow(/not in the catalog/);
+    expect(() => nodeSlideAgentModel('vendor/model-nobody-sells' as never)).toThrow(
+      /not in the catalog/,
+    );
+  });
+
+  it('resolves a free-looking unknown id to the free router row, never to a paid route', () => {
+    const route = nodeSlideAgentModel('vendor/unlisted-model:free' as never);
+    expect(route.id).toBe('openrouter/free');
+    expect(route.provider).toBe('openrouter');
+    expect(route.provider).not.toBe(nodeSlideAgentModel(NODESLIDE_NEBIUS_AGENT_MODEL).provider);
+  });
+
+  it('refuses a SPEC 1.2 verified free id the catalog does not serve instead of rerouting it', () => {
+    for (const id of ['nvidia/nemotron-3.5-lightning:free', 'apodex/apodex-1.1-mini:free'])
+      expect(() => nodeSlideAgentModel(id as never), id).toThrow(/not rerouted/);
+  });
+
+  it('resolves a "-free" suffix to the free router row too, and keeps lookalikes paid-unknown', async () => {
+    // SPEC A.0.10: free-looking is a "-free" OR ":free" suffix. 'foo-free' used to throw.
+    for (const id of ['foo-free', 'vendor/unlisted-model-free']) {
+      const route = nodeSlideAgentModel(id as never);
+      expect(route.id, id).toBe('openrouter/free');
+    }
+    // Only a suffix counts: "free" elsewhere in the id is not free-looking.
+    for (const id of ['free-model', 'vendor/freedom', 'vendor/free-tier-pro'])
+      expect(() => nodeSlideAgentModel(id as never), id).toThrow(/not in the catalog/);
+    const complete = vi.fn<NodeSlideCompletion>(async () => completion('{"ok":true}'));
+    await probeNodeSlideModelOnce('foo-free' as never, { complete });
+    for (const call of complete.mock.calls) {
+      expect(call[0]).toMatchObject({ provider: 'openrouter', model: 'openrouter/free' });
+    }
+  });
+
+  it('the unguarded probe rejects an unknown paid id before any dispatch', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () => completion('{"ok":true}'));
+    await expect(probeNodeSlideModelOnce('unknown-paid' as never, { complete })).rejects.toThrow(
+      /not in the catalog/,
+    );
+    expect(complete).not.toHaveBeenCalled();
+  });
+
+  it('the unguarded probe never sends a free-looking unknown id to a paid provider', async () => {
+    const complete = vi.fn<NodeSlideCompletion>(async () => completion('{"ok":true}'));
+    await probeNodeSlideModelOnce('unknown:free' as never, { complete });
+    for (const call of complete.mock.calls) {
+      expect(call[0]).toMatchObject({ provider: 'openrouter', model: 'openrouter/free' });
+    }
   });
 });

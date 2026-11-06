@@ -1,6 +1,5 @@
 import { ConvexError, v } from 'convex/values';
 import {
-  NODESLIDE_DEFAULT_REASONING_EFFORT,
   type NodeSlideAgentModelId,
   type NodeSlideReasoningEffort,
   isNodeSlideAgentModelId,
@@ -8,6 +7,7 @@ import {
   isNodeSlideReasoningEffort,
   nodeSlideAgentModel,
   nodeSlideDefaultModelForProviderMode,
+  nodeSlideDefaultReasoningEffort,
   nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
 import {
@@ -178,7 +178,7 @@ export function validateNodeSlideBriefProviderChoice(
         `The selected model is not available through ${providerName}.`,
       );
     }
-    const selectedEffort = providerEffort ?? NODESLIDE_DEFAULT_REASONING_EFFORT;
+    const selectedEffort = providerEffort ?? nodeSlideDefaultReasoningEffort(selectedModel);
     if (!isNodeSlideReasoningEffort(selectedEffort)) {
       throw nodeslideCreatePublicError(
         'invalid_request',
@@ -718,10 +718,14 @@ export const nodeslideAgentModelValidator = v.union(
   v.literal('z-ai/glm-5.2'),
   v.literal('anthropic/claude-sonnet-5'),
   v.literal('anthropic/claude-fable-5'),
+  v.literal('anthropic/claude-sonnet-5.5'),
+  v.literal('anthropic/claude-opus-5.5'),
   v.literal('google/gemini-3.5-flash'),
+  v.literal('google/gemini-3.8-flash'),
   v.literal('google/gemini-3.1-pro-preview'),
   v.literal('openai/gpt-5.6-sol'),
   v.literal('openai/gpt-5.6-terra'),
+  v.literal('openai/gpt-6.1-sol'),
   v.literal('openrouter/free'),
   v.literal('google/gemma-4-26b-a4b-it:free'),
   v.literal('google/gemma-4-31b-it:free'),

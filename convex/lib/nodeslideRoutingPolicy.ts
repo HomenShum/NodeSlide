@@ -7,7 +7,7 @@
  * contract unchanged. Keep this file dependency-free.
  *
  * Default policy: the planner is always the requested model. A cheap executor
- * (Gemini 3.5 Flash) is granted ONLY when the planner is a premium model
+ * (DeepSeek V4.1 Flash) is granted ONLY when the planner is a premium model
  * (Kimi / Claude / GPT) AND the plan contains at least two replace_text
  * operations worth of copy work. Everything else runs single-model.
  * The executor is always advisory: on failure or timeout the planner's own
@@ -16,7 +16,14 @@
 
 export const NODESLIDE_ROUTING_POLICY_VERSION = 'nodeslide.model-routing/v1' as const;
 
-export const NODESLIDE_ROUTING_EXECUTOR_MODEL = 'google/gemini-3.5-flash' as const;
+// Gemini 3.5 Flash was deprecated by Google on 2026-10-08 (requests auto-route to 3.6); SPEC A.2.8
+// moved the executor to 'google/gemini-3.8-flash'. SPEC "Homen decisions", NodeSlide executor
+// (2026-11-06): the executor is the paid OpenRouter route deepseek/deepseek-v4.1-flash-1017, an
+// exception to D2 for this role only, the exact dated id, not the ~latest alias. The role needs a route
+// the run-budget ledger admits: the ledger denies every zero-priced `:free` route (`dynamicRoute`,
+// shared/nodeslideRunBudget.ts), so a `:free` executor is refused before dispatch on every edit and the
+// split never runs. live-unverified until Homen adds OPENROUTER_API_KEY (no paid executor receipt yet).
+export const NODESLIDE_ROUTING_EXECUTOR_MODEL = 'deepseek/deepseek-v4.1-flash-1017' as const;
 
 /** Minimum replace_text operations before splitting copy work to an executor. */
 export const NODESLIDE_ROUTING_MIN_REPLACE_TEXT_OPS = 2 as const;

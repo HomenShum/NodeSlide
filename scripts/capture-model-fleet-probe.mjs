@@ -5,7 +5,11 @@ import path from 'node:path';
 import process from 'node:process';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../convex/_generated/api.js';
-import { validateModelFleetReceipt } from './lib/model-fleet-receipt-core.mjs';
+import {
+  EXECUTOR_SPLIT_RECEIPT_SCHEMA,
+  executorSplitReceiptFailures,
+  validateModelFleetReceipt,
+} from './lib/model-fleet-receipt-core.mjs';
 import {
   assertNodeSlideProductionDeployKey,
   captureNodeSlideConvexBuildIdentity,
@@ -29,6 +33,7 @@ const allowedProbeFunctions = new Map([
   ['runFleet', 'nodeslide.model-fleet-probe/v1'],
   ['runFreeRouterFleet', 'nodeslide.free-router-fleet-probe/v1'],
   ['runFreeRouterStructured', 'nodeslide.free-router-structured-probe/v1'],
+  ['runExecutorSplit', 'nodeslide.executor-split-probe/v1'],
 ]);
 if (allowedProbeFunctions.get(probeFunction) !== expectedSchema) {
   fail('Probe function and expected schema are not an allowed pair');
@@ -95,10 +100,20 @@ const exitCode = await new Promise((resolve, reject) => {
 if (exitCode !== 0) fail(`Convex fleet action failed (${safeDiagnostic(stderr)})`);
 
 const receipt = parseReceipt(stdout);
-try {
-  validateModelFleetReceipt(receipt, expectedSchema);
-} catch (error) {
-  fail(error instanceof Error ? error.message : 'Convex fleet action returned an invalid receipt');
+const isExecutorSplit = expectedSchema === EXECUTOR_SPLIT_RECEIPT_SCHEMA;
+if (isExecutorSplit) {
+  // The deployed backend must be the merge commit this workflow run stamped (sourceCommit).
+  const failures = executorSplitReceiptFailures(receipt, sourceCommit);
+  receipt.passed = failures.length === 0;
+  receipt.failures = failures;
+} else {
+  try {
+    validateModelFleetReceipt(receipt, expectedSchema);
+  } catch (error) {
+    fail(
+      error instanceof Error ? error.message : 'Convex fleet action returned an invalid receipt',
+    );
+  }
 }
 const exactMainSourceAfter = await verifyNodeSlideExactMainSource(
   sourceCommit,
@@ -121,7 +136,9 @@ const artifact = {
 await mkdir(path.dirname(outputPath), { recursive: true });
 await writeFile(outputPath, `${JSON.stringify(artifact, null, 2)}\n`, { mode: 0o600 });
 console.log(
-  `[model-fleet] ${receipt.passed ? 'PASS' : 'FAIL'} ${receipt.probedModelCount - receipt.failedModelCount}/${receipt.probedModelCount} offered routes returned assistant text`,
+  isExecutorSplit
+    ? `[model-fleet] ${receipt.passed ? 'PASS' : 'FAIL'} executor split${receipt.passed ? '' : `: ${receipt.failures.join('; ')}`}`
+    : `[model-fleet] ${receipt.passed ? 'PASS' : 'FAIL'} ${receipt.probedModelCount - receipt.failedModelCount}/${receipt.probedModelCount} offered routes returned assistant text`,
 );
 console.log(`[model-fleet] artifact: ${path.relative(process.cwd(), outputPath)}`);
 if (!receipt.passed) process.exit(1);

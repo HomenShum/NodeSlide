@@ -3,7 +3,10 @@ import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { buildNodeSlideStoryContext } from '../../../convex/lib/nodeslideStoryContext.js';
 import { writeDeckArtifacts } from '../../../packages/cli/src/generate.js';
-import type { NodeSlideWorkspace as CanonicalNodeSlideWorkspace } from '../../../shared/nodeslide.js';
+import {
+  type NodeSlideWorkspace as CanonicalNodeSlideWorkspace,
+  NODESLIDE_DEFAULT_AGENT_MODEL,
+} from '../../../shared/nodeslide.js';
 
 import { localByokStatus, requireLocalKeys } from './byok.js';
 import { type CallResult, callByModel } from './llmClient.js';
@@ -12,7 +15,7 @@ const REVIEW_CONSENT = 'openrouter_nodeslide_review_context_v1';
 const BRIEF_CONSENT = 'openrouter_full_brief_v1';
 const WEB_CONSENT = 'nodeslide_web_research_v1';
 const LOCAL_BYOK_CONSENT = 'nodeslide_local_byok_edit_v1';
-const DEFAULT_BYOK_MODEL = process.env.NODESLIDE_BYOK_MODEL ?? 'moonshotai/kimi-k3';
+const DEFAULT_BYOK_MODEL = process.env.NODESLIDE_BYOK_MODEL ?? NODESLIDE_DEFAULT_AGENT_MODEL;
 const NODE_SLIDE_EXTERNAL_OPERATION_MAX = 8;
 const NODE_SLIDE_PAGE_DEFAULT = 25;
 const NODE_SLIDE_PAGE_MAX = 100;
@@ -604,7 +607,10 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
           scope,
           providerMode: args.execution === 'hosted' ? 'openrouter_free' : 'deterministic',
           ...(args.execution === 'hosted'
-            ? { providerModel: args.model ?? 'moonshotai/kimi-k3', providerConsent: REVIEW_CONSENT }
+            ? {
+                providerModel: args.model ?? NODESLIDE_DEFAULT_AGENT_MODEL,
+                providerConsent: REVIEW_CONSENT,
+              }
             : {}),
           ...(args.idempotencyKey ? { idempotencyKey: args.idempotencyKey } : {}),
         });
@@ -739,7 +745,7 @@ export function registerNodeSlideTools(server: McpServer, convexCall: ConvexCall
         clientSessionId: z.string().min(8).max(256),
         accessCode: z.string().optional(),
         execution: z.enum(['hosted', 'deterministic']).default('hosted'),
-        model: z.string().default('moonshotai/kimi-k3'),
+        model: z.string().default(NODESLIDE_DEFAULT_AGENT_MODEL),
         effort: z.enum(['low', 'medium', 'high', 'xhigh', 'max']).default('low'),
         consent: z.boolean().default(false),
         outputDirectory: z.string().min(1).default('nodeslide-output'),

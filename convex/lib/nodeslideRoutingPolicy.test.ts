@@ -80,11 +80,19 @@ describe('NodeSlide routing policy (B2 orchestrator/worker split)', () => {
     expect(decision.reason).toBe('no_split_planner_is_executor');
   });
 
+  it('routes the executor to the paid DeepSeek V4.1 Flash dated id (Homen, 2026-11-06)', () => {
+    // SPEC "Homen decisions", NodeSlide executor (2026-11-06): an exception to D2 for this role only,
+    // the exact dated id, not the deepseek-v4.1-flash alias. Was 'google/gemini-3.8-flash' (SPEC A.2.8).
+    expect(NODESLIDE_ROUTING_EXECUTOR_MODEL).toBe('deepseek/deepseek-v4.1-flash-1017');
+    expect(isPremiumNodeSlidePlannerModel(NODESLIDE_ROUTING_EXECUTOR_MODEL)).toBe(false);
+  });
+
   it('classifies premium families by id segment, not by loose substring', () => {
     expect(isPremiumNodeSlidePlannerModel('moonshotai/kimi-k3')).toBe(true);
     expect(isPremiumNodeSlidePlannerModel('anthropic/claude-fable-5')).toBe(true);
     expect(isPremiumNodeSlidePlannerModel('openai/gpt-5.6-sol')).toBe(true);
-    // Gemini 3.5 Flash was the executor until Google deprecated it on 2026-10-08; 3.8 replaces it.
+    // Gemini 3.5 Flash was the executor until Google deprecated it on 2026-10-08; 3.8 replaced it, and
+    // DeepSeek V4.1 Flash replaced 3.8 on 2026-11-06 (test above). Neither Flash row is premium.
     expect(isPremiumNodeSlidePlannerModel('google/gemini-3.8-flash')).toBe(false);
     expect(isPremiumNodeSlidePlannerModel('google/gemini-3.5-flash')).toBe(false);
     expect(isPremiumNodeSlidePlannerModel('anthropic/claude-sonnet-5.5')).toBe(true);

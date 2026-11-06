@@ -20,6 +20,16 @@
  * both transcriptions together when the recorded date gets old.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+// Loaded here, at collection, on purpose. The MCP BYOK client keeps pi-ai's provider catalog off its
+// startup path with `await import('@earendil-works/pi-ai/compat')` inside `call()`, so the first BYOK
+// case below used to pay that cold import inside its own 5 s test budget (5 s timeouts under a loaded
+// `npm run check`; round 12 raised this file's testTimeout to 30 s, which hid the cause). Importing the
+// module here puts the load in collection, which has no per-test timeout, and the client's dynamic
+// import then resolves from the module cache. The client itself is unchanged. Measured unloaded on
+// 2026-11-06: the BYOK case took 568 ms with the cold imports in its body, 52 ms with both lines below.
+import '@earendil-works/pi-ai/compat';
+// The chat-completions transport behind OpenRouter, which the lazy API wrapper imports on first send.
+import '@earendil-works/pi-ai/api/openai-completions';
 import { call as callMcpByok } from '../mcp/src/lib/llmClient';
 import {
   NODESLIDE_AGENT_MODELS,
@@ -27,6 +37,7 @@ import {
   nodeSlideAgentModel,
 } from '../shared/nodeslide';
 import {
+  NODESLIDE_EXECUTOR_PRICE_VERIFIED_AT,
   NODESLIDE_HELD_PRICE_VERIFIED_AT,
   NODESLIDE_MODEL_PRICING,
   NODESLIDE_MODEL_PRICING_SOURCE_URL,
@@ -44,11 +55,6 @@ import {
   callNodeSlideFreeJson,
   openrouterProviderWithOverrides,
 } from './lib/nodeslideProvider';
-
-// The MCP BYOK case below cold-imports pi-ai through mcp/src/lib/llmClient.ts, which timed out at the 5 s
-// default under a loaded `npm run check` (this PR added that case in round 2). Same budget as its siblings,
-// requestShape.test.ts and llmClient.wire.test.ts. Only the timeout moves; every assertion is unchanged.
-vi.setConfig({ testTimeout: 30_000 });
 
 /**
  * Read out of the `data[]` entry for each id on 2026-10-14: `pricing.prompt`,
@@ -164,6 +170,26 @@ const HELD_AT_MAINS_CEILING = {
 } as const;
 
 /**
+ * The executor route (SPEC "Homen decisions", NodeSlide executor, 2026-11-06: the paid
+ * deepseek/deepseek-v4.1-flash-1017, an exception to D2). Read out of GET /api/v1/models at
+ * 2026-11-06T10:39:31Z: `pricing.prompt` / `pricing.completion`, `context_length`,
+ * `top_provider.max_completion_tokens`, created 2026-10-17, no `expiration_date`, `structured_outputs`,
+ * `response_format` and `reasoning` in `supported_parameters`. The listing also carries weekday
+ * time-of-day `overrides` up to 0.0000003 / 0.0000012 (01:00-04:00 and 06:00-10:00 UTC, Monday to
+ * Friday): those are the DeepSeek endpoint's own peak price. The row is the base price, which is also
+ * the `max_price` ceiling, so OpenRouter never bills above what the ledger reserved; at peak the
+ * DeepSeek endpoint is simply not admitted (see OPENROUTER_ADMISSION_2026_11_06).
+ */
+const OPENROUTER_EXECUTOR_CATALOG_2026_11_06 = {
+  'deepseek/deepseek-v4.1-flash-1017': {
+    prompt: '0.00000015',
+    completion: '0.0000006',
+    contextLength: 1_048_576,
+    maxCompletionTokens: 393_216,
+  },
+} as const;
+
+/**
  * The ledger-priced routes on which the frozen auto-router (pi-ai catalog price, micro-USD per
  * million tokens) differs from the ledger, as read from the installed pi-ai 1.1.0 catalog on
  * 2026-10-16. A row that appears or disappears here is a pricing change someone must look at.
@@ -173,6 +199,15 @@ const AUTO_ROUTER_DIFFERS_FROM_LEDGER: Record<string, { input: number; output: n
   'openai/gpt-5.6-sol': { input: 2_000_000, output: 10_000_000 }, // ledger 5 / 30
   'z-ai/glm-5.2': { input: 171_000, output: 7_200_000 }, // ledger 0.7686 / 2.4156
 };
+
+/**
+ * Ledger-priced routes the frozen auto-router cannot price at all: its only OpenRouter source is the
+ * bundled pi-ai 1.1.0 catalog, which has no row for these ids, so it refuses them (no estimate, no
+ * selection) instead of guessing. The executor is reached only through the routed edit planner and the
+ * reserve-before-dispatch ledger, never through the auto-router; a row appearing here is a route a
+ * job-create request cannot select.
+ */
+const AUTO_ROUTER_CANNOT_PRICE: readonly string[] = ['deepseek/deepseek-v4.1-flash-1017'];
 
 /** The routes the catalog prices at "0" per token. Never a price; always a deny. */
 const OPENROUTER_ZERO_PRICED_ROUTES: readonly NodeSlideAgentModelId[] = [
@@ -239,6 +274,24 @@ describe('every priced row matches the catalog it claims to come from', () => {
 });
 
 describe('the held rows carry the evidence that verified them, not the listing they differ from', () => {
+  for (const [modelId, row] of Object.entries(OPENROUTER_EXECUTOR_CATALOG_2026_11_06)) {
+    it(`prices ${modelId} as the 2026-11-06 listing published it, labelled with that read`, () => {
+      const pricing = nodeSlideModelPricing(modelId);
+      expect(pricing.kind).toBe('priced');
+      if (pricing.kind !== 'priced') return;
+      expect(pricing.inputMicroUsdPerMillionTokens).toBe(microUsdPerMillionTokens(row.prompt));
+      expect(pricing.outputMicroUsdPerMillionTokens).toBe(microUsdPerMillionTokens(row.completion));
+      expect(pricing.inputMicroUsdPerMillionTokens).toBe(150_000);
+      expect(pricing.outputMicroUsdPerMillionTokens).toBe(600_000);
+      expect(pricing.providerContextWindowTokens).toBe(row.contextLength);
+      expect(pricing.providerMaxOutputTokens).toBe(row.maxCompletionTokens);
+      expect(pricing.source).toBe('openrouter_model_catalog_api');
+      expect(pricing.sourceUrl).toBe(NODESLIDE_MODEL_PRICING_SOURCE_URL);
+      expect(pricing.verifiedAt).toBe(NODESLIDE_EXECUTOR_PRICE_VERIFIED_AT);
+      expect(NODESLIDE_EXECUTOR_PRICE_VERIFIED_AT).toBe('2026-11-06T10:39:31Z');
+    });
+  }
+
   for (const [modelId, held] of Object.entries(HELD_AT_MAINS_CEILING)) {
     it(`labels ${modelId} with its endpoint check of 2026-10-15, not the 2026-10-14 listing`, () => {
       const pricing = nodeSlideModelPricing(modelId);
@@ -395,6 +448,21 @@ const OPENROUTER_ADMISSION_2026_10_15 = {
   'openai/gpt-6.1-sol': { of: 8, admitted: 3, structured: 3 },
 } as const;
 
+/**
+ * The executor row, read the same way from GET /api/v1/models/deepseek/deepseek-v4.1-flash-1017/endpoints
+ * at 2026-11-06T10:39:31Z: 50 endpoints, 18 at or below 0.15 / 0.60 on both base rates (16 with
+ * structured_outputs). One of the 18 is DeepSeek's own endpoint, whose weekday peak override
+ * (0.30 / 1.20) is above the ceiling, so 17 (16 structured) are admitted at every hour.
+ */
+const OPENROUTER_ADMISSION_2026_11_06 = {
+  'deepseek/deepseek-v4.1-flash-1017': { of: 50, admitted: 17, structured: 16 },
+} as const;
+
+const OPENROUTER_ADMISSION = {
+  ...OPENROUTER_ADMISSION_2026_10_15,
+  ...OPENROUTER_ADMISSION_2026_11_06,
+} as const;
+
 /** The committed ceiling per route, restated in the listing's own unit (USD per million tokens). */
 const OPENROUTER_CEILING_AT_OBSERVATION = {
   'moonshotai/kimi-k3': { prompt: 3, completion: 15 },
@@ -409,6 +477,7 @@ const OPENROUTER_CEILING_AT_OBSERVATION = {
   'openai/gpt-5.6-sol': { prompt: 5, completion: 30 },
   'openai/gpt-5.6-terra': { prompt: 2, completion: 12 },
   'openai/gpt-6.1-sol': { prompt: 2, completion: 10 },
+  'deepseek/deepseek-v4.1-flash-1017': { prompt: 0.15, completion: 0.6 },
 } as const;
 
 describe('every metered OpenRouter ledger price is a ceiling that still routes', () => {
@@ -418,11 +487,11 @@ describe('every metered OpenRouter ledger price is a ceiling that still routes',
 
   it('has an observation for every metered route, and no stray rows', () => {
     const metered = meteredRoutes.map((model) => model.id).sort();
-    expect(Object.keys(OPENROUTER_ADMISSION_2026_10_15).sort()).toEqual(metered);
+    expect(Object.keys(OPENROUTER_ADMISSION).sort()).toEqual(metered);
     expect(Object.keys(OPENROUTER_CEILING_AT_OBSERVATION).sort()).toEqual(metered);
   });
 
-  for (const [modelId, observed] of Object.entries(OPENROUTER_ADMISSION_2026_10_15)) {
+  for (const [modelId, observed] of Object.entries(OPENROUTER_ADMISSION)) {
     it(`${modelId} was observed at its committed ceiling with a choice of providers`, () => {
       const pricing = nodeSlideModelPricing(modelId);
       expect(pricing.kind).toBe('priced');
@@ -684,10 +753,19 @@ describe('every pricing source in this repo agrees (Part A rule 6)', () => {
   // listed under "Open for Homen" in the PR body; do not delete this test to make the gap disappear.
   it('pins where the frozen auto-router estimate differs from the ledger rate', () => {
     const differing: Record<string, { input: number; output: number }> = {};
+    const unpriced: string[] = [];
     for (const route of ledgerPricedOpenRouterRoutes) {
       const pricing = nodeSlideModelPricing(route.id);
       if (pricing.kind !== 'priced') continue;
       const decision = autoRoute(route.id, 100);
+      if (decision.kind !== 'selected') {
+        // Refused for want of a price, not for any other reason.
+        expect(decision.kind === 'refused' && decision.refusal.code, route.id).toBe(
+          'pricing_unavailable',
+        );
+        unpriced.push(route.id);
+        continue;
+      }
       expect(decision.kind, `${route.id} is routable`).toBe('selected');
       const estimate = decision.costEstimate;
       expect(estimate.status).toBe('estimated');
@@ -703,6 +781,7 @@ describe('every pricing source in this repo agrees (Part A rule 6)', () => {
       }
     }
     expect(differing).toEqual(AUTO_ROUTER_DIFFERS_FROM_LEDGER);
+    expect(unpriced).toEqual(AUTO_ROUTER_CANNOT_PRICE);
   });
 
   it('keeps the Nebius GLM-5.2 hand-typed cost out of every reservation path', () => {

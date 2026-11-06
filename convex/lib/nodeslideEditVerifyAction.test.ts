@@ -272,7 +272,7 @@ describe('proposeEdit B4 tool loop messages', () => {
             },
             telemetry: {
               provider: 'openrouter',
-              model: 'google/gemini-3.8-flash',
+              model: 'deepseek/deepseek-v4.1-flash-1017',
               inputTokens: 5,
               outputTokens: 3,
               costMicroUsd: 1,
@@ -336,8 +336,9 @@ describe('proposeEdit B4 tool loop messages', () => {
     const executorStep = steps.find((step) => step.toolName === 'executor');
     const verifyStep = steps.find((step) => step.toolName === 'verify');
     expect(plannerStep?.spanModel).toBe('moonshotai/kimi-k3');
-    // Executor moved off Gemini 3.5 Flash: Google deprecated it on 2026-10-08 (auto-routed to 3.6).
-    expect(executorStep?.spanModel).toBe('google/gemini-3.8-flash');
+    // Executor moved off Gemini 3.5 Flash (Google deprecated it on 2026-10-08) to 'google/gemini-3.8-flash'
+    // (SPEC A.2.8), then to the paid DeepSeek V4.1 Flash dated id (SPEC "Homen decisions", 2026-11-06).
+    expect(executorStep?.spanModel).toBe('deepseek/deepseek-v4.1-flash-1017');
     expect(verifyStep?.message).toContain('shadow snapshot');
   });
 });

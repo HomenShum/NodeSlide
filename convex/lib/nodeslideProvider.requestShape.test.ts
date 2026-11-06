@@ -23,6 +23,7 @@ import {
   nodeSlideEffortForModel,
   nodeSlideModelSupportsReasoningEffort,
 } from '../../shared/nodeslide';
+import { nodeSlideModelPricing } from '../../shared/nodeslideRunBudget';
 import {
   callNodeSlideFreeJson,
   nodeSlideModelProbeProfile,
@@ -310,16 +311,20 @@ describe('Claude rows keep the OpenRouter chat-completions endpoint under pi-ai 
   });
 });
 
-describe('the routed executor (SPEC 2026-10-08 Gemini 3.5 Flash deprecation)', () => {
-  it('routes bulk copy to Gemini 3.8 Flash and the request names exactly that id', async () => {
+describe('the routed executor (Homen 2026-11-06: paid DeepSeek V4.1 Flash, exception to D2)', () => {
+  // SPEC "Homen decisions", NodeSlide executor (2026-11-06). The executor was Gemini 3.8 Flash (SPEC A.2.8,
+  // after Google deprecated 3.5 Flash on 2026-10-08); Homen moved it to the exact dated OpenRouter id.
+  const EXECUTOR_WIRE_ID = 'deepseek/deepseek-v4.1-flash-1017';
+
+  it('routes bulk copy to DeepSeek V4.1 Flash 1017 and the request names exactly that id', async () => {
     const decision = resolveNodeSlideRouting({
       task: 'edit_plan',
       requestedModel: 'moonshotai/kimi-k3',
       replaceTextOps: 3,
     });
     expect(decision.reason).toBe('split_premium_planner_bulk_copy');
-    expect(decision.executorModel).toBe(WIRE_ID.gemini38Flash);
-    expect(NODESLIDE_ROUTING_EXECUTOR_MODEL).toBe(WIRE_ID.gemini38Flash);
+    expect(decision.executorModel).toBe(EXECUTOR_WIRE_ID);
+    expect(NODESLIDE_ROUTING_EXECUTOR_MODEL).toBe(EXECUTOR_WIRE_ID);
 
     await callNodeSlideFreeJson({
       systemPrompt: 'Rewrite the copy.',
@@ -330,10 +335,51 @@ describe('the routed executor (SPEC 2026-10-08 Gemini 3.5 Flash deprecation)', (
     });
     expect(captured.length).toBeGreaterThan(0);
     for (const request of captured) {
-      expect(request.body['model']).toBe('google/gemini-3.8-flash');
-      expect(request.body['model']).not.toBe('google/gemini-3.5-flash');
+      expect(request.url).toBe('https://openrouter.ai/api/v1/chat/completions');
+      expect(request.body['model']).toBe(EXECUTOR_WIRE_ID);
+      // Not the undated alias, and not the previous executor.
+      expect(request.body['model']).not.toBe('deepseek/deepseek-v4.1-flash');
+      expect(request.body['model']).not.toBe('google/gemini-3.8-flash');
+      expect(request.body['reasoning']).toEqual({ effort: 'low' });
       expectNoForbiddenKeys(request.body);
     }
+  });
+
+  it('sends the executor call the way the budgeted dispatch does: json_schema, max_price at the ledger row', async () => {
+    // nodeslideBudgetedProvider.ts hands the ledger row's rates to the dispatch policy as the OpenRouter
+    // max_price ceiling. The executor's copy schema rides as native json_schema (the row has no
+    // json_object flag), so require_parameters keeps the request on structured-output endpoints.
+    const pricing = nodeSlideModelPricing(NODESLIDE_ROUTING_EXECUTOR_MODEL);
+    expect(pricing.kind).toBe('priced');
+    if (pricing.kind !== 'priced') return;
+    await callNodeSlideFreeJson(
+      {
+        systemPrompt: 'Rewrite the copy.',
+        userText: '{}',
+        maxTokens: 500,
+        model: NODESLIDE_ROUTING_EXECUTOR_MODEL,
+        reasoningEffort: 'low',
+        jsonSchema: { name: 'nodeslide_copy_execution', schema: { type: 'object' } },
+      },
+      {
+        dispatchPolicy: {
+          maxOutputTokens: 500,
+          maxRetries: 0,
+          maxInputMicroUsdPerMillionTokens: pricing.inputMicroUsdPerMillionTokens,
+          maxOutputMicroUsdPerMillionTokens: pricing.outputMicroUsdPerMillionTokens,
+        },
+      },
+    );
+    expect(captured).toHaveLength(1);
+    const body = captured[0]?.body ?? {};
+    expect(body['model']).toBe(EXECUTOR_WIRE_ID);
+    expect((body['response_format'] as { type: string }).type).toBe('json_schema');
+    // $0.15 in / $0.60 out per million tokens (OpenRouter public list, 2026-11-06).
+    expect(body['provider']).toMatchObject({
+      require_parameters: true,
+      max_price: { prompt: 0.15, completion: 0.6 },
+    });
+    expectNoForbiddenKeys(body);
   });
 
   it('sends the edit patch to Gemini 3.8 Flash as json_object, decided by the catalog flag', async () => {

@@ -133,7 +133,18 @@ describe('NodeSlide named pi-ai JSON provider', () => {
     const provider = openrouterProviderWithOverrides();
     const models = provider.getModels();
     const overrideIds = NODESLIDE_OPENROUTER_MODEL_OVERRIDES.map((model) => model.id);
-    expect(overrideIds).toEqual(['moonshotai/kimi-k3']);
+    // The executor's dated id joined on 2026-11-06 (SPEC "Homen decisions"): pi-ai 1.1.0 has no row for it.
+    expect(overrideIds).toEqual(['moonshotai/kimi-k3', 'deepseek/deepseek-v4.1-flash-1017']);
+    const expectedCost: Record<string, object> = {
+      'moonshotai/kimi-k3': { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 0 },
+      // OpenRouter public list, 2026-11-06T10:39:31Z.
+      'deepseek/deepseek-v4.1-flash-1017': {
+        input: 0.15,
+        output: 0.6,
+        cacheRead: 0.003,
+        cacheWrite: 0,
+      },
+    };
     for (const override of NODESLIDE_OPENROUTER_MODEL_OVERRIDES) {
       const matches = models.filter((model) => model.id === override.id);
       // Exactly one entry per id: our current definition wins over stale
@@ -141,7 +152,7 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       expect(matches).toHaveLength(1);
       expect(matches[0]).toMatchObject({
         reasoning: true,
-        cost: { input: 3, output: 15, cacheRead: 0.3, cacheWrite: 0 },
+        cost: expectedCost[override.id],
         contextWindow: 1_048_576,
         compat: {
           supportsReasoningEffort: true,
@@ -162,6 +173,8 @@ describe('NodeSlide named pi-ai JSON provider', () => {
       'google/gemini-3.8-flash',
       'google/gemini-3.1-pro-preview',
       'openai/gpt-6.1-sol',
+      // The executor (Homen 2026-11-06); pi-ai 1.1.0 has no row for it, so this is the override.
+      'deepseek/deepseek-v4.1-flash-1017',
     ]) {
       expect(models.find((model) => model.id === id)).toMatchObject({ reasoning: true });
     }

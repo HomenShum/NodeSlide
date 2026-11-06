@@ -93,12 +93,41 @@ export const NODESLIDE_KIMI_K3: Model<'openai-completions'> = {
 };
 
 /**
+ * The routed copy executor (SPEC "Homen decisions", 2026-11-06). pi-ai 1.1.0's bundled OpenRouter
+ * catalog has no row for the dated id (only deepseek/deepseek-v4.1-flash and :batch), so the route is
+ * registered here. Cost is the ledger row (USD per million tokens; pricingAsOf =
+ * NODESLIDE_EXECUTOR_PRICE_VERIFIED_AT, 2026-11-06T10:39:31Z, https://openrouter.ai/api/v1/models:
+ * $0.15 in / $0.60 out, cache read $0.003); window and output cap from the same read. The agreement
+ * test in convex/nodeslideModelPricing.test.ts asserts these equal the ledger row.
+ */
+export const NODESLIDE_DEEPSEEK_V41_FLASH_1017: Model<'openai-completions'> = {
+  id: 'deepseek/deepseek-v4.1-flash-1017',
+  name: 'DeepSeek: DeepSeek V4.1 Flash (1017)',
+  api: 'openai-completions',
+  provider: 'openrouter',
+  baseUrl: 'https://openrouter.ai/api/v1',
+  reasoning: true,
+  input: ['text'],
+  cost: { input: 0.15, output: 0.6, cacheRead: 0.003, cacheWrite: 0 },
+  contextWindow: 1_048_576,
+  maxTokens: 393_216,
+  compat: {
+    supportsDeveloperRole: false,
+    supportsReasoningEffort: true,
+    thinkingFormat: 'openrouter',
+    maxTokensField: 'max_tokens',
+  },
+};
+
+/**
  * Kimi is newer than the bundled catalog and OpenRouter exposes its reasoning
- * effort through the normalized nested reasoning object. Other routes retain
- * their bundled metadata and receive only efforts they advertise.
+ * effort through the normalized nested reasoning object; the executor's dated
+ * id is absent from it. Other routes retain their bundled metadata and receive
+ * only efforts they advertise.
  */
 export const NODESLIDE_OPENROUTER_MODEL_OVERRIDES: readonly Model<'openai-completions'>[] = [
   NODESLIDE_KIMI_K3,
+  NODESLIDE_DEEPSEEK_V41_FLASH_1017,
 ];
 
 const OPENROUTER_CHAT_COMPLETIONS_BASE_URL = 'https://openrouter.ai/api/v1';

@@ -534,6 +534,13 @@ export const NODESLIDE_MODEL_PRICING_VERIFIED_AT = '2026-10-14T16:03:00Z' as con
  * the date and the source their rows carry (SPEC D3, Homen 2026-10-16).
  */
 export const NODESLIDE_HELD_PRICE_VERIFIED_AT = '2026-10-15T23:08:00Z' as const;
+/**
+ * The executor row (deepseek/deepseek-v4.1-flash-1017, SPEC "Homen decisions" 2026-11-06) was added
+ * after the 2026-10-14 listing; it was read from https://openrouter.ai/api/v1/models at this instant
+ * and its ceiling checked against GET /api/v1/models/deepseek/deepseek-v4.1-flash-1017/endpoints in the
+ * same minute, so its row carries this date, not the 2026-10-14 one.
+ */
+export const NODESLIDE_EXECUTOR_PRICE_VERIFIED_AT = '2026-11-06T10:39:31Z' as const;
 const heldPriceEvidence = (modelId: string) => ({
   sourceUrl: `${NODESLIDE_MODEL_PRICING_SOURCE_URL}/${modelId}/endpoints`,
   verifiedAt: NODESLIDE_HELD_PRICE_VERIFIED_AT,
@@ -550,7 +557,7 @@ function pricedRoute(args: {
   outputMicroUsdPerMillionTokens: number;
   providerContextWindowTokens: number;
   providerMaxOutputTokens: number;
-  /** Set only on a held row, whose price is not the 2026-10-14 listing's. */
+  /** Set only on a row whose price is not the 2026-10-14 listing's (the held rows, the executor). */
   evidence?: { sourceUrl: string; verifiedAt: string };
 }): NodeSlidePricedModelMetadata {
   const { evidence, ...row } = args;
@@ -698,6 +705,25 @@ export const NODESLIDE_MODEL_PRICING = {
     outputMicroUsdPerMillionTokens: 12_000_000,
     providerContextWindowTokens: 1_050_000,
     providerMaxOutputTokens: 128_000,
+  }),
+  // The routed copy executor (SPEC "Homen decisions", 2026-11-06). Source: https://openrouter.ai/api/v1/models
+  // fetched 2026-11-06T10:39:31Z: pricing.prompt 0.00000015, pricing.completion 0.0000006 ($0.15 in /
+  // $0.60 out per M), context_length 1,048,576, top_provider.max_completion_tokens 393,216. The listing
+  // also carries weekday time-of-day overrides (DeepSeek's own endpoint doubles to 0.30 / 1.20 at
+  // 01:00-04:00 and 06:00-10:00 UTC). This row is the base price and, as for every row, the OpenRouter
+  // max_price ceiling: OpenRouter never bills above it, and at peak only DeepSeek's own endpoint drops
+  // out (as a ceiling it admitted 17 of 50 endpoints at every hour, 16 with structured_outputs;
+  // GET /api/v1/models/deepseek/deepseek-v4.1-flash-1017/endpoints, same minute).
+  'deepseek/deepseek-v4.1-flash-1017': pricedRoute({
+    modelId: 'deepseek/deepseek-v4.1-flash-1017',
+    evidence: {
+      sourceUrl: NODESLIDE_MODEL_PRICING_SOURCE_URL,
+      verifiedAt: NODESLIDE_EXECUTOR_PRICE_VERIFIED_AT,
+    },
+    inputMicroUsdPerMillionTokens: 150_000,
+    outputMicroUsdPerMillionTokens: 600_000,
+    providerContextWindowTokens: 1_048_576,
+    providerMaxOutputTokens: 393_216,
   }),
   // Priced at the flat tier. OpenRouter lists a higher tier above 272K prompt tokens
   // (2x input); a NodeSlide prompt is bounded far below that by the read-context limit.

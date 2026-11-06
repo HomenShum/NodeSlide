@@ -15,6 +15,12 @@
  * gemini-3.8-flash executor 107,010 / 4,000 = 0.095258 USD, 0.504014 USD together; 0.25 USD refused
  * the planner, 0.55 USD admitted both (SPEC D3, Homen 2026-10-16: default 0.55 USD).
  *
+ * Executor moved to deepseek/deepseek-v4.1-flash-1017 (SPEC "Homen decisions", 2026-11-06; ledger row
+ * 0.15 / 0.60 USD per million tokens, OpenRouter public list read 2026-11-06): the same 107,010 / 4,000
+ * tokens reserve 18,451.5 -> 18,452 micro-USD (rounded up) = 0.018452 USD, so planner plus executor is
+ * 0.427208 USD (was 0.504014). The committed 0.55 USD cap is unchanged and still admits both; 0.25 USD
+ * still refuses the planner alone.
+ *
  * Only the HTTP call is faked: no provider is contacted and nothing is spent.
  */
 import { describe, expect, it, vi } from 'vitest';
@@ -206,15 +212,17 @@ describe('the executor probe cap against the real ledger (SPEC D3)', () => {
     expect(receipt.routing.reason).toBe('planner_failed');
   });
 
-  it('admits planner plus the priced executor under the default cap (0.504014 USD in the Codex replay)', async () => {
+  it('admits planner plus the priced executor under the default cap (0.427208 USD; 0.504014 with the Gemini executor)', async () => {
     const receipt = await probe(executorSplitProbeBudgetUsd({}));
     // The planner goes first; the ledger then admits the executor too (a priced route, unlike a :free one).
     expect(state.calls).toEqual(['moonshotai/kimi-k3', NODESLIDE_ROUTING_EXECUTOR_MODEL]);
     expect(receipt.budget.refusals).toEqual([]);
     expect(receipt.budget.stoppedBy).toBeNull();
     // 0.408756 planner (114,252 input / 4,400 output estimated tokens at 3 / 15 USD per million) plus
-    // 0.095258 executor (107,010 / 4,000 at gemini-3.8-flash's price), the real-ledger figures Codex replayed.
-    expect(receipt.budget.estimateUsd).toBeCloseTo(0.504014, 6);
+    // 0.018452 executor (107,010 / 4,000 at deepseek-v4.1-flash-1017's 0.15 / 0.60). With the previous
+    // gemini-3.8-flash executor (0.75 / 3.75) the executor term was 0.095258 and the total 0.504014, the
+    // real-ledger figures Codex replayed on 2026-10-16.
+    expect(receipt.budget.estimateUsd).toBeCloseTo(0.408756 + 0.018452, 6);
     expect(receipt.budget.estimateUsd).toBeGreaterThan(0.25);
     expect(receipt.budget.estimateUsd).toBeLessThanOrEqual(
       NODESLIDE_EXECUTOR_SPLIT_DEFAULT_BUDGET_USD,

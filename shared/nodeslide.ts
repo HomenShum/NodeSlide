@@ -208,6 +208,26 @@ export const NODESLIDE_AGENT_MODELS = [
     supportedEfforts: ['low', 'medium', 'high', 'xhigh', 'max'],
   },
   {
+    // The routed copy executor (convex/lib/nodeslideRoutingPolicy.ts). SPEC "Homen decisions", NodeSlide
+    // executor (2026-11-06): the paid OpenRouter route, an exception to D2, the exact dated id rather
+    // than the deepseek-v4.1-flash alias. OpenRouter public list read 2026-11-06T10:39:31Z: created
+    // 2026-10-17, tools + response_format + structured_outputs + reasoning, 1,048,576 context, no
+    // expiration_date. Executor only: not offered in the picker until someone measures it as a planner.
+    id: 'deepseek/deepseek-v4.1-flash-1017',
+    upstreamId: 'deepseek/deepseek-v4.1-flash-1017',
+    provider: 'openrouter',
+    vendor: 'DeepSeek',
+    label: 'DeepSeek V4.1 Flash',
+    description: 'Low-cost copy executor for routed bulk text edits.',
+    costTier: 'fast',
+    bestFor: 'Routed bulk copy execution',
+    productionEnabled: false,
+    // Not sent: reasoning mode ignores sampling, and an unsent key cannot narrow the
+    // require_parameters endpoint set.
+    supportsTemperature: false,
+    supportedEfforts: ['low', 'medium', 'high'],
+  },
+  {
     id: 'openrouter/free',
     upstreamId: 'openrouter/free',
     provider: 'openrouter',

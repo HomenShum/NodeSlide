@@ -170,7 +170,7 @@ async function acceptedReceipt() {
 }
 
 describe('runNodeSlideExecutorSplitProbe', () => {
-  it('splits a kimi-k3 plan to gemini-3.8-flash and records what each provider echoed', async () => {
+  it('splits a kimi-k3 plan to the committed executor and records what each provider echoed', async () => {
     const receipt = await acceptedReceipt();
     expect(calls).toEqual(['moonshotai/kimi-k3', EXECUTOR]);
     expect(receipt.routing).toMatchObject({

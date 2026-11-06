@@ -24,7 +24,8 @@ export const NODE_SLIDE_FREE_ROUTE_CATALOG = [
 ].map(([id, provider, upstreamId]) => ({ id, provider, upstreamId }));
 
 export const EXECUTOR_SPLIT_RECEIPT_SCHEMA = 'nodeslide.executor-split-probe/v1';
-const EXECUTOR_SPLIT_EXECUTOR_MODEL = 'google/gemini-3.8-flash';
+// Mirrors NODESLIDE_ROUTING_EXECUTOR_MODEL (SPEC "Homen decisions", 2026-11-06; was google/gemini-3.8-flash).
+const EXECUTOR_SPLIT_EXECUTOR_MODEL = 'deepseek/deepseek-v4.1-flash-1017';
 const EXECUTOR_SPLIT_PLANNER_MODEL = 'moonshotai/kimi-k3';
 const EXECUTOR_SPLIT_COMMAND = 'npx convex run nodeslideModelProbe:runExecutorSplit';
 /** Pre-flight ceiling: one planner call and one executor call. A third is a retry or repair call. */

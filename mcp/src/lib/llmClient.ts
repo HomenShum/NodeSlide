@@ -43,7 +43,10 @@ import {
   isNodeSlideVerifiedFreeModelId,
   nodeSlideDefaultReasoningEffort,
 } from '../../../shared/nodeslide.js';
-import { nodeSlideLedgerPricedCost } from '../../../shared/nodeslideRunBudget.js';
+import {
+  nodeSlideLedgerPricedCost,
+  nodeSlideModelPricing,
+} from '../../../shared/nodeslideRunBudget.js';
 
 /**
  * pi-ai's Provider type is `KnownProvider | string` (open by design — users
@@ -251,6 +254,17 @@ export async function call(opts: CallOptions): Promise<CallResult> {
       ? { ...registryModel, cost: nodeSlideLedgerPricedCost(canonicalId, registryModel.cost) }
       : registryModel;
   const model = opts.baseUrl ? { ...pricedModel, baseUrl: opts.baseUrl } : pricedModel;
+  // Costing at the ledger rate is only honest if OpenRouter cannot bill above it, so the same rate is
+  // sent as the routing ceiling (as the Convex dispatcher does). Without it a pricier endpoint is
+  // billed while the cheaper ledger figure is persisted (Codex 2026-11-06: $0.006806 billed, 3,184 µUSD kept).
+  const ledger = pricedModel !== registryModel ? nodeSlideModelPricing(canonicalId) : undefined;
+  const maxPrice =
+    ledger?.kind === 'priced'
+      ? {
+          prompt: ledger.inputMicroUsdPerMillionTokens / 1_000_000,
+          completion: ledger.outputMicroUsdPerMillionTokens / 1_000_000,
+        }
+      : undefined;
 
   const userContent: (TextContent | ImageContent)[] = [{ type: 'text', text: opts.userText }];
   if (opts.userImage !== undefined) {
@@ -286,8 +300,19 @@ export async function call(opts: CallOptions): Promise<CallResult> {
   const rowEffort = row !== undefined ? nodeSlideDefaultReasoningEffort(row) : undefined;
   const result = await pi.complete(model, context, {
     ...rowEffortOption(model.api, rowEffort),
-    ...(model.api === 'anthropic-messages' && rowEffort !== undefined
-      ? { onPayload: (payload: unknown) => withTopLevelEffort(payload, rowEffort) }
+    ...((model.api === 'anthropic-messages' && rowEffort !== undefined) || maxPrice
+      ? {
+          onPayload: (payload: unknown) => {
+            const body = (
+              model.api === 'anthropic-messages' && rowEffort !== undefined
+                ? withTopLevelEffort(payload, rowEffort)
+                : payload
+            ) as { provider?: Record<string, unknown> };
+            return maxPrice
+              ? { ...body, provider: { ...body.provider, max_price: maxPrice } }
+              : body;
+          },
+        }
       : {}),
     ...(opts.signal !== undefined ? { signal: opts.signal } : {}),
     ...(opts.maxTokens !== undefined ? { maxOutputTokens: opts.maxTokens } : {}),

@@ -701,6 +701,32 @@ describe('every pricing source in this repo agrees (Part A rule 6)', () => {
       }
     });
 
+    // Codex 2026-11-06 (P2): the client costs at the ledger rate, so without a matching price ceiling
+    // OpenRouter can bill a pricier endpoint than the cost it persists (GLM billed $0.006806, persisted
+    // 3,184 micro-USD). The ceiling makes the persisted figure an upper bound on what is billed.
+    it('the MCP BYOK client caps OpenRouter at the ledger rate it costs at (provider.max_price)', async () => {
+      usage = { prompt_tokens: 10, completion_tokens: 10, total_tokens: 20 };
+      for (const id of mcpRoutes) {
+        let body: Record<string, unknown> = {};
+        vi.stubGlobal('fetch', async (_url: unknown, init?: RequestInit) => {
+          body = JSON.parse(String(init?.body));
+          return new Response(sse(), {
+            status: 200,
+            headers: { 'content-type': 'text/event-stream' },
+          });
+        });
+        await mcpCall(id);
+        const pricing = nodeSlideModelPricing(id);
+        if (pricing.kind !== 'priced') throw new Error(`${id} is not ledger-priced`);
+        expect(body['provider'], id).toMatchObject({
+          max_price: {
+            prompt: pricing.inputMicroUsdPerMillionTokens / 1_000_000,
+            completion: pricing.outputMicroUsdPerMillionTokens / 1_000_000,
+          },
+        });
+      }
+    });
+
     it('no response path costs a fully cached prompt above the input rate the quote assumed', async () => {
       // 100k prompt tokens, all served from cache, 10 output tokens (Codex's replay: glm-5.2 settled
       // 16,270 micro-USD against a 15,352 quote before the cache cap).
